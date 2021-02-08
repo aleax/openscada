@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -301,12 +301,16 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += crc;
 
 	    //Send request
-	    for(int i_tr = 0, resp_len = 0; i_tr < reqTry; i_tr++) {
+	    for(int iTr = 0, resp_len = 0; iTr < reqTry; iTr++) {
 		try {
 		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 		    rez.assign(buf, resp_len);
 		    //Wait tail
-		    while(resp_len && rez.size() < MODBUS_FRM_LIM) {
+		    while(resp_len && rez.size() < MODBUS_FRM_LIM &&
+			    (rez.size() < 3 || !(((rez[1]&0x80) && rez.size() >= (2+3)) ||	//Error specific fast termination the data waiting
+				(rez[1] >= 1 && rez[1] <= 4 && rez.size() >= (rez[2]+2+3)) ||	//Function [1...4] specific fast termination the data waiting
+				((rez[1] == 5 || rez[1] == 6 || rez[1] == 15 || rez[1] == 16) && rez.size() >= (5+3))) ))	//Function [5,6,15,16] specific fast termination the data waiting
+		    {
 			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err) { break; }
 			rez.append(buf, resp_len);
 		    }
@@ -333,7 +337,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap = ":"+DataToASCII(mbap)+"\x0D\x0A";
 
 	    //Send request
-	    for(int i_tr = 0, resp_len = 0; i_tr < reqTry; i_tr++) {
+	    for(int iTr = 0, resp_len = 0; iTr < reqTry; iTr++) {
 		try {
 		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 		    rez.assign(buf, resp_len);

@@ -38,6 +38,9 @@ class TableDelegate : public QItemDelegate
     Q_OBJECT
 
     public:
+	//Data
+	enum AddRoles { SelectRole = Qt::UserRole+10, AlignOptRole };
+
 	//Public attributes
 	TableDelegate( QObject *parent = 0 );
 

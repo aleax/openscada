@@ -761,7 +761,7 @@ void LineEdit::cancelSlot( )
 bool LineEdit::event( QEvent * e )
 {
     if(e->type() == QEvent::KeyRelease && bt_fld) {
-	QKeyEvent *keyEvent = (QKeyEvent *)e;
+	QKeyEvent *keyEvent = (QKeyEvent*)e;
 	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
 	    bt_fld->animateClick();
 	    return true;

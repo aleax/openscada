@@ -3941,7 +3941,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','709',32,'','','El_Troinik_gr7',
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','274',32,'','','KS105','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','743',32,'','','KS105','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','BC105',32,'','','KS105','КК105','','КШ105','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','128',32,'','','KS104','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','24',32,'','','KS104','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS104','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS104','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS104','','','','','','');
@@ -3976,7 +3976,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','fillColor','green',32,'','','CM101_2','
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','116',32,'','','CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS103','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','516',32,'','','CM101_2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','74',32,'','','KS103','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','21',32,'','','KS103','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','1.56',32,'','','CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','1.6',32,'','','CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','55',32,'','','CM101_2','','','','','','');
@@ -4029,7 +4029,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Pipe_simple
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','330',32,'','','El_Pipe_simple_gr14','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.5',32,'','','El_Pipe_simple_gr14','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','789',32,'','','El_Pipe_simple_gr14','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','14',32,'','','ElFigure3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-6',32,'','','ElFigure3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','elLst','line:(7|0):(7|99):::::
 line:(0|0):(14|0):::::
 ',32,'','','ElFigure3','line:(7|0):(7|99):::::
@@ -4049,7 +4049,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','793',32,'','','El_Pipe_simple_g
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','85',32,'','','El_Pipe_simple_gr13','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.64',32,'','','El_Pipe_simple_gr13','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.5',32,'','','ElFigure2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','24',32,'','','ElFigure2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-5',32,'','','ElFigure2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','elLst','line:(7|0):(7|99):::::
 line:(0|0):(14|0):::::
 ',32,'','','ElFigure2','line:(7|0):(7|99):::::
@@ -4066,7 +4066,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','48',32,'','','El_Pipe_simple_ve
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.35',32,'','','El_Pipe_simple_vert_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','577',32,'','','El_Pipe_simple_gr11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','331',32,'','','El_Pipe_simple_gr11','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','27',32,'','','El_Pipe_simple_gr10','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-15',32,'','','El_Pipe_simple_gr10','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','92',32,'','','Text8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','font','Arial 12 1',32,'','','Text8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','color','blue',32,'','','Text8','','','','','','');
@@ -4157,13 +4157,13 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','661',32,'','','El_Pipe_simple_v
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','372',32,'','','El_Pipe_simple_vert_gr14','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr14','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.45',32,'','','El_Pipe_simple_vert_gr14','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','45',32,'','','El_Pipe_simple_vert_gr14','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-22',32,'','','El_Pipe_simple_vert_gr14','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','fillColor','blue',32,'','','El_Pipe_simple_vert_gr14','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','661',32,'','','El_Pipe_simple_vert_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','439',32,'','','El_Pipe_simple_vert_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.65',32,'','','El_Pipe_simple_vert_gr15','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','49',32,'','','El_Pipe_simple_vert_gr15','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-14',32,'','','El_Pipe_simple_vert_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','fillColor','blue',32,'','','El_Pipe_simple_vert_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','150',32,'','','El_TroinikHT_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','fillColor','blue',32,'','','El_TroinikHT_gr3','','','','','','');
@@ -4186,21 +4186,21 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','text','AT101/2',32,'','','txtAT101_2','
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','T АТ 101/1',32,'','','TAT101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','312',32,'','','TAT101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','429',32,'','','TAT101_1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','34',32,'','','TAT101_1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','10',32,'','','TAT101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','T АТ 101/1',32,'','','TAT101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','559',32,'','','TAT101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','429',32,'','','TAT101_2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','36',32,'','','TAT101_2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','19',32,'','','TAT101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','P CM101/1',32,'','','P_CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','274',32,'','','P_CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','374',32,'','','P_CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','P_CM101_1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','99',32,'','','P_CM101_1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','8',32,'','','P_CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','P CM101/1',32,'','','P_CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','530',32,'','','P_CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','374',32,'','','P_CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','P_CM101_2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','101',32,'','','P_CM101_2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','17',32,'','','P_CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','fillColor','blue',32,'','','El_angleTR_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','2',32,'','','El_angleTR_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_angleTR_gr3','','','','','','');
@@ -4274,7 +4274,7 @@ line:(0|3.08):(18|3):::::
 line:(12|47.23):(25|47.23):::::
 line:(0|3.08):(18|3):::::
 ','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','66',32,'','','ElFigure7','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-3',32,'','','ElFigure7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','201',32,'','','ElFigure7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','25',32,'','','ElFigure7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','52',32,'','','ElFigure7','','','','','','');
@@ -4282,16 +4282,16 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','1',32,'','','ElFigure7','',''
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','254',32,'','','CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','227',32,'','','CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','49',32,'','','CM101_1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','77',32,'','','KS102','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','1',32,'','','KS102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','270',32,'','','KS102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','68',32,'','','KS102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','BC102',32,'','','KS102','КК102','','КШ102','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','63',32,'','','KS101','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','2',32,'','','KS101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS101','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','65',32,'','','ElFigure6','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-2',32,'','','ElFigure6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','elLst','line:(7|3):(7|47.23):::::
 line:(1|47.23):(14|47.23):::::
 ',32,'','','ElFigure6','line:(7|3):(7|47.23):::::
@@ -4306,18 +4306,18 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS101','','',
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','68',32,'','','KS101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','T_PP102','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','100',32,'','','T_PP102','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','14',32,'','','T_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','BC101',32,'','','KS101','КК101','','КШ101','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','231',32,'','','T_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','411',32,'','','T_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','T PP102',32,'','','T_PP102','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','93',32,'','','T_PP101','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','6',32,'','','T_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','T_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','274',32,'','','ElFigure6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','16',32,'','','ElFigure6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','52',32,'','','ElFigure6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','1',32,'','','ElFigure6','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','12',32,'','','ElFigure5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-13',32,'','','ElFigure5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','216',32,'','','ElFigure6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','elLst','line:(7|0):(7|99):::::
 line:(0|0):(14|0):::::
@@ -4340,7 +4340,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Pipe_simple
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','499',32,'','','El_Pipe_simple_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','100',32,'','','ElFigure4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.5',32,'','','ElFigure4','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','10',32,'','','ElFigure4','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-12',32,'','','ElFigure4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','elLst','line:(7|0):(7|99):::::
 line:(0|0):(14|0):::::
 ',32,'','','ElFigure4','line:(7|0):(7|99):::::
@@ -4415,10 +4415,10 @@ line:3:4::::
 INSERT INTO wlb_AGLKS_io VALUES('CM101','p1y','5',0,'','','ElFigure1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','p1x','6',0,'','','ElFigure1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','100',32,'','','ElFigure1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','64',32,'','','ElFigure1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-9',32,'','','ElFigure1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.75',32,'','','ElFigure1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','298',32,'','','El_Pipe_simple_vert_gr1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','67',32,'','','N_CM','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','3',32,'','','N_CM','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','521',32,'','','El_Pipe_simple_vert_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','129',32,'','','N_CM','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','181',32,'','','N_CM','','','','','','');
@@ -4433,7 +4433,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','55',32,'','','El_Strela_gr6',''
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_Strela_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Strela_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Pipe_simple_gr2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','33',32,'','','El_Pipe_simple_gr2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-1',32,'','','El_Pipe_simple_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','25',32,'','','El_Pipe_simple_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','331',32,'','','El_Pipe_simple_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.26',32,'','','El_Pipe_simple_gr3','','','','','','');
@@ -4453,34 +4453,34 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','126',32,'','','El_Pipe_simple_g
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','85',32,'','','El_Pipe_simple_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','2.7',32,'','','El_Pipe_simple_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Pipe_simple_gr5','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','24',32,'','','El_Pipe_simple_gr5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-7',32,'','','El_Pipe_simple_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','F PP101',32,'','','F_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','129',32,'','','F_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','256',32,'','','F_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','F_PP101','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','98',32,'','','F_PP101','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','5',32,'','','F_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','321',32,'','','El_Pipe_simple_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','151',32,'','','El_Pipe_simple_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','1.76',32,'','','El_Pipe_simple_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Pipe_simple_gr6','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','18',32,'','','El_Pipe_simple_gr6','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-10',32,'','','El_Pipe_simple_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','F PP102',32,'','','F_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','411',32,'','','F_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','209',32,'','','F_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','F_PP102','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','103',32,'','','F_PP102','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','13',32,'','','F_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','521',32,'','','El_Pipe_simple_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','151',32,'','','El_Pipe_simple_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','100',32,'','','El_Pipe_simple_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','1.91',32,'','','El_Pipe_simple_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Pipe_simple_gr7','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','19',32,'','','El_Pipe_simple_gr7','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-11',32,'','','El_Pipe_simple_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','420',32,'','','El_Pipe_simple_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','85',32,'','','El_Pipe_simple_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','100',32,'','','El_Pipe_simple_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','3.3',32,'','','El_Pipe_simple_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Pipe_simple_gr8','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','17',32,'','','El_Pipe_simple_gr8','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-8',32,'','','El_Pipe_simple_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','265',32,'','','txtCM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','261',32,'','','txtCM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','54',32,'','','txtCM101_1','','','','','','');
@@ -4492,7 +4492,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','95',32,'','','El_Pipe_simple_gr
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','331',32,'','','El_Pipe_simple_gr9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','1.7',32,'','','El_Pipe_simple_gr9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Pipe_simple_gr9','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','26',32,'','','El_Pipe_simple_gr9','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-18',32,'','','El_Pipe_simple_gr9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','525',32,'','','txtCM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','261',32,'','','txtCM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','54',32,'','','txtCM101_2','','','','','','');
@@ -4505,7 +4505,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','391',32,'','','KPP101','','',''
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','73',32,'','','KPP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KPP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KPP101','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','83',32,'','','KPP101','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','11',32,'','','KPP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','177',32,'','','Line_simple1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','352',32,'','','Line_simple1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','128.33',32,'','','Line_simple1','','','','','','');
@@ -4596,7 +4596,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','backColor','#5A5A5A',96,'backColorFra
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','bordWidth','1',32,'','','','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','bordColor','black',32,'','','','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','657',32,'','','ElFigure6','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','44',32,'','','El_Pipe_simple_gr16','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-23',32,'','','El_Pipe_simple_gr16','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr16','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','2.12',32,'','','El_Pipe_simple_gr16','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','font','Arial 14',32,'','','Text12','','','','','','');
@@ -4620,7 +4620,7 @@ line:1:5::::
 line:6:7::::
 ','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','orient','180',32,'','','ElFigure9','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','71',32,'','','ElFigure9','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-1',32,'','','ElFigure9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.7',32,'','','ElFigure9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','100',32,'','','ElFigure9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','p8x','28',0,'','','ElFigure7','','','','','','');
@@ -4664,8 +4664,8 @@ line:2:7:::::
 line:8:9:::::
 fill:4:3:5::
 ','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','73',32,'','','ElFigure7','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','45',32,'','','El_Pipe_simple_gr17','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-2',32,'','','ElFigure7','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-25',32,'','','El_Pipe_simple_gr17','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','197',32,'','','ElFigure7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','123',32,'','','ElFigure7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','44',32,'','','ElFigure7','','','','','','');
@@ -4689,7 +4689,7 @@ line:3:4::::
 ','','line:1:2::::
 line:3:4::::
 ','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','64',32,'','','ElFigure6','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-26',32,'','','ElFigure6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.55',32,'','','ElFigure6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','100',32,'','','ElFigure6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','16',32,'','','ElFigure6','','','','','','');
@@ -4725,7 +4725,7 @@ line:2:8::::
 line:7:9::::
 fill:4:3:5:
 ','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','72',32,'','','ElFigure5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-5',32,'','','ElFigure5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','54',32,'','','ElFigure5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','40',32,'','','El_Pipe_simple_gr15','','','','','','');
@@ -4758,7 +4758,7 @@ line:3:4::::
 ','','line:1:2::::
 line:3:4::::
 ','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','59',32,'','','ElFigure2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-4',32,'','','ElFigure2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.8',32,'','','ElFigure2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','100',32,'','','ElFigure2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','64',32,'','','El_angleBR_gr1','','','','','','');
@@ -4789,7 +4789,7 @@ line:3:4::::
 ','','line:1:2::::
 line:3:4::::
 ','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','58',32,'','','ElFigure1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-3',32,'','','ElFigure1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','100',32,'','','ElFigure1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.7',32,'','','ElFigure1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','290',32,'','','ElFigure1','','','','','','');
@@ -4799,7 +4799,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.17',32,'','','El_Pipe_sim
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','48',32,'','','El_Pipe_simple_gr11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','289',32,'','','ElFigure1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','111',32,'','','P_PP5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','18',32,'','','P_PP5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','400',32,'','','El_Pipe_simple_gr11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','201',32,'','','P_PP5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr10','','','','','','');
@@ -4854,13 +4854,13 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_pipe_1_gr
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','66',32,'','','El_pipe_1_gr13','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_angleTL_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_angleTL_gr1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','75',32,'','','ElFigure3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-7',32,'','','ElFigure3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','54',32,'','','ElFigure3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_pipe_1_gr13','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','258',32,'','','El_pipe_1_gr13','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','582',32,'','','F_PP5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','223',32,'','','F_PP5','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','115',32,'','','F_PP5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','19',32,'','','F_PP5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','414',32,'','','El_pipe_1_gr13','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','119',32,'','','El_TroinikVL_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_TroinikVL_gr1','','','','','','');
@@ -4870,22 +4870,22 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','198',32,'','','El_TroinikHT_g
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_TroinikHT_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','223',32,'','','F_PP1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','375',32,'','','F_PP1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','118',32,'','','F_PP1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','7',32,'','','F_PP1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','413',32,'','','F_PP3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','450',32,'','','F_PP3','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','120',32,'','','F_PP3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','11',32,'','','F_PP3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','661',32,'','','El_StrelaVB_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','452',32,'','','El_StrelaVB_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_StrelaVB_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_StrelaVB_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','123',32,'','','El_StrelaVB_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','fillColor','blue',32,'','','El_StrelaVB_gr3','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','9',32,'','','El_TroinikHT_gr1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-19',32,'','','El_TroinikHT_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','107',32,'','','El_TroinikHT_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','331',32,'','','El_TroinikHT_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_TroinikHT_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_TroinikHT_gr2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','92',32,'','','BC1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','4',32,'','','BC1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','92.5',32,'','','Text12','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','BC1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','BC1','','','','','','');
@@ -4958,13 +4958,13 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','p8x','20',0,'','','ElFigure9','','','
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','p8y','5',0,'','','ElFigure9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','166',32,'','','PC1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','84',32,'','','PC1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','86',32,'','','PC1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','5',32,'','','PC1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','519',32,'','','PC2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','37',32,'','','PC2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','102',32,'','','PC2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','17',32,'','','PC2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','777',32,'','','PC3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','237',32,'','','PC3','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','101',32,'','','PC3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','21',32,'','','PC3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','name','',32,'','','Title','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','5',32,'','','Title','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','5',32,'','','Title','','','','','','');
@@ -4975,7 +4975,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','1.56',32,'','','Title','','
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','88',32,'','','Title','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','font','Arial 20 0 1 1 0',32,'','','Title','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','1.2',32,'','','El_Pipe_simple_gr15','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','39',32,'','','El_Pipe_simple_gr14','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-22',32,'','','El_Pipe_simple_gr14','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','339',32,'','','El_Pipe_simple_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','75',32,'','','El_Pipe_simple_gr15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr14','','','','','','');
@@ -4995,13 +4995,13 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','492',32,'','','El_Pipe_simple
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','5.89',32,'','','El_Pipe_simple_gr10','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','254',32,'','','El_Pipe_simple_gr10','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','428',32,'','','P_PP3','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','119',32,'','','P_PP3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','10',32,'','','P_PP3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','54',32,'','','El_Pipe_simple_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','127',32,'','','El_Pipe_simple_gr9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','198',32,'','','El_Pipe_simple_gr9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.65',32,'','','El_Pipe_simple_gr9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr9','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','37',32,'','','El_Pipe_simple_gr9','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-11',32,'','','El_Pipe_simple_gr9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','224',32,'','','El_round_square11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','246',32,'','','El_round_square11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.4',32,'','','El_round_square11','','','','','','');
@@ -5019,7 +5019,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Strela_gr
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Strela_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','139',32,'','','El_Strela_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','orient','0',32,'','','El_Strela_gr2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','10',32,'','','El_TroinikHB_gr2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-16',32,'','','El_TroinikHB_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_TroinikHB_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_TroinikHB_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','323',32,'','','El_TroinikHB_gr2','','','','','','');
@@ -5046,12 +5046,12 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','857',32,'','','El_Strela_gr7'
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','318',32,'','','El_Strela_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Strela_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Strela_gr7','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','140',32,'','','El_Strela_gr7','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-24',32,'','','El_Strela_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','189',32,'','','PCV1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','186',32,'','','PCV1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','PCV1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','PCV1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','93',32,'','','PCV1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','5',32,'','','PCV1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','c1','#d3d3d3',32,'','','PCV1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','64',32,'','','El_Pipe_simple_vert_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','168',32,'','','El_Pipe_simple_vert_gr1','','','','','','');
@@ -5062,7 +5062,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','566',32,'','','PCV2','','',''
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','106',32,'','','PCV2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','PCV2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','PCV2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','99',32,'','','PCV2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','17',32,'','','PCV2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','145',32,'','','El_Pipe_simple_vert_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','168',32,'','','El_Pipe_simple_vert_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr2','','','','','','');
@@ -5072,12 +5072,12 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','828',32,'','','PCV3','','',''
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','306',32,'','','PCV3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','PCV3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','PCV3','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','141',32,'','','PCV3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','21',32,'','','PCV3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','323',32,'','','El_Pipe_simple_vert_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','194',32,'','','El_Pipe_simple_vert_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','2.1',32,'','','El_Pipe_simple_vert_gr3','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','24',32,'','','El_Pipe_simple_vert_gr3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-14',32,'','','El_Pipe_simple_vert_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','414',32,'','','El_Pipe_simple_vert_gr4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','276',32,'','','El_Pipe_simple_vert_gr4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr4','','','','','','');
@@ -5091,7 +5091,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','74',32,'','','El_Pipe_simple_
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','fillColor','blue',32,'','','El_Pipe_simple_vert_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','223',32,'','','T_PP1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','397',32,'','','T_PP1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','113',32,'','','T_PP1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','8',32,'','','T_PP1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','356',32,'','','Text1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','243',32,'','','Text1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','43',32,'','','Text1','','','','','','');
@@ -5102,7 +5102,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','514',32,'','','El_Pipe_simple
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','137',32,'','','El_Pipe_simple_vert_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','2.6',32,'','','El_Pipe_simple_vert_gr6','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','15',32,'','','El_Pipe_simple_vert_gr6','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-19',32,'','','El_Pipe_simple_vert_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','646.5',32,'','','Text2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','351',32,'','','Text2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','35',32,'','','Text2','','','','','','');
@@ -5114,11 +5114,11 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','234',32,'','','El_Pipe_simple
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','320',32,'','','El_Pipe_simple_vert_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','1.75',32,'','','El_Pipe_simple_vert_gr7','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','70',32,'','','El_Pipe_simple_vert_gr7','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-15',32,'','','El_Pipe_simple_vert_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','fillColor','blue',32,'','','El_Pipe_simple_vert_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','413',32,'','','T_PP3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','472',32,'','','T_PP3','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','116',32,'','','T_PP3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','12',32,'','','T_PP3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','766.5',32,'','','Text3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','292',32,'','','Text3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','35',32,'','','Text3','','','','','','');
@@ -5130,7 +5130,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','323',32,'','','El_Pipe_simple
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','92',32,'','','El_Pipe_simple_vert_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.81',32,'','','El_Pipe_simple_vert_gr8','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','17',32,'','','El_Pipe_simple_vert_gr8','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-13',32,'','','El_Pipe_simple_vert_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','357',32,'','','Text4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','308',32,'','','Text4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','42',32,'','','Text4','','','','','','');
@@ -5144,7 +5144,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.56',32,'','','El_Pipe_sim
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','21',32,'','','El_Pipe_simple_vert_gr9','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','582',32,'','','T_PP5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','245',32,'','','T_PP5','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','110',32,'','','T_PP5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','20',32,'','','T_PP5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','818.5',32,'','','Text5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','476',32,'','','Text5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','41',32,'','','Text5','','','','','','');
@@ -5181,7 +5181,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','136',32,'','','Text9','','','
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','text','CM102',32,'','','Text9','КМ102','','КМ102','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','223',32,'','','P_PP1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','353',32,'','','P_PP1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','112',32,'','','P_PP1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','6',32,'','','P_PP1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.15',32,'','','El_Pipe_simple_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr8','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','339',32,'','','El_Pipe_simple_gr8','','','','','','');
@@ -5196,7 +5196,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.95',32,'','','El_Pipe_sim
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','262',32,'','','El_Pipe_simple_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','260',32,'','','El_Pipe_simple_gr6','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','61',32,'','','El_Pipe_simple_gr5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-12',32,'','','El_Pipe_simple_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','198',32,'','','El_Pipe_simple_gr5','','','','','','');
@@ -5211,17 +5211,17 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','430',32,'','','El_StrelaVB_gr
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_StrelaVB_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_StrelaVB_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','152',32,'','','El_StrelaVB_gr1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','52',32,'','','El_Pipe_simple_gr3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-9',32,'','','El_Pipe_simple_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','149',32,'','','El_Pipe_simple_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','127',32,'','','El_Pipe_simple_gr3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.7',32,'','','El_Pipe_simple_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','30',32,'','','El_Pipe_simple_gr2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-10',32,'','','El_Pipe_simple_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','198',32,'','','El_Pipe_simple_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','33',32,'','','El_Pipe_simple_gr2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','33',32,'','','El_Pipe_simple_gr1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-8',32,'','','El_Pipe_simple_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Pipe_simple_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','149',32,'','','El_Pipe_simple_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Pipe_simple_gr1','','','','','','');
@@ -5250,7 +5250,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_pipe_1_gr
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_pipe_1_gr26','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','252',32,'','','El_pipe_1_gr26','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','746',32,'','','El_pipe_1_gr26','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','126',32,'','','El_TroinikHT_gr4','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-17',32,'','','El_TroinikHT_gr4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','421',32,'','','El_TroinikHT_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','499',32,'','','El_TroinikHT_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_TroinikHT_gr5','','','','','','');
@@ -5433,7 +5433,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','98',32,'','','BC2','','','','
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','137',32,'','','BC2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','BC2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','BC2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','89',32,'','','BC2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','3',32,'','','BC2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','597.5',32,'','','Text13','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','332',32,'','','Text13','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','27',32,'','','Text13','','','','','','');
@@ -5463,12 +5463,12 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','109',32,'','','Text15','','',
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','font','Arial 13 1',32,'','','Text15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','color','',32,'','','Text15','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','text','CS HP',32,'','','Text15','КС ВТ','','КУ ВД','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','311',32,'','','BC5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','312',32,'','','BC5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','168',32,'','','BC5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','100',32,'','','BC5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','BC5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','BC5','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','98',32,'','','BC5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','9',32,'','','BC5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','orient','-90',32,'','','BC5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','401.5',32,'','','Text21','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','61',32,'','','Text21','','','','','','');
@@ -5490,7 +5490,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','311',32,'','','BC6','','','',
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','106.66',32,'','','BC6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','BC6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','BC6','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','114',32,'','','BC6','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','13',32,'','','BC6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','725.5',32,'','','Text22','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','105',32,'','','Text22','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','103',32,'','','Text22','','','','','','');
@@ -5511,7 +5511,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','381',32,'','','BC7','','','',
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','106.66',32,'','','BC7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','BC7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','BC7','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','104',32,'','','BC7','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','14',32,'','','BC7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','703',32,'','','Text23','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','369',32,'','','Text23','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomW','41',32,'','','Text23','','','','','','');
@@ -5578,13 +5578,13 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','311',32,'','','BC21','','',''
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','106.66',32,'','','BC21','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','BC21','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','BC21','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','117',32,'','','BC21','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','15',32,'','','BC21','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','531',32,'','','BC22','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','381',32,'','','BC22','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomH','106.66',32,'','','BC22','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.3',32,'','','BC22','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.3',32,'','','BC22','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','105',32,'','','BC22','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','16',32,'','','BC22','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','275',32,'','','El_d1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','253',32,'','','El_d1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.4',32,'','','El_d1','','','','','','');
@@ -5611,12 +5611,12 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.4',32,'','','El_d4','',''
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','103',32,'','','El_d4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','44',32,'','','Pi','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','230',32,'','','Pi','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','87',32,'','','Pi','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','1',32,'','','Pi','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','514',32,'','','El_Krest_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','323',32,'','','El_Krest_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Krest_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Krest_gr1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','46',32,'','','El_Krest_gr1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-18',32,'','','El_Krest_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','681',32,'','','El_Krest_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','324',32,'','','El_Krest_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Krest_gr2','','','','','','');
@@ -5634,7 +5634,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_Krest_gr4
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','34',32,'','','El_Krest_gr4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','44',32,'','','Ti','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','270',32,'','','Ti','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','85',32,'','','Ti','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','2',32,'','','Ti','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','746',32,'','','El_Krest_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','317',32,'','','El_Krest_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_Krest_gr5','','','','','','');
@@ -5679,7 +5679,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','772',32,'','','El_pipe_1_gr1','
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','286',32,'','','El_pipe_1_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_pipe_1_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_pipe_1_gr1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','40',32,'','','El_pipe_1_gr1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-16',32,'','','El_pipe_1_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','678',32,'','','txtKS123','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','443',32,'','','txtKS123','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','48',32,'','','txtKS123','','','','','','');
@@ -5694,7 +5694,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.45',32,'','','El_Pipe_simpl
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','44',32,'','','El_Pipe_simple_vert_gr12','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','fillColor','blue',32,'','','El_Pipe_simple_vert_gr12','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','fillColor','blue',32,'','','El_Pipe_simple_vert_gr11','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','43',32,'','','El_Pipe_simple_vert_gr11','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-21',32,'','','El_Pipe_simple_vert_gr11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.6',32,'','','El_Pipe_simple_vert_gr11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','442',32,'','','El_Pipe_simple_vert_gr11','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr11','','','','','','');
@@ -5706,7 +5706,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','61',32,'','','El_Troinik_gr9','
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_Troinik_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','51',32,'','','El_Troinik_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.2',32,'','','El_angleBR_gr1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','11',32,'','','El_angleBR_gr1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-20',32,'','','El_angleBR_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_angleBR_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','282',32,'','','El_angleBR_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','50',32,'','','El_angleBR_gr1','','','','','','');
@@ -5719,7 +5719,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','20',32,'','','txtKS122','','','
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','443',32,'','','txtKS122','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','439',32,'','','txtKS122','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.5',32,'','','El_Pipe_simple_vert_gr10','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','42',32,'','','El_Pipe_simple_vert_gr10','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','-4',32,'','','El_Pipe_simple_vert_gr10','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','fillColor','blue',32,'','','El_Pipe_simple_vert_gr10','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.2',32,'','','El_Pipe_simple_vert_gr10','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','370',32,'','','El_Pipe_simple_vert_gr10','','','','','','');
@@ -5764,12 +5764,12 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','name','T CM101/1',32,'','','T_CM101_1',
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','274',32,'','','T_CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','396',32,'','','T_CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','T_CM101_1','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','94',32,'','','T_CM101_1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','9',32,'','','T_CM101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','T CM101/1',32,'','','T_CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','530',32,'','','T_CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','396',32,'','','T_CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','T_CM101_2','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','96',32,'','','T_CM101_2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','18',32,'','','T_CM101_2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','174',32,'','','txtKS121','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','441',32,'','','txtKS121','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','48',32,'','','txtKS121','','','','','','');
@@ -5810,21 +5810,21 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','139',32,'','','KS106','','','',
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS106','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS106','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS106','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','118',32,'','','KS106','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','16',32,'','','KS106','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','BC121',32,'','','KS107','КК121','','КШ121','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','745',32,'','','KS107','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','120',32,'','','KS107','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS107','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS107','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS107','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','76',32,'','','KS107','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','22',32,'','','KS107','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','BC121',32,'','','KS121','КК121','','КШ121','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','159',32,'','','KS121','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','413.24',32,'','','KS121','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS121','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS121','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS121','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','68',32,'','','KS121','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','7',32,'','','KS121','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','orient','90',32,'','','KS121','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','BC122',32,'','','KS122','КК122','','КШ122','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','422',32,'','','KS122','','','','','','');
@@ -5832,7 +5832,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','413.24',32,'','','KS122','','',
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS122','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS122','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS122','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','70',32,'','','KS122','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','15',32,'','','KS122','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','orient','90',32,'','','KS122','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','BC123',32,'','','KS123','КК123','','КШ123','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','662',32,'','','KS123','','','','','','');
@@ -5840,7 +5840,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','413.8',32,'','','KS123','','','
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS123','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS123','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS123','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','73',32,'','','KS123','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','20',32,'','','KS123','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','orient','90',32,'','','KS123','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','5',32,'','','CM101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','5',32,'','','CM101','','','','','','');
@@ -5856,12 +5856,12 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','name','P PP101',32,'','','P_PP101','','
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','129',32,'','','P_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','234',32,'','','P_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','P_PP101','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','97',32,'','','P_PP101','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','4',32,'','','P_PP101','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','P PP102',32,'','','P_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','411',32,'','','P_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','187',32,'','','P_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomW','102',32,'','','P_PP102','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','102',32,'','','P_PP102','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','12',32,'','','P_PP102','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','C101/1',32,'','','C101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','146',32,'','','C101_1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','303',32,'','','C101_1','','','','','','');
@@ -5880,7 +5880,7 @@ INSERT INTO wlb_AGLKS_io VALUES('CM101','geomY','303',32,'','','C101_3','','',''
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.57',32,'','','C101_3','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomX','492',32,'','','KS106','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','name','BC121',32,'','','KS106','КК121','','КШ121','','','');
-INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','75',32,'','','KS105','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('CM101','geomZ','23',32,'','','KS105','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomYsc','0.3',32,'','','KS105','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomH','103.34',32,'','','KS105','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('CM101','geomXsc','0.3',32,'','','KS105','','','','','','');
@@ -6019,7 +6019,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','514',32,'','','El_TroinikHT_g
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','393',32,'','','El_TroinikHT_gr4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_TroinikHT_gr4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_TroinikHT_gr4','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','4',32,'','','El_TroinikHT_gr4','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-20',32,'','','El_TroinikHT_gr4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','9',32,'','','El_angleTL_gr1','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','353',32,'','','El_angleTL_gr2','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','397',32,'','','El_angleTL_gr2','','','','','','');
@@ -6040,7 +6040,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','560',32,'','','El_angleTL_gr5
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','393',32,'','','El_angleTL_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_angleTL_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_angleTL_gr5','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','22',32,'','','El_angleTL_gr5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-21',32,'','','El_angleTL_gr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','700',32,'','','El_angleTL_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','259',32,'','','El_angleTL_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_angleTL_gr6','','','','','','');
@@ -6093,7 +6093,7 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','467',32,'','','El_angleTR_gr6
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','393',32,'','','El_angleTR_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_angleTR_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_angleTR_gr6','','','','','','');
-INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','11',32,'','','El_angleTR_gr6','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomZ','-17',32,'','','El_angleTR_gr6','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomX','681',32,'','','El_angleTR_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomY','391',32,'','','El_angleTR_gr7','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_angleTR_gr7','','','','','','');
@@ -6113,8 +6113,8 @@ CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT D
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO wlb_AGLKS_uio VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1584730673);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1584730673);
+INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1612108362);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1612108362);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','2','','..',1,'','','',-1,0,'name;dscr;',1582550254);
@@ -6127,7 +6127,7 @@ INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSet'
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docRepDay',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;n;',1582543524);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docRepMonth',1,'','','',-1,0,'name;geomYsc;pgNoOpenProc;n;',1582543531);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/doc','5','','/wlb_test/wdg_docTestGasNodeDayRep',1,'','','',-1,0,'name;geomYsc;',1580649241);
-INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1584730673);
+INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','mn','','root',1,'','','',-1,5,'name;dscr;',1612108362);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1',1,'','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1582873333);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen',1,'','','',-1,0,'pgNoOpenProc;pgGrp;',1584730410);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','gcadr','','/wlb_Main/wdg_grpCadr',1,'','','',-1,2,'geomYsc;evProc;pgGrp;',1400851728);
@@ -6338,7 +6338,7 @@ YGsnhAaPDeb5BACKrljHLJWoABAHBSAKVhX1MAKS2OAJi3T94EdDGcdZhLiq6ro+PT3NGNv9LyGk
 3xO9veE8olQrFA53xiZEghC0b2G7TsQ5T9oPTrqjd1RQalK6b+e8HwhRySF3MJRSSvdWyd4sKSFN
 EaUZAHAOnQJESikPth3vwDyUsZQ9KLmHu7ci6M03f3X16k8JCQCAc0RpArCn3JoAEcBhFagAGQA/
 DIUCEADWxYJz9fnnP/C8rQLleR7VdfTqq7/J7/NF8ZCO/lfR7iF1D3zc9z+IYrH4b7fLC7s/YYjB
-AAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;geomXsc;geomYsc;backColor;bordWidth;bordColor;',1554057059);
+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'','','',-1,'name;geomW;geomH;geomXsc;geomYsc;backColor;bordWidth;bordColor;',1612773409);
 INSERT INTO wlb_AGLKS VALUES('KCH_MN1','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAJ
 yklEQVRYhe1ZS2yc1RU+9/E/Z8Yztmf8mDG2xo5N7IZHHMfEFHADuJBs0sZkAUQobRdVV2yqLlqR
 TVW1O4SEqqpiQUVLKzWlJaJ1SERSkyBcTF0nDomN8rBjD7bH837+z3u7mGFie2zHM4gUpJ7F6P/P
@@ -6384,7 +6384,7 @@ VFEURVFKr/ML85hh4fM7HTNYdiVrtqyPn82ocNwW1G4tWTEAhDhCd26nYQmb3CxFi+SUVI9KZLKh
 sGVRy1rzSZKkbRbkX1ZzFwGSJKmUcCVJEohA8MYAKM1Qui3j2LZgWRJCTBSLrYZqAFiWFI3WbX2R
 z6eBAna5ihZAGLBFMonGKKotF9Y0bzJZv53rA2PUNBUALoqi15uoBgBCqKnpxtzcvjtKqiqoaztd
 qRSkUhtIynI2mexKJitaiO71vgfVWaC392wVo74kqv6/na8I/R/A/5q+9gCoqm6rJ/7VJEVR/gtO
-6VqgwKO3JAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'geomW;geomH;geomXsc;geomYsc;backColor;bordWidth;bordColor;',1554057011);
+6VqgwKO3JAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'geomW;geomH;geomXsc;geomYsc;backColor;bordWidth;bordColor;',1612773409);
 INSERT INTO wlb_AGLKS VALUES('comprEn','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAxVJREFUeJztmj1vE0EQhp8gqrRcARRbAMXVC+VSwC9wJKCwKc9QprVT
 kqQMEk2cRCliuYMYGqAMH5WdRC4AJRSATAMooQAU0Q7F+iTLIoqT3Meefa80rX1+dvzO3MxCrly5
@@ -6410,7 +6410,7 @@ else c1 = (pVar<1) ? "red" : "green";',1000,'name;geomW;geomH;fillColor;elLst;c1
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','statLine','','Status line items',131205,'',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131089,'0|0;1;2|Original size;Maximize;Full screen',128,'','');
-INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',0,'','');
+INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
-INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',0,'','');
+INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
 COMMIT;

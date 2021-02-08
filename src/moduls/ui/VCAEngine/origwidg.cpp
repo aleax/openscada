@@ -600,7 +600,8 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			  "    color - column color as a whole into the color name or code;\n"
 			  "    colorText - color of the column text as a whole into the color name or code;\n"
 			  "    font - font of the column text in the typical OpenSCADA string;\n"
-			  "    sort - sorting by the column [0 - Descending; 1 - Ascending].\n"
+			  "    sort - sorting by the column [0 - Descending; 1 - Ascending];\n"
+			  "    align - alignment the column for: \"left\", \"right\" and \"center\".\n"
 			  "  r   - Row of the values. Possible attributes of the row cell tag for the row as a whole:\n"
 			  "    color - row color as a whole into the color name or code;\n"
 			  "    colorText - color of the row text as a whole into the color name or code;\n"
@@ -610,7 +611,8 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			  "    colorText - color of the cell text into the color name or code;\n"
 			  "    font - font of the cell text in the typical OpenSCADA string;\n"
 			  "    img - image of the cell into the form \"[{src}:]{name}\";\n"
-			  "    edit - allowing the cell edition (0 or 1), by default - no (0)."));
+			  "    edit - allowing the cell edition (0 or 1), by default - no (0);\n"
+			  "    align - alignment the cell for: \"left\", \"right\" and \"center\"."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 	    }

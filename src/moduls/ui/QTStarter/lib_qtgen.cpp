@@ -62,26 +62,34 @@ TableDelegate::TableDelegate( QObject *parent ) : QItemDelegate(parent)
 
 void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    drawFocus(painter, option, option.rect.adjusted(+1,+1,-1,-1));
+    QStyleOptionViewItem opt = setOptions(index, option);
+
+    drawBackground(painter, opt, index);
+    //See the Qt source file "qitemdelegate.cpp" for more details
+    //drawCheck(painter, opt, checkRect, checkState);
+    //drawDecoration(painter, opt, decorationRect, pixmap);
 
     QVariant value = index.data(Qt::DisplayRole);
     switch(value.type()) {
 	case QVariant::Bool:
-	    //painter->save();
 	    if(value.toBool()) {
 		QImage img = QImage(":/images/button_ok.png").scaled(icoSize(), icoSize(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-		painter->drawImage(option.rect.center().x()-img.width()/2, option.rect.center().y()-img.height()/2, img);
+		painter->drawImage(opt.rect.center().x()-img.width()/2, opt.rect.center().y()-img.height()/2, img);
 	    }
-	    //painter->restore();
 	    break;
-	case QVariant::String:
-	    //!!!! Append correct eliding
-	    painter->drawText(option.rect, Qt::AlignLeft|Qt::AlignVCenter|Qt::TextWordWrap, value.toString());
+	case QVariant::Int: case QVariant::UInt: case QVariant::LongLong: case QVariant::ULongLong:
+	case QVariant::Double:
+	    painter->drawText(opt.rect, Qt::AlignCenter, value.toString());
 	    break;
 	default:
-	    drawDisplay(painter,option,option.rect,value.toString());
+	    int drawOpts = Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap;
+	    if(!index.data(AlignOptRole).isNull()) drawOpts = index.data(AlignOptRole).toInt();
+	    painter->drawText(opt.rect, drawOpts, value.toString());
+	    //drawDisplay(painter, opt, opt.rect, value.toString());
 	    break;
     }
+
+    drawFocus(painter, opt, opt.rect.adjusted(+1,+1,-1,-1));
 }
 
 QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
@@ -90,7 +98,7 @@ QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewIte
     if(!index.isValid()) return 0;
 
     QVariant value = index.data(Qt::DisplayRole);
-    QVariant val_user = index.data(Qt::UserRole);
+    QVariant val_user = index.data(SelectRole);
 
     if(val_user.isValid()) w_del = new QComboBox(parent);
     else if(value.type() == QVariant::String) {
@@ -113,7 +121,7 @@ QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewIte
 void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
 {
     QVariant value = index.data(Qt::DisplayRole);
-    QVariant val_user = index.data(Qt::UserRole);
+    QVariant val_user = index.data(SelectRole);
 
     if(dynamic_cast<QComboBox*>(editor)) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
@@ -133,7 +141,7 @@ void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, co
 {
     if(dynamic_cast<QComboBox*>(editor)) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
-	QVariant val_user = index.data(Qt::UserRole);
+	QVariant val_user = index.data(SelectRole);
 	if(!val_user.isValid())
 	    model->setData(index, (bool)comb->currentIndex(), Qt::EditRole);
 	else model->setData(index, comb->currentText(), Qt::EditRole);

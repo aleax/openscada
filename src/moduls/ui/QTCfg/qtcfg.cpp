@@ -1387,7 +1387,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			}
 
 			//   Set element
-			if(t_linf->attr("tp") == "bool") thd_it->setData(Qt::DisplayRole,(bool)s2i(t_linf->childGet(iEl)->text()));
+			if(t_linf->attr("tp") == "bool")	thd_it->setData(Qt::DisplayRole, (bool)s2i(t_linf->childGet(iEl)->text()));
 			else if(t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed") {
 			    int sel_n;
 			    for(sel_n = 0; sel_n < elms.size(); sel_n++)
@@ -1400,10 +1400,15 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    }
 
 			    thd_it->setData(Qt::DisplayRole, elms.at(sel_n));
-			    thd_it->setData(Qt::UserRole, elms);
+			    thd_it->setData(TableDelegate::SelectRole, elms);
+			    thd_it->setData(TableDelegate::AlignOptRole, Qt::AlignCenter);
 			}
-			else if(t_linf->attr("tp") == "time")
+			else if(t_linf->attr("tp") == "dec")	thd_it->setData(Qt::DisplayRole, s2ll(t_linf->childGet(iEl)->text()));
+			else if(t_linf->attr("tp") == "real")	thd_it->setData(Qt::DisplayRole, s2r(t_linf->childGet(iEl)->text()));
+			else if(t_linf->attr("tp") == "time") {
 			    thd_it->setData(Qt::DisplayRole, atm2s(s2i(t_linf->childGet(iEl)->text()),"%d-%m-%Y %H:%M:%S").c_str());
+			    thd_it->setData(TableDelegate::AlignOptRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
+			}
 			else thd_it->setData(Qt::DisplayRole, getPrintVal(t_linf->childGet(iEl)->text()).c_str());
 
 			//   Set access

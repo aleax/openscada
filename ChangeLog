@@ -1,3 +1,38 @@
+2021-02-08 Roman (stable)
+- !!:LibsDB.vcaBase: The new page "Storehouse (storeHouse)" was finished in implementation the class edition and appended for:
+	- class full-translated name;
+	- show and activation the buttons "Copy" and "Edit";
+	- use the item-column type in building the end-user table and the content alignment.
+    The frames "RootPgSo", "grpGraph", "grpGraph", "grpGraph10", "ElCadr", "grph_panel" of the library "Main"
+	improved in the active elements true order (z) for correct tab focus sequence working.
+- !!:data/ModelsDB/AGLKS/St.db: All frames of the library "AGLKS" improved in the active elements true order (z)
+    for correct tab focus sequence working.
+- !!:DAQ.ModBus: The output part of the protocol RTU variant appended for early termination of the package waiting
+    of the standard functions [ERR,1...6,15,16], what increases the overall bandwidth twice.
+- !!:UI.{QTStarter,QTCfg,Vision}: The common library class TableDelegate significantly improved to work in QTCfg and Vision:
+    - appended for the own user roles SelectRole and AlignOptRole;
+    - the cell paint appended for the background color by reading-applying the common roles;
+    - the number types (integer and real) appended for force centering;
+    - the string types appended by the options of alignment and wordwrapping.
+- !!:UI.{VCAEngine,Vision,WebVision}: The view Table of the primitive FormEl appended by the column and cell attribute "align" implementation.
+- !!:UI.Vision: The view Table of the primitive FormEl improved in that fitting after the table whole resizing only,
+	so allow the colums resizing manually also. The row height limited in half height of the table.
+    !: The mime data, style, diagnostic message table and the primitive Protocol switched to use the unified class TableDelegate
+	with some centred columns.
+- !!!!:FIX:UI.WebVision: The view Table of the primitive FormEl significantly improved for:
+	- multiline text edition of the string cells in whole width and height of the cell, with the edition apply by Ctrl+Enter;
+	- view limiting the string cells in 300 symbols;
+	- display the boolean cells as an image at the true state;
+	- fixed in the empty tables processing.
+    !!!!: The keyboard focus and events significantly improved for ensure that working in common by:
+	- setting the "tabindex" attribute for all active widgets and for FormEl items specially for the form elements;
+	- appending the "tabindex" number calculation as a unique one for whole interface, than prventing the tab focus jumps;
+	- processing the onfocus event for the own focus processing by setFocus();
+	- the view Button of the primitive FormEl appended for the keyboard events processing for down and up at the keys Space and Enter;
+	- the primitive Diagram is simplified by removing the spare A item.
+    !:FIX: Prevented from plodding spare DIV items at the page changing in the page containers.
+
+
 2021-01-31 Roman (stable)
 - !!!:LibsDB.vcaBase: The library "Main" appended for the new page "StoreHouse (storeHouse)" initial implementation.
 - SYS: The user API functions appended by the function lang() of the system language fast obtaining.
@@ -44,7 +79,7 @@
     of the buttons of the primitive FormEl is unified in reusing the system style objects
     and that disabled in the CSS styles using here due to color alpha lost.
 - FIX:UI.WebVision: The servSet() function appended in the error 404 processing, emerged at the sessions accessing
-    after they clossing on the server side.
+    after they closing on the server side.
 
 
 2020-12-29 Roman (stable)
