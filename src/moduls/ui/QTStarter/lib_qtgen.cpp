@@ -64,7 +64,9 @@ TableDelegate::TableDelegate( QObject *parent ) : QItemDelegate(parent)
 QSize TableDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     QRect rect = option.rect;
-    const bool wrapText = option.features & QStyleOptionViewItem::WrapText;
+    const bool wrapText = index.data(Qt::TextAlignmentRole).isValid() ?
+		    (index.data(Qt::TextAlignmentRole).toInt()&Qt::TextWordWrap) : true;
+	    //option.features & QStyleOptionViewItem::WrapText;
     switch(option.decorationPosition) {
 	case QStyleOptionViewItem::Left: case QStyleOptionViewItem::Right:
 	    rect.setWidth(wrapText && rect.isValid() ? rect.width() : 1000);
@@ -102,7 +104,7 @@ void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option
 	    break;
 	default:
 	    int drawOpts = Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap;
-	    if(!index.data(Qt::TextAlignmentRole).isNull())
+	    if(index.data(Qt::TextAlignmentRole).isValid())
 		drawOpts = index.data(Qt::TextAlignmentRole).toInt();
 
 	    QString lim = TSYS::strEncode(value.toString().toStdString(), TSYS::Limit,

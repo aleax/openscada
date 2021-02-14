@@ -1,4 +1,8 @@
 2021-02-14 Roman (stable)
+- FIX:UI.{QTStarter,QTCfg,Vision}: Fixed in building with Qt4 for TableDelegate.
+
+
+2021-02-14 Roman (stable)
 - LibsDB.vcaBase: Main.storeHouse: switched to non "colsWdthFit" mode and the field "Description" forced to width "40%".
 - FIX:DAQ,Transports: Fixed in the control fields "list:/redund/cntr/rdndt" and "list:/sub/ehost/mode" type "int" renaming to "dec".
 - !!!!:FIX:UI.WebCfgD: Completely revised and expanded for:
