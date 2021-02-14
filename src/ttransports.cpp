@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -471,7 +471,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/sub/ehost/addr",_("Address"),RWRWRW,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/sub/ehost/user",_("User"),RWRWRW,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/sub/ehost/pass",_("Password"),RWRWRW,"root",STR_ID,1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/sub/ehost/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","int","dest","select",
+	    ctrMkNode("list",opt,-1,"/sub/ehost/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","dec","dest","select",
 		"sel_id",TSYS::strMess("%d;%d;%d",ExtHost::User,ExtHost::System,ExtHost::UserSystem).c_str(),
 		"sel_list",_("User;System;User and System"));
 	    ctrMkNode("list",opt,-1,"/sub/ehost/upRiseLev",_("Level of lifting"),RWRWRW,"root",STR_ID,1,"tp","dec");

@@ -50,6 +50,7 @@ QColor OSCADA_QT::colorAdjToBack( const QColor &clr, const QColor &backClr )
     return QColor::fromHsv(clr.hue(), wS, wV, clr.alpha());
 }
 
+using namespace OSCADA;
 using namespace OSCADA_QT;
 
 //*************************************************
@@ -58,6 +59,24 @@ using namespace OSCADA_QT;
 TableDelegate::TableDelegate( QObject *parent ) : QItemDelegate(parent)
 {
 
+}
+
+QSize TableDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    QRect rect = option.rect;
+    const bool wrapText = option.features & QStyleOptionViewItem::WrapText;
+    switch(option.decorationPosition) {
+	case QStyleOptionViewItem::Left: case QStyleOptionViewItem::Right:
+	    rect.setWidth(wrapText && rect.isValid() ? rect.width() : 1000);
+	    break;
+	case QStyleOptionViewItem::Top: case QStyleOptionViewItem::Bottom:
+	    rect.setWidth(wrapText ? option.decorationSize.width() : 1000);
+	    break;
+    }
+
+    return textRectangle(0, rect, qvariant_cast<QFont>(index.data(Qt::FontRole)).resolve(option.font),
+	TSYS::strEncode(index.data(Qt::DisplayRole).toString().toStdString(),TSYS::Limit,
+	    i2s(index.data(TextLimRole).isValid()?index.data(TextLimRole).toInt():LIM_TEXT_DEF)).c_str()).size();
 }
 
 void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
@@ -83,8 +102,12 @@ void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option
 	    break;
 	default:
 	    int drawOpts = Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap;
-	    if(!index.data(AlignOptRole).isNull()) drawOpts = index.data(AlignOptRole).toInt();
-	    painter->drawText(opt.rect, drawOpts, value.toString());
+	    if(!index.data(Qt::TextAlignmentRole).isNull())
+		drawOpts = index.data(Qt::TextAlignmentRole).toInt();
+
+	    QString lim = TSYS::strEncode(value.toString().toStdString(), TSYS::Limit,
+		i2s(index.data(TextLimRole).isValid()?index.data(TextLimRole).toInt():LIM_TEXT_DEF)).c_str();
+	    painter->drawText(opt.rect, drawOpts, (lim.size() < value.toString().size()) ? lim+"..." : value.toString());
 	    //drawDisplay(painter, opt, opt.rect, value.toString());
 	    break;
     }

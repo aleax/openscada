@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +34,7 @@ SEC_WR = 0x02;		//Write access
 SEC_RD = 0x04;		//Read access
 copyBuf = '0';		//Copy node address buffer
 genReqs = null;		//Generic request object
+limTblItmCnt = 300;	//Limit of the table item content
 
 //Browser type detect
 var isNN = navigator.appName.indexOf('Netscape') != -1;
@@ -51,13 +52,13 @@ function strEncode( vl, tp )
     //return vl;
     var encRez = '';
     if(!tp || tp == "html")
-	for(var i_enc = 0; i_enc < vl.length; i_enc++)
-	    switch(vl.charAt(i_enc)) {
+	for(var iEnc = 0; iEnc < vl.length; iEnc++)
+	    switch(vl.charAt(iEnc)) {
 		case '&': encRez += '&amp;'; break;
 		case '>': encRez += '&gt;'; break;
 		case '<': encRez += '&lt;'; break;
 		case '"': encRez += '&quot;'; break;
-		default:  encRez += vl.charAt(i_enc);
+		default:  encRez += vl.charAt(iEnc);
 	    }
     return encRez;
 }
@@ -83,30 +84,6 @@ function pathLev( path, level, scan )
     }
 }
 
-/***************************************************
- * nodeText - Get DOM node text                    *
- ***************************************************/
-function nodeText( node )
-{
-    var rez = '';
-    for(var i = 0; node && i < node.childNodes.length; i++)
-	if(node.childNodes[i].nodeType == 3) rez += node.childNodes[i].data;
-
-    return rez;
-}
-
-/***************************************************
- * setNodeText - Set DOM node text                 *
- ***************************************************/
-function setNodeText( node, val )
-{
-    if(!node) return;
-    for(var i = 0; i < node.childNodes.length; i++)
-	if(node.childNodes[i].nodeType == 3)
-	{ node.childNodes[i].data = val; return; }
-    node.appendChild(node.ownerDocument.createTextNode(val));
-}
-
 /*****************************************************
  * nodeTextByTagId - Get DOM node by tag name and id *
  *****************************************************/
@@ -114,7 +91,7 @@ function nodeTextByTagId( node, tag, avl )
 {
     for(var i = 0; i < node.childNodes.length; i++)
 	if(node.childNodes[i].nodeName == tag && node.childNodes[i].getAttribute('id') == avl)
-	    return nodeText(node.childNodes[i]);
+	    return node.childNodes[i].textContent;
     return null;
 }
 
@@ -138,7 +115,7 @@ function posGetX( obj, noWScrl )
     for(var cObj = obj; cObj != null; cObj = cObj.offsetParent) posX += cObj.offsetLeft;
     //Calc block's scroll
     if(!isOpera)
-	for(var cObj = obj ; (cObj && cObj.nodeName!='BODY'); cObj = cObj.parentNode)
+	for(var cObj = obj ; (cObj && cObj.nodeName != 'BODY'); cObj = cObj.parentNode)
 	    posX -= (cObj.scrollLeft?cObj.scrollLeft:0);
 
     return posX + (!noWScrl?-window.pageXOffset:0) + (isNN?5:0);
@@ -154,7 +131,7 @@ function posGetY( obj, noWScrl )
     for(var cObj = obj; cObj != null; cObj = cObj.offsetParent) posY += cObj.offsetTop;
     //Calc block's scroll
     if(!isOpera)
-	for(var cObj = obj ; (cObj && cObj.nodeName!='BODY'); cObj = cObj.parentNode)
+	for(var cObj = obj ; (cObj && cObj.nodeName != 'BODY'); cObj = cObj.parentNode)
 	    posY -= (cObj.scrollTop?cObj.scrollTop:0);
 
     return posY + (!noWScrl?-window.pageYOffset:0) + (isNN?5:0);
@@ -289,7 +266,7 @@ function servReq( body )
  ***************************************************/
 function setStatus( mess, tm )
 {
-    setNodeText(document.getElementById('status'), mess?mess:'###Ready###');
+    document.getElementById('status').innerText = mess ? mess : '###Ready###';
     if(!mess) return;
     if(stTmID) clearTimeout(stTmID);
     if(!tm || tm > 0) stTmID = setTimeout('setStatus(null)', tm?tm:1000);
@@ -317,28 +294,28 @@ function expand( el, val, upTree )
 	}
 	if(el.grps.length > 1) {
 	    //Add and update present
-	    for(var i_g = 0; i_g < el.grps.length; i_g++) {
+	    for(var iG = 0; iG < el.grps.length; iG++) {
 		var liN = null;
 		// Search present item
 		if(upTree)
-		    for(var i_it = 0; i_it < cUL.childNodes.length; i_it++)
-			if(cUL.childNodes[i_it].grps[0].getAttribute('id') == el.grps[i_g].getAttribute('id'))
-			{ liN = cUL.childNodes[i_it]; break; }
+		    for(var iIt = 0; iIt < cUL.childNodes.length; iIt++)
+			if(cUL.childNodes[iIt].grps[0].getAttribute('id') == el.grps[iG].getAttribute('id'))
+			{ liN = cUL.childNodes[iIt]; break; }
 		if(!liN) {
 		    liN = document.createElement('li');
-		    if(i_g >= cUL.childNodes.length) cUL.appendChild(liN);
-		    else cUL.insertBefore(liN, cUL.childNodes[i_g]);
+		    if(iG >= cUL.childNodes.length) cUL.appendChild(liN);
+		    else cUL.insertBefore(liN, cUL.childNodes[iG]);
 		    liN.isExpand = false;
 		}
 		liN.setAttribute('id', el.getAttribute('id'));
 		// Set group
-		liN.grps = new Array(); liN.grps.push(el.grps[i_g]);
+		liN.grps = new Array(); liN.grps.push(el.grps[iG]);
 		// Init links
 		var isUsable = parseInt(liN.grps[0].getAttribute('chPresent'));
-		var treeIco = '/'+MOD_ID+'/img_tree'+(isUsable?(liN.isExpand?'Minus':'Plus'):'')+'Up'+((i_g!=(el.grps.length-1))?'Down':'');
+		var treeIco = '/'+MOD_ID+'/img_tree'+(isUsable?(liN.isExpand?'Minus':'Plus'):'')+'Up'+((iG!=(el.grps.length-1))?'Down':'');
 		var liCont = isUsable?"<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'>":"";
 		liCont += "<img src='"+treeIco+"'/></a>";
-		liCont += "<span style='font-style: italic;'>"+strEncode(el.grps[i_g].getAttribute('dscr'))+":</span>";
+		liCont += "<span style='font-style: italic;'>"+strEncode(el.grps[iG].getAttribute('dscr'))+":</span>";
 		// Next node for update
 		if(upTree && liN.isExpand) {
 		    var liNUL = null;
@@ -352,12 +329,12 @@ function expand( el, val, upTree )
 	    }
 	    //Delete no present
 	    if(upTree)
-		for(var i_it = 0; i_it < cUL.childNodes.length; i_it++) {
-		    var i_g;
-		    for(i_g = 0; i_g < el.grps.length; i_g++)
-			if(cUL.childNodes[i_it].grps[0].getAttribute('id') == el.grps[i_g].getAttribute('id'))
+		for(var iIt = 0; iIt < cUL.childNodes.length; iIt++) {
+		    var iG;
+		    for(iG = 0; iG < el.grps.length; iG++)
+			if(cUL.childNodes[iIt].grps[0].getAttribute('id') == el.grps[iG].getAttribute('id'))
 			    break;
-		    if(i_g >= el.grps.length) { cUL.removeChild(cUL.childNodes[i_it]); i_it--; }
+		    if(iG >= el.grps.length) { cUL.removeChild(cUL.childNodes[iIt]); iIt--; }
 		}
 	}
 	else {
@@ -365,43 +342,42 @@ function expand( el, val, upTree )
 	    var hostN = servGet(el.getAttribute('id'),'com=chlds&grp='+grpId);
 	    if(hostN && parseInt(hostN.getAttribute('rez')) == 0) {
 		//Add and update present
-		for(var i_e = 0; i_e < hostN.childNodes.length; i_e++) {
+		for(var iE = 0; iE < hostN.childNodes.length; iE++) {
 		    var tmpNdId = el.getAttribute('id')+'/'+
-			(grpId+(hostN.childNodes[i_e].getAttribute('id')?hostN.childNodes[i_e].getAttribute('id'):
-									 nodeText(hostN.childNodes[i_e])));
+			(grpId+(hostN.childNodes[iE].getAttribute('id')?hostN.childNodes[iE].getAttribute('id'):hostN.childNodes[iE].textContent));
 		    var liN = null;
 		    // Find item
 		    if(upTree)
-		    for(var i_it = 0; i_it < cUL.childNodes.length; i_it++)
-			if(cUL.childNodes[i_it].getAttribute('id') == tmpNdId)
-			{ liN = cUL.childNodes[i_it]; break; }
+		    for(var iIt = 0; iIt < cUL.childNodes.length; iIt++)
+			if(cUL.childNodes[iIt].getAttribute('id') == tmpNdId)
+			{ liN = cUL.childNodes[iIt]; break; }
 		    if(!liN) {
 			liN = document.createElement('li');
-			if(i_e >= cUL.childNodes.length) cUL.appendChild(liN);
-			else cUL.insertBefore(liN, cUL.childNodes[i_e]);
+			if(iE >= cUL.childNodes.length) cUL.appendChild(liN);
+			else cUL.insertBefore(liN, cUL.childNodes[iE]);
 			liN.isExpand = false;
 		    }
 		    liN.setAttribute('id',tmpNdId);
 		    // Load groups
 		    liN.grps = new Array();
-		    for(var i_grp = 0; i_grp < hostN.childNodes[i_e].childNodes.length; i_grp++)
-		    if(hostN.childNodes[i_e].childNodes[i_grp].nodeName == 'grp')
-			liN.grps.push(hostN.childNodes[i_e].childNodes[i_grp]);
+		    for(var iGrp = 0; iGrp < hostN.childNodes[iE].childNodes.length; iGrp++)
+		    if(hostN.childNodes[iE].childNodes[iGrp].nodeName == 'grp')
+			liN.grps.push(hostN.childNodes[iE].childNodes[iGrp]);
 		    // Init links
 		    var isUsable = (liN.grps.length>1)||(liN.grps.length&&parseInt(liN.grps[0].getAttribute('chPresent')));
-		    var treeIco = '/'+MOD_ID+'/img_tree'+(isUsable?(liN.isExpand?'Minus':'Plus'):'')+'Up'+((i_e!=(hostN.childNodes.length-1))?'Down':'');
+		    var treeIco = '/'+MOD_ID+'/img_tree'+(isUsable?(liN.isExpand?'Minus':'Plus'):'')+'Up'+((iE!=(hostN.childNodes.length-1))?'Down':'');
 		    var liCont = isUsable?"<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'>":"";
 		    liCont += "<img src='"+treeIco+"'/></a>";
-		    if(parseInt(hostN.childNodes[i_e].getAttribute('icoSize')))
+		    if(parseInt(hostN.childNodes[iE].getAttribute('icoSize')))
 			liCont += "<span><img src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico&size=16'/></span>"; 
 		    //liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>";
 		    liCont += "<span><a onclick='selectPage(this.parentNode.parentNode.getAttribute(\"id\")); return false;' "+
-			"onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+strEncode(nodeText(hostN.childNodes[i_e]))+"</a></span>";
+			"onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+strEncode(hostN.childNodes[iE].textContent)+"</a></span>";
 		    // Next node for update
 		    if(upTree && liN.isExpand) {
 			var liNUL = null;
-			for(var i_eu = 0; i_eu < liN.childNodes.length; i_eu++)
-			    if(liN.childNodes[i_eu].nodeName == 'UL') { liNUL = liN.childNodes[i_eu]; break; }
+			for(var iEu = 0; iEu < liN.childNodes.length; iEu++)
+			    if(liN.childNodes[iEu].nodeName == 'UL') { liNUL = liN.childNodes[iEu]; break; }
 			liN.innerHTML = liCont;
 			if(liNUL) liN.appendChild(liNUL);
 			expand(liN, val, upTree);
@@ -409,14 +385,14 @@ function expand( el, val, upTree )
 		}
 		//Delete no present
 		if(upTree)
-		    for(var i_it = 0; i_it < cUL.childNodes.length; i_it++) {
-			var i_e;
-			for(i_e = 0; i_e < hostN.childNodes.length; i_e++) {
+		    for(var iIt = 0; iIt < cUL.childNodes.length; iIt++) {
+			var iE;
+			for(iE = 0; iE < hostN.childNodes.length; iE++) {
 			    var grpId = el.grps[0].getAttribute('id');
-			    var tmpNdId = el.getAttribute('id')+'/'+(grpId+(hostN.childNodes[i_e].getAttribute('id')?hostN.childNodes[i_e].getAttribute('id'):nodeText(hostN.childNodes[i_e])));
-			    if(cUL.childNodes[i_it].getAttribute('id') == tmpNdId) break;
+			    var tmpNdId = el.getAttribute('id')+'/'+(grpId+(hostN.childNodes[iE].getAttribute('id')?hostN.childNodes[iE].getAttribute('id'):hostN.childNodes[iE].textContent));
+			    if(cUL.childNodes[iIt].getAttribute('id') == tmpNdId) break;
 			}
-			if(i_e >= hostN.childNodes.length) { cUL.removeChild(cUL.childNodes[i_it]); i_it--; }
+			if(iE >= hostN.childNodes.length) { cUL.removeChild(cUL.childNodes[iIt]); iIt--; }
 		    }
 	    }
 	}
@@ -449,7 +425,7 @@ function selectPage( path )
 /***************************************************
  * pageDisplay - Display selected page.            *
  ***************************************************/
-function pageDisplay( path )
+function pageDisplay( path, isComplete )
 {
     if(!path) return;
 
@@ -460,31 +436,31 @@ function pageDisplay( path )
     actEnable('actPrevious', ndPrev.length);
     actEnable('actNext', ndNext.length);
 
-    if(path != pgInfo.getAttribute('path')) {
+    if(path != pgInfo.getAttribute('path') || isComplete) {
 	// Stop refresh
 	pageCyclRefrStop();
 
 	if(selPath.length && document.getElementById(selPath)) document.getElementById(selPath).className = '';
 	selPath = path;
-	if(selPath.length && document.getElementById(selPath)) document.getElementById(selPath).className = 'select';
-	setNodeText(document.getElementById('selPath'),selPath);
+	document.getElementById('selPath').innerText = selPath;
 
 	pgInfo = servGet(selPath, 'com=info');
-	if(parseInt(pgInfo.getAttribute('rez')) != 0) { alert(nodeText(pgInfo)); return; }
+	if(parseInt(pgInfo.getAttribute('rez')) != 0) { alert(pgInfo.textContent); return; }
 	pgInfo.setAttribute('path', selPath);
 	root = pgInfo.childNodes[0];
     }
     else {
 	// Check the new node structure and the old node
 	var iTree = servGet(selPath,'com=info');
-	if(parseInt(iTree.getAttribute('rez')) != 0) { alert(nodeText(iTree)); return; }
+	if(parseInt(iTree.getAttribute('rez')) != 0) { alert(iTree.textContent); return; }
 	if(chkStruct(root,iTree.childNodes[0]))
 	{ pgInfo = iTree; pgInfo.setAttribute('path',selPath); root = pgInfo.childNodes[0]; }
     }
+    if(selPath.length && document.getElementById(selPath)) document.getElementById(selPath).className = 'select';
 
     actEnable('actManual', root.getAttribute("doc"));
     if(root.getAttribute("doc"))
-	actManual.setAttribute("href", nodeText(servGet("/doc/"+root.getAttribute("doc").split("|")[1].replace("/","%2f"))));
+	actManual.setAttribute("href", servGet("/doc/"+root.getAttribute("doc").split("|")[1].replace("/","%2f")).textContent);
 
     //Complex request form and it result use
     genReqs = crDoc();
@@ -496,8 +472,8 @@ function pageDisplay( path )
 
 	//Load and Save checking to allow
 	var reqModif = servGet('/%2fobj', 'com=modify');
-	actEnable('actLoad', parseInt(nodeText(reqModif)));
-	actEnable('actSave', parseInt(nodeText(reqModif)));
+	actEnable('actLoad', reqModif?parseInt(reqModif.textContent):0);
+	actEnable('actSave', reqModif?parseInt(reqModif.textContent):0);
 
 	//Send for the prepared generic request
 	if(genReqPrc == 0) {
@@ -511,8 +487,8 @@ function pageDisplay( path )
     actEnable('actAddIt', false);
     for(var iCh = 0; iCh < root.childNodes.length; iCh++)
 	if(root.childNodes[iCh].getAttribute('id') == 'br') {
-	    for(var i_g = 0; i_g < root.childNodes[iCh].childNodes.length; i_g++)
-		if(parseInt(root.childNodes[iCh].childNodes[i_g].getAttribute('acs'))&SEC_WR)
+	    for(var iG = 0; iG < root.childNodes[iCh].childNodes.length; iG++)
+		if(parseInt(root.childNodes[iCh].childNodes[iG].getAttribute('acs'))&SEC_WR)
 		{ actEnable('actAddIt',true); break; }
 	break;
     }
@@ -534,9 +510,9 @@ function editToolUpdate( )
 
     //Src and destination elements calc
     if(copyBuf.length <= 1 /*|| copyBuf.substr(1) == selPath || pathLev(copyBuf.substr(1),0) != pathLev(selPath,0)*/) return;
-    var s_elp; var s_el; var t_el;
+    var sElp; var sEl; var tEl;
     pathLev.off = 0;
-    while((t_el=pathLev(copyBuf.substr(1),0,true)).length) { s_elp += ('/'+s_el); s_el = t_el; }
+    while((tEl=pathLev(copyBuf.substr(1),0,true)).length) { sElp += ('/'+sEl); sEl = tEl; }
 
     for(var iCh = 0; iCh < root.childNodes.length; iCh++)
 	if(root.childNodes[iCh].getAttribute('id') == 'br') {
@@ -553,7 +529,7 @@ function editToolUpdate( )
  ***************************************************/
 function selectChildRecArea( node, aPath, cBlk )
 {
-    var i_area = 0;
+    var iArea = 0;
     //View title name
     if(aPath == "/") {
 	// Set node icon
@@ -563,54 +539,54 @@ function selectChildRecArea( node, aPath, cBlk )
 	}
 	else document.getElementById('pgIco').style.visibility = 'hidden';
 	// Set title
-	setNodeText(document.getElementById('pgTitle'),node.getAttribute('dscr'));
+	document.getElementById('pgTitle').innerText = node.getAttribute('dscr');
 	// Delete tabs of deleted areas
 	var activeTab = null;
 	var tabs = document.getElementById('pgTabs');
-	for(var i_tbs = 0; i_tbs < tabs.childNodes.length; i_tbs++) {
-	    var i_cf;
-	    for(i_cf = 0; i_cf < node.childNodes.length; i_cf++)
-		if(node.childNodes[i_cf].nodeName.toLowerCase() == 'area' &&
-			nodeText(tabs.childNodes[i_tbs]) == node.childNodes[i_cf].getAttribute('dscr'))
+	for(var iTbs = 0; iTbs < tabs.childNodes.length; iTbs++) {
+	    var iCf;
+	    for(iCf = 0; iCf < node.childNodes.length; iCf++)
+		if(node.childNodes[iCf].nodeName.toLowerCase() == 'area' &&
+			tabs.childNodes[iTbs].innerText == node.childNodes[iCf].getAttribute('dscr'))
 		    break;
-	    if(i_cf >= node.childNodes.length) {
-		tabs.removeChild(tabs.childNodes[i_tbs]);
-		i_tbs--;
+	    if(iCf >= node.childNodes.length) {
+		tabs.removeChild(tabs.childNodes[iTbs]);
+		iTbs--;
 	    }
-	    else if(tabs.childNodes[i_tbs].className == 'active') activeTab = tabs.childNodes[i_tbs];
+	    else if(tabs.childNodes[iTbs].className == 'active') activeTab = tabs.childNodes[iTbs];
 	}
 	// Add new tabs
-	for(var i_cf = 0; i_cf < node.childNodes.length; i_cf++) {
-	    if(node.childNodes[i_cf].nodeName.toLowerCase() != 'area') continue;
-	    var i_tbs;
-	    for(i_tbs = 0; i_tbs < tabs.childNodes.length; i_tbs++)
-		if(nodeText(tabs.childNodes[i_tbs]) == node.childNodes[i_cf].getAttribute('dscr'))
+	for(var iCf = 0; iCf < node.childNodes.length; iCf++) {
+	    if(node.childNodes[iCf].nodeName.toLowerCase() != 'area') continue;
+	    var iTbs;
+	    for(iTbs = 0; iTbs < tabs.childNodes.length; iTbs++)
+		if(tabs.childNodes[iTbs].innerText == node.childNodes[iCf].getAttribute('dscr'))
 		    break;
-	    if(i_tbs >= tabs.childNodes.length) {
+	    if(iTbs >= tabs.childNodes.length) {
 		var itab = document.createElement('span');
-		setNodeText(itab,node.childNodes[i_cf].getAttribute('dscr'));
+		itab.innerText = node.childNodes[iCf].getAttribute('dscr');
 		itab.onclick = function( ) { tabSelect(this); return false; }
-		if(i_area >= tabs.childNodes.length) tabs.appendChild(itab);
-		else tabs.insertBefore(itab,tabs.childNodes[i_area]);
-		node.childNodes[i_cf].setAttribute('qview','0');
+		if(iArea >= tabs.childNodes.length) tabs.appendChild(itab);
+		else tabs.insertBefore(itab,tabs.childNodes[iArea]);
+		node.childNodes[iCf].setAttribute('qview','0');
 	    }
-	    i_area++;
+	    iArea++;
 	}
 	if(!activeTab && tabs.childNodes.length) { activeTab = tabs.childNodes[0]; activeTab.className = 'active'; }
 	// Preparing of the active tab
-	for(var i_cf = 0; i_cf < node.childNodes.length; i_cf++)
-	    if(node.childNodes[i_cf].nodeName.toLowerCase() == 'area' &&
-		    nodeText(activeTab) == node.childNodes[i_cf].getAttribute('dscr'))
+	for(var iCf = 0; iCf < node.childNodes.length; iCf++)
+	    if(node.childNodes[iCf].nodeName.toLowerCase() == 'area' &&
+		    activeTab.innerText == node.childNodes[iCf].getAttribute('dscr'))
 	    {
-		var refresh = parseInt(node.childNodes[i_cf].getAttribute('qview'));
+		var refresh = parseInt(node.childNodes[iCf].getAttribute('qview'));
 		var cPg = document.getElementById('pgCont');
 		if(!refresh) {
 		    while(cPg.childNodes.length) cPg.removeChild(cPg.childNodes[0]);
-		    selectChildRecArea(node.childNodes[i_cf],aPath+node.childNodes[i_cf].getAttribute('id')+'/',cPg);
+		    selectChildRecArea(node.childNodes[iCf],aPath+node.childNodes[iCf].getAttribute('id')+'/',cPg);
 		    //  Mark last drawed tabs
-		    node.childNodes[i_cf].setAttribute('qview','1');
+		    node.childNodes[iCf].setAttribute('qview','1');
 		}
-		else selectChildRecArea(node.childNodes[i_cf],aPath+node.childNodes[i_cf].getAttribute('id')+'/',null);
+		else selectChildRecArea(node.childNodes[iCf],aPath+node.childNodes[iCf].getAttribute('id')+'/',null);
 
 		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
 		scrlArea = document.getElementById('gen-pnl-right');
@@ -631,8 +607,8 @@ function selectChildRecArea( node, aPath, cBlk )
 	    }
 	return;
     }
-    else for(var i_cf = 0; i_cf < node.childNodes.length; i_cf++) {
-	var t_s = node.childNodes[i_cf];
+    else for(var iCf = 0; iCf < node.childNodes.length; iCf++) {
+	var t_s = node.childNodes[iCf];
 
 	// Check access to node
 	var wr = parseInt(t_s.getAttribute('acs'))&SEC_WR;
@@ -705,7 +681,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				selectPage(selPath+'/'+(this.parentNode.srcNode.getAttribute('br_pref')+this.parentNode.lsId).replace(/%/g,'%25').replace(/\//g,'%2f'));
 			    else if(posId == 'add' || posId == 'ins' || posId == 'edit') {
 				dlgWin = ReqIdNameDlg('/'+MOD_ID+'/ico');
-				setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Setting item name###');
+				dlgWin.document.getElementById('wDlgHeader').innerText = '###Setting item name###';
 				var idSz = parseInt(this.parentNode.srcNode.getAttribute('idSz'));
 				dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = ((idSz > 0) ? idSz : 1000);
 				dlgWin.document.getElementById('wDlgType').style.display = 'none';
@@ -718,13 +694,13 @@ function selectChildRecArea( node, aPath, cBlk )
 				actOkFld.lsId = this.parentNode.lsId;
 				actOkFld.lsText = this.parentNode.lsText;
 				if(posId == 'add') {
-				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Adding an element.###');
+				    dlgWin.document.getElementById('wDlgTitle').childNodes[1].innerText = '###Adding an element.###';
 				    actOkFld.onclick = function() {
 					var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
 					var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 					var rez = servSet(this.itPath,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
-					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 					if(this.srcNode.getAttribute('tp') == 'br') treeUpdate();
 					pageRefresh();
 					document.body.dlgWin.close();
@@ -732,14 +708,14 @@ function selectChildRecArea( node, aPath, cBlk )
 				    }
 				}
 				else if(posId == 'ins') {
-				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Inserting an element.###');
+				    dlgWin.document.getElementById('wDlgTitle').childNodes[1].innerText = '###Inserting an element.###';
 				    actOkFld.onclick = function() {
 					var idm = dlgWin.document.getElementById('wDlgName').style.display!='none';
 					var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 					var com = "<ins "+(idm?("id='"+inpId+"' "):"")+" pos='"+this.selectedIndex+"' p_id='"+this.lsId+"'>"+inpName+"</ins>";
 					var rez = servSet(this.itPath,'com=com',com,true);
-					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 					if(this.srcNode.getAttribute('tp') == 'br') treeUpdate();
 					pageRefresh();
 					document.body.dlgWin.close();
@@ -747,7 +723,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				    }
 				}
 				else if(posId == 'edit') {
-				    setNodeText(dlgWin.document.getElementById('wDlgTitle').childNodes[1],'###Renaming the element.###');
+				    dlgWin.document.getElementById('wDlgTitle').childNodes[1].innerText = '###Renaming the element.###';
 				    dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = idm ? this.parentNode.lsId : this.parentNode.lsText;
 				    if(idm) dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value = this.parentNode.lsText;
 				    actOkFld.onclick = function() {
@@ -756,7 +732,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 					var com = "<edit "+(idm?("id='"+inpId+"' "):"")+" pos='"+this.selectedIndex+"' p_id='"+this.lsId+"'>"+inpName+"</edit>";
 					var rez = servSet(this.itPath,'com=com',com,true);
-					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+					if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 					if(this.srcNode.getAttribute('tp') == 'br') treeUpdate();
 					pageRefresh();
 					document.body.dlgWin.close();
@@ -767,14 +743,14 @@ function selectChildRecArea( node, aPath, cBlk )
 			    else if(posId == 'up' || posId == 'down') {
 				var c_new = (posId == 'down') ? c_new = this.selectedIndex+1 : this.selectedIndex-1;
 				var rez = servSet(this.parentNode.itPath,'com=com',"<move pos='"+this.selectedIndex+"' to='"+c_new+"'/>",true);
-				if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+				if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 				pageRefresh();
 			    }
 			    else if(posId == 'del') {
 				var com = idm ? ("<del pos='"+this.selectedIndex+"' id='"+this.parentNode.lsId+"'/>") :
 						("<del pos='"+this.selectedIndex+"'>"+this.parentNode.lsText+"</del>");
 				var rez = servSet(this.parentNode.itPath,'com=com',com,true);
-				if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+				if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 				if(this.parentNode.srcNode.getAttribute('tp') == 'br') treeUpdate();
 				pageRefresh();
 			    }
@@ -790,18 +766,18 @@ function selectChildRecArea( node, aPath, cBlk )
 	    }
 	    else { lab = t_s.addr_lab; val = t_s.addr_val; }
 	    //  Fill list
-	    setNodeText(lab,t_s.getAttribute('dscr')+': ');
+	    lab.innerText = t_s.getAttribute('dscr') + ': ';
 	    val.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 
 	    while(val.childNodes.length) val.removeChild(val.childNodes[0]);
 	    var dataReq = servGet(brPath,'com=get');
 	    if(!dataReq) continue;
-	    if(parseInt(dataReq.getAttribute('rez')) != 0) { alert(nodeText(dataReq)); continue; }
+	    if(parseInt(dataReq.getAttribute('rez')) != 0) { alert(dataReq.textContent); continue; }
 	    for(var iEl = 0; iEl < dataReq.childNodes.length; iEl++)
 		if(dataReq.childNodes[iEl].nodeName.toLowerCase() == 'el') {
 		    var opt = document.createElement('option');
 		    opt.lsId = dataReq.childNodes[iEl].getAttribute('id');
-		    setNodeText(opt,nodeText(dataReq.childNodes[iEl]));
+		    opt.innerText = dataReq.childNodes[iEl].textContent;
 		    val.appendChild(opt);
 		}
 	    while(val.childNodes.length < 3) {
@@ -831,7 +807,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    val.style.cursor = 'pointer';
 		    val.onclick = function( ) {
 			dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_save','###Selecting an image file for download to the picture field.###','/'+MOD_ID+this.itPath+'?com=img',true);
-			setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Setting an image###');
+			dlgWin.document.getElementById('wDlgHeader').innerText = '###Setting an image###';
 			dlgWin.document.getElementById('wDlgType').style.display = 'none';
 			dlgWin.document.getElementById('wDlgId').style.display = 'none';
 			dlgWin.document.getElementById('wDlgName').style.display = '';
@@ -850,7 +826,7 @@ function selectChildRecArea( node, aPath, cBlk )
 	    }
 	    else { lab = t_s.addr_lab; val = t_s.addr_val; }
 	    //  Set image
-	    if(lab) setNodeText(lab,t_s.getAttribute('dscr')+':');
+	    if(lab) lab.innerText = t_s.getAttribute('dscr') + ':';
 	    if(val) {
 		val.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 		val.src = '/'+MOD_ID+selPath+'/'+brPath+'?com=img&rnd='+Math.floor(Math.random()*1000);
@@ -878,13 +854,13 @@ function selectChildRecArea( node, aPath, cBlk )
 			    for(var iOff = 0; iOff < keys.length; iOff++)
 				for(var iEl = 0; iEl < this.srcNode.childNodes.length; iEl++)
 				    if(this.srcNode.childNodes[iEl].getAttribute('id') == keys[iOff])
-				    { com += "key_"+keys[iOff]+"='"+nodeText(this.srcNode.childNodes[iEl].childNodes[row])+"' "; break; }
+				    { com += "key_"+keys[iOff]+"='"+this.srcNode.childNodes[iEl].childNodes[row].textContent+"' "; break; }
 			}
 			com += ">"+strEncode(val)+"</set>";
 
 			var rez = servSet(this.itPath, 'com=com', com, true);
-			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
-			else setNodeText(this.srcNode.childNodes[col].childNodes[row], val);
+			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			else this.srcNode.childNodes[col].childNodes[row].innerText = val;
 			if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()',500);
 			else this.setElements();
 		    }
@@ -895,7 +871,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		table.setElements = function( ) {
 		    for(var iCol = 0; iCol < this.srcNode.childNodes.length; iCol++) {
 			var prcCol = this.srcNode.childNodes[iCol];
-			setNodeText(this.childNodes[0].childNodes[iCol+1],prcCol.getAttribute('dscr'));
+			this.childNodes[0].childNodes[iCol+1].innerText = prcCol.getAttribute('dscr');
 
 			//   Load selected list
 			if((!prcCol.val_ls || !prcCol.length) && (prcCol.getAttribute('dest') == 'select' || prcCol.getAttribute('dest') == 'sel_ed')) {
@@ -911,38 +887,39 @@ function selectChildRecArea( node, aPath, cBlk )
 				    if(xLst.childNodes[iEl].nodeName.toLowerCase() != 'el') continue;
 				    if(xLst.childNodes[iEl].getAttribute('id'))
 					prcCol.ind_ls.push(xLst.childNodes[iEl].getAttribute('id'));
-				    prcCol.val_ls.push(nodeText(xLst.childNodes[iEl]));
+				    prcCol.val_ls.push(xLst.childNodes[iEl].textContent);
 				}
 			    }
 			}
 			for(var iRow = 0; iRow < prcCol.childNodes.length; iRow++) {
 			    var tblCell = this.childNodes[iRow+1].childNodes[iCol+1];
-			    var cval = nodeText(prcCol.childNodes[iRow]);
+			    var cval = prcCol.childNodes[iRow].textContent;
 			    tblCell.isEdited = false; tblCell.cRow = iRow; tblCell.cCol = iCol;
 			    if(tblCell.isEnter) while(tblCell.childNodes.length) tblCell.removeChild(tblCell.lastChild);
 			    tblCell.isEnter = this.isEnter = false;
 			    tblCell.className = "";
 			    if(prcCol.getAttribute('tp') == 'bool') {
-				setNodeText(tblCell,parseInt(cval)?'On':'Off');
-				tblCell.style.fontWeight = parseInt(cval)?'bold':'normal';
-				tblCell.style.textAlign = 'center';
+				//tblCell.innerText = parseInt(cval) ? 'On' : 'Off';
+				//tblCell.style.fontWeight = parseInt(cval)?'bold':'normal';
+				tblCell.innerHTML = parseInt(cval) ? "<img src='/"+MOD_ID+"/img_button_ok'/> " : '';
 			    }
 			    else if(prcCol.getAttribute('dest') == 'select') {
-				setNodeText(tblCell,cval);
+				tblCell.innerText = cval;
 				for(var iEl = 0; iEl < prcCol.val_ls.length; iEl++)
 				    if((prcCol.ind_ls.length && prcCol.ind_ls[iEl] == cval) ||
 					    (!prcCol.ind_ls.length && prcCol.val_ls[iEl] == cval))
-					setNodeText(tblCell,prcCol.val_ls[iEl]);
+					tblCell.innerText = prcCol.val_ls[iEl];
 			    }
 			    else if(prcCol.getAttribute('tp') == 'time') {
 				var dt = new Date(parseInt(cval)*1000);
-				setNodeText(tblCell, i2s(dt.getDate(),10,2)+'.'+i2s(dt.getMonth()+1,10,2)+'.'+i2s(dt.getFullYear(),10,4)+
-				    ' '+i2s(dt.getHours(),10,2)+':'+i2s(dt.getMinutes(),10,2)+':'+i2s(dt.getSeconds(),10,2));
+				tblCell.innerText = i2s(dt.getDate(),10,2)+'.'+i2s(dt.getMonth()+1,10,2)+'.'+i2s(dt.getFullYear(),10,4)+
+				    ' '+i2s(dt.getHours(),10,2)+':'+i2s(dt.getMinutes(),10,2)+':'+i2s(dt.getSeconds(),10,2);
 			    }
 			    else {
 				if(prcCol.getAttribute('tp') == 'hex') cval = '0x'+parseInt(cval).toString(16);
 				else if(prcCol.getAttribute('tp') == 'oct') cval = '0'+parseInt(cval).toString(8);
-				setNodeText(tblCell, cval);
+				if(cval.length <= limTblItmCnt) tblCell.innerText = cval;
+				else tblCell.innerText = cval.slice(0,limTblItmCnt) + "...";
 			    }
 			}
 		    }
@@ -954,12 +931,12 @@ function selectChildRecArea( node, aPath, cBlk )
 	    else { table = t_s.addr_tbl; lab = t_s.addr_lab; }
 
 	    //  Fill the table
-	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(lab) lab.innerText = t_s.getAttribute('dscr') + ':';
 	    if(table) {
 		table.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 
 		var dataReq = servGet(brPath,'com=get');
-		if(dataReq && parseInt(dataReq.getAttribute('rez')) != 0) { alert(nodeText(dataReq)); continue; }
+		if(dataReq && parseInt(dataReq.getAttribute('rez')) != 0) { alert(dataReq.textContent); continue; }
 
 		//   Copy values to the info tree
 		for(var iCl = 0; dataReq && iCl < dataReq.childNodes.length; iCl++) {
@@ -975,7 +952,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    while(t_s.childNodes[iCli].lastChild) t_s.childNodes[iCli].removeChild(t_s.childNodes[iCli].lastChild);
 		    for(var iRw = 0; iRw < dataReq.childNodes[iCl].childNodes.length; iRw++) {
 			var el = t_s.ownerDocument.createElement(dataReq.childNodes[iCl].childNodes[iRw].nodeName);
-			setNodeText(el, nodeText(dataReq.childNodes[iCl].childNodes[iRw]))
+			el.textContent = dataReq.childNodes[iCl].childNodes[iRw].textContent;
 			if((tVl=dataReq.childNodes[iCl].childNodes[iRw].getAttribute('help'))) el.setAttribute('help', tVl);
 			t_s.childNodes[iCli].appendChild(el);
 		    }
@@ -999,7 +976,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				cCell.style.cursor = 'pointer';
 				cCell.srcNode = t_s;
 				cCell.onclick = function(e) {
-				    var rowP = parseInt(nodeText(this));
+				    var rowP = parseInt(this.innerText);
 				    if(!e) e = window.event;
 				    var popUpMenu = getPopup();
 				    var optEl = '';
@@ -1038,13 +1015,13 @@ function selectChildRecArea( node, aPath, cBlk )
 						    for(var iOff = 0; iOff < keys.length; iOff++)
 							for(var iEl = 0; iEl < this.srcNode.childNodes.length; iEl++)
 							    if(this.srcNode.childNodes[iEl].getAttribute('id') == keys[iOff])
-							    { com += "key_"+keys[iOff]+"='"+nodeText(this.srcNode.childNodes[iEl].childNodes[this.rowP])+"' "; break; }
+							    { com += "key_"+keys[iOff]+"='"+this.srcNode.childNodes[iEl].childNodes[this.rowP].textContent+"' "; break; }
 						}
 						com += "/>";
 					    }
 					    if(com.length) {
 						var rez = servSet(this.itPath,'com=com',com,true);
-						if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+						if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 						setTimeout('pageRefresh()',200);
 					    }
 					    return false;
@@ -1063,6 +1040,9 @@ function selectChildRecArea( node, aPath, cBlk )
 			    else {
 				if((tVl=t_s.childNodes[iCol].childNodes[iRw-1].getAttribute('help'))) cCell.title = tVl;
 				else if(table.childNodes[0].childNodes[iCol+1].title) cCell.title = table.childNodes[0].childNodes[iCol+1].title;
+				var colTp = t_s.childNodes[iCol].getAttribute('tp');
+				var colDst = t_s.childNodes[iCol].getAttribute('dest');
+				cCell.style.textAlign = (colTp == "bool" || colTp == "dec" || colTp == "real" || colTp == "time" || colDst == "sel_ed" || colDst == "select") ? "center" : "";
 			    }
 
 			    cCell.onclick = function( ) {
@@ -1077,7 +1057,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				this.isEnter = cTbl.isEnter = true;
 				this.className = "edit";
 				var prcCol = cTbl.srcNode.childNodes[this.cCol];
-				var cval = nodeText(prcCol.childNodes[this.cRow]);
+				var cval = prcCol.childNodes[this.cRow].textContent;
 
 				if(prcCol.getAttribute('tp') == 'bool') {
 				    this.innerHTML = "<input type='checkbox'/>";
@@ -1088,11 +1068,10 @@ function selectChildRecArea( node, aPath, cBlk )
 				}
 				else if(prcCol.getAttribute('dest') == 'select') {
 				    this.innerHTML = "<select/>";
-				    this.firstChild.onchange = function( )
-				    {
+				    this.firstChild.onchange = function( ) {
 					if(this.selectedIndex < 0) return;
 					var selId = this.options[this.selectedIndex].getAttribute('vid');
-					var selVal = nodeText(this.options[this.selectedIndex]);
+					var selVal = this.options[this.selectedIndex].innerText;
 					this.parentNode.parentNode.parentNode.comSet(this.parentNode.cRow,this.parentNode.cCol,selId?selId:selVal);
 					return false;
 				    }
@@ -1108,42 +1087,33 @@ function selectChildRecArea( node, aPath, cBlk )
 				    this.firstChild.innerHTML = valWCfg;
 				}
 				else if(prcCol.getAttribute('tp') == 'time') {
-				    var dt = new Date(parseInt(cval)*1000);
+				    this.apply = function( ) {
+					var dt = new Date(0);
+					dt.setDate(parseInt(this.childNodes[0].value));
+					dt.setMonth(parseInt(this.childNodes[1].value)-1);
+					dt.setFullYear(parseInt(this.childNodes[2].value));
+					dt.setHours(parseInt(this.childNodes[4].value));
+					dt.setMinutes(parseInt(this.childNodes[5].value));
+					dt.setSeconds(parseInt(this.childNodes[6].value));
+					this.parentNode.parentNode.comSet(this.cRow,this.cCol,Math.floor(dt.getTime()/1000));
+					return false;
+				    }
 				    this.innerHTML = "<input size='2'/><input size='2'/><input size='4'/>&nbsp;<input size='2'/><input size='2'/><input size='2'/>";
 				    this.childNodes[0].onkeyup = this.childNodes[1].onkeyup = this.childNodes[2].onkeyup =
 				    this.childNodes[4].onkeyup = this.childNodes[5].onkeyup = this.childNodes[6].onkeyup = function(e) {
 					if(!e) e = window.event;
-					if(this.parentNode.isEdited && e.keyCode == 13)
-					{ this.parentNode.childNodes[7].onclick(); return true; }
-					if(this.parentNode.isEdited && e.keyCode == 27) {
+					if(e.keyCode == 13) { this.parentNode.apply(); return true; }
+					if(e.keyCode == 27) {
 					    var val_w = this.parentNode;
 					    for(var iCh = 0; iCh < val_w.childNodes.length; iCh++)
 						if(val_w.childNodes[iCh].defaultValue)
 						    val_w.childNodes[iCh].value = val_w.childNodes[iCh].defaultValue;
 					    val_w.removeChild(this.parentNode.childNodes[7]);
-					    val_w.isEdited = false;
 					    return true;
 					}
-					if(this.parentNode.isEdited || this.value == this.defaultValue) return true;
-					var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
-					btOk.onclick = function( ) {
-					    var val_w = this.parentNode;
-					    var dt = new Date(0);
-					    dt.setDate(parseInt(val_w.childNodes[0].value));
-					    dt.setMonth(parseInt(val_w.childNodes[1].value)-1);
-					    dt.setFullYear(parseInt(val_w.childNodes[2].value));
-					    dt.setHours(parseInt(val_w.childNodes[4].value));
-					    dt.setMinutes(parseInt(val_w.childNodes[5].value));
-					    dt.setSeconds(parseInt(val_w.childNodes[6].value));
-					    val_w.parentNode.parentNode.comSet(val_w.cRow,val_w.cCol,Math.floor(dt.getTime()/1000));
-					    val_w.removeChild(this);
-					    val_w.isEdited = false;
-					    return false;
-					}
-					this.parentNode.appendChild(btOk);
-					this.parentNode.isEdited = true;
 					return true;
 				    }
+				    var dt = new Date(parseInt(cval)*1000);
 				    this.childNodes[0].value = this.childNodes[0].defaultValue = dt.getDate();
 				    this.childNodes[1].value = this.childNodes[1].defaultValue = dt.getMonth()+1;
 				    this.childNodes[2].value = this.childNodes[2].defaultValue = dt.getFullYear();
@@ -1164,8 +1134,8 @@ function selectChildRecArea( node, aPath, cBlk )
 					    if(!this.parentNode.val_ls || !this.parentNode.val_ls.length) return false;
 					    var combMenu = getCombo();
 					    var optHTML = '';
-					    for(var i_l = 0; i_l < this.parentNode.val_ls.length; i_l++)
-						optHTML += '<option>'+this.parentNode.val_ls[i_l]+'</option>';
+					    for(var iL = 0; iL < this.parentNode.val_ls.length; iL++)
+						optHTML += '<option>'+this.parentNode.val_ls[iL]+'</option>';
 					    var edFld = this.parentNode.childNodes[0];
 					    combMenu.childNodes[0].edFld = edFld;
 					    combMenu.childNodes[0].innerHTML = optHTML;
@@ -1177,7 +1147,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					    combMenu.childNodes[0].onclick = function() {
 						this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 						if(this.selectedIndex < 0) return;
-						this.edFld.value = nodeText(this.options[this.selectedIndex]);
+						this.edFld.value = this.options[this.selectedIndex].innerText;
 						this.edFld.parentNode.parentNode.parentNode.comSet(this.edFld.parentNode.cRow,this.edFld.parentNode.cCol,this.edFld.value);
 						return false;
 					    }
@@ -1185,45 +1155,25 @@ function selectChildRecArea( node, aPath, cBlk )
 					}
 					tblCell.appendChild(cmbImg);
 				    }
-				    else if(tp == 'dec') {
-					this.className += ' number'; this.childNodes[0].size = 10;
-					var spinImg = document.createElement('img'); spinImg.src = '/'+MOD_ID+'/img_spinar';
-					spinImg.onclick = function(e) {
-					    if(!e) e = window.event;
-					    var val_w = this.parentNode.childNodes[0];
-					    val_w.value = parseInt(val_w.value)+(((e.clientY-posGetY(this))<10)?1:-1);
-					    val_w.onkeyup();
-					    return false;
-					}
-					val_w.appendChild(spinImg);
-				    }
-				    else if(tp == 'hex' || tp == 'oct' || tp == 'real')
-				    { this.className += ' number'; this.childNodes[0].size = 10; }
-				    else {
-					this.childNodes[0].size = 30;
-					this.childNodes[0].maxLength = prcCol.getAttribute('len');
-					if(!this.childNodes[0].maxLength) this.childNodes[0].maxLength = 1000;
-				    }
+				    else if(tp == 'dec') { this.className += ' number'; this.childNodes[0].size = 10; }
+				    else if(tp == 'hex' || tp == 'oct' || tp == 'real') { this.className += ' number'; this.childNodes[0].size = 10; }
+				    else this.innerHTML = "<textarea/>";
 				    this.prcCol = prcCol;
+				    this.apply = function( ) {
+					var curVal = this.childNodes[0].value;
+					if(this.prcCol.getAttribute('tp') == 'hex') curVal = parseInt(curVal, 16);
+					else if(this.prcCol.getAttribute('tp') == 'oct') curVal = parseInt(curVal, 8);
+					this.parentNode.parentNode.comSet(this.cRow, this.cCol, curVal);
+					return false;
+				    }
 				    this.childNodes[0].onkeyup = function(e) {
 					if(!e) e = window.event;
-					if(this.parentNode.isEdited && e.keyCode == 13) { this.parentNode.lastChild.onclick(); return true; }
-					if(this.parentNode.isEdited && e.keyCode == 27) { this.parentNode.parentNode.parentNode.setElements(); return true; }
-					if(this.parentNode.isEdited) return true;
-					var btOk = document.createElement('img'); btOk.src = '/'+MOD_ID+'/img_button_ok';
-					btOk.onclick = function( ) {
-					    var curVal = this.parentNode.childNodes[0].value;
-					    if(this.parentNode.prcCol.getAttribute('tp') == 'hex') curVal = parseInt(curVal,16);
-					    else if(this.parentNode.prcCol.getAttribute('tp') == 'oct') curVal = parseInt(curVal,8);
-					    this.parentNode.parentNode.parentNode.comSet(this.parentNode.cRow,this.parentNode.cCol,curVal);
-					    return false;
-					}
-					this.parentNode.appendChild(btOk);
-					this.parentNode.isEdited = true;
+					if(e.keyCode == 13 && (this.nodeName != "TEXTAREA" || e.ctrlKey)) { this.parentNode.apply(); return true; }
+					if(e.keyCode == 27) { this.parentNode.parentNode.parentNode.setElements(); return true; }
 					return true;
 				    }
 				    this.firstChild.value = cval;
-				    this.isEdited = false;
+				    this.childNodes[0].focus();
 				}
 				//   Prevent for wrong selection
 				if(window.getSelection) window.getSelection().removeAllRanges();
@@ -1233,7 +1183,8 @@ function selectChildRecArea( node, aPath, cBlk )
 			}
 			table.childNodes[iRw].appendChild(cCell);
 		    }
-		    if(table.childNodes[iRw].childNodes.length) setNodeText(table.childNodes[iRw].childNodes[0], iRw?iRw:'#');
+		    if(table.childNodes[iRw].childNodes.length)
+			table.childNodes[iRw].childNodes[0].innerText = iRw ? iRw : '#';
 		}
 		table.srcNode = t_s;
 		table.setElements();
@@ -1260,17 +1211,17 @@ function selectChildRecArea( node, aPath, cBlk )
 		    if(this.srcNode.getAttribute('tp') == 'lnk') {
 			var dataReq = servGet(selPath+'/'+this.brPath,'com=get');
 			if(!dataReq) return false;
-			else if(parseInt(dataReq.getAttribute('rez')) != 0) { alert(nodeText(dataReq)); return false; }
-			selectPage('/'+pathLev(selPath,0)+nodeText(dataReq));
+			else if(parseInt(dataReq.getAttribute('rez')) != 0) { alert(dataReq.textContent); return false; }
+			selectPage('/'+pathLev(selPath,0)+dataReq.textContent);
 		    }
 		    else {
 			var com = '<set>';
 			for(var f_com = 0; f_com < this.srcNode.childNodes.length; f_com++)
 			    com += "<"+this.srcNode.childNodes[f_com].nodeName+" id='"+this.srcNode.childNodes[f_com].getAttribute('id')+"'>"+
-			nodeText(this.srcNode.childNodes[f_com])+"</"+this.srcNode.childNodes[f_com].nodeName+">";
+			this.srcNode.childNodes[f_com].textContent+"</"+this.srcNode.childNodes[f_com].nodeName+">";
 			com += '</set>';
 			var rez = servSet(selPath+'/'+this.brPath,'com=com',com,true);
-			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 			pageRefresh();
 		    }
 		    return false;
@@ -1304,7 +1255,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
     if(!comm) {
 	dataReq = servGet(brPath,'com=get');
 	if(!dataReq) dataReq = document.createElement('get');
-	else if(parseInt(dataReq.getAttribute('rez'))!=0) { alert(nodeText(dataReq)); setNodeText(dataReq,''); }
+	else if(parseInt(dataReq.getAttribute('rez')) != 0) { alert(dataReq.textContent); dataReq.textContent = ''; }
     }
 
     //View select fields
@@ -1326,11 +1277,11 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		val_w.childNodes[0].onchange = function( ) {
 		    if(this.selectedIndex < 0) return;
 		    var selId = this.options[this.selectedIndex].getAttribute('vid');
-		    var selVal = nodeText(this.options[this.selectedIndex]);
-		    if(this.itComm) setNodeText(this.srcNode, (selId?selId:selVal));
+		    var selVal = this.options[this.selectedIndex].innerText;
+		    if(this.itComm) this.srcNode.textContent = selId ? selId : selVal;
 		    else {
 			var rez = servSet(this.itPath, 'com=com', '<set>'+strEncode(selId?selId:selVal)+'</set>', true);
-			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 			setTimeout('pageRefresh()', 500);
 		    }
 		    return false;
@@ -1353,7 +1304,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	}
 	else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
 	// Fill combo
-	if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	if(lab) lab.innerText = t_s.getAttribute('dscr') + ':';
 	if(val_w || val_r) {
 	    (val_r||val_w).title = (tVl=t_s.getAttribute('help')) ? tVl : "";
 	    var sel_ok = false, c_el = 0;
@@ -1363,10 +1314,10 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		var valWCfg = '';
 		for(var ls_i = 0; ls_i < val_ls.length && val_ls[ls_i].length && (!ind_ls.length || ls_i < ind_ls.length); ls_i++) {
 		    if(val_w) valWCfg += "<option "+
-			(ind_ls.length ? ("vid='"+strEncode(ind_ls[ls_i])+"' "+((ind_ls[ls_i]==nodeText(dataReq))?"selected='true'":""))
-			    : ((val_ls[ls_i]==nodeText(dataReq))?"selected='true'":"")) + ">" + strEncode(val_ls[ls_i]) + "</option>";
-		    if((ind_ls.length && ind_ls[ls_i] == nodeText(dataReq)) || (!ind_ls.length && val_ls[ls_i] == nodeText(dataReq)))
-		    { sel_ok = true; if(val_r) setNodeText(val_r, val_ls[ls_i]); }
+			(ind_ls.length ? ("vid='"+strEncode(ind_ls[ls_i])+"' "+((ind_ls[ls_i]==dataReq.textContent)?"selected='true'":""))
+			    : ((val_ls[ls_i]==dataReq.textContent)?"selected='true'":"")) + ">" + strEncode(val_ls[ls_i]) + "</option>";
+		    if((ind_ls.length && ind_ls[ls_i] == dataReq.textContent) || (!ind_ls.length && val_ls[ls_i] == dataReq.textContent))
+		    { sel_ok = true; if(val_r) val_r.innerText = val_ls[ls_i]; }
 		}
 	    }
 	    else {
@@ -1375,19 +1326,19 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		    for(var iEl = 0; iEl < xLst.childNodes.length; iEl++) {
 			if(xLst.childNodes[iEl].nodeName.toLowerCase() != 'el') continue;
 			var curElId = xLst.childNodes[iEl].getAttribute('id');
-			var curElVl = nodeText(xLst.childNodes[iEl]);
+			var curElVl = xLst.childNodes[iEl].textContent;
 			if(val_w) valWCfg += "<option " +
-			    (curElId ? ("vid='"+strEncode(curElId)+"' "+((curElId==nodeText(dataReq))?"selected='true'":""))
-				     : ((curElVl==nodeText(dataReq))?"selected='true'":"")) + ">" + strEncode(curElVl) + "</option>";
-			if((curElId && curElId == nodeText(dataReq)) || (!curElId && curElVl == nodeText(dataReq)))
-			{ sel_ok = true; if(val_r) setNodeText(val_r, curElVl); }
+			    (curElId ? ("vid='"+strEncode(curElId)+"' "+((curElId==dataReq.textContent)?"selected='true'":""))
+				     : ((curElVl==dataReq.textContent)?"selected='true'":"")) + ">" + strEncode(curElVl) + "</option>";
+			if((curElId && curElId == dataReq.textContent) || (!curElId && curElVl == dataReq.textContent))
+			{ sel_ok = true; if(val_r) val_r.innerText = curElVl; }
 		    }
 		}
 	    }
 	    //  Insert empty field if none selected
 	    if(!sel_ok) {
-		if(val_w) valWCfg += "<option selected='true'>" + nodeText(dataReq) + "</option>";
-		if(val_r) setNodeText(val_r, nodeText(dataReq));
+		if(val_w) valWCfg += "<option selected='true'>" + dataReq.textContent + "</option>";
+		if(val_r) val_r.innerText = dataReq.textContent;
 	    }
 	    if(val_w) val_w.childNodes[0].innerHTML = valWCfg;
 	}
@@ -1411,10 +1362,10 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		    val_w.childNodes[0].srcNode = t_s;
 		    val_w.childNodes[0].itComm = comm;
 		    val_w.childNodes[0].onclick = function( ) {
-			if(this.itComm) setNodeText(this.srcNode, (this.checked?'1':'0'));
+			if(this.itComm) this.srcNode.textContent = this.checked ? '1' : '0';
 			else {
 			    var rez = servSet(this.itPath, 'com=com', '<set>'+(this.checked?'1':'0')+'</set>', true);
-			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 			    setTimeout('pageRefresh()', 500);
 			}
 			return false;
@@ -1437,14 +1388,14 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    }
 	    else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
 	    // Fill CheckBox
-	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(lab) lab.innerText = t_s.getAttribute('dscr') + ':';
 	    if(val_w) {
 		val_w.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
-		val_w.childNodes[0].checked = parseInt(nodeText(dataReq));
+		val_w.childNodes[0].checked = parseInt(dataReq.textContent);
 	    }
 	    if(val_r) {
 		val_r.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
-		setNodeText(val_r, nodeText(dataReq)=='<EVAL>'?'<EVAL>':(parseInt(nodeText(dataReq))?'On ':'Off '));
+		val_r.innerText = (dataReq.textContent=='<EVAL>') ? '<EVAL>' : (parseInt(dataReq.textContent)?'On ':'Off ');
 	    }
 	}
 	//View edit fields
@@ -1461,15 +1412,19 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		if(t_s.getAttribute('cols')) edit.setAttribute('cols', parseInt(t_s.getAttribute('cols')));
 		else edit.setAttribute('wrap', 'off');
 		edit.setAttribute('rows',parseInt(t_s.getAttribute('rows')) ? parseInt(t_s.getAttribute('rows')):5);
-		edit.onkeyup = function( ) {
-		    if(this.itComm) setNodeText(this.srcNode,this.value);
+		edit.onkeyup = function(e) {
+		    if(this.isChanged && e.keyCode == 13 && e.ctrlKey) { this.parentNode.childNodes[3].childNodes[0].onclick(); return true; }
+		    if(this.isChanged && e.keyCode == 27) { this.parentNode.children[3].children[1].onclick(); return true; }
+
+		    if(this.itComm) this.srcNode.textContent = this.value;
 		    else if(!this.isChanged && this.value != this.defaultValue) {
 			var btBlk = document.createElement('div'); //btBlk.style.textAlign = 'right';
 			var btApply = document.createElement('input'); btApply.type = 'button'; btApply.value = 'Apply';
 			btApply.onclick = function( ) {
 			    var wEl = this.parentNode.parentNode;
 			    var rez = servSet(wEl.childNodes[2].itPath, 'com=com', '<set>'+strEncode(wEl.childNodes[2].value,'html')+'</set>', true);
-			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+			    else wEl.childNodes[2].defaultValue = wEl.childNodes[2].value;
 			    setTimeout('pageRefresh()',500);
 			    wEl.removeChild(this.parentNode);
 			    wEl.childNodes[2].isChanged = false;
@@ -1497,10 +1452,10 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    }
 	    else { lab = t_s.addr_lab; edit = t_s.addr_edit; }
 	    // Fill Edit
-	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(lab) lab.innerText = t_s.getAttribute('dscr') + ':';
 	    if(edit && !edit.isChanged) {
 		edit.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
-		edit.value = edit.defaultValue = nodeText(dataReq);
+		edit.value = edit.defaultValue = dataReq.textContent;
 	    }
 	}
 	//View Data-Time fields
@@ -1526,7 +1481,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 				vD = val_w.childNodes[0].value.split("T")[0].split("-");
 				vT = val_w.childNodes[0].value.split("T")[1].split(":");
 				var dt = new Date(parseInt(vD[0]), parseInt(vD[1])-1, parseInt(vD[2]), parseInt(vT[0]), parseInt(vT[1]), parseInt(vT[2]));
-				setNodeText(val_w.srcNode, Math.floor(dt.getTime()/1000));
+				val_w.srcNode.textContent = Math.floor(dt.getTime()/1000);
 			    }
 			    return true;
 			}
@@ -1547,7 +1502,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    vT = val_w.childNodes[0].value.split("T")[1].split(":");
 			    var dt = new Date(parseInt(vD[0]), parseInt(vD[1])-1, parseInt(vD[2]), parseInt(vT[0]), parseInt(vT[1]), parseInt(vT[2]));
 			    var rez = servSet(val_w.itPath, 'com=com', '<set>'+Math.floor(dt.getTime()/1000)+'</set>', true);
-			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 			    setTimeout('pageRefresh()', 500);
 			    val_w.removeChild(this);
 			    val_w.isEdited = false;
@@ -1575,10 +1530,10 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    }
 	    else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
 	    // Fill data
-	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(lab) lab.innerText = t_s.getAttribute('dscr') + ':';
 	    if(val_w && !val_w.isEdited) {
 		val_w.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
-		var dt_time_t = parseInt(nodeText(dataReq));
+		var dt_time_t = parseInt(dataReq.textContent);
 		var dt = new Date(dt_time_t?(dt_time_t*1000):0);
 		val_w.childNodes[0].value = val_w.childNodes[0].defaultValue =
 		    i2s(dt.getFullYear(),10,4)+"-"+i2s(dt.getMonth()+1,10,2)+"-"+i2s(dt.getDate(),10,2)+
@@ -1586,9 +1541,9 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    }
 	    if(val_r) {
 		val_r.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
-		var dt = new Date(parseInt(nodeText(dataReq))*1000);
-		setNodeText(val_r, i2s(dt.getDate(),10,2)+'.'+i2s(dt.getMonth()+1,10,2)+'.'+i2s(dt.getFullYear(),10,4)+
-		    ' '+i2s(dt.getHours(),10,2)+':'+i2s(dt.getMinutes(),10,2)+':'+i2s(dt.getSeconds(),10,2));
+		var dt = new Date(parseInt(dataReq.textContent)*1000);
+		val_r.innerText = i2s(dt.getDate(),10,2)+'.'+i2s(dt.getMonth()+1,10,2)+'.'+i2s(dt.getFullYear(),10,4)+
+		    ' '+i2s(dt.getHours(),10,2)+':'+i2s(dt.getMinutes(),10,2)+':'+i2s(dt.getSeconds(),10,2);
 	    }
 	}
 	//View other string and numberic fields
@@ -1617,8 +1572,8 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    if(!this.parentNode.sel_list || !this.parentNode.sel_list.length) return false;
 			    var combMenu = getCombo();
 			    var optHTML = '';
-			    for(var i_l = 0; i_l < this.parentNode.sel_list.length; i_l++)
-				optHTML += '<option>' + this.parentNode.sel_list[i_l] + '</option>';
+			    for(var iL = 0; iL < this.parentNode.sel_list.length; iL++)
+				optHTML += '<option>' + this.parentNode.sel_list[iL] + '</option>';
 			    var edFld = this.parentNode.childNodes[0];
 			    combMenu.childNodes[0].edFld = edFld;
 			    combMenu.childNodes[0].innerHTML = optHTML;
@@ -1630,11 +1585,11 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    combMenu.childNodes[0].onclick = function( ) {
 				this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 				if(this.selectedIndex < 0) return;
-				this.edFld.value = nodeText(this.options[this.selectedIndex]);
-				if(this.edFld.parentNode.itComm) setNodeText(this.edFld.parentNode.srcNode, this.edFld.value);
+				this.edFld.value = this.options[this.selectedIndex].innerText;
+				if(this.edFld.parentNode.itComm) this.edFld.parentNode.srcNode.textContent = this.edFld.value;
 				else {
 				    var rez = servSet(this.edFld.parentNode.itPath, 'com=com', '<set>'+this.edFld.value+'</set>', true);
-				    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+				    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 				    setTimeout('pageRefresh()', 500);
 				}
 				return false;
@@ -1668,7 +1623,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    var curVal = this.value;
 			    if(this.parentNode.srcNode.getAttribute('tp') == 'hex') curVal = parseInt(curVal, 16);
 			    else if(this.parentNode.srcNode.getAttribute('tp') == 'oct') curVal = parseInt(curVal, 8);
-			    setNodeText(this.parentNode.srcNode,curVal);
+			    this.parentNode.srcNode.textContent = curVal;
 			    return true;
 			}
 			if(!e) e = window.event;
@@ -1686,7 +1641,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			    if(this.parentNode.srcNode.getAttribute('tp') == 'hex') curVal = parseInt(curVal, 16);
 			    else if(this.parentNode.srcNode.getAttribute('tp') == 'oct') curVal = parseInt(curVal, 8);
 			    var rez = servSet(this.parentNode.itPath, 'com=com', '<set>'+curVal+'</set>', true);
-			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+			    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 			    setTimeout('pageRefresh()', 500);
 			    this.parentNode.isEdited = false;
 			    this.parentNode.removeChild(this);
@@ -1713,14 +1668,14 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	    }
 	    else { lab = t_s.addr_lab; val_r = t_s.addr_val_r; val_w = t_s.addr_val_w; }
 	    // Fill line
-	    var sval = nodeText(dataReq);
+	    var sval = dataReq.textContent;
 	    if(t_s.getAttribute('tp') == 'hex') sval = '0x' + parseInt(sval).toString(16);
 	    else if(t_s.getAttribute('tp') == 'oct') sval = '0' + parseInt(sval).toString(8);
 
-	    if(lab) setNodeText(lab, t_s.getAttribute('dscr')+':');
+	    if(lab) lab.innerText = t_s.getAttribute('dscr') + ':';
 	    if(val_r) {
 		val_r.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
-		setNodeText(val_r,sval);
+		val_r.innerText = sval;
 	    }
 	    if(val_w && !val_w.isEdited) {
 		val_w.title = (tVl=t_s.getAttribute('help')) ? tVl : "";
@@ -1734,7 +1689,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 			if(xLst)
 			    for(var iEl = 0; iEl < xLst.childNodes.length; iEl++)
 				if(xLst.childNodes[iEl].nodeName.toLowerCase() == 'el')
-				    val_w.sel_list.push(nodeText(xLst.childNodes[iEl]));
+				    val_w.sel_list.push(xLst.childNodes[iEl].textContent);
 		    }
 		}
 	    }
@@ -1748,48 +1703,49 @@ function actEnable( act, vl )
 {
     var actEl = document.getElementById(act);
     if(!actEl) return;
-    actEl.className = vl?'active':'inactive';
+    actEl.disabled = !vl;
+    actEl.className = vl ? 'active' : 'inactive';
     actEl.childNodes[0].src = vl ? actEl.childNodes[0].src.replace('filtr=unact','filtr=none') :
 				   actEl.childNodes[0].src.replace('filtr=none','filtr=unact');
 }
 /***************************************************
  * chkStruct - Info page tree check structure.     *
  ***************************************************/
-function chkStruct( w_nd, n_nd )
+function chkStruct( wNd, nNd )
 {
     //Check access
-    if(w_nd.getAttribute('acs') != n_nd.getAttribute('acs')) return true;
+    if(wNd.getAttribute('acs') != nNd.getAttribute('acs')) return true;
 
     //Scan deleted nodes
-    for(var i_w = 0; i_w < w_nd.childNodes.length; i_w++) {
-	var i_n;
-	for(i_n = 0; i_n < n_nd.childNodes.length; i_n++)
-	    if(w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() &&
-		    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id'))
+    for(var iW = 0; iW < wNd.childNodes.length; iW++) {
+	var iN;
+	for(iN = 0; iN < nNd.childNodes.length; iN++)
+	    if(wNd.childNodes[iW].nodeName.toLowerCase() == nNd.childNodes[iN].nodeName.toLowerCase() &&
+		    wNd.childNodes[iW].getAttribute('id') == nNd.childNodes[iN].getAttribute('id'))
 		break;
-	if(i_n >= n_nd.childNodes.length && w_nd.nodeName.toLowerCase() != 'table' && w_nd.nodeName.toLowerCase() != 'list')
+	if(iN >= nNd.childNodes.length && wNd.nodeName.toLowerCase() != 'table' && wNd.nodeName.toLowerCase() != 'list')
 	return true;
     }
 
     //Scan for new nodes and check present nodes
-    for(var i_n = 0; i_n < n_nd.childNodes.length; i_n++) {
-	var i_w;
-	for(i_w = 0; i_w < w_nd.childNodes.length; i_w++)
-	    if(w_nd.childNodes[i_w].nodeName.toLowerCase() == n_nd.childNodes[i_n].nodeName.toLowerCase() &&
-		    w_nd.childNodes[i_w].getAttribute('id') == n_nd.childNodes[i_n].getAttribute('id'))
+    for(var iN = 0; iN < nNd.childNodes.length; iN++) {
+	var iW;
+	for(iW = 0; iW < wNd.childNodes.length; iW++)
+	    if(wNd.childNodes[iW].nodeName.toLowerCase() == nNd.childNodes[iN].nodeName.toLowerCase() &&
+		    wNd.childNodes[iW].getAttribute('id') == nNd.childNodes[iN].getAttribute('id'))
 		break;
-	if(i_w >= w_nd.childNodes.length) return true;
-	else if(chkStruct(w_nd.childNodes[i_w],n_nd.childNodes[i_n])) return true;
+	if(iW >= wNd.childNodes.length) return true;
+	else if(chkStruct(wNd.childNodes[iW],nNd.childNodes[iN])) return true;
 
 	//Check of the description present
-	if((w_nd.childNodes[i_w].getAttribute('dscr') && !n_nd.childNodes[i_n].getAttribute('dscr')) ||
-		(!w_nd.childNodes[i_w].getAttribute('dscr') && n_nd.childNodes[i_n].getAttribute('dscr')))
+	if((wNd.childNodes[iW].getAttribute('dscr') && !nNd.childNodes[iN].getAttribute('dscr')) ||
+		(!wNd.childNodes[iW].getAttribute('dscr') && nNd.childNodes[iN].getAttribute('dscr')))
 	    return true;
 
 	//Check base fields destination change
-	if(w_nd.childNodes[i_w].nodeName.toLowerCase() == 'fld' &&
-		(w_nd.childNodes[i_w].getAttribute('dest') != n_nd.childNodes[i_n].getAttribute('dest') ||
-		w_nd.childNodes[i_w].getAttribute('tp') != n_nd.childNodes[i_n].getAttribute('tp')))
+	if(wNd.childNodes[iW].nodeName.toLowerCase() == 'fld' &&
+		(wNd.childNodes[iW].getAttribute('dest') != nNd.childNodes[iN].getAttribute('dest') ||
+		wNd.childNodes[iW].getAttribute('tp') != nNd.childNodes[iN].getAttribute('tp')))
 	    return true;
     }
 
@@ -1800,94 +1756,88 @@ function chkStruct( w_nd, n_nd )
  ***************************************************/
 function tabSelect( tab )
 {
-  if( !tab || tab.className == 'active' ) return;
-  for( var i_t = 0; i_t < tab.parentNode.childNodes.length; i_t++ )
-    if( tab.parentNode.childNodes[i_t].className == 'active' )
-      tab.parentNode.childNodes[i_t].className = '';
-  tab.className = 'active';
+    if(!tab || tab.className == 'active') return;
+    for(var iT = 0; iT < tab.parentNode.childNodes.length; iT++)
+	if(tab.parentNode.childNodes[iT].className == 'active')
+	    tab.parentNode.childNodes[iT].className = '';
+    tab.className = 'active';
 
-  for( var i_cf = 0; i_cf < root.childNodes.length; i_cf++ )
-    if( root.childNodes[i_cf].nodeName.toLowerCase() == 'area' && nodeText(tab) == root.childNodes[i_cf].getAttribute('dscr') )
-    { root.childNodes[i_cf].setAttribute('qview','0'); break; }
+    for(var iCf = 0; iCf < root.childNodes.length; iCf++)
+	if(root.childNodes[iCf].nodeName.toLowerCase() == 'area' && tab.innerText == root.childNodes[iCf].getAttribute('dscr'))
+	{ root.childNodes[iCf].setAttribute('qview','0'); break; }
 
-  pageCyclRefrStop();
-  pageDisplay(selPath);
+    pageCyclRefrStop();
+    pageDisplay(selPath);
 }
 /***************************************************
  * hostsUpdate - Init/update tree hosts.           *
  ***************************************************/
 function hostsUpdate( )
 {
-  var treeRoot = document.getElementById('treeRoot');
-  //> Make hosts
-  var hostN = servGet('/','com=chlds');
-  if( hostN )
-  {
-    //> Remove no present hosts
-    for( var i_top = 0; i_top < treeRoot.childNodes.length; i_top++ )
-    {
-      var i_h;
-      for( i_h = 0; i_h < hostN.childNodes.length; i_h++ )
-	if( treeRoot.childNodes[i_top].getAttribute('id') == ('/'+hostN.childNodes[i_h].getAttribute('id')) )
-	  break;
-      if( i_h >= hostN.childNodes.length ) { treeRoot.removeChild(treeRoot.childNodes[i_top]); i_top--; }
+    var treeRoot = document.getElementById('treeRoot');
+    //Make hosts
+    var hostN = servGet('/', 'com=chlds');
+    if(hostN) {
+	// Remove no present hosts
+	for(var iTop = 0; iTop < treeRoot.childNodes.length; iTop++) {
+	    var iH;
+	    for(iH = 0; iH < hostN.childNodes.length; iH++)
+		if(treeRoot.childNodes[iTop].getAttribute('id') == ('/'+hostN.childNodes[iH].getAttribute('id')))
+		    break;
+	    if(iH >= hostN.childNodes.length) { treeRoot.removeChild(treeRoot.childNodes[iTop]); iTop--; }
+	}
+	// Add/update hosts
+	for(var i = 0; i < hostN.childNodes.length; i++) {
+	    var liN = null;
+	    for(var iTop = 0; iTop < treeRoot.childNodes.length; iTop++) {
+		if(treeRoot.childNodes[iTop].getAttribute('id') == ('/'+hostN.childNodes[i].getAttribute('id')))
+		{ liN = treeRoot.childNodes[iTop]; break; }
+	    }
+	    if(!liN) { liN = document.createElement('li'); treeRoot.appendChild(liN); }
+	    liN.setAttribute('id', '/'+hostN.childNodes[i].getAttribute('id'));
+	    liN.isExpand = false;
+	    // Load groups
+	    liN.grps = new Array();
+	    for(var iGrp = 0; iGrp < hostN.childNodes[i].childNodes.length; iGrp++)
+		if(hostN.childNodes[i].childNodes[iGrp].nodeName.toLowerCase() == 'grp')
+		    liN.grps.push(hostN.childNodes[i].childNodes[iGrp]);
+	    // Init links
+	    var treeIco = '/'+MOD_ID+'/img_tree'+(liN.isExpand?'Minus':'Plus')+((i!=0)?'Up':'')+((i!=(hostN.childNodes.length-1))?'Down':'');
+	    var liCont = "<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'><img src='"+treeIco+"'/></a>";
+	    if(parseInt(hostN.childNodes[i].getAttribute('icoSize')))
+		liCont += "<span><img src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico&size=16'/></span>";
+		//liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>"; 
+	    liCont += "<span><a onclick='selectPage(this.parentNode.parentNode.getAttribute(\"id\")); return false;' "+
+		"onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+hostN.childNodes[i].textContent+"</a></span>";
+	    liN.innerHTML = liCont;
+	}
+	if(hostN.childNodes.length) return '/'+hostN.childNodes[0].getAttribute('id');
     }
-    //> Add/update hosts
-    var emptyTree = treeRoot.childNodes.length;
-    for( var i = 0; i < hostN.childNodes.length; i++ )
-    {
-      var liN = null;
-      if( !emptyTree )
-        for( var i_top = 0; i_top < treeRoot.childNodes.length; i_top++ )
-        {
-	  if( treeRoot.childNodes[i_top].getAttribute('id') == ('/'+hostN.childNodes[i].getAttribute('id')) )
-	  { liN = treeRoot.childNodes[i_top]; break; }
-        }
-      if( !liN ) { liN = document.createElement('li'); treeRoot.appendChild(liN); liN.isExpand = false; }
-      liN.setAttribute('id','/'+hostN.childNodes[i].getAttribute('id'));
-      //> Load groups
-      liN.grps = new Array();
-      for( var iGrp = 0; iGrp < hostN.childNodes[i].childNodes.length; iGrp++ )
-	if( hostN.childNodes[i].childNodes[iGrp].nodeName.toLowerCase() == 'grp' )
-	  liN.grps.push(hostN.childNodes[i].childNodes[iGrp]);
-      //> Init links
-      var treeIco = '/'+MOD_ID+'/img_tree'+(liN.isExpand?'Minus':'Plus')+((i!=0)?'Up':'')+((i!=(hostN.childNodes.length-1))?'Down':'');
-      var liCont = "<a class='pm' onclick='expand(this.parentNode,!this.parentNode.isExpand); return false;'><img src='"+treeIco+"'/></a>";
-      if( parseInt(hostN.childNodes[i].getAttribute('icoSize')) )
-	liCont += "<span><img src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico&size=16'/></span>";
-	//liCont += "<span><img height='16px' src='/"+MOD_ID+liN.getAttribute('id')+"?com=ico'/></span>"; 
-      liCont += "<span><a onclick='selectPage(this.parentNode.parentNode.getAttribute(\"id\")); return false;' "+
-	"onmouseover='setStatus(this.parentNode.parentNode.getAttribute(\"id\"),10000);' href='#'>"+nodeText(hostN.childNodes[i])+"</a></span>";
-      liN.innerHTML = liCont;
-    }
-    if( hostN.childNodes.length ) return '/'+hostN.childNodes[0].getAttribute('id');
-  }
 }
 /**************************************************
  * treeUpdate - Update tree expanded elements.    *
  **************************************************/
 function treeUpdate( )
 {
-  var treeRoot = document.getElementById('treeRoot');
-  for( var i_t = 0; i_t < treeRoot.childNodes.length; i_t++ )
-    if( treeRoot.childNodes[i_t].isExpand )
-      expand(treeRoot.childNodes[i_t],true,true);
+    var treeRoot = document.getElementById('treeRoot');
+    for(var iT = 0; iT < treeRoot.childNodes.length; iT++)
+	if(treeRoot.childNodes[iT].isExpand)
+	    expand(treeRoot.childNodes[iT], true, true);
 }
 /**************************************************
  * getPopup - Get popup menu.                     *
  **************************************************/
 function getPopup( )
 {
-  var popUpMenu = document.getElementById('popupmenu');
-  if( !popUpMenu )
-  {
-    popUpMenu = document.createElement('div'); popUpMenu.id = 'popupmenu';
-    popUpMenu.appendChild(document.createElement('select'));
-    popUpMenu.childNodes[0].onblur = function() { this.parentNode.style.visibility = 'hidden'; }
-    document.body.appendChild(popUpMenu);
-    popUpMenu.style.visibility = 'hidden';
-  }
-  return popUpMenu;
+    var popUpMenu = document.getElementById('popupmenu');
+    if(!popUpMenu) {
+	popUpMenu = document.createElement('div'); popUpMenu.id = 'popupmenu';
+	popUpMenu.appendChild(document.createElement('select'));
+	popUpMenu.childNodes[0].onblur = function() { this.parentNode.style.visibility = 'hidden'; }
+	document.body.appendChild(popUpMenu);
+	popUpMenu.style.visibility = 'hidden';
+    }
+    return popUpMenu;
 }
 /**************************************************
  * getCombo - Get combo menu.                     *
@@ -1907,9 +1857,9 @@ function getCombo( )
 /**************************************************
  * pageRefresh - Curent page refrash call.        *
  **************************************************/
-function pageRefresh( )
+function pageRefresh( isComplete )
 {
-    pageDisplay(selPath);
+    pageDisplay(selPath, isComplete);
     if(pgRefrTmID) pgRefrTmID = setTimeout('pageRefresh();', 5000);
 }
 /********************************************************
@@ -1933,149 +1883,143 @@ function pageCyclRefrStop( )
  **************************************************/
 function itDBLoad( )
 {
-  var rez = servSet(selPath+'/%2fobj','com=com','<load/>',true);
-  if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-  else setTimeout('pageRefresh()',500);
+    var rez = servSet(selPath+'/%2fobj', 'com=com', '<load/>', true);
+    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+    else setTimeout('pageRefresh()', 500);
 }
 /**************************************************
  * itDBSave - Save current page to DB.             *
  **************************************************/
 function itDBSave( )
 {
-  var rez = servSet(selPath+'/%2fobj','com=com','<save/>',true);
-  if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-  else setTimeout('pageRefresh()',500);
+    var rez = servSet(selPath+'/%2fobj', 'com=com', '<save/>', true);
+    if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+    else setTimeout('pageRefresh()', 500);
 }
 /**************************************************
  * pageUp - Select up page.                       *
  **************************************************/
 function pageUp( )
 {
-  var i_l = selPath.length-1;
-  while(true)
-  {
-    var i_l = selPath.lastIndexOf('/',i_l);
-    if( i_l == -1 || i_l == 0 ) return;
-    if( (selPath.length-i_l) > 1 ) break;
-    i_l--;
-  }
-  selectPage(selPath.substr(0,i_l));
+    var iL = selPath.length-1;
+    while(true) {
+	var iL = selPath.lastIndexOf('/', iL);
+	if(iL == -1 || iL == 0) return;
+	if((selPath.length-iL) > 1) break;
+	iL--;
+    }
+    selectPage(selPath.substr(0,iL));
 }
 /**************************************************
  * pagePrev - Get previous page.                  *
  **************************************************/
 function pagePrev( )
 {
-  if( !ndPrev.length ) return;
-  ndNext.push(selPath);
-  pageDisplay(ndPrev.pop());
+    if(!ndPrev.length) return;
+    ndNext.push(selPath);
+    pageDisplay(ndPrev.pop());
 }
 /**************************************************
  * pageNext - Get next page.                      *
  **************************************************/
 function pageNext( )
 {
-  if( !ndNext.length ) return;
-  ndPrev.push(selPath);
-  pageDisplay(ndNext.pop());
+    if(!ndNext.length) return;
+    ndPrev.push(selPath);
+    pageDisplay(ndNext.pop());
 }
 /**************************************************
  * itAdd - Add new item action process.           *
  **************************************************/
 function itAdd( )
 {
-  if(!selPath.length) return;
-  var branchS = null;
-  for(var iCh = 0; iCh < root.childNodes.length; iCh++)
-    if(root.childNodes[iCh].nodeName.toLowerCase() == 'branches' && root.childNodes[iCh].getAttribute('id') == 'br')
-      branchS =  root.childNodes[iCh];
-  if(!branchS) return;
+    if(!selPath.length) return;
+    var branchS = null;
+    for(var iCh = 0; iCh < root.childNodes.length; iCh++)
+	if(root.childNodes[iCh].nodeName.toLowerCase() == 'branches' && root.childNodes[iCh].getAttribute('id') == 'br')
+	    branchS =  root.childNodes[iCh];
+    if(!branchS) return;
 
-  //> Load branches list
-  var typeCfg = '';
-  for(var i_b = 0; i_b < branchS.childNodes.length; i_b++)
-    if(parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR)
-      typeCfg += "<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+
-			"' gid='"+branchS.childNodes[i_b].getAttribute('id')+
-			"' idm='"+branchS.childNodes[i_b].getAttribute('idm')+"'>"+
-		branchS.childNodes[i_b].getAttribute('dscr')+"</option>";
-  if(!typeCfg.length) { alert('###There is no container for editing.###'); return; }
+    //Load branches list
+    var typeCfg = '';
+    for(var iB = 0; iB < branchS.childNodes.length; iB++)
+	if(parseInt(branchS.childNodes[iB].getAttribute('acs'))&SEC_WR)
+	    typeCfg += "<option idSz='"+branchS.childNodes[iB].getAttribute('idSz')+
+			"' gid='"+branchS.childNodes[iB].getAttribute('id')+
+			"' idm='"+branchS.childNodes[iB].getAttribute('idm')+"'>"+
+		branchS.childNodes[iB].getAttribute('dscr')+"</option>";
+    if(!typeCfg.length) { alert('###There is no container for editing.###'); return; }
 
-  dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,("###Adding an item to the node '%1'.###").replace('%1',selPath));
-  setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Adding a node###');
-  dlgWin.document.getElementById('wDlgType').style.display = '';
-  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
-  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( )
-  {
-    if(this.selectedIndex < 0) return;
-    var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
-    dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = (idSz > 0) ? idSz : 1000;
-    var idm = parseInt(this.options[this.selectedIndex].getAttribute('idm'));
-    dlgWin.document.getElementById('wDlgName').style.display = idm ? '' : 'none';
-    dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].maxLength = (idm > 1) ? idm : 1000;
-  }
-  dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();
-  dlgWin.document.getElementById('wDlgActOk').onclick = function()
-  {
-    var tpSel = dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0];
-    if( !tpSel || tpSel.selectedIndex < 0 ) { document.body.dlgWin.close(); return false; }
-    var idm = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idm'));
-    var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
-    var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
-    var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
+    dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,("###Adding an item to the node '%1'.###").replace('%1',selPath));
+    dlgWin.document.getElementById('wDlgHeader').innerText = '###Adding a node###';
+    dlgWin.document.getElementById('wDlgType').style.display = '';
+    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
+    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( ) {
+	if(this.selectedIndex < 0) return;
+	var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
+	dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = (idSz > 0) ? idSz : 1000;
+	var idm = parseInt(this.options[this.selectedIndex].getAttribute('idm'));
+	dlgWin.document.getElementById('wDlgName').style.display = idm ? '' : 'none';
+	dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].maxLength = (idm > 1) ? idm : 1000;
+    }
+    dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();
+    dlgWin.document.getElementById('wDlgActOk').onclick = function() {
+	var tpSel = dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0];
+	if(!tpSel || tpSel.selectedIndex < 0) { document.body.dlgWin.close(); return false; }
+	var idm = parseInt(tpSel.options[tpSel.selectedIndex].getAttribute('idm'));
+	var gbrId = tpSel.options[tpSel.selectedIndex].getAttribute('gid');
+	var inpId = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value;
+	var inpName = idm ? dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].value : inpId;
 
-    //> Check for already present node
-    var req = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com','<get/>',true);
-    if( !req || parseInt(req.getAttribute('rez')) != 0 ) { if(req) alert(nodeText(req)); document.body.dlgWin.close(); return false; }
-    for( var i_lel = 0; i_lel < req.childNodes.length; i_lel++ )
-      if( (req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
-	(!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId) )
-      { alert(("###Item '%1' already exists.###").replace('%1',inpId)); document.body.dlgWin.close(); return; }
+	// Check for already present node
+	var req = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com','<get/>',true);
+	if(!req || parseInt(req.getAttribute('rez')) != 0) { if(req) alert(req.textContent); document.body.dlgWin.close(); return false; }
+	for(var iLel = 0; iLel < req.childNodes.length; iLel++)
+	    if((req.childNodes[iLel].getAttribute('id') && req.childNodes[iLel].getAttribute('id') == inpId) ||
+		(!req.childNodes[iLel].getAttribute('id') && req.childNodes[iLel].textContent == inpId))
+	    { alert(("###Item '%1' already exists.###").replace('%1',inpId)); document.body.dlgWin.close(); return; }
 
-    //> Send command
-    var rez = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
-    if( !rez || parseInt(rez.getAttribute('rez')) != 0 ) { if(rez) alert(nodeText(rez)); document.body.dlgWin.close(); return false; }
-    document.body.dlgWin.close();
-    treeUpdate(); pageRefresh();
-    return false;
-  }
+	// Send command
+	var rez = servSet(selPath+'/%2fbr%2f'+gbrId,'com=com',"<add "+(idm?("id='"+inpId+"'"):"")+">"+inpName+"</add>",true);
+	if(!rez || parseInt(rez.getAttribute('rez')) != 0) { if(rez) alert(rez.textContent); document.body.dlgWin.close(); return false; }
+	document.body.dlgWin.close();
+	treeUpdate(); pageRefresh();
+	return false;
+    }
 }
 /**************************************************
  * itDel - Delete new item action process.        *
  **************************************************/
 function itDel( iit )
 {
-  var rmit = iit ? iit : selPath;
-  if( !rmit || !rmit.length ) return;
+    var rmit = iit ? iit : selPath;
+    if(!rmit || !rmit.length) return;
 
-  if( !iit && !confirm(("###Are you sure you want to remove the node '%1'?###").replace('%1',rmit)) ) return;
+    if(!iit && !confirm(("###Are you sure you want to remove the node '%1'?###").replace('%1',rmit))) return;
 
-  var t_el, sel_own = '', sel_el;
-  var n_obj = 0;
-  for( pathLev.off = 0; (t_el=pathLev(rmit,0,true)).length; n_obj++ )
-  { if( n_obj ) sel_own += ('/'+sel_el); sel_el = t_el; }
-  if( n_obj > 2 )
-  {
-    var req = servGet(sel_own+'/%2fbr','com=info');
-    if( parseInt(req.getAttribute('rez'))!=0 ) { alert(nodeText(req)); return; }
-    if( !req.childNodes[0] ) return;
+    var tEl, sel_own = '', sel_el;
+    var n_obj = 0;
+    for(pathLev.off = 0; (tEl=pathLev(rmit,0,true)).length; n_obj++)
+    { if(n_obj) sel_own += ('/'+sel_el); sel_el = tEl; }
+    if(n_obj > 2) {
+	var req = servGet(sel_own+'/%2fbr','com=info');
+	if(parseInt(req.getAttribute('rez')) != 0) { alert(req.textContent); return; }
+	if(!req.childNodes[0]) return;
 
-    var branch = req.childNodes[0];
-    for( var i_b = 0; i_b < branch.childNodes.length; i_b++ )
-    {
-      var b_id = branch.childNodes[i_b].getAttribute('id');
-      if( b_id == sel_el.substr(0,b_id.length) && parseInt(branch.childNodes[i_b].getAttribute('acs'))&SEC_WR )
-      {
-	var idm = parseInt(branch.childNodes[i_b].getAttribute('idm'));
-	var com = idm ? ("<del id='"+sel_el.substr(b_id.length)+"'/>") :
-	                ("<del>"+sel_el.substr(b_id.length)+"</del>");
-	var rez = servSet(sel_own+'/%2fbr%2f'+b_id,'com=com',com,true);
-	if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	else { treeUpdate(); if(!iit) { selPath = sel_own; pageDisplay(selPath); } }
-	break;
-      }
+	var branch = req.childNodes[0];
+	for(var iB = 0; iB < branch.childNodes.length; iB++) {
+	    var bId = branch.childNodes[iB].getAttribute('id');
+	    if(bId == sel_el.substr(0,bId.length) && parseInt(branch.childNodes[iB].getAttribute('acs'))&SEC_WR) {
+		var idm = parseInt(branch.childNodes[iB].getAttribute('idm'));
+		var com = idm ? ("<del id='"+sel_el.substr(bId.length)+"'/>") :
+				("<del>"+sel_el.substr(bId.length)+"</del>");
+		var rez = servSet(sel_own+'/%2fbr%2f'+bId,'com=com',com,true);
+		if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
+		else { treeUpdate(); if(!iit) { selPath = sel_own; pageDisplay(selPath); } }
+		break;
+	    }
+	}
     }
-  }
 }
 /**************************************************
  * itCut - Cut selected item.                     *
@@ -2139,11 +2083,9 @@ function itPaste( )
 
     //Make a request dialog
     dlgWin = ReqIdNameDlg('/'+MOD_ID+'/img_it_add');
-    setNodeText(dlgWin.document.getElementById('wDlgHeader'), '###Moving or copying the node###');
+    dlgWin.document.getElementById('wDlgHeader').innerText = '###Moving or copying the node###';
     wDlgTitle = dlgWin.document.getElementById('wDlgTitle').childNodes[1];
-    if(copyBuf.charAt(0) == '1')
-	setNodeText(wDlgTitle, ("###Move node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
-    else setNodeText(wDlgTitle, ("###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath));
+    wDlgTitle.innerText = ((copyBuf.charAt(0)=='1')?"###Move node '%1' to '%2'.###":"###Copy node '%1' to '%2'.###").replace('%1',copyBuf.substr(1)).replace('%2',toPath);
     if(bGrp.length) dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].value = sEl.substr(bGrp.length);
     dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].disabled = (statNm != statNmSrc);
     dlgWin.document.getElementById('wDlgName').style.display = 'none';
@@ -2174,17 +2116,17 @@ function itPaste( )
 	    dstNm += '/'+gbrId+inpId;
 	    // Check for already present node
 	    var req = servSet(toPath+'/%2fbr%2f'+gbrId,'com=com','<get/>', true);
-	    if(!req || parseInt(req.getAttribute('rez')) != 0) { if(req) alert(nodeText(req)); document.body.dlgWin.close(); return false; }
-	    for(var i_lel = 0; i_lel < req.childNodes.length; i_lel++)
-		if((req.childNodes[i_lel].getAttribute('id') && req.childNodes[i_lel].getAttribute('id') == inpId) ||
-			(!req.childNodes[i_lel].getAttribute('id') && nodeText(req.childNodes[i_lel]) == inpId)) {
+	    if(!req || parseInt(req.getAttribute('rez')) != 0) { if(req) alert(req.textContent); document.body.dlgWin.close(); return false; }
+	    for(var iLel = 0; iLel < req.childNodes.length; iLel++)
+		if((req.childNodes[iLel].getAttribute('id') && req.childNodes[iLel].getAttribute('id') == inpId) ||
+			(!req.childNodes[iLel].getAttribute('id') && req.childNodes[iLel].textContent == inpId)) {
 		    if(confirm(("###Node '%1' already present. Continue?###").replace('%1',dstNm))) break;
 		    document.body.dlgWin.close(); return;
 		}
 	}
 	//Copy visual item
 	var rez = servSet('/'+statNm+'/%2fobj','com=copy',"<copy src='"+srcNm+"' dst='"+dstNm+"' statNmSrc='"+statNmSrc+"' statNm='"+statNm+"'/>", true);
-	if(!rez || parseInt(rez.getAttribute('rez')) != 0) { if(rez) alert(nodeText(rez)); document.body.dlgWin.close(); return false; }
+	if(!rez || parseInt(rez.getAttribute('rez')) != 0) { if(rez) alert(rez.textContent); document.body.dlgWin.close(); return false; }
 
 	//Remove source widget
 	if(copyBuf.charAt(0) == '1') {
@@ -2245,18 +2187,23 @@ function ReqIdNameDlg( ico, mess, actPath, nmFile )
     dlgWin.isLoad = true;
 
     if(ico) document.getElementById('wDlgTitle').childNodes[0].src = ico;
-    if(mess) setNodeText(document.getElementById('wDlgTitle').childNodes[1],mess);
+    if(mess) document.getElementById('wDlgTitle').childNodes[1].innerText = mess;
 
     return window;
 }
 
 //First start data init
+if(genPnlLeft=document.getElementById('gen-pnl-left')) {
+    genPnlLeft.ondblclick = function(e) { if(e.elPrc) return true; e.elPrc = true; hostsUpdate(); }
+    genPnlLeft.onmousedown = function(){ return false; }
+}
+
 // Tool bar init
 var actManual = document.getElementById('actManual');
 //  Tree update action
 var actTreeUpdt = document.getElementById('treeBlk');
 if(actTreeUpdt) {
-    actTreeUpdt.ondblclick = function()	{ treeUpdate(); }
+    actTreeUpdt.ondblclick = function(e) { if(e.elPrc) return true; e.elPrc = true; treeUpdate(); }
     actTreeUpdt.onmousedown = function(){ return false; }
 }
 //  Update actions
@@ -2327,7 +2274,9 @@ function pageResize( horOnly ) {
 	genPnlLeft.style.height = (genPnlDown.offsetTop-genPnlLeft.offsetTop-getSpareHeight(genPnlLeft))+'px';
 	genPnlRight.style.height = (genPnlDown.offsetTop-genPnlRight.offsetTop-getSpareHeight(genPnlRight))+'px';
 	genPnlSplt.style.height = (genPnlDown.offsetTop-genPnlSplt.offsetTop-getSpareHeight(genPnlSplt))+'px';
-   }
+    }
+
+    setTimeout('pageRefresh(true)', 2000);
 }
 window.onresize = function( ) { pageResize(); }
 pageResize();

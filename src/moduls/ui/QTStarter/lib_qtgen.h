@@ -23,6 +23,8 @@
 
 #include <QItemDelegate>
 
+#define LIM_TEXT_DEF	300
+
 namespace OSCADA_QT
 {
 
@@ -39,10 +41,12 @@ class TableDelegate : public QItemDelegate
 
     public:
 	//Data
-	enum AddRoles { SelectRole = Qt::UserRole+10, AlignOptRole };
+	enum AddRoles { SelectRole = Qt::UserRole+10, TextLimRole };
 
 	//Public attributes
 	TableDelegate( QObject *parent = 0 );
+
+	QSize sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 
 	void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
 

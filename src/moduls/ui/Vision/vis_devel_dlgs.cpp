@@ -597,7 +597,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		    QTableWidgetItem *iTW = new QTableWidgetItem(req.childGet(iC)->childGet(iR)->text().c_str());
 		    stl_table->setItem(iR, iC, iTW);
 		    iTW->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((iC==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
-		    if(iC == 1) iTW->setData(TableDelegate::AlignOptRole, Qt::AlignCenter);
+		    if(iC == 1) iTW->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 		}
 	    }
 	    stl_table->resizeColumnsToContents();
@@ -634,7 +634,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		    QVariant val = req.childGet(iC)->childGet(iR)->text().c_str();
 		    if(iC == 0)	{
 			val = atm2s(s2i(val.toString().toStdString())).c_str();
-			tIt->setData(TableDelegate::AlignOptRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
+			tIt->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
 		    }
 		    else if(iC == 1 || iC == 3)	val = s2i(val.toString().toStdString());
 		    tIt->setData(Qt::DisplayRole, val);
@@ -701,13 +701,13 @@ void LibProjProp::tabChanged( int itb )
 		if(!mimeDataTable->item(iL,1)) {
 		    mimeDataTable->setItem(iL,1,new QTableWidgetItem());
 		    mimeDataTable->item(iL,1)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-		    mimeDataTable->item(iL,1)->setData(TableDelegate::AlignOptRole, Qt::AlignCenter);
+		    mimeDataTable->item(iL,1)->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 		}
 		mimeDataTable->item(iL,1)->setText(req.childGet(1)->childGet(iL)->text().c_str());
 		if(!mimeDataTable->item(iL,2)) {
 		    mimeDataTable->setItem(iL,2,new QTableWidgetItem());
 		    mimeDataTable->item(iL,2)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-		    mimeDataTable->item(iL,2)->setData(TableDelegate::AlignOptRole, Qt::AlignCenter);
+		    mimeDataTable->item(iL,2)->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 		}
 		mimeDataTable->item(iL,2)->setText(req.childGet(2)->childGet(iL)->text().c_str());
 	    }

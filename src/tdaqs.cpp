@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -616,7 +616,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/start",_("Run."),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,4, "tp","int", "dest","select",
+		ctrMkNode("list",opt,-1,"/redund/cntr/rdndt",_("Redund."),RWRWR_,"root",SDAQ_ID,4, "tp","dec", "dest","select",
 		    "sel_id",(i2s(TController::Off)+";"+i2s(TController::Asymmetric)+";"+i2s(TController::OnlyAlarms)).c_str(),
 		    "sel_list",_("Off;Asymmetric;Only alarms"));
 		ctrMkNode("list",opt,-1,"/redund/cntr/prefRun",_("Pref. to run"),RWRWR_,"root",SDAQ_ID,4,"tp","str",

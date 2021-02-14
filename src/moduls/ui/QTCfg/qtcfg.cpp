@@ -1401,13 +1401,13 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 			    thd_it->setData(Qt::DisplayRole, elms.at(sel_n));
 			    thd_it->setData(TableDelegate::SelectRole, elms);
-			    thd_it->setData(TableDelegate::AlignOptRole, Qt::AlignCenter);
+			    thd_it->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 			}
 			else if(t_linf->attr("tp") == "dec")	thd_it->setData(Qt::DisplayRole, s2ll(t_linf->childGet(iEl)->text()));
 			else if(t_linf->attr("tp") == "real")	thd_it->setData(Qt::DisplayRole, s2r(t_linf->childGet(iEl)->text()));
 			else if(t_linf->attr("tp") == "time") {
 			    thd_it->setData(Qt::DisplayRole, atm2s(s2i(t_linf->childGet(iEl)->text()),"%d-%m-%Y %H:%M:%S").c_str());
-			    thd_it->setData(TableDelegate::AlignOptRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
+			    thd_it->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
 			}
 			else thd_it->setData(Qt::DisplayRole, getPrintVal(t_linf->childGet(iEl)->text()).c_str());
 
@@ -1420,15 +1420,25 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    tbl->resizeColumnsToContents();
 		    for(int iTr = 0; iTr < 5; iTr++)	qApp->processEvents();	//Call all cascade events
 
-		    int tblWdth = tbl->maximumViewportSize().width();	//!!!! tbl->verticalScrollBar()->size().width() newer can be used here due it initially has 100 and does not update more
-			//- ((tbl->verticalScrollBar()/*&&tbl->verticalScrollBar()->isVisible()*/)?tbl->verticalScrollBar()->size().width():0);
-		    int averWdth = tblWdth/tbl->columnCount();
+		    int tblWdth = tbl->maximumViewportSize().width() -
+				    ((tbl->verticalScrollBar()&&tbl->verticalScrollBar()->isVisible())?tbl->verticalScrollBar()->size().width():0);
+			//!!!! tbl->verticalScrollBar()->size().width() newer can be used here due it initially has 100 and does not update more
+		    int averWdth = tbl->columnCount() ? (tblWdth/tbl->columnCount()) : 0;
 		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0;
 		    //   Count width params
 		    for(int iC = 0; iC < tbl->columnCount(); iC++) {
 			fullColsWdth += tbl->columnWidth(iC);
 			if(tbl->columnWidth(iC) <= averWdth)	niceForceColsWdth += tbl->columnWidth(iC);
 			else busyCols++;
+		    }
+		    for(int iIt = 0; busyCols && iIt < 10; iIt++) {
+			int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
+			int busyCols_ = 0, niceForceColsWdth_ = 0;
+			for(int iC = 0; iC < tbl->columnCount(); iC++)
+			    if(tbl->columnWidth(iC) < busyColsWdth) niceForceColsWdth_ += tbl->columnWidth(iC);
+			    else busyCols_++;
+			if(busyCols_ == busyCols) break;
+			busyCols = busyCols_; niceForceColsWdth = niceForceColsWdth_;
 		    }
 		    //   Set busyCols
 		    if(fullColsWdth > tblWdth && busyCols) {

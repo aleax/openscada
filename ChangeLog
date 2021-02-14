@@ -1,3 +1,38 @@
+2021-02-14 Roman (stable)
+- LibsDB.vcaBase: Main.storeHouse: switched to non "colsWdthFit" mode and the field "Description" forced to width "40%".
+- FIX:DAQ,Transports: Fixed in the control fields "list:/redund/cntr/rdndt" and "list:/sub/ehost/mode" type "int" renaming to "dec".
+- !!!!:FIX:UI.WebCfgD: Completely revised and expanded for:
+    - the all internal tool actions moving to the implementation as buttons and the toolbar size set from 25 to 30 pixels;
+    - removing the toolbar button images' size filtering-resizing on the server side;
+    - page icon padding between the title set to 10 pixels;
+    - the control page complete updating after the window resize;
+    - the table expandings for:
+	- the big text content limiting in 300 symbols at the visibility;
+	- the string type allowed for the multiline edition using TEXTAREA;
+	- the type data "bool" is shown as an image, not "On" or "Off";
+	- centering the boolean, number, time and selectable content;
+	- simplifying the table content edition for the types time, number and string by removing the apply and spin buttons.
+    - the generic text edition field by TEXTAREA expanded for apply and cancel from the keyboard;
+    - the hosts updating function binded to the double mouse click on the common space of the tree area;
+    - FIX: the hosts updating function fixed in detection douple host items;
+    - FIX: forced in the actual-selected item marking in the control tree after it rolling;
+    - removing nodeText() and setNodeText() by direct using "innerText" and "textContent";
+- !!:UI.{QTStarter,QTCfg,Vision}: The TableDelegate use the QT builtin role Qt::TextAlignmentRole instead own AlignOptRole,
+    was appended for long text visible limit support by the own role TextLimRole and the default value 300 symbols
+    by sizeHint() additional reimplementation.
+- !:UI.QTCfg: Improved in the table close filling by consideration the visible vertical scrollbar size
+    and several iterations of the close collumns fitting also as in UI.Vision.
+- !:UI.Vision: The Table view of the FormEl primitive cleaned form spare role Qt::UserRole+5 of the previous value storing,
+	    but that do now the table delegate.
+	The table early fitting moved just after it filling and the value setting, and after it force resizing to the container widget size,
+	    to provide that true fitting allways.
+	Applying the column force width and the row height calculation with limits
+	    are performed independently from the common attribute "colsWdthFit" value.
+	Improved in the table close filling by consideration the visible vertical scrollbar size.
+- !!:FIX:UI.WebVision: Fixed at last in plodding spare DIV items at the page changing in the page containers,
+    detected as changing the argument "pgBr" of the makeEl() function for the included page and it wrong processing by its container.
+
+
 2021-02-08 Roman (stable)
 - !!:LibsDB.vcaBase: The new page "Storehouse (storeHouse)" was finished in implementation the class edition and appended for:
 	- class full-translated name;

@@ -800,6 +800,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 		    this.pages[this.inclOpen].reqTm = tmCnt;
 		    pgCacheProc(this.pages[this.inclOpen]);
+		    //this.place.removeChild(this.pages[this.inclOpen].place);
 		    while(this.place.children.length) this.place.removeChild(this.place.children[0]);
 		    this.pages[this.inclOpen].perUpdtEn(false);
 		    delete this.pages[this.inclOpen];
@@ -810,9 +811,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if((pgO=pgCacheGet(this.inclOpen))) {
 			this.pages[this.inclOpen] = pgO;
 			this.place.appendChild(this.pages[this.inclOpen].place);
-			pgBr = servGet(this.inclOpen, 'com=attrsBr&tm='+pgO.reqTm);
 			this.pages[this.inclOpen].perUpdtEn(true);
-			this.pages[this.inclOpen].makeEl(pgBr);
+			this.pages[this.inclOpen].makeEl(servGet(this.inclOpen, 'com=attrsBr&tm='+pgO.reqTm));
 		    }
 		    else {
 			var iPg = new pwDescr(this.inclOpen, true, this);

@@ -609,7 +609,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 					default: v = QString::fromStdString(tC->text()); break;
 				    }
 				tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-				tit->setData(Qt::DisplayRole, QVariant()); tit->setData(Qt::DisplayRole, v);
+				tit->setData(Qt::DisplayRole, QVariant());	//!!!! To clean up the stored QVariant type for next reusing
+				tit->setData(Qt::DisplayRole, v);
 				// Back color
 				if((tC && (wVl=tC->attr("color")).size()) || (wVl=hit->data(Qt::UserRole+2).toString().toStdString()).size() ||
 					(wVl=rClr).size())
@@ -630,17 +631,15 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    tit->setData(Qt::DecorationRole, QPixmap::fromImage(img));
 				else tit->setData(Qt::DecorationRole, QVariant());
 				// Modify set
-				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit")))) {
+				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
 				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
-				    tit->setData(Qt::UserRole+5, v);
-				}
 				// Alignment set
 				if((tC && (wVl=tC->attr("align")).size()) || (wVl=hit->data(Qt::UserRole+6).toString().toStdString()).size()) {
 				    int flgs = Qt::TextWordWrap | Qt::AlignVCenter;
 				    if(wVl == "left") flgs |= Qt::AlignLeft;
 				    else if(wVl == "right") flgs |= Qt::AlignRight;
 				    else if(wVl == "center") flgs |= Qt::AlignHCenter;
-				    tit->setData(TableDelegate::AlignOptRole, flgs);
+				    tit->setData(Qt::TextAlignmentRole, flgs);
 				}
 				tit->setData(Qt::UserRole+1, iC);
 				tit->setData(Qt::UserRole+2, iR);
@@ -684,6 +683,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		shD->addrWdg->blockSignals(false);
 
 		setValue(w, shD->value, true);	//Value
+
+		wdg->resize(w->size());
+
+		tableFit(w);
 
 		break;
 	    }
@@ -731,11 +734,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
 	if(wAlign) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg, wAlign);
-
-	//Postprocessing after taking real data and size
-	switch(shD->elType) {
-	    case F_TABLE: tableFit(w);	break;
-	}
     }
 
     if(rel_cfg && !w->allAttrLoad() && shD->addrWdg)
@@ -971,25 +969,26 @@ void ShapeFormEl::tableFit( WdgView *w )
 
     wdg->horizontalHeader()->setStretchLastSection(false);
 
-    if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
-    if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
-	int tblWdth = wdg->maximumViewportSize().width();
-		    //vmax(w->sizeF().width(),wdg->maximumViewportSize().width()); - (wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
-	int averWdth = tblWdth/wdg->columnCount();
-	int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
+    if(wdg->columnCount() > 1)	wdg->resizeColumnsToContents();
 
-	//Count width params
-	for(int iC = 0; iC < wdg->columnCount(); iC++) {
-	    fullColsWdth += wdg->columnWidth(iC);
-	    if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
-		if(tVl < 0)	tVl = tblWdth*abs(tVl)/100;
-		niceForceColsWdth += tVl;
-		wdg->setColumnWidth(iC, tVl);
-	    }
-	    else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
-	    else busyCols++;
+    int tblWdth = wdg->maximumViewportSize().width() -
+		    ((wdg->verticalScrollBar()&&wdg->verticalScrollBar()->isVisible())?wdg->verticalScrollBar()->size().width():0);
+    int averWdth = wdg->columnCount() ? (tblWdth/wdg->columnCount()) : 0;
+    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
+
+    //Count width params
+    for(int iC = 0; iC < wdg->columnCount(); iC++) {
+	fullColsWdth += wdg->columnWidth(iC);
+	if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
+	    if(tVl < 0)	tVl = tblWdth*abs(tVl)/100;
+	    niceForceColsWdth += tVl;
+	    wdg->setColumnWidth(iC, tVl);
 	}
+	else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
+	else busyCols++;
+    }
 
+    if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
 	for(int iIt = 0; busyCols && iIt < 10; iIt++) {
 	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
 	    int busyCols_ = 0, niceForceColsWdth_ = 0;
@@ -1009,11 +1008,12 @@ void ShapeFormEl::tableFit( WdgView *w )
 			wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
 		    wdg->setColumnWidth(iC, busyColsWdth);
 	}
-	wdg->resizeRowsToContents();
-	for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
-	    wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/2));
     }
     wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
+
+    wdg->resizeRowsToContents();
+    for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
+	wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/2));
 }
 
 bool ShapeFormEl::event( WdgView *w, QEvent *event )
@@ -1105,7 +1105,7 @@ void ShapeFormEl::textAccept( )
     view->attrsSet(attrs);
 }
 
-void ShapeFormEl::checkChange(int st)
+void ShapeFormEl::checkChange( int st )
 {
     WdgView *view = (WdgView *)((QCheckBox*)sender())->parentWidget();
 
@@ -1298,12 +1298,6 @@ void ShapeFormEl::tableChange( int row, int col )
     if(((ShpDt*)w->shpData)->evLock /*|| !el->selectedItems().size()*/) return;
 
     QTableWidgetItem *wIt = el->item(row, col);
-
-    //Restore the previous value
-    if(!(((ShpDt*)w->shpData)->active && w->permCntr())) {
-	wIt->setData(Qt::DisplayRole, wIt->data(Qt::UserRole+5));
-	return;
-    }
 
     QVariant val = wIt->data(Qt::DisplayRole);
     if(val.type() == QVariant::Bool) val = val.toInt();
@@ -4491,15 +4485,15 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		QDateTime	dtm;
 		dtm.setTime_t(shD->messList[sortIts[iM].second].time);
 		shD->addrWdg->setItem(iM, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")));
-		tit->setData(TableDelegate::AlignOptRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
+		tit->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
 	    }
 	    else if(iCl == c_tmu) {
 		shD->addrWdg->setItem(iM, c_tmu, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[iM].second].utime)));
-		tit->setData(TableDelegate::AlignOptRole, Qt::AlignCenter);
+		tit->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 	    }
 	    else if(iCl == c_lev) {
 		shD->addrWdg->setItem(iM, c_lev, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[iM].second].level)));
-		tit->setData(TableDelegate::AlignOptRole, Qt::AlignCenter);
+		tit->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 	    }
 	    else if(iCl == c_cat)
 		shD->addrWdg->setItem(iM, c_cat, tit=new QTableWidgetItem(shD->messList[sortIts[iM].second].categ.c_str()));

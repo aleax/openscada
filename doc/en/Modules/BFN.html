@@ -48,7 +48,7 @@
 </div>
 
 <p>The module is written for the current data and alarms acquisition from the data concentration module BFN(BigFarmNet) of the poultry automation of "Big Dutchman" company (<a class="external free" href="http://www.bigdutchman.com" rel="nofollow noreferrer noopener" target="_blank">http://www.bigdutchman.com</a>). To the one module of data concentration (BFN) can be connected multiple controllers of the poultry house, for example, Viper CT/BAS — a computer to control the microclimate and production processes, designed in a modular principle; it is provided to maintain an optimal climate and production efficiency in the poultry-yard.
-</p><p>Inquiry of the BFN module is made by the SOAP/XML protocol, during which it can be obtained at once all available data of the one house computer. As a result of this, and because of the connection of multiple house computers to one BFN module, total query time of current data can reach 30 (thirty) seconds!
+</p><p>Acquisition of the BFN module is made by the SOAP/XML protocol (the CGI service "/cgi-bin/imwl_ws.cgi" on port 8000 mostly), during which it can be obtained at once all available data of the one house computer. As a result of this, and because of the connection of multiple house computers to one BFN module, total query time of current data can reach 30 (thirty) seconds!
 </p><p>Data and alarms are transmitted as codes of the signals and the alarms, and, therefore, to convert them to text messages it is necessary to have correspondence tables. Formation the code table of the signals and the alarms is provided by this module at the module's object level and in the "Symbols" tab (Fig.1). To use in the multilingual projects, data tables can be configured separately for each language.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:BFN_symb.png"><img class="thumbimage" height="629" src="../files/BFN_symb.png" width="808" /></a>  <div class="thumbcaption">Fig.1. Configuration tab of symbols of the signals and the alarms.</div></div></div></div>
@@ -63,7 +63,7 @@
 <li> The state "Enabled" and "Running", in which the controller object must be set at starting.</li>
 <li> The acquisition schedule policy and the priority of the data acquisition task.</li>
 <li> Period of sync with the remote station.</li>
-<li> Address of the transport by which the access to the BFN module is made. Usually the TCP-sockets of the transport module "<a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" are used.</li>
+<li> Address of the transport by which the access to the BFN module is made. Usually the TCP-sockets of the transport module "<a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>" on port <b>8000</b> are used.</li>
 <li> User and password for connecting to the BFN module.</li></ul>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">2</span> Parameters</span></h2>
 <p>The module doesn't provides the possibility of creating parameters manually, all parameters are automatically created taking into account the list of house controllers connected to the BFN module. In fact, one parameter — a single house controller and all its data is presented as the attributes of the parameter. One controller-computer of the house contains approximately 250 parameters, and some up to 500. As a result, the total amount of information of one BFN can reach 2000 signals! An example of the "Attributes" tab of the poultry house computer's parameter is shown in Figure 3.
@@ -87,5 +87,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/BFN/en">Modules/BFN/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">лютого 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2731</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/BFN/en">Modules/BFN/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2733</td></tr></table></body>
 </html>

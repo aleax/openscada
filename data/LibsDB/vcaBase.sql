@@ -24716,7 +24716,7 @@ if(f_start || toUpdate) {
 
 	//Updation the main table
 	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT * FROM `sh_"+class+"`;");
-	dataTbl_items = "<tbl sel=''row'' sortEn=''1'' colsWdthFit=''1'' hHdrVis=''1'' vHdrVis=''1''>\n";
+	dataTbl_items = "<tbl sel=''row'' sortEn=''1'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 	colTps = new Object();
 	for(iR = 0; iR < dataTbl.length; iR++) {
 		dataTbl_items += iR ? "<r>" : "<h>";
@@ -24728,7 +24728,7 @@ if(f_start || toUpdate) {
 				else {
 					opt += " edit=''1''";
 					if(itVl == "NAME")	{ itVl = tr("Name"); opt += " align=''center''"; }
-					else if(itVl == "DSCR")	itVl = tr("Description");
+					else if(itVl == "DSCR")	{ itVl = tr("Description"); opt += " width=''40%''"; }
 					else if(itVl.slice(0,3) == "SP_" && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) {
 						itVl = tVl.name;
 						if(tVl.tp.parse(0,":").search("bool","i") >= 0)			colTps[iC] = "b";
@@ -24777,7 +24777,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true;
 	}
 }
-','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1612790237);
+','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1613164289);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
