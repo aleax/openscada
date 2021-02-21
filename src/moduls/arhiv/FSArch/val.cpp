@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -251,8 +251,9 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     int r_len = read(hd, &head, sizeof(VFileArch::FHead));
     close(hd);
     if(r_len < (int)sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55) return false;
+    string aId = getArchiveID(head, TSYS::pathLevEnd(a_fnm,0));
     // Check to archive present
-    if(archive)	*archive = getArchiveID(head, TSYS::pathLevEnd(a_fnm,0));
+    if(archive)	*archive = aId;
     if(abeg)	*abeg = head.beg;
     if(aend)	*aend = head.end;
     if(aper)	*aper = head.period;
@@ -268,14 +269,14 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    cEl.cfg("FILE").setS(anm);
 	    cEl.cfg("BEGIN").setS(ll2s(head.beg,TSYS::Hex));
 	    cEl.cfg("END").setS(ll2s(head.end,TSYS::Hex));
-	    cEl.cfg("PRM1").setS(*archive);
+	    cEl.cfg("PRM1").setS(aId);
 	    cEl.cfg("PRM2").setS(ll2s(head.period,TSYS::Hex));
 	    cEl.cfg("PRM3").setS(i2s(head.vtp|(head.vtpExt<<4)));
 	    SYS->db().at().dataSet((infoTbl.size()?infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, false, true);
 	}
 	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file
-	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, archive->c_str(), head.period, head.vtp|(head.vtpExt<<4));
+	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, aId.c_str(), head.period, head.vtp|(head.vtpExt<<4));
 	    bool fOK = (write(hd,si.data(),si.size()) == (int)si.size());
 	    close(hd);
 	    if(!fOK) return false;

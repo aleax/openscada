@@ -1,3 +1,15 @@
+2021-02-21 Roman (stable)
+- LibsDB.vcaBase: Main.storeHouse: The classes' table expanded by the separate field "Table properties (TP)"
+    with the column width specifying here and all visual tables disabled for columns fitting by "colsWdthFit"
+    and temporarily for sorting by "sortEn", before it complete implementation.
+    The main visual table switched to default sorting by SQL "ORDER BY 'ID'", for new items placing in the end.
+    Appended for the data edition mode.
+- !!!!:FIX:Archive.FSArch: Critical fixed in the value archive files processing, in try they ID write to NULL string.
+- UI.Vision: The view Table of the primitive FormEl appended for the light edition -
+    without the columns refitting all updation time, only at:
+	first row appearing, columns count change and the column title change, font change and resize.
+
+
 2021-02-14 Roman (stable)
 - FIX:UI.{QTStarter,QTCfg,Vision}: Fixed in building with Qt4 for TableDelegate.
 

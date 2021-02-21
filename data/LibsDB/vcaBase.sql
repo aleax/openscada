@@ -1835,10 +1835,11 @@ INSERT INTO wlb_Main_incl VALUES('storeHouse','itCopy','/wlb_originals/wdg_FormE
 INSERT INTO wlb_Main_incl VALUES('storeHouse','itDel','/wlb_originals/wdg_FormEl','owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','lab_fltr','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;text;','');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','dataTbl','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;contextMenu;elType;value;items;set;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl','owner;name;en;active;geomX;geomH;geomZ;elType;value;mode;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','classEd','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','classEd','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;font;','');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','classNm','/wlb_originals/wdg_Text','owner;geomX;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','classSel','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','classSel','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;','');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','btClassEdit','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl','owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadre',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -8348,7 +8349,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','dscr','',32,'','','','','','','',''
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','900',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','550',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','580',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','22',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','evProc','',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','pgOpenSrc','',40,'','','','','','','','','');
@@ -8359,7 +8360,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','bordColor','black',32,'','','','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltr0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','23',32,'','','fltr0','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','608',32,'','','fltr0','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','588',32,'','','fltr0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','7',32,'','','fltr0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr0','','','','','','');
@@ -8371,7 +8372,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltr1','
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',32,'','','fltr1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','40',32,'','','fltr1','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','608',32,'','','fltr1','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','588',32,'','','fltr1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','7',32,'','','fltr1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr1','','','','','','');
@@ -8383,7 +8384,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltr2','
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',32,'','','fltr2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','57',32,'','','fltr2','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','608',32,'','','fltr2','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','588',32,'','','fltr2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','9',32,'','','fltr2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr2','','','','','','');
@@ -8395,7 +8396,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltr3','
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',32,'','','fltr3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','214',32,'','','fltr3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','74',32,'','','fltr3','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','608',32,'','','fltr3','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','588',32,'','','fltr3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltr3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','11',32,'','','fltr3','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','fltr3','','','','','','');
@@ -8417,9 +8418,9 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','cfg','',40,'','','fltr4','','','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 12',32,'','','fltr4','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','fltrCol0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','60',32,'','','fltrCol0','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','23',32,'','','fltrCol0','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','23',40,'','','fltrCol0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','150',32,'','','fltrCol0','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','fltrCol0','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',40,'','','fltrCol0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','7',32,'','','fltrCol0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','fltrCol0','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','4',32,'','','fltrCol0','','','','','','');
@@ -8486,43 +8487,43 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','go_report',''
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','go_report','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','img','doc',0,'','','go_report','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','itAdd','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','name','Add',32,'','','itAdd','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','name','Add',32,'','','itAdd','Додати','','Добавить','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','92.437',32,'','','itAdd','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','527.532',32,'','','itAdd','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','555.532',32,'','','itAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','114.815',32,'','','itAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','itAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','20',32,'','','itAdd','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Add new program',32,'','','itAdd','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Add new item',32,'','','itAdd','Додати новий елемент','','Добавить новый элемент','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','itAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','itAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','itAdd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','itCopy','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','name','Copy',32,'','','itCopy','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','name','Copy',32,'','','itCopy','Копіювати','','Копировать','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','210.606',32,'','','itCopy','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','527.532',32,'','','itCopy','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','555.532',32,'','','itCopy','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','129.165',32,'','','itCopy','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','itCopy','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','21',32,'','','itCopy','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Copy selected program',32,'','','itCopy','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Copy selected item',32,'','','itCopy','Копіювати обраний елемент','','Копировать выбранный элемент','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','itCopy','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','itCopy','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','img','copy',0,'','','itCopy','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','itCopy','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','itDel','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','name','Delete',32,'','','itDel','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','name','Delete',32,'','','itDel','Видалити','','Удалить','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','3.437',32,'','','itDel','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','527.532',32,'','','itDel','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','555.532',40,'','','itDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','76',32,'','','itDel','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','itDel','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',40,'','','itDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','19',32,'','','itDel','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Delete programm in selected position',32,'','','itDel','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Delete item in selected position',32,'','','itDel','Видалити елемент у обраній позиції','','Удалить элемент в выбранной позиции','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','itDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','itDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','itDel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','lab_fltr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','3',32,'','','lab_fltr','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','21',32,'','','lab_fltr','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','824',32,'','','lab_fltr','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','21',40,'','','lab_fltr','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','804',32,'','','lab_fltr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','88',32,'','','lab_fltr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','3',32,'','','lab_fltr','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomMargin','1',32,'','','lab_fltr','','','','','','');
@@ -8533,14 +8534,18 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','text','Filter:
         &
         &
         &
-        &',32,'','','lab_fltr','','','','','','');
+        &',32,'','','lab_fltr','Filter:
+        &
+        &
+        &
+        &','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','dataTbl','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','2',32,'','','dataTbl','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','40',40,'','','dataTbl','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','895',32,'','','dataTbl','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','486',40,'','','dataTbl','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','18',32,'','','dataTbl','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','contextMenu','Quittance:qtc',32,'','','dataTbl','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','540',40,'','','dataTbl','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','25',32,'','','dataTbl','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','contextMenu','',32,'','','dataTbl','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','dataTbl','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','9',32,'','','dataTbl','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','value','',8,'','','dataTbl','','','','','','');
@@ -8548,17 +8553,6 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','items','',8,'','','dataTbl','','','
 INSERT INTO wlb_Main_io VALUES('storeHouse','set','',8,'','','dataTbl','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','itCopy','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',32,'','','itDel','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','name','Edit',32,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','727',32,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','19',32,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','value','0',8,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','mode','1',0,'','','btEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','btEdit','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','classEd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','classEd','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','180',32,'','','classEd','','','','','','');
@@ -8593,6 +8587,38 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','items','',8,'','','classSel','','',
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','classSel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','14',32,'','','play','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','2',32,'','','date','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','722',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','20',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','20',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','contextMenu','',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','value','0',8,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','img','edit',0,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','mode','1',0,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','name','Edit',32,'','','btEdit','Редагувати','','Редактировать','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','810',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','23',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','87',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','16',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','20',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','contextMenu','',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',40,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','value','0',8,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','img','',0,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','mode','1',0,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 12',0,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the storehouse class',32,'','','btClassEdit','Редагувати клас складу','','Редактировать класс склада','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the storehouse',32,'','','btEdit','Редагувати склад','','Редактировать склад','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Select present or enter ID of the new storehouse class for editing',32,'','','classEd','Обрати наявний або ввести ІД нового класу складу для редагування','','Выбрать присутствующий или ввести ИД нового класса склада для редактирования','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Select the storehouse class',32,'','','classSel','Обрати клас складу','','Выбрать класс склада','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -11969,6 +11995,123 @@ ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
 AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
 gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oq4qk+O+hyAICqAQAAAQD4
 1fbCDAAAAIANAADg6gwAjo+PAQ==');
+INSERT INTO wlb_Main_mime VALUES('edit','image/png;8.78516','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');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_uio VALUES('ElCadr','max','Parameter: maximum',131076,'100|',10,'<page>|max','','','Параметр: максимум','','','Параметр: максимум','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','min','Parameter: minimum',131076,'0|',10,'<page>|min','','','Параметр: мінімум','','','Параметр: минимум','','','','');
@@ -12423,17 +12566,12 @@ else if(doRes && (sox=SYS.system("which sox")).length) {
 	return "audio/ogg";
 }',0,'','','','Повідомлення: тип 1 (Бузер)','','','Уведомление: тип 1 (Бузер)','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','report','Report',131205,'',8,'','','go_report','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','mess','Dialog message',131077,'Are you really want to delete this program?',0,'','','itDel','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','db','DB: Data base',131077,'',9,'DB','','','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','class','Class: initial',131077,'',8,'','','','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','DESCR','Quittance: description',131077,'',8,'','','dataTbl','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','NAME','Quittance: name',131077,'',8,'','','dataTbl','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','com','Quittance: command',131072,'0',8,'','','dataTbl','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','digComs','Quittance: commands',131077,'QUITT-blue',8,'','','dataTbl','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','dataTbl','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','st_open','Quittance: state',131072,'0',8,'','','dataTbl','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','classFix','Class: fixed',131077,'',9,'Class','','','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('storeHouse','classEditable','Class: editable',131072,'0',9,'Class','','','','','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('storeHouse','mess','Dialog message',131077,'Are you really want to delete this item?',0,'','','itDel','Повідомлення діалогу','Ви дійсно бажаєте видалити обраний елемент?','','Сообщение диалога','Вы действительно желаете удалить выбранный елемент?','','','');
+INSERT INTO wlb_Main_uio VALUES('storeHouse','db','DB: Data base',131077,'',9,'DB','','','БД: База даних','','БД','БД: База данных','','БД','','');
+INSERT INTO wlb_Main_uio VALUES('storeHouse','class','Class: initial',131077,'',8,'','','','Клас: поточний','','','Класс: начальный','','','','');
+INSERT INTO wlb_Main_uio VALUES('storeHouse','classFix','Class: fixed',131077,'',9,'Class','','','Клас: фіксований','','Клас','Класс: фиксированный','','Класс','','');
+INSERT INTO wlb_Main_uio VALUES('storeHouse','classEditable','Class: editable',131072,'0',9,'Class','','','Клас: редагований','','Клас','Класс: редактированный','','','','');
+INSERT INTO wlb_Main_uio VALUES('storeHouse','dataEditable','Data: editable',131072,'0',9,'','','','Дані: редаговане','','','Данные: редактированный','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -20510,6 +20648,7 @@ INSERT INTO Trs VALUES('Deleted user "%1"','Видалено користува�
 INSERT INTO Trs VALUES('Identifier','Ідентифікатор','Идентификатор');
 INSERT INTO Trs VALUES('Type','Тип','Тип');
 INSERT INTO Trs VALUES('New item','Новий елемент','Новый элемент');
+INSERT INTO Trs VALUES('Table properties','Властивості таблиці','Свойства таблицы');
 CREATE TABLE IF NOT EXISTS 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
@@ -24607,20 +24746,22 @@ function messByLang(iMess) {
 
 if(f_start) {
 	toUpdate = false;
-	btEdit_en = classEditable;
+	btClassEdit_en = dataEditable && classEditable;
 	if(classFix.length)	classNm_text = class = classFix;
 	else classSel_en = true;
+	btEdit_en = dataEditable;
 }
 
 //Common events process
 for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	//this.messInfo("TEST 01: Event="+sval);
-	if(sval == "ws_BtToggleChange:/btEdit") {
-		classEd_en = !classFix.length && btEdit_value;
-		classSel_en = !classFix.length && !btEdit_value;
+	if(sval == "ws_BtToggleChange:/btClassEdit") {
+		classEd_en = !classFix.length && btClassEdit_value;
+		classSel_en = !classFix.length && !btClassEdit_value;
 		toUpdate = true;
 		itDel_active = itCopy_active = false;
 	}
+	else if(sval == "ws_BtToggleChange:/btEdit")	toUpdate = true;
 	else if(sval == "ws_CombChange:/classSel")	{ class = ((tVl=classSel_value.match("\\((.+)\\)$")).length) ? tVl[1] : classSel_value; toUpdate = true; }
 	else if(sval == "ws_LnAccept:/classEd")		{ class = classEd_value; toUpdate = true; }
 }
@@ -24638,19 +24779,22 @@ if((f_start || toUpdate) /*&& !classFix.length*/) {
 	classNm_text = classSel_value = classEd_value = class;
 	if(clsNm.length == 2)	classNm_text = classSel_value = messByLang(clsNm[1][0]) + " ("+class+")";
 
-	btEdit_active = class.length;
-	itCopy_en = !btEdit_value;
+	dataTbl_geomY = btClassEdit_value ? lab_fltr_geomY : fltrCol0_geomY + fltrCol0_geomH;
+	dataTbl_geomH = itDel_geomY - dataTbl_geomY + ((btClassEdit_value||btEdit_value)?0:itDel_geomH);
+
+	btClassEdit_active = class.length;
+	itCopy_en = !btClassEdit_value;
 }
 
 //The edition mode
-if(btEdit_value) {
-	SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `classes` (`CLASS` varchar(20) DEFAULT '''', `ID` varchar(20) DEFAULT '''', `NAME` text, `TP` varchar(100) DEFAULT '''', PRIMARY KEY (`CLASS`,`ID`));");
+if(btClassEdit_value) {
+	SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `classes` (`CLASS` varchar(20) DEFAULT '''', `ID` varchar(20) DEFAULT '''', `NAME` text, `TP` varchar(100) DEFAULT '''', `TBL` varchar(100) DEFAULT '''', PRIMARY KEY (`CLASS`,`ID`));");
 
 	//Updation the main table
 	if(f_start || toUpdate) {
 		// Requesting the table structure
-		dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`, `NAME`, `TP` FROM `classes` WHERE `CLASS`=''"+class+"'';");
-		dataTbl_items = "<tbl sel=''row'' sortEn=''1'' colsWdthFit=''1'' hHdrVis=''1'' vHdrVis=''1''>\n";
+		dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`, `NAME`, `TP`, `TBL` FROM `classes` WHERE `CLASS`=''"+class+"'';");
+		dataTbl_items = "<tbl sel=''row'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 		for(iR = 0; iR < dataTbl.length; iR++) {
 			dataTbl_items += iR ? "<r>" : "<h>";
 			for(iC = 0; iC < dataTbl[iR].length; iC++) {
@@ -24661,6 +24805,7 @@ if(btEdit_value) {
 					if(itVl == "ID")				itVl = tr("Identifier");
 					else if(itVl == "NAME")	itVl = tr("Name");
 					else if(itVl == "TP")		itVl = tr("Type");
+					else if(itVl == "TBL")		itVl = tr("Table properties");
 				} else if(itVl == "<NULL>")	itVl = "";
 				dataTbl_items += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
 			}
@@ -24706,17 +24851,18 @@ if(btEdit_value) {
 //The representing mode
 if(f_start || toUpdate) {
 	// Requesting the table structure
-	clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`, `NAME`, `TP` FROM `classes` WHERE `CLASS`=''"+class+"'';");
+	clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`, `NAME`, `TP`,`TBL` FROM `classes` WHERE `CLASS`=''"+class+"'';");
 	clsLsO = new Object();		
 	for(iR = 1; iR < clsLs.length; iR++) {
 		clsLsO[clsLs[iR][0]] = tO = new Object();
 		tO.name = ((tO.name=clsLs[iR][1]) == "<NULL>" || !tO.name.length) ? clsLs[iR][0] : messByLang(tO.name);
 		tO.tp = clsLs[iR][2];
+		tO.tbl = clsLs[iR][3];
 	}
 
 	//Updation the main table
-	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT * FROM `sh_"+class+"`;");
-	dataTbl_items = "<tbl sel=''row'' sortEn=''1'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
+	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT * FROM `sh_"+class+"` ORDER BY ''ID'';");
+	dataTbl_items = "<tbl sel=''row'' sortEn=''0'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 	colTps = new Object();
 	for(iR = 0; iR < dataTbl.length; iR++) {
 		dataTbl_items += iR ? "<r>" : "<h>";
@@ -24726,15 +24872,16 @@ if(f_start || toUpdate) {
 			if(iR == 0) {
 				if(itVl == "ID")	opt += " width=''0px''";
 				else {
-					opt += " edit=''1''";
-					if(itVl == "NAME")	{ itVl = tr("Name"); opt += " align=''center''"; }
-					else if(itVl == "DSCR")	{ itVl = tr("Description"); opt += " width=''40%''"; }
+					opt += btEdit_value ? " edit=''1''" : "";
+					if(itVl == "NAME")	{ itVl = tr("Name"); opt += " width=''170px'' align=''center''"; }
+					else if(itVl == "DSCR")	{ itVl = tr("Description"); opt += " width=''350px''"; }
 					else if(itVl.slice(0,3) == "SP_" && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) {
 						itVl = tVl.name;
-						if(tVl.tp.parse(0,":").search("bool","i") >= 0)			colTps[iC] = "b";
-						else if(tVl.tp.parse(0,":").search("int","1") >= 0)	colTps[iC] = "i";
-						else if(tVl.tp.parse(0,":").search("(float,double)","1") >= 0) colTps[iC] = "r";
-						if((tVl2=tVl.tp.parse(1,":")).length)	opt += " align=''"+tVl2+"''";
+						if(tVl.tp.search("bool","i") >= 0)		colTps[iC] = "b";
+						else if(tVl.tp.search("int","1") >= 0)	colTps[iC] = "i";
+						else if(tVl.tp.search("(float,double)","1") >= 0) colTps[iC] = "r";
+						if((tVl2=tVl.tbl.parse(0,":")).length)	opt += " align=''"+tVl2+"''";
+						if((tVl2=tVl.tbl.parse(1,":")).length)	opt += " width=''"+tVl2+"''";
 						//this.messInfo("iC="+iC+"; tp="+tVl.tp+" = "+colTps[iC]);
 					}
 				}
@@ -24777,7 +24924,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true;
 	}
 }
-','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1613164289);
+','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1613931273);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB

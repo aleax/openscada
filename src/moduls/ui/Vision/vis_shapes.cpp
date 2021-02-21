@@ -542,6 +542,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    mk_new = true;
 		}
 
+		bool toReFit = (elFnt != wdg->font());
 		wdg->setFont(elFnt);		//Font
 
 		//Items
@@ -550,12 +551,14 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		bool hdrPresent = false, colsWdthFit = false;
 		int maxCols = 0, maxRows = 0;
 		try { tX.load(shD->items); } catch(...) { }
+
 		if(tX.name() != "tbl") {
 		    wdg->clear();
 		    wdg->horizontalHeader()->setVisible(false);
 		    wdg->verticalHeader()->setVisible(false);
 		}
 		else {
+		    //???? Review the sorting implementation in edition the table
 		    if(wdg->isSortingEnabled()) {
 			wdg->setSortingEnabled(false);
 			//wdg->clear();
@@ -570,18 +573,19 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			bool isH = false;
 			QTableWidgetItem *hit = NULL, *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
-			if(!isH && (int)iR >= wdg->rowCount()) wdg->setRowCount(iR+1);
+			if(!isH && (int)iR >= wdg->rowCount()) { wdg->setRowCount(iR+1); if(!wdg->rowCount()) toReFit = true; }
 			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); }
 			for(unsigned iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR->childSize()) ||
 								    (int)iC < wdg->columnCount(); iCh1++)
 			{
 			    XMLNode *tC = (tR && iCh1 < tR->childSize()) ? tR->childGet(iCh1) : NULL;
-			    if(tC && (int)iC >= wdg->columnCount()) wdg->setColumnCount(iC+1);
-			    if(!(hit=wdg->horizontalHeaderItem(iC))) wdg->setHorizontalHeaderItem(iC, (hit=new QTableWidgetItem()));
+			    if(tC && (int)iC >= wdg->columnCount()) { wdg->setColumnCount(iC+1); toReFit = true; }
+			    if(!(hit=wdg->horizontalHeaderItem(iC))) { wdg->setHorizontalHeaderItem(iC, (hit=new QTableWidgetItem())); toReFit = true; }
 			    if(isH) {	//Header process
 				hit->setText(tC?tC->text().c_str():"");
 				hit->setData(Qt::FontRole, elFnt);
 				if(tC) {
+				    if(tC->text() != hit->text().toStdString()) toReFit = true;
 				    hit->setData(Qt::UserRole, QVariant()); wdg->showColumn(iC);	//!!!! Need for updating the columns width
 				    if((wVl=tC->attr("width")).size()) {
 					int wdthCel = fmax(0, s2i(wVl));
@@ -633,6 +637,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				// Modify set
 				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
 				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
+				else tit->setFlags(tit->flags()&(~Qt::ItemIsEditable));
 				// Alignment set
 				if((tC && (wVl=tC->attr("align")).size()) || (wVl=hit->data(Qt::UserRole+6).toString().toStdString()).size()) {
 				    int flgs = Qt::TextWordWrap | Qt::AlignVCenter;
@@ -640,7 +645,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    else if(wVl == "right") flgs |= Qt::AlignRight;
 				    else if(wVl == "center") flgs |= Qt::AlignHCenter;
 				    tit->setData(Qt::TextAlignmentRole, flgs);
-				}
+				} else tit->setData(Qt::TextAlignmentRole, QVariant());
 				tit->setData(Qt::UserRole+1, iC);
 				tit->setData(Qt::UserRole+2, iR);
 			    }
@@ -677,6 +682,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			wdg->sortItems((sortCol?abs(sortCol)-1:0), ((sortCol>=0)?Qt::AscendingOrder:Qt::DescendingOrder));
 		    }
 		}
+		if(wdg->columnCount() != maxCols) toReFit = true;
 		wdg->setColumnCount(maxCols);
 		wdg->setRowCount(maxRows);
 		wdg->setProperty("colsWdthFit", colsWdthFit);
@@ -686,7 +692,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 
 		wdg->resize(w->size());
 
-		tableFit(w);
+		if(toReFit) tableFit(w);
+		else {
+		    wdg->resizeRowsToContents();
+		    for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
+			wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/2));
+		}
 
 		break;
 	    }
