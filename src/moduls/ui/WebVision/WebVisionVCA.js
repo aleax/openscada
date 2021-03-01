@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -517,9 +517,9 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 		" <td title='"+winName+"' style='padding-left: 5px; overflow: hidden; white-space: nowrap;'>"+winName+"</td>"+
 		" <td style='color: red; cursor: pointer; text-align: right; width: 1px;' "+
 		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose&cacheCntr\",\"\"); "+
-		"   this.offsetParent.iPg.pwClean(); "+
+		"   /*this.offsetParent.iPg.pwClean(); "+			//!!!! Commented to prevent the flicking
 		"   delete this.offsetParent.iPg.parent.pages[this.offsetParent.iPg.addr]; "+
-		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);'>X</td></tr>\n"+
+		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);*/'>X</td></tr>\n"+
 		"<tr><td colspan='2'><div/></td></tr>";
 	    document.getElementById('mainCntr').appendChild(iPg.window);
 	    iPg.place = iPg.window.rows[1].cells[0].children[0];
@@ -787,7 +787,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 		    this.pages[this.inclOpen].reqTm = tmCnt;
 		    pgCacheProc(this.pages[this.inclOpen]);
-		    this.place.removeChild(this.pages[this.inclOpen].place);
+		    //this.place.removeChild(this.pages[this.inclOpen].place);
+		    while(this.place.children.length) this.place.removeChild(this.place.children[0]);
 		    this.pages[this.inclOpen].perUpdtEn(false);
 		    delete this.pages[this.inclOpen];
 		    this.inclOpen = null;
@@ -797,9 +798,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if((pgO=pgCacheGet(this.inclOpen))) {
 			this.pages[this.inclOpen] = pgO;
 			this.place.appendChild(this.pages[this.inclOpen].place);
-			pgBr = servGet(this.inclOpen, 'com=attrsBr&tm='+pgO.reqTm);
 			this.pages[this.inclOpen].perUpdtEn(true);
-			this.pages[this.inclOpen].makeEl(pgBr);
+			this.pages[this.inclOpen].makeEl(servGet(this.inclOpen, 'com=attrsBr&tm='+pgO.reqTm));
 		    }
 		    else {
 			var iPg = new pwDescr(this.inclOpen, true, this);

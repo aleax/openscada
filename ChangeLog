@@ -1,3 +1,16 @@
+2021-03-01 Roman 0.9.3.2
+- !!!!:FIX:Archive.FSArch: Critical fixed in the value archive files processing, in try they ID write to NULL string.
+- !!:FIX:UI.WebVision: Fixed at last in plodding spare DIV items at the page changing in the page containers,
+    detected as changing the argument "pgBr" of the makeEl() function for the included page and it wrong processing by its container.
+- !!:DAQ.ModBus: The output part of the protocol RTU variant appended for early termination of the package waiting
+	of the standard functions [ERR,1...6,15,16], what increases the overall bandwidth twice.
+    !: The DAQ attributes parsing switched to use TSYS::strLine() and TSYS::strParse()
+	than allowing the symbol ':' in the name and empty lines in the text.
+- UI.QTCfg: Appended for clossing the double configuration windows without the warning dialog.
+- UI.WebVision: The external windows as DIV closing set in sending only the closing signal to the model
+    and real closing after it removing in the model to prevent sometime flicking.
+
+
 2021-02-01 Roman 0.9.3.1
 - FIX:SYS: TCfg::setS() in the extended variant switched in writing to the TVariant container directly, for the extended values,
     than omitting the field wrong limits.

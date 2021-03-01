@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1071,17 +1071,18 @@ void TMdPrm::enable( )
     if(isStd()) {
 	string ai, sel, atp, atp_m, atp_sub, aid, anm, aflg;
 	string m_attrLs = cfg("ATTR_LS").getS();
-	for(int ioff = 0; (sel=TSYS::strSepParse(m_attrLs,0,'\n',&ioff)).size(); ) {
-	    if(sel[0] == '#') continue;
-	    atp = TSYS::strSepParse(sel, 0, ':');
+	for(int ioff = 0; (sel=TSYS::strLine(m_attrLs,0,&ioff)).size() || ioff < m_attrLs.size(); ) {
+	    if(sel.empty() || sel[0] == '#') continue;
+	    int elOff = 0;
+	    atp = TSYS::strParse(sel, 0, ":", &elOff);
 	    if(atp.empty()) atp = "R";
-	    atp_m = TSYS::strSepParse(atp, 0, '_');
-	    atp_sub = TSYS::strSepParse(atp, 1, '_');
-	    ai  = TSYS::strSepParse(sel, 1, ':');
-	    aflg = TSYS::strSepParse(sel, 2, ':');
-	    aid = TSYS::strSepParse(sel, 3, ':');
+	    atp_m = TSYS::strParse(atp, 0, "_");
+	    atp_sub = TSYS::strParse(atp, 1, "_");
+	    ai  = TSYS::strParse(sel, 0, ":", &elOff);
+	    aflg = TSYS::strParse(sel, 0, ":", &elOff);
+	    aid = TSYS::strParse(sel, 0, ":", &elOff);
 	    if(aid.empty()) aid = ai;
-	    anm = TSYS::strSepParse(sel, 4, ':');
+	    anm = sel.substr(elOff);//  TSYS::strParse(sel, 0, ":", &elOff);
 	    if(anm.empty()) anm = aid;
 
 	    if((vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
@@ -1147,8 +1148,8 @@ void TMdPrm::enable( )
 	    //unsigned fId = 0;
 	    if(!lCtx->func()) {
 		string m_tmpl = cfg("TMPL").getS();
-		lCtx->setFunc(&SYS->daq().at().tmplLibAt(TSYS::strSepParse(m_tmpl,0,'.')).at().
-						      at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
+		lCtx->setFunc(&SYS->daq().at().tmplLibAt(TSYS::strParse(m_tmpl,0,".")).at().
+						      at(TSYS::strParse(m_tmpl,1,".")).at().func().at());
 		to_make = true;
 	    }
 	    // Init attrubutes
