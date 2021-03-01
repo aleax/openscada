@@ -33,14 +33,20 @@ int OSCADA_QT::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->fo
 
 QColor OSCADA_QT::colorAdjToBack( const QColor &clr, const QColor &backClr )
 {
-    int wV = vmax(60, 120-abs(clr.saturation()-backClr.saturation()));
+    //printf("TEST 00: %s on %s\n", clr.name().toStdString().c_str(), backClr.name().toStdString().c_str());
+
+    int wV = vmax(60,(256-abs(clr.saturation()-backClr.saturation()))/2);
 
     int wS = abs(clr.hue()-backClr.hue());
     if(wS > 360/2) wS = 360 - wS;
-    wS = vmax(0, 120-wS);
+    wS = vmax(0, (180-wS)/2);
+
+    //printf("TEST 01: wV=%d; wS=%d\n", wV, wS);
 
     if(wV > abs(clr.value()-backClr.value()))
-	wV = backClr.value() + wV*(((backClr.value()+wV)<256)?1:-1);
+	wV = backClr.value() + ((backClr.value() < 175) ?
+				    wV*(((backClr.value()+wV)<256)?1:-1) :
+				    wV*(((backClr.value()-wV)>0)?-1:1));
     else wV = clr.value();
 
     if(wS > abs(clr.saturation()-backClr.saturation()))

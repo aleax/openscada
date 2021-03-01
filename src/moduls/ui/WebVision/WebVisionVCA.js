@@ -530,9 +530,9 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 		" <td title='"+winName+"' style='padding-left: 5px; overflow: hidden; white-space: nowrap;'>"+winName+"</td>"+
 		" <td style='color: red; cursor: pointer; text-align: right; width: 1px;' "+
 		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose&cacheCntr\",\"\"); "+
-		"   this.offsetParent.iPg.pwClean(); "+
+		"   /*this.offsetParent.iPg.pwClean(); "+	//!!!! Commented to prevent the flicking
 		"   delete this.offsetParent.iPg.parent.pages[this.offsetParent.iPg.addr]; "+
-		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);'>X</td></tr>\n"+
+		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);*/'>X</td></tr>\n"+
 		"<tr><td colspan='2'><div/></td></tr>";
 	    document.getElementById('mainCntr').appendChild(iPg.window);
 	    iPg.place = iPg.window.rows[1].cells[0].children[0];
@@ -1923,13 +1923,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
-		    if(toInit || ((this.attrsMdf['items'] || this.attrsMdf['value']) && !formObj.edIt)) {
+		    if(toInit || ((this.attrsMdf['items'] || this.attrsMdf['value'] || this.attrsMdf['font']) && !formObj.edIt)) {
 			hdrPresent = false, maxCols = 0, maxRows = 0;
+			toReFit = this.attrsMdf['font'];
 			items = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
-			if(!items.children.length || (tX=items.children[0]).nodeName != "tbl") formObj.innerHTML = "";
+			if(!items.children.length || (tX=items.children[0]).nodeName != "tbl")	formObj.innerHTML = "";
 			else {
 			    if(toInit || !formObj.children.length) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
 			    rClr = null, rClrTxt = null, rFnt = null;
+			    startRows = formObj.tBodies[0].rows.length;
+			    startCols = startRows ? formObj.tBodies[0].rows[0].cells.length : 0;
 			    for(iR = 0, iRR = 0, iCh = 0; iCh < tX.children.length || iR < formObj.tBodies[0].rows.length; iCh++) {
 				tR = (iCh < items.children[0].children.length) ? items.children[0].children[iCh] : null;
 				isH = false, hit = null, tit = null;
@@ -1945,19 +1948,21 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    hit.onclick = formObj.onclick;
 				    if(isH) {	//Header process
 					if(iC == 0) { hit.innerText = '*'; iC++; continue; }
-					hit.innerText = tC ? tC.textContent : "";
 					if(tC) {
-					    if(!(wVl=tC.getAttribute("width"))) hit.style.width = ""
-					    else if(wVl.indexOf("%") >= 0)	hit.style.width = parseInt(wVl) + "%";
-					    else hit.style.width = (parseInt(wVl)*xSc) + "px";
+					    if(hit.innerText != tC.textContent) toReFit = true;
+					    hit.innerText = tC.textContent;
+					    hit.widthSrc = ""
+					    if(!(wVl=tC.getAttribute("width"))) ;
+					    else if(wVl.indexOf("%") >= 0)	hit.widthSrc = parseInt(wVl) + "%";
+					    else hit.widthSrc = (parseInt(wVl)*xSc) + "px";
 					    hit.outEdit = parseInt(tC.getAttribute("edit"));
 					    hit.outColor = tC.getAttribute("color");
 					    hit.outColorText = tC.getAttribute("colorText");
 					    hit.outFont = tC.getAttribute("font");
 					    hit.outAlign = tC.getAttribute("align");
-					    hit.style.display = (hit.style.width.length && !parseInt(hit.style.width)) ? "none" : "";
+					    hit.style.display = (hit.widthSrc.length && !parseInt(hit.widthSrc)) ? "none" : "";
 					    //if((wVl=tC.getAttribute("sort")))	{ sortCol = i_c+1; if(!parseInt(wVl)) sortCol *= -1; }
-					}
+					} else hit.innerText = "";
 				    }
 				    else {	//Rows content process
 					if(iC >= formObj.tBodies[0].rows[iR].cells.length)
@@ -1966,6 +1971,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					tit.onclick = formObj.onclick;
 					if(iC == 0) { tit.innerText = iR+1; iC++; continue; }
 					else tit.ondblclick = formObj.ondblclick;
+					// Modify set
+					if(hit.outEdit || (tC && (wVl=tC.getAttribute("edit")) && parseInt(wVl))) tit.isEdit = true;
+					else tit.isEdit = false;
 					// Value
 					if(tC) {
 					    tit.outTp = tC.nodeName;
@@ -1974,7 +1982,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    formObj.setVal(tC.textContent, iR, iC-1);
 					}
 					// Visibility
-					tit.style.display = (hit.style.width.length && !parseInt(hit.style.width)) ? "none" : "";
+					tit.style.display = (hit.widthSrc.length && !parseInt(hit.widthSrc)) ? "none" : "";
 					// Back color
 					if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
 					    tit.style.backgroundColor = getColor(wVl);
@@ -1989,9 +1997,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					// Cell image
 					if(tC && (wVl=tC.getAttribute("img")))
 					    tit.innerHTML = "<img src='/"+MOD_ID+this.addr+"?com=res&val="+wVl+"'/> " + tit.innerText;
-					// Modify set
-					if(hit.outEdit || (tC && (wVl=tC.getAttribute("edit")) && parseInt(wVl))) tit.isEdit = true;
-					else tit.isEdit = false;
 					// Alignment set
 					if((tC && (wVl=tC.getAttribute("align"))) || (wVl=hit.outAlign)) tit.style.textAlign = wVl;
 				    }
@@ -2003,6 +2008,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    iR++;
 				} else hdrPresent = true;
 			    }
+
+			    if((!startRows && formObj.tBodies[0].rows.length) || (formObj.tBodies[0].rows[0].cells.length > startCols)) toReFit = true;
+
 			    // Generic properties set
 			    formObj.oKeyID = (wVl=tX.getAttribute("keyID")) ? parseInt(wVl) : 0;
 			    formObj.oSel = tX.getAttribute("sel");
@@ -2016,7 +2024,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				formObj.tHead.rows[0].style.display = "none";
 				if(formObj.tBodies[0].rows.length)
 				    for(iC = 0; iC < formObj.tBodies[0].rows[0].cells.length; iC++)
-					formObj.tBodies[0].rows[0].cells[iC].style.width = formObj.tHead.rows[0].cells[iC].style.width;
+					formObj.tBodies[0].rows[0].cells[iC].widthSrc = formObj.tHead.rows[0].cells[iC].widthSrc;
 			    }
 			    //formObj.tHead.rows[0].style.display =
 			    //	(!(wVl=tX.getAttribute("hHdrVis")) || !wVl.length || parseInt(wVl)) ? "" : "none";
@@ -2033,11 +2041,23 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    while(formObj.tBodies[0].rows.length > maxRows)
 				formObj.tBodies[0].removeChild(formObj.tBodies[0].lastChild);
 
-			    formObj.style.width = ((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) ? "100%" : "";
+			    //Specifying the columns mode fitting - the table layout mode
+			    if(toReFit) {
+				hdrRow = formObj.tHead.rows[0];
+				if(hdrRow.style.display == "none") hdrRow = formObj.tBodies[0].rows[0];
+				for(iC = 0; iC < hdrRow.cells.length; iC++)
+				    hdrRow.cells[iC].style.width = hdrRow.cells[iC].widthSrc ? hdrRow.cells[iC].widthSrc : null;
+
+				formObj.style.width = ""; formObj.style.tableLayout = "auto";
+				if((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) formObj.style.width = "100%";
+				else this.perUpdtEn(true);
+			    }
 			}
 			delete items;
+
 		    }
 		    if(toInit) this.place.appendChild(formObj);
+
 		    // Set the value
 		    if((toInit || this.attrsMdf['value'] || this.attrsMdf['items']) && formObj.innerHTML.length) {
 			val = this.attrs['value'];
@@ -2523,14 +2543,36 @@ function perUpdtEn( en )
 	if(en) perUpdtWdgs[this.addr] = this;
 	else delete perUpdtWdgs[this.addr];
     }
-    for(var i in this.wdgs) this.wdgs[i].perUpdtEn(en);
+    //for(var i in this.wdgs) this.wdgs[i].perUpdtEn(en);	//!!!! Why that?
 }
 
 function perUpdt( )
 {
-    if(this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].tmClearEdit &&
-	    (this.place.childNodes[0].tmClearEdit-=prcTm) <= 0)
-	this.place.childNodes[0].chEscape();
+    if(this.attrs['root'] == 'FormEl') {
+	if(parseInt(this.attrs['elType']) == 9) { //Table type post adjust
+	    if(!(tblWdth=this.place.clientWidth)) return;	//Waiting the table drawing
+	    var tblWdthSum = 0;
+	    hdrRow = this.place.childNodes[0].tHead.rows[0];
+	    if(hdrRow.style.display == "none") hdrRow = this.place.childNodes[0].tBodies[0].rows[0];
+	    for(iC = 0; iC < hdrRow.cells.length; iC++) {
+		if(hdrRow.cells[iC].style.display == "none")	continue;
+		if(!hdrRow.cells[iC].style.width.length) {
+		    tblWdthSum += hdrRow.cells[iC].clientWidth;
+		    hdrRow.cells[iC].style.width = hdrRow.cells[iC].clientWidth+"px";
+		}
+		else if(hdrRow.cells[iC].style.width.indexOf("%") >= 0) {
+		    hdrRow.cells[iC].style.width = (parseInt(hdrRow.cells[iC].style.width)*tblWdth/100) + "px";
+		    tblWdthSum += parseInt(hdrRow.cells[iC].style.width);
+		}
+		else tblWdthSum += parseInt(hdrRow.cells[iC].style.width);
+	    }
+	    this.place.childNodes[0].style.width = tblWdthSum+"px";
+	    this.place.childNodes[0].style.tableLayout = "fixed";
+	    this.perUpdtEn(false);
+	}
+	else if(this.place.childNodes.length && this.place.childNodes[0].tmClearEdit && (this.place.childNodes[0].tmClearEdit-=prcTm) <= 0)
+	    this.place.childNodes[0].chEscape();
+    }
     else if(this.attrs['root'] == 'Diagram' && (this.updCntr-=prcTm) <= 0) {
 	this.updCntr = parseInt(this.attrs['trcPer']);
 	var dgrObj = this.place.childNodes[0];

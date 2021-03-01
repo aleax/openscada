@@ -1,3 +1,28 @@
+2021-03-01 Roman (stable)
+- !!!!:LibsDB.OscadaLibs: DevLib.IEC62056 rewrote in the synchronous (request-answer) mode
+    for working multiple devices on the serial bus.
+- !!!:LibsDB.vcaBase: Main.storeHouse: Implemented for the filter support with the columns indexing and listing.
+    The frame "RootPgSo" switched mostly from the hotkeys "Ctrl+?" to "CtrlAlt+?".
+    The frame "cntrPaspExt" table "trendsList" appended by the attribute "width='25%'" for the last two columns.
+- !:DAQ.ModBus: The DAQ attributes parsing switched to use TSYS::strLine() and TSYS::strParse()
+    than allowing the symbol ':' in the name and empty lines in the text.
+- UI.QTCfg: Appended for clossing the double configuration windows without the warning dialog.
+- FIX:UI.{QTStarter,QTCfg,Vision}: OSCADA_QT::colorAdjToBack() some improved in moving the background value to 175,
+    than at the value more the level, the text color preferred in setting the lower value and vice versa.
+- !!:UI.Vision: The view Table of the primitive FormEl improved:
+    - in light processing of the width changing;
+    - in fitting at the development mode;
+    - in fitting also at the vertical header also show.
+- !!:FIX:UI.WebVision: The view Table of the primitive FormEl appended for:
+	- the not fitting mode (the attribute "colsWdthFit" missing) implementation,
+	    using the automatic table layout mode for calculation the fixed widthes
+	    and next switching to the fixed table layout mode;
+	- the light edition mode base implementation;
+	- fixing the whole than 300 symbols edition.
+    The external windows as DIV closing set in sending only the closing signal to the model
+	and real closing after it removing in the model to prevent sometime flicking.
+
+
 2021-02-21 Roman (stable)
 - LibsDB.vcaBase: Main.storeHouse: The classes' table expanded by the separate field "Table properties (TP)"
     with the column width specifying here and all visual tables disabled for columns fitting by "colsWdthFit"

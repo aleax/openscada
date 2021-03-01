@@ -586,12 +586,16 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				hit->setData(Qt::FontRole, elFnt);
 				if(tC) {
 				    if(tC->text() != hit->text().toStdString()) toReFit = true;
-				    hit->setData(Qt::UserRole, QVariant()); wdg->showColumn(iC);	//!!!! Need for updating the columns width
-				    if((wVl=tC->attr("width")).size()) {
-					int wdthCel = fmax(0, s2i(wVl));
-					if(!wdthCel)	wdg->hideColumn(iC);
-					else hit->setData(Qt::UserRole,
+				    if((wVl=tC->attr("width")) != hit->data(Qt::UserRole+7).toString().toStdString()) {
+					hit->setData(Qt::UserRole+7, wVl.c_str());
+					hit->setData(Qt::UserRole, QVariant()); wdg->showColumn(iC);	//!!!! Need for updating the columns width
+					if(wVl.size()) {
+					    int wdthCel = fmax(0, s2i(wVl));
+					    if(!wdthCel)	wdg->hideColumn(iC);
+					    else hit->setData(Qt::UserRole,
 						(wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
+					}
+					toReFit = true;
 				    }
 				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
 				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
@@ -984,6 +988,7 @@ void ShapeFormEl::tableFit( WdgView *w )
 
     int tblWdth = wdg->maximumViewportSize().width() -
 		    ((wdg->verticalScrollBar()&&wdg->verticalScrollBar()->isVisible())?wdg->verticalScrollBar()->size().width():0);
+
     int averWdth = wdg->columnCount() ? (tblWdth/wdg->columnCount()) : 0;
     int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
 
@@ -1051,6 +1056,22 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 
 bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
+    //Common actions
+    switch(event->type()) {
+	case QEvent::Resize:
+	    if(((ShpDt*)w->shpData)->elType == F_TABLE &&
+		    object == ((ShpDt*)w->shpData)->addrWdg && ((QResizeEvent*)event)->size() != ((QResizeEvent*)event)->oldSize())
+		tableFit(w);
+	    break;
+	case QEvent::Show:
+	    if(((ShpDt*)w->shpData)->elType == F_TABLE &&
+		    (object == ((QTableWidget*)((ShpDt*)w->shpData)->addrWdg)->verticalScrollBar() ||
+		     object == ((QTableWidget*)((ShpDt*)w->shpData)->addrWdg)->verticalHeader()))
+		tableFit(w);
+	    break;
+    }
+
+    //Specific actions to the mode
     if(qobject_cast<DevelWdgView*>(w))
 	switch(event->type()) {
 	    case QEvent::Enter:
@@ -1067,11 +1088,6 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
     else {
 	//AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::Resize:
-		if(((ShpDt*)w->shpData)->elType == F_TABLE &&
-			object == ((ShpDt*)w->shpData)->addrWdg && ((QResizeEvent*)event)->size() != ((QResizeEvent*)event)->oldSize())
-		    tableFit(w);
-		break;
 	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
 		/*if(!w->hasFocus()) break;
 		attrs.push_back(std::make_pair("focus","1"));

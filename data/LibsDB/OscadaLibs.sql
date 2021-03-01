@@ -2485,6 +2485,8 @@ INSERT INTO Trs VALUES('Address ''%1'' out of range [1...999].','Адреса ''
 INSERT INTO Trs VALUES('Output transport is empty and the controller object is not ModBus.','','');
 INSERT INTO Trs VALUES('Address ''%1'' out of range [0...247].','','');
 INSERT INTO Trs VALUES('Inconsistent respond''s length.','','');
+INSERT INTO Trs VALUES('Too short','','');
+INSERT INTO Trs VALUES('No response','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data acquisition by SCU750 Cotrol Unit protocol.
 
@@ -6239,14 +6241,14 @@ Author: Roman Savochenko <roman@oscada.org>
 State of the protocol implementing: Client of the specification part 46, reading of the directly specified OBIS
 Total complexity: 3.2 HD
 Sponsored by: SVItoVYR Ltd for whole complexity
-Version: 1.0.2
+Version: 1.1.0
 License: GPLv2','IEC 62056 у частині 46 є одним з набору стандартів IEC 62056 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 46 надає шар підключення Даних з використанням протоколу HDLC, який переважно використовується на послідовних інтерфейсах.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Стан реалізації протоколу: Клієнт частини 46 специфікації, читання прямо визначених OBIS
 Загальна працемісткість: 3.2 ЛД
 Спонсорування: ТОВ "СВІТоВИР АВТоМАТИК" на загальну працемісткість
-Версія: 1.0.2
+Версія: 1.1.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function CRC( inSeq ) { return Special.FLibSYS.CRC(inSeq, 16, 0x1021, -1, true, true, 0xFFFF); }
 
@@ -6325,45 +6327,21 @@ function inVal( aId, aVal ) {
 	aO.set(aVal, 0, 0, true);
 }
 
-//Forming of the message and placing it to the output buffer
-//  Commands: "SNRM", "RR", "I", "DISC"
-function mess( com, data ) {
-	if(data.isEVal())	data = "";
-	mLen = 10 + (data.length ? data.length+2 : 0);
-	 //SYS.strFromCharCode(ac, func) + objs;
-	aMess = SYS.strFromCharCode(0xA0|(mLen>>8), mLen&0xFF);
-	if(!ctx.destLow && ctx.destUp < 128)					aMess += SYS.strFromCharCode(((ctx.destUp&0x3F)<<1)|1);
-	else if(ctx.destUp < 128 && ctx.destLow < 128)	aMess += SYS.strFromCharCode((ctx.destUp&0x3F)<<1, ((ctx.destLow&0x3F)<<1)|1);
-	else aMess += SYS.strFromCharCode((ctx.destUp>>7)<<1, (ctx.destUp&0x3F)<<1, (ctx.destLow>>7)<<1, ((ctx.destLow&0x3F)<<1)|1);
-	aMess += SYS.strFromCharCode((src<<1)|1);
-	ctx.reqToResp = com;
-	if(com == "SNRM")		aMess += SYS.strFromCharCode(0x93);
-	else if(com == "RR")	aMess += SYS.strFromCharCode((ctx.readSeq<<5)|0x11);
-	else if(com == "DISC")	aMess += SYS.strFromCharCode(0x53);
-	else if(com == "I") {
-		aMess += SYS.strFromCharCode(0x10|(ctx.readSeq<<5)|(ctx.sendSeq<<1));
-		if(ctx.sendSeq >= 7) ctx.sendSeq = 0; else ctx.sendSeq++;
-	} else return;	
-	aMess += SYS.strFromCharUTF("UTF-16LE",CRC(aMess)) + data;
-	if(data.length)	aMess += SYS.strFromCharUTF("UTF-16LE",CRC(aMess));
-	aMess = SYS.strFromCharCode(0x7E) + aMess + SYS.strFromCharCode(0x7E);
-	ctx.out += aMess;
-	//Just direct writing per one message
-	//SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(aMess,"Bin"," "));
-	//tr.messIO(aMess, 0, 0);
-}
-
-function processIn( ) {
+function processIn( isSync ) {
 	t_err = "";
 	//Parse for packages in general - the transport layer
 	for(waitSz = 0; ctx.in.length; ctx.in = ctx.in.slice(waitSz)) {
 		// Checking for very short
-		if(ctx.in.length < 9)	break;
+		if(ctx.in.length < 9)	{ if(isSync == true) return "10:"+tr("Too short"); break; }
 		// Checking the header entirety
 		if(ctx.in[0] != "~" || ((form=ctx.in.charCodeAt(1))&0xF0) != 0xA0 || ((dataSz=ctx.in.charCodeAt(1,"UTF-16BE")&0x07FF) < 7) ||
 				//  Checking the source address
-				!((src_=ctx.in.charCodeAt(3))&1) || (src_>>1) != src)
-		{ SYS.messDebug("/IEC62056",tr("Wrong header or source address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
+				!((src_=ctx.in.charCodeAt(3))&1) || (src_>>1) != src) {
+			SYS.messDebug("/IEC62056",tr("Wrong header or source address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("Wrong header or source address, rejected");
+			ctx.in = "";
+			break;
+		}
 		//  Checking the destination address
 		if(((dst_=ctx.in.charCodeAt(4))&1) && (dst_>>1) == ctx.destUp && ctx.destLow == 0)
 			dst_sz = 1;
@@ -6372,18 +6350,37 @@ function processIn( ) {
 		else if(!((dst_=ctx.in.charCodeAt(4))&1) && !(ctx.in.charCodeAt(5)&1) && !((dst_2=ctx.in.charCodeAt(6))&1) && (ctx.in.charCodeAt(7)&1) &&
 				(((dst_>>1)<<7)|(ctx.in.charCodeAt(5)>>1)) == ctx.destUp && (((dst_2>>1)<<7)|(ctx.in.charCodeAt(7)>>1)) == ctx.destLow)
 			dst_sz = 4;
-		else { SYS.messDebug("/IEC62056",tr("Wrong destination address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
-		if(ctx.in.length < (7+dst_sz))	break;	//Short yet, waiting
+		else {
+			SYS.messDebug("/IEC62056",tr("Wrong destination address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("Wrong destination address, rejected");
+			ctx.in = "";
+			break;
+		}
+		// Short yet, waiting
+		if(ctx.in.length < (7+dst_sz))	{ if(isSync == true) return "10:"+tr("Too short"); break; }
 		//  Checking the header CRC
-		if(CRC(ctx.in.slice(1,5+dst_sz)) != ctx.in.charCodeAt(5+dst_sz,"UTF-16LE"))
-		{ SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
+		if(CRC(ctx.in.slice(1,5+dst_sz)) != ctx.in.charCodeAt(5+dst_sz,"UTF-16LE")) {
+			SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("CRC-error, rejected");
+			ctx.in = "";
+			break;
+		}
 		// Checking the frame entirety
-		if(ctx.in.length < (waitSz=2+dataSz))	break;	//Not full yet, waiting
-		if(ctx.in[waitSz-1] != "~")
-		{ SYS.messDebug("/IEC62056",tr("The end symbol is wrong")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
+		//  Not full yet, waiting
+		if(ctx.in.length < (waitSz=2+dataSz)) { if(isSync == true) return "10:"+tr("Too short"); break; }
+		if(ctx.in[waitSz-1] != "~") {
+			SYS.messDebug("/IEC62056",tr("The end symbol is wrong")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("The end symbol is wrong");
+			ctx.in = "";
+			break;
+		}
 		//  Checking the frame CRC with the data
-		if(dataSz > (6+dst_sz) && CRC(ctx.in.slice(1,1+dataSz-2)) != ctx.in.charCodeAt(1+dataSz-2,"UTF-16LE"))
-		{ SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
+		if(dataSz > (6+dst_sz) && CRC(ctx.in.slice(1,1+dataSz-2)) != ctx.in.charCodeAt(1+dataSz-2,"UTF-16LE")) {
+			SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("CRC-error, rejected");
+			ctx.in = "";
+			break;
+		}
 
 		SYS.messDebug("/IEC62056",tr("Good input sequence")+": "+SYS.strDecode(ctx.in.slice(0,waitSz),"Bin"," "));
 
@@ -6401,7 +6398,7 @@ function processIn( ) {
 				continue;
 			}
 			if(ctx.readSeq >= 7) ctx.readSeq = 0; else ctx.readSeq++;
-			if(cntr&0x10) mess("RR");		//F - final
+			if(cntr&0x10)	ctx.sendRR = true; //mess("RR");		//F - final
 		}
 
 		ctx.inAMess += ctx.in.slice(7+dst_sz, 1+dataSz-2);
@@ -6450,6 +6447,43 @@ function processIn( ) {
 	return "0"+(t_err.length?":"+t_err:"");
 }
 
+//Forming of the message and placing it to the output buffer
+//  Commands: "SNRM", "RR", "I", "DISC"
+function mess( com, data ) {
+	if(data.isEVal())	data = "";
+	mLen = 10 + (data.length ? data.length+2 : 0);
+	 //SYS.strFromCharCode(ac, func) + objs;
+	aMess = SYS.strFromCharCode(0xA0|(mLen>>8), mLen&0xFF);
+	if(!ctx.destLow && ctx.destUp < 128)					aMess += SYS.strFromCharCode(((ctx.destUp&0x3F)<<1)|1);
+	else if(ctx.destUp < 128 && ctx.destLow < 128)	aMess += SYS.strFromCharCode((ctx.destUp&0x3F)<<1, ((ctx.destLow&0x3F)<<1)|1);
+	else aMess += SYS.strFromCharCode((ctx.destUp>>7)<<1, (ctx.destUp&0x3F)<<1, (ctx.destLow>>7)<<1, ((ctx.destLow&0x3F)<<1)|1);
+	aMess += SYS.strFromCharCode((src<<1)|1);
+	ctx.reqToResp = com;
+	if(com == "SNRM")		aMess += SYS.strFromCharCode(0x93);
+	else if(com == "RR")	aMess += SYS.strFromCharCode((ctx.readSeq<<5)|0x11);
+	else if(com == "DISC")	aMess += SYS.strFromCharCode(0x53);
+	else if(com == "I") {
+		aMess += SYS.strFromCharCode(0x10|(ctx.readSeq<<5)|(ctx.sendSeq<<1));
+		if(ctx.sendSeq >= 7) ctx.sendSeq = 0; else ctx.sendSeq++;
+	} else return;	
+	aMess += SYS.strFromCharUTF("UTF-16LE",CRC(aMess)) + data;
+	if(data.length)	aMess += SYS.strFromCharUTF("UTF-16LE",CRC(aMess));
+	aMess = SYS.strFromCharCode(0x7E) + aMess + SYS.strFromCharCode(0x7E);
+	ctx.out += aMess;
+	//Just direct writing per one message
+	//SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(aMess,"Bin"," "));
+	//tr.messIO(aMess, 0, 0);
+
+	//Synchronous request-response
+	SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(ctx.out,"Bin"," "));
+	t_err = "0";
+	ctx.in = tr.messIO(ctx.out); ctx.out = "";
+	if(!ctx.in.length)	{ t_err = "10:"+tr("No response"); tr.start(false); }
+	else while((t_err=processIn(true)).toInt() == 10 && (respTail=tr.messIO("")).length) ctx.in += respTail;
+
+	return t_err;
+}
+
 if(f_start) {
 	itemsSet_ = "";
 	items = new Object();
@@ -6461,7 +6495,10 @@ if(f_start) {
 
 	return;
 }
-if(f_stop)	mess("DISC");
+
+t_err = "0";
+
+if(f_stop)	t_err = mess("DISC");
 
 //Items set changing process
 if(itemsSet != itemsSet_) {
@@ -6470,7 +6507,6 @@ if(itemsSet != itemsSet_) {
 }
 
 //Check for the transport change and connect
-t_err = "0";
 destUp = dest.parse(0,":").toInt(); destLow = dest.parse(1,":").toInt();
 if(tr.isEVal() || transport != transport_)	{
 	itemsSet_ = "";
@@ -6509,25 +6545,28 @@ else {
 		ctx.sendSeq = ctx.readSeq = 0;
 		ctx.toInit = 1;
 		ctx.firSeq = -1;
+		ctx.sendRR = false;
 		ctx.reqToResp = "";
 	}
 
 	//Send output buffer and read the transport for an input data
-	if(ctx.out.length) SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(ctx.out,"Bin"," "));
-	ctx.in += tr.messIO(ctx.out, -0.001);
-	ctx.out = "";
+	// Asynchronous mode
+	//if(ctx.out.length) SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(ctx.out,"Bin"," "));
+	//ctx.in += tr.messIO(ctx.out, -0.001);
+	//ctx.out = "";
 
 	//Input processing
-	t_err = processIn();
+	//t_err = processIn();
 
 	//Response timeout
-	if(ctx.reqToResp.length) {
+	/*if(ctx.reqToResp.length) {
 		if(tmResp_ > tmRetr)	tr.start(false);	//No response long time
 		tmResp_ += 1/f_frq;
 	}
 	// Initial parameters setting
-	else if(ctx.toInit == 1)
-		mess("SNRM", SYS.strFromCharCode(
+	else*/
+	if(!t_err.toInt() && ctx.toInit == 1)
+		t_err = mess("SNRM", SYS.strFromCharCode(
 			0x81,0x80,0x12,		//format and group identifier, length 18 bytes
 				0x05,0x01,0x80,	//the parameter "Maximum information field length - transmit" = 128
 				0x06,0x01,0x80,	//the parameter "Maximum information field length - receive" = 128
@@ -6535,8 +6574,8 @@ else {
 				0x08,0x04,0x00,0x00,0x00,0x07	//the parameter "Window size - receive" = 7
 			));
 	// Initial parameter acquiring
-	else if(ctx.toInit == 2)
-		mess("I", SYS.strFromCharCode(
+	if(!t_err.toInt() && ctx.toInit == 2)
+		t_err = mess("I", SYS.strFromCharCode(
 			0xE6,								//Destination (remote) LSAP, fixed in COSEM
 			0xE6,								//Source (local) LSAP, fixed in COSEM E6 for command E7 for response
 			0x00,								//Quality, Control byte, Reserved and 00 always
@@ -6555,16 +6594,17 @@ else {
 				0x04, 0x00, 0x00, 0x18, 0x1D,	// Client side services
 				0x00, 0x00					// PDU maximum size
 			));
-	else {
+	if(!t_err.toInt() && ctx.toInit > 2) {
+		if(ctx.sendRR)	{ t_err = mess("RR"); ctx.sendRR = false; }
 		//Polling
 		// Read all items
-		if(tmPollAll_ > tmPollAll) {
+		if(!t_err.toInt() && tmPollAll_ > tmPollAll) {
 			if((iIt=itemsSet.parse(0,"\n",offPoll)).length) {
 				iIt_ClassId = iIt.parse(0, "-");
 				iIt_OBIS = iIt.parse(1, "-");
 				iIt_a = iIt.parse(2, "-");
 				ctx.reqOBIS = iIt_OBIS;
-				mess("I", SYS.strFromCharCode(0xE6, 0xE6, 0x00,
+				t_err = mess("I", SYS.strFromCharCode(0xE6, 0xE6, 0x00,
 					0xC0, 0x01, 0x81,	//Get-Request-Normal, Invoke-Id-And-Priority
 					0x00, iIt_ClassId.toInt(),	//Cosem-Class-Id, ?
 					iIt_OBIS.parse(0,".").toInt(), iIt_OBIS.parse(1,".").toInt(), iIt_OBIS.parse(2,".").toInt(), iIt_OBIS.parse(3,".").toInt(), iIt_OBIS.parse(4,".").toInt(), iIt_OBIS.parse(5,".").toInt(),
@@ -6592,7 +6632,7 @@ if(t_err.toInt()) {
 }
 f_err = t_err;
 
-if(f_stop && !tr.isEVal()) tr.start(false);','','',1592158749);
+if(f_stop && !tr.isEVal()) tr.start(false);','','',1614260893);
 INSERT INTO tmplib_DevLib VALUES('MTP4D','MTP 4D','MTP 4D','','The connection template of a simple vaccuumeter MTP 4D of the firm "Erstevak Ltd (http://www.erstvak.com/)".
 
 Author: Roman Savochenko <roman@oscada.org>

@@ -69,6 +69,8 @@ using namespace QTCFG;
 //*************************************************
 //* ConfApp                                       *
 //*************************************************
+int ConfApp::winCntr = 0;
+
 ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false)
 {
@@ -471,6 +473,8 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     initHosts();
     try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
+
+    winCntr++;
 }
 
 ConfApp::~ConfApp( )
@@ -490,6 +494,8 @@ ConfApp::~ConfApp( )
 
     // Push down all Qt events of the window to free the module
     for(int iTr = 0; iTr < 5; iTr++) qApp->processEvents();
+
+    winCntr--;
 }
 
 void ConfApp::quitSt( )
@@ -1012,7 +1018,7 @@ void ConfApp::enterManual( )
 
 void ConfApp::closeEvent( QCloseEvent* ce )
 {
-    if(!SYS->stopSignal() && !property("forceClose").toBool() && !mod->endRun() && !exitModifChk()) {
+    if(!SYS->stopSignal() && !property("forceClose").toBool() && !mod->endRun() && winCntr <= 1 && !exitModifChk()) {
 	ce->ignore();
 	return;
     }
