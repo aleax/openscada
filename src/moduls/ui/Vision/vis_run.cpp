@@ -80,7 +80,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 #endif
     fileDlg(NULL),
     conErr(NULL), crSessForce(icrSessForce), mKeepAspectRatio(true), mWinPosCntrSave(false), prjSes_it(iprjSes_it),
-    master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1),
+    master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), expTblCnt(1), x_scale(1), y_scale(1),
     mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), alrmUpdCnt(0), updPage(false), host(NULL)
 {
     QImage ico_t;
@@ -122,6 +122,10 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     actExpDoc = new QAction(this);
     connect(actExpDoc, SIGNAL(triggered()), this, SLOT(exportDoc()));
     menuExport->addAction(actExpDoc);
+    actExpTable = new QAction(this);
+    connect(actExpTable, SIGNAL(triggered()), this, SLOT(exportTable()));
+    menuExport->addAction(actExpTable);
+
     //  Close
     if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
     actClose = new QAction(QPixmap::fromImage(ico_t), "", this);
@@ -626,9 +630,9 @@ void VisRun::printDiag( const string &idg )
 	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget(spg, 2, 1);
-	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-		if((rwdg=findOpenWidget(lst[i_l])))
-		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		if((rwdg=findOpenWidget(lst[iL])))
+		    spg->addItem((rwdg->name()+" ("+lst[iL]+")").c_str(),lst[iL].c_str());
 	    if(sdlg.exec() != QDialog::Accepted) return;
 	    dg = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
@@ -716,9 +720,9 @@ void VisRun::printDoc( const string &idoc )
 	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget(spg, 2, 1);
-	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-		if((rwdg=findOpenWidget(lst[i_l])))
-		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		if((rwdg=findOpenWidget(lst[iL])))
+		    spg->addItem((rwdg->name()+" ("+lst[iL]+")").c_str(),lst[iL].c_str());
 	    if(sdlg.exec() != QDialog::Accepted)	return;
 	    doc = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
@@ -740,11 +744,19 @@ void VisRun::exportDef( )
 	//Check for the single and big document present for default the exporting
 	RunPageView *rpg;
 	RunWdgView *rwdg;
-	vector<string> lstDoc, lstDiagr;
+	vector<string> lstDoc, lstDiagr, lstTbls;
 	for(unsigned iP = 0; iP < pgList.size(); iP++)
 	    if((rpg=findOpenPage(pgList[iP]))) {
 		rpg->shapeList("Document", lstDoc);
 		rpg->shapeList("Diagram", lstDiagr);
+		rpg->shapeList("FormEl",lstTbls);
+		//Getting only tables
+		for(int iW = 0; iW < lstTbls.size(); iW++) {
+		    if((rwdg=findOpenWidget(lstTbls[iW])) && qobject_cast<QTableWidget*>(((ShapeFormEl::ShpDt*)rwdg->shpData)->addrWdg))
+			continue;
+		    lstTbls.erase(lstTbls.begin()+iW);
+		    iW--;
+		}
 	    }
 	if(lstDoc.size() == 1 && (rwdg=findOpenWidget(lstDoc[0])) &&
 		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
@@ -752,7 +764,10 @@ void VisRun::exportDef( )
 	else if(lstDiagr.size() == 1 && (rwdg=findOpenWidget(lstDiagr[0])) &&
 		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
 	    exportDiag(rwdg->id());
-	//Export master page
+	else if(lstTbls.size() == 1 && (rwdg=findOpenWidget(lstTbls[0])) &&
+		((masterPg()->width()/vmax(1,rwdg->width())) < 2 || (masterPg()->height()/vmax(1,rwdg->height())) < 2))
+	    exportTable(rwdg->id());
+	//Export the master page
 	else exportPg(master_pg->id());
     }
 }
@@ -817,9 +832,9 @@ void VisRun::exportDiag( const string &idg )
 	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget(spg, 2, 1);
-	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-		if((rwdg=findOpenWidget(lst[i_l])))
-		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		if((rwdg=findOpenWidget(lst[iL])))
+		    spg->addItem((rwdg->name()+" ("+lst[iL]+")").c_str(),lst[iL].c_str());
 	    if(sdlg.exec() != QDialog::Accepted) return;
 	    dg = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
@@ -938,9 +953,9 @@ void VisRun::exportDoc( const string &idoc )
 	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
 	    sdlg.edLay()->addWidget( spg, 2, 1 );
-	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-		if((rwdg=findOpenWidget(lst[i_l])))
-		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		if((rwdg=findOpenWidget(lst[iL])))
+		    spg->addItem((rwdg->name()+" ("+lst[iL]+")").c_str(),lst[iL].c_str());
 	    if(sdlg.exec() != QDialog::Accepted) return;
 	    doc = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
@@ -973,8 +988,8 @@ void VisRun::exportDoc( const string &idoc )
 			map<int,int>	rowSpn;
 			XMLNode *tblN = NULL, *tblRow;
 			string val;
-			for(int i_st = 0; i_st < 4; i_st++) {
-			    switch(i_st) {
+			for(int iSt = 0; iSt < 4; iSt++) {
+			    switch(iSt) {
 				case 0:	tblN = curNode->childGet("thead", 0, true);	break;
 				case 1:	tblN = curNode->childGet("tbody", 0, true);	break;
 				case 2:	tblN = curNode->childGet("tfoot", 0, true);	break;
@@ -983,9 +998,9 @@ void VisRun::exportDoc( const string &idoc )
 			    }
 			    if(!tblN)	continue;
 			    //  Rows process
-			    for(unsigned i_n = 0; i_n < tblN->childSize(); i_n++) {
-				if(strcasecmp(tblN->childGet(i_n)->name().c_str(),"tr") != 0)	continue;
-				tblRow = tblN->childGet(i_n);
+			    for(unsigned iN = 0; iN < tblN->childSize(); iN++) {
+				if(strcasecmp(tblN->childGet(iN)->name().c_str(),"tr") != 0)	continue;
+				tblRow = tblN->childGet(iN);
 				for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
 				    if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
 					    strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
@@ -1015,6 +1030,82 @@ void VisRun::exportDoc( const string &idoc )
 	// Export to XHTML
 	else rez = ((ShapeDocument::ShpDt*)rwdg->shpData)->toHtml();
 
+	bool fOK = true;
+	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data to export.")),TVision::Error,this);
+	else fOK = (write(fd,rez.data(),rez.size()) == (int)rez.size());
+	::close(fd);
+	if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error writing to: %1.")).arg(fileName), TVision::Error, this);
+    }
+}
+
+void VisRun::exportTable( const string &itbl )
+{
+    RunWdgView *rwdg;
+    QTableWidget *wdg;
+    string tbl = itbl;
+
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Exporting a table"),_("There is no page!")); return; }
+
+    if(tbl.empty()) {
+	RunPageView *rpg;
+	vector<string> lst;
+	//Getting all FormEls
+	for(unsigned iP = 0; iP < pgList.size(); iP++)
+	    if((rpg=findOpenPage(pgList[iP])))
+		rpg->shapeList("FormEl",lst);
+
+	//Getting only tables
+	for(int iW = 0; iW < lst.size(); iW++) {
+	    if((rwdg=findOpenWidget(lst[iW])) && qobject_cast<QTableWidget*>(((ShapeFormEl::ShpDt*)rwdg->shpData)->addrWdg))
+		continue;
+	    lst.erase(lst.begin()+iW);
+	    iW--;
+	}
+
+	//Specifying a source
+	if(lst.empty())	{ QMessageBox::warning(this,_("Exporting a table"),_("There is no table!")); return; }
+	if(lst.size() == 1) tbl = lst[0];
+	else {
+	    //Make select diagrams dialog
+	    QImage ico_t;
+	    if(!ico_t.load(TUIS::icoGet("table",NULL,true).c_str())) ico_t.load(":/images/export.png");
+	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a table to export."), _("Exporting a table"), false, false, lang().c_str());
+	    sdlg.edLay()->addWidget(new QLabel(_("Table:"),&sdlg), 2, 0);
+	    QComboBox *spg = new QComboBox(&sdlg);
+	    sdlg.edLay()->addWidget(spg, 2, 1);
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
+		if((rwdg=findOpenWidget(lst[iL])))
+		    spg->addItem((rwdg->name()+" ("+lst[iL]+")").c_str(),lst[iL].c_str());
+	    if(sdlg.exec() != QDialog::Accepted) return;
+	    tbl = spg->itemData(spg->currentIndex()).toString().toStdString();
+	}
+    }
+
+    if(!(rwdg=findOpenWidget(tbl)) || !(wdg=qobject_cast<QTableWidget*>(((ShapeFormEl::ShpDt*)rwdg->shpData)->addrWdg))) return;
+    QString fileName = getFileName(_("Saving a table"), QString(_("Table %1.csv")).arg(expTblCnt++), _("CSV file (*.csv)"), QFileDialog::AcceptSave);
+    if(!fileName.isEmpty()) {
+	int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, SYS->permCrtFiles());
+	if(fd < 0) {
+	    mod->postMess(mod->nodePath().c_str(),QString(_("Error saving to the file '%1'.")).arg(fileName),TVision::Error,this);
+	    return;
+	}
+	string rez;
+	//Export to CSV
+	if(fileName.indexOf(QRegExp("\\.csv$")) != -1) {
+	    QTableWidgetItem *tit;
+	    for(int iC = 0; iC < wdg->columnCount(); iC++)
+		rez += "\""+((tit=wdg->horizontalHeaderItem(iC))?tit->text().toStdString():string(""))+"\";";
+	    rez += "\n";
+	    for(int iR = 0; iR < wdg->rowCount(); iR++) {
+		for(int iC = 0; iC < wdg->columnCount(); iC++) {
+		    QVariant vl = (tit=wdg->item(iR,iC)) ? tit->data(Qt::DisplayRole) : QVariant();
+		    if(!vl.isValid()) rez += ";";
+		    else if(vl.type() == QVariant::String) rez += "\""+TSYS::strEncode(vl.toString().toStdString(),TSYS::SQL,"\"")+"\";";
+		    else rez += vl.toString().toStdString()+";";
+		}
+		rez += "\n";
+	    }
+	}
 	bool fOK = true;
 	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data to export.")),TVision::Error,this);
 	else fOK = (write(fd,rez.data(),rez.size()) == (int)rez.size());
@@ -1424,6 +1515,10 @@ void VisRun::messUpd( )
     actExpDoc->setToolTip(_("Export the selected document"));
     actExpDoc->setWhatsThis(_("The button for exporting the selected document"));
     actExpDoc->setStatusTip(_("Press for exporting the selected document."));
+    actExpTable->setText(_("Table"));
+    actExpTable->setToolTip(_("Export the selected table"));
+    actExpTable->setWhatsThis(_("The button for exporting the selected table"));
+    actExpTable->setStatusTip(_("Press for exporting the selected table."));
 
     //Project's manual
     actProjManual->setText(QString(_("Project '%1' manual")).arg(srcProject().c_str()));

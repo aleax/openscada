@@ -307,9 +307,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.assign(buf, resp_len);
 		    //Wait tail
 		    while(resp_len && rez.size() < MODBUS_FRM_LIM &&
-			    (rez.size() < 3 || !(((rez[1]&0x80) && rez.size() >= (2+3)) ||	//Error specific fast termination the data waiting
-				(rez[1] >= 1 && rez[1] <= 4 && rez.size() >= (rez[2]+2+3)) ||	//Function [1...4] specific fast termination the data waiting
-				((rez[1] == 5 || rez[1] == 6 || rez[1] == 15 || rez[1] == 16) && rez.size() >= (5+3))) ))	//Function [5,6,15,16] specific fast termination the data waiting
+			    // Error specific fast termination the data waiting
+			    (rez.size() < 3 || !(((rez[1]&0x80) && rez.size() >= (2+3)) ||
+				// Function [1...4] specific fast termination the data waiting
+				(rez[1] >= 1 && rez[1] <= 4 && rez.size() >= (((uint8_t)rez[2])+2+3)) ||
+				// Function [5,6,15,16] specific fast termination the data waiting
+				((rez[1] == 5 || rez[1] == 6 || rez[1] == 15 || rez[1] == 16) && rez.size() >= (5+3))) ))
 		    {
 			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf)); } catch(TError &err) { break; }
 			rez.append(buf, resp_len);

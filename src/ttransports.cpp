@@ -934,14 +934,15 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
 	    time_t stTm = time(NULL);
+	    string resLog;
 	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= prmWait_TM; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		//!!!! Can be long for big data
-		opt->setText(opt->text() + "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
-		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n");
+		resLog += "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
+		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n";
 	    }
+	    opt->setText(resLog);
 	}
 	if(ctrChkNode(opt,"SnthHgl",R_R___,"root",STR_ID,SEC_RD)) {
 	    opt->setAttr("font","Courier");
@@ -1308,14 +1309,15 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
 	    time_t stTm = time(NULL);
+	    string resLog;
 	    for(int iL = mLog.size()-1; iL >= 0 && (time(NULL)-stTm) <= prmWait_TM; iL--) {
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		//!!!! Can be long for big data
-		opt->setText(opt->text() + "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
-		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n");
+		resLog += "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
+		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n";
 	    }
+	    opt->setText(resLog);
 	}
 	if(ctrChkNode(opt,"SnthHgl",R_R___,"root",STR_ID,SEC_RD)) {
 	    opt->setAttr("font","Courier");

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-07 18:18+0200\n"
+"POT-Creation-Date: 2021-03-07 21:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1450,6 +1450,28 @@ msgstr ""
 msgid "No data to export."
 msgstr ""
 
+msgid "Exporting a table"
+msgstr ""
+
+msgid "There is no table!"
+msgstr ""
+
+msgid "Select a table to export."
+msgstr ""
+
+msgid "Table:"
+msgstr ""
+
+msgid "Saving a table"
+msgstr ""
+
+#, c-format
+msgid "Table %1.csv"
+msgstr ""
+
+msgid "CSV file (*.csv)"
+msgstr ""
+
 msgid ""
 "Several sessions are already opened for the project \"%1\".\n"
 "You can create a new or connect to the present session. Please select the one you want or click \"Cancel\"."
@@ -1555,6 +1577,18 @@ msgid "The button for exporting the selected document"
 msgstr ""
 
 msgid "Press for exporting the selected document."
+msgstr ""
+
+msgid "Table"
+msgstr ""
+
+msgid "Export the selected table"
+msgstr ""
+
+msgid "The button for exporting the selected table"
+msgstr ""
+
+msgid "Press for exporting the selected table."
 msgstr ""
 
 msgid "Project '%1' manual"

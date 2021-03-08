@@ -2450,12 +2450,14 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		if(ownerSess()->user() != u) ownerSess()->setUser(u);
 		ownerSess()->setUserActTm();
 	    }
+	    string events;
 	    for(unsigned iCh = 0; iCh < opt->childSize(); iCh++) {
 		XMLNode *aN = opt->childGet(iCh);
 		string aid = aN->attr("id");
-		if(aid == "event") eventAdd(aN->text()+"\n");
+		if(aid == "event") events += aN->text()+"\n";
 		else attrAt(aid).at().setS(aN->text());
 	    }
+	    if(events.size()) eventAdd(events);	//!!!! All events in the end
 	}
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get attributes all updated elements' of the branch

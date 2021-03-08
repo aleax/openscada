@@ -1,3 +1,29 @@
+2021-03-08 Roman (stable)
+- !:LibsDB.OscadaLibs: The common template base.anUnif appended for the force NORM alarm messages generation at the start,
+    to prevent of hang the old alarm messages by DAQGate and the redundancy. Testing mostly before deploying to like ones templates.
+- !!:LibsDB.vcaBase: Main.storeHouse: Appended for using the acceptation dialog of the deletion operations.
+	Enabled for the table sorting on the visualizers side, only in the view mode.
+	Appended for the filter variants clearing.
+    !: The template VCA-project adapted to the actual alarms table early appending in the vertical size scale 0.96.
+- !:Transports: Performance of the IO log preparing was significantly rised by using the preliminary buffer,
+    so currently there is possible of observing logs on 1000 records.
+- !:FIX:DAQ.ModBus: Fixed in the RTU variant early termination of the tail message waiting at messages more than 128 bytes.
+- FIX:UI.QTCfg: Prevented from show empty field of the button area of the TextEdit widget in some cases.
+- !:FIX:UI.VCAEngine: The service request "set:/serv/attr" to the sessions for a group of attributes
+    appended by the events applying in the last of all other attributes setting.
+- !!!:UI.Vision: The export function in runtime append of export the view Table of the primitive "FormEl" in CSV.
+    !: Improved in support the sorting of the table content per columns
+	by preserving the scroll position and the sorting parameters before the sorting disabling during the updation time.
+    Setting the value, early resizing and the table fitting moved to the space of the table content presence and after the sorting.
+- !!!!:UI.WebVision: The view "Table" of the primitive "FormEl" appended for the sorting support by columns.
+    !!: Switched back to the asynchronous mode of the default POST requests after the last fixing in the VCAEngine.
+    !: Improved something in the changed attributes processing during the post XML-parsing detection for the attribute XML-content,
+	than doubling of processing such attributes,
+	detected on the attribute "items" of the view "Table" of the primitive "FormEl" in the sorting mode.
+    The view "Table" of the primitive "FormEl" prevented from the complete updating at the attribute "value" modification.
+    The editable combobox fly menu size expanded up to 10 items in the vertical.
+
+
 2021-03-01 Roman (stable)
 - !!!!:LibsDB.OscadaLibs: DevLib.IEC62056 rewrote in the synchronous (request-answer) mode
     for working multiple devices on the serial bus.

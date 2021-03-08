@@ -242,7 +242,7 @@ function servGet( adr, prm, callBack, callBackPrm )
  ***************************************************/
 function servSet( adr, prm, body, noWaitRez )
 {
-    if(noWaitRez == null) noWaitRez = false;
+    if(noWaitRez == null) noWaitRez = true;
     var req = getXmlHttp();
     req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), noWaitRez);
     try {
@@ -600,16 +600,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
     this.place.wdgLnk = this;
     if(!inclPg && pgBr) {
 	//Clear modify flag for all
-	for(var j in this.attrsMdf) this.attrsMdf[j] = false;
+	for(var aId in this.attrsMdf) this.attrsMdf[aId] = false;
 	//Updated attributes
-	for(var j = 0; j < pgBr.childNodes.length; j++) {
-	    if(pgBr.childNodes[j].nodeName != 'el') continue;
-	    var i = pgBr.childNodes[j].getAttribute('id');
-	    if((i == 'bordWidth' || i == 'geomMargin') && (!this.attrs[i] || this.attrs[i] != pgBr.childNodes[j].textContent)) margBrdUpd = true;
-	    var curAttr = pgBr.childNodes[j].textContent;
-	    this.attrsMdf[i] = !this.attrs[i] || this.attrs[i] != curAttr;
-	    this.attrs[i] = curAttr;
-	    newAttr = true;
+	for(var iCh = 0; iCh < pgBr.childNodes.length; iCh++) {
+	    if(pgBr.childNodes[iCh].nodeName != 'el') continue;
+	    var aId = pgBr.childNodes[iCh].getAttribute('id');
+	    if((aId == 'bordWidth' || aId == 'geomMargin') && (!this.attrs[aId] || this.attrs[aId] != pgBr.childNodes[iCh].textContent)) margBrdUpd = true;
+	    this.attrsMdf[aId] = !this.attrs[aId] || this.attrs[aId] != pgBr.childNodes[iCh].textContent;
+	    if(this.attrsMdf[aId]) { this.attrs[aId] = pgBr.childNodes[iCh].textContent; newAttr = true; }
 	}
     }
 
@@ -1070,8 +1068,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 				    if(combList.childNodes[0].childNodes.length) {
 					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
-								 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,5)*parseInt(this.style.height))+'px; ';
-					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,5)*parseInt(this.style.height))+'px; '+
+								 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; ';
+					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; '+
 									       'font: '+formObj.parentNode.fontCfg+'; ';
 					combList.childNodes[0].formObj = formObj;
 					combList.childNodes[0].focus();
@@ -1560,8 +1558,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(!this.childNodes[0].classList.contains("pressed"))
 				{ attrs.value = '1'; this.childNodes[0].classList.add("pressed"); setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
 				else { attrs.value = '0'; this.childNodes[0].classList.remove("pressed"); setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
-				setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
 				setWAttrs(this.wdgLnk.addr,'value',attrs.value);
+				setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
 				return;
 			    }
 			    this.childNodes[0].classList.add("pressed");
@@ -1873,7 +1871,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(!this.svRow)
 				    this.tHead.rows[0].cells[this.svCol].style.backgroundColor =
 						this.tHead.rows[0].cells[this.svCol].svBackgroundColor;
-				for(iR = (this.svRow?this.svRow-1:0); iR <= (this.svRow?this.svRow-1:this.tBodies[0].rows.length-1); iR++)
+				for(iR = (this.svRow?this.svRow-1:0); iR <= (this.svRow?Math.min(this.svRow-1,this.tBodies[0].rows.length-1):this.tBodies[0].rows.length-1); iR++)
 				    for(iC = (this.svCol?this.svCol:0); iC <= (this.svCol?this.svCol:(this.tBodies[0].rows[iR].cells.length-1)); iC++)
 					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor =
 						this.tBodies[0].rows[iR].cells[iC].svBackgroundColor;
@@ -1900,7 +1898,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    tit = this.tBodies[0].rows[row].cells[col+1];
 			    if(tit.isEnter) {
 				tit.innerHTML = tit.svInnerHTML;
-				attrs = new Object(); attrs.set = val; attrs.event = "ws_TableEdit_"+col+"_"+row;
+				attrs = new Object(); attrs.set = val; attrs.event = "ws_TableEdit_"+col+"_"+this.tBodies[0].rows[row].rowReal;
 				setWAttrs(this.wdgLnk.addr, attrs);
 				tit.isEnter = false; this.edIt = null;
 			    }
@@ -1923,23 +1921,31 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
-		    if(toInit || ((this.attrsMdf['items'] || this.attrsMdf['value'] || this.attrsMdf['font']) && !formObj.edIt)) {
+		    if(toInit || ((this.attrsMdf['items'] /*|| this.attrsMdf['value']*/ || this.attrsMdf['font']) && !formObj.edIt)) {
 			hdrPresent = false, maxCols = 0, maxRows = 0;
 			toReFit = this.attrsMdf['font'];
-			items = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
-			if(!items.children.length || (tX=items.children[0]).nodeName != "tbl")	formObj.innerHTML = "";
+			var itemsO = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
+			if(!itemsO.children.length || (tX=itemsO.children[0]).nodeName != "tbl")	formObj.innerHTML = "";
 			else {
 			    if(toInit || !formObj.children.length) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
+			    else if(!((wVl=tX.getAttribute("sortEn")) && parseInt(wVl))) formObj.sortCol = null;
+
 			    rClr = null, rClrTxt = null, rFnt = null;
 			    startRows = formObj.tBodies[0].rows.length;
 			    startCols = startRows ? formObj.tBodies[0].rows[0].cells.length : 0;
+			    sortCol = 0;
 			    for(iR = 0, iRR = 0, iCh = 0; iCh < tX.children.length || iR < formObj.tBodies[0].rows.length; iCh++) {
-				tR = (iCh < items.children[0].children.length) ? items.children[0].children[iCh] : null;
+				tR = (iCh < itemsO.children[0].children.length) ? itemsO.children[0].children[iCh] : null;
 				isH = false, hit = null, tit = null;
 				if(tR && !((isH=(tR.nodeName=="h")) || tR.nodeName == "r")) continue;
 				if(!isH && iR >= formObj.tBodies[0].rows.length)
 				    formObj.tBodies[0].appendChild(this.place.ownerDocument.createElement('tr'));
-				if(!isH && tR) { rClr = tR.getAttribute("color"); rClrTxt = tR.getAttribute("colorText"); rFnt = tR.getAttribute("font"); }
+				if(!isH && tR) {
+				    formObj.tBodies[0].rows[iR].rowReal = iR;
+				    rClr = tR.getAttribute("color");
+				    rClrTxt = tR.getAttribute("colorText");
+				    rFnt = tR.getAttribute("font");
+				}
 				for(iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR.children.length) || iC < formObj.tHead.children.length; ) {
 				    tC = (tR && iCh1 < tR.children.length) ? tR.children[iCh1] : null;
 				    if(iC >= formObj.tHead.rows[0].cells.length)
@@ -1961,7 +1967,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    hit.outFont = tC.getAttribute("font");
 					    hit.outAlign = tC.getAttribute("align");
 					    hit.style.display = (hit.widthSrc.length && !parseInt(hit.widthSrc)) ? "none" : "";
-					    //if((wVl=tC.getAttribute("sort")))	{ sortCol = i_c+1; if(!parseInt(wVl)) sortCol *= -1; }
+					    if((wVl=tC.getAttribute("sort")))	{ sortCol = iC+1; if(!parseInt(wVl)) sortCol *= -1; }
 					} else hit.innerText = "";
 				    }
 				    else {	//Rows content process
@@ -2052,9 +2058,36 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) formObj.style.width = "100%";
 				else this.perUpdtEn(true);
 			    }
-			}
-			delete items;
 
+			    //Sorting
+			    if(((wVl=tX.getAttribute("sortEn")) && parseInt(wVl)) || sortCol) {
+				formObj.sort = function(col, force) {
+				    if(force) this.sortCol = -col;
+				    isDesc = (Math.abs(this.sortCol) == col && this.sortCol && this.sortCol > 0);
+				    prcArr = Array.prototype.slice.call(this.tBodies[0].rows,0).sort(
+					    function(a,b) { return (isDesc?-1:1)*a.cells[col-1].textContent.localeCompare(b.cells[col-1].textContent); }
+					);
+				    for(iR = 0; iR < prcArr.length; ++iR) {
+					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent)) {
+					    this.svRow = iR+1;
+					    prcArr[iR].cells[0].style.backgroundColor = prcArr[iR].cells[0].svBackgroundColor ? prcArr[iR].cells[0].svBackgroundColor : null;
+					}
+					prcArr[iR].cells[0].textContent = iR+1;
+					this.tBodies[0].appendChild(prcArr[iR]);
+				    }
+				    this.tHead.rows[0].cells[col-1].innerHTML = this.tHead.rows[0].cells[col-1].childNodes[0].textContent + "<span>&nbsp;"+(isDesc?"▲":"▼")+"</span>";
+				    if(this.sortCol && Math.abs(this.sortCol) != col)
+					this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].innerText = this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].childNodes[0].textContent;
+				    this.sortCol = (Math.abs(this.sortCol) == col) ? -this.sortCol : col;
+				}
+				for(iC = 1; iC < formObj.tHead.rows[0].cells.length; iC++)
+				    formObj.tHead.rows[0].cells[iC].onclick = function() { this.offsetParent.sort(this.cellIndex+1); }
+
+				if(formObj.sortCol) formObj.sort(formObj.sortCol, true);
+				else if(sortCol) formObj.sort(sortCol, true);
+			    }
+			}
+			delete itemsO;
 		    }
 		    if(toInit) this.place.appendChild(formObj);
 

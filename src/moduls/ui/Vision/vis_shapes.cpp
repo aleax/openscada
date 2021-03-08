@@ -558,13 +558,20 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    wdg->verticalHeader()->setVisible(false);
 		}
 		else {
-		    //???? Review the sorting implementation in edition the table
+		    int scrollPosV = -1, scrollPosH = -1;
+		    //Review the sorting implementation in edition the table
 		    if(wdg->isSortingEnabled()) {
+			// Saving the user sorting configuration
+			if(wdg->verticalScrollBar() && wdg->verticalScrollBar()->isVisible())
+			    scrollPosV = wdg->verticalScrollBar()->value();
+			if(wdg->horizontalScrollBar() && wdg->horizontalScrollBar()->isVisible())
+			    scrollPosH = wdg->horizontalScrollBar()->value();
+			wdg->setProperty("sortCol", (wdg->horizontalHeader()->sortIndicatorSection()+1)*((wdg->horizontalHeader()->sortIndicatorOrder()==Qt::AscendingOrder)?1:-1));
+
+			// Disabling the sorting before processing
 			wdg->setSortingEnabled(false);
-			//wdg->clear();
-			//wdg->setColumnCount(0);
 			wdg->setRowCount(0);
-		    }
+		    } else wdg->setProperty("sortCol", QVariant());
 		    string wVl, rClr, rClrTxt, rFnt;
 		    int sortCol = 0;
 		    // Items
@@ -681,26 +688,33 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 
 		    wdg->horizontalHeader()->setVisible(tX.attr("hHdrVis").size()?s2i(tX.attr("hHdrVis")):hdrPresent);
 		    wdg->verticalHeader()->setVisible(s2i(tX.attr("vHdrVis")));
+
+		    if(wdg->columnCount() != maxCols) toReFit = true;
+		    wdg->setColumnCount(maxCols);
+		    wdg->setRowCount(maxRows);
+		    wdg->setProperty("colsWdthFit", colsWdthFit);
+		    shD->addrWdg->blockSignals(false);
+
 		    if(s2i(tX.attr("sortEn")) || sortCol) {
 			wdg->setSortingEnabled(true);
+			// Restorring/enabling the sorting
+			if(toReFit || !wdg->property("sortCol").isValid()) wdg->setProperty("sortCol", sortCol);
+			sortCol = wdg->property("sortCol").toInt();
 			wdg->sortItems((sortCol?abs(sortCol)-1:0), ((sortCol>=0)?Qt::AscendingOrder:Qt::DescendingOrder));
+			if(scrollPosV > 0) wdg->verticalScrollBar()->setValue(scrollPosV);
+			if(scrollPosH > 0) wdg->horizontalScrollBar()->setValue(scrollPosH);
 		    }
-		}
-		if(wdg->columnCount() != maxCols) toReFit = true;
-		wdg->setColumnCount(maxCols);
-		wdg->setRowCount(maxRows);
-		wdg->setProperty("colsWdthFit", colsWdthFit);
-		shD->addrWdg->blockSignals(false);
 
-		setValue(w, shD->value, true);	//Value
+		    setValue(w, shD->value, true);	//Value
 
-		wdg->resize(w->size());
+		    wdg->resize(w->size());
 
-		if(toReFit) tableFit(w);
-		else {
-		    wdg->resizeRowsToContents();
-		    for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
-			wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/2));
+		    if(toReFit) tableFit(w);
+		    else {
+			wdg->resizeRowsToContents();
+			for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
+			    wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/2));
+		    }
 		}
 
 		break;

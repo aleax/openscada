@@ -7719,7 +7719,7 @@ Functions:
   - big motion speed of the end variable — error code 7 and alarm level 2.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.0
+Version: 2.1.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Функції:
@@ -7750,11 +7750,11 @@ License: GPLv2','Загальний, представницький та уні�
   - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.0
+Версія: 2.1.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	prevVar = EVAL_REAL;
-	alDelay_ = 0;
+	alDelay_ = 0; firstNorm = true;
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
@@ -7845,15 +7845,15 @@ if(alSup) {
 	f_err = "0";
 }
 else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
+	if(!firstNorm && tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
 	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1, firstNorm);
 	f_err = tErr;
-	alDelay_ = 0;
-}','','',1572284562);
+	alDelay_ = 0; firstNorm = false;
+}','','',1615121919);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:

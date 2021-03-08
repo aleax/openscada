@@ -1384,6 +1384,13 @@ INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it1lev','4',0,'','','alarm
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it1color','red',0,'','','alarms','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it2color','yellow',0,'','','alarms','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomH','551',32,'','','pgCont','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','geomYsc','0.96',32,'','','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','geomYsc','0.96',32,'','','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view4','geomYsc','0.96',32,'','','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_1','geomYsc','0.96',32,'','','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view5/pg_2','geomYsc','0.96',32,'','','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2','geomYsc','0.96',32,'','','','','','','','','');
+INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6','geomYsc','0.96',32,'','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_sp','/wlb_originals/wdg_ElFigure','name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;',2);
 INSERT INTO wlb_Main_incl VALUES('ElCadr','com_open','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;',2);
@@ -8351,7 +8358,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','',''
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','900',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','580',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','22',32,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','evProc','',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','evProc','ws_BtPress:/itDel:open:/pg_control/pg_accept',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','pgOpenSrc','',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','backColor','grey',96,'','','','','','','','','');
@@ -24844,7 +24851,8 @@ if(btClassEdit_value) {
 			SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` ADD `SP_NewItem` varchar(100) DEFAULT '''';");
 			toUpdate = true;
 		}
-		else if(sval == "ws_BtRelease:/itDel") {
+		else if(sval == "dlg_Apply:/itDel") {
+		//else if(sval == "ws_BtRelease:/itDel") {
 			SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `classes` WHERE `ID`=''"+dataTbl_value+"'';");
 			if(dataTbl.length > 2)	SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` DROP `SP_"+dataTbl_value+"`;");
 			else SYS.BD.nodeAt(db,".").SQLReq("DROP TABLE `sh_"+class+"`;");
@@ -24892,7 +24900,7 @@ if(f_start || toUpdate) {
 	}
 	// Same requesting
 	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT * FROM `sh_"+class+"` "+(wherePart.length?"WHERE"+wherePart:"")+"ORDER BY ''ID'';");
-	dataTbl_items = "<tbl sel=''row'' sortEn=''0'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
+	dataTbl_items = "<tbl sel=''row'' sortEn=''"+(btEdit_value?0:1)+"'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 	colTps = new Object();
 	for(iR = 0; iR < dataTbl.length; iR++) {
 		dataTbl_items += iR ? "<r>" : "<h>";
@@ -24978,7 +24986,8 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `sh_"+class+"` ("+nmLs+") VALUES ("+vlLs+");");
 		toUpdate = true;
 	}
-	else if(sval == "ws_BtRelease:/itDel") {
+	else if(sval == "dlg_Apply:/itDel") {
+	//else if(sval == "ws_BtRelease:/itDel") {
 		SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
 		toUpdate = true;
 	}
@@ -24996,7 +25005,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	else if(sval.slice(0,22) == "ws_CombChange:/fltrCol") {
 		fN = sval.slice(22).toInt();
 		fAct = !this["fltrCol"+fN].attr("value").match("\\((.+)\\)")[1].isEVal();
-		this["fltr"+fN].attrSet("active", fAct).attrSet("value", "");
+		this["fltr"+fN].attrSet("active", fAct).attrSet("value", "").attrSet("cfg", "");
 		if(fAct && (fN+1) < fMax && !this["fltrCol"+(fN+1)].attr("en")) {
 			this["fltrCol"+(fN+1)].attrSet("en", true);
 			this["fltr"+(fN+1)].attrSet("en", true).attrSet("active", false).attrSet("value", "");
@@ -25011,7 +25020,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true;
 }
-','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1614530735);
+','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1615121059);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -26490,14 +26499,14 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1','doc','','root',0,'
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1563002360);
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1606050538);
+INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','
-',-1,5,'name;dscr;geomX;',1584730664);
+',-1,5,'name;dscr;geomX;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','2','','root',1,'
 ','
-','',-1,5,'name;',1546704070);
+','',-1,5,'name;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO','control','','root',1,'
 ','
 ','
@@ -26515,23 +26524,23 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrPaspOld','','/wlb_Main/wdg_
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view1','','root',0,'
 ','','',-1,5,'owner;perm;name;dscr;geomZ;',1584730664);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view1','1','','/wlb_test/wdg_mn_gen',0,'','','',-1,0,'owner;perm;name;pgOpen;pgNoOpenProc;pgGrp;',1584730664);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546704070);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view2','1','','..',0,'','','',-1,0,'owner;',1546704070);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view3','','/wlb_Main/wdg_grpCadr',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546703892);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view3','','/wlb_Main/wdg_grpCadr',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view3','1','','..',0,'','','',-1,0,'owner;name;grpName;',1546703892);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view4','','/wlb_Main/wdg_ViewCadr',0,'','','',-1,2,'owner;perm;geomZ;evProc;pgGrp;',1546703892);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view4','','/wlb_Main/wdg_ViewCadr',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;evProc;pgGrp;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view4','1','','..',0,'','','',-1,0,'owner;name;',1546703892);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1','view5','','root',0,'
-','','',-1,5,'owner;perm;name;dscr;geomZ;',1546703892);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view5','1','','/wlb_doc/wdg_docAlarmsRep',0,'','','',-1,0,'owner;perm;',1546703892);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view5','2','','/wlb_doc/wdg_docUsersSet',0,'','','',-1,0,'owner;perm;',1546703892);
+','','',-1,5,'owner;perm;name;dscr;geomZ;',1615121472);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view5','1','','/wlb_doc/wdg_docAlarmsRep',0,'','','',-1,0,'owner;perm;geomYsc;',1615121472);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/1/view5','2','','/wlb_doc/wdg_docUsersSet',0,'','','',-1,0,'owner;perm;geomYsc;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2','view1','','root',0,'
 ','','',-1,5,'owner;perm;name;dscr;geomZ;',1546703988);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1546704070);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2','view2','','/wlb_Main/wdg_grpGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/2/view2','1','','..',0,'','','',-1,0,'owner;name;',1546704070);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','view6','','root',0,'
-','','',-1,5,'owner;perm;name;geomZ;',1554062066);
-INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_ResultGraph',0,'','','',-1,2,'owner;perm;geomZ;pgGrp;',1554062066);
+','','',-1,5,'owner;perm;name;geomZ;',1615121472);
+INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6','view6','','/wlb_Main/wdg_ResultGraph',0,'','','',-1,2,'owner;perm;geomYsc;geomZ;pgGrp;',1615121472);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so/view6/view6','1','','..',0,'','','',-1,0,'owner;name;grpName;',1554062066);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1562746129);
 CREATE TABLE IF NOT EXISTS 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));

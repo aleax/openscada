@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-27 11:56+0200\n"
+"POT-Creation-Date: 2021-03-07 21:04+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -326,8 +326,7 @@ msgstr ""
 "Кнопка принудительного сохранения данных элемента в БД, не только когда "
 "изменено"
 
-msgid ""
-"Press for saving the item data to the DB forcibly, not only when it changed."
+msgid "Press for saving the item data to the DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительного сохранения данных элемента в БД, не только когда "
 "изменено."
@@ -390,8 +389,7 @@ msgstr ""
 msgid "Delete visual item"
 msgstr "Удалить визуальный элемент"
 
-msgid ""
-"Deleting the visual item from the library, container widget, project or page"
+msgid "Deleting the visual item from the library, container widget, project or page"
 msgstr ""
 "Удаление визуального элемента из библиотеки, контейнера виджетов, проекта "
 "или страницы"
@@ -831,7 +829,7 @@ msgid "Field for indicating the fact of making changes."
 msgstr "Поле отображения факта изменения."
 
 msgid "Click to save all the made changes."
-msgstr "Нажать для сохранения всех внесёных изменений."
+msgstr "Нажать для сохранения всех внесённых изменений."
 
 msgid "This label displays the current widget scale."
 msgstr "Эта метка показывает текущий масштаб виджета."
@@ -1278,10 +1276,8 @@ msgstr ""
 "В случае отсутствия визуальный элемент будет создан у предка а все другие "
 "визуальные элементы, наследники от данного предка, будут использовать его!"
 
-msgid ""
-"Lowering down the selected attribute change of the visual item to the parent"
-msgstr ""
-"Опускание изменения выбранного атрибута визуального элемента к родителю"
+msgid "Lowering down the selected attribute change of the visual item to the parent"
+msgstr "Опускание изменения выбранного атрибута визуального элемента к родителю"
 
 msgid "Widgets"
 msgstr "Виджет"
@@ -1578,6 +1574,28 @@ msgstr "XHTML (*.html);;CSV файл (*.csv)"
 msgid "No data to export."
 msgstr "Нет данных для экспорта."
 
+msgid "Exporting a table"
+msgstr "Экспорт таблицы"
+
+msgid "There is no table!"
+msgstr "Нет ни одной таблицы!"
+
+msgid "Select a table to export."
+msgstr "Выберите таблицу для экспорта."
+
+msgid "Table:"
+msgstr "Таблица:"
+
+msgid "Saving a table"
+msgstr "Сохранение таблицы."
+
+#, c-format
+msgid "Table %1.csv"
+msgstr "Таблица %1.csv"
+
+msgid "CSV file (*.csv)"
+msgstr "CSV файл (*.csv)"
+
 msgid ""
 "Several sessions are already opened for the project \"%1\".\n"
 "You can create a new or connect to the present session. Please select the "
@@ -1688,6 +1706,18 @@ msgstr "Кнопка экспорта выбранного документа"
 
 msgid "Press for exporting the selected document."
 msgstr "Нажать для экспорта выбранного документа."
+
+msgid "Table"
+msgstr "Таблица"
+
+msgid "Export the selected table"
+msgstr "Экспорт выбранной таблицы"
+
+msgid "The button for exporting the selected table"
+msgstr "Кнопка экспорта выбранной таблицы"
+
+msgid "Press for exporting the selected table."
+msgstr "Нажать для экспорта выбранной таблицы."
 
 msgid "Project '%1' manual"
 msgstr "Руководство проекта '%1'"
@@ -1982,8 +2012,7 @@ msgstr "Точка 4:"
 msgid "Point 5:"
 msgstr "Точка 5:"
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the fill color from the properties list."
+msgid "Include(checked)/Exclude(unchecked) the fill color from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) цвет заливки из списка свойств."
 
 msgid "Fill Color"
@@ -1992,10 +2021,8 @@ msgstr "Цвет заливки"
 msgid "Set the default fill color."
 msgstr "Установить цвет заливки по умолчанию."
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the fill image from the properties list."
-msgstr ""
-"Включить(включен)/Исключить(выключен) изображение заливки из списка свойств."
+msgid "Include(checked)/Exclude(unchecked) the fill image from the properties list."
+msgstr "Включить(включен)/Исключить(выключен) изображение заливки из списка свойств."
 
 msgid "Fill Image"
 msgstr "Изображение заливки"
@@ -2010,11 +2037,9 @@ msgid "Dyn/Stat"
 msgstr "Дин/Стат"
 
 msgid "Make the fill image Dynamic(checked)/Static(unchecked)."
-msgstr ""
-"Сделать изображение заливки Динамическим(включена)/Статическим(выключена)."
+msgstr "Сделать изображение заливки Динамическим(включена)/Статическим(выключена)."
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the line width from the properties list."
+msgid "Include(checked)/Exclude(unchecked) the line width from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) ширину линии из списка свойств."
 
 msgid "Line width"
@@ -2026,8 +2051,7 @@ msgstr "Установить ширину линии по умолчанию. "
 msgid "Make the line width Dynamic(checked)/Static(unchecked)."
 msgstr "Сделать ширину линии Динамической(включена)/Статической(выключена)."
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the line color from the properties list."
+msgid "Include(checked)/Exclude(unchecked) the line color from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) цвет линии из списка свойств."
 
 msgid "Line color"
@@ -2039,8 +2063,7 @@ msgstr "Установить цвет линии по умолчанию."
 msgid "Make the line color Dynamic(checked)/Static(unchecked)."
 msgstr "Сделать цвет линии Динамическим(включена)/Статическим(выключена)."
 
-msgid ""
-"Include(checked)/Exclude(unchecked) the line style from the properties list."
+msgid "Include(checked)/Exclude(unchecked) the line style from the properties list."
 msgstr "Включить(включен)/Исключить(выключен) стиль линии из списка свойств."
 
 msgid "Line style"
@@ -2055,8 +2078,7 @@ msgstr "Сделать стиль линии Динамическим(включ
 msgid ""
 "Include(checked)/Exclude(unchecked) the border width from the properties "
 "list."
-msgstr ""
-"Включить(включен)/Исключить(выключен) ширину границы из списка свойств."
+msgstr "Включить(включен)/Исключить(выключен) ширину границы из списка свойств."
 
 msgid "Border width"
 msgstr "Ширина границы"
@@ -2166,7 +2188,7 @@ msgid "Loading page: '%1'."
 msgstr "Загрузка страницы: '%1'."
 
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 msgid "Cancel"
 msgstr "Отмена"
@@ -2245,3 +2267,4 @@ msgstr "Время инициализации '%s': %f мс."
 
 msgid "Input dialog of Vision"
 msgstr "Диалог ввода Vision"
+

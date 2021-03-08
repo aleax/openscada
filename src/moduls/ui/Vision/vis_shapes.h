@@ -114,6 +114,32 @@ class ShapeFormEl : public WdgShape
     Q_OBJECT
 
     public:
+	//Data
+	// Shape node date
+	class ShpDt
+	{
+	    public:
+		//Methods
+		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), setType(false), opt1(false), addrWdg(NULL) { }
+		//Attributes
+		short	en	:1;
+		short	active	:1;
+		short	evLock	:1;
+		short	elType	:5;
+		short	setType	:1;
+		short	view	:4;
+		short	opt1	:1;
+		short	mode	:5;
+		QWidget	*addrWdg;
+		QFont	font;
+		string	name;
+		string	value;
+		string	img;
+		string	items;
+		string	cfg;
+		string	color, colorText;
+	};
+
 	//Methods
 	ShapeFormEl( );
 
@@ -156,31 +182,6 @@ class ShapeFormEl : public WdgShape
 
     private:
 	//Data
-	// Shape node date
-	class ShpDt
-	{
-	    public:
-		//Methods
-		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), setType(false), opt1(false), addrWdg(NULL) { }
-		//Attributes
-		short	en	:1;
-		short	active	:1;
-		short	evLock	:1;
-		short	elType	:5;
-		short	setType	:1;
-		short	view	:4;
-		short	opt1	:1;
-		short	mode	:5;
-		QWidget	*addrWdg;
-		QFont	font;
-		string	name;
-		string	value;
-		string	img;
-		string	items;
-		string	cfg;
-		string	color, colorText;
-	};
-
 	QStyle	*forceStl;
 
 	//Methods
