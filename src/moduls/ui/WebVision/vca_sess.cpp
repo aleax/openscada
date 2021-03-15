@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -133,17 +133,20 @@ void VCASess::getReq( SSess &ses )
 	req.childAdd("openlist")->setAttr("path", "/%2fserv%2fpg")->setAttr("tm", (prmEl!=ses.prm.end())?prmEl->second:"0");
 	req.childAdd("get")->setAttr("path", "/%2fobj%2fcfg%2fper");
 	req.childAdd("get")->setAttr("path", "/%2fserv%2falarm")->setAttr("mode", "stat");
-	mod->cntrIfCmd(req, ses);
-	req.childGet(0)->setAttr("per", req.childGet(1)->text())->
-			setAttr("alarmSt", req.childGet(2)->attr("alarmSt"))->
-			setAttr("cachePgSz", i2s(mod->cachePgSz()))->
-			setAttr("cachePgLife", r2s(mod->cachePgLife()));
+	if(mod->cntrIfCmd(req,ses))
+	    ses.page = mod->pgCreator(ses.prt, mod->messPost(req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error), "404 Not Found");
+	else {
+	    req.childGet(0)->setAttr("per", req.childGet(1)->text())->
+			    setAttr("alarmSt", req.childGet(2)->attr("alarmSt"))->
+			    setAttr("cachePgSz", i2s(mod->cachePgSz()))->
+			    setAttr("cachePgLife", r2s(mod->cachePgLife()));
 
-	// Getting opened pages from the cache
-	for(unsigned iP = 0; iP < req.childGet(0)->childSize(); iP++)
-	    pgCacheGet(TSYS::path2sepstr(req.childGet(0)->childGet(iP)->text()));
+	    // Getting opened pages from the cache
+	    for(unsigned iP = 0; iP < req.childGet(0)->childSize(); iP++)
+		pgCacheGet(TSYS::path2sepstr(req.childGet(0)->childGet(iP)->text()));
 
-	ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	}
     }
     else if(wp_com == "style") {
 	XMLNode req("get"); req.setAttr("path", ses.url+"/%2fobj%2fcfg%2fstLst");

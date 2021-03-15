@@ -662,7 +662,7 @@ void TTypeTransport::perSYSCall( unsigned int cnt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb), assTrRes(true), mLogLen(0)
+    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb), assTrRes(true), mLogLen(0), mLogItLim(1000)
 {
     mId = iid;
 }
@@ -885,8 +885,9 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max","10000",
+	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length and block limit"),RWRW__,"root",STR_ID,4,"tp","dec", "min","0", "max","10000",
 		"help",_("Use zero for the log disabling."));
+	    ctrMkNode("fld",opt,-1,"/log/logItLim","",RWRW__,"root",STR_ID,3,"tp","dec", "min","1000", "max","1000000");
 	    if(logLen()) ctrMkNode("fld",opt,-1,"/log/log",_("Log"),R_R___,"root",STR_ID,3,"tp","str","rows","20","SnthHgl","1");
 	}
 	return;
@@ -930,6 +931,10 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(logLen()));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogLen(s2i(opt->text()));
     }
+    else if(a_path == "/log/logItLim") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(logItLim()));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogItLim(s2i(opt->text()));
+    }
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
@@ -940,7 +945,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
 		resLog += "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
-		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n";
+		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,logItLim()),TSYS::Bin,"<text>"):"")
+			   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
 	    }
 	    opt->setText(resLog);
 	}
@@ -959,7 +965,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")),
-    mDB(idb), mStartTm(0), mReqRes(true), mLogLen(0)
+    mDB(idb), mStartTm(0), mReqRes(true), mLogLen(0), mLogItLim(1000)
 {
     mId = iid;
 }
@@ -1193,8 +1199,9 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/req/answ",_("Answer"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","5","SnthHgl","1");
 	}
 	if(ctrMkNode("area",opt,-1,"/log",_("IO log"),R_R___,"root",STR_ID)) {
-	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length"),RWRW__,"root",STR_ID,4,"tp","dec","min","0","max","10000",
+	    ctrMkNode("fld",opt,-1,"/log/logLen",_("Log length and block limit"),RWRW__,"root",STR_ID,4,"tp","dec", "min","0", "max","10000",
 		"help",_("Use zero for the log disabling."));
+	    ctrMkNode("fld",opt,-1,"/log/logItLim","",RWRW__,"root",STR_ID,3,"tp","dec", "min","1000", "max","1000000");
 	    if(logLen()) ctrMkNode("fld",opt,-1,"/log/log",_("Log"),R_R___,"root",STR_ID,3,"tp","str","rows","20","SnthHgl","1");
 	}
 	return;
@@ -1305,6 +1312,10 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(logLen()));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogLen(s2i(opt->text()));
     }
+    else if(a_path == "/log/logItLim") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(i2s(logItLim()));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setLogItLim(s2i(opt->text()));
+    }
     else if(a_path == "/log/log") {
 	if(ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD)) {
 	    MtxAlloc res(mLogRes, true);
@@ -1315,7 +1326,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
 		resLog += "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
-		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off),TSYS::Bin,"<text>"):"") + "\n\n";
+		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,logItLim()),TSYS::Bin,"<text>"):"")
+			   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
 	    }
 	    opt->setText(resLog);
 	}

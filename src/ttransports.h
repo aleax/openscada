@@ -81,7 +81,9 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	// IO log
 	int logLen( )	{ return mLogLen; }
+	int logItLim( )	{ return mLogItLim; }
 	void setLogLen( int vl );
+	void setLogItLim( int vl )	{ mLogItLim = vl; }
 	void pushLogMess( const string &vl );
 
 	TTypeTransport &owner( ) const;
@@ -118,7 +120,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	vector<AutoHD<TTransportOut> >	mAssTrO;
 
 	// IO log
-	int		mLogLen;
+	int		mLogLen, mLogItLim;
 	deque<string>	mLog;
 };
 
@@ -173,7 +175,9 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	// IO log
 	int logLen( )	{ return mLogLen; }
+	int logItLim( )	{ return mLogItLim; }
 	void setLogLen( int vl );
+	void setLogItLim( int vl )	{ mLogItLim = vl; }
 	void pushLogMess( const string &vl );
 
 	TTypeTransport &owner( ) const;
@@ -213,7 +217,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	ResMtx	mReqRes, mLogRes;
 
 	// IO log
-	int		mLogLen;
+	int		mLogLen, mLogItLim;
 	deque<string>	mLog;
 };
 

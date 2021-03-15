@@ -21518,7 +21518,7 @@ if(play_value) {
 		stepTm = args.stepTm;
 		stepCur = args.stepCur;
 	}
-}','','',200,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1612768737);
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1615441292);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -24896,8 +24896,13 @@ if(f_start || toUpdate) {
 	// Where prepairing for the filter
 	for(wherePart = "", iF = 0; iF < fMax; iF++) {
 		if(!(tVl=this["fltr"+iF].attr("value")).length)	continue;
-		wherePart += (wherePart.length?"AND":"") + " `"+this["fltrCol"+iF].attr("value").match("\\((.+)\\)")[1]+"` REGEXP ''"+tVl+"'' ";
+		itVl = this["fltrCol"+iF].attr("value").match("\\((.+)\\)")[1];
+		wherePart += (wherePart.length?"AND":"") + " `"+itVl+"` REGEXP ''"+tVl+"'' ";
+		if(!colVars[itVl].isEVal())	colVars[itVl]["<lock>"] = true;
 	}
+	for(var iC in colVars)
+		if(colVars[iC]["<lock>"] == true)	delete colVars[iC]["<lock>"];
+		else delete colVars[iC];
 	// Same requesting
 	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT * FROM `sh_"+class+"` "+(wherePart.length?"WHERE"+wherePart:"")+"ORDER BY ''ID'';");
 	dataTbl_items = "<tbl sel=''row'' sortEn=''"+(btEdit_value?0:1)+"'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
@@ -24966,7 +24971,6 @@ if(f_start || toUpdate) {
 		iFo.attrSet("cfg", fCfg);
 	}
 
-
 	toUpdate = false;
 }
 
@@ -25000,7 +25004,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	else if(sval.slice(0,12) == "ws_TableEdit") {
 		col = sval.parse(0,"_",13).toInt(); row = sval.parse(1,"_",13).toInt();
 		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `"+dataTbl[0][col]+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[row+1][0]+"'';");
-		toUpdate = true;
+		//toUpdate = true;	//!!!! To prevent the spare flicking
 	}
 	else if(sval.slice(0,22) == "ws_CombChange:/fltrCol") {
 		fN = sval.slice(22).toInt();
@@ -25020,7 +25024,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true;
 }
-','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1615121059);
+','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1615639417);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB

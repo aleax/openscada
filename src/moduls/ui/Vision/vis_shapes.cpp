@@ -546,6 +546,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		wdg->setFont(elFnt);		//Font
 
 		//Items
+		if(shD->items == "<cleaned>")	break;
 		shD->addrWdg->blockSignals(true);
 		XMLNode tX("tbl");
 		bool hdrPresent = false, colsWdthFit = false;
@@ -600,7 +601,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 					    int wdthCel = fmax(0, s2i(wVl));
 					    if(!wdthCel)	wdg->hideColumn(iC);
 					    else hit->setData(Qt::UserRole,
-						(wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
+						    (wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
 					}
 					toReFit = true;
 				    }
@@ -698,6 +699,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    if(s2i(tX.attr("sortEn")) || sortCol) {
 			wdg->setSortingEnabled(true);
 			// Restorring/enabling the sorting
+			//  First visible column detection
+			for(int iC = 0; !sortCol && iC < wdg->columnCount(); iC++)
+			    if(!wdg->isColumnHidden(iC)) sortCol = iC+1;
 			if(toReFit || !wdg->property("sortCol").isValid()) wdg->setProperty("sortCol", sortCol);
 			sortCol = wdg->property("sortCol").toInt();
 			wdg->sortItems((sortCol?abs(sortCol)-1:0), ((sortCol>=0)?Qt::AscendingOrder:Qt::DescendingOrder));
@@ -716,6 +720,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			    wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/2));
 		    }
 		}
+
+		if(shD->items.size() > 10000)	shD->items = "<cleaned>";
 
 		break;
 	    }

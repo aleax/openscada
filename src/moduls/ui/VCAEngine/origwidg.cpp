@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: origwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -641,7 +641,9 @@ bool OrigFormEl::eventProc( const string &ev, Widget *src )
     int elTp = 0;
     switch((elTp=src->attrAt("elType").at().getI())) {
 	case F_TABLE: {
-	    if(ev.compare(0,13,"ws_TableEdit_") != 0)	break;
+	    if(ev.compare(0,13,"ws_TableEdit_") != 0 ||
+		    src->attrAt("items").at().getS().size() > limUserFile_SZ)	//Do not apply to the representer after some size
+		break;
 	    bool setOK = false;
 	    int col = s2i(TSYS::strParse(ev,2,"_"));
 	    int row = s2i(TSYS::strParse(ev,3,"_"));

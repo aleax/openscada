@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-07 16:56+0200\n"
+"POT-Creation-Date: 2021-03-14 08:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1622,6 +1622,9 @@ msgid "Select the blank language to reset the widget procedure and language to t
 msgstr ""
 
 msgid "Period of the calculating, milliseconds"
+msgstr ""
+
+msgid "Use -1 (< 0) if you want to use the parent widget/page/project calculating period."
 msgstr ""
 
 msgid "Procedure"

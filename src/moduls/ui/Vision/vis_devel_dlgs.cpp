@@ -74,6 +74,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     menuPushBt->setWhatsThis(_("The button for getting the item manual"));
     connect(menuPushBt, SIGNAL(released()), parent, SLOT(enterManual()));
     menuPushBt->setEnabled(false);
+    menuPushBt->setAutoDefault(false);
     wdg_tabs->setCornerWidget(menuPushBt);
 
     //Add tab 'Widget'
@@ -987,6 +988,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     menuPushBt->setWhatsThis(_("The button for getting the item manual"));
     connect(menuPushBt, SIGNAL(released()), parent, SLOT(enterManual()));
     menuPushBt->setEnabled(false);
+    menuPushBt->setAutoDefault(false);
     wdg_tabs->setCornerWidget(menuPushBt);
 
     //Add tab 'Widget'
@@ -1500,6 +1502,7 @@ void VisItProp::tabChanged( int itb )
 		gnd = TCntrNode::ctrId(root,proc_per->objectName().toStdString(),true);
 		proc_per->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 		if(gnd) {
+		    proc_per->setToolTip(gnd->attr("help").c_str());
 		    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_per->objectName().toStdString(),TSYS::PathEl));
 		    if(!owner()->cntrIfCmd(req)) proc_per->setValue(req.text().c_str());
 		}

@@ -1,3 +1,36 @@
+2021-03-15 Roman (stable)
+- !:LibsDB.OscadaLibs: The common template base.anUnif appended for an option "Force NORM violation at the start".
+    "NORMA" renamed to "NORM".
+- !!:LibsDB.vcaBase: Periodicity of the frame "RootPgSo" execution rise to 1000 milliseconds after appending for events early processing.
+    Main.storeHouse: filters procesing appended for clearing, forming accounting the previous filters;
+	prevented from flicking the table after some cell changing.
+- !:Transports: The IO log appended of limiting the one processing block size by a new configuration field.
+- DAQ.Value: The Value object prevented from storing NaN real values by replacing them to EVAL,
+    detected on problems of writing by SQL from Archive.DBArch.
+- UI.{VCAEngine,Vision}: The frame calculation field "Period of the calculating, milliseconds" appended for a context help.
+- UI.{WebVision,Vision}: The view Table of the primitive FormEl appended for switching the tables
+    in preventing of double storing the source content at the content size more for 10000.
+- !!!!:UI.VCAEngine: Appended and enabled as a build option for the mark mechanism of the attributes changing without the doubles,
+	by requesting the previous-completed cycles,
+	than also preventing the need of detection the doubles in the visualisers and storing the big source content.
+	The modification detection function modifChk() appended for an argument "isCnt" of specifying the containers.
+    !!!: The session tasks execution appended of early execution at events presence.
+    The view Table of the primitive FormEl appended of limiting in processing the table content
+	for direct apply the changes only for it size lesser for limUserFile_SZ (1 MB).
+- UI.Vision: The menu call button of the item and container configuration dialogs turned off from the auto apply default mode.
+    The view Table of the primitive FormEl set to the first visible column for sorting at the sorting enable.
+- !!!!:FIX:UI.WebVision: Appended for detection disappearing of the project execution session and return an error,
+	in the common request "pgOpenList", and at dropping down the calculation counter "tmCnt".
+    !!: Switched back to the synchronous mode of the default POST requests since getting of processing old events after new ones.
+    FIX: Fixed in processing the processings counter "prcCnt" for the true processing.
+    getXmlHttp() appended of counting and freeing the XML-request objects.
+    The view Table of the primitive FormEl:
+	Table cells in the editing mode allowed for the system-browser context menu.
+	FIX: Fixed in loss the first symbol at entering to editing the cell text content.
+	FIX: Disabled from returning back the text editing content of the cells after it Apply and before the change read back.
+	The table changes detection and updating switched to the mode of not storing double source content.
+
+
 2021-03-08 Roman (stable)
 - !:LibsDB.OscadaLibs: The common template base.anUnif appended for the force NORM alarm messages generation at the start,
     to prevent of hang the old alarm messages by DAQGate and the redundancy. Testing mostly before deploying to like ones templates.

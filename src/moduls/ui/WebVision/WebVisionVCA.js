@@ -109,12 +109,21 @@ function posGetY( obj, noWScrl )
  ***************************************************/
 function getXmlHttp( )
 {
-    if(window.XMLHttpRequest) return new XMLHttpRequest();
+    reqO = null;
+    if(window.XMLHttpRequest) reqO = new XMLHttpRequest();
     else if(window.ActiveXObject) {
-	try { return new ActiveXObject('Msxml2.XMLHTTP'); }
-	catch(e) { return new ActiveXObject('Microsoft.XMLHTTP'); }
+	try { reqO = new ActiveXObject('Msxml2.XMLHTTP'); }
+	catch(e) { reqO = new ActiveXObject('Microsoft.XMLHTTP'); }
     }
-    return null;
+
+    for(iO = 0; iO < reqObjects.length; iO++) {
+	if(reqObjects[iO] && reqObjects[iO].readyState == 4) { delete reqObjects[iO]; reqObjects[iO] = null; }
+	if(!reqObjects[iO]) { reqObjects.splice(iO, 1); iO--; }
+    }
+
+    reqObjects.push(reqO);
+
+    return reqO;
 }
 
 /***************************************************
@@ -242,7 +251,7 @@ function servGet( adr, prm, callBack, callBackPrm )
  ***************************************************/
 function servSet( adr, prm, body, noWaitRez )
 {
-    if(noWaitRez == null) noWaitRez = true;
+    if(noWaitRez == null) noWaitRez = false;	//!!!! Otherwise we can get of processing old events after new ones
     var req = getXmlHttp();
     req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), noWaitRez);
     try {
@@ -1857,6 +1866,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					}
 					return true;
 				    }
+				    this.firstChild.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.focus();
 				} else { this.isEnter = false; elTbl.edIt = null; }
 			    }
@@ -1865,7 +1875,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    else if(document.selection) document.selection.empty();
 			    return false;
 			}
-			formObj.selIt = function( row, col ) {
+			formObj.selIt = function(row, col) {
 			    //Restore saved
 			    if(this.svRow || this.svCol) {
 				if(!this.svRow)
@@ -1892,36 +1902,34 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			formObj.getVal = function( row, col ) {
 			    tit = this.tBodies[0].rows[row].cells[col+1];
-			    return tit.origVl ? tit.origVl : (tit.children.length ? tit.innerText.slice(1) : tit.innerText);
+			    return tit.origVl ? tit.origVl : tit.innerText;
 			}
 			formObj.setVal = function( val, row, col ) {
 			    tit = this.tBodies[0].rows[row].cells[col+1];
 			    if(tit.isEnter) {
-				tit.innerHTML = tit.svInnerHTML;
+				//tit.innerHTML = tit.svInnerHTML;
 				attrs = new Object(); attrs.set = val; attrs.event = "ws_TableEdit_"+col+"_"+this.tBodies[0].rows[row].rowReal;
 				setWAttrs(this.wdgLnk.addr, attrs);
 				tit.isEnter = false; this.edIt = null;
 			    }
-			    else {
-				tit.origVl = null;
-				switch(tit.outTp) {
-				    case 'b':
-					tit.childNodes[0].style.display = parseInt(val) ? "" : "none";
-					if(tit.isEdit) tit.origVl = parseInt(val);
-					break;
-				    case 'i': tit.innerText = parseInt(val);	break;
-				    case 'r': tit.innerText = parseFloat(parseFloat(val).toPrecision(6));	break;
-				    default:
-					if(val.length <= limTblItmCnt) tit.innerText = val;
-					else { tit.innerText = val.slice(0,limTblItmCnt) + "..."; if(tit.isEdit) tit.origVl = val; }
-					break;
-				}
+			    tit.origVl = null;
+			    switch(tit.outTp) {
+				case 'b':
+				    tit.childNodes[0].style.display = parseInt(val) ? "" : "none";
+				    if(tit.isEdit) tit.origVl = parseInt(val);
+				    break;
+				case 'i': tit.innerText = parseInt(val);	break;
+				case 'r': tit.innerText = parseFloat(parseFloat(val).toPrecision(6));	break;
+				default:
+				    if(val.length <= limTblItmCnt) tit.innerText = val;
+				    else { tit.innerText = val.slice(0,limTblItmCnt) + "..."; if(tit.isEdit) tit.origVl = val; }
+				    break;
 			    }
 			}
 		    }
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
-		    if(toInit || ((this.attrsMdf['items'] /*|| this.attrsMdf['value']*/ || this.attrsMdf['font']) && !formObj.edIt)) {
+		    if(this.attrs['items'] && (toInit || ((this.attrsMdf['items'] /*|| this.attrsMdf['value']*/ || this.attrsMdf['font']) && !formObj.edIt))) {
 			hdrPresent = false, maxCols = 0, maxRows = 0;
 			toReFit = this.attrsMdf['font'];
 			var itemsO = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
@@ -2088,6 +2096,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    }
 			}
 			delete itemsO;
+			//!!!! Preventing of storing big table sources
+			if(this.attrs['items'].length > 10000) { delete this.attrs['items']; this.attrs['items'] = null; }
 		    }
 		    if(toInit) this.place.appendChild(formObj);
 
@@ -2713,10 +2723,8 @@ function pwDescr( pgAddr, pg, parent )
  ***************************************************/
 function makeUI( callBackRez )
 {
-    if(!callBackRez) {
-	prcCnt = (callBackRez == -1) ? Math.min(0,prcCnt) - 1 :  Math.max(0,prcCnt) + 1;
-	stTmMain = new Date();
-    }
+    if(!callBackRez) stTmMain = new Date();
+    else prcCnt = (callBackRez == -1) ? Math.min(0,prcCnt) - 1 :  Math.max(0,prcCnt) + 1;
 
     //Get open pages list
     // Synchronous
@@ -2769,7 +2777,9 @@ function makeUI( callBackRez )
 		pgList.push(prPath);
 		masterPage.callPage(prPath, parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
 	    }
-	tmCnt = parseInt(pgNode.getAttribute('tm'));
+	tmCnt_ = parseInt(pgNode.getAttribute('tm'));
+	if((tmCnt_-tmCnt) < -10) window.location.reload();	//The server or the counter restarted - reload the session
+	tmCnt = tmCnt_;
     }
     else if(prcCnt < 10) window.location.reload();
 
@@ -3106,6 +3116,7 @@ window.onresize = function( ) {
 	stTmReload = setTimeout('window.location.reload()', 1000);
 }
 
+var reqObjects = new Array();		//Request objects
 var fullUpdCnt = 0;			//Full tree updating counter
 var alrmUpdCnt = 0;			//Alarms updating counter
 var mAlrmSt = -1;			//Current allarm state
@@ -3114,7 +3125,7 @@ var modelStyles = null;			//Model styles
 var prcCnt = 0;				//Process counter
 var prcTm = 0;				//Process time
 var planePer = 0;			//Planed update period
-var tmCnt = 0;				//Call counter
+var tmCnt = 0;				//Calls counter
 var pgList = new Array();		//Opened pages list
 var cachePgLife = 0;			//Life time of the pages into the cache
 var cachePgSz = 0;			//Maximum number of the pages cache

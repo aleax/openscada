@@ -1,12 +1,12 @@
 # OpenSCADA core translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <roman@oscada.org>, 2003-2020.
+# Roman Savochenko <roman@oscada.org>, 2003-2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-27 19:47+0200\n"
+"POT-Creation-Date: 2021-03-14 10:18+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -1006,6 +1006,7 @@ msgstr "Порожньо"
 msgid "Error selecting! Value: '%s'."
 msgstr "Помилка вибору! Значення: '%s'."
 
+#, c-format
 msgid ""
 "A duple IO '%s' is detected in position %d after %d. If you do not see the "
 "duple IO then you created a special IO, remove or rename it!"
@@ -2487,14 +2488,17 @@ msgstr "БД транспорту"
 msgid "IO log"
 msgstr "Лог ВВ"
 
-msgid "Log length"
-msgstr "Довжина логу"
+msgid "Log length and block limit"
+msgstr "Довжина логу та обмеження блоку"
 
 msgid "Use zero for the log disabling."
 msgstr "Використовуйте нуль для вимкнення логу."
 
 msgid "Log"
 msgstr "Лог"
+
+msgid "CUT"
+msgstr "ВИРІЗАНО"
 
 msgid "Connected. "
 msgstr "Підключено. "
