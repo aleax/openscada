@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.0.0"
+#define MOD_VER		"6.0.2"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -488,7 +488,10 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		string sesnm = zero_lev.substr(4);
 
 		AutoHD<VCASess> vs;
-		try { vs = vcaSesAt(sesnm); } catch(TError&) { }
+		try {
+		    vs = vcaSesAt(sesnm);
+		    if(vs.at().toRemoveSelf) { vs.free(); vcaSesDel(sesnm); }
+		} catch(TError&) { }
 
 		map<string,string>::iterator cntEl;
 		if((cntEl=ses.prm.find("com")) != ses.prm.end() && cntEl->second == "close") {

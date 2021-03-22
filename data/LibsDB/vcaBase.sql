@@ -41,16 +41,16 @@ INSERT INTO PrescrComs VALUES('Атмосфера','JavaLikeCalc.JavaScript
 SYS.DAQ.ModBus.PLC1.VP5.com.set(true);
 if(SYS.DAQ.ModBus.PLC1.P.var.get() == 1e5 || SYS.DAQ.ModBus.PLC1.SI12.var.get() == false) rez = true;','','','','','');
 CREATE TABLE IF NOT EXISTS 'PrescrProgs' ("name" TEXT DEFAULT '' ,"prgTxt" TEXT DEFAULT '' , PRIMARY KEY ("name"));
-INSERT INTO PrescrProgs VALUES('Библ1/Прог1','<prg wtm="12"><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO PrescrProgs VALUES('Библ1/Прог2','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO PrescrProgs VALUES('Библ1/Прог3','<prg><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO PrescrProgs VALUES('Библ1/Прог4','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO PrescrProgs VALUES('Библ1/Прог5','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO PrescrProgs VALUES('Библ1/Прог6','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO PrescrProgs VALUES('abcd','<prg wtm="52"><com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" name="Таймер ур.1"><com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" name="Таймер ур.2" /></com><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /></prg>');
+INSERT INTO PrescrProgs VALUES('Lib1/Prog1','<prg wtm="12"><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /></prg>');
+INSERT INTO PrescrProgs VALUES('Lib1/Prog2','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /></prg>');
+INSERT INTO PrescrProgs VALUES('Lib1/Prog3','<prg><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /></prg>');
+INSERT INTO PrescrProgs VALUES('Lib1/Prog4','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /></prg>');
+INSERT INTO PrescrProgs VALUES('Lib1/Prog5','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /></prg>');
+INSERT INTO PrescrProgs VALUES('Lib1/Prog6','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /></prg>');
+INSERT INTO PrescrProgs VALUES('abcd','<prg wtm="52"><com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Timer level 1" id="Timer" name="Timer lev.1"><com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" name="Timer lev.2" /></com><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /></prg>');
 INSERT INTO PrescrProgs VALUES('Abcdef','');
-INSERT INTO PrescrProgs VALUES('Библ1/Прог123','');
-INSERT INTO PrescrProgs VALUES('Тест12','<prg id="Тест12" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" name="Test timer" /></com></com></com></prg>');
+INSERT INTO PrescrProgs VALUES('Lib1/Prog123','');
+INSERT INTO PrescrProgs VALUES('Test12','<prg id="Test12" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" name="Test timer" /></com></com></com></prg>');
 CREATE TABLE IF NOT EXISTS 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO VCALibs VALUES('Main','Main elements','The library is created to provide main elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological and common processes. The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc.
 

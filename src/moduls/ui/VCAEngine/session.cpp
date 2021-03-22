@@ -1936,6 +1936,9 @@ void SessWdg::eventAdd( const string &ev )
     ownerSess()->dataResSes().lock();
     attrAt("event").at().setS(attrAt("event").at().getS()+ev);
     ownerSess()->dataResSes().unlock();
+
+    if(mess_lev() == TMess::Debug)
+	mess_sys(TMess::Debug, _("Events: %s"), TSYS::strTrim(ev).c_str());
 }
 
 string SessWdg::eventGet( bool clear )

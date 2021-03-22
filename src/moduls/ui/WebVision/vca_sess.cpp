@@ -42,7 +42,7 @@ using namespace VCA;
 //*************************************************
 //* VCASess					  *
 //*************************************************
-VCASess::VCASess( const string &iid ) : mId(iid)
+VCASess::VCASess( const string &iid ) : toRemoveSelf(false), mId(iid)
 {
     open_ses = lst_ses_req	= time(NULL);
     id_objs	= grpAdd("obj_");
@@ -133,8 +133,10 @@ void VCASess::getReq( SSess &ses )
 	req.childAdd("openlist")->setAttr("path", "/%2fserv%2fpg")->setAttr("tm", (prmEl!=ses.prm.end())?prmEl->second:"0");
 	req.childAdd("get")->setAttr("path", "/%2fobj%2fcfg%2fper");
 	req.childAdd("get")->setAttr("path", "/%2fserv%2falarm")->setAttr("mode", "stat");
-	if(mod->cntrIfCmd(req,ses))
+	if(mod->cntrIfCmd(req,ses)) {
+	    toRemoveSelf = true;
 	    ses.page = mod->pgCreator(ses.prt, mod->messPost(req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error), "404 Not Found");
+	}
 	else {
 	    req.childGet(0)->setAttr("per", req.childGet(1)->text())->
 			    setAttr("alarmSt", req.childGet(2)->attr("alarmSt"))->

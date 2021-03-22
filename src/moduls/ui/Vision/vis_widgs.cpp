@@ -960,7 +960,7 @@ void TextEdit::setText( const QString &itext )
 	but_box->setVisible(false);
 	but_box->setEnabled(false);
     }
-    if(!itext.size() && snt_hgl) { delete snt_hgl; snt_hgl = NULL; }
+    //if(!itext.size() && snt_hgl) { delete snt_hgl; snt_hgl = NULL; }	//!!!! Otherwise all empty text fields will be without the syntax highlighting
     isInit = false;
 
     m_text = itext;

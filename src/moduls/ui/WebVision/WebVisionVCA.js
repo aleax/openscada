@@ -2023,7 +2023,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				} else hdrPresent = true;
 			    }
 
-			    if((!startRows && formObj.tBodies[0].rows.length) || (formObj.tBodies[0].rows[0].cells.length > startCols)) toReFit = true;
+			    if((!startRows && formObj.tBodies[0].rows.length) || (formObj.tBodies[0].rows.length && formObj.tBodies[0].rows[0].cells.length > startCols))
+				toReFit = true;
 
 			    // Generic properties set
 			    formObj.oKeyID = (wVl=tX.getAttribute("keyID")) ? parseInt(wVl) : 0;
@@ -2088,8 +2089,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].innerText = this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].childNodes[0].textContent;
 				    this.sortCol = (Math.abs(this.sortCol) == col) ? -this.sortCol : col;
 				}
-				for(iC = 1; iC < formObj.tHead.rows[0].cells.length; iC++)
+				for(iC = 1; iC < formObj.tHead.rows[0].cells.length; iC++) {
 				    formObj.tHead.rows[0].cells[iC].onclick = function() { this.offsetParent.sort(this.cellIndex+1); }
+				    if(!sortCol && formObj.tHead.rows[0].cells[iC].style.display != "none") sortCol = iC+1;
+				}
 
 				if(formObj.sortCol) formObj.sort(formObj.sortCol, true);
 				else if(sortCol) formObj.sort(sortCol, true);

@@ -6977,7 +6977,7 @@ Functions:
     - ActTm — action time of the prescription-program, in the form "2020-03-14 16:05:52".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.0
+Version: 2.2.0
 License: GPLv2','Основний, представницький та уніфікований шаблон менеджеру та контролеру рецептів, їх опрацювання та прямого виконання у режимі "команда-макрос". Шаблон формує структуру параметру менеджеру рецептів, який може бути легко підключений до всіх кадрів цієї бібліотеки.
 
 Представницькою структурою менеджеру рецептів є:
@@ -7009,7 +7009,7 @@ License: GPLv2','Основний, представницький та уніф�
     - ActTm — час дії рецепту-програми, у форматі "2020-03-14 16:05:52".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.0
+Версія: 2.2.0
 Ліцензія: GPLv2','Основной, представительский и унифицированный шаблон менеджера и контроллера рецептов, их обработки и прямого исполнения в режиме "команда-макрос". Шаблон формирует структуру параметра менеджера рецептов, который может быть легко подключен ко всем кадрам этой библиотеки.
 
 Представительской структурой менеджера рецептов является:
@@ -7041,7 +7041,7 @@ License: GPLv2','Основний, представницький та уніф�
     - ActTm — время действия рецепта-программы, в формате "2020-03-14 16:05:52".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.1.0
+Версия: 2.2.0
 Лицензия: GPLv2',10,0,'JavaLikeCalc.JavaScript
 clcCnt++;
 
@@ -7132,8 +7132,8 @@ if(curMode <= 0 && mode == 1 && prog.length) {
 
 	if(comCntrO) {
 		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++) {
-			var cLi = comCntrO[cL[i_c]];
+		for(iC = 0; iC < cL.length; iC++) {
+			var cLi = comCntrO[cL[iC]];
 			cLi.run.set(false);
 			cLi.stop.set(false);
 			cLi.error.set(false);
@@ -7147,8 +7147,8 @@ else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode ==
 	//curMode = mode;
 	if((mode == 0 || mode == 1 || mode == 2) && comCntrO) {
 		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++)
-			comCntrO[cL[i_c]].pause.set(mode==2);
+		for(iC = 0; iC < cL.length; iC++)
+			comCntrO[cL[iC]].pause.set(mode == 2);
 	}
 }
 
@@ -7272,8 +7272,8 @@ if(curMode == 1 || curMode == 2) {
 				//comEl.setAttr("rez","-12:"+tr("Program terminated"));
 				// Stop all typical and set "abort" flag
 				var cL = comCntrO.nodeList("prm_");
-				for(i_c = 0; i_c < cL.length; i_c++) {
-					var cLi = comCntrO[cL[i_c]];
+				for(iC = 0; iC < cL.length; iC++) {
+					var cLi = comCntrO[cL[iC]];
 					cLi.run.set(false);
 					cLi.start.set(false);
 					cLi.abort.set(true);
@@ -7326,8 +7326,8 @@ if(curMode == 1 || curMode == 2) {
 				else if(rez.toInt() < 0) {
 					// Stop all typical and call "error" command
 					var cL = comCntrO.nodeList("prm_");
-					for(i_c = 0; i_c < cL.length; i_c++) {
-						var cLi = comCntrO[cL[i_c]];
+					for(iC = 0; iC < cL.length; iC++) {
+						var cLi = comCntrO[cL[iC]];
 						cLi.run.set(false);
 						cLi.start.set(false);
 						cLi.error.set(true);
@@ -7342,7 +7342,10 @@ if(curMode == 1 || curMode == 2) {
 					if(!(comA=curComPI["arg"+i_a]).isEVal())
 						comElI.setAttr("arg"+i_a, comA.get());
 			}
-			if(isCurCmd) continue;
+			if(isCurCmd) {
+				if(curComPI.pause.get() == true)	mode = 2;
+				continue;
+			}
 			//Force backgrounded rezult update for running
 			if(rez.toInt() != 0 && comElI.attr("rez").toInt() == 0)	comElI.setAttr("rez", rez);
 
@@ -7360,7 +7363,7 @@ if(curMode == 1 || curMode == 2) {
 			if(curComNd.childGet(curComPos).childSize())	{ curComLev++; curComPos = 0; }
 			else if((++curComPos) >= curComNd.childSize())
 			{ curComLev--; curComPos = curComLev ? curCom.parse(curComLev-1,":").toInt()+1 : curComNd.childSize(); }
-			for(i_c = 0, curComN = ""; i_c < (curComLev-1); i_c++) curComN += curCom.parse(i_c,":");
+			for(iC = 0, curComN = ""; iC < (curComLev-1); iC++) curComN += curCom.parse(iC,":");
 			curCom = curComN.length ? curComN+":"+curComPos : curComPos;
 		}
 		
@@ -7368,8 +7371,8 @@ if(curMode == 1 || curMode == 2) {
 		if(curComLev <= 0) {
 			// Stop all typical and call "stop" command
 			var cL = comCntrO.nodeList("prm_");
-			for(i_c = 0; i_c < cL.length; i_c++) {
-				var cLi = comCntrO[cL[i_c]];
+			for(iC = 0; iC < cL.length; iC++) {
+				var cLi = comCntrO[cL[iC]];
 				cLi.run.set(false);
 				cLi.start.set(false);
 				cLi.stop.set(true);
@@ -7395,7 +7398,7 @@ curMode = mode;
 
 }
 
-f_err = t_err;','','',1584814597);
+f_err = t_err;','','',1616351798);
 CREATE TABLE IF NOT EXISTS 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_base VALUES('digAlarm','Alarm discrete','Сигналізація дискретна','Сигнализация дискретная','Common, representative and unified template of separate discrete parameter (complex tag) processing with formation of signaling by the defined criterion. The template forms a structure of discrete parameter (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 

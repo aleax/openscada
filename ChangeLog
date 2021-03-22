@@ -1,3 +1,19 @@
+2021-03-22 Roman (stable)
+- !:LibsDB.OscadaLibs: PrescrTempl.manager appended for a feature of pausing prescriptions from the commands-steps.
+- !!:AGLKS.vca: The project page /prj_AGLKS/pg_so/pg_4/pg_mn/pg_1 renamed to /prj_AGLKS/pg_so/pg_4/pg_mn/pg_CM101 like to other ones.
+    !: Main views of the compressors on the main page set active and linked to switch the detail signal object.
+    !: The prescription frames prescrEdit and prescrRun appended to mnemonic schemes of the first signal object.
+- !:FIX:UI.WebVision: Prevented in cycling at presence the Web-session but missing the coresponded VCA-session,
+	as a completion of the previous fix.
+    FIX: The view Table of the primitive FormEl:
+	- fixed in updation at no row;
+	- set to the first visible column for sorting at the sorting enable.
+- FIX:UI.Vision: Fixed in enable the syntax highlighting for initially empty text elements.
+- !!:UI.VCAEngine: The "Diagnostic" page of the VCA-projects adapted to show the debug level messages at enable the debugging.
+    !: The session debug messages appended for messages of the setting events,
+	so removing the need of such messages for in the widget procedures.
+
+
 2021-03-15 Roman (stable)
 - !:LibsDB.OscadaLibs: The common template base.anUnif appended for an option "Force NORM violation at the start".
     "NORMA" renamed to "NORM".
