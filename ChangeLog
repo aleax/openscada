@@ -1,3 +1,15 @@
+2021-03-23 Roman 0.9.3.3
+- !:LibsDB.OscadaLibs: PrescrTempl.manager appended for a feature of pausing prescriptions from the commands-steps.
+- !:Transports: Performance of the IO log preparing was significantly rised by using the preliminary buffer,
+	so currently there is possible of observing logs on 1000 records.
+    The IO log appended of limiting the one processing block size by a new configuration field.
+- DAQ.Value: The Value object prevented from storing NaN real values by replacing them to EVAL,
+    detected on problems of writing by SQL from Archive.DBArch.
+- FIX:UI.QTCfg: Prevented from show empty field of the button area of the TextEdit widget in some cases.
+- !:FIX:UI.VCAEngine: The service request "set:/serv/attr" to the sessions for a group of attributes
+    appended by the events applying in the last of all other attributes setting.
+
+
 2021-03-01 Roman 0.9.3.2
 - !!!!:FIX:Archive.FSArch: Critical fixed in the value archive files processing, in try they ID write to NULL string.
 - !!:FIX:UI.WebVision: Fixed at last in plodding spare DIV items at the page changing in the page containers,

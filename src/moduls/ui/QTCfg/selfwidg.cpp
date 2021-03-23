@@ -480,7 +480,7 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     connect(edFld, SIGNAL(textChanged()), this, SLOT(changed()));
     connect(edFld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()));
     connect(edFld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
-    edFld->move(0, 0); edFld->resize(width(), height());
+    edFld->move(0, 0); edFld->resize(size());
 
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
@@ -574,6 +574,7 @@ void TextEdit::btApply( )
 {
     emit textChanged(text());
     butBox->setVisible((isCh=false));
+    edFld->document()->setModified(isCh);
     edFld->resize(size());
     emit apply();
 }
@@ -581,6 +582,7 @@ void TextEdit::btApply( )
 void TextEdit::btCancel( )
 {
     butBox->setVisible((isCh=false));
+    edFld->document()->setModified(isCh);
     edFld->resize(size());
     emit cancel();
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -764,6 +764,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	case TFld::Boolean:	setB((value!=EVAL_REAL) ? (bool)value : EVAL_BOOL, tm, sys);	break;
 	case TFld::Object:	if(value == EVAL_REAL) setO(new TEValObj(), tm, sys);		break;
 	case TFld::Real: {
+	    if(isnan(value)) value = EVAL_REAL;
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setR(value); return; }
 	    //Check to write
