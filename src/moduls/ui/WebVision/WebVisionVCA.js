@@ -1221,11 +1221,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			formObj.onmousedown = function(e) { this.setModify(true); }
 			formObj.onkeyup = function(e) {
-			    if(!e) e = window.event;
+			    e.stopImmediatePropagation();
 			    if(this.modify() && e.keyCode == 13) this.chApply();
 			    if(this.modify() && e.keyCode == 27) this.chEscape();
 			    if(this.saveVal != this.value) this.setModify(true);
+			    return true;
 			}
+			formObj.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
+			formObj.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 			formObj.modify = function( )
 			{ return (this.parentNode.children[this.parentNode.children.length-1].style.visibility == 'visible'); }
 			formObj.setModify = function(on) {
@@ -1468,7 +1471,17 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
 		    formObj.appendChild(this.place.ownerDocument.createTextNode(this.attrs['value']));
-		    formObj.onkeyup = function( ) { if(this.saveVal != this.value) this.setModify(true); };
+		    formObj.onkeyup = function(e) {
+			e.stopImmediatePropagation();
+			if(this.saveVal != this.value) this.setModify(true);
+			if(this.modify()) {
+			    if(e.keyCode == 13 && e.ctrlKey) this.nextSibling.onclick();
+			    if(e.keyCode == 27) this.nextSibling.nextSibling.onclick();
+			}
+			return true;
+		    };
+		    formObj.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
+		    formObj.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 		    formObj.modify = function( ) { return (this.parentNode.childNodes[1].style.visibility == 'visible'); }
 		    formObj.setModify = function(on) {
 			if(this.modify() == on) return;
@@ -1839,7 +1852,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
 				    }
 				    this.firstChild.onkeyup = function(e) {
-					e = e ? e : window.event;
 					if(e.keyCode == 13 || e.keyCode == 20) {
 					    this.checked = !this.checked;
 					    this.parentNode.offsetParent.setVal((this.checked?1:0), this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
@@ -1857,7 +1869,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    this.innerHTML = (this.outTp == "s") ? "<textarea style='height: "+this.clientHeight+"px;'/>" : "<input/>";
 				    this.firstChild.value = tVl;
 				    this.firstChild.onkeyup = function(e) {
-					e = e ? e : window.event;
+					e.stopImmediatePropagation();
 					if(e.keyCode == 13 && (this.nodeName != "TEXTAREA" || e.ctrlKey))
 					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
 					if(e.keyCode == 27) {
@@ -1866,6 +1878,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					}
 					return true;
 				    }
+				    this.firstChild.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.focus();
 				} else { this.isEnter = false; elTbl.edIt = null; }
@@ -2065,7 +2078,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 				formObj.style.width = ""; formObj.style.tableLayout = "auto";
 				if((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) formObj.style.width = "100%";
-				else this.perUpdtEn(true);
+				else { this.toReFit = toReFit; this.perUpdtEn(true); }
 			    }
 
 			    //Sorting
@@ -2589,14 +2602,14 @@ function perUpdtEn( en )
 	if(en) perUpdtWdgs[this.addr] = this;
 	else delete perUpdtWdgs[this.addr];
     }
-    //for(var i in this.wdgs) this.wdgs[i].perUpdtEn(en);	//!!!! Why that?
+    for(var i in this.wdgs) this.wdgs[i].perUpdtEn(en);	//!!!! To restore updating of elements like to Document after returning from the cache
 }
 
 function perUpdt( )
 {
     if(this.attrs['root'] == 'FormEl') {
-	if(parseInt(this.attrs['elType']) == 9) { //Table type post adjust
-	    if(!(tblWdth=this.place.clientWidth)) return;	//Waiting the table drawing
+	if(parseInt(this.attrs['elType']) == 9 && this.toReFit) {	//Table type post adjust
+	    if(!(tblWdth=this.place.clientWidth)) return;		//Waiting the table drawing
 	    var tblWdthSum = 0;
 	    hdrRow = this.place.childNodes[0].tHead.rows[0];
 	    if(hdrRow.style.display == "none") hdrRow = this.place.childNodes[0].tBodies[0].rows[0];
@@ -2614,6 +2627,7 @@ function perUpdt( )
 	    }
 	    this.place.childNodes[0].style.width = tblWdthSum+"px";
 	    this.place.childNodes[0].style.tableLayout = "fixed";
+	    this.toReFit = false;
 	    this.perUpdtEn(false);
 	}
 	else if(this.place.childNodes.length && this.place.childNodes[0].tmClearEdit && (this.place.childNodes[0].tmClearEdit-=prcTm) <= 0)

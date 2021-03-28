@@ -711,6 +711,7 @@ void TMdContr::redntDataUpdate( )
 
 void *TMdContr::Task( void *icntr )
 {
+    const TSYS::STask &tsk = TSYS::taskDescr();
     string pdu;
     TMdContr &cntr = *(TMdContr *)icntr;
 
@@ -719,7 +720,6 @@ void *TMdContr::Task( void *icntr )
 
     bool isStart = true;
     bool isStop  = false;
-    int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     while(true) {
 	try {
@@ -730,7 +730,8 @@ void *TMdContr::Task( void *icntr )
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		    cntr.pHd[iP].at().upValStd();
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		    cntr.pHd[iP].at().upValLog(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):-1);
+		    cntr.pHd[iP].at().upValLog(isStart, isStop,
+			(isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
 		prmRes.unlock();
 
 		cntr.tmDelay = vmax(0, cntr.tmDelay-(cntr.period()?(1e-9*(float)cntr.period()):1));
@@ -745,7 +746,6 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    cntr.callSt = true;
-	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
 	    /*MtxAlloc resAsWr(cntr.aWrRes, true);
@@ -875,7 +875,8 @@ void *TMdContr::Task( void *icntr )
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		cntr.pHd[iP].at().upValStd();
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		cntr.pHd[iP].at().upValLog(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
+		cntr.pHd[iP].at().upValLog(isStart, isStop,
+		    (isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
 	    isStart = false;
 	    prmRes.unlock();
 
@@ -903,7 +904,6 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //Calc acquisition process time
-	    t_prev = t_cnt;
 	    cntr.callSt = false;
 
 	    }	// !cntr.redntUse()
@@ -1173,7 +1173,7 @@ void TMdPrm::enable( )
 	    if(id_this >= 0) lCtx->setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
 	    // First call
-	    if(owner().startStat() && !owner().redntUse()) upValLog(true, false, 0);
+	    if(owner().startStat() && !owner().redntUse()) upValLog(true, false, DAQ_APER_FRQ);
 
 	} catch(TError &err) { disable(); throw; }
 
@@ -1198,7 +1198,7 @@ void TMdPrm::disable( )
     }
 
     owner().prmEn(this, false);	//Remove from process
-    if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upValLog(false, true, 0);
+    if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upValLog(false, true, DAQ_APER_FRQ);
 
     TParamContr::disable();
 

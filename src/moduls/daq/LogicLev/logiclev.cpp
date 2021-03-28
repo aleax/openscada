@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.5.2"
+#define MOD_VER		"2.5.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -225,7 +225,8 @@ void *TMdContr::Task( void *icntr )
 	    cntr.enRes.lock();
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		try {
-		    cntr.pHd[iP].at().calc(isStart, isStop, tsk.period()?(1/tsk.period()):(cntr.period()?1e9/cntr.period():1));
+		    cntr.pHd[iP].at().calc(isStart, isStop,
+			(isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
 		    if(cntr.messLev() == TMess::Debug) {
 			tCnt2 = TSYS::curTime();
 			cntr.pHd[iP].at().tmCalc = 1e-6*(tCnt2-tCnt1);
@@ -442,7 +443,7 @@ void TMdPrm::enable( )
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
-    if(isStd() && isFullEn && owner().startStat()) calc(true, false, 0);
+    if(isStd() && isFullEn && owner().startStat()) calc(true, false, DAQ_APER_FRQ);
     if(isFullEn) owner().prmEn(this, true);
 }
 
@@ -461,7 +462,7 @@ void TMdPrm::disable( )
 
     if(isPRefl() && prmRefl) prmRefl->free();
     else if(isStd() && tmpl) {
-	if(owner().startStat()) calc(false, true, 0);
+	if(owner().startStat()) calc(false, true, DAQ_APER_FRQ);
 	tmpl->cleanLnks(true);
     }
 

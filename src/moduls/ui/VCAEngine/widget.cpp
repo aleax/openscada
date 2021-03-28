@@ -43,7 +43,7 @@ Widget::~Widget( )
     mtxAttr().lock();
     map<string,Attr*>::iterator p;
     while((p = mAttrs.begin()) != mAttrs.end()) {
-	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
+	for(int iC = 0; iC < 100 && p->second->mConn; iC++)	TSYS::sysSleep(0.01);
 	if(p->second->mConn) mess_err(nodePath().c_str(),_("The attribute '%s' is not released. Forced removal!"),p->first.c_str());
 	delete p->second;
 	mAttrs.erase(p);
@@ -646,7 +646,7 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	mtxAttr().lock();
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end())	throw TError(nodePath().c_str(), _("Attribute '%s' is not present."), attr.c_str());
-	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
+	for(int iC = 0; iC < 100 && p->second->mConn; iC++)	TSYS::sysSleep(0.01);
 	if(p->second->mConn) throw TError(nodePath().c_str(), _("Deleting attribute '%s' has not been released."), attr.c_str());
 
 	int pos = p->second->mOi;
@@ -869,8 +869,8 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 		    }
 	}
 	else if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	//Set values
-	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
-		try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
+	    for(unsigned iCh = 0; iCh < opt->childSize(); iCh++)
+		try{ attrAt(opt->childGet(iCh)->attr("id")).at().setS(opt->childGet(iCh)->text()); }
 		catch(TError&) { }
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD)) {	//Get attributes all updated elements' of the branch

@@ -70,9 +70,9 @@ TCntrNode &WidgetLib::operator=( const TCntrNode &node )
 
     // Copy include pages
     src_n->list(pls);
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
-	if(!present(pls[i_p])) add(pls[i_p],"");
-	(TCntrNode&)at(pls[i_p]).at() = (TCntrNode&)src_n->at(pls[i_p]).at();
+    for(unsigned iP = 0; iP < pls.size(); iP++) {
+	if(!present(pls[iP])) add(pls[iP],"");
+	(TCntrNode&)at(pls[iP]).at() = (TCntrNode&)src_n->at(pls[iP]).at();
     }
 
     return *this;
@@ -894,6 +894,18 @@ CWidget::CWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TCon
 CWidget::~CWidget( )
 {
 
+}
+
+TCntrNode &CWidget::operator=( const TCntrNode &node )
+{
+    Widget::operator=(node);
+
+    if(attrPresent("geomX") && ownerLWdg().attrPresent("geomW"))
+	attrAt("geomX").at().setR(fmax(0,fmin(ownerLWdg().attrAt("geomW").at().getR()-attrAt("geomW").at().getR(),attrAt("geomX").at().getR())));
+    if(attrPresent("geomY") && ownerLWdg().attrPresent("geomH"))
+	attrAt("geomY").at().setR(fmax(0,fmin(ownerLWdg().attrAt("geomH").at().getR()-attrAt("geomH").at().getR(),attrAt("geomY").at().getR())));
+
+    return *this;
 }
 
 string CWidget::path( ) const	{ return "/wlb_"+ownerLWdg().ownerLib().id()+"/wdg_"+ownerLWdg().id()+"/wdg_"+id(); }

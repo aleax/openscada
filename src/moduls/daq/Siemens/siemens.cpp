@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"3.5.2"
+#define MOD_VER		"3.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1442,6 +1442,7 @@ int TMdContr::valSize( const string &itp )
 
 void *TMdContr::Task( void *icntr )
 {
+    const TSYS::STask &tsk = TSYS::taskDescr();
     TMdContr &cntr = *(TMdContr*)icntr;
 
     cntr.endrunReq = false;
@@ -1449,7 +1450,6 @@ void *TMdContr::Task( void *icntr )
 
     bool isStart = true;
     bool isStop  = false;
-    int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     try {
 	while(true) {
@@ -1457,15 +1457,17 @@ void *TMdContr::Task( void *icntr )
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc res1(cntr.enRes, true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		    try { cntr.pHd[iP].at().calc(isStart, isStop, cntr.period()?1:-1); }
-		    catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		    try {
+			cntr.pHd[iP].at().calc(isStart, isStop,
+			    (isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
+		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		res1.unlock();
 
 		cntr.tmDelay = vmax(0, cntr.tmDelay-1);
 
 		if(isStop) break;
 
-		TSYS::taskSleep(1000000000);
+		TSYS::taskSleep(cntr.period()?cntr.period():1e9);
 
 		if(cntr.endrunReq) isStop = true;
 		isStart = false;
@@ -1474,7 +1476,6 @@ void *TMdContr::Task( void *icntr )
 	    else if(cntr.tmDelay == 0) cntr.conErr = _("Connecting.");
 
 	    cntr.callSt = true;
-	    if(!cntr.period()) t_cnt = TSYS::curTime();
 
 	    //Update controller's data
 	    //Process write data blocks
@@ -1503,8 +1504,10 @@ void *TMdContr::Task( void *icntr )
 	    //Calc parameters
 	    MtxAlloc res1(cntr.enRes, true);
 	    for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
-		try{ cntr.pHd[i_p].at().calc(isStart,isStop,cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
-		catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		try {
+		    cntr.pHd[i_p].at().calc(isStart, isStop,
+			(isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
+		} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    res1.unlock();
 
 	    //Generic acquisition alarm generate
@@ -1516,7 +1519,6 @@ void *TMdContr::Task( void *icntr )
 		cntr.tmDelay--;
 	    }
 
-	    t_prev = t_cnt;
 	    cntr.callSt = false;
 
 	    if(isStop) break;
@@ -1736,7 +1738,7 @@ void TMdPrm::enable( )
 	if(to_make)	loadIO(true);
 
 	// Set to process
-	if(owner().startStat())	calc(true, false, 0);
+	if(owner().startStat())	calc(true, false, DAQ_APER_FRQ);
 
     } catch(TError &err) { disable(); throw; }
 
@@ -1754,7 +1756,7 @@ void TMdPrm::disable( )
 
     //Unregister parameter
     owner().prmEn(id(), false);
-    if(owner().startStat()) calc(false, true, 0);
+    if(owner().startStat()) calc(false, true, DAQ_APER_FRQ);
 
     //Template's function disconnect
     cleanLnks(true);

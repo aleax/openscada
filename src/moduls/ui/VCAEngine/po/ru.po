@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-21 11:28+0200\n"
+"POT-Creation-Date: 2021-03-26 15:29+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1555,8 +1555,8 @@ msgid ""
 "Error compiling the function '%s' by the language '%s' for the widget: %s"
 msgstr "Ошибка компиляции функции '%s' на языке '%s' для виджета: %s"
 
-msgid "Processing. "
-msgstr "Обработка. "
+msgid "Processing at %s. "
+msgstr "Обработка в %s. "
 
 msgid "Spent time on the branch: "
 msgstr "Затрачено времени на ветвь: "
@@ -1567,6 +1567,7 @@ msgstr "элемент: "
 msgid "It is a try of creating a widget in depth bigger to 10!"
 msgstr "Попытка создания виджета на глубину более 10!"
 
+#, c-format
 msgid "Events: %s"
 msgstr "События: %s"
 
@@ -1575,6 +1576,9 @@ msgstr "Ошибка вычисления виджета. Обработка о�
 
 msgid "Processing"
 msgstr "Обработка"
+
+msgid "Processing. "
+msgstr "Обработка. "
 
 msgid "Engine of the visual control area"
 msgstr "Движок среды визуализации и управления"

@@ -806,11 +806,12 @@ In the runtime mode, the year, month, and day are displayed according to the "se
 <table class="wikitable">
 
 <tr>
-<td> <span id="RootPgSo" title="#RootPgSo"><h2><span class="mw-headline" id="Root_page_.28SO.29_.28RootPgSo.29"><span class="mw-headline-number">2</span> Root page (SO) (<a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">RootPgSo</a>)</span></h2></span> </td>
-<td> 2.2 </td>
+<td> <span id="RootPgSo" title="#RootPgSo"><h2><span class="mw-headline" id="Root_page_.28SO.29_.28RootPgSo.29"><span class="mw-headline-number">2</span> Root page (SO) (<a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">RootPgSo</a>)</span></h2></span>
+</td>
+<td> 2.4 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -828,6 +829,7 @@ In the runtime mode, the year, month, and day are displayed according to the "se
 </p><p>The buttons area of the types of view is dynamic, in the sense of occupying the space of the missing ones, and the meaning of the types of view themselves are configured to different from the default value, i.e. there are two main types of view (view1 and view2), three auxiliary (view3, view4 and view5), as well as one common to the whole interface (view6).
 </p><p>Below are also the buttons of quietation those appear in the event of violations, and at the top is a customizable logo.
 </p><p><i>Container of the main frames of the user interface</i> — the area of the container for inclusion in it of the basic frames by their choice of buttons of types of view or change of the signal object.
+</p><p><i><a href="#alarmsAct">The generic table of active violations</a></i> — contains coloured rows of actual alarms sorted by their importance with the more important on the top. The widget disabled initially.
 </p><p><i>Container of the control panels</i> — container area to include control panels of various objects in the container area of the main frames, for example — panel of the parameter, document, graph and more.
 </p><p>Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 </p>
@@ -850,18 +852,19 @@ This widget can be used only in the root page mode that should be placed in the 
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Identifiers of the pages of the types of view, specified as [<b>view1</b>|<b>mn</b>], must be specified in the tree either in the new scheme "view1" or in the old scheme "mn". Mixing is not supported!
 </p><p>As the text of the signal object buttons, there are used name of the logical container with the corresponding <i>n</i> identifier. The description of this container also takes the text of the tooltip to this button if it is not empty. Description of the container also taken into tooltip for this button, if it is not empty.
 </p><p>All further adjustments and edits around this frame must be made for its copy-link in the project tree, and it is strongly not recommended to edit it in the library, otherwise you will lose the ability to update the library or these changes when updating it!
-</p><p>The text and the tooltip of the buttons of the types of view are directly changed in the corresponding properties of these widgets. The fast keys of the type of view are taken from the toolbar brackets, such as "Graphs (Ctrl+G)", and processed accordingly. To change the image of the type of view, it is enough to override the icon of the corresponding view, such as "view1", by loading the image with the appropriate name in the project Mime-data.
+</p><p>The text and the tooltip of the buttons of the types of view are directly changed in the corresponding properties of these widgets. The fast keys of the type of view are taken from the toolbar brackets, such as "Graphs (CtrlAlt+G)", and processed accordingly. To change the image of the type of view, it is enough to override the icon of the corresponding view, such as "view1", by loading the image with the appropriate name in the project Mime-data.
+</p><p>To enable <a href="#alarmsAct">the generic table of active violations</a> just set <b>1 (one)</b> in the frame links configuration for "alarms &gt; en".
+</p><p>To enable and configure the returning to some non privilege user after some time of the inactivity just set <b>{minutes)-{user}</b> in the frame links configuration for "defUser".
 </p><p>You can change the image of the logo in the same way as the image of the type of view, that is, upload a new image called "logo" to the project's Mime-data, and then adjust the geometry of the logo widget to the desired proportions. You can move the image widget to the left by moving the signal object button to the right by the size of the logo. If you do not need the logo at all then to nullify the widget width, but do not remove it!
 </p><p>Potentially, you can also move the navigation bar and the control panel container to the left by moving the main frame container, and maybe the signal object button, to the right.
-</p><p>If necessary, the root page can be appended with additional elements that do not require special processing, that is, changes to the initial procedure of the frame, that is no longer using but editing. For example, the root page is often appended by <a href="#alarmsAct">the generic table of active violations</a>, that can be placed under the main frame container at its entire width, reducing its height by the desired size of the table. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> It should be noted here that reducing the size of this container, like any other, will lead to the appearance of scrollbars and-or will require adjusting the frames of placement in the container. In the example above, this may not be necessary given the extension of the container to unused button rows of the signal objects.
-</p><p>In the absence of the Demo-mode, you may turn off the Demo launch button and expand the control panel.
+</p><p>If necessary, the root page can be appended with additional elements that do not require special processing, that is, changes to the initial procedure of the frame, that is no longer using but editing. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> It should be noted here that reducing the size of the containers will lead to the appearance of scrollbars and-or will require adjusting the frames of placement in the container but this may not be necessary given the extension of the container to unused button rows of the signal objects.
 </p><p><b><u>Using — runtime</u></b><br />
 When starting the frame in the runtime mode, there are first constructed the buttons of the signal objects, which are formed in two rows, after which the container of the main frames expands up for one row if there is enough one, or for two if the signal object is one. Next, there are formed buttons of the types of view, present of which are activated and expanded to fill the space of the missing ones.
 </p><p>After the dynamic forming, the frame periodically controls the frame change in the main frame container, which is displayed by the corresponding background color in a button of the signal object and the type of view to which the frame belongs. Between the listing buttons, information about the total number of frames and the current position is updated, and the buttons themselves are activated according to the possibility of listing in the current frame position. For the combobox of direct frames selection from list, respectively, the current list of frames is formed and the name of the current one is set. It also monitors the status of violation-notification of the signal objects, which is accordingly displayed by the text color of the buttons of the signal object and its flashing, as well as the quietation buttons are activated or deactivated.
 </p><p>Changing of the frame in the control panel container are not tracked and their are generally called from the main frame interface, unless it is cleared by changing the main frame by opening the panel-terminator.
-</p><p>From the basic actions, the frame allows the user to select the signal object, the type of view and the corresponding frame. By pressing the button of the signal object, the type of view, directly selecting in the combobox or listing; resulting in a call to the corresponding frame in the main frame container. From the ancillary actions, the user can quiet the violation-notification and start the Demo-mode, if one provided. The default frame setting involves servicing a number of hotkeys, such as <b>Ctrl+[1...0]</b> to call the signal objects 1 to 10, and <b>Ctrl+[MGCVDR]</b> to call appropriate types of view.
+</p><p>From the basic actions, the frame allows the user to select the signal object, the type of view and the corresponding frame. By pressing the button of the signal object, the type of view, directly selecting in the combobox or listing; resulting in a call to the corresponding frame in the main frame container. From the ancillary actions, the user can quiet the violation-notification and start the Demo-mode, if one provided. The default frame setting involves servicing a number of hotkeys, such as <b>CtrlAlt+[1...0]</b> to call the signal objects 1 to 10, and <b>CtrlAlt+[MGCVDR]</b> to call appropriate types of view.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_RootPgSoR.png"><img class="thumbimage" height="670" src="files/LibMainEls_RootPgSoR.png" width="1024" /></a>  <div class="thumbcaption">Fig.2b. The "Root page (SO)" frame in the runtime mode.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1037px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_RootPgSoR.png"><img class="thumbimage" height="675" src="files/LibMainEls_RootPgSoR.png" width="1035" /></a>  <div class="thumbcaption">Fig.2b. The "Root page (SO)" frame in the runtime mode.</div></div></div></div>
 <p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -872,6 +875,18 @@ When starting the frame in the runtime mode, there are first constructed the but
 <th> Type </th>
 <th> Description
 </th></tr>
+<tr>
+<td> alarms &gt; en (config) </td>
+<td> Alarms &gt; Enabled </td>
+<td> Boolean </td>
+<td> <a href="#alarmsAct">The generic table of active violations</a> enabling
+</td></tr>
+<tr>
+<td> defUser (config) </td>
+<td> Default to return, {minutes)-{user} </td>
+<td> String </td>
+<td> Enabling and configuring the returning to some non privilege user after some time of the inactivity by the string <b>{minutes)-{user}</b>.
+</td></tr>
 <tr>
 <td> demoPlayProc </td>
 <td> Procedure of the Demo play </td>
@@ -921,26 +936,20 @@ When starting the frame in the runtime mode, there are first constructed the but
 <td colspan="4"> <i>Main procedures of <a href="Modules/VCAEngine.html#Alarms" title="Special:MyLanguage/Modules/VCAEngine">the notification mechanism</a></i>
 </td></tr>
 <tr>
+<td> notify0 </td>
+<td> Notification: type 0 (Light) </td>
+<td> Text </td>
+<td>
+</td></tr>
+<tr>
+<td> notify1 </td>
+<td> Notification: type 1 (Buzzer) </td>
+<td> Text </td>
+<td>
+</td></tr>
+<tr>
 <td> notify2 </td>
 <td> Notification: type 2 (TextSpeech) </td>
-<td> Text </td>
-<td>
-</td></tr>
-<tr>
-<td> notifyVisVision0 </td>
-<td> Notification: Vision type 0 (Light) </td>
-<td> Text </td>
-<td>
-</td></tr>
-<tr>
-<td> notifyVisVision1 </td>
-<td> Notification: Vision type 1 (Buzzer) </td>
-<td> Text </td>
-<td>
-</td></tr>
-<tr>
-<td> notifyVisVision2 </td>
-<td> Notification: Vision type 2 (TextSpeech) </td>
 <td> Text </td>
 <td>
 </td></tr></table>

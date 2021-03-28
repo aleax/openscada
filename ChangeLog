@@ -1,3 +1,28 @@
+2021-03-28 Roman (stable)
+- !!:LibsDB.vcaBase,AGLKS.vca:
+    Main.RootPgSo: Appended for:
+	- the widget "alarms" on the primitive "Protocol" basis with the possibility of enable/disable;
+	- appended for an optional function of returning to a default user after specified time in a new attribute "defUser";
+	- switched to a non relative algorithm of the main mnemonic scheme's vertical position and height calculation.
+- LibsDB.vcaBase: Main.storeHouse: appended for the edition permition by the rule "root:ITW>RWRW__" for
+	the edition switching buttons btClassEdit and btEdit, with disabling by default and at the user changing.
+- !!:FIX:SYS: The EVAL_RFlt definition appended for the suffix "f" to prevent of wrong comparing the double EVAL_RFlt
+    with stored float values, fixes the archiver Archive.FSArch work with the float type values in the EVAL detection.
+- SYS,DAQ.{LogicLev,ModBus,Siemens}: Appended and used for a global constant DAQ_APER_FRQ
+    of frequency of representing the aperiodic invokes, like to f_start, of the periodic processes.
+- !!:DAQ.{ModBus,Siemens}: Switched in "f_frq" value form to use the real task execution information.
+- DAQ.Siemens: The waiting connection cycle switched to use the common period or 1 second for aperiodic scheduling.
+- !!:UI.VCAEngine: The project session execution information appended for the real periodicity taken from the task,
+	which also used in form value of the procedure attribute "f_frq"
+    Included widgets of the containers copying appended for adjustement the end position to ensure the visibility.
+- !!:FIX:UI.WebVision: The primitive "Document" building restored at switching into the mnemonic schemes,
+	by restorring of enabling child widgets in perUpdtEn()
+	and preventing the view "Table" of the primitive "FormEl" call here with no need of the refitting.
+    The view "LineEdit", "TextEdit", "Table" of the primitive FormEl disabled
+	for propagation the keyboard events in the edition mode, to prevent very big setting spare traffic.
+    The view "Table" of the primitive FormEl allowed for the system-browser context menu.
+
+
 2021-03-22 Roman (stable)
 - !:LibsDB.OscadaLibs: PrescrTempl.manager appended for a feature of pausing prescriptions from the commands-steps.
 - !!:AGLKS.vca: The project page /prj_AGLKS/pg_so/pg_4/pg_mn/pg_1 renamed to /prj_AGLKS/pg_so/pg_4/pg_mn/pg_CM101 like to other ones.

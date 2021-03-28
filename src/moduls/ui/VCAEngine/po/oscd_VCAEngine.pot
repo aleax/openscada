@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-21 11:28+0200\n"
+"POT-Creation-Date: 2021-03-26 15:29+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1231,7 +1231,8 @@ msgstr ""
 msgid "Error compiling the function '%s' by the language '%s' for the widget: %s"
 msgstr ""
 
-msgid "Processing. "
+#, c-format
+msgid "Processing at %s. "
 msgstr ""
 
 msgid "Spent time on the branch: "
@@ -1251,6 +1252,9 @@ msgid "Error calculating the widget. Process is disabled."
 msgstr ""
 
 msgid "Processing"
+msgstr ""
+
+msgid "Processing. "
 msgstr ""
 
 msgid "Engine of the visual control area"

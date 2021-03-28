@@ -1690,6 +1690,11 @@ TCntrNode &PageWdg::operator=( const TCntrNode &node )
 
     Widget::operator=(node);
 
+    if(attrPresent("geomX") && ownerPage().attrPresent("geomW"))
+	attrAt("geomX").at().setR(fmax(0,fmin(ownerPage().attrAt("geomW").at().getR()-attrAt("geomW").at().getR(),attrAt("geomX").at().getR())));
+    if(attrPresent("geomY") && ownerPage().attrPresent("geomH"))
+	attrAt("geomY").at().setR(fmax(0,fmin(ownerPage().attrAt("geomH").at().getR()-attrAt("geomH").at().getR(),attrAt("geomY").at().getR())));
+
     return *this;
 }
 

@@ -35,7 +35,7 @@ using namespace VCA;
 //************************************************
 Session::Session( const string &iid, const string &iproj ) : mAlrmRes(true), mCalcRes(true), mDataRes(true),
     mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataResSes()), mReqUser(dataResSes()), mReqLang(dataResSes()),
-    mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
+    mPer(100), mPerReal(0), mPermit(RWRWR_), mEnable(false), mStart(false),
     endrunReq(false), mBackgrnd(false), mConnects(0), mCalcClk(10), mReqTm(0), mUserActTm(0), mStyleIdW(-1)
 {
     mUser = "root";
@@ -254,6 +254,8 @@ bool Session::modifChk( unsigned int tm, unsigned int iMdfClc, bool isCnt )
 }
 
 string Session::ico( ) const		{ return (!parent().freeStat()) ? parent().at().ico() : ""; }
+
+int Session::period( bool isReal )	{ return (isReal && mPerReal) ? mPerReal : vmax(1, mPer); }
 
 AutoHD<Project> Session::parent( ) const{ return mParent; }
 
@@ -505,6 +507,7 @@ void Session::ntfReg( int8_t tp, const string &props, const string &pgCrtor )
 
 void *Session::Task( void *icontr )
 {
+    const TSYS::STask &tsk = TSYS::taskDescr();
     vector<string> pls;
     Session &ses = *(Session *)icontr;
 
@@ -513,6 +516,8 @@ void *Session::Task( void *icontr )
 
     ses.list(pls);
     while(!ses.endrunReq) {
+	ses.mPerReal = 1e-6*tsk.period();
+
 	//Calc session pages and all other items at recursion
 	for(unsigned iL = 0; iL < pls.size(); iL++)
 	    try { ses.at(pls[iL]).at().calc(false, false, iL); }
@@ -729,6 +734,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/obj/cfg/per",_("Period, milliseconds"),permit(),owner().c_str(),grp().c_str(),1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/obj/cfg/perReal","",R_R_R_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/obj/cfg/style",_("Style"),permit(),owner().c_str(),grp().c_str(),3,
 		    "tp","dec","dest","select","select","/obj/cfg/stLst");
 		ctrMkNode("list",opt,-1,"/obj/cfg/openPg",_("Opened pages"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -780,6 +786,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(period()));
 	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setPeriod(s2i(opt->text()));
     }
+    else if(a_path == "/obj/cfg/perReal" && ctrChkNode(opt))	opt->setText(i2s(period(true)));
     else if(a_path == "/obj/cfg/style") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(stlCurent()));
 	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_RD))	stlCurentSet(s2i(opt->text()));
@@ -1784,7 +1791,8 @@ string SessWdg::ico( ) const		{ return parent().freeStat() ? "" : parent().at().
 string SessWdg::getStatus( )
 {
     string rez = Widget::getStatus();
-    if(process())	rez += _("Processing. ");
+    if(process())
+	rez += TSYS::strMess(_("Processing at %s. "), TSYS::time2str(1e-3*((calcPer()>0)?calcPer():ownerSess()->period())).c_str());
     if(mess_lev() == TMess::Debug)
 	rez += _("Spent time on the branch: ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("the item: ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
 
@@ -2065,16 +2073,17 @@ void SessWdg::calc( bool first, bool last, int pos )
 
     try {
 	int pgOpenPrc = -1;
-	int64_t tCnt = 0;
-	bool isPer = false;
 
-	if(mess_lev() == TMess::Debug) tCnt = TSYS::curTime();
+	bool isPer = false;
 
 	//Processing
 	if((isPer=!((mCalcClk+pos)%(vmax(calcPer()/ownerSess()->period(),1))))	//at own period
 		|| first || last	//at start or stop
 		|| eventGet().size())	//early processing for events and what allows to set the own period in big
 	{
+	    int64_t tCnt = 0;
+	    if(mess_lev() == TMess::Debug) tCnt = TSYS::curTime();
+
 	    // Load events to process
 	    string wevent = eventGet(true);
 
@@ -2135,7 +2144,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 		// Load the data to the calc area
 		TValFunc::setUser(ownerSess()->reqUser());
 		TValFunc::setLang(ownerSess()->reqLang());
-		setR(SpIO_Frq, isPer ? 1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)) : -1);
+		setR(SpIO_Frq, 1000/(isPer?ownerSess()->period(true)*vmax(calcPer()/ownerSess()->period(true),1):ownerSess()->period(true)));
 		setB(SpIO_Start, first);
 		setB(SpIO_Stop, last);
 		for(int iIO = SpIO_Sz; iIO < ioSize(); iIO++) {

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=62887&amp;diff=63126" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -264,6 +264,7 @@ Information variables of the program:
 <p><b>Templates/definitions:</b>
 </p>
 <ul><li> <i>NSTR_BUF_LEN</i> — Length of string buffers for numbers (50 symbols).</li>
+<li> <i>DAQ_APER_FRQ</i> — Frequency of representing the aperiodic invokes, like to "f_start", of the periodic processes in Hz (1000000).</li>
 <li> <i>BUF_ARCH_NM</i> — The archive buffer name ("&lt;buffer&gt;").</li>
 <li> <i>ALRM_ARCH_NM</i> — The alarms table name ("&lt;alarms&gt;").</li>
 <li> <i>ALRM_ARCH_CH_NM</i> — The alarms table name ("&lt;alarmsChange&gt;") just for changing.</li>
@@ -2213,7 +2214,7 @@ Error values for the different data types (define):
 <li> <i>EVAL_INT16</i> — Error value of the integer 16 type (-32767);</li>
 <li> <i>EVAL_INT32</i> — Error value of the integer 32 type (-2147483647);</li>
 <li> <i>EVAL_INT64</i> — Error value of the integer 64 type (-9223372036854775807ll);</li>
-<li> <i>EVAL_RFlt</i> — Error value of the real type Float (-3.29E38);</li>
+<li> <i>EVAL_RFlt</i> — Error value of the real type Float (-3.29E38f);</li>
 <li> <i>EVAL_RDbl</i> — Error value of the real type Double (-1.79E308).</li></ul>
 <p>Типы данных (enum — TVariant::Type):
 </p>

@@ -855,7 +855,7 @@ int64_t ModVArchEl::begin( )
 
 void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
-    //Request by single values for most big buffer period
+    //Request by single values for very big buffer period
     if(buf.period()/100 > (int64_t)(archivator().valPeriod()*1e6)) {
 	ibeg = (ibeg/buf.period())*buf.period();
 	for(int64_t ctm; ibeg <= iend; ibeg += buf.period()) {
@@ -870,7 +870,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
     for(unsigned iA = 0; iA < files.size(); iA++)
 	if(ibeg > iend) break;
 	else if(!files[iA]->err() && ibeg <= files[iA]->end() && iend >= files[iA]->begin()) {
-	    for( ; ibeg < files[iA]->begin(); ibeg += files[iA]->period()) buf.setI(EVAL_INT,ibeg);
+	    for( ; ibeg < files[iA]->begin(); ibeg += files[iA]->period()) buf.setI(EVAL_INT, ibeg);
 	    files[iA]->getVals(buf, ibeg, vmin(iend,files[iA]->end()));
 	    ibeg = files[iA]->end()+files[iA]->period();
 	}

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1126,7 +1126,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 
 TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool onlyLocal )
 {
-    //Get from buffer
+    //Get from the buffer
     if((arch.empty() || arch == BUF_ARCH_NM) && (!tm || (begin() && *tm >= begin() && end() /*&& *tm <= end()*/)))
 	switch(TValBuf::valType()) {
 	    case TFld::Integer:	return TValBuf::getI(tm, up_ord);
@@ -2097,19 +2097,19 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 
 	    vector<string> t_arch_ls, arch_ls;
 	    owner().modList(t_arch_ls);
-	    for(unsigned i_ta = 0; i_ta < t_arch_ls.size(); i_ta++) {
-		owner().at(t_arch_ls[i_ta]).at().valList(arch_ls);
+	    for(unsigned iTa = 0; iTa < t_arch_ls.size(); iTa++) {
+		owner().at(t_arch_ls[iTa]).at().valList(arch_ls);
 		for(unsigned iA = 0; iA < arch_ls.size(); iA++) {
 		    TVArchEl *a_el = NULL;
 		    //Find attached
 		    ResAlloc res(aRes, false);
 		    for(unsigned iL = 0; iL < archEl.size(); iL++)
-			if(archEl[iL]->archivator().owner().modId() == t_arch_ls[i_ta] && archEl[iL]->archivator().id() == arch_ls[iA])
+			if(archEl[iL]->archivator().owner().modId() == t_arch_ls[iTa] && archEl[iL]->archivator().id() == arch_ls[iA])
 			    a_el = archEl[iL];
 		    //Fill table element
-		    if(n_arch)	n_arch->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[iA]).at().workId());
-		    if(n_start)	n_start->childAdd("el")->setText(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[iA]).at().startStat()?"1":"0");
-		    if(n_per)	n_per->childAdd("el")->setText(r2s(owner().at(t_arch_ls[i_ta]).at().valAt(arch_ls[iA]).at().valPeriod(),6));
+		    if(n_arch)	n_arch->childAdd("el")->setText(owner().at(t_arch_ls[iTa]).at().valAt(arch_ls[iA]).at().workId());
+		    if(n_start)	n_start->childAdd("el")->setText(owner().at(t_arch_ls[iTa]).at().valAt(arch_ls[iA]).at().startStat()?"1":"0");
+		    if(n_per)	n_per->childAdd("el")->setText(r2s(owner().at(t_arch_ls[iTa]).at().valAt(arch_ls[iA]).at().valPeriod(),6));
 		    if(a_el) {
 			if(n_prc) n_prc->childAdd("el")->setText("1");
 			if(n_end)
@@ -2199,7 +2199,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	int64_t c_tm = buf.begin();
 	if(buf.end() && buf.begin())
 	    while(c_tm <= buf.end()) {
-	        string val = buf.getS(&c_tm,true);
+	        string val = buf.getS(&c_tm, true);
 		if(n_tm) n_tm->childIns(0,"el")->setText(i2s(c_tm/1000000));
 		if(n_tm) n_utm->childIns(0,"el")->setText(i2s(c_tm%1000000));
 		if(n_val)n_val->childIns(0,"el")->setText(val);
@@ -2542,7 +2542,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
     getValsProc(buf, ibeg, iend);
 
     //Check for holes fill
-    // Check for redundant allow
+    // Check for the redundancy allowing
     if(!onlyLocal && archive().startStat() && buf.evalCnt() > ecnt && SYS->rdActive() &&
 	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::PassiveAttr))
     {
@@ -2620,7 +2620,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 			    if(prevPos > (bend-bbeg)/bper) break;
 			}
 
-			//Put buffer part to archive
+			//Put buffer part to the archive
 			if(noEvalOk)	setVals(buf, firstEval, curEval);
 		    }
 		    if(!lstStat.empty() && evalOk) goto reqCall;

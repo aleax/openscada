@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-21 11:28+0200\n"
+"POT-Creation-Date: 2021-03-26 15:29+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1568,8 +1568,8 @@ msgid ""
 msgstr ""
 "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
-msgid "Processing. "
-msgstr "Wird bearbeitet. "
+msgid "Processing at %s. "
+msgstr "Verarbeitung bei %s. "
 
 msgid "Spent time on the branch: "
 msgstr "Verbrachte Zeit in der Branche: "
@@ -1581,6 +1581,7 @@ msgid "It is a try of creating a widget in depth bigger to 10!"
 msgstr ""
 "Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
 
+#, c-format
 msgid "Events: %s"
 msgstr "Ereignisse: %s"
 
@@ -1589,6 +1590,9 @@ msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
 
 msgid "Processing"
 msgstr "Bearbeitung"
+
+msgid "Processing. "
+msgstr "Wird bearbeitet. "
 
 msgid "Engine of the visual control area"
 msgstr "Motor der visuellen Kontrollzone"

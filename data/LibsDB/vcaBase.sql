@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.0.6
+Version: 2.0.8
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.0.6
+Версія: 2.0.8
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.0.6
+Версия: 2.0.8
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -222,6 +222,7 @@ INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_pane
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','prev1','/wlb_Main/wdg_doc_panel/wdg_prev1','owner;value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','owner;value;');
 INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_control/pg_doc_panel','tmTp','/wlb_Main/wdg_doc_panel/wdg_tmTp','owner;');
+INSERT INTO prj_archBrowser_incl VALUES('/prj_archBrowser/pg_so','alarms','/wlb_Main/wdg_RootPgSo/wdg_alarms','');
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control','name','','Control panels',0,'','','Панели управления','','','Панелі керування','','');
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control/pg_graphSelPrm','value','color','',8,'','','','','','','','');
@@ -366,7 +367,7 @@ INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc/pg_mes
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_so/pg_1/pg_doc/pg_messRep','messCat','','1:*',40,'','','','','','','','');
 INSERT INTO prj_archBrowser_io VALUES('/prj_archBrowser/pg_control/pg_graphCalc','owner','','root:op',32,'','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','geomH;pgGrp;',2);
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','pgGrp;',2);
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW','pgGrp;',2);
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','date','/wlb_Main/wdg_doc_panel/wdg_date','value;',2);
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_control/pg_doc_panel','size','/wlb_Main/wdg_doc_panel/wdg_size','value;',2);
@@ -566,7 +567,7 @@ INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8','owner;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9','owner;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name','owner;','');
-INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','alarms','/wlb_originals/wdg_Protocol','owner;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;','');
+INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so','alarms','/wlb_Main/wdg_RootPgSo/wdg_alarms','','');
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -1365,24 +1366,6 @@ INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_2/pg_view2/pg_1','sclWin'
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_control/pg_graphCalc','owner','root:op',32,'','','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','dbDB','',34,'Controller|dbDB','prm:/LogicLev/prescription/manager/dbDB','prescrRunSimple','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view1/pg_1','dbProgs','',34,'Controller|dbProgs','prm:/LogicLev/prescription/manager/dbProgs','prescrRunSimple','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','owner','root:op',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomX','4',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomY','605',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomW','900',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomH','65',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomZ','39',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','headVis','0',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','tSize','0',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','trcPer','1',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','lev','-1',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','viewOrd','5',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','col','tm;cat;mess',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','itProp','3',32,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it0lev','5',0,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it0color','gray',0,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it1lev','4',0,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it1color','red',0,'','','alarms','','','','','','');
-INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','it2color','yellow',0,'','','alarms','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so','geomH','551',32,'','','pgCont','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view2','geomYsc','0.96',32,'','','','','','','','','');
 INSERT INTO prj_tmplSO_io VALUES('/prj_tmplSO/pg_so/pg_1/pg_view3','geomYsc','0.96',32,'','','','','','','','','');
@@ -1845,8 +1828,9 @@ INSERT INTO wlb_Main_incl VALUES('storeHouse','dataTbl','/wlb_originals/wdg_Form
 INSERT INTO wlb_Main_incl VALUES('storeHouse','classEd','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;font;','');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','classNm','/wlb_originals/wdg_Text','owner;geomX;geomW;geomH;geomZ;font;alignment;text;','');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','classSel','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','btClassEdit','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl','owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','btClassEdit','/wlb_originals/wdg_FormEl','owner;perm;en;active;geomX;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','alarms','/wlb_originals/wdg_Protocol','owner;en;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadre',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -2069,7 +2053,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.3.0
+Version: 2.4.0
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -2097,7 +2081,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.3.0
+Версія: 2.4.0
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -2127,10 +2111,10 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.3.0
+Версия: 2.4.0
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',32,'','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','backColor','gray',96,'','','','','backColor','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','name','',32,'','','cvt_sound','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','en','1',40,'','','cvt_sound','','','','','','');
@@ -2971,7 +2955,7 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','img','aSound',0,'','','cvt_sound','',
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomX','6',32,'','','pgCont','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomY','59',32,'','','pgCont','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','900',32,'','','pgCont','','','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','610',32,'','','pgCont','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','551',32,'','','pgCont','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','22',32,'','','pgCont','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','pgOpenSrc','',40,'','','pgCont','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','pgGrp','so',32,'','','pgCont','','','','','','');
@@ -8598,7 +8582,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','items','',8,'','','classSel','','',
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','classSel','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','14',32,'','','play','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','2',32,'','','date','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:ITW',32,'','','btClassEdit','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btClassEdit','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','722',32,'','','btClassEdit','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','20',32,'','','btClassEdit','','','','','','');
@@ -8611,7 +8595,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','value','0',8,'','','btClassEdit',''
 INSERT INTO wlb_Main_io VALUES('storeHouse','img','edit',0,'','','btClassEdit','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','mode','1',0,'','','btClassEdit','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','btClassEdit','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:ITW',32,'','','btEdit','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','name','Edit',32,'','','btEdit','Редагувати','','Редактировать','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btEdit','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','810',32,'','','btEdit','','','','','','');
@@ -8630,6 +8614,27 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the storehouse class
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Edit the storehouse',32,'','','btEdit','Редагувати склад','','Редактировать склад','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Select present or enter ID of the new storehouse class for editing',32,'','','classEd','Обрати наявний або ввести ІД нового класу складу для редагування','','Выбрать присутствующий или ввести ИД нового класса склада для редактирования','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Select the storehouse class',32,'','','classSel','Обрати клас складу','','Выбрать класс склада','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','perm','432',32,'','','btClassEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','perm','432',32,'','','btEdit','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','owner','root:UI',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','en','0',41,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomX','4',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomY','609',40,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','900',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','61',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','33',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','headVis','0',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','tSize','0',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','trcPer','1',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','lev','-1',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','viewOrd','5',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','col','tm;cat;mess',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','itProp','3',32,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','it0lev','5',0,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','it0color','gray',0,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','it1lev','4',0,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','it1color','red',0,'','','alarms','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','it2color','yellow',0,'','','alarms','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -12583,6 +12588,8 @@ INSERT INTO wlb_Main_uio VALUES('storeHouse','class','Class: initial',131077,'',
 INSERT INTO wlb_Main_uio VALUES('storeHouse','classFix','Class: fixed',131077,'',9,'Class','','','Клас: фіксований','','Клас','Класс: фиксированный','','Класс','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','classEditable','Class: editable',131072,'0',9,'Class','','','Клас: редагований','','Клас','Класс: редактированный','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','dataEditable','Data: editable',131072,'0',9,'','','','Дані: редаговане','','','Данные: редактированный','','','','');
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','defUser','Default to return, {minutes)-{user}',131077,'',9,'','','','Типово для повернення, {хвилини)-{користувач}','','','Типичное для возврата, {минут)-{пользователь}','','','','');
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','userSetVis','User setting',131077,'',8,'','','','Встановлення користувача','','','Установка пользователя','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
 INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
@@ -21298,6 +21305,7 @@ calcCnt++;
 
 if(f_start) {
 	play_en = demoPlayProc.length;
+	if(!play_en)	this.infoW.attrSet("geomH",this.play.attr("geomY")+this.play.attr("geomH")-this.infoW.attr("geomY"));
 	//Checking the signal object''s presenting and creating needed
 	soLst = this.nodeList("pg_"); soLstS = new Object();
 	for(i = 0; i < soLst.length; i++)
@@ -21388,11 +21396,10 @@ if(f_start) {
 		soOff += soNmSz;
 		i++;
 	}
-	if(row1 == 1 || !row2) {
-		soOff = soY2 - soY;
-		if(row1 == 1)	soOff = soOff*2;
-		this.pgCont.attrSet("geomY",this.pgCont.attr("geomY")-soOff).attrSet("geomH",this.pgCont.attr("geomH")+soOff);
-	}
+	if(row1 == 1)		soOff = soY;
+	else if(!row2)	soOff = soY2 - soInterSpecY;
+	else soOff = soY2 + this.so1.attr("geomH");
+	this.pgCont.attrSet("geomY",soOff).attrSet("geomH",(alarms_en?alarms_geomY:geomH)-soOff);
 
 	//Unused views concealment
 	for(iVG = 0; iVG < viewGrps.length; iVG++) {
@@ -21518,7 +21525,12 @@ if(play_value) {
 		stepTm = args.stepTm;
 		stepCur = args.stepCur;
 	}
-}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1615441292);
+}
+
+if((tVl=defUser.toInt()) && (tVl2=defUser.parse(1,"-")).length) {
+	if((SYS.time()-this.ownerSess().userActTm()) < tVl*60)	userSetVis = "";
+	else if(this.ownerSess().reqUser() != tVl2.parse(0,":"))	userSetVis = tVl2;
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1616490446);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -24765,6 +24777,15 @@ if(f_start) {
 	else classSel_en = true;
 	btEdit_en = dataEditable;
 	colVars = new Object();
+	btClassEdit_value = btEdit_value = false;
+	wUser = "";
+}
+
+if(wUser != this.ownerSess().reqUser()) {
+	wUser = this.ownerSess().reqUser();
+
+	btClassEdit_value = btEdit_value = false;
+	toUpdate = true;
 }
 
 //Common events process
@@ -25024,7 +25045,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true;
 }
-','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1615639417);
+','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1616486963);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -26484,7 +26505,7 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphSelPrm','','/wlb
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','ElCadr','','/wlb_Main/wdg_ElCadr',0,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1592753175);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','grph_panel','','/wlb_Main/wdg_grph_panel',0,'','','',-1,0,'',1592753175);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','terminator','','/wlb_Main/wdg_terminator',0,'','','',-1,0,'',1592753175);
-INSERT INTO prj_archBrowser VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1592753175);
+INSERT INTO prj_archBrowser VALUES('/archBrowser','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1616490553);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/ggraph','5','','..',1,'','','',-1,0,'name;',1495717615);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so','1','','root',1,'
 ','
@@ -26503,7 +26524,7 @@ INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1','doc','','root',0,'
 INSERT INTO prj_archBrowser VALUES('/archBrowser/so/1/doc','messRep','','/wlb_doc/wdg_docMessRep',0,'','','',-1,0,'owner;geomYsc;archLs;messCat;',1495719828);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphCalc','','/wlb_Main/wdg_graphCalc',0,'','','',-1,0,'owner;',1563002360);
 CREATE TABLE IF NOT EXISTS 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1615121472);
+INSERT INTO prj_tmplSO VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo',0,'','','',-1,1,'pgOpen;',1616490480);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/so','1','','root',1,'
 ','
 ','

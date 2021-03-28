@@ -12,7 +12,7 @@ Version: 2.0.0
 Версия: 2.0.0
 ');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','geomY;geomH;geomZ;pgGrp;',2);
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so','pgCont','/wlb_Main/wdg_RootPgSo/wdg_pgCont','geomY;pgGrp;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so','infoW','/wlb_Main/wdg_RootPgSo/wdg_infoW','pgGrp;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','trnd1','/wlb_Main/wdg_grpGraph/wdg_trnd1','curSek;',2);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','el1','/prj_AGLKS/pg_so/pg_1/pg_ggraph/wdg_el1','name;dscr;aMax;aMin;addr;ed;log;max;min;pModeA;pModeC;prec;wMax;wMin;',2);
@@ -355,7 +355,6 @@ INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','comprEn302
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_10','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','dbDB;dbProgs;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',0);
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_treeSelect','apply','/wlb_Main/wdg_treeSelect/wdg_apply','value;','');
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_treeSelect','cancel','/wlb_Main/wdg_treeSelect/wdg_cancel','value;','');
-INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so','alarms','/wlb_originals/wdg_Protocol','geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0fnt;it0color;it1lev;it1color;it2lev;it2color;','');
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','data','/wlb_Main/wdg_cntrPaspExt/wdg_data','owner;','');
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','sel_data','/wlb_Main/wdg_cntrPaspExt/wdg_sel_data','owner;value;','');
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_control/pg_cntrPasp','sel_trends','/wlb_Main/wdg_cntrPaspExt/wdg_sel_trends','owner;value;','');
@@ -504,6 +503,7 @@ INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_CM101','txtKS1
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_CM101','txtKS123','/wlb_AGLKS/wdg_CM101/wdg_txtKS123','owner;text;','');
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_CM101','txtPP101','/wlb_AGLKS/wdg_CM101/wdg_txtPP101','owner;text;','');
 INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so/pg_4/pg_mn/pg_CM101','txtPP102','/wlb_AGLKS/wdg_CM101/wdg_txtPP102','owner;text;','');
+INSERT INTO prj_AGLKS_incl VALUES('/prj_AGLKS/pg_so','alarms','/wlb_Main/wdg_RootPgSo/wdg_alarms','en;','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -2867,25 +2867,6 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_CM101','pErr',''
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_7/pg_mn/pg_CM101','pNAME','',34,'Parameter|NAME','prm:/BlockCalc/CM302/TT0204/NAME','T_CM101_2','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','digComs','',34,'Parameter|digComs','prm:/BlockCalc/gen/BC1','BC1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','digStts','',34,'Parameter|digStts','prm:/BlockCalc/gen/BC1','BC1','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','geomX','4',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','geomY','605',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','geomW','900',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','geomH','65',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','geomZ','34',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','headVis','0',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','tSize','0',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','trcPer','1',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','lev','-1',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','viewOrd','5',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','col','tm;cat;mess',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','itProp','3',32,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','it0lev','5',0,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','it0fnt','',0,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','it0color','gray',0,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','it1lev','4',0,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','it1color','red',0,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','it2lev','0',0,'','','alarms','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','it2color','yellow',0,'','','alarms','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','geomH','551',32,'','','pgCont','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','geomZ','27',32,'','','pgCont','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','geomYsc','0.96',32,'','','','','','','','','');
@@ -3864,6 +3845,8 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_prescrRun','prEx
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_prescrRun','prExtWork','',42,'Controller|work','prm:/LogicLev/prescription/manager/work','','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_prescrEdit','geomYsc','0.96',32,'','','','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_prescrRun','geomYsc','0.96',32,'','','','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','defUser','',41,'','5-user','','','','','','','');
+INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','en','',41,'','1','alarms','','','','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO prj_AGLKS_stl VALUES('<Styles>','Default','Light','','','','','','','','');
 INSERT INTO prj_AGLKS_stl VALUES('backColor','gray','ivory','','','','','','','','');
@@ -6360,7 +6343,7 @@ CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT D
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO wlb_AGLKS_uio VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;',1616334878);
+INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;defUser;',1616490460);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1616334878);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
