@@ -68,10 +68,10 @@ TCntrNode &WidgetLib::operator=( const TCntrNode &node )
 	mimeDataSet(pls[iM], mimeType, mimeData);
     }
 
-    // Copy include pages
+    // Copying the included widgets
     src_n->list(pls);
     for(unsigned iP = 0; iP < pls.size(); iP++) {
-	if(!present(pls[iP])) add(pls[iP],"");
+	if(!present(pls[iP])) add(pls[iP], "");
 	(TCntrNode&)at(pls[iP]).at() = (TCntrNode&)src_n->at(pls[iP]).at();
     }
 
@@ -507,6 +507,22 @@ LWidget::~LWidget( )
 
 }
 
+TCntrNode &LWidget::operator=( const TCntrNode &node )
+{
+    Widget::operator=(node);
+
+    //Removing the inherited but missed widgets on the source
+    const LWidget *src_n = dynamic_cast<const LWidget*>(&node);
+    if(src_n) {
+	vector<string> wls;
+	wdgList(wls);
+	for(unsigned iW = 0; iW < wls.size(); iW++)
+	    if(!src_n->wdgPresent(wls[iW])) wdgDel(wls[iW], true);
+    }
+
+    return *this;
+}
+
 WidgetLib &LWidget::ownerLib( ) const	{ return *(WidgetLib*)nodePrev(); }
 
 void LWidget::postDisable( int flag )
@@ -901,9 +917,13 @@ TCntrNode &CWidget::operator=( const TCntrNode &node )
     Widget::operator=(node);
 
     if(attrPresent("geomX") && ownerLWdg().attrPresent("geomW"))
-	attrAt("geomX").at().setR(fmax(0,fmin(ownerLWdg().attrAt("geomW").at().getR()-attrAt("geomW").at().getR(),attrAt("geomX").at().getR())));
+	attrAt("geomX").at().setR(fmax(0,
+	    fmin(ownerLWdg().attrAt("geomW").at().getR()-attrAt("geomW").at().getR()*attrAt("geomXsc").at().getR(),
+		attrAt("geomX").at().getR())));
     if(attrPresent("geomY") && ownerLWdg().attrPresent("geomH"))
-	attrAt("geomY").at().setR(fmax(0,fmin(ownerLWdg().attrAt("geomH").at().getR()-attrAt("geomH").at().getR(),attrAt("geomY").at().getR())));
+	attrAt("geomY").at().setR(fmax(0,
+	    fmin(ownerLWdg().attrAt("geomH").at().getR()-attrAt("geomH").at().getR()*attrAt("geomYsc").at().getR(),
+		attrAt("geomY").at().getR())));
 
     return *this;
 }

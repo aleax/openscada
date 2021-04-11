@@ -436,19 +436,16 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 {
     if(!pgId) return true;
 
-    //Check and update present page
-    if(this == masterPage) {
-	var opPg = this.findOpenPage(pgId);
-	if(opPg) {
-	    if(updWdg) {
-		fullUpdCnt = (fullUpdCnt > tmFullUpd) ? 0 : fullUpdCnt + planePer;
-		servGet(pgId, 'com=attrsBr&FullTree='+((fullUpdCnt==0)?1:0)+'&tm='+tmCnt, makeEl, opPg);
-	    }
+    //Checking and updating the presented pages
+    if(this == masterPage)
+	if((opPg=this.findOpenPage(pgId))) {
+	    opPg.fullUpdCnt = opPg.fullUpdCnt ? Math.max(0,opPg.fullUpdCnt-planePer) : tmFullUpd;
+	    if(updWdg || !opPg.fullUpdCnt)
+		servGet(pgId, 'com=attrsBr&FullTree='+(opPg.fullUpdCnt?0:1)+'&tm='+tmCnt, makeEl, opPg);
 	    return true;
 	}
-    }
 
-    //Checking a page before opening
+    //Checking pages before opening
     if(!pgGrp || !pgOpenSrc) {
 	reqPgGen = "<CntrReqs>"+
 	    "<get path='/%2fattr%2fpgGrp'/>"+
@@ -463,7 +460,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	pgOpenSrc = reqPgGen.childNodes[1].textContent;
     }
 
-    //Create or replace the main page
+    //Creating/replacing the main page
     if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
 	if(this.addr.length) {
 	    servSet(this.addr, 'com=pgClose&cacheCntr', '');
@@ -2073,7 +2070,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(toReFit) {
 				hdrRow = formObj.tHead.rows[0];
 				if(hdrRow.style.display == "none") hdrRow = formObj.tBodies[0].rows[0];
-				for(iC = 0; iC < hdrRow.cells.length; iC++)
+				for(iC = 0; hdrRow && iC < hdrRow.cells.length; iC++)
 				    hdrRow.cells[iC].style.width = hdrRow.cells[iC].widthSrc ? hdrRow.cells[iC].widthSrc : null;
 
 				formObj.style.width = ""; formObj.style.tableLayout = "auto";
@@ -2085,9 +2082,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(((wVl=tX.getAttribute("sortEn")) && parseInt(wVl)) || sortCol) {
 				formObj.sort = function(col, force) {
 				    if(force) this.sortCol = -col;
+				    col = Math.abs(col);
 				    isDesc = (Math.abs(this.sortCol) == col && this.sortCol && this.sortCol > 0);
 				    prcArr = Array.prototype.slice.call(this.tBodies[0].rows,0).sort(
-					    function(a,b) { return (isDesc?-1:1)*a.cells[col-1].textContent.localeCompare(b.cells[col-1].textContent); }
+					    function(a,b) { return (isDesc?1:-1)*a.cells[col-1].textContent.localeCompare(b.cells[col-1].textContent); }
 					);
 				    for(iR = 0; iR < prcArr.length; ++iR) {
 					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent)) {
@@ -2541,7 +2539,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
     };
 
-    //Delete child widgets check
+    //Checking for deletion the child widgets
     if(FullTree && pgBr)
 	for(var i in this.wdgs) {
 	    var j;
@@ -2751,14 +2749,14 @@ function makeUI( callBackRez )
     if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
     else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
     if(pgNode) {
-	// Get for the styles
+	// Getting for the styles
 	if(tmCnt == 0)	modelStyles = servGet('/'+sessId,'com=style');
 
 	modelPer = parseInt(pgNode.getAttribute("per"));
 	if((alrmUpdCnt+=planePer) > tmAlrmUpd) { alarmSet(parseInt(pgNode.getAttribute("alarmSt"))); alrmUpdCnt = 0; }
 	cachePgSz   = parseInt(pgNode.getAttribute("cachePgSz"));
 	cachePgLife = parseFloat(pgNode.getAttribute("cachePgLife"));
-	// Check for delete pages
+	// Checking for deleting the pages
 	for(var iP = 0; iP < pgList.length; iP++) {
 	    var opPg; var iCh;
 	    for(iCh = 0; iCh < pgNode.childNodes.length; iCh++)
@@ -2777,12 +2775,12 @@ function makeUI( callBackRez )
 	    else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[iP])
 	    { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null, true); }
 	}
-	// Process opened pages
+	// Processing the opened pages
 	pgList = new Array();
 	for(var i = 0; i < pgNode.childNodes.length; i++)
 	    if(pgNode.childNodes[i].nodeName == 'pg') {
 	        var prPath = pgNode.childNodes[i].textContent;
-		//  Check for closed window
+		//  Checking for closed windows
 		var opPg = masterPage.findOpenPage(prPath);
 		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
 		    servSet(prPath, 'com=pgClose&cacheCntr', '');

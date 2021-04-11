@@ -116,6 +116,8 @@ class LWidget : public Widget, public TConfig
 	LWidget( const string &id, const string &isrcwdg = "" );
 	~LWidget( );
 
+	TCntrNode &operator=( const TCntrNode &node );
+
 	string	path( ) const;
 	string	ico( ) const;
 	string	type( )		{ return "LibWidget"; }

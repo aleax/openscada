@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -346,6 +346,14 @@ void *TMdContr::Task( void *icntr )
 	}
     } catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
+    //Closing the session ...
+    if(TSYS::taskEndRun())
+	try {
+	    req.childClear();
+	    req.setAttr("id", "CloseALL");
+	    cntr.reqService(req);
+	} catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
+
     cntr.prcSt = false;
 
     return NULL;
@@ -485,8 +493,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 			case NC_Variable:	nAVl = _("Variable");	break;
 			case NC_Method:		nAVl = _("Method");	break;
 			case NC_ObjectType:	nAVl = _("ObjectType");	break;
-			case NC_VariableType:	nAVl = _("VariableType");	break;
-			case NC_ReferenceType:	nAVl = _("ReferenceType");	break;
+			case NC_VariableType:	nAVl = _("VariableType"); break;
+			case NC_ReferenceType:	nAVl = _("ReferenceType"); break;
 			case NC_DataType:	nAVl = _("DataType");	break;
 			case NC_View:		nAVl = _("View");	break;
 		    }
@@ -506,7 +514,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		    nANm = _("DataType");
 		    XML_N reqTp("opc.tcp");
 		    reqTp.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER))->
-			childAdd("node")->setAttr("nodeId", nAVl)->setAttr("attributeId", "3");
+			childAdd("node")->setAttr("nodeId", nAVl)->setAttr("attributeId", i2s(AId_BrowseName));
 		    reqService(reqTp);
 		    if(!reqTp.attr("err").empty()) mess_err(nodePath().c_str(), "%s", reqTp.attr("err").c_str());
 		    else if(reqTp.childSize()) nAVl = reqTp.childGet(0)->text();
@@ -641,8 +649,8 @@ string TMdPrm::attrPrc( )
 
     //Nodes list process and parameter's attributes creation
     string snd;
-    for(int off = 0; (snd=TSYS::strParse(ndList(),0,"\n",&off)).size(); ) {
-	if(snd[0] == '#') continue;
+    for(int off = 0; (snd=TSYS::strLine(ndList(),0,&off)).size() || off < ndList().size(); ) {
+	if(snd.empty() || snd[0] == '#') continue;
 	// Request for node class request
 	req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_NodeClass));
@@ -770,20 +778,22 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    //Read for type check
 	    string cNodeId;
 	    size_t stC = opt->text().rfind(")"), stP = opt->text().rfind("(", stC);
-	    bool isSet = false;
+	    bool isSet = false, isStructVar = false;
 	    if(stP != string::npos && stC != string::npos) {
 		cNodeId = TSYS::strDecode(opt->text().substr(stP+1,stC-stP-1));
 		XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 		req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(AId_NodeClass));
+		req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(AId_DataType));
 		try { owner().reqService(req); } catch(TError&) { }
 		if(req.attr("err").empty() && req.childSize() && s2i(req.childGet(0)->text()) == NC_Variable) {
+		    if(req.childSize() > 1 && s2i(req.childGet(1)->text()) == OpcUa_Structure)	isStructVar = true;
 		    string nLs = ndList(), nS;
 		    for(int off = 0; (nS=TSYS::strLine(nLs,0,&off)).size(); )
 			if(nS == cNodeId) break;
 		    if(nS.empty()) { setNdList(nLs+((nLs.size() && nLs[nLs.size()-1] != '\n')?"\n":"")+cNodeId); isSet = true; }
 		}
 	    }
-	    if(!isSet) TBDS::genDBSet(nodePath()+"selND", opt->text(), opt->attr("user"));
+	    if(!isSet || isStructVar)	TBDS::genDBSet(nodePath()+"selND", opt->text(), opt->attr("user"));
 	}
     }
     else if(a_path == "/prm/cfg/SEL_NDS_lst" && ctrChkNode(opt)) {

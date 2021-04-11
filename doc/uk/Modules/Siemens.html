@@ -23,8 +23,7 @@
 <th> Мови </th>
 <th> Платформи </th>
 <th> Тип </th>
-<th> Автор </th>
-<th> Опис
+<th> Автор
 </th></tr>
 
 <tr>
@@ -38,8 +37,15 @@
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Роман Савоченко </td>
-<td> Забезпечує підтримку джерел даних ПЛК Siemens за допомогою карт HILSCHER CIF (протоколом MPI) та бібліотеки LibnoDave (або власної реалізації) для решти. Також підтримуються джерела даних фірми Beckhoff для протоколу TwinCAT ADS/AMS, оскільки він також працює з блоками даних.
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Опис
+</th></tr>
+<tr>
+<td colspan="9"> Забезпечує підтримку джерел даних ПЛК Siemens за допомогою карт HILSCHER CIF (протоколом MPI) та бібліотеки LibnoDave (або власної реалізації) для решти. Також підтримуються джерела даних фірми Beckhoff для протоколу TwinCAT ADS/AMS, оскільки він також працює з блоками даних.
+<ul><li> <b>Зробити (To Do):</b></li></ul>
+<dl><dd> - доповнити вбудованим Стандартним Режимом DAQ-Параметрів.</dd></dl>
 </td></tr></table>
 <p>Першочерговою метою створення цього модуля становило забезпечення підтримки промислових контролерів фірми Siemens серії S7 (S7-200,300,400,1200). Історично склалося, що доступ до контролерів вказаної фірми у мережі ProfiBus здійснюється тільки за посередництвом власних комунікаційних процесорів (CP5412, CP5613 та інше) та власного протоколу S7. Вказані комунікаційні процесори та API до протоколу S7 достатньо дорогі, крім того, драйвери до комунікаційних процесорів та S7 API закриті, а також доступні тільки для платформи Intel + MS Windows (зустрічалась деяка інформація про можливість придбати для Linux).
 </p><p>У якості альтернативи комунікаційним процесорам від фірми Siemens, які дозволяють повноцінно працювати із контролерами фірми Siemens, виступає спектр комунікаційних продуктів фірми <a class="external text" href="http://hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Hilscher</a> у особі комунікаційних процесорів CIF серії ProfiBus (PB) та бібліотека <a class="external text" href="http://libnodave.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">LibnoDave</a>.
@@ -177,5 +183,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/uk">Modules/Siemens/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2738</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/uk">Modules/Siemens/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2743</td></tr></table></body>
 </html>

@@ -23,8 +23,7 @@
 <th> Языки </th>
 <th> Платформы </th>
 <th> Тип </th>
-<th> Автор </th>
-<th> Описание
+<th> Автор
 </th></tr>
 
 <tr>
@@ -38,8 +37,15 @@
 <td> x86,x86_64,ARM
 </td>
 <td> DAQ </td>
-<td> Роман Савоченко </td>
-<td> Обеспечивает поддержку источников данных ПЛК Siemens с помощью карт HILSCHER CIF (протоколом MPI) и библиотеки LibnoDave (или собственной реализации) для остального. Также поддерживаются источники данных фирмы Beckhoff для протокола TwinCAT ADS/AMS, поскольку он также работает с блоками данных.
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Описание
+</th></tr>
+<tr>
+<td colspan="9"> Обеспечивает поддержку источников данных ПЛК Siemens с помощью карт HILSCHER CIF (протоколом MPI) и библиотеки LibnoDave (или собственной реализации) для остального. Также поддерживаются источники данных фирмы Beckhoff для протокола TwinCAT ADS/AMS, поскольку он также работает с блоками данных.
+<ul><li> <b>Сделать (To Do):</b></li></ul>
+<dl><dd> - дополнить встроенным Стандартным Режимом DAQ-Параметров.</dd></dl>
 </td></tr></table>
 <p>Первоочередной целью создания модуля было обеспечение поддержки промышленных контроллеров фирмы Siemens серии S7 (S7-200,300,400,1200). Исторически сложилось, что доступ к контроллерам указанной фирмы в сети ProfiBus производился только посредством собственных коммуникационных процессоров (CP5412, CP5613 и т.д.) и собственного протокола S7. Указанные коммуникационные процессоры и API к протоколу S7 достаточно дорогостоящие, кроме того, драйвера к коммуникационным процессорам и S7 API закрыты, а также доступны только для платформы Intel + MS Windows (встречалась некоторая информация о возможности купить для Linux).
 </p><p>В качестве альтернативы коммуникационным процессорам от фирмы Siemens, которые позволяют полноценно работать с контроллерами фирмы Siemens, выступает спектр коммуникационных продуктов фирмы <a class="external text" href="http://hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Hilscher</a> в лице коммуникационных процессоров CIF серии ProfiBus (PB) и библиотека <a class="external text" href="http://libnodave.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">LibnoDave</a>.
@@ -177,5 +183,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/ru">Modules/Siemens/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2738</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/ru">Modules/Siemens/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2743</td></tr></table></body>
 </html>

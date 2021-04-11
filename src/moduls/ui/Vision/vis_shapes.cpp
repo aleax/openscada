@@ -601,7 +601,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 					    int wdthCel = fmax(0, s2i(wVl));
 					    if(!wdthCel)	wdg->hideColumn(iC);
 					    else hit->setData(Qt::UserRole,
-						    (wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
+						    (wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel);
 					}
 					toReFit = true;
 				    }
@@ -1016,7 +1016,7 @@ void ShapeFormEl::tableFit( WdgView *w )
     for(int iC = 0; iC < wdg->columnCount(); iC++) {
 	fullColsWdth += wdg->columnWidth(iC);
 	if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
-	    if(tVl < 0)	tVl = tblWdth*abs(tVl)/100;
+	    tVl = (tVl < 0) ? tblWdth*abs(tVl)/100 : tVl*w->xScale(true);
 	    niceForceColsWdth += tVl;
 	    wdg->setColumnWidth(iC, tVl);
 	}
@@ -1029,7 +1029,7 @@ void ShapeFormEl::tableFit( WdgView *w )
 	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
 	    int busyCols_ = 0, niceForceColsWdth_ = 0;
 	    for(int iC = 0; iC < wdg->columnCount(); iC++)
-		if((wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) || wdg->columnWidth(iC) < busyColsWdth)
+		if((wdg->horizontalHeaderItem(iC) && wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt()) || wdg->columnWidth(iC) < busyColsWdth)
 		    niceForceColsWdth_ += wdg->columnWidth(iC);
 		else busyCols_++;
 	    if(busyCols_ == busyCols)	break;
@@ -1040,7 +1040,7 @@ void ShapeFormEl::tableFit( WdgView *w )
 	if(fullColsWdth > tblWdth && busyCols) {
 	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
 	    for(int iC = 0; iC < wdg->columnCount(); iC++)
-		if((!wdg->horizontalHeaderItem(iC) || !(tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) &&
+		if((!wdg->horizontalHeaderItem(iC) || !wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt()) &&
 			wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
 		    wdg->setColumnWidth(iC, busyColsWdth);
 	}

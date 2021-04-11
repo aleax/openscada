@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Библиотеки/Основные графические элементы</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 94% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">российский</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (99% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -20,14 +20,13 @@
 <th> Лицензия </th>
 <th> Источник </th>
 <th> Языки </th>
-<th> Автор </th>
-<th> Описание
+<th> Автор
 </th></tr>
 
 <tr>
 <td> <a href="Libs_Main_graphical_elements.html" title="Special:MyLanguage/Libs/Main graphical elements">Библиотека основных элементов интерфейса пользователя</a>
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPLv2
 </td>
 <td> vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">GZip</a>) &gt; VCA.wlb_Main
@@ -35,11 +34,19 @@
 <td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
-</td>
-<td> Предоставляет библиотеку основных элементов пользовательского интерфейса общей и промышленной автоматизации.
+</td></tr>
+<tr>
+<th colspan="9"> Описание
+</th></tr>
+<tr>
+<td colspan="9"> Предоставляет библиотеку основных элементов пользовательского интерфейса общей и промышленной автоматизации.
 <ul><li> <b>Основано:</b> Сентябрь 2007</li>
 <li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li>
-<li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">большинство проектов на OpenSCADA</a></li></ul>
+<li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">большинство проектов на OpenSCADA</a></li>
+<li> <b>Сделать (To Do):</b></li></ul>
+<dl><dd> - <a href="#storeHouse">Склад</a>: расширить детализированным просмотрщиком и редактором специфических полей, начав эти поля в целом;</dd>
+<dd> - <a href="#storeHouse">Склад</a>: расширить генерацией отчётных документов к выбранным элементам, готовой для печати и удобной для полного обзора;</dd>
+<dd> - <a href="#storeHouse">Склад</a>: расширить генерацией отчётных документов к основной таблице с учётом настроек фильтра и природным отображением специфических полей.</dd></dl>
 </td></tr></table>
 <p>Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примитивов виджетов</a> и языка внутреннего программирования <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода <i>tr()</i> и перевод этих сообщений также доступен Английским, Украинским и Российским.
@@ -95,6 +102,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </ul>
 </li>
 <li class="toclevel-2"><a href="#.D0.9C.D0.B5.D0.BD.D0.B5.D0.B4.D0.B6.D0.B5.D1.80_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D0.B5.D0.B9_.28userManager.29"><span class="tocnumber">3.7</span> <span class="toctext">Менеджер пользователей (userManager)</span></a></li>
+<li class="toclevel-2"><a href="#Storehouse_.28storeHouse.29"><span class="tocnumber">3.8</span> <span class="toctext">Storehouse (storeHouse)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D0.B8_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.B8_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D1.8B.D0.B5_.D0.B4.D0.B8.D0.B0.D0.BB.D0.BE.D0.B3.D0.B8"><span class="tocnumber">4</span> <span class="toctext"><span>Панели управления и простые диалоги</span></span></a>
@@ -2126,6 +2134,132 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> Строка </td>
 <td> БД хранения новосозданных пользователей, типично — рабочая.
 </td></tr></table>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="storeHouse" title="#storeHouse"><h3><span class="mw-headline" id="Storehouse_.28storeHouse.29"><span class="mw-headline-number">3.8</span> Storehouse (<a href="Libs_Main_graphical_elements.html#storeHouse" title="Special:MyLanguage/Libs/Main graphical elements">storeHouse</a>)</span></h3></span>
+</td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en, uk
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<p>The element-frame, shown in Figure 3.8, serves to manage of storehouses on different classes-categories of the storing-managing things. Initially that was developed and tested on the class "Library". The frame means of the direct accessing the DB by SQL and currently supports only MySQL/MariaDB.
+</p>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> Get completed one from the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9.4 LTS announce</a>
+</td></tr></table>
+</div>
+<p>During the frame implementing, the view "Table" of <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the primitive "FormEl"</a> significantly expanded on both visualizers for:
+</p>
+<ul><li> Common things and in the <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCA-Engine</a>:
+<ul><li> improving the table content updating and storing for big content, non storing double source content;</li>
+<li> appended of limiting in processing the table content for direct apply the changes, only for it size lesser for limUserFile_SZ (1 MB).</li></ul></li>
+<li> <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>:
+<ul><li> table cells in the editing mode allowed for the system-browser context menu;</li>
+<li> appended for the sorting support by columns;</li>
+<li> prevented from the complete updating at the attribute "value" modification;</li>
+<li> appended for:
+<ul><li> the not fitting mode (the attribute "colsWdthFit" missing) implementation, using the automatic table layout mode for calculation the fixed widths and next switching to the fixed table layout mode;</li>
+<li> the light edition mode base implementation.</li></ul></li></ul></li>
+<li> <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>:
+<ul><li> appended in export to CSV;</li>
+<li> improved in:
+<ul><li> support the sorting of the table content per columns, by preserving the scroll position and the sorting parameters before the sorting disabling during the updating time;</li>
+<li> in light processing of the width changing;</li>
+<li> in fitting at the development mode, also at the vertical header show;</li></ul></li>
+<li> appended for the light edition — without the columns refitting all updating time;</li>
+<li> cleaned form spare role Qt::UserRole+5 of the previous value storing, but that do now the table delegate.</li></ul></li></ul>
+<p>The frame provides currently and in future for next features:
+</p>
+<ul><li> <b>Class edition mode</b>: observing, creation and edition the storehouse classes with a function of storing data at the field type change.</li>
+<li> <b>Main data observing and edition mode</b>:
+<ul><li> observing main data of the selected or fixed storehouse classes in a big table with possibility of sorting and filtering by up to five columns;</li>
+<li> editing of content of the table cells in the edition mode;</li>
+<li> adding, copying and removing of records-rows of the table in the edition mode;</li>
+<li> [PLANNED] detailed viewer and editor of the specific fields;</li>
+<li> [PLANNED] generation of report documents of the selected items, which is ready to print and convenient in complete observing;</li>
+<li> [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.</li></ul></li></ul>
+<p>The storehouse classes store in the table "classes" with the fixed table structure "<u><b>CLASS</b></u>, <u><b>ID</b></u>, <b>NAME</b>, <b>TP</b> , <b>TBL</b>, <b>FILTER</b>", where:
+</p>
+<ul><li> <i>CLASS</i> [varchar(20)] — class ID;</li>
+<li> <i>ID</i> [varchar(20)] — specific field ID of the class;</li>
+<li> <i>NAME</i> [text] — specific field localised name of the class, where the first line for the default value and the next lines form in the view <b>{2SymbolLang}:{LocalizedText}</b>;</li>
+<li> <i>TP</i> [varchar(100)] — specific field type of the class, which correspond now directly to the MySQL DB types;</li>
+<li> <i>TBL</i> [varchar(100)] — specific field properties of representing data in the table, has the format <b>{align}:{width}</b>, where:
+<ul><li> <i>align</i> — column alignment, supports the values: "left", "center", "right"; where the "left" value is default one for strings and "center" for other;</li>
+<li> <i>width</i> — forced width for the column, in percents at symbol "%" in the end or in pixels.</li></ul></li>
+<li> <i>FILTER</i> [text] — specific field properties of filtering and indexing lists preparing for the filter selection, for the variants: <b>index</b> and <b>list{SepSymb}</b>, where:
+<ul><li> <i>index</i> — the column value means as whole one for indexing;</li>
+<li> <i>list{SepSymb}</i> — the column value means as a list of items for indexing, separated by symbol <i>SepSymb</i>.</li></ul></li></ul>
+<p>Data of storehouse of the corresponded class stores in different table with name "sh_{CLASS}" and the structure "<u><b>ID</b></u>, <b>NAME</b>, <b>DSCR</b>, <b>SP_{ID}1</b>, ..., <b>SP_{ID}N</b>", where:
+</p>
+<ul><li> <i>ID</i> [INT] — automatic index of the table;</li>
+<li> <i>NAME</i> [varchar(200)] — name of the item;</li>
+<li> <i>DSCR</i> [text] — description of the item;</li>
+<li> <i>SP_{ID}X</i> — specific field of the class corresponding to <i>ID</i> in the class table.</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The class table field with <i>ID</i>="NAME" means the whole storehouse localised name.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseD.png"><img class="thumbimage" height="580" src="../en/files/LibMainEls_storeHouseD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8a. The "Storehouse" frame in the development mode.</div></div></div></div>
+<p><b><u>Using — development</u></b><br />
+The widget is designed to perform the role of a page, and should therefore be placed directly in the project's tree. Additionally, into the panels folder of the project, you need to place <a href="#accept">the acception dialog frame</a> and some attribute configuration is required, below, where no links are provided.
+</p><p><b><u>Using — runtime</u></b><br />
+In the runtime mode you will see single big table for class (Fig.3.8b) and data (Fig.3.8c) edition and representing.
+</p><p>In the main class data representing mode the users can observe the table, filter and sort the representing data at the specified fields.
+</p><p>In the main class data edition mode the users, allowed to edit, can add, copy, remove the rows/records and edit the fields.
+</p><p>In the class edition mode, the users, allowed to edit, can add new and remove present (after removing the last item) classes; and add, remove the specific class fields and edit properties of that fields.
+</p><p>For user access limitation there provided now only a mechanism of including the allowed for the class and data edition users to the group "ITW".
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR.png"><img class="thumbimage" height="580" src="../en/files/LibMainEls_storeHouseClassR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8b. The "Storehouse" frame in the runtime mode at the class representing.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataR.png"><img class="thumbimage" height="580" src="../en/files/LibMainEls_storeHouseDataR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8c. The "Storehouse" frame in the runtime mode at the data representing.</div></div></div></div>
+<p><b><u>Linking and configuring the attributes</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Description
+</th></tr>
+<tr>
+<td> class </td>
+<td> Class: initial </td>
+<td> String </td>
+<td> Forced/initial class for first opening.
+</td></tr>
+<tr>
+<td> classEditable (Constant) </td>
+<td> Class: editable </td>
+<td> Boolean </td>
+<td> Flag of allowing for the class edition.
+</td></tr>
+<tr>
+<td> classFix (Constant) </td>
+<td> Class: fixed </td>
+<td> String </td>
+<td> The fixed class for which the frame performed only, denying access for other classes.
+</td></tr>
+<tr>
+<td> dataEditable (Constant) </td>
+<td> Data: editable </td>
+<td> Boolean </td>
+<td> Flag of allowing for the main data edition.
+</td></tr>
+<tr>
+<td> db (Constant) </td>
+<td> DB: Data base </td>
+<td> String </td>
+<td> Database of the classes and data in the view <b>{Type}.{DB}</b>.
+</td></tr></table>
 <h2><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D0.B8_.D1.83.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F_.D0.B8_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D1.8B.D0.B5_.D0.B4.D0.B8.D0.B0.D0.BB.D0.BE.D0.B3.D0.B8"><span class="mw-headline-number">4</span> <span id="Panels" title="#Panels">Панели управления и простые диалоги</span></span></h2>
 <p>Содержит элементы-кадры панелей управления и простых диалогов, которые сложно или не нужно реализовывать в виде панелей. Эти кадры предназначены для размещения в соответствующей директории панелей дерева проекта, построенного согласно <a href="#RootPgSo">концепции объектов сигнализации корневой страницы "RootPgSo"</a>. Кадры в основном не предназначены для использования отдельно, поскольку часто репрезентуют специфику данных к которым предоставляют элементы управления или расширенную информацию, а соответственно должны использоваться вместе с ними, кроме случаев унификации, обобщения и расширения контроля примитивами!
 </p><p>Эти элементы в основном открываются динамически, при вызове из элемента-виджета первичного представления, осуществляя при этом <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#LinkingDyn" title="Special:MyLanguage/Sub-projects/VCA">динамическое связывание связей панели в группе "&lt;page&gt;"</a> с виджетом (часто страницей), который вызывает эту панель. Дальнейшая работа, до закрытия, осуществляется с данными виджета, который вызывал.
@@ -2924,5 +3058,5 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2738</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2743</td></tr></table></body>
 </html>

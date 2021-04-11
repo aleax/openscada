@@ -789,6 +789,7 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0) continue;
+
 	    //Get input's coils
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksCoilIn.size(); iB++) {
 		if(cntr.endrunReq) break;
@@ -816,6 +817,7 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0) continue;
+
 	    //Get registers
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlks.size(); iB++) {
 		if(cntr.endrunReq) break;
@@ -842,6 +844,7 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0)	continue;
+
 	    //Get input registers
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksIn.size(); iB++) {
 		if(cntr.endrunReq) break;
@@ -1085,7 +1088,7 @@ void TMdPrm::enable( )
 	    anm = sel.substr(elOff);//  TSYS::strParse(sel, 0, ":", &elOff);
 	    if(anm.empty()) anm = aid;
 
-	    if((vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
+	    if(aid.empty() || (vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
 
 	    TFld::Type tp = TFld::Integer;
 	    if(atp[0] == 'C' || (atp_sub.size() && atp_sub[0] == 'b')) tp = TFld::Boolean;

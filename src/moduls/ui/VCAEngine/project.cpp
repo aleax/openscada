@@ -896,7 +896,7 @@ TCntrNode &Page::operator=( const TCntrNode &node )
     try {
 	Widget::operator=(node);
 
-	//Include widgets copy
+	//Copying included pages
 	vector<string> els;
 	src_n->pageList(els);
 	// Call recursive only for separated branches copy and for prevent to included copy
@@ -905,6 +905,11 @@ TCntrNode &Page::operator=( const TCntrNode &node )
 		if(!pagePresent(els[iP])) pageAdd(els[iP], "");
 		(TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
 	    }
+
+	//Removing the inherited but missed widgets on the source
+	wdgList(els);
+	for(unsigned iW = 0; iW < els.size(); iW++)
+	if(!src_n->wdgPresent(els[iW])) wdgDel(els[iW], true);
     }
     catch(TError &err) {
 	if(prjFlags()&Page::Link)
@@ -1691,9 +1696,13 @@ TCntrNode &PageWdg::operator=( const TCntrNode &node )
     Widget::operator=(node);
 
     if(attrPresent("geomX") && ownerPage().attrPresent("geomW"))
-	attrAt("geomX").at().setR(fmax(0,fmin(ownerPage().attrAt("geomW").at().getR()-attrAt("geomW").at().getR(),attrAt("geomX").at().getR())));
+	attrAt("geomX").at().setR(fmax(0,
+	    fmin(ownerPage().attrAt("geomW").at().getR()-attrAt("geomW").at().getR()*attrAt("geomXsc").at().getR(),
+		attrAt("geomX").at().getR())));
     if(attrPresent("geomY") && ownerPage().attrPresent("geomH"))
-	attrAt("geomY").at().setR(fmax(0,fmin(ownerPage().attrAt("geomH").at().getR()-attrAt("geomH").at().getR(),attrAt("geomY").at().getR())));
+	attrAt("geomY").at().setR(fmax(0,
+	    fmin(ownerPage().attrAt("geomH").at().getR()-attrAt("geomH").at().getR()*attrAt("geomYsc").at().getR(),
+		attrAt("geomY").at().getR())));
 
     return *this;
 }

@@ -1,3 +1,22 @@
+2021-04-11 Roman (stable)
+- DAQ.ModBus: Appended for passing wrong items in the Standard Mode of the DAQ-parameters.
+- DAQ.OPC_UA: The DAQ-controller object appended in closing the session and secure channel at it stopping.
+    The variables list of the DAQ-parameters parsing set to complete parsing with passing empty lines.
+    Structure variables selection in DAQ-parameters allowed to select its items separately, in the selection browser.
+    libOPC_UA: Unified in specifying the default value of the secure channel life time, what set to 300000 ms.
+	Client::reqService() appended for the meta command "CloseALL" of closing current session and secure channel.
+- FIX:UI.VCAEngine: The child widgets copy fixed in ensuring the visibility accounting the widget scaling.
+    Copying the container widgets and pages appended for checking and removing the child widgets,
+	what removed on the source.
+- FIX:UI.Vision: The view Table of the primitive FormEl fixed in the table fitting, at fixed column widths in pixels,
+	for taking in acount the widget scale same in the fitting function, after resizing.
+    Title of the developing window appended for the remote host information.
+- !!:FIX:UI.WebVision: Fixed in checking the removed widgets for all and the master page.
+    FIX: The view Table of the primitive FormEl:
+	prevented from termination at empty rows and strictly set sorting columns;
+	unified in the strictly set sorting display.
+
+
 2021-03-28 Roman (stable)
 - !!:LibsDB.vcaBase,AGLKS.vca:
     Main.RootPgSo: Appended for:
@@ -57,7 +76,7 @@
 	The modification detection function modifChk() appended for an argument "isCnt" of specifying the containers.
     !!!: The session tasks execution appended of early execution at events presence.
     The view Table of the primitive FormEl appended of limiting in processing the table content
-	for direct apply the changes only for it size lesser for limUserFile_SZ (1 MB).
+	for direct apply the changes, only for it size lesser for limUserFile_SZ (1 MB).
 - UI.Vision: The menu call button of the item and container configuration dialogs turned off from the auto apply default mode.
     The view Table of the primitive FormEl set to the first visible column for sorting at the sorting enable.
 - !!!!:FIX:UI.WebVision: Appended for detection disappearing of the project execution session and return an error,
@@ -87,7 +106,7 @@
     appended by the events applying in the last of all other attributes setting.
 - !!!:UI.Vision: The export function in runtime append of export the view Table of the primitive "FormEl" in CSV.
     !: Improved in support the sorting of the table content per columns
-	by preserving the scroll position and the sorting parameters before the sorting disabling during the updation time.
+	by preserving the scroll position and the sorting parameters before the sorting disabling during the updating time.
     Setting the value, early resizing and the table fitting moved to the space of the table content presence and after the sorting.
 - !!!!:UI.WebVision: The view "Table" of the primitive "FormEl" appended for the sorting support by columns.
     !!: Switched back to the asynchronous mode of the default POST requests after the last fixing in the VCAEngine.
@@ -112,10 +131,10 @@
 - !!:UI.Vision: The view Table of the primitive FormEl improved:
     - in light processing of the width changing;
     - in fitting at the development mode;
-    - in fitting also at the vertical header also show.
+    - in fitting also at the vertical header show.
 - !!:FIX:UI.WebVision: The view Table of the primitive FormEl appended for:
 	- the not fitting mode (the attribute "colsWdthFit" missing) implementation,
-	    using the automatic table layout mode for calculation the fixed widthes
+	    using the automatic table layout mode for calculation the fixed widths
 	    and next switching to the fixed table layout mode;
 	- the light edition mode base implementation;
 	- fixing the whole than 300 symbols edition.
@@ -131,7 +150,7 @@
     Appended for the data edition mode.
 - !!!!:FIX:Archive.FSArch: Critical fixed in the value archive files processing, in try they ID write to NULL string.
 - UI.Vision: The view Table of the primitive FormEl appended for the light edition -
-    without the columns refitting all updation time, only at:
+    without the columns refitting all updating time, only at:
 	first row appearing, columns count change and the column title change, font change and resize.
 
 

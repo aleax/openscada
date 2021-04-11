@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.cpp
 /******************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>	      *
+ *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -1290,7 +1290,7 @@ void Client::protIO( XML_N &io )
 		}
 		if(debug) debugMess("OPN Req");
 
-		//Send request and wait respond
+		//Sending the request and wait a response
 		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
 		int off = 4;
@@ -1815,7 +1815,7 @@ void Client::reqService( XML_N &io )
 {
     io.setAttr("err", "");
     XML_N req("opc.tcp");
-    if(!sess.secChnl || !sess.secToken || (1e-3*(curTime()-sess.sessOpen) >= sess.secLifeTime) ||
+    if(io.attr("id") == "CloseALL" || !sess.secChnl || !sess.secToken || (1e-3*(curTime()-sess.sessOpen) >= sess.secLifeTime) ||
 	sess.endPoint != endPoint() || sess.secPolicy != secPolicy() || sess.secMessMode != secMessMode())
     {
 	//Close previous session for policy or endpoint change
@@ -1841,6 +1841,8 @@ void Client::reqService( XML_N &io )
 	    sess.clearFull(true);
 	}
 
+	if(io.attr("id") == "CloseALL") return;
+
 	// Send HELLO message
 	req.setAttr("id", "HEL")->setAttr("EndPoint", endPoint());
 	protIO(req);
@@ -1848,7 +1850,7 @@ void Client::reqService( XML_N &io )
 
 	// Send Open SecureChannel message for no secure policy
 	req.setAttr("id", "OPN")->setAttr("SecChnId", "0")->setAttr("ReqType", int2str(SC_ISSUE))->
-	    setAttr("SecPolicy", "None")->setAttr("SecurityMode", "1")->setAttr("SecLifeTm", "300000")->
+	    setAttr("SecPolicy", "None")->setAttr("SecurityMode", "1")->setAttr("SecLifeTm", int2str(OpcUa_SecCnlDefLifeTime))->
 	    setAttr("SeqNumber", uint2str(sess.sqNumb=51))->setAttr("SeqReqId", uint2str(sess.sqReqId=1))->setAttr("ReqHandle", "0");
 	protIO(req);
 	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
@@ -1899,7 +1901,7 @@ void Client::reqService( XML_N &io )
 	    req.setAttr("id", "OPN")->setAttr("SecChnId", "0")->setAttr("ReqType", int2str(SC_ISSUE))->
 		setAttr("ClntCert", cert())->setAttr("ServCert", servCert)->setAttr("PvKey", pvKey())->
 		setAttr("SecPolicy", secPolicy())->setAttr("SecurityMode", int2str(secMessMode))->
-		setAttr("SecLifeTm", "3600000")->setAttr("SeqNumber", uint2str(sess.sqNumb=51))->setAttr("SeqReqId", uint2str(sess.sqReqId=1))->
+		setAttr("SecLifeTm", int2str(OpcUa_SecCnlDefLifeTime))->setAttr("SeqNumber", uint2str(sess.sqNumb=51))->setAttr("SeqReqId", uint2str(sess.sqReqId=1))->
 		setAttr("ReqHandle", "0");
 	    protIO(req);
 	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
@@ -1923,7 +1925,7 @@ void Client::reqService( XML_N &io )
 	req.setAttr("id", "OPN")->setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("ReqType", int2str(SC_RENEW))->
 	    setAttr("ClntCert", (secPolicy()=="None")?"":cert())->setAttr("ServCert", sess.servCert)->setAttr("PvKey", pvKey())->
 	    setAttr("SecPolicy", secPolicy())->setAttr("SecurityMode", int2str(sess.secMessMode))->
-	    setAttr("SecLifeTm", "3600000")->setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId))->
+	    setAttr("SecLifeTm", int2str(OpcUa_SecCnlDefLifeTime))->setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId))->
 	    setAttr("ReqHandle", uint2str(sess.reqHndl++));
 	protIO(req);
 	if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); sess.clearFull(); return; }
@@ -3503,14 +3505,14 @@ nextReq:
 Server::SecCnl::SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm,
 	const string &iClCert, const string &iSecPolicy, char iSecMessMode, const string &iclAddr, uint32_t isecN ) :
     endPoint(iEp), secPolicy(iSecPolicy), secMessMode(iSecMessMode), tCreate(curTime()),
-    tLife(std::max(600000,iLifeTm)), TokenId(iTokenId), TokenIdPrev(0), clCert(iClCert), clAddr(iclAddr),
+    tLife(std::max(OpcUa_SecCnlDefLifeTime,iLifeTm)), TokenId(iTokenId), TokenIdPrev(0), clCert(iClCert), clAddr(iclAddr),
     servSeqN(isecN), clSeqN(isecN), startClSeqN(isecN), reqId(0), chCnt(0)
 {
 
 }
 
 Server::SecCnl::SecCnl( ) :
-    secMessMode(MS_None), tCreate(curTime()), tLife(600000), TokenId(0), TokenIdPrev(0), servSeqN(1), clSeqN(1), startClSeqN(1)
+    secMessMode(MS_None), tCreate(curTime()), tLife(OpcUa_SecCnlDefLifeTime), TokenId(0), TokenIdPrev(0), servSeqN(1), clSeqN(1), startClSeqN(1)
 {
 
 }

@@ -180,7 +180,7 @@ void VCASess::getReq( SSess &ses )
 	prmEl1 = ses.prm.find("FullTree");
 	XMLNode req("get");
 	req.setAttr("path", ses.url+"/%2fserv%2fattrBr")->setAttr("tm", (prmEl!=ses.prm.end())?prmEl->second:"0")->
-	    setAttr("FullTree", (prmEl1!=ses.prm.end())?prmEl1->second:"0");
+	    setAttr("FullTree", (prmEl1!=ses.prm.end()) ? prmEl1->second : "0");
 	mod->cntrIfCmd(req, ses);
 
 	// Backend objects' attributes set
