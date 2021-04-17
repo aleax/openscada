@@ -513,7 +513,7 @@ TVariant TPrmTempl::Impl::lnkInput( int num )
     res.unlock();
 
     if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size())
-	return con.at().getO().at().propGet(addr.substr(objOff),'.');
+	return con.at().getO().at().propGet(addr.substr(objOff), '.');
 
     return con.at().get();
 }

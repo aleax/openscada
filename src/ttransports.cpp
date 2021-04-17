@@ -662,7 +662,8 @@ void TTypeTransport::perSYSCall( unsigned int cnt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb), assTrRes(true), mLogLen(0), mLogItLim(1000)
+    TConfig(el), runSt(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb), assTrRes(true),
+    mLogLen(0), mLogItLim(1000), mLogLstDt(0), mLogLstDtTm(0)
 {
     mId = iid;
 }
@@ -781,20 +782,26 @@ void TTransportIn::setLogLen( int vl )
     MtxAlloc res(mLogRes, true);
 
     vl = vmax(0, vmin(10000,vl));
+    if(vl && !mLogLen) mLogLstDt = 0;
     while((int)mLog.size() > vl) mLog.pop_back();
 
     mLogLen = vl;
 }
 
-void TTransportIn::pushLogMess( const string &vl )
+void TTransportIn::pushLogMess( const string &vl, const string &data, int dataDir )
 {
     MtxAlloc res(mLogRes, true);
 
     if(!logLen()) return;
 
-    mLog.push_front(ll2s(TSYS::curTime()) + "\n" + vl);
-
-    while((int)mLog.size() > logLen())	mLog.pop_back();
+    if(mLog.size() && dataDir && dataDir == mLogLstDt && (SYS->sysTm()-mLogLstDtTm) < prmWait_TM)
+	mLog[0] += data;
+    else {
+	mLog.push_front(ll2s(TSYS::curTime()) + "\n" + vl + data);
+	while((int)mLog.size() > logLen())	mLog.pop_back();
+	mLogLstDtTm = SYS->sysTm();
+    }
+    mLogLstDt = dataDir;
 }
 
 string TTransportIn::assTrO( const string &addr )
@@ -944,7 +951,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		resLog += "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
+		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),itTm%1000000) +
 		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,logItLim()),TSYS::Bin,"<text>"):"")
 			   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
 	    }
@@ -965,7 +972,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), runSt(false), mDefTimeouts(true), mLstReqTm(0), mId(cfg("ID")),
-    mDB(idb), mStartTm(0), mReqRes(true), mLogLen(0), mLogItLim(1000)
+    mDB(idb), mStartTm(0), mReqRes(true), mLogLen(0), mLogItLim(1000), mLogLstDt(0), mLogLstDtTm(0)
 {
     mId = iid;
 }
@@ -1022,7 +1029,7 @@ void TTransportOut::clearConPrm( )
     dataRes().unlock();
 }
 
-void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); }
+void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); mLogLstDt = 0; }
 
 void TTransportOut::postDisable( int flag )
 {
@@ -1073,20 +1080,26 @@ void TTransportOut::setLogLen( int vl )
     MtxAlloc res(mLogRes, true);
 
     vl = vmax(0, vmin(10000,vl));
+    if(vl && !mLogLen) mLogLstDt = 0;
     while((int)mLog.size() > vl) mLog.pop_back();
 
     mLogLen = vl;
 }
 
-void TTransportOut::pushLogMess( const string &vl )
+void TTransportOut::pushLogMess( const string &vl, const string &data, int dataDir )
 {
     MtxAlloc res(mLogRes, true);
 
     if(!logLen()) return;
 
-    mLog.push_front(ll2s(TSYS::curTime()) + "\n" + vl);
-
-    while((int)mLog.size() > logLen())	mLog.pop_back();
+    if(mLog.size() && dataDir && dataDir == mLogLstDt && (SYS->sysTm()-mLogLstDtTm) < prmWait_TM)
+	mLog[0] += data;
+    else {
+	mLog.push_front(ll2s(TSYS::curTime()) + "\n" + vl + data);
+	while((int)mLog.size() > logLen())	mLog.pop_back();
+	mLogLstDtTm = SYS->sysTm();
+    }
+    mLogLstDt = dataDir;
 }
 
 TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -1325,7 +1338,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		int off = 0;
 		int64_t itTm   = s2ll(TSYS::strLine(mLog[iL],0,&off));
 		string  itDscr = TSYS::strLine(mLog[iL], 0, &off);
-		resLog += "[" + atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S")+"."+i2s(itTm%1000000)+"] " +
+		resLog += TSYS::strMess("[%s.%06d] ",atm2s(itTm/1000000,"%Y-%m-%dT%H:%M:%S").c_str(),itTm%1000000) +
 		    itDscr + ((off<(int)mLog[iL].size())?"\n"+TSYS::strDecode(mLog[iL].substr(off,logItLim()),TSYS::Bin,"<text>"):"")
 			   + (((mLog[iL].size()-off)>logItLim())?(string("\n...<")+_("CUT")+" "+TSYS::cpct2str(mLog[iL].size()-off-logItLim())+">"):string("")) + "\n\n";
 	    }

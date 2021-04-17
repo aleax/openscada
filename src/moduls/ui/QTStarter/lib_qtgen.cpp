@@ -178,7 +178,16 @@ void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, co
 	else model->setData(index, comb->currentText(), Qt::EditRole);
     }
     else if(dynamic_cast<QTextEdit*>(editor))	model->setData(index, ((QTextEdit*)editor)->toPlainText(), Qt::EditRole);
-    else if(dynamic_cast<QLineEdit*>(editor))	model->setData(index, ((QLineEdit*)editor)->text(), Qt::EditRole);
+    else if(dynamic_cast<QLineEdit*>(editor))
+	switch(index.data(Qt::DisplayRole).type()) {
+	    case QVariant::Int: case QVariant::UInt: case QVariant::LongLong: case QVariant::ULongLong:
+		model->setData(index, ((QLineEdit*)editor)->text().toLongLong(), Qt::EditRole);
+		break;
+	    case QVariant::Double:
+		model->setData(index, ((QLineEdit*)editor)->text().toDouble(), Qt::EditRole);
+		break;
+	    default: model->setData(index, ((QLineEdit*)editor)->text(), Qt::EditRole);	break;
+	}
     else QItemDelegate::setModelData(editor, model, index);
 }
 

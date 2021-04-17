@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TTRANSPORTS_H
 #define TTRANSPORTS_H
 
-#define STR_VER		24		//TransportS type modules version
+#define STR_VER		25		//TransportS type modules version
 #define STR_ID		"Transport"
 
 #include <string>
@@ -84,7 +84,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	int logItLim( )	{ return mLogItLim; }
 	void setLogLen( int vl );
 	void setLogItLim( int vl )	{ mLogItLim = vl; }
-	void pushLogMess( const string &vl );
+	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
 
 	TTypeTransport &owner( ) const;
 
@@ -120,7 +120,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	vector<AutoHD<TTransportOut> >	mAssTrO;
 
 	// IO log
-	int		mLogLen, mLogItLim;
+	int		mLogLen, mLogItLim, mLogLstDt;
+	time_t		mLogLstDtTm;
 	deque<string>	mLog;
 };
 
@@ -178,7 +179,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	int logItLim( )	{ return mLogItLim; }
 	void setLogLen( int vl );
 	void setLogItLim( int vl )	{ mLogItLim = vl; }
-	void pushLogMess( const string &vl );
+	void pushLogMess( const string &vl, const string &data = "", int dataDir = 0 );
 
 	TTypeTransport &owner( ) const;
 
@@ -217,7 +218,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	ResMtx	mReqRes, mLogRes;
 
 	// IO log
-	int		mLogLen, mLogItLim;
+	int		mLogLen, mLogItLim, mLogLstDt;
+	time_t		mLogLstDtTm;
 	deque<string>	mLog;
 };
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -616,7 +616,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 			switch(aid) {
 			    case AId_NodeClass: req.setAttr("type", i2s(OpcUa_Int32))->setText(i2s(NC_Variable));	return 0;
 			    case AId_DisplayName: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(nVal->name());	return 0;
-			    case AId_Descr: req.setAttr("type", i2s(OpcUa_String))->setText(nVal->fld().descr());	return 0;
+			    case AId_Descr: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(nVal->fld().descr());	return 0;
 			    case AId_Value: {
 				int64_t tm = 0;
 				bool dtOK = true;
@@ -685,7 +685,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				}
 				break;
 			    case AId_ValueRank: req.setAttr("type", i2s(OpcUa_Int32))->setText("-1");				return 0;
-			    case AId_ArrayDimensions: req.setAttr("type", i2s(OpcUa_Array|OpcUa_Int32))->setText("");		return 0;
+			    case AId_ArrayDimensions: req.setAttr("type", i2s(OpcUa_Array|OpcUa_UInt32))->setText("");		return 0;
 			    case AId_AccessLevel: case AId_UserAccessLevel:
 				req.setAttr("type", i2s(OpcUa_Byte))->setText(i2s(ACS_Read | (nVal->fld().flg()&TFld::NoWrite ? 0 : ACS_Write)));
 				return 0;

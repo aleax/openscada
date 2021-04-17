@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.5.3"
+#define MOD_VER		"2.6.1"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -570,7 +570,7 @@ void *TTrIn::Task( void *tr_in )
 
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(tr->nodePath().c_str(), _("The serial interface received the message '%d'."), req.size());
-	if(tr->logLen()) tr->pushLogMess(_("Received from\n") + req);
+	if(tr->logLen()) tr->pushLogMess(_("< Received from\n"), req, -1);
 
 	//Check for device lock and RING request from modem
 	if(tr->mMdmMode && !tr->mMdmDataMode) {
@@ -639,7 +639,7 @@ void *TTrIn::Task( void *tr_in )
 		    break;
 		}
 		tr->trOut += vmax(0, wL);
-		if(wL > 0 && tr->logLen()) tr->pushLogMess(_("Transmitted to\n") + string(answ.data()+wOff,wL));
+		if(wL > 0 && tr->logLen()) tr->pushLogMess(_("> Transmitted to\n"), string(answ.data()+wOff,wL), 1);
 	    }
 
 	    // Hard read for wait request echo and transfer disable
@@ -1179,7 +1179,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
     wReqTm = time ? time : wReqTm;
 
     string tVl = TSYS::strParse(timings(), 0, ":", &off);
-    float wCharTm = s2r(TSYS::strParse(tVl,0,"-"));
+    float wCharTm = s2r(TSYS::strParse(tVl,0,"-"));	//Milliseconds
     tVl = TSYS::strParse(tVl, 1, "-");
     float reqRetrMult = tVl.size() ? vmax(0,vmin(10,s2r(tVl))) : 4;
 
@@ -1205,7 +1205,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
     //Write request
     if(oBuf && oLen > 0) {
 	// Wait for char based timeout
-	if((tmW-mLstReqTm) < (reqRetrMult*wCharTm)) TSYS::sysSleep(1e-6*((reqRetrMult*wCharTm)-(tmW-mLstReqTm)));
+	if((tmW-mLstReqTm) < 1e3*(reqRetrMult*wCharTm)) TSYS::sysSleep(1e-6*(1e3*(reqRetrMult*wCharTm)-(tmW-mLstReqTm)));
 
 	// Input buffer clean
 	if(!notReq && !mI2C && !mSPI) {
@@ -1243,7 +1243,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 	    }
 	    else {
 		trOut += kz;
-		if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf+wOff,kz));
+		if(logLen()) pushLogMess(_("> Transmitted to\n"), string(oBuf+wOff,kz), 1);
 		if(mess_lev() == TMess::Debug) stRespTm = SYS->curTime();
 	    }
 
@@ -1312,7 +1312,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 		throw TError(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 	    }
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,blen)).c_str());
-	    if(blen > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,blen));
+	    if(blen > 0 && logLen()) pushLogMess(_("< Received from\n"), string(iBuf,blen), -1);
 	    if(blen > 0 && !notReq && mess_lev() == TMess::Debug) {
 		if(!(oBuf && oLen > 0))
 		    respSymbTmMax = fmax(respSymbTmMax, SYS->curTime()-tmW);

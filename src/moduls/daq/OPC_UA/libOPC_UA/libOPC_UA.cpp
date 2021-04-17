@@ -1128,8 +1128,8 @@ string UA::deriveKey( const string &secret, const string &seed, int keyLen )
 
     memcpy(hashTmp+20, seed.data(), seed.size());
     HMAC(EVP_sha1(), secret.data(), secret.size(), (const unsigned char*)seed.data(), seed.size(), hashTmp, 0);
-    for(int i_c = 0; i_c < hashCnt; i_c++) {
-	HMAC(EVP_sha1(), secret.data(), secret.size(), hashTmp, 20+seed.size(), hashRez+20*i_c, 0);
+    for(int iC = 0; iC < hashCnt; iC++) {
+	HMAC(EVP_sha1(), secret.data(), secret.size(), hashTmp, 20+seed.size(), hashRez+20*iC, 0);
 	HMAC(EVP_sha1(), secret.data(), secret.size(), hashTmp, 20, hashTmp, 0);
     }
 
@@ -3018,7 +3018,7 @@ nextReq:
 		    oNu(respEp, nc, 4);			//Nodes
 
 		    //   Nodes list processing
-		    for(uint32_t i_c = 0; i_c < nc; i_c++) {
+		    for(uint32_t iC = 0; iC < nc; iC++) {
 			NodeId nid = iNodeId(rb, off);		//nodeId
 			uint32_t bd = iNu(rb, off, 4);		//browseDirection
 			NodeId rtId = iNodeId(rb, off);		//referenceTypeId
@@ -3071,7 +3071,7 @@ nextReq:
 		    oNu(respEp, nCp, 4);		//continuationPoints
 
 		    //   Continuation points list processing
-		    for(uint32_t i_cp = 0; i_cp < nCp; i_cp++) {
+		    for(uint32_t iCp = 0; iCp < nCp; iCp++) {
 			string cp = iS(rb, off);	//continuationPoint
 
 			uint32_t stCode = 0, refNumb = 0;
@@ -3131,7 +3131,7 @@ nextReq:
 		    //  Respond
 		    oNu(respEp, nc, 4);				//Numbers
 		    //   Nodes list processing
-		    for(uint32_t i_c = 0; i_c < nc; i_c++) {
+		    for(uint32_t iC = 0; iC < nc; iC++) {
 			NodeId nid = iNodeId(rb, off);		//nodeId
 			uint32_t aid = iNu(rb, off, 4);		//attributeId
 			iS(rb, off);				//indexRange
@@ -3666,11 +3666,13 @@ void Server::EP::setEnable( bool vl )
 	   nodeReg(OpcUa_Integer,OpcUa_Int16,"Int16",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_Integer,OpcUa_Int32,"Int32",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_Integer,OpcUa_Int64,"Int64",NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_Integer,OpcUa_IntAuto,"IntAuto",NC_DataType,OpcUa_HasSubtype);
 	  nodeReg(OpcUa_Number,OpcUa_UInteger,"UInteger",NC_DataType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
 	   nodeReg(OpcUa_UInteger,OpcUa_Byte,"Byte",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_UInteger,OpcUa_UInt16,"UInt16",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_UInteger,OpcUa_UInt32,"UInt32",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_UInteger,OpcUa_UInt64,"UInt64",NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_UInteger,OpcUa_UIntAuto,"UIntAuto",NC_DataType,OpcUa_HasSubtype);
 	  nodeReg(OpcUa_Number,OpcUa_Double,"Double",NC_DataType,OpcUa_HasSubtype);
 	  nodeReg(OpcUa_Number,OpcUa_Float,"Float",NC_DataType,OpcUa_HasSubtype);
 	 nodeReg(OpcUa_BaseDataType,OpcUa_String,"String",NC_DataType,OpcUa_HasSubtype);
@@ -4039,8 +4041,8 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 
 	    //Forward hierarchical references process
 	    bool lstOK = lstNd.empty() ? true : false;
-	    for(unsigned i_ch = 0; (bd == BD_FORWARD || bd == BD_BOTH) && i_ch < ndX->second->childSize(); i_ch++) {
-		XML_N *chNd = ndX->second->childGet(i_ch);
+	    for(unsigned iCh = 0; (bd == BD_FORWARD || bd == BD_BOTH) && iCh < ndX->second->childSize(); iCh++) {
+		XML_N *chNd = ndX->second->childGet(iCh);
 		if(!lstOK) { lstOK = (lstNd==chNd->attr("NodeId")); continue; }
 		unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
 		if(nClass && !(nClass&cnClass)) continue;
@@ -4048,7 +4050,7 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 		    setAttr("referenceTypeId", chNd->attr("referenceTypeId"))->
 		    setAttr("dir", "1")->setAttr("name", chNd->attr("name"))->
 		    setAttr("NodeClass", int2str(cnClass))->setAttr("typeDefinition", chNd->attr("typeDefinition"));
-		if(rPn && (int)req.childSize() >= rPn && (i_ch+1) < ndX->second->childSize()) {
+		if(rPn && (int)req.childSize() >= rPn && (iCh+1) < ndX->second->childSize()) {
 		    req.setAttr("LastNode", chNd->attr("NodeId"));
 		    break;
 		}
@@ -4066,13 +4068,13 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 		case AId_NodeClass: req.setAttr("type", int2str(OpcUa_Int32))->setText(ndX->second->attr("NodeClass"));		return 0;
 		case AId_BrowseName: req.setAttr("type", int2str(OpcUa_QualifiedName))->setText(ndX->second->attr("name"));	return 0;
 		case AId_DisplayName:
-		    req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"), OpcUa_LocalizedText);
+		    req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"));
 		    return 0;
 		case AId_Descr: req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr("Descr"));		return 0;
 		case AId_WriteMask: case AId_UserWriteMask: req.setAttr("type", int2str(OpcUa_UInt32))->setText("0");		return 0;
 		case AId_IsAbstract: req.setAttr("type", int2str(OpcUa_Boolean))->setText(ndX->second->attr("IsAbstract"));	return 0;
 		case AId_Symmetric: req.setAttr("type", int2str(OpcUa_Boolean))->setText(ndX->second->attr("Symmetric"));	return 0;
-		case AId_InverseName: req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr("InverseName"));	return 0;
+		case AId_InverseName: req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr("InverseName")); return 0;
 		case AId_EventNotifier: req.setAttr("type", int2str(OpcUa_Byte))->setText(ndX->second->attr("EventNotifier"));	return 0;
 		default: {
 		    string dtType = ndX->second->attr("DataType");
@@ -4144,8 +4146,8 @@ XML_N &XML_N::operator=( const XML_N &prm )
 {
     //Delete self children and attributes
     mAttr.clear();
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
-	delete mChildren[i_ch];
+    for(unsigned iCh = 0; iCh < mChildren.size(); iCh++)
+	delete mChildren[iCh];
     mChildren.clear();
 
     //Copy params (name,text, attributes and instructions)
@@ -4157,8 +4159,8 @@ XML_N &XML_N::operator=( const XML_N &prm )
 	setAttr(ls[iA],prm.attr(ls[iA]));
 
     //Recursive copy children
-    for(unsigned i_ch = 0; i_ch < prm.childSize(); i_ch++)
-	*childAdd() = *prm.childGet(i_ch);
+    for(unsigned iCh = 0; iCh < prm.childSize(); iCh++)
+	*childAdd() = *prm.childGet(iCh);
 
     return *this;
 }
@@ -4187,19 +4189,19 @@ void XML_N::childDel( const unsigned id )
 
 void XML_N::childDel( XML_N *nd )
 {
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
-	if(mChildren[i_ch] == nd) {
-	    delete mChildren[i_ch];
-	    mChildren.erase(mChildren.begin()+i_ch);
+    for(unsigned iCh = 0; iCh < mChildren.size(); iCh++)
+	if(mChildren[iCh] == nd) {
+	    delete mChildren[iCh];
+	    mChildren.erase(mChildren.begin()+iCh);
 	    break;
 	}
 }
 
 void XML_N::childClear( const string &name )
 {
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); )
-	if(name.empty() || mChildren[i_ch]->name() == name) childDel(i_ch);
-	else i_ch++;
+    for(unsigned iCh = 0; iCh < mChildren.size(); )
+	if(name.empty() || mChildren[iCh]->name() == name) childDel(iCh);
+	else iCh++;
 }
 
 int XML_N::childIns( unsigned id, XML_N * n )
@@ -4230,9 +4232,9 @@ XML_N* XML_N::childGet( const int index, bool noex ) const
 
 XML_N* XML_N::childGet( const string &name, const int numb, bool noex ) const
 {
-    for(int i_ch = 0, i_n = 0; i_ch < (int)childSize(); i_ch++)
-	if(strcasecmp(childGet(i_ch)->name().c_str(),name.c_str()) == 0 && i_n++ == numb)
-	    return childGet(i_ch);
+    for(int iCh = 0, i_n = 0; iCh < (int)childSize(); iCh++)
+	if(strcasecmp(childGet(iCh)->name().c_str(),name.c_str()) == 0 && i_n++ == numb)
+	    return childGet(iCh);
 
     if(noex) return NULL;
     throw OPCError("Child %s:%d is not found!", name.c_str(), numb);
@@ -4252,8 +4254,8 @@ XML_N* XML_N::getElementBy( const string &iattr, const string &val )
     if(attr(iattr) == val)	return this;
 
     XML_N* rez = NULL;
-    for(unsigned i_ch = 0; !rez && i_ch < childSize(); i_ch++)
-	rez = childGet(i_ch)->getElementBy(iattr,val);
+    for(unsigned iCh = 0; !rez && iCh < childSize(); iCh++)
+	rez = childGet(iCh)->getElementBy(iattr,val);
 
     return rez;
 }
@@ -4281,14 +4283,14 @@ XML_N* XML_N::setText( const string &s, bool childs )
 {
     if(!childs || mName == "<*>") { mText = s; return this; }
 
-    int i_ch = -1;
+    int iCh = -1;
     for(int i_f = 0; i_f < (int)childSize(); i_f++)
 	if(childGet(i_f)->name() == "<*>") {
-	    if(i_ch < 0) childGet(i_f)->mText = s;
+	    if(iCh < 0) childGet(i_f)->mText = s;
 	    else childDel(i_f--);
-	    i_ch = i_f;
+	    iCh = i_f;
 	}
-    if(i_ch < 0) childAdd("<*>")->mText = s;
+    if(iCh < 0) childAdd("<*>")->mText = s;
 
     return this;
 }

@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.2.3"
+#define MOD_VER		"4.3.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -505,7 +505,9 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 		map<int, SSockIn*>::iterator cI = clId.find(sId);
 		if(cI != clId.end()) cI->second->trOut += vmax(0, wL);
 		sockRes.unlock();
-		if(wL > 0 && logLen()) pushLogMess(TSYS::strMess(_("%d:Transmitted directly to '%s'\n"),sId,TSYS::strLine(sender,0).c_str()) + string(data.data()+wOff,wL));
+		if(wL > 0 && logLen())
+		    pushLogMess(TSYS::strMess(_("%d:> Transmitted directly to '%s'\n"),sId,TSYS::strLine(sender,0).c_str()),
+			string(data.data()+wOff,wL), sId);
 	    }
 	    return wOff;
 	}
@@ -654,7 +656,7 @@ void *TSocketIn::Task( void *sock_in )
 
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), sender.c_str());
-	    if(sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),sock->sockFd,sender.c_str()) + req);
+	    if(sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:< Received from '%s'\n"),sock->sockFd,sender.c_str()), req, -sock->sockFd);
 
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
@@ -671,7 +673,7 @@ void *TSocketIn::Task( void *sock_in )
 	    r_len = sendto(sock->sockFd, answ.c_str(), answ.size(), 0, sadr, sadrLen);
 	    sock->trOut += vmax(0, r_len);
 
-	    if(r_len > 0 && sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),sock->sockFd,sender.c_str()) + answ);
+	    if(r_len > 0 && sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:> Transmitted to '%s'\n"),sock->sockFd,sender.c_str()), answ, sock->sockFd);
 	}
 #ifdef HAVE_LINUX_CAN_H
 	else if(sock->type == SOCK_RAWCAN) {
@@ -774,7 +776,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("Read message %s from '%s'."), TSYS::cpct2str(r_len).c_str(), s.sender.c_str());
 	    req.assign(buf, r_len);
-	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),s.sock,s.sender.c_str()) + req);
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:< Received from '%s'\n"),s.sock,s.sender.c_str()), req, -s.sock);
 
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
@@ -813,7 +815,9 @@ void *TSocketIn::ClTask( void *s_inf )
 		    s.s->dataRes().lock();
 		    s.s->trOut += vmax(0, wL); s.trOut += vmax(0, wL);
 		    s.s->dataRes().unlock();
-		    if(wL > 0 && s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),s.sock,s.sender.c_str()) + string(answ.data()+wOff,wL));
+		    if(wL > 0 && s.s->logLen())
+			s.s->pushLogMess(TSYS::strMess(_("%d:> Transmitted to '%s'\n"),s.sock,s.sender.c_str()),
+			    string(answ.data()+wOff,wL), s.sock);
 		}
 		answ = "";
 	    }
@@ -1383,7 +1387,7 @@ repeate:
 	    char tbuf[100];
 	    while(!notReq && read(sockFd,tbuf,sizeof(tbuf)) > 0) ;
 	    // Write request
-	    if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1000*mTmRep))
+	    if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1e3*mTmRep))
 		TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
 
 	    for(int wOff = 0; wOff != oLen; wOff += kz)
@@ -1406,7 +1410,7 @@ repeate:
 		}
 		else {
 		    trOut += kz;
-		    if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf+wOff,kz));
+		    if(logLen()) pushLogMess(_("> Transmitted to\n"), string(oBuf+wOff,kz), 1);
 		}
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
@@ -1491,7 +1495,7 @@ repeate:
 		    goto repeate;
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());
-		if(iB > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,iB));
+		if(iB > 0 && logLen()) pushLogMess(_("< Received from\n"), string(iBuf,iB), -1);
 		if(iB > 0 && mess_lev() == TMess::Debug && stRespTm) {
 		    respTm = SYS->curTime() - stRespTm;
 		    respTmMax = vmax(respTmMax, respTm);

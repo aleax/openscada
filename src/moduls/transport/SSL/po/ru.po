@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.SSL translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2008-2020.
+# Roman Savochenko <roman@oscada.org>, 2008-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 16:38+0300\n"
+"POT-Creation-Date: 2021-04-16 18:15+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -127,17 +127,15 @@ msgstr "Сокет был разорван ошибкой %s"
 msgid "The message is received in size %d."
 msgstr "Получено сообщение размером '%d'."
 
-#, c-format
-msgid "%d:Received from '%s'\n"
-msgstr "%d:Принято из '%s'\n"
+msgid "%d:< Received from '%s'\n"
+msgstr "%d:< Принято из '%s'\n"
 
 #, c-format
 msgid "The reply by the message in size %d."
 msgstr "Отвечено сообщением размера %d."
 
-#, c-format
-msgid "%d:Transmitted to '%s'\n"
-msgstr "%d:Передано на '%s'\n"
+msgid "%d:> Transmitted to '%s'\n"
+msgstr "%d:> Передано на '%s'\n"
 
 #, c-format
 msgid "Has been disconnected by '%s'!"
@@ -297,6 +295,7 @@ msgstr ""
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
+#, c-format
 msgid "Error connecting: %s"
 msgstr "Ошибка подключения: %s"
 
@@ -318,8 +317,8 @@ msgstr "Ошибка записи: %s"
 msgid "Wrote %s."
 msgstr "Записано %s."
 
-msgid "Transmitted to\n"
-msgstr "Передано\n"
+msgid "> Transmitted to\n"
+msgstr "> Передано\n"
 
 msgid "No data, the connection seems closed"
 msgstr "Нет данных, подключение похоже закрыто"
@@ -339,8 +338,8 @@ msgstr "Ошибка чтения (select): %s"
 msgid "Read %s."
 msgstr "Прочитано %s."
 
-msgid "Received from\n"
-msgstr "Получено\n"
+msgid "< Received from\n"
+msgstr "< Получено\n"
 
 msgid "Timings"
 msgstr "Временные интервалы"

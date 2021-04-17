@@ -1,3 +1,21 @@
+2021-04-17 Roman (stable)
+- !:FIX:LibsDB.OscadaLibs: DevLib.IEC62056 fixed in coming to the data requesting after initiation
+    and using the true address mask 0x7F instead 0x3F.
+- !!!!:Transports,{.,*}: The module version of the subsystem "Transports" rose to 25.
+    The IO log expanded for:
+    - combining data of even direction and address packages during prmWait_TM (5 seconds);
+    - microseconds part of the log fixed for 6 symbols;
+    - the data messages appended for the direction symbol.
+- !:FIX:DAQ.OPC_UA: The server part adapted to work with UAExpert 1.5 for:
+    - the attribute AId_Descr of the DAQ-value set to the type OpcUa_LocalizedText;
+    - the integer types appended for declaration OpcUa_IntAuto and OpcUa_UIntAuto.
+- !!!:FIX:Transport.Serial: The output transport fixed in the inter request waiting
+    at the reqRetrMult*wCharTm processing as milliseconds.
+- FIX:UI.QTStarter: The table delegate apply changes function TableDelegate::setModelData()
+    adapted in storing the value type.
+- FIX:UI.WebVision: Fixed in the keyboard focus switching at mouse clicking on buttons with images.
+
+
 2021-04-11 Roman (stable)
 - DAQ.ModBus: Appended for passing wrong items in the Standard Mode of the DAQ-parameters.
 - DAQ.OPC_UA: The DAQ-controller object appended in closing the session and secure channel at it stopping.

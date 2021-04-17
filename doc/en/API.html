@@ -1573,7 +1573,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>vector&lt;AutoHD&lt;TTransportOut&gt; &gt; assTrs( bool checkForCleanDisabled = false );</i> — The assigned output transports massive, created by the input transport for typical requests to the connection initiator. Set <i>checkForCleanDisabled</i> for prior checking and clean up disabled ones.</li>
 <li> <i>int logLen( );</i> — length of the IO log.</li>
 <li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
-<li> <i>void pushLogMess( const string &amp;vl );</i> — push the message <i>vl</i> to the log in format "<b>{Message}\n{BinData}</b>".</li>
+<li> <i>void pushLogMess( const string &amp;vl, const string &amp;data = "", int dataDir = 0 );</i> — push the message <i>vl</i> with the <i>data</i> in the direction <i>dataDir</i> to the log in the format "<b>{vl}\n{data}</b>".</li>
 <li> <i>TTypeTransport &amp;owner( ) const;</i> — Transport's type – the owner of the input transport.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -1625,7 +1625,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void messProtIO( XMLNode &amp;io, const string &amp;prot );</i> — Sending of the data in the XML tree <i>in</i> over the transport using the transport protocol <i>prot</i>.</li>
 <li> <i>int logLen( );</i> — length of the IO log.</li>
 <li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
-<li> <i>void pushLogMess( const string &amp;vl );</i> — push the message <i>vl</i> to the log in format "<b>{Message}\n{BinData}</b>".</li>
+<li> <i>void pushLogMess( const string &amp;vl, const string &amp;data = "", int dataDir = 0 );</i> — push the message <i>vl</i> with the <i>data</i> in the direction <i>dataDir</i> to the log in the format "<b>{vl}\n{data}</b>".</li>
 <li> <i>TTypeTransport &amp;owner( ) const;</i> — Type of transport - the owner of output transport.</li>
 <li> <i>ResMtx &amp;reqRes( );</i> — The requesting resource, needs to global lock into protocols with fragments receiving.</li></ul>
 <p><b>Protected attributes:</b>

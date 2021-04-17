@@ -6242,14 +6242,14 @@ Author: Roman Savochenko <roman@oscada.org>
 State of the protocol implementing: Client of the specification part 46, reading of the directly specified OBIS
 Total complexity: 3.2 HD
 Sponsored by: SVItoVYR Ltd for whole complexity
-Version: 1.1.0
+Version: 1.1.2
 License: GPLv2','IEC 62056 у частині 46 є одним з набору стандартів IEC 62056 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 46 надає шар підключення Даних з використанням протоколу HDLC, який переважно використовується на послідовних інтерфейсах.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Стан реалізації протоколу: Клієнт частини 46 специфікації, читання прямо визначених OBIS
 Загальна працемісткість: 3.2 ЛД
 Спонсорування: ТОВ "СВІТоВИР АВТоМАТИК" на загальну працемісткість
-Версія: 1.1.0
+Версія: 1.1.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function CRC( inSeq ) { return Special.FLibSYS.CRC(inSeq, 16, 0x1021, -1, true, true, 0xFFFF); }
 
@@ -6416,7 +6416,7 @@ function processIn( isSync ) {
 		}
 		else if((cntr&0x11) == 0x10) {	//I,F
 			if(ctx.inAMess.slice(0,4) == SYS.strFromCharCode(0xE6,0xE7,0x00,0x61)) {	//LPDU, APPLICATION 1, Initial parameter acquiring
-				if(ctx.inAMess.indexOf(SYS.strFromCharCode(0xA2,0x03,0x02,0x01,0x00)) >= 0) ctx.toInit = 0;
+				if(ctx.inAMess.indexOf(SYS.strFromCharCode(0xA2,0x03,0x02,0x01,0x00)) >= 0) ctx.toInit++;
 				else { t_err += tr("Error the authentication")+"; "; tr.start(false); }
 				//!!!! Deep parsing the initial parameter acquiring
 			}
@@ -6455,9 +6455,9 @@ function mess( com, data ) {
 	mLen = 10 + (data.length ? data.length+2 : 0);
 	 //SYS.strFromCharCode(ac, func) + objs;
 	aMess = SYS.strFromCharCode(0xA0|(mLen>>8), mLen&0xFF);
-	if(!ctx.destLow && ctx.destUp < 128)					aMess += SYS.strFromCharCode(((ctx.destUp&0x3F)<<1)|1);
-	else if(ctx.destUp < 128 && ctx.destLow < 128)	aMess += SYS.strFromCharCode((ctx.destUp&0x3F)<<1, ((ctx.destLow&0x3F)<<1)|1);
-	else aMess += SYS.strFromCharCode((ctx.destUp>>7)<<1, (ctx.destUp&0x3F)<<1, (ctx.destLow>>7)<<1, ((ctx.destLow&0x3F)<<1)|1);
+	if(!ctx.destLow && ctx.destUp < 128)					aMess += SYS.strFromCharCode(((ctx.destUp&0x7F)<<1)|1);
+	else if(ctx.destUp < 128 && ctx.destLow < 128)	aMess += SYS.strFromCharCode((ctx.destUp&0x7F)<<1, ((ctx.destLow&0x7F)<<1)|1);
+	else aMess += SYS.strFromCharCode((ctx.destUp>>7)<<1, (ctx.destUp&0x7F)<<1, (ctx.destLow>>7)<<1, ((ctx.destLow&0x7F)<<1)|1);
 	aMess += SYS.strFromCharCode((src<<1)|1);
 	ctx.reqToResp = com;
 	if(com == "SNRM")		aMess += SYS.strFromCharCode(0x93);

@@ -11,15 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/OPC UA</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">українська</a></div></div>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> The translation checking and actualizing
-</td></tr></table>
-</div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (99% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (99% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -99,24 +91,30 @@
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">A task of the module extending</a></li>
 <li> <b>To Do:</b></li></ul>
 <dl><dd> - revise the representing documentation page;</dd>
-<dd> - adapt to UAExpert 1.5;</dd>
 <dd> - append the builtin Logical Mode of the DAQ-Parameters;</dd>
 <dd> - append the authentication support for the input-server protocol part;</dd>
 <dd> - append the automatic creation for input transports and their pre-configuration from the EndPoint object properties;</dd>
 <dd> - implement the request-service "Publish" and chunks into the client part;</dd>
 <dd> - append for support of the history services of the server part, seeing and testing against UAExpert negotiation;</dd>
-<dd> - append for support of the history services of the client part;</dd>
-<dd> - implement the transport HTTP/SOAP.</dd></dl>
+<dd> - append for support of the history services of the client part.</dd></dl>
 </td></tr></table>
-<p>OPC (OLE for Process Control) — it is the family of protocols and technologies that provide the single interface to control the objects of automation and technological processes. The creating and support of specifications of OPC coordinates an international nonprofit organization <a class="external text" href="http://opcfoundation.org" rel="nofollow noreferrer noopener" target="_blank">OPC Foundation</a>, established in 1994 by the leading manufacturers of industrial automation.
-</p><p>In view of the fact that a significant influence in the OPC Foundation organization has the Microsoft corporation, OPC protocols, until recently, was single platform and closed, due to binding to the closed technologies of MS Windows. However, more recently, the OPC Foundation organization has created multi-platform solutions such as OPC XML-DA and OPC-UA. Most interesting of them is the OPC-UA, as a solution unifying all the earlier protocols in an open and multi-platform technologies. 
+<p>OPC (OLE for Process Control) — it is the family of protocols and technologies what provide the single interface to control the objects of automation and technological processes. The creating and support of specifications of OPC coordinates an international nonprofit organization <a class="external text" href="http://opcfoundation.org" rel="nofollow noreferrer noopener" target="_blank">OPC Foundation</a>, established in 1994 by the leading manufacturers of industrial automation.
+</p><p>In view of the fact that a significant influence in the OPC Foundation organization has the Microsoft corporation, OPC protocols, until recently, was single platform and closed, due to binding to the closed technologies of MS Windows. However recently the OPC Foundation organization has created multi-platform solutions such as OPC XML-DA and OPC-UA. Most interesting of them is the OPC-UA, as a solution of unifying all the earlier protocols in an open and multi-platform technologies. 
 </p><p>This module implements the interface and protocol support for OPC-UA in the form of client service, and as the OPC-UA server. Client service of OPC-UA is implemented by the same name module of the subsystem "Data acquisition", and the server is implemented by the subsystem's "Protocols" module. The OPC-UA protocol's specific implementing code by the module was moved to a separated library under the LGPL3 license, by the users requests.
-</p><p>In the current version of these modules and the library it is implemented the binary part of the protocol and basic services in unsafe mode and safe mode of policies "Base128Rsa15" and "Base256". Later it is planned to extend the module to work via HTTP/SOAP and implementation of other OPC-UA services.
+</p><p>In the current version of these modules and the library it is implemented the binary part of the protocol and basic services in unsafe mode and safe mode of policies "Base128Rsa15" and "Base256". Later it is planned to implementation of other OPC-UA services by the need.
 </p><p>Although the OPC-UA protocol is multi-platform, its specification and SDK are not freely available, but are provided only to members of the OPC Foundation organization. For this reason, the implementation of these modules has faced significant obstacles and problems.
-</p><p>Firstly, the protocol OPC-UA is complex and its realization in general without specification an extremely laborious. For this reason, the work on these modules for a long time was not started, and only thanks to sponsorship by an organization-member of OPC Foundation the OpenSCADA project received documentation of the specification. The SDK and source code ANSIC-API of the OPC-UA protocol have not been received due to their incompatibility with the GPL license and as a consequence, the potential threat of violation of the license when working with the source code, which could lead to subsequent legal problems with the free distribution of these modules.
-</p><p>Secondly, even the presence of the specification does not allow to solve some technical question without an example of implementation and possibility of test the working prototype of the client and server of OPC-UA. For example, it is the technical features of the implementation of symmetric encryption algorithms and the keys for them do not allowed to make the implementation of support for security policy at once.
-</p><p>To debug the operation of the modules the demonstration software of company <a class="external text" href="http://www.unified-automation.com" rel="nofollow noreferrer noopener" target="_blank">Unified Automation</a> was used, in consist of the OPC-UA client — UAExpert and Server — "OPC-UA Demo Server", from the SDK package. In view of the constantly developing process of same "UAExpert" client, as the OPC-UA specification implementing, it's new versions often have problems in work with the OPC-UA server from OpenSCADA. Generically the results of compatibility in work with clients and servers of the different developers you can get in <a href="#TableOfCompat">the table of compatibility</a>.
+</p><p>Firstly, the protocol OPC-UA is complex and its realization in general without any specification an extremely laborious. For this reason, the work on these modules for a long time was not started, and only thanks to sponsorship by an organization-member of OPC Foundation the OpenSCADA project received documentation of the specification. The SDK and source code ANSIC-API of the OPC-UA protocol have not been received due to their incompatibility with the GPL license and as a consequence, the potential threat of violation of the license when working with the source code, which could lead to subsequent legal problems with the free distribution of these modules.
+</p><p>Secondly, even the presence of the specification does not allow to solve some technical question without an example of implementation and possibility of test the working prototype of the client and server of OPC-UA. For example, it is the technical features of the implementation of the symmetric encryption algorithms and keys for them do not allowed to make the implementation of support for the security policies at once.
+</p><p>To debug the operation of the modules, the demonstration software of company <a class="external text" href="http://www.unified-automation.com" rel="nofollow noreferrer noopener" target="_blank">Unified Automation</a> was used, in consist of the OPC-UA client — UAExpert and Server — "OPC-UA Demo Server", from the SDK package. In view of the constantly developing process of the same "UAExpert" client, as the OPC-UA specification implementing, its new versions often have problems in work with the OPC-UA server from OpenSCADA. Generically the results of compatibility in work with clients and servers of different developers you can get in <a href="#TableOfCompat">the table of compatibility</a>.
 </p>
+<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
+<table cellspacing="0">
+<tr>
+<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../files/Constr.png" width="32" /></a>
+</td>
+<td style="padding-left:5px;"> The translation checking and actualizing is going here
+</td></tr></table>
+</div>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#The_OPC-UA_protocol"><span class="tocnumber">1</span> <span class="toctext">The OPC-UA protocol</span></a></li>
@@ -811,7 +809,16 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 <td> Pass </td>
 <td> Pass </td>
 <td> Pass </td>
-<td> Packages sequence number split from it's request and set self managing.
+<td> Packages sequence number split from it request and set self managing.
+</td></tr>
+<tr>
+<td> UAExpert 1.5 </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> Pass </td>
+<td> The Server code cleaned from inconsistency of the data types and the types appended for declaration own OpenSCADA types OpcUa_IntAuto and OpcUa_UIntAuto.
 </td></tr>
 <tr>
 <td colspan="7"> <i>Servers</i>

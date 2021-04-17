@@ -1582,6 +1582,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				return;
 			    }
 			    this.childNodes[0].classList.add("pressed");
+			    this.childNodes[0].focus();
 			    setWAttrs(this.wdgLnk.addr,'event','ws_BtPress');
 			}
 			this.place.btUp = function( ) {

@@ -196,7 +196,7 @@
 <li> <i>attribute</i> — for the associated linkage of the attributes at the parameter appointment. </li></ul>
 <p><span id="LogicLevLnks" title="#LogicLevLnks">The further linking</span> in general can be carried out by:
 </p>
-<ul><li> general definition-selecting the address-attribute of the subsystem "DAQ";</li>
+<ul><li> general definition-selecting the address-attribute of the subsystem "DAQ"; for example, the link "LogicLev.experiment.Pi.var" performs the access of the parameter attribute to the other parameter attribute; sign "(+)" at the end of the address indicate about successful linking and presence of the target; for object-type attributes, there permissible hierarchical access to a specific property of the object, by specifying its path through the symbol '#', for example: "LogicLev.experiment.Pi.var#pr1.pr2";</li>
 <li> definition of the specific address of a separate module of the subsystem "DAQ";</li>
 <li> direct setting a constant value in the format "<b>val:{Parameter}</b>";</li>
 <li> empty or erroneous address when the value by the link is set to <b>EVAL</b>.</li></ul>

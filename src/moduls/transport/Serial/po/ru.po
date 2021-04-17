@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.Serial translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Transport.Serial package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2009-2020.
+# Roman Savochenko <roman@oscada.org>, 2009-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 16:43+0300\n"
+"POT-Creation-Date: 2021-04-16 18:12+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -150,8 +150,8 @@ msgstr "Отключено"
 msgid "The serial interface received the message '%d'."
 msgstr "Последовательный интерфейс получил сообщение '%d'."
 
-msgid "Received from\n"
-msgstr "Получено\n"
+msgid "< Received from\n"
+msgstr "< Получено\n"
 
 msgid "Error requesting the protocol."
 msgstr "Ошибка запроса к протоколу."
@@ -167,8 +167,8 @@ msgstr "Запись: ответ ноль байт."
 msgid "Write: error '%s (%d)'."
 msgstr "Запись: ошибка '%s (%d)'."
 
-msgid "Transmitted to\n"
-msgstr "Передано\n"
+msgid "> Transmitted to\n"
+msgstr "> Передано\n"
 
 msgid "Error closing the protocol."
 msgstr "Ошибка закрытия протокола."
@@ -313,6 +313,7 @@ msgstr "Неизвестная ошибка"
 msgid "Transport is not connected!"
 msgstr "Транспорт не подключен!"
 
+#, c-format
 msgid "Reconnect by KeepAliveTm %gs."
 msgstr "Переподключение по KeepAliveTm %gс."
 
