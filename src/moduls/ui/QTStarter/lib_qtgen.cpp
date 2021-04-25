@@ -95,6 +95,8 @@ void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option
     //See the Qt source file "qitemdelegate.cpp" for more details
     //drawCheck(painter, opt, checkRect, checkState);
     //drawDecoration(painter, opt, decorationRect, pixmap);
+    painter->setFont(opt.font);
+    painter->setPen(opt.palette.brush(QPalette::Text).color());
 
     QVariant value = index.data(Qt::DisplayRole);
     switch(value.type()) {

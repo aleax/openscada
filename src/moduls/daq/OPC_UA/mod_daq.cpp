@@ -69,7 +69,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PvKey",_("Private key (PEM)"),TFld::String,TFld::FullText,"10000"));
     fldAdd(new TFld("AuthUser",_("Auth: user"),TFld::String,TFld::NoFlag,"20"));
     fldAdd(new TFld("AuthPass",_("Auth: password"),TFld::String,TFld::NoFlag,"20"));
-    fldAdd(new TFld("AttrsLimit",_("Parameter attributes number limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
+    fldAdd(new TFld("UseRead",_("Use the \"Read\" function"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
@@ -84,7 +84,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TController(name_c,daq_db,cfgelem), enRes(true),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
-    mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), mPAttrLim(cfg("AttrsLimit").getId()),
+    mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), mUseRead(cfg("UseRead").getBd()),
     mPer(1e9), prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmDelay(0), servSt(0)
 {
@@ -176,10 +176,14 @@ void TMdContr::enable_( )
     }
     enSt = true;
     setEndPoint(endPoint());
+
+    if(mSubScr.empty())	mSubScr.push_back(Subscr(this));	//Creation one subscription object
 }
 
 void TMdContr::disable_( )
 {
+    mSubScr.clear();
+
     tr.free();
 }
 
@@ -213,10 +217,13 @@ void TMdContr::protIO( XML_N &io )
     { io.setAttr("err", TSYS::strMess("0x%x:%s:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
 }
 
-int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
+int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
 {
     if(!connect()) connect(true);
-    return tr.at().messIO(obuf, len_ob, ibuf, len_ib);
+    try {
+    //!!!! Check for the timeout error or not
+	return tr.at().messIO(obuf, len_ob, ibuf, len_ib, time);
+    } catch(TError&) { return 0; }
 }
 
 void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }
@@ -243,6 +250,9 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
     bool firstCall = true;
 
+    if(cntr.period())	cntr.mSubScr[0].publInterval = 1e-6*cntr.period();
+    if(!cntr.mUseRead)	cntr.mSubScr[0].activate(true);
+
     XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 
     try {
@@ -251,10 +261,41 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay > 0){ TSYS::taskSleep(1e9); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
 	    cntr.callSt = true;
+
+	    if(!cntr.mUseRead) {
+		cntr.poll();
+
+		// Parameters updating
+		AutoHD<TVal> vl;
+		uint32_t ndSt = 0;
+		MtxAlloc res(cntr.enRes, true);
+		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
+		    cntr.pHd[iP].at().vlList(als);
+		    for(unsigned iA = 0; iA < als.size(); iA++) {
+			vl = cntr.pHd[iP].at().vlAt(als[iA]);
+			nId = TSYS::strLine(vl.at().fld().reserve(), 2);
+			if(nId.empty())	continue;
+
+			XML_N *mIt = ((ndSt=str2uint(nId)) < cntr.mSubScr[0].mItems.size()) ? &cntr.mSubScr[0].mItems[ndSt] : NULL;
+			ndSt = (!mIt || !mIt->attr("statusCode").size()) ? OpcUa_BadMonitoredItemIdInvalid :
+				   (ndSt=str2uint(mIt->attr("statusCode"))) ? ndSt : str2uint(mIt->attr("Status"));
+			vl.at().setS((!mIt||ndSt)?EVAL_STR:mIt->text(), 0, true);
+			vl.at().fld().setLen(ndSt);
+		    }
+		}
+
+		res.unlock();
+
+		firstCall = false;
+		cntr.callSt = false;
+
+		TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
+		continue;
+	    }
+
 	    unsigned int div = cntr.period() ? (unsigned int)(cntr.syncPer()/(1e-9*cntr.period())) : 0;
 
 	    MtxAlloc res(cntr.enRes, true);
-
 	    if(!req.childSize() || cntr.mPCfgCh || cntr.tmDelay == 0 || (div && (it_cnt%div) < cntr.pHd.size())) {
 		if(div && (it_cnt%div) < cntr.pHd.size()) cntr.pHd[it_cnt%div].at().attrPrc();
 
@@ -346,9 +387,11 @@ void *TMdContr::Task( void *icntr )
 	}
     } catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
-    //Closing the session ...
+    //Closing the subscription and session ...
     if(TSYS::taskEndRun())
 	try {
+	    if(!cntr.mUseRead) cntr.mSubScr[0].activate(false);
+
 	    req.childClear();
 	    req.setAttr("id", "CloseALL");
 	    cntr.reqService(req);
@@ -425,19 +468,19 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/EndPoint",mEndP.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/EndPoint",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "dest","sel_ed", "select","/cntr/cfg/elLst", NULL);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "tp","str", "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON(), NULL);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",mPrior.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior(), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable periodic sync."), NULL);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecPolicy",mSecPol.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecMessMode",mSecMessMode.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/Cert",mCert.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID, "tp","str", "cols","90", "rows","7", NULL);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PvKey", mPvKey.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthUser", mAuthUser.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass", mAuthPass.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/AttrsLimit",cfg("AttrsLimit").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecPolicy",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecMessMode",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/Cert",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID, "tp","str", "cols","90", "rows","7", NULL);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PvKey",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthUser",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/UseRead",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
 	if(enableStat() && ctrMkNode("area",opt,-1,"/ndBrws",_("Server nodes browser"))) {
 	    ctrMkNode2("fld",opt,-1,"/ndBrws/nd",_("Node"),RWRWR_,"root",SDAQ_ID, "tp","str", "dest","select", "select","/ndBrws/ndLst", NULL);
 	    if(ctrMkNode("table",opt,-1,"/ndBrws/attrs",_("Attributes"),R_R_R_,"root",SDAQ_ID)) {
@@ -706,7 +749,7 @@ string TMdPrm::attrPrc( )
 		    case OpcUa_Float: case OpcUa_Double:					vtp = TFld::Real;	break;
 		}
 
-		// Browse name
+		//  Browse name
 		string aNm = req.childGet(2)->text();
 		size_t nmPos = aNm.find(":");
 		if(nmPos!=string::npos) aNm.erase(0, nmPos+1);
@@ -715,7 +758,11 @@ string TMdPrm::attrPrc( )
 		unsigned vflg = TVal::DirWrite;
 		if(!(s2i(req.childGet(4)->text())&ACS_Write))	vflg |= TFld::NoWrite;
 
-		pEl.fldAdd(new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,"","","","",(snd+"\n"+req.childGet(3)->attr("VarTp")).c_str()));
+		//  Register to monitor
+		unsigned clntHndl = owner().mSubScr[0].monitoredItemAdd(NodeId::fromAddr(snd));
+
+		pEl.fldAdd(new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,"","","","",
+		    (snd+"\n"+req.childGet(3)->attr("VarTp")+"\n"+u2s(clntHndl)).c_str()));
 	    }
 	    res.unlock();
 	}

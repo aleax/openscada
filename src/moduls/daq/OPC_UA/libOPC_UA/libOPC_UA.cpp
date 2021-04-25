@@ -56,12 +56,16 @@ string int2str( int val )
     return buf;
 }
 
+int str2int( const string &val )	{ return atoi(val.c_str()); }
+
 string uint2str( unsigned val )
 {
     char buf[250];
     snprintf(buf, sizeof(buf), "%u", val);
     return buf;
 }
+
+unsigned long str2uint( const string &val )	{ return strtoul(val.c_str(), NULL, 0); }
 
 string ll2str( int64_t val )
 {
@@ -398,24 +402,24 @@ NodeId NodeId::fromAddr( const string &strAddr )
 	bf[2] = 0;
 	// Get Data1
 	dt = vl.substr(1,8);
-	for(int i_s = (dt.size()-2); i_s >= 0; i_s -= 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = (dt.size()-2); iS >= 0; iS -= 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	// Get Data2
 	dt = vl.substr(10,4);
-	for(int i_s = (dt.size()-2); i_s >= 0; i_s -= 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = (dt.size()-2); iS >= 0; iS -= 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	// Get Data3
 	dt = vl.substr(15,4);
-	for(int i_s = (dt.size()-2); i_s >= 0; i_s -= 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = (dt.size()-2); iS >= 0; iS -= 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	// Get Data4a
 	dt = vl.substr(20,4);
-	for(int i_s = 0; i_s < (int)dt.size(); i_s += 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = 0; iS < (int)dt.size(); iS += 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	// Get Data4b
 	dt = vl.substr(25,12);
-	for(int i_s = 0; i_s < (int)dt.size(); i_s += 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = 0; iS < (int)dt.size(); iS += 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	return NodeId(rez, ns, NodeId::Guid);
     }
 
@@ -449,36 +453,36 @@ string NodeId::toAddr( ) const
 	    vl += "{";
 	    //Get Data1
 	    string svl = strVal().substr(0,4);
-	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = (svl.size()-1); iSz >= 0; iSz--)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    //Get Data2
 	    vl += "-";
 	    svl = strVal().substr(4,2);
-	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = (svl.size()-1); iSz >= 0; iSz--)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    //Get Data3
 	    vl += "-";
 	    svl = strVal().substr(6,2);
-	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = (svl.size()-1); iSz >= 0; iSz--)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    //Get Data4a
 	    vl += "-";
 	    svl = strVal().substr(8,2);
-	    for(int i_sz = 0; i_sz < (int)svl.size(); i_sz++)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = 0; iSz < (int)svl.size(); iSz++)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    //Get Data4b
 	    vl += "-";
 	    svl = strVal().substr(10,6);
-	    for(int i_sz = 0; i_sz < (int)svl.size(); i_sz++)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = 0; iSz < (int)svl.size(); iSz++)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    vl += "}";
 	    break;
 	}
 	case NodeId::Opaque: {
 	    vl += "\"";
 	    string svl = strVal();
-	    for(unsigned i_sz = 0; i_sz < svl.size(); i_sz++)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(unsigned iSz = 0; iSz < svl.size(); iSz++)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    vl += "\"";
 	    break;
 	}
@@ -834,7 +838,7 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
 	}
 	//ArrayDimension
 	if(vEMsk&OpcUa_ArrayDimension) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supporteded.");
-	//????
+	//!!!!
     }
     if(eMsk&0x02) oN(buf, strtoul(vl.c_str(),NULL,10), 4);	//Status
     if(eMsk&0x04) oTm(buf, srcTmStmp ? srcTmStmp : curTime());	//SourceTimestamp
@@ -903,7 +907,7 @@ string UA::certDER2PEM( const string &certDer )
     if(x) bm = BIO_new(BIO_s_mem());
     if(bm && PEM_write_bio_X509(bm,x) > 0) {
 	char buf[4000];
-	for(int i_r = 0; (i_r=BIO_read(bm,buf,sizeof(buf))) > 0; ) rez.append(buf, i_r);
+	for(int iR = 0; (iR=BIO_read(bm,buf,sizeof(buf))) > 0; ) rez.append(buf, iR);
     }
     //Free temporary data
     if(bm) BIO_free(bm);
@@ -971,6 +975,7 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
 	    rez.append((char*)rsaOut, blen);
 	}
     }
+
     //Free temporary data
     if(pkey)	EVP_PKEY_free(pkey);
     if(bm)	BIO_free(bm);
@@ -1188,6 +1193,29 @@ Client::Client( )	{ }
 
 Client::~Client( )	{ }
 
+void Client::poll( )
+{
+    //Checking for the input channel activity
+    XML_N req("opc.tcp"); req.setAttr("id", "Poll");
+    reqService(req);
+
+    //Checking for the subscriptions
+    for(unsigned iSubscr = 0; iSubscr < mSubScr.size(); ++iSubscr) {
+	Subscr &curS = mSubScr[iSubscr];
+	if(!curS.subScrId) continue;
+	printf("TEST 00: %d\n", curS.publCnt);
+	while(curS.publCnt < 2) {
+	    curS.publCnt++;
+	    req.childClear();
+	    req.setAttr("id", "Publish");
+	    for(unsigned iAck = 0; iAck < curS.mSeqToAcq.size(); ++iAck)
+		req.childAdd("Ack")->setAttr("subScrId", uint2str(curS.subScrId))->setText(uint2str(curS.mSeqToAcq[iAck]));
+	    reqService(req);
+	    curS.mSeqToAcq.clear();
+	}
+    }
+}
+
 void Client::protIO( XML_N &io )
 {
     string rez, err;
@@ -1324,7 +1352,7 @@ void Client::protIO( XML_N &io )
 		    iNu(rez, off, 4);					//RequestId
 									//> Extension Object
 		    if(iNodeId(rez,off).numbVal() != OpcUa_OpenSecureChannelResponse)	//TypeId
-			throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+			throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 									//>> Body
 									//>>> RespondHeader
 		    iTm(rez, off);					//timestamp
@@ -1408,6 +1436,7 @@ void Client::protIO( XML_N &io )
 		nextReq:
 		int iTpId = 0;
 		string mReq;
+		bool waitResponse = true;
 		if(io.attr("id") == "FindServers") {
 		    iTpId = OpcUa_FindServersRequest;
 		    oS(mReq, io.attr("EndPoint"));			//endpointUrl
@@ -1434,7 +1463,7 @@ void Client::protIO( XML_N &io )
 		    oS(mReq, "");					//serverUri
 		    oS(mReq, io.attr("EndPoint"));			//endpointUrl
 		    oS(mReq, sessionName());				//sessionName
-		    io.setAttr("Nonce", randBytes(32));			//???? check for policy
+		    io.setAttr("Nonce", randBytes(32));			//!!!! check for policy
 		    oS(mReq, io.attr("Nonce"));				//clientNonce
 		    oS(mReq, certPEM2DER(io.childGet("ClientCert")->text()));	//clientCertificate
 		    oR(mReq, str2real(io.attr("sesTm")), 8);		//Requested SessionTimeout, ms
@@ -1495,9 +1524,9 @@ void Client::protIO( XML_N &io )
 		    oN(mReq, str2real(io.attr("timestampsToReturn")), 4);//timestampsTo Return (SERVER_1)
 									//> nodesToRead []
 		    oNu(mReq, std::min(25u,io.childSize()-stIdx), 4);	//nodes
-		    for(unsigned i_n = stIdx; i_n < io.childSize() && (i_n-stIdx) < 25; i_n++) {
-			oNodeId(mReq, NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId
-			oNu(mReq, strtoul(io.childGet(i_n)->attr("attributeId").c_str(),NULL,0), 4);	//attributeId (Value)
+		    for(unsigned iN = stIdx; iN < io.childSize() && (iN-stIdx) < 25; iN++) {
+			oNodeId(mReq, NodeId::fromAddr(io.childGet(iN)->attr("nodeId")));	//nodeId
+			oNu(mReq, strtoul(io.childGet(iN)->attr("attributeId").c_str(),NULL,0), 4);	//attributeId (Value)
 			oS(mReq, "");					//indexRange
 			oSqlf(mReq, "");				//dataEncoding
 		    }
@@ -1506,8 +1535,8 @@ void Client::protIO( XML_N &io )
 		    iTpId = OpcUa_WriteRequest;
 									//> nodesToWrite []
 		    oNu(mReq,io.childSize(),4);				//nodes
-		    for(unsigned i_n = 0; i_n < io.childSize(); i_n++) {
-			XML_N *nd = io.childGet(i_n);
+		    for(unsigned iN = 0; iN < io.childSize(); iN++) {
+			XML_N *nd = io.childGet(iN);
 			oNodeId(mReq, NodeId::fromAddr(nd->attr("nodeId")));			//nodeId
 			oNu(mReq, strtoul(nd->attr("attributeId").c_str(),NULL,0), 4);		//attributeId (Value)
 			oS(mReq, "");								//indexRange
@@ -1526,87 +1555,155 @@ void Client::protIO( XML_N &io )
 		    oNu(mReq, 0, 4);					//requestedMax ReferencesPerNode
 									//> nodesToBrowse
 		    oNu(mReq, io.childSize(), 4);			//Nodes 1
-		    for(unsigned i_n = 0; i_n < io.childSize(); i_n++) {
-			oNodeId(mReq, NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId (RootFolder)
-			oNu(mReq, strtoul(io.childGet(i_n)->attr("browseDirection").c_str(),NULL,0), 4);	//browseDirection (FORWARD_0)
-			oNodeId(mReq, NodeId::fromAddr(io.childGet(i_n)->attr("referenceTypeId")));	//referenceTypeId (HierarchicalReferences)
+		    for(unsigned iN = 0; iN < io.childSize(); iN++) {
+			oNodeId(mReq, NodeId::fromAddr(io.childGet(iN)->attr("nodeId")));	//nodeId (RootFolder)
+			oNu(mReq, strtoul(io.childGet(iN)->attr("browseDirection").c_str(),NULL,0), 4);	//browseDirection (FORWARD_0)
+			oNodeId(mReq, NodeId::fromAddr(io.childGet(iN)->attr("referenceTypeId")));	//referenceTypeId (HierarchicalReferences)
 			oNu(mReq, 1, 1);				//includeSubtypes (true)
-			oNu(mReq, strtoul(io.childGet(i_n)->attr("nodeClassMask").c_str(),NULL,0), 4);	//nodeClassMask
-			oNu(mReq, strtoul(io.childGet(i_n)->attr("resultMask").c_str(),NULL,0), 4);	//resultMask
+			oNu(mReq, strtoul(io.childGet(iN)->attr("nodeClassMask").c_str(),NULL,0), 4);	//nodeClassMask
+			oNu(mReq, strtoul(io.childGet(iN)->attr("resultMask").c_str(),NULL,0), 4);	//resultMask
 		    }
 		}
+		else if(io.attr("id") == "CreateSubscription") {
+		    iTpId = OpcUa_CreateSubscriptionRequest;
+		    oR(mReq, str2real(io.attr("publInterval")), 8);	//requestedPublishingInterval
+		    oNu(mReq, str2uint(io.attr("lifetimeCnt")), 4);	//requestedLifetimeCount
+		    oNu(mReq, str2uint(io.attr("maxKeepAliveCnt")), 4);	//requestedMaxKeepAliveCount
+		    oNu(mReq, str2uint(io.attr("maxNtfPerPubl")), 4);	//maxNotificationsPerPublish
+		    oNu(mReq, str2int(io.attr("publEn")), 1);		//publishingEnabled
+		    oNu(mReq, str2uint(io.attr("pr")), 1);		//priority
+		}
+		else if(io.attr("id") == "DeleteSubscriptions") {
+		    iTpId = OpcUa_DeleteSubscriptionsRequest;
+		    oNu(mReq, io.childSize(), 4);			//subscriptionIds []
+		    for(unsigned iS = 0; iS < io.childSize(); iS++)
+			oNu(mReq, str2uint(io.childGet(iS)->text()), 4);//subscriptionId
+		}
+		else if(io.attr("id") == "CreateMonitoredItems") {
+		    iTpId = OpcUa_CreateMonitoredItemsRequest;
+		    oNu(mReq, str2uint(io.attr("subScrId")), 4);	//subscriptionId
+		    oNu(mReq, str2uint(io.attr("tmstmpToRet")), 4);	//timestampsToReturn
+		    oNu(mReq, io.childSize(), 4);			//itemsToCreate [] | itemsToModify []
+		    for(unsigned iM = 0; iM < io.childSize(); iM++) {
+			XML_N *chO = io.childGet(iM);
+									// itemToMonitor
+
+			oNodeId(mReq, NodeId::fromAddr(chO->text()));	//  nodeId
+			oNu(mReq, str2uint(chO->attr("aId")), 4);	//  attributeId
+			oS(mReq, "");					//  indexRange
+			oSqlf(mReq, "");				//  dataEncoding
+			oNu(mReq, str2uint(chO->attr("mMode")), 4);	// monitoringMode
+									// requestedParameters
+			oNu(mReq, str2uint(chO->attr("hndl")), 4);	//  clientHandle
+			oR(mReq, str2real(chO->attr("smplInt")), 8);	//  samplingInterval, in ms
+			oNodeId(mReq, 0);				//  filter
+			oNu(mReq, 0, 1);				//   EncodingMask
+			oNu(mReq, str2uint(chO->attr("qSz")), 4);	//  queueSize
+			oNu(mReq, 1, 1);				//  discardOldest, !!!!:discarded by default
+		    }
+		}
+		else if(io.attr("id") == "Publish") {
+		    iTpId = OpcUa_PublishRequest;
+		    //  The publish request acknowledges
+		    oN(mReq, (io.childSize()?io.childSize():-1), 4);	//>subscription Acknowledgements []
+		    for(unsigned iAck = 0; iAck < io.childSize(); iAck++) {
+			XML_N *chO = io.childGet(iAck);
+			oNu(mReq, str2uint(chO->attr("subScrId")), 4);	//> subscriptionId
+			oNu(mReq, str2uint(chO->text()), 4);		//> sequenceNumber
+		    }
+		    waitResponse = false;
+		}
+		else if(io.attr("id") == "Poll") waitResponse = false;	//Just read the channel for the server activity
 		else throw OPCError(OpcUa_BadNotSupported, "Request '%s' isn't supported.", io.attr("id").c_str());
 
-		rez = "MSGF";							//SecureChannel message
-		rez.reserve(200);
-		oNu(rez, 0, 4);							//Message size
-		oNu(rez, strtoul(io.attr("SecChnId").c_str(),NULL,10), 4);	//Secure channel identifier
-		oNu(rez, strtoul(io.attr("SecTokenId").c_str(),NULL,10), 4);	//TokenId
-		int begEncBlck = rez.size();
-									//> Sequence header
-		oNu(rez, strtoul(io.attr("SeqNumber").c_str(),NULL,10), 4);	//Sequence number
-		oNu(rez, strtoul(io.attr("SeqReqId").c_str(),NULL,10), 4);	//RequestId
-									//> Extension body object
-		oNodeId(rez, iTpId);					//TypeId request
-									//>> Request Header
-		oNodeId(rez, NodeId::fromAddr(io.attr("authTokenId")));	//Session AuthenticationToken
-		oTm(rez, curTime());				//timestamp
-		uint32_t ReqHandle = strtoul(io.attr("ReqHandle").c_str(),NULL,10)+1;
-		io.setAttr("ReqHandle", uint2str(ReqHandle));
-		oN(rez, ReqHandle, 4);					//requestHandle
-		oNu(rez, 0, 4);						//returnDiagnostics
-		oS(rez, "");						//auditEntryId
-		oNu(rez, 10000, 4);					//timeoutHint
-									//>>> Extensible parameter
-		oNodeId(rez, 0);					//TypeId (0)
-		oNu(rez, 0, 1);						//Encoding
-		rez.append(mReq);					//Same request
-		oNu(rez, rez.size(), 4, 4);				//> Real message size
-		string secPolicy = io.attr("SecPolicy");
-		char secMessMode = atoi(io.attr("SecurityMode").c_str());
-		if(secMessMode == MS_Sign || secMessMode == MS_SignAndEncrypt) {
-		    string servKey = io.attr("servKey");
+		char secMessMode = 0;
+		string secPolicy;
 
-		    // Padding place
-		    if(secMessMode == MS_SignAndEncrypt) {
-			int kSz = servKey.size()/3;
-			int paddingSize = ((rez.size()-begEncBlck+1+20+kSz-1)/kSz)*kSz-(rez.size()-begEncBlck+20);
-			rez += string(paddingSize,(char)(paddingSize-1));
+		if(mReq.size()) {
+		    rez = "MSGF";						//SecureChannel message
+		    rez.reserve(200);
+		    oNu(rez, 0, 4);						//Message size
+		    oNu(rez, strtoul(io.attr("SecChnId").c_str(),NULL,10), 4);	//Secure channel identifier
+		    oNu(rez, strtoul(io.attr("SecTokenId").c_str(),NULL,10), 4);//TokenId
+		    int begEncBlck = rez.size();
+										//> Sequence header
+		    oNu(rez, strtoul(io.attr("SeqNumber").c_str(),NULL,10), 4);	//Sequence number
+		    oNu(rez, strtoul(io.attr("SeqReqId").c_str(),NULL,10), 4);	//RequestId
+										//> Extension body object
+		    oNodeId(rez, iTpId);					//TypeId request
+										//>> Request Header
+		    oNodeId(rez, NodeId::fromAddr(io.attr("authTokenId")));	//Session AuthenticationToken
+		    oTm(rez, curTime());					//timestamp
+		    uint32_t ReqHandle = strtoul(io.attr("ReqHandle").c_str(),NULL,10)+1;
+		    io.setAttr("ReqHandle", uint2str(ReqHandle));
+		    oN(rez, ReqHandle, 4);					//requestHandle
+		    oNu(rez, 0, 4);						//returnDiagnostics
+		    oS(rez, "");						//auditEntryId
+		    oNu(rez, 10000, 4);						//timeoutHint
+										//>>> Extensible parameter
+		    oNodeId(rez, 0);						//TypeId (0)
+		    oNu(rez, 0, 1);						//Encoding
+		    rez.append(mReq);						//Same request
+		    oNu(rez, rez.size(), 4, 4);					//> Real message size
+
+		    //???? Chunks implementation
+
+		    //Security information
+		    secPolicy = io.attr("SecPolicy");
+		    secMessMode = atoi(io.attr("SecurityMode").c_str());
+		    if(secMessMode == MS_Sign || secMessMode == MS_SignAndEncrypt) {
+			string servKey = io.attr("servKey");
+
+			// Padding place
+			if(secMessMode == MS_SignAndEncrypt) {
+			    int kSz = servKey.size()/3;
+			    int paddingSize = ((rez.size()-begEncBlck+1+20+kSz-1)/kSz)*kSz-(rez.size()-begEncBlck+20);
+			    rez += string(paddingSize,(char)(paddingSize-1));
+			}
+
+			// Real message size calc and place
+			oNu(rez, rez.size()+20, 4, 4);
+
+			// Signature
+			rez += symmetricSign(rez, servKey, secPolicy);
+
+			// Encoding
+			if(secMessMode == MS_SignAndEncrypt)
+			    rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricEncrypt(rez.substr(begEncBlck),servKey,secPolicy));
 		    }
 
-		    // Real message size calc and place
-		    oNu(rez, rez.size()+20, 4, 4);
-
-		    // Signature
-		    rez += symmetricSign(rez, servKey, secPolicy);
-
-		    // Encoding
-		    if(secMessMode == MS_SignAndEncrypt)
-			rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricEncrypt(rez.substr(begEncBlck),servKey,secPolicy));
+		    if(debug) debugMess(io.attr("id")+" Out");
 		}
 
-		if(debug) debugMess(io.attr("id")+" Req");
-		//Send request and wait respond
-		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
+		//Sending the request and waiting response, or just read the channel if there is no request
+		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf), -(waitResponse?10000:1));
+		//!!!! Take in the timeout values from the transport at some virtual variable
 		rez.assign(buf, resp_len);
+		continueRead:
 		int off = 4;
-		for( ; rez.size() < 8 || rez.size() < iNu(rez,off,4); off = 4) {
+		for( ; (rez.size() || waitResponse) && (rez.size() < 8 || rez.size() < iNu(rez,off,4)); off = 4) {
 		    resp_len = messIO(NULL, 0, buf, sizeof(buf));
-		    if(!resp_len) throw OPCError(OpcUa_BadCommunicationError, "Not full respond.");
+		    if(!resp_len) throw OPCError(OpcUa_BadCommunicationError, "No or not full message.");
 		    rez.append(buf, resp_len);
 		}
 
-		if(debug) debugMess(io.attr("id")+" Resp");
+		if(debug) debugMess(io.attr("id")+" In");
 
 		off = 4;
-		if(rez.size() < 8 || iNu(rez,off,4) != rez.size())
-		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTooLarge, "Respond size is not coincidence.");
+		uint32_t msgLen = 0;
+		//The response allowed to be big here due to the possibility of containg several messages
+		if(!rez.size() && !waitResponse) ;
+		else if(rez.size() < 8 || rez.size() < (msgLen=iNu(rez,off,4)))
+		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTooLarge, "Response size is not coincidence.");
 		else if(rez.compare(0,4,"ERRF") == 0) err = iErr(rez, off);
 		else if(rez.compare(0,4,"MSGF") != 0)
 		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTypeInvalid, "Respond don't acknowledge.");
 		else {
 		    iNu(rez, off, 4);					//Secure channel identifier
 		    iNu(rez, off, 4);					//Symmetric Algorithm Security Header : TokenId
+
+		    //???? Chunks implementation
+
 		    // Decrypt message block and signature check
 		    if(secMessMode == MS_Sign || secMessMode == MS_SignAndEncrypt) {
 			string clKey = io.attr("clKey");
@@ -1634,7 +1731,7 @@ void Client::protIO( XML_N &io )
 		    switch(oTpId) {
 			case OpcUa_FindServersResponse: {
 			    if(iTpId != OpcUa_FindServersRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 			    int AppDescrNub = iNu(rez, off, 4);				//List items
 			    for(int i_l = 0; i_l < AppDescrNub; i_l++) {
 				XML_N *ad = io.childAdd("ApplicationDescription");
@@ -1649,11 +1746,12 @@ void Client::protIO( XML_N &io )
 				for(int i_l2 = 0; i_l2 < discoveryUrlsN; i_l2++)
 				    ad->childAdd("discoveryUrl")->setText(iS(rez,off));	//discoveryUrl
 			    }
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_GetEndpointsResponse: {
 			    if(iTpId != OpcUa_GetEndpointsRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 			    int EndpointDescrNub = iNu(rez, off, 4);		//List items
 			    for(int i_l = 0; i_l < EndpointDescrNub; i_l++) {
 				XML_N *xep = io.childAdd("EndpointDescription");
@@ -1686,11 +1784,12 @@ void Client::protIO( XML_N &io )
 				xep->setAttr("transportProfileUri", iS(rez,off));	//transportProfileUri
 				xep->setAttr("securityLevel", uint2str(iNu(rez,off,1)));//securityLevel
 			    }
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_CreateSessionResponse: {
 			    if(iTpId != OpcUa_CreateSessionRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 			    io.setAttr("sesId", iNodeId(rez,off).toAddr());		//sessionId
 			    io.setAttr("authTokenId", iNodeId(rez,off).toAddr());	//authentication Token
 			    io.setAttr("sesTm", real2str(iR(rez,off,8)));		//revisedSession Timeout, ms
@@ -1734,25 +1833,28 @@ void Client::protIO( XML_N &io )
 				    !asymmetricVerify(certPEM2DER(io.childGet("ClientCert")->text())+io.attr("Nonce"),sign,servCert))
 				throw OPCError(OpcUa_BadApplicationSignatureInvalid, "Application signature error");
 			    iNu(rez, off, 4);				//maxRequest MessageSize
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_ActivateSessionResponse: {
 			    if(iTpId != OpcUa_ActivateSessionRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 			    iS(rez, off);				//serverNonce
 			    iN(rez, off, 4);				//results []
 			    iN(rez, off, 4);				//diagnosticInfos []
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_CloseSessionResponse:
 			    if(iTpId != OpcUa_CloseSessionRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 			    io.setAttr("sesId", "");			//sessionId
 			    io.setAttr("authTokenId", "");		//authentication Token
+			    waitResponse = false;
 			    break;
 			case OpcUa_ReadResponse: {
 			    if(iTpId != OpcUa_ReadRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 									//> results []
 			    int resN = iNu(rez, off, 4);		//Nodes number
 			    for(int iR = 0, stIdx_ = stIdx; iR < resN && stIdx_ < (int)io.childSize(); iR++, stIdx_++)
@@ -1761,32 +1863,34 @@ void Client::protIO( XML_N &io )
 									//>> diagnosticInfos []
 			    iN(rez, off, 4);				//Items number
 			    if(stIdx < (int)io.childSize()) goto nextReq;
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_WriteResponse: {
 			    if(iTpId != OpcUa_WriteRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 									//> results []
 			    int resN = iNu(rez, off, 4);		//Number
-			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++)
-				io.childGet(i_r)->setAttr("Status", strMess("0x%x",iNu(rez,off,4)));
+			    for(int iR = 0; iR < resN && iR < (int)io.childSize(); iR++)
+				io.childGet(iR)->setAttr("Status", strMess("0x%x",iNu(rez,off,4)));
 									//>> diagnosticInfos []
 			    iN(rez, off, 4);				//Items number
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_BrowseResponse: {
 			    if(iTpId != OpcUa_BrowseRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 									//> results []
 			    int resN = iNu(rez, off, 4);		//Numbers
-			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++) {
-				XML_N *rno = io.childGet(i_r);
+			    for(int iR = 0; iR < resN && iR < (int)io.childSize(); iR++) {
+				XML_N *rno = io.childGet(iR);
 				//strtoul(rno->attr("resultMask").c_str(), NULL, 0);	//resultMask
 				rno->setAttr("statusCode", uint2str(iNu(rez,off,4)));	//statusCode
 				iS(rez, off);				//continuationPoint
 									//>> References []
 				int refN = iNu(rez, off, 4);		//Numbers
-				for(int i_rf = 0; i_rf < refN; i_rf++) {
+				for(int iRf = 0; iRf < refN; iRf++) {
 				    XML_N *bno = rno->childAdd("bNode");
 				    bno->setAttr("referenceTypeId", uint2str(iNodeId(rez,off).numbVal()));
 				    bno->setAttr("isForward", iNu(rez,off,1)?"1":"0");
@@ -1798,11 +1902,115 @@ void Client::protIO( XML_N &io )
 				}
 			    }
 			    iN(rez, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_CreateSubscriptionResponse: {
+			    if(iTpId != OpcUa_CreateSubscriptionRequest)
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+
+			    io.setAttr("subScrId", uint2str(iNu(rez,off,4)));		//subscriptionId
+			    io.setAttr("publInterval", real2str(iR(rez,off,8)));	//revisedPublishingInterval
+			    io.setAttr("lifetimeCnt", uint2str(iNu(rez,off,4)));	//revisedLifetimeCount
+			    io.setAttr("maxKeepAliveCnt", uint2str(iNu(rez,off,4)));	//revisedMaxKeepAliveCount
+
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_DeleteSubscriptionsResponse: {
+			    if(iTpId != OpcUa_DeleteSubscriptionsRequest)
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+
+			    uint32_t sN = iNu(rez, off, 4);		//results []
+			    for(uint32_t iS = 0; iS < sN; ++iS) {
+				uint32_t sC = iNu(rez, off, 4);		// statusCode
+				if(iS < io.childSize())
+				    io.childGet(iS)->setAttr("statusCode", uint2str(sC));
+			    }
+			    iN(rez, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_CreateMonitoredItemsResponse: {
+			    if(iTpId != OpcUa_CreateMonitoredItemsRequest)
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+
+			    uint32_t mItN = iNu(rez, off, 4);		//results []
+			    for(uint32_t iIt = 0; iIt < mItN; ++iIt) {
+				uint32_t sC = iNu(rez, off, 4);		// statusCode
+				int32_t mItId = iN(rez, off, 4);	// monitoredItemId
+				double smplInt = iR(rez, off, 8);	// revisedSamplingInterval
+				uint32_t qSz = iNu(rez, off, 4);	// revisedQueueSize
+				if(iIt < io.childSize()) {
+				    XML_N *chO = io.childGet(iIt);
+				    chO->setAttr("statusCode", uint2str(sC));
+				    chO->setAttr("itId", int2str(mItId));
+				    chO->setAttr("smplInt", real2str(smplInt));
+				    chO->setAttr("qSz", uint2str(qSz));
+				}
+				iNodeId(rez, off);			// filterResult
+				iNu(rez, off, 1);			// encodingMask
+									//  !!!!: implement for non zero filter
+			    }
+			    iN(rez, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_PublishResponse: {
+			    uint32_t subScrId = iNu(rez, off, 4);	//subscriptionId
+			    Subscr *curSbscr = NULL;
+			    for(unsigned iSbscr = 0; iSbscr < mSubScr.size() && !curSbscr; ++iSbscr)
+				if(mSubScr[iSbscr].subScrId == subScrId) curSbscr = &mSubScr[iSbscr];
+			    if(!curSbscr) break;
+			    curSbscr->publCnt--;
+
+			    // Available sequences processing
+			    int32_t aSeqN = iN(rez, off, 4);		//availableSequence Numbers []
+			    for(int iSeq = 0; iSeq < aSeqN; ++iSeq)
+				//!!!! To implement at the republish implementing
+				iNu(rez, off, 4);			// sequenceNumber
+
+			    int moreNtfOff = iNu(rez, off, 1);		//moreNotifications
+									//  !!!!: use somewhat in the future
+									//notificationMessage
+			    uint32_t curSeq = iNu(rez, off, 4);		// sequenceNumber, current
+			    iTm(rez, off);				// publishTime
+			    int32_t ntfN = iN(rez, off, 4);		// notificationData []
+			    if(ntfN > 0) curSbscr->mSeqToAcq.push_back(curSeq);
+			    for(int iNtf = 0; iNtf < ntfN; ++iNtf) {
+				NodeId ntfType = iNodeId(rez, off);	//  TypeId (must be OpcUa_DataChangeNotification)
+				int8_t eMsk = iNu(rez, off, 1);		//  encodingMask
+				iNu(rez, off, 4);			//  extension object size
+									//    !!!!: implement for checking to OpcUa_DataChangeNotification
+									//          and reading/parsing the data block independently
+				int32_t ntfItN = iN(rez, off, 4);	//  monitoredItems []
+				XML_N tObj;
+				for(int iNtfIt = 0; iNtfIt < ntfItN; ++iNtfIt) {
+				    uint32_t clHdl = iNu(rez, off, 4);	//   clientHandle
+				    iDataValue(rez, off, (clHdl<curSbscr->mItems.size())?curSbscr->mItems[clHdl]:tObj);
+				}
+				iN(rez, off, 4);			//  diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+			    }
+			    int32_t resAckN = iN(rez, off, 4);		//results []
+									//  !!!!: implement for the acknowledge status processing
+			    for(int iResAckN = 0; iResAckN < resAckN; ++iResAckN)
+				iNu(rez, off, 4);			// result
+			    iN(rez, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
 			    break;
 			}
 			case OpcUa_ServiceFault: err = strMess("0x%x:%s", stCode, "Service fault");	break;
+			default: err = strMess("0x%x:Not supported message response %d", OpcUa_BadServiceUnsupported, oTpId);	break;
 		    }
 		}
+		rez.erase(0, msgLen);
+		if(rez.size() || (waitResponse && err.empty())) goto continueRead;
 	    }
 	}
 	else err = strMess("0x%x:%s", OpcUa_BadServiceUnsupported, strMess("OPC_UA protocol '%s' isn't supported.", io.name().c_str()).c_str());
@@ -1969,8 +2177,101 @@ void Client::reqService( XML_N &io )
 	setAttr("clKey", sess.clKey)->setAttr("servKey", sess.servKey);
     protIO(io);
 
-    if(strtoul(io.attr("err").c_str(),NULL,0) == OpcUa_BadInvalidArgument) sess.clearFull();
+    if(str2uint(io.attr("err")) == OpcUa_BadInvalidArgument) sess.clearFull();
     else if(io.attr("id") == "CloseSession") sess.clearSess();
+}
+
+//***************************************************************
+//* Client::Subscr - Subscription object by monitoreditems set	*
+//***************************************************************
+int Client::Subscr::monitoredItemAdd( const NodeId &nd, AttrIds aId, MonitoringMode mMode )
+{
+    XML_N req("opc.tcp");
+
+    int hndl = -1;
+
+    //Appending for new item
+    if(!nd.isNull()) {
+	string ndAddr = nd.toAddr();
+	for(unsigned iIt = 0; iIt < mItems.size() && hndl < 0; iIt++)
+	    if(mItems[iIt].attr("addr") == ndAddr && str2uint(mItems[iIt].attr("aId")) == aId)
+		hndl = iIt;
+	if(hndl < 0) {
+	    mItems.push_back(XML_N("mIt"));
+	    mItems.back().setAttr("addr", ndAddr)->
+			  setAttr("aId", uint2str(aId))->
+			  setAttr("mMode", uint2str(mMode))->
+			  setAttr("smplInt", real2str(publInterval))->
+			  setAttr("qSz","1");
+	    hndl = mItems.size()-1;
+	}
+    }
+
+    //Same registering the items
+    if(subScrId && (hndl >= 0 || nd.isNull())) {
+	req.setAttr("id", "CreateMonitoredItems")->
+	    setAttr("subScrId", uint2str(subScrId))->
+	    setAttr("tmstmpToRet", uint2str(TS_NEITHER));
+	for(unsigned iIt = ((hndl>=0)?hndl:0); iIt < ((hndl>=0)?hndl+1:mItems.size()); ++iIt)
+	    if(mItems[iIt].attr("statusCode").empty())	//Not registered still
+		req.childAdd("mIt")->
+		    setAttr("aId",mItems[iIt].attr("aId"))->
+		    setAttr("mMode",mItems[iIt].attr("mMode"))->
+		    setAttr("hndl",uint2str(iIt))->
+		    setAttr("smplInt", mItems[iIt].attr("smplInt"))->
+		    setAttr("qSz", mItems[iIt].attr("qSz"))->
+		    setText(mItems[iIt].attr("addr"));
+	clnt->reqService(req);
+	// Processing the result
+	for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
+	    XML_N *chO = req.childGet(iCh);
+	    uint32_t itId = str2uint(chO->attr("hndl"));
+	    if(itId >= mItems.size()) continue;
+	    mItems[itId].setAttr("statusCode", chO->attr("statusCode"))->
+			setAttr("itId", chO->attr("itId"))->
+			setAttr("smplInt", chO->attr("smplInt"))->
+			setAttr("qSz", chO->attr("qSz"));
+	}
+    }
+
+    return hndl;
+}
+
+void Client::Subscr::activate( bool vl )
+{
+    if(vl == (bool)subScrId) return;	//Already active/deactive
+
+    XML_N req("opc.tcp");
+    if(vl) {
+	//st = SS_CREATING;
+	req.setAttr("id", "CreateSubscription")->
+	    setAttr("publInterval", real2str(publInterval))->
+	    setAttr("lifetimeCnt", uint2str(lifetimeCnt))->
+	    setAttr("maxKeepAliveCnt", uint2str(maxKeepAliveCnt))->
+	    setAttr("maxNtfPerPubl", uint2str(maxNtfPerPubl))->
+	    setAttr("publEn", publEn?"1":"0")->
+	    setAttr("pr", uint2str(pr));
+	clnt->reqService(req);
+	if(str2uint(req.attr("subScrId"))) {
+	    subScrId = str2uint(req.attr("subScrId"));
+	    publInterval = str2real(req.attr("publInterval"));
+	    lifetimeCnt = str2uint(req.attr("lifetimeCnt"));
+	    maxKeepAliveCnt = str2uint(req.attr("maxKeepAliveCnt"));
+	    //st = SS_NORMAL;
+	}
+
+	//Activation off all registered monitoring items
+	monitoredItemAdd(0);
+    }
+    else {
+	req.setAttr("id", "DeleteSubscriptions");
+	req.childAdd("subscr")->setText(uint2str(subScrId));
+	clnt->reqService(req);
+	if(req.childSize() && req.childGet(0)->attr("statusCode").size() && !str2uint(req.childGet(0)->attr("statusCode")))
+	{ /*st = SS_CLOSED;*/ subScrId = 0; }
+    }
+
+    publCnt = 0;
 }
 
 //*************************************************
@@ -2138,8 +2439,8 @@ nextReq:
 	    EP *wep = NULL;
 	    for(int i_ep = 0; i_epOk < 0 && i_ep < (int)epLs.size(); i_ep++) {
 		if(!(wep=epEnAt(epLs[i_ep])))	continue;
-		for(int i_s = 0; i_epOk < 0 && i_s < wep->secSize(); i_s++)
-		    if(wep->secPolicy(i_s) == secPlc)
+		for(int iS = 0; i_epOk < 0 && iS < wep->secSize(); iS++)
+		    if(wep->secPolicy(iS) == secPlc)
 			i_epOk = i_ep;
 	    }
 	    if(i_epOk < 0) throw OPCError(OpcUa_BadSecurityPolicyRejected, "", "");
@@ -2182,8 +2483,8 @@ nextReq:
 
 	    // Find message secure mode
 	    bool secModOK = false;
-	    for(int i_s = 0; !secModOK && i_s < wep->secSize(); i_s++)
-		if(wep->secPolicy(i_s) == secPlc && wep->secMessageMode(i_s) == secMode)
+	    for(int iS = 0; !secModOK && iS < wep->secSize(); iS++)
+		if(wep->secPolicy(iS) == secPlc && wep->secMessageMode(iS) == secMode)
 		    secModOK = true;
 	    if(!secModOK) throw OPCError(OpcUa_BadSecurityModeRejected, "", "");
 
@@ -2430,8 +2731,8 @@ nextReq:
 			EP *ep = epEnAt(epLs[i_ep]);
 			if(!ep) continue;
 								//>>> EndpointDescription
-			for(int i_sec = 0; i_sec < ep->secSize(); i_sec++, epCnt++) {
-			    oS(respEp, ep->url()+"/OSCADA_OPC/"+ep->secPolicy(i_sec)/*+"/"+ep->secMessMode(i_sec)*/);    //endpointUrl
+			for(int iSec = 0; iSec < ep->secSize(); iSec++, epCnt++) {
+			    oS(respEp, ep->url()+"/OSCADA_OPC/"+ep->secPolicy(iSec)/*+"/"+ep->secMessMode(iSec)*/);    //endpointUrl
 								//>>>> server (ApplicationDescription)
 			    oS(respEp, applicationUri());	//applicationUri
 			    oS(respEp, productUri());		//productUri
@@ -2448,8 +2749,8 @@ nextReq:
 				oS(respEp,duLs[i_du]);		//discoveryUrl
 
 			    oS(respEp, certPEM2DER(ep->cert()));//>>> serverCertificate
-			    oNu(respEp, ep->secMessageMode(i_sec), 4);	//securityMode:MessageSecurityMode
-			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#"+ep->secPolicy(i_sec));	//securityPolicyUri
+			    oNu(respEp, ep->secMessageMode(iSec), 4);	//securityMode:MessageSecurityMode
+			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#"+ep->secPolicy(iSec));	//securityPolicyUri
 
 								//>>>> userIdentityTokens
 			    oNu(respEp, 2, 4);			//List items
@@ -2467,7 +2768,7 @@ nextReq:
 			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
 			    oS(respEp, "http://opcfoundation.org/UA-Profile/Transport/uatcp-uasc-uabinary");//transportProfileUri
-			    oNu(respEp, (ep->secPolicy(i_sec)!="None")?130:0, 1);	//securityLevel
+			    oNu(respEp, (ep->secPolicy(iSec)!="None")?130:0, 1);	//securityLevel
 			}
 		    }
 		    oNu(respEp, epCnt, 4, 0);			//EndpointDescrNubers list items
@@ -2521,7 +2822,7 @@ nextReq:
 			EP *ep = epEnAt(epLs[i_ep]);
 			if(!ep) continue;
 								//>>> EndpointDescription
-			for(int i_sec = 0; i_sec < ep->secSize(); i_sec++, epCnt++) {
+			for(int iSec = 0; iSec < ep->secSize(); iSec++, epCnt++) {
 			    oS(respEp, ep->url());		//endpointUrl
 								//>>>> server (ApplicationDescription)
 			    oS(respEp, applicationUri());	//applicationUri
@@ -2539,8 +2840,8 @@ nextReq:
 				oS(respEp, duLs[i_du]);		//discoveryUrl
 
 			    oS(respEp, certPEM2DER(ep->cert()));//>>> serverCertificate
-			    oNu(respEp, ep->secMessageMode(i_sec), 4);	//securityMode:MessageSecurityMode
-			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#"+ep->secPolicy(i_sec));	//securityPolicyUri
+			    oNu(respEp, ep->secMessageMode(iSec), 4);	//securityMode:MessageSecurityMode
+			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#"+ep->secPolicy(iSec));	//securityPolicyUri
 
 								//>>>> userIdentityTokens
 			    oNu(respEp, 2, 4);			//List items
@@ -2558,7 +2859,7 @@ nextReq:
 			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
 			    oS(respEp, "http://opcfoundation.org/UA-Profile/Transport/uatcp-uasc-uabinary");	//transportProfileUri
-			    oNu(respEp, (ep->secPolicy(i_sec)!="None")?10:0, 1);	//securityLevel
+			    oNu(respEp, (ep->secPolicy(iSec)!="None")?10:0, 1);	//securityLevel
 			}
 		    }
 		    oNu(respEp, epCnt, 4, enpNumperPos);	//EndpointDescrNubers real list items
@@ -2634,10 +2935,10 @@ nextReq:
 		    wep->sessClose(sesTokId);
 		    if(subScrDel) {
 			OPCAlloc mtx(wep->mtxData, true);
-			for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
-			    if(wep->mSubScr[i_ss].st != SS_CLOSED && wep->mSubScr[i_ss].sess == (int)sesTokId) {
-				wep->mSubScr[i_ss].setState(SS_CLOSED);
-				if(dbg) debugMess(strMess("EP: SubScription %d closed.",i_ss));
+			for(unsigned iSs = 0; iSs < wep->mSubScr.size(); ++iSs)
+			    if(wep->mSubScr[iSs].st != SS_CLOSED && wep->mSubScr[iSs].sess == (int)sesTokId) {
+				wep->mSubScr[iSs].setState(SS_CLOSED);
+				if(dbg) debugMess(strMess("EP: SubScription %d closed.",iSs));
 			    }
 		    }
 
@@ -2664,9 +2965,9 @@ nextReq:
 		    reqTp = OpcUa_CreateSubscriptionResponse;
 		    respEp.reserve(20);
 		    oNu(respEp, subScrId, 4);			//subscriptionId
-		    oR(respEp, ss.publInterv, 8);		//revisedPublishingInterval
-		    oNu(respEp, ss.cntrLifeTime, 4);		//revisedLifetimeCount
-		    oNu(respEp, ss.cntrKeepAlive, 4);		//revisedMaxKeepAliveCount
+		    oR(respEp, ss.publInterval, 8);		//revisedPublishingInterval
+		    oNu(respEp, ss.lifetimeCnt, 4);		//revisedLifetimeCount
+		    oNu(respEp, ss.maxKeepAliveCnt, 4);		//revisedMaxKeepAliveCount
 		    break;
 		}
 		case OpcUa_ModifySubscriptionRequest: {
@@ -2687,9 +2988,9 @@ nextReq:
 		    //  Respond
 		    reqTp = OpcUa_ModifySubscriptionResponse;
 		    respEp.reserve(20);
-		    oR(respEp, ss.publInterv, 8);		//revisedPublishingInterval
-		    oNu(respEp, ss.cntrLifeTime, 4);		//revisedLifetimeCount
-		    oNu(respEp, ss.cntrKeepAlive, 4);		//revisedMaxKeepAliveCount
+		    oR(respEp, ss.publInterval, 8);		//revisedPublishingInterval
+		    oNu(respEp, ss.lifetimeCnt, 4);		//revisedLifetimeCount
+		    oNu(respEp, ss.maxKeepAliveCnt, 4);		//revisedMaxKeepAliveCount
 		    break;
 		}
 		/*case OpcUa_TransferSubscriptionsRequest:
@@ -2702,7 +3003,7 @@ nextReq:
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
 
-		    for(uint32_t i_s = 0; i_s < sn; i_s++)
+		    for(uint32_t iS = 0; iS < sn; iS++)
 		    {
 			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 			Subscr ss = wep->subscrGet(subScrId);
@@ -2721,7 +3022,7 @@ nextReq:
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
 
-		    for(uint32_t i_s = 0; i_s < sn; i_s++) {
+		    for(uint32_t iS = 0; iS < sn; iS++) {
 			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 			Subscr ss = wep->subscrGet(subScrId);
 			oNu(respEp, ((ss.st==SS_CLOSED)?OpcUa_BadSubscriptionIdInvalid:0), 4);	//statusCode
@@ -2902,7 +3203,7 @@ nextReq:
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
 
-		    for(uint32_t i_s = 0; i_s < sn; i_s++) {
+		    for(uint32_t iS = 0; iS < sn; iS++) {
 			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 			Subscr ss = wep->subscrGet(subScrId);
 			if(ss.st != SS_CLOSED) wep->subscrSet(subScrId, SS_CUR, en);
@@ -2931,7 +3232,7 @@ nextReq:
 
 			bool nOK = true;
 			XML_N req("data");
-			for(unsigned i_rp = 0; i_rp < irp; i_rp++) {
+			for(unsigned iRp = 0; iRp < irp; iRp++) {
 			    NodeId rTpId = iNodeId(rb, off);	//referenceTypeId
 			    bool inv = iNu(rb, off, 1);		//isInverse
 			    iNu(rb, off, 1);			//includeSubtypes
@@ -2943,13 +3244,13 @@ nextReq:
 					 setAttr("BrDir", uint2str(inv?BD_INVERSE:BD_FORWARD))->
 					 setAttr("RefTpId", rTpId.toAddr());
 			    wep->reqData(OpcUa_BrowseRequest, req);
-			    unsigned i_ref;
-			    for(i_ref = 0; i_ref < req.childSize(); i_ref++)
-				if(req.childGet(i_ref)->attr("name") == tNm) {
-				    sN = NodeId::fromAddr(req.childGet(i_ref)->attr("NodeId"));
+			    unsigned iRef;
+			    for(iRef = 0; iRef < req.childSize(); iRef++)
+				if(req.childGet(iRef)->attr("name") == tNm) {
+				    sN = NodeId::fromAddr(req.childGet(iRef)->attr("NodeId"));
 				    break;
 				}
-			    nOK = (i_ref < req.childSize());
+			    nOK = (iRef < req.childSize());
 			}
 
 			//   Path result
@@ -2978,7 +3279,7 @@ nextReq:
 		    for(unsigned iN = 0; iN < nN; iN++) {
 			if(dbg) debugMess(strMess("RegisterNodesRequest: node=%d; off=%d.",iN,off));
 			NodeId rN = iNodeId(rb, off);	//>> registeredNode
-			//???? Maybe some check for the node <rN> presenting
+			//!!!! Maybe some check for the node <rN> presence
 			oNodeId(respEp, rN);		//<< registeredNode
 		    }
 		    break;
@@ -2997,7 +3298,7 @@ nextReq:
 		    for(unsigned iN = 0; iN < nN; iN++) {
 			if(dbg) debugMess(strMess("UnregisterNodesRequest: node=%d; off=%d.",iN,off));
 			NodeId uN = iNodeId(rb, off);	//>> unregisteredNode
-			//???? Maybe some check for the node <uN> presenting
+			//!!!! Maybe some check for the node <uN> presence
 		    }
 		    break;
 		}
@@ -3037,8 +3338,8 @@ nextReq:
 				    setAttr("ClassMask", uint2str(nClass))->setAttr("rPn", uint2str(rPn));
 			stCode = wep->reqData(reqTp, req);
 			refNumb = req.childSize();
-			for(unsigned i_ref = 0; !stCode && i_ref < req.childSize(); i_ref++) {
-			    XML_N *chN = req.childGet(i_ref);
+			for(unsigned iRef = 0; !stCode && iRef < req.childSize(); iRef++) {
+			    XML_N *chN = req.childGet(iRef);
 			    oRef(respEp, resMask, NodeId::fromAddr(chN->attr("NodeId")),
 				NodeId::fromAddr(chN->attr("referenceTypeId")),
 				atoi(chN->attr("dir").c_str()), chN->attr("name"), atoi(chN->attr("NodeClass").c_str()),
@@ -3086,8 +3387,8 @@ nextReq:
 					setAttr("ClassMask", uint2str(cPo.nClassMask))->setAttr("rPn", uint2str(cPo.refPerN));
 			    stCode = wep->reqData(reqTp, req);
 			    refNumb = req.childSize();
-			    for(unsigned i_ref = 0; !stCode && i_ref < req.childSize(); i_ref++) {
-				XML_N *chN = req.childGet(i_ref);
+			    for(unsigned iRef = 0; !stCode && iRef < req.childSize(); iRef++) {
+				XML_N *chN = req.childGet(iRef);
 				oRef(respEp, cPo.resMask, NodeId::fromAddr(chN->attr("NodeId")),
 				    NodeId::fromAddr(chN->attr("referenceTypeId")),
 				    atoi(chN->attr("dir").c_str()), chN->attr("name"), atoi(chN->attr("NodeClass").c_str()),
@@ -3157,7 +3458,7 @@ nextReq:
 
 		    //  Respond
 		    oNu(respEp, nc, 4);			//Numbers
-		    for(unsigned i_n = 0; i_n < nc; i_n++) {
+		    for(unsigned iN = 0; iN < nc; iN++) {
 			NodeId nid = iNodeId(rb, off);	//nodeId
 			uint32_t aid = iNu(rb, off, 4);	//attributeId (Value)
 			iS(rb, off);			//indexRange
@@ -3267,7 +3568,7 @@ nextReq:
 					uint32_t rSeq = iNu(*iRQ, rOff, 4);	//>sequenceNumber
 					int64_t rPblTm = iTm(*iRQ, rOff);	//>publishTime
 					//Check for remove from queue by long age
-					if((curTime()-rPblTm) > (wep->limRetrQueueTm()?1000000ll*wep->limRetrQueueTm():(int64_t)ss.cntrKeepAlive*ss.publInterv*1000))
+					if((curTime()-rPblTm) > (wep->limRetrQueueTm()?1000000ll*wep->limRetrQueueTm():(int64_t)ss.maxKeepAliveCnt*ss.publInterval*1000))
 					{
 					    iRQ = ss.retrQueue.erase(iRQ);
 					    continue;
@@ -3293,8 +3594,8 @@ nextReq:
 				    int mItOff = respEp.size();
 				    oN(respEp, 0, 4);				//<  monitoredItems []
 				    unsigned iMIt = 0;
-				    bool maxNotPerPublLim = false;
-				    for(unsigned iM = 0; !maxNotPerPublLim && iM < ss.mItems.size(); iM++) {
+				    bool maxNtfPerPublLim = false;
+				    for(unsigned iM = 0; !maxNtfPerPublLim && iM < ss.mItems.size(); iM++) {
 					Subscr::MonitItem &mIt = ss.mItems[iM];
 					if(!(mIt.md == MM_REPORTING && mIt.vQueue.size())) continue;
 					uint8_t eMsk = 0x01;
@@ -3305,7 +3606,7 @@ nextReq:
 					    default:				break;
 					}
 					while(mIt.vQueue.size()) {
-					    if(ss.maxNotPerPubl && iMIt >= ss.maxNotPerPubl) { maxNotPerPublLim = true; break; }
+					    if(ss.maxNtfPerPubl && iMIt >= ss.maxNtfPerPubl) { maxNtfPerPublLim = true; break; }
 					    oNu(respEp, mIt.cH, 4);		//<   clientHandle
 					    if(mIt.vQueue.front().st)
 						oDataValue(respEp, 0x0A, uint2str(mIt.vQueue.front().st), 0, mIt.vQueue.front().tm);	//<   status
@@ -3315,13 +3616,13 @@ nextReq:
 					}
 				    }
 				    oN(respEp, 0, 4);				//<   diagnosticInfos []
-				    oNu(respEp, maxNotPerPublLim, 1, moreNtfOff);//<moreNotifications, real value write
+				    oNu(respEp, maxNtfPerPublLim, 1, moreNtfOff);//<moreNotifications, real value write
 				    oN(respEp, iMIt, 4, mItOff);		//<  monitoredItems [], real items number write
 				    oNu(respEp, respEp.size()-extObjOff-4, 4, extObjOff);	//<  extension object real size write
 
 				    ss.retrQueue.push_back(respEp.substr(ntfMsgOff));	//Queue to retranslation
 				    ss.seqN++;
-				    if(maxNotPerPublLim) ss.setState(SS_LATE);	//Restore state to process into the next Publish request,
+				    if(maxNtfPerPublLim) ss.setState(SS_LATE);	//Restore state to process into the next Publish request,
 										// !!!! maybe store the previous monitored item's position
 										//      and early call its into the subScrCycle()
 				}
@@ -3537,11 +3838,11 @@ Server::Subscr Server::Subscr::copy( bool noWorkData )
     else {
 	rez.st = st;
 	rez.sess = sess;
-	rez.en = en;
-	rez.publInterv = publInterv;
-	rez.cntrLifeTime = cntrLifeTime;
-	rez.cntrKeepAlive = cntrKeepAlive;
-	rez.maxNotPerPubl = maxNotPerPubl;
+	rez.publEn = publEn;
+	rez.publInterval = publInterval;
+	rez.lifetimeCnt = lifetimeCnt;
+	rez.maxKeepAliveCnt = maxKeepAliveCnt;
+	rez.maxNtfPerPubl = maxNtfPerPubl;
 	rez.pr = pr;
     }
 
@@ -3556,7 +3857,7 @@ SubScrSt Server::Subscr::setState( SubScrSt ist )
 	case SS_CLOSED:	//Clear the object
 	    mItems.clear();
 	    retrQueue.clear();
-	    en = false;
+	    publEn = false;
 	    seqN = 1;
 	    wLT = wKA = 0;
 	    break;
@@ -3720,15 +4021,15 @@ void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId
 	}
 	if(hasData) scr.setState(SS_LATE);
 	// Publish processing
-	if(!forceSubscrQueue && (cntr%std::max(1u,(unsigned)(scr.publInterv/subscrProcPer()))))	continue;
+	if(!forceSubscrQueue && (cntr%std::max(1u,(unsigned)(scr.publInterval/subscrProcPer()))))	continue;
 	if(s->publishReqs.size()) {
 	    scr.wLT = 0;
 	    if(scr.toInit || scr.st == SS_LATE) { scr.wKA = 0; sls.push_back(scr.sess); }
-	    else if(!forceSubscrQueue && (++scr.wKA) >= scr.cntrKeepAlive) { scr.setState(SS_KEEPALIVE); sls.push_back(scr.sess); }
+	    else if(!forceSubscrQueue && (++scr.wKA) >= scr.maxKeepAliveCnt) { scr.setState(SS_KEEPALIVE); sls.push_back(scr.sess); }
 	}
-	else if(!forceSubscrQueue && (++scr.wLT) >= scr.cntrLifeTime) {
+	else if(!forceSubscrQueue && (++scr.wLT) >= scr.lifetimeCnt) {
 	    // Send StatusChangeNotification with Bad_Timeout
-	    //????
+	    //!!!!
 	    scr.setState(SS_CLOSED);	//Free Subscription
 	}
     }
@@ -3769,14 +4070,14 @@ MessageSecurityMode Server::EP::secMessageMode( int isec )
 int Server::EP::sessCreate( const string &iName, double iTInact )
 {
     OPCAlloc mtx(mtxData, true);
-    int i_s;
-    for(i_s = 0; i_s < (int)mSess.size(); i_s++)
-	if(!mSess[i_s].tAccess || 1e-3*(curTime()-mSess[i_s].tAccess) > mSess[i_s].tInact)
+    int iS;
+    for(iS = 0; iS < (int)mSess.size(); iS++)
+	if(!mSess[iS].tAccess || 1e-3*(curTime()-mSess[iS].tAccess) > mSess[iS].tInact)
 	    break;
-    if(i_s < (int)mSess.size()) mSess[i_s] = Sess(iName, iTInact);
+    if(iS < (int)mSess.size()) mSess[iS] = Sess(iName, iTInact);
     else mSess.push_back(Sess(iName,iTInact));
 
-    return i_s+1;
+    return iS+1;
 }
 
 void Server::EP::sessServNonceSet( int sid, const string &servNonce )
@@ -3857,8 +4158,8 @@ void Server::EP::sessCpSet( int sid, const string &cpId, const Server::Sess::Con
     pthread_mutex_unlock(&mtxData);
 }
 
-uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, double publInterv,
-    uint32_t cntrLifeTime, uint32_t cntrKeepAlive, uint32_t maxNotPerPubl, int pr )
+uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, double publInterval,
+    uint32_t lifetimeCnt, uint32_t maxKeepAliveCnt, uint32_t maxNtfPerPubl, int pr )
 {
     OPCAlloc mtx(mtxData, true);
 
@@ -3881,12 +4182,12 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
     Subscr &ss = mSubScr[ssId];
 
     //Set parameters
-    ss.en = en;
+    ss.publEn = en;
     if(sess >= 0) ss.sess = sess;
-    if(publInterv != 0) ss.publInterv = ceil(publInterv/subscrProcPer())*subscrProcPer();
-    if(cntrKeepAlive != 0) ss.cntrKeepAlive = cntrKeepAlive;
-    if(cntrLifeTime != 0) ss.cntrLifeTime = std::max(ss.cntrKeepAlive*3,cntrLifeTime);
-    if(maxNotPerPubl != OpcUa_NPosID) ss.maxNotPerPubl = maxNotPerPubl;
+    if(publInterval != 0) ss.publInterval = ceil(publInterval/subscrProcPer())*subscrProcPer();
+    if(maxKeepAliveCnt != 0) ss.maxKeepAliveCnt = maxKeepAliveCnt;
+    if(lifetimeCnt != 0) ss.lifetimeCnt = std::max(ss.maxKeepAliveCnt*3,lifetimeCnt);
+    if(maxNtfPerPubl != OpcUa_NPosID) ss.maxNtfPerPubl = maxNtfPerPubl;
     if(pr < 0) ss.pr = pr;
     ss.setState(st);
 
@@ -3944,7 +4245,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	if(rez == OpcUa_BadNodeIdUnknown)		mIt.nd = NodeId();
 	else if(rez == OpcUa_BadAttributeIdInvalid)	mIt.aid = Aid_Error;
 	if(smplItv == 0 || isnan(smplItv)) smplItv = str2real(req.attr("dtPer"))*1000;
-	if(smplItv == -1) smplItv = ss.publInterv;
+	if(smplItv == -1) smplItv = ss.publInterval;
 	if(smplItv != -2) mIt.smplItv = ceil(std::max(smplItv,subscrProcPer())/subscrProcPer())*subscrProcPer();
     }
 
@@ -4232,8 +4533,8 @@ XML_N* XML_N::childGet( const int index, bool noex ) const
 
 XML_N* XML_N::childGet( const string &name, const int numb, bool noex ) const
 {
-    for(int iCh = 0, i_n = 0; iCh < (int)childSize(); iCh++)
-	if(strcasecmp(childGet(iCh)->name().c_str(),name.c_str()) == 0 && i_n++ == numb)
+    for(int iCh = 0, iN = 0; iCh < (int)childSize(); iCh++)
+	if(strcasecmp(childGet(iCh)->name().c_str(),name.c_str()) == 0 && iN++ == numb)
 	    return childGet(iCh);
 
     if(noex) return NULL;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.h
 /***************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.7.15"
+#define DAQ_MVER	"2.0.0"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -114,7 +114,6 @@ class TMdContr: public TController, public Client
 	string	cert( )		{ return mCert; }
 	string	pvKey( )	{ return mPvKey; }
 	string	authData( );
-	int	pAttrLim( )	{ return mPAttrLim; }
 	string	epParse( string *uri = NULL );
 
 	void	setEndPoint( const string &iep )	{ mEndP = iep; }
@@ -133,7 +132,7 @@ class TMdContr: public TController, public Client
 	bool connect( int8_t est = -1 );
 	void reqService( XML_N &io );
 	void protIO( XML_N &io );
-	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
 	void debugMess( const string &mess );
 
     protected:
@@ -166,7 +165,7 @@ class TMdContr: public TController, public Client
 		&mCert,		//Client certificate
 		&mPvKey,	//Client certificate's private key
 		&mAuthUser, &mAuthPass;	//Auth user and password
-	int64_t	&mPAttrLim;	//Parameter attributes number limit
+	char	&mUseRead;	//Use Read function
 	int64_t	mPer;
 
 	bool	prcSt,		//Process task active

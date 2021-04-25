@@ -1,3 +1,18 @@
+2021-04-25 Roman (stable)
+- !!!!:DAQ.OPC_UA.{.,libOPC_UA}: Appended for the initial Publish service implementation on the DAQ-client part:
+    - the main client services processing function protIO() adapted to work in the asynchronous mode (not requesting);
+    - the function Client::messIO() expanded for the timeout argument with specifying the requesting mode also;
+    - short functions appended for str2int() and str2uint();
+    - the "Client" object appended for the subobject "Subscr" implementation with the functions:
+	activate(), monitoredItemAdd();
+    - the "Client" object appended for the functions: poll();
+    - the service requests of the client part appended for implementation, include processing the responses:
+	CreateSubscription, DeleteSubscriptions, CreateMonitoredItems, Publish, Poll;
+    - some fields renamed: publInterv to publInterval, cntrLifeTime to lifetimeCnt, cntrKeepAlive to maxKeepAliveCnt,
+	maxNotPerPubl to maxNtfPerPubl, en to publEn;
+- FIX:UI.{QTStarter,*}: The table delegate of the lib_qtgen library restored in applying the text custom font and color.
+
+
 2021-04-17 Roman (stable)
 - !:FIX:LibsDB.OscadaLibs: DevLib.IEC62056 fixed in coming to the data requesting after initiation
     and using the true address mask 0x7F instead 0x3F.

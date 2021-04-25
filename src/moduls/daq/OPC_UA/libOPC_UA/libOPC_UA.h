@@ -3,6 +3,19 @@
 /********************************************************************************
  *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
  *										*
+ *   Version: 2.0.0								*
+ *	* The main client services processing function protIO() adapted to work	*
+ *	  in the asynchronous mode (not requesting).				*
+ *	* The function Client::messIO() expanded for the timeout argument with	*
+ *	  specifying the requesting mode also.					*
+ *	* Short functions appended for str2int() and str2uint().		*
+ *	* The "Client" object appended for the functions: poll().		*
+ *	* The service requests of the client part appended for implementation,	*
+ *	  include processing the responses: CreateSubscription,			*
+ *	    DeleteSubscriptions, CreateMonitoredItems, Publish, Poll.		*
+ *	* Some fields renamed: publInterv to publInterval,			*
+ *	  cntrLifeTime to lifetimeCnt, cntrKeepAlive to maxKeepAliveCnt,	*
+ *	  maxNotPerPubl to maxNtfPerPubl, en to publEn.				*
  *   Version: 1.2.8								*
  *	* Hello/Acknowledge properties set configurable and client's ones	*
  *	  also storing.								*
@@ -312,7 +325,9 @@ enum MonitoringMode	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
 //* External functions                        */
 extern int64_t curTime( );
 extern string int2str( int val );
+extern int str2int( const string &val );
 extern string uint2str( unsigned val );
+extern unsigned long str2uint( const string &val );
 extern string ll2str( int64_t val );
 extern string real2str( double val, int prec = 15, char tp = 'g' );
 extern double str2real( const string &val );
@@ -326,34 +341,34 @@ extern string strMess( const char *fmt, ... );
 class OPCAlloc
 {
     public:
-	//Methods
-	OPCAlloc( pthread_mutex_t &iM, bool ilock = false ) : m(iM), mLock(false)
-	{ if(ilock) lock(); }
-	~OPCAlloc( )	{ unlock(); }
+    //Methods
+    OPCAlloc( pthread_mutex_t &iM, bool ilock = false ) : m(iM), mLock(false)
+    { if(ilock) lock(); }
+    ~OPCAlloc( )	{ unlock(); }
 
-	int lock( ) {
-	    if(mLock) return 0;
-	    int rez = pthread_mutex_lock(&m);
-	    if(!rez) mLock = true;
-	    return rez;
-	}
-	int tryLock( ) {
-	    if(mLock) return 0;
-	    int rez = pthread_mutex_trylock(&m);
-	    if(!rez) mLock = true;
-	    return rez;
-	}
-	int unlock( ) {
-	    if(!mLock) return 0;
-	    int rez = pthread_mutex_unlock(&m);
-	    if(!rez) mLock = false;
-	    return rez;
-	}
+    int lock( ) {
+	if(mLock) return 0;
+	int rez = pthread_mutex_lock(&m);
+	if(!rez) mLock = true;
+	return rez;
+    }
+    int tryLock( ) {
+	if(mLock) return 0;
+	int rez = pthread_mutex_trylock(&m);
+	if(!rez) mLock = true;
+	return rez;
+    }
+    int unlock( ) {
+	if(!mLock) return 0;
+	int rez = pthread_mutex_unlock(&m);
+	if(!rez) mLock = false;
+	return rez;
+    }
 
     private:
-	//Attributes
-	pthread_mutex_t	&m;
-	bool		mLock;
+    //Attributes
+    pthread_mutex_t	&m;
+    bool		mLock;
 };
 
 //*************************************************
@@ -362,13 +377,13 @@ class OPCAlloc
 class OPCError
 {
     public:
-	//Methods
-	OPCError( const char *fmt, ... );
-	OPCError( int cod, const char *fmt, ... );
+    //Methods
+    OPCError( const char *fmt, ... );
+    OPCError( int cod, const char *fmt, ... );
 
-	//Attributes
-	int	cod;
-	string	mess;
+    //Attributes
+    int		cod;
+    string	mess;
 };
 
 //*************************************************
@@ -377,51 +392,51 @@ class OPCError
 class XML_N
 {
     public:
-	//Methods
-	XML_N( const string &name = "" ) : mName(name), mText(""), mParent(NULL)	{  }
-	XML_N( const XML_N &nd );
-	~XML_N( )				{ clear(); }
+    //Methods
+    XML_N( const string &name = "" ) : mName(name), mText(""), mParent(NULL)	{  }
+    XML_N( const XML_N &nd );
+    ~XML_N( )				{ clear(); }
 
-	XML_N	&operator=( const XML_N &prm );
+    XML_N	&operator=( const XML_N &prm );
 
-	string	name( ) const			{ return mName; }
-	XML_N*	setName( const string &s )	{ mName = s; return this; }
+    string	name( ) const			{ return mName; }
+    XML_N*	setName( const string &s )	{ mName = s; return this; }
 
-	string	text( bool childs = false, bool recursive = false ) const;
-	XML_N*	setText( const string &s, bool childs = false );
+    string	text( bool childs = false, bool recursive = false ) const;
+    XML_N*	setText( const string &s, bool childs = false );
 
-	void	attrList( vector<string> &list ) const;
-	XML_N*	attrDel( const string &name );
-	void	attrClear( );
-	string	attr( const string &name, bool caseSens = true ) const;
-	XML_N*	setAttr( const string &name, const string &val );
+    void	attrList( vector<string> &list ) const;
+    XML_N*	attrDel( const string &name );
+    void	attrClear( );
+    string	attr( const string &name, bool caseSens = true ) const;
+    XML_N*	setAttr( const string &name, const string &val );
 
-	XML_N*	clear( );
+    XML_N*	clear( );
 
-	bool	childEmpty( ) const		{ return mChildren.empty(); }
-	unsigned childSize( ) const		{ return mChildren.size(); }
-	void	childAdd( XML_N *nd );
-	XML_N*	childAdd( const string &name = "" );
-	int	childIns( unsigned id, XML_N *nd );
-	XML_N*	childIns( unsigned id, const string &name = "" );
-	void	childDel( const unsigned id );
-	void	childDel( XML_N *nd );
-	void	childClear( const string &name = "" );
-	XML_N*	childGet( const int, bool noex = false ) const;
-	XML_N*	childGet( const string &name, const int numb = 0, bool noex = false ) const;
-	XML_N*	childGet( const string &attr, const string &name, bool noex = false ) const;
-	XML_N*	getElementBy( const string &attr, const string &val );
+    bool	childEmpty( ) const	{ return mChildren.empty(); }
+    unsigned	childSize( ) const	{ return mChildren.size(); }
+    void	childAdd( XML_N *nd );
+    XML_N*	childAdd( const string &name = "" );
+    int		childIns( unsigned id, XML_N *nd );
+    XML_N*	childIns( unsigned id, const string &name = "" );
+    void	childDel( const unsigned id );
+    void	childDel( XML_N *nd );
+    void	childClear( const string &name = "" );
+    XML_N*	childGet( const int, bool noex = false ) const;
+    XML_N*	childGet( const string &name, const int numb = 0, bool noex = false ) const;
+    XML_N*	childGet( const string &attr, const string &name, bool noex = false ) const;
+    XML_N*	getElementBy( const string &attr, const string &val );
 
-	XML_N*	parent( )			{ return mParent; }
-	XML_N*	root( );
+    XML_N*	parent( )		{ return mParent; }
+    XML_N*	root( );
 
     private:
-	//Attributes
-	string	mName;
-	string	mText;
-	vector<XML_N*>			mChildren;
-	vector<pair<string,string> >	mAttr;
-	XML_N	*mParent;
+    //Attributes
+    string	mName;
+    string	mText;
+    vector<XML_N*>			mChildren;
+    vector<pair<string,string> >	mAttr;
+    XML_N	*mParent;
 };
 
 //*************************************************
@@ -430,38 +445,38 @@ class XML_N
 class NodeId
 {
     public:
-	//Data
-	enum Type	{ Numeric, String, Guid, Opaque };
+    //Data
+    enum Type	{ Numeric, String, Guid, Opaque };
 
-	//Methods
-	NodeId( ) : mNs(0), mTp(Numeric), numb(0)	{ }
-	NodeId( uint32_t in, uint16_t ins = 0 );
-	NodeId( const string &istr, uint16_t ins = 0, Type tp = String );
-	NodeId( const NodeId &node )	{ operator=(node); }
-	~NodeId( );
+    //Methods
+    NodeId( ) : mNs(0), mTp(Numeric), numb(0)	{ }
+    NodeId( uint32_t in, uint16_t ins = 0 );
+    NodeId( const string &istr, uint16_t ins = 0, Type tp = String );
+    NodeId( const NodeId &node ){ operator=(node); }
+    ~NodeId( );
 
-	NodeId &operator=( const NodeId &node );
+    NodeId &operator=( const NodeId &node );
 
-	Type	type( ) const	{ return mTp; }
-	bool	isNull( ) const	{ return (mTp == Numeric && numb == 0); }
+    Type type( ) const		{ return mTp; }
+    bool isNull( ) const	{ return (mTp == Numeric && numb == 0); }
 
-	uint16_t ns( ) const	{ return mNs; }
-	uint32_t numbVal( ) const;
-	string	strVal( ) const;
+    uint16_t ns( ) const	{ return mNs; }
+    uint32_t numbVal( ) const;
+    string strVal( ) const;
 
-	void setNs( uint16_t ins )	{ mNs = ins; }
-	void setNumbVal( uint32_t in );
-	void setStrVal( const string &istr, Type tp = String );
+    void setNs( uint16_t ins )	{ mNs = ins; }
+    void setNumbVal( uint32_t in );
+    void setStrVal( const string &istr, Type tp = String );
 
-	static NodeId fromAddr( const string &strAddr );
-	string toAddr( ) const;
+    static NodeId fromAddr( const string &strAddr );
+    string toAddr( ) const;
 
     private:
-	//Attributes
-	uint16_t	mNs;
-	Type		mTp;
-	uint32_t	numb;
-	string		str;
+    //Attributes
+    uint16_t	mNs;
+    Type	mTp;
+    uint32_t	numb;
+    string	str;
 };
 
 //*************************************************
@@ -470,70 +485,70 @@ class NodeId
 class UA
 {
     public:
-	//Data
-	class SecuritySetting
-	{
-	    public:
-	    SecuritySetting( const string &iplc, int8_t imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
-	    SecuritySetting( ) : policy("None"), messageMode(MS_None)	{ }
+    //Data
+    class SecuritySetting
+    {
+	public:
+	SecuritySetting( const string &iplc, int8_t imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
+	SecuritySetting( ) : policy("None"), messageMode(MS_None)	{ }
 
-	    string		policy;
-	    MessageSecurityMode	messageMode;
-	};
+	string		policy;
+	MessageSecurityMode	messageMode;
+    };
 
-	//Methods
-	UA( );
-	~UA( );
+    //Methods
+    UA( );
+    ~UA( );
 
-	virtual string lang2CodeSYS( )	{ return "en"; }
-	virtual void debugMess( const string &mess ) { }
+    virtual string lang2CodeSYS( )	{ return "en"; }
+    virtual void debugMess( const string &mess ) { }
 
-	// Generic constants
-	virtual uint32_t rcvBufSz( )	{ return 0x10000; }	//Great for 8192
-	virtual uint32_t sndBufSz( )	{ return 0x10000; }	//Great for 8192
-	virtual uint32_t msgMaxSz( )	{ return 0x1000000; }	//Unlimited by default
-	virtual uint32_t chunkMaxCnt( )	{ return 5000; }	//Unlimited by default
+    // Generic constants
+    virtual uint32_t rcvBufSz( )	{ return 0x10000; }	//Great for 8192
+    virtual uint32_t sndBufSz( )	{ return 0x10000; }	//Great for 8192
+    virtual uint32_t msgMaxSz( )	{ return 0x1000000; }	//Unlimited by default
+    virtual uint32_t chunkMaxCnt( )	{ return 5000; }	//Unlimited by default
 
-	// Protocol's data processing
-	//----------------------------------------------------
-	static string iErr( const string &buf, int &off );
-	static const char *iVal( const string &buf, int &off, char vSz );
-	static int64_t iN( const string &rb, int &off, char vSz );
-	static uint64_t iNu( const string &rb, int &off, char vSz );
-	static double iR( const string &rb, int &off, char vSz = 4 );
-	static string iS( const string &buf, int &off );
-	static string iSl( const string &buf, int &off, string *locale = NULL );
-	static string iSqlf( const string &buf, int &off, uint16_t *nsIdx = NULL );
-	static int64_t iTm( const string &buf, int &off );
-	static NodeId iNodeId( const string &buf, int &off );
-	static string iVariant( const string &buf, int &off, uint8_t *tp = NULL );
-	static void iDataValue( const string &buf, int &off, XML_N &nVal );
+    // Protocol's data processing
+    //----------------------------------------------------
+    static string iErr( const string &buf, int &off );
+    static const char *iVal( const string &buf, int &off, char vSz );
+    static int64_t iN( const string &rb, int &off, char vSz );
+    static uint64_t iNu( const string &rb, int &off, char vSz );
+    static double iR( const string &rb, int &off, char vSz = 4 );
+    static string iS( const string &buf, int &off );
+    static string iSl( const string &buf, int &off, string *locale = NULL );
+    static string iSqlf( const string &buf, int &off, uint16_t *nsIdx = NULL );
+    static int64_t iTm( const string &buf, int &off );
+    static NodeId iNodeId( const string &buf, int &off );
+    static string iVariant( const string &buf, int &off, uint8_t *tp = NULL );
+    static void iDataValue( const string &buf, int &off, XML_N &nVal );
 
-	static void oN( string &buf, int64_t val, char sz, int off = -1 );
-	static void oNu( string &buf, uint64_t val, char sz, int off = -1 );
-	static void oR( string &buf, double val, char sz = 4 );
-	static void oS( string &buf, const string &val, int off = -1 );
-	static void oSl( string &buf, const string &val, const string &locale = "" );
-	static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
-	static void oTm( string &buf, int64_t val );
-	static void oNodeId( string &buf, const NodeId &val );
-	static void oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
-			bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
-	void oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );
+    static void oN( string &buf, int64_t val, char sz, int off = -1 );
+    static void oNu( string &buf, uint64_t val, char sz, int off = -1 );
+    static void oR( string &buf, double val, char sz = 4 );
+    static void oS( string &buf, const string &val, int off = -1 );
+    static void oSl( string &buf, const string &val, const string &locale = "" );
+    static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
+    static void oTm( string &buf, int64_t val );
+    static void oNodeId( string &buf, const NodeId &val );
+    static void oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
+		      bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
+    void oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );
 
-	static string randBytes( int num );
-	static string certPEM2DER( const string &certPem );
-	static string certDER2PEM( const string &certDer );
-	static string certThumbprint( const string &certPem );
-	static string asymmetricEncrypt( const string &mess, const string &certPem, const string &secPolicy );
-	static string asymmetricDecrypt( const string &mess, const string &pvKeyPem, const string &secPolicy );
-	static bool asymmetricVerify( const string &mess, const string &sign, const string &certPem );
-	static string asymmetricSign( const string &mess, const string &pvPem );
-	static int asymmetricKeyLength( const string &keyCertPem );
-	static string deriveKey( const string &secret, const string &seed, int keyLen );
-	static string symmetricEncrypt( const string &mess, const string &keySet, const string &secPolicy );
-	static string symmetricDecrypt( const string &mess, const string &keySet, const string &secPolicy );
-	static string symmetricSign( const string &mess, const string &keySet, const string &secPolicy );
+    static string randBytes( int num );
+    static string certPEM2DER( const string &certPem );
+    static string certDER2PEM( const string &certDer );
+    static string certThumbprint( const string &certPem );
+    static string asymmetricEncrypt( const string &mess, const string &certPem, const string &secPolicy );
+    static string asymmetricDecrypt( const string &mess, const string &pvKeyPem, const string &secPolicy );
+    static bool asymmetricVerify( const string &mess, const string &sign, const string &certPem );
+    static string asymmetricSign( const string &mess, const string &pvPem );
+    static int asymmetricKeyLength( const string &keyCertPem );
+    static string deriveKey( const string &secret, const string &seed, int keyLen );
+    static string symmetricEncrypt( const string &mess, const string &keySet, const string &secPolicy );
+    static string symmetricDecrypt( const string &mess, const string &keySet, const string &secPolicy );
+    static string symmetricSign( const string &mess, const string &keySet, const string &secPolicy );
 };
 
 //*************************************************
@@ -542,72 +557,108 @@ class UA
 class Client: public UA
 {
     public:
-	//Data
-	class SClntSess
-	{
-	    public:
-		//Methods
-		SClntSess( )		{ clearFull( ); }
-		void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
-		void clearFull( bool inclEPdescr = false ) {
-		    endPoint = servCert = clKey = servKey = "";
-		    if(inclEPdescr) endPointDscr.clear();
-		    secPolicy = "None"; secMessMode = 1;
-		    secChnl = secToken = reqHndl = 0;
-		    sqNumb = 33;
-		    sqReqId = 1;
-		    secLifeTime = 0;
-		    sessOpen = 0;
-		    clearSess( );
-		}
-
-		string		endPoint;
-		XML_N		endPointDscr;
-		uint32_t	secChnl;
-		uint32_t	secToken;
-		uint32_t	sqNumb;
-		uint32_t	sqReqId;
-		uint32_t	reqHndl;
-		int		secLifeTime;
-		string		sesId;
-		string		authTkId;
-		int64_t		sessOpen;
-		double		sesLifeTime;
-		string		servCert;
-		string		secPolicy;
-		char		secMessMode;
-		string		clKey, servKey;
-	};
-
+    //Data
+    class SClntSess
+    {
+	public:
 	//Methods
-	Client( );
-	~Client( );
+	SClntSess( )		{ clearFull( ); }
+	void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
+	void clearFull( bool inclEPdescr = false ) {
+	    endPoint = servCert = clKey = servKey = "";
+	    if(inclEPdescr) endPointDscr.clear();
+	    secPolicy = "None"; secMessMode = 1;
+	    secChnl = secToken = reqHndl = 0;
+	    sqNumb = 33;
+	    sqReqId = 1;
+	    secLifeTime = 0;
+	    sessOpen = 0;
+	    clearSess( );
+	}
 
-	// Main variables
-	virtual string	applicationUri( ) = 0;
-	virtual string	productUri( ) = 0;
-	virtual string	applicationName( ) = 0;
-	virtual string	sessionName( ) = 0;
-	virtual string	endPoint( ) = 0;
-	virtual string	secPolicy( ) = 0;
-	virtual int	secMessMode( ) = 0;
-	virtual string	cert( ) = 0;
-	virtual string	pvKey( ) = 0;
-	virtual string	authData( ) = 0;	//Empty			- anonymous
-						//{User}\n{Password}	- by user and password
+	string		endPoint;
+	XML_N		endPointDscr;
+	uint32_t	secChnl;
+	uint32_t	secToken;
+	uint32_t	sqNumb;
+	uint32_t	sqReqId;
+	uint32_t	reqHndl;
+	int		secLifeTime;
+	string		sesId;
+	string		authTkId;
+	int64_t		sessOpen;
+	double		sesLifeTime;
+	string		servCert;
+	string		secPolicy;
+	char		secMessMode;
+	string		clKey, servKey;
+    };
 
-	// External imlementations
-	virtual int	messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 ) = 0;
+    //* Subscription object by monitoreditems set
+    class Subscr
+    {
+	public:
+	//Methods
+	Subscr( Client *iclnt, double ipublInterval = 1e3 ) :
+	    publEn(true), publInterval(ipublInterval), subScrId(0), lifetimeCnt(12000),
+	    maxKeepAliveCnt(50), maxNtfPerPubl(65536), pr(0), publCnt(0),
+	    clnt(iclnt)	{ }
 
-	// Main call methods
-	//  Connection state check and/or establist by <est> > 0 or it close by == 0.
-	virtual bool	connect( int8_t est = -1 )	{ return false; }
-	virtual void	protIO( XML_N &io );
-	virtual void	reqService( XML_N &io );
+	void activate( bool vl );
+
+	int monitoredItemAdd( const NodeId &nd, AttrIds aId = AId_Value, MonitoringMode mMode = MM_REPORTING );
+	//void monitoredItemDel( const NodeId &nd )	{ }
+
+	//Attributes
+	bool	publEn;			//Enable publishing
+	double	publInterval;		//Publish interval, milliseconds
+	uint32_t subScrId,		//subscriptionId
+		lifetimeCnt,		//Counter after that miss notifications from client remove the object
+		maxKeepAliveCnt,	//Counter after that need to send empty publish response and
+					//	send StatusChangeNotification with Bad_Timeout
+		maxNtfPerPubl;		//Maximum notifications per single Publish response
+	uint8_t	pr,			//Priority
+		publCnt;		//Counter of the actual sent publish requests
+
+	vector<XML_N>		mItems;
+	vector<uint32_t>	mSeqToAcq;
+
+	Client *clnt;
+    };
+
+    //Methods
+    Client( );
+    ~Client( );
+
+    // Main variables
+    virtual string applicationUri( ) = 0;
+    virtual string productUri( ) = 0;
+    virtual string applicationName( ) = 0;
+    virtual string sessionName( ) = 0;
+    virtual string endPoint( ) = 0;
+    virtual string secPolicy( ) = 0;
+    virtual int	secMessMode( ) = 0;
+    virtual string cert( ) = 0;
+    virtual string pvKey( ) = 0;
+    virtual string authData( ) = 0;	//Empty			- anonymous
+					//{User}\n{Password}	- by user and password
+
+    virtual void poll( );		//To call in some cycle for processing the subscriptions
+					//and user code in it reimplementation
+
+    // External imlementations
+    virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 ) = 0;
+
+    // Main call methods
+    //  Connection state check and/or establist by <est> > 0 or it close by == 0.
+    virtual bool connect( int8_t est = -1 )	{ return false; }
+    virtual void protIO( XML_N &io );
+    virtual void reqService( XML_N &io );
 
     protected:
-	//Attributes
-	SClntSess	sess;
+    //Attributes
+    SClntSess		sess;		//Assigned session
+    vector<Subscr>	mSubScr;	//Subscriptions list
 };
 
 //*************************************************
@@ -689,63 +740,65 @@ class Server: public UA
 	class Subscr
 	{
 	    public:
+	    //Data
+	    //* Monitored item
+	    class MonitItem
+	    {
+		public:
 		//Data
-		//* Monitored item
-		class MonitItem
+		//* Value
+		class Val
 		{
 		    public:
-			class Val
-			{
-			    public:
-				Val( ) : tm(0), st(OpcUa_UncertainNoCommunicationLastUsableValue) { }
-				Val( const string &ivl, int64_t itm, uint32_t ist = 0 ) : vl(ivl), tm(itm), st(ist) { }
+		    Val( ) : tm(0), st(OpcUa_UncertainNoCommunicationLastUsableValue) { }
+		    Val( const string &ivl, int64_t itm, uint32_t ist = 0 ) : vl(ivl), tm(itm), st(ist) { }
 
-				string	vl;
-				int64_t	tm;
-				uint32_t st;
-			};
-
-			//Methods
-			MonitItem( ) : md(MM_DISABLED), aid(0), tmToRet(TS_SOURCE), smplItv(1000), qSz(OpcUa_NPosID),
-			    dO(false), cH(0), vTp(0), dtTm(0)	{ }
-
-			//Attributes
-			MonitoringMode	md;		//Monitoring mode
-			NodeId		nd;		//Target node
-			uint32_t	aid;		//The node's attribute ID
-			TimestampsToReturn tmToRet;	//Timestamps to return
-			double		smplItv;	//Sample interval
-			uint32_t	qSz;		//Queue size
-			bool		dO;		//Discard oldest
-			uint32_t	cH;		//Client handle
-			XML_N		fltr;		//Filters
-
-			int		vTp;		//Values type
-			int64_t		dtTm;		//Last value time
-			deque<Val>	vQueue;		//Values queue
+		    string	vl;
+		    int64_t	tm;
+		    uint32_t st;
 		};
 
 		//Methods
-		Subscr( ) : st(SS_CLOSED), sess(-1), en(false), toInit(true), publInterv(100), seqN(1),
-		    cntrLifeTime(12000), wLT(0), cntrKeepAlive(50), wKA(0), maxNotPerPubl(0), pr(0) 	{ }
-
-		Subscr copy( bool noWorkData = true );
-		SubScrSt setState( SubScrSt st = SS_CUR );
+		MonitItem( ) : md(MM_DISABLED), aid(0), tmToRet(TS_SOURCE), smplItv(1000), qSz(OpcUa_NPosID),
+		    dO(false), cH(0), vTp(0), dtTm(0)	{ }
 
 		//Attributes
-		SubScrSt st;			//Subscription status
-		int	sess;			//Session assign
-		bool	en,			//Enable state
+		MonitoringMode	md;		//Monitoring mode
+		NodeId		nd;		//Target node
+		uint32_t	aid;		//The node's attribute ID
+		TimestampsToReturn tmToRet;	//Timestamps to return
+		double		smplItv;	//Sample interval
+		uint32_t	qSz;		//Queue size
+		bool		dO;		//Discard oldest
+		uint32_t	cH;		//Client handle
+		XML_N		fltr;		//Filters
+
+		int		vTp;		//Values type
+		int64_t		dtTm;		//Last value time
+		deque<Val>	vQueue;		//Values queue
+	    };
+
+	    //Methods
+	    Subscr( ) : st(SS_CLOSED), sess(-1), publEn(false), toInit(true), publInterval(100), seqN(1),
+		lifetimeCnt(12000), wLT(0), maxKeepAliveCnt(50), wKA(0), maxNtfPerPubl(0), pr(0)	{ }
+
+	    Subscr copy( bool noWorkData = true );
+	    SubScrSt setState( SubScrSt st = SS_CUR );
+
+	    //Attributes
+	    SubScrSt	st;			//Subscription status
+	    int		sess;			//Session assign
+	    bool	publEn,			//Enable publishing
 			toInit;			//Subsription init publish package send needs
-		double	publInterv;		//Publish interval (ms)
-		uint32_t seqN,			//Sequence number for responds, rolls over 1, no increment for KeepAlive messages
-			 cntrLifeTime, wLT,	//Counter after that miss notifications from client remove the object
-			 cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond and
+	    double	publInterval;		//Publish interval, milliseconds
+	    uint32_t	seqN,			//Sequence number for responses, rolls over 1, no increment for KeepAlive messages
+			lifetimeCnt, wLT,	//Counter after that miss notifications from client remove the object
+			maxKeepAliveCnt, wKA,	//Counter after that need to send empty publish response and
 						//send StatusChangeNotification with Bad_Timeout
-			 maxNotPerPubl;		//Maximum notifications per single Publish response
-		uint8_t	pr;			//Priority
-		vector<MonitItem> mItems;
-		deque<string> retrQueue;	//Retransmission queue; used by Republish request;
+			maxNtfPerPubl;		//Maximum notifications per single Publish response
+	    uint8_t	pr;			//Priority
+	    vector<MonitItem> mItems;
+	    deque<string> retrQueue;		//Retransmission queue; used by Republish request;
 						//cleared to deep by KeepAlive! or by field Acknowledgements sets
 	};
 
@@ -793,7 +846,7 @@ class Server: public UA
 		void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
 		//  Subsciption
 		uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = 0 for new create
-		    double publInterv = 0, uint32_t cntrLifeTime = 0, uint32_t cntrKeepAlive = 0,
+		    double publInterval = 0, uint32_t lifetimeCnt = 0, uint32_t maxKeepAliveCnt = 0,
 		    uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );
 		Subscr subscrGet( uint32_t ssId, bool noWorkData = true );
 		//  Monitored items
