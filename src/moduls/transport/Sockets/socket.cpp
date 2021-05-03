@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.0"
+#define MOD_VER		"4.3.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -747,16 +747,21 @@ void *TSocketIn::ClTask( void *s_inf )
 	do {
 	    tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
 
-	    unsigned poolPrt = 0;
+	    unsigned pollPrt = 0;
 	    if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
 		for(unsigned iP = 0; iP < prot_in.size(); iP++)
-		    if(!prot_in[iP].freeStat() && (poolPrt=prot_in[iP].at().waitReqTm()))
+		    if(!prot_in[iP].freeStat() && (pollPrt=prot_in[iP].at().waitReqTm()))
 			break;
-	    if(poolPrt) { tv.tv_sec = poolPrt/1000; tv.tv_usec = (poolPrt%1000)*1000; }
+	    if(pollPrt) {
+		// Aligning to the grid
+		int64_t curTm = TSYS::curTime(), targTm = (curTm/(1000ll*pollPrt) + 1)*pollPrt*1000ll;
+		tv.tv_sec = (targTm-curTm)/1000000; tv.tv_usec = (targTm-curTm)%1000000;
+		//tv.tv_sec = pollPrt/1000; tv.tv_usec = (pollPrt%1000)*1000;
+	    }
 
 	    FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
 	    int kz = select(s.sock+1, &rw_fd, NULL, NULL, &tv);
-	    if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rw_fd))) continue;
+	    if((kz == 0 && !pollPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rw_fd))) continue;
 	    if(kz < 0) {
 		if(mess_lev() == TMess::Debug)
 		    mess_debug(s.s->nodePath().c_str(), _("Terminated by the error \"%s (%d)\""), strerror(errno), errno);
@@ -1404,8 +1409,7 @@ repeate:
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
 		    if(notReq) throw TError(nodePath().c_str(),_("Error writing: %s"), err.c_str());
 		    start();
-		    //???? Why only (kz == 0)? Testing for the error "Broken channel (32)"
-		    if(kz == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
+		    if(kz <= 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections, sometime (kz < 0) for error "Broken channel (32)"
 		    goto repeate;
 		}
 		else {
@@ -1490,8 +1494,7 @@ repeate:
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
-		    //???? Why only (kz == 0)? Testing for the error "Broken channel (32)"
-		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
+		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections
 		    goto repeate;
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());

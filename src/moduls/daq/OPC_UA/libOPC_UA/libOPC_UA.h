@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.0.0								*
+ *   Version: 2.0.10								*
  *	* The main client services processing function protIO() adapted to work	*
  *	  in the asynchronous mode (not requesting).				*
  *	* The function Client::messIO() expanded for the timeout argument with	*
@@ -323,7 +323,7 @@ enum SubScrSt		{ SS_CUR = 0, SS_CLOSED, SS_CREATING, SS_NORMAL, SS_LATE, SS_KEEP
 enum MonitoringMode	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
 
 //* External functions                        */
-extern int64_t curTime( );
+extern int64_t curTime( clockid_t clc = CLOCK_REALTIME );
 extern string int2str( int val );
 extern int str2int( const string &val );
 extern string uint2str( unsigned val );
@@ -562,18 +562,18 @@ class Client: public UA
     {
 	public:
 	//Methods
-	SClntSess( )		{ clearFull( ); }
+	SClntSess( )		{ clearFull(); }
 	void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
 	void clearFull( bool inclEPdescr = false ) {
 	    endPoint = servCert = clKey = servKey = "";
 	    if(inclEPdescr) endPointDscr.clear();
-	    secPolicy = "None"; secMessMode = 1;
+	    secPolicy = "None"; secMessMode = MS_None;
 	    secChnl = secToken = reqHndl = 0;
 	    sqNumb = 33;
 	    sqReqId = 1;
 	    secLifeTime = 0;
 	    sessOpen = 0;
-	    clearSess( );
+	    clearSess();
 	}
 
 	string		endPoint;
@@ -601,13 +601,14 @@ class Client: public UA
 	//Methods
 	Subscr( Client *iclnt, double ipublInterval = 1e3 ) :
 	    publEn(true), publInterval(ipublInterval), subScrId(0), lifetimeCnt(12000),
-	    maxKeepAliveCnt(50), maxNtfPerPubl(65536), pr(0), publCnt(0),
+	    maxKeepAliveCnt(50), maxNtfPerPubl(65536), pr(0),
 	    clnt(iclnt)	{ }
 
-	void activate( bool vl );
+	bool isActivated( )	{ return subScrId; }
+	void activate( bool vl, bool onlyLocally = false );
 
 	int monitoredItemAdd( const NodeId &nd, AttrIds aId = AId_Value, MonitoringMode mMode = MM_REPORTING );
-	//void monitoredItemDel( const NodeId &nd )	{ }
+	void monitoredItemDel( int32_t mItId, bool localDeactivation = false );
 
 	//Attributes
 	bool	publEn;			//Enable publishing
@@ -617,10 +618,12 @@ class Client: public UA
 		maxKeepAliveCnt,	//Counter after that need to send empty publish response and
 					//	send StatusChangeNotification with Bad_Timeout
 		maxNtfPerPubl;		//Maximum notifications per single Publish response
-	uint8_t	pr,			//Priority
-		publCnt;		//Counter of the actual sent publish requests
+	uint8_t	pr;			//Priority
 
-	vector<XML_N>		mItems;
+	vector<XML_N>		mItems;	//The monitored items' attributes and their specific values:
+					// * "addr" - address of the node (NodeId): <EMPTY>-free monitored item
+					// * "statusCode" - the monitored item initiation status: 0-GOOD, <EMPTY>-not initiated yet
+					// * "Status" - readed value status: 0-GOOD
 	vector<uint32_t>	mSeqToAcq;
 
 	Client *clnt;
@@ -659,6 +662,7 @@ class Client: public UA
     //Attributes
     SClntSess		sess;		//Assigned session
     vector<Subscr>	mSubScr;	//Subscriptions list
+    vector<uint32_t>	mPublSeqs;	//Publish packages registration
 };
 
 //*************************************************
@@ -760,7 +764,7 @@ class Server: public UA
 
 		//Methods
 		MonitItem( ) : md(MM_DISABLED), aid(0), tmToRet(TS_SOURCE), smplItv(1000), qSz(OpcUa_NPosID),
-		    dO(false), cH(0), vTp(0), dtTm(0)	{ }
+		    dO(false), cH(0), vTp(0), dtTm(0), lstPublTm(0)	{ }
 
 		//Attributes
 		MonitoringMode	md;		//Monitoring mode
@@ -774,13 +778,14 @@ class Server: public UA
 		XML_N		fltr;		//Filters
 
 		int		vTp;		//Values type
-		int64_t		dtTm;		//Last value time
+		int64_t		dtTm,		//Last value time
+				lstPublTm;	//Last publication time
 		deque<Val>	vQueue;		//Values queue
 	    };
 
 	    //Methods
 	    Subscr( ) : st(SS_CLOSED), sess(-1), publEn(false), toInit(true), publInterval(100), seqN(1),
-		lifetimeCnt(12000), wLT(0), maxKeepAliveCnt(50), wKA(0), maxNtfPerPubl(0), pr(0)	{ }
+		lifetimeCnt(12000), wLT(0), maxKeepAliveCnt(50), wKA(0), maxNtfPerPubl(0), pr(0), lstPublTm(0)	{ }
 
 	    Subscr copy( bool noWorkData = true );
 	    SubScrSt setState( SubScrSt st = SS_CUR );
@@ -800,6 +805,7 @@ class Server: public UA
 	    vector<MonitItem> mItems;
 	    deque<string> retrQueue;		//Retransmission queue; used by Republish request;
 						//cleared to deep by KeepAlive! or by field Acknowledgements sets
+	    int64_t	lstPublTm;		//Last publication time
 	};
 
 	//* End Point
@@ -823,11 +829,11 @@ class Server: public UA
 		virtual uint32_t limRetrQueueTm( )	{ return 0; }	//Time limit (seconds) for retransmission queue
 
 		bool enableStat( ) const		{ return mEn; }
-		virtual bool publishInPool( ) = 0;	//Publish in the pool mode of transport, otherwise that is an external task
+		virtual bool publishInPoll( ) = 0;	//Publish in the poll mode of transport, otherwise that is an external task
 
 		virtual void setEnable( bool vl );
-		virtual void setPublish( const string &inPrtId )	{ }	//Start a publish task or input request's pool of subScrCycle()
-		void subScrCycle( unsigned cntr, string *answ = NULL, const string &inPrtId = "" );	//Subscriptions processing cycle
+		virtual void setPublish( const string &inPrtId )	{ }	//Start a publish task or input request's poll of subScrCycle()
+		void subScrCycle( string *answ = NULL, const string &inPrtId = "" );	//Subscriptions processing cycle
 
 		// Security policies
 		int secSize( )		{ return mSec.size(); }

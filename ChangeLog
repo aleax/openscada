@@ -1,3 +1,33 @@
+2021-05-03 Roman (stable)
+- LibsDB.vcaBase: doc.{docRepInstVals,docRepDay,docRepMonth,docRepYear}:
+	The reports with the SVG graph appended for CSS option "text-align: center" to ensure it centering on Firfox.
+    Main.storeHouse: Appended for the type "text" support as the new table item "t".
+- !!!!:SYS: The function TSYS::curTime() appended for an argument of the clock source specifying with using
+    the function clock_gettime() and the function TSYS::curTimeN() appended.
+- Transport.{Sockets,SSL}: The input transport polling mode switched to aligning at the period grid.
+- Transport.Sockets: The error "Broken channel (32)" is detected at the writing, after disconnecting the server,
+    so the reconnection attempts set to 2 at (kz <= 0).
+- !!:UI.{VCAEngine,QTStarter,Vision,WebVision}: The view "Table" of the primitive "FormEl"
+    appended by the new cell type 't'-text mostly for allowing the edition confirming the type 's'-string by pressing Enter.
+- !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Continued in appending the Publish service support on the client side
+	and the code comming refactoring in generic:
+    - CLIENT: publish packages tracing switched from using a counter to checking the response sequences;
+    - SERVER: making the publish responses some even by updation the polling mode of the input transports and performing
+	the responses processing at the last time but not from the call counter;
+    - CLIENT: appended for the subscription restoring after the sessions clossing, unifying the MonitoredItem statuses,
+	need to be observed yet deeply for that;
+    - CLIENT: appended for adding new nodes to monitor and implementing monitoredItemDel() (DeleteMonitoredItems),
+	which but disabled due to the nodes can be used in other DAQ-parameters;
+    - CLIENT: significant unification in passing service variables (like to "EndPoint", "SecChnId", ...) to prevent them doubling
+	and the sequences processing moved all to the end serialization function messIO();
+    - CLIENT: moving the main service request "CLO" under the messages processing due to the renewals sending inward the Publish activity;
+    - CLIENT: adaption the security modes for work with the mixed input buffer.
+    - the function curTime() appended for an argument of the clock source specifying with using the function clock_gettime();
+    - fixing "POOL" word on "POLL".
+- UI.WebVision: The view LineEdit of the primitive FormEl set to update at the configuration change 'cfg'.
+    Widgets removing appended of removing the transparent DIV-frames.
+
+
 2021-04-25 Roman (stable)
 - !!!!:DAQ.OPC_UA.{.,libOPC_UA}: Appended for the initial Publish service implementation on the DAQ-client part:
     - the main client services processing function protIO() adapted to work in the asynchronous mode (not requesting);

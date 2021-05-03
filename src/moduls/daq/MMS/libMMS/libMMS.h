@@ -46,7 +46,7 @@ namespace SupportServs { enum e { status = 0, getNameList, identify, rename, rea
 			defineScatteredAccess, getScatteredAccessAttributes, deleteVariableAccess, defineNamedVariableList,
 			getNamedVariableListAttributes, deleteNamedVariableList, defineNamedType, getNamedTypeAttributes,
 			deleteNamedType, input, output, takeControl, relinquishControl, defineSemaphore, deleteSemaphore,
-			reportSemaphoreStatus, reportPoolSemaphoreStatus, reportSemaphoreEntryStatus, initiateDownloadSequence,
+			reportSemaphoreStatus, reportPollSemaphoreStatus, reportSemaphoreEntryStatus, initiateDownloadSequence,
 			downloadSegment, terminateDownloadSequence, initiateUploadSequence, uploadSegment, terminateUploadSequence,
 			requestDomainDownload, requestDomainUpload, loadDomainContent, storeDomainContent, deleteDomain,
 			getDomainAttributes, createProgramInvocation, deleteProgramInvocation, start, stop, resume, reset,

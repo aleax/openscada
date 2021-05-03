@@ -41,7 +41,7 @@ class TableDelegate : public QItemDelegate
 
     public:
 	//Data
-	enum AddRoles { SelectRole = Qt::UserRole+10, TextLimRole };
+	enum AddRoles { SelectRole = Qt::UserRole+10, TextLimRole, OneLineString };
 
 	//Public attributes
 	TableDelegate( QObject *parent = 0 );

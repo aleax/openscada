@@ -50,7 +50,7 @@ using namespace OPC;
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
-#define POOL_OF_TR
+#define POLL_OF_TR
 #define NS_OpenSCADA_DAQ 4
 
 namespace OPC_UA
@@ -68,7 +68,7 @@ class TProtIn: public TProtocolIn
 	TProtIn( string name );
 	~TProtIn( );
 
-	unsigned waitReqTm( )	{ return mPoolTm; }
+	unsigned waitReqTm( )	{ return mPollTm; }
 
 	bool mess( const string &request, string &answer );
 
@@ -76,7 +76,7 @@ class TProtIn: public TProtocolIn
 
 	//Attributes
 	bool	mSubscrIn;
-	unsigned mPoolTm, mSubscrCntr;
+	unsigned mPollTm;
 	int64_t	mPrevTm;
 	string	mBuf, mEp;
 	uint32_t mRcvBufSz, mSndBufSz, mMsgMaxSz, mChunkMaxCnt;
@@ -103,8 +103,8 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string cert( );
 	string pvKey( );
 	double subscrProcPer( )	{ return 100; }
-	bool publishInPool( ) {
-#ifdef POOL_OF_TR
+	bool publishInPoll( ) {
+#ifdef POLL_OF_TR
 	    return true;
 #else
 	    return false;
@@ -152,7 +152,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-#ifndef POOL_OF_TR
+#ifndef POLL_OF_TR
 	static void *Task( void *ep );
 #endif
 

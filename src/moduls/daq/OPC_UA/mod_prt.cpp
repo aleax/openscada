@@ -116,8 +116,8 @@ bool TProt::inReq( string &request, const string &inPrtId, string *answ )
     bool rez = Server::inReq(request, inPrtId, answ);
     res.unlock();
 
-#ifdef POOL_OF_TR
-    //Pool for subscriptions process
+#ifdef POLL_OF_TR
+    //Poll for subscriptions process
     AutoHD<TProtIn> ip = at(inPrtId);
     if(ip.at().waitReqTm() && !ip.at().mSubscrIn && epPresent(ip.at().mEp)) {
 	int64_t wTm = SYS->curTime();
@@ -125,10 +125,9 @@ bool TProt::inReq( string &request, const string &inPrtId, string *answ )
 	bool tmToCall = (wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm();
 	if(tmToCall || ep.at().forceSubscrQueue) {
 	    if(tmToCall) ep.at().forceSubscrQueue = false;
-	    if(!ep.at().forceSubscrQueue) ip.at().mSubscrCntr++;
 	    ip.at().mPrevTm = wTm;
 	    ip.at().mSubscrIn = true;
-	    epAt(ip.at().mEp).at().subScrCycle(ip.at().mSubscrCntr, answ, inPrtId);
+	    epAt(ip.at().mEp).at().subScrCycle(answ, inPrtId);
 	    ip.at().mSubscrIn = false;
 	}
     }
@@ -251,7 +250,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-TProtIn::TProtIn( string name ) : TProtocolIn(name), mSubscrIn(false), mPoolTm(0), mSubscrCntr(0), mPrevTm(0),
+TProtIn::TProtIn( string name ) : TProtocolIn(name), mSubscrIn(false), mPollTm(0), mPrevTm(0),
 	mRcvBufSz(0), mSndBufSz(0), mMsgMaxSz(0), mChunkMaxCnt(0)	{ }
 
 TProtIn::~TProtIn( )		{ }
@@ -261,7 +260,7 @@ TProt &TProtIn::owner( ) const	{ return *(TProt*)nodePrev(); }
 bool TProtIn::mess( const string &reqst, string &answ )
 {
     mBuf += reqst;
-#ifdef POOL_OF_TR
+#ifdef POLL_OF_TR
     return owner().inReq(mBuf, name(), &answ);
 #else
     return owner().inReq(mBuf, name());
@@ -320,14 +319,14 @@ string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
 bool OPCEndPoint::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-#ifndef POOL_OF_TR
+#ifndef POLL_OF_TR
 void *OPCEndPoint::Task( void *iep )
 {
     OPCEndPoint &ep = *(OPCEndPoint *)iep;
 
     for(unsigned cntr = 0; !TSYS::taskEndRun(); cntr++) {
 	ep.forceSubscrQueue = false;	//Disable the forcing mechanism for the method
-	try { ep.subScrCycle(cntr); }
+	try { ep.subScrCycle(); }
 	catch(OPCError &err)	{ mess_err(ep.nodePath().c_str(), err.mess.c_str()); }
 	catch(TError &err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
@@ -397,7 +396,7 @@ void OPCEndPoint::setEnable( bool vl )
 	nodeReg(OpcUa_BaseObjectType,NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ),"DAQParameterObjectType",NC_ObjectType,OpcUa_HasSubtype);
 	nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),NS_OpenSCADA_DAQ),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->
 	    setAttr("DisplayName",SYS->daq().at().subName());
-#ifndef POOL_OF_TR
+#ifndef POLL_OF_TR
 	SYS->taskCreate(nodePath('.',true), 0/*mPrior*/, OPCEndPoint::Task, this);
     }
     else SYS->taskDestroy(nodePath('.',true));
@@ -408,9 +407,9 @@ void OPCEndPoint::setEnable( bool vl )
 
 void OPCEndPoint::setPublish( const string &inPrtId )
 {
-#ifdef POOL_OF_TR
+#ifdef POLL_OF_TR
     AutoHD<TProtIn> ip = owner().at(inPrtId);
-    ip.at().mPoolTm = subscrProcPer();
+    ip.at().mPollTm = subscrProcPer();
     ip.at().mEp = id();
 #endif
     //Otherwise the task started/stoped into setEnable()

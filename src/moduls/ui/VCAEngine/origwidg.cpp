@@ -606,7 +606,7 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			  "    color - row color as a whole into the color name or code;\n"
 			  "    colorText - color of the row text as a whole into the color name or code;\n"
 			  "    font - font of the row text in the typical OpenSCADA string.\n"
-			  "  s, i, r, b - cells of the data types \"String\", \"Integer\", \"Real\" and \"Logical\". Possible attributes:\n"
+			  "  s, t, i, r, b - cells of the data types \"String\", \"Text\", \"Integer\", \"Real\" and \"Logical\". Possible attributes:\n"
 			  "    color - cell color;\n"
 			  "    colorText - color of the cell text into the color name or code;\n"
 			  "    font - font of the cell text in the typical OpenSCADA string;\n"
@@ -654,7 +654,7 @@ bool OrigFormEl::eventProc( const string &ev, Widget *src )
 		if(chRN->name() != "r") continue;
 		for(int iChC = 0, iC = 0; iChC < (int)chRN->childSize() && !setOK; iChC++) {
 		    XMLNode *chCN = chRN->childGet(iChC);
-		    if(!(chCN->name() == "s" || chCN->name() == "r" || chCN->name() == "i" || chCN->name() == "b")) continue;
+		    if(!(chCN->name() == "s" || chCN->name() == "t" || chCN->name() == "r" || chCN->name() == "i" || chCN->name() == "b")) continue;
 		    if(iC == col && iR == row) { chCN->setText(src->attrAt("set").at().getS(),true); setOK = true; }
 		    iC++;
 		}

@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.3.0"
+#define MOD_VER		"3.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -544,16 +544,21 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if(!SSL_pending(ssl)) {
 		tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
 
-		unsigned poolPrt = 0;
+		unsigned pollPrt = 0;
 		if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
 		    for(unsigned iP = 0; iP < prot_in.size(); iP++)
-			if(!prot_in[iP].freeStat() && (poolPrt=prot_in[iP].at().waitReqTm()))
+			if(!prot_in[iP].freeStat() && (pollPrt=prot_in[iP].at().waitReqTm()))
 			    break;
-		if(poolPrt) { tv.tv_sec = poolPrt/1000; tv.tv_usec = (poolPrt%1000)*1000; }
+		if(pollPrt) {
+		    // Aligning to the grid
+		    int64_t curTm = TSYS::curTime(), targTm = (curTm/(1000ll*pollPrt) + 1)*pollPrt*1000ll;
+		    tv.tv_sec = (targTm-curTm)/1000000; tv.tv_usec = (targTm-curTm)%1000000;
+		    //tv.tv_sec = pollPrt/1000; tv.tv_usec = (pollPrt%1000)*1000;
+		}
 
 		FD_ZERO(&rd_fd); FD_SET(s.sock, &rd_fd);
 		kz = select(s.sock+1, &rd_fd, NULL, NULL, &tv);
-		if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rd_fd))) continue;
+		if((kz == 0 && !pollPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rd_fd))) continue;
 		if(kz < 0) {
 		    if(mess_lev() == TMess::Debug)
 			mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by the error %s"), strerror(errno));

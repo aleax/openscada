@@ -652,10 +652,10 @@ Data types (enum — NodeId::Type):
 <li> <i>virtual uint32_t limMonitItms( );</i> — limit to monitoring elements number;</li>
 <li> <i>virtual uint32_t limRetrQueueTm( );</i> — time limit to the retransmission queue depth;</li>
 <li> <i>bool enableStat( );</i> — state "Enabled";</li>
-<li> <i>virtual bool publishInPool( ) = 0;</i> — publish in the pool mode of transport, otherwise that is an external task;</li>
+<li> <i>virtual bool publishInPoll( ) = 0;</i> — publish in the polling mode of transport, otherwise that is an external task;</li>
 <li> <i>virtual void setEnable( bool vl );</i> — set to "Enabled";</li>
-<li> <i>virtual void setPublish( const string &amp;inPrtId );</i> — start a publish task or input request's pool of subScrCycle();</li>
-<li> <i>void subScrCycle( unsigned cntr, string *answ = NULL, const string &amp;inPrtId = "" );</i> — function of the subscriptions list processing call cycle in step <i>cntr</i> for answer into <i>answ</i> in the pool mode; <i>inPrtId</i> set to the input transport's (connection) subscriptions process into the pool mode or it is empty for all subscriptions processing into a specified task;</li>
+<li> <i>virtual void setPublish( const string &amp;inPrtId );</i> — start a publish task or input request's poll of subScrCycle();</li>
+<li> <i>void subScrCycle( unsigned cntr, string *answ = NULL, const string &amp;inPrtId = "" );</i> — function of the subscriptions list processing call cycle in step <i>cntr</i> for answer into <i>answ</i> in the polling mode; <i>inPrtId</i> set to the input transport's (connection) subscriptions process into the polling mode or it is empty for all subscriptions processing into a specified task;</li>
 <li> <i>int secSize( );</i> — security policies number;</li>
 <li> <i>string secPolicy( int isec );</i> — getting of the security policy <i>isec</i> description;</li>
 <li> <i>MessageSecurityMode secMessageMode( int isec );</i> — messages security mode for the security policy <i>isec</i>;</li>
@@ -847,5 +847,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2743</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2746</td></tr></table></body>
 </html>

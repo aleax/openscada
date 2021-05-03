@@ -344,7 +344,8 @@ Information variables of the program:
 <li> <i>static const STask&amp; taskDescr( );</i> — Get reference to the task's descriptor.</li>
 <li> <i>static int sysSleep( float tm );</i> — System sleep in seconds up to nanoseconds (1e-9).</li>
 <li> <i>time_t sysTm( );</i> — System time fast access, from updated cell</li>
-<li> <i>static int64_t curTime( );</i> — The actual time in microsecond from the beginning of the era (01.01.1970). </li>
+<li> <i>static int64_t curTime( clockid_t clc = CLOCK_REALTIME );</i> — The clock <i>clc</i> time in microseconds from the beginning of the era (01.01.1970).</li>
+<li> <i>static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );</i> — The clock <i>clc</i> time in nanoseconds from the beginning of the era (01.01.1970).</li>
 <li> <i>string prjUserDir( );</i> — Directory of the user projects.</li>
 <li> <i>bool prjCustMode( );</i> — Custom mode of projects.</li>
 <li> <i>void setPrjCustMode( bool vl );</i> — Set for custom mode of projects.</li>
@@ -4123,5 +4124,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2743</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2746</td></tr></table></body>
 </html>

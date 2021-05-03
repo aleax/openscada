@@ -901,7 +901,7 @@ int TSYS::start( )
     Mess->translReg("", "uapi:" DB_CFG);
 
     mStopSignal = 0;
-    mess_sys(TMess::Info, _("Running is completed!"));
+    mess_sys(TMess::Info, _("Starting is completed!"));
 
     //Call in monopoly for main thread module or wait for a signal.
     mRunning = true;
@@ -1112,11 +1112,22 @@ void TSYS::cfgFileScan( bool first, bool up )
     }
 }
 
-int64_t TSYS::curTime( )
+int64_t TSYS::curTime( clockid_t clc )
 {
-    timeval cur_tm;
+    struct timespec tm;
+    clock_gettime(clc, &tm);
+    return 1000000ll*tm.tv_sec + tm.tv_nsec/1000;
+
+    /*timeval cur_tm;
     gettimeofday(&cur_tm, NULL);
-    return (int64_t)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;
+    return (int64_t)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;*/
+}
+
+uint64_t TSYS::curTimeN( clockid_t clc )
+{
+    struct timespec tm;
+    clock_gettime(clc, &tm);
+    return 1000000000ll*tm.tv_sec + tm.tv_nsec;
 }
 
 bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t tm )

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -250,7 +250,8 @@ class TSYS : public TCntrNode
 	static long HZ( );
 
 	time_t	sysTm( ) volatile	{ return mSysTm ? mSysTm : time(NULL); }	//System time fast access, from updated cell
-	static int64_t curTime( );	//Current system time (usec)
+	static int64_t curTime( clockid_t clc = CLOCK_REALTIME );	//Current system time, microseconds
+	static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );	//Current system time, nanoseconds
 
 	// Projects
 	string prjUserDir( );

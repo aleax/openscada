@@ -134,7 +134,7 @@ QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewIte
     QVariant val_user = index.data(SelectRole);
 
     if(val_user.isValid()) w_del = new QComboBox(parent);
-    else if(value.type() == QVariant::String) {
+    else if(value.type() == QVariant::String && !index.data(OneLineString).toBool()) {
 	w_del = new QTextEdit(parent);
 	((QTextEdit*)w_del)->setTabStopWidth(40);
 	((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);

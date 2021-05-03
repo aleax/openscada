@@ -251,7 +251,6 @@ void *TMdContr::Task( void *icntr )
     bool firstCall = true;
 
     if(cntr.period())	cntr.mSubScr[0].publInterval = 1e-6*cntr.period();
-    if(!cntr.mUseRead)	cntr.mSubScr[0].activate(true);
 
     XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 
@@ -263,15 +262,17 @@ void *TMdContr::Task( void *icntr )
 	    cntr.callSt = true;
 
 	    if(!cntr.mUseRead) {
+		if(!cntr.mSubScr[0].isActivated()) cntr.mSubScr[0].activate(true);
+
 		cntr.poll();
 
 		// Parameters updating
 		AutoHD<TVal> vl;
 		uint32_t ndSt = 0;
 		MtxAlloc res(cntr.enRes, true);
-		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
+		for(unsigned iP = 0; iP < cntr.pHd.size(); ++iP) {
 		    cntr.pHd[iP].at().vlList(als);
-		    for(unsigned iA = 0; iA < als.size(); iA++) {
+		    for(unsigned iA = 0; iA < als.size(); ++iA) {
 			vl = cntr.pHd[iP].at().vlAt(als[iA]);
 			nId = TSYS::strLine(vl.at().fld().reserve(), 2);
 			if(nId.empty())	continue;
@@ -324,8 +325,8 @@ void *TMdContr::Task( void *icntr )
 	    int ndSt = 0;
 	    AutoHD<TVal> vl;
 	    res.lock();
-	    for(unsigned i_c = 0, iP = 0, varTp = 0; i_c < req.childSize() && iP < cntr.pHd.size(); i_c++) {
-		XML_N *cnX = req.childGet(i_c);
+	    for(unsigned iC = 0, iP = 0, varTp = 0; iC < req.childSize() && iP < cntr.pHd.size(); iC++) {
+		XML_N *cnX = req.childGet(iC);
 		if(cnX->attr("prmId") == "OPC_UA_Server" && cnX->attr("prmAttr") == "ServerStatus_State")
 		{ cntr.servSt = strtoul(cnX->text().c_str(),NULL,10); continue; }
 		while(cnX->attr("prmId") != cntr.pHd[iP].at().id()) iP++;
@@ -439,8 +440,8 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 	    reqService(req);
 
 	    res.request(true);
-	    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
-		XML_N *xep = req.childGet(i_ch);
+	    for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
+		XML_N *xep = req.childGet(iCh);
 		string ep = xep->attr("endpointUrl");
 		if(epLst.find(ep) != epLst.end()) ep += "/"+TSYS::strParse(xep->attr("securityPolicyUri"),1,"#")+"/"+xep->attr("securityMode");
 		epLst[ep] = SecuritySetting(TSYS::strParse(xep->attr("securityPolicyUri"),1,"#"), s2i(xep->attr("securityMode")));
@@ -777,11 +778,17 @@ string TMdPrm::attrPrc( )
     //Find for delete attribute
     res.lock();
     for(unsigned iA = 0, iP; iA < pEl.fldSize(); ) {
-	for(iP = 0; iP < als.size(); iP++)
+	for(iP = 0; iP < als.size(); ++iP)
 	    if(TSYS::strLine(pEl.fldAt(iA).reserve(),0) == als[iP])	break;
 	if(iP >= als.size())
-	    try{ pEl.fldDel(iA); continue; } catch(TError &err) { }
-	iA++;
+	    try {
+		//  Unregister from monitor
+		//owner().mSubScr[0].monitoredItemDel(str2uint(TSYS::strLine(pEl.fldAt(iA).reserve(),2)));
+
+		pEl.fldDel(iA);
+		continue;
+	    } catch(TError &err) { }
+	++iA;
     }
 
     return "";
@@ -796,7 +803,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",EVAL_STR,RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",EVAL_STR,(owner().startStat()&&enableStat())?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
 	    "help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
 		"Variables wrote by separated lines into format: [ns:id].\n"
 		"Where:\n"
@@ -807,7 +814,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string view;\n"
 		"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
 		"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and GUID view."));
-	ctrMkNode2("fld",opt,-1,"/prm/cfg/SEL_NDS",_("Node append"),RWRW__,"root",SDAQ_ID,"dest","select","select","/prm/cfg/SEL_NDS_lst",NULL);
+	ctrMkNode2("fld",opt,-1,"/prm/cfg/SEL_NDS",_("Node append"),(owner().startStat()&&enableStat())?0:RWRW__,"root",SDAQ_ID,
+	    "dest","select", "select","/prm/cfg/SEL_NDS_lst", NULL);
 	return;
     }
 

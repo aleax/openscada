@@ -639,8 +639,8 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),(DAQTmpl().size()||inProgLang().size()?RWRW__:0),"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/in/WaitReqTm",_("Timeout of a request waiting, milliseconds"),RWRW__,"root",SPRT_ID,2,
-		    "tp","dec", "help",_("Use this for the poolling mode enabling through setting this timeout to a nonzero value.\n"
-					"Into the poolling mode an input transport will call this protocol with the empty message at no request during this timeout."));
+		    "tp","dec", "help",_("Use this for the polling mode enabling through setting this timeout to a nonzero value.\n"
+					"Into the polling mode an input transport will call this protocol with the empty message at no request during this timeout."));
 		ResAlloc res(inCfgRes, false);
 		if(func() && chkLnkNeed) chkLnkNeed = initLnks();
 		if(func() && ctrMkNode("table",opt,-1,"/in/io",_("IO"),RWRW__,"root",SPRT_ID,1,"rows","10")) {

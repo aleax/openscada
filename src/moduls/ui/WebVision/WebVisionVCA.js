@@ -1025,9 +1025,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
 			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
 		    }
-		    if(formObj.valSet && this.attrsMdf['value']) formObj.valSet(this.attrs['value']);
 		    this.place.view = parseInt(this.attrs['view']);
 		    this.place.cfg = this.attrs['cfg'];
+		    if(formObj.valSet && (this.attrsMdf['value'] || this.attrsMdf['cfg'])) formObj.valSet(this.attrs['value']);
 		    if(!toInit) break;
 		    formObj.wdgLnk = this;
 		    formObj.disabled = !elWr;
@@ -1862,9 +1862,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 				    this.firstChild.focus();
 				}
-				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s") {
+				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s" || this.outTp == "t") {
 				    tVl = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
-				    this.innerHTML = (this.outTp == "s") ? "<textarea style='height: "+this.clientHeight+"px;'/>" : "<input/>";
+				    this.innerHTML = (this.outTp == "t") ? "<textarea style='height: "+this.clientHeight+"px;'/>" : "<input/>";
 				    this.firstChild.value = tVl;
 				    this.firstChild.onkeyup = function(e) {
 					e.stopImmediatePropagation();
@@ -2549,6 +2549,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    break;
 	    if(j >= pgBr.childNodes.length) {
 		this.wdgs[i].place.parentNode.removeChild(this.wdgs[i].place);
+		if(this.wdgs[i].placeTr)
+		    this.wdgs[i].placeTr.parentNode.removeChild(this.wdgs[i].placeTr);
 		delete this.wdgs[i];
 	    }
 	}

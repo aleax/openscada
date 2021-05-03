@@ -8347,7 +8347,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -8361,7 +8361,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0
+Версия: 1.0.1
 Лицензия: GPLv2','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','');
@@ -12646,7 +12646,7 @@ INSERT INTO wlb_doc_io VALUES('docRepDay','tmpl','<body docProcLang="JavaLikeCal
 <?dp return "<h1>"+tr("Average over hour values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-params.repHour*3600-1,"%d %B %Y")+"</span>";?>
 </center>
 
-<div width="100%"><div style="margin-left: auto; margin-right: auto; width: fit-content;">
+<div width="100%"><div style="margin-left: auto; margin-right: auto; text-align: center; width: fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
@@ -12714,7 +12714,7 @@ INSERT INTO wlb_doc_io VALUES('docRepMonth','tmpl','<body docProcLang="JavaLikeC
 <?dp return "<h1>"+tr("Average over day values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-params.repHour*3600-1,"%B %Y")+"</span>";?>
 </center>
 
-<div width="100%"><div style="margin-left: auto; margin-right: auto; width: fit-content;">
+<div width="100%"><div style="margin-left: auto; margin-right: auto; text-align: center; width: fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
@@ -12867,7 +12867,7 @@ INSERT INTO wlb_doc_io VALUES('docRepInstVals','tmpl','<body docProcLang="JavaLi
 <?dp return "<h1>"+tr("Instantaneous values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time)+"</span>";?>
 </center>
 
-<div width="100%"><div style="margin-left: auto; margin-right: auto; width: fit-content;">
+<div width="100%"><div style="margin-left: auto; margin-right: auto; width: text-align: center; fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
@@ -13182,23 +13182,23 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 3.1.1
+Version: 3.1.2
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту середніх за годину значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом години формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової години (наприклад, 14:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного дня (наприклад, 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 3.1.1
+Версія: 3.1.2
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','dscr','The document is provided for generating a report of the instantaneous values in view of the trends diagram and the data table. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.0
+Version: 2.1.1
 License: GPLv2',32,'','','','Документ слугує для генерації звіту миттєвих значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.0
+Версія: 2.1.1
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','dscr','The document is provided for generating a month report of the day-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -13206,14 +13206,14 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 3.1.1
+Version: 3.1.2
 License: GPLv2',32,'','','','Документ слугує для генерації місячного звіту середніх за добу значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом доби формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової доби (наприклад, 05 09:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного місяця (наприклад, 05 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 3.1.1
+Версія: 3.1.2
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','The document is provided for generating a report of different sort messages together, including: "Violations", "User-operator actions" and "System". The document is the dynamic type, so you can specify the data time and depth. The document so commonly uses and represents the messages structures: "Violations", "User-operator actions" and "System". As a data source of this document is the message archive.
 
@@ -13276,7 +13276,7 @@ Manually entered data is stored or traditionally in an archive of values, with o
 The message archiver of the module FSArch must be set for the next attributes to correct work perform together this document: set "Prevent duplicates", "Consider duplicates and prevent, for equal time, category, level" and set "Time size of the archive files" to 3660 days. The module DBArch must work without such kind specific.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту місячних значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають переважно архіви значень DAQ-параметрів.
 
 Документом вперше запроваджено ручне введення архівних значень великого інтервалу часу вимірювання, яким у цьому випадку є місяць, як недетермінований інтервал. Найбільшу актуальність ця функція становить для лічильників, які з тієї або іншої причини неможливо підключити до системи прямо, із безперервним вимірюванням або періодичним вивантаженням ділянок архіву. Визначення параметру до ручного вводу здійснюється встановленням постійної isMan відповідного параметру, що вмикає елементи форми нагорі документу, за відповідних прав ("root" або у групі "ITW"), та доступ до даних для таблиці та тренду суворо за інтервалом документу — місяць, як і їх введення.
@@ -13290,7 +13290,7 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Архіватор повідомлень модуля FSArch має бути встановлено у наступних атрибутах для здійснення коректної роботи разом із цим документом: встановити "Запобігати дублікатам", "Вважати дублікатами та запобігати, для рівного часу, категорії, рівня" та встановити "Розмір файлів за часом" у 3660 діб. Модуль DBArch має працювати без такого роду специфіки.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','evProc','',32,'','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:ITW',32,'','','lab_set','','','','','','');
@@ -13370,7 +13370,7 @@ INSERT INTO wlb_doc_io VALUES('docRepYear','tmpl','<body docProcLang="JavaLikeCa
 <?dp return "<h1>"+tr("Month values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time-1,"%Y")+"</span>";?>
 </center>
 
-<div width="100%"><div style="margin-left: auto; margin-right: auto; width: fit-content;">
+<div width="100%"><div style="margin-left: auto; margin-right: auto; text-align: center; width: fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!(pO=params[iP]).min.isEVal() && !pO.max.isEVal())
@@ -24973,8 +24973,9 @@ if(f_start || toUpdate) {
 						}
 						itVl = tVl.name;
 						if(tVl.tp.search("bool","i") >= 0)		colTps[iC] = "b";
-						else if(tVl.tp.search("int","1") >= 0)	colTps[iC] = "i";
-						else if(tVl.tp.search("(float,double)","1") >= 0) colTps[iC] = "r";
+						else if(tVl.tp.search("int","i") >= 0)	colTps[iC] = "i";
+						else if(tVl.tp.search("(float|double)","i") >= 0) colTps[iC] = "r";
+						else if(tVl.tp.search("text","i") >= 0)	colTps[iC] = "t";
 						if((tVl2=tVl.tbl.parse(0,":")).length)	opt += " align=''"+tVl2+"''";
 						if((tVl2=tVl.tbl.parse(1,":")).length)	opt += " width=''"+tVl2+"''";
 						//this.messInfo("iC="+iC+"; tp="+tVl.tp+" = "+colTps[iC]+"; tVl.fltr="+tVl.fltr);

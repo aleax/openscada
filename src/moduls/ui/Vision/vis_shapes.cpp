@@ -622,7 +622,14 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 					case 'b': v = (bool)s2i(tC->text());	break;
 					case 'i': v = s2ll(tC->text());		break;
 					case 'r': v = s2r(tC->text());		break;
-					default: v = QString::fromStdString(tC->text()); break;
+					case 't':
+					    tit->setData(TableDelegate::OneLineString, false);
+					    v = QString::fromStdString(tC->text());
+					    break;
+					default:
+					    tit->setData(TableDelegate::OneLineString, true);
+					    v = QString::fromStdString(tC->text());
+					    break;
 				    }
 				tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 				tit->setData(Qt::DisplayRole, QVariant());	//!!!! To clean up the stored QVariant type for next reusing
