@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.OPC_UA translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2010-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:40+0300\n"
+"POT-Creation-Date: 2021-05-09 17:07+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -57,8 +57,8 @@ msgstr "Аутентиф.: пользователь"
 msgid "Auth: password"
 msgstr "Аутентиф.: пароль"
 
-msgid "Parameter attributes number limit"
-msgstr "Ограничение количества атрибутов параметра"
+msgid "Use the \"Read\" function"
+msgstr "Использовать функцию \"Read\""
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -83,16 +83,29 @@ msgstr "Сбор с периодом: %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
-msgstr "Следующий cбор по cron '%s'. "
+msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s[%s]. Requests %.6g."
-msgstr "Затрачено времени: %s[%s]. Запросов %.6g."
+msgid "Spent time: %s[%s]. Requests %.6g. "
+msgstr "Затрачено времени: %s[%s]. Запросов %.6g. "
+
+#, c-format
+msgid ""
+"Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session "
+"%s. "
+msgstr ""
+"Канал безопасности %u, токен %u, время жизни %s; Запроса ИД %u, держатель "
+"%u; Сеанс %s. "
+
+#, c-format
+msgid "Subscription %d, publishes %u, keep alive %s. "
+msgstr "Подписка %d, публикаций %u, удержание живым %s. "
 
 #, c-format
 msgid "OPC UA automatic created transport for '%s' controller."
 msgstr "OPC UA автоматически созданный транспорт для контроллера '%s'."
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Подключение к источнику данных: %s."
 
@@ -107,6 +120,13 @@ msgstr "НОРМА"
 
 msgid "Zero for disable periodic sync."
 msgstr "Ноль для отключения периодической синхронизации."
+
+msgid ""
+"Otherwise there is activated and used the Publish (asynchronous) data "
+"acquisition service of the OPC-UA protocol."
+msgstr ""
+"Иначе активируется и используется сервис сбора данных Publish "
+"(асинхронный) протокола OPC-UA."
 
 msgid "Server nodes browser"
 msgstr "Обзор узлов сервера"
@@ -283,7 +303,7 @@ msgid "Binary"
 msgstr "Бинарный"
 
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 msgid "Security policies"
 msgstr "Политики безопасности"
@@ -300,8 +320,31 @@ msgstr "Дополнительные параметры"
 msgid "Search and create new server error."
 msgstr "Ошибка поиска и создания нового сервера."
 
+msgid "Server"
+msgstr "Сервер"
+
+msgid "Active secure channels"
+msgstr "Активные каналы безопасности"
+
 msgid "End points"
 msgstr "Конечные узлы"
+
+msgid "None"
+msgstr "Нет"
+
+msgid "Sign"
+msgstr "Подпись"
+
+msgid "Sign&Encrypt"
+msgstr "Подпись&Шифрование"
+
+#, c-format
+msgid ""
+"%u(token %u): %s(%s,%s) at %s(live %s); Sequence server %u, client %u; "
+"Request ID %u"
+msgstr ""
+"%u(токен %u): %s(%s,%s) от %s(живой %s); Последовательность сервера %u, "
+"клиента %u; ІД Запроса %u"
 
 msgid "Disabled. "
 msgstr "Отключен. "
@@ -321,6 +364,12 @@ msgstr "Состояние"
 
 msgid "Status"
 msgstr "Статус"
+
+msgid "Active sessions"
+msgstr "Активные сеансы"
+
+msgid "Active subscriptions"
+msgstr "Активные подписки"
 
 msgid "Enabled"
 msgstr "Включен"
@@ -354,6 +403,37 @@ msgstr "Время очереди повторной передачи, сек."
 
 msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr "Установить в 0 для автоматического по cntrKeepAlive*publInterv"
+
+#, c-format
+msgid "%d(%s): at %s(live %s), secure channels \"%s\"; Publish requests %u"
+msgstr "%d(%s): от %s(живой %s), каналы безопасности \"%s\"; Запросы публикации %u"
+
+msgid "Closed"
+msgstr "Закрыто"
+
+msgid "Creating"
+msgstr "Создание"
+
+msgid "Normal"
+msgstr "Норма"
+
+msgid "Late"
+msgstr "Познее"
+
+msgid "KeepAlive"
+msgstr "УдержаниеЖивым"
+
+#, c-format
+msgid ""
+"%d: %s, session %d; Publish %s, interval %s, last %s, sequence %d, lifetime "
+"%d, keep alive %d; Monitored items %u; Retransmission queue %u"
+msgstr ""
+"%d: %s, сеанс %d; Публикация %s, интервал %s, последнее %s, "
+"последовательность %d, время жизни %d, удержание живым %d; Элементы "
+"мониторинга %u; Очередь повторной отправки %u"
+
+msgid "Disabled"
+msgstr "Отключен"
 
 msgid "No present selected row."
 msgstr "Выбранная строка отсутствует."

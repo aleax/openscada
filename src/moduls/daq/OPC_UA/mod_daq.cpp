@@ -119,8 +119,16 @@ string TMdContr::getStatus( )
 	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
 	    if(period()) rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
 	    else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s[%s]. Requests %.6g."),
+	    rez += TSYS::strMess(_("Spent time: %s[%s]. Requests %.6g. "),
 		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(), -tmDelay);
+	    OPCAlloc res(mtxData, true);
+	    rez += TSYS::strMess(_("Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session %s. "),
+		sess.secChnl, sess.secToken, tm2s(1e-3*sess.secLifeTime-1e-6*(curTime()-sess.sessOpen)).c_str(), sess.sqReqId, sess.reqHndl, sess.sesId.c_str());
+	    if(sess.mSubScr.size())
+		rez += TSYS::strMess(_("Subscription %d, publishes %u, keep alive %s. "),
+		    sess.mSubScr[0].subScrId, sess.mPublSeqs.size(),
+		    tm2s(2*1e-3*sess.mSubScr[0].maxKeepAliveCnt*sess.mSubScr[0].publInterval-1e-6*(curTime()-sess.mSubScr[0].lstPublTm)).c_str());
+	    res.unlock();
 	    if(servSt) rez.replace(0, 1, TSYS::strMess("0x%x",servSt));
 	}
     }
@@ -136,7 +144,7 @@ void TMdContr::reqService( XML_N &io )
 {
     if(tr.freeStat())	return;
 
-    ResAlloc res(nodeRes(), true);
+    ResAlloc res(resOPC, true);
     io.setAttr("err", "");
 
     try { tr.at().start(); }
@@ -177,12 +185,12 @@ void TMdContr::enable_( )
     enSt = true;
     setEndPoint(endPoint());
 
-    if(mSubScr.empty())	mSubScr.push_back(Subscr(this));	//Creation one subscription object
+    if(sess.mSubScr.empty())	sess.mSubScr.push_back(Subscr(this));	//Creation one subscription object
 }
 
 void TMdContr::disable_( )
 {
-    mSubScr.clear();
+    sess.mSubScr.clear();
 
     tr.free();
 }
@@ -250,7 +258,7 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
     bool firstCall = true;
 
-    if(cntr.period())	cntr.mSubScr[0].publInterval = 1e-6*cntr.period();
+    if(cntr.period())	cntr.sess.mSubScr[0].publInterval = 1e-6*cntr.period();
 
     XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 
@@ -262,7 +270,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.callSt = true;
 
 	    if(!cntr.mUseRead) {
-		if(!cntr.mSubScr[0].isActivated()) cntr.mSubScr[0].activate(true);
+		if(!cntr.sess.mSubScr[0].isActivated()) cntr.sess.mSubScr[0].activate(true);
 
 		cntr.poll();
 
@@ -270,6 +278,7 @@ void *TMdContr::Task( void *icntr )
 		AutoHD<TVal> vl;
 		uint32_t ndSt = 0;
 		MtxAlloc res(cntr.enRes, true);
+		OPCAlloc resDt(cntr.mtxData);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); ++iP) {
 		    cntr.pHd[iP].at().vlList(als);
 		    for(unsigned iA = 0; iA < als.size(); ++iA) {
@@ -277,10 +286,12 @@ void *TMdContr::Task( void *icntr )
 			nId = TSYS::strLine(vl.at().fld().reserve(), 2);
 			if(nId.empty())	continue;
 
-			XML_N *mIt = ((ndSt=str2uint(nId)) < cntr.mSubScr[0].mItems.size()) ? &cntr.mSubScr[0].mItems[ndSt] : NULL;
+			resDt.lock();
+			XML_N *mIt = ((ndSt=str2uint(nId)) < cntr.sess.mSubScr[0].mItems.size()) ? &cntr.sess.mSubScr[0].mItems[ndSt] : NULL;
 			ndSt = (!mIt || !mIt->attr("statusCode").size()) ? OpcUa_BadMonitoredItemIdInvalid :
 				   (ndSt=str2uint(mIt->attr("statusCode"))) ? ndSt : str2uint(mIt->attr("Status"));
 			vl.at().setS((!mIt||ndSt)?EVAL_STR:mIt->text(), 0, true);
+			resDt.unlock();
 			vl.at().fld().setLen(ndSt);
 		    }
 		}
@@ -391,7 +402,7 @@ void *TMdContr::Task( void *icntr )
     //Closing the subscription and session ...
     if(TSYS::taskEndRun())
 	try {
-	    if(!cntr.mUseRead) cntr.mSubScr[0].activate(false);
+	    if(!cntr.mUseRead) cntr.sess.mSubScr[0].activate(false);
 
 	    req.childClear();
 	    req.setAttr("id", "CloseALL");
@@ -412,7 +423,7 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 	    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 	else if(co.name() == "EndPoint" && enableStat()) {
 	    tr.at().setAddr("TCP:"+epParse()); tr.at().modifClr();
-	    ResAlloc res(nodeRes(), false);
+	    ResAlloc res(resOPC, false);
 	    SecuritySetting ss("", -1);
 	    if(epLst.find(co.getS()) != epLst.end()) ss = epLst[co.getS()];
 	    res.release();
@@ -481,7 +492,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PvKey",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthUser",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/UseRead",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/UseRead",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID,
+	    "help", _("Otherwise there is activated and used the Publish (asynchronous) data acquisition service of the OPC-UA protocol."), NULL);
 	if(enableStat() && ctrMkNode("area",opt,-1,"/ndBrws",_("Server nodes browser"))) {
 	    ctrMkNode2("fld",opt,-1,"/ndBrws/nd",_("Node"),RWRWR_,"root",SDAQ_ID, "tp","str", "dest","select", "select","/ndBrws/ndLst", NULL);
 	    if(ctrMkNode("table",opt,-1,"/ndBrws/attrs",_("Attributes"),R_R_R_,"root",SDAQ_ID)) {
@@ -496,7 +508,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(a_path == "/cntr/cfg/AuthPass" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
 	opt->setText(string(mAuthPass.getS().size(),'*'));
     else if(a_path == "/cntr/cfg/elLst" && ctrChkNode(opt)) {
-	ResAlloc res(nodeRes(), false);
+	ResAlloc res(resOPC, false);
 	for(map<string, SecuritySetting>::iterator iEp = epLst.begin(); iEp != epLst.end(); iEp++)
 	    opt->childAdd("el")->setText(iEp->first);
     }
@@ -760,7 +772,7 @@ string TMdPrm::attrPrc( )
 		if(!(s2i(req.childGet(4)->text())&ACS_Write))	vflg |= TFld::NoWrite;
 
 		//  Register to monitor
-		unsigned clntHndl = owner().mSubScr[0].monitoredItemAdd(NodeId::fromAddr(snd));
+		unsigned clntHndl = owner().sess.mSubScr[0].monitoredItemAdd(NodeId::fromAddr(snd));
 
 		pEl.fldAdd(new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,"","","","",
 		    (snd+"\n"+req.childGet(3)->attr("VarTp")+"\n"+u2s(clntHndl)).c_str()));
@@ -783,7 +795,7 @@ string TMdPrm::attrPrc( )
 	if(iP >= als.size())
 	    try {
 		//  Unregister from monitor
-		//owner().mSubScr[0].monitoredItemDel(str2uint(TSYS::strLine(pEl.fldAt(iA).reserve(),2)));
+		//owner().sess.mSubScr[0].monitoredItemDel(str2uint(TSYS::strLine(pEl.fldAt(iA).reserve(),2)));
 
 		pEl.fldDel(iA);
 		continue;

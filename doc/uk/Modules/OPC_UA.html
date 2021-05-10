@@ -50,7 +50,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Сервер OPC-UA
 </td>
-<td> 1.10 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -182,16 +182,19 @@
 </p><p>OPC-UA спроектовано як рішення для міграції із OPC клієнтів та серверів, які основані на Microsoft COM технологіях. OPC COM сервери (DA, HDA та A&amp;E) можуть бути легко віддзеркалені у OPС-UA. Виробники можуть самостійно здійснювати таку міграцію або ж рекомендувати користувачам використовувати обгортки та конвертори між цими протоколами. OPC-UA уніфікує попередні моделі у єдиному адресному просторі з єдиною множиною сервісів.
 </p>
 <h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.97_.D1.81.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83"><span class="mw-headline-number">2</span> Модуль реалізації серверу</span></h2>
-<p>Модуль серверу містить код реалізації серверної частини OPC-UA — серверних сервісів, у частині специфічній для OpenSCADA, та використовуючи бібліотеку для OPC-UA специфічної частини. Для побудови OPC-UA серверу достатньо створити вхідний транспорт, за звичай це TCP-транспорт модуля <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, та обрати в ньому модуль даного протоколу, а також сконфігурувати хоча б один кінцевий вузол модуля протоколу, про що нижче.
+<p>Модуль серверу містить код реалізації серверної частини OPC-UA — серверних сервісів (Рис.1), у частині специфічній для OpenSCADA, та використовуючи бібліотеку для OPC-UA специфічної частини. Для побудови OPC-UA серверу достатньо створити вхідний транспорт, за звичай це TCP-транспорт модуля <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, та обрати в ньому модуль даного протоколу, а також сконфігурувати хоча б один кінцевий вузол модуля протоколу, про що нижче.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:879px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_serv_uk.png"><img class="thumbimage" height="487" src="../files/OPC-UA_prt_serv_uk.png" width="877" /></a>  <div class="thumbcaption">Рис.1. Загальний стан "Серверу".</div></div></div></div>
+<p>Загальний стан Серверу містить лише перелік активних каналів безпеки.
 </p>
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.81.D0.BB.D1.83.D0.B3.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B7.D0.B0.D0.BF.D0.B8.D1.82.D1.96.D0.B2_.D0.B7.D0.B0_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.BE.D0.BC_OPC-UA"><span class="mw-headline-number">2.1</span> Обслуговування запитів за протоколом OPC-UA</span></h3>
-<p>Вхідні запити до модуля-протоколу обробляються модулем у відповідності до сконфігурованих кінцевих вузлів OPC-UA (EndPoints) (рис.1).
+<p>Вхідні запити до модуля-протоколу обробляються модулем у відповідності до сконфігурованих кінцевих вузлів OPC-UA (EndPoints) (рис.2).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_eps_uk.png"><img class="thumbimage" height="485" src="../files/OPC-UA_prt_eps_uk.png" width="618" /></a>  <div class="thumbcaption">Рис.1. Кінцеві вузли протоколу.</div></div></div></div>
-<p>Кінцевий вузол протоколу OPC-UA це фактично об'єкт серверу OPC-UA. Кінцеві вузли у OPC-UA можуть бути як локальними, так і віддаленими. Локальний кінцевий вузол призначено для надання ресурсів станції OpenSCADA за протоколом OPC-UA, в той-же час віддалені кінцеві вузли слугують для виконання як сервісу огляду доступних OPC-UA вузлів, так і для шлюзування запитів до віддалених станцій. У цій версії модуля підтримується тільки конфігурація локальних кінцевих вузлів.
-</p><p>Загальна конфігурація кінцевого вузла здійснюється на головній вкладці сторінки кінцевого вузла (рис.2) параметрами:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:684px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_eps_uk.png"><img class="thumbimage" height="487" src="../files/OPC-UA_prt_eps_uk.png" width="682" /></a>  <div class="thumbcaption">Рис.2. Кінцеві вузли протоколу.</div></div></div></div>
+<p>Кінцевий вузол протоколу OPC-UA це фактично об'єкт серверу OPC-UA. Кінцеві вузли у OPC-UA можуть бути як локальними, так і віддаленими. Локальні кінцеві вузли призначено для надання ресурсів станції OpenSCADA за протоколом OPC-UA, в той-же час віддалені кінцеві вузли слугують для виконання як сервісу огляду доступних OPC-UA вузлів, так і для шлюзування запитів до віддалених станцій. У цій версії модуля підтримується тільки конфігурація локальних кінцевих вузлів.
+</p><p>Загальна конфігурація кінцевого вузла здійснюється на головній вкладці сторінки кінцевого вузла (рис.3) параметрами:
 </p>
-<ul><li> Стан вузла, а саме: статус, "Включено" та ім'я БД, яка містить конфігурацію.</li>
+<ul><li> Стан вузла, а саме: загальний статус, перелік активних сеансів та підписок, "Включено" та ім'я БД, яка містить конфігурацію.</li>
 <li> Ідентифікатор, Ім'я та опис вузла.</li>
 <li> Стан, у який переводити вузол при завантажені: "Включено".</li>
 <li> Тип кодування протоколу, на цей час це лише "Бінарний".</li>
@@ -199,7 +202,7 @@
 <li> Сертифікат серверу у форматі PEM.</li>
 <li> Приватний ключ у форматі PEM.</li>
 <li> Політики безпеки серверу.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:906px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main_uk.png"><img class="thumbimage" height="717" src="../files/OPC-UA_prt_ep_main_uk.png" width="904" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки кінцевого вузла.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:908px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main_uk.png"><img class="thumbimage" height="903" src="../files/OPC-UA_prt_ep_main_uk.png" width="906" /></a>  <div class="thumbcaption">Рис.3. Головна вкладка сторінки кінцевого вузла.</div></div></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -212,14 +215,14 @@
 <p>Модуль збору даних надає можливість опитування та запису атрибутів значення(13) вузлів типу "Змінна".
 </p>
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">3.1</span> Об'єкт контролеру даних</span></h3>
-<p>Для додання джерела даних OPC-UA створюється та конфігурується об'єкт контролеру у системі OpenSCADA. Приклад вкладки конфігурації об'єкту контролеру даного типу зображено на рисунку 3.
+<p>Для додання джерела даних OPC-UA створюється та конфігурується об'єкт контролеру в OpenSCADA. Приклад вкладки конфігурації об'єкту контролеру даного типу зображено на рисунку 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:860px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main_uk.png"><img class="thumbimage" height="717" src="../files/OPC-UA_cntr_main_uk.png" width="858" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації об'єкту контролера.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:885px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main_uk.png"><img class="thumbimage" height="767" src="../files/OPC-UA_cntr_main_uk.png" width="883" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфігурації об'єкту контролера OPC-UA.</div></div></div></div>
 <p>За допомогою цієї вкладки можна встановити:
 </p>
-<ul><li> Стан контролеру, а сам: Статус, "Включено", Запущено" та ім'я БД, яка містить конфігурацію.</li>
+<ul><li> Стан контролеру, а саме: деталізований загальний статус, "Включено", "Виконання" та ім'я БД, яка містить конфігурацію.</li>
 <li> Ідентифікатор, ім'я та опис контролеру.</li>
-<li> Стан, в який переводити контролер при завантажені: "Включено" та "Запущено".</li>
+<li> Стан, в який переводити контролер при завантажені: "Включено" та "Виконання".</li>
 <li> Ім'я таблиці для збереження конфігурації параметрів контролеру.</li>
 <li> Політика планування та пріоритет задачі збору даних.</li>
 <li> Період синхронізації конфігурації атрибутів параметрів з віддаленою станцією, а також час повтору спроб відновлення підключення.</li>
@@ -228,12 +231,12 @@
 <ul><li> Політика безпеки та режим безпеки повідомлення.</li>
 <li> Сертифікат клієнту та приватний ключ у форматі PEM.</li>
 <li> Користувач та пароль для аутентифікації на сервері. Порожнє значення включає анонімний доступ.</li>
-<li> Обмеження кількості атрибутів у параметрі.</li></ul>
-<p>З метою полегшення ідентифікації вузлів на віддаленій станції, а також вибору їх для вставки у об'єкті параметру контролеру, в самому об'єкту контролеру передбачено вкладку навігації за вузлам віддаленої станції "Огляд вузлів серверу", де можна пройтися за деревом об'єктів та ознайомитися з їх атрибутами (рис.4).
+<li> Використовувати функцію "Read". Інакше активується та використовується сервіс збору даних Publish (асинхронний) протоколу OPC-UA.</li></ul>
+<p>З метою полегшення ідентифікації вузлів на віддаленій станції, а також вибору їх для вставки у об'єкті параметру контролеру, в самому об'єкту контролеру передбачено вкладку навігації за вузлам віддаленої станції "Огляд вузлів серверу", де можна пройтися за деревом об'єктів та ознайомитися з їх атрибутами (рис.5).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:763px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse_uk.png"><img class="thumbimage" height="667" src="../files/OPC-UA_cntr_browse_uk.png" width="761" /></a>  <div class="thumbcaption">Рис.4. Вкладка "Огляд вузлів серверу" сторінки об'єкту контролеру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:719px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse_uk.png"><img class="thumbimage" height="690" src="../files/OPC-UA_cntr_browse_uk.png" width="717" /></a>  <div class="thumbcaption">Рис.5. Вкладка "Огляд вузлів серверу" сторінки об'єкту контролеру OPC-UA.</div></div></div></div>
 <h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">3.2</span> Параметри</span></h3>
-<p>Модуль збору даних надає лише один тип параметрів — "Стандарт". Додатковим конфігураційним полем параметру даного модуля (рис.5) є перелік вузлів OPC-UA та поле навігації за вузлами OPC-UA у один рядок, для вставки обраних вузлів типу "Змінна" до визначеного переліку. Атрибут у цьому переліку записується наступним чином: <b>{ns}:{id}</b>.
+<p>Модуль збору даних надає лише один тип параметрів — "Стандарт". Додатковим конфігураційним полем параметру даного модуля (рис.6) є перелік вузлів OPC-UA та поле навігації за вузлами OPC-UA у один рядок, для вставки обраних вузлів типу "Змінна" до визначеного переліку. Атрибут у цьому переліку записується наступним чином: <b>{ns}:{id}</b>.
 </p>
 <dl><dd>Де:
 <dl><dd><i>ns</i> — простір імен, числом; нульове значення може бути опущено;</dd>
@@ -243,16 +246,16 @@
 <dd><b>3:"BasicDevices2"</b> — вузол базових пристроїв у просторі імен 3 та у вигляді рядка;</dd>
 <dd><b>4:"61626364"</b> — вузол у просторі імен 4 та у вигляді рядка байт;</dd>
 <dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — вузол у просторі імен 4 і у вигляді GUID.</dd></dl></dd></dl>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_uk.png"><img class="thumbimage" height="675" src="../files/OPC-UA_prm_uk.png" width="693" /></a>  <div class="thumbcaption">Рис.5. Вкладка конфігурації об'єкту параметра.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_uk.png"><img class="thumbimage" height="651" src="../files/OPC-UA_prm_uk.png" width="681" /></a>  <div class="thumbcaption">Рис.6. Вкладка конфігурації об'єкту параметра OPC-UA.</div></div></div></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Вузли типу "Змінна" зі значенням у вигляді структури прочитати цілком зазвичай не можна тому потрібно її елементи вставляти до переліку вузлів читання окремо.
-</p><p>У відповідності із вказаним переліком вузлів виконується опитування та створення атрибутів параметру (рис.6).
+</p><p>У відповідності із вказаним переліком вузлів виконується опитування та створення атрибутів параметру (рис.7).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr_uk.png"><img class="thumbimage" height="574" src="../files/OPC-UA_prm_atr_uk.png" width="693" /></a>  <div class="thumbcaption">Рис.6. Вкладка атрибутів параметру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr_uk.png"><img class="thumbimage" height="574" src="../files/OPC-UA_prm_atr_uk.png" width="693" /></a>  <div class="thumbcaption">Рис.7. Вкладка атрибутів параметру.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_libOPC_UA"><span class="mw-headline-number">4</span> Бібліотека libOPC_UA</span></h2>
 <p>Ґрунтуючись на напрацюваннях цього модуля протокольний код OPC-UA було винесено до окремої бібліотеки та опубліковано під ліцензією LGPLv3. Такі дії виконано з метою надати можливість простого додання підтримки протоколу OPC-UA стороннім проектам. Бібліотека представлена двома файлами libOPC_UA.h, libOPC_UA.cpp; підтримується та міститься у складі цього модуля, тобто останню версію Ви можете завантажити тут: <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA</a>.
-</p><p>Бібліотеку, як і цей модуль, написано на мові програмування C++. Статичну діаграму класів, яка відображає архітектуру бібліотеки, приведена на рисунку 7. Згідно діаграмі класів бібліотеку виконано у просторі імен "OPC", а архітектурно її можна поділити на клієнтську "Client" та серверну "Server" частини, які успадковані від загального класу протоколу "UA". Крім безпосередньо класів протоколу "OPC-UA" бібліотека включає в себе набір функцій та класів для обробки або збереження даних протоколу, окремо з яких треба відзначити клас вузла мови XML "XML_N", використаний для уніфікації звернень до API бібліотеки.
+</p><p>Бібліотеку, як і цей модуль, написано на мові програмування C++. Статичну діаграму класів, яка відображає архітектуру бібліотеки, приведена на рисунку 8. Згідно діаграмі класів бібліотеку виконано у просторі імен "OPC", а архітектурно її можна поділити на клієнтську "Client" та серверну "Server" частини, які успадковані від загального класу протоколу "UA". Крім безпосередньо класів протоколу "OPC-UA" бібліотека включає в себе набір функцій та класів для обробки або збереження даних протоколу, окремо з яких треба відзначити клас вузла мови XML "XML_N", використаний для уніфікації звернень до API бібліотеки.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../../en/files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Рис.7. Статична діаграма класів бібліотеки libOPC_UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../../en/files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Рис.8. Статична діаграма класів бібліотеки libOPC_UA.</div></div></div></div>
 <p>Використання бібліотеки, в цілому, полягає у спадкуванні класу "Client" та/або "Server", згідно із функціями кінцевої програми, та наступної реалізації віртуальних функцій властивостей клієнта/сервера, у контексті протоколу OPC-UA, а також транспортної частини комунікації, тобто підключення/відкриття до TCP-сокету та передачу/читання неструктурованого потоку даних. Наступні запити та обробка запитів даних (для серверу) здійснюється через виклик функції <i>reqService()</i>, запит до сервісу, та/або обробки віртуальної функції <i>reqData()</i> запиту до даних, тобто фактично інтеграція у модель даних додатку.
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D0.BB.D1.83.D0.B6.D0.B1.D0.BE.D0.B2.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8.2C_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D1.82.D0.B0_.D0.BA.D0.BB.D0.B0.D1.81_UA"><span class="mw-headline-number">4.1</span> Службові об'єкти, функції та клас UA</span></h3>

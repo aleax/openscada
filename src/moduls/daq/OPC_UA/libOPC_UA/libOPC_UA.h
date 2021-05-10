@@ -3,19 +3,32 @@
 /********************************************************************************
  *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.0.10								*
- *	* The main client services processing function protIO() adapted to work	*
- *	  in the asynchronous mode (not requesting).				*
- *	* The function Client::messIO() expanded for the timeout argument with	*
- *	  specifying the requesting mode also.					*
+ *   Version: 2.0.20								*
  *	* Short functions appended for str2int() and str2uint().		*
+ *	CLIENT:									*
+ *	* The main services processing function protIO() adapted to work	*
+ *	  in the asynchronous mode (not requesting).				*
+ *	* The function messIO() expanded for the timeout argument with		*
+ *	  specifying the requesting mode also.					*
  *	* The "Client" object appended for the functions: poll().		*
- *	* The service requests of the client part appended for implementation,	*
- *	  include processing the responses: CreateSubscription,			*
- *	    DeleteSubscriptions, CreateMonitoredItems, Publish, Poll.		*
+ *	* The service requests appended for implementation, include processing	*
+ *	  the responses, for: CreateSubscription, DeleteSubscriptions,		*
+ *	  CreateMonitoredItems, Publish, Poll.					*
+ *	* The message property "timeoutHint" set to 0 for all messages since	*
+ *	  the possibility of that triggering for Publish messages.		*
+ *	* The client object appended by the common resources lock mtxData.	*
+ *	SERVER:									*
+ *	* The subscription processing function EP::subScrCycle() appended	*
+ *	  of checking the assigned sessions and secure channels state		*
+ *	  to close the subscriptions.						*
+ *	* Unifying of detection the MonitoredItems sampling and the Publish	*
+ *	  response need in binding to the corresponded intervals of sampling	*
+ *	  and publishing cycle grid.						*
  *	* Some fields renamed: publInterv to publInterval,			*
  *	  cntrLifeTime to lifetimeCnt, cntrKeepAlive to maxKeepAliveCnt,	*
- *	  maxNotPerPubl to maxNtfPerPubl, en to publEn.				*
+ *	  maxNotPerPubl to maxNtfPerPubl, en to publEn, secSize() to secN().	*
+ *	* Added EP::sessN(), EP::subscrN() and chnlList().			*
+ *	* EP::mtxData lock switched to PTHREAD_MUTEX_RECURSIVE.			*
  *   Version: 1.2.8								*
  *	* Hello/Acknowledge properties set configurable and client's ones	*
  *	  also storing.								*
@@ -558,6 +571,42 @@ class Client: public UA
 {
     public:
     //Data
+    //* Subscription object by monitoreditems set
+    class Subscr
+    {
+	public:
+	//Methods
+	Subscr( Client *iclnt, double ipublInterval = 1e3 ) :
+	    publEn(true), publInterval(ipublInterval), subScrId(0), lifetimeCnt(12000),
+	    maxKeepAliveCnt(10), maxNtfPerPubl(65536), pr(0), lstPublTm(0),
+	    clnt(iclnt)	{ }
+
+	bool isActivated( )	{ return subScrId; }
+	void activate( bool vl, bool onlyLocally = false );
+
+	int monitoredItemAdd( const NodeId &nd, AttrIds aId = AId_Value, MonitoringMode mMode = MM_REPORTING );
+	void monitoredItemDel( int32_t mItId, bool localDeactivation = false );
+
+	//Attributes
+	bool	publEn;		//Enable publishing
+	double	publInterval;	//Publish interval, milliseconds
+	uint32_t subScrId,	//subscriptionId
+		lifetimeCnt,	//Counter after that miss notifications from client remove the object
+		maxKeepAliveCnt,//Counter after that need to send empty publish response and
+				//	send StatusChangeNotification with Bad_Timeout
+		maxNtfPerPubl;	//Maximum notifications per single Publish response
+	uint8_t	pr;		//Priority
+
+	vector<XML_N>	mItems;	//The monitored items' attributes and their specific values:
+				// * "addr" - address of the node (NodeId): <EMPTY>-free monitored item
+				// * "statusCode" - the monitored item initiation status: 0-GOOD, <EMPTY>-not initiated yet
+				// * "Status" - readed value status: 0-GOOD
+	vector<uint32_t> mSeqToAcq;
+	int64_t	lstPublTm;	//Last publication response time
+
+	Client *clnt;
+    };
+
     class SClntSess
     {
 	public:
@@ -573,17 +622,22 @@ class Client: public UA
 	    sqReqId = 1;
 	    secLifeTime = 0;
 	    sessOpen = 0;
+
 	    clearSess();
+
+	    //Clear subscriptions
+	    for(unsigned iSubscr = 0; iSubscr < mSubScr.size(); ++iSubscr)
+		mSubScr[iSubscr].activate(false, true);
 	}
 
 	string		endPoint;
 	XML_N		endPointDscr;
 	uint32_t	secChnl;
 	uint32_t	secToken;
+	int		secLifeTime;
 	uint32_t	sqNumb;
 	uint32_t	sqReqId;
 	uint32_t	reqHndl;
-	int		secLifeTime;
 	string		sesId;
 	string		authTkId;
 	int64_t		sessOpen;
@@ -592,41 +646,9 @@ class Client: public UA
 	string		secPolicy;
 	char		secMessMode;
 	string		clKey, servKey;
-    };
 
-    //* Subscription object by monitoreditems set
-    class Subscr
-    {
-	public:
-	//Methods
-	Subscr( Client *iclnt, double ipublInterval = 1e3 ) :
-	    publEn(true), publInterval(ipublInterval), subScrId(0), lifetimeCnt(12000),
-	    maxKeepAliveCnt(50), maxNtfPerPubl(65536), pr(0),
-	    clnt(iclnt)	{ }
-
-	bool isActivated( )	{ return subScrId; }
-	void activate( bool vl, bool onlyLocally = false );
-
-	int monitoredItemAdd( const NodeId &nd, AttrIds aId = AId_Value, MonitoringMode mMode = MM_REPORTING );
-	void monitoredItemDel( int32_t mItId, bool localDeactivation = false );
-
-	//Attributes
-	bool	publEn;			//Enable publishing
-	double	publInterval;		//Publish interval, milliseconds
-	uint32_t subScrId,		//subscriptionId
-		lifetimeCnt,		//Counter after that miss notifications from client remove the object
-		maxKeepAliveCnt,	//Counter after that need to send empty publish response and
-					//	send StatusChangeNotification with Bad_Timeout
-		maxNtfPerPubl;		//Maximum notifications per single Publish response
-	uint8_t	pr;			//Priority
-
-	vector<XML_N>		mItems;	//The monitored items' attributes and their specific values:
-					// * "addr" - address of the node (NodeId): <EMPTY>-free monitored item
-					// * "statusCode" - the monitored item initiation status: 0-GOOD, <EMPTY>-not initiated yet
-					// * "Status" - readed value status: 0-GOOD
-	vector<uint32_t>	mSeqToAcq;
-
-	Client *clnt;
+	vector<Subscr>	mSubScr;	//Subscriptions list
+	vector<uint32_t> mPublSeqs;	//Publish packages registration
     };
 
     //Methods
@@ -645,6 +667,7 @@ class Client: public UA
     virtual string pvKey( ) = 0;
     virtual string authData( ) = 0;	//Empty			- anonymous
 					//{User}\n{Password}	- by user and password
+    virtual uint8_t publishReqsPool( )	{ return 2; }	//Pool of the publish requests for the server
 
     virtual void poll( );		//To call in some cycle for processing the subscriptions
 					//and user code in it reimplementation
@@ -661,8 +684,8 @@ class Client: public UA
     protected:
     //Attributes
     SClntSess		sess;		//Assigned session
-    vector<Subscr>	mSubScr;	//Subscriptions list
-    vector<uint32_t>	mPublSeqs;	//Publish packages registration
+
+    pthread_mutex_t	mtxData;
 };
 
 //*************************************************
@@ -727,8 +750,8 @@ class Server: public UA
 	    Sess( );
 
 	    //Attributes
-	    string	name, inPrtId,
-			idPolicyId, user;
+	    string	name, inPrtId;
+			//idPolicyId, user;
 	    vector<uint32_t> secCnls;
 	    double	tInact;
 	    int64_t	tAccess;
@@ -759,7 +782,7 @@ class Server: public UA
 
 		    string	vl;
 		    int64_t	tm;
-		    uint32_t st;
+		    uint32_t	st;
 		};
 
 		//Methods
@@ -797,7 +820,7 @@ class Server: public UA
 			toInit;			//Subsription init publish package send needs
 	    double	publInterval;		//Publish interval, milliseconds
 	    uint32_t	seqN,			//Sequence number for responses, rolls over 1, no increment for KeepAlive messages
-			lifetimeCnt, wLT,	//Counter after that miss notifications from client remove the object
+			lifetimeCnt, wLT,	//Counter after that missing the client notifications will be removed from the object
 			maxKeepAliveCnt, wKA,	//Counter after that need to send empty publish response and
 						//send StatusChangeNotification with Bad_Timeout
 			maxNtfPerPubl;		//Maximum notifications per single Publish response
@@ -836,11 +859,12 @@ class Server: public UA
 		void subScrCycle( string *answ = NULL, const string &inPrtId = "" );	//Subscriptions processing cycle
 
 		// Security policies
-		int secSize( )		{ return mSec.size(); }
+		unsigned secN( )	{ return mSec.size(); }
 		string secPolicy( int isec );
 		MessageSecurityMode secMessageMode( int isec );
 
 		// Sessions
+		unsigned sessN( )	{ return mSess.size(); }
 		int sessCreate( const string &iName, double iTInact );
 		void sessServNonceSet( int sid, const string &servNonce );
 		virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false,
@@ -851,6 +875,7 @@ class Server: public UA
 		Sess::ContPoint sessCpGet( int sid, const string &cpId );
 		void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
 		//  Subsciption
+		unsigned subscrN( )	{ return mSubScr.size(); }
 		uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = 0 for new create
 		    double publInterval = 0, uint32_t lifetimeCnt = 0, uint32_t maxKeepAliveCnt = 0,
 		    uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );
@@ -915,6 +940,7 @@ class Server: public UA
 	virtual void clientChunkMaxCntSet( const string &inPrtId, uint32_t vl ) = 0;
 
 	// Channel manipulation functions
+	void chnlList( vector<uint32_t> &chnls );
 	int chnlSet( int cid, const string &iEp, int32_t lifeTm = 0,
 	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1,
 	    const string &iclAddr = "", uint32_t iseqN = 1 );

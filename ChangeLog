@@ -1,3 +1,34 @@
+2021-05-10 Roman (stable)
+- LibsDB.vcaBase: Main.storeHouse: Appended for the type "text" appointment to the fixed field "DSCR"
+    and the field "NAME" of the class edition table.
+- !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Continued in appending the Publish service support on the client side
+	and the code comming refactoring in generic:
+    CLIENT:
+    - the message property "timeoutHint" set to 0 for all messages since the possibility of that triggering
+	for Publish messages where no messages besides Publish ones are presented;
+    - finished and tested in the secure policies support at Publish;
+    - the subscription container moved from the Client object to SClntSess for cleaning together
+	closing the secure channel and session in clearFull();
+    - the subscription Publish processing function poll() appended for checking of loss all Publish requests
+	during the two keep alive count-time and restorring the pool;
+    - the request resource renamed to resOPC and the client object appended by the common resources lock mtxData;
+    - the monitored items container access moved under the client resource common lock;
+    - the controller object common status appended for the detailed information about the used secure channel,
+	session and subscription;
+    - the target Publish requests pool per subscription moved under a virtual function publishReqsPool() with default value 2;
+    - appended for debug message of the request errors;
+    SERVER:
+    - the subscription processing function EP::subScrCycle() appended of checking the assigned sessions and secure channels state
+	to close the subscriptions than preventing of the foreign Publish packages flood on reopened input transport connections;
+    - fixing and unifying of detection the MonitoredItems sampling and the Publish response need in binding to
+	the corresponded intervals of sampling and publishing cycle grid;
+    - EP::secSize() renamed to EP::secN() and there added EP::sessN(), EP::subscrN() and chnlList();
+    - EP::mtxData lock switched to PTHREAD_MUTEX_RECURSIVE;
+    - the OpenSCADA module - OPC-UA Server object appended for the common server status tab with information
+	about active secure channels;
+    - the EndPoint Node object common state appended for information about active sessions and subscriptions.
+
+
 2021-05-03 Roman (stable)
 - LibsDB.vcaBase: doc.{docRepInstVals,docRepDay,docRepMonth,docRepYear}:
 	The reports with the SVG graph appended for CSS option "text-align: center" to ensure it centering on Firfox.

@@ -8347,7 +8347,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1
+Version: 1.0.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -8361,7 +8361,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.1
+Версия: 1.0.2
 Лицензия: GPLv2','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','');
@@ -24868,7 +24868,7 @@ if(btClassEdit_value) {
 			dataTbl_items += iR ? "<r>" : "<h>";
 			for(iC = 0; iC < dataTbl[iR].length; iC++) {
 				itVl = dataTbl[iR][iC];
-				opt = "";
+				tNm = "s", opt = "";
 				if(iR == 0)	 {
 					opt += " edit=''1''";
 					if(itVl == "ID")				itVl = tr("Identifier");
@@ -24876,8 +24876,12 @@ if(btClassEdit_value) {
 					else if(itVl == "TP")		itVl = tr("Type");
 					else if(itVl == "TBL")		itVl = tr("Table properties");
 					else if(itVl == "FILTER")	itVl = tr("Filter");
-				} else if(itVl == "<NULL>")	itVl = "";
-				dataTbl_items += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
+				}
+				else {
+				    if(iC == 1)	tNm = "t";
+				    if(itVl == "<NULL>")	itVl = "";
+				}
+				dataTbl_items += "<"+tNm+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+tNm+">";
 			}
 			dataTbl_items += iR ? "</r>\n" : "</h>\n";
 		}
@@ -24964,7 +24968,7 @@ if(f_start || toUpdate) {
 				else {
 					opt += btEdit_value ? " edit=''1''" : "";
 					if(itVl == "NAME")	{ itVl = tr("Name"); opt += " width=''170px'' align=''center''"; }
-					else if(itVl == "DSCR")	{ itVl = tr("Description"); opt += " width=''350px''"; }
+					else if(itVl == "DSCR")	{ colTps[iC] = "t"; itVl = tr("Description"); opt += " width=''350px''"; }
 					else if(itVl.slice(0,3) == "SP_" && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) {
 						if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl].isEVal()) {
 							colVars[itVl] = new Object();

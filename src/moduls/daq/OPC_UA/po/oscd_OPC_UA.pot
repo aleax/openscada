@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:40+0300\n"
+"POT-Creation-Date: 2021-05-09 17:07+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,7 +59,7 @@ msgstr ""
 msgid "Auth: password"
 msgstr ""
 
-msgid "Parameter attributes number limit"
+msgid "Use the \"Read\" function"
 msgstr ""
 
 msgid "Standard"
@@ -88,7 +88,15 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s[%s]. Requests %.6g."
+msgid "Spent time: %s[%s]. Requests %.6g. "
+msgstr ""
+
+#, c-format
+msgid "Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session %s. "
+msgstr ""
+
+#, c-format
+msgid "Subscription %d, publishes %u, keep alive %s. "
 msgstr ""
 
 #, c-format
@@ -109,6 +117,9 @@ msgid "OK"
 msgstr ""
 
 msgid "Zero for disable periodic sync."
+msgstr ""
+
+msgid "Otherwise there is activated and used the Publish (asynchronous) data acquisition service of the OPC-UA protocol."
 msgstr ""
 
 msgid "Server nodes browser"
@@ -287,7 +298,26 @@ msgstr ""
 msgid "Search and create new server error."
 msgstr ""
 
+msgid "Server"
+msgstr ""
+
+msgid "Active secure channels"
+msgstr ""
+
 msgid "End points"
+msgstr ""
+
+msgid "None"
+msgstr ""
+
+msgid "Sign"
+msgstr ""
+
+msgid "Sign&Encrypt"
+msgstr ""
+
+#, c-format
+msgid "%u(token %u): %s(%s,%s) at %s(live %s); Sequence server %u, client %u; Request ID %u"
 msgstr ""
 
 msgid "Disabled. "
@@ -307,6 +337,12 @@ msgid "State"
 msgstr ""
 
 msgid "Status"
+msgstr ""
+
+msgid "Active sessions"
+msgstr ""
+
+msgid "Active subscriptions"
 msgstr ""
 
 msgid "Enabled"
@@ -340,6 +376,32 @@ msgid "Retransmission queue time, sek."
 msgstr ""
 
 msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
+msgstr ""
+
+#, c-format
+msgid "%d(%s): at %s(live %s), secure channels \"%s\"; Publish requests %u"
+msgstr ""
+
+msgid "Closed"
+msgstr ""
+
+msgid "Creating"
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Late"
+msgstr ""
+
+msgid "KeepAlive"
+msgstr ""
+
+#, c-format
+msgid "%d: %s, session %d; Publish %s, interval %s, last %s, sequence %d, lifetime %d, keep alive %d; Monitored items %u; Retransmission queue %u"
+msgstr ""
+
+msgid "Disabled"
 msgstr ""
 
 msgid "No present selected row."

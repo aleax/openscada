@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.0.5"
+#define DAQ_MVER	"2.0.10"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -122,8 +122,6 @@ class TMdContr: public TController, public Client
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	ResRW &nodeRes( )	{ return cntrRes; }
-
 	// OPC_UA Client methods
 	string applicationUri( );
 	string productUri( );
@@ -154,7 +152,7 @@ class TMdContr: public TController, public Client
 
 	//Attributes
 	ResMtx	enRes;
-	ResRW	cntrRes;	//Resource for enable params
+	ResRW	resOPC;		//Request and API-stack resource
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s

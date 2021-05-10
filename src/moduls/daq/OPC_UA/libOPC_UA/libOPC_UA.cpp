@@ -1029,11 +1029,15 @@ string UA::asymmetricDecrypt( const string &mess, const string &keyPem, const st
 	throw OPCError("asymmetricDecrypt: %s", err);
     }
 
+    //printf("TEST 50: %d (%d-'%s')= %d\n", mess.size(), keyPem.size(), secPolicy.c_str(), rez.size());
+
     return rez;
 }
 
 bool UA::asymmetricVerify( const string &mess, const string &sign, const string &certPem )
 {
+    //printf("TEST 51: mess=%d; sign=%d; certPem=%d\n", mess.size(), sign.size(), certPem.size());
+
     int rez = -1;
     X509 *x = NULL;
     BIO *bm = NULL, *mdtmp = NULL;
@@ -1193,9 +1197,20 @@ string UA::symmetricSign( const string &mess, const string &keySet, const string
 //*************************************************
 //* Protocol OPC UA client part			  *
 //*************************************************
-Client::Client( )	{ }
+Client::Client( )
+{
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mtxData, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+}
 
-Client::~Client( )	{ }
+Client::~Client( )
+{
+    pthread_mutex_lock(&mtxData);
+    pthread_mutex_destroy(&mtxData);
+}
 
 void Client::poll( )
 {
@@ -1204,10 +1219,18 @@ void Client::poll( )
     reqService(req);
 
     //Checking for the subscriptions
-    for(unsigned iSubscr = 0; iSubscr < mSubScr.size(); ++iSubscr) {
-	Subscr &curS = mSubScr[iSubscr];
+    for(unsigned iSubscr = 0; iSubscr < sess.mSubScr.size(); ++iSubscr) {
+	Subscr &curS = sess.mSubScr[iSubscr];
 	if(!curS.subScrId) continue;
-	while(mPublSeqs.size() < 2) {
+
+	// Checking for loss all publish requests at missing the publish responses long time
+	if(1e-6*(curTime()-curS.lstPublTm) > 2*1e-3*curS.maxKeepAliveCnt*curS.publInterval) {
+	    sess.mPublSeqs.clear();
+	    curS.lstPublTm = curTime();
+	}
+
+	// Sending the publish requests
+	while(sess.mPublSeqs.size() < publishReqsPool()) {
 	    req.childClear();
 	    req.setAttr("id", "Publish");
 	    for(unsigned iAck = 0; iAck < curS.mSeqToAcq.size(); ++iAck)
@@ -1225,8 +1248,9 @@ void Client::protIO( XML_N &io )
     char buf[1000];
     int stIdx = 0;
 
+    bool debug = (bool)atoi(io.attr("debug").c_str());
+
     try {
-	bool debug = (bool)atoi(io.attr("debug").c_str());
 	if(io.name() == "opc.tcp") {
 	    if(io.attr("id") == "HEL") {
 		rez = "HELF";				//> HELLO message type
@@ -1460,7 +1484,7 @@ void Client::protIO( XML_N &io )
 		    oS(mReq, "");					//signature
 		    oS(mReq, "");					//algorithm
 
-		    mPublSeqs.clear();
+		    sess.mPublSeqs.clear();
 		}
 		else if(io.attr("id") == "CloseSession") {
 		    iTpId = OpcUa_CloseSessionRequest;
@@ -1569,7 +1593,8 @@ void Client::protIO( XML_N &io )
 		    }
 		    waitResponse = false;
 
-		    mPublSeqs.push_back(sess.reqHndl);
+		    sess.mPublSeqs.push_back(sess.reqHndl);
+		    //printf("TEST 00: Sent Publish %d\n", sess.mPublSeqs.back());
 		}
 		else if(io.attr("id") == "Poll") waitResponse = false;	//Just read the channel for the server activity
 		else throw OPCError(OpcUa_BadNotSupported, "Request '%s' isn't supported.", io.attr("id").c_str());
@@ -1596,7 +1621,7 @@ void Client::protIO( XML_N &io )
 		    oN(rez, (sess.reqHndl++), 4);			//requestHandle
 		    oNu(rez, 0, 4);					//returnDiagnostics
 		    oS(rez, "");					//auditEntryId
-		    oNu(rez, 10000, 4);					//timeoutHint
+		    oNu(rez, 0/*10000*/, 4);				//timeoutHint
 									//>>> Extensible parameter
 		    oNodeId(rez, 0);					//TypeId (0)
 		    oNu(rez, 0, 1);					//Encoding
@@ -1636,16 +1661,16 @@ void Client::protIO( XML_N &io )
 		rez.assign(buf, resp_len);
 		continueRead:
 		int off = 4;
-		for( ; (rez.size() || waitResponse) && (rez.size() < 8 || rez.size() < iNu(rez,off,4)); off = 4) {
+		uint32_t msgLen = 0;
+		for( ; (rez.size() || waitResponse) && (rez.size() < 8 || rez.size() < (msgLen=iNu(rez,off,4))); off = 4) {
 		    resp_len = messIO(NULL, 0, buf, sizeof(buf));
 		    if(!resp_len) throw OPCError(OpcUa_BadCommunicationError, "No or not full message.");
 		    rez.append(buf, resp_len);
 		}
 
-		if(debug) debugMess(io.attr("id")+" In");
+		if(debug && rez.size()) debugMess("In "+uint2str(msgLen)+"("+uint2str(rez.size())+")");
 
 		off = 4;
-		uint32_t msgLen = 0;
 		//The response allowed to be big here due to the possibility of containg several messages
 		if(!rez.size() && !waitResponse) ;
 		else if(rez.size() < 8 || rez.size() < (msgLen=iNu(rez,off,4)))
@@ -1661,11 +1686,16 @@ void Client::protIO( XML_N &io )
 		    if(!isSecNone) {
 			if(clntCertThmb != certThumbprint(io.attr("ClntCert")))
 			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Client certificate thumbprint error.");
+
+			//if(debug) debugMess(io.attr("id")+" TEST 41: off="+uint2str(off)+"; "+uint2str(msgLen)+"("+uint2str(rez.size())+")");
+
 			// Decoding
 			int rezLen = rez.size();
-			rez.replace(off, msgLen-off, asymmetricDecrypt(rez.substr(off,msgLen-off),io.attr("PvKey"),secPlc));
+			rez.replace(off, msgLen-(unsigned)off, asymmetricDecrypt(rez.substr(off,msgLen-(unsigned)off),io.attr("PvKey"),secPlc));
 			msgLen += (int)rez.size() - rezLen;
 			//rez.replace(off, rez.size()-off, asymmetricDecrypt(rez.substr(off),io.attr("PvKey"),secPlc));
+
+			//if(debug) debugMess(io.attr("id")+" TEST 41a: "+uint2str(msgLen)+"("+uint2str(rez.size())+")");
 		    }
 
 		    iNu(rez, off, 4);					//Sequence number
@@ -1695,7 +1725,8 @@ void Client::protIO( XML_N &io )
 			io.setAttr("clKey", deriveKey(clNonce,servNonce,symKeySz*3));
 			io.setAttr("servKey", deriveKey(servNonce,clNonce,symKeySz*3));
 			off += iNu(rez, off, 1);			//Pass padding
-			if(!asymmetricVerify(rez.substr(0,off),rez.substr(off,msgLen-off),io.attr("ServCert")))	//Check Signature
+			//if(debug) debugMess(io.attr("id")+" TEST 41b: off="+uint2str(off)+"("+uint2str(msgLen-off)+")");
+			if(!asymmetricVerify(rez.substr(0,off),rez.substr(off,msgLen-(unsigned)off),io.attr("ServCert")))	//Check Signature
 			//if(!asymmetricVerify(rez.substr(0,off),rez.substr(off),io.attr("ServCert")))	//Check Signature
 			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
 		    }
@@ -1704,6 +1735,8 @@ void Client::protIO( XML_N &io )
 		else if(rez.compare(0,4,"MSGF") != 0)
 		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTypeInvalid, "Respond don't acknowledge.");
 		else {
+		    if(debug) debugMess("MSG Resp");
+
 		    iNu(rez, off, 4);					//Secure channel identifier
 		    iNu(rez, off, 4);					//Symmetric Algorithm Security Header : TokenId
 
@@ -1714,7 +1747,7 @@ void Client::protIO( XML_N &io )
 			//string clKey = io.attr("clKey");
 			if(secMessMode == MS_SignAndEncrypt) {
 			    int rezLen = rez.size();
-			    rez.replace(off, msgLen-off, symmetricDecrypt(rez.substr(off,msgLen-off),sess.clKey,secPolicy));
+			    rez.replace(off, msgLen-(unsigned)off, symmetricDecrypt(rez.substr(off,msgLen-(unsigned)off),sess.clKey,secPolicy));
 			    msgLen += (int)rez.size() - rezLen;
 			    //rez.replace(off, rez.size()-off, symmetricDecrypt(rez.substr(off),clKey,secPolicy));
 			}
@@ -1990,13 +2023,19 @@ void Client::protIO( XML_N &io )
 			case OpcUa_PublishResponse: {
 			    uint32_t subScrId = iNu(rez, off, 4);	//subscriptionId
 			    Subscr *curSbscr = NULL;
-			    for(unsigned iSbscr = 0; iSbscr < mSubScr.size() && !curSbscr; ++iSbscr)
-				if(mSubScr[iSbscr].subScrId == subScrId) curSbscr = &mSubScr[iSbscr];
+			    for(unsigned iSbscr = 0; iSbscr < sess.mSubScr.size() && !curSbscr; ++iSbscr)
+				if(sess.mSubScr[iSbscr].subScrId == subScrId) curSbscr = &sess.mSubScr[iSbscr];
 			    if(!curSbscr) break;
 
-			    for(bool isFound = false; !isFound && mPublSeqs.size(); ) {
-				isFound = (mPublSeqs[0] == requestHandle);
-				mPublSeqs.erase(mPublSeqs.begin());
+			    curSbscr->lstPublTm = curTime();
+
+			    //printf("TEST 10: Received Publish response %d!\n", requestHandle);
+
+			    for(bool isFound = false; !isFound && sess.mPublSeqs.size(); ) {
+				isFound = (sess.mPublSeqs[0] == requestHandle);
+				//if(!isFound)
+				//    printf("TEST 11: Lost publish request %d at requesting response for %d!\n", sess.mPublSeqs[0], requestHandle);
+				sess.mPublSeqs.erase(sess.mPublSeqs.begin());
 			    }
 
 			    // Available sequences processing
@@ -2020,6 +2059,7 @@ void Client::protIO( XML_N &io )
 									//          and reading/parsing the data block independently
 				int32_t ntfItN = iN(rez, off, 4);	//  monitoredItems []
 				XML_N tObj;
+				OPCAlloc res(mtxData, true);
 				for(int iNtfIt = 0; iNtfIt < ntfItN; ++iNtfIt) {
 				    uint32_t clHdl = iNu(rez, off, 4);	//   clientHandle
 				    iDataValue(rez, off, (clHdl<curSbscr->mItems.size())?curSbscr->mItems[clHdl]:tObj);
@@ -2044,7 +2084,11 @@ void Client::protIO( XML_N &io )
 	    }
 	}
 	else err = strMess("0x%x:%s", OpcUa_BadServiceUnsupported, strMess("OPC_UA protocol '%s' isn't supported.", io.name().c_str()).c_str());
-    } catch(OPCError &er) { err = strMess("0x%x:%s", er.cod, er.mess.c_str()); }
+    }
+    catch(OPCError &er) {
+	err = strMess("0x%x:%s", er.cod, er.mess.c_str());
+	if(debug) debugMess(io.attr("id")+" Error: "+err);
+    }
 
     io.setAttr("err", err);
 }
@@ -2059,8 +2103,8 @@ void Client::reqService( XML_N &io )
 	//Close previous session for policy or endpoint change
 	if(sess.authTkId.size()) {
 	    // Close subscriptions locally
-	    for(unsigned iSubscr = 0; iSubscr < mSubScr.size(); ++iSubscr)
-		mSubScr[iSubscr].activate(false, true);
+	    //for(unsigned iSubscr = 0; iSubscr < mSubScr.size(); ++iSubscr)
+	    //	mSubScr[iSubscr].activate(false, true);
 
 	    // Same the session closing
 	    req.setAttr("id", "CloseSession")->
@@ -2243,6 +2287,7 @@ int Client::Subscr::monitoredItemAdd( const NodeId &nd, AttrIds aId, MonitoringM
     if(!nd.isNull()) {
 	string ndAddr = nd.toAddr();
 	int emptyIt = -1;
+	OPCAlloc res(clnt->mtxData, true);
 	for(unsigned iIt = 0; iIt < mItems.size() /*&& hndl < 0*/; iIt++)
 	    if(mItems[iIt].attr("addr") == ndAddr && str2uint(mItems[iIt].attr("aId")) == aId)
 		hndl = iIt;
@@ -2266,6 +2311,7 @@ int Client::Subscr::monitoredItemAdd( const NodeId &nd, AttrIds aId, MonitoringM
 	req.setAttr("id", "CreateMonitoredItems")->
 	    setAttr("subScrId", uint2str(subScrId))->
 	    setAttr("tmstmpToRet", uint2str(TS_NEITHER));
+	OPCAlloc res(clnt->mtxData, true);
 	for(unsigned iIt = ((hndl>=0)?hndl:0); iIt < ((hndl>=0)?hndl+1:mItems.size()); ++iIt)
 	    if(mItems[iIt].attr("statusCode").empty())	//Not registered still
 		req.childAdd("mIt")->
@@ -2275,8 +2321,12 @@ int Client::Subscr::monitoredItemAdd( const NodeId &nd, AttrIds aId, MonitoringM
 		    setAttr("smplInt", mItems[iIt].attr("smplInt"))->
 		    setAttr("qSz", mItems[iIt].attr("qSz"))->
 		    setText(mItems[iIt].attr("addr"));
+	res.lock();
+
 	clnt->reqService(req);
+
 	// Processing the result
+	res.unlock();
 	for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
 	    XML_N *chO = req.childGet(iCh);
 	    uint32_t itId = str2uint(chO->attr("hndl"));
@@ -2293,6 +2343,7 @@ int Client::Subscr::monitoredItemAdd( const NodeId &nd, AttrIds aId, MonitoringM
 
 void Client::Subscr::monitoredItemDel( int32_t mItId, bool localDeactivation )
 {
+    OPCAlloc res(clnt->mtxData, true);
     if(mItId >= (int)mItems.size())	return;
 
     for(unsigned iIt = ((mItId>=0)?mItId:0); iIt < ((mItId>=0)?mItId+1:mItems.size()); ++iIt)
@@ -2332,6 +2383,7 @@ void Client::Subscr::activate( bool vl, bool onlyLocally )
 	    publInterval = str2real(req.attr("publInterval"));
 	    lifetimeCnt = str2uint(req.attr("lifetimeCnt"));
 	    maxKeepAliveCnt = str2uint(req.attr("maxKeepAliveCnt"));
+	    lstPublTm = curTime();
 	}
 
 	//Activation off all registered monitoring items
@@ -2367,6 +2419,15 @@ Server::~Server( )
 {
     pthread_mutex_lock(&mtxData);
     pthread_mutex_destroy(&mtxData);
+}
+
+void Server::chnlList( vector<uint32_t> &chnls )
+{
+    OPCAlloc res(mtxData, true);
+
+    chnls.clear();
+    for(map<uint32_t,SecCnl>::iterator scIt = mSecCnl.begin(); scIt != mSecCnl.end(); ++scIt)
+	chnls.push_back(scIt->first);
 }
 
 int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& iClCert, const string &iSecPolicy, char iSecMessMode,
@@ -2516,7 +2577,7 @@ nextReq:
 	    EP *wep = NULL;
 	    for(int iEP = 0; iEPOk < 0 && iEP < (int)epLs.size(); iEP++) {
 		if(!(wep=epEnAt(epLs[iEP])))	continue;
-		for(int iS = 0; iEPOk < 0 && iS < wep->secSize(); iS++)
+		for(int iS = 0; iEPOk < 0 && iS < wep->secN(); iS++)
 		    if(wep->secPolicy(iS) == secPlc)
 			iEPOk = iEP;
 	    }
@@ -2560,7 +2621,7 @@ nextReq:
 
 	    // Find message secure mode
 	    bool secModOK = false;
-	    for(int iS = 0; !secModOK && iS < wep->secSize(); iS++)
+	    for(int iS = 0; !secModOK && iS < wep->secN(); iS++)
 		if(wep->secPolicy(iS) == secPlc && wep->secMessageMode(iS) == secMode)
 		    secModOK = true;
 	    if(!secModOK) throw OPCError(OpcUa_BadSecurityModeRejected, "", "");
@@ -2568,7 +2629,7 @@ nextReq:
 	    if((chnlId=chnlSet((reqTp==SC_RENEW?chnlId:0),wep->id(),reqLifeTm,clntCert,secPlc,secMode,clientAddr(inPrtId),seqN)) < 0)
 		throw OPCError(OpcUa_BadTcpSecureChannelUnknown, "", "");
 
-	    // Prepare respond message
+	    // Preparing the response message
 	    out.reserve(200);
 	    out.append("OPNF");					//OpenSecureChannel message type
 	    oNu(out, 0, 4);					//Message size
@@ -2808,7 +2869,7 @@ nextReq:
 			EP *ep = epEnAt(epLs[iEP]);
 			if(!ep) continue;
 								//>>> EndpointDescription
-			for(int iSec = 0; iSec < ep->secSize(); iSec++, epCnt++) {
+			for(int iSec = 0; iSec < ep->secN(); iSec++, epCnt++) {
 			    oS(respEp, ep->url()+"/OSCADA_OPC/"+ep->secPolicy(iSec)/*+"/"+ep->secMessMode(iSec)*/);    //endpointUrl
 								//>>>> server (ApplicationDescription)
 			    oS(respEp, applicationUri());	//applicationUri
@@ -2899,7 +2960,7 @@ nextReq:
 			EP *ep = epEnAt(epLs[iEP]);
 			if(!ep) continue;
 								//>>> EndpointDescription
-			for(int iSec = 0; iSec < ep->secSize(); iSec++, epCnt++) {
+			for(int iSec = 0; iSec < ep->secN(); iSec++, epCnt++) {
 			    oS(respEp, ep->url());		//endpointUrl
 								//>>>> server (ApplicationDescription)
 			    oS(respEp, applicationUri());	//applicationUri
@@ -3703,7 +3764,7 @@ nextReq:
 										// !!!! maybe store the previous monitored item's position
 										//      and early call its into the subScrCycle()
 				}
-				s->publishReqs.erase(s->publishReqs.begin()+iP);	//Remove the publish request from the queue
+				s->publishReqs.erase(s->publishReqs.begin()+iP);//Remove the publish request from the queue
 
 				//oN(respEp, -1, 4);			//<results [], empty
 				respEp += respAck;			//<results []
@@ -3890,7 +3951,7 @@ Server::SecCnl::SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm,
 }
 
 Server::SecCnl::SecCnl( ) :
-    secMessMode(MS_None), tCreate(curTime()), tLife(OpcUa_SecCnlDefLifeTime), TokenId(0), TokenIdPrev(0), servSeqN(1), clSeqN(1), startClSeqN(1)
+    secMessMode(MS_None), tCreate(0/*curTime()*/), tLife(OpcUa_SecCnlDefLifeTime), TokenId(0), TokenIdPrev(0), servSeqN(1), clSeqN(1), startClSeqN(1)
 {
 
 }
@@ -3958,7 +4019,13 @@ SubScrSt Server::Subscr::setState( SubScrSt ist )
 //*************************************************
 Server::EP::EP( Server *iserv ) : forceSubscrQueue(false), mEn(false), cntReq(0), objTree("root"), serv(iserv)
 {
-    pthread_mutex_init(&mtxData, NULL);
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mtxData, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
+    //pthread_mutex_init(&mtxData, NULL);
 }
 
 Server::EP::~EP( )
@@ -4075,6 +4142,15 @@ void Server::EP::subScrCycle( string *answ, const string &inPrtId )
 	Subscr &scr = mSubScr[iSc];
 	if(scr.st == SS_CLOSED) continue;
 	if(!(s=sessGet_(scr.sess)) || !s->tAccess) { scr.setState(SS_CLOSED); continue; }
+	// Checking for the security channel presence
+	for(int iSc = 0; iSc < (int)s->secCnls.size(); ++iSc) {
+	    SecCnl &sCnlO = serv->chnlGet_(s->secCnls[iSc]);
+	    if(!sCnlO.tCreate || (sCnlO.tCreate && (1e-3*sCnlO.tLife-1e-6*(curTime()-sCnlO.tCreate)) <= 0)) {
+		s->secCnls.erase(s->secCnls.begin()+iSc);
+		iSc--;
+	    }
+	}
+	if(!s->secCnls.size()) { scr.setState(SS_CLOSED); continue; }
 	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
 
 	int64_t	curTm = curTime(), curTm_ = curTm;
@@ -4085,8 +4161,8 @@ void Server::EP::subScrCycle( string *answ, const string &inPrtId )
 	for(unsigned iM = 0; !forceSubscrQueue && iM < scr.mItems.size(); ++iM) {
 	    Subscr::MonitItem &mIt = scr.mItems[iM];
 
-	    curTm_ = mIt.smplItv ? (curTm/(1000*(int)mIt.smplItv)) * (int)mIt.smplItv*1000 : curTm;
-	    if(mIt.md == MM_DISABLED || (curTm_-mIt.lstPublTm) < 1e3*mIt.smplItv)	continue;
+	    curTm_ = mIt.smplItv ? (curTm/(int64_t)(1e3*mIt.smplItv)) * (int64_t)(mIt.smplItv*1e3) : curTm;
+	    if(mIt.md == MM_DISABLED || curTm_ == mIt.lstPublTm) continue;
 	    mIt.lstPublTm = curTm_;
 	    //if(mIt.md == MM_DISABLED || (cntr%std::max(1u,(unsigned)(mIt.smplItv/subscrProcPer()))))	continue;
 
@@ -4107,10 +4183,13 @@ void Server::EP::subScrCycle( string *answ, const string &inPrtId )
 	if(hasData) scr.setState(SS_LATE);
 	// Publish processing
 
-	curTm_ = scr.publInterval ? (curTm/(1000*(int)scr.publInterval)) * (int)scr.publInterval*1000 : curTm;
-	if((curTm_-scr.lstPublTm) < 1e3*scr.publInterval)	continue;
+	curTm_ = scr.publInterval ? (curTm/(int64_t)(1e3*scr.publInterval)) * (int64_t)(scr.publInterval*1e3) : curTm;
+	if(curTm_ == scr.lstPublTm)	continue;
 	scr.lstPublTm = curTm_;
 	//if(!forceSubscrQueue && (cntr%std::max(1u,(unsigned)(scr.publInterval/subscrProcPer()))))	continue;
+
+	//printf("TEST 20: %d(%lld): iSc=%d; publInterval=%g; subscrProcPer=%g; hasData=%d(%d); st=%d; = %d\n", time(NULL), curTm, iSc,
+	//    scr.publInterval, subscrProcPer(), hasData, scr.mItems.size(), scr.st, s->publishReqs.size());
 
 	if(s->publishReqs.size()) {
 	    scr.wLT = 0;
@@ -4125,7 +4204,7 @@ void Server::EP::subScrCycle( string *answ, const string &inPrtId )
     }
 
     //Publish call
-    for(size_t iS = 0; iS < sls.size(); iS++) {
+    for(size_t iS = 0; iS < sls.size(); ++iS) {
 	if(!(s=sessGet_(sls[iS])) || s->publishReqs.empty()) continue;
 	string req = s->publishReqs.front(), inPrt = s->inPrtId;
 	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
@@ -4182,7 +4261,7 @@ uint32_t Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const s
     uint32_t rez = OpcUa_BadSessionIdInvalid;
 
     OPCAlloc mtx(mtxData, true);
-    //Check for target session present
+    //Checking for the target session presence
     if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess) {
 	mSess[sid-1].tAccess = curTime();
 	mSess[sid-1].inPrtId = inPrtId;

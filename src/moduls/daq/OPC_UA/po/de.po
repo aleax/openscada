@@ -1,13 +1,14 @@
 # OpenSCADA.DAQ.OPC_UA translate to German.
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
+#
+# Roman Savochenko <roman@oscada.org>, 2011-2021.
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
-# Roman Savochenko <roman@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:40+0300\n"
+"POT-Creation-Date: 2021-05-09 17:07+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -58,8 +59,8 @@ msgstr "Auth: Benutzer"
 msgid "Auth: password"
 msgstr "Auth: Passwort"
 
-msgid "Parameter attributes number limit"
-msgstr "Beschränkung der Quantität der Parameterattribute"
+msgid "Use the \"Read\" function"
+msgstr "Verwenden Sie die \"Read \" Funktion"
 
 msgid "Standard"
 msgstr "Standard"
@@ -87,13 +88,26 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s[%s]. Requests %.6g."
-msgstr "Verbrauchte Zeit: %s[%s]. Anfragen %.6g."
+msgid "Spent time: %s[%s]. Requests %.6g. "
+msgstr "Verbrauchte Zeit: %s[%s]. Anfragen %.6g. "
+
+#, c-format
+msgid ""
+"Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session "
+"%s. "
+msgstr ""
+"Sicherer Kanal %u, Token %u, Lebensdauer %s; ID anfordern %u, behandeln %u; "
+"Sitzung %s. "
+
+#, c-format
+msgid "Subscription %d, publishes %u, keep alive %s. "
+msgstr "Abonnement %d, veröffentlicht %u, am Leben zu erhalten %s. "
 
 #, c-format
 msgid "OPC UA automatic created transport for '%s' controller."
 msgstr "OPC UA automatische erstellt Transportmittel für '%s' Controller."
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Verbindung zur Datenquelle: %s."
 
@@ -108,6 +122,13 @@ msgstr "OK"
 
 msgid "Zero for disable periodic sync."
 msgstr "Zero deaktivieren periodische Synchronisation."
+
+msgid ""
+"Otherwise there is activated and used the Publish (asynchronous) data "
+"acquisition service of the OPC-UA protocol."
+msgstr ""
+"Andernfalls wird der Publish (asynchronous) Datenerfassungsdienst des "
+"OPC-UA-Protokolls aktiviert und verwendet. "
 
 msgid "Server nodes browser"
 msgstr "Übersicht der Knoten des Servers"
@@ -301,8 +322,31 @@ msgstr "Zusatz Parametern"
 msgid "Search and create new server error."
 msgstr "Fehler der Suche und der Schaffung des neuen Servers."
 
+msgid "Server"
+msgstr "Server"
+
+msgid "Active secure channels"
+msgstr "Aktive sichere Kanäle"
+
 msgid "End points"
 msgstr "Endknoten"
+
+msgid "None"
+msgstr "Keine"
+
+msgid "Sign"
+msgstr "Unterschrift"
+
+msgid "Sign&Encrypt"
+msgstr "Unterschrift&Kodierung"
+
+#, c-format
+msgid ""
+"%u(token %u): %s(%s,%s) at %s(live %s); Sequence server %u, client %u; "
+"Request ID %u"
+msgstr ""
+"%u(Token %u): %s(%s,%s) bei %s(lebende %s); Sequenzserver %u, Client %u; "
+"Anfrage-ID %u"
 
 msgid "Disabled. "
 msgstr "Ausgeschaltet. "
@@ -322,6 +366,12 @@ msgstr "Zustand"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "Active sessions"
+msgstr "Aktive Sitzungen"
+
+msgid "Active subscriptions"
+msgstr "Aktive Abonnements"
 
 msgid "Enabled"
 msgstr "Aktiviert"
@@ -355,6 +405,36 @@ msgstr "Retransmission Warteschlangenzeit, sek."
 
 msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
+
+#, c-format
+msgid "%d(%s): at %s(live %s), secure channels \"%s\"; Publish requests %u"
+msgstr "%d(%s): bei %s(live %s), sichere Kanäle \"%s\"; Anfragen veröffentlichen %u"
+
+msgid "Closed"
+msgstr "Geschlossen"
+
+msgid "Creating"
+msgstr "Erstellen"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Late"
+msgstr "Spät"
+
+msgid "KeepAlive"
+msgstr "KeepAlive"
+
+#, c-format
+msgid ""
+"%d: %s, session %d; Publish %s, interval %s, last %s, sequence %d, lifetime "
+"%d, keep alive %d; Monitored items %u; Retransmission queue %u"
+msgstr ""
+"%d: %s, Sitzung %d; Veröffentlichen %s, Intervall %s, letzte %s, Sequenz %d, "
+"Lebensdauer %d, halten %d; Überwachte Elemente %u; Neuübertragungswarteschlange %u "
+
+msgid "Disabled"
+msgstr "Deaktiviert"
 
 msgid "No present selected row."
 msgstr "Gewählte Zeile fehlt."

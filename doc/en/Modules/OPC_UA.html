@@ -50,7 +50,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Server OPC-UA
 </td>
-<td> 1.10 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -182,16 +182,19 @@
 </p><p>OPC-UA is designed as a solution for migration from OPC clients and servers, which are based on Microsoft COM technologies. OPC COM servers (DA, HDA and A&amp;E) can be easily reflected in OPC-UA. Producers can independently make such migration or recommend users to use wrappers and converters between these protocols. OPC-UA unifies the previous models in the single address space with the single set of the services.
 </p>
 <h2><span class="mw-headline" id="Module_of_the_server_implementation"><span class="mw-headline-number">2</span> Module of the server implementation</span></h2>
-<p>The server module contains an implementation code for the server part of OPC-UA — server services, in part of the OpenSCADA specific, and using the library in part of the OPC-UA specific. To construct the OPC-UA server it is enough to create an input transport, for ordinarily it is TCP-transport of the module <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, and select in it the module of the protocol, and also configure although one endpoint node of the protocol module, about it see bellow.
+<p>The server module contains an implementation code for the server part of OPC-UA — server services (Fig.1), in part of the OpenSCADA specific, and using the library in part of the OPC-UA specific. To construct the OPC-UA server it is enough to create an input transport, for ordinarily it is TCP-transport of the module <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, and select in it the module of the protocol, and also configure although one endpoint node of the protocol module, about it see bellow.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:899px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_serv.png"><img class="thumbimage" height="509" src="../files/OPC-UA_prt_serv.png" width="897" /></a>  <div class="thumbcaption">Fig.1. The "Server" common state.</div></div></div></div>
+<p>The common state of the Server contains only the list of the active secure channels.
 </p>
 <h3><span class="mw-headline" id="Service_of_requests_on_the_OPC-UA_protocol"><span class="mw-headline-number">2.1</span> Service of requests on the OPC-UA protocol</span></h3>
-<p>Input requests to the module-protocol are processed by the module in accordance with configured endpoint nodes of OPC-UA (EndPoints) (Fig.1).
+<p>Input requests to the module-protocol are processed by the module in accordance with configured endpoint nodes of OPC-UA (EndPoints) (Fig.2).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:623px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_eps.png"><img class="thumbimage" height="511" src="../files/OPC-UA_prt_eps.png" width="621" /></a>  <div class="thumbcaption">Fig.1. Endpoint nodes of the protocol.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:684px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_eps.png"><img class="thumbimage" height="509" src="../files/OPC-UA_prt_eps.png" width="682" /></a>  <div class="thumbcaption">Fig.2. Endpoint nodes of the protocol.</div></div></div></div>
 <p>Endpoint node of the OPC-UA protocol is actually the server object of OPC-UA. Endpoint nodes in OPC-UA can be either local or remote. Local ones are designed to provide resources of OpenSCADA station by the protocol OPC-UA, while remote endpoint nodes are both for the service and review of available OPC-UA units, and to forwarding of the requests to remote stations. In this version of the module is only supported the configuration of the local endpoint nodes.
-</p><p>General configuration of the endpoint node is made on the main tab of the endpoint node's page (Fig.2) with parameters:
+</p><p>General configuration of the endpoint node is made on the main tab of the endpoint node's page (Fig.3) with parameters:
 </p>
-<ul><li> Node status, as follow: status, "Enable" and the name of the database containing the configuration.</li>
+<ul><li> Node status, as follow: common status, lists of the active sessions and subscriptions, "Enabled" and the name of the database containing the configuration.</li>
 <li> Identifier, name and description of the node.</li>
 <li> State, in which to transfer the node at the start: "Enabled".</li>
 <li> Type of the protocol encoding, at the moment it is only "Binary".</li>
@@ -199,7 +202,7 @@
 <li> Server certificate in the PEM format.</li>
 <li> Private key in the PEM format.</li>
 <li> Security Server Policy.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:888px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="743" src="../files/OPC-UA_prt_ep_main.png" width="886" /></a>  <div class="thumbcaption">Fig.2. Main tab of the endpoint node's page.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:890px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="908" src="../files/OPC-UA_prt_ep_main.png" width="888" /></a>  <div class="thumbcaption">Fig.3. Main tab of the endpoint node's page.</div></div></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -212,14 +215,14 @@
 <p>The data acquisition module provides ability of acquisition and writing the value's attributes (13) of points with the "Variable" type.
 </p>
 <h3><span class="mw-headline" id="Data_controller.27s_object"><span class="mw-headline-number">3.1</span> Data controller's object</span></h3>
-<p>To append the OPC-UA data source the controller's object into the OpenSCADA system is created and configured. An example of the configuration tab of the controller's object is shown in Figure 3.
+<p>To append the OPC-UA data source the controller's object into OpenSCADA is created and configured. An example of the configuration tab of the controller's object is shown in Figure 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:859px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="717" src="../files/OPC-UA_cntr_main.png" width="857" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:859px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="780" src="../files/OPC-UA_cntr_main.png" width="857" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
-<ul><li> The state controller, as follow: Status, "Enable", "Run" and the name of the database containing the configuration.</li>
+<ul><li> The state controller, as follow: detailed common status, "Enabled", "Running" and the name of the database containing the configuration.</li>
 <li> ID, name and description of the controller.</li>
-<li> State, in which to transfer the controller at start: "Enable", "Run".</li>
+<li> State, in which to transfer the controller at start: "Enabled", "Running".</li>
 <li> Name of the table to store the configuration of parameters of the controller.</li>
 <li> Scheduling policy and priority of the task of the data acquisition.</li>
 <li> Period of synchronization of the configuration of attributes of the parameters with the remote station, and try time for the connection restore.</li>
@@ -228,12 +231,12 @@
 <ul><li> Security policy and mode of the messaging security.</li>
 <li> Client certificate and private key in the PEM format.</li>
 <li> User and password to authenticate on the server. Empty value here enable the anonymous access.</li>
-<li> Limit to number of attributes into the parameter.</li></ul>
-<p>To facilitate the identification of nodes on the remote station, as well as their choice to be inserted in the parameter of the controller in the controller's object it is provided the navigation on the remote station's nodes tab, where you can walk through the tree of objects and familiar with their attributes (Figure 4).
+<li> Use the "Read" function. Otherwise there is activated and used the Publish (asynchronous) data acquisition service of the OPC-UA protocol.</li></ul>
+<p>To facilitate the identification of nodes on the remote station, as well as their choice to be inserted in the parameter of the controller in the controller's object it is provided the navigation on the remote station's nodes tab, where you can walk through the tree of objects and familiar with their attributes (Figure 5).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:720px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse.png"><img class="thumbimage" height="664" src="../files/OPC-UA_cntr_browse.png" width="718" /></a>  <div class="thumbcaption">Fig.4. The "Server nodes browser" tab of a controller's object page.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse.png"><img class="thumbimage" height="672" src="../files/OPC-UA_cntr_browse.png" width="687" /></a>  <div class="thumbcaption">Fig.5. The "Server nodes browser" tab of the OPC-UA controller object page.</div></div></div></div>
 <h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3.2</span> Parameters</span></h3>
-<p>The data acquisition module provides only one type of parameters — "Standard". Additional configuration field of the parameter of the module (Fig. 5) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of type "Variable" insertion to the defined list. Attribute in this list is written as follows: <b>{ns}:{id}</b>.
+<p>The data acquisition module provides only one type of parameters — "Standard". Additional configuration field of the parameter of the module (Fig.6) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of type "Variable" insertion to the defined list. Attribute in this list is written as follows: <b>{ns}:{id}</b>.
 </p>
 <dl><dd>Where:
 <dl><dd><i>ns</i> — name space, number; zero value can be omitted;</dd>
@@ -243,16 +246,16 @@
 <dd><b>3:"BasicDevices2"</b> — basic devices node in the name space 3 and the string view;</dd>
 <dd><b>4:"61626364"</b> — node in the names space 4 and the byte string view;</dd>
 <dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — node in the names space 4 and the GUID view.</dd></dl></dd></dl>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm.png"><img class="thumbimage" height="675" src="../files/OPC-UA_prm.png" width="692" /></a>  <div class="thumbcaption">Fig.5. Configuration tab of a parameter's object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm.png"><img class="thumbimage" height="651" src="../files/OPC-UA_prm.png" width="678" /></a>  <div class="thumbcaption">Fig.6. Configuration tab of the OPC-UA parameter object.</div></div></div></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Nodes in type "Variable" with the value view as a structure are impossible typically to read entirely then you need it's elements insert separately to the reading nodes list.
-</p><p>In accordance with the specified list of nodes performs acquisition and creation of the parameter's attributes (Fig. 6).
+</p><p>In accordance with the specified list of nodes performs acquisition and creation of the parameter's attributes (Fig.7).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr.png"><img class="thumbimage" height="492" src="../files/OPC-UA_prm_atr.png" width="692" /></a>  <div class="thumbcaption">Fig.6. Tab of attributes of a parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr.png"><img class="thumbimage" height="492" src="../files/OPC-UA_prm_atr.png" width="692" /></a>  <div class="thumbcaption">Fig.7. Tab of attributes of a parameter.</div></div></div></div>
 <h2><span class="mw-headline" id="libOPC_UA_library"><span class="mw-headline-number">4</span> libOPC_UA library</span></h2>
 <p>Grounding on workouts of the module the protocol OPC-UA code was moved to different library and published on the LGPLv3 license. That was done to provide possibility of easy appending of support the OPC-UA protocol by external projects. The library represents by two files libOPC_UA.h, libOPC_UA.cpp; supported and hosted into the module content, then it's last version you can get here: <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA</a>.
-</p><p>The library, like this module code, wrote on C++ programming language. Statistic classes diagram which represents the library architecture shown on Figure 7. According to the classes diagram the library implemented into the name space "OPC" and architecturally it can be divided to client "Client" and server "Server" parts which inherited from common class "UA". Besides the direct classes of the protocol "OPC-UA" the library includes to self a set of functions and classes for processing or storing the protocol data, specialty from which it should be noted class of a node of language XML "XML_N" used for requests to the library API unification.
+</p><p>The library, like this module code, wrote on C++ programming language. Statistic classes diagram which represents the library architecture shown on Figure 8. According to the classes diagram the library implemented into the name space "OPC" and architecturally it can be divided to client "Client" and server "Server" parts which inherited from common class "UA". Besides the direct classes of the protocol "OPC-UA" the library includes to self a set of functions and classes for processing or storing the protocol data, specialty from which it should be noted class of a node of language XML "XML_N" used for requests to the library API unification.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Fig.7. Static class diagram of the library libOPC_UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:399px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="249" src="../files/OPC-UA_libOPCUA_class.png" width="397" /></a>  <div class="thumbcaption">Fig.8. Static class diagram of the library libOPC_UA.</div></div></div></div>
 <p>The library using at all lies in inheriting of the class "Client" and/or "Server", according to the end-program functions, and next implementing of the virtual function for the client/server properties, into the OPC-UA protocol context and the transport communication part, that is connect/open a TCP-socket and write/read of unstructured data stream. Next requests and the requested data processing (for server) performed through the function call <i>reqService()</i>, request to a service, and/or processing of the virtual function <i>reqData()</i> of a data requesting then in fact there is integration to the data model of the application.
 </p>
 <h3><span class="mw-headline" id="Service_objects.2C_functions_and_the_class_UA"><span class="mw-headline-number">4.1</span> Service objects, functions and the class UA</span></h3>

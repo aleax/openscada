@@ -205,17 +205,17 @@ void TProt::modStart( )
 {
     vector<string> ls;
     epList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	if(epAt(ls[i_n]).at().toEnable())
-	    epAt(ls[i_n]).at().setEnable(true);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	if(epAt(ls[iN]).at().toEnable())
+	    epAt(ls[iN]).at().setEnable(true);
 }
 
 void TProt::modStop( )
 {
     vector<string> ls;
     epList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	epAt(ls[i_n]).at().setEnable(false);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	epAt(ls[iN]).at().setEnable(false);
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
@@ -226,7 +226,9 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
 	ctrMkNode("grp", opt, -1, "/br/ep_", _("End point"), RWRWR_, "root", SPRT_ID, 2, "idm",i2s(limObjNm_SZ).c_str(), "idSz",i2s(limObjID_SZ).c_str());
-	if(ctrMkNode("area",opt,0,"/ep",_("End points")))
+	if(ctrMkNode("area",opt,0,"/serv",_("Server")))
+	    ctrMkNode("list",opt,-1,"/serv/asc",_("Active secure channels"),R_R_R_,"root",SPRT_ID);
+	if(ctrMkNode("area",opt,1,"/ep",_("End points")))
 	    ctrMkNode("list", opt, -1, "/ep/ep", _("End points"), RWRWR_, "root", SPRT_ID, 5,
 		"tp","br", "idm",i2s(limObjNm_SZ).c_str(), "s_com","add,del", "br_pref","ep_", "idSz",i2s(limObjID_SZ).c_str());
 	return;
@@ -238,11 +240,29 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    vector<string> lst;
 	    epList(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id", lst[i_f])->setText(epAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id", lst[iF])->setText(epAt(lst[iF]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", epAdd(opt->attr("id"))); epAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mEndPnt,opt->attr("id"),-1,1);
+    }
+    else if(a_path == "/serv/asc" && ctrChkNode(opt)) {
+	vector<uint32_t> chnls;
+	chnlList(chnls);
+	for(unsigned iCh = 0; iCh < chnls.size(); ++iCh) {
+	    SecCnl scO = chnlGet(chnls[iCh]);
+	    string secMess = _("Unknown");
+	    switch(scO.secMessMode) {
+		case MS_None:	secMess = _("None");	break;
+		case MS_Sign:	secMess = _("Sign");	break;
+		case MS_SignAndEncrypt: secMess = _("Sign&Encrypt");	break;
+	    }
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%u(token %u): %s(%s,%s) at %s(live %s); Sequence server %u, client %u; Request ID %u"),
+		chnls[iCh], scO.TokenId, scO.endPoint.c_str(), scO.secPolicy.c_str(), secMess.c_str(),
+		atm2s(scO.tCreate*1e-6,"%Y-%m-%dT%H:%M:%S").c_str(),
+		tm2s(1e-3*scO.tLife-1e-6*(curTime()-scO.tCreate)).c_str(),
+		scO.servSeqN, scO.clSeqN, scO.reqId));
+	}
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -371,8 +391,8 @@ void OPCEndPoint::save_( )
     //Security policies store
     string sp;
     MtxAlloc res(secRes, true);
-    for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
-	sp += mSec[i_p].policy + ":" + i2s(mSec[i_p].messageMode)+"\n";
+    for(unsigned iP = 0; iP < mSec.size(); iP++)
+	sp += mSec[iP].policy + ":" + i2s(mSec[iP].messageMode)+"\n";
     cfg("SecPolicies").setS(sp);
 
     //Addition parameters save
@@ -548,11 +568,11 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		}
 
 		bool lstOK = lstNd.empty() ? true : false;
-		for(unsigned i_p = 0; i_p < prevLs.childSize(); i_p++) {
-		    XML_N *pN = prevLs.childGet(i_p);
+		for(unsigned iP = 0; iP < prevLs.childSize(); iP++) {
+		    XML_N *pN = prevLs.childGet(iP);
 		    if(!lstOK) { lstOK = (lstNd==pN->attr("NodeId")); continue; }
 		    *(req.childAdd("ref")) = *pN;
-		    if(rPn && (int)req.childSize() >= rPn && (i_p+1) < prevLs.childSize()) {
+		    if(rPn && (int)req.childSize() >= rPn && (iP+1) < prevLs.childSize()) {
 			req.setAttr("LastNode", pN->attr("NodeId"));
 			break;
 		    }
@@ -780,6 +800,8 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/ep",_("End point"))) {
 	    if(ctrMkNode("area",opt,-1,"/ep/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/ep/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/ep/st/asess",_("Active sessions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
+		ctrMkNode("list",opt,-1,"/ep/st/asubscr",_("Active subscriptions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
@@ -818,6 +840,41 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/ep/st/asess" && ctrChkNode(opt)) {
+	OPCAlloc mtx(mtxData, true);
+	for(unsigned iSess = 0; iSess < sessN(); ++iSess) {
+	    Server::Sess &sesO = mSess[iSess];
+	    string sChnlLs;
+	    for(unsigned iCh = 0; iCh < sesO.secCnls.size(); ++iCh)
+		sChnlLs += (sChnlLs.size()?",":"") + uint2str(sesO.secCnls[iCh]);
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%d(%s): at %s(live %s), secure channels \"%s\"; Publish requests %u"),
+		iSess+1, sesO.inPrtId.c_str(),
+		atm2s(sesO.tAccess*1e-6,"%Y-%m-%dT%H:%M:%S").c_str(),
+		tm2s(1e-3*sesO.tInact-1e-6*(curTime()-sesO.tAccess)).c_str(),
+		sChnlLs.c_str(), sesO.publishReqs.size()));
+	}
+    }
+    else if(a_path == "/ep/st/asubscr" && ctrChkNode(opt)) {
+	OPCAlloc mtx(mtxData, true);
+	for(unsigned iSbscr = 0; iSbscr < subscrN(); ++iSbscr) {
+	    Server::Subscr &sbscrO = mSubScr[iSbscr];
+	    string state = _("Unknown");
+	    switch(sbscrO.st) {
+		case SS_CLOSED:		state = _("Closed");	break;
+		case SS_CREATING:	state = _("Creating");	break;
+		case SS_NORMAL:		state = _("Normal");	break;
+		case SS_LATE:		state = _("Late");	break;
+		case SS_KEEPALIVE:	state = _("KeepAlive");	break;
+	    }
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%d: %s, session %d; Publish %s, interval %s, last %s, sequence %d, lifetime %d, keep alive %d; Monitored items %u; Retransmission queue %u"),
+		iSbscr+1, state.c_str(), sbscrO.sess,
+		(sbscrO.publEn?_("Enabled"):_("Disabled")),
+		tm2s(1e-3*sbscrO.publInterval).c_str(),
+		atm2s(1e-6*sbscrO.lstPublTm,"%Y-%m-%dT%H:%M:%S").c_str(),
+		sbscrO.seqN, vmax(0,sbscrO.lifetimeCnt-sbscrO.wKA), vmax(0,sbscrO.maxKeepAliveCnt-sbscrO.wKA),
+		sbscrO.mItems.size(), sbscrO.retrQueue.size()));
+	}
+    }
     else if(a_path == "/ep/cfg/ls_itr" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("*");
 	vector<string> sls;
@@ -830,9 +887,9 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",RWRWR_);
 	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",RWRWR_);
 	    MtxAlloc res(secRes, true);
-	    for(unsigned i_p = 0; i_p < mSec.size(); i_p++) {
-		if(n_pol) n_pol->childAdd("el")->setText(mSec[i_p].policy);
-		if(n_mm)  n_mm->childAdd("el")->setText(i2s(mSec[i_p].messageMode));
+	    for(unsigned iP = 0; iP < mSec.size(); iP++) {
+		if(n_pol) n_pol->childAdd("el")->setText(mSec[iP].policy);
+		if(n_mm)  n_mm->childAdd("el")->setText(i2s(mSec[iP].messageMode));
 	    }
 	    return;
 	}
