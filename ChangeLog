@@ -1,3 +1,35 @@
+2021-05-16 Roman (stable)
+- Security: The user object appended for a function "auth" of User API for authenticate at password.
+- FIX:Protocol.HTTP: Fixed in the User API function messIO() for processing parts of the HTTP-request POST
+    and they bounder set to the canonic form.
+- !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Continued in appending the Publish service support on the client side
+	and the code comming refactoring in generic:
+    - the default LifeTimeCounter of the subscriptions set to 2400;
+    - the function XML_N::childClear() appended by a result of returning the same XML_N object for concatenation;
+    CLIENT:
+    - appended for the CHUNKS implementation both for requests and responses;
+    - completely revised and cleared in the common requesting function reqService() from doubling the arguments and parameters
+	what fixed of checking the signing in mixing with Publish of the secure policies,
+	appended for restoring sessions at reconnection the secure channel,
+	and the current session and secure channel clearing is unified;
+    - the Read request returned to the plain requesting with limition on CHUNKS only;
+    - the channel writing and reading is separated in MSG packages processing;
+    - the publish requests resent period set to OpcUa_ClntPublishResentCntr(10) of KeepAlive counters;
+    - the controller object status appended for number of processing monitored items.
+    SERVER:
+    - subscriptions processing returned to they processing in a separate task and the function subScrCycle()
+	for true counting all timeouts to disable, and processing the periodicity of subscription and publishing
+	returned to the counter also, but the publishing left for processing in the input channel activity
+	and the function Server::EP::publishCall();
+    - link of the sessions to secure channels switched to single one instead an array;
+    - not final chunk packages switched to send directly, for not append to single TCP-package;
+    - the secure channels limited in OpcUa_SecCnlLimit(10) and the publishes queue in OpcUa_ServerMaxPublishQueue(10);
+    - the common End Point status appended of the subscription task period and time of execution;
+    - the sessions status display switched to one channel link;
+    - the subscription status display cleaned from the last time and fixed for the lifetime;
+- !!:FIX:UI.VCAEngine: The VCA-styles fixed in accessing to empty fields which don't load.
+
+
 2021-05-10 Roman (stable)
 - LibsDB.vcaBase: Main.storeHouse: Appended for the type "text" appointment to the fixed field "DSCR"
     and the field "NAME" of the class edition table.

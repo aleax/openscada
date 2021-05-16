@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-09 17:07+0300\n"
+"POT-Creation-Date: 2021-05-16 19:18+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -93,11 +93,11 @@ msgstr "Витрачено часу: %s[%s]. Запитів %.6g. "
 msgid ""
 "Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session "
 "%s. "
-msgstr "Канал безпеки %u, токен %u, час життя %s; Запиту ІД %u, тримач %u; Сеанс %s. "
+msgstr ""
+"Канал безпеки %u, токен %u, час життя %s; Запиту ІД %u, тримач %u; Сеанс %s. "
 
-#, c-format
-msgid "Subscription %d, publishes %u, keep alive %s. "
-msgstr "Підписка %d, публікацій %u, утримання живим %s. "
+msgid "Subscription %u, publishes %u, keep alive %s; Monitored items %u. "
+msgstr "Підписка %u, публікацій %u, утримання живим %s; Елементів моніторингу %u. "
 
 #, c-format
 msgid "OPC UA automatic created transport for '%s' controller."
@@ -351,8 +351,8 @@ msgid "Enabled. "
 msgstr "Ввімкнено. "
 
 #, c-format
-msgid "Requests %.4g."
-msgstr "Запитів %.4g."
+msgid "Requests %.4g. Subscription task period %s, time %s[%s]. "
+msgstr "Запитів %.4g. Підписка - період завдання %s, час %s[%s]. "
 
 msgid "End point: "
 msgstr "Кінцевий вузол: "
@@ -402,9 +402,8 @@ msgstr "Час черги повторної передачі, сек."
 msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr "Встановити у 0 для автоматичного за cntrKeepAlive*publInterv"
 
-#, c-format
-msgid "%d(%s): at %s(live %s), secure channels \"%s\"; Publish requests %u"
-msgstr "%d(%s): від %s(живий %s), канали безпеки \"%s\"; Запити публікації %u"
+msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
+msgstr "%d(%s): від %s(живий %s), канал безпеки %u; Запити публікації %u"
 
 msgid "Closed"
 msgstr "Закрите"
@@ -421,14 +420,12 @@ msgstr "Пізніш"
 msgid "KeepAlive"
 msgstr "УтриманняЖивим"
 
-#, c-format
 msgid ""
-"%d: %s, session %d; Publish %s, interval %s, last %s, sequence %d, lifetime "
-"%d, keep alive %d; Monitored items %u; Retransmission queue %u"
+"%d: %s, session %d; Publish %s, interval %s, sequence %d, lifetime %d, keep "
+"alive %d; Monitored items %u; Retransmission queue %u"
 msgstr ""
-"%d: %s, сеанс %d; Публікація %s, інтервал %s, останнє %s, послідовність %d, "
-"час життя %d, тримання живим %d; Елементи моніторингу %u; Черга повторного "
-"надсилання %u"
+"%d: %s, сеанс %d; Публікація %s, інтервал %s, послідовність %d, час життя %d, "
+"тримання живим %d; Елементи моніторингу %u; Черга повторного надсилання %u"
 
 msgid "Disabled"
 msgstr "Вимкнено"

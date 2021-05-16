@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-09 17:07+0300\n"
+"POT-Creation-Date: 2021-05-16 19:18+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -99,9 +99,8 @@ msgstr ""
 "Sicherer Kanal %u, Token %u, Lebensdauer %s; ID anfordern %u, behandeln %u; "
 "Sitzung %s. "
 
-#, c-format
-msgid "Subscription %d, publishes %u, keep alive %s. "
-msgstr "Abonnement %d, veröffentlicht %u, am Leben zu erhalten %s. "
+msgid "Subscription %u, publishes %u, keep alive %s; Monitored items %u. "
+msgstr "Abonnement %u, veröffentlicht %u, am Leben zu erhalten %s; Überwachte Elemente %u. "
 
 #, c-format
 msgid "OPC UA automatic created transport for '%s' controller."
@@ -127,8 +126,8 @@ msgid ""
 "Otherwise there is activated and used the Publish (asynchronous) data "
 "acquisition service of the OPC-UA protocol."
 msgstr ""
-"Andernfalls wird der Publish (asynchronous) Datenerfassungsdienst des "
-"OPC-UA-Protokolls aktiviert und verwendet. "
+"Andernfalls wird der Publish (asynchronous) Datenerfassungsdienst des OPC-UA-"
+"Protokolls aktiviert und verwendet. "
 
 msgid "Server nodes browser"
 msgstr "Übersicht der Knoten des Servers"
@@ -355,8 +354,8 @@ msgid "Enabled. "
 msgstr "Eingeschaltet. "
 
 #, c-format
-msgid "Requests %.4g."
-msgstr "Anfragen %.4g."
+msgid "Requests %.4g. Subscription task period %s, time %s[%s]. "
+msgstr "Anfragen %.4g. Abonnement-Task-Zeitraum %s, Zeit %s[%s]. "
 
 msgid "End point: "
 msgstr "Endknoten: "
@@ -406,9 +405,9 @@ msgstr "Retransmission Warteschlangenzeit, sek."
 msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 
-#, c-format
-msgid "%d(%s): at %s(live %s), secure channels \"%s\"; Publish requests %u"
-msgstr "%d(%s): bei %s(live %s), sichere Kanäle \"%s\"; Anfragen veröffentlichen %u"
+msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
+msgstr ""
+"%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -425,13 +424,12 @@ msgstr "Spät"
 msgid "KeepAlive"
 msgstr "KeepAlive"
 
-#, c-format
 msgid ""
-"%d: %s, session %d; Publish %s, interval %s, last %s, sequence %d, lifetime "
-"%d, keep alive %d; Monitored items %u; Retransmission queue %u"
+"%d: %s, session %d; Publish %s, interval %s, sequence %d, lifetime %d, keep "
+"alive %d; Monitored items %u; Retransmission queue %u"
 msgstr ""
-"%d: %s, Sitzung %d; Veröffentlichen %s, Intervall %s, letzte %s, Sequenz %d, "
-"Lebensdauer %d, halten %d; Überwachte Elemente %u; Neuübertragungswarteschlange %u "
+"%d: %s, Sitzung %d; Veröffentlichen %s, Intervall %s, Sequenz %d, Lebensdauer %d, "
+"halten %d; Überwachte Elemente %u; Neuübertragungswarteschlange %u"
 
 msgid "Disabled"
 msgstr "Deaktiviert"

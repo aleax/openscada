@@ -862,7 +862,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     if(boundary.empty()) return;
 
     for(pos = 0; true; ) {
-	pos = content.find(boundary,pos);
+	pos = content.find(boundary, pos);
 	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
 	pos += boundary.size()+strlen(c_term);
 

@@ -116,22 +116,9 @@ bool TProt::inReq( string &request, const string &inPrtId, string *answ )
     bool rez = Server::inReq(request, inPrtId, answ);
     res.unlock();
 
-#ifdef POLL_OF_TR
-    //Poll for subscriptions process
     AutoHD<TProtIn> ip = at(inPrtId);
-    if(ip.at().waitReqTm() && !ip.at().mSubscrIn && epPresent(ip.at().mEp)) {
-	int64_t wTm = SYS->curTime();
-	AutoHD<OPCEndPoint> ep = epAt(ip.at().mEp);
-	bool tmToCall = (wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm();
-	if(tmToCall || ep.at().forceSubscrQueue) {
-	    if(tmToCall) ep.at().forceSubscrQueue = false;
-	    ip.at().mPrevTm = wTm;
-	    ip.at().mSubscrIn = true;
-	    epAt(ip.at().mEp).at().subScrCycle(answ, inPrtId);
-	    ip.at().mSubscrIn = false;
-	}
-    }
-#endif
+    if(epPresent(ip.at().mEp))
+	epAt(ip.at().mEp).at().publishCall(answ, inPrtId);
 
     return rez;
 }
@@ -280,11 +267,7 @@ TProt &TProtIn::owner( ) const	{ return *(TProt*)nodePrev(); }
 bool TProtIn::mess( const string &reqst, string &answ )
 {
     mBuf += reqst;
-#ifdef POLL_OF_TR
     return owner().inReq(mBuf, name(), &answ);
-#else
-    return owner().inReq(mBuf, name());
-#endif
 }
 
 //*************************************************
@@ -339,14 +322,12 @@ string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
 bool OPCEndPoint::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-#ifndef POLL_OF_TR
 void *OPCEndPoint::Task( void *iep )
 {
     OPCEndPoint &ep = *(OPCEndPoint *)iep;
 
     for(unsigned cntr = 0; !TSYS::taskEndRun(); cntr++) {
-	ep.forceSubscrQueue = false;	//Disable the forcing mechanism for the method
-	try { ep.subScrCycle(); }
+	try { ep.subScrCycle(cntr); }
 	catch(OPCError &err)	{ mess_err(ep.nodePath().c_str(), err.mess.c_str()); }
 	catch(TError &err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
@@ -355,7 +336,6 @@ void *OPCEndPoint::Task( void *iep )
 
     return NULL;
 }
-#endif
 
 void OPCEndPoint::load_( TConfig *icfg )
 {
@@ -416,23 +396,15 @@ void OPCEndPoint::setEnable( bool vl )
 	nodeReg(OpcUa_BaseObjectType,NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ),"DAQParameterObjectType",NC_ObjectType,OpcUa_HasSubtype);
 	nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),NS_OpenSCADA_DAQ),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->
 	    setAttr("DisplayName",SYS->daq().at().subName());
-#ifndef POLL_OF_TR
 	SYS->taskCreate(nodePath('.',true), 0/*mPrior*/, OPCEndPoint::Task, this);
-    }
-    else SYS->taskDestroy(nodePath('.',true));
-#else
-    }
-#endif
+    } else SYS->taskDestroy(nodePath('.',true));
 }
 
 void OPCEndPoint::setPublish( const string &inPrtId )
 {
-#ifdef POLL_OF_TR
     AutoHD<TProtIn> ip = owner().at(inPrtId);
     ip.at().mPollTm = subscrProcPer();
     ip.at().mEp = id();
-#endif
-    //Otherwise the task started/stoped into setEnable()
 }
 
 string OPCEndPoint::getStatus( )
@@ -440,7 +412,9 @@ string OPCEndPoint::getStatus( )
     string rez = _("Disabled. ");
     if(enableStat()) {
 	rez = _("Enabled. ");
-	rez += TSYS::strMess(_("Requests %.4g."), (double)cntReq);
+	rez += TSYS::strMess(_("Requests %.4g. Subscription task period %s, time %s[%s]. "),
+	    (double)cntReq, tm2s(1e-3*subscrProcPer()).c_str(),
+	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
 
     return rez;
@@ -844,14 +818,11 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	OPCAlloc mtx(mtxData, true);
 	for(unsigned iSess = 0; iSess < sessN(); ++iSess) {
 	    Server::Sess &sesO = mSess[iSess];
-	    string sChnlLs;
-	    for(unsigned iCh = 0; iCh < sesO.secCnls.size(); ++iCh)
-		sChnlLs += (sChnlLs.size()?",":"") + uint2str(sesO.secCnls[iCh]);
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%d(%s): at %s(live %s), secure channels \"%s\"; Publish requests %u"),
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%d(%s): at %s(live %s), secure channel %u; Publish requests %u"),
 		iSess+1, sesO.inPrtId.c_str(),
 		atm2s(sesO.tAccess*1e-6,"%Y-%m-%dT%H:%M:%S").c_str(),
 		tm2s(1e-3*sesO.tInact-1e-6*(curTime()-sesO.tAccess)).c_str(),
-		sChnlLs.c_str(), sesO.publishReqs.size()));
+		sesO.secCnl, sesO.publishReqs.size()));
 	}
     }
     else if(a_path == "/ep/st/asubscr" && ctrChkNode(opt)) {
@@ -866,12 +837,11 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		case SS_LATE:		state = _("Late");	break;
 		case SS_KEEPALIVE:	state = _("KeepAlive");	break;
 	    }
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%d: %s, session %d; Publish %s, interval %s, last %s, sequence %d, lifetime %d, keep alive %d; Monitored items %u; Retransmission queue %u"),
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%d: %s, session %d; Publish %s, interval %s, sequence %d, lifetime %d, keep alive %d; Monitored items %u; Retransmission queue %u"),
 		iSbscr+1, state.c_str(), sbscrO.sess,
 		(sbscrO.publEn?_("Enabled"):_("Disabled")),
 		tm2s(1e-3*sbscrO.publInterval).c_str(),
-		atm2s(1e-6*sbscrO.lstPublTm,"%Y-%m-%dT%H:%M:%S").c_str(),
-		sbscrO.seqN, vmax(0,sbscrO.lifetimeCnt-sbscrO.wKA), vmax(0,sbscrO.maxKeepAliveCnt-sbscrO.wKA),
+		sbscrO.seqN, vmax(0,sbscrO.lifetimeCnt-sbscrO.wLT), vmax(0,sbscrO.maxKeepAliveCnt-sbscrO.wKA),
 		sbscrO.mItems.size(), sbscrO.retrQueue.size()));
 	}
     }

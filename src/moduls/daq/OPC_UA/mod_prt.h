@@ -44,13 +44,12 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.0.0"
+#define PRT_MVER	"2.1.2"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
-#define POLL_OF_TR
 #define NS_OpenSCADA_DAQ 4
 
 namespace OPC_UA
@@ -103,13 +102,6 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string cert( );
 	string pvKey( );
 	double subscrProcPer( )	{ return 100; }
-	bool publishInPoll( ) {
-#ifdef POLL_OF_TR
-	    return true;
-#else
-	    return false;
-#endif
-	}
 
 	string getStatus( );
 
@@ -152,9 +144,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-#ifndef POLL_OF_TR
 	static void *Task( void *ep );
-#endif
 
 	//Attributes
 	TCfg	&mId,

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Client OPC-UA
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -50,7 +50,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Server OPC-UA
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -70,7 +70,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Library of implementing OPC-UA into OpenSCADA
 </td>
-<td> 2.0 </td>
+<td> 2.1 </td>
 <td> LGPL3 </td>
 <td> libOPC_UA.{h,cpp} </td>
 <td> en </td>
@@ -184,7 +184,7 @@
 <h2><span class="mw-headline" id="Module_of_the_server_implementation"><span class="mw-headline-number">2</span> Module of the server implementation</span></h2>
 <p>The server module contains an implementation code for the server part of OPC-UA — server services (Fig.1), in part of the OpenSCADA specific, and using the library in part of the OPC-UA specific. To construct the OPC-UA server it is enough to create an input transport, for ordinarily it is TCP-transport of the module <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a>, and select in it the module of the protocol, and also configure although one endpoint node of the protocol module, about it see bellow.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:899px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_serv.png"><img class="thumbimage" height="509" src="../files/OPC-UA_prt_serv.png" width="897" /></a>  <div class="thumbcaption">Fig.1. The "Server" common state.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:910px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_serv.png"><img class="thumbimage" height="510" src="../files/OPC-UA_prt_serv.png" width="908" /></a>  <div class="thumbcaption">Fig.1. The "Server" common state.</div></div></div></div>
 <p>The common state of the Server contains only the list of the active secure channels.
 </p>
 <h3><span class="mw-headline" id="Service_of_requests_on_the_OPC-UA_protocol"><span class="mw-headline-number">2.1</span> Service of requests on the OPC-UA protocol</span></h3>
@@ -202,7 +202,7 @@
 <li> Server certificate in the PEM format.</li>
 <li> Private key in the PEM format.</li>
 <li> Security Server Policy.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:890px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="908" src="../files/OPC-UA_prt_ep_main.png" width="888" /></a>  <div class="thumbcaption">Fig.3. Main tab of the endpoint node's page.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:991px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="925" src="../files/OPC-UA_prt_ep_main.png" width="989" /></a>  <div class="thumbcaption">Fig.3. Main tab of the endpoint node's page.</div></div></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -217,7 +217,7 @@
 <h3><span class="mw-headline" id="Data_controller.27s_object"><span class="mw-headline-number">3.1</span> Data controller's object</span></h3>
 <p>To append the OPC-UA data source the controller's object into OpenSCADA is created and configured. An example of the configuration tab of the controller's object is shown in Figure 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:859px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="780" src="../files/OPC-UA_cntr_main.png" width="857" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:931px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="800" src="../files/OPC-UA_cntr_main.png" width="929" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
 <ul><li> The state controller, as follow: detailed common status, "Enabled", "Running" and the name of the database containing the configuration.</li>

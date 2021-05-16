@@ -169,8 +169,8 @@ void Session::setStart( bool val )
 	mStProp.clear();
 	if(stlCurent() >= 0) {
 	    parent().at().stlPropList(pg_ls);
-	    for(unsigned i_sp = 0; i_sp < pg_ls.size(); i_sp++)
-		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet(pg_ls[i_sp], "", stlCurent());
+	    for(unsigned iSP = 0; iSP < pg_ls.size(); iSP++)
+		mStProp[pg_ls[iSP]] = parent().at().stlPropGet(pg_ls[iSP], "", stlCurent());
 	}
 
 	if(mess_lev() == TMess::Debug) {
@@ -557,8 +557,8 @@ void Session::stlCurentSet( int sid )
 	if(sid >= 0 && sid < parent().at().stlSize()) {
 	    vector<string> pg_ls;
 	    parent().at().stlPropList(pg_ls);
-	    for(unsigned i_sp = 0; i_sp < pg_ls.size(); i_sp++)
-		mStProp[pg_ls[i_sp]] = parent().at().stlPropGet(pg_ls[i_sp], "", sid);
+	    for(unsigned iSP = 0; iSP < pg_ls.size(); iSP++)
+		mStProp[pg_ls[iSP]] = parent().at().stlPropGet(pg_ls[iSP], "", sid);
 	}
 	else mStyleIdW = -1;
     }

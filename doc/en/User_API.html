@@ -493,7 +493,8 @@ SYS.cntrReq(req); </pre></li>
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">access to the appropriate subsystem</span>] — sets the configuration field <i>nm</i> of the object to the value <i>val</i>.</li>
-<li> <i>Array groups( )</i> — returns the groups list of the user</li></ul>
+<li> <i>bool auth( string pass )</i> — returns TRUE at successful authentication the user for <i>pass</i>.</li>
+<li> <i>Array groups( )</i> — returns the groups list of the user.</li></ul>
 <p>Functions of the object "Users group" (SYS.Security["grp_{Group}"]):
 </p>
 <ul><li> <i>ElTp cfg( string nm )</i> — gets the value of the configuration field <i>nm</i> of the object.</li>

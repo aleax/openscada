@@ -3,13 +3,32 @@
 /********************************************************************************
  *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
  *										*
+ *   Version: 2.1.10								*
+ *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
+ *	* The function XML_N::childClear() appended by a result of returning	*
+ *	  the same XML_N object for concatenation.				*
+ *	CLIENT:									*
+ *	* Appended for the CHUNKS implementation both for requests and responses.
+ *	* Completely revised and cleared in the common requesting function	*
+ *	  reqService() from doubling the arguments and parameters, appended for	*
+ *	  restoring sessions at reconnection the secure channel.		*
+ *	* The Read request set to the plain requesting with limition on	CHUNKS.	*
+ *	SERVER:									*
+ *	* Subscriptions processing returned to they processing in a separate	*
+ *	  task and the function subScrCycle() for true counting all timeouts,	*
+ *	  and processing the periodicity of subscription and publishing returned*
+ *	  to the counter also, but the publishing left for processing in	*
+ *	  the input channel activity and the function Server::EP::publishCall().*
+ *	* Link of the sessions to secure channels switched to single one.	*
+ *	* Not final chunk packages switched to send directly, for not append	*
+ *	  to single TCP-package.						*
+ *	* The secure channels limited in OpcUa_SecCnlLimit(10) and the publishes*
+ *	  queue in OpcUa_ServerMaxPublishQueue(10).				*
  *   Version: 2.0.20								*
  *	* Short functions appended for str2int() and str2uint().		*
  *	CLIENT:									*
  *	* The main services processing function protIO() adapted to work	*
  *	  in the asynchronous mode (not requesting).				*
- *	* The function messIO() expanded for the timeout argument with		*
- *	  specifying the requesting mode also.					*
  *	* The "Client" object appended for the functions: poll().		*
  *	* The service requests appended for implementation, include processing	*
  *	  the responses, for: CreateSubscription, DeleteSubscriptions,		*
@@ -18,12 +37,6 @@
  *	  the possibility of that triggering for Publish messages.		*
  *	* The client object appended by the common resources lock mtxData.	*
  *	SERVER:									*
- *	* The subscription processing function EP::subScrCycle() appended	*
- *	  of checking the assigned sessions and secure channels state		*
- *	  to close the subscriptions.						*
- *	* Unifying of detection the MonitoredItems sampling and the Publish	*
- *	  response need in binding to the corresponded intervals of sampling	*
- *	  and publishing cycle grid.						*
  *	* Some fields renamed: publInterv to publInterval,			*
  *	  cntrLifeTime to lifetimeCnt, cntrKeepAlive to maxKeepAliveCnt,	*
  *	  maxNotPerPubl to maxNtfPerPubl, en to publEn, secSize() to secN().	*
@@ -88,8 +101,11 @@ namespace OPC
 {
 
 //Constants
-#define OpcUa_ProtocolVersion	0
-#define OpcUa_SecCnlDefLifeTime	300000
+#define OpcUa_ProtocolVersion		0
+#define OpcUa_SecCnlLimit		10
+#define OpcUa_SecCnlDefLifeTime		300000
+#define OpcUa_ClntPublishResentCntr	10
+#define OpcUa_ServerMaxPublishQueue	10
 
 #define OpcUa_NPosID		0xFFFFFFFF
 
@@ -434,7 +450,7 @@ class XML_N
     XML_N*	childIns( unsigned id, const string &name = "" );
     void	childDel( const unsigned id );
     void	childDel( XML_N *nd );
-    void	childClear( const string &name = "" );
+    XML_N*	childClear( const string &name = "" );
     XML_N*	childGet( const int, bool noex = false ) const;
     XML_N*	childGet( const string &name, const int numb = 0, bool noex = false ) const;
     XML_N*	childGet( const string &attr, const string &name, bool noex = false ) const;
@@ -577,7 +593,7 @@ class Client: public UA
 	public:
 	//Methods
 	Subscr( Client *iclnt, double ipublInterval = 1e3 ) :
-	    publEn(true), publInterval(ipublInterval), subScrId(0), lifetimeCnt(12000),
+	    publEn(true), publInterval(ipublInterval), subScrId(0), lifetimeCnt(2400),
 	    maxKeepAliveCnt(10), maxNtfPerPubl(65536), pr(0), lstPublTm(0),
 	    clnt(iclnt)	{ }
 
@@ -611,41 +627,49 @@ class Client: public UA
     {
 	public:
 	//Methods
-	SClntSess( )		{ clearFull(); }
-	void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
-	void clearFull( bool inclEPdescr = false ) {
-	    endPoint = servCert = clKey = servKey = "";
-	    if(inclEPdescr) endPointDscr.clear();
+	SClntSess( )	{ clearSess(); clearSecCnl(true); }
+
+	void clearSecCnl( bool inclEP = false ) {
+	    servRcvBufSz = servSndBufSz = servMsgMaxSz = servChunkMaxCnt = 0;
+
+	    servCert = clKey = servKey = "";
 	    secPolicy = "None"; secMessMode = MS_None;
 	    secChnl = secToken = reqHndl = 0;
+	    secChnlChanged = false;
 	    sqNumb = 33;
 	    sqReqId = 1;
 	    secLifeTime = 0;
-	    sessOpen = 0;
+	    sessOpen = lstMessReq = 0;
 
-	    clearSess();
+	    if(inclEP) { endPoint = ""; endPointDscr.clear(); }
+	}
+	void clearSess( bool inclSubscr = true ) {
+	    sesId = authTkId = servNonce = "";
+	    sesLifeTime = 1.2e6;
 
 	    //Clear subscriptions
-	    for(unsigned iSubscr = 0; iSubscr < mSubScr.size(); ++iSubscr)
+	    for(unsigned iSubscr = 0; inclSubscr && iSubscr < mSubScr.size(); ++iSubscr)
 		mSubScr[iSubscr].activate(false, true);
 	}
 
+	uint32_t	servRcvBufSz, servSndBufSz, servMsgMaxSz, servChunkMaxCnt;
 	string		endPoint;
 	XML_N		endPointDscr;
 	uint32_t	secChnl;
 	uint32_t	secToken;
 	int		secLifeTime;
+	bool		secChnlChanged;
 	uint32_t	sqNumb;
 	uint32_t	sqReqId;
 	uint32_t	reqHndl;
 	string		sesId;
 	string		authTkId;
-	int64_t		sessOpen;
+	int64_t		sessOpen, lstMessReq;
 	double		sesLifeTime;
 	string		servCert;
 	string		secPolicy;
 	char		secMessMode;
-	string		clKey, servKey;
+	string		clKey, servKey, servNonce;
 
 	vector<Subscr>	mSubScr;	//Subscriptions list
 	vector<uint32_t> mPublSeqs;	//Publish packages registration
@@ -662,7 +686,7 @@ class Client: public UA
     virtual string sessionName( ) = 0;
     virtual string endPoint( ) = 0;
     virtual string secPolicy( ) = 0;
-    virtual int	secMessMode( ) = 0;
+    virtual int secMessMode( ) = 0;
     virtual string cert( ) = 0;
     virtual string pvKey( ) = 0;
     virtual string authData( ) = 0;	//Empty			- anonymous
@@ -713,12 +737,13 @@ class Server: public UA
 	    uint32_t	TokenId, TokenIdPrev;
 	    string	clCert, clAddr;
 	    string	servKey, clKey;
-	    uint32_t	servSeqN, clSeqN, startClSeqN, reqId;
+	    uint32_t	servSeqN, clSeqN/*, startClSeqN*/, reqId;
 	    // Chunks accumulation
 	    int		chCnt;	//Negative for error chunks sequence
 	    string	chB;
 	};
 	//* Session
+	class EP;
 	class Sess
 	{
 	    public:
@@ -749,10 +774,12 @@ class Server: public UA
 	    Sess( const string &iName, double iTInact );
 	    Sess( );
 
+	    bool isSecCnlActive( EP *ep );
+
 	    //Attributes
 	    string	name, inPrtId;
 			//idPolicyId, user;
-	    vector<uint32_t> secCnls;
+	    uint32_t	secCnl;
 	    double	tInact;
 	    int64_t	tAccess;
 	    string	servNonce;
@@ -787,7 +814,7 @@ class Server: public UA
 
 		//Methods
 		MonitItem( ) : md(MM_DISABLED), aid(0), tmToRet(TS_SOURCE), smplItv(1000), qSz(OpcUa_NPosID),
-		    dO(false), cH(0), vTp(0), dtTm(0), lstPublTm(0)	{ }
+		    dO(false), cH(0), vTp(0), dtTm(0)	{ }
 
 		//Attributes
 		MonitoringMode	md;		//Monitoring mode
@@ -801,14 +828,13 @@ class Server: public UA
 		XML_N		fltr;		//Filters
 
 		int		vTp;		//Values type
-		int64_t		dtTm,		//Last value time
-				lstPublTm;	//Last publication time
+		int64_t		dtTm;		//Last value time
 		deque<Val>	vQueue;		//Values queue
 	    };
 
 	    //Methods
-	    Subscr( ) : st(SS_CLOSED), sess(-1), publEn(false), toInit(true), publInterval(100), seqN(1),
-		lifetimeCnt(12000), wLT(0), maxKeepAliveCnt(50), wKA(0), maxNtfPerPubl(0), pr(0), lstPublTm(0)	{ }
+	    Subscr( ) : st(SS_CLOSED), sess(-1), publEn(false), toInit(true), publInterval(100), seqN(1), pubCntr(0), pubCntr_(0),
+		lifetimeCnt(2400), wLT(0), maxKeepAliveCnt(50), wKA(0), maxNtfPerPubl(0), pr(0)	{ }
 
 	    Subscr copy( bool noWorkData = true );
 	    SubScrSt setState( SubScrSt st = SS_CUR );
@@ -820,6 +846,7 @@ class Server: public UA
 			toInit;			//Subsription init publish package send needs
 	    double	publInterval;		//Publish interval, milliseconds
 	    uint32_t	seqN,			//Sequence number for responses, rolls over 1, no increment for KeepAlive messages
+			pubCntr, pubCntr_,	//Publish counter
 			lifetimeCnt, wLT,	//Counter after that missing the client notifications will be removed from the object
 			maxKeepAliveCnt, wKA,	//Counter after that need to send empty publish response and
 						//send StatusChangeNotification with Bad_Timeout
@@ -828,7 +855,6 @@ class Server: public UA
 	    vector<MonitItem> mItems;
 	    deque<string> retrQueue;		//Retransmission queue; used by Republish request;
 						//cleared to deep by KeepAlive! or by field Acknowledgements sets
-	    int64_t	lstPublTm;		//Last publication time
 	};
 
 	//* End Point
@@ -836,81 +862,78 @@ class Server: public UA
 	{
 	    friend class Server;
 	    public:
-		//Methods
-		EP( Server *serv );
-		~EP( );
+	    //Methods
+	    EP( Server *serv );
+	    ~EP( );
 
-		virtual string id( ) = 0;
-		virtual string url( ) = 0;
-		virtual string cert( ) = 0;
-		virtual string pvKey( ) = 0;
-		virtual double subscrProcPer( ) = 0;	//Generic minimum cycle period of publishes and the data processing
+	    virtual string id( ) = 0;
+	    virtual string url( ) = 0;
+	    virtual string cert( ) = 0;
+	    virtual string pvKey( ) = 0;
+	    virtual double subscrProcPer( ) = 0;	//Generic minimum cycle period of publishes and the data processing
 
-		// Limits
-		virtual uint32_t limSubScr( )		{ return 10; }
-		virtual uint32_t limMonitItms( )	{ return 1000; }
-		virtual uint32_t limRetrQueueTm( )	{ return 0; }	//Time limit (seconds) for retransmission queue
+	    // Limits
+	    virtual uint32_t limSubScr( )	{ return 10; }
+	    virtual uint32_t limMonitItms( )	{ return 1000; }
+	    virtual uint32_t limRetrQueueTm( )	{ return 0; }	//Time limit (seconds) for retransmission queue
 
-		bool enableStat( ) const		{ return mEn; }
-		virtual bool publishInPoll( ) = 0;	//Publish in the poll mode of transport, otherwise that is an external task
+	    bool enableStat( ) const		{ return mEn; }
 
-		virtual void setEnable( bool vl );
-		virtual void setPublish( const string &inPrtId )	{ }	//Start a publish task or input request's poll of subScrCycle()
-		void subScrCycle( string *answ = NULL, const string &inPrtId = "" );	//Subscriptions processing cycle
+	    virtual void setEnable( bool vl );
+	    virtual void setPublish( const string &inPrtId )	{ }	//Start a publish task or input request's poll of subScrCycle()
+	    void subScrCycle( unsigned cntr );				//Subscriptions processing cycle
+	    void publishCall( string *answ = NULL, const string &inPrtId = "" );
 
-		// Security policies
-		unsigned secN( )	{ return mSec.size(); }
-		string secPolicy( int isec );
-		MessageSecurityMode secMessageMode( int isec );
+	    // Security policies
+	    unsigned secN( )	{ return mSec.size(); }
+	    string secPolicy( int isec );
+	    MessageSecurityMode secMessageMode( int isec );
 
-		// Sessions
-		unsigned sessN( )	{ return mSess.size(); }
-		int sessCreate( const string &iName, double iTInact );
-		void sessServNonceSet( int sid, const string &servNonce );
-		virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false,
-		    const string &inPrtId = "", const XML_N &identTkn = XML_N() );
-		void sessClose( int sid );
-		Sess sessGet( int sid );
-		//  Continuation points by Browse and BrowseNext
-		Sess::ContPoint sessCpGet( int sid, const string &cpId );
-		void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
-		//  Subsciption
-		unsigned subscrN( )	{ return mSubScr.size(); }
-		uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = 0 for new create
-		    double publInterval = 0, uint32_t lifetimeCnt = 0, uint32_t maxKeepAliveCnt = 0,
-		    uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );
-		Subscr subscrGet( uint32_t ssId, bool noWorkData = true );
-		//  Monitored items
-		uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = 0 for new create
-		    const NodeId &nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1),
-		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID, XML_N *fltr = NULL );
-		Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );
+	    // Sessions
+	    unsigned sessN( )	{ return mSess.size(); }
+	    int sessCreate( const string &iName, double iTInact );
+	    void sessServNonceSet( int sid, const string &servNonce );
+	    virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false,
+		const string &inPrtId = "", const XML_N &identTkn = XML_N() );
+	    void sessClose( int sid, bool delSubscr = true );
+	    Sess sessGet( int sid );
+	    //  Continuation points by Browse and BrowseNext
+	    Sess::ContPoint sessCpGet( int sid, const string &cpId );
+	    void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
+	    //  Subsciption
+	    unsigned subscrN( )	{ return mSubScr.size(); }
+	    uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = 0 for new create
+		double publInterval = 0, uint32_t lifetimeCnt = 0, uint32_t maxKeepAliveCnt = 0,
+		uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );
+	    Subscr subscrGet( uint32_t ssId, bool noWorkData = true );
+	    //  Monitored items
+	    uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = 0 for new create
+		const NodeId &nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1),
+		double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID, XML_N *fltr = NULL );
+	    Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );
 
-		virtual uint32_t reqData( int reqTp, XML_N &req );
-
-		//Attributes
-		bool			forceSubscrQueue;	//Aperiodic subscription processing without checking to real data
+	    virtual uint32_t reqData( int reqTp, XML_N &req );
 
 	    protected:
-		//Methods
-		XML_N *nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,
-		    int ndClass, const NodeId &refTypeId, const NodeId &typeDef = 0 );
-		Sess *sessGet_( int sid );	//Unresourced
+	    //Methods
+	    XML_N *nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,
+		int ndClass, const NodeId &refTypeId, const NodeId &typeDef = 0 );
+	    Sess *sessGet_( int sid );	//Unresourced
 
-		//Attributes
-		char			mEn;
+	    //Attributes
+	    char		mEn;
 
-		uint64_t		cntReq;
+	    uint64_t		cntReq;
 
-		vector<SecuritySetting>	mSec;
-		vector<Sess>		mSess;
-		vector<Subscr>		mSubScr;	//Subscriptions list
+	    vector<SecuritySetting>	mSec;
+	    vector<Sess>	mSess;
+	    vector<Subscr>	mSubScr;	//Subscriptions list
 
-		XML_N			objTree;
-		map<string, XML_N*>	ndMap;
-		pthread_mutex_t		mtxData;
+	    XML_N		objTree;
+	    map<string, XML_N*>	ndMap;
+	    pthread_mutex_t	mtxData;
 
-		Server			*serv;
+	    Server		*serv;
 	};
 
 	//Methods

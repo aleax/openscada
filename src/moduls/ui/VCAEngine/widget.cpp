@@ -1772,7 +1772,7 @@ TVariant Attr::get( bool sys )
 string Attr::getS( bool sys )
 {
     if(flgGlob()&Attr::OnlyRead || (flgGlob()&Attr::PreRead && !sys)) return owner()->vlGet(*this).getS();
-    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getS(true),false).getS();
+    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this, getS(true), false).getS();
     switch(fld().type()) {
 	case TFld::Integer:	{ int64_t tvl = getI(sys); return (tvl != EVAL_INT) ? ll2s(tvl) : EVAL_STR; }
 	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? r2s(tvl) : EVAL_STR; }

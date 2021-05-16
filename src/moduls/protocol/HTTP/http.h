@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,7 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define cntBnd "asdfeeeeqqwe34QWEasd4rserv$WERwar34q2fsdFWEra345tfSDFasefavt5rtaew@#"
+#define cntBnd "----OpenSCADAFormBoundary4q2fsdFWEra345tf"
 #define CtxTmplMark	"#####CONTEXT#####"
 
 using std::string;

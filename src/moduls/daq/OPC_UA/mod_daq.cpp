@@ -125,9 +125,10 @@ string TMdContr::getStatus( )
 	    rez += TSYS::strMess(_("Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session %s. "),
 		sess.secChnl, sess.secToken, tm2s(1e-3*sess.secLifeTime-1e-6*(curTime()-sess.sessOpen)).c_str(), sess.sqReqId, sess.reqHndl, sess.sesId.c_str());
 	    if(sess.mSubScr.size())
-		rez += TSYS::strMess(_("Subscription %d, publishes %u, keep alive %s. "),
+		rez += TSYS::strMess(_("Subscription %u, publishes %u, keep alive %s; Monitored items %u. "),
 		    sess.mSubScr[0].subScrId, sess.mPublSeqs.size(),
-		    tm2s(2*1e-3*sess.mSubScr[0].maxKeepAliveCnt*sess.mSubScr[0].publInterval-1e-6*(curTime()-sess.mSubScr[0].lstPublTm)).c_str());
+		    tm2s(2*1e-3*sess.mSubScr[0].maxKeepAliveCnt*sess.mSubScr[0].publInterval-1e-6*(curTime()-sess.mSubScr[0].lstPublTm)).c_str(),
+		    sess.mSubScr[0].mItems.size());
 	    res.unlock();
 	    if(servSt) rez.replace(0, 1, TSYS::strMess("0x%x",servSt));
 	}

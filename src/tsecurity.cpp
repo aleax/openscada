@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -447,8 +447,10 @@ void TUser::save_( )
 
 TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // bool auth( string pass ) - authenticate the user for <pass>
+    if(iid == "auth" && prms.size()) { return auth(prms[0].getS()); }
     // Array groups( ) - groups list of the user.
-    if(iid == "groups") {
+    else if(iid == "groups") {
 	TArrayObj *rez = new TArrayObj();
 	try {
 	    vector<string> ls;

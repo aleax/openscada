@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-09 17:07+0300\n"
+"POT-Creation-Date: 2021-05-16 19:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,7 +96,7 @@ msgid "Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Sessi
 msgstr ""
 
 #, c-format
-msgid "Subscription %d, publishes %u, keep alive %s. "
+msgid "Subscription %u, publishes %u, keep alive %s; Monitored items %u. "
 msgstr ""
 
 #, c-format
@@ -327,7 +327,7 @@ msgid "Enabled. "
 msgstr ""
 
 #, c-format
-msgid "Requests %.4g."
+msgid "Requests %.4g. Subscription task period %s, time %s[%s]. "
 msgstr ""
 
 msgid "End point: "
@@ -379,7 +379,7 @@ msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr ""
 
 #, c-format
-msgid "%d(%s): at %s(live %s), secure channels \"%s\"; Publish requests %u"
+msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
 msgstr ""
 
 msgid "Closed"
@@ -398,7 +398,7 @@ msgid "KeepAlive"
 msgstr ""
 
 #, c-format
-msgid "%d: %s, session %d; Publish %s, interval %s, last %s, sequence %d, lifetime %d, keep alive %d; Monitored items %u; Retransmission queue %u"
+msgid "%d: %s, session %d; Publish %s, interval %s, sequence %d, lifetime %d, keep alive %d; Monitored items %u; Retransmission queue %u"
 msgstr ""
 
 msgid "Disabled"

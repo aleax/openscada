@@ -216,11 +216,8 @@ void Project::load_( TConfig *icfg )
     vector<string> vlst;
     for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,true); ) {
 	vlst.clear();
-	for(int iS = 0; iS < 10; iS++) {
-	    svl = cStl.cfg(TSYS::strMess("V_%d",iS)).getS();
-	    if(svl.empty()) break;
-	    vlst.push_back(svl);
-	}
+	for(int iS = 0; iS < 10; iS++)
+	    vlst.push_back(cStl.cfg(TSYS::strMess("V_%d",iS)).getS());
 	mStProp[cStl.cfg("ID").getS()] = vlst;
     }
 }
