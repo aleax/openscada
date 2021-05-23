@@ -1,3 +1,38 @@
+2021-05-23 Roman (stable)
+- data/openscada-proj.in: Switched to linking user LibsDB content to the system RO-content-libraries instead the copying.
+- AGLKS.vca: The short links on the main mnemonic scheme activated for all users.
+- !!:FIX:Mess: The data lock separated from all messages lock in dtRes to prevent the concurency locks
+    at active work with translations. The mLang2CodeBase, mLang2Code attributes switched to the lock.
+- !:FIX:DAQ.DAQGate: Prevented from error processing of parameters from other DAQ.DAQGate controller objects with the broken link.
+- UI.{VCAEngine,Vision}: The service of activation runtime visualizer-specific attributes appended
+    of the default value in the text, on the attribute "keepAspectRatio", wich is TRUE by default on UI.Vision.
+- UI.VCAEngine: The widgets, restored from the parrent widget, is set to enabled after adding.
+- !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Continued in appending the Publish service and client CHUNKS support
+	on the client side and the code comming refactoring in generic:
+    - the object NodeId appended for the function operator==() of direct comparing;
+    CLIENT:
+    - the object Client::Subscr::MonitItem is appended as a replace of XML_N in the monitored items representing;
+    - the error OpcUa_BadSecureChannelIdInvalid added for clearing the secure channel;
+    - the function monitoredItemAdd() fixed on sending the empty requests;
+    - Client::SClntSess::{sessOpen,lstMessReq} renamed to {secChnlOpenTm,secLstMessReqTm}
+    - ... and prevented from clearing in restoring the session and secure channel;
+    - OpcUa_ClntPublishResentCntr is set by default to 2 and used in the client status;
+    - Client::Subscr::monitoredItemDel() appended of an attribute of marking the items as NODATA;
+    - values acquisition is unified in their reading in the function Client::poll() both for the Read and Publish modes
+    - ... and processing in the parameter function upVal()
+    - ... and the values requesting by the controller object function getValMIt() with the Arrays support
+    - ... than preparing closely for builtin the logical parameter type;
+    - monitored items adding moved from attrPrc() directly to enable() and which ensured to call at the controller object start
+    - ... and the items processing improved in updating the description, flags and link;
+    - acquisition in the both modes appended-restored for reading OpcUa_Server_ServerStatus_State;
+    - the DAQ-parameter objects enabled for including other parameters;
+    - the EVAL setting and removing for all attributes tested for all modes.
+    SERVER:
+    - the Publish processing prevented on processing wrong and foreign Subscriptions, by checking inPrtId, sesTokId and isSecCnlAct;
+    - the session checking of all messages appended of preventing of using foreign connections with the same secure channel and session
+    - ... and clearing the channel names of the reconnections on other, already wrong sessions.
+
+
 2021-05-16 Roman (stable)
 - Security: The user object appended for a function "auth" of User API for authenticate at password.
 - FIX:Protocol.HTTP: Fixed in the User API function messIO() for processing parts of the HTTP-request POST

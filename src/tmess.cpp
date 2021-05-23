@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,7 +58,7 @@ using namespace OSCADA;
 //*************************************************
 TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE),
     mConvCode(true), mIsUTF8(true), mTranslDyn(false), mTranslDynPlan(false), mTranslEnMan(false), mTranslSet(false),
-    mRes(true), mLang2CodeBase(mRes), mLang2Code(mRes), getMessRes(true)
+    mLang2CodeBase(dtRes), mLang2Code(dtRes), getMessRes(true)
 {
     openlog(PACKAGE, 0, LOG_USER);
 
@@ -411,13 +411,13 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 	req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
 
 	MtxAlloc res(mRes, true);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    if(ls[i_l] == DB_CFG)
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    if(ls[iL] == DB_CFG)
 		for(int io_cnt = 0; SYS->db().at().dataSeek("","/" mess_TrUApiTbl,io_cnt++,req,false,true); )
 		    trMessIdx[req.cfg("base").getS()]["cfg:/" mess_TrUApiTbl] = prms;
 	    else
-		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[i_l]+"." mess_TrUApiTbl,"",io_cnt++,req,false,true); )
-		    trMessIdx[req.cfg("base").getS()]["db:"+ls[i_l]+"." mess_TrUApiTbl "#base"] = prms;
+		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[iL]+"." mess_TrUApiTbl,"",io_cnt++,req,false,true); )
+		    trMessIdx[req.cfg("base").getS()]["db:"+ls[iL]+"." mess_TrUApiTbl "#base"] = prms;
     }
     else {
 	if(sTrm(mess).empty()) return;

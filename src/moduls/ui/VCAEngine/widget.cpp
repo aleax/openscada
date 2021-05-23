@@ -499,7 +499,10 @@ void Widget::wClear( )
 	    parw.at().wdgList(ls);
 	    for(unsigned iW = 0; iW < ls.size(); iW++)
 		if(!wdgPresent(ls[iW]))
-		    try{ wdgAdd(ls[iW],"",parw.at().wdgAt(ls[iW]).at().path(),true); }
+		    try {
+			wdgAdd(ls[iW], "", parw.at().wdgAt(ls[iW]).at().path(), true);
+			wdgAt(ls[iW]).at().setEnable(true);
+		    }
 		    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 		else wdgAt(ls[iW]).at().wClear();
 	}

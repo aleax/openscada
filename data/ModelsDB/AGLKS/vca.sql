@@ -4090,12 +4090,12 @@ INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','El_d3','/wlb_mnEls/wdg_El_d','geomX
 INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','El_d4','/wlb_mnEls/wdg_El_d','geomX;geomY;geomXsc;geomYsc;geomZ;',2);
 INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','Pi','/wlb_Main/wdg_anShow','geomX;geomY;geomZ;',2);
 INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','Ti','/wlb_Main/wdg_anShow','geomX;geomY;geomZ;',2);
-INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr1','/wlb_originals/wdg_ElFigure','active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
-INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr2','/wlb_originals/wdg_ElFigure','active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
-INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr3','/wlb_originals/wdg_ElFigure','active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
-INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr4','/wlb_originals/wdg_ElFigure','active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
-INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr5','/wlb_originals/wdg_ElFigure','active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
-INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr6','/wlb_originals/wdg_ElFigure','active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
+INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr1','/wlb_originals/wdg_ElFigure','perm;active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
+INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr2','/wlb_originals/wdg_ElFigure','perm;active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
+INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr3','/wlb_originals/wdg_ElFigure','perm;active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
+INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr4','/wlb_originals/wdg_ElFigure','perm;active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
+INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr5','/wlb_originals/wdg_ElFigure','perm;active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
+INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','compr6','/wlb_originals/wdg_ElFigure','perm;active;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p4x;p4y;p6x;p6y;',2);
 INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','El_Pipe_simple_vert_gr3','/wlb_mnEls/wdg_El_Pipe_simple_vert_gr','geomX;geomY;geomXsc;geomYsc;geomZ;',2);
 INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','El_Pipe_simple_gr3','/wlb_mnEls/wdg_El_Pipe_simple_gr','geomX;geomY;geomXsc;geomYsc;geomZ;',2);
 INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','El_Troinik_gr2','/wlb_mnEls/wdg_El_Troinik_gr','geomX;geomY;geomXsc;geomYsc;geomZ;orient;',2);
@@ -6339,6 +6339,12 @@ INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','active','1',32,'','','compr3','','','
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','active','1',32,'','','compr4','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','active','1',32,'','','compr5','','','','','','');
 INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','active','1',32,'','','compr6','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','perm','438',32,'','','compr1','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','perm','438',32,'','','compr2','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','perm','438',32,'','','compr3','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','perm','438',32,'','','compr4','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','perm','438',32,'','','compr5','','','','','','');
+INSERT INTO wlb_AGLKS_io VALUES('KCH_MN1','perm','438',32,'','','compr6','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO wlb_AGLKS_uio VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
@@ -6616,7 +6622,7 @@ VFEURVFKr/ML85hh4fM7HTNYdiVrtqyPn82ocNwW1G4tWTEAhDhCd26nYQmb3CxFi+SUVI9KZLKh
 sGVRy1rzSZKkbRbkX1ZzFwGSJKmUcCVJEohA8MYAKM1Qui3j2LZgWRJCTBSLrYZqAFiWFI3WbX2R
 z6eBAna5ihZAGLBFMonGKKotF9Y0bzJZv53rA2PUNBUALoqi15uoBgBCqKnpxtzcvjtKqiqoaztd
 qRSkUhtIynI2mexKJitaiO71vgfVWaC392wVo74kqv6/na8I/R/A/5q+9gCoqm6rJ/7VJEVR/gtO
-6VqgwKO3JAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'geomW;geomH;geomXsc;geomYsc;backColor;bordWidth;bordColor;',1616310250);
+6VqgwKO3JAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'geomW;geomH;geomXsc;geomYsc;backColor;bordWidth;bordColor;',1621363048);
 INSERT INTO wlb_AGLKS VALUES('comprEn','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAxVJREFUeJztmj1vE0EQhp8gqrRcARRbAMXVC+VSwC9wJKCwKc9QprVT
 kqQMEk2cRCliuYMYGqAMH5WdRC4AJRSATAMooQAU0Q7F+iTLIoqT3Meefa80rX1+dvzO3MxCrly5

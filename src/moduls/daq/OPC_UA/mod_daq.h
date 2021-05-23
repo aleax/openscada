@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.1.10"
+#define DAQ_MVER	"2.1.20"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -72,9 +72,9 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( ) const;
+	void upVal( );
 
-	string attrPrc( );
+	TMdContr &owner( ) const;
 
     private:
 	//Methods
@@ -101,7 +101,7 @@ class TMdContr: public TController, public Client
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	string getStatus( );
+	string	getStatus( );
 
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
@@ -119,6 +119,8 @@ class TMdContr: public TController, public Client
 	void	setEndPoint( const string &iep )	{ mEndP = iep; }
 	void	setSecPolicy( const string &isp )	{ mSecPol = isp; }
 	void	setSecMessMode( int smm )		{ mSecMessMode = smm; }
+
+	TVariant getValMIt( unsigned mItId, uint32_t *st = NULL );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -168,7 +170,7 @@ class TMdContr: public TController, public Client
 
 	bool	prcSt,		//Process task active
 		callSt,		//Calc now stat
-		mPCfgCh;	//Parameter's configuration is changed
+		isReload;
 	int8_t	alSt;		//Alarm state
 
 	AutoHD<TTransportOut>	tr;

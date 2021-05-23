@@ -72,7 +72,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("UseRead",_("Use the \"Read\" function"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Parameter type bd structure
-    int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
+    int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("ND_LS",_("Nodes list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000",""));
 }
 
@@ -85,7 +85,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TCon
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
     mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), mUseRead(cfg("UseRead").getBd()),
-    mPer(1e9), prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
+    mPer(1e9), prcSt(false), callSt(false), isReload(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
@@ -123,17 +123,59 @@ string TMdContr::getStatus( )
 		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(), -tmDelay);
 	    OPCAlloc res(mtxData, true);
 	    rez += TSYS::strMess(_("Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session %s. "),
-		sess.secChnl, sess.secToken, tm2s(1e-3*sess.secLifeTime-1e-6*(curTime()-sess.sessOpen)).c_str(), sess.sqReqId, sess.reqHndl, sess.sesId.c_str());
+		sess.secChnl, sess.secToken, tm2s(1e-3*sess.secLifeTime-1e-6*(curTime()-sess.secChnlOpenTm)).c_str(), sess.sqReqId, sess.reqHndl, sess.sesId.c_str());
 	    if(sess.mSubScr.size())
 		rez += TSYS::strMess(_("Subscription %u, publishes %u, keep alive %s; Monitored items %u. "),
 		    sess.mSubScr[0].subScrId, sess.mPublSeqs.size(),
-		    tm2s(2*1e-3*sess.mSubScr[0].maxKeepAliveCnt*sess.mSubScr[0].publInterval-1e-6*(curTime()-sess.mSubScr[0].lstPublTm)).c_str(),
+		    tm2s(OpcUa_ClntPublishResentCntr*1e-3*sess.mSubScr[0].maxKeepAliveCnt*sess.mSubScr[0].publInterval-1e-6*(curTime()-sess.mSubScr[0].lstPublTm)).c_str(),
 		    sess.mSubScr[0].mItems.size());
 	    res.unlock();
 	    if(servSt) rez.replace(0, 1, TSYS::strMess("0x%x",servSt));
 	}
     }
     return rez;
+}
+
+TVariant TMdContr::getValMIt( unsigned mItId, uint32_t *st )
+{
+    uint32_t ndSt = 0;
+
+    OPCAlloc resDt(mtxData);
+    Subscr::MonitItem *mIt = (mItId < sess.mSubScr[0].mItems.size()) ? &sess.mSubScr[0].mItems[mItId] : NULL;
+    if(mUseRead) ndSt = (mIt && !str2uint(mIt->val.attr("nodata"))) ? str2uint(mIt->val.attr("Status")) : OpcUa_BadMonitoredItemIdInvalid;
+    else ndSt = (!mIt || !mIt->active || str2uint(mIt->val.attr("nodata"))) ? OpcUa_BadMonitoredItemIdInvalid :
+			(ndSt=mIt->st) ? ndSt : str2uint(mIt->val.attr("Status"));
+
+    if(!mIt || ndSt)	return EVAL_REAL;
+    else {
+	unsigned varTp = 0;
+	if((varTp=s2i(mIt->val.attr("VarTp")))&OpcUa_Array) {
+	    TArrayObj *curArr = new TArrayObj();
+	    string vEl;
+	    switch(varTp&OpcUa_VarMask) {
+		case OpcUa_Boolean:
+		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
+			curArr->arSet(iEl, bool(s2i(vEl)));
+		    break;
+		case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
+		case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:
+		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
+			curArr->arSet(iEl, (int64_t)s2ll(vEl));
+		    break;
+		case OpcUa_Float: case OpcUa_Double:
+		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
+			curArr->arSet(iEl, s2r(vEl));
+		    break;
+		default:
+		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
+			curArr->arSet(iEl, vEl);
+		    break;
+	    }
+	    return curArr;
+	} else return mIt->val.text();
+    }
+
+    if(st) *st = ndSt;
 }
 
 string TMdContr::authData( )
@@ -198,11 +240,19 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    //Establish connection
-    //try { tr.at().start(); } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
-
     servSt = 0;
     tmDelay = 0;
+
+    // Reenable parameters
+    try {
+	vector<string> pls;
+	list(pls);
+
+	isReload = true;
+	for(unsigned iP = 0; iP < pls.size(); iP++)
+	    if(at(pls[iP]).at().enableStat()) at(pls[iP]).at().enable();
+	isReload = false;
+    } catch(TError&) { isReload = false; throw; }
 
     //Start the gathering data task
     if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -247,151 +297,63 @@ void TMdContr::prmEn( const string &id, bool val )
 
     if(val && iPrm >= pHd.size()) pHd.push_back(at(id));
     if(!val && iPrm < pHd.size()) pHd.erase(pHd.begin()+iPrm);
-    if(startStat()) mPCfgCh = true;
 }
 
 void *TMdContr::Task( void *icntr )
 {
-    vector<string>	als;
-    string		nId;
     TMdContr &cntr = *(TMdContr *)icntr;
 
     cntr.prcSt = true;
     bool firstCall = true;
 
+    //Initiate the publish period and register the server status attribute reading
     if(cntr.period())	cntr.sess.mSubScr[0].publInterval = 1e-6*cntr.period();
-
-    XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
+    unsigned ServerStatusMIt = cntr.sess.mSubScr[0].monitoredItemAdd(OpcUa_Server_ServerStatus_State);
 
     try {
-	for(unsigned int it_cnt = cntr.pHd.size(); !TSYS::taskEndRun(); it_cnt++) {
+	for(unsigned int it_cnt = cntr.pHd.size(); !TSYS::taskEndRun(); ++it_cnt) {
 	    if(cntr.redntUse())	{ TSYS::taskSleep(1e9); continue; }
-	    if(cntr.tmDelay > 0){ TSYS::taskSleep(1e9); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
+	    if(cntr.tmDelay > 0){
+		MtxAlloc res(cntr.enRes, true);
+		for(unsigned iP = 0; iP < cntr.pHd.size(); ++iP)
+		    cntr.pHd[iP].at().upVal();
+		res.unlock();
+
+		TSYS::taskSleep(cntr.period()?cntr.period():1e9);
+		cntr.tmDelay = vmax(0,cntr.tmDelay-1);
+		continue;
+	    }
 
 	    cntr.callSt = true;
 
-	    if(!cntr.mUseRead) {
-		if(!cntr.sess.mSubScr[0].isActivated()) cntr.sess.mSubScr[0].activate(true);
+	    if(!cntr.mUseRead && !cntr.sess.mSubScr[0].isActivated())	cntr.sess.mSubScr[0].activate(true);
 
-		cntr.poll();
+	    cntr.acqErr.setVal(cntr.poll(cntr.mUseRead));
+	    bool isErr = cntr.acqErr.getVal().size();
 
-		// Parameters updating
-		AutoHD<TVal> vl;
-		uint32_t ndSt = 0;
+	    if(!isErr) {
+		//Getting the controller-server status
+		cntr.servSt = cntr.getValMIt(ServerStatusMIt).getI();
+
+		//Updating the parameters
 		MtxAlloc res(cntr.enRes, true);
-		OPCAlloc resDt(cntr.mtxData);
-		for(unsigned iP = 0; iP < cntr.pHd.size(); ++iP) {
-		    cntr.pHd[iP].at().vlList(als);
-		    for(unsigned iA = 0; iA < als.size(); ++iA) {
-			vl = cntr.pHd[iP].at().vlAt(als[iA]);
-			nId = TSYS::strLine(vl.at().fld().reserve(), 2);
-			if(nId.empty())	continue;
+		for(unsigned iP = 0; iP < cntr.pHd.size(); ++iP)
+		    cntr.pHd[iP].at().upVal();
 
-			resDt.lock();
-			XML_N *mIt = ((ndSt=str2uint(nId)) < cntr.sess.mSubScr[0].mItems.size()) ? &cntr.sess.mSubScr[0].mItems[ndSt] : NULL;
-			ndSt = (!mIt || !mIt->attr("statusCode").size()) ? OpcUa_BadMonitoredItemIdInvalid :
-				   (ndSt=str2uint(mIt->attr("statusCode"))) ? ndSt : str2uint(mIt->attr("Status"));
-			vl.at().setS((!mIt||ndSt)?EVAL_STR:mIt->text(), 0, true);
-			resDt.unlock();
-			vl.at().fld().setLen(ndSt);
-		    }
-		}
-
-		res.unlock();
-
-		firstCall = false;
-		cntr.callSt = false;
-
-		TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
-		continue;
-	    }
-
-	    unsigned int div = cntr.period() ? (unsigned int)(cntr.syncPer()/(1e-9*cntr.period())) : 0;
-
-	    MtxAlloc res(cntr.enRes, true);
-	    if(!req.childSize() || cntr.mPCfgCh || cntr.tmDelay == 0 || (div && (it_cnt%div) < cntr.pHd.size())) {
-		if(div && (it_cnt%div) < cntr.pHd.size()) cntr.pHd[it_cnt%div].at().attrPrc();
-
-		//Prepare nodes list
-		req.childClear();
-		req.childAdd("node")->setAttr("prmId", "OPC_UA_Server")->setAttr("prmAttr", "ServerStatus_State")->
-		    setAttr("nodeId", i2s(OpcUa_Server_ServerStatus_State))->setAttr("attributeId", i2s(AId_Value));
-		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
-		    if(firstCall || cntr.tmDelay == 0) cntr.pHd[iP].at().attrPrc();
-		    cntr.pHd[iP].at().vlList(als);
-		    for(unsigned iA = 0; iA < als.size(); iA++) {
-			nId = TSYS::strLine(cntr.pHd[iP].at().vlAt(als[iA]).at().fld().reserve(), 0);
-			if(nId.empty())	continue;
-			req.childAdd("node")->setAttr("prmId", cntr.pHd[iP].at().id())->
-			    setAttr("prmAttr", als[iA])->setAttr("nodeId", nId)->setAttr("attributeId", i2s(AId_Value));
-		    }
-		}
-		cntr.mPCfgCh = false;
-	    }
-	    res.unlock();
-
-	    cntr.reqService(req);
-
-	    //Place results
-	    bool isErr = !req.attr("err").empty();
-	    int ndSt = 0;
-	    AutoHD<TVal> vl;
-	    res.lock();
-	    for(unsigned iC = 0, iP = 0, varTp = 0; iC < req.childSize() && iP < cntr.pHd.size(); iC++) {
-		XML_N *cnX = req.childGet(iC);
-		if(cnX->attr("prmId") == "OPC_UA_Server" && cnX->attr("prmAttr") == "ServerStatus_State")
-		{ cntr.servSt = strtoul(cnX->text().c_str(),NULL,10); continue; }
-		while(cnX->attr("prmId") != cntr.pHd[iP].at().id()) iP++;
-		if(iP >= cntr.pHd.size()) break;
-		if(cntr.pHd[iP].at().vlPresent(cnX->attr("prmAttr"))) {
-		    ndSt = strtol(cnX->attr("Status").c_str(),NULL,0);
-		    vl = cntr.pHd[iP].at().vlAt(cnX->attr("prmAttr"));
-		    if((varTp=s2i(cnX->attr("VarTp")))&OpcUa_Array && !isErr && !ndSt) {
-			TArrayObj *curArr = new TArrayObj();
-			string vEl;
-			switch(varTp&OpcUa_VarMask) {
-			    case OpcUa_Boolean:
-				for(int off = 0, iEl = 0; (vEl=TSYS::strLine(cnX->text(),0,&off)).size(); iEl++)
-				    curArr->arSet(iEl, bool(s2i(vEl)));
-				break;
-			    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
-			    case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:
-				for(int off = 0, iEl = 0; (vEl=TSYS::strLine(cnX->text(),0,&off)).size(); iEl++)
-				    curArr->arSet(iEl, (int64_t)s2ll(vEl));
-				break;
-			    case OpcUa_Float: case OpcUa_Double:
-				for(int off = 0, iEl = 0; (vEl=TSYS::strLine(cnX->text(),0,&off)).size(); iEl++)
-				    curArr->arSet(iEl, s2r(vEl));
-				break;
-			    default:
-				for(int off = 0, iEl = 0; (vEl=TSYS::strLine(cnX->text(),0,&off)).size(); iEl++)
-				    curArr->arSet(iEl, vEl);
-				break;
-			}
-			vl.at().setO(curArr, 0, true);
-		    }
-		    else vl.at().setS((isErr||ndSt)?EVAL_STR:cnX->text(), 0, true);
-		    vl.at().fld().setLen(ndSt);
-		}
-	    }
-	    if(isErr) {
-		cntr.acqErr.setVal(req.attr("err"));
-		//mess_err(cntr.nodePath().c_str(), "%s", cntr.acqErr.getVal().c_str());
-		if(cntr.alSt <= 0) {
-		    cntr.alSt = 1;
-		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(cntr.acqErr.getVal(),"=").c_str()));
-		}
-		cntr.tmDelay = cntr.restTm();
-		continue;
-	    }
-	    else {
-		cntr.acqErr.setVal("");
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
 		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
 		}
 	    }
-	    res.unlock();
+	    else {
+		if(cntr.alSt <= 0) {
+		    cntr.alSt = 1;
+		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(cntr.acqErr.getVal(),"=").c_str()));
+		    cntr.sess.mSubScr[0].monitoredItemDel(-1, true, true);	//Clear subscription values
+		}
+		cntr.tmDelay = cntr.restTm();
+		continue;
+	    }
 
 	    firstCall = false;
 	    cntr.callSt = false;
@@ -405,8 +367,7 @@ void *TMdContr::Task( void *icntr )
 	try {
 	    if(!cntr.mUseRead) cntr.sess.mSubScr[0].activate(false);
 
-	    req.childClear();
-	    req.setAttr("id", "CloseALL");
+	    XML_N req("opc.tcp"); req.setAttr("id", "CloseALL");
 	    cntr.reqService(req);
 	} catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
@@ -442,9 +403,9 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 
 	    res.request(true);
 	    epLst.clear();
-	    for(unsigned i_s = 0; i_s < req.childSize(); i_s++)
-		for(unsigned i_d = 0; i_d < req.childGet(i_s)->childSize(); i_d++)
-		    epLst[req.childGet(i_s)->childGet(i_d)->text()] = SecuritySetting();
+	    for(unsigned iS = 0; iS < req.childSize(); iS++)
+		for(unsigned iD = 0; iD < req.childGet(iS)->childSize(); iD++)
+		    epLst[req.childGet(iS)->childGet(iD)->text()] = SecuritySetting();
 	    res.release();
 
 	    //Send GetEndpoints request for EndPoints list provide
@@ -672,35 +633,12 @@ TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat())	return;
+    if(enableStat() && !owner().isReload) return;
 
     TParamContr::enable();
 
-    attrPrc();
-
-    owner().prmEn(id(), true);
-}
-
-void TMdPrm::disable( )
-{
-    if(!enableStat())  return;
-
-    owner().prmEn(id(), false);
-
-    TParamContr::disable();
-
-    //Set EVAL to parameter attributes
-    vector<string> ls;
-    elem().fldList(ls);
-    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
-	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
-}
-
-string TMdPrm::attrPrc( )
-{
     MtxAlloc res(enRes);
 
-    bool srchOK = false;
     XML_N req("opc.tcp");
     vector<string> als;
 
@@ -716,16 +654,15 @@ string TMdPrm::attrPrc( )
 	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_Value));
 	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_AccessLevel));
 	owner().reqService(req);
-	if(!req.attr("err").empty()) {
+	//if(!req.attr("err").empty()) {
 	    //mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
-	    return req.attr("err");
-	}
+	    //return req.attr("err");
+	//}
 	if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))	continue;
 
 	// Variable node's attribute creation
 	if(s2i(req.childGet(0)->text()) == NC_Variable && s2i(req.childGet(4)->text())&ACS_Read) {
 	    als.push_back(snd);
-	    srchOK = false;
 
 	    //  Value type prepare
 	    TFld::Type vtp = TFld::String;
@@ -739,45 +676,41 @@ string TMdPrm::attrPrc( )
 
 	    res.lock();
 	    // Find for already presented attribute
-	    for(unsigned iA = 0; iA < pEl.fldSize() && !srchOK; iA++)
+	    string aid;
+	    for(unsigned iA = 0; iA < pEl.fldSize() && aid.empty(); iA++)
 		if(TSYS::strLine(pEl.fldAt(iA).reserve(),0) == snd) {
 		    if(pEl.fldAt(iA).type() != vtp)
 			try { pEl.fldDel(iA); break; }
 			catch(TError &err) { }
-		    srchOK = true;
+		    aid = pEl.fldAt(iA).name();
 		}
 
 	    // Create new attribute
-	    if(!srchOK) {
+	    if(aid.empty()) {
 		//  Prepare attribute id
-		string aid = TSYS::strEncode((isdigit(req.childGet(1)->text()[0])?TSYS::strParse(req.childGet(1)->text(),1,":"):req.childGet(1)->text()), TSYS::oscdID);
+		aid = TSYS::strEncode((isdigit(req.childGet(1)->text()[0])?TSYS::strParse(req.childGet(1)->text(),1,":"):req.childGet(1)->text()), TSYS::oscdID);
 		while(vlPresent(aid))	aid = TSYS::strLabEnum(aid);
 
-		//  Value type prepare
-		TFld::Type vtp = TFld::String;
-		if(s2i(req.childGet(3)->attr("VarTp"))&OpcUa_Array) vtp = TFld::Object;
-		else switch(s2i(req.childGet(3)->attr("VarTp"))&OpcUa_VarMask) {
-		    case OpcUa_Boolean:								vtp = TFld::Boolean;	break;
-		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
-		    case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:	vtp = TFld::Integer;	break;
-		    case OpcUa_Float: case OpcUa_Double:					vtp = TFld::Real;	break;
-		}
-
-		//  Browse name
-		string aNm = req.childGet(2)->text();
-		size_t nmPos = aNm.find(":");
-		if(nmPos!=string::npos) aNm.erase(0, nmPos+1);
-
-		//  Flags prepare
-		unsigned vflg = TVal::DirWrite;
-		if(!(s2i(req.childGet(4)->text())&ACS_Write))	vflg |= TFld::NoWrite;
-
-		//  Register to monitor
-		unsigned clntHndl = owner().sess.mSubScr[0].monitoredItemAdd(NodeId::fromAddr(snd));
-
-		pEl.fldAdd(new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,"","","","",
-		    (snd+"\n"+req.childGet(3)->attr("VarTp")+"\n"+u2s(clntHndl)).c_str()));
+		pEl.fldAdd(new TFld(aid.c_str(),"",vtp,TFld::NoFlag));
 	    }
+	    int el_id = pEl.fldId(aid);
+
+	    //  Flags prepare
+	    unsigned vflg = TVal::DirWrite|TVal::DirRead;
+	    if(!(s2i(req.childGet(4)->text())&ACS_Write))	vflg |= TFld::NoWrite;
+	    pEl.fldAt(el_id).setFlg(vflg);
+
+	    //  Browse name
+	    string aNm = req.childGet(2)->text();
+	    size_t nmPos = aNm.find(":");
+	    if(nmPos!=string::npos) aNm.erase(0, nmPos+1);
+	    pEl.fldAt(el_id).setDescr(aNm);
+
+	    //  Register to monitor
+	    unsigned clntHndl = owner().sess.mSubScr[0].monitoredItemAdd(NodeId::fromAddr(snd));
+
+	    pEl.fldAt(el_id).setReserve(snd+"\n"+req.childGet(3)->attr("VarTp")+"\n"+u2s(clntHndl));
+
 	    res.unlock();
 	}
 
@@ -804,7 +737,40 @@ string TMdPrm::attrPrc( )
 	++iA;
     }
 
-    return "";
+    owner().prmEn(id(), true);
+}
+
+void TMdPrm::disable( )
+{
+    if(!enableStat())  return;
+
+    owner().prmEn(id(), false);
+
+    TParamContr::disable();
+
+    //Set EVAL to parameter attributes
+    vector<string> ls;
+    elem().fldList(ls);
+    for(unsigned iEl = 0; iEl < ls.size(); iEl++)
+	vlAt(ls[iEl]).at().setS(EVAL_STR,0,true);
+}
+
+void TMdPrm::upVal( )
+{
+    vector<string>	als;
+    AutoHD<TVal> vl;
+    string	nId;
+    uint32_t ndSt = 0;
+
+    vlList(als);
+    for(unsigned iA = 0; iA < als.size(); ++iA) {
+	vl = vlAt(als[iA]);
+	nId = TSYS::strLine(vl.at().fld().reserve(), 2);
+	if(nId.empty())	continue;
+
+	vl.at().set(owner().getValMIt(str2uint(nId),&ndSt), 0, true);
+	vl.at().fld().setLen(ndSt);
+    }
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
@@ -907,29 +873,33 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if(val.name() != "err")	return;
-
     if(!enableStat() || !owner().startStat()) {
-	if(!enableStat())		val.setS(_("1:Parameter disabled."),0,true);
-	else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."),0,true);
+	if(val.name() == "err") {
+	    if(!enableStat())		val.setS(_("1:Parameter disabled."),0,true);
+	    else if(!owner().startStat()) val.setS(_("2:Acquisition stopped."),0,true);
+	}
+	else val.setS(EVAL_STR, 0, true);
 	return;
     }
+
     if(owner().redntUse()) return;
 
-    if(!owner().acqErr.getVal().empty()) val.setS(owner().acqErr.getVal(),0,true);
-    else {
-	//Check remote attributes for error status
-	uint32_t firstErr = 0;
-	vector<uint32_t> astls;
-	MtxAlloc res(enRes, true);
-	for(unsigned iA = 0; iA < pEl.fldSize(); iA++) {
-	    astls.push_back(pEl.fldAt(iA).len());
-	    if(pEl.fldAt(iA).len() && !firstErr) firstErr = pEl.fldAt(iA).len();
+    if(val.name() == "err") {
+	if(!owner().acqErr.getVal().empty()) val.setS(owner().acqErr.getVal(),0,true);
+	else {
+	    //Checking the remote attributes for the error status
+	    uint32_t firstErr = 0;
+	    vector<uint32_t> astls;
+	    MtxAlloc res(enRes, true);
+	    for(unsigned iA = 0; iA < pEl.fldSize(); iA++) {
+		astls.push_back(pEl.fldAt(iA).len());
+		if(pEl.fldAt(iA).len() && !firstErr) firstErr = pEl.fldAt(iA).len();
+	    }
+	    res.unlock();
+	    string aLs;
+	    for(unsigned iA = 0; iA < astls.size(); iA++) aLs += TSYS::strMess(":0x%x",astls[iA]);
+	    val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
 	}
-	res.unlock();
-	string aLs;
-	for(unsigned iA = 0; iA < astls.size(); iA++) aLs += TSYS::strMess(":0x%x",astls[iA]);
-	val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
     }
 }
 

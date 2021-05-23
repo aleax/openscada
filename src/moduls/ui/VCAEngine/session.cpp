@@ -2536,7 +2536,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	//Visualizer specific attributes creation at the request
 	if(!attrPresent(tStr) && opt->attr("aNm").size()) {
 	    parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm").c_str(),(TFld::Type)s2i(opt->attr("aTp")),
-			s2i(opt->attr("aFlg"))|Attr::IsUser,"","",opt->attr("aVls").c_str(),opt->attr("aNms").c_str()));
+			s2i(opt->attr("aFlg"))|Attr::IsUser,"",opt->text().c_str(),opt->attr("aVls").c_str(),opt->attr("aNms").c_str()));
 	    parent().at().attrAt(tStr).at().setModif(1);
 	    parent().at().modif();
 	}

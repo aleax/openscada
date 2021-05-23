@@ -3,17 +3,29 @@
 /********************************************************************************
  *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.1.10								*
+ *   Version: 2.1.20								*
+ *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
  *	* The function XML_N::childClear() appended by a result of returning	*
  *	  the same XML_N object for concatenation.				*
  *	CLIENT:									*
+ *	* Client::Subscr::MonitItem is appended as a replace of XML_N		*
+ *	  in the monitored items representing.					*
+ *	* Values acquisition is unified in their reading in the function	*
+ *	  Client::poll() both for the Read and Publish modes.			*
  *	* Appended for the CHUNKS implementation both for requests and responses.
  *	* Completely revised and cleared in the common requesting function	*
  *	  reqService() from doubling the arguments and parameters, appended for	*
  *	  restoring sessions at reconnection the secure channel.		*
  *	* The Read request set to the plain requesting with limition on	CHUNKS.	*
+ *	* Client::SClntSess::{sessOpen,lstMessReq} renamed to			*
+ *	  {secChnlOpenTm,secLstMessReqTm} and prevented from clearing.		*
+ *	* OpcUa_ClntPublishResentCntr is set by default to 2.			*
  *	SERVER:									*
+ *	* The session checking of all messages appended of preventing of using	*
+ *	  foreign connections with the same secure channel and session.		*
+ *	* The Publish processing prevented on processing wrong and foreign	*
+ *	  Subscriptions, by checking inPrtId, sesTokId and isSecCnlAct.		*
  *	* Subscriptions processing returned to they processing in a separate	*
  *	  task and the function subScrCycle() for true counting all timeouts,	*
  *	  and processing the periodicity of subscription and publishing returned*
@@ -104,7 +116,7 @@ namespace OPC
 #define OpcUa_ProtocolVersion		0
 #define OpcUa_SecCnlLimit		10
 #define OpcUa_SecCnlDefLifeTime		300000
-#define OpcUa_ClntPublishResentCntr	10
+#define OpcUa_ClntPublishResentCntr	2
 #define OpcUa_ServerMaxPublishQueue	10
 
 #define OpcUa_NPosID		0xFFFFFFFF
@@ -484,6 +496,7 @@ class NodeId
     NodeId( const NodeId &node ){ operator=(node); }
     ~NodeId( );
 
+    bool operator==( const NodeId &node );
     NodeId &operator=( const NodeId &node );
 
     Type type( ) const		{ return mTp; }
@@ -591,6 +604,29 @@ class Client: public UA
     class Subscr
     {
 	public:
+	//Data
+	//* Monitored item
+	class MonitItem
+	{
+	    public:
+	    //Methods
+	    MonitItem( NodeId ind, uint32_t iaid, MonitoringMode imd = MM_REPORTING ) :
+		md(imd), nd(ind), aid(iaid), smplItv(0), qSz(1), active(false)	{ }
+
+	    //Attributes
+	    MonitoringMode md;		//Monitoring mode
+	    NodeId	nd;		//Target node: <EMPTY>-free monitored item
+	    uint32_t	aid;		//The node's attribute ID
+
+	    double	smplItv;	//Sample interval
+	    uint32_t	qSz;		//Queue size
+
+	    bool	active;		//Active item
+	    uint32_t	st;		//Status
+
+	    XML_N	val;		//Value
+	};
+
 	//Methods
 	Subscr( Client *iclnt, double ipublInterval = 1e3 ) :
 	    publEn(true), publInterval(ipublInterval), subScrId(0), lifetimeCnt(2400),
@@ -601,7 +637,7 @@ class Client: public UA
 	void activate( bool vl, bool onlyLocally = false );
 
 	int monitoredItemAdd( const NodeId &nd, AttrIds aId = AId_Value, MonitoringMode mMode = MM_REPORTING );
-	void monitoredItemDel( int32_t mItId, bool localDeactivation = false );
+	void monitoredItemDel( int32_t mItId, bool localDeactivation = false, bool onlyNoData = false );
 
 	//Attributes
 	bool	publEn;		//Enable publishing
@@ -613,10 +649,7 @@ class Client: public UA
 		maxNtfPerPubl;	//Maximum notifications per single Publish response
 	uint8_t	pr;		//Priority
 
-	vector<XML_N>	mItems;	//The monitored items' attributes and their specific values:
-				// * "addr" - address of the node (NodeId): <EMPTY>-free monitored item
-				// * "statusCode" - the monitored item initiation status: 0-GOOD, <EMPTY>-not initiated yet
-				// * "Status" - readed value status: 0-GOOD
+	vector<MonitItem> mItems;	//The monitored items
 	vector<uint32_t> mSeqToAcq;
 	int64_t	lstPublTm;	//Last publication response time
 
@@ -627,7 +660,7 @@ class Client: public UA
     {
 	public:
 	//Methods
-	SClntSess( )	{ clearSess(); clearSecCnl(true); }
+	SClntSess( ) : secChnlOpenTm(0), secLstMessReqTm(0)	{ clearSess(); clearSecCnl(true); }
 
 	void clearSecCnl( bool inclEP = false ) {
 	    servRcvBufSz = servSndBufSz = servMsgMaxSz = servChunkMaxCnt = 0;
@@ -639,7 +672,7 @@ class Client: public UA
 	    sqNumb = 33;
 	    sqReqId = 1;
 	    secLifeTime = 0;
-	    sessOpen = lstMessReq = 0;
+	    //secChnlOpenTm = secLstMessReqTm = 0;
 
 	    if(inclEP) { endPoint = ""; endPointDscr.clear(); }
 	}
@@ -655,20 +688,17 @@ class Client: public UA
 	uint32_t	servRcvBufSz, servSndBufSz, servMsgMaxSz, servChunkMaxCnt;
 	string		endPoint;
 	XML_N		endPointDscr;
-	uint32_t	secChnl;
-	uint32_t	secToken;
+	uint32_t	secChnl, secToken;
 	int		secLifeTime;
 	bool		secChnlChanged;
-	uint32_t	sqNumb;
-	uint32_t	sqReqId;
-	uint32_t	reqHndl;
-	string		sesId;
-	string		authTkId;
-	int64_t		sessOpen, lstMessReq;
-	double		sesLifeTime;
-	string		servCert;
+	uint32_t	sqNumb, sqReqId, reqHndl;
 	string		secPolicy;
 	char		secMessMode;
+	int64_t		secChnlOpenTm, secLstMessReqTm;
+	string		sesId;
+	string		authTkId;
+	double		sesLifeTime;
+	string		servCert;
 	string		clKey, servKey, servNonce;
 
 	vector<Subscr>	mSubScr;	//Subscriptions list
@@ -693,8 +723,10 @@ class Client: public UA
 					//{User}\n{Password}	- by user and password
     virtual uint8_t publishReqsPool( )	{ return 2; }	//Pool of the publish requests for the server
 
-    virtual void poll( );		//To call in some cycle for processing the subscriptions
-					//and user code in it reimplementation
+    virtual string poll( bool byRead = false );		//To call in some cycle for processing the subscriptions
+							//  and user code in it reimplementation
+							//<byRead> is designed for direct reading the registered monitored items
+							//  by the "Read" function
 
     // External imlementations
     virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 ) = 0;

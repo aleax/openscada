@@ -128,7 +128,7 @@ void TMdContr::postDisable( int flag )
 	    //Delete logical parameter's io table
 	    string tbl = DB()+"."+cfg("PRM_BD_L").getS()+"_io";
 	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl,true);
+	    SYS->db().at().close(tbl, true);
 	}
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

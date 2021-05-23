@@ -352,6 +352,16 @@ NodeId::~NodeId( )
     //if(type() != NodeId::Numeric) mTp = NodeId::Numeric;
 }
 
+bool NodeId::operator==( const NodeId &node )
+{
+    if(type() != node.type())	return false;
+    switch(type()) {
+	case NodeId::Numeric:	return (numbVal() == node.numbVal());
+	case NodeId::String:	return (strVal() == node.strVal());
+    }
+    return true;
+}
+
 NodeId &NodeId::operator=( const NodeId &node )
 {
     setNs(node.ns());
@@ -674,8 +684,8 @@ void UA::iDataValue( const string &buf, int &off, XML_N &nd )
     if(em&0x01) {					//Value
 	uint8_t emv;
 	nd.setText(iVariant(buf,off,&emv));
-	nd.setAttr("VarTp", uint2str(emv));
-    }
+	nd.setAttr("VarTp", uint2str(emv))->setAttr("nodata", "");
+    } else nd.setAttr("nodata", "1");
     if(em&0x02)	nd.setAttr("Status", strMess("0x%x",iNu(buf,off,4)));
     if(em&0x04)	nd.setAttr("SourceTimestamp", ll2str(iTm(buf,off)));
     if(em&0x10)	nd.setAttr("SourcePicoseconds", uint2str(iNu(buf,off,2)));
@@ -1208,32 +1218,69 @@ Client::~Client( )
     pthread_mutex_destroy(&mtxData);
 }
 
-void Client::poll( )
+string Client::poll( bool byRead )
 {
-    //Checking for the input channel activity
-    XML_N req("opc.tcp"); req.setAttr("id", "Poll");
-    reqService(req);
+    XML_N req("opc.tcp");
 
-    //Checking for the subscriptions
-    for(unsigned iSubscr = 0; iSubscr < sess.mSubScr.size(); ++iSubscr) {
-	Subscr &curS = sess.mSubScr[iSubscr];
-	if(!curS.subScrId) continue;
+    if(byRead) {
+	req.setAttr("id", "Read")->setAttr("timestampsToReturn", int2str(TS_NEITHER));
 
-	// Checking for loss all publish requests at missing the publish responses long time
-	if(1e-6*(curTime()-curS.lstPublTm) > OpcUa_ClntPublishResentCntr*1e-3*curS.maxKeepAliveCnt*curS.publInterval) {
-	    sess.mPublSeqs.clear();
-	    curS.lstPublTm = curTime();
-	}
+	//Checking for the subscriptions
+	for(unsigned iSubscr = 0; iSubscr < sess.mSubScr.size(); ++iSubscr) {
+	    Subscr &curS = sess.mSubScr[iSubscr];
 
-	// Sending the publish requests
-	while(sess.mPublSeqs.size() < publishReqsPool()) {
-	    req.childClear()->setAttr("id", "Publish");
-	    for(unsigned iAck = 0; iAck < curS.mSeqToAcq.size(); ++iAck)
-		req.childAdd("Ack")->setAttr("subScrId", uint2str(curS.subScrId))->setText(uint2str(curS.mSeqToAcq[iAck]));
-	    curS.mSeqToAcq.clear();
+	    req.childClear();
+	    OPCAlloc res(mtxData, true);
+	    for(unsigned mIt = 0; mIt < sess.mSubScr[iSubscr].mItems.size(); ++mIt) {
+		Subscr::MonitItem &curIt = sess.mSubScr[iSubscr].mItems[mIt];
+		if(curIt.nd.isNull())	continue;
+		req.childAdd("node")->
+			setAttr("mItId", uint2str(mIt))->
+			setAttr("nodeId", curIt.nd.toAddr())->
+			setAttr("attributeId", uint2str(curIt.aid));
+	    }
+	    res.unlock();
+
 	    reqService(req);
+
+	    res.lock();
+	    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
+		XML_N *chO = req.childGet(iCh);
+		if(str2uint(chO->attr("mItId")) >= sess.mSubScr[iSubscr].mItems.size())	continue;
+		Subscr::MonitItem &mO = sess.mSubScr[iSubscr].mItems[str2uint(chO->attr("mItId"))];
+		mO.val = *chO;
+	    }
+	    res.unlock();
 	}
     }
+    else {
+	//Checking for the input channel activity
+	req.setAttr("id", "Poll");
+	reqService(req);
+
+	//Checking for the subscriptions
+	for(unsigned iSubscr = 0; iSubscr < sess.mSubScr.size() && req.attr("err").empty(); ++iSubscr) {
+	    Subscr &curS = sess.mSubScr[iSubscr];
+	    if(!curS.subScrId) continue;
+
+	    // Checking for loss all publish requests at missing the publish responses long time
+	    if(1e-6*(curTime()-curS.lstPublTm) > OpcUa_ClntPublishResentCntr*1e-3*curS.maxKeepAliveCnt*curS.publInterval) {
+		sess.mPublSeqs.clear();
+		curS.lstPublTm = curTime();
+	    }
+
+	    // Sending the publish requests
+	    while(sess.mPublSeqs.size() < publishReqsPool() && req.attr("err").empty()) {
+		req.childClear()->setAttr("id", "Publish");
+		for(unsigned iAck = 0; iAck < curS.mSeqToAcq.size(); ++iAck)
+		    req.childAdd("Ack")->setAttr("subScrId", uint2str(curS.subScrId))->setText(uint2str(curS.mSeqToAcq[iAck]));
+		curS.mSeqToAcq.clear();	//????
+		reqService(req);
+	    }
+	}
+    }
+
+    return req.attr("err");
 }
 
 void Client::protIO( XML_N &io )
@@ -1618,7 +1665,7 @@ void Client::protIO( XML_N &io )
 		    oNodeId(reqBody, iTpId);				//TypeId request
 									//>> Request Header
 		    oNodeId(reqBody, NodeId::fromAddr(sess.authTkId));	//Session AuthenticationToken
-		    oTm(reqBody, (sess.lstMessReq=curTime()));		//timestamp
+		    oTm(reqBody, (sess.secLstMessReqTm=curTime()));		//timestamp
 		    oN(reqBody, (sess.reqHndl++), 4);			//requestHandle
 		    oNu(reqBody, 0, 4);					//returnDiagnostics
 		    oS(reqBody, "");					//auditEntryId
@@ -1697,7 +1744,7 @@ void Client::protIO( XML_N &io )
 		    oNodeId(rez, iTpId);				//TypeId request
 									//>> Request Header
 		    oNodeId(rez, NodeId::fromAddr(sess.authTkId));	//Session AuthenticationToken
-		    oTm(rez, (sess.lstMessReq=curTime()));		//timestamp
+		    oTm(rez, (sess.secLstMessReqTm=curTime()));		//timestamp
 		    //io.setAttr("ReqHandle", uint2str(ReqHandle));
 		    oN(rez, (sess.reqHndl++), 4);			//requestHandle
 		    oNu(rez, 0, 4);					//returnDiagnostics
@@ -1809,7 +1856,7 @@ void Client::protIO( XML_N &io )
 			if(!asymmetricVerify(rb.substr(0,off),rb.substr(off),sess.servCert))	//Check Signature
 			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
 		    }
-		    sess.sessOpen = curTime();
+		    sess.secChnlOpenTm = curTime();
 		    waitResponse = false;
 		}
 		else if(rez.compare(0,3,"MSG") != 0) {
@@ -2177,7 +2224,7 @@ void Client::protIO( XML_N &io )
 				OPCAlloc res(mtxData, true);
 				for(int iNtfIt = 0; iNtfIt < ntfItN; ++iNtfIt) {
 				    uint32_t clHdl = iNu(rb, off, 4);	//   clientHandle
-				    iDataValue(rb, off, (clHdl<curSbscr->mItems.size())?curSbscr->mItems[clHdl]:tObj);
+				    iDataValue(rb, off, (clHdl<curSbscr->mItems.size())?curSbscr->mItems[clHdl].val:tObj);
 				}
 				iN(rb, off, 4);			//  diagnosticInfos []
 									//  !!!!: implement for parsing the non zero info
@@ -2211,8 +2258,8 @@ void Client::reqService( XML_N &io )
 {
     //Common timings
     int64_t curTm = curTime();
-    bool isScnlLive = ((curTm-sess.sessOpen)/1000ll < sess.secLifeTime);
-    bool isSessLive = ((curTm-sess.lstMessReq)/1000ll < sess.sesLifeTime);
+    bool isScnlLive = ((curTm-sess.secChnlOpenTm)/1000ll < sess.secLifeTime);
+    bool isSessLive = ((curTm-sess.secLstMessReqTm)/1000ll < sess.sesLifeTime);
 
     string ireq = io.attr("id");
     io.setAttr("err", "");
@@ -2293,7 +2340,7 @@ void Client::reqService( XML_N &io )
 	}
     }
     //Sending the channel renew request at 75% remaining life time
-    else if(1e-3*(curTm-sess.sessOpen) >= 0.75*sess.secLifeTime) {
+    else if(1e-3*(curTm-sess.secChnlOpenTm) >= 0.75*sess.secLifeTime) {
 	req.setAttr("id", "OPN")->
 	    setAttr("ReqType", int2str(SC_RENEW))->
 	    setAttr("SecLifeTm", int2str(OpcUa_SecCnlDefLifeTime));
@@ -2324,7 +2371,10 @@ void Client::reqService( XML_N &io )
     protIO(io);
 
     //Clearing the connection completly at the original request error OpcUa_BadInvalidArgument
-    if(str2uint(io.attr("err")) == OpcUa_BadInvalidArgument) { sess.clearSess(); sess.clearSecCnl(); }
+    if(str2uint(io.attr("err")) == OpcUa_BadInvalidArgument || str2uint(io.attr("err")) == OpcUa_BadSecureChannelIdInvalid) {
+	//sess.clearSess();
+	sess.clearSecCnl();
+    }
 }
 
 //***************************************************************
@@ -2338,24 +2388,23 @@ int Client::Subscr::monitoredItemAdd( const NodeId &nd, AttrIds aId, MonitoringM
 
     //Appending for new item
     if(!nd.isNull()) {
-	string ndAddr = nd.toAddr();
 	int emptyIt = -1;
 	OPCAlloc res(clnt->mtxData, true);
 	for(unsigned iIt = 0; iIt < mItems.size() /*&& hndl < 0*/; iIt++)
-	    if(mItems[iIt].attr("addr") == ndAddr && str2uint(mItems[iIt].attr("aId")) == aId)
+	    if(mItems[iIt].nd == nd && mItems[iIt].aid == aId)
 		hndl = iIt;
-	    else if(mItems[iIt].attr("addr").empty() && emptyIt < 0)	emptyIt = iIt;
+	    else if(mItems[iIt].nd.isNull() && emptyIt < 0)	emptyIt = iIt;
 
 	if(hndl < 0) {
 	    if(emptyIt >= 0)	hndl = emptyIt;
-	    else { mItems.push_back(XML_N("mIt")); hndl = mItems.size() - 1; }
-	    XML_N &itO = mItems[hndl];
-	    itO.setAttr("addr", ndAddr)->
-		setAttr("aId", uint2str(aId))->
-		setAttr("mMode", uint2str(mMode))->
-		setAttr("smplInt", real2str(publInterval))->
-		setAttr("qSz", "1")->
-		setAttr("statusCode", "")->setAttr("Status", "");
+	    else { mItems.push_back(MonitItem(nd,aId,mMode)); hndl = mItems.size() - 1; }
+	    MonitItem &itO = mItems[hndl];
+	    itO.md = mMode;
+	    itO.smplItv = publInterval;
+	    itO.qSz = 1;
+	    itO.active = false;
+	    itO.st = 0;
+	    itO.val.setAttr("nodata", "1");
 	}
     }
 
@@ -2366,41 +2415,47 @@ int Client::Subscr::monitoredItemAdd( const NodeId &nd, AttrIds aId, MonitoringM
 	    setAttr("tmstmpToRet", uint2str(TS_NEITHER));
 	OPCAlloc res(clnt->mtxData, true);
 	for(unsigned iIt = ((hndl>=0)?hndl:0); iIt < ((hndl>=0)?hndl+1:mItems.size()); ++iIt)
-	    if(mItems[iIt].attr("statusCode").empty())	//Not registered still
+	    if(!mItems[iIt].active)	//Not registered still
 		req.childAdd("mIt")->
-		    setAttr("aId",mItems[iIt].attr("aId"))->
-		    setAttr("mMode",mItems[iIt].attr("mMode"))->
-		    setAttr("hndl",uint2str(iIt))->
-		    setAttr("smplInt", mItems[iIt].attr("smplInt"))->
-		    setAttr("qSz", mItems[iIt].attr("qSz"))->
-		    setText(mItems[iIt].attr("addr"));
-	res.lock();
-
-	clnt->reqService(req);
-
-	// Processing the result
+		    setAttr("aId", uint2str(mItems[iIt].aid))->
+		    setAttr("mMode", uint2str(mItems[iIt].md))->
+		    setAttr("hndl", uint2str(iIt))->
+		    setAttr("smplInt", real2str(mItems[iIt].smplItv))->
+		    setAttr("qSz", uint2str(mItems[iIt].qSz))->
+		    setText(mItems[iIt].nd.toAddr());
 	res.unlock();
-	for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
-	    XML_N *chO = req.childGet(iCh);
-	    uint32_t itId = str2uint(chO->attr("hndl"));
-	    if(itId >= mItems.size()) continue;
-	    mItems[itId].setAttr("statusCode", chO->attr("statusCode"))->setAttr("Status", "")->
-			setAttr("itId", chO->attr("itId"))->
-			setAttr("smplInt", chO->attr("smplInt"))->
-			setAttr("qSz", chO->attr("qSz"));
+
+	if(req.childSize()) {
+	    clnt->reqService(req);
+
+	    // Processing the result
+	    res.lock();
+	    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
+		XML_N *chO = req.childGet(iCh);
+		uint32_t itId = str2uint(chO->attr("hndl"));
+		if(itId >= mItems.size()) continue;
+		mItems[itId].active = true;
+		mItems[itId].st = str2uint(chO->attr("statusCode"));
+		mItems[itId].smplItv = str2real(chO->attr("smplInt"));
+		mItems[itId].qSz = str2uint(chO->attr("qSz"));
+		mItems[itId].val.setAttr("nodata", "1");
+	    }
 	}
     }
 
     return hndl;
 }
 
-void Client::Subscr::monitoredItemDel( int32_t mItId, bool localDeactivation )
+void Client::Subscr::monitoredItemDel( int32_t mItId, bool localDeactivation, bool onlyNoData )
 {
     OPCAlloc res(clnt->mtxData, true);
     if(mItId >= (int)mItems.size())	return;
 
     for(unsigned iIt = ((mItId>=0)?mItId:0); iIt < ((mItId>=0)?mItId+1:mItems.size()); ++iIt)
-	if(localDeactivation) mItems[iIt].setAttr("statusCode", "")->setAttr("Status", "");
+	if(localDeactivation) {
+	    if(!onlyNoData) { mItems[iIt].active = false; mItems[iIt].st = 0; }
+	    mItems[iIt].val.setAttr("nodata", "1");
+	}
 	else {
 	    XML_N req("opc.tcp");
 	    req.setAttr("id", "DeleteMonitoredItems")->
@@ -2411,8 +2466,12 @@ void Client::Subscr::monitoredItemDel( int32_t mItId, bool localDeactivation )
 	    //Processing the result
 	    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
 		XML_N *chO = req.childGet(iCh);
-		if(str2uint(chO->attr("statusCode")) == 0 && mItId == str2uint(chO->attr("mIt")))
-		    mItems[mItId].setAttr("addr", "")->setAttr("statusCode", "")->setAttr("Status", "");
+		if(str2uint(chO->attr("statusCode")) == 0 && mItId == str2uint(chO->attr("mIt"))) {
+		    mItems[mItId].nd = NodeId();
+		    mItems[mItId].active = false;
+		    mItems[mItId].st = 0;
+		    mItems[mItId].val.setAttr("nodata", "1");
+		}
 	    }
 	}
 }
@@ -3713,8 +3772,9 @@ nextReq:
 			}
 			if(findOK || s->publishReqs.size() == 1) {
 			    unsigned prSS = wep->mSubScr.size();
-			    for(unsigned iSs = 0; iSs < wep->mSubScr.size(); ++iSs)
-				if((wep->mSubScr[iSs].toInit || wep->mSubScr[iSs].st == SS_LATE || wep->mSubScr[iSs].st == SS_KEEPALIVE) &&
+			    for(unsigned iSs = 0; inPrtId == s->inPrtId && iSs < wep->mSubScr.size(); ++iSs)
+				if(wep->mSubScr[iSs].sess == sesTokId &&
+					(wep->mSubScr[iSs].toInit || wep->mSubScr[iSs].st == SS_LATE || wep->mSubScr[iSs].st == SS_KEEPALIVE) &&
 					(prSS == wep->mSubScr.size() || wep->mSubScr[iSs].pr > wep->mSubScr[prSS].pr))
 				    prSS = iSs;
 			    if(prSS < wep->mSubScr.size()) {
@@ -4213,7 +4273,7 @@ void Server::EP::subScrCycle( unsigned cntr )
 	if(scr.st == SS_CLOSED) continue;
 	if(!(s=sessGet_(scr.sess)) || !s->tAccess) { scr.setState(SS_CLOSED); continue; }
 	// Checking for the security channel correspondence
-	s->isSecCnlActive(this);
+	bool isSecCnlAct = s->isSecCnlActive(this);
 
 	// Monitored items processing
 	bool hasData = false;
@@ -4237,7 +4297,7 @@ void Server::EP::subScrCycle( unsigned cntr )
 		hasData = true;
 	    }
 	}
-	if(hasData) scr.setState(SS_LATE);
+	if(hasData && isSecCnlAct) scr.setState(SS_LATE);
 
 	if(cntr%std::max(1u,(unsigned)(scr.publInterval/subscrProcPer())))	continue;
 
@@ -4325,12 +4385,19 @@ uint32_t Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const s
     //Checking for the target session presence
     if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess) {
 	mSess[sid-1].tAccess = curTime();
+	// Error the present session using at changing the physical channel
+	if(check && inPrtId != mSess[sid-1].inPrtId)	return OpcUa_BadSecureChannelIdInvalid;
 	mSess[sid-1].inPrtId = inPrtId;
 	if(!check || secCnl == mSess[sid-1].secCnl) {
+	    // New sequre channel binding to the actual session
 	    if(secCnl != mSess[sid-1].secCnl) {
 		mSess[sid-1].secCnl = secCnl;
 		setPublish(inPrtId);
 		mSess[sid-1].publishReqs.clear();
+
+		for(unsigned iS = 0; iS < mSess.size(); ++iS)
+		    if(iS != (sid-1) && mSess[iS].inPrtId == inPrtId)
+			mSess[iS].inPrtId = "";
 	    }
 	    rez = 0;
 	}

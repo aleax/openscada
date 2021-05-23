@@ -1617,7 +1617,8 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 				     setAttr("aVls", "0;1;2")->setAttr("aNms", _("Original size;Maximize;Full screen"));
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fkeepAspectRatio")->
 				     setAttr("aNm", _("Keep aspect ratio on the scaling"))->
-				     setAttr("aTp", i2s(TFld::Boolean));
+				     setAttr("aTp", i2s(TFld::Boolean))->
+				     setText("1");
 	reqSpc.childAdd("activate")->setAttr("path", "/%2fserv%2fattr%2fstBarNoShow")->
 				     setAttr("aNm", _("Do not show the status bar"))->
 				     setAttr("aTp", i2s(TFld::Boolean));

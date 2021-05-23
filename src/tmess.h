@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -189,7 +189,7 @@ class TMess
 	unsigned mTranslEnMan	:1;
 	unsigned mTranslSet	:1;
 
-	ResMtx	mRes;
+	ResMtx	dtRes, mRes;
 
 	MtxString	mLang2CodeBase, mLang2Code;
 
