@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.1.20								*
+ *   Version: 2.1.21								*
  *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
  *	* The function XML_N::childClear() appended by a result of returning	*
@@ -491,8 +491,8 @@ class NodeId
 
     //Methods
     NodeId( ) : mNs(0), mTp(Numeric), numb(0)	{ }
-    NodeId( uint32_t in, uint16_t ins = 0 );
-    NodeId( const string &istr, uint16_t ins = 0, Type tp = String );
+    NodeId( uint32_t n, uint16_t ns = 0 );
+    NodeId( const string &str, uint16_t ns = 0, Type tp = String );
     NodeId( const NodeId &node ){ operator=(node); }
     ~NodeId( );
 
@@ -506,9 +506,9 @@ class NodeId
     uint32_t numbVal( ) const;
     string strVal( ) const;
 
-    void setNs( uint16_t ins )	{ mNs = ins; }
-    void setNumbVal( uint32_t in );
-    void setStrVal( const string &istr, Type tp = String );
+    void setNs( uint16_t ns )	{ mNs = ns; }
+    void setNumbVal( uint32_t n );
+    void setStrVal( const string &str, Type tp = String );
 
     static NodeId fromAddr( const string &strAddr );
     string toAddr( ) const;
@@ -531,7 +531,7 @@ class UA
     class SecuritySetting
     {
 	public:
-	SecuritySetting( const string &iplc, int8_t imMode ) : policy(iplc), messageMode((MessageSecurityMode)imMode) { }
+	SecuritySetting( const string &plc, int8_t mMode ) : policy(plc), messageMode((MessageSecurityMode)mMode) { }
 	SecuritySetting( ) : policy("None"), messageMode(MS_None)	{ }
 
 	string		policy;
@@ -616,7 +616,7 @@ class Client: public UA
 	    //Attributes
 	    MonitoringMode md;		//Monitoring mode
 	    NodeId	nd;		//Target node: <EMPTY>-free monitored item
-	    uint32_t	aid;		//The node's attribute ID
+	    uint32_t	aid;		//Attribute ID of the node
 
 	    double	smplItv;	//Sample interval
 	    uint32_t	qSz;		//Queue size
@@ -624,7 +624,7 @@ class Client: public UA
 	    bool	active;		//Active item
 	    uint32_t	st;		//Status
 
-	    XML_N	val;		//Value
+	    XML_N	val;		//Value: the attribute "nodata" presence means the data missing;
 	};
 
 	//Methods
@@ -642,18 +642,17 @@ class Client: public UA
 	//Attributes
 	bool	publEn;		//Enable publishing
 	double	publInterval;	//Publish interval, milliseconds
-	uint32_t subScrId,	//subscriptionId
-		lifetimeCnt,	//Counter after that miss notifications from client remove the object
-		maxKeepAliveCnt,//Counter after that need to send empty publish response and
-				//	send StatusChangeNotification with Bad_Timeout
+	uint32_t subScrId,	//Subscription identifier: <ZERO>-inactive object
+		lifetimeCnt,	//Counter, at which and in the absence of notifications, the client deletes this object
+		maxKeepAliveCnt,//Counter for which you need to send an empty publication response
 		maxNtfPerPubl;	//Maximum notifications per single Publish response
 	uint8_t	pr;		//Priority
 
-	vector<MonitItem> mItems;	//The monitored items
-	vector<uint32_t> mSeqToAcq;
+	vector<MonitItem> mItems; //The monitored items
+	vector<uint32_t> mSeqToAcq; //Register of the sequences of the Publish responses need to be acknowledged in a near Publish request;
 	int64_t	lstPublTm;	//Last publication response time
 
-	Client *clnt;
+	Client *clnt;		//Direct link to the Client object
     };
 
     class SClntSess
@@ -685,24 +684,26 @@ class Client: public UA
 		mSubScr[iSubscr].activate(false, true);
 	}
 
-	uint32_t	servRcvBufSz, servSndBufSz, servMsgMaxSz, servChunkMaxCnt;
-	string		endPoint;
-	XML_N		endPointDscr;
-	uint32_t	secChnl, secToken;
-	int		secLifeTime;
-	bool		secChnlChanged;
-	uint32_t	sqNumb, sqReqId, reqHndl;
-	string		secPolicy;
-	char		secMessMode;
-	int64_t		secChnlOpenTm, secLstMessReqTm;
-	string		sesId;
-	string		authTkId;
-	double		sesLifeTime;
-	string		servCert;
-	string		clKey, servKey, servNonce;
+	uint32_t	servRcvBufSz,		//Buffer size of the server receiver
+			servSndBufSz,		//Buffer size of the server transmitter
+			servMsgMaxSz,		//Maximum message size of the server
+			servChunkMaxCnt;	//Maximum chunks number of the server
+	string		endPoint;		//End Point
+	XML_N		endPointDscr;		//End Point description
+	uint32_t	secChnl, secToken;	//Security channel index and token
+	int		secLifeTime;		//Secure channel lifetime
+	bool		secChnlChanged;		//The flag of the secure channel changing for reconnection or reactivation of the session
+	uint32_t	sqNumb, sqReqId, reqHndl;	//The sequence number, the sequence number of request and the request handler
+	string		secPolicy;		//Security policy
+	char		secMessMode;		//Message security mode
+	int64_t		secChnlOpenTm, secLstMessReqTm;	//Time of opening/renewing the secure channel and the last message request
+	string		sesId, authTkId;	//Session identifier and token of authentication
+	double		sesLifeTime;		//Session lifetime
+	string		servCert, servNonce, servKey;	//Server certificate, "nonce" and symmetric key
+	string		clKey;			//Client symmetric key
 
-	vector<Subscr>	mSubScr;	//Subscriptions list
-	vector<uint32_t> mPublSeqs;	//Publish packages registration
+	vector<Subscr>	mSubScr;		//Subscriptions list
+	vector<uint32_t> mPublSeqs;		//Publish packages registration
     };
 
     //Methods
@@ -756,8 +757,8 @@ class Server: public UA
 	{
 	    public:
 	    //Methods
-	    SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert,
-		const string &iSecPolicy, char iSecMessMode, const string &iclAddr, uint32_t isecN );
+	    SecCnl( const string &ep, uint32_t tokenId, int32_t lifeTm, const string &clCert,
+		const string &secPolicy, char secMessMode, const string &clAddr, uint32_t secN );
 	    SecCnl( );
 
 	    //Attributes
@@ -766,9 +767,9 @@ class Server: public UA
 	    char	secMessMode;
 	    int64_t	tCreate;
 	    int32_t	tLife;
-	    uint32_t	TokenId, TokenIdPrev;
-	    string	clCert, clAddr;
-	    string	servKey, clKey;
+	    uint32_t	tokenId, tokenIdPrev;
+	    string	clCert, clAddr, clKey;
+	    string	servKey;
 	    uint32_t	servSeqN, clSeqN/*, startClSeqN*/, reqId;
 	    // Chunks accumulation
 	    int		chCnt;	//Negative for error chunks sequence
@@ -803,7 +804,7 @@ class Server: public UA
 	    };
 
 	    //Methods
-	    Sess( const string &iName, double iTInact );
+	    Sess( const string &name, double tInact );
 	    Sess( );
 
 	    bool isSecCnlActive( EP *ep );
@@ -873,16 +874,16 @@ class Server: public UA
 
 	    //Attributes
 	    SubScrSt	st;			//Subscription status
-	    int		sess;			//Session assign
-	    bool	publEn,			//Enable publishing
-			toInit;			//Subsription init publish package send needs
+	    int		sess;			//Session of the subscription
+	    bool	publEn,			//Enabling the publication
+			toInit;			//Flag of the subscription initiation - sending of the first-empty package of the publication response
 	    double	publInterval;		//Publish interval, milliseconds
 	    uint32_t	seqN,			//Sequence number for responses, rolls over 1, no increment for KeepAlive messages
 			pubCntr, pubCntr_,	//Publish counter
 			lifetimeCnt, wLT,	//Counter after that missing the client notifications will be removed from the object
 			maxKeepAliveCnt, wKA,	//Counter after that need to send empty publish response and
 						//send StatusChangeNotification with Bad_Timeout
-			maxNtfPerPubl;		//Maximum notifications per single Publish response
+			maxNtfPerPubl;		//Maximum number of the notifications at one response of the publishing
 	    uint8_t	pr;			//Priority
 	    vector<MonitItem> mItems;
 	    deque<string> retrQueue;		//Retransmission queue; used by Republish request;
@@ -918,12 +919,12 @@ class Server: public UA
 
 	    // Security policies
 	    unsigned secN( )	{ return mSec.size(); }
-	    string secPolicy( int isec );
-	    MessageSecurityMode secMessageMode( int isec );
+	    string secPolicy( int sec );
+	    MessageSecurityMode secMessageMode( int sec );
 
 	    // Sessions
 	    unsigned sessN( )	{ return mSess.size(); }
-	    int sessCreate( const string &iName, double iTInact );
+	    int sessCreate( const string &name, double tInact );
 	    void sessServNonceSet( int sid, const string &servNonce );
 	    virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false,
 		const string &inPrtId = "", const XML_N &identTkn = XML_N() );
@@ -996,9 +997,9 @@ class Server: public UA
 
 	// Channel manipulation functions
 	void chnlList( vector<uint32_t> &chnls );
-	int chnlSet( int cid, const string &iEp, int32_t lifeTm = 0,
-	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1,
-	    const string &iclAddr = "", uint32_t iseqN = 1 );
+	int chnlSet( int cid, const string &ep, int32_t lifeTm = 0,
+	    const string& clCert = "", const string &secPolicy = "None", char secMessMode = 1,
+	    const string &clAddr = "", uint32_t seqN = 1 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
 	SecCnl &chnlGet_( int cid )	{ return mSecCnl[cid]; }	//Unsafe direct link. Use "mtxData" to manage!

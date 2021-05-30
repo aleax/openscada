@@ -245,7 +245,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		case MS_SignAndEncrypt: secMess = _("Sign&Encrypt");	break;
 	    }
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%u(token %u): %s(%s,%s) at %s(live %s); Sequence server %u, client %u; Request ID %u"),
-		chnls[iCh], scO.TokenId, scO.endPoint.c_str(), scO.secPolicy.c_str(), secMess.c_str(),
+		chnls[iCh], scO.tokenId, scO.endPoint.c_str(), scO.secPolicy.c_str(), secMess.c_str(),
 		atm2s(scO.tCreate*1e-6,"%Y-%m-%dT%H:%M:%S").c_str(),
 		tm2s(1e-3*scO.tLife-1e-6*(curTime()-scO.tCreate)).c_str(),
 		scO.servSeqN, scO.clSeqN, scO.reqId));

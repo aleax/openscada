@@ -1,3 +1,16 @@
+2021-05-30 Roman (stable)
+- !!:DOC: The document "Modules/OPC_UA" complete revised for the modules version 2.1 and the translation.
+- FIX:LibsDB.OscadaLibs: base.ntf in the notification part improved for the broken transports (after the long response time) processing.
+- !:FIX:Archive.DBArch: Fixed from some crash at the value archiver groups processing
+    in the unlocked function ModVArch::grpLimits() for reqRes.
+- FIX:DAQ.DAQGate: Fixed in listing the DAQ-objects in control remotely through the OpenSCADA Control Interface.
+- !:DAQ.ModBus: IO of the Logical Level parameters enabled for the translation, for not linked strings and like to DAQ.LogicLev.
+- {DAQ,Protocol}.OPC_UA.libOPC_UA: Acknowledged items clearance moved after the successful sending the Publish request and only for what
+    acknowledged and not all presented. Server.SecCnl.{TokenId,TokenIdPrev} renamed to Server.SecCnl.{tokenId,tokenIdPrev}.
+- Protocol.SelfSystem: The SingleUserHostLimit default value increased up to 100.
+- UI.Vision: Real values precision of cells of the view Table of the primitive FormEl limited in 6 digits.
+
+
 2021-05-23 Roman (stable)
 - data/openscada-proj.in: Switched to linking user LibsDB content to the system RO-content-libraries instead the copying.
 - AGLKS.vca: The short links on the main mnemonic scheme activated for all users.

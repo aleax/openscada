@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.7"
+#define MOD_VER		"2.2.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -781,7 +781,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		setAttr("toPrm","1")->setAttr("sep",".");
 	    if(cntrIfCmd(req) == 0) {
 		*opt = req;
-		opt->childIns(0,"el")->setText(_("<<Append current>>"));
+		opt->setName("get")->childIns(0,"el")->setText(_("<<Append current>>"));
 		break;
 	    }
 	}

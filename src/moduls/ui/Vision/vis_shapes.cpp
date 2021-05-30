@@ -621,7 +621,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    switch(tC->name()[0]) {
 					case 'b': v = (bool)s2i(tC->text());	break;
 					case 'i': v = s2ll(tC->text());		break;
-					case 'r': v = s2r(tC->text());		break;
+					case 'r': v = s2r(r2s(s2r(tC->text()),6));break;	//!!!! Maybe pass the precission and format as an argument
 					case 't':
 					    tit->setData(TableDelegate::OneLineString, false);
 					    v = QString::fromStdString(tC->text());

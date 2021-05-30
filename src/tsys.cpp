@@ -2007,7 +2007,7 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
 		" " + prj).c_str());
 
     //Check for the project folder presence and main items creation at miss or wrong the projects manager procedure
-    //????
+    //!!!!
 
     //Check for the project folder availability and switch to the project
     string  prjDir = prjUserDir() + "/" + prj,
@@ -2299,7 +2299,7 @@ void *TSYS::taskWrap( void *stas )
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	SYS->mess_sys(TMess::Error, _("Task %u unexpected terminated by an exception."), tsk->thr);
     }
-    //???? The code cause: FATAL: exception not rethrown
+    //!!!! The code causes: FATAL: exception not rethrown
     //catch(...)	{ mess_sys(TMess::Error, _("Task %u unexpected terminated by an unknown exception."), tsk->thr); }
 
     //Mark for task finish
@@ -3447,61 +3447,61 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    TConfig req;
 	    vector<XMLNode*> ns;
 
-	    // Columns list prepare
+	    // Columns list preparing
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/base","",RWRW__,"root","root"));
 	    for(int off = 0; (tStr=strParse(Mess->translLangs(),0,";",&off)).size(); )
 		if(tStr.size() == 2 && tStr != Mess->lang2CodeBase())
 		    ns.push_back(ctrMkNode("list",opt,-1,("/tr/mess/"+tStr).c_str(),tStr.c_str(),RWRW__,"root","root"));
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/src","",R_R_R_,"root","root"));
 
-	    // Values request from first source
+	    // Values requesting from the first source
 	    MtxAlloc res(Mess->mRes, true);
 	    for(map<string, map<string,string> >::iterator im = Mess->trMessIdx.begin(); im != Mess->trMessIdx.end(); ++im) {
-		//  Check for filter
+		//  Checking for the filter
 		if(trFltr.size()) {
 		    map<string,string>::iterator is;
 		    for(is = im->second.begin(); is != im->second.end() && (is->first+"#"+is->second).find(trFltr) == string::npos; ++is) ;
 		    if(is == im->second.end()) continue;
 		}
 
-		//  Rows append
-		for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
-		    if(i_n == 0) ns[i_n]->childAdd("el")->setText(im->first);
-		    else if(i_n < (ns.size()-1)) ns[i_n]->childAdd("el")->setText("");	//Empty cell at start
+		//  Rows appending
+		for(unsigned iN = 0; iN < ns.size(); iN++) {
+		    if(iN == 0) ns[iN]->childAdd("el")->setText(im->first);
+		    else if(iN < (ns.size()-1)) ns[iN]->childAdd("el")->setText("");	//Empty cells at the start
 		    else {
 			tStr.clear();
 			for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is)
 			    tStr += (tStr.size()?"\n":"")+is->first;// + "#" + is->second;
-			ns[i_n]->childAdd("el")->setText(tStr);
+			ns[iN]->childAdd("el")->setText(tStr);
 		    }
 		}
 		if(ns.size() <= 2) continue;	//No any translated languages set
 
-		//  Real translated data obtain and check
+		//  Real translated data obtaining and checking
 		for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is) {
 		    string tMath, trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#");
 		    bool firstInst = (is == im->second.begin()), isCfg = false, haveMatch = false;
-		    //  Source is config file or included DB
+		    //  Source is the config file or the included DB
 		    if((isCfg=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
-			//  Need DB structure prepare
+			//  Needed for the DB structure preparing
 			req.elem().fldClear();
 			req.elem().fldAdd(new TFld(trFld.c_str(),trFld.c_str(),TFld::String,0));
-			for(unsigned i_n = 1; i_n < ns.size(); i_n++)
-			    req.elem().fldAdd(new TFld(Mess->translFld(ns[i_n]->attr("id"),trFld,isCfg).c_str(),
-				ns[i_n]->attr("descr").c_str(),TFld::String,0));
+			for(unsigned iN = 1; iN < ns.size(); iN++)
+			    req.elem().fldAdd(new TFld(Mess->translFld(ns[iN]->attr("id"),trFld,isCfg).c_str(),
+				ns[iN]->attr("descr").c_str(),TFld::String,0));
 			req.cfg(trFld).setReqKey(true);
 			req.cfg(trFld).setS(im->first);
 
-			//  Get from config file or DB source
+			//  Getting from the config file or the DB source
 			bool seekRez = false;
 			for(int inst = 0; true; inst++) {
 			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, true)
 					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, true);
 			    if(!seekRez) break;
-			    for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
-				if(!(i_n && i_n < (ns.size()-1))) continue;
-				tMath = req.cfg(Mess->translFld(ns[i_n]->attr("id"),trFld,isCfg)).getS();
-				XMLNode *recNd = ns[i_n]->childGet(-1);
+			    for(unsigned iN = 0; iN < ns.size(); iN++) {
+				if(!(iN && iN < (ns.size()-1))) continue;
+				tMath = req.cfg(Mess->translFld(ns[iN]->attr("id"),trFld,isCfg)).getS();
+				XMLNode *recNd = ns[iN]->childGet(-1);
 				if(firstInst) { recNd->setText(tMath); haveMatch = true; }
 				else {
 				    if(!s2i(recNd->attr("unmatch"))) {

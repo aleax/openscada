@@ -1930,7 +1930,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    if(tit.isEdit) tit.origVl = parseInt(val);
 				    break;
 				case 'i': tit.innerText = parseInt(val);	break;
-				case 'r': tit.innerText = parseFloat(parseFloat(val).toPrecision(6));	break;
+				case 'r': tit.innerText = parseFloat(parseFloat(val).toPrecision(6));	break;	//!!!! Maybe pass the precission and format as an argument
 				default:
 				    if(val.length <= limTblItmCnt) tit.innerText = val;
 				    else { tit.innerText = val.slice(0,limTblItmCnt) + "..."; if(tit.isEdit) tit.origVl = val; }

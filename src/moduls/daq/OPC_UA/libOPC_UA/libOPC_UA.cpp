@@ -1274,8 +1274,13 @@ string Client::poll( bool byRead )
 		req.childClear()->setAttr("id", "Publish");
 		for(unsigned iAck = 0; iAck < curS.mSeqToAcq.size(); ++iAck)
 		    req.childAdd("Ack")->setAttr("subScrId", uint2str(curS.subScrId))->setText(uint2str(curS.mSeqToAcq[iAck]));
-		curS.mSeqToAcq.clear();	//????
+		//curS.mSeqToAcq.clear();
 		reqService(req);
+		if(req.attr("err").empty())
+		    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh)
+			for(unsigned iAck = 0; iAck < curS.mSeqToAcq.size(); ++iAck)
+			    if(str2uint(req.childGet(iCh)->text()) == curS.mSeqToAcq[iAck])
+			    { curS.mSeqToAcq.erase(curS.mSeqToAcq.begin()+iAck); break; }
 	    }
 	}
     }
@@ -2551,8 +2556,8 @@ int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& i
     if(cid) {
 	if(mSecCnl.find(cid) != mSecCnl.end()) {
 	    mSecCnl[cid].tLife = lifeTm;
-	    mSecCnl[cid].TokenIdPrev = mSecCnl[cid].TokenId;
-	    if((++mSecCnl[cid].TokenId) == 0) mSecCnl[cid].TokenId = 1;
+	    mSecCnl[cid].tokenIdPrev = mSecCnl[cid].tokenId;
+	    if((++mSecCnl[cid].tokenId) == 0) mSecCnl[cid].tokenId = 1;
 	    mSecCnl[cid].tCreate = curTime();
 	    return cid;
 	} else return -1;
@@ -2777,7 +2782,7 @@ nextReq:
 								//>>>> Standard respond
 	    oNu(out, OpcUa_ProtocolVersion, 4);			//ServerProtocolVersion
 	    oNu(out, chnlId, 4);				//Secure channel identifier
-	    oNu(out, chnlGet(chnlId).TokenId, 4);		//TokenId
+	    oNu(out, chnlGet(chnlId).tokenId, 4);		//TokenId
 	    oTm(out, chnlGet(chnlId).tCreate);			//CreatedAt
 	    oN(out, chnlGet(chnlId).tLife, 4);			//RevisedLifeTime (600000, minimum)
 
@@ -2820,8 +2825,8 @@ nextReq:
 
 	    SecCnl scHd = chnlGet(secId);
 	    // Secure channel and token check
-	    if(!scHd.TokenId) throw OPCError(0, "", "");
-	    if(scHd.TokenId != tokId)	throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
+	    if(!scHd.tokenId) throw OPCError(0, "", "");
+	    if(scHd.tokenId != tokId)	throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
 	    // Decrypt message block
 	    if(scHd.secMessMode == MS_SignAndEncrypt)
 		rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),scHd.servKey,scHd.secPolicy));
@@ -2861,8 +2866,8 @@ nextReq:
 	    uint32_t tokId = iNu(rb, off, 4);			//TokenId
 	    SecCnl scHd = chnlGet(secId);
 	    // Secure channel and token check
-	    if(!scHd.TokenId) throw OPCError(OpcUa_BadSecureChannelClosed, "Secure channel closed");
-	    if(!(tokId == scHd.TokenId || (tokId == scHd.TokenIdPrev && (curTime() < 1000ll*(scHd.tCreate+0.25*scHd.tLife)))))
+	    if(!scHd.tokenId) throw OPCError(OpcUa_BadSecureChannelClosed, "Secure channel closed");
+	    if(!(tokId == scHd.tokenId || (tokId == scHd.tokenIdPrev && (curTime() < 1000ll*(scHd.tCreate+0.25*scHd.tLife)))))
 		throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
 	    if(curTime() > (scHd.tCreate+(int64_t)scHd.tLife*1000))
 		throw OPCError(OpcUa_BadSecureChannelIdInvalid, "Secure channel renew expired");
@@ -3966,7 +3971,7 @@ nextReq:
 		resp.append(isFinal?"F":"C");
 		oNu(resp, 0, 4);			//Message size
 		oNu(resp, secId, 4);			//Secure channel identifier
-		oNu(resp, tokId, 4);			//Symmetric Algorithm Security Header : TokenId
+		oNu(resp, tokId, 4);			//Symmetric Algorithm Security Header : tokenId
 		int begEncBlck = resp.size();
 							//> Sequence header
 		oNu(resp, scHd_.servSeqN++, 4);		//Sequence number
@@ -4066,14 +4071,14 @@ nextReq:
 Server::SecCnl::SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm,
 	const string &iClCert, const string &iSecPolicy, char iSecMessMode, const string &iclAddr, uint32_t isecN ) :
     endPoint(iEp), secPolicy(iSecPolicy), secMessMode(iSecMessMode), tCreate(curTime()),
-    tLife(std::max(OpcUa_SecCnlDefLifeTime,iLifeTm)), TokenId(iTokenId), TokenIdPrev(0), clCert(iClCert), clAddr(iclAddr),
+    tLife(std::max(OpcUa_SecCnlDefLifeTime,iLifeTm)), tokenId(iTokenId), tokenIdPrev(0), clCert(iClCert), clAddr(iclAddr),
     servSeqN(isecN), clSeqN(isecN), /*startClSeqN(isecN),*/ reqId(0), chCnt(0)
 {
 
 }
 
 Server::SecCnl::SecCnl( ) :
-    secMessMode(MS_None), tCreate(0/*curTime()*/), tLife(OpcUa_SecCnlDefLifeTime), TokenId(0), TokenIdPrev(0), servSeqN(1), clSeqN(1)//, startClSeqN(1)
+    secMessMode(MS_None), tCreate(0/*curTime()*/), tLife(OpcUa_SecCnlDefLifeTime), tokenId(0), tokenIdPrev(0), servSeqN(1), clSeqN(1)//, startClSeqN(1)
 {
 
 }

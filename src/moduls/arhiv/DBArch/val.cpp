@@ -321,6 +321,8 @@ bool ModVArch::grpLimits( SGrp &oG, int64_t *ibeg, int64_t *iend )
     try {
 	AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(oG.pos), true);
 
+	MtxAlloc res(reqRes, true);
+
 	//Remove limited records
 	TConfig	cfg(&oG.tblEl);
 	if(maxSize() && (wEnd-wBeg) > (int64_t)(maxSize()*86400e6)) {

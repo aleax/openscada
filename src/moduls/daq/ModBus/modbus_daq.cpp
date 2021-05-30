@@ -82,7 +82,7 @@ void TTpContr::postEnable( int flag )
     //  Parameter template IO DB structure
     elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ*6).c_str()));
     elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
-    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"1000000"));
+    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"1000000"));
 }
 
 void TTpContr::load_( )
@@ -1229,12 +1229,16 @@ void TMdPrm::loadIO( bool force )
     //Load IO and init links
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(ownerPath(true));
+    cfg.cfg("VALUE").setExtVal(true);
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
 	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
-	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS());
+	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force no translated
+	else if(lCtx->func()->io(iIO)->type() != IO::String)
+	    lCtx->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));		//Force no translated
 	else lCtx->setS(iIO, cfg.cfg("VALUE").getS());
     }
     lCtx->chkLnkNeed = lCtx->initLnks();
