@@ -23,8 +23,7 @@
 <th> Мови </th>
 <th> Платформи </th>
 <th> Тип </th>
-<th> Автор </th>
-<th> Опис
+<th> Автор
 </th></tr>
 
 <tr>
@@ -38,8 +37,13 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Збір Даних </td>
-<td> Роман Савоченко </td>
-<td> Надає реалізацію клієнтського ModBus сервісу. Підтримуються Modbus/TCP, Modbus/RTU та Modbus/ASCII протоколи.
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Опис
+</th></tr>
+<tr>
+<td colspan="9"> Надає реалізацію клієнтського ModBus сервісу. Підтримуються Modbus/TCP, Modbus/RTU та Modbus/ASCII протоколи.
 </td></tr>
 
 <tr>
@@ -53,8 +57,16 @@
 <td> x86,x86_64,ARM
 </td>
 <td> Протокол </td>
-<td> Роман Савоченко </td>
-<td> Надає реалізацію ModBus протоколів. Підтримуються Modbus/TCP, Modbus/RTU та Modbus/ASCII протоколи.
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Опис
+</th></tr>
+<tr>
+<td colspan="9"> Надає реалізацію ModBus протоколів. Підтримуються Modbus/TCP, Modbus/RTU та Modbus/ASCII протоколи.
+<ul><li> <b>Загальна працемісткість:</b> &gt; 20 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Зробити (To Do):</b></li></ul>
+<dl><dd> - додати опцію 'L' для байтів регістру у порядку "молодший-перший" (LE) замість стандартного "старший-перший" (BE).</dd></dl>
 </td></tr></table>
 <p>ModBus — комунікаційний протокол, заснований на клієнт-серверній архітектурі. Розроблений фірмою Modicon для використання у контролерах з програмованою логікою (ПЛК). Став стандартом де-факто у промисловості та широко застосовується для організації зв'язку промислового електронного обладнання. Використовується для передачі даних через послідовні лінії зв'язку RS-485, RS-422, RS-232, а також мережі TCP/IP. На цей час підтримується некомерційною організацією ModBus-IDA.
 </p><p>Існує три режими протоколу: ModBus/RTU, ModBus/ASCII та ModBus/TCP. Перші два використовують послідовні лінії зв'язку (переважно RS-485, рідше RS-422/RS-232), останній використовує мережі TCP/IP для передачі даних.
@@ -368,5 +380,5 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/uk">Modules/ModBus/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2746</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/uk">Modules/ModBus/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
 </html>

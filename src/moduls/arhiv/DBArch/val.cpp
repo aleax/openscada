@@ -592,7 +592,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 	}
 	tC += 10*period();
     }
-
+    cfg.setElem(NULL);
     res.unlock();
 
     // Fill by EVAL following range part without a real data
@@ -641,6 +641,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 	    default: break;
 	}
     }
+    cf.setElem(NULL);
     res.unlock();
 
     if(tm) *tm = 0;
@@ -767,6 +768,8 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 
 	archivator().grpMetaUpd(*gO, pLs.size()?&pLs:NULL);
     }
+
+    cfg.setElem(NULL);
 
     return lstWrTm;
 }

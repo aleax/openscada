@@ -2221,7 +2221,7 @@ double TSYS::taskUtilizTm( const string &path, bool max )
     if(it == mTasks.end()) return 0;
     if(max) return 1e-9*it->second.consMax;
     int64_t tm_beg = 0, tm_end = 0, tm_per = 0;
-    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++) {
+    for(int iTr = 0; tm_beg == tm_per && iTr < 2; iTr++) {
 	tm_beg = it->second.tm_beg;
 	tm_end = it->second.tm_end;
 	tm_per = it->second.tm_per;
@@ -3099,21 +3099,30 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    "help",_("To set up the task invoking phase."));
 	    }
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
-	    ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language of the text variables"),RWRWR_,"root","root",5,
+	    ctrMkNode("fld",opt,-1,"/tr/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
+	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language of the text variables"),RWRWR_,"root","root",5,
 		"tp","str","len","2","dest","sel_ed","select","/tr/baseLangLs",
-		"help",_("Enables the multilingual support for text variables by selecting the base language."));
+		"help",_("Enables the multilingual support for text variables in the configuration DBs by selecting the base language.\n"
+		    "You can select or type here other language besides English(en), but take in your mind that "
+		    "all standard OpenSCADA libraries's formed for the base language English(en), so other base languages "
+		    "will break these DBs at change!"));
 	    if(Mess->lang2CodeBase().size()) {
-		ctrMkNode("fld",opt,-1,"/tr/dyn",_("Dynamic translation"),R_R_R_,"root","root",2,"tp","bool","help",_("Current state of the dynamic translation."));
+		blNd->setAttr("dscr", blNd->attr("dscr") + ", " + _("dynamic translation"));
 		ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Dynamic translation scheduling for next startup."));
 		if(!Mess->translDyn())
 		    ctrMkNode("fld",opt,-1,"/tr/enMan",_("Enable the manager"),RWRWR_,"root","root",2,"tp","bool",
 			"help",_("Enables the generic translation manager which cause full reloading for all built messages obtain."));
 	    }
 	    if(Mess->translEnMan()) {
-		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRW__,"root","root",2,"tp","str",
-		    "help",_("List of processed languages, in a two-character representation and separated by the character ';'."));
-		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter"),RWRW__,"root","root",1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch",_("Check for mismatch"),RWRW__,"root","root",1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages of managing"),RWRW__,"root","root",2,"tp","str",
+		    "help",_("List of the processing languages, in the two-character representation and separated by the character ';'."));
+		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter, check for mismatch, pass"),RWRW__,"root","root",2,"tp","str",
+		    "help",_("Source filter of limiting the manager work in some DBs, the source just must contain such substring."));
+		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch","",RWRW__,"root","root",2,"tp","bool",
+		    "help",_("Enable for checking the equal base messages for their translation equality in different sources."));
+		ctrMkNode("fld",opt,-1,"/tr/pass","",RWRW__,"root","root",3,"tp","dec","min","0",
+		    "help",_("Pass the specified number of the table items from the top, "
+			    "useful for very big projects which are limited in time of the table complete processing."));
 		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRW__,"root","root",1,"key","base")) {
 		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->lang2CodeBase().c_str(),RWRW__,"root","root",1,"tp","str");
 		    string lngEl;
@@ -3328,7 +3337,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_tid)	n_tid->childAdd("el")->setText(i2s(it->second.tid));
 		if(n_stat) {
 		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0, lagMax = 0, consMax = 0;
-		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++) {
+		    for(int iTr = 0; tm_beg == tm_per && iTr < 2; iTr++) {
 			tm_beg = it->second.tm_beg; tm_end = it->second.tm_end;
 			tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt;
 			lagMax = it->second.lagMax; consMax = it->second.consMax;
@@ -3409,6 +3418,17 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    TBDS::genDBSet(nodePath()+"TaskPhase:"+it->first, i2s(tVl));
 	}
     }
+    else if(a_path == "/tr/status" && ctrChkNode(opt)) {
+	string stV;
+	if(Mess->lang2CodeBase().empty())	stV += _("only use the already multilanguage DBs with their modification");
+	else {
+	    if(Mess->translDyn()) stV += _("dynamic translation");
+	    stV += (Mess->translDyn()?"; ":"") +
+		    TSYS::strMess(_("creating or modification the configuration DBs as multilanguage ones with the pointed base language '%s'"),
+			Mess->lang2CodeBase().c_str());
+	}
+	opt->setText(stV);
+    }
     else if(a_path == "/tr/baseLang") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang2CodeBase());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang2CodeBase(opt->text());
@@ -3419,7 +3439,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(Mess->lang2CodeBase());
 	opt->childAdd("el")->setText("");
     }
-    else if(a_path == "/tr/dyn" && ctrChkNode(opt))	opt->setText(i2s(Mess->translDyn()));
     else if(a_path == "/tr/dynPlan") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(i2s(Mess->translDyn(true)));
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	Mess->setTranslDyn(s2i(opt->text()));
@@ -3434,16 +3453,24 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/tr/fltr") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	{
+	    TBDS::genDBSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
+	    TBDS::genDBSet(nodePath()+"TrPassN","0",opt->attr("user"));
+	}
     }
     else if(a_path == "/tr/chkUnMatch") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrChkUnMatch",opt->text(),opt->attr("user"));
     }
+    else if(a_path == "/tr/pass") {
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrPassN","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrPassN",opt->text(),opt->attr("user"));
+    }
     else if(a_path == "/tr/mess") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD)) {
 	    bool chkUnMatch = s2i(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
 	    string tStr, trFltr = TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user"));
+	    unsigned passN = vmax(0, s2i(TBDS::genDBGet(nodePath()+"TrPassN","0",opt->attr("user"))));
 	    TConfig req;
 	    vector<XMLNode*> ns;
 
@@ -3456,13 +3483,18 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 
 	    // Values requesting from the first source
 	    MtxAlloc res(Mess->mRes, true);
-	    for(map<string, map<string,string> >::iterator im = Mess->trMessIdx.begin(); im != Mess->trMessIdx.end(); ++im) {
+	    time_t stTm = time(NULL);
+	    map<string, map<string,string> >::iterator im = Mess->trMessIdx.begin();
+	    for(unsigned pos = 0; im != Mess->trMessIdx.end() && (time(NULL)-stTm) < prmInterf_TM; ++im) {
 		//  Checking for the filter
 		if(trFltr.size()) {
 		    map<string,string>::iterator is;
 		    for(is = im->second.begin(); is != im->second.end() && (is->first+"#"+is->second).find(trFltr) == string::npos; ++is) ;
 		    if(is == im->second.end()) continue;
 		}
+
+		//  Pass the specified items number
+		if((pos++) < passN) continue;
 
 		//  Rows appending
 		for(unsigned iN = 0; iN < ns.size(); iN++) {
@@ -3478,9 +3510,14 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(ns.size() <= 2) continue;	//No any translated languages set
 
 		//  Real translated data obtaining and checking
-		for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is) {
-		    string tMath, trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#");
-		    bool firstInst = (is == im->second.begin()), isCfg = false, haveMatch = false;
+		bool firstInst = true;
+		for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is)
+		try {
+		    //  Pass the out filter sources
+		    if(trFltr.size() && (is->first+"#"+is->second).find(trFltr) == string::npos) continue;
+
+		    string tMath, trSrc = TSYS::strParse(is->first, 0, "#"), trFld = TSYS::strParse(is->first, 1, "#");
+		    bool isCfg = false, haveMatch = false;
 		    //  Source is the config file or the included DB
 		    if((isCfg=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
 			//  Needed for the DB structure preparing
@@ -3518,12 +3555,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			}
 		    } else haveMatch = true;
 		    if(!chkUnMatch || !haveMatch) break;
-		}
+		} catch(TError &err) { continue; }
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
 	    bool needReload = false;
-	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->lang2CodeBase():opt->attr("col")), opt->text(), &needReload);
+	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->lang2CodeBase():opt->attr("col")), opt->text(),
+				&needReload, TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
 	    if(!needReload) opt->setAttr("noReload","1");
 	}
     }

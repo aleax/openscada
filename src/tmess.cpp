@@ -342,9 +342,9 @@ string TMess::translGetLU( const string &base, const string &lang, const string 
     return translGetU(base, user, src);
 }
 
-string TMess::translSet( const string &base, const string &lang, const string &mess, bool *needReload )
+string TMess::translSet( const string &base, const string &lang, const string &mess, bool *needReload, const string &srcFltr )
 {
-    if(!translDyn() && !needReload) return mess;
+    if(!translDyn() || !needReload) return mess;
 
     string trLang = lang2Code();
     if(lang.size() >= 2)	trLang = lang.substr(0,2);
@@ -355,7 +355,10 @@ string TMess::translSet( const string &base, const string &lang, const string &m
     MtxAlloc res(mRes, true);
     map<string,string> mI = trMessIdx[base];
     for(map<string,string>::iterator is = mI.begin(); is != mI.end(); ++is) {
+	if(srcFltr.size() && (is->first+"#"+is->second).find(srcFltr) == string::npos)	continue;
+
 	string trSrc = TSYS::strParse(is->first,0,"#"), setFld = TSYS::strParse(is->first,1,"#");
+
 	TConfig req;
 	bool setRes = false, isCfg = false;
 	//  Source is config file or included DB

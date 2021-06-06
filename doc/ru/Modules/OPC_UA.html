@@ -84,13 +84,15 @@
 </th></tr>
 <tr>
 <td colspan="9"> Предоставляет реализацию протокола OPC-UA в части клиента и сервера, в виде отдельной библиотеки.
-<ul><li> <b>Общая трудоёмкость:</b> &gt; 30 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span></li>
+<ul><li> <b>Общая трудоёмкость:</b> &gt; 50 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Спонсировано, 2 года ТП на 13 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> Дмитрий Лыков, ООО Вектор</li>
 <li> <b>Спонсировано, перенос кода протокола в LGPL библиотеку, значительное улучшение и документирование на 8.4 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> Александр Леута, MYSCADA</li>
 <li> <b>Спонсировано, работу с UAExpert 1.4 и kepware2 на 0.9 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> Устьянцев Михаил</li>
+<li> <b>Спонсировано, работу с UAExpert 1.5, реализацию клиентского Publish и Chunks, значительную унификации и полную ревизию документа на 9.5 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Fund" title="Special:MyLanguage/Fund">Фонд</a></li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">Задача расширения модуля</a></li>
 <li> <b>Сделать (To Do):</b></li></ul>
 <dl><dd> + отревизировать представительскую страницу документации;</dd>
+<dd> - разрешить противоречие в <i>Client::messIO()</i> на предмет смешивания режима чистого запроса с режимом свободного чтения/записи и времени ожидания тут ответа без прямой передачи таймаута подключения;</dd>
 <dd> - дополнить встроенным Логическим Режимом DAQ-Параметров;</dd>
 <dd> - добавить поддержку аутентификации к входной-серверной части протокола;</dd>
 <dd> - добавить автоматическое создание входных транспортов и их пре-конфигурацию из свойств объекта КонечногоУзла;</dd>
@@ -784,8 +786,8 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 <td> + </td>
 <td> + </td>
 <td> + </td>
-<td> - </td>
-<td> IO requests by XML implemented: HEL (HELLO), OPN (OpenSecureChannel), CLO (CloseSecureChannel), FindServers, GetEndpoints, CreateSession, ActivateSession, CloseSession, Read, Write, Browse
+<td> + </td>
+<td> IO requests by XML implemented: HEL (HELLO), OPN (OpenSecureChannel), CLO (CloseSecureChannel), FindServers, GetEndpoints, CreateSession, ActivateSession, CloseSession, Read, Write, Browse, CreateSubscription, DeleteSubscriptions, CreateMonitoredItems, DeleteMonitoredItems, Publish, Poll (the special empty request of checking the input channel). Chunks implemented.
 </td></tr>
 <tr>
 <td> OpenSCADA OPC-UA Server (libOPC_UA server part) </td>
@@ -897,10 +899,14 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 <td> Pass </td>
 <td> Pass </td>
 <td> Pass </td>
-<td> <span style="color: blue">Not tested</span> </td>
-<td> <span style="color: blue">NA</span> </td>
-<td> The authenticate process fixed by the server provides self specific identifiers to its. The string of bytes wrong interpretation fixed.
+<td> Pass </td>
+<td> Pass </td>
+<td>
+<ul><li> the authenticate process fixed by the server provides self specific identifiers to its. The string of bytes wrong interpretation fixed;</li>
+<li> 2021.05: has limits on direct reading by the service request "Read", so that was an initiator of implementing the service request "Publish" and Chunks for the Client part, UAExpert 1.5 adaption, significant refactoring and the document complete revision.</li></ul>
 </td></tr></table>
+<p><br />
+</p>
 <h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">8</span> Ссылки</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.odg" title="File:OPC-UA libOPCUA class.odg">Диаграмма: Статическая диаграмма классов библиотеки libOPC_UA.</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:OPC-UA_openssl.cnf" title="File:OPC-UA openssl.cnf">Файл конфигурации создания сертификата для OPC-UA.</a></li></ul>
@@ -910,5 +916,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/ru">Modules/OPC_UA/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2746</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/ru">Modules/OPC_UA/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
 </html>

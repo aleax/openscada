@@ -51,6 +51,7 @@
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Values_archivation" title="Special:MyLanguage/Sub-projects/Values archivation">Values archiving</a>.</li></ul></li>
 <li> New documents:
 <ul><li> Create a separate WIKI-page of the "Smart Home" project on <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Server" title="Special:MyLanguage/Sub-projects/Server">the OpenSCADA server</a>. Move the project to the multilingual mode.</li>
+<li> Create the How to "Create the multilanguage OpenSCADA project";</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/MMS" title="Special:MyLanguage/Modules/MMS">DAQ.MMS</a>;</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ODBC" title="Special:MyLanguage/Modules/ODBC">DB.ODBC</a>.</li></ul></li></ul>
 </td></tr>
@@ -82,7 +83,7 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Testing.2C_optimization_and_fixing"><span class="mw-headline-number">4</span> <span id="TestOptFix" title="#TestOptFix">Testing, optimization and fixing</span></span></h3>
-<ul><li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Implement the asynchronous writing with a function of preventing the data loss on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures: <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>, <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>. The function currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
+<ul><li> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] Implement the asynchronous writing with a function of preventing the data loss on the time of the connection missing for the key DAQ-modules of the OpenSCADA internal procedures: <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a>, <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP_DAS</a>, <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON</a>. The function is currently tested on the module <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>.</li>
 <li> <i>UI.{Vision,WebVision}</i>: Complete revision of the primitive "ElFigure" implementation, what needs:</li></ul>
 <dl><dd>- BUG: selecting multiple figures at hold the key "Ctrl";</dd>
 <dd>- BUG: clearing the copy buffer after selected items copy — impossible for the copy repeat;</dd>
@@ -94,7 +95,8 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Program.2FSystem_generic"><span class="mw-headline-number">5</span> Program/System generic</span></h3>
-<ul><li> Develop the pure demo and the TP-mode on the certificates base in the keys of the subscription on a TP-package: prevent writing and form the notification dialogues.</li>
+<ul><li> Develop the possibility of copy OpenSCADA configuration parts together their translation on all available languages, useful for copy the multilanguage parts in own multilanguage libraries or projects.</li>
+<li> Develop the pure demo and the TP-mode on the certificates base in the keys of the subscription on a TP-package: prevent writing and form the notification dialogues.</li>
 <li> Work out for developing, using, integration to solutions, concept of the support of the OpenSCADA project. Expand the community targeting for implementation control of:
 <ul><li> tasks: tasks pool, fund and fundraising; developers register, ranks for participate into the tasks.</li>
 <li> solutions: register a task of the solution implementation (by consumer), set demands to the task and performer, set the price limit; each performer propose self price; consumer select a performer. Commission from the order price to the project is 10%.</li></ul></li>
@@ -163,6 +165,7 @@
 <dd>- implement IEC-60850 and test with "libiec60850".</dd></dl>
 <ul><li> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a></li></ul>
 <dl><dd> + revise the representing documentation page;</dd>
+<dd> - resolve the controversy in <i>Client::messIO()</i> about mixing the pure requesting mode with the free read/write mode and the time of waiting responses here without passing the connection timeout directly;</dd>
 <dd> - append the builtin Logical Mode of the DAQ-Parameters;</dd>
 <dd> - append the authentication support for the input-server protocol part;</dd>
 <dd> - append the automatic creation for input transports and their pre-configuration from the EndPoint object properties;</dd>
@@ -172,6 +175,8 @@
 <dd> - append for support of the history services of the client part.</dd></dl>
 <ul><li> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a></li></ul>
 <dl><dd> - append the builtin Standard Mode of the DAQ-Parameters.</dd></dl>
+<ul><li> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a></li></ul>
+<dl><dd> - append the option 'L' for the register bytes in little-endian (LE) instead the standard big-endian (BE) order.</dd></dl>
 <ul><li> <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a></li></ul>
 <dl><dd> - append measuring of the system memory consumption per process or group of the processes.</dd></dl>
 </td></tr>
@@ -192,7 +197,10 @@
 <dl><dd> - implement for a manager of sub-projects of their starting into different processes but with the ones storing and managing into the single configuration file of the project, for high reliable configurations;</dd>
 <dd> - implement for a manager of the background-daemon processes.</dd></dl>
 <ul><li> <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a></li></ul>
-<dl><dd> + expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
+<dl><dd> * revise and unify the keyboard focus forcing on a first active element considering them specifity, to ensure the keyboard shortcuts;</dd>
+<dd> * <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> [TESTING] check for passing the attribute changes on the visualizer side to the WebBrowser at any conditions, on the example of the control panel appearance at switching <a href="Libs_Main_graphical_elements.html#grpGraph" title="Special:MyLanguage/Libs/Main graphical elements">the graph groups</a>; is tested now by&nbsp;!MODIF_SLIDE_CUR_MECH in <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a>;</dd>
+<dd> - ElFigure: fix some properties loss (line width at the least) at the actions processing, in the way of the primitive code common refactoring;</dd>
+<dd> + expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
 <dd> * expand the status-bar, with the functions:
 <dl><dd> - export and print;</dd>
 <dd> - call of the project documents;</dd>
@@ -221,5 +229,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2746</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
 </html>

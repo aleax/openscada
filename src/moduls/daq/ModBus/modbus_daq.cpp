@@ -898,7 +898,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //Generic acquisition alarm generate
-	    if(cntr.tmDelay <= 0) {
+	    if(cntr.tmDelay <= 0 && !cntr.endrunReq) {
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
 		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);

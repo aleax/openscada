@@ -1,3 +1,24 @@
+2021-06-06 Roman (stable)
+- FIX:Archives: The value archives prevented from the atachment try of the missed archivers.
+    Size of the field of the archivers list expanded up to 1000.
+- !!!!:SYS: The "Translations" tab restructured something, appended for the actual status, appended for some context help
+    and the translations manager appended for:
+	- limiting of the table form in prmInterf_TM (7 seconds);
+	- an configuration field of passing number the top messages;
+	- setting only for the filtered sources;
+	- checking the content for match only for the filtered sources;
+	- pass the sources missing error.
+    The translation function TMess::translSet() prevented from propagation the group messages change not from the translation manager.
+- !:FIX:Archive.DBArch: Fixed from some crashes at the value archiver groups processing
+    by not clearing the table field configs (TConfig) links under the locks.
+- FIX:DAQ.ModBus: Prevented from marking the not connected controller objects as NORM at them stopping.
+- FIX:UI.QTStarter: Prevented from updation the starting window at it close-hide state.
+- FIX:UI.QTCfg: The table rows heigh updation moved at all time the table udation but there can be changed only the rows sequence,
+    so breaking they rows custom height, detected on the translation table.
+- UI.WebVision: All items appended for the CSS property "pointer-events" treating in the value "all" for active, the master page and boxes
+    with included pages; or "none" for all others. To ensure the pointer events pass through inactive elements to the active ones behind.
+
+
 2021-05-30 Roman (stable)
 - !!:DOC: The document "Modules/OPC_UA" complete revised for the modules version 2.1 and the translation.
 - FIX:LibsDB.OscadaLibs: base.ntf in the notification part improved for the broken transports (after the long response time) processing.

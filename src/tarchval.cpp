@@ -1049,7 +1049,7 @@ void TVArchive::start( )
 
     //Attach to the archivers
     string arch, archs = cfg("ArchS").getS();
-    for(int i_off = 0; (arch = TSYS::strSepParse(archs,0,';',&i_off)).size(); )
+    for(int iOff = 0; (arch = TSYS::strSepParse(archs,0,';',&iOff)).size(); )
 	if(!archivatorPresent(arch))
 	    try { archivatorAttach(arch); }
 	    catch(TError &err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
@@ -1271,8 +1271,11 @@ bool TVArchive::archivatorPresent( const string &arch )
 {
     ResAlloc res(aRes, false);
     try {
-	AutoHD<TVArchivator> archivat = owner().at(TSYS::strSepParse(arch,0,'.')).at().
-						valAt(TSYS::strSepParse(arch,1,'.'));
+	string	aMod = TSYS::strSepParse(arch,0,'.'),
+		aArch = TSYS::strSepParse(arch,1,'.');
+	if(!owner().modPresent(aMod) || !owner().at(aMod).at().valPresent(aArch))	//!!!! To prevent the attachment
+	    return true;
+	AutoHD<TVArchivator> archivat = owner().at(aMod).at().valAt(aArch);
 	for(unsigned iL = 0; iL < archEl.size(); iL++)
 	    if(&archEl[iL]->archivator() == &archivat.at())
 		return true;

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,7 +90,7 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd(new TFld("BHGRD",_("Buffer in the hard time grid"),TFld::Boolean,0,"1","1"));
     elAval.fldAdd(new TFld("BHRES",_("Buffer in the high time resolution"),TFld::Boolean,0,"1","0"));
     elAval.fldAdd(new TFld("FillLast",_("Filling the passage points with the last value"),TFld::Boolean,0,"1","0"));
-    elAval.fldAdd(new TFld("ArchS",_("Process into archivers"),TFld::String,0,"500"));
+    elAval.fldAdd(new TFld("ArchS",_("Process into archivers"),TFld::String,0,"1000"));
 
     setMessBufLen(BUF_SIZE_DEF);
 }

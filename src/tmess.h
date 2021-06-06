@@ -149,7 +149,7 @@ class TMess
 	string translGetU( const string &base, const string &user, const string &src = "" );
 	string translGetLU( const string &base, const string &lang, const string &user, const string &src = "" );
 	//  Translation set for <base>, <lang> | <user> and <mess>. Return base or the changed.
-	string translSet( const string &base, const string &lang, const string &mess, bool *needReload = NULL );
+	string translSet( const string &base, const string &lang, const string &mess, bool *needReload = NULL, const string &srcFltr = "" );
 	string translSetU( const string &base, const string &user, const string &mess, bool *needReload = NULL );
 	string translSetLU( const string &base, const string &lang, const string &user, const string &mess, bool *needReload = NULL );
 	//  Register translations. Source format:

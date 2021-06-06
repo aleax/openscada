@@ -57,7 +57,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.9.7"
+#define MOD_VER		"5.9.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -958,7 +958,7 @@ void StApp::startDialog( )
 //*************************************************
 //* StartDialog                                   *
 //*************************************************
-StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
+StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
 {
     if(SYS->prjCustMode()) setWindowTitle(_("Qt-starter of OpenSCADA"));
     else if(SYS->prjNm().size()) setWindowTitle(QString(_("Project: %1")).arg(SYS->prjNm().c_str()));
@@ -1142,8 +1142,6 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL)
     butt->setWhatsThis(_("The button for exit the program."));
     QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQtModule()));
     wnd_lay->addWidget(butt, 0, 0);
-
-    startTimer(1e3*prmWait_TM);
 }
 
 void StartDialog::showEvent( QShowEvent* )
@@ -1151,10 +1149,14 @@ void StartDialog::showEvent( QShowEvent* )
     //Hide the projects apply button for too busy lists
     if(prjsLs && prjsBt)
 	prjsBt->setVisible(!prjsLs->verticalScrollBar() || !prjsLs->verticalScrollBar()->isVisible() || prjsLs->height() > 3*QFontMetrics(prjsLs->font()).height());
+
+    updTmrId = startTimer(1e3*prmWait_TM);
 }
 
 void StartDialog::closeEvent( QCloseEvent *ce )
 {
+    if(updTmrId >= 0)	{ killTimer(updTmrId); updTmrId = -1; }
+
     if(!mod->QtApp->trayPresent() && mod->QtApp->topLevelWindows() <= 1) SYS->stop();
     ce->accept();
 }

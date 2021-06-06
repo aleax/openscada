@@ -1454,8 +1454,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				tbl->setColumnWidth(iC, busyColsWdth);
 		    }
 
-		    tbl->resizeRowsToContentsLim();
+		    //tbl->resizeRowsToContentsLim();
 		}
+		if(tbl->columnCount() && tbl->rowCount()) tbl->resizeRowsToContentsLim();
 
 		tblInit = false;
 	    }

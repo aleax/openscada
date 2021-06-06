@@ -634,7 +634,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    geomX -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
 	    geomY -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
 	}
-	elStyle += 'position: '+((this==masterPage || this.window)?'relative':'absolute')+'; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
+	elStyle += 'position: '+((this==masterPage || this.window)?'relative':'absolute')+'; '+
+		   'left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; '+
+		   'pointer-events: '+((elWr||this == masterPage)?'all':'none')+'; ';
 
 	// Calculation of the main window/page scale
 	if(this == masterPage) {
@@ -828,6 +830,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		}
 	    }
+	    if(this.inclOpen) elStyle += 'pointer-events: all; ';
 	    this.place.wdgLnk = this;
 	}
 	else if(this.attrs['root'] == 'Text') {
@@ -2771,7 +2774,7 @@ function makeUI( callBackRez )
 		else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
 		else {
 		    document.body.removeChild(opPg.window);
-		    masterPage = new pwDescr('', true)
+		    masterPage = new pwDescr('', true);
 		}
 		if(opPg.parent)	delete opPg.parent.pages[pgList[iP]];
 	    }

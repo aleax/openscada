@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-03 20:25+0300\n"
+"POT-Creation-Date: 2021-06-06 19:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1866,13 +1866,12 @@ msgstr ""
 msgid "Base language of the text variables"
 msgstr ""
 
-msgid "Enables the multilingual support for text variables by selecting the base language."
+msgid ""
+"Enables the multilingual support for text variables in the configuration DBs by selecting the base language.\n"
+"You can select or type here other language besides English(en), but take in your mind that all standard OpenSCADA libraries's formed for the base language English(en), so other base languages will break these DBs at change!"
 msgstr ""
 
-msgid "Dynamic translation"
-msgstr ""
-
-msgid "Current state of the dynamic translation."
+msgid "dynamic translation"
 msgstr ""
 
 msgid "Dynamic translation scheduling for next startup."
@@ -1884,16 +1883,22 @@ msgstr ""
 msgid "Enables the generic translation manager which cause full reloading for all built messages obtain."
 msgstr ""
 
-msgid "Languages"
+msgid "Languages of managing"
 msgstr ""
 
-msgid "List of processed languages, in a two-character representation and separated by the character ';'."
+msgid "List of the processing languages, in the two-character representation and separated by the character ';'."
 msgstr ""
 
-msgid "Source filter"
+msgid "Source filter, check for mismatch, pass"
 msgstr ""
 
-msgid "Check for mismatch"
+msgid "Source filter of limiting the manager work in some DBs, the source just must contain such substring."
+msgstr ""
+
+msgid "Enable for checking the equal base messages for their translation equality in different sources."
+msgstr ""
+
+msgid "Pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing."
 msgstr ""
 
 msgid "Debug"
@@ -1957,6 +1962,13 @@ msgid "Attempt to set missing processor."
 msgstr ""
 
 msgid "Error installing processors for the thread."
+msgstr ""
+
+msgid "only use the already multilanguage DBs with their modification"
+msgstr ""
+
+#, c-format
+msgid "creating or modification the configuration DBs as multilanguage ones with the pointed base language '%s'"
 msgstr ""
 
 msgid "<<<Unmatched sources!!!>>>\n"
