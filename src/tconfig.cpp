@@ -194,8 +194,8 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
 {
     if(elem.compare(0,4,"sel_") == 0 && TCntrNode::ctrChkNode(opt)) {
 	TFld &n_e_fld = cfg(elem.substr(4)).fld();
-	for(unsigned i_a = 0; i_a < n_e_fld.selNm().size(); i_a++)
-	    opt->childAdd("el")->setText(n_e_fld.selNm()[i_a]);
+	for(unsigned iA = 0; iA < n_e_fld.selNm().size(); iA++)
+	    opt->childAdd("el")->setText(n_e_fld.selNm()[iA]);
 	return;
     }
     TCfg &cel = cfg(elem);

@@ -1,3 +1,14 @@
+2021-06-09 Roman (stable)
+- FIX:LibsDB.vcaBase: Main.storeHouse: Fixed in the not string 's' cells content encoding to "HTML".
+- FIX:SYS.BD: The generic DB saving function TBDS::dataSet() was prevented from creation the empty container tags
+    in the config file at the flag "toChangeExistsCfg".
+- !!:FIX:SYS: The common configuration field "WorkDir" was prevented from marking as modified one at the project switch
+	than saving it in the configuration file.
+    The tab "Tasks" of the main control page moved after the tab "Translations".
+- !:UI.{VCAEngine,Vision,WebVision}: The view "Table" of the primitive "FormEl" appended of the column, row and cell space
+    option "prec" of the real value precision control.
+
+
 2021-06-06 Roman (stable)
 - FIX:Archives: The value archives prevented from the atachment try of the missed archivers.
     Size of the field of the archivers list expanded up to 1000.

@@ -2030,7 +2030,7 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
     //  Set the project configuration file into "--config", name into "--statName", change the work directory
     cmdOpt("config", prjCfg);
     cmdOpt("statName", prj);
-    setWorkDir(prjDir);
+    setWorkDir(prjDir, true);
 
     //  Set an exit signal for restarting the system, clean prjNm and return true
     stop(SIGUSR2);
@@ -3083,21 +3083,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    }
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to the configuration of the list of remote stations"),0660,"root","Transport",1,"tp","lnk");
 	}
-	if(ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___))
-	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",1,"key","path")) {
-		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/tasks/tasks/thrd",_("Thread"),R_R___,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/tasks/tasks/tid",_("TID"),R_R___,"root","root",1,"tp","dec");
-		ctrMkNode("list",opt,-1,"/tasks/tasks/stat",_("Status"),R_R___,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
-#if __GLIBC_PREREQ(2,4)
-		if(nCPU() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",2,"tp","str",
-		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character."));
-#endif
-		if(taskInvPhs() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/taskPh",_("Phase"),RWRW__,"root","root",2,"tp","dec",
-		    "help",_("To set up the task invoking phase."));
-	    }
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
 	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language of the text variables"),RWRWR_,"root","root",5,
@@ -3133,6 +3118,21 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	}
+	if(ctrMkNode("area",opt,-1,"/tasks",_("Tasks"),R_R___))
+	    if(ctrMkNode("table",opt,-1,"/tasks/tasks",_("Tasks"),RWRW__,"root","root",1,"key","path")) {
+		ctrMkNode("list",opt,-1,"/tasks/tasks/path",_("Path"),R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/thrd",_("Thread"),R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/tid",_("TID"),R_R___,"root","root",1,"tp","dec");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/stat",_("Status"),R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/plc",_("Policy"),R_R___,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/tasks/tasks/prior",_("Prior."),R_R___,"root","root",1,"tp","dec");
+#if __GLIBC_PREREQ(2,4)
+		if(nCPU() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",2,"tp","str",
+		    "help",_("To set up the processors you use, write a row of numbers separated by a ':' character."));
+#endif
+		if(taskInvPhs() > 1) ctrMkNode("list",opt,-1,"/tasks/tasks/taskPh",_("Phase"),RWRW__,"root","root",2,"tp","dec",
+		    "help",_("To set up the task invoking phase."));
+	    }
 	if((mess_lev() == TMess::Debug || !cntrEmpty()) && ctrMkNode("area",opt,-1,"/debug",_("Debug"))) {
 	    if(!cntrEmpty() && ctrMkNode("table",opt,-1,"/debug/cntr",_("Counters"),R_R_R_,"root","root")) {
 		ctrMkNode("list",opt,-1,"/debug/cntr/id","ID",R_R_R_,"root","root",1,"tp","str");

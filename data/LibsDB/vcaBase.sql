@@ -8347,7 +8347,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.2
+Version: 1.0.3
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -8361,7 +8361,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.2
+Версия: 1.0.3
 Лицензия: GPLv2','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','');
@@ -24989,7 +24989,7 @@ if(f_start || toUpdate) {
 			}
 			else {
 				if(itVl == "<NULL>")	itVl = "";
-				if(!colTps[iC].isEVal())	dataTbl_items += "<"+colTps[iC]+opt+">"+itVl+"</"+colTps[iC]+">";
+				if(!colTps[iC].isEVal())	dataTbl_items += "<"+colTps[iC]+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+colTps[iC]+">";
 				else dataTbl_items += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
 				if(!(tVl2=colVars[dataTbl[0][iC]]).isEVal())	{
 					if(tVl2.fltr == "index" && itVl.length)	tVl2.ls[itVl] = true;

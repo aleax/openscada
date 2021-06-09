@@ -573,7 +573,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			wdg->setSortingEnabled(false);
 			wdg->setRowCount(0);
 		    } else wdg->setProperty("sortCol", QVariant());
-		    string wVl, rClr, rClrTxt, rFnt;
+		    string wVl, rClr, rClrTxt, rFnt, rPrec;
 		    int sortCol = 0;
 		    // Items
 		    for(unsigned iR = 0, iRR = 0, iCh = 0; iCh < tX.childSize() || (int)iR < wdg->rowCount(); iCh++) {
@@ -582,7 +582,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			QTableWidgetItem *hit = NULL, *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
 			if(!isH && (int)iR >= wdg->rowCount()) { wdg->setRowCount(iR+1); if(!wdg->rowCount()) toReFit = true; }
-			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); }
+			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); rPrec = tR->attr("prec"); }
 			for(unsigned iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR->childSize()) ||
 								    (int)iC < wdg->columnCount(); iCh1++)
 			{
@@ -611,6 +611,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    hit->setData(Qt::UserRole+4, ((wVl=tC->attr("font")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+6, tC->attr("align").c_str());
 				    if((wVl=tC->attr("sort")).size())	{ sortCol = iC+1; if(!s2i(wVl)) sortCol *= -1; }
+				    hit->setData(Qt::UserRole+8, ((wVl=tC->attr("prec")).size()) ? QString::fromStdString(wVl) : QVariant());
 				}
 			    }
 			    else {	//Rows content process
@@ -621,7 +622,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    switch(tC->name()[0]) {
 					case 'b': v = (bool)s2i(tC->text());	break;
 					case 'i': v = s2ll(tC->text());		break;
-					case 'r': v = s2r(r2s(s2r(tC->text()),6));break;	//!!!! Maybe pass the precission and format as an argument
+					case 'r':
+					    if((wVl=tC->attr("prec")).empty() && (wVl=hit->data(Qt::UserRole+8).toString().toStdString()).empty() && (wVl=rPrec).empty())
+						wVl = "6";
+					    v = s2r(r2s(s2r(tC->text()),s2i(wVl)));
+					    break;
 					case 't':
 					    tit->setData(TableDelegate::OneLineString, false);
 					    v = QString::fromStdString(tC->text());
@@ -665,6 +670,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    else if(wVl == "center") flgs |= Qt::AlignHCenter;
 				    tit->setData(Qt::TextAlignmentRole, flgs);
 				} else tit->setData(Qt::TextAlignmentRole, QVariant());
+				// Original position
 				tit->setData(Qt::UserRole+1, iC);
 				tit->setData(Qt::UserRole+2, iR);
 			    }

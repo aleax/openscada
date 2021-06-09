@@ -1933,7 +1933,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    if(tit.isEdit) tit.origVl = parseInt(val);
 				    break;
 				case 'i': tit.innerText = parseInt(val);	break;
-				case 'r': tit.innerText = parseFloat(parseFloat(val).toPrecision(6));	break;	//!!!! Maybe pass the precission and format as an argument
+				case 'r':
+				    tit.innerText = parseFloat(parseFloat(val).toPrecision(tit.outPrec?tit.outPrec:6));
+				    break;
 				default:
 				    if(val.length <= limTblItmCnt) tit.innerText = val;
 				    else { tit.innerText = val.slice(0,limTblItmCnt) + "..."; if(tit.isEdit) tit.origVl = val; }
@@ -1952,7 +1954,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(toInit || !formObj.children.length) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
 			    else if(!((wVl=tX.getAttribute("sortEn")) && parseInt(wVl))) formObj.sortCol = null;
 
-			    rClr = null, rClrTxt = null, rFnt = null;
+			    rClr = null, rClrTxt = null, rFnt = null, rPrec = null;
 			    startRows = formObj.tBodies[0].rows.length;
 			    startCols = startRows ? formObj.tBodies[0].rows[0].cells.length : 0;
 			    sortCol = 0;
@@ -1967,6 +1969,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    rClr = tR.getAttribute("color");
 				    rClrTxt = tR.getAttribute("colorText");
 				    rFnt = tR.getAttribute("font");
+				    rPrec = tR.getAttribute("prec");
 				}
 				for(iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR.children.length) || iC < formObj.tHead.children.length; ) {
 				    tC = (tR && iCh1 < tR.children.length) ? tR.children[iCh1] : null;
@@ -1990,6 +1993,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    hit.outAlign = tC.getAttribute("align");
 					    hit.style.display = (hit.widthSrc.length && !parseInt(hit.widthSrc)) ? "none" : "";
 					    if((wVl=tC.getAttribute("sort")))	{ sortCol = iC+1; if(!parseInt(wVl)) sortCol *= -1; }
+					    hit.outPrec = tC.getAttribute("prec");
 					} else hit.innerText = "";
 				    }
 				    else {	//Rows content process
@@ -2007,6 +2011,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    tit.outTp = tC.nodeName;
 					    tit.style.textAlign = (tit.outTp == "b" || tit.outTp == "i" || tit.outTp == "r") ? "center" : "";
 					    if(tit.outTp == "b") tit.innerHTML = "<img src='/"+MOD_ID+"/img_button_ok' height='"+fntSz+"px'/> ";
+					    if(tit.outTp == "r" && ((wVl=tC.getAttribute("prec")) || (wVl=hit.outPrec) || (wVl=rPrec)))
+						tit.outPrec = parseInt(wVl);
 					    formObj.setVal(tC.textContent, iR, iC-1);
 					}
 					// Visibility
