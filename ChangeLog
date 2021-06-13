@@ -1,3 +1,12 @@
+2021-06-13 Roman (stable)
+- !!:FIX:SYS,BD.LDAP,Archive.{DBArch,FSArch},DAQ.{ModBus,MMS},{DAQ,Protocol}.OPC_UA,UI.Vision: Some cleaned from the build warnings.
+- SYS: The global variable limCacheIts_N type changed to "unsigned".
+- !FIX:{DAQ,Protocol}.OPC_UA.libOPC_UA: Fixed in the NodeId::operator=() function for comparing other string types,
+	like to Guid and Opaque.
+    FIX: Fixed in building on the Nokia N800 environment and the field "timestampsToReturn" type wrong conversion to REAL.
+- FIX:UI.WebVision: Fixed in form the configured width of the non string arguments of the primitive Text.
+
+
 2021-06-09 Roman (stable)
 - FIX:LibsDB.vcaBase: Main.storeHouse: Fixed in the not string 's' cells content encoding to "HTML".
 - FIX:SYS.BD: The generic DB saving function TBDS::dataSet() was prevented from creation the empty container tags
@@ -15,16 +24,16 @@
 - !!!!:SYS: The "Translations" tab restructured something, appended for the actual status, appended for some context help
     and the translations manager appended for:
 	- limiting of the table form in prmInterf_TM (7 seconds);
-	- an configuration field of passing number the top messages;
+	- a configuration field of passing number the top messages;
 	- setting only for the filtered sources;
 	- checking the content for match only for the filtered sources;
 	- pass the sources missing error.
-    The translation function TMess::translSet() prevented from propagation the group messages change not from the translation manager.
+    The translation function TMess::translSet() prevented from propagation the group messages changed not from the translation manager.
 - !:FIX:Archive.DBArch: Fixed from some crashes at the value archiver groups processing
     by not clearing the table field configs (TConfig) links under the locks.
 - FIX:DAQ.ModBus: Prevented from marking the not connected controller objects as NORM at them stopping.
-- FIX:UI.QTStarter: Prevented from updation the starting window at it close-hide state.
-- FIX:UI.QTCfg: The table rows heigh updation moved at all time the table udation but there can be changed only the rows sequence,
+- FIX:UI.QTStarter: Prevented from updating the starting window at it close-hide state.
+- FIX:UI.QTCfg: The table rows heigh updating moved at all time the table udation but there can be changed only the rows sequence,
     so breaking they rows custom height, detected on the translation table.
 - UI.WebVision: All items appended for the CSS property "pointer-events" treating in the value "all" for active, the master page and boxes
     with included pages; or "none" for all others. To ensure the pointer events pass through inactive elements to the active ones behind.
@@ -46,14 +55,14 @@
 2021-05-23 Roman (stable)
 - data/openscada-proj.in: Switched to linking user LibsDB content to the system RO-content-libraries instead the copying.
 - AGLKS.vca: The short links on the main mnemonic scheme activated for all users.
-- !!:FIX:Mess: The data lock separated from all messages lock in dtRes to prevent the concurency locks
+- !!:FIX:Mess: The data lock separated from all messages lock in dtRes to prevent the concurrently locks
     at active work with translations. The mLang2CodeBase, mLang2Code attributes switched to the lock.
 - !:FIX:DAQ.DAQGate: Prevented from error processing of parameters from other DAQ.DAQGate controller objects with the broken link.
 - UI.{VCAEngine,Vision}: The service of activation runtime visualizer-specific attributes appended
     of the default value in the text, on the attribute "keepAspectRatio", wich is TRUE by default on UI.Vision.
-- UI.VCAEngine: The widgets, restored from the parrent widget, is set to enabled after adding.
+- UI.VCAEngine: The included widgets, restored from the parent widget, is set to enabled after adding.
 - !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Continued in appending the Publish service and client CHUNKS support
-	on the client side and the code comming refactoring in generic:
+	on the client side and the code coming refactoring in generic:
     - the object NodeId appended for the function operator==() of direct comparing;
     CLIENT:
     - the object Client::Subscr::MonitItem is appended as a replace of XML_N in the monitored items representing;
@@ -79,11 +88,11 @@
 
 
 2021-05-16 Roman (stable)
-- Security: The user object appended for a function "auth" of User API for authenticate at password.
+- Security: The user object appended for a function auth() of the User API to authenticate at password.
 - FIX:Protocol.HTTP: Fixed in the User API function messIO() for processing parts of the HTTP-request POST
     and they bounder set to the canonic form.
 - !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Continued in appending the Publish service support on the client side
-	and the code comming refactoring in generic:
+	and the code coming refactoring in generic:
     - the default LifeTimeCounter of the subscriptions set to 2400;
     - the function XML_N::childClear() appended by a result of returning the same XML_N object for concatenation;
     CLIENT:
@@ -114,7 +123,7 @@
 - LibsDB.vcaBase: Main.storeHouse: Appended for the type "text" appointment to the fixed field "DSCR"
     and the field "NAME" of the class edition table.
 - !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Continued in appending the Publish service support on the client side
-	and the code comming refactoring in generic:
+	and the code coming refactoring in generic:
     CLIENT:
     - the message property "timeoutHint" set to 0 for all messages since the possibility of that triggering
 	for Publish messages where no messages besides Publish ones are presented;
@@ -122,7 +131,7 @@
     - the subscription container moved from the Client object to SClntSess for cleaning together
 	closing the secure channel and session in clearFull();
     - the subscription Publish processing function poll() appended for checking of loss all Publish requests
-	during the two keep alive count-time and restorring the pool;
+	during the two keep alive count-time and restoring the pool;
     - the request resource renamed to resOPC and the client object appended by the common resources lock mtxData;
     - the monitored items container access moved under the client resource common lock;
     - the controller object common status appended for the detailed information about the used secure channel,
@@ -136,14 +145,14 @@
 	the corresponded intervals of sampling and publishing cycle grid;
     - EP::secSize() renamed to EP::secN() and there added EP::sessN(), EP::subscrN() and chnlList();
     - EP::mtxData lock switched to PTHREAD_MUTEX_RECURSIVE;
-    - the OpenSCADA module - OPC-UA Server object appended for the common server status tab with information
+    - the OpenSCADA module - OPC-UA Server object, appended for the common server status tab with information
 	about active secure channels;
     - the EndPoint Node object common state appended for information about active sessions and subscriptions.
 
 
 2021-05-03 Roman (stable)
 - LibsDB.vcaBase: doc.{docRepInstVals,docRepDay,docRepMonth,docRepYear}:
-	The reports with the SVG graph appended for CSS option "text-align: center" to ensure it centering on Firfox.
+	The reports with the SVG graph appended for the CSS option "text-align: center" to ensure it centring on Firefox.
     Main.storeHouse: Appended for the type "text" support as the new table item "t".
 - !!!!:SYS: The function TSYS::curTime() appended for an argument of the clock source specifying with using
     the function clock_gettime() and the function TSYS::curTimeN() appended.
@@ -153,9 +162,9 @@
 - !!:UI.{VCAEngine,QTStarter,Vision,WebVision}: The view "Table" of the primitive "FormEl"
     appended by the new cell type 't'-text mostly for allowing the edition confirming the type 's'-string by pressing Enter.
 - !!!!:{DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Continued in appending the Publish service support on the client side
-	and the code comming refactoring in generic:
+	and the code coming refactoring in generic:
     - CLIENT: publish packages tracing switched from using a counter to checking the response sequences;
-    - SERVER: making the publish responses some even by updation the polling mode of the input transports and performing
+    - SERVER: making the publish responses some even by updating the polling mode of the input transports and performing
 	the responses processing at the last time but not from the call counter;
     - CLIENT: appended for the subscription restoring after the sessions clossing, unifying the MonitoredItem statuses,
 	need to be observed yet deeply for that;
@@ -164,7 +173,7 @@
     - CLIENT: significant unification in passing service variables (like to "EndPoint", "SecChnId", ...) to prevent them doubling
 	and the sequences processing moved all to the end serialization function messIO();
     - CLIENT: moving the main service request "CLO" under the messages processing due to the renewals sending inward the Publish activity;
-    - CLIENT: adaption the security modes for work with the mixed input buffer.
+    - CLIENT: adaption the secure messages for work with the mixed input buffer.
     - the function curTime() appended for an argument of the clock source specifying with using the function clock_gettime();
     - fixing "POOL" word on "POLL".
 - UI.WebVision: The view LineEdit of the primitive FormEl set to update at the configuration change 'cfg'.
@@ -238,10 +247,10 @@
 - !!:DAQ.{ModBus,Siemens}: Switched in "f_frq" value form to use the real task execution information.
 - DAQ.Siemens: The waiting connection cycle switched to use the common period or 1 second for aperiodic scheduling.
 - !!:UI.VCAEngine: The project session execution information appended for the real periodicity taken from the task,
-	which also used in form value of the procedure attribute "f_frq"
-    Included widgets of the containers copying appended for adjustement the end position to ensure the visibility.
+	which also used in form value of the procedure attribute "f_frq".
+    Included widgets of the containers copying appended for adjustment the end position to ensure the visibility.
 - !!:FIX:UI.WebVision: The primitive "Document" building restored at switching into the mnemonic schemes,
-	by restorring of enabling child widgets in perUpdtEn()
+	by restoring of enabling child widgets in perUpdtEn()
 	and preventing the view "Table" of the primitive "FormEl" call here with no need of the refitting.
     The view "LineEdit", "TextEdit", "Table" of the primitive FormEl disabled
 	for propagation the keyboard events in the edition mode, to prevent very big setting spare traffic.
@@ -253,15 +262,15 @@
 - !!:AGLKS.vca: The project page /prj_AGLKS/pg_so/pg_4/pg_mn/pg_1 renamed to /prj_AGLKS/pg_so/pg_4/pg_mn/pg_CM101 like to other ones.
     !: Main views of the compressors on the main page set active and linked to switch the detail signal object.
     !: The prescription frames prescrEdit and prescrRun appended to mnemonic schemes of the first signal object.
-- !:FIX:UI.WebVision: Prevented in cycling at presence the Web-session but missing the coresponded VCA-session,
+- !:FIX:UI.WebVision: Prevented in cycling at presence the Web-session but missing the corresponded VCA-session,
 	as a completion of the previous fix.
     FIX: The view Table of the primitive FormEl:
-	- fixed in updation at no row;
+	- fixed in updating at no row;
 	- set to the first visible column for sorting at the sorting enable.
 - FIX:UI.Vision: Fixed in enable the syntax highlighting for initially empty text elements.
 - !!:UI.VCAEngine: The "Diagnostic" page of the VCA-projects adapted to show the debug level messages at enable the debugging.
     !: The session debug messages appended for messages of the setting events,
-	so removing the need of such messages for in the widget procedures.
+	so removing the need of such messages in the widget procedures.
 
 
 2021-03-15 Roman (stable)
@@ -376,14 +385,14 @@
 	- the big text content limiting in 300 symbols at the visibility;
 	- the string type allowed for the multiline edition using TEXTAREA;
 	- the type data "bool" is shown as an image, not "On" or "Off";
-	- centering the boolean, number, time and selectable content;
+	- centring the boolean, number, time and selectable content;
 	- simplifying the table content edition for the types time, number and string by removing the apply and spin buttons.
     - the generic text edition field by TEXTAREA expanded for apply and cancel from the keyboard;
-    - the hosts updating function binded to the double mouse click on the common space of the tree area;
+    - the hosts updating function bound to the double mouse click on the common space of the tree area;
     - FIX: the hosts updating function fixed in detection douple host items;
     - FIX: forced in the actual-selected item marking in the control tree after it rolling;
     - removing nodeText() and setNodeText() by direct using "innerText" and "textContent";
-- !!:UI.{QTStarter,QTCfg,Vision}: The TableDelegate use the QT builtin role Qt::TextAlignmentRole instead own AlignOptRole,
+- !!:UI.{QTStarter,QTCfg,Vision}: The TableDelegate use the Qt builtin role Qt::TextAlignmentRole instead own AlignOptRole,
     was appended for long text visible limit support by the own role TextLimRole and the default value 300 symbols
     by sizeHint() additional reimplementation.
 - !:UI.QTCfg: Improved in the table close filling by consideration the visible vertical scrollbar size
@@ -391,7 +400,7 @@
 - !:UI.Vision: The Table view of the FormEl primitive cleaned form spare role Qt::UserRole+5 of the previous value storing,
 	    but that do now the table delegate.
 	The table early fitting moved just after it filling and the value setting, and after it force resizing to the container widget size,
-	    to provide that true fitting allways.
+	    to provide that true fitting always.
 	Applying the column force width and the row height calculation with limits
 	    are performed independently from the common attribute "colsWdthFit" value.
 	Improved in the table close filling by consideration the visible vertical scrollbar size.
@@ -404,20 +413,19 @@
 	- class full-translated name;
 	- show and activation the buttons "Copy" and "Edit";
 	- use the item-column type in building the end-user table and the content alignment.
-    The frames "RootPgSo", "grpGraph", "grpGraph", "grpGraph10", "ElCadr", "grph_panel" of the library "Main"
+    The frames "RootPgSo", "grpGraph", "grpGraph10", "ElCadr", "grph_panel" of the library "Main"
 	improved in the active elements true order (z) for correct tab focus sequence working.
-- !!:data/ModelsDB/AGLKS/St.db: All frames of the library "AGLKS" improved in the active elements true order (z)
-    for correct tab focus sequence working.
+- !!:AGLKS.vca: All frames of the library "AGLKS" improved in the active elements true order (z) for correct tab focus sequence working.
 - !!:DAQ.ModBus: The output part of the protocol RTU variant appended for early termination of the package waiting
     of the standard functions [ERR,1...6,15,16], what increases the overall bandwidth twice.
 - !!:UI.{QTStarter,QTCfg,Vision}: The common library class TableDelegate significantly improved to work in QTCfg and Vision:
     - appended for the own user roles SelectRole and AlignOptRole;
     - the cell paint appended for the background color by reading-applying the common roles;
-    - the number types (integer and real) appended for force centering;
+    - the number types (integer and real) appended for force centring;
     - the string types appended by the options of alignment and wordwrapping.
 - !!:UI.{VCAEngine,Vision,WebVision}: The view Table of the primitive FormEl appended by the column and cell attribute "align" implementation.
 - !!:UI.Vision: The view Table of the primitive FormEl improved in that fitting after the table whole resizing only,
-	so allow the colums resizing manually also. The row height limited in half height of the table.
+	so allow the columns resizing manually also. The row height limited in half height of the table.
     !: The mime data, style, diagnostic message table and the primitive Protocol switched to use the unified class TableDelegate
 	with some centred columns.
 - !!!!:FIX:UI.WebVision: The view Table of the primitive FormEl significantly improved for:
@@ -446,10 +454,10 @@
 - FIX:UI.VCAEngine: Some improved in the links processing only for constants.
 - !!!!:UI.Vision: The view "Table" of the primitive "FormEl" significantly improved in:
 	- connection the common table delegate with the feature of multiline edition;
-	- columns show at the table updation;
+	- columns show at the table updating;
 	- more precision columns width alignment;
 	- rows height limition in 70% from the whole table size;
-	- allowing collumns width manual edition before it updation.
+	- allowing collumns width manual edition before it updating.
     !!: The property dialogues of the "Widgets" and "Projects" / "Widget libraries" appended
 	for own statusbar and a button of builtin manual invoking. The TextEdit widgets switched
 	to own statusbar of the property dialogues for the cursor position and what disabled in ToolTip.
@@ -522,7 +530,7 @@
     and improved in the "Content-Disposition" form.
 - !!:FIX:UI.QTStarter: The project list updating code rewrote for soft update, without the current item selection lost.
     FIX: Fixed in building with Qt 5.15.
-- FIX:UI.Vision: Fixed in the user color adjustement in the project execution mode.
+- FIX:UI.Vision: Fixed in the user color adjustment in the project execution mode.
 - !!:UI.WebUser: Adapted to the work with POST and the content in the body.
 
 
@@ -1062,7 +1070,7 @@
 	- the manual input support;
 	- appending of configuration the document depth of the selecting.
     doc.{docRepInstVals,docRepDay,docRepMonth,docRepYear}:
-	Improved for centering the diagram area and by appending the scale information near the measurement unit.
+	Improved for centring the diagram area and by appending the scale information near the measurement unit.
     Main.ElViewGraph: Some improved for expanding the value field to all widget width and the default precision set in 6.
 - !!!:Model.AGLKS.St: FSArch.1m: The strange and temporary message archivers removed:
 	FSArch.{NetRequsts,test,StatErrors}, DBArch.test and added the actual ones: FSArch.{alarms,actions,SYS}, DBArch.SYS.
@@ -1374,7 +1382,7 @@
     !!: The first alarms obtaining in the messages redundancy enabled only at presence the message archives in the redundancy.
 - !!:Archive,DAQ.Controller,Special.FLibSYS: For the current time of messages and values mostly used TSYS::curTime()/1000000 instead time(NULL)
     due to the message and value time is in microseconds and mark by TSYS::curTime().
-- DB: The function TTypeBD::open() return changed allways to the requested ID for already presented nodes.
+- DB: The function TTypeBD::open() return changed always to the requested ID for already presented nodes.
 - !:Archive.{FSArch,DBArch}: Access control to the message put() and get() functions restored to the first one,
     due to changing the messages bottom time border processing in the redundancy and DAQ.DAQGate.
 - !!!:FIX:Archive.FSArch: Fixed for the info.db processing by using the DB address as
@@ -4357,7 +4365,7 @@
 - !!:FIX:Transports.Sockets: Debug messages some unified and appended.
     The connection time global sticking to the value from messIO() fixed by executions processing for restore.
 - Transports: User API function {TrOut}.start() added for fast control for the output transport state.
-- FIX:UI.VCAEngine: To function of a widget changes down to the parrent added checking for the recurrence inheritance prevent.
+- FIX:UI.VCAEngine: To function of a widget changes down to the parent added checking for the recurrence inheritance prevent.
 
 
 2015-11-19 Roman
@@ -4626,7 +4634,7 @@
 - SYS.TMess: Time mark format of messages for stdout and stderr set to ISO 8601.
 - FIX:SYS.TCntrNode: To function chldList() argument "onlyEn" is added and used by default for list only enabled node.
     Some problems detected here on real-time systems when one high-priority task try access to disabled and going to remove nodes.
-- SYS.Security: User's language field allowed for configure allways.
+- SYS.Security: User's language field allowed for configure always.
 - FIX:Archive,Archive.FSArch: Early get empty, and request to unallocated memory, previous value in string prevented by EVAL assign here,
     into valSet().
 - FIX:DAQ.{DCON,ICP_DAS,ModBus}: Error messages expanding to addition different errors per tries fixed.
@@ -6466,7 +6474,7 @@
     Fix possibility for open and include new page to container the page into the "f_start" stage.
     "prm:*" dynamic links wrong set is fixed by remove prefix "a_" from last item - attribute.
 - FIX:UI.Vision: No actions update on the library's widget rename or remove is fixed.
-    Tool windows centering is disabled and new pages loading by load("") is moved to constructor RunPageView for
+    Tool windows centring is disabled and new pages loading by load("") is moved to constructor RunPageView for
     allow DE for custom control to the windows placing behavior.
 
 
@@ -6871,7 +6879,7 @@
 
 
 2013-02-14 Roman
-- FIX:UI.VCAEngine: Lock session on enabling try pages with broken child widgets, like no parrent set, is fixed
+- FIX:UI.VCAEngine: Lock session on enabling try pages with broken child widgets, like no parent set, is fixed
     and the error ignored for full project start.
 - FIX:UI.VCAEngine: Global attributes translation read for field "CFG_VAL" is fixed.
 - FIX:UI.Vision: Attributes change for group widgets and for equal to first attribute value into the group is fixed.
@@ -10046,7 +10054,7 @@
 - FIX:DAQ.ModBus: PDU size control is added.
 - !!:DAQ.OPC_UA: OPC UA clien acquisition is made work. OPC UA server nodes browser is added to client's controller.
 - !:UI.QTCfg: Rows adjusting is added for tables after new rows add. Table's content copy to clipboard is added.
-- FIX:UI.QTCfg: QT bug for no updation first row a table at some cases is hacked.
+- FIX:UI.QTCfg: QT bug for no updating first row a table at some cases is hacked.
 
 
 2010-03-30 Maxim
@@ -10131,7 +10139,7 @@
 - FIX:UI.VCAEngine: A project selection for a session is fixed.
 - FIX:UI.Vision: A text rotation of primitive "Text" is fixed fo angles more 180 degrees.
 - FIX:UI.WebCfgD: Empty icons hide on pages is added for browsers based on KHTML.
-- FIX:UI.WebVision: Internal widgets updation is fixed at borders changing.
+- FIX:UI.WebVision: Internal widgets updating is fixed at borders changing.
 
 
 2010-02-27 Roman
@@ -12170,7 +12178,7 @@
 2008-09-08 Roman
 - !:/UI/WebVision: Cursor set to primitive Diagramm is added.
 - !!:/UI/WebVision: Force focus support is added.
-- FIX:/UI/WebVision: No full updation after page getting from cache is fixed.
+- FIX:/UI/WebVision: No full updating after page getting from cache is fixed.
 
 
 2008-09-07 Roman

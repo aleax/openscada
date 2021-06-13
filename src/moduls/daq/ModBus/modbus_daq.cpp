@@ -1074,7 +1074,7 @@ void TMdPrm::enable( )
     if(isStd()) {
 	string ai, sel, atp, atp_m, atp_sub, aid, anm, aflg;
 	string m_attrLs = cfg("ATTR_LS").getS();
-	for(int ioff = 0; (sel=TSYS::strLine(m_attrLs,0,&ioff)).size() || ioff < m_attrLs.size(); ) {
+	for(int ioff = 0; (sel=TSYS::strLine(m_attrLs,0,&ioff)).size() || ioff < (int)m_attrLs.size(); ) {
 	    if(sel.empty() || sel[0] == '#') continue;
 	    int elOff = 0;
 	    atp = TSYS::strParse(sel, 0, ":", &elOff);

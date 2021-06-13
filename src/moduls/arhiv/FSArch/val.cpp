@@ -413,10 +413,10 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
 	    short wBitsPerSample;
 	} wv_form;
 
-	strncpy(rif.riff, "RIFF", 4);
+	strncpy(rif.riff, "RIFF", sizeof(rif.riff));
 	rif.filesize = buf.realSize()*sizeof(float)+sizeof(rif)+2*sizeof(chnk)+sizeof(wv_form);
-	strncpy(rif.rifftype,"WAVE",4);
-	strncpy(chnk.chunk_id,"fmt ",4);
+	strncpy(rif.rifftype, "WAVE", sizeof(rif.rifftype));
+	strncpy(chnk.chunk_id, "fmt ", sizeof(chnk.chunk_id));
 	chnk.chunksize = sizeof(wv_form);
 	wv_form.wFormatTag = 3;
 	wv_form.nChannels = 1;
@@ -432,7 +432,7 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
 	fOK = fOK && (write(hd,&rif,sizeof(rif)) == sizeof(rif));
 	fOK = fOK && (write(hd,&chnk,sizeof(chnk)) == sizeof(chnk));
 	fOK = fOK && (write(hd,&wv_form,sizeof(wv_form)) == sizeof(wv_form));
-	strncpy(chnk.chunk_id, "data", 4);
+	strncpy(chnk.chunk_id, "data", sizeof(chnk.chunk_id));
 	chnk.chunksize = 0;				//Set temporary size buf.realSize()*sizeof(float);
 	off_t sz_pos = lseek(hd, 0, SEEK_CUR);
 	fOK = fOK && (write(hd,&chnk,sizeof(chnk)) == sizeof(chnk));

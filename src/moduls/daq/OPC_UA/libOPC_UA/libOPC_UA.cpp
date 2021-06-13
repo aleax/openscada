@@ -357,7 +357,7 @@ bool NodeId::operator==( const NodeId &node )
     if(type() != node.type())	return false;
     switch(type()) {
 	case NodeId::Numeric:	return (numbVal() == node.numbVal());
-	case NodeId::String:	return (strVal() == node.strVal());
+	default: return (strVal() == node.strVal());
     }
     return true;
 }
@@ -1227,8 +1227,6 @@ string Client::poll( bool byRead )
 
 	//Checking for the subscriptions
 	for(unsigned iSubscr = 0; iSubscr < sess.mSubScr.size(); ++iSubscr) {
-	    Subscr &curS = sess.mSubScr[iSubscr];
-
 	    req.childClear();
 	    OPCAlloc res(mtxData, true);
 	    for(unsigned mIt = 0; mIt < sess.mSubScr[iSubscr].mItems.size(); ++mIt) {
@@ -1244,6 +1242,7 @@ string Client::poll( bool byRead )
 	    reqService(req);
 
 	    res.lock();
+	    if(iSubscr >= sess.mSubScr.size())	continue;	//Changed out of lock
 	    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
 		XML_N *chO = req.childGet(iCh);
 		if(str2uint(chO->attr("mItId")) >= sess.mSubScr[iSubscr].mItems.size())	continue;
@@ -1557,7 +1556,7 @@ void Client::protIO( XML_N &io )
 		else if(io.attr("id") == "Read") {
 		    iTpId = OpcUa_ReadRequest;
 		    oR(mReq, str2real(io.attr("maxAge")), 8);		//maxAge 0 ms
-		    oN(mReq, str2real(io.attr("timestampsToReturn")), 4);//timestampsTo Return (SERVER_1)
+		    oN(mReq, str2int(io.attr("timestampsToReturn")), 4);//timestampsTo Return (SERVER_1)
 									//> nodesToRead []
 		    oNu(mReq, io.childSize(), 4);			//nodes
 		    //oNu(mReq, std::min(25u,io.childSize()-stIdx), 4);	//nodes
@@ -1651,7 +1650,7 @@ void Client::protIO( XML_N &io )
 		else if(io.attr("id") == "Publish") {
 		    iTpId = OpcUa_PublishRequest;
 		    //  The publish request acknowledges
-		    oN(mReq, (io.childSize()?io.childSize():-1), 4);	//>subscription Acknowledgements []
+		    oN(mReq, (io.childSize()?(int)io.childSize():-1), 4);	//>subscription Acknowledgements []
 		    for(unsigned iAck = 0; iAck < io.childSize(); iAck++) {
 			XML_N *chO = io.childGet(iAck);
 			oNu(mReq, str2uint(chO->attr("subScrId")), 4);	//> subscriptionId
@@ -2700,9 +2699,9 @@ nextReq:
 	    epEnList(epLs);
 	    int iEPOk = -1;
 	    EP *wep = NULL;
-	    for(int iEP = 0; iEPOk < 0 && iEP < (int)epLs.size(); iEP++) {
+	    for(int iEP = 0; iEPOk < 0 && iEP < (int)epLs.size(); ++iEP) {
 		if(!(wep=epEnAt(epLs[iEP])))	continue;
-		for(int iS = 0; iEPOk < 0 && iS < wep->secN(); iS++)
+		for(unsigned iS = 0; iEPOk < 0 && iS < wep->secN(); ++iS)
 		    if(wep->secPolicy(iS) == secPlc)
 			iEPOk = iEP;
 	    }
@@ -2746,7 +2745,7 @@ nextReq:
 
 	    // Find message secure mode
 	    bool secModOK = false;
-	    for(int iS = 0; !secModOK && iS < wep->secN(); iS++)
+	    for(unsigned iS = 0; !secModOK && iS < wep->secN(); ++iS)
 		if(wep->secPolicy(iS) == secPlc && wep->secMessageMode(iS) == secMode)
 		    secModOK = true;
 	    if(!secModOK) throw OPCError(OpcUa_BadSecurityModeRejected, "", "");
@@ -2995,7 +2994,7 @@ nextReq:
 			EP *ep = epEnAt(epLs[iEP]);
 			if(!ep) continue;
 								//>>> EndpointDescription
-			for(int iSec = 0; iSec < ep->secN(); iSec++, epCnt++) {
+			for(unsigned iSec = 0; iSec < ep->secN(); iSec++, epCnt++) {
 			    oS(respEp, ep->url()+"/OSCADA_OPC/"+ep->secPolicy(iSec)/*+"/"+ep->secMessMode(iSec)*/);    //endpointUrl
 								//>>>> server (ApplicationDescription)
 			    oS(respEp, applicationUri());	//applicationUri
@@ -3083,11 +3082,11 @@ nextReq:
 		    vector<string> epLs;
 		    epEnList(epLs);
 		    unsigned epCnt = 0;
-		    for(unsigned iEP = 0; iEP < epLs.size(); iEP++) {
+		    for(unsigned iEP = 0; iEP < epLs.size(); ++iEP) {
 			EP *ep = epEnAt(epLs[iEP]);
 			if(!ep) continue;
 								//>>> EndpointDescription
-			for(int iSec = 0; iSec < ep->secN(); iSec++, epCnt++) {
+			for(unsigned iSec = 0; iSec < ep->secN(); ++iSec, ++epCnt) {
 			    oS(respEp, ep->url());		//endpointUrl
 								//>>>> server (ApplicationDescription)
 			    oS(respEp, applicationUri());	//applicationUri
@@ -3778,7 +3777,7 @@ nextReq:
 			if(findOK || s->publishReqs.size() == 1) {
 			    unsigned prSS = wep->mSubScr.size();
 			    for(unsigned iSs = 0; inPrtId == s->inPrtId && iSs < wep->mSubScr.size(); ++iSs)
-				if(wep->mSubScr[iSs].sess == sesTokId &&
+				if(wep->mSubScr[iSs].sess == (int)sesTokId &&
 					(wep->mSubScr[iSs].toInit || wep->mSubScr[iSs].st == SS_LATE || wep->mSubScr[iSs].st == SS_KEEPALIVE) &&
 					(prSS == wep->mSubScr.size() || wep->mSubScr[iSs].pr > wep->mSubScr[prSS].pr))
 				    prSS = iSs;
@@ -4155,7 +4154,7 @@ SubScrSt Server::Subscr::setState( SubScrSt ist )
 //*************************************************
 //* Server::EP					  *
 //*************************************************
-Server::EP::EP( Server *iserv ) : mEn(false), cntReq(0), objTree("root"), serv(iserv)
+Server::EP::EP( Server *iserv ) : serv(iserv), mEn(false), cntReq(0), objTree("root")
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);

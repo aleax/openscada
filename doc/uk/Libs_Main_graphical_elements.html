@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Основні графічні елементи</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 99% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">российский</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -2150,36 +2150,38 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
 <p>Елемент-кадр, представлений на рисунку 3.8, слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
+</p><p>Протягом реалізації кадру, вигляд "Таблиця" <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">примітиву "FormEl"</a> значним чином розширено на обох візуалізаторах щодо:
 </p>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="../en/files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> Get completed one from the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9.4 LTS announce</a>
-</td></tr></table>
-</div>
-<p>During the frame implementing, the view "Table" of <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the primitive "FormEl"</a> significantly expanded on both visualizers for:
-</p>
-<ul><li> Common things and in the <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCA-Engine</a>:
-<ul><li> improving the table content updating and storing for big content, non storing double source content;</li>
-<li> appended of limiting in processing the table content for direct apply the changes, only for it size lesser for limUserFile_SZ (1 MB).</li></ul></li>
-<li> <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>:
-<ul><li> table cells in the editing mode allowed for the system-browser context menu;</li>
-<li> appended for the sorting support by columns;</li>
-<li> prevented from the complete updating at the attribute "value" modification;</li>
-<li> appended for:
-<ul><li> the not fitting mode (the attribute "colsWdthFit" missing) implementation, using the automatic table layout mode for calculation the fixed widths and next switching to the fixed table layout mode;</li>
-<li> the light edition mode base implementation.</li></ul></li></ul></li>
-<li> <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>:
-<ul><li> appended in export to CSV;</li>
-<li> improved in:
-<ul><li> support the sorting of the table content per columns, by preserving the scroll position and the sorting parameters before the sorting disabling during the updating time;</li>
-<li> in light processing of the width changing;</li>
-<li> in fitting at the development mode, also at the vertical header show;</li></ul></li>
-<li> appended for the light edition — without the columns refitting all updating time;</li>
-<li> cleaned form spare role Qt::UserRole+5 of the previous value storing, but that do now the table delegate.</li></ul></li></ul>
-<p>Кадр надає наразі, та надасть у майбутньому, наступні властивості:
+<dl><dd><dl><dd><ul><li> VCAEngine,QTStarter,Vision,WebVision: Appended by the new cell type 't'-text mostly for allowing the edition confirming the type 's'-string by pressing Enter.</li>
+<li> VCAEngine,Vision,WebVision: Appended of the column, row and cell space option "prec" of the real value precision control; and by the column and cell attribute "align" implementation.</li>
+<li> WebVision,Vision: Appended for switching the tables in preventing of double storing the source content at the content size more for 10000.</li>
+<li> FIX:Vision: Use the the common table delegate with the feature of multiline edition.</li></ul>
+<dl><dd><ul><li> Improved in the columns, rows and cells show at the table updation and commonly:</li></ul>
+<dl><dd><ul><li> in limiting the visual size of the cell content in 300 symbols;</li>
+<li> in limition the rows height in 70% from the whole table size;</li>
+<li> more precision columns width alignment;</li>
+<li> in fitting at the development mode;</li>
+<li> in fitting also at the vertical header show;</li>
+<li> in the table close filling by consideration the visible vertical scrollbar size;</li>
+<li> in fitting after the table whole resizing only, so allow the columns resizing manually also and to provide that true fitting always.</li></ul></dd></dl>
+<ul><li> Implemented for the light processing of the width changing and updating:</li></ul>
+<dl><dd><ul><li> light edition without the columns refitting all updating time, only at: first row appearing, columns count change and the column title change, font change and resize;</li>
+<li> apply the column force width and the row height calculation with limits independently from the common attribute "colsWdthFit" value;</li>
+<li> setting the value, early resizing and the table fitting, moved to the space of the table content presence and after the sorting.</li></ul></dd></dl>
+<ul><li> The export function in runtime append of export the view Table of the primitive "FormEl" in CSV.</li></ul></dd></dl>
+<ul><li> WebVision:</li></ul>
+<dl><dd><ul><li> Improved in the columns, rows and cells show at the table updating and commonly:</li></ul>
+<dl><dd><ul><li> the not fitting mode (the attribute "colsWdthFit" missing) implementation, using the automatic table layout mode for calculation the fixed widths and next switching to the fixed table layout mode;</li>
+<li> multiline text edition of the text cells in whole width and height of the cell, with the edition apply by Ctrl+Enter;</li>
+<li> view limiting the string cells in 300 symbols;</li>
+<li> display the boolean cells as an image at the true state;</li>
+<li> table cells in the editing mode allowed for the system-browser context menu.</li></ul></dd></dl>
+<ul><li> Implemented for the light processing of the width changing and updating:</li></ul>
+<dl><dd><ul><li> the table changes detection and updating switched to the mode of not storing double source content.</li>
+<li> prevented from the complete updating at the attribute "value" modification;</li></ul></dd></dl>
+<ul><li> Appended for the sorting support by columns. Set to the first visible column for sorting at the sorting enable.</li></ul></dd></dl></dd></dl></dd></dl>
+<p><br />
+Кадр надає наразі, та надасть у майбутньому, наступні властивості:
 </p>
 <ul><li> <b>Режим редагування класів</b>: споглядання, створення та редагування класів складу із функцією збереження даних при зміні типу поля.</li>
 <li> <b>Режим споглядання та редагування основних даних</b>:
@@ -2207,7 +2209,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li> <i>NAME</i> [varchar(200)] — назва елементу;</li>
 <li> <i>DSCR</i> [text] — опис елементу;</li>
 <li> <i>SP_{ID}X</i> — специфічне поле класу відповідно до <i>ID</i> класу таблиці.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The class table field with <i>ID</i>="NAME" means the whole storehouse localised name.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Поле класу таблиці із <i>ID</i>="NAME" передбачає загальну локалізовану назву складу.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseD_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8a. Кадр "Склад" у режимі розробки.</div></div></div></div>
 <p><b><u>Використання — розробка</u></b><br />

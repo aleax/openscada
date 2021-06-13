@@ -344,9 +344,237 @@
 <li> Generating the actual offline documentation using the service procedure "<a href="Libs_Service_procedures.html#docOffLine" title="Special:MyLanguage/Libs/Service procedures">EXT: Off-line documentation</a>".</li>
 <li> Committing the release fixes to the repository and building that for the second-final build.</li></ul>
 </div>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 40 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2755" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
-</p><p>...
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 45 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2755" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+</p><p><b><u>New and significantly updated parts</u></b><br />
 </p>
+<ul><li> OpenSCADA Core: 3:9:0 =&gt; <b>3:10:0</b></li>
+<li> OpenSCADA "Transports" subsystem: 17 =&gt; <b>18</b></li>
+<li> {DAQ,Protocol}.OPC_UA,libOPC_UA: 1.7 =&gt; <b>2.1</b>, 1.10 =&gt; <b>2.1</b>, 1.2 =&gt; <b>2.1</b></li>
+<li> DAQ.ModBus: 2.12 =&gt; <b>3.1</b></li>
+<li> DAQ.Siemens: 3.5 =&gt; <b>3.6</b></li>
+<li> Transport.Sockets: 4.2 =&gt; <b>4.3</b></li>
+<li> Transport.Serial: 2.5 =&gt; <b>2.6</b></li>
+<li> Transport.SSL: 3.2 =&gt; <b>3.3</b></li>
+<li> UI.WebCfgD: 1.5 =&gt; <b>2.0</b></li>
+<li> UI.VCAEngine: 6.9 =&gt; <b>7.1</b></li>
+<li> UI.QTStarter: 5.8 =&gt; <b>5.9</b></li>
+<li> UI.QTCfg: 5.1 =&gt; <b>5.4</b></li>
+<li> UI.Vision: 7.7 =&gt; <b>7.13</b></li>
+<li> UI.WebVision: 5.8 =&gt; <b>6.2</b></li>
+<li> LibsDB.OscadaLibs.DevLib.IEC62056: 1.0 =&gt; <b>1.1</b></li>
+<li> LibsDB.vcaBase.Main: 2.0 =&gt; <b>2.1</b>
+<ul><li> storeHouse: <b>1.0</b></li>
+<li> RootPgSo: 2.3 =&gt; <b>2.4</b></li></ul></li></ul>
+<p><b><u><a class="external text" href="http://oscada.org/en/news/single-page/article/trinity-desktop-environment-tde-release-1409/" rel="nofollow noreferrer noopener" target="_blank">Automation Linux distributive of the project OpenSCADA</a></u></b><br />
+</p>
+<ul><li> the patched packages "tdemultimedia-trinity", "tdenetwork-trinity" and "tdeutils-trinity" were rebuilt;</li>
+<li> before the release there, in <a class="external text" href="https://mirror.git.trinitydesktop.org/weblate/" rel="nofollow noreferrer noopener" target="_blank">TDE Weblate</a>, have finished the translation to Ukrainian for the parts-packages of TDE:&nbsp;?;</li></ul>
+<p><b><u>OpenSCADA libraries and projects</u></b><br />
+</p>
+<ul><li> LibsDB.vcaBase,AGLKS.vca: Main.RootPgSo: Appended for:
+<ul><li> the widget "alarms" on the primitive "Protocol" basis with the possibility of enable/disable;</li>
+<li> appended for an optional function of returning to a default user after specified time in a new attribute "defUser";</li>
+<li> switched to a non relative algorithm of the main mnemonic scheme's vertical position and height calculation.</li></ul></li>
+<li> LibsDB.OscadaLibs: DevLib.IEC62056: Rewrote in the synchronous (request-answer) mode for working multiple devices on the serial bus.</li>
+<li> LibsDB.vcaBase:
+<ul><li> The library "Main" appended for the new page "StoreHouse (storeHouse)" implementation.</li>
+<li> Main.RootPgSo: Periodicity of the frame execution rise to 1000 milliseconds after appending for events early processing. Switched mostly from the hotkeys "Ctrl+?" to "CtrlAlt+?".</li></ul></li>
+<li> AGLKS.vca: The project page /prj_AGLKS/pg_so/pg_4/pg_mn/pg_1 renamed to /prj_AGLKS/pg_so/pg_4/pg_mn/pg_CM101 like to other ones.</li></ul>
+<p><b><u>API</u></b><br />
+<i>!!!!:Changes</i>:
+</p>
+<ul><li> SYS: The function TSYS::curTime() appended for an argument of the clock source specifying with using the function clock_gettime(). The EVAL_RFlt definition appended for the suffix "f".</li>
+<li> Mess: The translation function TMess::translSet() appended by an argument "srcFltr" of filtering at sources.</li>
+<li> Transport: The IO-log functions pushLogMess() appended by the arguments "data" and "dataDir".</li></ul>
+<p><i>Appends</i>:
+</p>
+<ul><li> Mess: The data lock separated from all messages lock in dtRes.</li>
+<li> SYS: The user API functions appended by the function lang() of the system language fast obtaining.
+<ul><li> Appended for the function TSYS::curTimeN().</li>
+<li> .,DAQ.{LogicLev,ModBus,Siemens}: Appended and used for a global constant DAQ_APER_FRQ of frequency of representing the aperiodic invokes, like to f_start, of the periodic processes.</li></ul></li>
+<li> Security: The user object appended for a function auth() of the User API to authenticate at password.</li>
+<li> Transport: The input and output transport objects appended for the IO-log attributes: "mLogLstDt", "mLogLstDtTm".</li></ul>
+<p><b><u>SYS</u></b><br />
+</p>
+<ul><li> configure.ac: Core library version rose to 3:10:0 and the program version rose to 0.9.4.</li>
+<li> The source code messages and program documentation:
+<ul><li> rom_as@oscada.org replaced by roman@oscada.org in everywhere in the source.</li>
+<li> The document "Modules/OPC_UA" complete revised for the modules version 2.1 and the translation.</li></ul></li>
+<li> FIX:Building: data/Android/patches/openscada_oscada.xml.patch: The Android patch appended for the plain passwords restoring in the table ExtTansp.</li>
+<li> The "Translations" tab restructured something, appended for the actual status, appended for some context help and the translations manager appended for:</li></ul>
+<dl><dd><dl><dd><ul><li> limiting of the table form in prmInterf_TM (7 seconds);</li>
+<li> a configuration field of passing number the top messages;</li>
+<li> setting only for the filtered sources;</li>
+<li> checking the content for match only for the filtered sources;</li>
+<li> pass the sources missing error.</li></ul></dd></dl>
+<ul><li> The translation function TMess::translSet() prevented from propagation the group messages changed not from the translation manager.</li></ul></dd></dl>
+<ul><li> FIX: The common configuration field "WorkDir" was prevented from marking as modified one at the project switch than saving it in the configuration file.</li>
+<li> FIX: The EVAL_RFlt definition appended for the suffix "f" to prevent of wrong comparing the double EVAL_RFlt with stored float values, fixes the archiver Archive.FSArch work with the float type values in the EVAL detection.</li>
+<li> FIX:Mess: The data lock separated from all messages lock in dtRes to prevent the concurrently locks at active work with translations. The mLang2CodeBase, mLang2Code attributes switched to the lock.</li>
+<li> data/openscada-proj.in: Switched to linking user LibsDB content to the system RO-content-libraries instead the copying.</li></ul>
+<p><b><u>DAQ</u></b><br />
+</p>
+<ul><li> ModBus,Siemens: Switched in "f_frq" value form to use the real task execution information.</li>
+<li> {DAQ,Protocol}.OPC_UA.{.,libOPC_UA}: Appended for the Publish service implementation client CHUNKS support on the DAQ-client part and the code coming refactoring in generic:</li></ul>
+<dl><dd><dl><dd> <i>CLIENT</i>:</dd></dl>
+<ul><li> attributes (monitored items) adding moved from attrPrc() directly to enable() and which ensured to call at the controller object start</li>
+<li> ... and the items processing improved in updating the description, flags and link;</li>
+<li> values acquisition is unified in processing in the parameter function upVal()</li>
+<li> ... and the values requesting by the controller object function getValMIt() with the Arrays support</li>
+<li> ... than preparing closely for builtin the logical parameter type;</li>
+<li> the DAQ-parameter objects enabled for including other parameters;</li>
+<li> the EVAL setting and removing for all attributes tested for all modes.</li>
+<li> structure variables selection in DAQ-parameters allowed to select its items separately, in the selection browser;</li>
+<li> the variables list of the DAQ-parameters parsing set to complete parsing with passing empty lines;</li>
+<li> the DAQ-controller object appended in closing the session and secure channel at it stopping.</li>
+<li> the controller object common status appended for the detailed information about the used secure channel, session, subscription and the processing monitored items;</li>
+<li> the request resource renamed to resOPC.</li></ul>
+<dl><dd> <i>SERVER</i>:</dd></dl>
+<ul><li> the OPC-UA Server object appended for the common server status tab with information about activity of the secure channels;</li>
+<li> the EndPoint Node object appended for the common state with information about activity of the sessions and subscriptions and the subscription task period and time of execution.</li></ul>
+<dl><dd> <i>LIB</i>:</dd></dl>
+<ul><li> unified in specifying the default value of the secure channel life time, what set to 300000 ms.</li>
+<li> the default LifeTimeCounter of the subscriptions set to 2400;</li>
+<li> the object NodeId appended for the function operator==() of direct comparing;</li>
+<li> the function XML_N::childClear() appended by a result of returning the same XML_N object for concatenation;</li>
+<li> the function curTime() appended for an argument of the clock source specifying with using the function clock_gettime();</li>
+<li> short functions appended for str2int() and str2uint();</li>
+<li> some fields renamed: publInterv to publInterval, cntrLifeTime to lifetimeCnt, cntrKeepAlive to maxKeepAliveCnt, maxNotPerPubl to maxNtfPerPubl, en to publEn;</li>
+<li> fixing "POOL" word on "POLL".</li></ul>
+<dl><dd> <i>LIB_CLIENT</i>:</dd></dl>
+<ul><li> Client::reqService() appended for the meta command "CloseALL" of closing current session and secure channel;</li>
+<li> the main client services processing function protIO() adapted to work in the asynchronous mode (not requesting);</li></ul>
+<dl><dd><ul><li> the function Client::messIO() expanded for the timeout argument with specifying the requesting mode also;</li>
+<li> the channel writing and reading is separated in MSG packages processing;</li>
+<li> adaption the secure messages to work with the mixed input buffer:</li>
+<li> moving the main service request "CLO" under the messages processing due to the renewals sending inward the Publish activity.</li></ul></dd></dl>
+<ul><li> implemented for the Publish service on the client side:</li></ul>
+<dl><dd><ul><li> the "Client" object appended for the subobject "Subscr" implementation (but stored in Client::SClntSess) with the functions: activate(), monitoredItemAdd() and monitoredItemDel();</li>
+<li> the "Client" object appended for the function poll() with:</li></ul>
+<dl><dd><ul><li> unifying the values reading both for the Read and Publish modes;</li>
+<li> checking of loss all Publish requests during the OpcUa_ClntPublishResentCntr(2) keep alive count-time;</li>
+<li> restoring the Publish pool.</li></ul></dd></dl>
+<ul><li> the object Client::Subscr::MonitItem is appended as the monitored items representer with the access under the client resource common lock;</li></ul>
+<dl><dd><ul><li> the service requests appended for implementation, include processing the responses: CreateSubscription, DeleteSubscriptions, CreateMonitoredItems, Publish, Poll;</li>
+<li> implemented and tested in the secure policies support at Publish;</li>
+<li> the target Publish requests pool per subscription set in the virtual function publishReqsPool() with default value 2;</li></ul></dd></dl>
+<ul><li> appended for the CHUNKS implementation both for requests and responses;</li>
+<li> completely revised and cleared in the common requesting function reqService() from doubling the arguments and parameters:</li></ul>
+<dl><dd><ul><li> fixed of checking the signing in mixing with Publish of the secure policies;</li>
+<li> appended for restoring sessions at reconnection the secure channel;</li>
+<li> unifying the clearing of the current session and secure channel.</li></ul></dd></dl>
+<ul><li> the client object appended by the common resources lock mtxData;</li>
+<li> the message property "timeoutHint" set to 0 for all messages;</li>
+<li> the Read request returned to the plain requesting with limition on CHUNKS only;</li>
+<li> the error OpcUa_BadSecureChannelIdInvalid added for clearing the secure channel;</li>
+<li> Client::SClntSess::{sessOpen,lstMessReq} renamed to {secChnlOpenTm,secLstMessReqTm}</li>
+<li> ... and prevented from clearing in restoring the session and secure channel;</li>
+<li> appended for debug message of the request errors.</li></ul></dd>
+<dd> <i>LIB_SERVER</i>:</dd></dl>
+<ul><li> the server part adapted to work with UAExpert 1.5 for: the attribute AId_Descr of the DAQ-value set to the type OpcUa_LocalizedText, the integer types appended for declaration OpcUa_IntAuto and OpcUa_UIntAuto.</li>
+<li> the subscriptions processing returned to they processing in a separate task and the function subScrCycle() for:</li></ul>
+<dl><dd><ul><li> true counting all timeouts to disable;</li>
+<li> processing the periodicity of subscription and publishing;</li>
+<li> checking the assigned sessions and secure channels state to close the subscriptions.</li></ul></dd></dl>
+<ul><li> but the publishing left for processing in the input channel activity and the function Server::EP::publishCall() with preventing the Publish processing for wrong and foreign Subscriptions, by checking inPrtId, sesTokId and isSecCnlAct;</li>
+<li> Session unification for: link of the sessions to secure channels switched to single one instead an array, the session checking of all messages appended of preventing of using foreign connections;</li>
+<li> not final chunk packages switched to send directly, for not append to single TCP-package;</li>
+<li> EP::mtxData lock switched to PTHREAD_MUTEX_RECURSIVE;</li>
+<li> the secure channels limited in OpcUa_SecCnlLimit(10) and the publishes queue in OpcUa_ServerMaxPublishQueue(10);</li>
+<li> EP::secSize() renamed to EP::secN() and there added EP::sessN(), EP::subscrN() and chnlList();</li>
+<li> Server.SecCnl.{TokenId,TokenIdPrev} renamed to Server.SecCnl.{tokenId,tokenIdPrev}.</li></ul></dd></dl>
+<ul><li> ModBus: The output part of the protocol RTU variant appended for early termination of the package waiting of the standard functions [ERR,1...6,15,16], what increases the overall bandwidth twice.
+<ul><li> IO of the Logical Level parameters enabled for the translation, for not linked strings and like to DAQ.LogicLev.</li>
+<li> The DAQ attributes parsing switched to use TSYS::strLine() and TSYS::strParse() than allowing the symbol ':' in the name and empty lines in the text.</li></ul></li></ul>
+<p><b><u>Archives-History</u></b><br />
+</p>
+<ul><li> FIX:FSArch: Critical fixed in the value archive files processing, in try they ID write to NULL string.</li>
+<li> DBArch: The message archivers appended for the configuration field "Unique and non duple messages for time and category only".</li>
+<li> FIX: Fixed from some crashes at the value archiver groups processing by not clearing the table field configs (TConfig) links under the locks and the unlocked function ModVArch::grpLimits() for reqRes.</li></ul>
+<p><b><u>Transports</u></b><br />
+</p>
+<ul><li> The IO log, both input and output parts, expanded and appended of:
+<ul><li> combining data of packages with even direction and address during prmWait_TM (5 seconds);</li>
+<li> microseconds part of the log fixed for 6 symbols;</li>
+<li> the data messages appended for the direction symbol;</li>
+<li> of limiting the one processing block size by a new configuration field;</li>
+<li> performance significantly rising by using the preliminary buffer.</li></ul></li>
+<li> FIX:Serial: The output transport fixed in the inter request waiting at the reqRetrMult*wCharTm processing as milliseconds.</li>
+<li> FIX:Sockets: The error "Broken channel (32)" is detected at the writing, after disconnecting the server, so the reconnection attempts set to 2 at (kz &lt;= 0).</li></ul>
+<p><b><u>User Interface</u></b><br />
+</p>
+<ul><li> FIX:Common review and refactoring the tables in Qt and Web both generically and in the view Table of the primitive FomEl of VCA:</li></ul>
+<dl><dd><ul><li> QTStarter,QTCfg,Vision: The common library class TableDelegate significantly improved to work in QTCfg and Vision:</li></ul>
+<dl><dd><ul><li> appended for the own user roles SelectRole, TextLimRole and OneLineString;</li>
+<li> the cell paint appended for the background color by reading-applying the common roles;</li>
+<li> the number types (integer and real) appended for force centering;</li>
+<li> the string types appended by the options of alignment and wordwrapping from the role Qt::TextAlignmentRole;</li>
+<li> appended for long text visible limit support by the own role TextLimRole and the default value 300 symbols by sizeHint() additional reimplementation.</li></ul></dd></dl>
+<ul><li> FIX: The view "Table" of the primitive "FormEl":</li></ul></dd></dl>
+<dl><dd><dl><dd><ul><li> VCAEngine,QTStarter,Vision,WebVision: Appended by the new cell type 't'-text mostly for allowing the edition confirming the type 's'-string by pressing Enter.</li>
+<li> VCAEngine,Vision,WebVision: Appended of the column, row and cell space option "prec" of the real value precision control; and by the column and cell attribute "align" implementation.</li>
+<li> WebVision,Vision: Appended for switching the tables in preventing of double storing the source content at the content size more for 10000.</li>
+<li> FIX:Vision: Use the the common table delegate with the feature of multiline edition.</li></ul>
+<dl><dd><ul><li> Improved in the columns, rows and cells show at the table updation and commonly:</li></ul>
+<dl><dd><ul><li> in limiting the visual size of the cell content in 300 symbols;</li>
+<li> in limition the rows height in 70% from the whole table size;</li>
+<li> more precision columns width alignment;</li>
+<li> in fitting at the development mode;</li>
+<li> in fitting also at the vertical header show;</li>
+<li> in the table close filling by consideration the visible vertical scrollbar size;</li>
+<li> in fitting after the table whole resizing only, so allow the columns resizing manually also and to provide that true fitting always.</li></ul></dd></dl>
+<ul><li> Implemented for the light processing of the width changing and updating:</li></ul>
+<dl><dd><ul><li> light edition without the columns refitting all updating time, only at: first row appearing, columns count change and the column title change, font change and resize;</li>
+<li> apply the column force width and the row height calculation with limits independently from the common attribute "colsWdthFit" value;</li>
+<li> setting the value, early resizing and the table fitting, moved to the space of the table content presence and after the sorting.</li></ul></dd></dl>
+<ul><li> The export function in runtime append of export the view Table of the primitive "FormEl" in CSV.</li></ul></dd></dl>
+<ul><li> WebVision:</li></ul>
+<dl><dd><ul><li> Improved in the columns, rows and cells show at the table updating and commonly:</li></ul>
+<dl><dd><ul><li> the not fitting mode (the attribute "colsWdthFit" missing) implementation, using the automatic table layout mode for calculation the fixed widths and next switching to the fixed table layout mode;</li>
+<li> multiline text edition of the text cells in whole width and height of the cell, with the edition apply by Ctrl+Enter;</li>
+<li> view limiting the string cells in 300 symbols;</li>
+<li> display the boolean cells as an image at the true state;</li>
+<li> table cells in the editing mode allowed for the system-browser context menu.</li></ul></dd></dl>
+<ul><li> Implemented for the light processing of the width changing and updating:</li></ul>
+<dl><dd><ul><li> the table changes detection and updating switched to the mode of not storing double source content.</li>
+<li> prevented from the complete updating at the attribute "value" modification;</li></ul></dd></dl>
+<ul><li> Appended for the sorting support by columns. Set to the first visible column for sorting at the sorting enable.</li></ul></dd></dl></dd></dl></dd></dl>
+<dl><dd><ul><li> WebCfgD: The table expandings for:</li></ul>
+<dl><dd><ul><li> the big text content limiting in 300 symbols at the visibility;</li>
+<li> the string type allowed for the multiline edition using TEXTAREA;</li>
+<li> the type data "bool" is shown as an image, not "On" or "Off";</li>
+<li> centring the boolean, number, time and selectable content;</li>
+<li> simplifying the table content edition for the types time, number and string by removing the apply and spin buttons.</li></ul></dd></dl></dd></dl>
+<ul><li> QTStarter,QTCfg,Vision: The common Qt-code of the OpenSCADA Qt-modules started in their moving to the new library files lib_qtgen.* what placed in the module QTStarter folder and linked in all Qt-modules, and that done for: external icoSize() and colorAdjToBack() and TableDelegate.</li>
+<li> VCAEngine:</li></ul>
+<dl><dd><ul><li> Appended and enabled as a build option for the mark mechanism of the attributes changing without the doubles, by requesting the previous-completed cycles, than also preventing the need of detection the doubles in the visualisers and storing the big source content.</li>
+<li> The projects runtime improved in changing parents of the processing pages on the fly.</li>
+<li> The session tasks execution appended of early execution at events presence.</li>
+<li> FIX: The VCA-styles fixed in accessing to empty fields which don't load.</li>
+<li> The "Diagnostic" page of the VCA-projects adapted to show the debug level messages at enable the debugging.</li>
+<li> The project session execution information appended for the real periodicity taken from the task, which also used in form value of the procedure attribute "f_frq".</li></ul></dd></dl>
+<ul><li> Vision: The property dialogues of the "Widgets" and "Projects" / "Widget libraries" appended for own statusbar and a button of builtin manual invoking. The TextEdit widgets switched to own statusbar of the property dialogues for the cursor position and what disabled in ToolTip. The text code edition widget of the "Widgets" property dialogue appended in restoring the cursor position after apply or cancel.</li>
+<li> FIX:WebVision: Appended for detection disappearing of the project execution session and return an error, in the common request "pgOpenList", and at dropping down the calculation counter "tmCnt".</li></ul>
+<dl><dd><ul><li> The keyboard focus and events significantly improved for ensure that working in common by:</li></ul>
+<dl><dd><ul><li> setting the "tabindex" attribute for all active widgets and for FormEl items specially for the form elements;</li>
+<li> appending the "tabindex" number calculation as a unique one for whole interface, than prventing the tab focus jumps;</li>
+<li> processing the onfocus event for the own focus processing by setFocus();</li>
+<li> the view Button of the primitive FormEl appended for the keyboard events processing for down and up at the keys Space and Enter;</li>
+<li> the primitive Diagram is simplified by removing the spare A item;</li>
+<li> FIX: Fixed in the keyboard focus switching at mouse clicking on buttons with images.</li></ul></dd></dl>
+<ul><li> FIX: Fixed in checking the removed widgets for all and the master page.</li>
+<li> FIX: Fixed at last in plodding spare DIV items at the page changing in the page containers.</li>
+<li> FIX: Prevented in cycling at presence the Web-session but missing the corresponded VCA-session.</li></ul></dd></dl>
+<ul><li> FIX:WebCfgD: Completely revised and expanded for:</li></ul>
+<dl><dd><ul><li> the all internal tool actions moving to the implementation as buttons and the toolbar size set from 25 to 30 pixels;</li>
+<li> removing the toolbar button images' size filtering-resizing on the server side;</li>
+<li> page icon padding between the title set to 10 pixels;</li>
+<li> the control page complete updating after the window resize;</li>
+<li> the generic text edition field by TEXTAREA expanded for apply and cancel from the keyboard;</li>
+<li> the hosts updating function bound to the double mouse click on the common space of the tree area;</li>
+<li> FIX: the hosts updating function fixed in detection douple host items;</li>
+<li> FIX: forced in the actual-selected item marking in the control tree after it rolling;</li>
+<li> removing nodeText() and setNodeText() by direct using "innerText" and "textContent".</li></ul></dd></dl>
 <h3><span class="mw-headline" id=".5B20.12.2020.5D_The_THIRD_update"><span class="mw-headline-number">7.2</span> [20.12.2020] The THIRD update</span></h3>
 <p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 40 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2726" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><b><u><a class="external text" href="http://oscada.org/en/news/single-page/article/trinity-desktop-environment-tde-release-1409/" rel="nofollow noreferrer noopener" target="_blank">Automation Linux distributive of the project OpenSCADA</a></u></b><br />

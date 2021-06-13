@@ -746,7 +746,7 @@ void ShapeElFigure::initShapeItems( const QPointF &pos, QVector<int> &items_arra
 {
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
-    PntMap &pnts = elFD->shapePnts;
+    //PntMap &pnts = elFD->shapePnts;
     for(int i = 0; i < items_array.size(); i++) {
 	//Detecting if the start or end point of this arc matches the start or end point of the other arc and, if so, add this point to the map again
 	//!!!! Commented to allow the arcs binding, for images like to the sector diagrams

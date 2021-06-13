@@ -323,7 +323,7 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 	    for(map<string,CacheEl>::iterator itr = trMessCache.begin(); itr != trMessCache.end(); ++itr)
 		sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
 	    sort(sortQueue.begin(), sortQueue.end());
-	    for(unsigned i_del = 0; i_del < 10*(limCacheIts_N/10); ++i_del) trMessCache.erase(sortQueue[i_del].second);
+	    for(unsigned iDel = 0; iDel < 10*(limCacheIts_N/10); ++iDel) trMessCache.erase(sortQueue[iDel].second);
 	}
     }
 

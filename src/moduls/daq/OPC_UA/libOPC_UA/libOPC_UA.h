@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.1.21								*
+ *   Version: 2.1.24								*
  *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
  *	* The function XML_N::childClear() appended by a result of returning	*
@@ -703,7 +703,7 @@ class Client: public UA
 	string		clKey;			//Client symmetric key
 
 	vector<Subscr>	mSubScr;		//Subscriptions list
-	vector<uint32_t> mPublSeqs;		//Publish packages registration
+	vector<int32_t> mPublSeqs;		//Publish packages registration
     };
 
     //Methods
@@ -947,6 +947,9 @@ class Server: public UA
 
 	    virtual uint32_t reqData( int reqTp, XML_N &req );
 
+	    //Attributes
+	    Server		*serv;
+
 	    protected:
 	    //Methods
 	    XML_N *nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,
@@ -965,8 +968,6 @@ class Server: public UA
 	    XML_N		objTree;
 	    map<string, XML_N*>	ndMap;
 	    pthread_mutex_t	mtxData;
-
-	    Server		*serv;
 	};
 
 	//Methods

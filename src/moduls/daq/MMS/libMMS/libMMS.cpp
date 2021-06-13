@@ -936,7 +936,8 @@ void Client::protIO( XML_N &io )
 								"("+iErr->second[0]+"). ";
 							else { chErr += "unknown"; off += szC3; }
 						    }
-						else off += szC2;	break;
+						else off += szC2;
+						break;
 					    }
 					    break;
 					}

@@ -836,6 +836,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		case SS_NORMAL:		state = _("Normal");	break;
 		case SS_LATE:		state = _("Late");	break;
 		case SS_KEEPALIVE:	state = _("KeepAlive");	break;
+		default: break;
 	    }
 	    opt->childAdd("el")->setText(TSYS::strMess(_("%d: %s, session %d; Publish %s, interval %s, sequence %d, lifetime %d, keep alive %d; Monitored items %u; Retransmission queue %u"),
 		iSbscr+1, state.c_str(), sbscrO.sess,

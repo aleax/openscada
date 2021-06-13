@@ -863,6 +863,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    argCfg[0] = this.attrs['arg'+i+'cfg'];
 			    argVal = parseInt(this.attrs['arg'+i+'val']);
 			    if(isNaN(argVal)) argVal = 0;
+			    argVal = argVal.toString();
 			    break;
 			case 1:
 			    argCfg = this.attrs['arg'+i+'cfg'].split(';');
@@ -871,6 +872,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    else if(argCfg[1] == 'f')	argVal = parseFloat(this.attrs['arg'+i+'val']).toFixed(Math.max(0,argCfg[2]));
 			    else argVal = this.attrs['arg'+i+'val'];
 			    if(isNaN(argVal)) argVal = 0;
+			    argVal = argVal.toString();
 			    break;
 			case 2:
 			    argCfg[0] = this.attrs['arg'+i+'cfg'];

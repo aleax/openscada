@@ -56,7 +56,7 @@ uint8_t	OSCADA::limObjNm_SZ = 100;
 uint8_t	OSCADA::limArchID_SZ = 50;
 int	OSCADA::limUserFile_SZ = 10048576;
 int	OSCADA::limUserIts_N = 1000000;
-int	OSCADA::limCacheIts_N = 100;
+unsigned OSCADA::limCacheIts_N = 100;
 
 int	OSCADA::prmStrBuf_SZ = 10000;
 float	OSCADA::prmWait_DL = 0.1;

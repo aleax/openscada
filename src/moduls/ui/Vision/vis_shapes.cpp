@@ -1102,6 +1102,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		     object == ((QTableWidget*)((ShpDt*)w->shpData)->addrWdg)->verticalHeader()))
 		tableFit(w);
 	    break;
+	default: break;
     }
 
     //Specific actions to the mode

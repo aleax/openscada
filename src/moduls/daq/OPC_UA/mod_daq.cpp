@@ -176,6 +176,8 @@ TVariant TMdContr::getValMIt( unsigned mItId, uint32_t *st )
     }
 
     if(st) *st = ndSt;
+
+    return EVAL_REAL;
 }
 
 string TMdContr::authData( )
@@ -304,7 +306,6 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
 
     cntr.prcSt = true;
-    bool firstCall = true;
 
     //Initiate the publish period and register the server status attribute reading
     if(cntr.period())	cntr.sess.mSubScr[0].publInterval = 1e-6*cntr.period();
@@ -355,7 +356,6 @@ void *TMdContr::Task( void *icntr )
 		continue;
 	    }
 
-	    firstCall = false;
 	    cntr.callSt = false;
 
 	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
@@ -644,7 +644,7 @@ void TMdPrm::enable( )
 
     //Nodes list process and parameter's attributes creation
     string snd;
-    for(int off = 0; (snd=TSYS::strLine(ndList(),0,&off)).size() || off < ndList().size(); ) {
+    for(int off = 0; (snd=TSYS::strLine(ndList(),0,&off)).size() || off < (int)ndList().size(); ) {
 	if(snd.empty() || snd[0] == '#') continue;
 	// Request for node class request
 	req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DB.ODBC file: mod_ldap.cpp
 /***************************************************************************
- *   Copyright (C) 2017-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2017-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,7 +33,7 @@
 #define MOD_NAME	_("Directory by LDAP")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.6.1"
+#define MOD_VER		"0.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of directories by LDAP.")
 #define MOD_LICENSE	"GPL2"
@@ -225,7 +225,7 @@ void MTable::fieldStruct( TConfig &cfg )
     LDAPMessage	*result, *entry;
     if(ldap_search_s(owner().ldp,("ou="+name()+","+owner().bdn).c_str(),LDAP_SCOPE_ONE,NULL,NULL,0,&result) != LDAP_SUCCESS)	return;
     for(entry = ldap_first_entry(owner().ldp,result); entry; entry = ldap_next_entry(owner().ldp,entry)) {
-	char *chDN, *a, **vals;
+	char *chDN, *a;
 	//Use the DN for key attribute detection
 	if(!(chDN=ldap_get_dn(owner().ldp,entry))) continue;
 	string keyA = TSYS::strParse(TSYS::strParse(chDN,0,","),0,"=");

@@ -113,7 +113,7 @@ void ModMArch::start( )
 	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),(tmAsStr()?"20":"10")));
 	reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"6","0"));
 	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"200"));
-	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,(keyTmCat()?TFld::NoFlag:TCfg::Key),(keyTmCat()?"100000":"255")));
+	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,(keyTmCat()?(int)TFld::NoFlag:(int)TCfg::Key),(keyTmCat()?"100000":"255")));
 	reqEl.fldAdd(new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"2"));
     }
 

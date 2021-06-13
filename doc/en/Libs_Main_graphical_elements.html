@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (99% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -2150,36 +2150,38 @@ In the runtime mode, a list is formed with available users and, at their selecti
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
 <p>The element-frame, shown in Figure 3.8, serves to manage of storehouses on different classes-categories of the storing-managing things. Initially that was developed and tested on the class "Library". The frame means of the direct accessing the DB by SQL and currently supports only MySQL/MariaDB.
+</p><p>During the frame implementing, the view "Table" of <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the primitive "FormEl"</a> significantly expanded on both visualizers for:
 </p>
-<div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
-<table cellspacing="0">
-<tr>
-<td> <a class="image" href="http://oscada.org/wiki/File:Constr.png"><img alt="Constr.png" height="32" src="files/Constr.png" width="32" /></a>
-</td>
-<td style="padding-left:5px;"> Get completed one from the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9.4 LTS announce</a>
-</td></tr></table>
-</div>
-<p>During the frame implementing, the view "Table" of <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the primitive "FormEl"</a> significantly expanded on both visualizers for:
-</p>
-<ul><li> Common things and in the <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCA-Engine</a>:
-<ul><li> improving the table content updating and storing for big content, non storing double source content;</li>
-<li> appended of limiting in processing the table content for direct apply the changes, only for it size lesser for limUserFile_SZ (1 MB).</li></ul></li>
-<li> <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>:
-<ul><li> table cells in the editing mode allowed for the system-browser context menu;</li>
-<li> appended for the sorting support by columns;</li>
-<li> prevented from the complete updating at the attribute "value" modification;</li>
-<li> appended for:
-<ul><li> the not fitting mode (the attribute "colsWdthFit" missing) implementation, using the automatic table layout mode for calculation the fixed widths and next switching to the fixed table layout mode;</li>
-<li> the light edition mode base implementation.</li></ul></li></ul></li>
-<li> <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a>:
-<ul><li> appended in export to CSV;</li>
-<li> improved in:
-<ul><li> support the sorting of the table content per columns, by preserving the scroll position and the sorting parameters before the sorting disabling during the updating time;</li>
-<li> in light processing of the width changing;</li>
-<li> in fitting at the development mode, also at the vertical header show;</li></ul></li>
-<li> appended for the light edition — without the columns refitting all updating time;</li>
-<li> cleaned form spare role Qt::UserRole+5 of the previous value storing, but that do now the table delegate.</li></ul></li></ul>
-<p>The frame provides currently and in future for next features:
+<dl><dd><dl><dd><ul><li> VCAEngine,QTStarter,Vision,WebVision: Appended by the new cell type 't'-text mostly for allowing the edition confirming the type 's'-string by pressing Enter.</li>
+<li> VCAEngine,Vision,WebVision: Appended of the column, row and cell space option "prec" of the real value precision control; and by the column and cell attribute "align" implementation.</li>
+<li> WebVision,Vision: Appended for switching the tables in preventing of double storing the source content at the content size more for 10000.</li>
+<li> FIX:Vision: Use the the common table delegate with the feature of multiline edition.</li></ul>
+<dl><dd><ul><li> Improved in the columns, rows and cells show at the table updation and commonly:</li></ul>
+<dl><dd><ul><li> in limiting the visual size of the cell content in 300 symbols;</li>
+<li> in limition the rows height in 70% from the whole table size;</li>
+<li> more precision columns width alignment;</li>
+<li> in fitting at the development mode;</li>
+<li> in fitting also at the vertical header show;</li>
+<li> in the table close filling by consideration the visible vertical scrollbar size;</li>
+<li> in fitting after the table whole resizing only, so allow the columns resizing manually also and to provide that true fitting always.</li></ul></dd></dl>
+<ul><li> Implemented for the light processing of the width changing and updating:</li></ul>
+<dl><dd><ul><li> light edition without the columns refitting all updating time, only at: first row appearing, columns count change and the column title change, font change and resize;</li>
+<li> apply the column force width and the row height calculation with limits independently from the common attribute "colsWdthFit" value;</li>
+<li> setting the value, early resizing and the table fitting, moved to the space of the table content presence and after the sorting.</li></ul></dd></dl>
+<ul><li> The export function in runtime append of export the view Table of the primitive "FormEl" in CSV.</li></ul></dd></dl>
+<ul><li> WebVision:</li></ul>
+<dl><dd><ul><li> Improved in the columns, rows and cells show at the table updating and commonly:</li></ul>
+<dl><dd><ul><li> the not fitting mode (the attribute "colsWdthFit" missing) implementation, using the automatic table layout mode for calculation the fixed widths and next switching to the fixed table layout mode;</li>
+<li> multiline text edition of the text cells in whole width and height of the cell, with the edition apply by Ctrl+Enter;</li>
+<li> view limiting the string cells in 300 symbols;</li>
+<li> display the boolean cells as an image at the true state;</li>
+<li> table cells in the editing mode allowed for the system-browser context menu.</li></ul></dd></dl>
+<ul><li> Implemented for the light processing of the width changing and updating:</li></ul>
+<dl><dd><ul><li> the table changes detection and updating switched to the mode of not storing double source content.</li>
+<li> prevented from the complete updating at the attribute "value" modification;</li></ul></dd></dl>
+<ul><li> Appended for the sorting support by columns. Set to the first visible column for sorting at the sorting enable.</li></ul></dd></dl></dd></dl></dd></dl>
+<p><br />
+The frame provides currently and in future for next features:
 </p>
 <ul><li> <b>Class edition mode</b>: observing, creation and edition the storehouse classes with a function of storing data at the field type change.</li>
 <li> <b>Main data observing and edition mode</b>:
