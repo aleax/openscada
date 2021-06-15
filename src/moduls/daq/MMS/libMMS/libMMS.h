@@ -1,7 +1,7 @@
 
 //OpenSCADA MMS(IEC-9506) implementation library file: libMMS.h
 /******************************************************************************
- *   Copyright (C) 2014-2017 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2014-2017 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -46,7 +46,7 @@ namespace SupportServs { enum e { status = 0, getNameList, identify, rename, rea
 			defineScatteredAccess, getScatteredAccessAttributes, deleteVariableAccess, defineNamedVariableList,
 			getNamedVariableListAttributes, deleteNamedVariableList, defineNamedType, getNamedTypeAttributes,
 			deleteNamedType, input, output, takeControl, relinquishControl, defineSemaphore, deleteSemaphore,
-			reportSemaphoreStatus, reportPoolSemaphoreStatus, reportSemaphoreEntryStatus, initiateDownloadSequence,
+			reportSemaphoreStatus, reportPollSemaphoreStatus, reportSemaphoreEntryStatus, initiateDownloadSequence,
 			downloadSegment, terminateDownloadSequence, initiateUploadSequence, uploadSegment, terminateUploadSequence,
 			requestDomainDownload, requestDomainUpload, loadDomainContent, storeDomainContent, deleteDomain,
 			getDomainAttributes, createProgramInvocation, deleteProgramInvocation, start, stop, resume, reset,

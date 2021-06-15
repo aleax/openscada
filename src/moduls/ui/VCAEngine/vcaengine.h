@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: vcaengine.h
 /***************************************************************************
- *   Copyright (C) 2006-2015 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2006-2015 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,8 @@
 #include "libwidg.h"
 #include "project.h"
 #include "session.h"
+
+//#define MODIF_SLIDE_CUR_MECH		//the slide current mark mechanism of the attributes changing detection with the doubles, old one
 
 #undef _
 #define _(mess) mod->I18N(mess)

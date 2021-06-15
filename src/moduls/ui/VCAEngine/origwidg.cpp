@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: origwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -600,17 +600,22 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			  "    color - column color as a whole into the color name or code;\n"
 			  "    colorText - color of the column text as a whole into the color name or code;\n"
 			  "    font - font of the column text in the typical OpenSCADA string;\n"
-			  "    sort - sorting by the column [0 - Descending; 1 - Ascending].\n"
+			  "    prec - value precision of the real type cells in the column;\n"
+			  "    sort - sorting by the column [0 - Descending; 1 - Ascending];\n"
+			  "    align - alignment the column for: \"left\", \"right\" and \"center\".\n"
 			  "  r   - Row of the values. Possible attributes of the row cell tag for the row as a whole:\n"
 			  "    color - row color as a whole into the color name or code;\n"
 			  "    colorText - color of the row text as a whole into the color name or code;\n"
-			  "    font - font of the row text in the typical OpenSCADA string.\n"
-			  "  s, i, r, b - cells of the data types \"String\", \"Integer\", \"Real\" and \"Logical\". Possible attributes:\n"
+			  "    font - font of the row text in the typical OpenSCADA string;\n"
+			  "    prec - value precision of the real type cells in the row.\n"
+			  "  s, t, i, r, b - cells of the data types \"String\", \"Text\", \"Integer\", \"Real\" and \"Logical\". Possible attributes:\n"
 			  "    color - cell color;\n"
 			  "    colorText - color of the cell text into the color name or code;\n"
 			  "    font - font of the cell text in the typical OpenSCADA string;\n"
+			  "    prec - value precision of the real type cell;\n"
 			  "    img - image of the cell into the form \"[{src}:]{name}\";\n"
-			  "    edit - allowing the cell edition (0 or 1), by default - no (0)."));
+			  "    edit - allowing the cell edition (0 or 1), by default - no (0);\n"
+			  "    align - alignment the cell for: \"left\", \"right\" and \"center\"."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 	    }
@@ -639,7 +644,9 @@ bool OrigFormEl::eventProc( const string &ev, Widget *src )
     int elTp = 0;
     switch((elTp=src->attrAt("elType").at().getI())) {
 	case F_TABLE: {
-	    if(ev.compare(0,13,"ws_TableEdit_") != 0)	break;
+	    if(ev.compare(0,13,"ws_TableEdit_") != 0 ||
+		    src->attrAt("items").at().getS().size() > limUserFile_SZ)	//Do not apply to the representer after some size
+		break;
 	    bool setOK = false;
 	    int col = s2i(TSYS::strParse(ev,2,"_"));
 	    int row = s2i(TSYS::strParse(ev,3,"_"));
@@ -650,7 +657,7 @@ bool OrigFormEl::eventProc( const string &ev, Widget *src )
 		if(chRN->name() != "r") continue;
 		for(int iChC = 0, iC = 0; iChC < (int)chRN->childSize() && !setOK; iChC++) {
 		    XMLNode *chCN = chRN->childGet(iChC);
-		    if(!(chCN->name() == "s" || chCN->name() == "r" || chCN->name() == "i" || chCN->name() == "b")) continue;
+		    if(!(chCN->name() == "s" || chCN->name() == "t" || chCN->name() == "r" || chCN->name() == "i" || chCN->name() == "b")) continue;
 		    if(iC == col && iR == row) { chCN->setText(src->attrAt("set").at().getS(),true); setOK = true; }
 		    iC++;
 		}

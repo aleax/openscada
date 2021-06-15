@@ -413,10 +413,10 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
 	    short wBitsPerSample;
 	} wv_form;
 
-	strncpy(rif.riff, "RIFF", 4);
+	strncpy(rif.riff, "RIFF", sizeof(rif.riff));
 	rif.filesize = buf.realSize()*sizeof(float)+sizeof(rif)+2*sizeof(chnk)+sizeof(wv_form);
-	strncpy(rif.rifftype,"WAVE",4);
-	strncpy(chnk.chunk_id,"fmt ",4);
+	strncpy(rif.rifftype, "WAVE", sizeof(rif.rifftype));
+	strncpy(chnk.chunk_id, "fmt ", sizeof(chnk.chunk_id));
 	chnk.chunksize = sizeof(wv_form);
 	wv_form.wFormatTag = 3;
 	wv_form.nChannels = 1;
@@ -432,7 +432,7 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
 	fOK = fOK && (write(hd,&rif,sizeof(rif)) == sizeof(rif));
 	fOK = fOK && (write(hd,&chnk,sizeof(chnk)) == sizeof(chnk));
 	fOK = fOK && (write(hd,&wv_form,sizeof(wv_form)) == sizeof(wv_form));
-	strncpy(chnk.chunk_id, "data", 4);
+	strncpy(chnk.chunk_id, "data", sizeof(chnk.chunk_id));
 	chnk.chunksize = 0;				//Set temporary size buf.realSize()*sizeof(float);
 	off_t sz_pos = lseek(hd, 0, SEEK_CUR);
 	fOK = fOK && (write(hd,&chnk,sizeof(chnk)) == sizeof(chnk));
@@ -855,7 +855,7 @@ int64_t ModVArchEl::begin( )
 
 void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
-    //Request by single values for most big buffer period
+    //Request by single values for very big buffer period
     if(buf.period()/100 > (int64_t)(archivator().valPeriod()*1e6)) {
 	ibeg = (ibeg/buf.period())*buf.period();
 	for(int64_t ctm; ibeg <= iend; ibeg += buf.period()) {
@@ -870,7 +870,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
     for(unsigned iA = 0; iA < files.size(); iA++)
 	if(ibeg > iend) break;
 	else if(!files[iA]->err() && ibeg <= files[iA]->end() && iend >= files[iA]->begin()) {
-	    for( ; ibeg < files[iA]->begin(); ibeg += files[iA]->period()) buf.setI(EVAL_INT,ibeg);
+	    for( ; ibeg < files[iA]->begin(); ibeg += files[iA]->period()) buf.setI(EVAL_INT, ibeg);
 	    files[iA]->getVals(buf, ibeg, vmin(iend,files[iA]->end()));
 	    ibeg = files[iA]->end()+files[iA]->period();
 	}

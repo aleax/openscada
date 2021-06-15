@@ -4,13 +4,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2010-2020.
+# Roman Savochenko <roman@oscada.org>, 2010-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-19 17:52+0200\n"
+"POT-Creation-Date: 2021-04-08 10:51+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -179,9 +179,8 @@ msgstr "Verbunden"
 msgid "Disconnected"
 msgstr "Getrennt"
 
-#, c-format
-msgid "OpenSCADA Vision developing: %s"
-msgstr "OpenSCADA Vision-Entwicklung: %s"
+msgid "%s %s-developing: %s"
+msgstr "%s %s-Entwicklung: %s"
 
 msgid "Full screen"
 msgstr "Vollbild"
@@ -1029,6 +1028,9 @@ msgstr "Versuch, dich selbst zu kopieren/zu bewegen \"%1/%1\"!"
 msgid "Properties of the widgets library"
 msgstr "Eigenschaften der Widgetbibliothek"
 
+msgid "The button for getting the item manual"
+msgstr "Schaltfläche zum Abrufen des Artikelhandbuchs"
+
 msgid "Widgets library"
 msgstr "Widgetsbibliothek"
 
@@ -1130,9 +1132,6 @@ msgstr "Stufe"
 
 msgid "Message"
 msgstr "Nachricht"
-
-msgid "Close"
-msgstr "Schliessen"
 
 msgid "Error getting the node '%1' information."
 msgstr "Fehler beim Abrufen des Knoten '%1' Informationen."
@@ -1599,6 +1598,28 @@ msgstr "XHTML (*.html);;CSV File (*.csv)"
 msgid "No data to export."
 msgstr "Keine Daten für Export."
 
+msgid "Exporting a table"
+msgstr "Eine Tabelle exportieren"
+
+msgid "There is no table!"
+msgstr "Es gibt keine Tabelle!"
+
+msgid "Select a table to export."
+msgstr "Wählen Sie eine Tabelle zu exportieren."
+
+msgid "Table:"
+msgstr "Tabelle:"
+
+msgid "Saving a table"
+msgstr "Eine Tabelle speichern"
+
+#, c-format
+msgid "Table %1.csv"
+msgstr "Tabelle %1.csv"
+
+msgid "CSV file (*.csv)"
+msgstr "CSV File (*.csv)"
+
 msgid ""
 "Several sessions are already opened for the project \"%1\".\n"
 "You can create a new or connect to the present session. Please select the "
@@ -1710,6 +1731,18 @@ msgstr "Schaltfläche für den Export des ausgewählten Dokuments"
 
 msgid "Press for exporting the selected document."
 msgstr "Betätigen für den Export des ausgewählten Dokuments."
+
+msgid "Table"
+msgstr "Tabelle"
+
+msgid "Export the selected table"
+msgstr "Export der ausgewählten Tabelle"
+
+msgid "The button for exporting the selected table"
+msgstr "Schaltfläche für den Export der ausgewählten Tabelle"
+
+msgid "Press for exporting the selected table."
+msgstr "Betätigen für den Export der ausgewählten Tabelle."
 
 msgid "Project '%1' manual"
 msgstr "Handbuch von Projekt '%1'"
@@ -1991,10 +2024,10 @@ msgid "Points:"
 msgstr "Punkte:"
 
 msgid "x"
-msgstr ""
+msgstr "x"
 
 msgid "y"
-msgstr ""
+msgstr "y"
 
 msgid "Point 3:"
 msgstr "Punkt 3:"
@@ -2201,7 +2234,7 @@ msgid "Loading page: '%1'."
 msgstr "Lade Seite: '%1'."
 
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 msgid "Cancel"
 msgstr "Abbrechen"

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: types.h
 /***************************************************************************
- *   Copyright (C) 2013-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -79,7 +79,7 @@ namespace VCA
 	// Primitive "FormEl" specific
 	A_FormElType	= 20,
 	A_FormElValue	= 21,
-	A_FormElMixP1	= 22,	//LINE_ED:view; TEXT_ED:wordWrap; BUTTON:img; {COMBO,LIST,TREE}:items; {SLIDER,SCROLL_BAR}:cfg
+	A_FormElMixP1	= 22,	//LINE_ED:view; TEXT_ED:wordWrap; BUTTON:img; {COMBO,LIST,TREE,TABLE}:items; {SLIDER,SCROLL_BAR}:cfg
 	A_FormElMixP2	= 23,	//LINE_ED:cfg; BUTTON:color
 	A_FormElMixP3	= 24,	//{LINE_ED,TEXT_ED}:confirm; BUTTON:mode
 	A_FormElFont	= 25,

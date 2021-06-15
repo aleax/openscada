@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-23 08:51+0300\n"
+"POT-Creation-Date: 2021-01-20 22:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,12 @@ msgid "To form time as a string"
 msgstr ""
 
 msgid "Only for databases that support such by means of specific data types like \"datetime\" in MySQL."
+msgstr ""
+
+msgid "Unique and non duple messages for time and category only"
+msgstr ""
+
+msgid "Otherwise the message field is included to the primary key and is limited in 255 symbols."
 msgstr ""
 
 msgid "Mark, time/(10*per)"

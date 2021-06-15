@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: tvision.h
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko (roman@oscada.org)
+ *   Copyright (C) 2006-2021 by Roman Savochenko (roman@oscada.org)
  *                 2005-2006 by Evgen Zaichuk
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -97,7 +97,6 @@ class TVision : public TUI
 	void postMess( const QString &cat, const QString &mess, MessLev type = Info, QWidget *parent = NULL );
 
 	static QWidget *getFocusedWdg( QWidget *wcntr );
-	static QColor colorAdjToBack( const QColor &clr, const QColor &backClr );
 
 	// Request to OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob = false );

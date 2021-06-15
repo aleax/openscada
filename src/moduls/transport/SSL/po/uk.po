@@ -1,13 +1,13 @@
 # OpenSCADA.Transport.SSL translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2008-2020.
+# Roman Savochenko <roman@oscada.org>, 2008-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 16:43+0300\n"
+"POT-Creation-Date: 2021-04-16 18:15+0300\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -126,17 +126,15 @@ msgstr "Сокет було перервано помилкою %s"
 msgid "The message is received in size %d."
 msgstr "Отримано повідомлення розміром %d."
 
-#, c-format
-msgid "%d:Received from '%s'\n"
-msgstr "%d:Отримано з '%s'\n"
+msgid "%d:< Received from '%s'\n"
+msgstr "%d:< Отримано з '%s'\n"
 
 #, c-format
 msgid "The reply by the message in size %d."
 msgstr "Відповідь повідомленням розміром %d."
 
-#, c-format
-msgid "%d:Transmitted to '%s'\n"
-msgstr "%d:Передано до '%s'\n"
+msgid "%d:> Transmitted to '%s'\n"
+msgstr "%d:> Передано до '%s'\n"
 
 #, c-format
 msgid "Has been disconnected by '%s'!"
@@ -317,8 +315,8 @@ msgstr "Помилка запису: %s"
 msgid "Wrote %s."
 msgstr "Записано %s."
 
-msgid "Transmitted to\n"
-msgstr "Передано\n"
+msgid "> Transmitted to\n"
+msgstr "> Передано\n"
 
 msgid "No data, the connection seems closed"
 msgstr "Немає даних, з'єднання схоже закрите"
@@ -338,8 +336,8 @@ msgstr "Помилка читання (select): %s"
 msgid "Read %s."
 msgstr "Прочитано %s."
 
-msgid "Received from\n"
-msgstr "Отримано\n"
+msgid "< Received from\n"
+msgstr "< Отримано\n"
 
 msgid "Timings"
 msgstr "Інтервали часу"

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2020.
+# Roman Savochenko <roman@oscada.org>, 2011-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 16:43+0300\n"
+"POT-Creation-Date: 2021-04-16 18:12+0300\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -154,8 +154,8 @@ msgstr "Getrennt"
 msgid "The serial interface received the message '%d'."
 msgstr "Die serielle Schnittstelle hat die Nachricht '%d' erhalten."
 
-msgid "Received from\n"
-msgstr "Empfangen von\n"
+msgid "< Received from\n"
+msgstr "< Empfangen von\n"
 
 msgid "Error requesting the protocol."
 msgstr "Fehler in der Protokollanfrage."
@@ -171,8 +171,8 @@ msgstr "Schreiben: Die Antwort ist Nullbyte."
 msgid "Write: error '%s (%d)'."
 msgstr "Schreiben: Fehler '%s (%d)'."
 
-msgid "Transmitted to\n"
-msgstr "Übertragen an\n"
+msgid "> Transmitted to\n"
+msgstr "> Übertragen an\n"
 
 msgid "Error closing the protocol."
 msgstr "Fehler beim Schließen des Protokolls."
@@ -318,6 +318,7 @@ msgstr "Unbekannter Fehler"
 msgid "Transport is not connected!"
 msgstr "Transport ist nicht verbunden!"
 
+#, c-format
 msgid "Reconnect by KeepAliveTm %gs."
 msgstr "Reconnect durch KeepAliveTm %gs."
 

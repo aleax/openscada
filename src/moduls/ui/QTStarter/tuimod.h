@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -91,6 +91,8 @@ private:
     //Attributes
     QListWidget	*prjsLs;
     QPushButton	*prjsBt;
+
+    int		updTmrId;
 
 private slots:
     //Methods

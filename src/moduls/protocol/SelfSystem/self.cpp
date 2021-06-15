@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.0"
+#define MOD_VER		"1.9.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -68,7 +68,7 @@ using namespace SelfPr;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComprBrd(80), mSingleUserHostLimit(10)
+TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComprBrd(80), mSingleUserHostLimit(100)
 {
     mod = this;
 

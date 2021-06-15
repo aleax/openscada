@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-19 17:52+0200\n"
+"POT-Creation-Date: 2021-04-08 10:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,7 +130,7 @@ msgid "Disconnected"
 msgstr ""
 
 #, c-format
-msgid "OpenSCADA Vision developing: %s"
+msgid "%s %s-developing: %s"
 msgstr ""
 
 msgid "Full screen"
@@ -907,6 +907,9 @@ msgstr ""
 msgid "Properties of the widgets library"
 msgstr ""
 
+msgid "The button for getting the item manual"
+msgstr ""
+
 msgid "Widgets library"
 msgstr ""
 
@@ -1007,9 +1010,6 @@ msgid "Level"
 msgstr ""
 
 msgid "Message"
-msgstr ""
-
-msgid "Close"
 msgstr ""
 
 msgid "Error getting the node '%1' information."
@@ -1450,6 +1450,28 @@ msgstr ""
 msgid "No data to export."
 msgstr ""
 
+msgid "Exporting a table"
+msgstr ""
+
+msgid "There is no table!"
+msgstr ""
+
+msgid "Select a table to export."
+msgstr ""
+
+msgid "Table:"
+msgstr ""
+
+msgid "Saving a table"
+msgstr ""
+
+#, c-format
+msgid "Table %1.csv"
+msgstr ""
+
+msgid "CSV file (*.csv)"
+msgstr ""
+
 msgid ""
 "Several sessions are already opened for the project \"%1\".\n"
 "You can create a new or connect to the present session. Please select the one you want or click \"Cancel\"."
@@ -1555,6 +1577,18 @@ msgid "The button for exporting the selected document"
 msgstr ""
 
 msgid "Press for exporting the selected document."
+msgstr ""
+
+msgid "Table"
+msgstr ""
+
+msgid "Export the selected table"
+msgstr ""
+
+msgid "The button for exporting the selected table"
+msgstr ""
+
+msgid "Press for exporting the selected table."
 msgstr ""
 
 msgid "Project '%1' manual"

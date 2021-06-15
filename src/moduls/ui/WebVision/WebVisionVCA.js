@@ -28,6 +28,7 @@ var gPrms = window.location.search || '';
 var tmClearEdit = 10;			//Clear time of line edit fields, seconds
 var tmFullUpd = 5;			//Full tree updating time,seconds
 var tmAlrmUpd = 0.5;			//Alarms updating time, seconds
+var limTblItmCnt = 300;			//Limit of the table item content
 
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -108,12 +109,21 @@ function posGetY( obj, noWScrl )
  ***************************************************/
 function getXmlHttp( )
 {
-    if(window.XMLHttpRequest) return new XMLHttpRequest();
+    reqO = null;
+    if(window.XMLHttpRequest) reqO = new XMLHttpRequest();
     else if(window.ActiveXObject) {
-	try { return new ActiveXObject('Msxml2.XMLHTTP'); }
-	catch(e) { return new ActiveXObject('Microsoft.XMLHTTP'); }
+	try { reqO = new ActiveXObject('Msxml2.XMLHTTP'); }
+	catch(e) { reqO = new ActiveXObject('Microsoft.XMLHTTP'); }
     }
-    return null;
+
+    for(iO = 0; iO < reqObjects.length; iO++) {
+	if(reqObjects[iO] && reqObjects[iO].readyState == 4) { delete reqObjects[iO]; reqObjects[iO] = null; }
+	if(!reqObjects[iO]) { reqObjects.splice(iO, 1); iO--; }
+    }
+
+    reqObjects.push(reqO);
+
+    return reqO;
 }
 
 /***************************************************
@@ -241,7 +251,7 @@ function servGet( adr, prm, callBack, callBackPrm )
  ***************************************************/
 function servSet( adr, prm, body, noWaitRez )
 {
-    if(noWaitRez == null) noWaitRez = false;
+    if(noWaitRez == null) noWaitRez = false;	//!!!! Otherwise we can get of processing old events after new ones
     var req = getXmlHttp();
     req.open('POST', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm), noWaitRez);
     try {
@@ -368,11 +378,23 @@ function chkPattern( val, patt )
 }
 
 /***************************************************
+ * getTabIndex - Calculate the absolute tab index  *
+ ***************************************************/
+function getTabIndex( wdgO, origPos )
+{
+    for(pow = 1, curPar = wdgO.parent; curPar; curPar = curPar.parent)
+	if(curPar.wPos >= 0) { origPos += curPar.wPos*Math.pow(100,pow); pow++; }
+
+    return origPos;
+}
+
+/***************************************************
  * setFocus - Command for set focus                *
  ***************************************************/
 function setFocus( wdg, onlyClr )
 {
     if(masterPage.focusWdf && masterPage.focusWdf == wdg) return;
+
     var attrs = new Object();
     if(masterPage.focusWdf) { attrs.focus = '0'; attrs.event = 'ws_FocusOut'; setWAttrs(masterPage.focusWdf,attrs); }
     masterPage.focusWdf = wdg;
@@ -414,19 +436,16 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 {
     if(!pgId) return true;
 
-    //Check and update present page
-    if(this == masterPage) {
-	var opPg = this.findOpenPage(pgId);
-	if(opPg) {
-	    if(updWdg) {
-		fullUpdCnt = (fullUpdCnt > tmFullUpd) ? 0 : fullUpdCnt + planePer;
-		servGet(pgId, 'com=attrsBr&FullTree='+((fullUpdCnt==0)?1:0)+'&tm='+tmCnt, makeEl, opPg);
-	    }
+    //Checking and updating the presented pages
+    if(this == masterPage)
+	if((opPg=this.findOpenPage(pgId))) {
+	    opPg.fullUpdCnt = opPg.fullUpdCnt ? Math.max(0,opPg.fullUpdCnt-planePer) : tmFullUpd;
+	    if(updWdg || !opPg.fullUpdCnt)
+		servGet(pgId, 'com=attrsBr&FullTree='+(opPg.fullUpdCnt?0:1)+'&tm='+tmCnt, makeEl, opPg);
 	    return true;
 	}
-    }
 
-    //Checking a page before opening
+    //Checking pages before opening
     if(!pgGrp || !pgOpenSrc) {
 	reqPgGen = "<CntrReqs>"+
 	    "<get path='/%2fattr%2fpgGrp'/>"+
@@ -441,7 +460,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	pgOpenSrc = reqPgGen.childNodes[1].textContent;
     }
 
-    //Create or replace the main page
+    //Creating/replacing the main page
     if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
 	if(this.addr.length) {
 	    servSet(this.addr, 'com=pgClose&cacheCntr', '');
@@ -517,7 +536,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 		" <td title='"+winName+"' style='padding-left: 5px; overflow: hidden; white-space: nowrap;'>"+winName+"</td>"+
 		" <td style='color: red; cursor: pointer; text-align: right; width: 1px;' "+
 		"  onclick='servSet(this.offsetParent.iPg.addr,\"com=pgClose&cacheCntr\",\"\"); "+
-		"   /*this.offsetParent.iPg.pwClean(); "+			//!!!! Commented to prevent the flicking
+		"   /*this.offsetParent.iPg.pwClean(); "+	//!!!! Commented to prevent the flicking
 		"   delete this.offsetParent.iPg.parent.pages[this.offsetParent.iPg.addr]; "+
 		"   document.getElementById(\"mainCntr\").removeChild(this.offsetParent.iPg.window);*/'>X</td></tr>\n"+
 		"<tr><td colspan='2'><div/></td></tr>";
@@ -587,16 +606,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
     this.place.wdgLnk = this;
     if(!inclPg && pgBr) {
 	//Clear modify flag for all
-	for(var j in this.attrsMdf) this.attrsMdf[j] = false;
+	for(var aId in this.attrsMdf) this.attrsMdf[aId] = false;
 	//Updated attributes
-	for(var j = 0; j < pgBr.childNodes.length; j++) {
-	    if(pgBr.childNodes[j].nodeName != 'el') continue;
-	    var i = pgBr.childNodes[j].getAttribute('id');
-	    if((i == 'bordWidth' || i == 'geomMargin') && (!this.attrs[i] || this.attrs[i] != pgBr.childNodes[j].textContent)) margBrdUpd = true;
-	    var curAttr = pgBr.childNodes[j].textContent;
-	    this.attrsMdf[i] = !this.attrs[i] || this.attrs[i] != curAttr;
-	    this.attrs[i] = curAttr;
-	    newAttr = true;
+	for(var iCh = 0; iCh < pgBr.childNodes.length; iCh++) {
+	    if(pgBr.childNodes[iCh].nodeName != 'el') continue;
+	    var aId = pgBr.childNodes[iCh].getAttribute('id');
+	    if((aId == 'bordWidth' || aId == 'geomMargin') && (!this.attrs[aId] || this.attrs[aId] != pgBr.childNodes[iCh].textContent)) margBrdUpd = true;
+	    this.attrsMdf[aId] = !this.attrs[aId] || this.attrs[aId] != pgBr.childNodes[iCh].textContent;
+	    if(this.attrsMdf[aId]) { this.attrs[aId] = pgBr.childNodes[iCh].textContent; newAttr = true; }
 	}
     }
 
@@ -617,7 +634,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    geomX -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
 	    geomY -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
 	}
-	elStyle += 'position: '+((this==masterPage || this.window)?'relative':'absolute')+'; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
+	elStyle += 'position: '+((this==masterPage || this.window)?'relative':'absolute')+'; '+
+		   'left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; '+
+		   'pointer-events: '+((elWr||this == masterPage)?'all':'none')+'; ';
 
 	// Calculation of the main window/page scale
 	if(this == masterPage) {
@@ -730,7 +749,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 						    '&geomW='+geomW.toFixed(3)+'&geomH='+geomH.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
 	    if(elWr != this.place.elWr) {
-		figObj.onclick = !elWr ? '' : function(e) {
+		figObj.onclick = !elWr ? null : function(e) {
 		    if(!e) e = window.event;
 		    servSet(this.wdgLnk.addr,'com=obj&sub=point&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3)+
@@ -739,7 +758,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 						    '&key='+evMouseGet(e),'');
 		    return false;
 		}
-		figObj.ondblclick = !elWr ? '' : function(e) {
+		figObj.ondblclick = !elWr ? null : function(e) {
 		    if(!e) e = window.event;
 		    servSet(this.wdgLnk.addr,'com=obj&sub=point&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3)+
@@ -811,8 +830,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		}
 	    }
+	    if(this.inclOpen) elStyle += 'pointer-events: all; ';
 	    this.place.wdgLnk = this;
-	    //this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return true; };	//Changed to return true for <input type="file">
 	}
 	else if(this.attrs['root'] == 'Text') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
@@ -844,6 +863,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    argCfg[0] = this.attrs['arg'+i+'cfg'];
 			    argVal = parseInt(this.attrs['arg'+i+'val']);
 			    if(isNaN(argVal)) argVal = 0;
+			    argVal = argVal.toString();
 			    break;
 			case 1:
 			    argCfg = this.attrs['arg'+i+'cfg'].split(';');
@@ -852,6 +872,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    else if(argCfg[1] == 'f')	argVal = parseFloat(this.attrs['arg'+i+'val']).toFixed(Math.max(0,argCfg[2]));
 			    else argVal = this.attrs['arg'+i+'val'];
 			    if(isNaN(argVal)) argVal = 0;
+			    argVal = argVal.toString();
 			    break;
 			case 2:
 			    argCfg[0] = this.attrs['arg'+i+'cfg'];
@@ -875,8 +896,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    //				"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(3)+"&ySc="+ySc.toFixed(3)+"'/>";
 
 	    //this.place.wdgLnk = this;
-	    //if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
-	    //else this.place.onclick = '';
 	}
 	else if(this.attrs['root'] == 'Media') {
 	    elStyle += 'border-width: '+this.attrs['bordWidth']+'px; ';
@@ -1002,7 +1021,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		case 0:	//Line edit
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
-		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || comElMdf || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
 			brdW = (bordStyle?parseInt(bordStyle):1) + 1;
 			var geomWint = geomW - 2*brdW;
@@ -1012,9 +1030,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
 			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
 		    }
-		    if(formObj.valSet && this.attrsMdf['value']) formObj.valSet(this.attrs['value']);
 		    this.place.view = parseInt(this.attrs['view']);
 		    this.place.cfg = this.attrs['cfg'];
+		    if(formObj.valSet && (this.attrsMdf['value'] || this.attrsMdf['cfg'])) formObj.valSet(this.attrs['value']);
 		    if(!toInit) break;
 		    formObj.wdgLnk = this;
 		    formObj.disabled = !elWr;
@@ -1061,8 +1079,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 				    if(combList.childNodes[0].childNodes.length) {
 					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
-								 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,5)*parseInt(this.style.height))+'px; ';
-					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,5)*parseInt(this.style.height))+'px; '+
+								 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; ';
+					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; '+
 									       'font: '+formObj.parentNode.fontCfg+'; ';
 					combList.childNodes[0].formObj = formObj;
 					combList.childNodes[0].focus();
@@ -1205,11 +1223,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			formObj.onmousedown = function(e) { this.setModify(true); }
 			formObj.onkeyup = function(e) {
-			    if(!e) e = window.event;
+			    e.stopImmediatePropagation();
 			    if(this.modify() && e.keyCode == 13) this.chApply();
 			    if(this.modify() && e.keyCode == 27) this.chEscape();
 			    if(this.saveVal != this.value) this.setModify(true);
+			    return true;
 			}
+			formObj.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
+			formObj.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 			formObj.modify = function( )
 			{ return (this.parentNode.children[this.parentNode.children.length-1].style.visibility == 'visible'); }
 			formObj.setModify = function(on) {
@@ -1437,12 +1458,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.valSet(this.attrs['value']);
 		    break;
 		case 1:	//Text edit
+		    elStyle += 'pointer-events: all; ';
 		    var fntSz = (getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0);
 		    var applySz = Math.max(16, fntSz);
 
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('textarea') : this.place.childNodes[0];
-		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || comElMdf || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font']) {
 			formObj.style.cssText = 'padding: 1px; width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; font: '+this.place.fontCfg+'; ';
 			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
@@ -1453,7 +1474,17 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
 		    formObj.appendChild(this.place.ownerDocument.createTextNode(this.attrs['value']));
-		    formObj.onkeyup = function( ) { if(this.saveVal != this.value) this.setModify(true); };
+		    formObj.onkeyup = function(e) {
+			e.stopImmediatePropagation();
+			if(this.saveVal != this.value) this.setModify(true);
+			if(this.modify()) {
+			    if(e.keyCode == 13 && e.ctrlKey) this.nextSibling.onclick();
+			    if(e.keyCode == 27) this.nextSibling.nextSibling.onclick();
+			}
+			return true;
+		    };
+		    formObj.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
+		    formObj.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 		    formObj.modify = function( ) { return (this.parentNode.childNodes[1].style.visibility == 'visible'); }
 		    formObj.setModify = function(on) {
 			if(this.modify() == on) return;
@@ -1501,7 +1532,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var spanObj = tblCell.childNodes.length > 1 ? tblCell.childNodes[1] : this.place.ownerDocument.createElement('span');
 		    spanObj.style.cssText = 'display: table-cell; white-space: pre-line; word-break: break-word; height: '+geomH+'px; ';
 
-		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['value']) formObj.checked = parseInt(this.attrs['value']);
 		    if(toInit) {
 			formObj.type = 'checkbox';
@@ -1534,29 +1564,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.custBut = custBut;
 		    var toInit = !this.place.childNodes.length;
 		    formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
-		    if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['font'])		formObj.style.font = this.place.fontCfg;
 		    if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
 		    if(toInit || this.attrsMdf['colorText'])	formObj.style.color = getColor(this.attrs['colorText']);
-		    this.mouseup[this.mouseup.length] = function(e,el) {
-			if(el.checkable) return;
-			el.childNodes[0].classList.remove("pressed");
-			if(el.wdgLnk.attrs["vs_goHttpUrl"]) window.location = el.wdgLnk.attrs["vs_goHttpUrl"];
-			setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease');
-		    }
-		    this.mousedown[this.mousedown.length] = function(e,el) {
-			if(el.checkable) {
-			    var attrs = new Object();
-			    if(!el.childNodes[0].classList.contains("pressed"))
-			    { attrs.value = '1'; el.childNodes[0].classList.add("pressed"); setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); }
-			    else { attrs.value = '0'; el.childNodes[0].classList.remove("pressed"); setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease'); }
-			    setWAttrs(el.wdgLnk.addr,'event','ws_BtToggleChange');
-			    setWAttrs(el.wdgLnk.addr,'value',attrs.value);
-			    return;
-			}
-			el.childNodes[0].classList.add("pressed");
-			setWAttrs(el.wdgLnk.addr,'event','ws_BtPress');
-		    };
+
+		    this.mouseup[this.mouseup.length] = function(e,el) { el.btUp(); }
+		    this.mousedown[this.mousedown.length] = function(e,el) { el.btDown(); };
 		    if(toInit) {
 			formObj.style.cursor = elWr ? 'pointer' : '';
 			formObj.disabled = !elWr;
@@ -1564,6 +1577,28 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
 			formObj.style.padding = "0";
 			this.place.appendChild(formObj);
+			this.place.btDown = function( ) {
+			    if(this.checkable) {
+				var attrs = new Object();
+				if(!this.childNodes[0].classList.contains("pressed"))
+				{ attrs.value = '1'; this.childNodes[0].classList.add("pressed"); setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
+				else { attrs.value = '0'; this.childNodes[0].classList.remove("pressed"); setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
+				setWAttrs(this.wdgLnk.addr,'value',attrs.value);
+				setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
+				return;
+			    }
+			    this.childNodes[0].classList.add("pressed");
+			    this.childNodes[0].focus();
+			    setWAttrs(this.wdgLnk.addr,'event','ws_BtPress');
+			}
+			this.place.btUp = function( ) {
+			    if(this.checkable) return;
+			    this.childNodes[0].classList.remove("pressed");
+			    if(this.wdgLnk.attrs["vs_goHttpUrl"]) window.location = this.wdgLnk.attrs["vs_goHttpUrl"];
+			    setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
+			}
+			formObj.onkeydown = function(e)	{ if(e.keyCode == 13 || e.keyCode == 32) this.parentNode.btDown(); }
+			formObj.onkeyup = function(e)	{ if(e.keyCode == 13 || e.keyCode == 32) this.parentNode.btUp(); }
 		    }
 
 		    if(custBut && !this.place.isLoad) {
@@ -1650,9 +1685,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    break;
 		case 4: case 5:	//Combo box, List
+		    elStyle += 'pointer-events: all; ';
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('select') : this.place.childNodes[0];
-		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || comElMdf || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font']) {
 			formObj.style.cssText = 'padding: 0; top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
 					    'height: '+((elTp==4)?fntSz:geomH)+'px; width: '+geomW+'px; '+
@@ -1710,7 +1745,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var applySz = Math.floor(Math.max(16, Math.min(xSc,ySc)*16));
 		    var toInit = !this.place.children.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.children[0];
-		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['value']) formObj.value = parseInt(this.attrs['value']);
 		    formObj.vOr = false;
 		    if(toInit || this.attrsMdf['cfg']) {
@@ -1738,7 +1772,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.appendChild(formObj);
 		    break;
 		case 8:	//Tree
-		    elStyle += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
+		    elStyle += "pointer-events: all; border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
 		    elStyle += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
 		    geomW -= 2; geomH -= 2;
 		    //elStyle += "border: 1px solid gray; padding: 1px; ";
@@ -1748,7 +1782,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = toInit ? getTree() : this.place.children[0];
 		    formObj.wdgLnk = this;
 		    formObj.elWr = elWr;
-		    if(toInit || this.attrsMdf['geomZ'])formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['font'])	formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    //Events and the processings init
 		    if(toInit)
@@ -1765,7 +1798,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit) this.place.appendChild(formObj);
 		    break;
 		case 9:	//Table
-		    elStyle += "padding: 1px; ";
+		    elStyle += "pointer-events: all; padding: 1px; ";
 		    if(bordStyle) elStyle += "border: "+bordStyle+"; ";
 		    if(backStyle != null) elStyle += backStyle;
 		    geomW -= 4; geomH -= 4;
@@ -1816,7 +1849,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				this.svInnerHTML = this.innerHTML;
 
 				if(this.outTp == "b") {
-				    tVl = (elTbl.getVal(this.parentNode.rowIndex-1,this.cellIndex-1) == "true");
+				    tVl = elTbl.getVal(this.parentNode.rowIndex-1,this.cellIndex-1);
 				    this.innerHTML = "<input type='checkbox'/>";
 				    this.firstChild.checked = tVl;
 				    this.firstChild.onclick = function( ) {
@@ -1824,7 +1857,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
 				    }
 				    this.firstChild.onkeyup = function(e) {
-					e = e ? e : window.event;
 					if(e.keyCode == 13 || e.keyCode == 20) {
 					    this.checked = !this.checked;
 					    this.parentNode.offsetParent.setVal((this.checked?1:0), this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
@@ -1837,13 +1869,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 				    this.firstChild.focus();
 				}
-				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s") {
+				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s" || this.outTp == "t") {
 				    tVl = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
-				    this.innerHTML = "<input/>";
+				    this.innerHTML = (this.outTp == "t") ? "<textarea style='height: "+this.clientHeight+"px;'/>" : "<input/>";
 				    this.firstChild.value = tVl;
 				    this.firstChild.onkeyup = function(e) {
-					e = e ? e : window.event;
-					if(e.keyCode == 13)
+					e.stopImmediatePropagation();
+					if(e.keyCode == 13 && (this.nodeName != "TEXTAREA" || e.ctrlKey))
 					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
 					if(e.keyCode == 27) {
 					    this.parentNode.isEnter = false; this.parentNode.offsetParent.edIt = null;
@@ -1851,6 +1883,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					}
 					return true;
 				    }
+				    this.firstChild.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
+				    this.firstChild.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.focus();
 				} else { this.isEnter = false; elTbl.edIt = null; }
 			    }
@@ -1859,13 +1893,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    else if(document.selection) document.selection.empty();
 			    return false;
 			}
-			formObj.selIt = function( row, col ) {
+			formObj.selIt = function(row, col) {
 			    //Restore saved
 			    if(this.svRow || this.svCol) {
 				if(!this.svRow)
 				    this.tHead.rows[0].cells[this.svCol].style.backgroundColor =
 						this.tHead.rows[0].cells[this.svCol].svBackgroundColor;
-				for(iR = (this.svRow?this.svRow-1:0); iR <= (this.svRow?this.svRow-1:this.tBodies[0].rows.length-1); iR++)
+				for(iR = (this.svRow?this.svRow-1:0); iR <= (this.svRow?Math.min(this.svRow-1,this.tBodies[0].rows.length-1):this.tBodies[0].rows.length-1); iR++)
 				    for(iC = (this.svCol?this.svCol:0); iC <= (this.svCol?this.svCol:(this.tBodies[0].rows[iR].cells.length-1)); iC++)
 					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor =
 						this.tBodies[0].rows[iR].cells[iC].svBackgroundColor;
@@ -1886,43 +1920,61 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			formObj.getVal = function( row, col ) {
 			    tit = this.tBodies[0].rows[row].cells[col+1];
-			    return tit.children.length ? tit.innerText.slice(1) : tit.innerText;
+			    return tit.origVl ? tit.origVl : tit.innerText;
 			}
 			formObj.setVal = function( val, row, col ) {
 			    tit = this.tBodies[0].rows[row].cells[col+1];
 			    if(tit.isEnter) {
-				tit.innerHTML = tit.svInnerHTML;
-				attrs = new Object(); attrs.set = val; attrs.event = "ws_TableEdit_"+col+"_"+row;
+				//tit.innerHTML = tit.svInnerHTML;
+				attrs = new Object(); attrs.set = val; attrs.event = "ws_TableEdit_"+col+"_"+this.tBodies[0].rows[row].rowReal;
 				setWAttrs(this.wdgLnk.addr, attrs);
 				tit.isEnter = false; this.edIt = null;
 			    }
-			    else {
-				switch(tit.outTp) {
-				    case 'b': val = parseInt(val) ? "true" : "false";	break;
-				    case 'i': val = parseInt(val);	break;
-				    case 'r': val = parseFloat(parseFloat(val).toPrecision(6));	break;
-				}
-				tit.innerText = val;
+			    tit.origVl = null;
+			    switch(tit.outTp) {
+				case 'b':
+				    tit.childNodes[0].style.display = parseInt(val) ? "" : "none";
+				    if(tit.isEdit) tit.origVl = parseInt(val);
+				    break;
+				case 'i': tit.innerText = parseInt(val);	break;
+				case 'r':
+				    tit.innerText = parseFloat(parseFloat(val).toPrecision(tit.outPrec?tit.outPrec:6));
+				    break;
+				default:
+				    if(val.length <= limTblItmCnt) tit.innerText = val;
+				    else { tit.innerText = val.slice(0,limTblItmCnt) + "..."; if(tit.isEdit) tit.origVl = val; }
+				    break;
 			    }
 			}
 		    }
-		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
-		    if(toInit || ((this.attrsMdf['items'] || this.attrsMdf['value']) && !formObj.edIt)) {
+		    if(this.attrs['items'] && (toInit || ((this.attrsMdf['items'] /*|| this.attrsMdf['value']*/ || this.attrsMdf['font']) && !formObj.edIt))) {
 			hdrPresent = false, maxCols = 0, maxRows = 0;
-			items = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
-			if(!items.children.length || (tX=items.children[0]).nodeName != "tbl") formObj.innerHTML = "";
+			toReFit = this.attrsMdf['font'];
+			var itemsO = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
+			if(!itemsO.children.length || (tX=itemsO.children[0]).nodeName != "tbl")	formObj.innerHTML = "";
 			else {
 			    if(toInit || !formObj.children.length) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
-			    rClr = null, rClrTxt = null, rFnt = null;
+			    else if(!((wVl=tX.getAttribute("sortEn")) && parseInt(wVl))) formObj.sortCol = null;
+
+			    rClr = null, rClrTxt = null, rFnt = null, rPrec = null;
+			    startRows = formObj.tBodies[0].rows.length;
+			    startCols = startRows ? formObj.tBodies[0].rows[0].cells.length : 0;
+			    sortCol = 0;
 			    for(iR = 0, iRR = 0, iCh = 0; iCh < tX.children.length || iR < formObj.tBodies[0].rows.length; iCh++) {
-				tR = (iCh < items.children[0].children.length) ? items.children[0].children[iCh] : null;
+				tR = (iCh < itemsO.children[0].children.length) ? itemsO.children[0].children[iCh] : null;
 				isH = false, hit = null, tit = null;
 				if(tR && !((isH=(tR.nodeName=="h")) || tR.nodeName == "r")) continue;
 				if(!isH && iR >= formObj.tBodies[0].rows.length)
 				    formObj.tBodies[0].appendChild(this.place.ownerDocument.createElement('tr'));
-				if(!isH && tR) { rClr = tR.getAttribute("color"); rClrTxt = tR.getAttribute("colorText"); rFnt = tR.getAttribute("font"); }
+				if(!isH && tR) {
+				    formObj.tBodies[0].rows[iR].rowReal = iR;
+				    rClr = tR.getAttribute("color");
+				    rClrTxt = tR.getAttribute("colorText");
+				    rFnt = tR.getAttribute("font");
+				    rPrec = tR.getAttribute("prec");
+				}
 				for(iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR.children.length) || iC < formObj.tHead.children.length; ) {
 				    tC = (tR && iCh1 < tR.children.length) ? tR.children[iCh1] : null;
 				    if(iC >= formObj.tHead.rows[0].cells.length)
@@ -1931,18 +1983,22 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    hit.onclick = formObj.onclick;
 				    if(isH) {	//Header process
 					if(iC == 0) { hit.innerText = '*'; iC++; continue; }
-					hit.innerText = tC ? tC.textContent : "";
 					if(tC) {
-					    if(!(wVl=tC.getAttribute("width"))) hit.style.width = ""
-					    else if(wVl.indexOf("%") >= 0)	hit.style.width = parseInt(wVl) + "%";
-					    else hit.style.width = (parseInt(wVl)*xSc) + "px";
+					    if(hit.innerText != tC.textContent) toReFit = true;
+					    hit.innerText = tC.textContent;
+					    hit.widthSrc = ""
+					    if(!(wVl=tC.getAttribute("width"))) ;
+					    else if(wVl.indexOf("%") >= 0)	hit.widthSrc = parseInt(wVl) + "%";
+					    else hit.widthSrc = (parseInt(wVl)*xSc) + "px";
 					    hit.outEdit = parseInt(tC.getAttribute("edit"));
 					    hit.outColor = tC.getAttribute("color");
 					    hit.outColorText = tC.getAttribute("colorText");
 					    hit.outFont = tC.getAttribute("font");
-					    hit.style.display = (hit.style.width.length && !parseInt(hit.style.width)) ? "none" : "";
-					    //if((wVl=tC.getAttribute("sort")))	{ sortCol = i_c+1; if(!parseInt(wVl)) sortCol *= -1; }
-					}
+					    hit.outAlign = tC.getAttribute("align");
+					    hit.style.display = (hit.widthSrc.length && !parseInt(hit.widthSrc)) ? "none" : "";
+					    if((wVl=tC.getAttribute("sort")))	{ sortCol = iC+1; if(!parseInt(wVl)) sortCol *= -1; }
+					    hit.outPrec = tC.getAttribute("prec");
+					} else hit.innerText = "";
 				    }
 				    else {	//Rows content process
 					if(iC >= formObj.tBodies[0].rows[iR].cells.length)
@@ -1951,10 +2007,20 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					tit.onclick = formObj.onclick;
 					if(iC == 0) { tit.innerText = iR+1; iC++; continue; }
 					else tit.ondblclick = formObj.ondblclick;
+					// Modify set
+					if(hit.outEdit || (tC && (wVl=tC.getAttribute("edit")) && parseInt(wVl))) tit.isEdit = true;
+					else tit.isEdit = false;
 					// Value
-					if(tC) { tit.outTp = tC.nodeName; formObj.setVal(tC.textContent, iR, iC-1); }
+					if(tC) {
+					    tit.outTp = tC.nodeName;
+					    tit.style.textAlign = (tit.outTp == "b" || tit.outTp == "i" || tit.outTp == "r") ? "center" : "";
+					    if(tit.outTp == "b") tit.innerHTML = "<img src='/"+MOD_ID+"/img_button_ok' height='"+fntSz+"px'/> ";
+					    if(tit.outTp == "r" && ((wVl=tC.getAttribute("prec")) || (wVl=hit.outPrec) || (wVl=rPrec)))
+						tit.outPrec = parseInt(wVl);
+					    formObj.setVal(tC.textContent, iR, iC-1);
+					}
 					// Visibility
-					tit.style.display = (hit.style.width.length && !parseInt(hit.style.width)) ? "none" : "";
+					tit.style.display = (hit.widthSrc.length && !parseInt(hit.widthSrc)) ? "none" : "";
 					// Back color
 					if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
 					    tit.style.backgroundColor = getColor(wVl);
@@ -1969,9 +2035,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					// Cell image
 					if(tC && (wVl=tC.getAttribute("img")))
 					    tit.innerHTML = "<img src='/"+MOD_ID+this.addr+"?com=res&val="+wVl+"'/> " + tit.innerText;
-					// Modify set
-					if(hit.outEdit || (tC && (wVl=tC.getAttribute("edit")) && parseInt(wVl))) tit.isEdit = true;
-					else tit.isEdit = false;
+					// Alignment set
+					if((tC && (wVl=tC.getAttribute("align"))) || (wVl=hit.outAlign)) tit.style.textAlign = wVl;
 				    }
 				    if(tC)	{ ++iCR; maxCols = Math.max(maxCols, iCR); }
 				    iC++; iCh1++;
@@ -1981,6 +2046,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    iR++;
 				} else hdrPresent = true;
 			    }
+
+			    if((!startRows && formObj.tBodies[0].rows.length) || (formObj.tBodies[0].rows.length && formObj.tBodies[0].rows[0].cells.length > startCols))
+				toReFit = true;
+
 			    // Generic properties set
 			    formObj.oKeyID = (wVl=tX.getAttribute("keyID")) ? parseInt(wVl) : 0;
 			    formObj.oSel = tX.getAttribute("sel");
@@ -1994,14 +2063,15 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				formObj.tHead.rows[0].style.display = "none";
 				if(formObj.tBodies[0].rows.length)
 				    for(iC = 0; iC < formObj.tBodies[0].rows[0].cells.length; iC++)
-					formObj.tBodies[0].rows[0].cells[iC].style.width = formObj.tHead.rows[0].cells[iC].style.width;
+					formObj.tBodies[0].rows[0].cells[iC].widthSrc = formObj.tHead.rows[0].cells[iC].widthSrc;
 			    }
 			    //formObj.tHead.rows[0].style.display =
 			    //	(!(wVl=tX.getAttribute("hHdrVis")) || !wVl.length || parseInt(wVl)) ? "" : "none";
 			    while(formObj.tHead.rows[0].cells.length > (maxCols+1))
 				formObj.tHead.rows[0].removeChild(formObj.tHead.rows[0].lastChild);
 			    wVl = (wVl=tX.getAttribute("vHdrVis")) ? parseInt(wVl) : false;
-			    formObj.tHead.rows[0].cells[0].style.display = wVl ? "" : "none";
+			    if(formObj.tHead.rows[0].cells.length)
+				formObj.tHead.rows[0].cells[0].style.display = wVl ? "" : "none";
 			    for(iR = 0; iR < formObj.tBodies[0].rows.length; iR++) {
 				tR = formObj.tBodies[0].rows[iR];
 				if(tR.cells.length) tR.cells[0].style.display = wVl ? "" : "none";
@@ -2010,10 +2080,55 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    while(formObj.tBodies[0].rows.length > maxRows)
 				formObj.tBodies[0].removeChild(formObj.tBodies[0].lastChild);
 
-			    formObj.style.width = ((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) ? "100%" : "";
+			    //Specifying the columns mode fitting - the table layout mode
+			    if(toReFit) {
+				hdrRow = formObj.tHead.rows[0];
+				if(hdrRow.style.display == "none") hdrRow = formObj.tBodies[0].rows[0];
+				for(iC = 0; hdrRow && iC < hdrRow.cells.length; iC++)
+				    hdrRow.cells[iC].style.width = hdrRow.cells[iC].widthSrc ? hdrRow.cells[iC].widthSrc : null;
+
+				formObj.style.width = ""; formObj.style.tableLayout = "auto";
+				if((wVl=tX.getAttribute("colsWdthFit")) && parseInt(wVl)) formObj.style.width = "100%";
+				else { this.toReFit = toReFit; this.perUpdtEn(true); }
+			    }
+
+			    //Sorting
+			    if(((wVl=tX.getAttribute("sortEn")) && parseInt(wVl)) || sortCol) {
+				formObj.sort = function(col, force) {
+				    if(force) this.sortCol = -col;
+				    col = Math.abs(col);
+				    isDesc = (Math.abs(this.sortCol) == col && this.sortCol && this.sortCol > 0);
+				    prcArr = Array.prototype.slice.call(this.tBodies[0].rows,0).sort(
+					    function(a,b) { return (isDesc?1:-1)*a.cells[col-1].textContent.localeCompare(b.cells[col-1].textContent); }
+					);
+				    for(iR = 0; iR < prcArr.length; ++iR) {
+					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent)) {
+					    this.svRow = iR+1;
+					    prcArr[iR].cells[0].style.backgroundColor = prcArr[iR].cells[0].svBackgroundColor ? prcArr[iR].cells[0].svBackgroundColor : null;
+					}
+					prcArr[iR].cells[0].textContent = iR+1;
+					this.tBodies[0].appendChild(prcArr[iR]);
+				    }
+				    this.tHead.rows[0].cells[col-1].innerHTML = this.tHead.rows[0].cells[col-1].childNodes[0].textContent + "<span>&nbsp;"+(isDesc?"▲":"▼")+"</span>";
+				    if(this.sortCol && Math.abs(this.sortCol) != col)
+					this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].innerText = this.tHead.rows[0].cells[Math.abs(this.sortCol)-1].childNodes[0].textContent;
+				    this.sortCol = (Math.abs(this.sortCol) == col) ? -this.sortCol : col;
+				}
+				for(iC = 1; iC < formObj.tHead.rows[0].cells.length; iC++) {
+				    formObj.tHead.rows[0].cells[iC].onclick = function() { this.offsetParent.sort(this.cellIndex+1); }
+				    if(!sortCol && formObj.tHead.rows[0].cells[iC].style.display != "none") sortCol = iC+1;
+				}
+
+				if(formObj.sortCol) formObj.sort(formObj.sortCol, true);
+				else if(sortCol) formObj.sort(sortCol, true);
+			    }
 			}
+			delete itemsO;
+			//!!!! Preventing of storing big table sources
+			if(this.attrs['items'].length > 10000) { delete this.attrs['items']; this.attrs['items'] = null; }
 		    }
 		    if(toInit) this.place.appendChild(formObj);
+
 		    // Set the value
 		    if((toInit || this.attrsMdf['value'] || this.attrsMdf['items']) && formObj.innerHTML.length) {
 			val = this.attrs['value'];
@@ -2032,33 +2147,27 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    break;
 	    }
+	    this.place.isSpecFocus = true;
+	    if(elWr != this.place.elWr || this.attrsMdf['geomZ'])
+		if(elWr) formObj.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ']))); else formObj.removeAttribute('tabIndex');
+	    if(elWr != this.place.elWr) formObj.onfocus = !elWr ? null : function(e) { setFocus(this.parentNode.wdgLnk.addr); }
 	}
 	else if(this.attrs['root'] == 'Diagram') {
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
-	    var anchObj = this.place.childNodes[0];
-	    if(!anchObj) {
-		anchObj = this.place.ownerDocument.createElement('a');
-		anchObj.wdgLnk = this;
-		var dgrObj = this.place.ownerDocument.createElement('img');
-		dgrObj.border = 0;
-		anchObj.appendChild(dgrObj); this.place.appendChild(anchObj);
+	    var dgrObj = this.place.childNodes[0];
+	    if(!dgrObj)	{
+		this.place.appendChild((dgrObj=this.place.ownerDocument.createElement('img')));
+		dgrObj.wdgLnk = this;
 	    }
-	    anchObj.isActive = elWr;
-	    anchObj.href = '#';
-	    anchObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-	    //anchObj.onfocus = function( ) { if(this.isActive) setFocus(this.wdgLnk.addr); }
-	    anchObj.onkeydown = function(e) { if(this.isActive) setWAttrs(this.wdgLnk.addr,'event','key_pres'+evKeyGet(e?e:window.event)); }
-	    anchObj.onkeyup = function(e) { if(this.isActive) setWAttrs(this.wdgLnk.addr,'event','key_rels'+evKeyGet(e?e:window.even)); }
-	    anchObj.onclick = function(e) {
+	    dgrObj.isActive = elWr;
+	    dgrObj.onclick = function(e) {
 		if(!this.isActive) return false;
 		if(!e) e = window.event;
 		servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
 							  '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 							  '&key='+evMouseGet(e),'');
-		//setFocus(this.wdgLnk.addr);
 		return false;
 	    }
-	    var dgrObj = anchObj.childNodes[0];
 	    dgrObj.isLoad = false;
 	    dgrObj.onload = function( )	{ this.isLoad = true; }
 	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
@@ -2068,7 +2177,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Protocol') {
 	    if(!this.attrs['backColor'] || !getColor(this.attrs['backColor'],true)) elStyle += 'background-color: white; ';
-	    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
+	    elStyle += 'pointer-events: all; border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
 	    geomW -= 6; geomH -= 6;
 
 	    this.wFont = getFont(this.attrs['font'], Math.min(xSc,ySc));
@@ -2078,10 +2187,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		this.place.firstChild.setAttribute('width','100%');
 		this.place.firstChild.wdgLnk = this;
 		this.place.firstChild.isActive = elWr;
-		this.place.firstChild.onclick = function(e) {
-		    //if(this.isActive) setFocus(this.wdgLnk.addr);
-		    return false;
-		}
+		//this.place.firstChild.onclick = function(e) { return false; }
 		this.place.firstChild.className = 'prot';
 		this.loadData = function( ) {
 		    if(!this.tmPrev) this.tmPrev = 0;
@@ -2287,7 +2393,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else { this.perUpdtEn(false); this.loadData(); }
 	}
 	else if(this.attrs['root'] == 'Document') {
-	    elStyle += 'background-color: white; ';
+	    elStyle += 'pointer-events: all; background-color: white; ';
 
 	    if(this.attrsMdf["style"] || this.attrsMdf["font"] ||
 		(this.attrsMdf["doc"] && this.attrs["doc"].length) || (this.attrsMdf["tmpl"] && !this.attrs["doc"].length))
@@ -2353,7 +2459,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	if(elStyle != this.place.style.cssText)	this.place.style.cssText = elStyle;
 
-	//Generic mouse events process
+	//Generic events process
 	if(elWr) {
 	    this.mousedown[this.mousedown.length] = function(e,el) {
 		setWAttrs(el.wdgLnk.addr,'event','key_mousePres'+evMouseGet(e));
@@ -2361,9 +2467,25 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	    this.mouseup[this.mouseup.length] = function(e,el) {
 		setWAttrs(el.wdgLnk.addr,'event','key_mouseRels'+evMouseGet(e));
+		if(!el.isSpecFocus) el.focus();
 	    }
-	    this.place.ondblclick = function(e) { setWAttrs(this.wdgLnk.addr,'event','key_mouseDblClick'); return false; }
-	} else this.place.ondblclick = '';
+	}
+	if(!this.place.isSpecFocus) {
+	    if(elWr != this.place.elWr || this.attrsMdf['geomZ'])
+		if(elWr) this.place.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ']))); else this.place.removeAttribute('tabIndex');
+	    if(elWr != this.place.elWr) this.place.onfocus = !elWr ? null : function(e) { setFocus(this.wdgLnk.addr); }
+	}
+	if(elWr != this.place.elWr) {
+	    this.place.ondblclick = !elWr ? null : function(e) { setWAttrs(this.wdgLnk.addr,'event','key_mouseDblClick'); return false; }
+	    this.place.onkeydown = !elWr ? null : function(e) {
+		e = e ? e : window.event;
+		setWAttrs(this.wdgLnk.addr,'event','key_pres'+(e.ctrlKey?"Ctrl":"")+(e.altKey?"Alt":"")+(e.shiftKey?"Shift":"")+evKeyGet(e));
+	    }
+	    this.place.onkeyup = !elWr ? null : function(e) {
+		e = e ? e : window.event;
+		setWAttrs(this.wdgLnk.addr,'event','key_rels'+(e.ctrlKey?"Ctrl":"")+(e.altKey?"Alt":"")+(e.shiftKey?"Shift":"")+evKeyGet(e));
+	    }
+	}
 
 	//Context menu setup
 	if(elWr && this.attrs['contextMenu'].length) {
@@ -2431,7 +2553,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
     };
 
-    //Delete child widgets check
+    //Checking for deletion the child widgets
     if(FullTree && pgBr)
 	for(var i in this.wdgs) {
 	    var j;
@@ -2440,6 +2562,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    break;
 	    if(j >= pgBr.childNodes.length) {
 		this.wdgs[i].place.parentNode.removeChild(this.wdgs[i].place);
+		if(this.wdgs[i].placeTr)
+		    this.wdgs[i].placeTr.parentNode.removeChild(this.wdgs[i].placeTr);
 		delete this.wdgs[i];
 	    }
 	}
@@ -2452,6 +2576,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.wdgs[chEl]) this.wdgs[chEl].makeEl(pgBr.childNodes[j], false, full, FullTree);
 	    else {
 		var wdgO = new pwDescr(this.addr+'/wdg_'+chEl, false, this);
+		wdgO.wPos = j;
 		wdgO.place = this.place.ownerDocument.createElement('div');
 		this.place.appendChild(wdgO.place);
 		this.wdgs[chEl] = wdgO;
@@ -2491,17 +2616,40 @@ function perUpdtEn( en )
 	if(en) perUpdtWdgs[this.addr] = this;
 	else delete perUpdtWdgs[this.addr];
     }
-    for(var i in this.wdgs) this.wdgs[i].perUpdtEn(en);
+    for(var i in this.wdgs) this.wdgs[i].perUpdtEn(en);	//!!!! To restore updating of elements like to Document after returning from the cache
 }
 
 function perUpdt( )
 {
-    if(this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].tmClearEdit &&
-	    (this.place.childNodes[0].tmClearEdit-=prcTm) <= 0)
-	this.place.childNodes[0].chEscape();
+    if(this.attrs['root'] == 'FormEl') {
+	if(parseInt(this.attrs['elType']) == 9 && this.toReFit) {	//Table type post adjust
+	    if(!(tblWdth=this.place.clientWidth)) return;		//Waiting the table drawing
+	    var tblWdthSum = 0;
+	    hdrRow = this.place.childNodes[0].tHead.rows[0];
+	    if(hdrRow.style.display == "none") hdrRow = this.place.childNodes[0].tBodies[0].rows[0];
+	    for(iC = 0; iC < hdrRow.cells.length; iC++) {
+		if(hdrRow.cells[iC].style.display == "none")	continue;
+		if(!hdrRow.cells[iC].style.width.length) {
+		    tblWdthSum += hdrRow.cells[iC].clientWidth;
+		    hdrRow.cells[iC].style.width = hdrRow.cells[iC].clientWidth+"px";
+		}
+		else if(hdrRow.cells[iC].style.width.indexOf("%") >= 0) {
+		    hdrRow.cells[iC].style.width = (parseInt(hdrRow.cells[iC].style.width)*tblWdth/100) + "px";
+		    tblWdthSum += parseInt(hdrRow.cells[iC].style.width);
+		}
+		else tblWdthSum += parseInt(hdrRow.cells[iC].style.width);
+	    }
+	    this.place.childNodes[0].style.width = tblWdthSum+"px";
+	    this.place.childNodes[0].style.tableLayout = "fixed";
+	    this.toReFit = false;
+	    this.perUpdtEn(false);
+	}
+	else if(this.place.childNodes.length && this.place.childNodes[0].tmClearEdit && (this.place.childNodes[0].tmClearEdit-=prcTm) <= 0)
+	    this.place.childNodes[0].chEscape();
+    }
     else if(this.attrs['root'] == 'Diagram' && (this.updCntr-=prcTm) <= 0) {
 	this.updCntr = parseInt(this.attrs['trcPer']);
-	var dgrObj = this.place.childNodes[0].childNodes[0];
+	var dgrObj = this.place.childNodes[0];
 	if(!dgrObj.stLoadTm) dgrObj.stLoadTm = (new Date()).getTime();
 	if(dgrObj && (dgrObj.isLoad || ((new Date()).getTime()-dgrObj.stLoadTm) > this.updCntr*3000)) {
 	    dgrObj.isLoad = false;
@@ -2599,16 +2747,15 @@ function pwDescr( pgAddr, pg, parent )
     this.yScale = yScale;
     this.isEnabled = isEnabled;
     this.updCntr = 0;
+    this.wPos = -1;
 }
 /***************************************************
  * makeUI                                          *
  ***************************************************/
 function makeUI( callBackRez )
 {
-    if(!callBackRez) {
-	prcCnt = (callBackRez == -1) ? Math.min(0,prcCnt) - 1 :  Math.max(0,prcCnt) + 1;
-	stTmMain = new Date();
-    }
+    if(!callBackRez) stTmMain = new Date();
+    else prcCnt = (callBackRez == -1) ? Math.min(0,prcCnt) - 1 :  Math.max(0,prcCnt) + 1;
 
     //Get open pages list
     // Synchronous
@@ -2618,14 +2765,14 @@ function makeUI( callBackRez )
     if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
     else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
     if(pgNode) {
-	// Get for the styles
+	// Getting for the styles
 	if(tmCnt == 0)	modelStyles = servGet('/'+sessId,'com=style');
 
 	modelPer = parseInt(pgNode.getAttribute("per"));
 	if((alrmUpdCnt+=planePer) > tmAlrmUpd) { alarmSet(parseInt(pgNode.getAttribute("alarmSt"))); alrmUpdCnt = 0; }
 	cachePgSz   = parseInt(pgNode.getAttribute("cachePgSz"));
 	cachePgLife = parseFloat(pgNode.getAttribute("cachePgLife"));
-	// Check for delete pages
+	// Checking for deleting the pages
 	for(var iP = 0; iP < pgList.length; iP++) {
 	    var opPg; var iCh;
 	    for(iCh = 0; iCh < pgNode.childNodes.length; iCh++)
@@ -2637,19 +2784,19 @@ function makeUI( callBackRez )
 		else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
 		else {
 		    document.body.removeChild(opPg.window);
-		    masterPage = new pwDescr('', true)
+		    masterPage = new pwDescr('', true);
 		}
 		if(opPg.parent)	delete opPg.parent.pages[pgList[iP]];
 	    }
 	    else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[iP])
 	    { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null, true); }
 	}
-	// Process opened pages
+	// Processing the opened pages
 	pgList = new Array();
 	for(var i = 0; i < pgNode.childNodes.length; i++)
 	    if(pgNode.childNodes[i].nodeName == 'pg') {
 	        var prPath = pgNode.childNodes[i].textContent;
-		//  Check for closed window
+		//  Checking for closed windows
 		var opPg = masterPage.findOpenPage(prPath);
 		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
 		    servSet(prPath, 'com=pgClose&cacheCntr', '');
@@ -2661,7 +2808,9 @@ function makeUI( callBackRez )
 		pgList.push(prPath);
 		masterPage.callPage(prPath, parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
 	    }
-	tmCnt = parseInt(pgNode.getAttribute('tm'));
+	tmCnt_ = parseInt(pgNode.getAttribute('tm'));
+	if((tmCnt_-tmCnt) < -10) window.location.reload();	//The server or the counter restarted - reload the session
+	tmCnt = tmCnt_;
     }
     else if(prcCnt < 10) window.location.reload();
 
@@ -2998,6 +3147,7 @@ window.onresize = function( ) {
 	stTmReload = setTimeout('window.location.reload()', 1000);
 }
 
+var reqObjects = new Array();		//Request objects
 var fullUpdCnt = 0;			//Full tree updating counter
 var alrmUpdCnt = 0;			//Alarms updating counter
 var mAlrmSt = -1;			//Current allarm state
@@ -3006,7 +3156,7 @@ var modelStyles = null;			//Model styles
 var prcCnt = 0;				//Process counter
 var prcTm = 0;				//Process time
 var planePer = 0;			//Planed update period
-var tmCnt = 0;				//Call counter
+var tmCnt = 0;				//Calls counter
 var pgList = new Array();		//Opened pages list
 var cachePgLife = 0;			//Life time of the pages into the cache
 var cachePgSz = 0;			//Maximum number of the pages cache

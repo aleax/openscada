@@ -60,6 +60,7 @@
 #include "vis_devel.h"
 #include "vis_run_widgs.h"
 #include "vis_devel_widgs.h"
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_shapes.h"
 
 #ifdef HAVE_PHONON
@@ -72,7 +73,7 @@
 #endif
 #endif
 
-
+using namespace OSCADA_QT;
 using namespace VISION;
 
 //*************************************************
@@ -529,6 +530,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		if(!wdg || !qobject_cast<QTableWidget*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QTableWidget(w);
+		    wdg->setItemDelegate(new TableDelegate);
 		    wdg->setAlternatingRowColors(true);
 		    wdg->setSelectionMode(QAbstractItemView::SingleSelection);
 		    wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
@@ -540,27 +542,38 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    mk_new = true;
 		}
 
+		bool toReFit = (elFnt != wdg->font());
 		wdg->setFont(elFnt);		//Font
 
 		//Items
+		if(shD->items == "<cleaned>")	break;
 		shD->addrWdg->blockSignals(true);
 		XMLNode tX("tbl");
 		bool hdrPresent = false, colsWdthFit = false;
 		int maxCols = 0, maxRows = 0;
 		try { tX.load(shD->items); } catch(...) { }
+
 		if(tX.name() != "tbl") {
 		    wdg->clear();
 		    wdg->horizontalHeader()->setVisible(false);
 		    wdg->verticalHeader()->setVisible(false);
 		}
 		else {
+		    int scrollPosV = -1, scrollPosH = -1;
+		    //Review the sorting implementation in edition the table
 		    if(wdg->isSortingEnabled()) {
+			// Saving the user sorting configuration
+			if(wdg->verticalScrollBar() && wdg->verticalScrollBar()->isVisible())
+			    scrollPosV = wdg->verticalScrollBar()->value();
+			if(wdg->horizontalScrollBar() && wdg->horizontalScrollBar()->isVisible())
+			    scrollPosH = wdg->horizontalScrollBar()->value();
+			wdg->setProperty("sortCol", (wdg->horizontalHeader()->sortIndicatorSection()+1)*((wdg->horizontalHeader()->sortIndicatorOrder()==Qt::AscendingOrder)?1:-1));
+
+			// Disabling the sorting before processing
 			wdg->setSortingEnabled(false);
-			//wdg->clear();
-			//wdg->setColumnCount(0);
 			wdg->setRowCount(0);
-		    }
-		    string wVl, rClr, rClrTxt, rFnt;
+		    } else wdg->setProperty("sortCol", QVariant());
+		    string wVl, rClr, rClrTxt, rFnt, rPrec;
 		    int sortCol = 0;
 		    // Items
 		    for(unsigned iR = 0, iRR = 0, iCh = 0; iCh < tX.childSize() || (int)iR < wdg->rowCount(); iCh++) {
@@ -568,31 +581,37 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			bool isH = false;
 			QTableWidgetItem *hit = NULL, *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
-			if(!isH && (int)iR >= wdg->rowCount()) wdg->setRowCount(iR+1);
-			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); }
+			if(!isH && (int)iR >= wdg->rowCount()) { wdg->setRowCount(iR+1); if(!wdg->rowCount()) toReFit = true; }
+			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); rPrec = tR->attr("prec"); }
 			for(unsigned iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR->childSize()) ||
 								    (int)iC < wdg->columnCount(); iCh1++)
 			{
 			    XMLNode *tC = (tR && iCh1 < tR->childSize()) ? tR->childGet(iCh1) : NULL;
-			    if(tC && (int)iC >= wdg->columnCount()) wdg->setColumnCount(iC+1);
-			    if(!(hit=wdg->horizontalHeaderItem(iC))) wdg->setHorizontalHeaderItem(iC, (hit=new QTableWidgetItem()));
+			    if(tC && (int)iC >= wdg->columnCount()) { wdg->setColumnCount(iC+1); toReFit = true; }
+			    if(!(hit=wdg->horizontalHeaderItem(iC))) { wdg->setHorizontalHeaderItem(iC, (hit=new QTableWidgetItem())); toReFit = true; }
 			    if(isH) {	//Header process
 				hit->setText(tC?tC->text().c_str():"");
 				hit->setData(Qt::FontRole, elFnt);
 				if(tC) {
-				    if((wVl=tC->attr("width")).size()) {
-					int wdthCel = fmax(0, s2i(wVl));
-					if(wdthCel) {
-					    wdg->showColumn(iC);
-					    hit->setData(Qt::UserRole,
-						(wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel*w->xScale(true));
-					} else wdg->hideColumn(iC);
-				    } //else hit->setData(Qt::UserRole, QVariant());
+				    if(tC->text() != hit->text().toStdString()) toReFit = true;
+				    if((wVl=tC->attr("width")) != hit->data(Qt::UserRole+7).toString().toStdString()) {
+					hit->setData(Qt::UserRole+7, wVl.c_str());
+					hit->setData(Qt::UserRole, QVariant()); wdg->showColumn(iC);	//!!!! Need for updating the columns width
+					if(wVl.size()) {
+					    int wdthCel = fmax(0, s2i(wVl));
+					    if(!wdthCel)	wdg->hideColumn(iC);
+					    else hit->setData(Qt::UserRole,
+						    (wVl.find("%") == wVl.size()-1) ? -wdthCel : wdthCel);
+					}
+					toReFit = true;
+				    }
 				    hit->setData(Qt::UserRole+1, (bool)s2i(tC->attr("edit")));
 				    hit->setData(Qt::UserRole+2, ((wVl=tC->attr("color")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+3, ((wVl=tC->attr("colorText")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+4, ((wVl=tC->attr("font")).size()) ? QString::fromStdString(wVl) : QVariant());
+				    hit->setData(Qt::UserRole+6, tC->attr("align").c_str());
 				    if((wVl=tC->attr("sort")).size())	{ sortCol = iC+1; if(!s2i(wVl)) sortCol *= -1; }
+				    hit->setData(Qt::UserRole+8, ((wVl=tC->attr("prec")).size()) ? QString::fromStdString(wVl) : QVariant());
 				}
 			    }
 			    else {	//Rows content process
@@ -603,11 +622,23 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    switch(tC->name()[0]) {
 					case 'b': v = (bool)s2i(tC->text());	break;
 					case 'i': v = s2ll(tC->text());		break;
-					case 'r': v = s2r(tC->text());		break;
-					default: v = QString::fromStdString(tC->text()); break;
+					case 'r':
+					    if((wVl=tC->attr("prec")).empty() && (wVl=hit->data(Qt::UserRole+8).toString().toStdString()).empty() && (wVl=rPrec).empty())
+						wVl = "6";
+					    v = s2r(r2s(s2r(tC->text()),s2i(wVl)));
+					    break;
+					case 't':
+					    tit->setData(TableDelegate::OneLineString, false);
+					    v = QString::fromStdString(tC->text());
+					    break;
+					default:
+					    tit->setData(TableDelegate::OneLineString, true);
+					    v = QString::fromStdString(tC->text());
+					    break;
 				    }
 				tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-				tit->setData(Qt::DisplayRole, QVariant()); tit->setData(Qt::DisplayRole, v);
+				tit->setData(Qt::DisplayRole, QVariant());	//!!!! To clean up the stored QVariant type for next reusing
+				tit->setData(Qt::DisplayRole, v);
 				// Back color
 				if((tC && (wVl=tC->attr("color")).size()) || (wVl=hit->data(Qt::UserRole+2).toString().toStdString()).size() ||
 					(wVl=rClr).size())
@@ -628,10 +659,18 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    tit->setData(Qt::DecorationRole, QPixmap::fromImage(img));
 				else tit->setData(Qt::DecorationRole, QVariant());
 				// Modify set
-				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit")))) {
+				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
 				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
-				    tit->setData(Qt::UserRole+5, v);
-				}
+				else tit->setFlags(tit->flags()&(~Qt::ItemIsEditable));
+				// Alignment set
+				if((tC && (wVl=tC->attr("align")).size()) || (wVl=hit->data(Qt::UserRole+6).toString().toStdString()).size()) {
+				    int flgs = Qt::TextWordWrap | Qt::AlignVCenter;
+				    if(wVl == "left") flgs |= Qt::AlignLeft;
+				    else if(wVl == "right") flgs |= Qt::AlignRight;
+				    else if(wVl == "center") flgs |= Qt::AlignHCenter;
+				    tit->setData(Qt::TextAlignmentRole, flgs);
+				} else tit->setData(Qt::TextAlignmentRole, QVariant());
+				// Original position
 				tit->setData(Qt::UserRole+1, iC);
 				tit->setData(Qt::UserRole+2, iR);
 			    }
@@ -663,17 +702,39 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 
 		    wdg->horizontalHeader()->setVisible(tX.attr("hHdrVis").size()?s2i(tX.attr("hHdrVis")):hdrPresent);
 		    wdg->verticalHeader()->setVisible(s2i(tX.attr("vHdrVis")));
+
+		    if(wdg->columnCount() != maxCols) toReFit = true;
+		    wdg->setColumnCount(maxCols);
+		    wdg->setRowCount(maxRows);
+		    wdg->setProperty("colsWdthFit", colsWdthFit);
+		    shD->addrWdg->blockSignals(false);
+
 		    if(s2i(tX.attr("sortEn")) || sortCol) {
 			wdg->setSortingEnabled(true);
+			// Restorring/enabling the sorting
+			//  First visible column detection
+			for(int iC = 0; !sortCol && iC < wdg->columnCount(); iC++)
+			    if(!wdg->isColumnHidden(iC)) sortCol = iC+1;
+			if(toReFit || !wdg->property("sortCol").isValid()) wdg->setProperty("sortCol", sortCol);
+			sortCol = wdg->property("sortCol").toInt();
 			wdg->sortItems((sortCol?abs(sortCol)-1:0), ((sortCol>=0)?Qt::AscendingOrder:Qt::DescendingOrder));
+			if(scrollPosV > 0) wdg->verticalScrollBar()->setValue(scrollPosV);
+			if(scrollPosH > 0) wdg->horizontalScrollBar()->setValue(scrollPosH);
+		    }
+
+		    setValue(w, shD->value, true);	//Value
+
+		    wdg->resize(w->size());
+
+		    if(toReFit) tableFit(w);
+		    else {
+			wdg->resizeRowsToContents();
+			for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
+			    wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/2));
 		    }
 		}
-		wdg->setColumnCount(maxCols);
-		wdg->setRowCount(maxRows);
-		wdg->setProperty("colsWdthFit", colsWdthFit);
-		shD->addrWdg->blockSignals(false);
 
-		setValue(w, shD->value, true);	//Value
+		if(shD->items.size() > 10000)	shD->items = "<cleaned>";
 
 		break;
 	    }
@@ -721,14 +782,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
 	if(wAlign) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg, wAlign);
-
-	//Postprocessing after taking real data and size
-	switch(shD->elType) {
-	    case F_TABLE:
-		((QVBoxLayout*)w->layout())->activate();
-		tableFit(w);
-		break;
-	}
     }
 
     if(rel_cfg && !w->allAttrLoad() && shD->addrWdg)
@@ -964,35 +1017,52 @@ void ShapeFormEl::tableFit( WdgView *w )
 
     wdg->horizontalHeader()->setStretchLastSection(false);
 
-    if(wdg->columnCount() > 1) wdg->resizeColumnsToContents();
+    if(wdg->columnCount() > 1)	wdg->resizeColumnsToContents();
+
+    int tblWdth = wdg->maximumViewportSize().width() -
+		    ((wdg->verticalScrollBar()&&wdg->verticalScrollBar()->isVisible())?wdg->verticalScrollBar()->size().width():0);
+
+    int averWdth = wdg->columnCount() ? (tblWdth/wdg->columnCount()) : 0;
+    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
+
+    //Count width params
+    for(int iC = 0; iC < wdg->columnCount(); iC++) {
+	fullColsWdth += wdg->columnWidth(iC);
+	if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
+	    tVl = (tVl < 0) ? tblWdth*abs(tVl)/100 : tVl*w->xScale(true);
+	    niceForceColsWdth += tVl;
+	    wdg->setColumnWidth(iC, tVl);
+	}
+	else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
+	else busyCols++;
+    }
+
     if(wdg->property("colsWdthFit").toBool() && wdg->rowCount()) {
-	int tblWdth = wdg->maximumViewportSize().width();
-		    //vmax(w->sizeF().width(),wdg->maximumViewportSize().width()); - (wdg->verticalScrollBar()?wdg->verticalScrollBar()->size().width():0);
-	int averWdth = tblWdth/wdg->columnCount();
-	int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
-	//Count width params
-	for(int iC = 0; iC < wdg->columnCount(); iC++) {
-	    fullColsWdth += wdg->columnWidth(iC);
-	    if(wdg->horizontalHeaderItem(iC) && (tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) {
-		if(tVl < 0)	tVl = tblWdth*abs(tVl)/100;
-		niceForceColsWdth += tVl;
-		wdg->setColumnWidth(iC, tVl);
-	    }
-	    else if(wdg->columnWidth(iC) <= averWdth)	niceForceColsWdth += wdg->columnWidth(iC);
-	    else busyCols++;
+	for(int iIt = 0; busyCols && iIt < 10; iIt++) {
+	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
+	    int busyCols_ = 0, niceForceColsWdth_ = 0;
+	    for(int iC = 0; iC < wdg->columnCount(); iC++)
+		if((wdg->horizontalHeaderItem(iC) && wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt()) || wdg->columnWidth(iC) < busyColsWdth)
+		    niceForceColsWdth_ += wdg->columnWidth(iC);
+		else busyCols_++;
+	    if(busyCols_ == busyCols)	break;
+	    busyCols = busyCols_; niceForceColsWdth = niceForceColsWdth_;
 	}
 
 	//Set busyCols
 	if(fullColsWdth > tblWdth && busyCols) {
 	    int busyColsWdth = (tblWdth-niceForceColsWdth)/busyCols;
 	    for(int iC = 0; iC < wdg->columnCount(); iC++)
-		if((!wdg->horizontalHeaderItem(iC) || !(tVl=wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt())) &&
+		if((!wdg->horizontalHeaderItem(iC) || !wdg->horizontalHeaderItem(iC)->data(Qt::UserRole).toInt()) &&
 			wdg->columnWidth(iC) > averWdth && wdg->columnWidth(iC) > busyColsWdth)
 		    wdg->setColumnWidth(iC, busyColsWdth);
 	}
-	wdg->resizeRowsToContents();
     }
     wdg->horizontalHeader()->setStretchLastSection(wdg->property("colsWdthFit").toBool());
+
+    wdg->resizeRowsToContents();
+    for(int iRW = 0; iRW < wdg->rowCount(); iRW++)
+	wdg->setRowHeight(iRW, vmin(wdg->rowHeight(iRW), wdg->size().height()/2));
 }
 
 bool ShapeFormEl::event( WdgView *w, QEvent *event )
@@ -1019,6 +1089,23 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 
 bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
+    //Common actions
+    switch(event->type()) {
+	case QEvent::Resize:
+	    if(((ShpDt*)w->shpData)->elType == F_TABLE &&
+		    object == ((ShpDt*)w->shpData)->addrWdg && ((QResizeEvent*)event)->size() != ((QResizeEvent*)event)->oldSize())
+		tableFit(w);
+	    break;
+	case QEvent::Show:
+	    if(((ShpDt*)w->shpData)->elType == F_TABLE &&
+		    (object == ((QTableWidget*)((ShpDt*)w->shpData)->addrWdg)->verticalScrollBar() ||
+		     object == ((QTableWidget*)((ShpDt*)w->shpData)->addrWdg)->verticalHeader()))
+		tableFit(w);
+	    break;
+	default: break;
+    }
+
+    //Specific actions to the mode
     if(qobject_cast<DevelWdgView*>(w))
 	switch(event->type()) {
 	    case QEvent::Enter:
@@ -1028,14 +1115,13 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    case QEvent::MouseButtonRelease:
 	    case QEvent::MouseButtonDblClick:
 	    case QEvent::ContextMenu:
-		QApplication::sendEvent(w,event);
+		QApplication::sendEvent(w, event);
 		return true;
 	    default:	break;
 	}
     else {
-	AttrValS attrs;
+	//AttrValS attrs;
 	switch(event->type()) {
-	    case QEvent::Resize: case QEvent::Show: tableFit(w);	break;
 	    case QEvent::FocusIn: qobject_cast<RunWdgView*>(w)->mainWin()->setFocus(w->id());	break;
 		/*if(!w->hasFocus()) break;
 		attrs.push_back(std::make_pair("focus","1"));
@@ -1080,7 +1166,7 @@ void ShapeFormEl::textAccept( )
     view->attrsSet(attrs);
 }
 
-void ShapeFormEl::checkChange(int st)
+void ShapeFormEl::checkChange( int st )
 {
     WdgView *view = (WdgView *)((QCheckBox*)sender())->parentWidget();
 
@@ -1273,12 +1359,6 @@ void ShapeFormEl::tableChange( int row, int col )
     if(((ShpDt*)w->shpData)->evLock /*|| !el->selectedItems().size()*/) return;
 
     QTableWidgetItem *wIt = el->item(row, col);
-
-    //Restore the previous value
-    if(!(((ShpDt*)w->shpData)->active && w->permCntr())) {
-	wIt->setData(Qt::DisplayRole, wIt->data(Qt::UserRole+5));
-	return;
-    }
 
     QVariant val = wIt->data(Qt::DisplayRole);
     if(val.type() == QVariant::Bool) val = val.toInt();
@@ -4134,6 +4214,7 @@ void ShapeProtocol::init( WdgView *w )
     //Init main widget
     QVBoxLayout *lay = new QVBoxLayout(w);
     shD->addrWdg = new QTableWidget(w);
+    shD->addrWdg->setItemDelegate(new TableDelegate);
     shD->addrWdg->setSelectionBehavior(QAbstractItemView::SelectRows);
     //shD->addrWdg->setSortingEnabled(true);
     eventFilterSet(w, shD->addrWdg, true);
@@ -4465,11 +4546,16 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		QDateTime	dtm;
 		dtm.setTime_t(shD->messList[sortIts[iM].second].time);
 		shD->addrWdg->setItem(iM, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")));
+		tit->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
 	    }
-	    else if(iCl == c_tmu)
+	    else if(iCl == c_tmu) {
 		shD->addrWdg->setItem(iM, c_tmu, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[iM].second].utime)));
-	    else if(iCl == c_lev)
+		tit->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
+	    }
+	    else if(iCl == c_lev) {
 		shD->addrWdg->setItem(iM, c_lev, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[iM].second].level)));
+		tit->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
+	    }
 	    else if(iCl == c_cat)
 		shD->addrWdg->setItem(iM, c_cat, tit=new QTableWidgetItem(shD->messList[sortIts[iM].second].categ.c_str()));
 	    else if(iCl == c_mess)

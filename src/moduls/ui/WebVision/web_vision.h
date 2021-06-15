@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -130,6 +130,9 @@ class TWEB: public TUI
 
 	ResMtx &cacheRes( )	{ return mCacheRes; }
 
+	// Post message dialog
+	string messPost( const string &cat, const string &mess, MessLev type = Info );
+
     protected:
 	//Methods
 	void load_( );
@@ -141,10 +144,6 @@ class TWEB: public TUI
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
     private:
-	//Methods
-	// Post message dialog
-	string messPost( const string &cat, const string &mess, MessLev type = Info );
-
 	//Attributes
 	int		mTSess;				//Time of sesion life (minutes)
 	int		mSessLimit;			//Sessions limit

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,6 +29,7 @@
 #include <QGridLayout>
 #include <QSyntaxHighlighter>
 #include <QItemDelegate>
+#include <QTableWidget>
 
 #include <xml.h>
 
@@ -49,8 +50,6 @@ typedef vector<pair<string,string> > AttrValS;
 
 namespace VISION
 {
-    extern int icoSize( float mult = 1 );
-
     //*********************************************
     //* Id and name input dialog                  *
     //*********************************************
@@ -376,6 +375,7 @@ namespace VISION
 	    WdgShape		*shape;		//Link to root widget shape
 	    QMainWindow		*main_win;	//Main window
     };
+
 }
 
 #endif //VIS_WIDGS_H

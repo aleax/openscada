@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -395,7 +395,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	}
 	else {
 	    res.lock(false);
-	    nd = SYS->cfgNode(SYS->id()+"/"+path, true);
+	    nd = SYS->cfgNode(SYS->id()+"/"+path, !toChangeExistsCfg /*true*/);
 	    SYS->modifCfg(true);
 	}
 

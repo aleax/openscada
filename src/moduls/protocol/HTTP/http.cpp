@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.2"
+#define MOD_VER		"3.6.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -481,11 +481,11 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    if(io.childGet(cnt_c)->childGet(ch_c)->name() == "prm")
 			cnt += io.childGet(cnt_c)->childGet(ch_c)->attr("id")+": "+
 			   io.childGet(cnt_c)->childGet(ch_c)->text()+"\x0D\x0A";
-		cnt += "\x0D\x0A"+io.childGet(cnt_c)->text();
+		cnt += "\x0D\x0A"+io.childGet(cnt_c)->text()+"\x0D\x0A";
 		isCnt = true;
 	    }
 	    if(isCnt) {
-		//cnt += "--" cntBnd "--\x0D\x0A";
+		cnt += "--" cntBnd "--\x0D\x0A";
 		io.childAdd("prm")->setAttr("id","Content-Type")->setText("multipart/form-data; boundary=" cntBnd);
 	    } else cnt = io.text();
 	    io.childAdd("prm")->setAttr("id","Content-Length")->setText(i2s(cnt.size()));
@@ -1023,7 +1023,7 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
     if(boundary.empty()) return;
 
     for(size_t pos = 0, spos = 0, i_bnd = 0; true; ) {
-	pos = content.find(boundary,pos);
+	pos = content.find(boundary, pos);
 	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
 	pos += boundary.size()+strlen(c_term);
 

@@ -65,7 +65,10 @@ case "$1" in
     if test -n "$dPrjUser" -a ! -d $dPrjUser; then mkdir $dPrjUser; fi
     if test ! -d $dPrjRez -o ! -w $dPrjRez && test -n "$dPrjUser" -a -w $dPrjUser; then
 	dPrjRez=$dPrjUser/$prjNm
-	if test -d $dPrj/LibsDB -a ! -d $dPrjUser/LibsDB; then cp -R $dPrj/LibsDB $dPrjUser; fi
+	#if test -d $dPrj/LibsDB -a ! -d $dPrjUser/LibsDB; then cp -R $dPrj/LibsDB $dPrjUser; fi
+	# Creating the user LibsDB folder and setting links to the system DB files of the libraries
+	mkdir -p $dPrjUser/LibsDB/; ln -s $dPrj/LibsDB/* $dPrjUser/LibsDB/;
+
 	if test ! -d $dPrjRez -a -d $dPrj/$prjNm; then
 	    mkdir -p $dPrjRez
 	    cp -R $dPrj/$prjNm/* $dPrjRez;

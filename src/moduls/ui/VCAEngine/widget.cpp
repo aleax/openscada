@@ -43,7 +43,7 @@ Widget::~Widget( )
     mtxAttr().lock();
     map<string,Attr*>::iterator p;
     while((p = mAttrs.begin()) != mAttrs.end()) {
-	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
+	for(int iC = 0; iC < 100 && p->second->mConn; iC++)	TSYS::sysSleep(0.01);
 	if(p->second->mConn) mess_err(nodePath().c_str(),_("The attribute '%s' is not released. Forced removal!"),p->first.c_str());
 	delete p->second;
 	mAttrs.erase(p);
@@ -206,7 +206,7 @@ void Widget::setOwner( const string &iown )
     if(SYS->security().at().grpAt("UI").at().user(iown)) setGrp("UI");
     else {
 	vector<string> gls;
-	SYS->security().at().usrGrpList(owner(),gls);
+	SYS->security().at().usrGrpList(owner(), gls);
 	setGrp(gls.size()?gls[0]:Widget::grp());
     }
 }
@@ -290,15 +290,8 @@ void Widget::setEnable( bool val, bool force )
     if(!val) {
 	mess_sys(TMess::Debug, _("Disabling the widget."));
 
-	disable(this);
-
-	//Free no base attributes and restore base
-	vector<string> ls;
-	attrList(ls);
-	for(unsigned iL = 0; iL < ls.size(); iL++)
-	    if(!(attrAt(ls[iL]).at().flgGlob()&Attr::Generic)) attrDel(ls[iL], true);
-
-	//Disable heritors widgets
+	//Disable heritors widgets.
+	//!!!! Before all but else the heritors lost some attributes
 	for(unsigned iH = 0; iH < herit().size(); )
 	    if(herit()[iH].at().enable())
 		try { herit()[iH].at().setEnable(false); }
@@ -308,6 +301,14 @@ void Widget::setEnable( bool val, bool force )
 		    iH++;
 		}
 	    else iH++;
+
+	disable(this);
+
+	//Free no base attributes and restore base
+	vector<string> ls;
+	attrList(ls);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    if(!(attrAt(ls[iL]).at().flgGlob()&Attr::Generic)) attrDel(ls[iL], true);
 
 	if(!mParent.freeStat()) {
 	    //Unregister heritater
@@ -498,7 +499,10 @@ void Widget::wClear( )
 	    parw.at().wdgList(ls);
 	    for(unsigned iW = 0; iW < ls.size(); iW++)
 		if(!wdgPresent(ls[iW]))
-		    try{ wdgAdd(ls[iW],"",parw.at().wdgAt(ls[iW]).at().path(),true); }
+		    try {
+			wdgAdd(ls[iW], "", parw.at().wdgAt(ls[iW]).at().path(), true);
+			wdgAt(ls[iW]).at().setEnable(true);
+		    }
 		    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 		else wdgAt(ls[iW]).at().wClear();
 	}
@@ -645,7 +649,7 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	mtxAttr().lock();
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end())	throw TError(nodePath().c_str(), _("Attribute '%s' is not present."), attr.c_str());
-	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
+	for(int iC = 0; iC < 100 && p->second->mConn; iC++)	TSYS::sysSleep(0.01);
 	if(p->second->mConn) throw TError(nodePath().c_str(), _("Deleting attribute '%s' has not been released."), attr.c_str());
 
 	int pos = p->second->mOi;
@@ -868,8 +872,8 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 		    }
 	}
 	else if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	//Set values
-	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
-		try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
+	    for(unsigned iCh = 0; iCh < opt->childSize(); iCh++)
+		try{ attrAt(opt->childGet(iCh)->attr("id")).at().setS(opt->childGet(iCh)->text()); }
 		catch(TError&) { }
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD)) {	//Get attributes all updated elements' of the branch
@@ -1464,10 +1468,11 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Configuration template"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculation"))) {
-		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/plang/list",
+		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,4,"tp","str", "dest","sel_ed", "select","/plang/list",
 		    "help",_("Select the blank language to reset the widget procedure and language to the parent widget."));
 		if(calcLang().size())
-		    ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Period of the calculating, milliseconds"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+		    ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Period of the calculating, milliseconds"),RWRWR_,"root",SUI_ID,2,"tp","dec",
+		    "help",_("Use -1 (< 0) if you want to use the parent widget/page/project calculating period."));
 		if(calcProg().size() && !(!parent().freeStat() && calcProg() == parent().at().calcProg()))
 		    ctrMkNode("fld",opt,-1,"/proc/calc/prog_tr",_("Completely translate the procedure"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		if(calcLang().size())
@@ -1770,7 +1775,7 @@ TVariant Attr::get( bool sys )
 string Attr::getS( bool sys )
 {
     if(flgGlob()&Attr::OnlyRead || (flgGlob()&Attr::PreRead && !sys)) return owner()->vlGet(*this).getS();
-    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getS(true),false).getS();
+    if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this, getS(true), false).getS();
     switch(fld().type()) {
 	case TFld::Integer:	{ int64_t tvl = getI(sys); return (tvl != EVAL_INT) ? ll2s(tvl) : EVAL_STR; }
 	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? r2s(tvl) : EVAL_STR; }

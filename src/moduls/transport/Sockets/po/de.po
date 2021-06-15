@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.Sockets package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2020.
+# Roman Savochenko <roman@oscada.org>, 2011-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 16:35+0300\n"
+"POT-Creation-Date: 2021-04-16 18:09+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -145,6 +145,7 @@ msgstr "Verbunden"
 msgid "Disconnected"
 msgstr "Getrennt"
 
+#, c-format
 msgid "Reconnect due to lack of input activity to '%s'."
 msgstr "Reconnect wegen fehlender Eingabeaktivität für '%s'."
 
@@ -159,9 +160,8 @@ msgstr "Schreiben: Antwort für Null-Bytes."
 msgid "Write: error '%s (%d)'!"
 msgstr "Schreiben: Fehler '%s (%d)'!"
 
-#, c-format
-msgid "%d:Transmitted directly to '%s'\n"
-msgstr "%d:Direkt zu '%s' übertragen\n"
+msgid "%d:> Transmitted directly to '%s'\n"
+msgstr "%d:> Direkt zu '%s' übertragen\n"
 
 #, c-format
 msgid "Closing the input transport by the error \"%s (%d)\""
@@ -174,17 +174,15 @@ msgstr "Fehler beim Erstellen eines Threads!"
 msgid "Read datagram %s from '%s'!"
 msgstr "Lesen Datagramm %s aus '%s'!"
 
-#, c-format
-msgid "%d:Received from '%s'\n"
-msgstr "%d:Empfangen von '%s'\n"
+msgid "%d:< Received from '%s'\n"
+msgstr "%d:< Empfangen von '%s'\n"
 
 #, c-format
 msgid "Wrote datagram %s to '%s'!"
 msgstr "Schrieb Datagramm %s auf '%s'!"
 
-#, c-format
-msgid "%d:Transmitted to '%s'\n"
-msgstr "%d:Übertragen in '%s'\n"
+msgid "%d:> Transmitted to '%s'\n"
+msgstr "%d:> Übertragen in '%s'\n"
 
 #, c-format
 msgid ""
@@ -219,6 +217,10 @@ msgstr "Nachricht lesen %s aus '%s'."
 #, c-format
 msgid "Wrote message %s to '%s'."
 msgstr "Schrieb Nachricht %s auf '%s'."
+
+#, c-format
+msgid "Write: error '%s (%d)'."
+msgstr "Schreiben: Fehler '%s (%d)'."
 
 #, c-format
 msgid "Error transmitting: %s"
@@ -426,6 +428,7 @@ msgstr "Fehler beim Erstellen des %s-Sockets!"
 msgid "RAWCAN socket doesn't bind to '%s'!"
 msgstr "RAWCAN Socket ist nicht verbunden mit '%s'!"
 
+#, c-format
 msgid "Error connecting: %s"
 msgstr "Verbindungsfehler: %s"
 
@@ -439,6 +442,10 @@ msgstr "Transport ist nicht verbunden!"
 msgid "Error requesting: %s"
 msgstr "Fehler beim Anfordern: %s"
 
+#, c-format
+msgid "Error writing '%s (%d)'"
+msgstr "Fehler beim Schreiben '%s (%d)'"
+
 msgid "No data wrote"
 msgstr "Keine Daten geschrieben"
 
@@ -446,8 +453,8 @@ msgstr "Keine Daten geschrieben"
 msgid "Error writing: %s"
 msgstr "Fehler beim Schreiben: %s"
 
-msgid "Transmitted to\n"
-msgstr "Übertragen an\n"
+msgid "> Transmitted to\n"
+msgstr "> Übertragen an\n"
 
 #, c-format
 msgid "Wrote %s."
@@ -460,6 +467,10 @@ msgstr "Lesezeitüberschreitung."
 msgid "Error reading (select): %s"
 msgstr "Fehler beim Lesen (Auswählen): %s"
 
+#, c-format
+msgid "Error reading '%s (%d)'"
+msgstr "Fehler beim Lesen '%s (%d)'"
+
 msgid "No data, the connection seems closed"
 msgstr "Keine Daten, die Verbindung scheint geschlossen zu sein"
 
@@ -471,8 +482,8 @@ msgstr "Fehler beim Lesen: %s"
 msgid "Read %s."
 msgstr "Lesen Sie %s."
 
-msgid "Received from\n"
-msgstr "Empfangen von\n"
+msgid "< Received from\n"
+msgstr "< Empfangen von\n"
 
 msgid "Timings"
 msgstr "Zeitabstände"

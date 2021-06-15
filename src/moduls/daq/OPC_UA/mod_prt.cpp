@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -116,23 +116,9 @@ bool TProt::inReq( string &request, const string &inPrtId, string *answ )
     bool rez = Server::inReq(request, inPrtId, answ);
     res.unlock();
 
-#ifdef POOL_OF_TR
-    //Pool for subscriptions process
     AutoHD<TProtIn> ip = at(inPrtId);
-    if(ip.at().waitReqTm() && !ip.at().mSubscrIn && epPresent(ip.at().mEp)) {
-	int64_t wTm = SYS->curTime();
-	AutoHD<OPCEndPoint> ep = epAt(ip.at().mEp);
-	bool tmToCall = (wTm-ip.at().mPrevTm)/1000 >= ip.at().waitReqTm();
-	if(tmToCall || ep.at().forceSubscrQueue) {
-	    if(tmToCall) ep.at().forceSubscrQueue = false;
-	    if(!ep.at().forceSubscrQueue) ip.at().mSubscrCntr++;
-	    ip.at().mPrevTm = wTm;
-	    ip.at().mSubscrIn = true;
-	    epAt(ip.at().mEp).at().subScrCycle(ip.at().mSubscrCntr, answ, inPrtId);
-	    ip.at().mSubscrIn = false;
-	}
-    }
-#endif
+    if(epPresent(ip.at().mEp))
+	epAt(ip.at().mEp).at().publishCall(answ, inPrtId);
 
     return rez;
 }
@@ -206,17 +192,17 @@ void TProt::modStart( )
 {
     vector<string> ls;
     epList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	if(epAt(ls[i_n]).at().toEnable())
-	    epAt(ls[i_n]).at().setEnable(true);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	if(epAt(ls[iN]).at().toEnable())
+	    epAt(ls[iN]).at().setEnable(true);
 }
 
 void TProt::modStop( )
 {
     vector<string> ls;
     epList(ls);
-    for(unsigned i_n = 0; i_n < ls.size(); i_n++)
-	epAt(ls[i_n]).at().setEnable(false);
+    for(unsigned iN = 0; iN < ls.size(); iN++)
+	epAt(ls[iN]).at().setEnable(false);
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
@@ -227,7 +213,9 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
 	ctrMkNode("grp", opt, -1, "/br/ep_", _("End point"), RWRWR_, "root", SPRT_ID, 2, "idm",i2s(limObjNm_SZ).c_str(), "idSz",i2s(limObjID_SZ).c_str());
-	if(ctrMkNode("area",opt,0,"/ep",_("End points")))
+	if(ctrMkNode("area",opt,0,"/serv",_("Server")))
+	    ctrMkNode("list",opt,-1,"/serv/asc",_("Active secure channels"),R_R_R_,"root",SPRT_ID);
+	if(ctrMkNode("area",opt,1,"/ep",_("End points")))
 	    ctrMkNode("list", opt, -1, "/ep/ep", _("End points"), RWRWR_, "root", SPRT_ID, 5,
 		"tp","br", "idm",i2s(limObjNm_SZ).c_str(), "s_com","add,del", "br_pref","ep_", "idSz",i2s(limObjID_SZ).c_str());
 	return;
@@ -239,11 +227,29 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    vector<string> lst;
 	    epList(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id", lst[i_f])->setText(epAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id", lst[iF])->setText(epAt(lst[iF]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", epAdd(opt->attr("id"))); epAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mEndPnt,opt->attr("id"),-1,1);
+    }
+    else if(a_path == "/serv/asc" && ctrChkNode(opt)) {
+	vector<uint32_t> chnls;
+	chnlList(chnls);
+	for(unsigned iCh = 0; iCh < chnls.size(); ++iCh) {
+	    SecCnl scO = chnlGet(chnls[iCh]);
+	    string secMess = _("Unknown");
+	    switch(scO.secMessMode) {
+		case MS_None:	secMess = _("None");	break;
+		case MS_Sign:	secMess = _("Sign");	break;
+		case MS_SignAndEncrypt: secMess = _("Sign&Encrypt");	break;
+	    }
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%u(token %u): %s(%s,%s) at %s(live %s); Sequence server %u, client %u; Request ID %u"),
+		chnls[iCh], scO.tokenId, scO.endPoint.c_str(), scO.secPolicy.c_str(), secMess.c_str(),
+		atm2s(scO.tCreate*1e-6,"%Y-%m-%dT%H:%M:%S").c_str(),
+		tm2s(1e-3*scO.tLife-1e-6*(curTime()-scO.tCreate)).c_str(),
+		scO.servSeqN, scO.clSeqN, scO.reqId));
+	}
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -251,7 +257,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-TProtIn::TProtIn( string name ) : TProtocolIn(name), mSubscrIn(false), mPoolTm(0), mSubscrCntr(0), mPrevTm(0),
+TProtIn::TProtIn( string name ) : TProtocolIn(name), mSubscrIn(false), mPollTm(0), mPrevTm(0),
 	mRcvBufSz(0), mSndBufSz(0), mMsgMaxSz(0), mChunkMaxCnt(0)	{ }
 
 TProtIn::~TProtIn( )		{ }
@@ -261,11 +267,7 @@ TProt &TProtIn::owner( ) const	{ return *(TProt*)nodePrev(); }
 bool TProtIn::mess( const string &reqst, string &answ )
 {
     mBuf += reqst;
-#ifdef POOL_OF_TR
     return owner().inReq(mBuf, name(), &answ);
-#else
-    return owner().inReq(mBuf, name());
-#endif
 }
 
 //*************************************************
@@ -320,13 +322,11 @@ string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
 bool OPCEndPoint::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-#ifndef POOL_OF_TR
 void *OPCEndPoint::Task( void *iep )
 {
     OPCEndPoint &ep = *(OPCEndPoint *)iep;
 
     for(unsigned cntr = 0; !TSYS::taskEndRun(); cntr++) {
-	ep.forceSubscrQueue = false;	//Disable the forcing mechanism for the method
 	try { ep.subScrCycle(cntr); }
 	catch(OPCError &err)	{ mess_err(ep.nodePath().c_str(), err.mess.c_str()); }
 	catch(TError &err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
@@ -336,7 +336,6 @@ void *OPCEndPoint::Task( void *iep )
 
     return NULL;
 }
-#endif
 
 void OPCEndPoint::load_( TConfig *icfg )
 {
@@ -372,8 +371,8 @@ void OPCEndPoint::save_( )
     //Security policies store
     string sp;
     MtxAlloc res(secRes, true);
-    for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
-	sp += mSec[i_p].policy + ":" + i2s(mSec[i_p].messageMode)+"\n";
+    for(unsigned iP = 0; iP < mSec.size(); iP++)
+	sp += mSec[iP].policy + ":" + i2s(mSec[iP].messageMode)+"\n";
     cfg("SecPolicies").setS(sp);
 
     //Addition parameters save
@@ -397,23 +396,15 @@ void OPCEndPoint::setEnable( bool vl )
 	nodeReg(OpcUa_BaseObjectType,NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ),"DAQParameterObjectType",NC_ObjectType,OpcUa_HasSubtype);
 	nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),NS_OpenSCADA_DAQ),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->
 	    setAttr("DisplayName",SYS->daq().at().subName());
-#ifndef POOL_OF_TR
 	SYS->taskCreate(nodePath('.',true), 0/*mPrior*/, OPCEndPoint::Task, this);
-    }
-    else SYS->taskDestroy(nodePath('.',true));
-#else
-    }
-#endif
+    } else SYS->taskDestroy(nodePath('.',true));
 }
 
 void OPCEndPoint::setPublish( const string &inPrtId )
 {
-#ifdef POOL_OF_TR
     AutoHD<TProtIn> ip = owner().at(inPrtId);
-    ip.at().mPoolTm = subscrProcPer();
+    ip.at().mPollTm = subscrProcPer();
     ip.at().mEp = id();
-#endif
-    //Otherwise the task started/stoped into setEnable()
 }
 
 string OPCEndPoint::getStatus( )
@@ -421,7 +412,9 @@ string OPCEndPoint::getStatus( )
     string rez = _("Disabled. ");
     if(enableStat()) {
 	rez = _("Enabled. ");
-	rez += TSYS::strMess(_("Requests %.4g."), (double)cntReq);
+	rez += TSYS::strMess(_("Requests %.4g. Subscription task period %s, time %s[%s]. "),
+	    (double)cntReq, tm2s(1e-3*subscrProcPer()).c_str(),
+	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
 
     return rez;
@@ -549,11 +542,11 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		}
 
 		bool lstOK = lstNd.empty() ? true : false;
-		for(unsigned i_p = 0; i_p < prevLs.childSize(); i_p++) {
-		    XML_N *pN = prevLs.childGet(i_p);
+		for(unsigned iP = 0; iP < prevLs.childSize(); iP++) {
+		    XML_N *pN = prevLs.childGet(iP);
 		    if(!lstOK) { lstOK = (lstNd==pN->attr("NodeId")); continue; }
 		    *(req.childAdd("ref")) = *pN;
-		    if(rPn && (int)req.childSize() >= rPn && (i_p+1) < prevLs.childSize()) {
+		    if(rPn && (int)req.childSize() >= rPn && (iP+1) < prevLs.childSize()) {
 			req.setAttr("LastNode", pN->attr("NodeId"));
 			break;
 		    }
@@ -616,7 +609,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 			switch(aid) {
 			    case AId_NodeClass: req.setAttr("type", i2s(OpcUa_Int32))->setText(i2s(NC_Variable));	return 0;
 			    case AId_DisplayName: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(nVal->name());	return 0;
-			    case AId_Descr: req.setAttr("type", i2s(OpcUa_String))->setText(nVal->fld().descr());	return 0;
+			    case AId_Descr: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(nVal->fld().descr());	return 0;
 			    case AId_Value: {
 				int64_t tm = 0;
 				bool dtOK = true;
@@ -685,7 +678,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				}
 				break;
 			    case AId_ValueRank: req.setAttr("type", i2s(OpcUa_Int32))->setText("-1");				return 0;
-			    case AId_ArrayDimensions: req.setAttr("type", i2s(OpcUa_Array|OpcUa_Int32))->setText("");		return 0;
+			    case AId_ArrayDimensions: req.setAttr("type", i2s(OpcUa_Array|OpcUa_UInt32))->setText("");		return 0;
 			    case AId_AccessLevel: case AId_UserAccessLevel:
 				req.setAttr("type", i2s(OpcUa_Byte))->setText(i2s(ACS_Read | (nVal->fld().flg()&TFld::NoWrite ? 0 : ACS_Write)));
 				return 0;
@@ -781,6 +774,8 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/ep",_("End point"))) {
 	    if(ctrMkNode("area",opt,-1,"/ep/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/ep/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/ep/st/asess",_("Active sessions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
+		ctrMkNode("list",opt,-1,"/ep/st/asubscr",_("Active subscriptions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
@@ -819,6 +814,38 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/ep/st/asess" && ctrChkNode(opt)) {
+	OPCAlloc mtx(mtxData, true);
+	for(unsigned iSess = 0; iSess < sessN(); ++iSess) {
+	    Server::Sess &sesO = mSess[iSess];
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%d(%s): at %s(live %s), secure channel %u; Publish requests %u"),
+		iSess+1, sesO.inPrtId.c_str(),
+		atm2s(sesO.tAccess*1e-6,"%Y-%m-%dT%H:%M:%S").c_str(),
+		tm2s(1e-3*sesO.tInact-1e-6*(curTime()-sesO.tAccess)).c_str(),
+		sesO.secCnl, sesO.publishReqs.size()));
+	}
+    }
+    else if(a_path == "/ep/st/asubscr" && ctrChkNode(opt)) {
+	OPCAlloc mtx(mtxData, true);
+	for(unsigned iSbscr = 0; iSbscr < subscrN(); ++iSbscr) {
+	    Server::Subscr &sbscrO = mSubScr[iSbscr];
+	    string state = _("Unknown");
+	    switch(sbscrO.st) {
+		case SS_CLOSED:		state = _("Closed");	break;
+		case SS_CREATING:	state = _("Creating");	break;
+		case SS_NORMAL:		state = _("Normal");	break;
+		case SS_LATE:		state = _("Late");	break;
+		case SS_KEEPALIVE:	state = _("KeepAlive");	break;
+		default: break;
+	    }
+	    opt->childAdd("el")->setText(TSYS::strMess(_("%d: %s, session %d; Publish %s, interval %s, sequence %d, lifetime %d, keep alive %d; Monitored items %u; Retransmission queue %u"),
+		iSbscr+1, state.c_str(), sbscrO.sess,
+		(sbscrO.publEn?_("Enabled"):_("Disabled")),
+		tm2s(1e-3*sbscrO.publInterval).c_str(),
+		sbscrO.seqN, vmax(0,sbscrO.lifetimeCnt-sbscrO.wLT), vmax(0,sbscrO.maxKeepAliveCnt-sbscrO.wKA),
+		sbscrO.mItems.size(), sbscrO.retrQueue.size()));
+	}
+    }
     else if(a_path == "/ep/cfg/ls_itr" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("*");
 	vector<string> sls;
@@ -831,9 +858,9 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_pol	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/0","",RWRWR_);
 	    XMLNode *n_mm	= ctrMkNode("list",opt,-1,"/ep/cfg/secPlc/1","",RWRWR_);
 	    MtxAlloc res(secRes, true);
-	    for(unsigned i_p = 0; i_p < mSec.size(); i_p++) {
-		if(n_pol) n_pol->childAdd("el")->setText(mSec[i_p].policy);
-		if(n_mm)  n_mm->childAdd("el")->setText(i2s(mSec[i_p].messageMode));
+	    for(unsigned iP = 0; iP < mSec.size(); iP++) {
+		if(n_pol) n_pol->childAdd("el")->setText(mSec[iP].policy);
+		if(n_mm)  n_mm->childAdd("el")->setText(i2s(mSec[iP].messageMode));
 	    }
 	    return;
 	}

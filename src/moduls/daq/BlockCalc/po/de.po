@@ -4,7 +4,7 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2018.
+# Roman Savochenko <roman@oscada.org>, 2011-2018.
 #
 msgid ""
 msgstr ""
@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-04 10:38+0200\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"

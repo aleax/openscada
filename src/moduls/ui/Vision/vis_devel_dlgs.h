@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -123,8 +123,6 @@ class LibProjProp: public QDialog
 	QTableWidget	*messTable;	//Messages table
 	QPushButton	*rldPushBt;
 
-	QDialogButtonBox *butbox;	//Buttons
-
 	bool		show_init, is_modif, ico_modif;
 	string		ed_it;
 };
@@ -210,8 +208,6 @@ class VisItProp : public QDialog
 	QTreeWidget	*obj_attr_cfg;	//Attribute configuration widget
 	QPushButton	*buttAttrAdd,	//Add new attribute button
 			*buttAttrDel;	//Delete attribute record
-
-	QDialogButtonBox *butbox;	//Buttons
 
 	bool		show_init, is_modif, ico_modif, lib_wdg;
 	string		ed_it;

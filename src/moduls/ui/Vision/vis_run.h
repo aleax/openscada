@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -251,6 +251,7 @@ class VisRun : public QMainWindow
 	void exportPg( const string &pg = "" );		//Export select page
 	void exportDiag( const string &dg = "" );	//Export select diagram
 	void exportDoc( const string &doc = "" );	//Export select document
+	void exportTable( const string &tbl = "" );	//Export select table
 
     private slots:
 	//Private slots
@@ -302,6 +303,7 @@ class VisRun : public QMainWindow
 		*actExpPg,			//Export the selected page
 		*actExpDiag,			//Export the selected diagram
 		*actExpDoc,			//Export the selected document
+		*actExpTable,			//Export the selected table
 		*actAbout,			//About
 		*actQtAbout,			//About Qt
 		*actProjManual,			//The project manual
@@ -333,7 +335,7 @@ class VisRun : public QMainWindow
 	unsigned	mScreen,		//Work screen, possible virtual
 			wPrcCnt;		//Process counter
 	unsigned	reqtm;			//Requested time
-	unsigned	expDiagCnt, expDocCnt;
+	unsigned	expDiagCnt, expDocCnt, expTblCnt;
 
 	float		x_scale, y_scale;	//RunTime scaling
 

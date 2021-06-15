@@ -79,7 +79,7 @@
 
 Summary: Open SCADA system
 Name: openscada
-Version: 0.9.3
+Version: 0.9.4
 Release: 1%{?dist}
 Source0: ftp://oscada.org/OpenSCADA/Work/openscada-%version.tar.xz
 Source1: ftp://oscada.org/OpenSCADA/Work/openscada-res-%version.tar.xz

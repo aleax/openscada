@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,11 +51,13 @@
 #include <QCompleter>
 #include <QMdiSubWindow>
 
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
 #include "vis_devel.h"
 #include "vis_shapes.h"
 #include "vis_devel_widgs.h"
 
+using namespace OSCADA_QT;
 using namespace VISION;
 
 //****************************************
@@ -398,7 +400,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 	    switch(role) {
 		case Qt::DisplayRole:	val = it->name().c_str();	break;
 		case Qt::ForegroundRole:
-		    if(it->modify())	val = QBrush(mod->colorAdjToBack("blue",qApp->palette().color(QPalette::Base)));
+		    if(it->modify())	val = QBrush(colorAdjToBack("blue",qApp->palette().color(QPalette::Base)));
 		    break;
 	    }
 	if(index.column() == 1)

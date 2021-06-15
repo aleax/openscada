@@ -11,12 +11,17 @@
   <style type='text/css'>
     body { background-color: #E6E6E6; font-family: Verdana,Arial,Helvetica,sans-serif; font-size: 12px; }
 
-    #gen-pnl-up { position: absolute; left: 0px; top: 0px; width: 800px; height: 25px; padding-top: 1px; padding-left: 5px; font-size: 15px; overflow: hidden; }
+    #gen-pnl-up { position: absolute; left: 0px; top: 0px; width: 800px; height: 30px; padding-top: 1px; padding-left: 5px; font-size: 15px; overflow: hidden; }
     #gen-pnl-up div { width: 300%; }
-    #gen-pnl-up img { height: 22px; border: 0; float: left; padding-right: 5px; vertical-align: middle; }
-    #gen-pnl-up span { display: table-cell; height: 22px; border: 0; vertical-align: middle; }
+    #gen-pnl-up button { padding: 1px 3px; border: 1px solid #a9a9a9; float: left; margin-right: 5px; }
+    #gen-pnl-up div a img { padding-right: 5px; padding-top: 2px; }
+    #gen-pnl-up div > img { padding-right: 5px; height: 28px; }
+    /*#gen-pnl-up a { padding: 1px 3px; }*/
+    /*#gen-pnl-up button.active { border: 1px solid black; }*/
+    #gen-pnl-up img { height: 22px; border: 0; float: left; /*padding-right: 5px; vertical-align: middle;*/ }
+    #gen-pnl-up span { display: table-cell; height: 28px; border: 0; vertical-align: middle; }
 
-    #gen-pnl-left { position: absolute; left: 0px; top: 25px; width: 246px; height: 471px; background-color: #F7FFF6; border: 2px ridge #F7FFF6; overflow: auto; text-align: left; vertical-align: top; white-space: nowrap; color: black; }
+    #gen-pnl-left { position: absolute; left: 0px; top: 30px; width: 246px; height: 471px; background-color: #F7FFF6; border: 2px ridge #F7FFF6; overflow: auto; text-align: left; vertical-align: top; white-space: nowrap; color: black; }
     #gen-pnl-left ul { list-style-image: none; list-style-position: outside; list-style-type: none; background-color: #F7FFF6; background-repeat: repeat-y; background-attachment: scroll; background-position: left top; margin: 0; white-space: nowrap; }
     ul.tree { padding: 0; }
     ul.tree ul { padding: 0 0 0 17px; }
@@ -24,10 +29,11 @@
     ul.tree a { text-decoration:none; color: black; }
     ul.tree a.pm { cursor: pointer; }
     ul.tree img { vertical-align: middle; height: 16px; }
-    a.active img { cursor: pointer; }
-    a.inactive img { cursor: default; filter: grayscale(100%) opacity(30%); }
+    a.active img, button.active img { cursor: pointer; }
+    a.inactive img, button.inactive img { cursor: default; filter: grayscale(100%) opacity(30%); }
 
-    #gen-pnl-right { position: absolute; left: 250px; top: 25px; width: 546px; height: 471px; background-color: #F7F7F1; border: 2px outset #F7F7F1; overflow: auto; margin-left: 5px; padding-left: 1px; padding-right: 2px; }
+    #gen-pnl-right { position: absolute; left: 250px; top: 30px; width: 546px; height: 471px; background-color: #F7F7F1; border: 2px outset #F7F7F1; overflow: auto; margin-left: 5px; padding-left: 1px; padding-right: 2px; }
+    #pgIco { padding-right: 10px; }
     #gen-pnl-right table.page { padding-top: 5px; }
     #gen-pnl-right td.title { color: black; font-family: Arial; font-size: 20px; font-style: italic; text-align: left; padding-bottom: 5px; }
     #gen-pnl-right td.title img { vertical-align: middle; height: 32px; }
@@ -73,26 +79,26 @@
 </head>
 <body alink='#33ccff' link='#3366ff' text='#000000' vlink='#339999'>
 <div id='gen-pnl-up'><div>
-  <a id='actLoad' class='inactive' title='###Load###'><img src='/WebCfgD/img_load?filtr=unact&size=22' /></a>
-  <a id='actSave' class='inactive' title='###Save###'><img src='/WebCfgD/img_save?filtr=unact&size=22' /></a>
+  <button id='actLoad' class='inactive' title='###Load###'><img src='/WebCfgD/img_load' /></button>
+  <button id='actSave' class='inactive' title='###Save###'><img src='/WebCfgD/img_save' /></button>
   <img src='/WebCfgD/img_line' />
-  <a id='actUp' class='inactive' title='###Up###'><img src='/WebCfgD/img_up?filtr=unact&size=22' /></a>
-  <a id='actPrevious' class='inactive' title='###Back###'><img src='/WebCfgD/img_previous?filtr=unact&size=22' /></a>
-  <a id='actNext' class='inactive' title='###Forward###'><img src='/WebCfgD/img_next?filtr=unact&size=22' /></a>
+  <button id='actUp' class='inactive' title='###Up###'><img src='/WebCfgD/img_up' /></button>
+  <button id='actPrevious' class='inactive' title='###Back###'><img src='/WebCfgD/img_previous' /></button>
+  <button id='actNext' class='inactive' title='###Forward###'><img src='/WebCfgD/img_next' /></button>
   <img src='/WebCfgD/img_line'/>
-  <a id='actAddIt' class='inactive' title='###Add item###'><img src='/WebCfgD/img_it_add?filtr=unact&size=22' /></a>
-  <a id='actDelIt' class='inactive' title='###Delete item###'><img src='/WebCfgD/img_it_del?filtr=unact&size=22' /></a>
+  <button id='actAddIt' class='inactive' title='###Add item###'><img src='/WebCfgD/img_it_add' /></button>
+  <button id='actDelIt' class='inactive' title='###Delete item###'><img src='/WebCfgD/img_it_del' /></button>
   <img src='/WebCfgD/img_line'/>
-  <a id='actCopy' class='inactive' title='###Copy item###'><img src='/WebCfgD/img_editcopy?filtr=unact&size=22' /></a>
-  <a id='actCut' class='inactive' title='###Cut item###'><img src='/WebCfgD/img_editcut?filtr=unact&size=22' /></a>
-  <a id='actPaste' class='inactive' title='###Paste item###'><img src='/WebCfgD/img_editpaste?filtr=unact&size=22' /></a>
+  <button id='actCopy' class='inactive' title='###Copy item###'><img src='/WebCfgD/img_editcopy' /></button>
+  <button id='actCut' class='inactive' title='###Cut item###'><img src='/WebCfgD/img_editcut' /></button>
+  <button id='actPaste' class='inactive' title='###Paste item###'><img src='/WebCfgD/img_editpaste' /></button>
   <img src='/WebCfgD/img_line' />
-  <a id='actUpdate' class='active' title='###Refresh the item and tree###'><img src='/WebCfgD/img_reload?filtr=none&size=22' /></a>
-  <a id='actStart' class='active' title='###Start the cycled refreshing###'><img src='/WebCfgD/img_start?filtr=none&size=22' /></a>
-  <a id='actStop' class='inactive' title='###Stop the cycled refreshing###'><img src='/WebCfgD/img_stop?filtr=unact&size=22' /></a>
+  <button id='actUpdate' class='active' title='###Refresh the item and tree###'><img src='/WebCfgD/img_reload' /></button>
+  <button id='actStart' class='active' title='###Start the cycled refreshing###'><img src='/WebCfgD/img_start' /></button>
+  <button id='actStop' class='inactive' title='###Stop the cycled refreshing###'><img src='/WebCfgD/img_stop' /></button>
   <img src='/WebCfgD/img_line' />
-  <a id='actManual' class='inactive' title='###Manual###' target='_blank'><img src='/WebCfgD/img_manual?size=22' /></a>
-  <a id='actAbout' class='active' href='/WebCfgD/about' title='###About###'><img src='/WebCfgD/img_help?size=22' /></a>
+  <a id='actManual' class='inactive' title='###Manual###' target='_blank'><img src='/WebCfgD/img_manual' /></a>
+  <a id='actAbout' class='active' href='/WebCfgD/about' title='###About###'><img src='/WebCfgD/img_help' /></a>
   <img src='/WebCfgD/img_line' />
   <span id='selPath' />
 </div></div>

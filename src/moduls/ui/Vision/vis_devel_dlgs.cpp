@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QStatusBar>
 #include <QTreeWidget>
 #include <QItemEditorFactory>
 #include <QPushButton>
@@ -38,10 +39,12 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_dlgs.h"
 
+using namespace OSCADA_QT;
 using namespace VISION;
 
 //****************************************
@@ -63,6 +66,16 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     wdg_tabs = new QTabWidget(this);
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+
+    //Manual invoking button
+    if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
+    QPushButton *menuPushBt = new QPushButton(QPixmap::fromImage(ico_t), "");
+    menuPushBt->setToolTip(_("Manual on ..."));
+    menuPushBt->setWhatsThis(_("The button for getting the item manual"));
+    connect(menuPushBt, SIGNAL(released()), parent, SLOT(enterManual()));
+    menuPushBt->setEnabled(false);
+    menuPushBt->setAutoDefault(false);
+    wdg_tabs->setCornerWidget(menuPushBt);
 
     //Add tab 'Widget'
     //------------------
@@ -212,6 +225,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     dlg_lay->setSpacing(6);
 
     mimeDataTable = new QTableWidget(0, 3, tab_w);
+    mimeDataTable->setItemDelegate(new TableDelegate);
     mimeDataTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(mimeDataTable, SIGNAL(cellChanged(int,int)), this, SLOT(mimeDataChange(int,int)));
     mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Mime type") << _("Data size"));
@@ -259,6 +273,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     dlg_lay->addWidget(stl_name, 1, 1, 1, 2);
 
     stl_table = new QTableWidget(0, 2, tab_w);
+    stl_table->setItemDelegate(new TableDelegate);
     stl_table->setObjectName("/style/props");
     stl_table->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(stl_table, SIGNAL(cellChanged(int,int)), this, SLOT(stlTableChange(int,int)));
@@ -301,6 +316,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     dlg_lay->addWidget(messSize, 1, 1, 1, 2);
 
     messTable = new QTableWidget(0, 5, tab_w);
+    messTable->setItemDelegate(new TableDelegate);
     messTable->setObjectName("/mess/mess");
     messTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     messTable->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
@@ -308,14 +324,13 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     messTable->setHorizontalHeaderLabels(QStringList() << _("Time") << _("mcsec") << _("Category") << _("Level") << _("Message"));
     dlg_lay->addWidget(messTable, 2, 0, 1, 3);
 
-    //Add button box
-    //----------------
-    butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
-    // Init close button
-    butbox->button(QDialogButtonBox::Close)->setText(_("Close"));
-    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
+    QStatusBar *status = new QStatusBar(this);
+    tab_lay->addWidget(status);
 
-    tab_lay->addWidget(butbox);
+    //Add button box
+    QDialogButtonBox *butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
+    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
+    status->insertPermanentWidget(0, butbox);
 
     //resize(800, 600);
 
@@ -360,6 +375,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
     setWindowTitle(root->attr("dscr").c_str());
 
+    wdg_tabs->cornerWidget()->setEnabled(root->attr("doc").size());
+    wdg_tabs->cornerWidget()->setProperty("doc", root->attr("doc").c_str());
+
     //Generic dialog's page
     gnd = TCntrNode::ctrId(root, "/obj", true);
     wdg_tabs->setTabEnabled(0,gnd);
@@ -387,8 +405,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl)+":"+TSYS::pathLev(ed_it,0));
 	    if(!owner()->cntrIfCmd(req)) {
 		string els;
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
-		    els += req.childGet(i_l)->text() + "\n";
+		for(unsigned iL = 0; iL < req.childSize(); iL++)
+		    els += req.childGet(iL)->text() + "\n";
 		obj_db->setCfg(els.c_str());
 	    }
 	}
@@ -415,9 +433,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/u_lst",TSYS::PathEl));
 	    obj_user->clear();
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++) {
-		    obj_user->addItem(req.childGet(i_l)->text().c_str());
-		    if(sval == req.childGet(i_l)->text()) obj_user->setCurrentIndex(i_l);
+		for(unsigned iL = 0; iL < req.childSize(); iL++) {
+		    obj_user->addItem(req.childGet(iL)->text().c_str());
+		    if(sval == req.childGet(iL)->text()) obj_user->setCurrentIndex(iL);
 		}
 	}
 	// Group
@@ -430,9 +448,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/obj/g_lst",TSYS::PathEl));
 	    obj_grp->clear();
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++) {
-		    obj_grp->addItem(req.childGet(i_l)->text().c_str());
-		    if(sval == req.childGet(i_l)->text()) obj_grp->setCurrentIndex(i_l);
+		for(unsigned iL = 0; iL < req.childSize(); iL++) {
+		    obj_grp->addItem(req.childGet(iL)->text().c_str());
+		    if(sval == req.childGet(iL)->text()) obj_grp->setCurrentIndex(iL);
 		}
 	}
 	// Icon
@@ -451,8 +469,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	obj_accuser->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
 	    obj_accuser->clear();
-	    for(int i_l = 0, i_i = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&i_l)).size(); )
-		obj_accuser->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&i_i)));
+	    for(int iL = 0, iI = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&iL)).size(); )
+		obj_accuser->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&iI)));
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accuser->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_accuser->setCurrentIndex(obj_accuser->findData(s2i(req.text())));
 	}
@@ -460,8 +478,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	obj_accgrp->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
 	    obj_accgrp->clear();
-	    for(int i_l = 0, i_i = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&i_l)).size(); )
-		obj_accgrp->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&i_i)));
+	    for(int iL = 0, iI = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&iL)).size(); )
+		obj_accgrp->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&iI)));
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accgrp->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_accgrp->setCurrentIndex(obj_accgrp->findData(s2i(req.text())));
 	}
@@ -469,8 +487,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	obj_accother->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
 	    obj_accother->clear();
-	    for(int i_l = 0, i_i = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&i_l)).size(); )
-		obj_accother->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&i_i)));
+	    for(int iL = 0, iI = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&iL)).size(); )
+		obj_accother->addItem(wstr.c_str(),s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&iI)));
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_accother->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_accother->setCurrentIndex(obj_accother->findData(s2i(req.text())));
 	}
@@ -514,8 +532,8 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	prj_runw->setVisible(gnd); ((QLabel*)TSYS::str2addr(prj_runw->windowIconText().toStdString()))->setVisible(gnd);
 	if(gnd) {
 	    prj_runw->clear();
-	    for(int i_l = 0, i_i = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&i_l)).size(); )
-		prj_runw->addItem(wstr.c_str(), s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&i_i)));
+	    for(int iL = 0, iI = 0; (wstr=TSYS::strSepParse(gnd->attr("sel_list"),0,';',&iL)).size(); )
+		prj_runw->addItem(wstr.c_str(), s2i(TSYS::strSepParse(gnd->attr("sel_id"),0,';',&iI)));
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(prj_runw->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) prj_runw->setCurrentIndex(prj_runw->findData(s2i(req.text())));
 	}
@@ -549,9 +567,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    stl_select->clear();
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_l = 0; i_l < req.childSize(); i_l++) {
-		    stl_select->addItem(req.childGet(i_l)->text().c_str(),req.childGet(i_l)->attr("id").c_str());
-		    if(sval == req.childGet(i_l)->attr("id"))	stl_select->setCurrentIndex(i_l);
+		for(unsigned iL = 0; iL < req.childSize(); iL++) {
+		    stl_select->addItem(req.childGet(iL)->text().c_str(),req.childGet(iL)->attr("id").c_str());
+		    if(sval == req.childGet(iL)->attr("id"))	stl_select->setCurrentIndex(iL);
 		}
 	}
 
@@ -576,9 +594,11 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    owner()->cntrIfCmd(req);
 	    for(unsigned iC = 0; iC < req.childSize() && iC < 2; iC++) {
 		stl_table->setRowCount(req.childGet(iC)->childSize());
-		for(unsigned i_r = 0; i_r < req.childGet(iC)->childSize(); i_r++) {
-		    stl_table->setItem(i_r, iC, new QTableWidgetItem(req.childGet(iC)->childGet(i_r)->text().c_str()));
-		    stl_table->item(i_r, iC)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((iC==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
+		for(unsigned iR = 0; iR < req.childGet(iC)->childSize(); iR++) {
+		    QTableWidgetItem *iTW = new QTableWidgetItem(req.childGet(iC)->childGet(iR)->text().c_str());
+		    stl_table->setItem(iR, iC, iTW);
+		    iTW->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((iC==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
+		    if(iC == 1) iTW->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 		}
 	    }
 	    stl_table->resizeColumnsToContents();
@@ -607,11 +627,18 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    owner()->cntrIfCmd(req);
 	    for(unsigned iC = 0; iC < req.childSize() && iC < 5; iC++) {
 		messTable->setRowCount(req.childGet(iC)->childSize());
-		for(unsigned i_r = 0; i_r < req.childGet(iC)->childSize(); i_r++) {
-		    string val = req.childGet(iC)->childGet(i_r)->text();
-		    if(iC == 0) val = atm2s(s2i(val));
-		    messTable->setItem(i_r, iC, new QTableWidgetItem(val.c_str()));
-		    messTable->item(i_r, iC)->setFlags(Qt::ItemIsEnabled);
+		for(unsigned iR = 0; iR < req.childGet(iC)->childSize(); iR++) {
+		    QTableWidgetItem *tIt = new QTableWidgetItem();
+		    messTable->setItem(iR, iC, tIt);
+		    tIt->setFlags(Qt::ItemIsEnabled);
+
+		    QVariant val = req.childGet(iC)->childGet(iR)->text().c_str();
+		    if(iC == 0)	{
+			val = atm2s(s2i(val.toString().toStdString())).c_str();
+			tIt->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
+		    }
+		    else if(iC == 1 || iC == 3)	val = s2i(val.toString().toStdString());
+		    tIt->setData(Qt::DisplayRole, val);
 		}
 	    }
 
@@ -665,23 +692,25 @@ void LibProjProp::tabChanged( int itb )
 	if(!owner()->cntrIfCmd(req)) {
 	    XMLNode *id_col = req.childGet(0);
 	    mimeDataTable->setRowCount(id_col->childSize());
-	    for(unsigned i_l = 0; i_l < id_col->childSize(); i_l++) {
-		if(!mimeDataTable->item(i_l,0)) {
-		    mimeDataTable->setItem(i_l,0,new QTableWidgetItem());
-		    mimeDataTable->item(i_l,0)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
+	    for(unsigned iL = 0; iL < id_col->childSize(); iL++) {
+		if(!mimeDataTable->item(iL,0)) {
+		    mimeDataTable->setItem(iL,0,new QTableWidgetItem());
+		    mimeDataTable->item(iL,0)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
 		}
-		mimeDataTable->item(i_l,0)->setText(id_col->childGet(i_l)->text().c_str());
-		mimeDataTable->item(i_l,0)->setData(Qt::UserRole,id_col->childGet(i_l)->text().c_str());
-		if(!mimeDataTable->item(i_l,1)) {
-		    mimeDataTable->setItem(i_l,1,new QTableWidgetItem());
-		    mimeDataTable->item(i_l,1)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
+		mimeDataTable->item(iL,0)->setText(id_col->childGet(iL)->text().c_str());
+		mimeDataTable->item(iL,0)->setData(Qt::UserRole,id_col->childGet(iL)->text().c_str());
+		if(!mimeDataTable->item(iL,1)) {
+		    mimeDataTable->setItem(iL,1,new QTableWidgetItem());
+		    mimeDataTable->item(iL,1)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
+		    mimeDataTable->item(iL,1)->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 		}
-		mimeDataTable->item(i_l,1)->setText(req.childGet(1)->childGet(i_l)->text().c_str());
-		if(!mimeDataTable->item(i_l,2)) {
-		    mimeDataTable->setItem(i_l,2,new QTableWidgetItem());
-		    mimeDataTable->item(i_l,2)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
+		mimeDataTable->item(iL,1)->setText(req.childGet(1)->childGet(iL)->text().c_str());
+		if(!mimeDataTable->item(iL,2)) {
+		    mimeDataTable->setItem(iL,2,new QTableWidgetItem());
+		    mimeDataTable->item(iL,2)->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
+		    mimeDataTable->item(iL,2)->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 		}
-		mimeDataTable->item(i_l,2)->setText(req.childGet(2)->childGet(i_l)->text().c_str());
+		mimeDataTable->item(iL,2)->setText(req.childGet(2)->childGet(iL)->text().c_str());
 	    }
 	    mimeDataTable->resizeColumnsToContents();
 	}
@@ -952,6 +981,16 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     tab_lay->addWidget(wdg_tabs);
     connect(wdg_tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 
+    //Manual invoking button
+    if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
+    QPushButton *menuPushBt = new QPushButton(QPixmap::fromImage(ico_t), "");
+    menuPushBt->setToolTip(_("Manual on ..."));
+    menuPushBt->setWhatsThis(_("The button for getting the item manual"));
+    connect(menuPushBt, SIGNAL(released()), parent, SLOT(enterManual()));
+    menuPushBt->setEnabled(false);
+    menuPushBt->setAutoDefault(false);
+    wdg_tabs->setCornerWidget(menuPushBt);
+
     //Add tab 'Widget'
     QScrollArea *scrl = new QScrollArea();
     wdg_tabs->addTab(scrl, _("Widget"));
@@ -1173,11 +1212,13 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     //connect(obj_attr, SIGNAL(modified(const string&)), this, SIGNAL(apply(const string&)));
     dlg_lay->addWidget(obj_lnk,0,0);
 
-    //Add button box
-    butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
-    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
+    QStatusBar *status = new QStatusBar(this);
+    tab_lay->addWidget(status);
 
-    tab_lay->addWidget(butbox);
+    //Add button box
+    QDialogButtonBox *butbox = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, this);
+    connect(butbox->button(QDialogButtonBox::Close), SIGNAL(clicked()), this, SLOT(close()));
+    status->insertPermanentWidget(0, butbox);
 
     //End resize
     //resize(800,600);
@@ -1225,6 +1266,9 @@ void VisItProp::showDlg( const string &iit, bool reload )
     root = info_req.childGet(0);
 
     setWindowTitle(root->attr("dscr").c_str());
+
+    wdg_tabs->cornerWidget()->setEnabled(root->attr("doc").size());
+    wdg_tabs->cornerWidget()->setProperty("doc", root->attr("doc").c_str());
 
     //Generic dialog's page
     gnd = TCntrNode::ctrId(root, "/wdg", true);
@@ -1345,9 +1389,6 @@ void VisItProp::showDlg( const string &iit, bool reload )
     wdg_tabs->setTabEnabled(2, gnd);
     if(gnd) wdg_tabs->setTabText(2, gnd->attr("dscr").c_str());
 
-    proc_per->setValue("");
-    proc_text->setText("");
-
     is_modif = false;
 
     //Show dialog
@@ -1389,19 +1430,19 @@ void VisItProp::tabChanged( int itb )
 		    //wlst.push_back(req.childGet(i_w)->attr("id"));
 	    //  Fill table
 	    //  Delete no present root items
-	    for(int i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++) {
+	    for(int iR = 0; iR < obj_attr_cfg->topLevelItemCount(); iR++) {
 		unsigned i_w;
 		for(i_w = 0; i_w < wlst.size(); i_w++)
-		    if(obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str()) break;
-		if(i_w >= wlst.size())	delete obj_attr_cfg->topLevelItem(i_r--);
+		    if(obj_attr_cfg->topLevelItem(iR)->text(0) == wlst[i_w].c_str()) break;
+		if(i_w >= wlst.size())	delete obj_attr_cfg->topLevelItem(iR--);
 	    }
 	    //  Add root items
 	    for(unsigned i_w = 0; i_w < wlst.size(); i_w++) {
 		QTreeWidgetItem *root_it;
-		int i_r;
-		for(i_r = 0; i_r < obj_attr_cfg->topLevelItemCount(); i_r++)
-		    if(obj_attr_cfg->topLevelItem(i_r)->text(0) == wlst[i_w].c_str()) break;
-		if(i_r < obj_attr_cfg->topLevelItemCount()) root_it = obj_attr_cfg->topLevelItem(i_r);
+		int iR;
+		for(iR = 0; iR < obj_attr_cfg->topLevelItemCount(); iR++)
+		    if(obj_attr_cfg->topLevelItem(iR)->text(0) == wlst[i_w].c_str()) break;
+		if(iR < obj_attr_cfg->topLevelItemCount()) root_it = obj_attr_cfg->topLevelItem(iR);
 		else root_it = new QTreeWidgetItem(0);
 
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_attr_cfg->objectName().toStdString(),TSYS::PathEl))->
@@ -1413,32 +1454,32 @@ void VisItProp::tabChanged( int itb )
 		obj_attr_cfg->addTopLevelItem(root_it);
 
 		//  Delete no presents widget's items
-		for(int i_r = 0; i_r < root_it->childCount(); i_r++) {
-		    unsigned i_l;
-		    for(i_l = 0; i_l < req.childGet(0)->childSize(); i_l++)
-			if(root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str())
+		for(int iR = 0; iR < root_it->childCount(); iR++) {
+		    unsigned iL;
+		    for(iL = 0; iL < req.childGet(0)->childSize(); iL++)
+			if(root_it->child(iR)->text(0) == req.childGet("id","id")->childGet(iL)->text().c_str())
 			    break;
-		    if(i_l >= req.childGet(0)->childSize())	delete root_it->child(i_r--);
+		    if(iL >= req.childGet(0)->childSize())	delete root_it->child(iR--);
 		}
 
 		//  Add widget's items
-		for(unsigned i_l = 0; i_l < req.childGet(0)->childSize(); i_l++) {
+		for(unsigned iL = 0; iL < req.childGet(0)->childSize(); iL++) {
 		    QTreeWidgetItem *cur_it;
-		    int i_r;
-		    for(i_r = 0; i_r < root_it->childCount(); i_r++)
-			if(root_it->child(i_r)->text(0) == req.childGet("id","id")->childGet(i_l)->text().c_str())
+		    int iR;
+		    for(iR = 0; iR < root_it->childCount(); iR++)
+			if(root_it->child(iR)->text(0) == req.childGet("id","id")->childGet(iL)->text().c_str())
 			    break;
-		    if(i_r < root_it->childCount()) cur_it = root_it->child(i_r);
+		    if(iR < root_it->childCount()) cur_it = root_it->child(iR);
 		    else cur_it = new QTreeWidgetItem(root_it);
 		    cur_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-		    cur_it->setText(0,req.childGet("id","id")->childGet(i_l)->text().c_str());
+		    cur_it->setText(0,req.childGet("id","id")->childGet(iL)->text().c_str());
 		    cur_it->setData(0,Qt::UserRole,cur_it->text(0));
-		    cur_it->setText(1,req.childGet("id","name")->childGet(i_l)->text().c_str());
-		    cur_it->setData(2,Qt::DisplayRole,s2i(req.childGet("id","type")->childGet(i_l)->text()));
-		    cur_it->setText(3,req.childGet("id","wa")->childGet(i_l)->text().c_str());
-		    cur_it->setData(4,Qt::DisplayRole,(bool)s2i(req.childGet("id","proc")->childGet(i_l)->text()));
-		    cur_it->setData(5,Qt::DisplayRole,s2i(req.childGet("id","cfg")->childGet(i_l)->text()));
-		    cur_it->setText(6,req.childGet("id","cfgtmpl")->childGet(i_l)->text().c_str());
+		    cur_it->setText(1,req.childGet("id","name")->childGet(iL)->text().c_str());
+		    cur_it->setData(2,Qt::DisplayRole,s2i(req.childGet("id","type")->childGet(iL)->text()));
+		    cur_it->setText(3,req.childGet("id","wa")->childGet(iL)->text().c_str());
+		    cur_it->setData(4,Qt::DisplayRole,(bool)s2i(req.childGet("id","proc")->childGet(iL)->text()));
+		    cur_it->setData(5,Qt::DisplayRole,s2i(req.childGet("id","cfg")->childGet(iL)->text()));
+		    cur_it->setText(6,req.childGet("id","cfgtmpl")->childGet(iL)->text().c_str());
 		}
 	    }
 	    //  Load types and configurations
@@ -1456,10 +1497,12 @@ void VisItProp::tabChanged( int itb )
 	    if(obj_attr_cfg->topLevelItemCount()) obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
 	    //  Calculate period
+	    proc_per->setValue("");
 	    if(!proc_per->isEdited()) {
 		gnd = TCntrNode::ctrId(root,proc_per->objectName().toStdString(),true);
 		proc_per->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 		if(gnd) {
+		    proc_per->setToolTip(gnd->attr("help").c_str());
 		    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_per->objectName().toStdString(),TSYS::PathEl));
 		    if(!owner()->cntrIfCmd(req)) proc_per->setValue(req.text().c_str());
 		}
@@ -1489,8 +1532,10 @@ void VisItProp::tabChanged( int itb )
 		if(!owner()->cntrIfCmd(req)) proc_text_tr->setChecked(s2i(req.text()));
 	    }
 	    //  Calc procedure
+	    int edPosSave = (proc_text->text().size()) ? proc_text->workWdg()->textCursor().position() : -1;
+	    proc_text->setText("");
 	    if(!proc_text->isEdited()) {
-		gnd = TCntrNode::ctrId(root,proc_text->objectName().toStdString(),true);
+		gnd = TCntrNode::ctrId(root, proc_text->objectName().toStdString(), true);
 		proc_text->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 		if(gnd) {
 		    req.clear()->setName("CntrReqs")->setAttr("path",ed_it);
@@ -1503,6 +1548,10 @@ void VisItProp::tabChanged( int itb )
 			proc_text->setProperty("inherited", (bool)s2i(req.childGet(0)->attr("inherited")));
 			proc_text->setProperty("redefined", (bool)s2i(req.childGet(0)->attr("redefined")));
 			proc_text->setProperty("redefAccept", false);
+			if(edPosSave >= 0 && proc_text->text().size()) {
+			    QTextCursor tCur = proc_text->workWdg()->textCursor(); tCur.setPosition(edPosSave);
+			    proc_text->workWdg()->setTextCursor(tCur); proc_text->workWdg()->ensureCursorVisible();
+			}
 			proc_text->blockSignals(false);
 		    }
 		}
@@ -1539,8 +1588,8 @@ void VisItProp::selectParent( )
 
 	//Load combobox
 	obj_parent->clear();
-	for(unsigned i_l = 0; i_l < req.childSize(); i_l++)
-	    obj_parent->addItem(req.childGet(i_l)->text().c_str());
+	for(unsigned iL = 0; iL < req.childSize(); iL++)
+	    obj_parent->addItem(req.childGet(iL)->text().c_str());
 	if(obj_parent->findText(cur_val) < 0) obj_parent->addItem(cur_val);
 	obj_parent->setCurrentIndex(obj_parent->findText(cur_val));
     }
@@ -1769,9 +1818,9 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 	if(index.column() == 2 || index.column() == 5) {
 	    QString val("String");
 	    QStringList types = index.model()->index(0,0).data(Qt::UserRole+((index.column()==5)?1:0)).toStringList();
-	    for(int i_l = 0; i_l < types.size(); i_l++)
-		if(s2i(TSYS::strSepParse(types[i_l].toStdString(),1,'|')) == index.data(Qt::DisplayRole).toInt())
-		    val = TSYS::strSepParse(types[i_l].toStdString(),0,'|').c_str();
+	    for(int iL = 0; iL < types.size(); iL++)
+		if(s2i(TSYS::strSepParse(types[iL].toStdString(),1,'|')) == index.data(Qt::DisplayRole).toInt())
+		    val = TSYS::strSepParse(types[iL].toStdString(),0,'|').c_str();
 	    drawDisplay(painter, option, option.rect, val);
 	    return;
 	}
@@ -1811,9 +1860,9 @@ void VisItProp::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
     if(index.column() == 2 || index.column() == 5) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	QStringList types = index.model()->index(0,0).data(Qt::UserRole+((index.column()==5)?1:0)).toStringList();
-	for(int i_l = 0; i_l < types.size(); i_l++)
-	    comb->addItem(TSYS::strSepParse(types[i_l].toStdString(),0,'|').c_str(),
-		    s2i(TSYS::strSepParse(types[i_l].toStdString(),1,'|')));
+	for(int iL = 0; iL < types.size(); iL++)
+	    comb->addItem(TSYS::strSepParse(types[iL].toStdString(),0,'|').c_str(),
+		    s2i(TSYS::strSepParse(types[iL].toStdString(),1,'|')));
 	comb->setCurrentIndex(comb->findData(index.data(Qt::DisplayRole).toInt()));
     }
     else QItemDelegate::setEditorData(editor, index);

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 6.9 </td>
+<td> 7.1 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -1766,17 +1766,22 @@ Where:
 <li> "color" — column color as a whole into the color name or code;</li>
 <li> "colorText" — color of the column text as a whole into the color name or code;</li>
 <li> "font" — font of the column text in the typical OpenSCADA string;</li>
-<li> "sort" — sorting by the column [0 - Descending; 1 - Ascending].</li></ul></dd>
+<li> "prec" — value precision of the real type cells in the column;</li>
+<li> "sort" — sorting by the column [0 - Descending; 1 - Ascending];</li>
+<li> "align" — alignment the column for: "left", "right" and "center".</li></ul></dd>
 <dd>"r" — Row of the values. Possible attributes of the row cell tag for the row as a whole:
 <ul><li> "color" — row color as a whole into the color name or code;</li>
 <li> "colorText" — color of the row text as a whole into the color name or code;</li>
-<li> "font" — font of the cell text in the typical OpenSCADA string.</li></ul></dd>
-<dd>"s", "i", "r", "b" — cells of the data types "String", "Integer", "Real" and "Logical". Possible attributes:
+<li> "font" — font of the cell text in the typical OpenSCADA string;</li>
+<li> "prec" — value precision of the real type cells in the row.</li></ul></dd>
+<dd>"s", "t", "i", "r", "b" — cells of the data types "String", "Text", "Integer", "Real" and "Logical". Possible attributes:
 <ul><li> "color" — cell color;</li>
 <li> "colorText" — color of the cell text into the color name or code;</li>
 <li> "font" — font of the cell text in the typical OpenSCADA string;</li>
+<li> "prec" — value precision of the real type cell;</li>
 <li> "img" — image of the cell into the form "<b>[{src}:]{name}</b>", the details above;</li>
-<li> "edit" — allowing the cell edition (0 or 1), by default - no (0).</li></ul></dd></dl>
+<li> "edit" — allowing the cell edition (0 or 1), by default - no (0);</li>
+<li> "align" — alignment the cell for: "left", "right" and "center".</li></ul></dd></dl>
 </td></tr>
 <tr>
 <td> font </td>
@@ -3309,7 +3314,7 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:705px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime.png"><img class="thumbimage" height="573" src="../files/VCAeng_mime.png" width="703" /></a>  <div class="thumbcaption">Fig.4.6. Configuration tab of Mime-data of the container.</div></div></div></div>
 <p>Configuration of the project's session differs significantly from configuration of the project (Fig.4.7), but also contains pages of the project.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:994px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ses.png"><img class="thumbimage" height="650" src="../files/VCAeng_pg_ses.png" width="992" /></a>  <div class="thumbcaption">Fig.4.7. Configuration page of the projects sessions.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:982px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ses.png"><img class="thumbimage" height="649" src="../files/VCAeng_pg_ses.png" width="980" /></a>  <div class="thumbcaption">Fig.4.7. Configuration page of the projects sessions.</div></div></div></div>
 <p>From this page you can set:
 </p>
 <ul><li> State of the session, the same: "Enabled"; "Running"; user; owner; users group; access; source project; mode of execution in the background; execution time of the session; counter of client connections; last request time, user and language; last user action and remained time to it force closing.</li>
@@ -3318,7 +3323,7 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <li> List of the opened pages.</li></ul>
 <p>Configuration pages of the visual elements, placed in different containers, may be very different, but this difference is the presence or absence of individual tabs. Main tab of the visual elements in fact is the same everywhere, differing in one configuration field and three into the session (Fig.4.8). The pages contains the tabs of the child pages and included widgets. The container widgets contains the tab of the included widgets. All visual elements contain attributes tab (Fig.4.9), except the logical containers of the projects. Elements, at the level of which it is possible to build the user procedure and to determine the links, contain the tabs "Process" (Fig.4.10) and "Links" (Fig.4.11).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:774px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_main.png"><img class="thumbimage" height="729" src="../files/VCAeng_vit_main.png" width="772" /></a>  <div class="thumbcaption">Fig.4.8. Main tab of configuration of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:754px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_main.png"><img class="thumbimage" height="743" src="../files/VCAeng_vit_main.png" width="752" /></a>  <div class="thumbcaption">Fig.4.8. Main tab of configuration of the visual elements.</div></div></div></div>
 <p>From this page you can set:
 </p>
 <ul><li> States of the element, the same: "Enabled", counter of the use, parent element and jump to it, date and time of the last modification.</li>
@@ -3335,5 +3340,5 @@ Deprecated, but supported, the API is represented by a group of functions direct
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2020</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.3</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
 </html>

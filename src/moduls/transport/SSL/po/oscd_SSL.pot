@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 16:43+0300\n"
+"POT-Creation-Date: 2021-04-16 18:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,7 +96,7 @@ msgid "The message is received in size %d."
 msgstr ""
 
 #, c-format
-msgid "%d:Received from '%s'\n"
+msgid "%d:< Received from '%s'\n"
 msgstr ""
 
 #, c-format
@@ -104,7 +104,7 @@ msgid "The reply by the message in size %d."
 msgstr ""
 
 #, c-format
-msgid "%d:Transmitted to '%s'\n"
+msgid "%d:> Transmitted to '%s'\n"
 msgstr ""
 
 #, c-format
@@ -262,7 +262,7 @@ msgstr ""
 msgid "Wrote %s."
 msgstr ""
 
-msgid "Transmitted to\n"
+msgid "> Transmitted to\n"
 msgstr ""
 
 msgid "No data, the connection seems closed"
@@ -283,7 +283,7 @@ msgstr ""
 msgid "Read %s."
 msgstr ""
 
-msgid "Received from\n"
+msgid "< Received from\n"
 msgstr ""
 
 msgid "Timings"

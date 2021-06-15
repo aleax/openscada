@@ -1,7 +1,7 @@
 
 //OpenSCADA MMS(IEC-9506) implementation library file: libMMS.cpp
 /******************************************************************************
- *   Copyright (C) 2014-2017 by Roman Savochenko, <rom_as@oscada.org>	      *
+ *   Copyright (C) 2014-2017 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -936,7 +936,8 @@ void Client::protIO( XML_N &io )
 								"("+iErr->second[0]+"). ";
 							else { chErr += "unknown"; off += szC3; }
 						    }
-						else off += szC2;	break;
+						else off += szC2;
+						break;
 					    }
 					    break;
 					}

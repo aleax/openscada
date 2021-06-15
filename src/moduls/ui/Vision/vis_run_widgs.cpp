@@ -172,7 +172,7 @@ void RunWdgView::shapeList( const string &snm, vector<string> &ls )
     for(int iC = 0; iC < children().size(); iC++)
 	if(qobject_cast<RunWdgView*>(children().at(iC)) && !qobject_cast<RunPageView*>(children().at(iC)) &&
 		((RunWdgView*)children().at(iC))->isEnabled())
-	    ((RunWdgView*)children().at(iC))->shapeList(snm,ls);
+	    ((RunWdgView*)children().at(iC))->shapeList(snm, ls);
 }
 
 RunWdgView *RunWdgView::findOpenWidget( const string &iwdg )

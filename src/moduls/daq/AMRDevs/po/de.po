@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.AMRDevs package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010, 2011.
-# Roman Savochenko <rom_as@oscada.org>, 2017.
+# Roman Savochenko <roman@oscada.org>, 2017.
 #
 msgid ""
 msgstr ""

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.2.2"
+#define MOD_VER		"3.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -544,16 +544,21 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if(!SSL_pending(ssl)) {
 		tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
 
-		unsigned poolPrt = 0;
+		unsigned pollPrt = 0;
 		if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
 		    for(unsigned iP = 0; iP < prot_in.size(); iP++)
-			if(!prot_in[iP].freeStat() && (poolPrt=prot_in[iP].at().waitReqTm()))
+			if(!prot_in[iP].freeStat() && (pollPrt=prot_in[iP].at().waitReqTm()))
 			    break;
-		if(poolPrt) { tv.tv_sec = poolPrt/1000; tv.tv_usec = (poolPrt%1000)*1000; }
+		if(pollPrt) {
+		    // Aligning to the grid
+		    int64_t curTm = TSYS::curTime(), targTm = (curTm/(1000ll*pollPrt) + 1)*pollPrt*1000ll;
+		    tv.tv_sec = (targTm-curTm)/1000000; tv.tv_usec = (targTm-curTm)%1000000;
+		    //tv.tv_sec = pollPrt/1000; tv.tv_usec = (pollPrt%1000)*1000;
+		}
 
 		FD_ZERO(&rd_fd); FD_SET(s.sock, &rd_fd);
 		kz = select(s.sock+1, &rd_fd, NULL, NULL, &tv);
-		if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rd_fd))) continue;
+		if((kz == 0 && !pollPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rd_fd))) continue;
 		if(kz < 0) {
 		    if(mess_lev() == TMess::Debug)
 			mess_debug(s.s->nodePath().c_str(), _("Socket has been terminated by the error %s"), strerror(errno));
@@ -566,7 +571,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("The message is received in size %d."), rez);
 	    req.assign(buf, rez);
-	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),s.sock,s.sender.c_str()) + req);
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:< Received from '%s'\n"),s.sock,s.sender.c_str()), req, -s.sock);
 
 	    s.s->dataRes().lock();
 	    s.s->trIn += rez; s.trIn += rez;
@@ -592,7 +597,9 @@ void *TSocketIn::ClTask( void *s_inf )
 		s.s->dataRes().lock();
 		s.s->trOut += vmax(0, rez); s.trOut += vmax(0, rez);
 		s.s->dataRes().unlock();
-		if(rez > 0 && s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),s.sock,s.sender.c_str()) + string(answ.data(),rez));
+		if(rez > 0 && s.s->logLen())
+		    s.s->pushLogMess(TSYS::strMess(_("%d:> Transmitted to '%s'\n"),s.sock,s.sender.c_str()),
+			string(answ.data(),rez), s.sock);
 		answ = "";
 	    }
 	    cnt++;
@@ -1160,7 +1167,7 @@ repeate:
 	}
 
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
-	if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf,ret));
+	if(logLen()) pushLogMess(_("> Transmitted to\n"), string(oBuf,ret), 1);
 
 	trOut += ret;
 	writeReq = true;
@@ -1237,7 +1244,7 @@ repeate:
 		trIn += vmax(0, ret);
 	    }
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,ret)).c_str());
-	    if(ret > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,ret));
+	    if(ret > 0 && logLen()) pushLogMess(_("< Received from\n"), string(iBuf,ret), -1);
 	    if(ret > 0 && mess_lev() == TMess::Debug && stRespTm) {
 		respTm = SYS->curTime() - stRespTm;
 		respTmMax = vmax(respTmMax, respTm);

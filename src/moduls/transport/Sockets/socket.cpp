@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.2.2"
+#define MOD_VER		"4.3.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -505,7 +505,9 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 		map<int, SSockIn*>::iterator cI = clId.find(sId);
 		if(cI != clId.end()) cI->second->trOut += vmax(0, wL);
 		sockRes.unlock();
-		if(wL > 0 && logLen()) pushLogMess(TSYS::strMess(_("%d:Transmitted directly to '%s'\n"),sId,TSYS::strLine(sender,0).c_str()) + string(data.data()+wOff,wL));
+		if(wL > 0 && logLen())
+		    pushLogMess(TSYS::strMess(_("%d:> Transmitted directly to '%s'\n"),sId,TSYS::strLine(sender,0).c_str()),
+			string(data.data()+wOff,wL), sId);
 	    }
 	    return wOff;
 	}
@@ -654,7 +656,7 @@ void *TSocketIn::Task( void *sock_in )
 
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(sock->nodePath().c_str(), _("Read datagram %s from '%s'!"), TSYS::cpct2str(r_len).c_str(), sender.c_str());
-	    if(sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),sock->sockFd,sender.c_str()) + req);
+	    if(sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:< Received from '%s'\n"),sock->sockFd,sender.c_str()), req, -sock->sockFd);
 
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
@@ -671,7 +673,7 @@ void *TSocketIn::Task( void *sock_in )
 	    r_len = sendto(sock->sockFd, answ.c_str(), answ.size(), 0, sadr, sadrLen);
 	    sock->trOut += vmax(0, r_len);
 
-	    if(r_len > 0 && sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),sock->sockFd,sender.c_str()) + answ);
+	    if(r_len > 0 && sock->logLen()) sock->pushLogMess(TSYS::strMess(_("%d:> Transmitted to '%s'\n"),sock->sockFd,sender.c_str()), answ, sock->sockFd);
 	}
 #ifdef HAVE_LINUX_CAN_H
 	else if(sock->type == SOCK_RAWCAN) {
@@ -745,16 +747,21 @@ void *TSocketIn::ClTask( void *s_inf )
 	do {
 	    tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
 
-	    unsigned poolPrt = 0;
+	    unsigned pollPrt = 0;
 	    if((actPrts=s.s->prtInit(prot_in,s.sock,s.sender)))
 		for(unsigned iP = 0; iP < prot_in.size(); iP++)
-		    if(!prot_in[iP].freeStat() && (poolPrt=prot_in[iP].at().waitReqTm()))
+		    if(!prot_in[iP].freeStat() && (pollPrt=prot_in[iP].at().waitReqTm()))
 			break;
-	    if(poolPrt) { tv.tv_sec = poolPrt/1000; tv.tv_usec = (poolPrt%1000)*1000; }
+	    if(pollPrt) {
+		// Aligning to the grid
+		int64_t curTm = TSYS::curTime(), targTm = (curTm/(1000ll*pollPrt) + 1)*pollPrt*1000ll;
+		tv.tv_sec = (targTm-curTm)/1000000; tv.tv_usec = (targTm-curTm)%1000000;
+		//tv.tv_sec = pollPrt/1000; tv.tv_usec = (pollPrt%1000)*1000;
+	    }
 
 	    FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
 	    int kz = select(s.sock+1, &rw_fd, NULL, NULL, &tv);
-	    if((kz == 0 && !poolPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rw_fd))) continue;
+	    if((kz == 0 && !pollPrt) || (kz == -1 && errno == EINTR) || (kz > 0 && !FD_ISSET(s.sock,&rw_fd))) continue;
 	    if(kz < 0) {
 		if(mess_lev() == TMess::Debug)
 		    mess_debug(s.s->nodePath().c_str(), _("Terminated by the error \"%s (%d)\""), strerror(errno), errno);
@@ -774,7 +781,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(s.s->nodePath().c_str(), _("Read message %s from '%s'."), TSYS::cpct2str(r_len).c_str(), s.sender.c_str());
 	    req.assign(buf, r_len);
-	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Received from '%s'\n"),s.sock,s.sender.c_str()) + req);
+	    if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:< Received from '%s'\n"),s.sock,s.sender.c_str()), req, -s.sock);
 
 	    int64_t stTm = 0;
 	    if(mess_lev() == TMess::Debug) stTm = SYS->curTime();
@@ -802,7 +809,7 @@ void *TSocketIn::ClTask( void *s_inf )
 			    if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
 			    //!!!! May be some flush !!!!
 			}
-			string err = TSYS::strMess(_("Write: error '%s (%d)'!"), strerror(errno), errno);
+			string err = TSYS::strMess(_("Write: error '%s (%d)'."), strerror(errno), errno);
 			if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("Error transmitting: %s"),err.c_str()));
 			mess_err(s.s->nodePath().c_str(), "%s", err.c_str());
 			s.s->dataRes().lock();
@@ -813,7 +820,9 @@ void *TSocketIn::ClTask( void *s_inf )
 		    s.s->dataRes().lock();
 		    s.s->trOut += vmax(0, wL); s.trOut += vmax(0, wL);
 		    s.s->dataRes().unlock();
-		    if(wL > 0 && s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Transmitted to '%s'\n"),s.sock,s.sender.c_str()) + string(answ.data()+wOff,wL));
+		    if(wL > 0 && s.s->logLen())
+			s.s->pushLogMess(TSYS::strMess(_("%d:> Transmitted to '%s'\n"),s.sock,s.sender.c_str()),
+			    string(answ.data()+wOff,wL), s.sock);
 		}
 		answ = "";
 	    }
@@ -1383,7 +1392,7 @@ repeate:
 	    char tbuf[100];
 	    while(!notReq && read(sockFd,tbuf,sizeof(tbuf)) > 0) ;
 	    // Write request
-	    if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1000*mTmRep))
+	    if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1e3*mTmRep))
 		TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
 
 	    for(int wOff = 0; wOff != oLen; wOff += kz)
@@ -1394,18 +1403,18 @@ repeate:
 			kz = select(sockFd+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(sockFd,&rw_fd)) { kz = 0; continue; }
 		    }
-		    err = (kz < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : _("No data wrote");
+		    err = (kz < 0) ? TSYS::strMess(_("Error writing '%s (%d)'"),strerror(errno),errno) : _("No data wrote");
 		    stop();
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error writing: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
 		    if(notReq) throw TError(nodePath().c_str(),_("Error writing: %s"), err.c_str());
 		    start();
-		    if(kz == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
+		    if(kz <= 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections, sometime (kz < 0) for error "Broken channel (32)"
 		    goto repeate;
 		}
 		else {
 		    trOut += kz;
-		    if(logLen()) pushLogMess(_("Transmitted to\n") + string(oBuf+wOff,kz));
+		    if(logLen()) pushLogMess(_("> Transmitted to\n"), string(oBuf+wOff,kz), 1);
 		}
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Wrote %s."), TSYS::cpct2str(oLen).c_str());
@@ -1478,18 +1487,18 @@ repeate:
 		// * !!: Zero can be also after disconection by peer and possible undetected here for the not request mode,
 		//	what can be easily tested on stopping the ModBus input service
 		if(iB < 0 || (iB == 0 && writeReq && !notReq)) {
-		    err = (iB < 0) ? TSYS::strMess("%s (%d)",strerror(errno),errno) : TSYS::strMess(_("No data, the connection seems closed"));
+		    err = (iB < 0) ? TSYS::strMess(_("Error reading '%s (%d)'"),strerror(errno),errno) : TSYS::strMess(_("No data, the connection seems closed"));
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading: %s"), err.c_str());
 		    if(logLen()) pushLogMess(TSYS::strMess(_("Error reading: %s"), err.c_str()));
 		    stop();
 		    // * Pass to retry into the request mode and on the successful writing
 		    if(!writeReq || notReq) throw TError(nodePath().c_str(),_("Error reading: %s"), err.c_str());
 		    start();
-		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the loss connections
+		    if(iB == 0 && wAttempts == 1) wAttempts = 2;	//!!!! To restore the lost connections
 		    goto repeate;
 		}
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Read %s."), TSYS::cpct2str(vmax(0,iB)).c_str());
-		if(iB > 0 && logLen()) pushLogMess(_("Received from\n") + string(iBuf,iB));
+		if(iB > 0 && logLen()) pushLogMess(_("< Received from\n"), string(iBuf,iB), -1);
 		if(iB > 0 && mess_lev() == TMess::Debug && stRespTm) {
 		    respTm = SYS->curTime() - stRespTm;
 		    respTmMax = vmax(respTmMax, respTm);

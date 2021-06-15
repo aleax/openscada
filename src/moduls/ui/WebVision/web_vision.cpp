@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"5.8.1"
+#define MOD_VER		"6.2.1"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -488,7 +488,10 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		string sesnm = zero_lev.substr(4);
 
 		AutoHD<VCASess> vs;
-		try { vs = vcaSesAt(sesnm); } catch(TError&) { }
+		try {
+		    vs = vcaSesAt(sesnm);
+		    if(vs.at().toRemoveSelf) { vs.free(); vcaSesDel(sesnm); }
+		} catch(TError&) { }
 
 		map<string,string>::iterator cntEl;
 		if((cntEl=ses.prm.find("com")) != ses.prm.end() && cntEl->second == "close") {
@@ -859,7 +862,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     if(boundary.empty()) return;
 
     for(pos = 0; true; ) {
-	pos = content.find(boundary,pos);
+	pos = content.find(boundary, pos);
 	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
 	pos += boundary.size()+strlen(c_term);
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -321,6 +321,8 @@ bool ModVArch::grpLimits( SGrp &oG, int64_t *ibeg, int64_t *iend )
     try {
 	AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(oG.pos), true);
 
+	MtxAlloc res(reqRes, true);
+
 	//Remove limited records
 	TConfig	cfg(&oG.tblEl);
 	if(maxSize() && (wEnd-wBeg) > (int64_t)(maxSize()*86400e6)) {
@@ -590,7 +592,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 	}
 	tC += 10*period();
     }
-
+    cfg.setElem(NULL);
     res.unlock();
 
     // Fill by EVAL following range part without a real data
@@ -639,6 +641,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 	    default: break;
 	}
     }
+    cf.setElem(NULL);
     res.unlock();
 
     if(tm) *tm = 0;
@@ -765,6 +768,8 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 
 	archivator().grpMetaUpd(*gO, pLs.size()?&pLs:NULL);
     }
+
+    cfg.setElem(NULL);
 
     return lstWrTm;
 }

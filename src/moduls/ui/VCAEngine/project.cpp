@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -216,11 +216,8 @@ void Project::load_( TConfig *icfg )
     vector<string> vlst;
     for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,true); ) {
 	vlst.clear();
-	for(int iS = 0; iS < 10; iS++) {
-	    svl = cStl.cfg(TSYS::strMess("V_%d",iS)).getS();
-	    if(svl.empty()) break;
-	    vlst.push_back(svl);
-	}
+	for(int iS = 0; iS < 10; iS++)
+	    vlst.push_back(cStl.cfg(TSYS::strMess("V_%d",iS)).getS());
 	mStProp[cStl.cfg("ID").getS()] = vlst;
     }
 }
@@ -843,7 +840,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	time_t gtm = s2i(TBDS::genDBGet(mod->nodePath()+"messTm","0",opt->attr("user")));
 	if(!gtm) gtm = time(NULL);
 	int gsz = s2i(TBDS::genDBGet(mod->nodePath()+"messSize","600",opt->attr("user")));
-	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", TMess::Info, "");
+	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", Mess->messLevel(), "");
 
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SUI_ID);
 	XMLNode *n_tmu  = ctrMkNode("list",opt,-1,"/mess/mess/0a","",R_R___,"root",SUI_ID);
@@ -896,7 +893,7 @@ TCntrNode &Page::operator=( const TCntrNode &node )
     try {
 	Widget::operator=(node);
 
-	//Include widgets copy
+	//Copying included pages
 	vector<string> els;
 	src_n->pageList(els);
 	// Call recursive only for separated branches copy and for prevent to included copy
@@ -905,6 +902,11 @@ TCntrNode &Page::operator=( const TCntrNode &node )
 		if(!pagePresent(els[iP])) pageAdd(els[iP], "");
 		(TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
 	    }
+
+	//Removing the inherited but missed widgets on the source
+	wdgList(els);
+	for(unsigned iW = 0; iW < els.size(); iW++)
+	if(!src_n->wdgPresent(els[iW])) wdgDel(els[iW], true);
     }
     catch(TError &err) {
 	if(prjFlags()&Page::Link)
@@ -1689,6 +1691,15 @@ TCntrNode &PageWdg::operator=( const TCntrNode &node )
     }
 
     Widget::operator=(node);
+
+    if(attrPresent("geomX") && ownerPage().attrPresent("geomW"))
+	attrAt("geomX").at().setR(fmax(0,
+	    fmin(ownerPage().attrAt("geomW").at().getR()-attrAt("geomW").at().getR()*attrAt("geomXsc").at().getR(),
+		attrAt("geomX").at().getR())));
+    if(attrPresent("geomY") && ownerPage().attrPresent("geomH"))
+	attrAt("geomY").at().setR(fmax(0,
+	    fmin(ownerPage().attrAt("geomH").at().getR()-attrAt("geomH").at().getR()*attrAt("geomYsc").at().getR(),
+		attrAt("geomY").at().getR())));
 
     return *this;
 }

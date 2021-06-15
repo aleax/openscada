@@ -1705,20 +1705,20 @@ INSERT INTO tmplib_base_io VALUES('anUnif','ed','Dimension',0,32,'',3,'Один�
 INSERT INTO tmplib_base_io VALUES('anUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','');
 INSERT INTO tmplib_base_io VALUES('anUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','');
 INSERT INTO tmplib_base_io VALUES('anUnif','scSqr','Scale: square',3,32,'0',6,'Шкала: квадратична','','Шкала: квадратичная','');
-INSERT INTO tmplib_base_io VALUES('anUnif','aMin','Border down alarm',2,32,'0',11,'Границя нижня аварійна','','Граница нижняя аварийная','');
-INSERT INTO tmplib_base_io VALUES('anUnif','aMax','Border up alarm',2,32,'0',12,'Границя верхня аварійна','','Граница верхняя аварийная','');
-INSERT INTO tmplib_base_io VALUES('anUnif','wMin','Border down warning',2,32,'0',13,'Границя нижня попереджув.','','Граница нижняя предупр.','');
-INSERT INTO tmplib_base_io VALUES('anUnif','wMax','Border up warning',2,32,'0',14,'Границя верхня попереджув.','','Граница верхняя предупр.','');
-INSERT INTO tmplib_base_io VALUES('anUnif','speed','Motion speed, %/cycle',2,32,'0',16,'Швидкість зміни, %/цикл','','Скорость изменения, %/цикл','');
-INSERT INTO tmplib_base_io VALUES('anUnif','prec','Precision, signs',1,32,'2',17,'Точність, знаків','','Точность, знаков','');
-INSERT INTO tmplib_base_io VALUES('anUnif','Tf','Filter time, seconds',2,32,'0',19,'Час фільтру, секунд','','Время фильтрации, секунд','');
-INSERT INTO tmplib_base_io VALUES('anUnif','iAdd','Input addition',2,64,'0',20,'Додаток до входу','','Дополнение ко входу','');
-INSERT INTO tmplib_base_io VALUES('anUnif','iMult','Input multiplication',2,64,'1',21,'Множник входу','','Множитель входа','');
-INSERT INTO tmplib_base_io VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',22,'Мінімум шкали модуля','','Минимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',23,'Максимум шкали модуля','','Максимум шкалы модуля','');
-INSERT INTO tmplib_base_io VALUES('anUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',24,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
-INSERT INTO tmplib_base_io VALUES('anUnif','plcImit','PLC imitation',3,64,'0',25,'Імітація ПЛК','','Имитация ПЛК','');
-INSERT INTO tmplib_base_io VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',26,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
+INSERT INTO tmplib_base_io VALUES('anUnif','aMin','Border down alarm',2,32,'0',12,'Границя нижня аварійна','','Граница нижняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('anUnif','aMax','Border up alarm',2,32,'0',13,'Границя верхня аварійна','','Граница верхняя аварийная','');
+INSERT INTO tmplib_base_io VALUES('anUnif','wMin','Border down warning',2,32,'0',14,'Границя нижня попереджув.','','Граница нижняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('anUnif','wMax','Border up warning',2,32,'0',15,'Границя верхня попереджув.','','Граница верхняя предупр.','');
+INSERT INTO tmplib_base_io VALUES('anUnif','speed','Motion speed, %/cycle',2,32,'0',17,'Швидкість зміни, %/цикл','','Скорость изменения, %/цикл','');
+INSERT INTO tmplib_base_io VALUES('anUnif','prec','Precision, signs',1,32,'2',18,'Точність, знаків','','Точность, знаков','');
+INSERT INTO tmplib_base_io VALUES('anUnif','Tf','Filter time, seconds',2,32,'0',20,'Час фільтру, секунд','','Время фильтрации, секунд','');
+INSERT INTO tmplib_base_io VALUES('anUnif','iAdd','Input addition',2,64,'0',21,'Додаток до входу','','Дополнение ко входу','');
+INSERT INTO tmplib_base_io VALUES('anUnif','iMult','Input multiplication',2,64,'1',22,'Множник входу','','Множитель входа','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcMin','Minimum module scale',2,64,'0',23,'Мінімум шкали модуля','','Минимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcMax','Maximum module scale',2,64,'0',24,'Максимум шкали модуля','','Максимум шкалы модуля','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',25,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы, %','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcImit','PLC imitation',3,64,'0',26,'Імітація ПЛК','','Имитация ПЛК','');
+INSERT INTO tmplib_base_io VALUES('anUnif','plcImitIn','PLC imitation input',2,128,'Imitation|var',27,'Вхід імітації ПЛК','Імітація|var','Вход имитации ПЛК','Имитация|var');
 INSERT INTO tmplib_base_io VALUES('digitBlockUnif','com','Command "Open"',3,161,'Crane|com',0,'Команда "Відкрити"','Кран|com','Команда "Открыть"','Кран|com');
 INSERT INTO tmplib_base_io VALUES('digitBlockUnif','close','Command "Close"',3,161,'Crane|close',1,'Команда "Закрити"','Кран|close','Команда "Закрыть"','Кран|close');
 INSERT INTO tmplib_base_io VALUES('digitBlockUnif','stop','Command "Stop"',3,161,'Crane|stop',2,'Команда "Зупинити"','Кран|stop','Команда "Стоп"','Кран|stop');
@@ -1851,18 +1851,18 @@ INSERT INTO tmplib_base_io VALUES('anUnifSt','this','Object',4,1,'',31,'Об''є
 INSERT INTO tmplib_base_io VALUES('anUnifSt','SHIFR','Code',0,0,'',32,'Шифр','','Шифр','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','NAME','Name',0,0,'',33,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','DESCR','Description',0,0,'',34,'Опис','','Описание','');
-INSERT INTO tmplib_base_io VALUES('anUnif','this','Object',4,1,'',27,'Об''єкт','','Объект','');
+INSERT INTO tmplib_base_io VALUES('anUnif','this','Object',4,1,'',28,'Об''єкт','','Объект','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','NAME','Name',0,0,'',48,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','this','Object',4,1,'',46,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('anUnif','SHIFR','Code',0,0,'',28,'Шифр','','Шифр','');
-INSERT INTO tmplib_base_io VALUES('anUnif','NAME','Name',0,0,'',29,'Ім''я','','Имя','');
-INSERT INTO tmplib_base_io VALUES('anUnif','DESCR','Description',0,0,'',30,'Опис','','Описание','');
+INSERT INTO tmplib_base_io VALUES('anUnif','SHIFR','Code',0,0,'',29,'Шифр','','Шифр','');
+INSERT INTO tmplib_base_io VALUES('anUnif','NAME','Name',0,0,'',30,'Ім''я','','Имя','');
+INSERT INTO tmplib_base_io VALUES('anUnif','DESCR','Description',0,0,'',31,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','DESCR','Description',0,0,'',49,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','this','Object',4,1,'',52,'Об''єкт','','Объект','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','SHIFR','Code',0,0,'',53,'Шифр','','Шифр','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','NAME','Name',0,0,'',54,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','DESCR','Description',0,0,'',55,'Опис','','Описание','');
-INSERT INTO tmplib_base_io VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',15,'Гистерезиз порушення границь','','Гистерезиз нарушения границ','');
+INSERT INTO tmplib_base_io VALUES('anUnif','HystBnd','Hysteresis of boders violation',2,32,'1',16,'Гистерезиз порушення границь','','Гистерезиз нарушения границ','');
 INSERT INTO tmplib_base_io VALUES('anUnif','inProc','Input processing procedure',0,68,'',1,'Вхідна процедура обробки','','Входная процедура обработки','');
 INSERT INTO tmplib_base_io VALUES('anUnif','subMode','Substitute: mode',1,40,'0
 0;1;2
@@ -1902,7 +1902,7 @@ INSERT INTO tmplib_base_io VALUES('digAlarm','SHIFR','Code',0,0,'',8,'Шифр',
 INSERT INTO tmplib_base_io VALUES('digAlarm','NAME','Name',0,0,'',9,'Ім''я','','Имя','');
 INSERT INTO tmplib_base_io VALUES('digAlarm','DESCR','Description',0,0,'',10,'Опис','','Описание','');
 INSERT INTO tmplib_base_io VALUES('digAlarm','this','Object',4,0,'',11,'Об''єкт','','Объект','');
-INSERT INTO tmplib_base_io VALUES('anUnif','log','Logarithmic scale',3,32,'0',18,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO tmplib_base_io VALUES('anUnif','log','Logarithmic scale',3,32,'0',19,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','log','Logarithmic scale',3,32,'0',16,'Логарифмічна шкала','','Логарифмическая шкала','');
 INSERT INTO tmplib_base_io VALUES('digAlarm','stInv','State inversion',3,64,'',1,'Інверсія стану','','Инверсия состояния','');
 INSERT INTO tmplib_base_io VALUES('digAlarm','st_open','State "Opened"',3,16,'',6,'Стан "Відкрито"','','Состояние "Открыто"','');
@@ -1977,6 +1977,7 @@ INSERT INTO tmplib_base_io VALUES('pidUnif','log','Logarithmic scale',3,32,'0',2
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','alSup','Violations suppress',3,32,'0',13,'Придушення порушень','','Подавление нарушений','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','alDelay','Violations delay, seconds',2,32,'0',14,'Затримка порушень, секунди','','Задержка нарушений, секунды','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','log','Logarithmic scale',3,32,'0',22,'Логарифмічна шкала','','Логарифмическая шкала','');
+INSERT INTO tmplib_base_io VALUES('anUnif','alNormForceStart','Force NORM violation at the start',3,32,'0',11,'Примусове порушення НОРМА при запуску','','Принудительное нарушение НОРМА при запуске','');
 CREATE TABLE IF NOT EXISTS 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 CREATE TABLE IF NOT EXISTS 'flb_web_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
@@ -2131,7 +2132,7 @@ INSERT INTO Trs VALUES('Lower alarm border error','Помилка нижньої
 INSERT INTO Trs VALUES('Upper warning border error','Помилка верхньої поперджув. границі','Нарушение верхней предупредительной границы');
 INSERT INTO Trs VALUES('Lower warning border error','Помилка нижньої поперджув. границі','Нарушение нижней предупредительной границы');
 INSERT INTO Trs VALUES('Too big parameter''s motion speed','Дуже велика швидкість зміни параметру','Очень большая скорость изменения параметра');
-INSERT INTO Trs VALUES('NORMA','НОРМА','НОРМА');
+INSERT INTO Trs VALUES('NORM','НОРМА','НОРМА');
 INSERT INTO Trs VALUES('Step missed','Крок пропущено','Шаг пропущен');
 INSERT INTO Trs VALUES('Program terminated','Програму перервано','Программа прервана');
 INSERT INTO Trs VALUES('Terminated program session by the user','Перерваний користувачем сеанс програми','Прерванный пользователем сеанс программы');
@@ -2486,6 +2487,8 @@ INSERT INTO Trs VALUES('Address ''%1'' out of range [1...999].','Адреса ''
 INSERT INTO Trs VALUES('Output transport is empty and the controller object is not ModBus.','','');
 INSERT INTO Trs VALUES('Address ''%1'' out of range [0...247].','','');
 INSERT INTO Trs VALUES('Inconsistent respond''s length.','','');
+INSERT INTO Trs VALUES('Too short','','');
+INSERT INTO Trs VALUES('No response','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_DevLib VALUES('SCU750','EDWARDS TURBOMOLECULAR PUMPS','','','Typical EDWARDS TURBOMOLECULAR PUMPS (http://edwardsvacuum.com) data acquisition by SCU750 Cotrol Unit protocol.
 
@@ -2965,7 +2968,7 @@ if(alDelay > 0 && conDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.
 if(alDelay > 0 && conDelay_ > 0 && tErr.toInt() != tErr1)	{ conDelay_ = 0; tErr1 = tErr.toInt(); }
 if(alDelay > 0 && conDelay_ < alDelay){ conDelay_ += 1/f_frq; return; }
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
-else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+else if(f_err.toInt() && !tErr.toInt())			this.alarmSet(DESCR+": "+tr("NORM"), 1);
 f_err = tErr;
 conDelay_ = 0;','','',1561317269);
 INSERT INTO tmplib_DevLib VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7" for complex heat measurement and counting. The device complex enough to provide more parameters, more history and accessed by a nonlinear Serial-based protocol at low speed. The template implements acquisition for all significant parameters, gets for their history by hours, days and result months. Also you can to append easily enough for processing of the remained parameters.
@@ -6240,14 +6243,14 @@ Author: Roman Savochenko <roman@oscada.org>
 State of the protocol implementing: Client of the specification part 46, reading of the directly specified OBIS
 Total complexity: 3.2 HD
 Sponsored by: SVItoVYR Ltd for whole complexity
-Version: 1.0.2
+Version: 1.1.2
 License: GPLv2','IEC 62056 у частині 46 є одним з набору стандартів IEC 62056 який визначає системи, що використовуються у віддаленому контролі (телемеханіці — диспетчерському контролі та зборі даних) у інженерній електриці та у застосунках автоматизації енергетичних систем. Частина 46 надає шар підключення Даних з використанням протоколу HDLC, який переважно використовується на послідовних інтерфейсах.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Стан реалізації протоколу: Клієнт частини 46 специфікації, читання прямо визначених OBIS
 Загальна працемісткість: 3.2 ЛД
 Спонсорування: ТОВ "СВІТоВИР АВТоМАТИК" на загальну працемісткість
-Версія: 1.0.2
+Версія: 1.1.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function CRC( inSeq ) { return Special.FLibSYS.CRC(inSeq, 16, 0x1021, -1, true, true, 0xFFFF); }
 
@@ -6326,45 +6329,21 @@ function inVal( aId, aVal ) {
 	aO.set(aVal, 0, 0, true);
 }
 
-//Forming of the message and placing it to the output buffer
-//  Commands: "SNRM", "RR", "I", "DISC"
-function mess( com, data ) {
-	if(data.isEVal())	data = "";
-	mLen = 10 + (data.length ? data.length+2 : 0);
-	 //SYS.strFromCharCode(ac, func) + objs;
-	aMess = SYS.strFromCharCode(0xA0|(mLen>>8), mLen&0xFF);
-	if(!ctx.destLow && ctx.destUp < 128)					aMess += SYS.strFromCharCode(((ctx.destUp&0x3F)<<1)|1);
-	else if(ctx.destUp < 128 && ctx.destLow < 128)	aMess += SYS.strFromCharCode((ctx.destUp&0x3F)<<1, ((ctx.destLow&0x3F)<<1)|1);
-	else aMess += SYS.strFromCharCode((ctx.destUp>>7)<<1, (ctx.destUp&0x3F)<<1, (ctx.destLow>>7)<<1, ((ctx.destLow&0x3F)<<1)|1);
-	aMess += SYS.strFromCharCode((src<<1)|1);
-	ctx.reqToResp = com;
-	if(com == "SNRM")		aMess += SYS.strFromCharCode(0x93);
-	else if(com == "RR")	aMess += SYS.strFromCharCode((ctx.readSeq<<5)|0x11);
-	else if(com == "DISC")	aMess += SYS.strFromCharCode(0x53);
-	else if(com == "I") {
-		aMess += SYS.strFromCharCode(0x10|(ctx.readSeq<<5)|(ctx.sendSeq<<1));
-		if(ctx.sendSeq >= 7) ctx.sendSeq = 0; else ctx.sendSeq++;
-	} else return;	
-	aMess += SYS.strFromCharUTF("UTF-16LE",CRC(aMess)) + data;
-	if(data.length)	aMess += SYS.strFromCharUTF("UTF-16LE",CRC(aMess));
-	aMess = SYS.strFromCharCode(0x7E) + aMess + SYS.strFromCharCode(0x7E);
-	ctx.out += aMess;
-	//Just direct writing per one message
-	//SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(aMess,"Bin"," "));
-	//tr.messIO(aMess, 0, 0);
-}
-
-function processIn( ) {
+function processIn( isSync ) {
 	t_err = "";
 	//Parse for packages in general - the transport layer
 	for(waitSz = 0; ctx.in.length; ctx.in = ctx.in.slice(waitSz)) {
 		// Checking for very short
-		if(ctx.in.length < 9)	break;
+		if(ctx.in.length < 9)	{ if(isSync == true) return "10:"+tr("Too short"); break; }
 		// Checking the header entirety
 		if(ctx.in[0] != "~" || ((form=ctx.in.charCodeAt(1))&0xF0) != 0xA0 || ((dataSz=ctx.in.charCodeAt(1,"UTF-16BE")&0x07FF) < 7) ||
 				//  Checking the source address
-				!((src_=ctx.in.charCodeAt(3))&1) || (src_>>1) != src)
-		{ SYS.messDebug("/IEC62056",tr("Wrong header or source address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
+				!((src_=ctx.in.charCodeAt(3))&1) || (src_>>1) != src) {
+			SYS.messDebug("/IEC62056",tr("Wrong header or source address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("Wrong header or source address, rejected");
+			ctx.in = "";
+			break;
+		}
 		//  Checking the destination address
 		if(((dst_=ctx.in.charCodeAt(4))&1) && (dst_>>1) == ctx.destUp && ctx.destLow == 0)
 			dst_sz = 1;
@@ -6373,18 +6352,37 @@ function processIn( ) {
 		else if(!((dst_=ctx.in.charCodeAt(4))&1) && !(ctx.in.charCodeAt(5)&1) && !((dst_2=ctx.in.charCodeAt(6))&1) && (ctx.in.charCodeAt(7)&1) &&
 				(((dst_>>1)<<7)|(ctx.in.charCodeAt(5)>>1)) == ctx.destUp && (((dst_2>>1)<<7)|(ctx.in.charCodeAt(7)>>1)) == ctx.destLow)
 			dst_sz = 4;
-		else { SYS.messDebug("/IEC62056",tr("Wrong destination address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
-		if(ctx.in.length < (7+dst_sz))	break;	//Short yet, waiting
+		else {
+			SYS.messDebug("/IEC62056",tr("Wrong destination address, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("Wrong destination address, rejected");
+			ctx.in = "";
+			break;
+		}
+		// Short yet, waiting
+		if(ctx.in.length < (7+dst_sz))	{ if(isSync == true) return "10:"+tr("Too short"); break; }
 		//  Checking the header CRC
-		if(CRC(ctx.in.slice(1,5+dst_sz)) != ctx.in.charCodeAt(5+dst_sz,"UTF-16LE"))
-		{ SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
+		if(CRC(ctx.in.slice(1,5+dst_sz)) != ctx.in.charCodeAt(5+dst_sz,"UTF-16LE")) {
+			SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("CRC-error, rejected");
+			ctx.in = "";
+			break;
+		}
 		// Checking the frame entirety
-		if(ctx.in.length < (waitSz=2+dataSz))	break;	//Not full yet, waiting
-		if(ctx.in[waitSz-1] != "~")
-		{ SYS.messDebug("/IEC62056",tr("The end symbol is wrong")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
+		//  Not full yet, waiting
+		if(ctx.in.length < (waitSz=2+dataSz)) { if(isSync == true) return "10:"+tr("Too short"); break; }
+		if(ctx.in[waitSz-1] != "~") {
+			SYS.messDebug("/IEC62056",tr("The end symbol is wrong")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("The end symbol is wrong");
+			ctx.in = "";
+			break;
+		}
 		//  Checking the frame CRC with the data
-		if(dataSz > (6+dst_sz) && CRC(ctx.in.slice(1,1+dataSz-2)) != ctx.in.charCodeAt(1+dataSz-2,"UTF-16LE"))
-		{ SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," ")); ctx.in = ""; break; }
+		if(dataSz > (6+dst_sz) && CRC(ctx.in.slice(1,1+dataSz-2)) != ctx.in.charCodeAt(1+dataSz-2,"UTF-16LE")) {
+			SYS.messDebug("/IEC62056",tr("CRC-error, rejected")+": "+SYS.strDecode(ctx.in,"Bin"," "));
+			if(isSync == true) return "11:"+tr("CRC-error, rejected");
+			ctx.in = "";
+			break;
+		}
 
 		SYS.messDebug("/IEC62056",tr("Good input sequence")+": "+SYS.strDecode(ctx.in.slice(0,waitSz),"Bin"," "));
 
@@ -6402,7 +6400,7 @@ function processIn( ) {
 				continue;
 			}
 			if(ctx.readSeq >= 7) ctx.readSeq = 0; else ctx.readSeq++;
-			if(cntr&0x10) mess("RR");		//F - final
+			if(cntr&0x10)	ctx.sendRR = true; //mess("RR");		//F - final
 		}
 
 		ctx.inAMess += ctx.in.slice(7+dst_sz, 1+dataSz-2);
@@ -6419,7 +6417,7 @@ function processIn( ) {
 		}
 		else if((cntr&0x11) == 0x10) {	//I,F
 			if(ctx.inAMess.slice(0,4) == SYS.strFromCharCode(0xE6,0xE7,0x00,0x61)) {	//LPDU, APPLICATION 1, Initial parameter acquiring
-				if(ctx.inAMess.indexOf(SYS.strFromCharCode(0xA2,0x03,0x02,0x01,0x00)) >= 0) ctx.toInit = 0;
+				if(ctx.inAMess.indexOf(SYS.strFromCharCode(0xA2,0x03,0x02,0x01,0x00)) >= 0) ctx.toInit++;
 				else { t_err += tr("Error the authentication")+"; "; tr.start(false); }
 				//!!!! Deep parsing the initial parameter acquiring
 			}
@@ -6451,6 +6449,43 @@ function processIn( ) {
 	return "0"+(t_err.length?":"+t_err:"");
 }
 
+//Forming of the message and placing it to the output buffer
+//  Commands: "SNRM", "RR", "I", "DISC"
+function mess( com, data ) {
+	if(data.isEVal())	data = "";
+	mLen = 10 + (data.length ? data.length+2 : 0);
+	 //SYS.strFromCharCode(ac, func) + objs;
+	aMess = SYS.strFromCharCode(0xA0|(mLen>>8), mLen&0xFF);
+	if(!ctx.destLow && ctx.destUp < 128)					aMess += SYS.strFromCharCode(((ctx.destUp&0x7F)<<1)|1);
+	else if(ctx.destUp < 128 && ctx.destLow < 128)	aMess += SYS.strFromCharCode((ctx.destUp&0x7F)<<1, ((ctx.destLow&0x7F)<<1)|1);
+	else aMess += SYS.strFromCharCode((ctx.destUp>>7)<<1, (ctx.destUp&0x7F)<<1, (ctx.destLow>>7)<<1, ((ctx.destLow&0x7F)<<1)|1);
+	aMess += SYS.strFromCharCode((src<<1)|1);
+	ctx.reqToResp = com;
+	if(com == "SNRM")		aMess += SYS.strFromCharCode(0x93);
+	else if(com == "RR")	aMess += SYS.strFromCharCode((ctx.readSeq<<5)|0x11);
+	else if(com == "DISC")	aMess += SYS.strFromCharCode(0x53);
+	else if(com == "I") {
+		aMess += SYS.strFromCharCode(0x10|(ctx.readSeq<<5)|(ctx.sendSeq<<1));
+		if(ctx.sendSeq >= 7) ctx.sendSeq = 0; else ctx.sendSeq++;
+	} else return;	
+	aMess += SYS.strFromCharUTF("UTF-16LE",CRC(aMess)) + data;
+	if(data.length)	aMess += SYS.strFromCharUTF("UTF-16LE",CRC(aMess));
+	aMess = SYS.strFromCharCode(0x7E) + aMess + SYS.strFromCharCode(0x7E);
+	ctx.out += aMess;
+	//Just direct writing per one message
+	//SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(aMess,"Bin"," "));
+	//tr.messIO(aMess, 0, 0);
+
+	//Synchronous request-response
+	SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(ctx.out,"Bin"," "));
+	t_err = "0";
+	ctx.in = tr.messIO(ctx.out); ctx.out = "";
+	if(!ctx.in.length)	{ t_err = "10:"+tr("No response"); tr.start(false); }
+	else while((t_err=processIn(true)).toInt() == 10 && (respTail=tr.messIO("")).length) ctx.in += respTail;
+
+	return t_err;
+}
+
 if(f_start) {
 	itemsSet_ = "";
 	items = new Object();
@@ -6462,7 +6497,10 @@ if(f_start) {
 
 	return;
 }
-if(f_stop)	mess("DISC");
+
+t_err = "0";
+
+if(f_stop)	t_err = mess("DISC");
 
 //Items set changing process
 if(itemsSet != itemsSet_) {
@@ -6471,7 +6509,6 @@ if(itemsSet != itemsSet_) {
 }
 
 //Check for the transport change and connect
-t_err = "0";
 destUp = dest.parse(0,":").toInt(); destLow = dest.parse(1,":").toInt();
 if(tr.isEVal() || transport != transport_)	{
 	itemsSet_ = "";
@@ -6510,25 +6547,28 @@ else {
 		ctx.sendSeq = ctx.readSeq = 0;
 		ctx.toInit = 1;
 		ctx.firSeq = -1;
+		ctx.sendRR = false;
 		ctx.reqToResp = "";
 	}
 
 	//Send output buffer and read the transport for an input data
-	if(ctx.out.length) SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(ctx.out,"Bin"," "));
-	ctx.in += tr.messIO(ctx.out, -0.001);
-	ctx.out = "";
+	// Asynchronous mode
+	//if(ctx.out.length) SYS.messDebug("/IEC62056",tr("Good output sequence")+": "+SYS.strDecode(ctx.out,"Bin"," "));
+	//ctx.in += tr.messIO(ctx.out, -0.001);
+	//ctx.out = "";
 
 	//Input processing
-	t_err = processIn();
+	//t_err = processIn();
 
 	//Response timeout
-	if(ctx.reqToResp.length) {
+	/*if(ctx.reqToResp.length) {
 		if(tmResp_ > tmRetr)	tr.start(false);	//No response long time
 		tmResp_ += 1/f_frq;
 	}
 	// Initial parameters setting
-	else if(ctx.toInit == 1)
-		mess("SNRM", SYS.strFromCharCode(
+	else*/
+	if(!t_err.toInt() && ctx.toInit == 1)
+		t_err = mess("SNRM", SYS.strFromCharCode(
 			0x81,0x80,0x12,		//format and group identifier, length 18 bytes
 				0x05,0x01,0x80,	//the parameter "Maximum information field length - transmit" = 128
 				0x06,0x01,0x80,	//the parameter "Maximum information field length - receive" = 128
@@ -6536,8 +6576,8 @@ else {
 				0x08,0x04,0x00,0x00,0x00,0x07	//the parameter "Window size - receive" = 7
 			));
 	// Initial parameter acquiring
-	else if(ctx.toInit == 2)
-		mess("I", SYS.strFromCharCode(
+	if(!t_err.toInt() && ctx.toInit == 2)
+		t_err = mess("I", SYS.strFromCharCode(
 			0xE6,								//Destination (remote) LSAP, fixed in COSEM
 			0xE6,								//Source (local) LSAP, fixed in COSEM E6 for command E7 for response
 			0x00,								//Quality, Control byte, Reserved and 00 always
@@ -6556,16 +6596,17 @@ else {
 				0x04, 0x00, 0x00, 0x18, 0x1D,	// Client side services
 				0x00, 0x00					// PDU maximum size
 			));
-	else {
+	if(!t_err.toInt() && ctx.toInit > 2) {
+		if(ctx.sendRR)	{ t_err = mess("RR"); ctx.sendRR = false; }
 		//Polling
 		// Read all items
-		if(tmPollAll_ > tmPollAll) {
+		if(!t_err.toInt() && tmPollAll_ > tmPollAll) {
 			if((iIt=itemsSet.parse(0,"\n",offPoll)).length) {
 				iIt_ClassId = iIt.parse(0, "-");
 				iIt_OBIS = iIt.parse(1, "-");
 				iIt_a = iIt.parse(2, "-");
 				ctx.reqOBIS = iIt_OBIS;
-				mess("I", SYS.strFromCharCode(0xE6, 0xE6, 0x00,
+				t_err = mess("I", SYS.strFromCharCode(0xE6, 0xE6, 0x00,
 					0xC0, 0x01, 0x81,	//Get-Request-Normal, Invoke-Id-And-Priority
 					0x00, iIt_ClassId.toInt(),	//Cosem-Class-Id, ?
 					iIt_OBIS.parse(0,".").toInt(), iIt_OBIS.parse(1,".").toInt(), iIt_OBIS.parse(2,".").toInt(), iIt_OBIS.parse(3,".").toInt(), iIt_OBIS.parse(4,".").toInt(), iIt_OBIS.parse(5,".").toInt(),
@@ -6593,7 +6634,7 @@ if(t_err.toInt()) {
 }
 f_err = t_err;
 
-if(f_stop && !tr.isEVal()) tr.start(false);','','',1592158749);
+if(f_stop && !tr.isEVal()) tr.start(false);','','',1614260893);
 INSERT INTO tmplib_DevLib VALUES('MTP4D','MTP 4D','MTP 4D','','The connection template of a simple vaccuumeter MTP 4D of the firm "Erstevak Ltd (http://www.erstvak.com/)".
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -7452,7 +7493,7 @@ else {
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
@@ -7649,7 +7690,7 @@ else {
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
@@ -7683,7 +7724,7 @@ Functions:
   - big motion speed of the end variable — error code 7 and alarm level 2.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.0
+Version: 2.1.2
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Функції:
@@ -7714,11 +7755,11 @@ License: GPLv2','Загальний, представницький та уні�
   - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.0
+Версія: 2.1.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	prevVar = EVAL_REAL;
-	alDelay_ = 0;
+	alDelay_ = 0; firstNorm = alNormForceStart;
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
@@ -7809,15 +7850,15 @@ if(alSup) {
 	f_err = "0";
 }
 else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
+	if(!firstNorm && tErr.toInt() && tErr.toInt() != f_err.toInt() && this.cntr().status().toInt())	return;
 	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1, firstNorm);
 	f_err = tErr;
-	alDelay_ = 0;
-}','','',1572284562);
+	alDelay_ = 0; firstNorm = false;
+}','','',1615650088);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:
@@ -7942,7 +7983,7 @@ else {
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572862020);
@@ -8061,7 +8102,7 @@ else {
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
@@ -8196,7 +8237,7 @@ else {
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -4);
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572861425);
@@ -8300,7 +8341,7 @@ else {
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
@@ -8428,7 +8469,7 @@ else {
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
@@ -8442,7 +8483,7 @@ THE OUTPUT USER PROTOCOL PART "SMTP" provides operations with a SMTP-server for 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: SVItoVYR LTD
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2','Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
 
 ДИСПЕТЧЕР може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на Логічному рівні або об''єкті контролеру модуля JavaLikeCalc.
@@ -8453,7 +8494,7 @@ License: GPLv2','Комплексний шаблон повідомлення м
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "СВІТоВИР АВТоМАТИК"
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -8664,11 +8705,11 @@ if(f_start) {
 	return;	//Don''t real process at start
 }
 if(f_stop)	{ emailState = SMSState = ""; return; }
-if(!SMTPTr || emailTrAddr_ != emailTrAddr) {
+if(!SMTPTr || SMTPTr.isEVal() || emailTrAddr_ != emailTrAddr) {
 	SMTPTr = emailTrAddr.length ? SYS.Transport.nodeAt(emailTrAddr, ".") : false;
 	emailTrAddr_ = emailTrAddr;
 }
-if(!SMSTr || SMSTrAddr_ != SMSTrAddr)	{
+if(!SMSTr || SMSTr.isEVal() || SMSTrAddr_ != SMSTrAddr)	{
 	SMSTr = SMSTrAddr.length ? SYS.Transport.nodeAt(SMSTrAddr, ".") : false;
 	SMSTrAddr_ = SMSTrAddr;
 }
@@ -8703,8 +8744,9 @@ for(var nM in queue) {
 	io.setAttr("ProtIt", "SMTP").setAttr("auth", emailAuth).setAttr("from", emailSender).setAttr("to", emailReceiver).setAttr("topic", topic).setText(mess);
 	SMTP();
 	//SYS.messInfo("NTF", "Send error: "+io.attr("err"));
-	if(!io.attr("err").toInt()) { delete queue[nM]; emailSentN++; }
+	if(!(tVl=io.attr("err").toInt())) { delete queue[nM]; emailSentN++; }
 	else {
+		if(tVl == 10)	SMTPTr = false;	//Reconnect the transport
 		emailQueueN++;
 		if(!emailErr.length)	emailErr = io.attr("err");
 	}
@@ -8875,7 +8917,7 @@ else {
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
 	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), -(2+alLev));
-	else	this.alarmSet(DESCR+": "+tr("NORMA"), 1);
+	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);

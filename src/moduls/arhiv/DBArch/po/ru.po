@@ -1,13 +1,13 @@
 # OpenSCADA.Archive.DBArch translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.Archive.DBArch package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2007-2010, 2016-2020.
+# Roman Savochenko <roman@oscada.org>, 2007-2010, 2016-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.DBArch 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-23 08:51+0300\n"
+"POT-Creation-Date: 2021-01-20 22:14+0200\n"
 "PO-Revision-Date: 2007-10-21 22:40+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -80,6 +80,16 @@ msgid ""
 msgstr ""
 "Только для БД поддерживающих такое посредством специфических типов данных "
 "вроде \"datetime\" в MySQL."
+
+msgid "Unique and non duple messages for time and category only"
+msgstr "Уникальные и недублирующие сообщения только за временем и категорией"
+
+msgid ""
+"Otherwise the message field is included to the primary key and is limited in "
+"255 symbols."
+msgstr ""
+"Иначе поле сообщения включается к первичному ключу и его ограничено 255 "
+"символами."
 
 msgid "Mark, time/(10*per)"
 msgstr "Метка, time/(10*per)"

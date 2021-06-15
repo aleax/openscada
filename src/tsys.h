@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,6 +29,7 @@
 
 //Other global constants
 #define NSTR_BUF_LEN	50	// Length of string buffers for numbers
+#define DAQ_APER_FRQ	1000000	// Frequency of representing the aperiodic invokes, like to f_start, of the periodic processes in Hz
 
 // !!!!(to v1.0) Left for the compatibility
 #define OBJ_ID_SZ	"20"
@@ -89,7 +90,7 @@ extern uint8_t	limArchID_SZ;	//[50...90] ID size of the value archive objects, l
 extern int	limUserFile_SZ;	//[1MB...*10MB...1000MB] The files size limit at loading and processing in the userspace
 				//	and the part size of the big files transferring.
 extern int	limUserIts_N;	//[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
-extern int	limCacheIts_N;	//[*100...100000] The limit on count of the caching items.
+extern unsigned	limCacheIts_N;	//[*100...100000] The limit on count of the caching items.
 
 //Global configurable parameters
 extern int	prmStrBuf_SZ;	//[1000...*10000...1000000] Length of string buffers, no string class
@@ -249,7 +250,8 @@ class TSYS : public TCntrNode
 	static long HZ( );
 
 	time_t	sysTm( ) volatile	{ return mSysTm ? mSysTm : time(NULL); }	//System time fast access, from updated cell
-	static int64_t curTime( );	//Current system time (usec)
+	static int64_t curTime( clockid_t clc = CLOCK_REALTIME );	//Current system time, microseconds
+	static uint64_t curTimeN( clockid_t clc = CLOCK_REALTIME );	//Current system time, nanoseconds
 
 	// Projects
 	string prjUserDir( );

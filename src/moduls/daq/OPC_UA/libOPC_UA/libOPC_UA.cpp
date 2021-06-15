@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.cpp
 /******************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>	      *
+ *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -42,11 +42,15 @@ namespace OPC
 //*************************************************
 //* Static methods, mostly from OpenSCADA::TSYS   *
 //*************************************************
-int64_t curTime( )
+int64_t curTime( clockid_t clc )
 {
-    timeval cur_tm;
+    struct timespec tm;
+    clock_gettime(clc, &tm);
+    return 1000000ll*tm.tv_sec + tm.tv_nsec/1000;
+
+    /*timeval cur_tm;
     gettimeofday(&cur_tm, NULL);
-    return (int64_t)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;
+    return (int64_t)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;*/
 }
 
 string int2str( int val )
@@ -56,12 +60,16 @@ string int2str( int val )
     return buf;
 }
 
+int str2int( const string &val )	{ return atoi(val.c_str()); }
+
 string uint2str( unsigned val )
 {
     char buf[250];
     snprintf(buf, sizeof(buf), "%u", val);
     return buf;
 }
+
+unsigned long str2uint( const string &val )	{ return strtoul(val.c_str(), NULL, 0); }
 
 string ll2str( int64_t val )
 {
@@ -344,6 +352,16 @@ NodeId::~NodeId( )
     //if(type() != NodeId::Numeric) mTp = NodeId::Numeric;
 }
 
+bool NodeId::operator==( const NodeId &node )
+{
+    if(type() != node.type())	return false;
+    switch(type()) {
+	case NodeId::Numeric:	return (numbVal() == node.numbVal());
+	default: return (strVal() == node.strVal());
+    }
+    return true;
+}
+
 NodeId &NodeId::operator=( const NodeId &node )
 {
     setNs(node.ns());
@@ -398,24 +416,24 @@ NodeId NodeId::fromAddr( const string &strAddr )
 	bf[2] = 0;
 	// Get Data1
 	dt = vl.substr(1,8);
-	for(int i_s = (dt.size()-2); i_s >= 0; i_s -= 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = (dt.size()-2); iS >= 0; iS -= 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	// Get Data2
 	dt = vl.substr(10,4);
-	for(int i_s = (dt.size()-2); i_s >= 0; i_s -= 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = (dt.size()-2); iS >= 0; iS -= 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	// Get Data3
 	dt = vl.substr(15,4);
-	for(int i_s = (dt.size()-2); i_s >= 0; i_s -= 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = (dt.size()-2); iS >= 0; iS -= 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	// Get Data4a
 	dt = vl.substr(20,4);
-	for(int i_s = 0; i_s < (int)dt.size(); i_s += 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = 0; iS < (int)dt.size(); iS += 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	// Get Data4b
 	dt = vl.substr(25,12);
-	for(int i_s = 0; i_s < (int)dt.size(); i_s += 2)
-	{ bf[0] = dt[i_s]; bf[1] = dt[i_s+1]; rez += (char)strtol(bf,NULL,16); }
+	for(int iS = 0; iS < (int)dt.size(); iS += 2)
+	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
 	return NodeId(rez, ns, NodeId::Guid);
     }
 
@@ -449,36 +467,36 @@ string NodeId::toAddr( ) const
 	    vl += "{";
 	    //Get Data1
 	    string svl = strVal().substr(0,4);
-	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = (svl.size()-1); iSz >= 0; iSz--)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    //Get Data2
 	    vl += "-";
 	    svl = strVal().substr(4,2);
-	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = (svl.size()-1); iSz >= 0; iSz--)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    //Get Data3
 	    vl += "-";
 	    svl = strVal().substr(6,2);
-	    for(int i_sz = (svl.size()-1); i_sz >= 0; i_sz--)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = (svl.size()-1); iSz >= 0; iSz--)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    //Get Data4a
 	    vl += "-";
 	    svl = strVal().substr(8,2);
-	    for(int i_sz = 0; i_sz < (int)svl.size(); i_sz++)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = 0; iSz < (int)svl.size(); iSz++)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    //Get Data4b
 	    vl += "-";
 	    svl = strVal().substr(10,6);
-	    for(int i_sz = 0; i_sz < (int)svl.size(); i_sz++)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(int iSz = 0; iSz < (int)svl.size(); iSz++)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    vl += "}";
 	    break;
 	}
 	case NodeId::Opaque: {
 	    vl += "\"";
 	    string svl = strVal();
-	    for(unsigned i_sz = 0; i_sz < svl.size(); i_sz++)
-		vl += strMess("%0.2x",(unsigned char)svl[i_sz]);
+	    for(unsigned iSz = 0; iSz < svl.size(); iSz++)
+		vl += strMess("%0.2x",(unsigned char)svl[iSz]);
 	    vl += "\"";
 	    break;
 	}
@@ -666,8 +684,8 @@ void UA::iDataValue( const string &buf, int &off, XML_N &nd )
     if(em&0x01) {					//Value
 	uint8_t emv;
 	nd.setText(iVariant(buf,off,&emv));
-	nd.setAttr("VarTp", uint2str(emv));
-    }
+	nd.setAttr("VarTp", uint2str(emv))->setAttr("nodata", "");
+    } else nd.setAttr("nodata", "1");
     if(em&0x02)	nd.setAttr("Status", strMess("0x%x",iNu(buf,off,4)));
     if(em&0x04)	nd.setAttr("SourceTimestamp", ll2str(iTm(buf,off)));
     if(em&0x10)	nd.setAttr("SourcePicoseconds", uint2str(iNu(buf,off,2)));
@@ -834,7 +852,7 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
 	}
 	//ArrayDimension
 	if(vEMsk&OpcUa_ArrayDimension) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supporteded.");
-	//????
+	//!!!!
     }
     if(eMsk&0x02) oN(buf, strtoul(vl.c_str(),NULL,10), 4);	//Status
     if(eMsk&0x04) oTm(buf, srcTmStmp ? srcTmStmp : curTime());	//SourceTimestamp
@@ -903,7 +921,7 @@ string UA::certDER2PEM( const string &certDer )
     if(x) bm = BIO_new(BIO_s_mem());
     if(bm && PEM_write_bio_X509(bm,x) > 0) {
 	char buf[4000];
-	for(int i_r = 0; (i_r=BIO_read(bm,buf,sizeof(buf))) > 0; ) rez.append(buf, i_r);
+	for(int iR = 0; (iR=BIO_read(bm,buf,sizeof(buf))) > 0; ) rez.append(buf, iR);
     }
     //Free temporary data
     if(bm) BIO_free(bm);
@@ -971,6 +989,7 @@ string UA::asymmetricEncrypt( const string &mess, const string &certPem, const s
 	    rez.append((char*)rsaOut, blen);
 	}
     }
+
     //Free temporary data
     if(pkey)	EVP_PKEY_free(pkey);
     if(bm)	BIO_free(bm);
@@ -1128,8 +1147,8 @@ string UA::deriveKey( const string &secret, const string &seed, int keyLen )
 
     memcpy(hashTmp+20, seed.data(), seed.size());
     HMAC(EVP_sha1(), secret.data(), secret.size(), (const unsigned char*)seed.data(), seed.size(), hashTmp, 0);
-    for(int i_c = 0; i_c < hashCnt; i_c++) {
-	HMAC(EVP_sha1(), secret.data(), secret.size(), hashTmp, 20+seed.size(), hashRez+20*i_c, 0);
+    for(int iC = 0; iC < hashCnt; iC++) {
+	HMAC(EVP_sha1(), secret.data(), secret.size(), hashTmp, 20+seed.size(), hashRez+20*iC, 0);
 	HMAC(EVP_sha1(), secret.data(), secret.size(), hashTmp, 20, hashTmp, 0);
     }
 
@@ -1184,20 +1203,107 @@ string UA::symmetricSign( const string &mess, const string &keySet, const string
 //*************************************************
 //* Protocol OPC UA client part			  *
 //*************************************************
-Client::Client( )	{ }
+Client::Client( )
+{
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mtxData, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+}
 
-Client::~Client( )	{ }
+Client::~Client( )
+{
+    pthread_mutex_lock(&mtxData);
+    pthread_mutex_destroy(&mtxData);
+}
+
+string Client::poll( bool byRead )
+{
+    XML_N req("opc.tcp");
+
+    if(byRead) {
+	req.setAttr("id", "Read")->setAttr("timestampsToReturn", int2str(TS_NEITHER));
+
+	//Checking for the subscriptions
+	for(unsigned iSubscr = 0; iSubscr < sess.mSubScr.size(); ++iSubscr) {
+	    req.childClear();
+	    OPCAlloc res(mtxData, true);
+	    for(unsigned mIt = 0; mIt < sess.mSubScr[iSubscr].mItems.size(); ++mIt) {
+		Subscr::MonitItem &curIt = sess.mSubScr[iSubscr].mItems[mIt];
+		if(curIt.nd.isNull())	continue;
+		req.childAdd("node")->
+			setAttr("mItId", uint2str(mIt))->
+			setAttr("nodeId", curIt.nd.toAddr())->
+			setAttr("attributeId", uint2str(curIt.aid));
+	    }
+	    res.unlock();
+
+	    reqService(req);
+
+	    res.lock();
+	    if(iSubscr >= sess.mSubScr.size())	continue;	//Changed out of lock
+	    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
+		XML_N *chO = req.childGet(iCh);
+		if(str2uint(chO->attr("mItId")) >= sess.mSubScr[iSubscr].mItems.size())	continue;
+		Subscr::MonitItem &mO = sess.mSubScr[iSubscr].mItems[str2uint(chO->attr("mItId"))];
+		mO.val = *chO;
+	    }
+	    res.unlock();
+	}
+    }
+    else {
+	//Checking for the input channel activity
+	req.setAttr("id", "Poll");
+	reqService(req);
+
+	//Checking for the subscriptions
+	for(unsigned iSubscr = 0; iSubscr < sess.mSubScr.size() && req.attr("err").empty(); ++iSubscr) {
+	    Subscr &curS = sess.mSubScr[iSubscr];
+	    if(!curS.subScrId) continue;
+
+	    // Checking for loss all publish requests at missing the publish responses long time
+	    if(1e-6*(curTime()-curS.lstPublTm) > OpcUa_ClntPublishResentCntr*1e-3*curS.maxKeepAliveCnt*curS.publInterval) {
+		sess.mPublSeqs.clear();
+		curS.lstPublTm = curTime();
+	    }
+
+	    // Sending the publish requests
+	    while(sess.mPublSeqs.size() < publishReqsPool() && req.attr("err").empty()) {
+		req.childClear()->setAttr("id", "Publish");
+		for(unsigned iAck = 0; iAck < curS.mSeqToAcq.size(); ++iAck)
+		    req.childAdd("Ack")->setAttr("subScrId", uint2str(curS.subScrId))->setText(uint2str(curS.mSeqToAcq[iAck]));
+		//curS.mSeqToAcq.clear();
+		reqService(req);
+		if(req.attr("err").empty())
+		    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh)
+			for(unsigned iAck = 0; iAck < curS.mSeqToAcq.size(); ++iAck)
+			    if(str2uint(req.childGet(iCh)->text()) == curS.mSeqToAcq[iAck])
+			    { curS.mSeqToAcq.erase(curS.mSeqToAcq.begin()+iAck); break; }
+	    }
+	}
+    }
+
+    return req.attr("err");
+}
 
 void Client::protIO( XML_N &io )
 {
-    string rez, err;
+    string rez, rb, err;
     char buf[1000];
-    int stIdx = 0;
+    int resp_len = 0;
+    //Input chunks
+    int chCnt = 0;
+    string chB;
+    uint32_t chClSeqN = 0, chReqId = 0;
+
+    bool debug = (bool)atoi(io.attr("debug").c_str());
 
     try {
-	bool debug = (bool)atoi(io.attr("debug").c_str());
 	if(io.name() == "opc.tcp") {
 	    if(io.attr("id") == "HEL") {
+		if(io.attr("EndPoint").size())	sess.endPoint = endPoint();
+
 		rez = "HELF";				//> HELLO message type
 		rez.reserve(50);
 		oNu(rez, 0, 4);				//Message size
@@ -1206,13 +1312,13 @@ void Client::protIO( XML_N &io )
 		oNu(rez, sndBufSz(), 4);		//Send buffer size
 		oNu(rez, msgMaxSz(), 4);		//Max message size
 		oNu(rez, chunkMaxCnt(), 4);		//Max chunk count
-		oS(rez, io.attr("EndPoint"));		//EndpointURL
+		oS(rez, sess.endPoint);			//EndpointURL
 		oNu(rez, rez.size(), 4, 4);		//Real message size
 
-		if(debug) debugMess(strMess("HELLO Req(%d): ep='%s'",rez.size(),io.attr("EndPoint").c_str()));
+		if(debug) debugMess(strMess("HELLO Req(%d): ep='%s'",rez.size(),sess.endPoint.c_str()));
 
 		//Send request
-		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
+		resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
 
 		if(debug) debugMess(strMess("HELLO Resp(%d)",rez.size()));
@@ -1224,232 +1330,188 @@ void Client::protIO( XML_N &io )
 		else if(rez.compare(0,4,"ACKF") != 0)
 		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTypeInvalid, "Respond don't acknowledge.");
 		else {
-		    iNu(rez, off, 4);			//Protocol version
-		    iNu(rez, off, 4);			//Recive buffer size
-		    iNu(rez, off, 4);			//Send buffer size
-		    iNu(rez, off, 4);			//Max message size
-		    iNu(rez, off, 4);			//Max chunk count
+		    iNu(rez, off, 4);				//Protocol version
+		    sess.servRcvBufSz = iNu(rez, off, 4);	//Recive buffer size
+		    sess.servSndBufSz = iNu(rez, off, 4);	//Send buffer size
+		    sess.servMsgMaxSz = iNu(rez, off, 4);	//Max message size
+		    sess.servChunkMaxCnt = iNu(rez, off, 4);	//Max chunk count
 		}
 	    }
-	    else if(io.attr("id") == "OPN") {
-		bool isSecNone = false;
-		int symKeySz = 0, asymKeyPad = 0;
-		string secPlc = io.attr("SecPolicy");
-		if(secPlc == "None")			isSecNone = true;
-		else if(secPlc == "Basic128Rsa15")	{ symKeySz = 16; asymKeyPad = 11; }
-		else if(secPlc == "Basic256")		{ symKeySz = 32; asymKeyPad = 42; }
-		else throw OPCError(OpcUa_BadSecurityPolicyRejected, "");
-
-		rez = "OPNF";				//OpenSecureChannel message type
+	    else if(io.attr("id") == "CLO") {
+		rez = "CLOF";				//OpenSecureChannel close
 		rez.reserve(200);
 		oNu(rez, 0, 4);				//Message size
-		oNu(rez, strtoul(io.attr("SecChnId").c_str(),NULL,10), 4);	//Secure channel identifier
-							//> Security Header
-		oS(rez, "http://opcfoundation.org/UA/SecurityPolicy#"+secPlc);	//Security policy URI
-		oS(rez, certPEM2DER(io.attr("ClntCert")));	//ClientCertificate
-		oS(rez, certThumbprint(io.attr("ServCert")));	//ServerCertificateThumbprint
-		uint32_t begEncBlck = rez.size();
+		oNu(rez, sess.secChnl, 4);		//Secure channel identifier
+		oNu(rez, sess.secToken, 4);		//TokenId
+		int begEncBlck = rez.size();
 							//> Sequence header
-		oNu(rez, strtoul(io.attr("SeqNumber").c_str(),NULL,10), 4);	//Sequence number
-		oNu(rez, strtoul(io.attr("SeqReqId").c_str(),NULL,10), 4);	//RequestId
+		oNu(rez, (++sess.sqNumb), 4);		//Sequence number
+		oNu(rez, (++sess.sqReqId), 4);		//RequestId
 							//> Extension body object
-		oNodeId(rez, NodeId(OpcUa_OpenSecureChannelRequest));	//TypeId
+		oNodeId(rez, OpcUa_CloseSecureChannelRequest); //TypeId request: CloseSecureChannel
 							//>> Request Header
 		oNodeId(rez, 0);			//Session AuthenticationToken
 		oTm(rez, curTime());			//timestamp
-		oN(rez, atoi(io.attr("ReqHandle").c_str()),4);	//requestHandle
+		oN(rez, 0, 4);				//requestHandle
 		oNu(rez, 0, 4);				//returnDiagnostics
 		oS(rez, "");				//auditEntryId
 		oNu(rez, 0, 4);				//timeoutHint
 							//>>> Extensible parameter
-		oNodeId(rez, 0);				//TypeId (0)
+		oNodeId(rez, 0);			//TypeId (0)
 		oNu(rez, 0, 1);				//Encoding
-							//>>>> Standard request
-		oNu(rez, OpcUa_ProtocolVersion, 4);	//ClienUAocolVersion
-		oNu(rez, atoi(io.attr("ReqType").c_str()), 4);	//RequestType
-		oN(rez, atoi(io.attr("SecurityMode").c_str()), 4);	//SecurityMode
-		string clNonce = isSecNone ? string("\000",1) : randBytes(symKeySz);
-		oS(rez, clNonce);			//ClientNonce
-		oN(rez, atoi(io.attr("SecLifeTm").c_str()), 4);	//RequestedLifetime
-		oNu(rez, rez.size(), 4, 4);		//> Real message size
-
-		if(!isSecNone) {
+		oNu(rez,rez.size(), 4, 4);		//> Real message size
+		if(sess.secMessMode == MS_Sign || sess.secMessMode == MS_SignAndEncrypt) {
 		    // Padding place
-		    int kSz = asymmetricKeyLength(io.attr("ServCert")),
-			signSz = asymmetricKeyLength(io.attr("ClntCert")),
-			encSz = (rez.size() - begEncBlck) + 1 + signSz,
-			paddingSize = (encSz/(kSz-asymKeyPad) + (encSz%(kSz-asymKeyPad)?1:0))*(kSz-asymKeyPad) - encSz;
-		    rez += string(paddingSize+1, char(paddingSize));
-		    // Real message size calc and place
-		    oNu(rez, begEncBlck + kSz*((rez.size()-begEncBlck+signSz)/(kSz-asymKeyPad)), 4, 4);
-		    // Signature
-		    rez += asymmetricSign(rez, io.attr("PvKey"));
-		    // Encoding
-		    if(debug) debugMess("OPN Req (decoded)");
-		    rez.replace(begEncBlck, rez.size()-begEncBlck, asymmetricEncrypt(rez.substr(begEncBlck),io.attr("ServCert"),secPlc));
-		}
-		if(debug) debugMess("OPN Req");
-
-		//Send request and wait respond
-		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
-		rez.assign(buf, resp_len);
-		int off = 4;
-		for( ; rez.size() < 8 || rez.size() < iNu(rez,off,4); off = 4) {
-		    resp_len = messIO(NULL, 0, buf, sizeof(buf));
-		    if(!resp_len) throw OPCError(OpcUa_BadCommunicationError, "Not full respond.");
-		    rez.append(buf, resp_len);
-		}
-
-		off = 4;
-		if(rez.size() < 8 || iNu(rez,off,4) != rez.size())
-		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTooLarge, "Respond size is not coincidence.");
-		else if(rez.compare(0,4,"ERRF") == 0) err = iErr(rez,off);
-		else if(rez.compare(0,4,"OPNF") != 0)
-		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTypeInvalid, "Respond don't acknowledge.");
-		else {
-		    if(debug) debugMess("OPN Resp");
-		    iNu(rez, off, 4);					//Secure channel identifier
-		    iS(rez, off);					//Security policy URI
-		    string servCert = iS(rez, off);			//ServerCertificate
-		    string clntCertThmb = iS(rez, off);			//ClientCertificateThumbprint
-
-		    if(!isSecNone) {
-			if(clntCertThmb != certThumbprint(io.attr("ClntCert")))
-			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Client certificate thumbprint error.");
-			// Decoding
-			rez.replace(off, rez.size()-off, asymmetricDecrypt(rez.substr(off),io.attr("PvKey"),secPlc));
-		    }
-
-		    iNu(rez, off, 4);					//Sequence number
-		    iNu(rez, off, 4);					//RequestId
-									//> Extension Object
-		    if(iNodeId(rez,off).numbVal() != OpcUa_OpenSecureChannelResponse)	//TypeId
-			throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
-									//>> Body
-									//>>> RespondHeader
-		    iTm(rez, off);					//timestamp
-		    iN(rez, off, 4);					//requestHandle
-		    iN(rez, off, 4);					//StatusCode
-		    iN(rez, off, 1);					//serviceDiagnostics
-		    iS(rez, off);					//stringTable
-									//>>> Extensible parameter
-		    iNodeId(rez, off);					//TypeId (0)
-		    iNu(rez, off, 1);					//Encoding
-									//>>>> Standard respond
-		    iNu(rez, off, 4);					//ServerProtocolVersion
-		    io.setAttr("SecChnId", uint2str(iNu(rez,off,4)));	//Secure channel identifier
-		    io.setAttr("SecTokenId", uint2str(iNu(rez,off,4)));	//TokenId
-		    iTm(rez, off);					//CreatedAt
-		    io.setAttr("SecLifeTm", int2str(iN(rez,off,4)));	//RevisedLifeTime
-		    string servNonce = iS(rez, off);			//nonce
-		    // Signature
-		    if(!isSecNone) {
-			io.setAttr("clKey", deriveKey(clNonce,servNonce,symKeySz*3));
-			io.setAttr("servKey", deriveKey(servNonce,clNonce,symKeySz*3));
-			off += iNu(rez, off, 1);			//Pass padding
-			if(!asymmetricVerify(rez.substr(0,off),rez.substr(off),io.attr("ServCert")))	//Check Signature
-			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
-		    }
-		}
-	    }
-	    else if(io.attr("id") == "CLO") {
-		rez = "CLOF";						//OpenSecureChannel close
-		rez.reserve(200);
-		oNu(rez, 0, 4);						//Message size
-		oNu(rez, strtoul(io.attr("SecChnId").c_str(),NULL,10), 4);	//Secure channel identifier
-		oNu(rez, strtoul(io.attr("SecTokenId").c_str(),NULL,10), 4);	//TokenId
-		int begEncBlck = rez.size();
-									//> Sequence header
-		oNu(rez, strtoul(io.attr("SeqNumber").c_str(),NULL,10), 4);	//Sequence number
-		oNu(rez, strtoul(io.attr("SeqReqId").c_str(),NULL,10), 4);	//RequestId
-									//> Extension body object
-		oNodeId(rez, OpcUa_CloseSecureChannelRequest);		//TypeId request: CloseSecureChannel
-									//>> Request Header
-		oNodeId(rez, 0);					//Session AuthenticationToken
-		oTm(rez, curTime());					//timestamp
-		oN(rez, 0, 4);						//requestHandle
-		oNu(rez, 0, 4);						//returnDiagnostics
-		oS(rez, "");						//auditEntryId
-		oNu(rez, 0, 4);						//timeoutHint
-									//>>> Extensible parameter
-		oNodeId(rez, 0);					//TypeId (0)
-		oNu(rez, 0, 1);						//Encoding
-		oNu(rez,rez.size(), 4, 4);				//> Real message size
-		string secPolicy = io.attr("SecPolicy");
-		char secMessMode = atoi(io.attr("SecurityMode").c_str());
-		if(secMessMode == MS_Sign || secMessMode == MS_SignAndEncrypt) {
-		    string servKey = io.attr("servKey");
-		    // Padding place
-		    if(secMessMode == MS_SignAndEncrypt) {
-			int kSz = servKey.size()/3;
+		    if(sess.secMessMode == MS_SignAndEncrypt) {
+			int kSz = sess.servKey.size()/3;
 			int paddingSize = ((rez.size()-begEncBlck+1+20+kSz-1)/kSz)*kSz-(rez.size()-begEncBlck+20);
 			rez += string(paddingSize, (char)(paddingSize-1));
 		    }
 		    // Real message size calc and place
 		    oNu(rez, rez.size()+20, 4, 4);
 		    // Signature
-		    rez += symmetricSign(rez, servKey, secPolicy);
+		    rez += symmetricSign(rez, sess.servKey, sess.secPolicy);
 		    // Encoding
-		    if(secMessMode == MS_SignAndEncrypt)
-			rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricEncrypt(rez.substr(begEncBlck),servKey,secPolicy));
+		    if(sess.secMessMode == MS_SignAndEncrypt)
+			rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricEncrypt(rez.substr(begEncBlck),sess.servKey,sess.secPolicy));
 		}
 
 		//Parameters clear
-		io.setAttr("SecChnId", "")->setAttr("SecTokenId", "")->
-		    setAttr("SeqNumber", "")->setAttr("SeqReqId", "");
+		//io.setAttr("SecChnId", "")->setAttr("SecTokenId", "")->setAttr("SeqNumber", "")->setAttr("SeqReqId", "");
+		//sess.sqNumb = 0;
+		//sess.sqReqId = 0;
 
 		if(debug) debugMess("CLO Req");
 
 		//Send request and don't wait response
 		messIO(rez.data(), rez.size(), NULL, 0);
 		connect(false);	//Close the connection
+
+		sess.clearSecCnl(str2int(io.attr("clearEP")));
 	    }
 	    else {
-		nextReq:
+		//nextReq:
+		//Open specific
+		bool isSecNone = false;
+		int symKeySz = 0, asymKeyPad = 0;
+		string clNonce;
+		//Message specific
 		int iTpId = 0;
 		string mReq;
-		if(io.attr("id") == "FindServers") {
+		//int32_t ReqHandle = str2int(io.attr("ReqHandle"));
+		bool waitResponse = true;
+		if(io.attr("id") == "OPN") {
+		    sess.secPolicy = io.attr("SecPolicy");
+		    if(sess.secPolicy.empty()) sess.secPolicy = secPolicy();
+		    if(sess.secPolicy == "None")		isSecNone = true;
+		    else if(sess.secPolicy == "Basic128Rsa15")	{ symKeySz = 16; asymKeyPad = 11; }
+		    else if(sess.secPolicy == "Basic256")	{ symKeySz = 32; asymKeyPad = 42; }
+		    else throw OPCError(OpcUa_BadSecurityPolicyRejected, "");
+
+		    if(io.attr("ServCert").size())	sess.servCert = io.attr("ServCert");
+		    if(io.attr("SecurityMode").size())	sess.secMessMode = atoi(io.attr("SecurityMode").c_str());
+
+		    SC_ReqTP reqTp = (SC_ReqTP)str2int(io.attr("ReqType"));
+		    if(reqTp == SC_ISSUE) {
+			sess.secChnl = sess.sqReqId = sess.reqHndl = 0;
+			sess.sqNumb = 50;
+			sess.secChnlChanged = true;
+		    }
+
+		    rez = "OPNF";			//OpenSecureChannel message type
+		    rez.reserve(200);
+		    oNu(rez, 0, 4);			//Message size
+		    oNu(rez, sess.secChnl, 4);		//Secure channel identifier
+							//> Security Header
+		    oS(rez, "http://opcfoundation.org/UA/SecurityPolicy#"+sess.secPolicy);	//Security policy URI
+		    oS(rez, certPEM2DER((sess.secPolicy=="None")?"":cert()));	//ClientCertificate
+		    oS(rez, certThumbprint(sess.servCert));//ServerCertificateThumbprint
+		    uint32_t begEncBlck = rez.size();
+							//> Sequence header
+		    oNu(rez, (++sess.sqNumb), 4);	//Sequence number
+		    oNu(rez, (++sess.sqReqId), 4);	//RequestId
+							//> Extension body object
+		    oNodeId(rez, NodeId(OpcUa_OpenSecureChannelRequest));	//TypeId
+							//>> Request Header
+		    oNodeId(rez, 0);			//Session AuthenticationToken
+		    oTm(rez, curTime());		//timestamp
+		    oN(rez, (sess.reqHndl++), 4);	//requestHandle
+		    oNu(rez, 0, 4);			//returnDiagnostics
+		    oS(rez, "");			//auditEntryId
+		    oNu(rez, 0, 4);			//timeoutHint
+							//>>> Extensible parameter
+		    oNodeId(rez, 0);			//TypeId (0)
+		    oNu(rez, 0, 1);			//Encoding
+							//>>>> Standard request
+		    oNu(rez, OpcUa_ProtocolVersion, 4);	//ClienUAocolVersion
+		    oNu(rez, reqTp, 4);			//RequestType
+		    oN(rez, sess.secMessMode, 4);	//SecurityMode
+		    clNonce = isSecNone ? string("\000",1) : randBytes(symKeySz);
+		    oS(rez, clNonce);			//ClientNonce
+		    oN(rez, atoi(io.attr("SecLifeTm").c_str()), 4);	//RequestedLifetime
+		    oNu(rez, rez.size(), 4, 4);		//> Real message size
+
+		    if(!isSecNone) {
+			// Padding place
+			int kSz = asymmetricKeyLength(sess.servCert),
+			    signSz = asymmetricKeyLength(cert()),
+			    encSz = (rez.size() - begEncBlck) + 1 + signSz,
+			    paddingSize = (encSz/(kSz-asymKeyPad) + (encSz%(kSz-asymKeyPad)?1:0))*(kSz-asymKeyPad) - encSz;
+			rez += string(paddingSize+1, char(paddingSize));
+			// Real message size calc and place
+			oNu(rez, begEncBlck + kSz*((rez.size()-begEncBlck+signSz)/(kSz-asymKeyPad)), 4, 4);
+			// Signature
+			rez += asymmetricSign(rez, pvKey());
+			// Encoding
+			if(debug) debugMess("OPN Req (decoded)");
+			rez.replace(begEncBlck, rez.size()-begEncBlck, asymmetricEncrypt(rez.substr(begEncBlck),sess.servCert,sess.secPolicy));
+		    }
+		    if(debug) debugMess("OPN Req");
+
+		    messIO(rez.data(), rez.size(), NULL, 0);
+		}
+		else if(io.attr("id") == "FindServers") {
 		    iTpId = OpcUa_FindServersRequest;
-		    oS(mReq, io.attr("EndPoint"));			//endpointUrl
-		    oN(mReq, 0, 4);					//localeIds []
-		    oN(mReq, 0, 4);					//serverUris []
+		    oS(mReq, sess.endPoint);			//endpointUrl
+		    oN(mReq, 0, 4);				//localeIds []
+		    oN(mReq, 0, 4);				//serverUris []
 		}
 		else if(io.attr("id") == "GetEndpoints") {
 		    iTpId = OpcUa_GetEndpointsRequest;
-		    oS(mReq, io.attr("EndPoint"));			//endpointUrl
-		    oN(mReq, 0, 4);					//localeIds []
-		    oN(mReq, 0, 4);					//profileUris []
+		    oS(mReq, sess.endPoint);			//endpointUrl
+		    oN(mReq, 0, 4);				//localeIds []
+		    oN(mReq, 0, 4);				//profileUris []
 		}
 		else if(io.attr("id") == "CreateSession") {
 		    iTpId = OpcUa_CreateSessionRequest;
-									//> clientDescription (Application Description)
-		    oS(mReq, applicationUri());				//applicationUri
-		    oS(mReq, productUri());				//productUri
-		    oSl(mReq, applicationName());			//applicationName
-		    oNu(mReq, 1, 4);					//applicationType (CLIENT_1)
-		    oS(mReq, "");					//gatewayServerUri
-		    oS(mReq, "");					//discoveryProfileUri
-		    oN(mReq, 0, 4);					//discoveryUrls
+								//> clientDescription (Application Description)
+		    oS(mReq, applicationUri());			//applicationUri
+		    oS(mReq, productUri());			//productUri
+		    oSl(mReq, applicationName());		//applicationName
+		    oNu(mReq, 1, 4);				//applicationType (CLIENT_1)
+		    oS(mReq, "");				//gatewayServerUri
+		    oS(mReq, "");				//discoveryProfileUri
+		    oN(mReq, 0, 4);				//discoveryUrls
 
-		    oS(mReq, "");					//serverUri
-		    oS(mReq, io.attr("EndPoint"));			//endpointUrl
-		    oS(mReq, sessionName());				//sessionName
-		    io.setAttr("Nonce", randBytes(32));			//???? check for policy
-		    oS(mReq, io.attr("Nonce"));				//clientNonce
-		    oS(mReq, certPEM2DER(io.childGet("ClientCert")->text()));	//clientCertificate
-		    oR(mReq, str2real(io.attr("sesTm")), 8);		//Requested SessionTimeout, ms
-		    oNu(mReq, 0x1000000, 4);				//maxResponse MessageSize
+		    oS(mReq, "");				//serverUri
+		    oS(mReq, sess.endPoint);			//endpointUrl
+		    oS(mReq, sessionName());			//sessionName
+		    io.setAttr("Nonce", randBytes(32));		//!!!! check for policy
+		    oS(mReq, io.attr("Nonce"));			//clientNonce
+		    oS(mReq, certPEM2DER(cert()));		//clientCertificate
+		    oR(mReq, str2real(io.attr("sesTm")), 8);	//Requested SessionTimeout, ms
+		    oNu(mReq, 0x1000000, 4);			//maxResponse MessageSize
 		}
 		else if(io.attr("id") == "ActivateSession") {
 		    iTpId = OpcUa_ActivateSessionRequest;
 									//> clientSignature
-		    if(io.attr("SecPolicy") == "None") {
+		    if(sess.secPolicy == "None") {
 			oS(mReq, "");					//algorithm
 			oS(mReq, "");					//signature
 		    }
 		    else {
 			oS(mReq, "http://www.w3.org/2000/09/xmldsig#rsa-sha1");	//algorithm
-			oS(mReq, asymmetricSign(certPEM2DER(io.attr("ServCert"))+io.attr("servNonce"),io.attr("PvKey")));	//signature
+			oS(mReq, asymmetricSign(certPEM2DER(sess.servCert)+sess.servNonce,pvKey()));	//signature
 		    }
 
 		    oNu(mReq, 0, 4);					//clientSoftwareCertificates []
@@ -1484,20 +1546,24 @@ void Client::protIO( XML_N &io )
 									//> userTokenSignature
 		    oS(mReq, "");					//signature
 		    oS(mReq, "");					//algorithm
+
+		    sess.mPublSeqs.clear();
 		}
 		else if(io.attr("id") == "CloseSession") {
 		    iTpId = OpcUa_CloseSessionRequest;
-		    oN(mReq, 1, 1);					//deleteSubscriptions
+		    oN(mReq, str2uint(io.attr("deleteSubscriptions")), 1);//deleteSubscriptions
 		}
 		else if(io.attr("id") == "Read") {
 		    iTpId = OpcUa_ReadRequest;
 		    oR(mReq, str2real(io.attr("maxAge")), 8);		//maxAge 0 ms
-		    oN(mReq, str2real(io.attr("timestampsToReturn")), 4);//timestampsTo Return (SERVER_1)
+		    oN(mReq, str2int(io.attr("timestampsToReturn")), 4);//timestampsTo Return (SERVER_1)
 									//> nodesToRead []
-		    oNu(mReq, std::min(25u,io.childSize()-stIdx), 4);	//nodes
-		    for(unsigned i_n = stIdx; i_n < io.childSize() && (i_n-stIdx) < 25; i_n++) {
-			oNodeId(mReq, NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId
-			oNu(mReq, strtoul(io.childGet(i_n)->attr("attributeId").c_str(),NULL,0), 4);	//attributeId (Value)
+		    oNu(mReq, io.childSize(), 4);			//nodes
+		    //oNu(mReq, std::min(25u,io.childSize()-stIdx), 4);	//nodes
+		    for(unsigned iN = 0; iN < io.childSize(); iN++) {
+		    //for(unsigned iN = stIdx; iN < io.childSize() && (iN-stIdx) < 25; iN++) {
+			oNodeId(mReq, NodeId::fromAddr(io.childGet(iN)->attr("nodeId")));	//nodeId
+			oNu(mReq, strtoul(io.childGet(iN)->attr("attributeId").c_str(),NULL,0), 4);	//attributeId (Value)
 			oS(mReq, "");					//indexRange
 			oSqlf(mReq, "");				//dataEncoding
 		    }
@@ -1506,8 +1572,8 @@ void Client::protIO( XML_N &io )
 		    iTpId = OpcUa_WriteRequest;
 									//> nodesToWrite []
 		    oNu(mReq,io.childSize(),4);				//nodes
-		    for(unsigned i_n = 0; i_n < io.childSize(); i_n++) {
-			XML_N *nd = io.childGet(i_n);
+		    for(unsigned iN = 0; iN < io.childSize(); iN++) {
+			XML_N *nd = io.childGet(iN);
 			oNodeId(mReq, NodeId::fromAddr(nd->attr("nodeId")));			//nodeId
 			oNu(mReq, strtoul(nd->attr("attributeId").c_str(),NULL,0), 4);		//attributeId (Value)
 			oS(mReq, "");								//indexRange
@@ -1526,449 +1592,931 @@ void Client::protIO( XML_N &io )
 		    oNu(mReq, 0, 4);					//requestedMax ReferencesPerNode
 									//> nodesToBrowse
 		    oNu(mReq, io.childSize(), 4);			//Nodes 1
-		    for(unsigned i_n = 0; i_n < io.childSize(); i_n++) {
-			oNodeId(mReq, NodeId::fromAddr(io.childGet(i_n)->attr("nodeId")));	//nodeId (RootFolder)
-			oNu(mReq, strtoul(io.childGet(i_n)->attr("browseDirection").c_str(),NULL,0), 4);	//browseDirection (FORWARD_0)
-			oNodeId(mReq, NodeId::fromAddr(io.childGet(i_n)->attr("referenceTypeId")));	//referenceTypeId (HierarchicalReferences)
+		    for(unsigned iN = 0; iN < io.childSize(); iN++) {
+			oNodeId(mReq, NodeId::fromAddr(io.childGet(iN)->attr("nodeId")));	//nodeId (RootFolder)
+			oNu(mReq, strtoul(io.childGet(iN)->attr("browseDirection").c_str(),NULL,0), 4);	//browseDirection (FORWARD_0)
+			oNodeId(mReq, NodeId::fromAddr(io.childGet(iN)->attr("referenceTypeId")));	//referenceTypeId (HierarchicalReferences)
 			oNu(mReq, 1, 1);				//includeSubtypes (true)
-			oNu(mReq, strtoul(io.childGet(i_n)->attr("nodeClassMask").c_str(),NULL,0), 4);	//nodeClassMask
-			oNu(mReq, strtoul(io.childGet(i_n)->attr("resultMask").c_str(),NULL,0), 4);	//resultMask
+			oNu(mReq, strtoul(io.childGet(iN)->attr("nodeClassMask").c_str(),NULL,0), 4);	//nodeClassMask
+			oNu(mReq, strtoul(io.childGet(iN)->attr("resultMask").c_str(),NULL,0), 4);	//resultMask
 		    }
 		}
+		else if(io.attr("id") == "CreateSubscription") {
+		    iTpId = OpcUa_CreateSubscriptionRequest;
+		    oR(mReq, str2real(io.attr("publInterval")), 8);	//requestedPublishingInterval
+		    oNu(mReq, str2uint(io.attr("lifetimeCnt")), 4);	//requestedLifetimeCount
+		    oNu(mReq, str2uint(io.attr("maxKeepAliveCnt")), 4);	//requestedMaxKeepAliveCount
+		    oNu(mReq, str2uint(io.attr("maxNtfPerPubl")), 4);	//maxNotificationsPerPublish
+		    oNu(mReq, str2int(io.attr("publEn")), 1);		//publishingEnabled
+		    oNu(mReq, str2uint(io.attr("pr")), 1);		//priority
+		}
+		else if(io.attr("id") == "DeleteSubscriptions") {
+		    iTpId = OpcUa_DeleteSubscriptionsRequest;
+		    oNu(mReq, io.childSize(), 4);			//subscriptionIds []
+		    for(unsigned iS = 0; iS < io.childSize(); iS++)
+			oNu(mReq, str2uint(io.childGet(iS)->text()), 4);//subscriptionId
+		}
+		else if(io.attr("id") == "CreateMonitoredItems") {
+		    iTpId = OpcUa_CreateMonitoredItemsRequest;
+		    oNu(mReq, str2uint(io.attr("subScrId")), 4);	//subscriptionId
+		    oNu(mReq, str2uint(io.attr("tmstmpToRet")), 4);	//timestampsToReturn
+		    oNu(mReq, io.childSize(), 4);			//itemsToCreate [] | itemsToModify []
+		    for(unsigned iM = 0; iM < io.childSize(); iM++) {
+			XML_N *chO = io.childGet(iM);
+									// itemToMonitor
+
+			oNodeId(mReq, NodeId::fromAddr(chO->text()));	//  nodeId
+			oNu(mReq, str2uint(chO->attr("aId")), 4);	//  attributeId
+			oS(mReq, "");					//  indexRange
+			oSqlf(mReq, "");				//  dataEncoding
+			oNu(mReq, str2uint(chO->attr("mMode")), 4);	// monitoringMode
+									// requestedParameters
+			oNu(mReq, str2uint(chO->attr("hndl")), 4);	//  clientHandle
+			oR(mReq, str2real(chO->attr("smplInt")), 8);	//  samplingInterval, in ms
+			oNodeId(mReq, 0);				//  filter
+			oNu(mReq, 0, 1);				//   EncodingMask
+			oNu(mReq, str2uint(chO->attr("qSz")), 4);	//  queueSize
+			oNu(mReq, 1, 1);				//  discardOldest, !!!!:discarded by default
+		    }
+		}
+		else if(io.attr("id") == "DeleteMonitoredItems") {
+		    iTpId = OpcUa_DeleteMonitoredItemsRequest;
+		    oNu(mReq, str2uint(io.attr("subScrId")), 4);	//subscriptionId
+		    //oNu(mReq, (int)MM_DISABLED, 4);			//monitoringMode
+		    oNu(mReq, io.childSize(), 4);			//itemsToModify []
+		    for(unsigned iM = 0; iM < io.childSize(); ++iM)
+			oNu(mReq, str2uint(io.childGet(iM)->text()), 4);// monitoredItemId
+		}
+		else if(io.attr("id") == "Publish") {
+		    iTpId = OpcUa_PublishRequest;
+		    //  The publish request acknowledges
+		    oN(mReq, (io.childSize()?(int)io.childSize():-1), 4);	//>subscription Acknowledgements []
+		    for(unsigned iAck = 0; iAck < io.childSize(); iAck++) {
+			XML_N *chO = io.childGet(iAck);
+			oNu(mReq, str2uint(chO->attr("subScrId")), 4);	//> subscriptionId
+			oNu(mReq, str2uint(chO->text()), 4);		//> sequenceNumber
+		    }
+		    waitResponse = false;
+
+		    sess.mPublSeqs.push_back(sess.reqHndl);
+		}
+		else if(io.attr("id") == "Poll") waitResponse = false;	//Just read the channel for the server activity
 		else throw OPCError(OpcUa_BadNotSupported, "Request '%s' isn't supported.", io.attr("id").c_str());
 
-		rez = "MSGF";							//SecureChannel message
-		rez.reserve(200);
-		oNu(rez, 0, 4);							//Message size
-		oNu(rez, strtoul(io.attr("SecChnId").c_str(),NULL,10), 4);	//Secure channel identifier
-		oNu(rez, strtoul(io.attr("SecTokenId").c_str(),NULL,10), 4);	//TokenId
-		int begEncBlck = rez.size();
-									//> Sequence header
-		oNu(rez, strtoul(io.attr("SeqNumber").c_str(),NULL,10), 4);	//Sequence number
-		oNu(rez, strtoul(io.attr("SeqReqId").c_str(),NULL,10), 4);	//RequestId
-									//> Extension body object
-		oNodeId(rez, iTpId);					//TypeId request
+		if(mReq.size()) {
+		    // Request extension object finalize for chunks
+		    string reqBody; reqBody.reserve(50);
+		    oNodeId(reqBody, iTpId);				//TypeId request
 									//>> Request Header
-		oNodeId(rez, NodeId::fromAddr(io.attr("authTokenId")));	//Session AuthenticationToken
-		oTm(rez, curTime());				//timestamp
-		uint32_t ReqHandle = strtoul(io.attr("ReqHandle").c_str(),NULL,10)+1;
-		io.setAttr("ReqHandle", uint2str(ReqHandle));
-		oN(rez, ReqHandle, 4);					//requestHandle
-		oNu(rez, 0, 4);						//returnDiagnostics
-		oS(rez, "");						//auditEntryId
-		oNu(rez, 10000, 4);					//timeoutHint
+		    oNodeId(reqBody, NodeId::fromAddr(sess.authTkId));	//Session AuthenticationToken
+		    oTm(reqBody, (sess.secLstMessReqTm=curTime()));		//timestamp
+		    oN(reqBody, (sess.reqHndl++), 4);			//requestHandle
+		    oNu(reqBody, 0, 4);					//returnDiagnostics
+		    oS(reqBody, "");					//auditEntryId
+		    oNu(reqBody, 0/*10000*/, 4);			//timeoutHint
 									//>>> Extensible parameter
-		oNodeId(rez, 0);					//TypeId (0)
-		oNu(rez, 0, 1);						//Encoding
-		rez.append(mReq);					//Same request
-		oNu(rez, rez.size(), 4, 4);				//> Real message size
-		string secPolicy = io.attr("SecPolicy");
-		char secMessMode = atoi(io.attr("SecurityMode").c_str());
-		if(secMessMode == MS_Sign || secMessMode == MS_SignAndEncrypt) {
-		    string servKey = io.attr("servKey");
+		    oNodeId(reqBody, 0);				//TypeId (0)
+		    oNu(reqBody, 0, 1);					//Encoding
+		    reqBody.append(mReq);				//Same request
 
-		    // Padding place
-		    if(secMessMode == MS_SignAndEncrypt) {
-			int kSz = servKey.size()/3;
-			int paddingSize = ((rez.size()-begEncBlck+1+20+kSz-1)/kSz)*kSz-(rez.size()-begEncBlck+20);
-			rez += string(paddingSize,(char)(paddingSize-1));
+		    // Maximum chunk's body size calculation for client's recieve buffer size
+		    unsigned chnkBodySz = sess.servRcvBufSz - 16;		// - {HeadSz}
+		    if(sess.secMessMode == MS_Sign || sess.secMessMode == MS_SignAndEncrypt) {
+			if(sess.secMessMode == MS_SignAndEncrypt) {
+			    int kSz = pvKey().size()/3;
+			    chnkBodySz = (chnkBodySz/kSz)*kSz - 1;	//Allign to the server key size and remove same padding size's byte
+			}
+			chnkBodySz -= 20;				//Remove the sign size
+		    }
+		    chnkBodySz -= 8;	//- {SeqSz}
+		    if((sess.servMsgMaxSz && reqBody.size() > sess.servMsgMaxSz) ||
+			    (sess.servChunkMaxCnt && (reqBody.size()/chnkBodySz + ((reqBody.size()%chnkBodySz)?1:0)) > sess.servChunkMaxCnt))
+			throw OPCError(OpcUa_BadRequestTooLarge, "Request too large");
+		    // Same chunks prepare.
+		    sess.sqReqId++;
+		    while(reqBody.size()) {
+			bool isFinal = (reqBody.size() <= chnkBodySz);
+			string req; req.reserve(200);
+			req.append("MSG");				//OpenSecureChannel message type
+			req.append(isFinal?"F":"C");
+			oNu(req, 0, 4);					//Message size
+			oNu(req, sess.secChnl, 4);			//Secure channel identifier
+			oNu(req, sess.secToken, 4);			//TokenId
+			int begEncBlck = req.size();
+									//> Sequence header
+			oNu(req, (++sess.sqNumb), 4);			//Sequence number
+			oNu(req, sess.sqReqId, 4);			//RequestId
+			req.append(reqBody,0,std::min(chnkBodySz,(unsigned)reqBody.size()));
+			reqBody.erase(0,std::min(chnkBodySz,(unsigned)reqBody.size()));
+			oNu(req, req.size(), 4, 4);			//Real message size
+
+			//Security information
+			if(sess.secMessMode == MS_Sign || sess.secMessMode == MS_SignAndEncrypt) {
+			    // Padding place
+			    if(sess.secMessMode == MS_SignAndEncrypt) {
+				int kSz = sess.servKey.size()/3;
+				int paddingSize = ((req.size()-begEncBlck+1+20+kSz-1)/kSz)*kSz - (req.size()-begEncBlck+20);
+				req += string(paddingSize,(char)(paddingSize-1));
+			    }
+
+			    // Real message size calc and place
+			    oNu(req, req.size()+20, 4, 4);
+
+			    // Signature
+			    req += symmetricSign(req, sess.servKey, sess.secPolicy);
+
+			    // Encoding
+			    if(sess.secMessMode == MS_SignAndEncrypt)
+				req.replace(begEncBlck, req.size()-begEncBlck, symmetricEncrypt(req.substr(begEncBlck),sess.servKey,sess.secPolicy));
+			}
+
+			//Sending the request
+			messIO(req.data(), req.size(), NULL, 0);
 		    }
 
-		    // Real message size calc and place
-		    oNu(rez, rez.size()+20, 4, 4);
+		    // Original one chunk request
+		    /*rez = "MSGF";					//SecureChannel message
+		    rez.reserve(200);
+		    oNu(rez, 0, 4);					//Message size
+		    oNu(rez, sess.secChnl, 4);				//Secure channel identifier
+		    oNu(rez, sess.secToken, 4);				//TokenId
+		    int begEncBlck = rez.size();
+									//> Sequence header
+		    oNu(rez, (++sess.sqNumb), 4);			//Sequence number
+		    oNu(rez, (++sess.sqReqId), 4);			//RequestId
+									//> Extension body object
+		    oNodeId(rez, iTpId);				//TypeId request
+									//>> Request Header
+		    oNodeId(rez, NodeId::fromAddr(sess.authTkId));	//Session AuthenticationToken
+		    oTm(rez, (sess.secLstMessReqTm=curTime()));		//timestamp
+		    //io.setAttr("ReqHandle", uint2str(ReqHandle));
+		    oN(rez, (sess.reqHndl++), 4);			//requestHandle
+		    oNu(rez, 0, 4);					//returnDiagnostics
+		    oS(rez, "");					//auditEntryId
+		    oNu(rez, 0, 4);					//timeoutHint
+									//>>> Extensible parameter
+		    oNodeId(rez, 0);					//TypeId (0)
+		    oNu(rez, 0, 1);					//Encoding
+		    rez.append(mReq);					//Same request
+		    oNu(rez, rez.size(), 4, 4);				//> Real message size
 
-		    // Signature
-		    rez += symmetricSign(rez, servKey, secPolicy);
+		    //Security information
+		    if(sess.secMessMode == MS_Sign || sess.secMessMode == MS_SignAndEncrypt) {
+			// Padding place
+			if(sess.secMessMode == MS_SignAndEncrypt) {
+			    int kSz = sess.servKey.size()/3;
+			    int paddingSize = ((rez.size()-begEncBlck+1+20+kSz-1)/kSz)*kSz-(rez.size()-begEncBlck+20);
+			    rez += string(paddingSize,(char)(paddingSize-1));
+			}
 
-		    // Encoding
-		    if(secMessMode == MS_SignAndEncrypt)
-			rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricEncrypt(rez.substr(begEncBlck),servKey,secPolicy));
+			// Real message size calc and place
+			oNu(rez, rez.size()+20, 4, 4);
+
+			// Signature
+			rez += symmetricSign(rez, sess.servKey, sess.secPolicy);
+
+			// Encoding
+			if(sess.secMessMode == MS_SignAndEncrypt)
+			    rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricEncrypt(rez.substr(begEncBlck),sess.servKey,sess.secPolicy));
+		    }
+
+		    if(debug) debugMess(io.attr("id")+" Out");
+
+		    //Sending the request
+		    messIO(rez.data(), rez.size(), NULL, 0);*/
 		}
 
-		if(debug) debugMess(io.attr("id")+" Req");
-		//Send request and wait respond
-		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
-		rez.assign(buf, resp_len);
+		rez = "";
+		//Waiting for request response, or just read the channel if there is no request
+		continueReadChnk:
+		resp_len = messIO(NULL, 0, buf, sizeof(buf), -(waitResponse&&rez.empty()?10000:1));	//???? Get 10000 from the transport timeouts
+		rez.append(buf, resp_len);
+
+		//Reading the whole package
+		continueRead:
 		int off = 4;
-		for( ; rez.size() < 8 || rez.size() < iNu(rez,off,4); off = 4) {
+		uint32_t msgLen = 0;
+		for( ; (rez.size() || waitResponse) && (rez.size() < 8 || rez.size() < (msgLen=iNu(rez,off,4))); off = 4) {
 		    resp_len = messIO(NULL, 0, buf, sizeof(buf));
-		    if(!resp_len) throw OPCError(OpcUa_BadCommunicationError, "Not full respond.");
+		    if(!resp_len) throw OPCError(OpcUa_BadCommunicationError, "No or not full message.");
 		    rez.append(buf, resp_len);
 		}
 
-		if(debug) debugMess(io.attr("id")+" Resp");
+		if(debug && rez.size()) debugMess("In "+uint2str(msgLen)+"("+uint2str(rez.size())+")");
 
 		off = 4;
-		if(rez.size() < 8 || iNu(rez,off,4) != rez.size())
-		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTooLarge, "Respond size is not coincidence.");
-		else if(rez.compare(0,4,"ERRF") == 0) err = iErr(rez, off);
-		else if(rez.compare(0,4,"MSGF") != 0)
-		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTypeInvalid, "Respond don't acknowledge.");
-		else {
-		    iNu(rez, off, 4);					//Secure channel identifier
-		    iNu(rez, off, 4);					//Symmetric Algorithm Security Header : TokenId
-		    // Decrypt message block and signature check
-		    if(secMessMode == MS_Sign || secMessMode == MS_SignAndEncrypt) {
-			string clKey = io.attr("clKey");
-			if(secMessMode == MS_SignAndEncrypt)
-			    rez.replace(off, rez.size()-off, symmetricDecrypt(rez.substr(off),clKey,secPolicy));
-			if(rez.substr(rez.size()-20) != symmetricSign(rez.substr(0,rez.size()-20),clKey,secPolicy))	//Check Signature
+		//The response allowed to be big here due to the possibility of containg several messages
+		if(!rez.size() && !waitResponse) ;
+		else if(rez.size() < 8 || rez.size() < (msgLen=iNu(rez,off,4))) {
+		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTooLarge, "Response size is not coincidence.");
+		    rez = "";
+		}
+		else if(rez.compare(0,4,"ERRF") == 0) { err = iErr(rez, off); rez = ""; }
+		else if(rez.compare(0,4,"OPNF") == 0) {
+		    if(debug) debugMess("OPN Resp");
+
+		    rb = rez.substr(0, msgLen); rez.erase(0, msgLen);
+
+		    iNu(rb, off, 4);					//Secure channel identifier
+		    iS(rb, off);					//Security policy URI
+		    string servCert = iS(rb, off);			//ServerCertificate
+		    string clntCertThmb = iS(rb, off);			//ClientCertificateThumbprint
+
+		    if(!isSecNone) {
+			if(clntCertThmb != certThumbprint(cert()))
+			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Client certificate thumbprint error.");
+
+			// Decoding
+			rb.replace(off, rb.size()-off, asymmetricDecrypt(rb.substr(off),pvKey(),sess.secPolicy));
+		    }
+
+		    iNu(rb, off, 4);			//Sequence number
+		    iNu(rb, off, 4);			//RequestId
+							//> Extension Object
+		    if(iNodeId(rb,off).numbVal() != OpcUa_OpenSecureChannelResponse)	//TypeId
+			throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+							//>> Body
+							//>>> RespondHeader
+		    iTm(rb, off);			//timestamp
+		    iN(rb, off, 4);			//requestHandle
+		    iN(rb, off, 4);			//StatusCode
+		    iN(rb, off, 1);			//serviceDiagnostics
+		    iS(rb, off);			//stringTable
+							//>>> Extensible parameter
+		    iNodeId(rb, off);			//TypeId (0)
+		    iNu(rb, off, 1);			//Encoding
+							//>>>> Standard respond
+		    iNu(rb, off, 4);			//ServerProtocolVersion
+		    sess.secChnl = iNu(rb,off,4);	//Secure channel identifier
+		    sess.secToken = iNu(rb,off,4);	//TokenId
+		    iTm(rb, off);			//CreatedAt
+		    sess.secLifeTime = iN(rb,off,4);	//RevisedLifeTime
+		    string servNonce = iS(rb, off);	//nonce
+		    // Signature
+		    if(!isSecNone) {
+			sess.clKey = deriveKey(clNonce, servNonce, symKeySz*3);
+			sess.servKey = deriveKey(servNonce, clNonce, symKeySz*3);
+			off += iNu(rb, off, 1);			//Pass padding
+			if(!asymmetricVerify(rb.substr(0,off),rb.substr(off),sess.servCert))	//Check Signature
 			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
 		    }
+		    sess.secChnlOpenTm = curTime();
+		    waitResponse = false;
+		}
+		else if(rez.compare(0,3,"MSG") != 0) {
+		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTypeInvalid, "Respond don't acknowledge.");
+		    rez = "";
+		}
+		else {
+		    if(debug) debugMess("MSG Resp");
+
+		    rb = rez.substr(0, msgLen); rez.erase(0, msgLen);
+
+		    uint32_t secId = iNu(rb, off, 4);			//Secure channel identifier
+		    uint32_t tokId = iNu(rb, off, 4);			//Symmetric Algorithm Security Header : TokenId
+
+		    // Decrypt message block and signature check
+		    if(sess.secMessMode == MS_Sign || sess.secMessMode == MS_SignAndEncrypt) {
+			if(sess.secMessMode == MS_SignAndEncrypt)
+			    rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),sess.clKey,sess.secPolicy));
+			if(rb.substr(rb.size()-20) != symmetricSign(rb.substr(0,rb.size()-20),sess.clKey,sess.secPolicy))	//Check Signature
+			    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
+			rb.erase(rb.size()-20);				//Remove the signature
+			if(sess.secMessMode == MS_SignAndEncrypt)
+			    rb.erase(rb.size()-(rb[rb.size()-1]+1));	//Remove the padding by the last byte value
+		    }
 									//> Sequence header
-		    iNu(rez, off, 4);					//Sequence number
-		    iNu(rez, off, 4);					//RequestId
+		    uint32_t clSeqN = iNu(rb, off, 4);			//Sequence number
+		    uint32_t reqId = iNu(rb, off, 4);			//RequestId
+		    //Chunks processing
+		    bool passMessPrc = false;
+		    // Abort
+		    if(rb[3] == 'A') { chCnt = 0; chB = ""; passMessPrc = true; }
+		    else if(chCnt || rb[3] == 'C') {
+			//Checking for lost sequence
+			// * Lost single 'C' before 'F': pass to processing but there is possible single 'F', it will be checked by correct request type.
+			// * Lost intermediate 'F' ('C' both after and before): clean the chunks buffer and start it's filling from begin.
+			// * Lost first 'C': clean the chunks buffer and start it's filling from next 'C' but there is possible this is first 'C' after
+			//	single 'F' lost before, it will be checked by correct request type.
+			// * Lost intermediate 'C': clean and mark the chunks buffer as some chunk into sequence lost and pass all next chunks up to 'F'.
+			// * Lost intermediate 'C' just before 'F': clean the chunks buffer and 'F'.
+			// * Lost 'F' after 'C' before 'F': clean the chunks buffer and pass current 'F' to process but there is possible that is single 'F'
+			//	next, it will be checked by correct request type.
+			//!!!! Maybe set a mark for errors generation pass after checking to correct request type or the message's sequence begin.
+			if(chCnt < 0 || (chCnt && (clSeqN-chClSeqN) > 1)) {
+			    chB = "";
+			    if(rb[3] == 'C' && reqId == chReqId) { chCnt = -1; passMessPrc = true; }
+			    else { chCnt = 0; passMessPrc = (reqId == chReqId); }
+			}
+			if(!passMessPrc) {
+			    chB.append(rb, off, string::npos);
+			    if(rb[3] == 'C') {
+				// Checking for limits
+				chCnt++;
+				if((chunkMaxCnt() && chCnt > (int)chunkMaxCnt()) || (msgMaxSz() && chB.size() > msgMaxSz()))
+				    throw OPCError(OpcUa_BadResponseTooLarge, "Response too large");
+				passMessPrc = true;
+			    }
+			    else {
+				rb.replace(off, string::npos, chB);
+				chCnt = 0; chB = "";
+			    }
+			}
+		    }
+		    chClSeqN = clSeqN; chReqId = reqId;
+		    if(passMessPrc) { waitResponse = true; goto continueReadChnk; }
+
 									//> Extension Object
-		    uint32_t oTpId = iNodeId(rez, off).numbVal();	//TypeId
+		    uint32_t oTpId = iNodeId(rb, off).numbVal();	//TypeId
 									//>> Body
 									//>>> RespondHeader
-		    iTm(rez, off);					//timestamp
-		    iN(rez, off, 4);					//requestHandle
-		    uint32_t stCode = iNu(rez, off, 4);			//StatusCode
-		    iN(rez, off, 1);					//serviceDiagnostics
-		    iS(rez, off);					//stringTable
+		    iTm(rb, off);					//timestamp
+		    int32_t requestHandle = iN(rb, off, 4);		//requestHandle
+		    uint32_t stCode = iNu(rb, off, 4);			//StatusCode
+		    iN(rb, off, 1);					//serviceDiagnostics
+		    iS(rb, off);					//stringTable
 									//>>> Extensible parameter
-		    iNodeId(rez, off);					//TypeId (0)
-		    iNu(rez, off, 1);					//Encoding
+		    iNodeId(rb, off);					//TypeId (0)
+		    iNu(rb, off, 1);					//Encoding
 
 		    switch(oTpId) {
 			case OpcUa_FindServersResponse: {
 			    if(iTpId != OpcUa_FindServersRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
-			    int AppDescrNub = iNu(rez, off, 4);				//List items
-			    for(int i_l = 0; i_l < AppDescrNub; i_l++) {
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+			    int AppDescrNub = iNu(rb, off, 4);				//List items
+			    for(int iL = 0; iL < AppDescrNub; iL++) {
 				XML_N *ad = io.childAdd("ApplicationDescription");
-				ad->setAttr("applicationUri", iS(rez,off));		//applicationUri
-				ad->setAttr("productUri", iS(rez,off));			//productUri
-				ad->setAttr("applicationName", iSl(rez,off));		//applicationName
-				ad->setAttr("applicationType", uint2str(iNu(rez,off,4)));//applicationType
-				ad->setAttr("gatewayServerUri", iS(rez,off));		//gatewayServerUri
-				ad->setAttr("discoveryProfileUri", iS(rez,off));	//discoveryProfileUri
+				ad->setAttr("applicationUri", iS(rb,off));		//applicationUri
+				ad->setAttr("productUri", iS(rb,off));			//productUri
+				ad->setAttr("applicationName", iSl(rb,off));		//applicationName
+				ad->setAttr("applicationType", uint2str(iNu(rb,off,4)));//applicationType
+				ad->setAttr("gatewayServerUri", iS(rb,off));		//gatewayServerUri
+				ad->setAttr("discoveryProfileUri", iS(rb,off));	//discoveryProfileUri
 											//>>>> discoveryUrls
-				int discoveryUrlsN = iNu(rez, off, 4);			//List items
-				for(int i_l2 = 0; i_l2 < discoveryUrlsN; i_l2++)
-				    ad->childAdd("discoveryUrl")->setText(iS(rez,off));	//discoveryUrl
+				int discoveryUrlsN = iNu(rb, off, 4);			//List items
+				for(int iL2 = 0; iL2 < discoveryUrlsN; iL2++)
+				    ad->childAdd("discoveryUrl")->setText(iS(rb,off));	//discoveryUrl
 			    }
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_GetEndpointsResponse: {
 			    if(iTpId != OpcUa_GetEndpointsRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
-			    int EndpointDescrNub = iNu(rez, off, 4);		//List items
-			    for(int i_l = 0; i_l < EndpointDescrNub; i_l++) {
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+			    int EndpointDescrNub = iNu(rb, off, 4);		//List items
+			    for(int iL = 0; iL < EndpointDescrNub; iL++) {
 				XML_N *xep = io.childAdd("EndpointDescription");
 										//>>> EndpointDescription
-				xep->setAttr("endpointUrl", iS(rez,off));	//endpointUrl
+				xep->setAttr("endpointUrl", iS(rb,off));	//endpointUrl
 										//>>>> server (ApplicationDescription)
-				xep->setAttr("applicationUri", iS(rez,off));	//applicationUri
-				xep->setAttr("productUri", iS(rez,off));	//productUri
-				xep->setAttr("applicationName", iSl(rez,off));	//applicationName
-				xep->setAttr("applicationType", uint2str(iNu(rez,off,4)));	//applicationType
-				xep->setAttr("gatewayServerUri", iS(rez,off));	//gatewayServerUri
-				xep->setAttr("discoveryProfileUri", iS(rez,off));//discoveryProfileUri
+				xep->setAttr("applicationUri", iS(rb,off));	//applicationUri
+				xep->setAttr("productUri", iS(rb,off));	//productUri
+				xep->setAttr("applicationName", iSl(rb,off));	//applicationName
+				xep->setAttr("applicationType", uint2str(iNu(rb,off,4)));	//applicationType
+				xep->setAttr("gatewayServerUri", iS(rb,off));	//gatewayServerUri
+				xep->setAttr("discoveryProfileUri", iS(rb,off));//discoveryProfileUri
 										//>>>> discoveryUrls
-				int discoveryUrlsN = iNu(rez, off, 4);		//List items
-				for(int i_l2 = 0; i_l2 < discoveryUrlsN; i_l2++)
-				    xep->childAdd("discoveryUrl")->setText(iS(rez,off));	//discoveryUrl
-				xep->childAdd("serverCertificate")->setText(certDER2PEM(iS(rez,off)));	//>>> serverCertificate
-				xep->setAttr("securityMode", uint2str(iNu(rez,off,4)));	//securityMode
-				xep->setAttr("securityPolicyUri", iS(rez,off));	//securityPolicyUri
+				int discoveryUrlsN = iNu(rb, off, 4);		//List items
+				for(int iL2 = 0; iL2 < discoveryUrlsN; iL2++)
+				    xep->childAdd("discoveryUrl")->setText(iS(rb,off));	//discoveryUrl
+				xep->childAdd("serverCertificate")->setText(certDER2PEM(iS(rb,off)));	//>>> serverCertificate
+				xep->setAttr("securityMode", uint2str(iNu(rb,off,4)));	//securityMode
+				xep->setAttr("securityPolicyUri", iS(rb,off));	//securityPolicyUri
 										//>>>> userIdentityTokens
-				int userIdentityTokensN = iNu(rez, off, 4);	//List items
-				for(int i_l2 = 0; i_l2 < userIdentityTokensN; i_l2++) {
+				int userIdentityTokensN = iNu(rb, off, 4);	//List items
+				for(int iL2 = 0; iL2 < userIdentityTokensN; iL2++) {
 				    XML_N *xit = xep->childAdd("userIdentityToken");
-				    xit->setAttr("policyId", iS(rez,off));		//policyId
-				    xit->setAttr("tokenType", uint2str(iNu(rez,off,4)));//tokenType
-				    xit->setAttr("issuedTokenType", iS(rez,off));	//issuedTokenType
-				    xit->setAttr("issuerEndpointUrl", iS(rez,off));	//issuerEndpointUrl
-				    xit->setAttr("securityPolicyUri", iS(rez,off));	//securityPolicyUri
+				    xit->setAttr("policyId", iS(rb,off));		//policyId
+				    xit->setAttr("tokenType", uint2str(iNu(rb,off,4)));//tokenType
+				    xit->setAttr("issuedTokenType", iS(rb,off));	//issuedTokenType
+				    xit->setAttr("issuerEndpointUrl", iS(rb,off));	//issuerEndpointUrl
+				    xit->setAttr("securityPolicyUri", iS(rb,off));	//securityPolicyUri
 				}
-				xep->setAttr("transportProfileUri", iS(rez,off));	//transportProfileUri
-				xep->setAttr("securityLevel", uint2str(iNu(rez,off,1)));//securityLevel
+				xep->setAttr("transportProfileUri", iS(rb,off));	//transportProfileUri
+				xep->setAttr("securityLevel", uint2str(iNu(rb,off,1)));//securityLevel
 			    }
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_CreateSessionResponse: {
 			    if(iTpId != OpcUa_CreateSessionRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
-			    io.setAttr("sesId", iNodeId(rez,off).toAddr());		//sessionId
-			    io.setAttr("authTokenId", iNodeId(rez,off).toAddr());	//authentication Token
-			    io.setAttr("sesTm", real2str(iR(rez,off,8)));		//revisedSession Timeout, ms
-			    io.setAttr("servNonce", iS(rez,off));			//serverNonce
-			    string servCert = certDER2PEM(iS(rez,off));	//serverCertificate
-			    int EndpointDescrNub = iNu(rez, off, 4);	//List items
-			    for(int i_l = 0; i_l < EndpointDescrNub; i_l++) {
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+			    sess.sesId = iNodeId(rb,off).toAddr();	//sessionId
+			    sess.authTkId = iNodeId(rb,off).toAddr();	//authentication Token
+			    sess.sesLifeTime = iR(rb, off, 8);		//revisedSession Timeout, ms
+			    sess.servNonce = iS(rb,off);		//serverNonce
+			    string servCert = certDER2PEM(iS(rb,off));	//serverCertificate
+			    int EndpointDescrNub = iNu(rb, off, 4);	//List items
+			    for(int iL = 0; iL < EndpointDescrNub; iL++) {
 									//> EndpointDescription
-				iS(rez, off);				//endpointUrl
+				iS(rb, off);				//endpointUrl
 									//>> server (ApplicationDescription)
-				iS(rez, off);				//applicationUri
-				iS(rez, off);				//productUri
-				iSl(rez, off);				//applicationName
-				iNu(rez, off, 4);			//applicationType
-				iS(rez, off);				//gatewayServerUri
-				iS(rez, off);				//discoveryProfileUri
+				iS(rb, off);				//applicationUri
+				iS(rb, off);				//productUri
+				iSl(rb, off);				//applicationName
+				iNu(rb, off, 4);			//applicationType
+				iS(rb, off);				//gatewayServerUri
+				iS(rb, off);				//discoveryProfileUri
 									//>> discoveryUrls
-				int discoveryUrlsN = iNu(rez, off, 4);	//List items
-				for(int i_l2 = 0; i_l2 < discoveryUrlsN; i_l2++)
-				    iS(rez, off);			//discoveryUrl
-				iS(rez, off);				//> serverCertificate
-				iNu(rez, off, 4);				//securityMode
-				iS(rez, off);				//securityPolicyUri
+				int discoveryUrlsN = iNu(rb, off, 4);	//List items
+				for(int iL2 = 0; iL2 < discoveryUrlsN; iL2++)
+				    iS(rb, off);			//discoveryUrl
+				iS(rb, off);				//> serverCertificate
+				iNu(rb, off, 4);				//securityMode
+				iS(rb, off);				//securityPolicyUri
 									//>> userIdentityTokens
-				int userIdentityTokensN = iNu(rez, off, 4);//List items
-				for(int i_l2 = 0; i_l2 < userIdentityTokensN; i_l2++) {
-				    iS(rez, off);			//policyId
-				    iNu(rez, off, 4);			//tokenType
-				    iS(rez, off);			//issuedTokenType
-				    iS(rez, off);			//issuerEndpointUrl
-				    iS(rez, off);			//securityPolicyUri
+				int userIdentityTokensN = iNu(rb, off, 4);//List items
+				for(int iL2 = 0; iL2 < userIdentityTokensN; iL2++) {
+				    iS(rb, off);			//policyId
+				    iNu(rb, off, 4);			//tokenType
+				    iS(rb, off);			//issuedTokenType
+				    iS(rb, off);			//issuerEndpointUrl
+				    iS(rb, off);			//securityPolicyUri
 				}
-				iS(rez, off);				//transportProfileUri
-				iNu(rez, off, 1);			//securityLevel
+				iS(rb, off);				//transportProfileUri
+				iNu(rb, off, 1);			//securityLevel
 			    }
-			    iS(rez, off);				//serverSoftware Certificates []
+			    iS(rb, off);				//serverSoftware Certificates []
 									//> serverSignature
-			    string alg = iS(rez, off);			//algorithm
-			    string sign = iS(rez, off);			//signature
-			    if(io.attr("SecPolicy") != "None" &&
-				    !asymmetricVerify(certPEM2DER(io.childGet("ClientCert")->text())+io.attr("Nonce"),sign,servCert))
+			    string alg = iS(rb, off);			//algorithm
+			    string sign = iS(rb, off);			//signature
+			    if(sess.secPolicy != "None" &&
+				    !asymmetricVerify(certPEM2DER(cert())+io.attr("Nonce"),sign,servCert))
 				throw OPCError(OpcUa_BadApplicationSignatureInvalid, "Application signature error");
-			    iNu(rez, off, 4);				//maxRequest MessageSize
+			    iNu(rb, off, 4);				//maxRequest MessageSize
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_ActivateSessionResponse: {
 			    if(iTpId != OpcUa_ActivateSessionRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
-			    iS(rez, off);				//serverNonce
-			    iN(rez, off, 4);				//results []
-			    iN(rez, off, 4);				//diagnosticInfos []
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+			    sess.servNonce = iS(rb, off);		//serverNonce
+			    iN(rb, off, 4);				//results []
+			    iN(rb, off, 4);				//diagnosticInfos []
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_CloseSessionResponse:
 			    if(iTpId != OpcUa_CloseSessionRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
-			    io.setAttr("sesId", "");			//sessionId
-			    io.setAttr("authTokenId", "");		//authentication Token
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+			    sess.clearSess(str2uint(io.attr("deleteSubscriptions")));
+			    waitResponse = false;
 			    break;
 			case OpcUa_ReadResponse: {
 			    if(iTpId != OpcUa_ReadRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 									//> results []
-			    int resN = iNu(rez, off, 4);		//Nodes number
-			    for(int iR = 0, stIdx_ = stIdx; iR < resN && stIdx_ < (int)io.childSize(); iR++, stIdx_++)
-				iDataValue(rez, off, *io.childGet(stIdx_));
-			    stIdx += std::min(25u, io.childSize()-stIdx);
+			    uint32_t resN = iNu(rb, off, 4);		//Nodes number
+			    for(uint32_t iR = 0; iR < resN && iR < io.childSize(); ++iR)
+				iDataValue(rb, off, *io.childGet(iR));
+
+			    //for(int iR = 0, stIdx_ = stIdx; iR < resN && stIdx_ < (int)io.childSize(); iR++, stIdx_++)
+			    //	iDataValue(rb, off, *io.childGet(stIdx_));
+			    //stIdx += std::min(25u, io.childSize()-stIdx);
 									//>> diagnosticInfos []
-			    iN(rez, off, 4);				//Items number
-			    if(stIdx < (int)io.childSize()) goto nextReq;
+			    iN(rb, off, 4);				//Items number
+			    //if(stIdx < (int)io.childSize()) goto nextReq;
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_WriteResponse: {
 			    if(iTpId != OpcUa_WriteRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 									//> results []
-			    int resN = iNu(rez, off, 4);		//Number
-			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++)
-				io.childGet(i_r)->setAttr("Status", strMess("0x%x",iNu(rez,off,4)));
+			    int resN = iNu(rb, off, 4);		//Number
+			    for(int iR = 0; iR < resN && iR < (int)io.childSize(); iR++)
+				io.childGet(iR)->setAttr("Status", strMess("0x%x",iNu(rb,off,4)));
 									//>> diagnosticInfos []
-			    iN(rez, off, 4);				//Items number
+			    iN(rb, off, 4);				//Items number
+			    waitResponse = false;
 			    break;
 			}
 			case OpcUa_BrowseResponse: {
 			    if(iTpId != OpcUa_BrowseRequest)
-				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
 									//> results []
-			    int resN = iNu(rez, off, 4);		//Numbers
-			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++) {
-				XML_N *rno = io.childGet(i_r);
+			    int resN = iNu(rb, off, 4);		//Numbers
+			    for(int iR = 0; iR < resN && iR < (int)io.childSize(); iR++) {
+				XML_N *rno = io.childGet(iR);
 				//strtoul(rno->attr("resultMask").c_str(), NULL, 0);	//resultMask
-				rno->setAttr("statusCode", uint2str(iNu(rez,off,4)));	//statusCode
-				iS(rez, off);				//continuationPoint
+				rno->setAttr("statusCode", uint2str(iNu(rb,off,4)));	//statusCode
+				iS(rb, off);				//continuationPoint
 									//>> References []
-				int refN = iNu(rez, off, 4);		//Numbers
-				for(int i_rf = 0; i_rf < refN; i_rf++) {
+				int refN = iNu(rb, off, 4);		//Numbers
+				for(int iRf = 0; iRf < refN; iRf++) {
 				    XML_N *bno = rno->childAdd("bNode");
-				    bno->setAttr("referenceTypeId", uint2str(iNodeId(rez,off).numbVal()));
-				    bno->setAttr("isForward", iNu(rez,off,1)?"1":"0");
-				    bno->setAttr("nodeId", iNodeId(rez,off).toAddr());
-				    bno->setAttr("browseName", iSqlf(rez,off));
-				    bno->setAttr("displayName", iSl(rez,off));
-				    bno->setAttr("nodeClass", uint2str(iNu(rez,off,4)));
-				    bno->setAttr("typeDefinition", uint2str(iNodeId(rez,off).numbVal()));
+				    bno->setAttr("referenceTypeId", uint2str(iNodeId(rb,off).numbVal()));
+				    bno->setAttr("isForward", iNu(rb,off,1)?"1":"0");
+				    bno->setAttr("nodeId", iNodeId(rb,off).toAddr());
+				    bno->setAttr("browseName", iSqlf(rb,off));
+				    bno->setAttr("displayName", iSl(rb,off));
+				    bno->setAttr("nodeClass", uint2str(iNu(rb,off,4)));
+				    bno->setAttr("typeDefinition", uint2str(iNodeId(rb,off).numbVal()));
 				}
 			    }
-			    iN(rez, off, 4);				//diagnosticInfos []
+			    iN(rb, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_CreateSubscriptionResponse: {
+			    if(iTpId != OpcUa_CreateSubscriptionRequest)
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+
+			    io.setAttr("subScrId", uint2str(iNu(rb,off,4)));		//subscriptionId
+			    io.setAttr("publInterval", real2str(iR(rb,off,8)));	//revisedPublishingInterval
+			    io.setAttr("lifetimeCnt", uint2str(iNu(rb,off,4)));	//revisedLifetimeCount
+			    io.setAttr("maxKeepAliveCnt", uint2str(iNu(rb,off,4)));	//revisedMaxKeepAliveCount
+
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_DeleteSubscriptionsResponse: {
+			    if(iTpId != OpcUa_DeleteSubscriptionsRequest)
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+
+			    uint32_t sN = iNu(rb, off, 4);		//results []
+			    for(uint32_t iS = 0; iS < sN; ++iS) {
+				uint32_t sC = iNu(rb, off, 4);		// statusCode
+				if(iS < io.childSize())
+				    io.childGet(iS)->setAttr("statusCode", uint2str(sC));
+			    }
+			    iN(rb, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_CreateMonitoredItemsResponse: {
+			    if(iTpId != OpcUa_CreateMonitoredItemsRequest)
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+
+			    uint32_t mItN = iNu(rb, off, 4);		//results []
+			    for(uint32_t iIt = 0; iIt < mItN; ++iIt) {
+				uint32_t sC = iNu(rb, off, 4);		// statusCode
+				int32_t mItId = iN(rb, off, 4);	// monitoredItemId
+				double smplInt = iR(rb, off, 8);	// revisedSamplingInterval
+				uint32_t qSz = iNu(rb, off, 4);	// revisedQueueSize
+				if(iIt < io.childSize()) {
+				    XML_N *chO = io.childGet(iIt);
+				    chO->setAttr("statusCode", uint2str(sC));
+				    chO->setAttr("itId", int2str(mItId));
+				    chO->setAttr("smplInt", real2str(smplInt));
+				    chO->setAttr("qSz", uint2str(qSz));
+				}
+				iNodeId(rb, off);			// filterResult
+				iNu(rb, off, 1);			// encodingMask
+									//  !!!!: implement for non zero filter
+			    }
+			    iN(rb, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_DeleteMonitoredItemsResponse: {
+			    if(iTpId != OpcUa_DeleteMonitoredItemsRequest)
+				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "NodeId of the response does not correspond the request");
+
+			    uint32_t mItN = iNu(rb, off, 4);		//results []
+			    for(uint32_t iIt = 0; iIt < mItN; ++iIt) {
+				uint32_t sC = iNu(rb, off, 4);		// statusCode
+				if(iIt < io.childSize())
+				    io.childGet(iIt)->setAttr("statusCode", uint2str(sC));
+			    }
+			    iN(rb, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+
+			    waitResponse = false;
+			    break;
+			}
+			case OpcUa_PublishResponse: {
+			    uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
+			    Subscr *curSbscr = NULL;
+			    for(unsigned iSbscr = 0; iSbscr < sess.mSubScr.size() && !curSbscr; ++iSbscr)
+				if(sess.mSubScr[iSbscr].subScrId == subScrId) curSbscr = &sess.mSubScr[iSbscr];
+			    if(!curSbscr) break;
+
+			    curSbscr->lstPublTm = curTime();
+
+			    for(bool isFound = false; !isFound && sess.mPublSeqs.size(); ) {
+				isFound = (sess.mPublSeqs[0] == requestHandle);
+				sess.mPublSeqs.erase(sess.mPublSeqs.begin());
+			    }
+
+			    // Available sequences processing
+			    int32_t aSeqN = iN(rb, off, 4);		//availableSequence Numbers []
+			    for(int iSeq = 0; iSeq < aSeqN; ++iSeq)
+				//!!!! To implement at the republish implementing
+				iNu(rb, off, 4);			// sequenceNumber
+
+			    int moreNtfOff = iNu(rb, off, 1);		//moreNotifications
+									//  !!!!: use somewhat in the future
+									//notificationMessage
+			    uint32_t curSeq = iNu(rb, off, 4);		// sequenceNumber, current
+			    iTm(rb, off);				// publishTime
+			    int32_t ntfN = iN(rb, off, 4);		// notificationData []
+			    if(ntfN > 0) curSbscr->mSeqToAcq.push_back(curSeq);
+			    for(int iNtf = 0; iNtf < ntfN; ++iNtf) {
+				NodeId ntfType = iNodeId(rb, off);	//  TypeId (must be OpcUa_DataChangeNotification)
+				int8_t eMsk = iNu(rb, off, 1);		//  encodingMask
+				iNu(rb, off, 4);			//  extension object size
+									//    !!!!: implement for checking to OpcUa_DataChangeNotification
+									//          and reading/parsing the data block independently
+				int32_t ntfItN = iN(rb, off, 4);	//  monitoredItems []
+				XML_N tObj;
+				OPCAlloc res(mtxData, true);
+				for(int iNtfIt = 0; iNtfIt < ntfItN; ++iNtfIt) {
+				    uint32_t clHdl = iNu(rb, off, 4);	//   clientHandle
+				    iDataValue(rb, off, (clHdl<curSbscr->mItems.size())?curSbscr->mItems[clHdl].val:tObj);
+				}
+				iN(rb, off, 4);			//  diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
+			    }
+			    int32_t resAckN = iN(rb, off, 4);		//results []
+									//  !!!!: implement for the acknowledge status processing
+			    for(int iResAckN = 0; iResAckN < resAckN; ++iResAckN)
+				iNu(rb, off, 4);			// result
+			    iN(rb, off, 4);				//diagnosticInfos []
+									//  !!!!: implement for parsing the non zero info
 			    break;
 			}
 			case OpcUa_ServiceFault: err = strMess("0x%x:%s", stCode, "Service fault");	break;
+			default: err = strMess("0x%x:Not supported message response %d", OpcUa_BadServiceUnsupported, oTpId);	break;
 		    }
 		}
+		if(rez.size() || (waitResponse && err.empty())) goto continueRead;
 	    }
 	}
 	else err = strMess("0x%x:%s", OpcUa_BadServiceUnsupported, strMess("OPC_UA protocol '%s' isn't supported.", io.name().c_str()).c_str());
-    } catch(OPCError &er) { err = strMess("0x%x:%s", er.cod, er.mess.c_str()); }
+    }
+    catch(OPCError &er) {
+	err = strMess("0x%x:%s", er.cod, er.mess.c_str());
+	if(debug) debugMess(io.attr("id")+" Error: "+err);
+    }
 
     io.setAttr("err", err);
 }
 
 void Client::reqService( XML_N &io )
 {
-    io.setAttr("err", "");
-    XML_N req("opc.tcp");
-    if(!sess.secChnl || !sess.secToken || (1e-3*(curTime()-sess.sessOpen) >= sess.secLifeTime) ||
-	sess.endPoint != endPoint() || sess.secPolicy != secPolicy() || sess.secMessMode != secMessMode())
-    {
-	//Close previous session for policy or endpoint change
-	if(sess.authTkId.size()) {
-	    req.setAttr("id", "CloseSession")->
-		setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("SecTokenId", uint2str(sess.secToken))->
-		setAttr("authTokenId", sess.authTkId)->setAttr("ReqHandle", uint2str(sess.reqHndl++))->
-		setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId))->
-		setAttr("SecPolicy", sess.secPolicy)->setAttr("SecurityMode", int2str(sess.secMessMode))->
-		setAttr("clKey", sess.clKey)->setAttr("servKey", sess.servKey);
-	    protIO(req);
-	    sess.clearSess();
-	}
-
-	//Close previous secure channel
-	if(sess.secChnl && sess.secToken) {
-	    req.setAttr("id", "CLO")->
-		setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("SecTokenId", uint2str(sess.secToken))->
-		setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId))->
-		setAttr("SecPolicy", sess.secPolicy)->setAttr("SecurityMode", int2str(sess.secMessMode))->
-		setAttr("clKey", sess.clKey)->setAttr("servKey", sess.servKey);
-	    protIO(req);
-	    sess.clearFull(true);
-	}
-
-	// Send HELLO message
-	req.setAttr("id", "HEL")->setAttr("EndPoint", endPoint());
-	protIO(req);
-	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
-
-	// Send Open SecureChannel message for no secure policy
-	req.setAttr("id", "OPN")->setAttr("SecChnId", "0")->setAttr("ReqType", int2str(SC_ISSUE))->
-	    setAttr("SecPolicy", "None")->setAttr("SecurityMode", "1")->setAttr("SecLifeTm", "300000")->
-	    setAttr("SeqNumber", uint2str(sess.sqNumb=51))->setAttr("SeqReqId", uint2str(sess.sqReqId=1))->setAttr("ReqHandle", "0");
-	protIO(req);
-	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
-	sess.sessOpen = curTime();
-	//sess.sqNumb = 51;
-	//sess.sqReqId = 1;
-	sess.reqHndl = 0;
-	sess.secChnl = strtoul(req.attr("SecChnId").c_str(), NULL, 10);
-	sess.secToken = strtoul(req.attr("SecTokenId").c_str(), NULL, 10);
-	sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
-
-	if(secPolicy() != "None" || io.attr("id") == "GetEndpoints" || !sess.endPointDscr.childSize()) {
-	    // Send GetEndpoints request for certificate retrieve and for secure policy check
-	    req.setAttr("id", "GetEndpoints")->setAttr("EndPoint", endPoint())->
-		setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId));
-	    protIO(req);
-	    if(!req.attr("err").empty()) { io.setAttr("err", req.attr("err")); return; }
-	    //  Find endoint with needed secure policy
-	    unsigned i_ep;
-	    for(i_ep = 0; i_ep < req.childSize(); i_ep++)
-		if(req.childGet(i_ep)->name() == "EndpointDescription" &&
-			strParse(req.childGet(i_ep)->attr("securityPolicyUri"),1,"#") == secPolicy() &&
-			atoi(req.childGet(i_ep)->attr("securityMode").c_str()) == secMessMode())
-		    break;
-	    if(i_ep >= req.childSize())
-	    { io.setAttr("err",strMess("0x%x:%s",OpcUa_BadSecurityPolicyRejected,"No secure policy found")); return; }
-	    sess.endPointDscr = *req.childGet(i_ep);
-	    if(io.attr("id") == "GetEndpoints") { io = req; return; }
-	}
-
-	if(secPolicy() != "None") {
-	    string servCert = sess.endPointDscr.childGet("serverCertificate")->text();
-	    int secMessMode = atoi(sess.endPointDscr.attr("securityMode").c_str());
-	    req.childClear();
-
-	    // Send Close request for no secure channel
-	    req.setAttr("id", "CLO");
-	    protIO(req);
-	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
-	    sess.clearFull();
-
-	    // Send HELLO message
-	    req.setAttr("id", "HEL")->setAttr("EndPoint", endPoint());
-	    protIO(req);
-	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
-
-	    // Send Open SecureChannel message for secure policy
-	    req.setAttr("id", "OPN")->setAttr("SecChnId", "0")->setAttr("ReqType", int2str(SC_ISSUE))->
-		setAttr("ClntCert", cert())->setAttr("ServCert", servCert)->setAttr("PvKey", pvKey())->
-		setAttr("SecPolicy", secPolicy())->setAttr("SecurityMode", int2str(secMessMode))->
-		setAttr("SecLifeTm", "3600000")->setAttr("SeqNumber", uint2str(sess.sqNumb=51))->setAttr("SeqReqId", uint2str(sess.sqReqId=1))->
-		setAttr("ReqHandle", "0");
-	    protIO(req);
-	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
-	    sess.sessOpen = curTime();
-	    //sess.sqNumb = 51;
-	    //sess.sqReqId = 1;
-	    sess.reqHndl = 0;
-	    sess.secChnl = strtoul(req.attr("SecChnId").c_str(),NULL,10);
-	    sess.secToken = strtoul(req.attr("SecTokenId").c_str(),NULL,10);
-	    sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
-	    sess.servCert = servCert;
-	    sess.secMessMode = secMessMode;
-	    sess.clKey = req.attr("clKey");
-	    sess.servKey = req.attr("servKey");
-	}
-	sess.endPoint = endPoint( );
-	sess.secPolicy = secPolicy( );
-    }
-    //Renew channel request send
-    else if(1e-3*(curTime()-sess.sessOpen) >= 0.75*sess.secLifeTime) {
-	req.setAttr("id", "OPN")->setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("ReqType", int2str(SC_RENEW))->
-	    setAttr("ClntCert", (secPolicy()=="None")?"":cert())->setAttr("ServCert", sess.servCert)->setAttr("PvKey", pvKey())->
-	    setAttr("SecPolicy", secPolicy())->setAttr("SecurityMode", int2str(sess.secMessMode))->
-	    setAttr("SecLifeTm", "3600000")->setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId))->
-	    setAttr("ReqHandle", uint2str(sess.reqHndl++));
-	protIO(req);
-	if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); sess.clearFull(); return; }
-	sess.sessOpen = curTime();
-	sess.secChnl = strtoul(req.attr("SecChnId").c_str(),NULL,10);
-	sess.secToken = strtoul(req.attr("SecTokenId").c_str(),NULL,10);
-	sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
-	sess.clKey = req.attr("clKey");
-	sess.servKey = req.attr("servKey");
-    }
-
-    io.setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("SecTokenId", uint2str(sess.secToken))->
-	setAttr("SecPolicy", sess.secPolicy)->setAttr("SecurityMode", int2str(sess.secMessMode));
+    //Common timings
+    int64_t curTm = curTime();
+    bool isScnlLive = ((curTm-sess.secChnlOpenTm)/1000ll < sess.secLifeTime);
+    bool isSessLive = ((curTm-sess.secLstMessReqTm)/1000ll < sess.sesLifeTime);
 
     string ireq = io.attr("id");
-    if(ireq != "FindServers" && ireq != "GetEndpoints" && (!sess.authTkId.size() /*|| 1e-3*(curTime()-sess.sessOpen) >= sess.sesLifeTime*/))
-    {
-	// Send CreateSession message
-	req.setAttr("id", "CreateSession")->setAttr("EndPoint", endPoint())->setAttr("sesTm", "1.2e6")->
-	    setAttr("PvKey", pvKey())->setAttr("ServCert", sess.servCert)->
-	    setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("SecTokenId", uint2str(sess.secToken))->
-	    setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId))->
-	    setAttr("ReqHandle", uint2str(sess.reqHndl++))->setAttr("authTokenId", sess.authTkId)->
-	    setAttr("SecPolicy", sess.secPolicy)->setAttr("SecurityMode", int2str(sess.secMessMode))->
-	    setAttr("clKey", sess.clKey)->setAttr("servKey", sess.servKey)->
-	    childAdd("ClientCert")->setText(cert());
-	protIO(req);
-	if(!req.attr("err").empty())	{ io.setAttr("err",req.attr("err")); sess.clearFull(); return; }
-	sess.sesId = req.attr("sesId");
-	sess.authTkId = req.attr("authTokenId");
-	sess.sesLifeTime = str2real(req.attr("sesTm"));
+    io.setAttr("err", "");
+    XML_N req("opc.tcp");
 
-	// Send ActivateSession message
-	req.setAttr("id", "ActivateSession")->setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId));
+    //Closing for previous session, secure channel and reopening new ones at:
+    // the common command CloseALL, missing connection, end life time and changing the policy
+    if(ireq == "CloseALL" || !sess.secChnl || !sess.secToken || !isScnlLive ||
+	sess.endPoint != endPoint() || sess.secPolicy != secPolicy() || sess.secMessMode != secMessMode())
+    {
+	// Closing previous session or just clearing the session at error
+	if(sess.authTkId.size() && ireq == "CloseALL") {
+	    if(isScnlLive) {
+		req.setAttr("id", "CloseSession")->setAttr("deleteSubscriptions", "1");
+		protIO(req);
+	    } else sess.clearSess(true);
+	}
+
+	// Closing previous secure channel
+	if(sess.secChnl && sess.secToken) {
+	    req.setAttr("id", "CLO")->setAttr("clearEP","1");
+	    protIO(req);
+	}
+
+	if(ireq == "CloseALL") return;
+
+	// Sending the HELLO message
+	req.clear()->setAttr("id", "HEL")->setAttr("EndPoint", endPoint());
 	protIO(req);
-	if(!req.attr("err").empty())	{ io.setAttr("err",req.attr("err")); return; }
+	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
+
+	// Sending the Open SecureChannel message for no secure policy
+	req.setAttr("id", "OPN")->
+	    setAttr("ReqType", int2str(SC_ISSUE))->
+	    setAttr("SecPolicy", "None")->setAttr("SecurityMode", int2str(MS_None))->
+	    setAttr("SecLifeTm", int2str(OpcUa_SecCnlDefLifeTime));
+	protIO(req);
+	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
+
+	if(secPolicy() != "None" || ireq == "GetEndpoints" || !sess.endPointDscr.childSize()) {
+	    // Sending the GetEndpoints request for the server certificate retrieving and for the secure policy checking
+	    req.setAttr("id", "GetEndpoints");
+	    protIO(req);
+	    if(!req.attr("err").empty()) { io.setAttr("err", req.attr("err")); return; }
+	    //  Finding an endoint with needed secure policy
+	    unsigned iEP;
+	    for(iEP = 0; iEP < req.childSize(); iEP++)
+		if(req.childGet(iEP)->name() == "EndpointDescription" &&
+			strParse(req.childGet(iEP)->attr("securityPolicyUri"),1,"#") == secPolicy() &&
+			atoi(req.childGet(iEP)->attr("securityMode").c_str()) == secMessMode())
+		    break;
+	    if(iEP >= req.childSize())
+	    { io.setAttr("err",strMess("0x%x:%s",OpcUa_BadSecurityPolicyRejected,"No secure policy found")); return; }
+	    sess.endPointDscr = *req.childGet(iEP);
+	    if(ireq == "GetEndpoints") { io = req; return; }
+	}
+
+	// Reconnecting for the secure policy
+	if(secPolicy() != "None") {
+	    //  Sending the Close request for the not secure channel
+	    req.clear()->setAttr("id", "CLO");
+	    protIO(req);
+	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
+
+	    //  Sending HELLO message
+	    req.setAttr("id", "HEL");
+	    protIO(req);
+	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
+
+	    //  Sending the Open SecureChannel message for the secure policy
+	    req.setAttr("id", "OPN")->
+		setAttr("ReqType", int2str(SC_ISSUE))->
+		setAttr("ServCert", sess.endPointDscr.childGet("serverCertificate")->text())->
+		setAttr("SecurityMode", sess.endPointDscr.attr("securityMode"))->
+		setAttr("SecLifeTm", int2str(OpcUa_SecCnlDefLifeTime));
+	    protIO(req);
+	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
+	}
+    }
+    //Sending the channel renew request at 75% remaining life time
+    else if(1e-3*(curTm-sess.secChnlOpenTm) >= 0.75*sess.secLifeTime) {
+	req.setAttr("id", "OPN")->
+	    setAttr("ReqType", int2str(SC_RENEW))->
+	    setAttr("SecLifeTm", int2str(OpcUa_SecCnlDefLifeTime));
+	protIO(req);
+	if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); sess.clearSecCnl(); return; }
     }
 
-    io.setAttr("EndPoint", endPoint())->setAttr("authTokenId", sess.authTkId)->setAttr("ReqHandle", uint2str(sess.reqHndl++))->
-	setAttr("SeqNumber", uint2str(++sess.sqNumb))->setAttr("SeqReqId", uint2str(++sess.sqReqId))->
-	setAttr("clKey", sess.clKey)->setAttr("servKey", sess.servKey);
+    //Sending the session creation and activation messages with support of reusing of previous sessions at isSessLive
+    if(ireq != "FindServers" && ireq != "GetEndpoints" && (sess.secChnlChanged || sess.authTkId.empty() || !isScnlLive)) {
+	// Sending the CreateSession message
+	if(sess.authTkId.empty() || !isSessLive) {
+	    if(sess.authTkId.size())	sess.clearSess();
+	    req.setAttr("id", "CreateSession")->
+		setAttr("sesTm", "1.2e6");
+	    protIO(req);
+	    if(!req.attr("err").empty())	{ io.setAttr("err",req.attr("err")); sess.clearSecCnl(); return; }
+	}
+
+	// Sending the ActivateSession message
+	req.setAttr("id", "ActivateSession");
+	protIO(req);
+	if(!req.attr("err").empty())	{ io.setAttr("err",req.attr("err")); sess.clearSess(); return; }
+
+	sess.secChnlChanged = false;
+    }
+
+    //The same original request
     protIO(io);
 
-    if(strtoul(io.attr("err").c_str(),NULL,0) == OpcUa_BadInvalidArgument) sess.clearFull();
-    else if(io.attr("id") == "CloseSession") sess.clearSess();
+    //Clearing the connection completly at the original request error OpcUa_BadInvalidArgument
+    if(str2uint(io.attr("err")) == OpcUa_BadInvalidArgument || str2uint(io.attr("err")) == OpcUa_BadSecureChannelIdInvalid) {
+	//sess.clearSess();
+	sess.clearSecCnl();
+    }
+}
+
+//***************************************************************
+//* Client::Subscr - Subscription object by monitoreditems set	*
+//***************************************************************
+int Client::Subscr::monitoredItemAdd( const NodeId &nd, AttrIds aId, MonitoringMode mMode )
+{
+    XML_N req("opc.tcp");
+
+    int hndl = -1;
+
+    //Appending for new item
+    if(!nd.isNull()) {
+	int emptyIt = -1;
+	OPCAlloc res(clnt->mtxData, true);
+	for(unsigned iIt = 0; iIt < mItems.size() /*&& hndl < 0*/; iIt++)
+	    if(mItems[iIt].nd == nd && mItems[iIt].aid == aId)
+		hndl = iIt;
+	    else if(mItems[iIt].nd.isNull() && emptyIt < 0)	emptyIt = iIt;
+
+	if(hndl < 0) {
+	    if(emptyIt >= 0)	hndl = emptyIt;
+	    else { mItems.push_back(MonitItem(nd,aId,mMode)); hndl = mItems.size() - 1; }
+	    MonitItem &itO = mItems[hndl];
+	    itO.md = mMode;
+	    itO.smplItv = publInterval;
+	    itO.qSz = 1;
+	    itO.active = false;
+	    itO.st = 0;
+	    itO.val.setAttr("nodata", "1");
+	}
+    }
+
+    //Same registering the items
+    if(subScrId && (hndl >= 0 || nd.isNull())) {
+	req.setAttr("id", "CreateMonitoredItems")->
+	    setAttr("subScrId", uint2str(subScrId))->
+	    setAttr("tmstmpToRet", uint2str(TS_NEITHER));
+	OPCAlloc res(clnt->mtxData, true);
+	for(unsigned iIt = ((hndl>=0)?hndl:0); iIt < ((hndl>=0)?hndl+1:mItems.size()); ++iIt)
+	    if(!mItems[iIt].active)	//Not registered still
+		req.childAdd("mIt")->
+		    setAttr("aId", uint2str(mItems[iIt].aid))->
+		    setAttr("mMode", uint2str(mItems[iIt].md))->
+		    setAttr("hndl", uint2str(iIt))->
+		    setAttr("smplInt", real2str(mItems[iIt].smplItv))->
+		    setAttr("qSz", uint2str(mItems[iIt].qSz))->
+		    setText(mItems[iIt].nd.toAddr());
+	res.unlock();
+
+	if(req.childSize()) {
+	    clnt->reqService(req);
+
+	    // Processing the result
+	    res.lock();
+	    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
+		XML_N *chO = req.childGet(iCh);
+		uint32_t itId = str2uint(chO->attr("hndl"));
+		if(itId >= mItems.size()) continue;
+		mItems[itId].active = true;
+		mItems[itId].st = str2uint(chO->attr("statusCode"));
+		mItems[itId].smplItv = str2real(chO->attr("smplInt"));
+		mItems[itId].qSz = str2uint(chO->attr("qSz"));
+		mItems[itId].val.setAttr("nodata", "1");
+	    }
+	}
+    }
+
+    return hndl;
+}
+
+void Client::Subscr::monitoredItemDel( int32_t mItId, bool localDeactivation, bool onlyNoData )
+{
+    OPCAlloc res(clnt->mtxData, true);
+    if(mItId >= (int)mItems.size())	return;
+
+    for(unsigned iIt = ((mItId>=0)?mItId:0); iIt < ((mItId>=0)?mItId+1:mItems.size()); ++iIt)
+	if(localDeactivation) {
+	    if(!onlyNoData) { mItems[iIt].active = false; mItems[iIt].st = 0; }
+	    mItems[iIt].val.setAttr("nodata", "1");
+	}
+	else {
+	    XML_N req("opc.tcp");
+	    req.setAttr("id", "DeleteMonitoredItems")->
+		setAttr("subScrId", uint2str(subScrId));
+	    req.childAdd("mIt")->setText(uint2str(mItId));
+	    clnt->reqService(req);
+
+	    //Processing the result
+	    for(unsigned iCh = 0; iCh < req.childSize(); ++iCh) {
+		XML_N *chO = req.childGet(iCh);
+		if(str2uint(chO->attr("statusCode")) == 0 && mItId == str2uint(chO->attr("mIt"))) {
+		    mItems[mItId].nd = NodeId();
+		    mItems[mItId].active = false;
+		    mItems[mItId].st = 0;
+		    mItems[mItId].val.setAttr("nodata", "1");
+		}
+	    }
+	}
+}
+
+void Client::Subscr::activate( bool vl, bool onlyLocally )
+{
+    if(vl == (bool)subScrId) return;	//Already active/deactive
+
+    XML_N req("opc.tcp");
+    if(vl) {
+	req.setAttr("id", "CreateSubscription")->
+	    setAttr("publInterval", real2str(publInterval))->
+	    setAttr("lifetimeCnt", uint2str(lifetimeCnt))->
+	    setAttr("maxKeepAliveCnt", uint2str(maxKeepAliveCnt))->
+	    setAttr("maxNtfPerPubl", uint2str(maxNtfPerPubl))->
+	    setAttr("publEn", publEn?"1":"0")->
+	    setAttr("pr", uint2str(pr));
+	clnt->reqService(req);
+	if(str2uint(req.attr("subScrId"))) {
+	    subScrId = str2uint(req.attr("subScrId"));
+	    publInterval = str2real(req.attr("publInterval"));
+	    lifetimeCnt = str2uint(req.attr("lifetimeCnt"));
+	    maxKeepAliveCnt = str2uint(req.attr("maxKeepAliveCnt"));
+	    lstPublTm = curTime();
+	}
+
+	//Activation off all registered monitoring items
+	monitoredItemAdd(0);
+    }
+    else {
+	if(!onlyLocally) {
+	    req.setAttr("id", "DeleteSubscriptions");
+	    req.childAdd("subscr")->setText(uint2str(subScrId));
+	    clnt->reqService(req);
+	}
+
+	//if(req.childSize() && req.childGet(0)->attr("statusCode").size() && !str2uint(req.childGet(0)->attr("statusCode")))
+	subScrId = 0;	//Independently from the status code during to possible server errors
+
+	monitoredItemDel(-1, true);	//Deactivate-disable off all registered monitoring items
+    }
 }
 
 //*************************************************
@@ -1989,6 +2537,15 @@ Server::~Server( )
     pthread_mutex_destroy(&mtxData);
 }
 
+void Server::chnlList( vector<uint32_t> &chnls )
+{
+    OPCAlloc res(mtxData, true);
+
+    chnls.clear();
+    for(map<uint32_t,SecCnl>::iterator scIt = mSecCnl.begin(); scIt != mSecCnl.end(); ++scIt)
+	chnls.push_back(scIt->first);
+}
+
 int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& iClCert, const string &iSecPolicy, char iSecMessMode,
     const string &iclAddr, uint32_t iseqN )
 {
@@ -1998,22 +2555,30 @@ int Server::chnlSet( int cid, const string &iEp, int32_t lifeTm, const string& i
     if(cid) {
 	if(mSecCnl.find(cid) != mSecCnl.end()) {
 	    mSecCnl[cid].tLife = lifeTm;
-	    mSecCnl[cid].TokenIdPrev = mSecCnl[cid].TokenId;
-	    if((++mSecCnl[cid].TokenId) == 0) mSecCnl[cid].TokenId = 1;
+	    mSecCnl[cid].tokenIdPrev = mSecCnl[cid].tokenId;
+	    if((++mSecCnl[cid].tokenId) == 0) mSecCnl[cid].tokenId = 1;
 	    mSecCnl[cid].tCreate = curTime();
 	    return cid;
 	} else return -1;
     }
 
-    //Check for Re-establish
-    map<uint32_t, SecCnl>::iterator iSC = mSecCnl.begin();
+    //Checking to remove old lost channels and calculation the channels limit
+    unsigned actSecCnl = 0;
+    for(map<uint32_t,SecCnl>::iterator iSC = mSecCnl.begin(); iSC != mSecCnl.end(); )
+	if(1e-6*(curTime()-iSC->second.tCreate) > 1e-3*iSC->second.tLife)
+	    mSecCnl.erase(iSC++);
+	else { ++iSC; ++actSecCnl; }
+    if(actSecCnl > OpcUa_SecCnlLimit)	return -1;
+
+    //Checking to Re-establish and to close old channells
+    /*map<uint32_t, SecCnl>::iterator iSC = mSecCnl.begin();
     while(iSC != mSecCnl.end() && !((iseqN-iSC->second.clSeqN) < 10 && iseqN != iSC->second.startClSeqN &&
 				iclAddr == iSC->second.clAddr && iClCert == iSC->second.clCert)) ++iSC;
     if(iSC != mSecCnl.end()) {
 	if(debug()) debugMess(strMess("SecCnl: Re-establish detected for %d(%d): seqN=%d, clAddr='%s'.",
 				iSC->first,iseqN,iSC->second.clSeqN,iSC->second.clAddr.c_str()));
 	return iSC->first;
-    }
+    }*/
 
     //New channel create
     do {
@@ -2132,15 +2697,15 @@ nextReq:
 	    // Find server with that policy
 	    vector<string> epLs;
 	    epEnList(epLs);
-	    int i_epOk = -1;
+	    int iEPOk = -1;
 	    EP *wep = NULL;
-	    for(int i_ep = 0; i_epOk < 0 && i_ep < (int)epLs.size(); i_ep++) {
-		if(!(wep=epEnAt(epLs[i_ep])))	continue;
-		for(int i_s = 0; i_epOk < 0 && i_s < wep->secSize(); i_s++)
-		    if(wep->secPolicy(i_s) == secPlc)
-			i_epOk = i_ep;
+	    for(int iEP = 0; iEPOk < 0 && iEP < (int)epLs.size(); ++iEP) {
+		if(!(wep=epEnAt(epLs[iEP])))	continue;
+		for(unsigned iS = 0; iEPOk < 0 && iS < wep->secN(); ++iS)
+		    if(wep->secPolicy(iS) == secPlc)
+			iEPOk = iEP;
 	    }
-	    if(i_epOk < 0) throw OPCError(OpcUa_BadSecurityPolicyRejected, "", "");
+	    if(iEPOk < 0) throw OPCError(OpcUa_BadSecurityPolicyRejected, "", "");
 
 	    string clntCert = certDER2PEM(iS(rb,off));		//>SenderCertificate
 	    string serverCertThmbp = iS(rb, off);		//>ReceiverCertificateThumbrint
@@ -2180,15 +2745,15 @@ nextReq:
 
 	    // Find message secure mode
 	    bool secModOK = false;
-	    for(int i_s = 0; !secModOK && i_s < wep->secSize(); i_s++)
-		if(wep->secPolicy(i_s) == secPlc && wep->secMessageMode(i_s) == secMode)
+	    for(unsigned iS = 0; !secModOK && iS < wep->secN(); ++iS)
+		if(wep->secPolicy(iS) == secPlc && wep->secMessageMode(iS) == secMode)
 		    secModOK = true;
 	    if(!secModOK) throw OPCError(OpcUa_BadSecurityModeRejected, "", "");
 
 	    if((chnlId=chnlSet((reqTp==SC_RENEW?chnlId:0),wep->id(),reqLifeTm,clntCert,secPlc,secMode,clientAddr(inPrtId),seqN)) < 0)
 		throw OPCError(OpcUa_BadTcpSecureChannelUnknown, "", "");
 
-	    // Prepare respond message
+	    // Preparing the response message
 	    out.reserve(200);
 	    out.append("OPNF");					//OpenSecureChannel message type
 	    oNu(out, 0, 4);					//Message size
@@ -2216,7 +2781,7 @@ nextReq:
 								//>>>> Standard respond
 	    oNu(out, OpcUa_ProtocolVersion, 4);			//ServerProtocolVersion
 	    oNu(out, chnlId, 4);				//Secure channel identifier
-	    oNu(out, chnlGet(chnlId).TokenId, 4);		//TokenId
+	    oNu(out, chnlGet(chnlId).tokenId, 4);		//TokenId
 	    oTm(out, chnlGet(chnlId).tCreate);			//CreatedAt
 	    oN(out, chnlGet(chnlId).tLife, 4);			//RevisedLifeTime (600000, minimum)
 
@@ -2251,15 +2816,16 @@ nextReq:
 	//Check for Close SecureChannel message type
 	else if(rb.compare(0,4,"CLOF") == 0) {
 	    if(rb.size() < mSz) return holdConn;
-	    if(dbg) debugMess("CLO Req");
-
 	    off = 8;
 	    uint32_t secId = iNu(rb, off, 4);			//Secure channel identifier
 	    uint32_t tokId = iNu(rb, off, 4);			//TokenId
+
+	    if(dbg) debugMess("CLO Req secId="+uint2str(secId)+", tokId="+uint2str(tokId));
+
 	    SecCnl scHd = chnlGet(secId);
 	    // Secure channel and token check
-	    if(!scHd.TokenId) throw OPCError(0, "", "");
-	    if(scHd.TokenId != tokId)	throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
+	    if(!scHd.tokenId) throw OPCError(0, "", "");
+	    if(scHd.tokenId != tokId)	throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
 	    // Decrypt message block
 	    if(scHd.secMessMode == MS_SignAndEncrypt)
 		rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),scHd.servKey,scHd.secPolicy));
@@ -2299,8 +2865,8 @@ nextReq:
 	    uint32_t tokId = iNu(rb, off, 4);			//TokenId
 	    SecCnl scHd = chnlGet(secId);
 	    // Secure channel and token check
-	    if(!scHd.TokenId) throw OPCError(OpcUa_BadSecureChannelClosed, "Secure channel closed");
-	    if(!(tokId == scHd.TokenId || (tokId == scHd.TokenIdPrev && (curTime() < 1000ll*(scHd.tCreate+0.25*scHd.tLife)))))
+	    if(!scHd.tokenId) throw OPCError(OpcUa_BadSecureChannelClosed, "Secure channel closed");
+	    if(!(tokId == scHd.tokenId || (tokId == scHd.tokenIdPrev && (curTime() < 1000ll*(scHd.tCreate+0.25*scHd.tLife)))))
 		throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
 	    if(curTime() > (scHd.tCreate+(int64_t)scHd.tLife*1000))
 		throw OPCError(OpcUa_BadSecureChannelIdInvalid, "Secure channel renew expired");
@@ -2327,7 +2893,7 @@ nextReq:
 		// Abort
 		if(rb[3] == 'A') { scHd_.chCnt = 0; scHd_.chB = ""; passMessPrc = true; }
 		else if(scHd.chCnt || rb[3] == 'C') {
-		    //Check for lose sequence
+		    //Checking for lost sequence
 		    // * Lost single 'C' before 'F': pass to processing but there is possible single 'F', it will be checked by correct request type.
 		    // * Lost intermediate 'F' ('C' both after and before): clean the chunks buffer and start it's filling from begin.
 		    // * Lost first 'C': clean the chunks buffer and start it's filling from next 'C' but there is possible this is first 'C' after
@@ -2365,7 +2931,7 @@ nextReq:
 								//>> Request Header
 	    uint32_t sesTokId = iNodeId(rb, off).numbVal();	//Session AuthenticationToken
 
-	    if(dbg) debugMess(strMess("MSG Req: %d; seqN=%d",reqTp,scHd_.clSeqN));
+	    if(dbg) debugMess(strMess("MSG Req: %d, seqN=%d, secId=%u, inPrtId=%s; sesTokId=%u.",reqTp,scHd_.clSeqN,secId,inPrtId.c_str(),sesTokId));
 
 	    // Session check
 	    if(!(reqTp == OpcUa_CreateSessionRequest || reqTp == OpcUa_FindServersRequest || reqTp == OpcUa_GetEndpointsRequest ||
@@ -2405,8 +2971,8 @@ nextReq:
 		    vector<string> duLs;
 		    discoveryUrls(duLs);
 		    oNu(respEp, duLs.size(), 4);		//List items
-		    for(unsigned i_du = 0; i_du < duLs.size(); i_du++)
-			oS(respEp, duLs[i_du]);			//discoveryUrl
+		    for(unsigned iDU = 0; iDU < duLs.size(); iDU++)
+			oS(respEp, duLs[iDU]);			//discoveryUrl
 		    break;
 		}
 		case OpcUa_GetEndpointsRequest: {
@@ -2424,12 +2990,12 @@ nextReq:
 		    vector<string> epLs;
 		    epEnList(epLs);
 		    unsigned epCnt = 0;
-		    for(unsigned i_ep = 0; i_ep < epLs.size(); i_ep++) {
-			EP *ep = epEnAt(epLs[i_ep]);
+		    for(unsigned iEP = 0; iEP < epLs.size(); iEP++) {
+			EP *ep = epEnAt(epLs[iEP]);
 			if(!ep) continue;
 								//>>> EndpointDescription
-			for(int i_sec = 0; i_sec < ep->secSize(); i_sec++, epCnt++) {
-			    oS(respEp, ep->url()+"/OSCADA_OPC/"+ep->secPolicy(i_sec)/*+"/"+ep->secMessMode(i_sec)*/);    //endpointUrl
+			for(unsigned iSec = 0; iSec < ep->secN(); iSec++, epCnt++) {
+			    oS(respEp, ep->url()+"/OSCADA_OPC/"+ep->secPolicy(iSec)/*+"/"+ep->secMessMode(iSec)*/);    //endpointUrl
 								//>>>> server (ApplicationDescription)
 			    oS(respEp, applicationUri());	//applicationUri
 			    oS(respEp, productUri());		//productUri
@@ -2442,12 +3008,12 @@ nextReq:
 			    vector<string> duLs;
 			    discoveryUrls(duLs);
 			    oNu(respEp, duLs.size(), 4);	//List items
-			    for(unsigned i_du = 0; i_du < duLs.size(); i_du++)
-				oS(respEp,duLs[i_du]);		//discoveryUrl
+			    for(unsigned iDU = 0; iDU < duLs.size(); iDU++)
+				oS(respEp,duLs[iDU]);		//discoveryUrl
 
 			    oS(respEp, certPEM2DER(ep->cert()));//>>> serverCertificate
-			    oNu(respEp, ep->secMessageMode(i_sec), 4);	//securityMode:MessageSecurityMode
-			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#"+ep->secPolicy(i_sec));	//securityPolicyUri
+			    oNu(respEp, ep->secMessageMode(iSec), 4);	//securityMode:MessageSecurityMode
+			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#"+ep->secPolicy(iSec));	//securityPolicyUri
 
 								//>>>> userIdentityTokens
 			    oNu(respEp, 2, 4);			//List items
@@ -2465,7 +3031,7 @@ nextReq:
 			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
 			    oS(respEp, "http://opcfoundation.org/UA-Profile/Transport/uatcp-uasc-uabinary");//transportProfileUri
-			    oNu(respEp, (ep->secPolicy(i_sec)!="None")?130:0, 1);	//securityLevel
+			    oNu(respEp, (ep->secPolicy(iSec)!="None")?130:0, 1);	//securityLevel
 			}
 		    }
 		    oNu(respEp, epCnt, 4, 0);			//EndpointDescrNubers list items
@@ -2492,10 +3058,11 @@ nextReq:
 		    iNu(rb, off, 4);				//maxResponse MessageSize
 
 		    //  Try for session reusing
-		    int sessId = 0;
-		    if(!sesTokId && !wep->sessActivate(sesTokId,secId,true,inPrtId)) sessId = sesTokId;
+		    //int sessId = 0;
+		    //if(!sesTokId && !wep->sessActivate(sesTokId,secId,true,inPrtId)) sessId = sesTokId;
 		    //  Create new session
-		    if(!sessId) sessId = wep->sessCreate(sessNm, rStm);
+		    //if(!sessId) 
+		    int sessId = wep->sessCreate(sessNm, rStm);
 		    string servNonce = (scHd.secPolicy != "None") ? randBytes(32) : "";
 		    wep->sessServNonceSet(sessId, servNonce);
 
@@ -2515,11 +3082,11 @@ nextReq:
 		    vector<string> epLs;
 		    epEnList(epLs);
 		    unsigned epCnt = 0;
-		    for(unsigned i_ep = 0; i_ep < epLs.size(); i_ep++) {
-			EP *ep = epEnAt(epLs[i_ep]);
+		    for(unsigned iEP = 0; iEP < epLs.size(); ++iEP) {
+			EP *ep = epEnAt(epLs[iEP]);
 			if(!ep) continue;
 								//>>> EndpointDescription
-			for(int i_sec = 0; i_sec < ep->secSize(); i_sec++, epCnt++) {
+			for(unsigned iSec = 0; iSec < ep->secN(); ++iSec, ++epCnt) {
 			    oS(respEp, ep->url());		//endpointUrl
 								//>>>> server (ApplicationDescription)
 			    oS(respEp, applicationUri());	//applicationUri
@@ -2533,12 +3100,12 @@ nextReq:
 			    vector<string> duLs;
 			    discoveryUrls(duLs);
 			    oNu(respEp, duLs.size(), 4);	//List items
-			    for(unsigned i_du = 0; i_du < duLs.size(); i_du++)
-				oS(respEp, duLs[i_du]);		//discoveryUrl
+			    for(unsigned iDU = 0; iDU < duLs.size(); iDU++)
+				oS(respEp, duLs[iDU]);		//discoveryUrl
 
 			    oS(respEp, certPEM2DER(ep->cert()));//>>> serverCertificate
-			    oNu(respEp, ep->secMessageMode(i_sec), 4);	//securityMode:MessageSecurityMode
-			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#"+ep->secPolicy(i_sec));	//securityPolicyUri
+			    oNu(respEp, ep->secMessageMode(iSec), 4);	//securityMode:MessageSecurityMode
+			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#"+ep->secPolicy(iSec));	//securityPolicyUri
 
 								//>>>> userIdentityTokens
 			    oNu(respEp, 2, 4);			//List items
@@ -2556,7 +3123,7 @@ nextReq:
 			    oS(respEp, "http://opcfoundation.org/UA/SecurityPolicy#Basic128Rsa15");	//securityPolicyUri
 
 			    oS(respEp, "http://opcfoundation.org/UA-Profile/Transport/uatcp-uasc-uabinary");	//transportProfileUri
-			    oNu(respEp, (ep->secPolicy(i_sec)!="None")?10:0, 1);	//securityLevel
+			    oNu(respEp, (ep->secPolicy(iSec)!="None")?10:0, 1);	//securityLevel
 			}
 		    }
 		    oNu(respEp, epCnt, 4, enpNumperPos);	//EndpointDescrNubers real list items
@@ -2581,13 +3148,13 @@ nextReq:
 		    string alg = iS(rb, off);			//> algorithm
 		    string sign = iS(rb, off);			//> signature
 		    if(scHd.secPolicy != "None") {
-			if(!asymmetricVerify(certPEM2DER(wep->cert())+wep->sessGet(sesTokId).servNonce, sign, scHd.clCert))
+			if(!asymmetricVerify(certPEM2DER(wep->cert())+wep->sessGet(sesTokId).servNonce,sign,scHd.clCert))
 			    throw OPCError(OpcUa_BadApplicationSignatureInvalid, "Application signature error");
 		    }
 
 		    iNu(rb, off, 4);				//>clientSoftwareCertificates []
 		    uint32_t ln = iNu(rb, off, 4);		//>localeIds []
-		    for(unsigned i_l = 0; i_l < ln; i_l++)
+		    for(unsigned iL = 0; iL < ln; iL++)
 			iS(rb, off);				//> localeId
 								//>userIdentityToken
 		    uint32_t userIdTk = iNodeId(rb, off).numbVal();	//> TypeId
@@ -2629,15 +3196,7 @@ nextReq:
 		case OpcUa_CloseSessionRequest: {
 		    //  Request
 		    bool subScrDel = iNu(rb, off, 1);		//deleteSubscriptions
-		    wep->sessClose(sesTokId);
-		    if(subScrDel) {
-			OPCAlloc mtx(wep->mtxData, true);
-			for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
-			    if(wep->mSubScr[i_ss].st != SS_CLOSED && wep->mSubScr[i_ss].sess == (int)sesTokId) {
-				wep->mSubScr[i_ss].setState(SS_CLOSED);
-				if(dbg) debugMess(strMess("EP: SubScription %d closed.",i_ss));
-			    }
-		    }
+		    wep->sessClose(sesTokId, subScrDel);
 
 		    //  Respond
 		    reqTp = OpcUa_CloseSessionResponse;
@@ -2662,9 +3221,9 @@ nextReq:
 		    reqTp = OpcUa_CreateSubscriptionResponse;
 		    respEp.reserve(20);
 		    oNu(respEp, subScrId, 4);			//subscriptionId
-		    oR(respEp, ss.publInterv, 8);		//revisedPublishingInterval
-		    oNu(respEp, ss.cntrLifeTime, 4);		//revisedLifetimeCount
-		    oNu(respEp, ss.cntrKeepAlive, 4);		//revisedMaxKeepAliveCount
+		    oR(respEp, ss.publInterval, 8);		//revisedPublishingInterval
+		    oNu(respEp, ss.lifetimeCnt, 4);		//revisedLifetimeCount
+		    oNu(respEp, ss.maxKeepAliveCnt, 4);		//revisedMaxKeepAliveCount
 		    break;
 		}
 		case OpcUa_ModifySubscriptionRequest: {
@@ -2685,9 +3244,9 @@ nextReq:
 		    //  Respond
 		    reqTp = OpcUa_ModifySubscriptionResponse;
 		    respEp.reserve(20);
-		    oR(respEp, ss.publInterv, 8);		//revisedPublishingInterval
-		    oNu(respEp, ss.cntrLifeTime, 4);		//revisedLifetimeCount
-		    oNu(respEp, ss.cntrKeepAlive, 4);		//revisedMaxKeepAliveCount
+		    oR(respEp, ss.publInterval, 8);		//revisedPublishingInterval
+		    oNu(respEp, ss.lifetimeCnt, 4);		//revisedLifetimeCount
+		    oNu(respEp, ss.maxKeepAliveCnt, 4);		//revisedMaxKeepAliveCount
 		    break;
 		}
 		/*case OpcUa_TransferSubscriptionsRequest:
@@ -2700,7 +3259,7 @@ nextReq:
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
 
-		    for(uint32_t i_s = 0; i_s < sn; i_s++)
+		    for(uint32_t iS = 0; iS < sn; iS++)
 		    {
 			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 			Subscr ss = wep->subscrGet(subScrId);
@@ -2719,7 +3278,7 @@ nextReq:
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
 
-		    for(uint32_t i_s = 0; i_s < sn; i_s++) {
+		    for(uint32_t iS = 0; iS < sn; iS++) {
 			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 			Subscr ss = wep->subscrGet(subScrId);
 			oNu(respEp, ((ss.st==SS_CLOSED)?OpcUa_BadSubscriptionIdInvalid:0), 4);	//statusCode
@@ -2900,7 +3459,7 @@ nextReq:
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
 
-		    for(uint32_t i_s = 0; i_s < sn; i_s++) {
+		    for(uint32_t iS = 0; iS < sn; iS++) {
 			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 			Subscr ss = wep->subscrGet(subScrId);
 			if(ss.st != SS_CLOSED) wep->subscrSet(subScrId, SS_CUR, en);
@@ -2929,7 +3488,7 @@ nextReq:
 
 			bool nOK = true;
 			XML_N req("data");
-			for(unsigned i_rp = 0; i_rp < irp; i_rp++) {
+			for(unsigned iRp = 0; iRp < irp; iRp++) {
 			    NodeId rTpId = iNodeId(rb, off);	//referenceTypeId
 			    bool inv = iNu(rb, off, 1);		//isInverse
 			    iNu(rb, off, 1);			//includeSubtypes
@@ -2941,13 +3500,13 @@ nextReq:
 					 setAttr("BrDir", uint2str(inv?BD_INVERSE:BD_FORWARD))->
 					 setAttr("RefTpId", rTpId.toAddr());
 			    wep->reqData(OpcUa_BrowseRequest, req);
-			    unsigned i_ref;
-			    for(i_ref = 0; i_ref < req.childSize(); i_ref++)
-				if(req.childGet(i_ref)->attr("name") == tNm) {
-				    sN = NodeId::fromAddr(req.childGet(i_ref)->attr("NodeId"));
+			    unsigned iRef;
+			    for(iRef = 0; iRef < req.childSize(); iRef++)
+				if(req.childGet(iRef)->attr("name") == tNm) {
+				    sN = NodeId::fromAddr(req.childGet(iRef)->attr("NodeId"));
 				    break;
 				}
-			    nOK = (i_ref < req.childSize());
+			    nOK = (iRef < req.childSize());
 			}
 
 			//   Path result
@@ -2976,7 +3535,7 @@ nextReq:
 		    for(unsigned iN = 0; iN < nN; iN++) {
 			if(dbg) debugMess(strMess("RegisterNodesRequest: node=%d; off=%d.",iN,off));
 			NodeId rN = iNodeId(rb, off);	//>> registeredNode
-			//???? Maybe some check for the node <rN> presenting
+			//!!!! Maybe some check for the node <rN> presence
 			oNodeId(respEp, rN);		//<< registeredNode
 		    }
 		    break;
@@ -2995,7 +3554,7 @@ nextReq:
 		    for(unsigned iN = 0; iN < nN; iN++) {
 			if(dbg) debugMess(strMess("UnregisterNodesRequest: node=%d; off=%d.",iN,off));
 			NodeId uN = iNodeId(rb, off);	//>> unregisteredNode
-			//???? Maybe some check for the node <uN> presenting
+			//!!!! Maybe some check for the node <uN> presence
 		    }
 		    break;
 		}
@@ -3016,7 +3575,7 @@ nextReq:
 		    oNu(respEp, nc, 4);			//Nodes
 
 		    //   Nodes list processing
-		    for(uint32_t i_c = 0; i_c < nc; i_c++) {
+		    for(uint32_t iC = 0; iC < nc; iC++) {
 			NodeId nid = iNodeId(rb, off);		//nodeId
 			uint32_t bd = iNu(rb, off, 4);		//browseDirection
 			NodeId rtId = iNodeId(rb, off);		//referenceTypeId
@@ -3035,8 +3594,8 @@ nextReq:
 				    setAttr("ClassMask", uint2str(nClass))->setAttr("rPn", uint2str(rPn));
 			stCode = wep->reqData(reqTp, req);
 			refNumb = req.childSize();
-			for(unsigned i_ref = 0; !stCode && i_ref < req.childSize(); i_ref++) {
-			    XML_N *chN = req.childGet(i_ref);
+			for(unsigned iRef = 0; !stCode && iRef < req.childSize(); iRef++) {
+			    XML_N *chN = req.childGet(iRef);
 			    oRef(respEp, resMask, NodeId::fromAddr(chN->attr("NodeId")),
 				NodeId::fromAddr(chN->attr("referenceTypeId")),
 				atoi(chN->attr("dir").c_str()), chN->attr("name"), atoi(chN->attr("NodeClass").c_str()),
@@ -3069,7 +3628,7 @@ nextReq:
 		    oNu(respEp, nCp, 4);		//continuationPoints
 
 		    //   Continuation points list processing
-		    for(uint32_t i_cp = 0; i_cp < nCp; i_cp++) {
+		    for(uint32_t iCp = 0; iCp < nCp; iCp++) {
 			string cp = iS(rb, off);	//continuationPoint
 
 			uint32_t stCode = 0, refNumb = 0;
@@ -3084,8 +3643,8 @@ nextReq:
 					setAttr("ClassMask", uint2str(cPo.nClassMask))->setAttr("rPn", uint2str(cPo.refPerN));
 			    stCode = wep->reqData(reqTp, req);
 			    refNumb = req.childSize();
-			    for(unsigned i_ref = 0; !stCode && i_ref < req.childSize(); i_ref++) {
-				XML_N *chN = req.childGet(i_ref);
+			    for(unsigned iRef = 0; !stCode && iRef < req.childSize(); iRef++) {
+				XML_N *chN = req.childGet(iRef);
 				oRef(respEp, cPo.resMask, NodeId::fromAddr(chN->attr("NodeId")),
 				    NodeId::fromAddr(chN->attr("referenceTypeId")),
 				    atoi(chN->attr("dir").c_str()), chN->attr("name"), atoi(chN->attr("NodeClass").c_str()),
@@ -3129,7 +3688,7 @@ nextReq:
 		    //  Respond
 		    oNu(respEp, nc, 4);				//Numbers
 		    //   Nodes list processing
-		    for(uint32_t i_c = 0; i_c < nc; i_c++) {
+		    for(uint32_t iC = 0; iC < nc; iC++) {
 			NodeId nid = iNodeId(rb, off);		//nodeId
 			uint32_t aid = iNu(rb, off, 4);		//attributeId
 			iS(rb, off);				//indexRange
@@ -3155,7 +3714,7 @@ nextReq:
 
 		    //  Respond
 		    oNu(respEp, nc, 4);			//Numbers
-		    for(unsigned i_n = 0; i_n < nc; i_n++) {
+		    for(unsigned iN = 0; iN < nc; iN++) {
 			NodeId nid = iNodeId(rb, off);	//nodeId
 			uint32_t aid = iNu(rb, off, 4);	//attributeId (Value)
 			iS(rb, off);			//indexRange
@@ -3211,11 +3770,15 @@ nextReq:
 			    rb[3] = 'Q';
 			    oNu(rb, rb.size(), 4, 4);
 			    s->publishReqs.push_back(rb);
+			    //   Limiting the publish requests
+			    while(s->publishReqs.size() > OpcUa_ServerMaxPublishQueue)
+				s->publishReqs.pop_front();
 			}
 			if(findOK || s->publishReqs.size() == 1) {
 			    unsigned prSS = wep->mSubScr.size();
-			    for(unsigned iSs = 0; iSs < wep->mSubScr.size(); ++iSs)
-				if((wep->mSubScr[iSs].toInit || wep->mSubScr[iSs].st == SS_LATE || wep->mSubScr[iSs].st == SS_KEEPALIVE) &&
+			    for(unsigned iSs = 0; inPrtId == s->inPrtId && iSs < wep->mSubScr.size(); ++iSs)
+				if(wep->mSubScr[iSs].sess == (int)sesTokId &&
+					(wep->mSubScr[iSs].toInit || wep->mSubScr[iSs].st == SS_LATE || wep->mSubScr[iSs].st == SS_KEEPALIVE) &&
 					(prSS == wep->mSubScr.size() || wep->mSubScr[iSs].pr > wep->mSubScr[prSS].pr))
 				    prSS = iSs;
 			    if(prSS < wep->mSubScr.size()) {
@@ -3245,6 +3808,8 @@ nextReq:
 				respEp.reserve(100);
 				oNu(respEp, prSS+1, 4);				//<subscriptionId
 
+				if(dbg) debugMess(strMess("Publish Resp: toInit=%d; st=%d",ss.toInit,ss.st));
+
 				if(ss.toInit || ss.st == SS_KEEPALIVE) {
 				    ss.toInit = false;
 				    if(ss.st == SS_KEEPALIVE) ss.setState(SS_NORMAL);
@@ -3256,8 +3821,6 @@ nextReq:
 				    oN(respEp, 0, 4);			// notificationData []
 				}
 				else if(ss.st == SS_LATE) {
-				    ss.setState(SS_NORMAL);
-
 				    int aSeqOff = respEp.size(), aSeqN = 1;
 				    oN(respEp, aSeqN, 4);		//<availableSequence Numbers [], reserve
 				    for(deque<string>::iterator iRQ = ss.retrQueue.begin(); iRQ != ss.retrQueue.end(); ) {
@@ -3265,7 +3828,7 @@ nextReq:
 					uint32_t rSeq = iNu(*iRQ, rOff, 4);	//>sequenceNumber
 					int64_t rPblTm = iTm(*iRQ, rOff);	//>publishTime
 					//Check for remove from queue by long age
-					if((curTime()-rPblTm) > (wep->limRetrQueueTm()?1000000ll*wep->limRetrQueueTm():(int64_t)ss.cntrKeepAlive*ss.publInterv*1000))
+					if((curTime()-rPblTm) > (wep->limRetrQueueTm()?1000000ll*wep->limRetrQueueTm():(int64_t)ss.maxKeepAliveCnt*ss.publInterval*1000))
 					{
 					    iRQ = ss.retrQueue.erase(iRQ);
 					    continue;
@@ -3291,8 +3854,8 @@ nextReq:
 				    int mItOff = respEp.size();
 				    oN(respEp, 0, 4);				//<  monitoredItems []
 				    unsigned iMIt = 0;
-				    bool maxNotPerPublLim = false;
-				    for(unsigned iM = 0; !maxNotPerPublLim && iM < ss.mItems.size(); iM++) {
+				    bool maxNtfPerPublLim = false, hasData = false;
+				    for(unsigned iM = 0; !maxNtfPerPublLim && iM < ss.mItems.size(); iM++) {
 					Subscr::MonitItem &mIt = ss.mItems[iM];
 					if(!(mIt.md == MM_REPORTING && mIt.vQueue.size())) continue;
 					uint8_t eMsk = 0x01;
@@ -3303,27 +3866,30 @@ nextReq:
 					    default:				break;
 					}
 					while(mIt.vQueue.size()) {
-					    if(ss.maxNotPerPubl && iMIt >= ss.maxNotPerPubl) { maxNotPerPublLim = true; break; }
+					    if(ss.maxNtfPerPubl && iMIt >= ss.maxNtfPerPubl) { maxNtfPerPublLim = true; break; }
 					    oNu(respEp, mIt.cH, 4);		//<   clientHandle
 					    if(mIt.vQueue.front().st)
 						oDataValue(respEp, 0x0A, uint2str(mIt.vQueue.front().st), 0, mIt.vQueue.front().tm);	//<   status
 					    else oDataValue(respEp, eMsk, mIt.vQueue.front().vl, mIt.vTp, mIt.vQueue.front().tm);	//<   value
 					    mIt.vQueue.pop_front();
+					    if(mIt.vQueue.size()) hasData = true;
 					    iMIt++;
 					}
 				    }
+				    if(!hasData) ss.setState(SS_NORMAL);
 				    oN(respEp, 0, 4);				//<   diagnosticInfos []
-				    oNu(respEp, maxNotPerPublLim, 1, moreNtfOff);//<moreNotifications, real value write
+				    oNu(respEp, maxNtfPerPublLim, 1, moreNtfOff);//<moreNotifications, real value write
 				    oN(respEp, iMIt, 4, mItOff);		//<  monitoredItems [], real items number write
 				    oNu(respEp, respEp.size()-extObjOff-4, 4, extObjOff);	//<  extension object real size write
 
 				    ss.retrQueue.push_back(respEp.substr(ntfMsgOff));	//Queue to retranslation
 				    ss.seqN++;
-				    if(maxNotPerPublLim) ss.setState(SS_LATE);	//Restore state to process into the next Publish request,
+				    if(maxNtfPerPublLim) ss.setState(SS_LATE);	//Restore state to process into the next Publish request,
 										// !!!! maybe store the previous monitored item's position
 										//      and early call its into the subScrCycle()
 				}
-				s->publishReqs.erase(s->publishReqs.begin()+iP);	//Remove the publish request from the queue
+				s->publishReqs.erase(s->publishReqs.begin()+iP);//Remove the publish request from the queue
+				ss.pubCntr++;
 
 				//oN(respEp, -1, 4);			//<results [], empty
 				respEp += respAck;			//<results []
@@ -3399,11 +3965,12 @@ nextReq:
 	    // Same chunks prepare.
 	    while(respBody.size()) {
 		string resp; resp.reserve(200);
+		bool isFinal = (respBody.size() <= chnkBodySz);
 		resp.append("MSG");			//OpenSecureChannel message type
-		resp.append((respBody.size()<=chnkBodySz)?"F":"C");
+		resp.append(isFinal?"F":"C");
 		oNu(resp, 0, 4);			//Message size
 		oNu(resp, secId, 4);			//Secure channel identifier
-		oNu(resp, tokId, 4);			//Symmetric Algorithm Security Header : TokenId
+		oNu(resp, tokId, 4);			//Symmetric Algorithm Security Header : tokenId
 		int begEncBlck = resp.size();
 							//> Sequence header
 		oNu(resp, scHd_.servSeqN++, 4);		//Sequence number
@@ -3429,7 +3996,7 @@ nextReq:
 		    if(scHd.secMessMode == MS_SignAndEncrypt)
 			resp.replace(begEncBlck, resp.size()-begEncBlck, symmetricEncrypt(resp.substr(begEncBlck),scHd.clKey,scHd.secPolicy));
 		}
-		if(answ) out += resp;
+		if(answ && isFinal) out += resp;	//!!!! isFinal is to ensure separate packages for chunks
 		else writeToClient(inPrtId, resp);
 	    }
 
@@ -3503,14 +4070,14 @@ nextReq:
 Server::SecCnl::SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm,
 	const string &iClCert, const string &iSecPolicy, char iSecMessMode, const string &iclAddr, uint32_t isecN ) :
     endPoint(iEp), secPolicy(iSecPolicy), secMessMode(iSecMessMode), tCreate(curTime()),
-    tLife(std::max(600000,iLifeTm)), TokenId(iTokenId), TokenIdPrev(0), clCert(iClCert), clAddr(iclAddr),
-    servSeqN(isecN), clSeqN(isecN), startClSeqN(isecN), reqId(0), chCnt(0)
+    tLife(std::max(OpcUa_SecCnlDefLifeTime,iLifeTm)), tokenId(iTokenId), tokenIdPrev(0), clCert(iClCert), clAddr(iclAddr),
+    servSeqN(isecN), clSeqN(isecN), /*startClSeqN(isecN),*/ reqId(0), chCnt(0)
 {
 
 }
 
 Server::SecCnl::SecCnl( ) :
-    secMessMode(MS_None), tCreate(curTime()), tLife(600000), TokenId(0), TokenIdPrev(0), servSeqN(1), clSeqN(1), startClSeqN(1)
+    secMessMode(MS_None), tCreate(0/*curTime()*/), tLife(OpcUa_SecCnlDefLifeTime), tokenId(0), tokenIdPrev(0), servSeqN(1), clSeqN(1)//, startClSeqN(1)
 {
 
 }
@@ -3518,12 +4085,23 @@ Server::SecCnl::SecCnl( ) :
 //*************************************************
 //* Server::Sess				  *
 //*************************************************
-Server::Sess::Sess( const string &iName, double iTInact ) : name(iName), tInact(std::max(iTInact,1.0)), tAccess(curTime())
+Server::Sess::Sess( const string &iName, double iTInact ) : name(iName), secCnl(0), tInact(std::max(iTInact,1.0)), tAccess(curTime())
 {
 
 }
 
-Server::Sess::Sess( ) : tInact(0), tAccess(0)	{ }
+Server::Sess::Sess( ) : secCnl(0), tInact(0), tAccess(0)	{ }
+
+bool Server::Sess::isSecCnlActive( EP *ep )
+{
+    if(secCnl) {
+	SecCnl &sCnlO = ep->serv->chnlGet_(secCnl);
+	if(!sCnlO.tCreate || (sCnlO.tCreate && (1e-3*sCnlO.tLife-1e-6*(curTime()-sCnlO.tCreate)) <= 0))
+	    secCnl = 0;
+    }
+
+    return secCnl;
+}
 
 //*************************************************
 //* Server::Subscr                                *
@@ -3535,11 +4113,11 @@ Server::Subscr Server::Subscr::copy( bool noWorkData )
     else {
 	rez.st = st;
 	rez.sess = sess;
-	rez.en = en;
-	rez.publInterv = publInterv;
-	rez.cntrLifeTime = cntrLifeTime;
-	rez.cntrKeepAlive = cntrKeepAlive;
-	rez.maxNotPerPubl = maxNotPerPubl;
+	rez.publEn = publEn;
+	rez.publInterval = publInterval;
+	rez.lifetimeCnt = lifetimeCnt;
+	rez.maxKeepAliveCnt = maxKeepAliveCnt;
+	rez.maxNtfPerPubl = maxNtfPerPubl;
 	rez.pr = pr;
     }
 
@@ -3554,7 +4132,7 @@ SubScrSt Server::Subscr::setState( SubScrSt ist )
 	case SS_CLOSED:	//Clear the object
 	    mItems.clear();
 	    retrQueue.clear();
-	    en = false;
+	    publEn = false;
 	    seqN = 1;
 	    wLT = wKA = 0;
 	    break;
@@ -3576,9 +4154,13 @@ SubScrSt Server::Subscr::setState( SubScrSt ist )
 //*************************************************
 //* Server::EP					  *
 //*************************************************
-Server::EP::EP( Server *iserv ) : forceSubscrQueue(false), mEn(false), cntReq(0), objTree("root"), serv(iserv)
+Server::EP::EP( Server *iserv ) : serv(iserv), mEn(false), cntReq(0), objTree("root")
 {
-    pthread_mutex_init(&mtxData, NULL);
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mtxData, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
 Server::EP::~EP( )
@@ -3664,11 +4246,13 @@ void Server::EP::setEnable( bool vl )
 	   nodeReg(OpcUa_Integer,OpcUa_Int16,"Int16",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_Integer,OpcUa_Int32,"Int32",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_Integer,OpcUa_Int64,"Int64",NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_Integer,OpcUa_IntAuto,"IntAuto",NC_DataType,OpcUa_HasSubtype);
 	  nodeReg(OpcUa_Number,OpcUa_UInteger,"UInteger",NC_DataType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
 	   nodeReg(OpcUa_UInteger,OpcUa_Byte,"Byte",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_UInteger,OpcUa_UInt16,"UInt16",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_UInteger,OpcUa_UInt32,"UInt32",NC_DataType,OpcUa_HasSubtype);
 	   nodeReg(OpcUa_UInteger,OpcUa_UInt64,"UInt64",NC_DataType,OpcUa_HasSubtype);
+	   nodeReg(OpcUa_UInteger,OpcUa_UIntAuto,"UIntAuto",NC_DataType,OpcUa_HasSubtype);
 	  nodeReg(OpcUa_Number,OpcUa_Double,"Double",NC_DataType,OpcUa_HasSubtype);
 	  nodeReg(OpcUa_Number,OpcUa_Float,"Float",NC_DataType,OpcUa_HasSubtype);
 	 nodeReg(OpcUa_BaseDataType,OpcUa_String,"String",NC_DataType,OpcUa_HasSubtype);
@@ -3681,25 +4265,28 @@ void Server::EP::setEnable( bool vl )
     mEn = vl;
 }
 
-void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId )
+void Server::EP::subScrCycle( unsigned cntr )
 {
     OPCAlloc mtx(mtxData, true);
 
-    //Subscription process
-    vector<int>	sls;
+    //Subscriptions processing
     Sess *s = NULL;
     int64_t vTm = 0;
-    for(unsigned iSc = 0; iSc < mSubScr.size(); iSc++) {
+    for(unsigned iSc = 0; iSc < mSubScr.size(); ++iSc) {
 	Subscr &scr = mSubScr[iSc];
 	if(scr.st == SS_CLOSED) continue;
 	if(!(s=sessGet_(scr.sess)) || !s->tAccess) { scr.setState(SS_CLOSED); continue; }
-	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
+	// Checking for the security channel correspondence
+	bool isSecCnlAct = s->isSecCnlActive(this);
+
 	// Monitored items processing
 	bool hasData = false;
 	XML_N req("data");
-	for(unsigned iM = 0; !forceSubscrQueue && iM < scr.mItems.size(); ++iM) {
+	for(unsigned iM = 0; iM < scr.mItems.size(); ++iM) {
 	    Subscr::MonitItem &mIt = scr.mItems[iM];
+
 	    if(mIt.md == MM_DISABLED || (cntr%std::max(1u,(unsigned)(mIt.smplItv/subscrProcPer()))))	continue;
+
 	    //  Read data
 	    req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtTmGet","1");
 		//setAttr("dtTmGet",(mIt.tmToRet==TS_SOURCE||mIt.tmToRet==TS_BOTH)?"1":"0");
@@ -3714,32 +4301,41 @@ void Server::EP::subScrCycle( unsigned cntr, string *answ, const string &inPrtId
 		hasData = true;
 	    }
 	}
-	if(hasData) scr.setState(SS_LATE);
-	// Publish processing
-	if(!forceSubscrQueue && (cntr%std::max(1u,(unsigned)(scr.publInterv/subscrProcPer()))))	continue;
-	if(s->publishReqs.size()) {
+	if(hasData && isSecCnlAct) scr.setState(SS_LATE);
+
+	if(cntr%std::max(1u,(unsigned)(scr.publInterval/subscrProcPer())))	continue;
+
+	if(scr.pubCntr_ != scr.pubCntr || scr.st == SS_CREATING) {
 	    scr.wLT = 0;
-	    if(scr.toInit || scr.st == SS_LATE) { scr.wKA = 0; sls.push_back(scr.sess); }
-	    else if(!forceSubscrQueue && (++scr.wKA) >= scr.cntrKeepAlive) { scr.setState(SS_KEEPALIVE); sls.push_back(scr.sess); }
+	    if(scr.toInit || scr.st == SS_LATE)	scr.wKA = 0;
+	    else if((++scr.wKA) >= scr.maxKeepAliveCnt)	scr.setState(SS_KEEPALIVE);
 	}
-	else if(!forceSubscrQueue && (++scr.wLT) >= scr.cntrLifeTime) {
+	else if((++scr.wLT) >= scr.lifetimeCnt) {
 	    // Send StatusChangeNotification with Bad_Timeout
-	    //????
+	    //!!!!
 	    scr.setState(SS_CLOSED);	//Free Subscription
 	}
+	if(scr.st == SS_LATE || scr.st == SS_KEEPALIVE)	scr.pubCntr_ = scr.pubCntr;
     }
+}
 
-    //Publish call
-    for(size_t iS = 0; iS < sls.size(); iS++) {
-	if(!(s=sessGet_(sls[iS])) || s->publishReqs.empty()) continue;
+void Server::EP::publishCall( string *answ, const string &inPrtId )
+{
+    OPCAlloc mtx(mtxData, true);
+
+    Sess *s = NULL;
+    for(unsigned iSc = 0; iSc < mSubScr.size(); ++iSc) {
+	Subscr &scr = mSubScr[iSc];
+	if(!(scr.st == SS_LATE || scr.st == SS_KEEPALIVE) ||
+		!(s=sessGet_(scr.sess)) || !s->tAccess || !s->isSecCnlActive(this) ||
+		(inPrtId.size() && inPrtId != s->inPrtId) || s->publishReqs.empty())
+	    continue;
+
 	string req = s->publishReqs.front(), inPrt = s->inPrtId;
-	if(inPrtId.size() && inPrtId != s->inPrtId) continue;
 	mtx.unlock();
 	serv->inReq(req, inPrt, answ);
 	mtx.lock();
     }
-
-    forceSubscrQueue = false;
 }
 
 string Server::EP::secPolicy( int isec )
@@ -3765,14 +4361,17 @@ MessageSecurityMode Server::EP::secMessageMode( int isec )
 int Server::EP::sessCreate( const string &iName, double iTInact )
 {
     OPCAlloc mtx(mtxData, true);
-    int i_s;
-    for(i_s = 0; i_s < (int)mSess.size(); i_s++)
-	if(!mSess[i_s].tAccess || 1e-3*(curTime()-mSess[i_s].tAccess) > mSess[i_s].tInact)
+    int iS;
+    for(iS = 0; iS < (int)mSess.size(); ++iS)
+	if(!mSess[iS].tAccess || 1e-3*(curTime()-mSess[iS].tAccess) > mSess[iS].tInact)
 	    break;
-    if(i_s < (int)mSess.size()) mSess[i_s] = Sess(iName, iTInact);
+    if(iS < (int)mSess.size()) {
+	sessClose(iS+1);
+	mSess[iS] = Sess(iName, iTInact);
+    }
     else mSess.push_back(Sess(iName,iTInact));
 
-    return i_s+1;
+    return iS+1;
 }
 
 void Server::EP::sessServNonceSet( int sid, const string &servNonce )
@@ -3787,16 +4386,23 @@ uint32_t Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const s
     uint32_t rez = OpcUa_BadSessionIdInvalid;
 
     OPCAlloc mtx(mtxData, true);
-    //Check for target session present
+    //Checking for the target session presence
     if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess) {
 	mSess[sid-1].tAccess = curTime();
+	// Error the present session using at changing the physical channel
+	if(check && inPrtId != mSess[sid-1].inPrtId)	return OpcUa_BadSecureChannelIdInvalid;
 	mSess[sid-1].inPrtId = inPrtId;
-	int iS;
-	for(iS = 0; iS < (int)mSess[sid-1].secCnls.size(); iS++)
-	    if(mSess[sid-1].secCnls[iS] == secCnl)
-		break;
-	if(!check || iS < (int)mSess[sid-1].secCnls.size()) {
-	    if(iS >= (int)mSess[sid-1].secCnls.size()) mSess[sid-1].secCnls.push_back(secCnl);
+	if(!check || secCnl == mSess[sid-1].secCnl) {
+	    // New sequre channel binding to the actual session
+	    if(secCnl != mSess[sid-1].secCnl) {
+		mSess[sid-1].secCnl = secCnl;
+		setPublish(inPrtId);
+		mSess[sid-1].publishReqs.clear();
+
+		for(unsigned iS = 0; iS < mSess.size(); ++iS)
+		    if(iS != (sid-1) && mSess[iS].inPrtId == inPrtId)
+			mSess[iS].inPrtId = "";
+	    }
 	    rez = 0;
 	}
     }
@@ -3804,10 +4410,17 @@ uint32_t Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const s
     return rez;
 }
 
-void Server::EP::sessClose( int sid )
+void Server::EP::sessClose( int sid, bool delSubscr )
 {
     pthread_mutex_lock(&mtxData);
-    if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess) mSess[sid-1] = Sess();
+    if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess) {
+	mSess[sid-1] = Sess();
+
+	//Disable the assigned subscriptions
+	for(unsigned iSs = 0; delSubscr && iSs < mSubScr.size(); ++iSs)
+	    if(mSubScr[iSs].st != SS_CLOSED && mSubScr[iSs].sess == sid)
+		mSubScr[iSs].setState(SS_CLOSED);
+    }
     pthread_mutex_unlock(&mtxData);
 }
 
@@ -3853,8 +4466,8 @@ void Server::EP::sessCpSet( int sid, const string &cpId, const Server::Sess::Con
     pthread_mutex_unlock(&mtxData);
 }
 
-uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, double publInterv,
-    uint32_t cntrLifeTime, uint32_t cntrKeepAlive, uint32_t maxNotPerPubl, int pr )
+uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, double publInterval,
+    uint32_t lifetimeCnt, uint32_t maxKeepAliveCnt, uint32_t maxNtfPerPubl, int pr )
 {
     OPCAlloc mtx(mtxData, true);
 
@@ -3870,19 +4483,18 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 	if(nSubScrPerSess >= limSubScr())	return 0;
 	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
 	mSubScr[ssId].toInit = true;
-	forceSubscrQueue = true;
     }
     else ssId--;
 
     Subscr &ss = mSubScr[ssId];
 
     //Set parameters
-    ss.en = en;
+    ss.publEn = en;
     if(sess >= 0) ss.sess = sess;
-    if(publInterv != 0) ss.publInterv = ceil(publInterv/subscrProcPer())*subscrProcPer();
-    if(cntrKeepAlive != 0) ss.cntrKeepAlive = cntrKeepAlive;
-    if(cntrLifeTime != 0) ss.cntrLifeTime = std::max(ss.cntrKeepAlive*3,cntrLifeTime);
-    if(maxNotPerPubl != OpcUa_NPosID) ss.maxNotPerPubl = maxNotPerPubl;
+    if(publInterval != 0) ss.publInterval = ceil(publInterval/subscrProcPer())*subscrProcPer();
+    if(maxKeepAliveCnt != 0) ss.maxKeepAliveCnt = maxKeepAliveCnt;
+    if(lifetimeCnt != 0) ss.lifetimeCnt = std::max(ss.maxKeepAliveCnt*3,lifetimeCnt);
+    if(maxNtfPerPubl != OpcUa_NPosID) ss.maxNtfPerPubl = maxNtfPerPubl;
     if(pr < 0) ss.pr = pr;
     ss.setState(st);
 
@@ -3921,7 +4533,6 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	    if(mIt.md == MM_DISABLED && aid == AId_Value) {	//Initiate the publisher by the InitialValue
 		mIt.vQueue.push_back(Subscr::MonitItem::Val("",(mIt.dtTm=curTime()),OpcUa_UncertainInitialValue));
 		ss.setState(SS_LATE);
-		forceSubscrQueue = true;
 	    }
 	    mIt.md = md;
 	}
@@ -3940,7 +4551,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	if(rez == OpcUa_BadNodeIdUnknown)		mIt.nd = NodeId();
 	else if(rez == OpcUa_BadAttributeIdInvalid)	mIt.aid = Aid_Error;
 	if(smplItv == 0 || isnan(smplItv)) smplItv = str2real(req.attr("dtPer"))*1000;
-	if(smplItv == -1) smplItv = ss.publInterv;
+	if(smplItv == -1) smplItv = ss.publInterval;
 	if(smplItv != -2) mIt.smplItv = ceil(std::max(smplItv,subscrProcPer())/subscrProcPer())*subscrProcPer();
     }
 
@@ -4037,8 +4648,8 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 
 	    //Forward hierarchical references process
 	    bool lstOK = lstNd.empty() ? true : false;
-	    for(unsigned i_ch = 0; (bd == BD_FORWARD || bd == BD_BOTH) && i_ch < ndX->second->childSize(); i_ch++) {
-		XML_N *chNd = ndX->second->childGet(i_ch);
+	    for(unsigned iCh = 0; (bd == BD_FORWARD || bd == BD_BOTH) && iCh < ndX->second->childSize(); iCh++) {
+		XML_N *chNd = ndX->second->childGet(iCh);
 		if(!lstOK) { lstOK = (lstNd==chNd->attr("NodeId")); continue; }
 		unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
 		if(nClass && !(nClass&cnClass)) continue;
@@ -4046,7 +4657,7 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 		    setAttr("referenceTypeId", chNd->attr("referenceTypeId"))->
 		    setAttr("dir", "1")->setAttr("name", chNd->attr("name"))->
 		    setAttr("NodeClass", int2str(cnClass))->setAttr("typeDefinition", chNd->attr("typeDefinition"));
-		if(rPn && (int)req.childSize() >= rPn && (i_ch+1) < ndX->second->childSize()) {
+		if(rPn && (int)req.childSize() >= rPn && (iCh+1) < ndX->second->childSize()) {
 		    req.setAttr("LastNode", chNd->attr("NodeId"));
 		    break;
 		}
@@ -4064,13 +4675,13 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 		case AId_NodeClass: req.setAttr("type", int2str(OpcUa_Int32))->setText(ndX->second->attr("NodeClass"));		return 0;
 		case AId_BrowseName: req.setAttr("type", int2str(OpcUa_QualifiedName))->setText(ndX->second->attr("name"));	return 0;
 		case AId_DisplayName:
-		    req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"), OpcUa_LocalizedText);
+		    req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"));
 		    return 0;
 		case AId_Descr: req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr("Descr"));		return 0;
 		case AId_WriteMask: case AId_UserWriteMask: req.setAttr("type", int2str(OpcUa_UInt32))->setText("0");		return 0;
 		case AId_IsAbstract: req.setAttr("type", int2str(OpcUa_Boolean))->setText(ndX->second->attr("IsAbstract"));	return 0;
 		case AId_Symmetric: req.setAttr("type", int2str(OpcUa_Boolean))->setText(ndX->second->attr("Symmetric"));	return 0;
-		case AId_InverseName: req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr("InverseName"));	return 0;
+		case AId_InverseName: req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr("InverseName")); return 0;
 		case AId_EventNotifier: req.setAttr("type", int2str(OpcUa_Byte))->setText(ndX->second->attr("EventNotifier"));	return 0;
 		default: {
 		    string dtType = ndX->second->attr("DataType");
@@ -4142,8 +4753,8 @@ XML_N &XML_N::operator=( const XML_N &prm )
 {
     //Delete self children and attributes
     mAttr.clear();
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
-	delete mChildren[i_ch];
+    for(unsigned iCh = 0; iCh < mChildren.size(); iCh++)
+	delete mChildren[iCh];
     mChildren.clear();
 
     //Copy params (name,text, attributes and instructions)
@@ -4155,8 +4766,8 @@ XML_N &XML_N::operator=( const XML_N &prm )
 	setAttr(ls[iA],prm.attr(ls[iA]));
 
     //Recursive copy children
-    for(unsigned i_ch = 0; i_ch < prm.childSize(); i_ch++)
-	*childAdd() = *prm.childGet(i_ch);
+    for(unsigned iCh = 0; iCh < prm.childSize(); iCh++)
+	*childAdd() = *prm.childGet(iCh);
 
     return *this;
 }
@@ -4185,19 +4796,21 @@ void XML_N::childDel( const unsigned id )
 
 void XML_N::childDel( XML_N *nd )
 {
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
-	if(mChildren[i_ch] == nd) {
-	    delete mChildren[i_ch];
-	    mChildren.erase(mChildren.begin()+i_ch);
+    for(unsigned iCh = 0; iCh < mChildren.size(); iCh++)
+	if(mChildren[iCh] == nd) {
+	    delete mChildren[iCh];
+	    mChildren.erase(mChildren.begin()+iCh);
 	    break;
 	}
 }
 
-void XML_N::childClear( const string &name )
+XML_N* XML_N::childClear( const string &name )
 {
-    for(unsigned i_ch = 0; i_ch < mChildren.size(); )
-	if(name.empty() || mChildren[i_ch]->name() == name) childDel(i_ch);
-	else i_ch++;
+    for(unsigned iCh = 0; iCh < mChildren.size(); )
+	if(name.empty() || mChildren[iCh]->name() == name) childDel(iCh);
+	else iCh++;
+
+    return this;
 }
 
 int XML_N::childIns( unsigned id, XML_N * n )
@@ -4228,9 +4841,9 @@ XML_N* XML_N::childGet( const int index, bool noex ) const
 
 XML_N* XML_N::childGet( const string &name, const int numb, bool noex ) const
 {
-    for(int i_ch = 0, i_n = 0; i_ch < (int)childSize(); i_ch++)
-	if(strcasecmp(childGet(i_ch)->name().c_str(),name.c_str()) == 0 && i_n++ == numb)
-	    return childGet(i_ch);
+    for(int iCh = 0, iN = 0; iCh < (int)childSize(); iCh++)
+	if(strcasecmp(childGet(iCh)->name().c_str(),name.c_str()) == 0 && iN++ == numb)
+	    return childGet(iCh);
 
     if(noex) return NULL;
     throw OPCError("Child %s:%d is not found!", name.c_str(), numb);
@@ -4250,8 +4863,8 @@ XML_N* XML_N::getElementBy( const string &iattr, const string &val )
     if(attr(iattr) == val)	return this;
 
     XML_N* rez = NULL;
-    for(unsigned i_ch = 0; !rez && i_ch < childSize(); i_ch++)
-	rez = childGet(i_ch)->getElementBy(iattr,val);
+    for(unsigned iCh = 0; !rez && iCh < childSize(); iCh++)
+	rez = childGet(iCh)->getElementBy(iattr,val);
 
     return rez;
 }
@@ -4279,14 +4892,14 @@ XML_N* XML_N::setText( const string &s, bool childs )
 {
     if(!childs || mName == "<*>") { mText = s; return this; }
 
-    int i_ch = -1;
+    int iCh = -1;
     for(int i_f = 0; i_f < (int)childSize(); i_f++)
 	if(childGet(i_f)->name() == "<*>") {
-	    if(i_ch < 0) childGet(i_f)->mText = s;
+	    if(iCh < 0) childGet(i_f)->mText = s;
 	    else childDel(i_f--);
-	    i_ch = i_f;
+	    iCh = i_f;
 	}
-    if(i_ch < 0) childAdd("<*>")->mText = s;
+    if(iCh < 0) childAdd("<*>")->mText = s;
 
     return this;
 }

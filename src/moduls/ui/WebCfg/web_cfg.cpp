@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2019 by Roman Savochenko, <rom_as@oscada.org>      *
+ *   Copyright (C) 2004-2019 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.8.1"
+#define MOD_VER		"1.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"

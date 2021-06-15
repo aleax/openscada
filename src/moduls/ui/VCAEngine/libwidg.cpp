@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -68,11 +68,11 @@ TCntrNode &WidgetLib::operator=( const TCntrNode &node )
 	mimeDataSet(pls[iM], mimeType, mimeData);
     }
 
-    // Copy include pages
+    // Copying the included widgets
     src_n->list(pls);
-    for(unsigned i_p = 0; i_p < pls.size(); i_p++) {
-	if(!present(pls[i_p])) add(pls[i_p],"");
-	(TCntrNode&)at(pls[i_p]).at() = (TCntrNode&)src_n->at(pls[i_p]).at();
+    for(unsigned iP = 0; iP < pls.size(); iP++) {
+	if(!present(pls[iP])) add(pls[iP], "");
+	(TCntrNode&)at(pls[iP]).at() = (TCntrNode&)src_n->at(pls[iP]).at();
     }
 
     return *this;
@@ -429,8 +429,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
-	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trLU(at(lst[i_f]).at().name(),l,u));
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(at(lst[iF]).at().name(),l,u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) { opt->setAttr("id", add(opt->attr("id"),opt->text())); at(opt->attr("id")).at().setOwner(opt->attr("user")); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) del(opt->attr("id"),true);
@@ -505,6 +505,22 @@ LWidget::LWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TCon
 LWidget::~LWidget( )
 {
 
+}
+
+TCntrNode &LWidget::operator=( const TCntrNode &node )
+{
+    Widget::operator=(node);
+
+    //Removing the inherited but missed widgets on the source
+    const LWidget *src_n = dynamic_cast<const LWidget*>(&node);
+    if(src_n) {
+	vector<string> wls;
+	wdgList(wls);
+	for(unsigned iW = 0; iW < wls.size(); iW++)
+	    if(!src_n->wdgPresent(wls[iW])) wdgDel(wls[iW], true);
+    }
+
+    return *this;
 }
 
 WidgetLib &LWidget::ownerLib( ) const	{ return *(WidgetLib*)nodePrev(); }
@@ -894,6 +910,22 @@ CWidget::CWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TCon
 CWidget::~CWidget( )
 {
 
+}
+
+TCntrNode &CWidget::operator=( const TCntrNode &node )
+{
+    Widget::operator=(node);
+
+    if(attrPresent("geomX") && ownerLWdg().attrPresent("geomW"))
+	attrAt("geomX").at().setR(fmax(0,
+	    fmin(ownerLWdg().attrAt("geomW").at().getR()-attrAt("geomW").at().getR()*attrAt("geomXsc").at().getR(),
+		attrAt("geomX").at().getR())));
+    if(attrPresent("geomY") && ownerLWdg().attrPresent("geomH"))
+	attrAt("geomY").at().setR(fmax(0,
+	    fmin(ownerLWdg().attrAt("geomH").at().getR()-attrAt("geomH").at().getR()*attrAt("geomYsc").at().getR(),
+		attrAt("geomY").at().getR())));
+
+    return *this;
 }
 
 string CWidget::path( ) const	{ return "/wlb_"+ownerLWdg().ownerLib().id()+"/wdg_"+ownerLWdg().id()+"/wdg_"+id(); }

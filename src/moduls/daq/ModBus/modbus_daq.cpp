@@ -82,7 +82,7 @@ void TTpContr::postEnable( int flag )
     //  Parameter template IO DB structure
     elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ*6).c_str()));
     elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
-    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"1000000"));
+    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"1000000"));
 }
 
 void TTpContr::load_( )
@@ -128,7 +128,7 @@ void TMdContr::postDisable( int flag )
 	    //Delete logical parameter's io table
 	    string tbl = DB()+"."+cfg("PRM_BD_L").getS()+"_io";
 	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl,true);
+	    SYS->db().at().close(tbl, true);
 	}
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -711,6 +711,7 @@ void TMdContr::redntDataUpdate( )
 
 void *TMdContr::Task( void *icntr )
 {
+    const TSYS::STask &tsk = TSYS::taskDescr();
     string pdu;
     TMdContr &cntr = *(TMdContr *)icntr;
 
@@ -719,7 +720,6 @@ void *TMdContr::Task( void *icntr )
 
     bool isStart = true;
     bool isStop  = false;
-    int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     while(true) {
 	try {
@@ -730,7 +730,8 @@ void *TMdContr::Task( void *icntr )
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		    cntr.pHd[iP].at().upValStd();
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		    cntr.pHd[iP].at().upValLog(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):-1);
+		    cntr.pHd[iP].at().upValLog(isStart, isStop,
+			(isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
 		prmRes.unlock();
 
 		cntr.tmDelay = vmax(0, cntr.tmDelay-(cntr.period()?(1e-9*(float)cntr.period()):1));
@@ -745,7 +746,6 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    cntr.callSt = true;
-	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
 	    /*MtxAlloc resAsWr(cntr.aWrRes, true);
@@ -789,6 +789,7 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0) continue;
+
 	    //Get input's coils
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksCoilIn.size(); iB++) {
 		if(cntr.endrunReq) break;
@@ -816,6 +817,7 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0) continue;
+
 	    //Get registers
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlks.size(); iB++) {
 		if(cntr.endrunReq) break;
@@ -842,6 +844,7 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0)	continue;
+
 	    //Get input registers
 	    for(unsigned iB = 0; !isStart && !isStop && iB < cntr.acqBlksIn.size(); iB++) {
 		if(cntr.endrunReq) break;
@@ -875,7 +878,8 @@ void *TMdContr::Task( void *icntr )
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
 		cntr.pHd[iP].at().upValStd();
 	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
-		cntr.pHd[iP].at().upValLog(isStart, isStop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
+		cntr.pHd[iP].at().upValLog(isStart, isStop,
+		    (isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
 	    isStart = false;
 	    prmRes.unlock();
 
@@ -894,7 +898,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //Generic acquisition alarm generate
-	    if(cntr.tmDelay <= 0) {
+	    if(cntr.tmDelay <= 0 && !cntr.endrunReq) {
 		if(cntr.alSt != 0) {
 		    cntr.alSt = 0;
 		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
@@ -903,7 +907,6 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //Calc acquisition process time
-	    t_prev = t_cnt;
 	    cntr.callSt = false;
 
 	    }	// !cntr.redntUse()
@@ -1071,7 +1074,7 @@ void TMdPrm::enable( )
     if(isStd()) {
 	string ai, sel, atp, atp_m, atp_sub, aid, anm, aflg;
 	string m_attrLs = cfg("ATTR_LS").getS();
-	for(int ioff = 0; (sel=TSYS::strLine(m_attrLs,0,&ioff)).size() || ioff < m_attrLs.size(); ) {
+	for(int ioff = 0; (sel=TSYS::strLine(m_attrLs,0,&ioff)).size() || ioff < (int)m_attrLs.size(); ) {
 	    if(sel.empty() || sel[0] == '#') continue;
 	    int elOff = 0;
 	    atp = TSYS::strParse(sel, 0, ":", &elOff);
@@ -1085,7 +1088,7 @@ void TMdPrm::enable( )
 	    anm = sel.substr(elOff);//  TSYS::strParse(sel, 0, ":", &elOff);
 	    if(anm.empty()) anm = aid;
 
-	    if((vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
+	    if(aid.empty() || (vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
 
 	    TFld::Type tp = TFld::Integer;
 	    if(atp[0] == 'C' || (atp_sub.size() && atp_sub[0] == 'b')) tp = TFld::Boolean;
@@ -1173,7 +1176,7 @@ void TMdPrm::enable( )
 	    if(id_this >= 0) lCtx->setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
 	    // First call
-	    if(owner().startStat() && !owner().redntUse()) upValLog(true, false, 0);
+	    if(owner().startStat() && !owner().redntUse()) upValLog(true, false, DAQ_APER_FRQ);
 
 	} catch(TError &err) { disable(); throw; }
 
@@ -1198,7 +1201,7 @@ void TMdPrm::disable( )
     }
 
     owner().prmEn(this, false);	//Remove from process
-    if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upValLog(false, true, 0);
+    if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upValLog(false, true, DAQ_APER_FRQ);
 
     TParamContr::disable();
 
@@ -1226,12 +1229,16 @@ void TMdPrm::loadIO( bool force )
     //Load IO and init links
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(ownerPath(true));
+    cfg.cfg("VALUE").setExtVal(true);
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
 	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
-	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS());
+	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force no translated
+	else if(lCtx->func()->io(iIO)->type() != IO::String)
+	    lCtx->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));		//Force no translated
 	else lCtx->setS(iIO, cfg.cfg("VALUE").getS());
     }
     lCtx->chkLnkNeed = lCtx->initLnks();

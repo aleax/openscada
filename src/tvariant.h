@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.h
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@ using std::map;
 #define EVAL_INT16	-32767
 #define EVAL_INT32	-2147483647
 #define EVAL_INT64	-9223372036854775807ll
-#define EVAL_RFlt	-3.29E38
+#define EVAL_RFlt	-3.29E38f
 #define EVAL_RDbl	-1.79E308
 
 namespace OSCADA

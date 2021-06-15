@@ -2120,8 +2120,8 @@ INSERT INTO LogLevPrm_prescription_io VALUES('manager','curCom','','');
 INSERT INTO LogLevPrm_prescription_io VALUES('manager','work','<XMLNodeObj:prg comCur="1" comN="" comPath="" name="abcd" seekPos="1" wtm="52">
 <XMLNodeObj:com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">
 </XMLNodeObj:com>
-<XMLNodeObj:com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.1" proc="&lt;EVAL&gt;">
-<XMLNodeObj:com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.2" proc="&lt;EVAL&gt;">
+<XMLNodeObj:com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Timer level 1" id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Timer lev.1" proc="&lt;EVAL&gt;">
+<XMLNodeObj:com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Timer lev.2" proc="&lt;EVAL&gt;">
 </XMLNodeObj:com>
 </XMLNodeObj:com>
 <XMLNodeObj:com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;">

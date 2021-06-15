@@ -1,7 +1,7 @@
 # OpenSCADA.DAQ.SNMP translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.SNMP package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2006-2018.
+# Roman Savochenko <roman@oscada.org>, 2006-2018.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-04 11:09+0200\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"

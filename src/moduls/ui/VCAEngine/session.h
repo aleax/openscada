@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,7 @@ class Session : public TCntrNode
 	string	owner( ) const	{ return mOwner; }		//Source project owner
 	string	grp( ) const	{ return mGrp; }		//Source project group
 	short	permit( ) const	{ return mPermit; }		//Permission for access to source project
-	int	period( )	{ return vmax(1,mPer); }	//Process period (ms)
+	int	period( bool isReal = false );			//Processing period, milliseconds
 	bool	enable( ) const	{ return mEnable; }		//Enable stat
 	bool	start( )	{ return mStart; }		//Start stat
 	bool	backgrnd( )	{ return mBackgrnd; }		//Background session execution
@@ -80,7 +80,7 @@ class Session : public TCntrNode
 	void disconnect( int conId = 0 );
 	void stlCurentSet( int sid );
 
-	bool modifChk( unsigned int tm, unsigned int iMdfClc );
+	bool modifChk( unsigned int tm, unsigned int iMdfClc, bool isCnt = false );
 
 	// Pages
 	void list( vector<string> &ls ) const		{ chldList(mPage,ls); }
@@ -217,7 +217,7 @@ class Session : public TCntrNode
 	const string mId;
 	string	mPrjnm, mOwner, mGrp;
 	MtxString mUser, mReqUser, mReqLang;
-	int	mPer, mPermit;
+	int	mPer, mPerReal, mPermit;
 	bool	mEnable, mStart, endrunReq;	//Enabled, Started and endrun stats
 	bool	mBackgrnd;			//Backgrounded execution of a session
 	int	mConnects;			//Connections counter
@@ -318,7 +318,6 @@ class SessWdg : public Widget, public TValFunc
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	unsigned int modifVal( Attr &cfg );
-	bool modifChk( unsigned int tm, unsigned int iMdfClc );
 
 	//Attributes
 	unsigned	mProc	: 1;

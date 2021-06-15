@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.h
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -486,6 +486,9 @@ class VCASess : public TCntrNode
 	float cacheResLen( );
 
 	ResRW &nodeRes( )		{ return nRes; }
+
+	//Attributes
+	bool	toRemoveSelf;		//Mostly used at removing the VCA-session but presence the Web-session
 
     private:
 	//Data

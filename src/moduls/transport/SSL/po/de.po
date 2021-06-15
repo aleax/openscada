@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
-# Roman Savochenko <roman@oscada.org>, 2011-2020.
+# Roman Savochenko <roman@oscada.org>, 2011-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-22 16:38+0300\n"
+"POT-Creation-Date: 2021-04-16 18:15+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -130,17 +130,15 @@ msgstr "Socket wurde beendet mit dem Fehler %s"
 msgid "The message is received in size %d."
 msgstr "Die Nachricht wird in der Größe %d empfangen."
 
-#, c-format
-msgid "%d:Received from '%s'\n"
-msgstr "%d:Empfangen von '%s'\n"
+msgid "%d:< Received from '%s'\n"
+msgstr "%d:< Empfangen von '%s'\n"
 
 #, c-format
 msgid "The reply by the message in size %d."
 msgstr "Die Antwort der Nachricht in der Größe %d"
 
-#, c-format
-msgid "%d:Transmitted to '%s'\n"
-msgstr "%d:Übertragen in '%s'\n"
+msgid "%d:> Transmitted to '%s'\n"
+msgstr "%d:> Übertragen in '%s'\n"
 
 #, c-format
 msgid "Has been disconnected by '%s'!"
@@ -300,6 +298,7 @@ msgstr ""
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
+#, c-format
 msgid "Error connecting: %s"
 msgstr "Verbindungsfehler: %s"
 
@@ -321,8 +320,8 @@ msgstr "Fehler beim Schreiben: %s"
 msgid "Wrote %s."
 msgstr "Schrieb %s."
 
-msgid "Transmitted to\n"
-msgstr "Übertragen an\n"
+msgid "> Transmitted to\n"
+msgstr "> Übertragen an\n"
 
 msgid "No data, the connection seems closed"
 msgstr "Keine Daten, die Verbindung scheint geschlossen zu sein"
@@ -342,8 +341,8 @@ msgstr "Fehler beim Lesen (Auswählen): %s"
 msgid "Read %s."
 msgstr "Lesen Sie %s."
 
-msgid "Received from\n"
-msgstr "Empfangen von\n"
+msgid "< Received from\n"
+msgstr "< Empfangen von\n"
 
 msgid "Timings"
 msgstr "Zeitabstände"

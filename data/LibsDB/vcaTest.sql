@@ -687,7 +687,11 @@ INSERT INTO wlb_test_io VALUES('FormElTests','items','<tbl colsWdthFit="1">
  <h><s>Заголовок1</s><s>Заголовок2</s></h>
  <r><s>Рядок</s><i>1234</i></r>
  <r><b>1</b><r>3.14159265</r></r>
-</tbl>','','','','','');
+</tbl>','','<tbl colsWdthFit="1">
+ <h><s>Заголовок1</s><s>Заголовок2</s></h>
+ <r><s>Строка</s><i>1234</i></r>
+ <r><b>1</b><r>3.14159265</r></r>
+</tbl>','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','active','1',32,'','','tbl','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','geomW','105',32,'','','tree','','','','','','');
 INSERT INTO wlb_test_io VALUES('TextEltests','inHtml','1',32,'','','text1','','','','','','');

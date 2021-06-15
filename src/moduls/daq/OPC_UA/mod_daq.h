@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.h
 /***************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"1.7.11"
+#define DAQ_MVER	"2.1.22"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -72,9 +72,9 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	TMdContr &owner( ) const;
+	void upVal( );
 
-	string attrPrc( );
+	TMdContr &owner( ) const;
 
     private:
 	//Methods
@@ -101,7 +101,7 @@ class TMdContr: public TController, public Client
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	string getStatus( );
+	string	getStatus( );
 
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
@@ -114,16 +114,15 @@ class TMdContr: public TController, public Client
 	string	cert( )		{ return mCert; }
 	string	pvKey( )	{ return mPvKey; }
 	string	authData( );
-	int	pAttrLim( )	{ return mPAttrLim; }
 	string	epParse( string *uri = NULL );
 
 	void	setEndPoint( const string &iep )	{ mEndP = iep; }
 	void	setSecPolicy( const string &isp )	{ mSecPol = isp; }
 	void	setSecMessMode( int smm )		{ mSecMessMode = smm; }
 
-	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+	TVariant getValMIt( unsigned mItId, uint32_t *st = NULL );
 
-	ResRW &nodeRes( )	{ return cntrRes; }
+	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	// OPC_UA Client methods
 	string applicationUri( );
@@ -133,7 +132,7 @@ class TMdContr: public TController, public Client
 	bool connect( int8_t est = -1 );
 	void reqService( XML_N &io );
 	void protIO( XML_N &io );
-	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0 );
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
 	void debugMess( const string &mess );
 
     protected:
@@ -155,7 +154,7 @@ class TMdContr: public TController, public Client
 
 	//Attributes
 	ResMtx	enRes;
-	ResRW	cntrRes;	//Resource for enable params
+	ResRW	resOPC;		//Request and API-stack resource
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s
@@ -166,12 +165,12 @@ class TMdContr: public TController, public Client
 		&mCert,		//Client certificate
 		&mPvKey,	//Client certificate's private key
 		&mAuthUser, &mAuthPass;	//Auth user and password
-	int64_t	&mPAttrLim;	//Parameter attributes number limit
+	char	&mUseRead;	//Use Read function
 	int64_t	mPer;
 
 	bool	prcSt,		//Process task active
 		callSt,		//Calc now stat
-		mPCfgCh;	//Parameter's configuration is changed
+		isReload;
 	int8_t	alSt;		//Alarm state
 
 	AutoHD<TTransportOut>	tr;
