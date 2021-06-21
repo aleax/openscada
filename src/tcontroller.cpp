@@ -117,6 +117,18 @@ string TController::descr( )	{ return cfg("DESCR").getS(); }
 
 void TController::setDescr( const string &dscr )	{ cfg("DESCR").setS(dscr); }
 
+int64_t TController::timeStamp( )
+{
+    int64_t mTimeStamp = 0;
+
+    vector<string> ls;
+    list(ls);
+    for(unsigned iL = 0; iL < ls.size(); ++iL)
+	mTimeStamp = vmax(mTimeStamp, at(ls[iL]).at().timeStamp());
+
+    return mTimeStamp;
+}
+
 string TController::tbl( )	{ return owner().owner().subId()+"_"+owner().modId(); }
 
 string TController::getStatus( )
@@ -505,6 +517,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/cntr/st/runSt",_("Running"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		ctrMkNode("fld",opt,-1,"/cntr/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
@@ -585,6 +598,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/cntr/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/cntr/st/enSt") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	s2i(opt->text()) ? enable() : disable();

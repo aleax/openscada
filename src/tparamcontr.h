@@ -64,6 +64,7 @@ class TParamContr : public TConfig, public TValue
 	string	name( );
 	string	descr( );
 	bool toEnable( )		{ return cfg("EN").getB(); }
+	int64_t	timeStamp( );
 	bool enableStat( ) const	{ return mEn; }
 	bool dataActive( );
 

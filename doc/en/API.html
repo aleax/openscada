@@ -836,6 +836,7 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>string workId( );</i> — Work ID of the controller, including the ID of the module.</li>
 <li> <i>string name( );</i> — Controller's name.</li>
 <li> <i>string descr( );</i> — Controller's description.</li>
+<li> <i>int64_t timeStamp( );</i> — Timestamp of the object changing as maximum of timestamps of the included parameter objects.</li>
 <li> <i>virtual string getStatus( );</i> — Request function of the controller's status.</li>
 <li> <i>string DB( );</i> — DB name of the controller's instance.</li>
 <li> <i>string tbl( );</i> — The name of the table of DB of the controller's instance.</li>
@@ -927,6 +928,7 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>string name( );</i> — Parameter's name.</li>
 <li> <i>string descr( );</i> — Parameter's description.</li>
 <li> <i>bool toEnable( );</i> — Sign "To enable parameter".</li>
+<li> <i>int64_t timeStamp( );</i> — Timestamp of the object changing accounting the included parameter objects.</li>
 <li> <i>bool enableStat( ) const;</i> — Status "Enable".</li>
 <li> <i>void setName( const string &amp;inm );</i> — Setting of the parameter's name.</li>
 <li> <i>void setDescr( const string &amp;idsc );</i> — Setting of the parameter's description.</li>

@@ -3551,6 +3551,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 				    }
 				}
 			    }
+			    firstInst = false;
 			    if(!chkUnMatch || !haveMatch) break;
 			}
 		    } else haveMatch = true;

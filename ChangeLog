@@ -1,3 +1,16 @@
+2021-06-21 Roman 0.9.4
+- FIX:LibsDB.vcaBase: Main.ElViewGraph.lb_val.arg0cfg fixed in wrong translation to uk.
+- DAQ.DAQGate: The requestion function cntrIfCmd() appended for the argument "noConnect" of preventing
+    the missed connections establish at the archive requesting now.
+- FIX:SYS: The "Translations" tab fixed in the option of checking for matching.
+- !!:DAQ: The DAQ-parameter object appended for an information field of the changing timestamp with it maximum value
+    on the controller object, by the new DB configuration field "TIMESTAMP" of the parameter object.
+- FIX:DAQ.{ModBus,Siemens}: Appended for setting the modification flag of the target parameter at copy to it,
+    for the Logical Level type.
+- UI.VCAEngine: Some unified in the links processing for translation String constants and "val:{Value}".
+- FIX:UI.Vision: Fixed in complete exiting from the edition mode of the primitive ElFigure included into the Box at focus lost.
+
+
 2021-06-14 Roman 0.9.4
 - New and significantly updated parts:
     - OpenSCADA Core: 3:9:0 => 3:10:0
@@ -69,9 +82,9 @@
 	!!: The document "Modules/OPC_UA" complete revised for the modules version 2.1 and the translation.
     !!!!: The "Translations" tab restructured something, appended for the actual status, appended for some context help
 		and the translations manager appended for:
-	    - limiting of the table form in prmInterf_TM (7 seconds);
+	    - limiting of the table form time in prmInterf_TM (7 seconds);
 	    - a configuration field of passing number the top messages;
-	    - setting only for the filtered sources;
+	    - translation setting only for the filtered sources;
 	    - checking the content for match only for the filtered sources;
 	    - pass the sources missing error.
 	!!!: The translation function TMess::translSet() prevented from propagation the group messages changed not from the translation manager.
@@ -202,7 +215,7 @@
 - Transports:
     !!!: The IO log, both input and output parts, expanded and appended of:
 	- combining data of packages with even direction and address during prmWait_TM (5 seconds);
-	- microseconds part of the log fixed for 6 symbols;
+	- microseconds part of the time fixed for 6 symbols;
 	- the data messages appended for the direction symbol;
 	- of limiting the one processing block size by a new configuration field;
 	- performance significantly rising by using the preliminary buffer.
@@ -303,8 +316,8 @@
 	The included widgets, restored from the parent widget, is set to enabled after adding.
 	Copying the container widgets and pages appended for checking and removing the child widgets, what removed on the source.
 	Included widgets of the containers copying appended for adjustment the end position to ensure the visibility.
-    !!:Vision: The property dialogues of the "Widgets" and "Projects" / "Widget libraries" appended for own statusbar
-	    and a button of builtin manual invoking. The TextEdit widgets switched to own statusbar of the property
+    !!:Vision: The property dialogues of the "Widgets" and "Projects / Widget libraries" appended for own statusbar
+	    and a button of context manual invoking. The TextEdit widgets switched to own statusbar of the property
 	    dialogues for the cursor position and what disabled in ToolTip.
 	!!: The text code edition widget of the "Widgets" property dialogue appended in restoring the cursor position after apply or cancel.
 	!: The text edition widget appended in the syntax highlight rules cleaning at the reloading.
@@ -318,7 +331,7 @@
     !!!!:FIX:WebVision: Appended for detection disappearing of the project execution session and return an error,
 	    in the common request "pgOpenList", and at dropping down the calculation counter "tmCnt".
 	!!!!: The keyboard focus and events significantly improved for ensure that working in common by:
-	    - setting the "tabindex" attribute for all active widgets and for FormEl items specially for the form elements;
+	    - setting the "tabindex" attribute for all active widgets and for FormEl items specially - for the form elements;
 	    - appending the "tabindex" number calculation as a unique one for whole interface, than prventing the tab focus jumps;
 	    - processing the onfocus event for the own focus setting by setFocus();
 	    - the view Button of the primitive FormEl appended for the keyboard events processing for down and up at the keys Space and Enter;

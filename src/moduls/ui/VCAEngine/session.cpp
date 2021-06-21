@@ -2093,8 +2093,12 @@ void SessWdg::calc( bool first, bool last, int pos )
 	    inLnkGet = true;
 	    for(unsigned iA = 0; iA < mAttrLnkLs.size(); iA++) {
 		try { attr = attrAt(mAttrLnkLs[iA]); } catch(TError &err) { continue; }
-		string cfgVal = trLU(attr.at().cfgVal(), ownerSess()->reqLang(), ownerSess()->reqUser());
-		if(attr.at().flgSelf()&Attr::CfgConst && !cfgVal.empty())	attr.at().setS(cfgVal);
+		string	cfgVal = attr.at().cfgVal(), cfgValTr = cfgVal;
+		if(attr.at().type() == TFld::String)
+		    cfgValTr = trLU(cfgVal, ownerSess()->reqLang(), ownerSess()->reqUser());
+		if(attr.at().flgSelf()&Attr::CfgConst && !cfgValTr.empty()) attr.at().setS(cfgValTr);
+		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !cfgValTr.empty() && TSYS::strParse(cfgValTr,0,":") == "val")
+		    attr.at().setS(cfgValTr.substr(4));
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !cfgVal.empty()) {
 		    obj_tp = TSYS::strParse(cfgVal, 0, ":") + ":";
 		    if(obj_tp == "val:")	attr.at().setS(cfgVal.substr(obj_tp.size()));

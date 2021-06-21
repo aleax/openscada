@@ -126,6 +126,18 @@ void TParamContr::setName( const string &inm )	{ cfg("NAME").setS(inm); }
 
 string TParamContr::descr( )			{ return cfg("DESCR").getS(); }
 
+int64_t TParamContr::timeStamp( )
+{
+    int64_t mTimeStamp = cfg("TIMESTAMP").getI();
+
+    vector<string> ls;
+    list(ls);
+    for(unsigned iL = 0; iL < ls.size(); ++iL)
+	mTimeStamp = vmax(mTimeStamp, at(ls[iL]).at().timeStamp());
+
+    return mTimeStamp;
+}
+
 bool TParamContr::dataActive( )			{ return owner().startStat(); }
 
 void TParamContr::setDescr( const string &idsc ){ cfg("DESCR").setS(idsc); }
@@ -273,6 +285,7 @@ void TParamContr::load_( TConfig *icfg )
 void TParamContr::save_( )
 {
     cfg("OWNER") = ownerPath();
+    cfg("TIMESTAMP") = (int64_t)SYS->sysTm();
     SYS->db().at().dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
 
     //Save archives
@@ -446,10 +459,12 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 		else ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		if(owner().enableStat())
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/prm/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDAQ_ID,RWRWR_);
 		ctrRemoveNode(opt,"/prm/cfg/OWNER");
+		ctrRemoveNode(opt,"/prm/cfg/TIMESTAMP");
 	    }
 	}
 
@@ -478,6 +493,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    else s2i(opt->text()) ? enable() : disable();
 	}
     }
+    else if(a_path == "/prm/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(mPrm >= 0 && a_path == "/iPrms/nmb" && ctrChkNode(opt)) {
 	vector<string> c_list;
 	list(c_list);

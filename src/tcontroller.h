@@ -73,6 +73,7 @@ class TController : public TCntrNode, public TConfig
 	string workId( );
 	string name( );
 	string descr( );
+	int64_t timeStamp( );
 	virtual string getStatus( );
 
 	string DB( )		{ return mDB; }
