@@ -1043,6 +1043,7 @@ TCntrNode &TMdPrm::operator=( const TCntrNode &node )
 	else lCtx->setS(iIO, src_n->lCtx->getS(iIO));
 
     lCtx->chkLnkNeed = lCtx->initLnks();
+    modif();
 
     return *this;
 }

@@ -2093,42 +2093,47 @@ void SessWdg::calc( bool first, bool last, int pos )
 	    inLnkGet = true;
 	    for(unsigned iA = 0; iA < mAttrLnkLs.size(); iA++) {
 		try { attr = attrAt(mAttrLnkLs[iA]); } catch(TError &err) { continue; }
-		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(trLU(attr.at().cfgVal(),ownerSess()->reqLang(),ownerSess()->reqUser()));
-		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty()) {
-		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";
-		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
+		string	cfgVal = attr.at().cfgVal(), cfgValTr = cfgVal;
+		if(attr.at().type() == TFld::String)
+		    cfgValTr = trLU(cfgVal, ownerSess()->reqLang(), ownerSess()->reqUser());
+		if(attr.at().flgSelf()&Attr::CfgConst && !cfgValTr.empty()) attr.at().setS(cfgValTr);
+		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !cfgValTr.empty() && TSYS::strParse(cfgValTr,0,":") == "val")
+		    attr.at().setS(cfgValTr.substr(4));
+		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !cfgVal.empty()) {
+		    obj_tp = TSYS::strParse(cfgVal, 0, ":") + ":";
+		    if(obj_tp == "val:")	attr.at().setS(cfgVal.substr(obj_tp.size()));
 		    else if(obj_tp == "prm:") {
 			int detOff = obj_tp.size();	//Links subdetail process
-			vl = SYS->daq().at().attrAt(TSYS::strParse(attr.at().cfgVal(),0,"#",&detOff),0,true);
+			vl = SYS->daq().at().attrAt(TSYS::strParse(cfgVal,0,"#",&detOff),0,true);
 			if(vl.freeStat()) { attr.at().setS(EVAL_STR); continue; }
 			if(attr.at().flgGlob()&Attr::Address) {
 			    string nP = vl.at().nodePath(0,true);
 			    attr.at().setS((nP.size()&&nP[nP.size()-1]=='/')?nP.substr(0,nP.size()-1):"");// "/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
 			}
-			else if(vl.at().fld().type() == TFld::Object && detOff < (int)attr.at().cfgVal().size())
-			    attr.at().set(vl.at().getO().at().propGet(attr.at().cfgVal().substr(detOff),0));
+			else if(vl.at().fld().type() == TFld::Object && detOff < (int)cfgVal.size())
+			    attr.at().set(vl.at().getO().at().propGet(cfgVal.substr(detOff),0));
 			else attr.at().set(vl.at().get());
 
-			/*vl = SYS->daq().at().attrAt(attr.at().cfgVal().substr(obj_tp.size()),0,true);
+			/*vl = SYS->daq().at().attrAt(cfgVal.substr(obj_tp.size()),0,true);
 			if(vl.freeStat()) { attr.at().setS(EVAL_STR); continue; }
 
 			if(attr.at().flgGlob()&Attr::Address) {
 			    string nP = vl.at().nodePath(0,true);
-			    attr.at().setS((nP.size()&&nP[nP.size()-1]=='/')?nP.substr(0,nP.size()-1):"");// "/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
+			    attr.at().setS((nP.size()&&nP[nP.size()-1]=='/')?nP.substr(0,nP.size()-1):"");// "/DAQ"+cfgVal.substr(obj_tp.size()));
 			}
 			else attr.at().set(vl.at().get());*/
 		    }
 		    else if(obj_tp == "wdg:")
-			try { attr.at().set(attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).at().get()); }
+			try { attr.at().set(attrAt(cfgVal.substr(obj_tp.size()),0).at().get()); }
 			catch(TError &err) { attr.at().setS(EVAL_STR); continue; }
 		    else if(obj_tp == "arh:" && attr.at().flgGlob()&Attr::Address)
-			attr.at().setS("/Archive/va_"+attr.at().cfgVal().substr(obj_tp.size()));
+			attr.at().setS("/Archive/va_"+cfgVal.substr(obj_tp.size()));
 		}
 		/*else if(attr.at().flgSelf()&Attr::CfgLnkOut) {
-		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':') + ":";
-		    if(!attr.at().cfgVal().size() ||
-			    (obj_tp == "prm:" && SYS->daq().at().attrAt(TSYS::strParse(attr.at().cfgVal().substr(obj_tp.size()),0,"#"),0,true).freeStat()) ||
-			    (obj_tp == "wdg:" && attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).freeStat()))
+		    obj_tp = TSYS::strSepParse(cfgVal,0,':') + ":";
+		    if(!cfgVal.size() ||
+			    (obj_tp == "prm:" && SYS->daq().at().attrAt(TSYS::strParse(cfgVal.substr(obj_tp.size()),0,"#"),0,true).freeStat()) ||
+			    (obj_tp == "wdg:" && attrAt(cfgVal.substr(obj_tp.size()),0).freeStat()))
 			attr.at().setS(EVAL_STR, false, true);
 		}*/
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn) attr.at().setS(EVAL_STR);

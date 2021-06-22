@@ -2152,34 +2152,32 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <p>Елемент-кадр, представлений на рисунку 3.8, слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 </p><p>Протягом реалізації кадру, вигляд "Таблиця" <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">примітиву "FormEl"</a> значним чином розширено на обох візуалізаторах щодо:
 </p>
-<dl><dd><dl><dd><ul><li> VCAEngine,QTStarter,Vision,WebVision: Appended by the new cell type 't'-text mostly for allowing the edition confirming the type 's'-string by pressing Enter.</li>
-<li> VCAEngine,Vision,WebVision: Appended of the column, row and cell space option "prec" of the real value precision control; and by the column and cell attribute "align" implementation.</li>
-<li> WebVision,Vision: Appended for switching the tables in preventing of double storing the source content at the content size more for 10000.</li>
-<li> FIX:Vision: Use the the common table delegate with the feature of multiline edition.</li></ul>
-<dl><dd><ul><li> Improved in the columns, rows and cells show at the table updation and commonly:</li></ul>
-<dl><dd><ul><li> in limiting the visual size of the cell content in 300 symbols;</li>
-<li> in limition the rows height in 70% from the whole table size;</li>
-<li> more precision columns width alignment;</li>
-<li> in fitting at the development mode;</li>
-<li> in fitting also at the vertical header show;</li>
-<li> in the table close filling by consideration the visible vertical scrollbar size;</li>
-<li> in fitting after the table whole resizing only, so allow the columns resizing manually also and to provide that true fitting always.</li></ul></dd></dl>
-<ul><li> Implemented for the light processing of the width changing and updating:</li></ul>
-<dl><dd><ul><li> light edition without the columns refitting all updating time, only at: first row appearing, columns count change and the column title change, font change and resize;</li>
-<li> apply the column force width and the row height calculation with limits independently from the common attribute "colsWdthFit" value;</li>
-<li> setting the value, early resizing and the table fitting, moved to the space of the table content presence and after the sorting.</li></ul></dd></dl>
-<ul><li> The export function in runtime append of export the view Table of the primitive "FormEl" in CSV.</li></ul></dd></dl>
+<dl><dd><dl><dd><ul><li> VCAEngine,QTStarter,Vision,WebVision: Доповнено новим типом клітинки 't'-текст, переважно для можливості підтвердження редагування типу 's'-рядок натисканням Enter.</li>
+<li> VCAEngine,Vision,WebVision: Доповнено опцією "prec" простору стовпчика, рядка та клітинки для контролю точності реальних значень; та реалізацією атрибуту "align" стовпчика та клітинки.</li>
+<li> WebVision,Vision: Доповнено перемиканням таблиць у запобігання подвійному зберіганню вихідного вмісту за його розміру більш ніж 10000.</li>
+<li> FIX:Vision: Використання загального делегату таблиці із можливістю багаторядкового редагування.</li></ul>
+<dl><dd><ul><li> Вдосконалено відображення стовпців, рядків та клітинок при оновлені та загалом:</li></ul>
+<dl><dd><ul><li> обмеженням візуального розміру вмісту клітинки 300 символами та висоти рядків у 70% від загального розміру таблиці;</li>
+<li> більш точним вирівнюванням ширини стовпців;</li>
+<li> підлаштуванням у режимі розробки, а також при видимості вертикального заголовку;</li>
+<li> щільним заповненням таблиці через врахування розміру видимої смуги вертикального гортання;</li>
+<li> підлаштуванням лише після цілковитої зміни розміру таблиці, чим також дозволивши ручну зміну стовпців та для надання такого-правильного підлаштування завжди.</li></ul></dd></dl>
+<ul><li> Реалізовано "легке" опрацювання зміни ширини та оновлення:</li></ul>
+<dl><dd><ul><li> "легке" редагування без перепідлаштування стовпців за кожного оновлення, лише за: появи першого рядка, зміни кількості стовпців та зміни заголовку стовпця, зміни шрифту та зміни розміру;</li>
+<li> застосування фіксованої ширини стовпця та вирахування висоти рядків із обмеженнями незалежно від значення загального атрибуту "colsWdthFit";</li>
+<li> встановлення значення, рання зміна розміру та підлаштування таблиці, перенесено у простір наявності вмісту таблиці та після сортування.</li></ul></dd></dl>
+<ul><li> Функцію експорту під час виконання доповнено експортом виду Таблиця примітиву "FormEl" у CSV.</li></ul></dd></dl>
 <ul><li> WebVision:</li></ul>
-<dl><dd><ul><li> Improved in the columns, rows and cells show at the table updating and commonly:</li></ul>
-<dl><dd><ul><li> the not fitting mode (the attribute "colsWdthFit" missing) implementation, using the automatic table layout mode for calculation the fixed widths and next switching to the fixed table layout mode;</li>
-<li> multiline text edition of the text cells in whole width and height of the cell, with the edition apply by Ctrl+Enter;</li>
-<li> view limiting the string cells in 300 symbols;</li>
-<li> display the boolean cells as an image at the true state;</li>
-<li> table cells in the editing mode allowed for the system-browser context menu.</li></ul></dd></dl>
-<ul><li> Implemented for the light processing of the width changing and updating:</li></ul>
-<dl><dd><ul><li> the table changes detection and updating switched to the mode of not storing double source content.</li>
-<li> prevented from the complete updating at the attribute "value" modification;</li></ul></dd></dl>
-<ul><li> Appended for the sorting support by columns. Set to the first visible column for sorting at the sorting enable.</li></ul></dd></dl></dd></dl></dd></dl>
+<dl><dd><ul><li> Вдосконалено відображення стовпців, рядків та клітинок при оновлені та загалом:</li></ul>
+<dl><dd><ul><li> реалізацією режиму не підлаштування (відсутність атрибуту "colsWdthFit"), з використанням режиму автоматичного розміщення таблиці для обчислення фіксованої ширини та наступного перемикання у фіксований режим розміщення таблиці;</li>
+<li> багаторядковим редагуванням тексту клітинок у повну ширину та висоту клітинки, із застосуванням редагування за Ctrl+Enter;</li>
+<li> вигляд строкових клітинок обмежено 300 символами;</li>
+<li> відображення логічних клітинок зображенням стану TRUE;</li>
+<li> клітинки таблиці, у режимі редагування, дозволено до виклику контекстного меню системи-браузеру.</li></ul></dd></dl>
+<ul><li> Реалізовано "легке" опрацювання зміни ширини та оновлення:</li></ul>
+<dl><dd><ul><li> виявляння змін таблиці та оновлення перемкнуто у режим не зберігання вихідного вмісту двічі;</li>
+<li> попереджено від цілковитого оновлення за модифікації атрибуту "value".</li></ul></dd></dl>
+<ul><li> Доповнено підтримкою сортування за стовпцями. Встановлення у сортування за першим видимим стовпчиком при ввімкнені сортування.</li></ul></dd></dl></dd></dl></dd></dl>
 <p><br />
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
 </p>

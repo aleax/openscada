@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -134,7 +134,7 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	// Request to OpenSCADA control interface
-	int cntrIfCmd( XMLNode &node );
+	int cntrIfCmd( XMLNode &node, bool noConnect = false );
 
     protected:
 	//Methods

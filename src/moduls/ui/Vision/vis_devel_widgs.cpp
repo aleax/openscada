@@ -2182,6 +2182,7 @@ void DevelWdgView::setEdit( bool vl )
 
 	//Update widgets order
 	if(wLevel() == 0) orderUpdate();
+	else levelWidget(0)->setEdit(false);
     }
 
     if(wLevel() == 0) selAreaUpdate();

@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.8"
+#define MOD_VER		"2.2.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -148,7 +148,7 @@ string TMdContr::getStatus( )
 		val += TSYS::strMess(_("Requests to the station '%s': %.6g."),mStatWork[iSt].first.c_str(),-mStatWork[iSt].second.cntr);
 		isWork = true;
 	    }
-	if(!isWork) val.replace(0,1,"10");
+	if(!isWork) val.replace(0, 1, "10");
     }
 
     return val;
@@ -560,6 +560,7 @@ void *TMdContr::Task( void *icntr )
 		    if(!req.childSize()) continue;
 
 		    //Same request
+		    //???? Hungs at connection errors - not completed big responses
 		    if(cntr.cntrIfCmd(req)) {
 			if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), "%s", req.text().c_str());
 			continue;
@@ -683,15 +684,15 @@ string TMdContr::catsPat( )
     return curPat;
 }
 
-int TMdContr::cntrIfCmd( XMLNode &node )
+int TMdContr::cntrIfCmd( XMLNode &node, bool noConnect )
 {
     string reqStat = TSYS::pathLev(node.attr("path"), 0);
 
     bool stPresent = false;
     for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
 	if(mStatWork[iSt].first == reqStat) {
+	    if(mStatWork[iSt].second.cntr > 0 || (mStatWork[iSt].second.cntr > -1 && noConnect)) break;
 	    stPresent = true;
-	    if(mStatWork[iSt].second.cntr > 0) break;
 	    try {
 		node.setAttr("conTm", enableStat()?"":"1000");	//Set one second timeout to disabled controller for start procedure speed up.
 		int rez = SYS->transport().at().cntrIfCmd(node, MOD_ID+id());
@@ -1087,14 +1088,14 @@ void TMdVl::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     //Service commands process
     if(a_path == "/serv/val" && owner().owner().restDtTm()) {	//Values access
-	// Request to remote station
+	// Requesting the remote station
 	string scntr;
 	for(int c_off = 0; (scntr=TSYS::strSepParse(owner().stats(),0,';',&c_off)).size(); )
 	    try {
 		opt->setAttr("path",scntr+"/DAQ/"+owner().prmAddr()+"/a_"+name()+"/"+TSYS::strEncode(a_path,TSYS::PathEl));
-		if(!owner().owner().cntrIfCmd(*opt)) break;
+		if(!owner().owner().cntrIfCmd(*opt,true)) break;
 	    } catch(TError &err) { continue; }
-	opt->setAttr("path",a_path);
+	opt->setAttr("path", a_path);
 	return;
     }
 

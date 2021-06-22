@@ -4231,7 +4231,7 @@ INSERT INTO wlb_Main_io VALUES('ElViewGraph','text','%1',32,'','','lb_val','',''
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','numbArg','1',32,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','arg0tp','2',0,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','arg0val','-',8,'','','lb_val','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewGraph','arg0cfg','12',0,'','','lb_val','10','','','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewGraph','arg0cfg','12',0,'','','lb_val','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','en','1',40,'','','play','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','bordColor','gray',32,'','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','bordStyle','6',32,'','','','','','','','','');

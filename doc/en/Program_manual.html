@@ -755,7 +755,8 @@
 <ul><li> <i>Status</i> — specifies the controller object status. In our case, the controller is running and the current computation time is 460 microseconds and the maximum one is 1.6 milliseconds.</li>
 <li> <i>Enabled</i> — state of the controller object "Enabled". When enabled, the controller object provides the possibility of creating the parameters and their configuration.</li>
 <li> <i>Running</i> — State of the controller object "Running". The running controller object performs the physical data acquisition and/or includes mechanisms for access to these data.</li>
-<li> <i>Controller DB</i> — address of the database for data storage of the controller object and its parameters.</li></ul></li>
+<li> <i>Controller DB</i> — address of the database for data storage of the controller object and its parameters.</li>
+<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the controller object identifier.</li>
 <li> <i>Name</i> — specifies the controller name.</li>
@@ -765,7 +766,7 @@
 <li> <i>Parameters tables</i> — names of tables that store the parameters of different types (refers to parameter objects of the data acquisition).</li>
 <li> <i>Schedule of the calculation</i> — defines whether periodic or scheduled character of the calculations is. In our example the template calculation is periodic in one second.</li>
 <li> <i>Priority of the acquisition task</i> — sets priority of the data acquisition of this controller. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the controller task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_main.png"><img class="thumbimage" height="660" src="files/QTCfg_subsys_daq_mod_cntr_main.png" width="711" /></a>  <div class="thumbcaption">Fig. 4.5h. The main configuration tab of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:681px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_main.png"><img class="thumbimage" height="678" src="files/QTCfg_subsys_daq_mod_cntr_main.png" width="679" /></a>  <div class="thumbcaption">Fig. 4.5h. The main configuration tab of a controller object of the subsystem "Data acquisition".</div></div></div></div>
 <p>The tab "Parameters" (Fig.4.5i) contains a list of parameters in the controller object, provides selection of the type of parameters that are created by default, as well as information on the total number and the number of enabled parameters. In the context menu user can add, delete and go to the desired parameter.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:688px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm.png"><img class="thumbimage" height="583" src="files/QTCfg_subsys_daq_mod_cntr_prm.png" width="686" /></a>  <div class="thumbcaption">Fig. 4.5i. The tab "Parameters" of the configuration page of a controller object of the subsystem "Data acquisition".</div></div></div></div>
@@ -777,14 +778,15 @@
 </p>
 <ul><li> Section "State" — contains the properties, which characterize the state of the parameter:
 <ul><li> <i>Type</i> — specifies the parameter type. Type of disabled parameter can be changed if there are multiple types.</li>
-<li> <i>Enabled</i> — state of the parameter "Enabled". Enabled parameter is used by the controller for the data acquisition.</li></ul></li>
+<li> <i>Enabled</i> — state of the parameter "Enabled". Enabled parameter is used by the controller for the data acquisition.</li>
+<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the parameter identifier.</li>
 <li> <i>Name</i> — specifies the parameter name.</li>
 <li> <i>Description</i> — brief description of the parameter and its purpose.</li>
 <li> <i>To enable</i> — indicates the state "Enabled" in which to transfer the parameter at the program startup.</li>
 <li> <i>Parameter template</i> — address of the previously discussed template.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:798px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_main.png"><img class="thumbimage" height="542" src="files/QTCfg_subsys_daq_mod_cntr_prm_main.png" width="796" /></a>  <div class="thumbcaption">Fig. 4.5k. The main configuration tab of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_main.png"><img class="thumbimage" height="613" src="files/QTCfg_subsys_daq_mod_cntr_prm_main.png" width="773" /></a>  <div class="thumbcaption">Fig. 4.5k. The main configuration tab of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
 <p>The tab "Attributes" (Fig.4.5l) contains the parameter attributes and their values in accordance with the configuration of the used template and calculation of its program.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:798px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_attr.png"><img class="thumbimage" height="542" src="files/QTCfg_subsys_daq_mod_cntr_prm_attr.png" width="796" /></a>  <div class="thumbcaption">Fig. 4.5l. The tab "Attributes" of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>

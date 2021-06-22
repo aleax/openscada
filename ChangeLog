@@ -1,3 +1,19 @@
+2021-06-22 Roman (stable)
+- FIX:LibsDB.vcaBase: Main.ElViewGraph.lb_val.arg0cfg fixed in wrong translation to uk.
+- FIX:SYS: The "Translations" tab fixed in the option of checking for matching.
+- !:DAQ: The DAQ-parameter object appended for an information field of the changing timestamp with it maximum value
+    on the controller object, by the new DB configuration field "TIMESTAMP" of the parameter object.
+- DAQ.DAQGate: The requestion function cntrIfCmd() appended for the argument "noConnect" of preventing
+    the missed connections establish at the archive requesting now.
+- FIX:DAQ.{ModBus,Siemens}: Appended for setting the modification flag of the target parameter at copy to it,
+    for the Logical Level type.
+- UI.VCAEngine: Some unified in the links processing for translation String constants and "val:{Value}".
+- FIX:UI.Vision: Fixed in complete exiting from the edition mode of the primitive ElFigure included into the Box at focus lost.
+- UI.WebVision: Allowed in the pointer events independently from the activity
+    for the views "Text edit", "Combo box", "List", "Tree", "Table" of the primitive FormEl
+    and the primitives "Protocol", "Document".
+
+
 2021-06-13 Roman (stable)
 - !!:FIX:SYS,BD.LDAP,Archive.{DBArch,FSArch},DAQ.{ModBus,MMS},{DAQ,Protocol}.OPC_UA,UI.Vision: Some cleaned from the build warnings.
 - SYS: The global variable limCacheIts_N type changed to "unsigned".
@@ -172,7 +188,7 @@
 	which but disabled due to the nodes can be used in other DAQ-parameters;
     - CLIENT: significant unification in passing service variables (like to "EndPoint", "SecChnId", ...) to prevent them doubling
 	and the sequences processing moved all to the end serialization function messIO();
-    - CLIENT: moving the main service request "CLO" under the messages processing due to the renewals sending inward the Publish activity;
+    - CLIENT: moving the main service request "OPN" under the messages processing due to the renewals sending inward the Publish activity;
     - CLIENT: adaption the secure messages for work with the mixed input buffer.
     - the function curTime() appended for an argument of the clock source specifying with using the function clock_gettime();
     - fixing "POOL" word on "POLL".

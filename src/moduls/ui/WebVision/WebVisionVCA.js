@@ -1458,6 +1458,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.valSet(this.attrs['value']);
 		    break;
 		case 1:	//Text edit
+		    elStyle += 'pointer-events: all; ';
 		    var fntSz = (getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0);
 		    var applySz = Math.max(16, fntSz);
 
@@ -1684,6 +1685,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    break;
 		case 4: case 5:	//Combo box, List
+		    elStyle += 'pointer-events: all; ';
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('select') : this.place.childNodes[0];
 		    if(toInit || comElMdf || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font']) {
@@ -1770,7 +1772,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.appendChild(formObj);
 		    break;
 		case 8:	//Tree
-		    elStyle += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
+		    elStyle += "pointer-events: all; border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
 		    elStyle += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
 		    geomW -= 2; geomH -= 2;
 		    //elStyle += "border: 1px solid gray; padding: 1px; ";
@@ -1796,7 +1798,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit) this.place.appendChild(formObj);
 		    break;
 		case 9:	//Table
-		    elStyle += "padding: 1px; ";
+		    elStyle += "pointer-events: all; padding: 1px; ";
 		    if(bordStyle) elStyle += "border: "+bordStyle+"; ";
 		    if(backStyle != null) elStyle += backStyle;
 		    geomW -= 4; geomH -= 4;
@@ -2175,7 +2177,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Protocol') {
 	    if(!this.attrs['backColor'] || !getColor(this.attrs['backColor'],true)) elStyle += 'background-color: white; ';
-	    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
+	    elStyle += 'pointer-events: all; border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
 	    geomW -= 6; geomH -= 6;
 
 	    this.wFont = getFont(this.attrs['font'], Math.min(xSc,ySc));
@@ -2391,7 +2393,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else { this.perUpdtEn(false); this.loadData(); }
 	}
 	else if(this.attrs['root'] == 'Document') {
-	    elStyle += 'background-color: white; ';
+	    elStyle += 'pointer-events: all; background-color: white; ';
 
 	    if(this.attrsMdf["style"] || this.attrsMdf["font"] ||
 		(this.attrsMdf["doc"] && this.attrs["doc"].length) || (this.attrsMdf["tmpl"] && !this.attrs["doc"].length))
