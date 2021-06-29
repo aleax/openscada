@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.2.9"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -94,7 +94,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("TM_REST_DT",_("Depth time of restore data, hours"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
     fldAdd(new TFld("GATH_MESS_LEV",_("Level of requested messages"),TFld::Integer,TFld::Selectable,"1","1",
 	"-1;0;1;2;3;4;5;6;7",_("==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
-    fldAdd(new TFld("SYNCPER",_("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
+    fldAdd(new TFld("SYNCPER",_("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","-1;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
     fldAdd(new TFld("CNTRPRM",_("List of the remote controller objects and parameters"),TFld::String,TFld::FullText,"200"));
     fldAdd(new TFld("ALLOW_DEL_PA",_("Allow the automatic removal of parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
@@ -177,8 +177,12 @@ void TMdContr::enable_( )
 	for(int stOff = 0; (statV=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&stOff)).size(); )
 	    mStatWork.push_back(pair<string,StHd>(statV,StHd()));
 
+    list(prmLs);
+    bool toSync = (syncPer() >= 0 || prmLs.empty());
+    prmLs.clear();
+
     //Remote station scaning. Controllers and parameters scaning
-    for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
+    for(unsigned iSt = 0; iSt < mStatWork.size() && toSync; iSt++)
 	for(int cpOff = 0; (cpEl=TSYS::strSepParse(cfg("CNTRPRM").getS(),0,'\n',&cpOff)).size(); )
 	    try {
 		// Parse parameters list
@@ -319,7 +323,7 @@ void TMdContr::enable_( )
 	    } catch(TError &err) { if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", err.mess.c_str()); }
 
     //Removing remotely missed parameters in case all remote stations active status by the actual list
-    if(mAllowToDelPrmAttr) {
+    if(mAllowToDelPrmAttr && toSync) {
 	bool prmChkToDel = true;
 	for(unsigned iSt = 0; prmChkToDel && iSt < mStatWork.size(); iSt++)
 	    if(mStatWork[iSt].second.cntr >= 0) prmChkToDel = false;
@@ -480,7 +484,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(1e9); continue; }
 	    else {
-		if(cntr.syncPer()) {	//Enable sync
+		if(cntr.syncPer() > 0) {	//Enable sync
 		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
 		    if(syncCnt <= 0) syncCnt = cntr.syncPer();
 		    syncCnt = vmax(0, syncCnt-1e-6*(tCnt-tPrev));
@@ -488,7 +492,7 @@ void *TMdContr::Task( void *icntr )
 		else { div = 0; syncCnt = 1; }	//Disable sync
 
 		//Parameters list update
-		if(firstCall || needEnable || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
+		if((firstCall && cntr.syncPer() >= 0) || needEnable || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
 		    try { cntr.enable_(); } catch(TError &err) { }
 
 		MtxAlloc resPrm(cntr.enRes, true);
@@ -496,7 +500,7 @@ void *TMdContr::Task( void *icntr )
 		//Mark no process
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 		    TMdPrm &pO = cntr.pHd[iP].at();
-		    if(!pO.isSynced || (!div && syncCnt <= 0) || (div && itCnt > div && (((itCnt+iP)%div) == 0))) pO.sync();
+		    if((!pO.isSynced && cntr.syncPer() >= 0) || (!div && syncCnt <= 0) || (div && itCnt > div && (((itCnt+iP)%div) == 0))) pO.sync();
 		    pO.isPrcOK = false;
 		}
 
@@ -518,11 +522,11 @@ void *TMdContr::Task( void *icntr )
 			    cntrLstMA[aMod+"/"+aCntr] = true;
 
 			    XMLNode *prmNd = req.childAdd("get")->setAttr("lcPs",i2s(iP))->setAttr("path",prm.prmAddr()+"/%2fserv%2fattr");
-			    prmNd->setAttr("hostTm", !cntr.restDtTm() ? "1" : "0");
+			    prmNd->setAttr("hostTm", !cntr.restDtTm() ? "1" : "");
 
 			    // Prepare individual attributes list
 			    bool sepReq = !prm.isEVAL && ((!div && syncCnt > 0) || (div && ((itCnt+iP)%div)));
-			    prmNd->setAttr("sepReq", sepReq ? "1" : "0");
+			    prmNd->setAttr("sepReq", sepReq ? "1" : "");
 			    if(!cntr.restDtTm() && !sepReq) continue;
 
 			    vector<string> listV;
@@ -542,7 +546,7 @@ void *TMdContr::Task( void *icntr )
 			    if(sepReq && !prmNd->childSize()) { req.childDel(prmNd); prm.isPrcOK = true; }	//Pass request and mark by processed
 			    if(sepReq && rC > listV.size()/2) {
 				prmNd->childClear("el");
-				prmNd->setAttr("sepReq", "0");
+				prmNd->setAttr("sepReq", "");
 			    }
 			}
 		    }
@@ -560,7 +564,6 @@ void *TMdContr::Task( void *icntr )
 		    if(!req.childSize()) continue;
 
 		    //Same request
-		    //???? Hungs at connection errors - not completed big responses
 		    if(cntr.cntrIfCmd(req)) {
 			if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), "%s", req.text().c_str());
 			continue;
@@ -727,7 +730,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable the access to the remote archive."), NULL);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable to the periodic sync."), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable the periodic sync and -1 for the sync disabling at the start also."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/STATIONS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "help",_("List of remote OpenSCADA station IDs used in this controller."), "rows", "2", NULL);
 	ctrMkNode2("fld",opt,-4,"/cntr/cfg/SEL_STAT",_("Append station"),enableStat()?0:RWRW__,"root",SDAQ_ID,
@@ -855,7 +858,7 @@ void TMdPrm::load_( )
 
     loadIO();
 
-    sync();	//Sync for the attributes list
+    if(owner().syncPer() >= 0)	sync();	//Sync for the attributes list
 }
 
 void TMdPrm::loadIO( )

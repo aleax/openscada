@@ -318,7 +318,11 @@
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B14.06.2021.5D_The_FOURTH_update"><span class="mw-headline-number">7.1</span> [14.06.2021] The FOURTH update</span></h3>
 <p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 45 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2755" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
-</p><p><b><u>New and significantly updated parts</u></b><br />
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>User significant actions on the update</u></b><br />
+</p>
+<ul><li> FIX:SYS: The common configuration field "WorkDir" was prevented from marking as modified one at the project switch than saving it in the configuration file, but there is no mechanism of automatic removing this field from the configuration file of the old projects.</li></ul>
+<dl><dd> <b><span style="color: red">=</span></b>&gt; remove manually the common configuration field "WorkDir" if it was appeared there in a wrong way and you have problems in use folders of foreign OpenSCADA projects by this project.</dd></dl>
+<p><b><u>New and significantly updated parts</u></b><br />
 </p>
 <ul><li> OpenSCADA Core: 3:9:0 =&gt; <b>3:10:0</b></li></ul>
 <dl><dd> (<a href="#Translations">revision the translations mechanism</a>)</dd></dl>
@@ -383,7 +387,6 @@
 <li> pass the sources missing error.</li></ul></dd></dl>
 <ul><li> The translation function TMess::translSet() prevented from propagation the group messages changed not from the translation manager.</li></ul></dd></dl>
 <ul><li> FIX:.,BD.LDAP,Archive.{DBArch,FSArch},DAQ.{ModBus,MMS},{DAQ,Protocol}.OPC_UA,UI.Vision: Some cleaned from the build warnings.</li>
-<li> FIX: The common configuration field "WorkDir" was prevented from marking as modified one at the project switch than saving it in the configuration file.</li>
 <li> FIX: The EVAL_RFlt definition appended for the suffix "f" to prevent of wrong comparing the double EVAL_RFlt with stored float values, fixes the archiver Archive.FSArch work with the float type values in the EVAL detection.</li>
 <li> FIX:Mess: The data lock separated from all messages lock in dtRes to prevent the concurrently locks at active work with translations. The mLang2CodeBase, mLang2Code attributes switched to this new lock.</li>
 <li> data/openscada-proj.in: Switched to linking user LibsDB content to the system RO-content-libraries instead the copying.</li></ul>

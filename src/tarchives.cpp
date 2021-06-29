@@ -243,6 +243,21 @@ string TArchiveS::valAdd( const string &iid, const string &idb )
     return chldAdd(mAval, new TVArchive(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb,&aValE()));
 }
 
+void TArchiveS::valDel( const string &id, bool db )
+{
+    //Try to start the stopped archive to remove from the storages also
+    AutoHD<TVArchive> vDel = valAt(id);
+    if(db && !vDel.at().startStat() && vDel.at().toStart())
+	try {
+	    vDel.at().setSrcMode(TVArchive::Passive);
+	    vDel.at().start();
+	} catch(TError&) { }
+    vDel.free();
+
+    //Same removing
+    chldDel(mAval, id, -1, db);
+}
+
 string TArchiveS::optDescr( )
 {
     return TSYS::strMess(_(
@@ -1160,7 +1175,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",list[iA])->setText(valAt(list[iA]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR))	{ opt->setAttr("id", valAdd(opt->attr("id"))); valAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	chldDel(mAval,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	valDel(opt->attr("id"), true);
     }
     else if(a_path == "/redund/restDtOverTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(r2s(rdRestDtOverTm()));

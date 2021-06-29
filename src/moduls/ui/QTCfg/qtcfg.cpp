@@ -62,6 +62,7 @@
 #include "tuimod.h"
 
 #define CH_REFR_TM	100
+#define GRP_SHOW_OP_LIM	10
 
 using namespace OSCADA_QT;
 using namespace QTCFG;
@@ -696,15 +697,16 @@ void ConfApp::itDel( const string &iit )
 	else for(int iEl = 0; iEl < sel_ls.size(); iEl++) {
 	    rmit = sel_ls.at(iEl)->text(2).toStdString() + ((iEl<(sel_ls.size()-1))?"\n":"");
 	    rmits += rmit;
-	    if(iEl < 10) rmits_lim += rmit;
+	    if(iEl < GRP_SHOW_OP_LIM) rmits_lim += rmit;
 	}
-	if(sel_ls.size() > 10) rmits_lim += TSYS::strMess(_("... and yet %d nodes"), sel_ls.size()-10);
+	if(sel_ls.size() > GRP_SHOW_OP_LIM)
+	    rmits_lim += TSYS::strMess(_("... and yet %d nodes"), sel_ls.size()-GRP_SHOW_OP_LIM);
     }
     if(rmits.empty())	return;
 
     if(iit.empty()) {
 	InputDlg dlg(this, actItDel->icon(),
-		QString(_("Are you sure of deleting the nodes '%1'?")).arg(rmits_lim.c_str()),_("Deleting the nodes"), 0, 0);
+		QString(_("Are you sure of deleting the nodes: %1 ?")).arg(rmits_lim.c_str()),_("Deleting the nodes"), 0, 0);
 	if(dlg.exec() != QDialog::Accepted)	return;
     }
 
@@ -2428,20 +2430,26 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 
 	// Multiple requests to selected nodes into the tree
 	if(rez == TError::NoError && (node.name() == "set" || node.name() == "load" || node.name() == "save") && CtrTree->selectedItems().size() >= 2) {
-	    string reqPath = node.attr("path"), reqPathEl, selNds;
+	    string reqPath = node.attr("path");
 	    size_t reqElPos = reqPath.rfind("/");
 	    if(reqElPos != string::npos) {
-		reqPathEl = reqPath.substr(reqElPos+1); reqPath = reqPath.substr(0, reqElPos);
+		string reqPathEl = reqPath.substr(reqElPos+1), reqPath = reqPath.substr(0,reqElPos), selNds_lim;
+		vector<string> selNds;
 		QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
-		for(int iEl = 0; iEl < sel_ls.size(); iEl++)
-		    if(sel_ls.at(iEl)->text(2).toStdString() != reqPath)
-			selNds += sel_ls.at(iEl)->text(2).toStdString()+"\n";
+		for(unsigned iEl = 0; iEl < sel_ls.size(); iEl++)
+		    if(sel_ls.at(iEl)->text(2).toStdString() != reqPath) {
+			selNds.push_back(sel_ls.at(iEl)->text(2).toStdString());
+			if(selNds.size() < GRP_SHOW_OP_LIM)
+			    selNds_lim += (selNds_lim.size()?"\n":"") + selNds.back();
+		    }
+		if(selNds.size() > GRP_SHOW_OP_LIM)
+		    selNds_lim += TSYS::strMess(_("... and yet %d nodes"), selNds.size()-GRP_SHOW_OP_LIM);
 		if(selNds.size()) {
 		    int questRes = QMessageBox::question(this, _("Sending the changes to the selected ones"),
-			    TSYS::strMess(_("Send the command '%s' to other selected nodes \"%s\"?"), node.name().c_str(), selNds.c_str()).c_str(),
+			    QString(_("Send the command '%1' to other selected nodes: %2 ?")).arg(node.name().c_str()).arg(selNds_lim.c_str()),
 			    QMessageBox::Apply|QMessageBox::Cancel, QMessageBox::Apply);
-		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); ) {
-			node.setAttr("path", reqPath+"/"+reqPathEl);
+		    for(unsigned iSel = 0; questRes == QMessageBox::Apply && iSel < selNds.size(); ++iSel) {
+			node.setAttr("path", selNds[iSel]+"/"+reqPathEl);
 			cntrIfCmdHosts(node);
 			//SYS->transport().at().cntrIfCmd(node, "UIQtCfg", wUser->user().toStdString());
 		    }

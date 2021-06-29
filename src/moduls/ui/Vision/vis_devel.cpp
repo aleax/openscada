@@ -1583,7 +1583,10 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		req.clear()->setName("set")->setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
 		    setAttr("src", s_elp+"/"+s_el)->setAttr("dst", d_elp+"/"+d_el);
 		int err = cntrIfCmd(req);
-		if(err)	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+		if(err) {
+		    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+		    copy_els.push_back(d_elp+"/"+d_el);	//!!!! Update the item anytime at errors due to the possible restoring of it
+		}
 		if(!err || err == 1) {	//Not errors or warnings
 		    if(it_nm.size()) {
 			req.clear()->setName("set")->setText(it_nm);

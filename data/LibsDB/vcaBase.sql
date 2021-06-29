@@ -1409,15 +1409,15 @@ INSERT INTO wlb_Main_incl VALUES('RootPgSo','pgCntr','/wlb_originals/wdg_Text','
 INSERT INTO wlb_Main_incl VALUES('ElViewCadr','trnd','/wlb_originals/wdg_Diagram','geomX;geomY;geomW;backColor;bordWidth;trcPer;tSize;prm0addr;prm0color;prm0val;',2);
 INSERT INTO wlb_Main_incl VALUES('ElViewCadr','text','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;font;color;alignment;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;arg1cfg;',2);
 INSERT INTO wlb_Main_incl VALUES('grpCadr','ElFigure','/wlb_originals/wdg_ElFigure','geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el1','/wlb_Main/wdg_ElCadr','en;geomX;geomY;bordColor;max;min;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el2','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el3','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el4','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmColor;',2);
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el1','/wlb_Main/wdg_ElCadr','en;geomX;geomY;bordColor;prmColor;',2);
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el2','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el3','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el4','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
 INSERT INTO wlb_Main_incl VALUES('grpCadr','name','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el5','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el6','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el7','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el8','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;max;min;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmDemention;prmManIn;prmOpenSt;prmOut;prmShifr;prmSp;prmStop;prmVar;',2);
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el5','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el6','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el7','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el8','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
 INSERT INTO wlb_Main_incl VALUES('grpCadr','trnd1','/wlb_originals/wdg_Diagram','perm;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSek;tSize;sclHor;sclVer;sclMarkColor;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0width;prm0val;curSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1width;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2width;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3width;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4width;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5width;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6width;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7width;prm7val;',2);
 INSERT INTO wlb_Main_incl VALUES('anShow','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomMargin;font;color;alignment;text;',2);
 INSERT INTO wlb_Main_incl VALUES('anShow','val','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomMargin;font;color;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
@@ -3579,7 +3579,7 @@ INSERT INTO wlb_Main_io VALUES('grpCadr','prm0addr','',40,'','','trnd1','','',''
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm0bordL','0',40,'','','trnd1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm0bordU','0',40,'','','trnd1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm0color','',40,'','','trnd1','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grpCadr','curSek','1554013690',8,'','','trnd1','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grpCadr','curSek','1624643127',8,'','','trnd1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm1addr','',8,'','','trnd1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm1bordL','0',8,'','','trnd1','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','prm1bordU','0',8,'','','trnd1','','','','','','');
@@ -12201,14 +12201,14 @@ INSERT INTO wlb_Main_uio VALUES('grpGraph','addr','Address',196613,'<EVAL>||',10
 INSERT INTO wlb_Main_uio VALUES('ElViewCadr','addr','Address',196613,NULL,10,'Parameter|var','','','Адреса','','','Адрес','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewCadr','var','Variable',131076,'<EVAL>|',10,'Parameter|var','','','Змінна','','','Переменная','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpCadr','grpName','Group name',131077,NULL,9,'','','','Ім''я групи','','','Имя группы','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el8','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el7','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el6','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el5','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el4','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el3','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el2','Параметр: адреса','','','Параметр: адрес','','','','');
-INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'Parameter|var','','el1','Параметр: адреса','','','Параметр: адрес','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el8','Параметр: адреса','','','Параметр: адрес','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el7','Параметр: адреса','','','Параметр: адрес','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el6','Параметр: адреса','','','Параметр: адрес','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el5','Параметр: адреса','','','Параметр: адрес','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el4','Параметр: адреса','','','Параметр: адрес','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el3','Параметр: адреса','','','Параметр: адрес','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el2','Параметр: адреса','','','Параметр: адрес','','','','');
+INSERT INTO wlb_Main_uio VALUES('grpCadr','prmAddr','Parameter: address',196613,NULL,10,'<page>|var','','el1','Параметр: адреса','','','Параметр: адрес','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pErr','Parameter: error',131077,NULL,10,'Parameter|err','','','Параметр: помилка',NULL,'','Параметр: ошибка',NULL,'','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pErrCode','Parameter: error code',131073,'1|',8,'','','','Параметр: код помилки','','','Параметр: код ошибки','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pName','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','','','Параметр: имя','','','','');
@@ -21650,7 +21650,7 @@ for(i = 0; i < 8; i++) {
 						.attrSet("prm"+i+"bordL",el.attr("min")).attrSet("prm"+i+"bordU",el.attr("max"))
 						.attrSet("prm"+i+"color",el.attr("bordColor"));
 	}
-}','','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1578246829);
+}','','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1624643148);
 INSERT INTO wlb_Main VALUES('anShow','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAZCAIAAAAOir+2AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAF/0lEQVRYhdWW/08bdRjHn8/n7nrXu2tpy1ootmUtDChsK2snk62AsMnG
 5pj1a6LRH4w/+cMS/xT/g4lLNJkxxmjinIvFKduy4QbKgCJQ+pUCLdD1rndt784f6jadQxMDmL1/

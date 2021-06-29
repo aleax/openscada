@@ -1,3 +1,17 @@
+2021-06-29 Roman (stable)
+- LibsDB.vcaBase: Main.grpCadr: Cleared from spare modification and the group name set to "<page>" for the unification.
+- Archives: The archive object removing appended of switching to "Passive" and starting for stopped ones,
+    to remove also from the storages for the archive objects with lost the source.
+- DAQ.{*,DAQGate}: Archive values requesting in redundancy and the gate cleared for setting some values to "0" for "sepReq", "hostTm"
+    to decrease some the traffic.
+- !!:DAQ.DAQGate: The sync modes appended for a mode of preventing the sync in whole for the stored in the cache objects,
+    allowing value -1 for the configuration field "Synchronization time with the remote station, seconds."
+- FIX:DAQ.Siemens: Fix the restoring connection time calculation for the acquisition periodicity not 1 second.
+- UI.QTCfg: The copy accepting dialog appended for the limiting of the display items list in 10.
+- FIX:UI.VCAEngine: Detection the group-parameter link status as OK appended for checking not only first sucesfully linked attribute.
+- FIX:UI.Vision: The copy widgets appended for udating at errors also, for the possible restoring of the inherited removing.
+
+
 2021-06-22 Roman (stable)
 - FIX:LibsDB.vcaBase: Main.ElViewGraph.lb_val.arg0cfg fixed in wrong translation to uk.
 - FIX:SYS: The "Translations" tab fixed in the option of checking for matching.

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -365,7 +365,7 @@ void TController::redntDataUpdate( )
 								   TSYS::curTime()-(int64_t)(3.6e9*owner().owner().rdRestDtTm()))));
 		if(!vl.at().arch().freeStat() || vl.at().reqFlg()) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
 	    }
-	    if(rC > listV.size()/2) { prmNd->childClear("el"); prmNd->setAttr("sepReq", "0"); }
+	    if(rC > listV.size()/2) { prmNd->childClear("el"); prmNd->setAttr("sepReq", ""); }
 	    //if(s2i(prmNd->attr("sepReq")) && !prmNd->childSize()) req.childDel(prmNd);
 	}
 	hst.push_back(RedntStkEl(addr));
