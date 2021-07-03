@@ -1304,8 +1304,15 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(),0,'|'))
 		{
 		    sel = srcwdg.at().attrAt(a_ls[iA]).at().cfgVal();
-		    if(!custom && sel.size() && sel.find(cfg_val) != 0) custom = true;
 		    rez += (rez.size()?", ":"")+sel;
+		    if(!custom && sel.size() && sel.find(cfg_val) != 0) custom = true;
+		    if(!custom && !lnkOK) {
+			string sel_tp  = (sel.size() >= 4) ? sel.substr(0,4) : "";
+			if(sel.rfind("/") != string::npos &&
+				((sel_tp == "prm:" && !SYS->daq().at().attrAt(sel.substr(4),0,true).freeStat()) ||
+				(sel_tp == "wdg:" && !srcwdg.at().attrAt(sel.substr(4),0).freeStat())))
+			    lnkOK = true;
+		    }
 		}
 	    if(!custom) {
 		rez = cfg_val;

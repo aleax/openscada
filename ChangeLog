@@ -1,3 +1,25 @@
+2021-07-03 Roman 0.9.4
+- FIX:LibsDB.OscadaLibs: The template library tests.test fixed in the IO "di" for the grouping.
+- FIX:LibsDB.vcaBase: Main.grpCadr: Cleared from spare modification and the group name set to "<page>" for the unification.
+    doc.docMessRep,Main.{alarmsAct,alarmsSt}: Expanded in detecion the current source name of violations after passing the multiple gates.
+- FIX:AGLKS.St: The DAQ-parameter LogLev.gen.P4 fixed in the violation borders specifying.
+- FIX:Archives: The archive object removing appended of switching to "Passive" and starting for stopped ones,
+	to remove also from the storages for the archive objects with lost the source.
+    !: The control interface button expanded for clearing the visible alarms, not all them only.
+- DAQ.{*,DAQGate}: Archive values requesting in redundancy and the gate cleared for setting some values to "0" for "sepReq", "hostTm"
+    to decrease some the traffic.
+- !!:DAQ.DAQGate: The sync modes appended for a mode of preventing the sync in whole for the stored in the cache objects,
+    allowing value -1 for the configuration field "Synchronization time with the remote station, seconds."
+- FIX:DAQ.Siemens: Fix the restoring connection time calculation for the acquisition periodicity not 1 second.
+- FIX:DAQ.OPC_UA: Fixed-finished in the parameter including support.
+- UI.QTCfg: The copy accepting dialog appended for the limiting of the display items list in 10.
+- FIX:UI.VCAEngine: Detection the group-parameter link status as OK appended for checking not only first sucesfully linked attribute.
+- !:FIX:UI.{Vision,WebVision}: The view Table of the primitive FormEl fixed in specifying
+    the column sorting value "0" as descending and "1" as ascending from the top,
+    and force of applying the attribute "sort" change.
+- FIX:UI.Vision: The copy widgets appended for udating at errors also, for the possible restoring of the inherited removing.
+
+
 2021-06-21 Roman 0.9.4
 - FIX:LibsDB.vcaBase: Main.ElViewGraph.lb_val.arg0cfg fixed in wrong translation to uk.
 - DAQ.DAQGate: The requestion function cntrIfCmd() appended for the argument "noConnect" of preventing

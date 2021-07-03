@@ -243,6 +243,21 @@ string TArchiveS::valAdd( const string &iid, const string &idb )
     return chldAdd(mAval, new TVArchive(TSYS::strEncode(sTrm(iid),TSYS::oscdID),idb,&aValE()));
 }
 
+void TArchiveS::valDel( const string &id, bool db )
+{
+    //Try to start the stopped archive to remove from the storages also
+    AutoHD<TVArchive> vDel = valAt(id);
+    if(db && !vDel.at().startStat() && vDel.at().toStart())
+	try {
+	    vDel.at().setSrcMode(TVArchive::Passive);
+	    vDel.at().start();
+	} catch(TError&) { }
+    vDel.free();
+
+    //Same removing
+    chldDel(mAval, id, -1, db);
+}
+
 string TArchiveS::optDescr( )
 {
     return TSYS::strMess(_(
@@ -1025,7 +1040,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",_("Message"),R_R___,"root",SARH_ID,1,"tp","str");
 		}
 		if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && mAlarms.size())
-		    ctrMkNode("comm",opt,-1,"/m_arch/view/alClean",_("Clean up the the current violations table"),RWRW__,"root",SARH_ID);
+		    ctrMkNode("comm",opt,-1,"/m_arch/view/alClean",_("Clear visible violations"),RWRW__,"root",SARH_ID);
 	    }
 	}
 	if(ctrMkNode("area",opt,2,"/v_arch",_("Values"),R_R_R_,"root",SARH_ID)) {
@@ -1124,8 +1139,17 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/m_arch/view/alClean" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
+	vector<TMess::SRec> rec;
+	time_t gtm = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
+	int gsz = s2i(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
+	messGet(gtm-gsz, gtm, rec,
+	    TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
+	    s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))),
+	    TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")));
 	mRes.lock();
-	mAlarms.clear();
+	for(unsigned iRec = 0; iRec < rec.size(); ++iRec)
+	    mAlarms.erase(rec[iRec].categ);
 	mRes.unlock();
     }
     else if(a_path == "/v_arch/per") {
@@ -1160,7 +1184,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",list[iA])->setText(valAt(list[iA]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR))	{ opt->setAttr("id", valAdd(opt->attr("id"))); valAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	chldDel(mAval,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	valDel(opt->attr("id"), true);
     }
     else if(a_path == "/redund/restDtOverTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(r2s(rdRestDtOverTm()));

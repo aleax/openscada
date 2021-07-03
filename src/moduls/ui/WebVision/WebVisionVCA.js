@@ -1996,7 +1996,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    hit.outFont = tC.getAttribute("font");
 					    hit.outAlign = tC.getAttribute("align");
 					    hit.style.display = (hit.widthSrc.length && !parseInt(hit.widthSrc)) ? "none" : "";
-					    if((wVl=tC.getAttribute("sort")))	{ sortCol = iC+1; if(!parseInt(wVl)) sortCol *= -1; }
+					    if((wVl=tC.getAttribute("sort")))	{ sortCol = iC+1; if(parseInt(wVl)) sortCol *= -1; }
 					    hit.outPrec = tC.getAttribute("prec");
 					} else hit.innerText = "";
 				    }
@@ -2094,6 +2094,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 			    //Sorting
 			    if(((wVl=tX.getAttribute("sortEn")) && parseInt(wVl)) || sortCol) {
+				if(sortCol) {
+				    if(formObj.sortColSet && sortCol != formObj.sortColSet) formObj.sortCol = null;
+				    formObj.sortColSet = sortCol;
+				} else formObj.sortColSet = null;
+
 				formObj.sort = function(col, force) {
 				    if(force) this.sortCol = -col;
 				    col = Math.abs(col);

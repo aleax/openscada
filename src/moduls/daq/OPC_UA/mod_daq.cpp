@@ -289,16 +289,16 @@ int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int 
 
 void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }
 
-void TMdContr::prmEn( const string &id, bool val )
+void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
-    MtxAlloc res(enRes, true);
-
     unsigned iPrm;
-    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
-	if(pHd[iPrm].at().id() == id) break;
 
-    if(val && iPrm >= pHd.size()) pHd.push_back(at(id));
-    if(!val && iPrm < pHd.size()) pHd.erase(pHd.begin()+iPrm);
+    MtxAlloc res(enRes, true);
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(&pHd[iPrm].at() == prm) break;
+
+    if(val && iPrm >= pHd.size())	pHd.push_back(prm);
+    if(!val && iPrm < pHd.size())	pHd.erase(pHd.begin()+iPrm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -737,14 +737,14 @@ void TMdPrm::enable( )
 	++iA;
     }
 
-    owner().prmEn(id(), true);
+    owner().prmEn(this, true);
 }
 
 void TMdPrm::disable( )
 {
     if(!enableStat())  return;
 
-    owner().prmEn(id(), false);
+    owner().prmEn(this, false);
 
     TParamContr::disable();
 

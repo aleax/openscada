@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -225,7 +225,7 @@ class TArchiveS : public TSubSYS
 	void valList( vector<string> &list ) const		{ chldList(mAval, list); }
 	bool valPresent( const string &id ) const		{ return chldPresent(mAval, id); }
 	string valAdd( const string &id, const string &idb = "*.*" );
-	void valDel( const string &id, bool db = false )	{ chldDel(mAval, id, -1, db); }
+	void valDel( const string &id, bool db = false );
 	AutoHD<TVArchive> valAt( const string &id ) const	{ return chldAt(mAval, id); }
 
 	void setActMess( TMArchivator *a, bool val );

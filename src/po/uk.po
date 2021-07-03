@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-06 19:00+0300\n"
+"POT-Creation-Date: 2021-07-02 07:12+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -269,8 +269,8 @@ msgstr "Рівень"
 msgid "Message"
 msgstr "Повідомлення"
 
-msgid "Clean up the the current violations table"
-msgstr "Очистити таблицю поточних порушень"
+msgid "Clear visible violations"
+msgstr "Очистити видимі порушення"
 
 msgid "Values"
 msgstr "Значення"
@@ -864,6 +864,9 @@ msgstr "Статус"
 msgid "Controller DB"
 msgstr "БД контролера"
 
+msgid "Date of modification"
+msgstr "Дата модифікації"
+
 msgid "Parameter"
 msgstr "Параметр"
 
@@ -895,9 +898,6 @@ msgstr "Повністю перекладати процедуру"
 
 msgid "Procedure"
 msgstr "Процедура"
-
-msgid "Date of modification"
-msgstr "Дата модифікації"
 
 msgid "Template identifier"
 msgstr "Ідентифікатор шаблону"
@@ -2202,37 +2202,6 @@ msgstr "Лічильник"
 msgid "Go to the configuration of the list of remote stations"
 msgstr "Перехід до конфігурації переліку віддалених станцій"
 
-msgid "Tasks"
-msgstr "Задачі"
-
-msgid "Thread"
-msgstr "Нитка"
-
-msgid "TID"
-msgstr "TID"
-
-msgid "Policy"
-msgstr "Політика"
-
-msgid "Prior."
-msgstr "Пріор."
-
-msgid "CPU set"
-msgstr "Вст. CPU"
-
-msgid ""
-"To set up the processors you use, write a row of numbers separated by a ':' "
-"character."
-msgstr ""
-"Для встановлення використовуваних процесорів записуйте рядок номерів "
-"поділених символом ':'."
-
-msgid "Phase"
-msgstr "Фаза"
-
-msgid "To set up the task invoking phase."
-msgstr "Для встановлення фазування виклику задач."
-
 msgid "Translations"
 msgstr "Переклади"
 
@@ -2301,6 +2270,37 @@ msgid ""
 msgstr ""
 "Пропустити визначену кількість елементів таблиці від початку, корисно для "
 "дуже великих проектів які обмежено у часі повного опрацювання таблиці."
+
+msgid "Tasks"
+msgstr "Задачі"
+
+msgid "Thread"
+msgstr "Нитка"
+
+msgid "TID"
+msgstr "TID"
+
+msgid "Policy"
+msgstr "Політика"
+
+msgid "Prior."
+msgstr "Пріор."
+
+msgid "CPU set"
+msgstr "Вст. CPU"
+
+msgid ""
+"To set up the processors you use, write a row of numbers separated by a ':' "
+"character."
+msgstr ""
+"Для встановлення використовуваних процесорів записуйте рядок номерів "
+"поділених символом ':'."
+
+msgid "Phase"
+msgstr "Фаза"
+
+msgid "To set up the task invoking phase."
+msgstr "Для встановлення фазування виклику задач."
 
 msgid "Debug"
 msgstr "Налагодження"
@@ -2372,6 +2372,7 @@ msgstr "Помилка встановлення процесорів для по
 msgid "only use the already multilanguage DBs with their modification"
 msgstr "лише використовувати вже багатомовні БД із їх модифікацією"
 
+#, c-format
 msgid ""
 "creating or modification the configuration DBs as multilanguage ones with "
 "the pointed base language '%s'"

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.DAQGate translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2007-2020.
+# Roman Savochenko <roman@oscada.org>, 2007-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-24 19:29+0300\n"
+"POT-Creation-Date: 2021-06-28 11:56+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -132,14 +132,18 @@ msgstr "НОРМА"
 msgid "Connection to the data source '%s': %s."
 msgstr "Підключення до джерела даних '%s': %s."
 
+#, c-format
 msgid "Station missed '%s'."
 msgstr "Станція відсутня '%s'."
 
 msgid "Zero to disable the access to the remote archive."
 msgstr "Нуль для вимкнення доступу до віддаленого архіву."
 
-msgid "Zero to disable to the periodic sync."
-msgstr "Нуль для виключення періодичної синхронізації."
+msgid ""
+"Zero to disable the periodic sync and -1 for the sync disabling at the start "
+"also."
+msgstr ""
+"Нуль для виключення періодичної синхронізації та -1 також для виключення синхронізації при запуску."
 
 msgid "List of remote OpenSCADA station IDs used in this controller."
 msgstr ""
