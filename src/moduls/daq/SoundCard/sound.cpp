@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_NAME	_("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.4"
+#define MOD_VER		"0.8.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
@@ -182,7 +182,7 @@ void TMdContr::start_( )
     numChan = 0;
     acqSize = cntCor = 0;
 
-    //Former proccess parameters list
+    //Former the process parameters list
     vector<string> list_p;
     list(list_p);
     for(unsigned iPrm = 0; iPrm < list_p.size(); iPrm++)
@@ -238,7 +238,7 @@ void TMdContr::stop_( )
     PaError err = Pa_CloseStream(stream);
     if(err != paNoError) throw TError(nodePath().c_str(),"Pa_CloseStream: %s",Pa_GetErrorText(err));
 
-    //Clear proccess parameters list
+    //Clear the process parameters list
     pHd.clear();
 }
 

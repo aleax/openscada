@@ -268,7 +268,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     //Check for no present and no empty keys allow
     if(row == 0) {

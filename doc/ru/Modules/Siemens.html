@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
 <td> Сбор данных Siemens и Beckhoff
 </td>
-<td> 3.6 </td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> daq_Siemens.so </td>
 <td> en,uk,ru,de </td>
@@ -44,8 +44,9 @@
 </th></tr>
 <tr>
 <td colspan="9"> Обеспечивает поддержку источников данных ПЛК Siemens с помощью карт HILSCHER CIF (протоколом MPI) и библиотеки LibnoDave (или собственной реализации) для остального. Также поддерживаются источники данных фирмы Beckhoff для протокола TwinCAT ADS/AMS, поскольку он также работает с блоками данных.
-<ul><li> <b>Сделать (To Do):</b></li></ul>
-<dl><dd> - дополнить встроенным Стандартным Режимом DAQ-Параметров.</dd></dl>
+<ul><li> <b>Спонсировано, поддержку Простого типа и определение областей данных на 1.5 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> INSERTEC LTDA</li>
+<li> <b>Сделать (To Do):</b></li></ul>
+<dl><dd> + дополнить встроенным Стандартным Режимом DAQ-Параметров.</dd></dl>
 </td></tr></table>
 <p>Первоочередной целью создания модуля было обеспечение поддержки промышленных контроллеров фирмы Siemens серии S7 (S7-200,300,400,1200). Исторически сложилось, что доступ к контроллерам указанной фирмы в сети ProfiBus производился только посредством собственных коммуникационных процессоров (CP5412, CP5613 и т.д.) и собственного протокола S7. Указанные коммуникационные процессоры и API к протоколу S7 достаточно дорогостоящие, кроме того, драйвера к коммуникационным процессорам и S7 API закрыты, а также доступны только для платформы Intel + MS Windows (встречалась некоторая информация о возможности купить для Linux).
 </p><p>В качестве альтернативы коммуникационным процессорам от фирмы Siemens, которые позволяют полноценно работать с контроллерами фирмы Siemens, выступает спектр коммуникационных продуктов фирмы <a class="external text" href="http://hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Hilscher</a> в лице коммуникационных процессоров CIF серии ProfiBus (PB) и библиотека <a class="external text" href="http://libnodave.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">LibnoDave</a>.
@@ -60,10 +61,20 @@
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BC.D0.BC.D1.83.D0.BD.D0.B8.D0.BA.D0.B0.D1.86.D0.B8.D0.BE.D0.BD.D0.BD.D1.8B.D0.B5_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D1.8B_CIF"><span class="tocnumber">1</span> <span class="toctext">Коммуникационные контроллеры CIF</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">2</span> <span class="toctext">Объект контроллера</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">3</span> <span class="toctext"><span>Параметры</span></span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#.D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D1.8B.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Асинхронный режим записи</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext"><span>Замечания</span></span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">6</span> <span class="toctext">Ссылки</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">3</span> <span class="toctext"><span>Параметры</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#.D0.9B.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.28logic.29"><span class="tocnumber">3.1</span> <span class="toctext">Логический (logic)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#.D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.28std.29"><span class="tocnumber">3.2</span> <span class="toctext">Простой (std)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#.D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D1.8B.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Асинхронный режим записи</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">4.1</span> <span class="toctext"><span>API пользовательского программирования</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-8"><a href="#.D0.9F.D1.80.D0.B8.D0.BB.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5_A._.D0.9E.D0.B1.D0.BB.D0.B0.D1.81.D1.82.D0.B8_.D0.94.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.BF.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_ISO_TCP_.28.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D0.BD.D0.B0.D1.8F_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B0_LibnoDave.29"><span class="tocnumber">5</span> <span class="toctext"><span>Приложение A. Области Данных подключений ISO_TCP</span> (исходная таблица LibnoDave)</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">6</span> <span class="toctext"><span>Замечания</span></span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">7</span> <span class="toctext">Ссылки</span></a></li>
 </ul>
 </div>
 
@@ -101,31 +112,39 @@
 <li> CIF плата, используемая для доступа к промышленному контроллеру посредством CIF коммуникационных процессоров.</li>
 <li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">Выходной транспорт OpenSCADA</a> для протокола ADS (порт 48898, 801 для AMS) и ISO_TCP (порт 102) для отправки запросов.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Параметры</span></span></h2>
-<p>Учитывая высокую интеллектуальность источников данных, в лице промышленных контроллеров фирмы Siemens S7-200,300,400,1200, объекты параметра выполняются на основе <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">шаблонов</a>. Данный подход позволяет не ограничиваться жёстким перечнем типов параметров, что ограничивает и возможности контроллеров, а предоставить возможность пользователю формировать нужные ему типы параметров самостоятельно или использовать библиотеки уже разработанных ранее типов параметров — шаблонов.
-</p><p>Исходя из этого модуль предоставляет только один тип параметров — "Логический". Дополнительными конфигурационными полями параметров данного модуля (рис.4) является поле выбора шаблона параметра.
+<p>Модуль сбора данных предоставляет два типа параметра: "Логический (logic)" и "Простой (simple)". Дополнительными конфигурационными полями параметров данного модуля являются:
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:793px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_ru.png"><img class="thumbimage" height="515" src="../files/Siemens_prm_ru.png" width="791" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфигурации параметра.</div></div></div></div>
+<ul><li> <i><b>Логический (logic)</b></i>:
+<ul><li> <i>Шаблон параметра</i> — адрес шаблона параметра DAQ.</li></ul></li>
+<li> <i><b>Простой (simple)</b></i>:
+<ul><li> <i>Перечень атрибутов</i> — содержит структурированный список конфигурации атрибутов Siemens.</li></ul></li></ul>
+<h4><span class="mw-headline" id=".D0.9B.D0.BE.D0.B3.D0.B8.D1.87.D0.B5.D1.81.D0.BA.D0.B8.D0.B9_.28logic.29"><span class="mw-headline-number">3.1</span> Логический (logic)</span></h4>
+<p>Учитывая высокую интеллектуальность источников данных, в лице промышленных контроллеров фирмы Siemens S7-200,300,400,1200, объекты типа параметра выполняются на основе <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">шаблонов</a>. Данный подход позволяет не ограничиваться жёстким перечнем типов параметров, что ограничивает и возможности контроллеров, а предоставить возможность пользователю формировать нужные ему типы параметров самостоятельно или использовать библиотеки уже разработанных ранее типов параметров — шаблонов.
+</p><p>Дополнительными конфигурационными полями типа параметров (рис.4) является поле выбора шаблона параметра.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:848px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm_ru.png"><img class="thumbimage" height="566" src="../files/Siemens_prm_ru.png" width="846" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфигурации параметра.</div></div></div></div>
 <p>Для конфигурации шаблона параметра предоставляется соответствующая вкладка, содержимое которой определяется конфигурацией шаблона, т.е формируются соответствующие ссылочные поля и поля установки постоянных.
-</p><p>Siemens-БД конечный адрес записывается в форме "<b>DB{N}.{off}[.{BOff}|{TpSz}]</b>", где:
+</p><p>Конечный адрес Siemens-БД записывается в форме "<b>(DB{N}|F).{off}[.[{tp}]{SzBit}]</b>", где:
 </p>
-<ul><li> <i>N</i> — номер Блока Данных;</li>
+<ul><li> <b>DB</b>{<i>N</i>} — десятичный номер Блока Данных, может быть отрицательным для специфических областей данных типов подключения ISO_TCP (смотрите <a href="#DataAreas">Приложение A</a> на предмет областей данных);</li>
+<li> <b>F</b> — специфическая область данных Флагов/Маркеров (131) типов подключения ISO_TCP;</li>
 <li> <i>off</i> — смещение в Блоке Данных;</li>
-<li> <i>BOff</i> — бит байта для Логический;</li>
-<li> <i>TpSz</i> — тип и размер для других типов от Логический в форме "<b>[{tp}]{sz}</b>", где:
-<ul><li> <i>tp</i> — тип одним символом из перечня: b-Логический, i-Знаковое целое, u-Беззнаковое целое, r-Вещественное, s-Строка;</li>
-<li> <i>sz</i> — размер типа: b=[0...7], iu=[1,2(тип),4,8], r=[4(тип).8], s=[0(тип10)...100].</li></ul></li></ul>
+<li> <i>tp</i> — тип одним символом из перечня: b-Логический, i-Знаковое целое, u-Беззнаковое целое, r-Вещественное, s-Строка;</li>
+<li> <i>SzBit</i> — размер типа для не Логического или бит байта для него: b=[0...7], iu=[1,2(тип.),4,8], r=[4(тип.),8], s=[0(тип.10)...100].</li></ul>
 <p>Примеры конечных адресов:
 </p>
-<ul><li> "DB1.12.2", "DB1.0xC.2", "DB1.12.b2" — Логический в БД 1, смещение 12 и біт 2;</li>
+<ul><li> "DB1.12.2", "DB1.0xC.2", "DB1.12.b2" — Логический в БД 1, смещение 12 и бит 2;</li>
 <li> "DB2.24", "DB2.0x18.8" — Целое или Вещественное, полученное из типа ВВ шаблона, в БД 2, смещение 24, размер типовой и 8;</li>
 <li> "DB3.36.i4", "DB3.0x24.r8" — прямо определённое Целое и Вещественное в БД 3, смещение 36, размер 4 и 8;</li>
-<li> "DB4.48.20", "DB4.0x30.s20" — неявно, из типа ВВ шаблона, и прямо определённая Строка в БД 4, смещение 48 и размер 20.</li></ul>
-<p>Типы ссылок обычно определяются типом параметра в шаблоне (Логический, Целый, Вещественный и Строковый) и определением значения ссылки (для групповых ссылок). Определение групповой ссылки в шаблоне записывается в формате: "<b>{LnkName}|{OffDB[.{bit}]}[|{TpSz}]</b>", где:
+<li> "DB4.48.20", "DB4.0x30.s20" — неявно, из типа ВВ шаблона, и прямо определённая Строка в БД 4, смещение 48 и размер 20;</li>
+<li> "F.12.5" — Логическое в области данных Флаги/Маркеры, смещение 12 и бит 5.</li></ul>
+<p>Типы ссылок обычно определяются типом параметра в шаблоне (Логический, Целый, Вещественный и Строковый) и определением значения ссылки (для групповых ссылок). Определение групповой ссылки в шаблоне записывается в формате: "<b>{LnkName}|{OffDB}[.{bit}][|[{tp}]{sz}]</b>", где:
 </p>
 <ul><li> <i>LnkName</i> — имя групповой ссылки. Все ссылки с одинаковым именем группируются и указываются как одна ссылка на блок данных или блок данных с указанным смещением.</li>
-<li> <i>OffDB</i> — номер смещения в блоке данных. При указании только блока данных, при конфигурации шаблона, это смещение будет указанно для параметра. Если-же при конфигурации шаблона будет указано и смещение, то оба смещения будут суммироваться вместе. Такой подход позволяет обращаться к нескольким структурам в одном блоке данных. Номер блока данных и смещение можно указывать в десятичном (3245) и шестнадцатеричном формате (0xCAD).</li>
-<li> <i>bit</i> — номер бита для Логического;</li>
-<li> <i>TpSz</i> — равно этому-же полю выше.</li></ul>
+<li> <i>OffDB</i> — номер смещения в блоке данных. При указании в конфигурации шаблона только блока данных это смещение будет указанно для параметра. Если-же при конфигурации шаблона будет указано и смещение, то оба смещения будут суммироваться вместе. Такой подход позволяет обращаться к нескольким структурам в одном блоке данных. Номер блока данных и смещение можно указывать в десятичном (3245) и шестнадцатеричном формате (0xCAD).</li>
+<li> <i>bit</i> — номер бита для Логического, [0...7];</li>
+<li> <i>tp</i> — тип одним символом из перечня: i-Знаковое целое, u-Беззнаковое целое, r-Вещественное, s-Строка;</li>
+<li> <i>sz</i> — размер типа: iu=[1,2(тип.),4,8], r=[4(тип.),8], s=[0(тип.10)...100].</li></ul>
 <p>Примеры типов связи:
 </p>
 <ul><li> "Grp 1|0.0" — Логический в "Grp 1", смещение 0 и бит 0;</li>
@@ -140,18 +159,147 @@
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Модулем поддерживается адресация только к блокам данных (БД) контроллеров.
 </p><p>Модулем предусмотрена особая обработка ряда атрибутов шаблона:
 </p>
-<ul><li> <i>f_frq</i> — частота вычисления процедуры шаблона или время после последнего вычисления (отрицательное в секундах) для планирования по CRON, только чтение.</li>
-<li> <i>f_start</i> — флаг первого выполнения процедуры шаблона — запуск, только чтение.</li>
-<li> <i>f_stop</i> — флаг последнего выполнения процедуры шаблона — останов, только чтение.</li>
+<ul><li> <i>f_frq</i> — частота вычисления процедуры шаблона, только чтение.</li>
+<li> <i>f_start</i> — флажок первого выполнения процедуры шаблона — запуск, только чтение.</li>
+<li> <i>f_stop</i> — флажок последнего выполнения процедуры шаблона — останов, только чтение.</li>
 <li> <i>f_err</i> — ошибка параметра, полный доступ. Значение этого атрибута шаблона попадает в атрибут ошибки параметра — "err".</li>
 <li> <i>SHIFR</i> — значение шифра параметра, только чтение.</li>
 <li> <i>NAME</i> — значение имени параметра, только чтение.</li>
 <li> <i>DESCR</i> — значение описания параметра, только чтение.</li>
 <li> <i>this</i> — объект данного параметра, позволяет получить доступ к атрибутам параметра, например, для доступа к архивам.</li></ul>
+<h4><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D1.81.D1.82.D0.BE.D0.B9_.28std.29"><span class="mw-headline-number">3.2</span> Простой (std)</span></h4>
+<p>Главная страница конфигурации параметра простого типа представлена на рисунке 9.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:735px;"><a class="image" href="http://oscada.org/wiki/File:SiemensSimpl_prm_ru.png"><img class="thumbimage" height="668" src="../files/SiemensSimpl_prm_ru.png" width="733" /></a>  <div class="thumbcaption">Рис.9. Вкладка конфигурации параметра простого типа.</div></div></div></div>
+<p>Линия атрибута в параметре списка атрибутов записывается как "<b>(DB{N}|F).{off}.{tp}{SzBit}:{flg}:{id}[:{name}]</b>".<br />
+Где:
+</p>
+<ul><li> <b>DB</b>{<i>N</i>} — десятичный номер Блока Данных, может быть отрицательным для специфических областей данных типов подключения ISO_TCP (смотрите <a href="#DataAreas">Дополнение A</a> на предмет областей данных);</li>
+<li> <b>F</b> — специфическая область данных Флагов/Маркеров (131) типов подключения ISO_TCP;</li>
+<li> <i>off</i> — смещение в Блоке Данных;</li>
+<li> <i>tp</i> — тип одним символом из перечня: b-Логический, i-Знаковое целое, u-Беззнаковое целое, r-Вещественное, s-Строка;</li>
+<li> <i>SzBit</i> — размер типа для не Логического или бит байта для него: b=[0...7], iu=[1,2(тип.),4,8], r=[4(тип.),8], s=[0(тип.10)...100];</li>
+<li> <i>flg</i> — флаги: режим чтения/записи (r-чтение, w-запись);</li>
+<li> <i>id</i> — идентификатор создаваемого атрибута;</li>
+<li> <i>name</i> — имя создаваемого атрибута.</li></ul>
+<p>Примеры конечных адресов:
+</p>
+<ul><li> "DB1.12.b2:r:var:Variable" — Логический в БД 1, смещение 12 и бит 2;</li>
+<li> "DB2.24.u:rw:var:Variable", "DB2.0x18.r8:w:var" — Целое или Вещественное в БД 2, смещение 24, размер типовой и 8;</li>
+<li> "DB4.0x30.s20:r:var:Variable" — Строка в БД 4, смещение 48 и размер 20;</li>
+<li> "F12.b5:r:var:Variable" — Логическое в области данных Флаги/Маркеры, смещение 12 и бит 5.</li></ul>
+<p>Линия, которая начинается с символа '#', считается комментарием и не обрабатывается.
+</p><p>В соответствии с указанным списком атрибутов выполняется опрос и создание атрибутов параметра (рис.10).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:735px;"><a class="image" href="http://oscada.org/wiki/File:SiemensSimpl_prm_atr_ru.png"><img class="thumbimage" height="569" src="../files/SiemensSimpl_prm_atr_ru.png" width="733" /></a>  <div class="thumbcaption">Рис.10. Вкладка атрибутов параметра простого типа.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.90.D1.81.D0.B8.D0.BD.D1.85.D1.80.D0.BE.D0.BD.D0.BD.D1.8B.D0.B9_.D1.80.D0.B5.D0.B6.D0.B8.D0.BC_.D0.B7.D0.B0.D0.BF.D0.B8.D1.81.D0.B8"><span class="mw-headline-number">4</span> Асинхронный режим записи</span></h2>
 <p>Стандартным режимом записи для SCADA-систем, взаимодействующих с PLC, является синхронный, поскольку он позволяет контролировать корректность завершения операции записи. Однако, в случае записи множества параметров сразу, такой подход не оправдан в виду отправки множества мелких запросов в контроллер, что его перегружает и занимает большой интервал времени. Решением этой проблемы является асинхронная запись смежных значений одним блоком. Такой режим поддерживается этим модулем и позволяет записывать все параметры сразу смежными блоками по 240 байт. Чтение и запись в таком режиме производится смежными блоками с периодичностью опроса контроллера.
 </p>
-<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">5</span> <span id="Notes" title="#Notes">Замечания</span></span></h2>
+<h3><span class="mw-headline" id="API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">4.1</span> <span id="UserAPI" title="#UserAPI">API пользовательского программирования</span></span></h3>
+<p>В виду поддержки параметров логического типа, имеет смысл предоставление ряда функций пользовательского API для их вызова из шаблона логического параметра.
+</p><p><b>Объект "Параметр" [this]</b>
+</p>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включенного параметра логического типа</span>] — добавление атрибута <i>id</i> с именем <i>name</i> и типом <i>tp</i>. Если атрибут уже присутствует то будут применены свойства, которые возможно изменить "на ходу": имя, режим выбора и параметры выбора.
+<ul><li> <i>id, name</i> — идентификатор и имя нового атрибута;</li>
+<li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим выбора [sel | seled] + только для чтения [ro];</li>
+<li> <i>selValsNms</i> — две строки со значениями в первой и их именами во второй, разделённые ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра логического типа</span>] — удаление атрибута <i>id</i>.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.BB.D0.BE.D0.B6.D0.B5.D0.BD.D0.B8.D0.B5_A._.D0.9E.D0.B1.D0.BB.D0.B0.D1.81.D1.82.D0.B8_.D0.94.D0.B0.D0.BD.D0.BD.D1.8B.D1.85_.D0.BF.D0.BE.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_ISO_TCP_.28.D0.B8.D1.81.D1.85.D0.BE.D0.B4.D0.BD.D0.B0.D1.8F_.D1.82.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D0.B0_LibnoDave.29"><span class="mw-headline-number">5</span> <span id="DataAreas" title="#DataAreas">Приложение A. Области Данных подключений ISO_TCP</span> (<a class="external text" href="http://www.proview.se/misc/libnodave/area.html" rel="nofollow noreferrer noopener" target="_blank">исходная таблица LibnoDave</a>)</span></h2>
+<table class="wikitable">
+
+<tr>
+<th> Название </th>
+<th> Код </th>
+<th> Элемент примера(Немецкое) </th>
+<th> Элемент примера(Английское)
+</th></tr>
+<tr>
+<td> Блоки данных </td>
+<td> 132 </td>
+<td> DB3.DBD4 </td>
+<td> DB3.DBD4
+</td></tr>
+<tr>
+<td> Флаги/Маркеры </td>
+<td> 131 </td>
+<td> MW4 </td>
+<td> FW4
+</td></tr>
+<tr>
+<td> Образ входной памяти </td>
+<td> 129 </td>
+<td> EB2 </td>
+<td> IB2
+</td></tr>
+<tr>
+<td> Образ выходной памяти </td>
+<td> 130 </td>
+<td> AD8 </td>
+<td> QD8
+</td></tr>
+<tr>
+<td> Таймеры </td>
+<td> 29 </td>
+<td> T2 </td>
+<td> T2
+</td></tr>
+<tr>
+<td> Счётчики </td>
+<td> 28 </td>
+<td> Z2 </td>
+<td> C2
+</td></tr>
+<tr>
+<td> Прямой В/В </td>
+<td> 128 </td>
+<td> PEW4 </td>
+<td> PIW4
+</td></tr>
+<tr>
+<td> Системная информация семейства 200 </td>
+<td> 3 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> Данные (V-память) у S7-200 </td>
+<td> 132 </td>
+<td> VW1234 </td>
+<td> VW1234
+</td></tr>
+<tr>
+<td> Область системных флажков семейства 200 </td>
+<td> 5 </td>
+<td> SMB0 </td>
+<td> SFB0?
+</td></tr>
+<tr>
+<td> Слова аналоговых входов семейства 200 </td>
+<td> 6 </td>
+<td> AEW0 </td>
+<td> AIW0?
+</td></tr>
+<tr>
+<td> Слова аналоговых выходов семейства 200 </td>
+<td> 7 </td>
+<td> AAW0 </td>
+<td> AQW0?
+</td></tr>
+<tr>
+<td> IEC Таймеры </td>
+<td> 31 </td>
+<td> T2 </td>
+<td> T2
+</td></tr>
+<tr>
+<td> IEC Счётчики </td>
+<td> 30 </td>
+<td> Z2 </td>
+<td> C2
+</td></tr></table>
+<h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">6</span> <span id="Notes" title="#Notes">Замечания</span></span></h2>
 <p>После целенаправленного поиска было обнаружено несколько решений проблемы коммуникации с промышленными контроллерами фирмы Siemens посредством различных коммуникационных интерфейсов:
 </p>
 <ul><li> Обнаружено достаточно много решений от фирмы Siemens, которые поставляются с решениями поддерживающими открытую ОС "Linux" (<a class="external free" href="http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm" rel="nofollow noreferrer noopener" target="_blank">http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm</a>, ...).</li></ul>
@@ -173,7 +321,7 @@
 <ul><li> Создайте блок данных в совместимости с S7-300/400 и/или выключите оптимизацию этого блока для появления колонки смещения. Отключите любую защиту этого блока данных. </li>
 <li> Если Вы имеете LibnoDave сообщение "error 33028 context is not supported. Step7 says: Function not implemented or error in telegram.", то Вы имеете S7-1200 V4.0 и должны <a class="external text" href="https://sourceforge.net/p/libnodave/discussion/205657/thread/7ec9f370/?limit=25" rel="nofollow noreferrer noopener" target="_blank">предоставить доступ для функций интерфейса Get/Put</a> в конфигурации ПЛК.</li></ul>
 </td></tr></table>
-<h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">6</span> Ссылки</span></h2>
+<h2><span class="mw-headline" id=".D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="mw-headline-number">7</span> Ссылки</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Siemens_cif2621.tgz" title="File:Siemens cif2621.tgz">Драйвер фирмы Hilscher для плат семейства CIF</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Siemens_lastkernels.patch" title="File:Siemens lastkernels.patch">Патч для сборки драйвера для ядра Linux 2.6.29</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Siemens_crash_20160127_0911.crash.gz" title="File:Siemens crash 20160127 0911.crash.gz">Отчёт о падении, LibnoDave специфическое</a></li></ul>
@@ -183,5 +331,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/ru">Modules/Siemens/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/ru">Modules/Siemens/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

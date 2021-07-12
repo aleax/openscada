@@ -31,7 +31,7 @@
 <td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 3.3 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
@@ -57,7 +57,7 @@
 </p><p>Кожний вхідний транспорт обов'язково пов'язується з одним з доступних транспортних протоколів, якому передаються вхідні повідомлення. Разом з транспортним протоколом підтримується механізм об'єднання шматків розрізнених при передачі запитів.
 </p><p>Діалог конфігурації вхідного SSL-транспорту зображено на рисунок 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:862px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in_uk.png"><img class="thumbimage" height="993" src="../files/SSL_in_uk.png" width="860" /></a>  <div class="thumbcaption">Рис.1. Діалог конфігурації вхідного SSL-транспорту.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:846px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in_uk.png"><img class="thumbimage" height="823" src="../files/SSL_in_uk.png" width="844" /></a>  <div class="thumbcaption">Рис.1. Діалог конфігурації вхідного SSL-транспорту.</div></div></div></div>
 <p>За допомогою цього діалогу можна встановити:
 </p>
 <ul><li> Стан транспорту, а саме: статус, "Підключення", ім'я БД (яка містить конфігурацію) та перелік з інформацією про поточні підключення.</li>
@@ -68,8 +68,9 @@
 <li> <i>mode</i> – SSL-режим та версія (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), по замовченню та при помилці використовується найбільш безпечний та відповідний.</li></ul></li>
 <li> Обрання транспортних протоколів.</li>
 <li> Стан "Підключення", у який переводити транспорт при завантажені.</li>
-<li> Сертифікати, приватний ключ SSL та пароль приватного ключа SSL.</li>
-<li> Максимальна кількість клієнтів, Максимальна кількість клієнтів за хостами та Розмір вхідного буферу.</li>
+<li> PEM-файл сертифікатів та приватного ключа; або сертифікати, приватний ключ SSL безпосередньо та пароль приватного ключа SSL.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Приховано у підключеному стані.</dd></dl>
+<ul><li> Максимальна кількість клієнтів, Максимальна кількість клієнтів за хостами та Розмір вхідного буферу.</li>
 <li> Keep alive запитів. Закриття підключення після вказаної кількості запитів. Нульове значення для вимкнення — не закривається ніколи.</li>
 <li> Keep alive час очікування, секунд. Закриття підключення після відсутності запитів протягом вказаного часу. Нульове значення для вимкнення — не закривається ніколи.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Вимикати цю функцію не рекомендується оскільки властивість мережі TCP/IP не гарантує повідомлення серверу про відключення з'єднання, скажемо у випадку пропадання живлення на клієнті. У результаті чого можуть <span style="color: red">назавжди</span> залишатися відкриті клієнтські підключення, а за досягненням ліміту сервер припинить приймати нові!</dd></dl>
@@ -79,7 +80,7 @@
 </p><p>Транспорт підтримує пряме визначення декількох адрес серверу та опрацювання всіх IP-адрес у які резолвиться символьна адреса, що дозволяє будувати <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">вертикальне резервування</a> безпосередньо транспортом, який буде автоматично підключатися до першого доступного серверу.
 </p><p>Головну вкладку сторінки конфігурації вихідного SSL-транспорту зображено на рисунку 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:767px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out_uk.png"><img class="thumbimage" height="787" src="../files/SSL_out_uk.png" width="765" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки конфігурації вихідного SSL-транспорту.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:846px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out_uk.png"><img class="thumbimage" height="604" src="../files/SSL_out_uk.png" width="844" /></a>  <div class="thumbcaption">Рис.2. Головна вкладка сторінки конфігурації вихідного SSL-транспорту.</div></div></div></div>
 <p>За допомогою цього діалогу можна встановити:
 </p>
 <ul><li> Стан транспорту, а саме: статус, "Підключення" та ім'я БД, яка містить конфігурацію.</li>
@@ -88,8 +89,9 @@
 <ul><li> <i>addr</i> — адреса до якої здійснюється підключення. Допускається як символьне так й IPv4 "<b>127.0.0.1</b>" або IPv6 "<b>[::1]</b>" представлення адреси.</li>
 <li> <i>port</i> — мережевий порт до якого здійснюється підключення. Можливе вказання символьного ім'я порту відповідно до <i>/etc/services</i>.</li>
 <li> <i>mode</i> — SSL-режим та версія (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), по замовченню та при помилці використовується найбільш безпечний та відповідний.</li></ul></li>
-<li> Сертифікати, приватний ключ SSL та пароль приватного ключа SSL.</li>
-<li> Інтервали часу підключення у форматі "<b>{conn}:{next}</b>", де:
+<li> PEM-файл сертифікатів та приватного ключа; або сертифікати, приватний ключ SSL безпосередньо та пароль приватного ключа SSL.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Приховано у підключеному стані.</dd></dl>
+<ul><li> Інтервали часу підключення у форматі "<b>{conn}:{next}</b>", де:
 <ul><li> <i>conn</i> — максимальний час очікування відповіді з'єднання, у секундах;</li>
 <li> <i>next</i> — максимальний час очікування продовження відповіді, у секундах.</li></ul></li></ul>
 <dl><dd> Може бути пріоритетно визначено другим глобальним аргументом поля адреси, на кшталт "<b>localhost:123||5:1</b>".</dd></dl>
@@ -112,5 +114,5 @@ $ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/uk">Modules/SSL/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/uk">Modules/SSL/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

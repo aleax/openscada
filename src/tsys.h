@@ -228,8 +228,11 @@ class TSYS : public TCntrNode
 	string	selDB( )	{ return mSelDB; }
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
-	XMLNode *cfgCtx( )	{ return mCfgCtx; }
-	void	setCfgCtx( XMLNode *vl )	{ mCfgCtx = vl; }
+	XMLNode *cfgCtx( bool last = false )	{ return last ? mCfgCtxLast : mCfgCtx; }
+	void	setCfgCtx( XMLNode *vl, bool last = false ) {
+	    if(last) mCfgCtxLast = vl;
+	    else { mCfgCtx = vl; mCfgCtxLast = NULL; }
+	}
 	ResMtx &cfgLoadSaveM( )	{ return mCfgLoadSaveM; }
 
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
@@ -491,7 +494,7 @@ class TSYS : public TCntrNode
 	map<string, SStat>	mSt;		//Remote stations
 
 	ResMtx	mCfgLoadSaveM;
-	XMLNode	*mCfgCtx;
+	XMLNode	*mCfgCtx, *mCfgCtxLast;
 
 	unsigned char	mRdStLevel,	//Current station level
 			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds

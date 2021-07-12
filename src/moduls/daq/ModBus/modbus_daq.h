@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"3.1.3"
+#define DAQ_MVER	"3.1.5"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -57,7 +57,7 @@ namespace ModBus
 //******************************************************
 class TMdContr;
 
-class TMdPrm : public TParamContr
+class TMdPrm: public TParamContr
 {
     public:
 	//Methods
@@ -215,8 +215,8 @@ class TMdContr: public TController
 	char	&mMerge,			//Fragments of register merge
 		&mMltWr,			//Use multi-write functions(15,16)
 		&mAsynchWr;			//Asynchronous write
-	int64_t	&reqTm,				//Request timeout in ms
-		&restTm,			//Restore timeout in s
+	int64_t	&reqTm,				//Request timeout in milliseconds
+		&restTm,			//Restore timeout in seconds
 		&connTry;			//Connections try
 	int64_t	mPer;
 

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2010-2019.
+# Roman Savochenko <roman@oscada.org>, 2010-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 16:57+0200\n"
+"POT-Creation-Date: 2021-07-12 19:53+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -123,8 +123,7 @@ msgstr ""
 "Schaltfläche zum zwangsweisen Laden der Artikeldaten aus der DB, nicht nur "
 "beim Ändern"
 
-msgid ""
-"Press for loading the item data from DB forcibly, not only when it changed."
+msgid "Press for loading the item data from DB forcibly, not only when it changed."
 msgstr ""
 "Drücken Sie, um die Artikeldaten zwangsweise zu laden, nicht nur, wenn sie "
 "geändert wurden."
@@ -147,14 +146,12 @@ msgstr "Speichern Sie an die DB gewaltsam"
 msgid "Save the item data to DB forcibly"
 msgstr "Sichern Sie die Artikeldaten in der DB gewaltsam"
 
-msgid ""
-"The button for saving the item data to DB forcibly, not only when it changed"
+msgid "The button for saving the item data to DB forcibly, not only when it changed"
 msgstr ""
 "Schaltfläche zum zwangsweisen Speichern der Artikeldaten in den DB, nicht "
 "nur bei Änderung"
 
-msgid ""
-"Press for saving the item data to DB forcibly, not only when it changed."
+msgid "Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 "Drücken Sie, um die Artikeldaten zwangsweise in der Datenbank zu speichern, "
 "nicht nur, wenn sie geändert wurden."
@@ -238,8 +235,7 @@ msgid "Start the cycled refreshing"
 msgstr "Starten Sie die zyklische Aktualisierung"
 
 msgid "The button for starting the cycled refreshing of the page content"
-msgstr ""
-"Schaltfläche zum Starten der zyklischen Aktualisierung des Seiteninhalts"
+msgstr "Schaltfläche zum Starten der zyklischen Aktualisierung des Seiteninhalts"
 
 msgid "Press for starting the cycled refreshing of the page content."
 msgstr "Betätigen zum Starten der zyklischen Aktualisierung des Seiteninhalts."
@@ -251,8 +247,7 @@ msgid "Stop the cycled refreshing"
 msgstr "Stoppen Sie die zyklische Aktualisierung"
 
 msgid "The button for stopping the cycled refreshing of the page content"
-msgstr ""
-"Schaltfläche zum Beenden der zyklischen Aktualisierung des Seiteninhalts"
+msgstr "Schaltfläche zum Beenden der zyklischen Aktualisierung des Seiteninhalts"
 
 msgid "Press for stopping the cycled refreshing of the page content."
 msgstr "Betätigen zum Beenden der zyklischen Aktualisierung des Seiteninhalts."
@@ -297,8 +292,7 @@ msgid "Selected page manual"
 msgstr "Ausgewählte Seiten-Handbuch"
 
 msgid "The button for getting the using selected page manual."
-msgstr ""
-"Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
+msgstr "Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
 
 msgid "Press to get the using selected page manual."
 msgstr "Klicken um das Verwendung ausgewählter Seiten-Handbuch zu bekommen."
@@ -388,14 +382,11 @@ msgstr "Der Knoten '%1' ist bereits vorhanden."
 msgid "... and yet %d nodes"
 msgstr "... und noch %d Knoten"
 
-msgid "Are you sure of deleting the nodes '%1'?"
-msgstr "Sind Sie sicher, die Knoten '%1' zu löschen?"
+msgid "Are you sure of deleting the nodes: %1 ?"
+msgstr "Sind Sie sicher, dass Sie die Knoten löschen: %1 ?"
 
 msgid "Deleting the nodes"
 msgstr "Löschen der Knoten"
-
-msgid "Copying is not possible."
-msgstr "Kopieren ist nicht möglich."
 
 msgid "Selected"
 msgstr "Gewählt"
@@ -412,8 +403,19 @@ msgstr "Kopieren des Knotens '%1' in '%2'.\n"
 msgid "Do not ask for more."
 msgstr "Frag nicht nach mehr."
 
-msgid "The node '%1' is already present. Continue?"
-msgstr "Der Knoten '%1' ist schon vorhanden. Weiter?"
+msgid ""
+"The node '%1' is already present.\n"
+"Continue?"
+msgstr ""
+"Der Knoten '%1' ist schon vorhanden.\n"
+"Weiter?"
+
+msgid ""
+"Copy/Move node '%1' error '%2'.\n"
+"Continue other nodes?"
+msgstr ""
+"Kopieren/Verschieben des Knotens '%1' Fehler '%2'.\n"
+"Andere Knoten fortsetzen?"
 
 msgid "List of messages in the status bar:"
 msgstr "Liste der Nachrichten in der Statusleiste:"
@@ -452,13 +454,13 @@ msgid "The manual '%1' was not found offline or online!"
 msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
 
 msgid "<EVAL>"
-msgstr ""
+msgstr "<EVAL>"
 
 msgid "On"
-msgstr ""
+msgstr "On"
 
 msgid "Off"
-msgstr ""
+msgstr "Off"
 
 msgid "Applying the changes"
 msgstr "Anwenden der Änderungen"
@@ -483,9 +485,8 @@ msgstr "Zeit der Erweiterung/Aktualisierung '%s': %f msek."
 msgid "Sending the changes to the selected ones"
 msgstr "Senden der Änderungen an die ausgewählten"
 
-#, c-format
-msgid "Send the command '%s' to other selected nodes \"%s\"?"
-msgstr "Senden Befehl '%s' zu anderen ausgewählten Knoten \"%s\"?"
+msgid "Send the command '%1' to other selected nodes: %2 ?"
+msgstr "Senden Sie den Befehl '%1' an andere ausgewählte Knoten: %2 ?"
 
 #, c-format
 msgid "Unknown host '%s'."
@@ -514,9 +515,6 @@ msgstr "%s| Geh zum Link '%s'!"
 #, c-format
 msgid "%s| Pressed down '%s'!"
 msgstr "%s| Betätigen '%s'!"
-
-msgid "Value is missing: "
-msgstr "Wert fehlt: "
 
 #, c-format
 msgid "%s| Changed '%s' from '%s' to '%s'!"
@@ -699,7 +697,7 @@ msgid "Name:"
 msgstr "Name:"
 
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 msgid "Item type:"
 msgstr "Typ des Elements:"
@@ -787,3 +785,4 @@ msgstr "QTCfg Dialog"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Auswahl des Bezeichners und des Knotens"
+

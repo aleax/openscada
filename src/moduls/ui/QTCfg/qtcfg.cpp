@@ -669,9 +669,9 @@ void ConfApp::itAdd( )
     XMLNode req("get");
     req.setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
     if(!cntrIfCmd(req))
-	for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
-	    if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
-	       (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
+	for(unsigned iLel = 0; iLel < req.childSize(); iLel++)
+	    if((req.childGet(iLel)->attr("id").size() && req.childGet(iLel)->attr("id") == dlg.id().toStdString()) ||
+	       (!req.childGet(iLel)->attr("id").size() && req.childGet(iLel)->text() == dlg.id().toStdString()))
 	    {
 		mod->postMess(mod->nodePath().c_str(), QString(_("The node '%1' is already present.")).arg(dlg.id()).toStdString(), TUIMod::Info, this);
 		return;
@@ -830,11 +830,11 @@ void ConfApp::itPaste( )
 	    XMLNode req("get");
 	    req.setAttr("path", toPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
-	    for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
-		if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
-		   (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
+	    for(unsigned iLel = 0; iLel < req.childSize(); iLel++)
+		if((req.childGet(iLel)->attr("id").size() && req.childGet(iLel)->attr("id") == dlg.id().toStdString()) ||
+		   (!req.childGet(iLel)->attr("id").size() && req.childGet(iLel)->text() == dlg.id().toStdString()))
 		{
-		    InputDlg dlg1(this, actItPaste->icon(), QString(_("The node '%1' is already present. Continue?")).arg(dstNm.c_str()),
+		    InputDlg dlg1(this, actItPaste->icon(), QString(_("The node '%1' is already present.\nContinue?")).arg(dstNm.c_str()),
 					_("Moving or copying the node"), 0, 0);
 		    if(isMult) {
 			prcAlrPres = new QCheckBox(_("Do not ask for more."), &dlg1);
@@ -846,30 +846,44 @@ void ConfApp::itPaste( )
 		}
 	}
 
-	//Local copy visual item
-	if(statNm == statNmSrc) {
-	    XMLNode req("copy");
-	    req.setAttr("path", "/"+statNm+"/%2fobj")->setAttr("src", srcNm)->setAttr("dst", dstNm);
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); pageRefresh(); return; }
-	}
-	//Interstation copy
-	else {
-	    XMLNode req("add");
-	    //Create the destination node
-	    req.setAttr("path", selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'))->
-		setAttr("id", dlg.id().toStdString())->setText(dlg.id().toStdString());
-	    /*if(s2i(TSYS::strSepParse(dlg.target(),1,'\n')))
-		req.setAttr("id", dlg.id().toStdString())->setText(dlg.name().toStdString());
-	    else req.setText(dlg.id().toStdString());*/
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TUIMod::Info, this); return; }
+	try {
+	    //Local copy visual item
+	    if(statNm == statNmSrc) {
+		XMLNode req("copy");
+		req.setAttr("path", "/"+statNm+"/%2fobj")->setAttr("src", srcNm)->setAttr("dst", dstNm);
+		if(cntrIfCmd(req))
+		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
+	    }
+	    //Interstation copy
+	    else {
+		XMLNode req("add");
+		//Create the destination node
+		req.setAttr("path", selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'))->
+		    setAttr("id", dlg.id().toStdString())->setText(dlg.id().toStdString());
+		/*if(s2i(TSYS::strSepParse(dlg.target(),1,'\n')))
+		    req.setAttr("id", dlg.id().toStdString())->setText(dlg.name().toStdString());
+		else req.setText(dlg.id().toStdString());*/
+		if(cntrIfCmd(req))
+		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
 
-	    //Get context of the source node
-	    req.clear()->setName("save")->setAttr("path", "/"+statNmSrc+srcNm+"/%2fobj")->setAttr("ctx", "1");
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
+		//Get context of the source node
+		req.clear()->setName("save")->setAttr("path", "/"+statNmSrc+srcNm+"/%2fobj")->setAttr("ctx", "1");
+		if(cntrIfCmd(req))
+		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
 
-	    //Load context of the source node to the destination one
-	    req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj");
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); pageRefresh(); return; }
+		//Load context of the source node to the destination one
+		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj");
+		if(cntrIfCmd(req))
+		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
+	    }
+	} catch(TError &err) {
+	    if(elOff >= copyBuf.size()) mod->postMess(err.cat.c_str(), err.mess.c_str(), TUIMod::Error, this);
+	    else if(InputDlg(this,actItPaste->icon(),
+			QString(_("Copy/Move node '%1' error '%2'.\nContinue other nodes?")).arg(dstNm.c_str()).arg(err.mess.c_str()),
+			_("Moving or copying the node"),0,0).exec() == QDialog::Accepted)
+		    continue;
+	    pageRefresh();
+	    return;
 	}
 
 	//Remove source widget

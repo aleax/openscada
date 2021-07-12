@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.1.22"
+#define DAQ_MVER	"2.3.1"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -64,35 +64,89 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
-	string ndList( )			{ return cfg("ND_LS").getS(); }
-	void setNdList( const string &vl )	{ cfg("ND_LS").setS(vl); }
+	TCntrNode &operator=( const TCntrNode &node );
 
-	TElem &elem( )		{ return pEl; }
+	bool isStd( ) const;
+	bool isLogic( ) const;
 
 	void enable( );
 	void disable( );
 
-	void upVal( );
+	void upValStd( );
+	void upValLog( bool first, bool last, double frq );
+
+	string ndList( )			{ return cfg("ND_LS").getS(); }
+	void setNdList( const string &vl )	{ cfg("ND_LS").setS(vl); }
+
+	TElem *dynElCntr( )	{ return &pEl; }
+	TElem &elem( )		{ return pEl; }
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	TMdContr &owner( ) const;
+
+	//Attributes
+	MtxString acqErr;
+
+    protected:
+	//Methods
+	void load_( );
+	void save_( );
+	void cntrCmdProc( XMLNode *opt );
+	void setType( const string &tpId );
 
     private:
 	//Methods
 	void postEnable( int flag );
-	void cntrCmdProc( XMLNode *opt );
+	void postDisable( int flag );
+
 	void vlGet( TVal &vo );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &vo );
 
+	void loadIO( bool force = false );
+	void saveIO( );
+
 	//Attributes
 	TElem	pEl;			//Work atribute elements
 
-	ResMtx	enRes;
+	// Logical type by template
+	//Data
+	//***************************************************
+	//* Logical type parameter's context                *
+	class TLogCtx : public TPrmTempl::Impl
+	{
+	    public:
+	    //Methods
+	    TLogCtx( TCntrNode *iobj, const string &name );
+
+	    bool lnkInit( int num, bool toRecnt = false );
+	    bool lnkActive( int num );
+	    TVariant lnkInput( int num );
+	    bool lnkOutput( int num, const TVariant &vl );
+
+	    void cleanLnks( bool andFunc = false );
+
+	    //bool cntrCmdProc( XMLNode *opt, const string &pref = "/cfg" );
+
+	    //Attributes
+	    bool chkLnkNeed;	// Check lnks need flag
+	    int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
+
+	    protected:
+	    //Methods
+	    string lnkHelp( );
+	};
+
+	//Attributes
+	TLogCtx	*lCtx;
 };
 
 //*************************************************
 //* OPC_UA::TMdContr                              *
 //*************************************************
+class TTpContr;
+
 class TMdContr: public TController, public Client
 {
     friend class TMdPrm;
@@ -106,7 +160,6 @@ class TMdContr: public TController, public Client
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
-	int	restTm( )	{ return mRestTm; }
 	int	syncPer( )	{ return mSync; }
 	string	endPoint( )	{ return mEndP; }
 	string	secPolicy( )	{ return mSecPol; }
@@ -135,29 +188,39 @@ class TMdContr: public TController, public Client
 	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
 	void debugMess( const string &mess );
 
+	TTpContr &owner( ) const;
+
     protected:
 	//Methods
-	void prmEn( const string &id, bool val );
-
+	void load_( );
 	void enable_( );
 	void disable_( );
 	void start_( );
 	void stop_( );
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
+	void prmEn( TMdPrm *prm, bool val );
+
+	// Values process
+	TVariant getVal( const string &iaddr, MtxString &err );
+	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
+
+	// Service
+	void postDisable( int flag );		//Delete all DB if flag 1
+
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
+	void setCntrDelay( const string &err );
 
 	//Attributes
 	ResMtx	enRes;
 	ResRW	resOPC;		//Request and API-stack resource
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
-		&mRestTm,	//Restore timeout in s
 		&mSync,		//Synchronization inter remote station: attributes list update.
 		&mEndP,		//Target endpoint
 		&mSecPol,	//Security policy
@@ -165,6 +228,7 @@ class TMdContr: public TController, public Client
 		&mCert,		//Client certificate
 		&mPvKey,	//Client certificate's private key
 		&mAuthUser, &mAuthPass;	//Auth user and password
+	int64_t	&restTm;	//Restore timeout in seconds
 	char	&mUseRead;	//Use Read function
 	int64_t	mPer;
 
@@ -196,6 +260,8 @@ class TTpContr: public TTypeDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
+	TElem	&prmIOE( )	{ return elPrmIO; }
+
     protected:
 	//Methods
 	void postEnable( int flag );
@@ -208,6 +274,9 @@ class TTpContr: public TTypeDAQ
     private:
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
+
+	//Attributes
+	TElem	elPrmIO;
 };
 
 extern TTpContr *mod;

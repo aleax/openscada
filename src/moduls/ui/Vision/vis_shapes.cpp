@@ -610,7 +610,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 				    hit->setData(Qt::UserRole+3, ((wVl=tC->attr("colorText")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+4, ((wVl=tC->attr("font")).size()) ? QString::fromStdString(wVl) : QVariant());
 				    hit->setData(Qt::UserRole+6, tC->attr("align").c_str());
-				    if((wVl=tC->attr("sort")).size())	{ sortCol = iC+1; if(!s2i(wVl)) sortCol *= -1; }
+				    if((wVl=tC->attr("sort")).size())	{ sortCol = iC+1; if(s2i(wVl)) sortCol *= -1; }
 				    hit->setData(Qt::UserRole+8, ((wVl=tC->attr("prec")).size()) ? QString::fromStdString(wVl) : QVariant());
 				}
 			    }
@@ -710,6 +710,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 		    shD->addrWdg->blockSignals(false);
 
 		    if(s2i(tX.attr("sortEn")) || sortCol) {
+			if(sortCol) {
+			    if(wdg->property("sortColSet").isValid() && sortCol != wdg->property("sortColSet").toInt())
+				wdg->setProperty("sortCol", QVariant());
+			    wdg->setProperty("sortColSet", sortCol);
+			} else wdg->setProperty("sortColSet", QVariant());
 			wdg->setSortingEnabled(true);
 			// Restorring/enabling the sorting
 			//  First visible column detection

@@ -510,7 +510,7 @@ class NodeId
     void setNumbVal( uint32_t n );
     void setStrVal( const string &str, Type tp = String );
 
-    static NodeId fromAddr( const string &strAddr );
+    static NodeId fromAddr( const string &strAddr, bool strictStr = false );
     string toAddr( ) const;
 
     private:

@@ -295,14 +295,14 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <p>Модуль сбора данных предоставляет два типа параметра: "Стандартный (std)" и "Логический (logic)". Дополнительными конфигурационными полями параметров данного модуля являются:
 </p>
 <ul><li> <i><b>Стандартный (std)</b></i>:
-<ul><li> <i>Перечень атрибутов</i> — содержит структурированный список конфигурации атрибутов ModBus.</li></ul></li>
+<ul><li> <i>Перечень атрибутов</i> — содержит структурированный список конфигурации атрибутов ModBUS.</li></ul></li>
 <li> <i><b>Логический (logic)</b></i>:
 <ul><li> <i>Шаблон параметра</i> — адрес шаблона параметра DAQ.</li></ul></li></ul>
 <h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D0.B9_.28std.29"><span class="mw-headline-number">3.2.1</span> Стандартный (std)</span></h4>
 <p>Главная страница конфигурации параметра стандартного типа представлена на рисунке 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_ru.png"><img class="thumbimage" height="659" src="../files/ModBus_prm_ru.png" width="633" /></a>  <div class="thumbcaption">Рис.9. Вкладка конфигурации параметра стандартного типа.</div></div></div></div>
-<p>Атрибут, в параметре списка атрибутов, записывается следующим образом: <b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>.<br />
+<p>Линия атрибута в параметре списка атрибутов записывается как "<b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>".<br />
 Где:
 </p>
 <ul><li> <i>dt</i> — тип данных ModBus ("R"—регистр[3,6(16)], "C"—бит[1,5(15)], "RI"—регистр входа[4], "CI"—бит входа[2]);</li></ul>
@@ -319,7 +319,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <dd>"R_i4:400,300:r:int32:Int32" — получить int32 из регистров 400 и 300;</dd>
 <dd>"R_b10:25:r:rBit:Reg bit", "R_b:25.10:r:rBit:Reg bit" — получить бит 10 из регистра 25;</dd>
 <dd>"R_s:15,20:r:str:Reg blk" — получить строку (блок регистров) из регистра 15 и размером 20.</dd></dl>
-<p>Строка, которая начинается с символа '#', считается комментарием и не обрабатывается.
+<p>Линия, которая начинается с символа '#', считается комментарием и не обрабатывается.
 </p><p>В соответствии с указанным списком атрибутов выполняется опрос и создание атрибутов параметра (рис.10).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr_ru.png"><img class="thumbimage" height="533" src="../files/ModBus_prm_atr_ru.png" width="633" /></a>  <div class="thumbcaption">Рис.10. Вкладка атрибутов параметра стандартного типа.</div></div></div></div>
@@ -327,8 +327,8 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <p>Главная страница конфигурации параметра логического типа представлена на рисунке 11.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm_ru.png"><img class="thumbimage" height="533" src="../files/ModBusLog_prm_ru.png" width="711" /></a>  <div class="thumbcaption">Рис.11. Вкладка конфигурации параметра логического типа.</div></div></div></div>
-<p>Значение ссылки, при конфигурации шаблона (рис.12), записывается в формате:
-<b>{dt}:{numb}[:{flg}]</b>.<br />
+<p>Значение ссылки при конфигурации шаблона (рис.12) записывается в форме
+"<b>{dt}:{numb}[:{flg}]</b>".<br />
 Где:
 </p>
 <ul><li> <i>dt</i> — тип данных ModBus ("R"—регистр[3,6(16)], "C"—бит[1,5(15)], "RI"—регистр входа[4], "CI"—бит входа[2]);</li></ul>
@@ -381,5 +381,5 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

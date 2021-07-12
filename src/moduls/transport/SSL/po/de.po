@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-16 18:15+0300\n"
+"POT-Creation-Date: 2021-07-12 18:45+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
@@ -130,6 +130,7 @@ msgstr "Socket wurde beendet mit dem Fehler %s"
 msgid "The message is received in size %d."
 msgstr "Die Nachricht wird in der Größe %d empfangen."
 
+#, c-format
 msgid "%d:< Received from '%s'\n"
 msgstr "%d:< Empfangen von '%s'\n"
 
@@ -137,6 +138,7 @@ msgstr "%d:< Empfangen von '%s'\n"
 msgid "The reply by the message in size %d."
 msgstr "Die Antwort der Nachricht in der Größe %d"
 
+#, c-format
 msgid "%d:> Transmitted to '%s'\n"
 msgstr "%d:> Übertragen in '%s'\n"
 
@@ -203,6 +205,9 @@ msgstr ""
 "    mode - SSL-Modus und -Version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, "
 "DTLSv1_2), standardmäßig und irrtümlicherweise wird der sicherste und am "
 "besten geeignete verwendet."
+
+msgid "PEM-file of the certificates and private key"
+msgstr "PEM-Datei der Zertifikate und des privaten Schlüssels"
 
 msgid "Certificates and private key"
 msgstr "Zertifikate und Privatschlüssel"
@@ -292,11 +297,11 @@ msgstr ""
 
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"
-msgstr ""
+msgstr "SSL_CTX_use_certificate_chain_file: %s"
 
 #, c-format
 msgid "SSL_CTX_use_PrivateKey_file: %s"
-msgstr ""
+msgstr "SSL_CTX_use_PrivateKey_file: %s"
 
 #, c-format
 msgid "Error connecting: %s"
@@ -349,3 +354,4 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
+

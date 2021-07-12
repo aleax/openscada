@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,11 +73,13 @@ class TCfg : public TVariant
 	bool	reqKey( ) const		{ return mReqKey; }
 	bool	isKey( ) const;						//Whether real or request key test
 	bool	extVal( ) const		{ return mExtVal; }
+	bool	isSet( ) const		{ return mIsSet; }
 	void	setView( bool vw )	{ mView = vw; }
 	void	setKeyUse( bool vl )	{ if(fld().flg()&Key) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 	void	setReqKey( bool vl, bool treatDep = true );
 	void	setExtVal( bool vw );
+	void	setIsSet( bool vl )	{ mIsSet = vl; }
 	void	toDefault( bool notSetType = false );
 
 	TFld	&fld( ) const		{ return *mFld; }
@@ -123,6 +125,7 @@ class TCfg : public TVariant
 					//where TVariant type force to String and value separated by one value (set for key)
 					//and two value (base for key) by 0 symbol
 	uint8_t	mInCfgCh	: 1;
+	uint8_t	mIsSet		: 1;
 
 	TFld	*mFld;
 	TConfig	&mOwner;
@@ -167,6 +170,9 @@ class TConfig: public TValElem
 	void setIncmplTblStrct( bool vl ) { mIncmplTblStrct = vl; }
 	bool reqKeys( )			{ return mReqKeys; }
 
+	bool trcSet( ) const		{ return mTrcSet; }
+	void setTrcSet( bool vl );
+
 	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user, int perm, const string &owner );
 
     protected:
@@ -189,6 +195,7 @@ class TConfig: public TValElem
 	uint8_t		single		: 1;
 	uint8_t		mIncmplTblStrct	: 1;
 	uint8_t		mReqKeys	: 1;
+	uint8_t		mTrcSet		: 1;
 };
 
 }

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTCfg translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2004-2019.
+# Roman Savochenko <roman@oscada.org>, 2004-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 16:57+0200\n"
+"POT-Creation-Date: 2021-07-12 19:53+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -118,8 +118,7 @@ msgstr ""
 "Кнопка принудительной загрузки данных элемента из БД, не только когда "
 "изменено"
 
-msgid ""
-"Press for loading the item data from DB forcibly, not only when it changed."
+msgid "Press for loading the item data from DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительной загрузки данных элемента из БД, не только когда "
 "изменено."
@@ -142,14 +141,12 @@ msgstr "Принудительно сохранить в БД"
 msgid "Save the item data to DB forcibly"
 msgstr "Принудительно сохранить данные элемента в БД"
 
-msgid ""
-"The button for saving the item data to DB forcibly, not only when it changed"
+msgid "The button for saving the item data to DB forcibly, not only when it changed"
 msgstr ""
 "Кнопка принудительного сохранения данных элемента в БД, не только когда "
 "изменено"
 
-msgid ""
-"Press for saving the item data to DB forcibly, not only when it changed."
+msgid "Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительного сохранения данных элемента в БД, не только когда "
 "изменено."
@@ -236,8 +233,7 @@ msgid "The button for starting the cycled refreshing of the page content"
 msgstr "Кнопка запуска периодического обновления содержимого текущей страницы."
 
 msgid "Press for starting the cycled refreshing of the page content."
-msgstr ""
-"Нажать для запуска периодического обновления содержимого текущей страницы."
+msgstr "Нажать для запуска периодического обновления содержимого текущей страницы."
 
 msgid "&Stop"
 msgstr "&Остановить"
@@ -246,12 +242,10 @@ msgid "Stop the cycled refreshing"
 msgstr "Остановить периодическое обновление"
 
 msgid "The button for stopping the cycled refreshing of the page content"
-msgstr ""
-"Кнопка останова периодического обновления содержимого текущей страницы."
+msgstr "Кнопка останова периодического обновления содержимого текущей страницы."
 
 msgid "Press for stopping the cycled refreshing of the page content."
-msgstr ""
-"Нажать для останова периодического обновления содержимого текущей страницы."
+msgstr "Нажать для останова периодического обновления содержимого текущей страницы."
 
 msgid "&About"
 msgstr "Пр&о..."
@@ -308,8 +302,7 @@ msgid "The button for requesting information about the user interface elements"
 msgstr "Кнопка запроса информации про элементы пользовательского интерфейса"
 
 msgid "Press for requesting information about the user interface elements."
-msgstr ""
-"Нажать для запроса информации про элементы пользовательского интерфейса"
+msgstr "Нажать для запроса информации про элементы пользовательского интерфейса"
 
 msgid "&File"
 msgstr "&Файл"
@@ -380,14 +373,11 @@ msgstr "Узел '%1' уже присутствует."
 msgid "... and yet %d nodes"
 msgstr "... и ещё %d узла"
 
-msgid "Are you sure of deleting the nodes '%1'?"
-msgstr "Вы действительно желаете удалить узлы '%1'?"
+msgid "Are you sure of deleting the nodes: %1 ?"
+msgstr "Вы действительно желаете удалить узлы: %1 ?"
 
 msgid "Deleting the nodes"
 msgstr "Удаление узлов"
-
-msgid "Copying is not possible."
-msgstr "Копирование невозможно."
 
 msgid "Selected"
 msgstr "Выбранный"
@@ -404,8 +394,19 @@ msgstr "Копирование узла '%1' в '%2'.\n"
 msgid "Do not ask for more."
 msgstr "Не спрашивать более."
 
-msgid "The node '%1' is already present. Continue?"
-msgstr "Узел '%1' уже присутствует. Продолжить?"
+msgid ""
+"The node '%1' is already present.\n"
+"Continue?"
+msgstr ""
+"Узел '%1' уже присутствует.\n"
+"Продолжить?"
+
+msgid ""
+"Copy/Move node '%1' error '%2'.\n"
+"Continue other nodes?"
+msgstr ""
+"Ошибка Копирования/Перемещения узла '%1': '%2'.\n"
+"Продолжить другие узлы?"
 
 msgid "List of messages in the status bar:"
 msgstr "Список сообщений строки статуса:"
@@ -444,7 +445,7 @@ msgid "The manual '%1' was not found offline or online!"
 msgstr "Не найдено руководства '%1' локально и в сети!"
 
 msgid "<EVAL>"
-msgstr ""
+msgstr "<EVAL>"
 
 msgid "On"
 msgstr "Вкл"
@@ -475,9 +476,8 @@ msgstr "Время расширения/обновления '%s': %f мс."
 msgid "Sending the changes to the selected ones"
 msgstr "Отправка изменений выбранным"
 
-#, c-format
-msgid "Send the command '%s' to other selected nodes \"%s\"?"
-msgstr "Отправить команду '%s' другим выбранным узлам \"%s\"?"
+msgid "Send the command '%1' to other selected nodes: %2 ?"
+msgstr "Отправить команду '%1' другим выбранным узлам: %2 ?"
 
 #, c-format
 msgid "Unknown host '%s'."
@@ -506,9 +506,6 @@ msgstr "%s| Переход по ссылке '%s'!"
 #, c-format
 msgid "%s| Pressed down '%s'!"
 msgstr "%s| Нажат '%s'!"
-
-msgid "Value is missing: "
-msgstr "Значение отсутствует:"
 
 #, c-format
 msgid "%s| Changed '%s' from '%s' to '%s'!"
@@ -691,7 +688,7 @@ msgid "Name:"
 msgstr "Имя:"
 
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 msgid "Item type:"
 msgstr "Тип элемента:"
@@ -776,3 +773,4 @@ msgstr "QTCfg диалог"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Выбор идентификатора и имени узла"
+

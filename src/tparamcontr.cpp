@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -92,8 +92,10 @@ TCntrNode &TParamContr::operator=( const TCntrNode &node )
 	for(unsigned iA = 0; iA < aLs.size(); iA++) {
 	    if(!src_n->vlPresent(aLs[iA]) || src_n->vlAt(aLs[iA]).at().arch().freeStat()) continue;
 
-	    vlAt(aLs[iA]).at().setArch();
-	    (TCntrNode&)vlAt(aLs[iA]).at().arch().at() = (TCntrNode&)src_n->vlAt(aLs[iA]).at().arch().at();
+	    try {
+		vlAt(aLs[iA]).at().setArch();
+		(TCntrNode&)vlAt(aLs[iA]).at().arch().at() = (TCntrNode&)src_n->vlAt(aLs[iA]).at().arch().at();
+	    } catch(TError &err) { if(err.cod != TError::Arch_Val_DblVSrc) throw; }
 	}
 
 	//Included parameters copy
@@ -267,9 +269,9 @@ void TParamContr::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//Checking for need to change the parameter type at loading from the configuration context
-	if(SYS->cfgCtx() && !SYS->cfgCtx()->childGet("id",owner().owner().nodePath()+owner().cfg(type().mDB).getS(),true))
+	if(SYS->cfgCtx() && !SYS->cfgCtx()->childGet("prmTp",type().name,true))
 	    for(unsigned iTp = 0; iTp < owner().owner().tpPrmSize(); ++iTp)
-		if(SYS->cfgCtx()->childGet("id",owner().owner().nodePath()+owner().cfg(owner().owner().tpPrmAt(iTp).mDB).getS(),true)) {
+		if(SYS->cfgCtx()->childGet("prmTp",owner().owner().tpPrmAt(iTp).name,true)) {
 		    setType(owner().owner().tpPrmAt(iTp).name);
 		    break;
 		}
@@ -287,6 +289,7 @@ void TParamContr::save_( )
     cfg("OWNER") = ownerPath();
     cfg("TIMESTAMP") = (int64_t)SYS->sysTm();
     SYS->db().at().dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
+    if(SYS->cfgCtx(true)) SYS->cfgCtx(true)->setAttr("prmTp", type().name);
 
     //Save archives
     vector<string> aLs;
@@ -453,10 +456,13 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
 	if(ctrMkNode("area",opt,0,"/prm",_("Parameter"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
-		if(!enableStat() && owner().owner().tpPrmSize() > 1)
+		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),((!enableStat()&&owner().owner().tpPrmSize()>1)?RWRWR_:R_R_R_),"root",SDAQ_ID,4,
+		    "tp","str","dest","select","select","/prm/tpLst",
+		    "help",_("The type changing leads to lose some data of the specific configurations."));
+		/*if(!enableStat() && owner().owner().tpPrmSize() > 1)
 		    ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","select","select","/prm/tpLst",
 			"help",_("The type changing leads to lose some data of the specific configurations."));
-		else ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		else ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");*/
 		if(owner().enableStat())
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");

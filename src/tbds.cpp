@@ -166,7 +166,8 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     string bdn = realDBName(ibdn);
     bool isCfgCtx = (localCfgCtx || ((ibdn.size() || path.size()) && SYS->cfgCtx()));
 
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     if(isCfgCtx || (path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
@@ -392,6 +393,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	    nd = curCtx;
 	    if(path.size() && !(nd=curCtx->childGet("id",path,true)))
 		nd = curCtx->childAdd("node")->setAttr("id", path);
+	    if(SYS->cfgCtx())	SYS->setCfgCtx(nd, true);
 	}
 	else {
 	    res.lock(false);

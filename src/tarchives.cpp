@@ -1040,7 +1040,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",_("Message"),R_R___,"root",SARH_ID,1,"tp","str");
 		}
 		if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && mAlarms.size())
-		    ctrMkNode("comm",opt,-1,"/m_arch/view/alClean",_("Clean up the the current violations table"),RWRW__,"root",SARH_ID);
+		    ctrMkNode("comm",opt,-1,"/m_arch/view/alClean",_("Clear visible violations"),RWRW__,"root",SARH_ID);
 	    }
 	}
 	if(ctrMkNode("area",opt,2,"/v_arch",_("Values"),R_R_R_,"root",SARH_ID)) {
@@ -1139,8 +1139,17 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/m_arch/view/alClean" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
+	vector<TMess::SRec> rec;
+	time_t gtm = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
+	int gsz = s2i(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
+	messGet(gtm-gsz, gtm, rec,
+	    TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
+	    s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))),
+	    TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")));
 	mRes.lock();
-	mAlarms.clear();
+	for(unsigned iRec = 0; iRec < rec.size(); ++iRec)
+	    mAlarms.erase(rec[iRec].categ);
 	mRes.unlock();
     }
     else if(a_path == "/v_arch/per") {

@@ -1,3 +1,43 @@
+2021-07-12 Roman (stable)
+- FIX:LibsDB.OscadaLibs: The template library tests.test fixed in the IO "di" for the grouping.
+- LibsDB.vcaBase: doc.docMessRep,Main.{alarmsAct,alarmsSt}:
+    Expanded in detecion the current source name of violations after passing the multiple gates.
+- FIX:AGLKS.St: The DAQ-parameter LogLev.gen.P4 fixed in the violation borders specifying.
+    OPC_UA.test.test: Expanded for use the type and RW parameter hints.
+- !!!:SYS.{TConfig,TCfg},BD.*: Expanded for new parameters TConfig::{trcSet,setTrcSet}(), TCfg::{isSet,setIsSet}()
+    of detection the configuration field changing and using in the partial DB-loading instead toDefault().
+- !!!:SYS,DB,DAQ: The global configuration context copying mechanism (interstation) appended for the marking link
+	to the last setting operation object, to easy postmarks setting.
+    !!:DAQ: As a postmark to the saving DAQ-parameter object there apended the attribute "prmTp" with the parameter type,
+	which is used next in true detection the parameter type changing at the following loading.
+- FIX:DAQ,Archives,UI.QTCfg: DAQ-Parameters copy prevented from an error of presence already the binding archive.
+    UI.QTCfg: Such errors also prevented on termination the group copying operation by a new acceptation dialogue.
+- !!:Transport.SSL: Both input and output parts appended of the possibility to point the certificates and the key
+    directly from an external file.
+- DAQ: The function TPrmTempl::Impl::cntrCmdProc() set as the virtual one, to allow of implementing the DAQ-source specific.
+    The DAQ-Parameter type switched to show the name always, not only at the selection.
+- DAQ.{ModBus,Siemens,OPC-UA}: The DAQ-Parameters of the Ligical type appended for the common connection errors display
+	in the attribute "err".
+    DAQ.{ModBus,Siemens}:Added for clearing the call now flag at errors.
+- DAQ.ModBus: The source code some cleared.
+- !:Archives: The control interface button expanded for clearing the visible alarms, not all them only.
+- !!!!:FIX:{DAQ,Protocol}.OPC_UA: Appended for the Logical type DAQ-Parameter support.
+    !!: The Standard type DAQ-Parameters appended for the no requesting the metadata on the server mode
+	and the attributes direct ID and name.
+    FIX:DAQ.OPC_UA: Fixed-finished in the parameter including support.
+    The certificate and key disabled in show for the enabled/started objects.
+- !!!!:FIX:DAQ.Siemens: Appended for the Simple type of the DAQ-parameters.
+    !!!: Appended for the data area specifying as a negative DB with code of this area,
+	and the Flags/Marks processing (0x83) added in a specific way, by the prefix "F".
+    !: Enabled for the parameters hierarchical including.
+    FIX: Fixed in sending the opening connection requests at the connection lost in the ISO-TCP own implementation.
+- !:FIX:UI.{Vision,WebVision}: The view Table of the primitive FormEl fixed in specifying
+    the column sorting value "0" as descending and "1" as ascending from the top,
+    and force of applying the attribute "sort" change.
+- FIX:UI.VCAEngine: Fixed in detection the page links recursion.
+- UI.Vision: The subwindows closing is set to real close not from the close event but the OpenSCADA control interface.
+
+
 2021-06-29 Roman (stable)
 - LibsDB.vcaBase: Main.grpCadr: Cleared from spare modification and the group name set to "<page>" for the unification.
 - Archives: The archive object removing appended of switching to "Passive" and starting for stopped ones,

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Client OPC-UA
 </td>
-<td> 2.1 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -88,12 +88,12 @@
 <li> <b>Sponsored by, for 2 years TS on 13 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Likov Dmitry, Vector LTD</li>
 <li> <b>Sponsored by, for moving the protocol code to a LGPL library, significant improvement and documenting, on 8.4 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Oleksander Leuta, MYSCADA</li>
 <li> <b>Sponsored by, for working with UAExpert 1.4 and kepware on 0.9 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Ustijancev Michael</li>
-<li> <b>Sponsored by, for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Update4#OPC_UA" title="Special:MyLanguage/Documents/Release 0.9/Update4">working with UAExpert 1.5, Client's Publish and Chunks implementing, significant refactoring</a> and the document complete revision on 9.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Fund" title="Special:MyLanguage/Fund">Fund</a></li>
+<li> <b>Sponsored by, for <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Update4#OPC_UA" title="Special:MyLanguage/Documents/Release 0.9/Update4">working with UAExpert 1.5, Client's Publish and Chunks implementing, significant refactoring</a>, the Logical Level type support and the document complete revision on 10.4 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Fund" title="Special:MyLanguage/Fund">Fund</a></li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">A task of the module extending</a></li>
 <li> <b>To Do:</b></li></ul>
 <dl><dd> + revise the representing documentation page;</dd>
 <dd> - resolve the controversy in <i>Client::messIO()</i> about mixing the pure requesting mode with the free read/write mode and the time of waiting responses here without passing the connection timeout directly;</dd>
-<dd> - append the builtin Logical Mode of the DAQ-Parameters;</dd>
+<dd> + append the builtin Logical Mode of the DAQ-Parameters;</dd>
 <dd> - append the authentication support for the input-server protocol part;</dd>
 <dd> - append the automatic creation for input transports and their pre-configuration from the EndPoint object properties;</dd>
 <dd> + implement the request-service "Publish" and chunks into the client part;</dd>
@@ -121,65 +121,71 @@
 <li class="toclevel-1 tocsection-4"><a href="#Module_of_the_data_acquisition"><span class="tocnumber">3</span> <span class="toctext">Module of the data acquisition</span></a>
 <ul>
 <li class="toclevel-2 tocsection-5"><a href="#Controller_object"><span class="tocnumber">3.1</span> <span class="toctext">Controller object</span></a></li>
-<li class="toclevel-2 tocsection-6"><a href="#Parameters"><span class="tocnumber">3.2</span> <span class="toctext">Parameters</span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-7"><a href="#libOPC_UA_library"><span class="tocnumber">4</span> <span class="toctext">libOPC_UA library</span></a>
+<li class="toclevel-2 tocsection-6"><a href="#Parameters"><span class="tocnumber">3.2</span> <span class="toctext">Parameters</span></a>
 <ul>
-<li class="toclevel-2 tocsection-8"><a href="#Service_objects.2C_functions_and_the_class_UA"><span class="tocnumber">4.1</span> <span class="toctext">Service objects, functions and the class UA</span></a>
+<li class="toclevel-3 tocsection-7"><a href="#Standard_.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Standard (std)</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#Logical_.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Logical (logic)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#User_programming_API"><span class="tocnumber">3.3</span> <span class="toctext"><span>User programming API</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#libOPC_UA_library"><span class="tocnumber">4</span> <span class="toctext">libOPC_UA library</span></a>
 <ul>
-<li class="toclevel-3 tocsection-9"><a href="#Data"><span class="tocnumber">4.1.1</span> <span class="toctext">Data</span></a></li>
-<li class="toclevel-3 tocsection-10"><a href="#External_functions"><span class="tocnumber">4.1.2</span> <span class="toctext">External functions</span></a></li>
-<li class="toclevel-3 tocsection-11"><a href="#Automatic_POSIX_mutex_unlock_object_for_OPC_.28OPCAlloc.29"><span class="tocnumber">4.1.3</span> <span class="toctext">Automatic POSIX mutex unlock object for OPC (OPCAlloc)</span></a></li>
-<li class="toclevel-3 tocsection-12"><a href="#Error_of_OPC_.28OPCError.29"><span class="tocnumber">4.1.4</span> <span class="toctext">Error of OPC (OPCError)</span></a></li>
-<li class="toclevel-3 tocsection-13"><a href="#XML-tag_.28XML_N.29"><span class="tocnumber">4.1.5</span> <span class="toctext">XML-tag (XML_N)</span></a></li>
-<li class="toclevel-3 tocsection-14"><a href="#Node.27s_object_of_OPC-UA_.28NodeId.29"><span class="tocnumber">4.1.6</span> <span class="toctext">Node's object of OPC-UA (NodeId)</span></a></li>
-<li class="toclevel-3 tocsection-15"><a href="#Root_object_of_the_OPC-UA_protocol_.28UA.29"><span class="tocnumber">4.1.7</span> <span class="toctext">Root object of the OPC-UA protocol (UA)</span></a>
+<li class="toclevel-2 tocsection-11"><a href="#Service_objects.2C_functions_and_the_class_UA"><span class="tocnumber">4.1</span> <span class="toctext">Service objects, functions and the class UA</span></a>
 <ul>
-<li class="toclevel-4 tocsection-16"><a href="#Included_object_of_the_security_parameters_.28SecuritySetting.29"><span class="tocnumber">4.1.7.1</span> <span class="toctext">Included object of the security parameters (SecuritySetting)</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-2 tocsection-17"><a href="#Main_object_of_the_Client_.28Client-.3EUA.29"><span class="tocnumber">4.2</span> <span class="toctext">Main object of the Client (Client-&gt;UA)</span></a>
+<li class="toclevel-3 tocsection-12"><a href="#Data"><span class="tocnumber">4.1.1</span> <span class="toctext">Data</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#External_functions"><span class="tocnumber">4.1.2</span> <span class="toctext">External functions</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#Automatic_POSIX_mutex_unlock_object_for_OPC_.28OPCAlloc.29"><span class="tocnumber">4.1.3</span> <span class="toctext">Automatic POSIX mutex unlock object for OPC (OPCAlloc)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#Error_of_OPC_.28OPCError.29"><span class="tocnumber">4.1.4</span> <span class="toctext">Error of OPC (OPCError)</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#XML-tag_.28XML_N.29"><span class="tocnumber">4.1.5</span> <span class="toctext">XML-tag (XML_N)</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#Node.27s_object_of_OPC-UA_.28NodeId.29"><span class="tocnumber">4.1.6</span> <span class="toctext">Node's object of OPC-UA (NodeId)</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#Root_object_of_the_OPC-UA_protocol_.28UA.29"><span class="tocnumber">4.1.7</span> <span class="toctext">Root object of the OPC-UA protocol (UA)</span></a>
 <ul>
-<li class="toclevel-3 tocsection-18"><a href="#Complex_Client_session_.28Client::SClntSess.29"><span class="tocnumber">4.2.1</span> <span class="toctext">Complex Client session (Client::SClntSess)</span></a>
+<li class="toclevel-4 tocsection-19"><a href="#Included_object_of_the_security_parameters_.28SecuritySetting.29"><span class="tocnumber">4.1.7.1</span> <span class="toctext">Included object of the security parameters (SecuritySetting)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-20"><a href="#Main_object_of_the_Client_.28Client-.3EUA.29"><span class="tocnumber">4.2</span> <span class="toctext">Main object of the Client (Client-&gt;UA)</span></a>
 <ul>
-<li class="toclevel-4 tocsection-19"><a href="#Client_Subscription_.28Client::Subscr.29"><span class="tocnumber">4.2.1.1</span> <span class="toctext">Client Subscription (Client::Subscr)</span></a>
+<li class="toclevel-3 tocsection-21"><a href="#Complex_Client_session_.28Client::SClntSess.29"><span class="tocnumber">4.2.1</span> <span class="toctext">Complex Client session (Client::SClntSess)</span></a>
 <ul>
-<li class="toclevel-5 tocsection-20"><a href="#Monitored_Item_of_the_Client_Subscription_.28Client::Subscr::MonitItem.29"><span class="tocnumber">4.2.1.1.1</span> <span class="toctext">Monitored Item of the Client Subscription (Client::Subscr::MonitItem)</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-2 tocsection-21"><a href="#Main_object_of_the_Server_.28Server-.3EUA.29"><span class="tocnumber">4.3</span> <span class="toctext">Main object of the Server (Server-&gt;UA)</span></a>
+<li class="toclevel-4 tocsection-22"><a href="#Client_Subscription_.28Client::Subscr.29"><span class="tocnumber">4.2.1.1</span> <span class="toctext">Client Subscription (Client::Subscr)</span></a>
 <ul>
-<li class="toclevel-3 tocsection-22"><a href="#Server_Security_Channel_.28Server::SecCnl.29"><span class="tocnumber">4.3.1</span> <span class="toctext">Server Security Channel (Server::SecCnl)</span></a></li>
-<li class="toclevel-3 tocsection-23"><a href="#Server_Session_.28Server::Sess.29"><span class="tocnumber">4.3.2</span> <span class="toctext">Server Session (Server::Sess)</span></a>
+<li class="toclevel-5 tocsection-23"><a href="#Monitored_Item_of_the_Client_Subscription_.28Client::Subscr::MonitItem.29"><span class="tocnumber">4.2.1.1.1</span> <span class="toctext">Monitored Item of the Client Subscription (Client::Subscr::MonitItem)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-24"><a href="#Main_object_of_the_Server_.28Server-.3EUA.29"><span class="tocnumber">4.3</span> <span class="toctext">Main object of the Server (Server-&gt;UA)</span></a>
 <ul>
-<li class="toclevel-4 tocsection-24"><a href="#Browse_continuation_point_of_the_Server_Session_.28Server::Sess::ContPoint.29"><span class="tocnumber">4.3.2.1</span> <span class="toctext">Browse continuation point of the Server Session (Server::Sess::ContPoint)</span></a></li>
-</ul>
-</li>
-<li class="toclevel-3 tocsection-25"><a href="#Server_Subscription_.28Server::Subscr.29"><span class="tocnumber">4.3.3</span> <span class="toctext">Server Subscription (Server::Subscr)</span></a>
+<li class="toclevel-3 tocsection-25"><a href="#Server_Security_Channel_.28Server::SecCnl.29"><span class="tocnumber">4.3.1</span> <span class="toctext">Server Security Channel (Server::SecCnl)</span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="#Server_Session_.28Server::Sess.29"><span class="tocnumber">4.3.2</span> <span class="toctext">Server Session (Server::Sess)</span></a>
 <ul>
-<li class="toclevel-4 tocsection-26"><a href="#Monitored_Item_of_the_Server_Subscription_.28Server::Subscr::MonitItem.29"><span class="tocnumber">4.3.3.1</span> <span class="toctext">Monitored Item of the Server Subscription (Server::Subscr::MonitItem)</span></a>
+<li class="toclevel-4 tocsection-27"><a href="#Browse_continuation_point_of_the_Server_Session_.28Server::Sess::ContPoint.29"><span class="tocnumber">4.3.2.1</span> <span class="toctext">Browse continuation point of the Server Session (Server::Sess::ContPoint)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-28"><a href="#Server_Subscription_.28Server::Subscr.29"><span class="tocnumber">4.3.3</span> <span class="toctext">Server Subscription (Server::Subscr)</span></a>
 <ul>
-<li class="toclevel-5 tocsection-27"><a href="#Value_element_of_the_Monitored_Item_of_the_Server_Subscription_.28Server::Subscr::MonitItem::Val.29"><span class="tocnumber">4.3.3.1.1</span> <span class="toctext">Value element of the Monitored Item of the Server Subscription (Server::Subscr::MonitItem::Val)</span></a></li>
+<li class="toclevel-4 tocsection-29"><a href="#Monitored_Item_of_the_Server_Subscription_.28Server::Subscr::MonitItem.29"><span class="tocnumber">4.3.3.1</span> <span class="toctext">Monitored Item of the Server Subscription (Server::Subscr::MonitItem)</span></a>
+<ul>
+<li class="toclevel-5 tocsection-30"><a href="#Value_element_of_the_Monitored_Item_of_the_Server_Subscription_.28Server::Subscr::MonitItem::Val.29"><span class="tocnumber">4.3.3.1.1</span> <span class="toctext">Value element of the Monitored Item of the Server Subscription (Server::Subscr::MonitItem::Val)</span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toclevel-3 tocsection-28"><a href="#Server_End_Point_.28Server::EP.29"><span class="tocnumber">4.3.4</span> <span class="toctext">Server End Point (Server::EP)</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#Server_End_Point_.28Server::EP.29"><span class="tocnumber">4.3.4</span> <span class="toctext">Server End Point (Server::EP)</span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-29"><a href="#Private_keys_and_certificates"><span class="tocnumber">5</span> <span class="toctext">Private keys and certificates</span></a></li>
-<li class="toclevel-1 tocsection-30"><a href="#Notes"><span class="tocnumber">6</span> <span class="toctext">Notes</span></a></li>
-<li class="toclevel-1 tocsection-31"><a href="#Table_of_compatibility_of_implementations_of_OPC-UA_from_other_developers"><span class="tocnumber">7</span> <span class="toctext"><span>Table of compatibility of implementations of OPC-UA from other developers</span></span></a></li>
-<li class="toclevel-1 tocsection-32"><a href="#Links"><span class="tocnumber">8</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-32"><a href="#Private_keys_and_certificates"><span class="tocnumber">5</span> <span class="toctext">Private keys and certificates</span></a></li>
+<li class="toclevel-1 tocsection-33"><a href="#Notes"><span class="tocnumber">6</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-34"><a href="#Table_of_compatibility_of_implementations_of_OPC-UA_from_other_developers"><span class="tocnumber">7</span> <span class="toctext"><span>Table of compatibility of implementations of OPC-UA from other developers</span></span></a></li>
+<li class="toclevel-1 tocsection-35"><a href="#Links"><span class="tocnumber">8</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -211,17 +217,17 @@
 <li> State, in which to transfer the node at the start: "Enabled".</li>
 <li> Type of the protocol encoding, at the moment it is only "Binary".</li>
 <li> URL of the endpoint node.</li>
-<li> Server certificate in the PEM format.</li>
-<li> Private key in the PEM format.</li>
-<li> Security Server Policy.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:991px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="925" src="../files/OPC-UA_prt_ep_main.png" width="989" /></a>  <div class="thumbcaption">Fig.3. Main tab of the endpoint node's page.</div></div></div></div>
+<li> Server certificate and private key in the PEM format.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the enabled state.</dd></dl>
+<ul><li> Security Server Policy.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1003px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main.png"><img class="thumbimage" height="846" src="../files/OPC-UA_prt_ep_main.png" width="1001" /></a>  <div class="thumbcaption">Fig.3. Main tab of the endpoint node's page.</div></div></div></div>
 <h2><span class="mw-headline" id="Module_of_the_data_acquisition"><span class="mw-headline-number">3</span> Module of the data acquisition</span></h2>
 <p>The data acquisition module provides ability of acquisition and writing the value's attributes (13) of points with the "Variable" type in the direct acquisition mode by the request "Read" and the asynchronous service request "Publish".
 </p>
 <h3><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">3.1</span> Controller object</span></h3>
 <p>To append the OPC-UA data source the controller's object into OpenSCADA is created and configured. An example of the configuration tab of the controller's object is shown in Figure 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:931px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="800" src="../files/OPC-UA_cntr_main.png" width="929" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:907px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main.png"><img class="thumbimage" height="847" src="../files/OPC-UA_cntr_main.png" width="905" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the OPC-UA controller object.</div></div></div></div>
 <p>From this tab you can set:
 </p>
 <ul><li> The state controller, as follow: detailed common status, "Enabled", "Running" and the name of the database containing the configuration.</li>
@@ -233,33 +239,85 @@
 <li> URL of the endpoint node of the remote station — OPC-UA server. In begin, the address you can point as "<b>opc.tcp://{IP|name}:{port}</b>", after that, at the controller's object enable and allowing the pointed OPC-UA node, there will be emerged to select the refined address.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Often there meets a situation when the refined address is symbolic which does not resolve into the network by the server incorrect configuration. In this cases you need to keep the original IP-address or the name which resolved to the correct IP.</dd></dl>
 <ul><li> Security policy and mode of the messaging security.</li>
-<li> Client certificate and private key in the PEM format.</li>
-<li> User and password to authenticate on the server, empty value here enable the anonymous access.</li>
+<li> Client certificate and private key in the PEM format.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the running state.</dd></dl>
+<ul><li> User and password to authenticate on the server, empty value here enable the anonymous access.</li>
 <li> Use the "Read" function, otherwise there is activated and used the Publish (asynchronous) data acquisition service of the OPC-UA protocol.</li></ul>
 <p>To facilitate the identification of nodes on the remote station, as well as their choice to be inserted in the parameter of the controller, in the controller's object it is provided the tab "Server nodes browser" of navigation on the remote station's nodes, where you can walk through the tree of objects and familiar with their attributes (Fig.5).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse.png"><img class="thumbimage" height="672" src="../files/OPC-UA_cntr_browse.png" width="687" /></a>  <div class="thumbcaption">Fig.5. The "Server nodes browser" tab of the OPC-UA controller object page.</div></div></div></div>
 <h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3.2</span> Parameters</span></h3>
-<p>The data acquisition module provides only one type of parameters — "Standard". Additional configuration field of the parameter of the module (Fig.6) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of the type "Variable" insertion to the defined list. Attribute in this list is written as follows: <b>{ns}:{id}</b>.
+<p>The data acquisition module provides two types of parameter: "Standard (std)" and "Logical (logic)". Additional configuration fields of the parameters of this module are:
 </p>
-<dl><dd>Where:
-<dl><dd><i>ns</i> — name space, number; zero value can be omitted;</dd>
-<dd><i>id</i> — node identifier by number, string, bytes string and GUID.</dd></dl></dd>
-<dd>Examples:
+<ul><li> <i><b>Standard (std)</b></i>:
+<ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes ModBUS.</li></ul></li>
+<li> <i><b>Logical (logic)</b></i>:
+<ul><li> <i>Parameter template</i> — address of the DAQ-parameter template.</li></ul></li></ul>
+<h4><span class="mw-headline" id="Standard_.28std.29"><span class="mw-headline-number">3.2.1</span> Standard (std)</span></h4>
+<p>Additional configuration field of the type parameter (Fig.6) is the list of OPC-UA nodes and the field of navigation by OPC-UA nodes in single line, for the selected nodes of the type "Variable" insertion to the defined list. Attribute in this list is written as "<b>{ns}:{id}[|[{flg}][|{id}[|{name}]]]</b>".<br />
+Where:
+</p>
+<ul><li> <i>ns</i> — name space, number; zero value can be omitted;</li>
+<li> <i>id</i> — node identifier by number, string, bytes string and GUID;</li>
+<li> <i>flg</i> — flags of no requesting the metadata on the server: value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/write mode (r-read, w-write);</li>
+<li> <i>id</i> — identifier of the created attribute;</li>
+<li> <i>name</i> — name of the created attribute.</li></ul>
+<p>Examples:
+</p>
 <dl><dd><b>84</b> — root directory;</dd>
-<dd><b>3:"BasicDevices2"</b> — basic devices node in the name space 3 and the string view;</dd>
-<dd><b>4:"61626364"</b> — node in the names space 4 and the byte string view;</dd>
-<dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — node in the names space 4 and the GUID view.</dd></dl></dd></dl>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm.png"><img class="thumbimage" height="651" src="../files/OPC-UA_prm.png" width="678" /></a>  <div class="thumbcaption">Fig.6. Configuration tab of the OPC-UA parameter object.</div></div></div></div>
+<dd><b>3:"BasicDevices2"||var</b> — basic devices node in the name space 3 and the string view with the force attribute ID;</dd>
+<dd><b>4:"61626364"||var|Variable</b> — node in the names space 4 and the byte string view with the force attribute ID and name;</dd>
+<dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}|irw|var|Variable</b> — node in the names space 4 and the GUID view with no requesting the server metadata for RW Integer and the force attribute ID and name.</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:678px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm.png"><img class="thumbimage" height="667" src="../files/OPC-UA_prm.png" width="676" /></a>  <div class="thumbcaption">Fig.6. Configuration tab of the OPC-UA parameter object.</div></div></div></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Nodes in type "Variable" with the value view as a structure are impossible typically to read entirely then you need it's elements insert separately to the reading nodes list.
 </p><p>In accordance with the specified list of nodes there performs acquisition and creation of the parameter's attributes (Fig.7).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:694px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr.png"><img class="thumbimage" height="492" src="../files/OPC-UA_prm_atr.png" width="692" /></a>  <div class="thumbcaption">Fig.7. Tab of attributes of a parameter.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:678px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr.png"><img class="thumbimage" height="562" src="../files/OPC-UA_prm_atr.png" width="676" /></a>  <div class="thumbcaption">Fig.7. Tab of attributes of the parameter.</div></div></div></div>
+<h4><span class="mw-headline" id="Logical_.28logic.29"><span class="mw-headline-number">3.2.2</span> Logical (logic)</span></h4>
+<p>Main page of configuration parameters of the logical type is shown in Figure 8.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:760px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UALog_prm.png"><img class="thumbimage" height="595" src="../files/OPC-UALog_prm.png" width="758" /></a>  <div class="thumbcaption">Рис.8. Configuration tab of the logical parameter type.</div></div></div></div>
+<p>Link value, when configuring the template (Fig.9), is written in the form "<b>{ns}:{id}</b>".<br />
+Where:
+</p>
+<ul><li> <i>ns</i> — name space, number; zero value can be omitted;</li>
+<li> <i>id</i> — node identifier by number, string, bytes string and GUID.</li></ul>
+<p>Examples:
+</p>
+<dl><dd><b>84</b> — root directory;</dd>
+<dd><b>3:"BasicDevices2"</b> — basic devices node in the name space 3 and the string view;</dd>
+<dd><b>4:"61626364"</b> — node in the names space 4 and the byte string view;</dd>
+<dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — node in the names space 4 and the GUID view.</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:760px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UALog_tmpl.png"><img class="thumbimage" height="595" src="../files/OPC-UALog_tmpl.png" width="758" /></a>  <div class="thumbcaption">Рис.9. Tab "Template configuration" of the logical parameter type.</div></div></div></div>
+<p>The module provides a special processing of a number of attributes of the template:
+</p>
+<ul><li> <i>f_frq</i> — frequency of the calculation of the template procedure or the time after the last calculation (negative in seconds) for planning by CRON, read-only.</li>
+<li> <i>f_start</i> — sign of the first execution of the template procedure — start-up, read-only.</li>
+<li> <i>f_stop</i> — sign of the last execution of the template procedure — stop, read only.</li>
+<li> <i>f_err</i> — parameter error, full access. The value of this attribute of the template falls into the error attribute of the parameter "err". Write here <b>EVAL</b> for the possibility of setting the attribute "err" from the outside and all others in the Read Only mode.</li>
+<li> <i>SHIFR</i> — code of the parameter, read-only.</li>
+<li> <i>NAME</i> — name of the parameter, read-only.</li>
+<li> <i>DESCR</i> — description of the parameter, read-only.</li>
+<li> <i>this</i> — object of the parameter, allows access to the attributes of the parameter, for example, to access archives-history.</li></ul>
+<p>In accordance with the template, underlying the parameter, we obtain a set of attributes of the parameter (Fig. 10).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:760px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UALog_prm_atr.png"><img class="thumbimage" height="595" src="../files/OPC-UALog_prm_atr.png" width="758" /></a>  <div class="thumbcaption">Fig.10. Tab of attributes of the logical parameter type.</div></div></div></div>
+<h3><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">3.3</span> <span id="UserAPI" title="#UserAPI">User programming API</span></span></h3>
+<p>Due to the support of the logical type parameters, it makes sense to provide a number of functions of the user API for calling them from the template of the logical parameter.
+</p><p><b>The object "Parameter" [this]</b>
+</p>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — adds the attribute <i>id</i> with the name <i>name</i> and the type <i>tp</i>. If the attribute is already present, the properties will be applied that can be changed on the go: name, selection mode and selection options.
+<ul><li> <i>id, name</i> — identifier and name of the new attribute;</li>
+<li> <i>tp</i> — attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read-only [ro];</li>
+<li> <i>selValsNms</i> — two lines with values in first and their names in second, separated by ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — removes the attribute <i>id</i>.</li></ul>
+<p><br />
+</p>
 <h2><span class="mw-headline" id="libOPC_UA_library"><span class="mw-headline-number">4</span> libOPC_UA library</span></h2>
 <p>Grounding on workouts of the module, the protocol OPC-UA code was moved to a different library and published on the LGPLv3 license. That was done to provide the possibility of easy appending of support the OPC-UA protocol by external projects. The library represents by two files libOPC_UA.h, libOPC_UA.cpp; supported and hosted into the module content, then its actual version you can get here: <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA</a>.
-</p><p>The library, like to this module code, wrote on C++ programming language. Static classes diagram, which represents the library architecture, shown on Figure 8. Accordingly to the classes diagram, the library implemented into the name space "OPC" and architecturally it can be divided to the "Client" and "Server" parts which inherited from the common class "UA". Besides the direct classes of the protocol "OPC-UA", the library includes to itself a set of functions and classes for processing or storing the protocol data, especially of which it should be noted the class of node of language XML "XML_N", used for requests unification to the library API.
+</p><p>The library, like to this module code, wrote on C++ programming language. Static classes diagram, which represents the library architecture, shown on Figure 11. Accordingly to the classes diagram, the library implemented into the name space "OPC" and architecturally it can be divided to the "Client" and "Server" parts which inherited from the common class "UA". Besides the direct classes of the protocol "OPC-UA", the library includes to itself a set of functions and classes for processing or storing the protocol data, especially of which it should be noted the class of node of language XML "XML_N", used for requests unification to the library API.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:400px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="311" src="../files/OPC-UA_libOPCUA_class.png" width="398" /></a>  <div class="thumbcaption">Fig.8. Static class diagram of the library libOPC_UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:400px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="311" src="../files/OPC-UA_libOPCUA_class.png" width="398" /></a>  <div class="thumbcaption">Fig.11. Static class diagram of the library libOPC_UA.</div></div></div></div>
 <p>The library using at all lies in inheriting of the class "Client" and/or "Server" accordingly to the end-program functions and next implementing of the virtual functions for the client/server properties into the OPC-UA protocol context, and the transport communication part also, that is — connect/open a TCP-socket and write/read of unstructured data stream. Next requests, and the requested data processing (for server), performed through call the function of requesting to the service <i>reqService()</i> and/or processing of the virtual function of the data requesting <i>reqData()</i> than, in fact, there is integration to the data model of the application.
 </p><p>After appending to the client for support of the asynchronous data polling by the service "Publish", the integration process was supplemented by periodic call for the <i>Client::poll()</i> function in order to process the asynchronous service. The "Client::poll()" function is also provided with support for synchronous operation, by a separate argument, through the unified subscription-registering infrastructure of monitoring elements, but the "Read" function. That is, now it is enough to register all the elements of monitoring with the function <i>Client::Subscr::monitoredItemAdd()</i> and then call the function <i>Client::poll()</i> to get their data in the desired mode.
 </p><p>After the last refactoring of the code in version 2, the integration of the server part additionally requires a mandatory start of a separate thread of all subscriptions processing, with call from it for the function <i>Server::EP::subScrCycle()</i> and the argument of the subscription processing cycle counter — the periodicity of the call <i>Server::EP::subscrProcPer()</i>.
@@ -757,7 +815,7 @@ $ openssl genrsa -out key_c.pem -des3 -rand /var/log/messages 2048
 # Private key without the password creation:
 $ openssl rsa -in key_c.pem -out key_c1.pem
 # Selfsigned certificate creation:
-$ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.cnf -days 3650
+$ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.cnf -days 3650
 # Files content placing, for the file key_c1.pem to the field of private key and the file cert_c.pem to the certificate field!
 </pre>
 <h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">6</span> Notes</span></h2>
@@ -891,7 +949,7 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 <td> Pass </td>
 <td> Pass </td>
 <td> <span style="color: blue">Not tested</span> </td>
-<td> <span style="color: blue">NA</span> </td>
+<td> <span style="color: blue">Not tested</span> </td>
 <td>
 </td></tr>
 <tr>
@@ -916,5 +974,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

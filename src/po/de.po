@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-06 19:00+0300\n"
+"POT-Creation-Date: 2021-07-02 07:12+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -274,8 +274,8 @@ msgstr "Stufe"
 msgid "Message"
 msgstr "Nachricht"
 
-msgid "Clean up the the current violations table"
-msgstr "Löschen Sie die aktuelle Alarmtabelle"
+msgid "Clear visible violations"
+msgstr "Sichtbare Verstöße löschen"
 
 msgid "Values"
 msgstr "Werte"
@@ -872,6 +872,9 @@ msgstr "Status"
 msgid "Controller DB"
 msgstr "Datenbank des Controllers"
 
+msgid "Date of modification"
+msgstr "Änderungsdatum"
+
 msgid "Parameter"
 msgstr "Parameter"
 
@@ -903,9 +906,6 @@ msgstr "Übersetzen Sie das Verfahren vollständig"
 
 msgid "Procedure"
 msgstr "Verfahren"
-
-msgid "Date of modification"
-msgstr "Änderungsdatum"
 
 msgid "Template identifier"
 msgstr "Vorlagen-ID"
@@ -2222,37 +2222,6 @@ msgstr "Zähler"
 msgid "Go to the configuration of the list of remote stations"
 msgstr "Wechseln Sie zur Konfiguration der Liste der Remote-Stationen"
 
-msgid "Tasks"
-msgstr "Aufgaben"
-
-msgid "Thread"
-msgstr "Der Strom"
-
-msgid "TID"
-msgstr "TID"
-
-msgid "Policy"
-msgstr "Politik"
-
-msgid "Prior."
-msgstr "Priorität"
-
-msgid "CPU set"
-msgstr "CPU Installation"
-
-msgid ""
-"To set up the processors you use, write a row of numbers separated by a ':' "
-"character."
-msgstr ""
-"Für eine Verwendung von CPU gesetzt Schreib Prozessoren Zahlen String mit "
-"dem Symbol ':' getrennt."
-
-msgid "Phase"
-msgstr "Phase"
-
-msgid "To set up the task invoking phase."
-msgstr "Zum Einstellen der Phaseneinstellung der Task"
-
 msgid "Translations"
 msgstr "Übersetzungen"
 
@@ -2324,6 +2293,37 @@ msgstr ""
 "für sehr große Projekte, die in der Zeit der vollständigen Verarbeitung der "
 "Tabelle begrenzt sind."
 
+msgid "Tasks"
+msgstr "Aufgaben"
+
+msgid "Thread"
+msgstr "Der Strom"
+
+msgid "TID"
+msgstr "TID"
+
+msgid "Policy"
+msgstr "Politik"
+
+msgid "Prior."
+msgstr "Priorität"
+
+msgid "CPU set"
+msgstr "CPU Installation"
+
+msgid ""
+"To set up the processors you use, write a row of numbers separated by a ':' "
+"character."
+msgstr ""
+"Für eine Verwendung von CPU gesetzt Schreib Prozessoren Zahlen String mit "
+"dem Symbol ':' getrennt."
+
+msgid "Phase"
+msgstr "Phase"
+
+msgid "To set up the task invoking phase."
+msgstr "Zum Einstellen der Phaseneinstellung der Task"
+
 msgid "Debug"
 msgstr "Debuggen"
 
@@ -2394,6 +2394,7 @@ msgstr "Fehler beim Installieren der Prozessoren für den Thread."
 msgid "only use the already multilanguage DBs with their modification"
 msgstr "nur die bereits mehrsprachigen DBs mit ihren Modifikationen verwenden"
 
+#, c-format
 msgid ""
 "creating or modification the configuration DBs as multilanguage ones with "
 "the pointed base language '%s'"

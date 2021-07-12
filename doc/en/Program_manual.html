@@ -133,7 +133,7 @@
 <p>The subsystem "DAQ" (Data Acquisition) (Fig.1.3) provides to support dynamic data sources whether: PLC, MOD, virtual sources and other. The function of this subsystem is to provide the received data in structured form — <b>the data model</b> and to provide management of these data, for example, these are data modification.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:309px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.png"><img class="thumbimage" height="335" src="files/Oscada_subsys_daq_str.png" width="307" /></a>  <div class="thumbcaption">Fig. 1.3. Hierarchical structure of the subsystem "DAQ".</div></div></div></div>
-<p>The subsystem "DAQ" is a modular one and it contains modular objects of types of sources of dynamic data. For example OpenSCADA provides now more than twenty <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">modules</a> and <a class="new" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Libs/Generic_list" title="Special:MyLanguage/Libs/Libs/Generic list (page does not exist)">library items</a> by <a class="new" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Special:MyLanguage/Documents/DAQ" title="Special:MyLanguage/Libs/Special:MyLanguage/Documents/DAQ (page does not exist)">sources of the logical level</a>. Most significant and developed from them are:
+<p>The subsystem "DAQ" is a modular one and it contains modular objects of types of sources of dynamic data. For example, OpenSCADA provides now more than twenty <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">modules</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Generic_list" title="Special:MyLanguage/Libs/Generic list">library items</a> by <a href="DAQ.html#UserPrt" title="Special:MyLanguage/Documents/DAQ">sources of the logical level</a>. Most significant and developed from them are:
 </p>
 <ul><li> <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">Java-like based calculator</a>;</li>
 <li> <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">Logical level</a>;</li>
@@ -143,15 +143,15 @@
 <li> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>;</li>
 <li> <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON client</a>;</li>
 <li> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">Client OPC-UA</a>;</li>
+<li> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens DAQ</a>;</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/MMS" title="Special:MyLanguage/Modules/MMS">MMS(IEC-9506)</a>;</li>
 <li> <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP client</a>;</li>
 <li> <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP DAS hardware</a>;</li>
-<li> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens DAQ</a>;</li>
 <li> <a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">Diamond DAQ boards</a>.</li></ul>
 <p>Each non-logical source type is implemented into a separate module, which can contain many sources (controller objects), and each source is usually executed in a separate thread-task.
 </p><p>Separately taken object controller may contain parameters specified by module types. For example, the parameters of the analog type, the basic information of which is the value of the integer or the real type. Structurally, the parameter is a list of attributes that contain data. Attributes can have five basic types: logical, integer, real, character string (text) and object. Structures of controller objects, parameters and their types are contained in the subsystem "DAQ" so that the module objects carry out their filling in accordance with their own specifics.
 </p><p>Certain types of data sources themselves can generate data as they generate them entirely, as well as processing physical data, and even <a href="DAQ.html#UserPrt" title="Special:MyLanguage/Documents/DAQ">fully implement the gathering of these data into OpenSCADA environment</a> and its internal language. Such data sources are called logical. Fully logical data sources are represented by modules:
-<a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> and <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>. There are several modules that combine logical data as a result of direct physical ones processing: <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>.
+<a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> and <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>. There are several modules that combine logical data as a result of direct physical ones processing: <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> and <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.
 </p><p>Dynamic data sources can be remote, that is, they can be generated or received at the remote OpenSCADA station. To communicate with such data sources, the <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> gateway module is used. The function of this type of data sources is to display the data sources of the remote OpenSCADA station to the local one.
 </p><p>You can read in detail the key subsystem "DAQ" and its functions in a separate document "<a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">Data acquisition in OpenSCADA</a>".
 </p>
@@ -786,7 +786,7 @@
 <li> <i>Description</i> — brief description of the parameter and its purpose.</li>
 <li> <i>To enable</i> — indicates the state "Enabled" in which to transfer the parameter at the program startup.</li>
 <li> <i>Parameter template</i> — address of the previously discussed template.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_main.png"><img class="thumbimage" height="613" src="files/QTCfg_subsys_daq_mod_cntr_prm_main.png" width="773" /></a>  <div class="thumbcaption">Fig. 4.5k. The main configuration tab of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:769px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_main.png"><img class="thumbimage" height="653" src="files/QTCfg_subsys_daq_mod_cntr_prm_main.png" width="767" /></a>  <div class="thumbcaption">Fig. 4.5k. The main configuration tab of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
 <p>The tab "Attributes" (Fig.4.5l) contains the parameter attributes and their values in accordance with the configuration of the used template and calculation of its program.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:798px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_attr.png"><img class="thumbimage" height="542" src="files/QTCfg_subsys_daq_mod_cntr_prm_attr.png" width="796" /></a>  <div class="thumbcaption">Fig. 4.5l. The tab "Attributes" of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
@@ -842,7 +842,7 @@
 <li> <i>Category</i> — category o the message.</li>
 <li> <i>Level</i> — level of the message.</li>
 <li> <i>Message</i> — text of the message.</li></ul>
-<p>For alarm messages, after the table appears a button for clean up this table of the active alarms, that is useful for service functions. The table also appended for the "Delete" command to remove single alarm messages.
+<p>For alarm messages, after the table appears a button for clean up this table for the visible alarms, that is useful for service functions. The table also appended for the "Delete" command to remove single alarm.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1043px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="621" src="files/QTCfg_subsys_arch_mess.png" width="1041" /></a>  <div class="thumbcaption">Fig. 4.6b. The tab "Messages" of the subsystem "Archives-History".</div></div></div></div>
 <p>The tab "Values" (Fig.4.6c) contains the general configuration of the values archiving and the list of archives of values. In the context menu of the list of values the user has the opportunity to add, delete and go to the desired archive. The general configuration of the archiving is represented by the fields:
@@ -1818,5 +1818,5 @@ openscada-proj backupList {ProjName}
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

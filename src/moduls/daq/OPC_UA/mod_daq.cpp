@@ -57,6 +57,7 @@ void TTpContr::postEnable( int flag )
 
     //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD_L",_("Logical parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
@@ -74,6 +75,13 @@ void TTpContr::postEnable( int flag )
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("ND_LS",_("Nodes list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000",""));
+    // Logical parameter type by the DAQ parameter template
+    t_prm = tpParmAdd("logic", "PRM_BD_L", _("Logical"), true);
+    tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
+    // Parameter template IO DB structure
+    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
+    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
@@ -82,13 +90,14 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TController(name_c,daq_db,cfgelem), enRes(true),
-    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mRestTm(cfg("TM_REST")), mSync(cfg("SYNCPER")),
+    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
-    mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), mUseRead(cfg("UseRead").getBd()),
+    mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), restTm(cfg("TM_REST").getId()), mUseRead(cfg("UseRead").getBd()),
     mPer(1e9), prcSt(false), callSt(false), isReload(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmDelay(0), servSt(0)
 {
-    cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
+    cfg("PRM_BD").setS("OPC_UA_Prm_"+id());
+    cfg("PRM_BD_L").setS("OPC_UA_PrmL_"+id());
 }
 
 TMdContr::~TMdContr( )
@@ -96,24 +105,28 @@ TMdContr::~TMdContr( )
     if(startStat()) stop();
 }
 
-string TMdContr::epParse( string *uri )
+void TMdContr::postDisable( int flag )
 {
-    if(endPoint().compare(0,10,"opc.tcp://") != 0) return "";
-    size_t uriPos = endPoint().find("/", 10);
-    if(uri) *uri = (uriPos != string::npos) ? endPoint().substr(uriPos) : "";
-
-    string addr = endPoint().substr(10, (uriPos==string::npos) ? uriPos : (uriPos-10));
-    return s2i(TSYS::strParse(addr,1,":")) ? addr : TSYS::strParse(addr,0,":")+":4840";
+    TController::postDisable(flag);
+    try {
+	if(flag) {
+	    //Delete parameter's io table
+	    string tbl = DB()+"."+cfg("PRM_BD_L").getS()+"_io";
+	    SYS->db().at().open(tbl);
+	    SYS->db().at().close(tbl, true);
+	}
+    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
-
     if(startStat() && !redntUse()) {
+	if(!prcSt) rez += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1) {
-	    rez += TSYS::strMess(_("Connection error. Restoring in %.6g s."), tmDelay);
-	    rez.replace(0, 1, "10");
+	    rez += (acqErr.getVal().size()?acqErr.getVal():string(_("Error connecting."))) + " ";
+	    if(tmDelay) rez += TSYS::strMess(_("Restoring in %.6g s. "), tmDelay);
+	    rez.replace(0, 1, i2s(TError::Tr_Connect));
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
@@ -136,86 +149,14 @@ string TMdContr::getStatus( )
     return rez;
 }
 
-TVariant TMdContr::getValMIt( unsigned mItId, uint32_t *st )
-{
-    uint32_t ndSt = 0;
-
-    OPCAlloc resDt(mtxData);
-    Subscr::MonitItem *mIt = (mItId < sess.mSubScr[0].mItems.size()) ? &sess.mSubScr[0].mItems[mItId] : NULL;
-    if(mUseRead) ndSt = (mIt && !str2uint(mIt->val.attr("nodata"))) ? str2uint(mIt->val.attr("Status")) : OpcUa_BadMonitoredItemIdInvalid;
-    else ndSt = (!mIt || !mIt->active || str2uint(mIt->val.attr("nodata"))) ? OpcUa_BadMonitoredItemIdInvalid :
-			(ndSt=mIt->st) ? ndSt : str2uint(mIt->val.attr("Status"));
-
-    if(!mIt || ndSt)	return EVAL_REAL;
-    else {
-	unsigned varTp = 0;
-	if((varTp=s2i(mIt->val.attr("VarTp")))&OpcUa_Array) {
-	    TArrayObj *curArr = new TArrayObj();
-	    string vEl;
-	    switch(varTp&OpcUa_VarMask) {
-		case OpcUa_Boolean:
-		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
-			curArr->arSet(iEl, bool(s2i(vEl)));
-		    break;
-		case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
-		case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:
-		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
-			curArr->arSet(iEl, (int64_t)s2ll(vEl));
-		    break;
-		case OpcUa_Float: case OpcUa_Double:
-		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
-			curArr->arSet(iEl, s2r(vEl));
-		    break;
-		default:
-		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
-			curArr->arSet(iEl, vEl);
-		    break;
-	    }
-	    return curArr;
-	} else return mIt->val.text();
-    }
-
-    if(st) *st = ndSt;
-
-    return EVAL_REAL;
-}
-
-string TMdContr::authData( )
-{
-    return (mAuthUser.getS().size() && mAuthPass.getS().size()) ? mAuthUser.getS()+"\n"+mAuthPass.getS() : "";
-}
-
-void TMdContr::reqService( XML_N &io )
-{
-    if(tr.freeStat())	return;
-
-    ResAlloc res(resOPC, true);
-    io.setAttr("err", "");
-
-    try { tr.at().start(); }
-    catch(TError &err) { io.setAttr("err", TSYS::strMess("0x%x:%s",OpcUa_BadCommunicationError,err.mess.c_str())); return; }
-
-    Client::reqService(io);
-    if(io.attr("err").empty()) tmDelay--;
-}
-
-string TMdContr::applicationUri( )	{ return "urn:"+SYS->host()+":OpenSCADA:DAQ.OPC_UA"; }
-
-string TMdContr::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SITE;*/ }
-
-string TMdContr::applicationName( )	{ return "OpenSCADA.OPC-UA Client"; }
-
-bool TMdContr::connect( int8_t est )
-{
-    if(tr.freeStat()) return false;
-
-    if(est == 0) tr.at().stop();
-    else if(est > 0) tr.at().start();
-
-    return tr.at().startStat();
-}
+TTpContr &TMdContr::owner( ) const	{ return *(TTpContr*)nodePrev(); }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
+
+void TMdContr::load_( )
+{
+    if(SYS->cfgCtx() && toEnable() && !enableStat())	enable();
+}
 
 void TMdContr::enable_( )
 {
@@ -242,6 +183,8 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
+    if(prcSt) return;
+
     servSt = 0;
     tmDelay = 0;
 
@@ -267,113 +210,9 @@ void TMdContr::stop_( )
 
     alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
-}
 
-void TMdContr::protIO( XML_N &io )
-{
-    MtxAlloc resN(tr.at().reqRes(), true);
-    if(messLev() == TMess::Debug) io.setAttr("debug", "1");
-    try { Client::protIO(io); }
-    catch(TError &er)
-    { io.setAttr("err", TSYS::strMess("0x%x:%s:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
-}
-
-int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
-{
-    if(!connect()) connect(true);
-    try {
-    //!!!! Check for the timeout error or not
-	return tr.at().messIO(obuf, len_ob, ibuf, len_ib, time);
-    } catch(TError&) { return 0; }
-}
-
-void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }
-
-void TMdContr::prmEn( const string &id, bool val )
-{
-    MtxAlloc res(enRes, true);
-
-    unsigned iPrm;
-    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
-	if(pHd[iPrm].at().id() == id) break;
-
-    if(val && iPrm >= pHd.size()) pHd.push_back(at(id));
-    if(!val && iPrm < pHd.size()) pHd.erase(pHd.begin()+iPrm);
-}
-
-void *TMdContr::Task( void *icntr )
-{
-    TMdContr &cntr = *(TMdContr *)icntr;
-
-    cntr.prcSt = true;
-
-    //Initiate the publish period and register the server status attribute reading
-    if(cntr.period())	cntr.sess.mSubScr[0].publInterval = 1e-6*cntr.period();
-    unsigned ServerStatusMIt = cntr.sess.mSubScr[0].monitoredItemAdd(OpcUa_Server_ServerStatus_State);
-
-    try {
-	for(unsigned int it_cnt = cntr.pHd.size(); !TSYS::taskEndRun(); ++it_cnt) {
-	    if(cntr.redntUse())	{ TSYS::taskSleep(1e9); continue; }
-	    if(cntr.tmDelay > 0){
-		MtxAlloc res(cntr.enRes, true);
-		for(unsigned iP = 0; iP < cntr.pHd.size(); ++iP)
-		    cntr.pHd[iP].at().upVal();
-		res.unlock();
-
-		TSYS::taskSleep(cntr.period()?cntr.period():1e9);
-		cntr.tmDelay = vmax(0,cntr.tmDelay-1);
-		continue;
-	    }
-
-	    cntr.callSt = true;
-
-	    if(!cntr.mUseRead && !cntr.sess.mSubScr[0].isActivated())	cntr.sess.mSubScr[0].activate(true);
-
-	    cntr.acqErr.setVal(cntr.poll(cntr.mUseRead));
-	    bool isErr = cntr.acqErr.getVal().size();
-
-	    if(!isErr) {
-		//Getting the controller-server status
-		cntr.servSt = cntr.getValMIt(ServerStatusMIt).getI();
-
-		//Updating the parameters
-		MtxAlloc res(cntr.enRes, true);
-		for(unsigned iP = 0; iP < cntr.pHd.size(); ++iP)
-		    cntr.pHd[iP].at().upVal();
-
-		if(cntr.alSt != 0) {
-		    cntr.alSt = 0;
-		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
-		}
-	    }
-	    else {
-		if(cntr.alSt <= 0) {
-		    cntr.alSt = 1;
-		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(cntr.acqErr.getVal(),"=").c_str()));
-		    cntr.sess.mSubScr[0].monitoredItemDel(-1, true, true);	//Clear subscription values
-		}
-		cntr.tmDelay = cntr.restTm();
-		continue;
-	    }
-
-	    cntr.callSt = false;
-
-	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
-	}
-    } catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
-
-    //Closing the subscription and session ...
-    if(TSYS::taskEndRun())
-	try {
-	    if(!cntr.mUseRead) cntr.sess.mSubScr[0].activate(false);
-
-	    XML_N req("opc.tcp"); req.setAttr("id", "CloseALL");
-	    cntr.reqService(req);
-	} catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
-
-    cntr.prcSt = false;
-
-    return NULL;
+    //Clear the process parameters list
+    enRes.lock(); pHd.clear(); enRes.unlock();
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -437,6 +276,285 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
     return true;
 }
 
+void TMdContr::prmEn( TMdPrm *prm, bool val )
+{
+    unsigned iPrm;
+
+    MtxAlloc res(enRes, true);
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(&pHd[iPrm].at() == prm) break;
+
+    if(val && iPrm >= pHd.size())	pHd.push_back(prm);
+    if(!val && iPrm < pHd.size())	pHd.erase(pHd.begin()+iPrm);
+}
+
+bool TMdContr::connect( int8_t est )
+{
+    if(tr.freeStat()) return false;
+
+    if(est == 0) tr.at().stop();
+    else if(est > 0) tr.at().start();
+
+    return tr.at().startStat();
+}
+
+int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time )
+{
+    if(!connect()) connect(true);
+    try {
+	//!!!! Check for the timeout error or not
+	return tr.at().messIO(obuf, len_ob, ibuf, len_ib, time);
+    } catch(TError&) { return 0; }
+}
+
+void TMdContr::protIO( XML_N &io )
+{
+    MtxAlloc resN(tr.at().reqRes(), true);
+    if(messLev() == TMess::Debug) io.setAttr("debug", "1");
+    try { Client::protIO(io); }
+    catch(TError &er)
+    { io.setAttr("err", TSYS::strMess("0x%x:%s:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
+}
+
+void TMdContr::reqService( XML_N &io )
+{
+    if(tr.freeStat())	return;
+
+    ResAlloc res(resOPC, true);
+    io.setAttr("err", "");
+
+    try { tr.at().start(); }
+    catch(TError &err) { io.setAttr("err", TSYS::strMess("0x%x:%s",OpcUa_BadCommunicationError,err.mess.c_str())); return; }
+
+    Client::reqService(io);
+    if(io.attr("err").empty()) tmDelay--;
+}
+
+TVariant TMdContr::getValMIt( unsigned mItId, uint32_t *st )
+{
+    uint32_t ndSt = 0;
+
+    OPCAlloc resDt(mtxData);
+    Subscr::MonitItem *mIt = (mItId < sess.mSubScr[0].mItems.size()) ? &sess.mSubScr[0].mItems[mItId] : NULL;
+    if(mUseRead) ndSt = (mIt && !str2uint(mIt->val.attr("nodata"))) ? str2uint(mIt->val.attr("Status")) : OpcUa_BadMonitoredItemIdInvalid;
+    else ndSt = (!mIt || !mIt->active || str2uint(mIt->val.attr("nodata"))) ? OpcUa_BadMonitoredItemIdInvalid :
+			(ndSt=mIt->st) ? ndSt : str2uint(mIt->val.attr("Status"));
+
+    if(!mIt || ndSt)	return EVAL_REAL;
+    else {
+	unsigned varTp = 0;
+	if((varTp=s2i(mIt->val.attr("VarTp")))&OpcUa_Array) {
+	    TArrayObj *curArr = new TArrayObj();
+	    string vEl;
+	    switch(varTp&OpcUa_VarMask) {
+		case OpcUa_Boolean:
+		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
+			curArr->arSet(iEl, bool(s2i(vEl)));
+		    break;
+		case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
+		case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:
+		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
+			curArr->arSet(iEl, (int64_t)s2ll(vEl));
+		    break;
+		case OpcUa_Float: case OpcUa_Double:
+		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
+			curArr->arSet(iEl, s2r(vEl));
+		    break;
+		default:
+		    for(int off = 0, iEl = 0; (vEl=TSYS::strLine(mIt->val.text(),0,&off)).size(); iEl++)
+			curArr->arSet(iEl, vEl);
+		    break;
+	    }
+	    return curArr;
+	} else return mIt->val.text();
+    }
+
+    if(st) *st = ndSt;
+
+    return EVAL_REAL;
+}
+
+TVariant TMdContr::getVal( const string &iaddr, MtxString &err )
+{
+    if(tmDelay > 0) {
+	if(err.getVal().empty())
+	    err = TSYS::strMess("%d:%s", TError::Tr_Connect, acqErr.getVal().c_str());
+	return EVAL_REAL;
+    }
+
+    string	nId = TSYS::strLine(iaddr, 2);
+    if(nId.empty())	return EVAL_REAL;
+
+    uint32_t ndSt = 0;
+    TVariant rez = getValMIt(str2uint(nId), &ndSt);
+    if(ndSt && err.getVal().empty())
+	err = TSYS::strMess(_("Error '%s': 0x%x"), TSYS::strLine(iaddr,0).c_str(), ndSt);
+
+    return rez;
+}
+
+bool TMdContr::setVal( const TVariant &vl, const string &iaddr, MtxString &err )
+{
+    if(tmDelay > 0) {
+	if(err.getVal().empty()) err = TSYS::strMess("%d:%s", TError::Tr_Connect, acqErr.getVal().c_str());
+	return false;
+    }
+    if(vl.isEVal())	return true;
+
+    XML_N req("opc.tcp");
+
+    string wrVl;
+    AutoHD<TArrayObj> arr;
+    if(vl.type() == TVariant::Object && !(arr=vl.getO()).freeStat())
+	for(size_t iA = 0; iA < arr.at().arSize(); iA++) wrVl += arr.at().arGet(iA).getS() + "\n";
+    else wrVl = vl.getS();
+    req.setAttr("id", "Write")->
+	childAdd("node")->setAttr("nodeId", TSYS::strLine(iaddr,0))->
+			  setAttr("attributeId", i2s(AId_Value))->
+			  setAttr("VarTp", TSYS::strLine(iaddr,1))->
+			  setText(wrVl);
+    reqService(req);
+    if(!req.attr("err").empty()) { if(err.getVal().empty()) err = req.attr("err"); return false; }
+    else if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0)) {
+	if(err.getVal().empty()) err = TSYS::strMess(_("Write error status: %s"), req.childGet(0)->attr("Status").c_str());
+	return false;
+    }
+
+    return true;
+}
+
+string TMdContr::epParse( string *uri )
+{
+    if(endPoint().compare(0,10,"opc.tcp://") != 0) return "";
+    size_t uriPos = endPoint().find("/", 10);
+    if(uri) *uri = (uriPos != string::npos) ? endPoint().substr(uriPos) : "";
+
+    string addr = endPoint().substr(10, (uriPos==string::npos) ? uriPos : (uriPos-10));
+    return s2i(TSYS::strParse(addr,1,":")) ? addr : TSYS::strParse(addr,0,":")+":4840";
+}
+
+string TMdContr::authData( )
+{
+    return (mAuthUser.getS().size() && mAuthPass.getS().size()) ? mAuthUser.getS()+"\n"+mAuthPass.getS() : "";
+}
+
+string TMdContr::applicationUri( )	{ return "urn:"+SYS->host()+":OpenSCADA:DAQ.OPC_UA"; }
+
+string TMdContr::productUri( )		{ return "urn:OpenSCADA:DAQ.OPC_UA";/*PACKAGE_SITE;*/ }
+
+string TMdContr::applicationName( )	{ return "OpenSCADA.OPC-UA Client"; }
+
+void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }
+
+void *TMdContr::Task( void *icntr )
+{
+    const TSYS::STask &tsk = TSYS::taskDescr();
+    TMdContr &cntr = *(TMdContr*)icntr;
+
+    cntr.prcSt = true;
+
+    bool isStart = true;
+    bool isStop  = false;
+
+    //Initiate the publish period and register the server status attribute reading
+    if(cntr.period())	cntr.sess.mSubScr[0].publInterval = 1e-6*cntr.period();
+    unsigned ServerStatusMIt = cntr.sess.mSubScr[0].monitoredItemAdd(OpcUa_Server_ServerStatus_State);
+
+    while(true) {
+	try {
+	    if(!cntr.redntUse()) {
+	    if(cntr.tmDelay > 0) {
+		cntr.callSt = false;
+		//Get data from blocks to parameters or calc for logical type parameters
+		MtxAlloc prmRes(cntr.enRes, true);
+		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		    cntr.pHd[iP].at().upValStd();
+		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		    cntr.pHd[iP].at().upValLog(isStart, isStop,
+		    (isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
+		prmRes.unlock();
+
+		cntr.tmDelay = vmax(0, cntr.tmDelay-(cntr.period()?(1e-9*(float)cntr.period()):1));
+
+		if(isStop) break;
+
+		TSYS::taskSleep(cntr.period()?cntr.period():1e9);
+
+		if(TSYS::taskEndRun()) isStop = true;
+		isStart = false;
+		continue;
+	    }
+
+	    cntr.callSt = true;
+
+	    if(!cntr.mUseRead && !cntr.sess.mSubScr[0].isActivated())	cntr.sess.mSubScr[0].activate(true);
+
+	    if(!isStart && !isStop && !TSYS::taskEndRun()) {
+		string tErr = cntr.poll(cntr.mUseRead);
+		if(tErr.size()) cntr.setCntrDelay(tErr);
+	    }
+
+	    if(cntr.tmDelay > 0)	continue;
+
+	    //Getting the controller-server status
+	    cntr.servSt = cntr.getValMIt(ServerStatusMIt).getI();
+
+	    //Get data from blocks to parameters or calc for logical type parameters
+	    MtxAlloc prmRes(cntr.enRes, true);
+	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		cntr.pHd[iP].at().upValStd();
+	    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
+		cntr.pHd[iP].at().upValLog(isStart, isStop,
+		    (isStart||isStop) ? DAQ_APER_FRQ : (tsk.period()?(1/tsk.period()):1e9/vmax(1e9/DAQ_APER_FRQ,cntr.period())));
+	    isStart = false;
+	    prmRes.unlock();
+
+	    //Generic acquisition alarm generate
+	    if(cntr.tmDelay <= 0 && !TSYS::taskEndRun()) {
+		if(cntr.alSt != 0) {
+		    cntr.alSt = 0;
+		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
+		}
+		cntr.tmDelay--;
+	    }
+
+	    cntr.callSt = false;
+
+	    }	// !cntr.redntUse()
+
+	} catch(TError &err) { cntr.setCntrDelay(TSYS::strMess(_("10:Generic error: %s."), err.mess.c_str())); /*mess_err(err.cat.c_str(), err.mess.c_str());*/ }
+
+	if(isStop) break;
+
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
+
+	if(TSYS::taskEndRun()) isStop = true;
+    }
+
+    //Closing the subscription and session ...
+    if(TSYS::taskEndRun())
+	try {
+	    if(!cntr.mUseRead) cntr.sess.mSubScr[0].activate(false);
+
+	    XML_N req("opc.tcp"); req.setAttr("id", "CloseALL");
+	    cntr.reqService(req);
+	} catch(TError &err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
+
+    cntr.prcSt = false;
+
+    return NULL;
+}
+
+void TMdContr::setCntrDelay( const string &err )
+{
+    if(alSt <= 0) {
+	alSt = 1;
+	alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(err,"=").c_str()));
+    }
+    acqErr = err;
+    tmDelay = restTm;
+}
+
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
@@ -450,8 +568,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero for disable periodic sync."), NULL);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecPolicy",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecMessMode",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/Cert",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID, "tp","str", "cols","90", "rows","7", NULL);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PvKey",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	if(startStat()) { ctrRemoveNode(opt,"/cntr/cfg/Cert"); ctrRemoveNode(opt,"/cntr/cfg/PvKey"); }
+	else {
+	    ctrMkNode2("fld",opt,-1,"/cntr/cfg/Cert",EVAL_STR,RWRW__,"root",SDAQ_ID, "tp","str", "cols","90", "rows","7", NULL);
+	    ctrMkNode("fld",opt,-1,"/cntr/cfg/PvKey",EVAL_STR,RWRW__,"root",SDAQ_ID);
+	}
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthUser",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/UseRead",EVAL_STR,startStat()?R_R___:RWRW__,"root",SDAQ_ID,
@@ -616,17 +737,66 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), pEl("w_attr")
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), acqErr(dataRes()), pEl("w_attr"), lCtx(NULL)
 {
-
+    acqErr.setVal("");
+    if(isLogic()) lCtx = new TLogCtx(this, name+"_OPCUAPrm");
 }
 
-TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
+TMdPrm::~TMdPrm( )
+{
+    nodeDelAll();
+    if(lCtx) delete lCtx;
+}
 
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
     if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
+}
+
+void TMdPrm::postDisable( int flag )
+{
+    TParamContr::postDisable(flag);
+
+    if(flag && isLogic()) {
+	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+	TConfig cfg(&mod->prmIOE());
+	cfg.cfg("PRM_ID").setS(id(), true);
+	SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+    }
+}
+
+TCntrNode &TMdPrm::operator=( const TCntrNode &node )
+{
+    TParamContr::operator=(node);
+
+    const TMdPrm *src_n = dynamic_cast<const TMdPrm*>(&node);
+    if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx) return *this;
+
+    //IO values copy
+    for(int iIO = 0; iIO < src_n->lCtx->ioSize(); iIO++)
+	if(src_n->lCtx->ioFlg(iIO)&TPrmTempl::CfgLink)
+	    lCtx->lnkAddrSet(iIO, src_n->lCtx->lnkAddr(iIO));
+	else lCtx->setS(iIO, src_n->lCtx->getS(iIO));
+
+    lCtx->chkLnkNeed = lCtx->initLnks();
+    modif();
+
+    return *this;
+}
+
+bool TMdPrm::isStd( ) const		{ return (type().name == "std"); }
+
+bool TMdPrm::isLogic( ) const		{ return (type().name == "logic"); }
+
+void TMdPrm::setType( const string &tpId )
+{
+    if(lCtx) { delete lCtx; lCtx = NULL; }
+
+    TParamContr::setType(tpId);
+
+    if(isLogic()) lCtx = new TLogCtx(this, name()+"_OPCUAPrm");
 }
 
 TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
@@ -637,114 +807,178 @@ void TMdPrm::enable( )
 
     TParamContr::enable();
 
-    MtxAlloc res(enRes);
-
     XML_N req("opc.tcp");
-    vector<string> als;
+    map<string, bool> als;
 
-    //Nodes list process and parameter's attributes creation
-    string snd;
-    for(int off = 0; (snd=TSYS::strLine(ndList(),0,&off)).size() || off < (int)ndList().size(); ) {
-	if(snd.empty() || snd[0] == '#') continue;
-	// Request for node class request
-	req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_NodeClass));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_BrowseName));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_DisplayName));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_Value));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_AccessLevel));
-	owner().reqService(req);
-	//if(!req.attr("err").empty()) {
-	    //mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
-	    //return req.attr("err");
-	//}
-	if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))	continue;
+    //Parse OPC-UA attributes and convert to string list for standard type parameter
+    if(isStd()) {
+	//Nodes list process and parameter's attributes creation
+	string aIt, aNd, aFlg, aId, aNm;
+	for(int off = 0; (aIt=TSYS::strLine(ndList(),0,&off)).size() || off < (int)ndList().size(); ) {
+	    if(aIt.empty() || aIt[0] == '#') continue;
 
-	// Variable node's attribute creation
-	if(s2i(req.childGet(0)->text()) == NC_Variable && s2i(req.childGet(4)->text())&ACS_Read) {
-	    als.push_back(snd);
+	    int itOff = 0;
+	    aNd = TSYS::strParse(aIt, 0, "|", &itOff);
+	    aFlg = TSYS::strParse(aIt, 0, "|", &itOff);
+	    aId = TSYS::strParse(aIt, 0, "|", &itOff);
+	    aNm = TSYS::strParse(aIt, 0, "|", &itOff);
 
-	    //  Value type prepare
-	    TFld::Type vtp = TFld::String;
-	    if(s2i(req.childGet(3)->attr("VarTp"))&OpcUa_Array) vtp = TFld::Object;
-	    else switch(s2i(req.childGet(3)->attr("VarTp"))&OpcUa_VarMask) {
-		case OpcUa_Boolean:								vtp = TFld::Boolean;	break;
-		case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
-		case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:	vtp = TFld::Integer;	break;
-		case OpcUa_Float: case OpcUa_Double:						vtp = TFld::Real;	break;
-	    }
+	    string svtp;
+	    TFld::Type vtp = TFld::Integer;
+	    unsigned vflg = 0;
 
-	    res.lock();
-	    // Find for already presented attribute
-	    string aid;
-	    for(unsigned iA = 0; iA < pEl.fldSize() && aid.empty(); iA++)
-		if(TSYS::strLine(pEl.fldAt(iA).reserve(),0) == snd) {
-		    if(pEl.fldAt(iA).type() != vtp)
-			try { pEl.fldDel(iA); break; }
-			catch(TError &err) { }
-		    aid = pEl.fldAt(iA).name();
-		}
+	    // Attribute creating from the hints
+	    if(aFlg.size()) {
+		//  Value type prepare
+		if(aFlg.find("b") != string::npos)	vtp = TFld::Boolean;
+		else if(aFlg.find("i") != string::npos)	vtp = TFld::Integer;
+		else if(aFlg.find("f") != string::npos)	vtp = TFld::Real;
+		else if(aFlg.find("s") != string::npos)	vtp = TFld::String;
+		else if(aFlg.find("o") != string::npos)	vtp = TFld::Object;
 
-	    // Create new attribute
-	    if(aid.empty()) {
+		//  Flags prepare
+		vflg = (aFlg.find("r") != string::npos && aFlg.find("w") != string::npos) ? TVal::DirWrite|TVal::DirRead :
+			((aFlg.find("w") != string::npos) ? TVal::DirWrite : TFld::NoWrite|TVal::DirRead);
+
 		//  Prepare attribute id
-		aid = TSYS::strEncode((isdigit(req.childGet(1)->text()[0])?TSYS::strParse(req.childGet(1)->text(),1,":"):req.childGet(1)->text()), TSYS::oscdID);
-		while(vlPresent(aid))	aid = TSYS::strLabEnum(aid);
-
-		pEl.fldAdd(new TFld(aid.c_str(),"",vtp,TFld::NoFlag));
+		if(aId.empty())
+		    aId = TSYS::strEncode((isdigit(aNd[0])?TSYS::strParse(aNd,1,":"):aNd), TSYS::oscdID);
 	    }
-	    int el_id = pEl.fldId(aid);
+	    // Attribute creating from the server information
+	    else {
+		// Request for node class request
+		req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
+		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_NodeClass));
+		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_BrowseName));
+		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_DisplayName));
+		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_Value));
+		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_AccessLevel));
+		owner().reqService(req);
+		//if(!req.attr("err").empty()) {
+		    //mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
+		    //return req.attr("err");
+		//}
+		if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))	continue;
 
-	    //  Flags prepare
-	    unsigned vflg = TVal::DirWrite|TVal::DirRead;
-	    if(!(s2i(req.childGet(4)->text())&ACS_Write))	vflg |= TFld::NoWrite;
+		// Variable node's attribute creation
+		if(s2i(req.childGet(0)->text()) == NC_Variable && s2i(req.childGet(4)->text())&ACS_Read) {
+		    svtp = req.childGet(3)->attr("VarTp");
+		    //  Value type prepare
+		    vtp = TFld::String;
+		    if(s2i(svtp)&OpcUa_Array) vtp = TFld::Object;
+		    else switch(s2i(svtp)&OpcUa_VarMask) {
+			case OpcUa_Boolean:							vtp = TFld::Boolean;	break;
+			case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
+			case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:vtp = TFld::Integer;	break;
+			case OpcUa_Float: case OpcUa_Double:					vtp = TFld::Real;	break;
+		    }
+
+		    //  Flags prepare
+		    vflg = TVal::DirWrite|TVal::DirRead;
+		    if(!(s2i(req.childGet(4)->text())&ACS_Write))	vflg |= TFld::NoWrite;
+
+		    //  Prepare attribute id
+		    if(aId.empty()) {
+			//   Checking for doubles
+			unsigned iA = 0;
+			while(iA < pEl.fldSize() && TSYS::strLine(pEl.fldAt(iA).reserve(),0) != aNd) iA++;
+			if(iA < pEl.fldSize())	aId = pEl.fldAt(iA).name();
+			else {
+			    //   ID creating
+			    aId = TSYS::strEncode((isdigit(req.childGet(1)->text()[0])?TSYS::strParse(req.childGet(1)->text(),1,":"):req.childGet(1)->text()), TSYS::oscdID);
+			    while(vlPresent(aId)) aId = TSYS::strLabEnum(aId);
+			}
+		    }
+		} else continue;
+	    }
+
+	    if(aNm.empty())	aNm = aId;
+
+	    if(!pEl.fldPresent(aId) || pEl.fldAt(pEl.fldId(aId)).type() != vtp) {
+		if(pEl.fldPresent(aId)) pEl.fldDel(pEl.fldId(aId));
+		pEl.fldAdd(new TFld(aId.c_str(),"",vtp,TFld::NoFlag));
+	    }
+
+	    int el_id = pEl.fldId(aId);
+
 	    pEl.fldAt(el_id).setFlg(vflg);
-
-	    //  Browse name
-	    string aNm = req.childGet(2)->text();
-	    size_t nmPos = aNm.find(":");
-	    if(nmPos!=string::npos) aNm.erase(0, nmPos+1);
 	    pEl.fldAt(el_id).setDescr(aNm);
 
-	    //  Register to monitor
-	    unsigned clntHndl = owner().sess.mSubScr[0].monitoredItemAdd(NodeId::fromAddr(snd));
+	    unsigned clntHndl = owner().sess.mSubScr[0].monitoredItemAdd(NodeId::fromAddr(aNd));
 
-	    pEl.fldAt(el_id).setReserve(snd+"\n"+req.childGet(3)->attr("VarTp")+"\n"+u2s(clntHndl));
+	    pEl.fldAt(el_id).setReserve(aNd+"\n"+svtp+"\n"+u2s(clntHndl));
 
-	    res.unlock();
+	    als[aId] = true;
+
+	    //>> Browse request for get child nodes
+	    /*req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",i2s(TProt::BD_BOTH));
+	    reqOPC(req);
+	    if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
+	    XMLNode *rn = req.childGet(0);*/
 	}
-
-	//>> Browse request for get child nodes
-	/*req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",i2s(TProt::BD_BOTH));
-	reqOPC(req);
-	if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
-	XMLNode *rn = req.childGet(0);*/
     }
+    //Template's function connect for logical type parameter
+    else if(isLogic() && lCtx)
+	try {
+	    //vector<string> als;
+	    bool to_make = false;
+	    if(!lCtx->func()) {
+		string m_tmpl = cfg("TMPL").getS();
+		lCtx->setFunc(&SYS->daq().at().tmplLibAt(TSYS::strParse(m_tmpl,0,".")).at().
+				at(TSYS::strParse(m_tmpl,1,".")).at().func().at());
+		to_make = true;
+	    }
+	    // Init attrubutes
+	    lCtx->addLinksAttrs(&pEl);
+
+	    // Load IO at enabling
+	    if(to_make) loadIO(true);
+
+	    // Init links
+	    lCtx->chkLnkNeed = lCtx->initLnks(true);
+
+	    // Init system attributes identifiers
+	    lCtx->idFreq  = lCtx->ioId("f_frq");
+	    lCtx->idStart = lCtx->ioId("f_start");
+	    lCtx->idStop  = lCtx->ioId("f_stop");
+	    lCtx->idErr   = lCtx->ioId("f_err");
+	    lCtx->idSh    = lCtx->ioId("SHIFR");
+	    lCtx->idNm    = lCtx->ioId("NAME");
+	    lCtx->idDscr  = lCtx->ioId("DESCR");
+	    int idThis    = lCtx->ioId("this");
+	    if(idThis >= 0) lCtx->setO(idThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+
+	    // First call
+	    if(owner().startStat() && !owner().redntUse()) upValLog(true, false, DAQ_APER_FRQ);
+
+	} catch(TError &err) { disable(); throw; }
 
     //Find for delete attribute
-    res.lock();
-    for(unsigned iA = 0, iP; iA < pEl.fldSize(); ) {
-	for(iP = 0; iP < als.size(); ++iP)
-	    if(TSYS::strLine(pEl.fldAt(iA).reserve(),0) == als[iP])	break;
-	if(iP >= als.size())
+    for(int iP = 0; isStd() && iP < (int)pEl.fldSize(); iP++)
+	if(als.find(pEl.fldAt(iP).name()) == als.end())
 	    try {
-		//  Unregister from monitor
-		//owner().sess.mSubScr[0].monitoredItemDel(str2uint(TSYS::strLine(pEl.fldAt(iA).reserve(),2)));
+		// Unregister from monitor
+		//owner().sess.mSubScr[0].monitoredItemDel(str2uint(TSYS::strLine(pEl.fldAt(iP).reserve(),2)));
 
-		pEl.fldDel(iA);
-		continue;
-	    } catch(TError &err) { }
-	++iA;
-    }
+		pEl.fldDel(iP); iP--;
+	    } catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 
-    owner().prmEn(id(), true);
+    owner().prmEn(this, true);
 }
 
 void TMdPrm::disable( )
 {
     if(!enableStat())  return;
 
-    owner().prmEn(id(), false);
+    if(lCtx && lCtx->func()) {
+	//Waiting the ordinal calculation finish
+	for(int iTm = 0; lCtx->isCalc() && iTm < prmWait_TM/prmWait_DL; iTm++) SYS->sysSleep(prmWait_DL);
+	//Termination the calculation
+	while(lCtx->isCalc()) { SYS->taskSendSIGALRM(owner().nodePath('.',true)); SYS->sysSleep(prmWait_DL); }
+    }
+
+    owner().prmEn(this, false);
+    if(lCtx && lCtx->func() && owner().startStat() && !owner().redntUse()) upValLog(false, true, DAQ_APER_FRQ);
 
     TParamContr::disable();
 
@@ -752,61 +986,300 @@ void TMdPrm::disable( )
     vector<string> ls;
     elem().fldList(ls);
     for(unsigned iEl = 0; iEl < ls.size(); iEl++)
-	vlAt(ls[iEl]).at().setS(EVAL_STR,0,true);
+	vlAt(ls[iEl]).at().setS(EVAL_STR, 0, true);
+
+    //Template's function disconnect
+    if(lCtx)	lCtx->cleanLnks(true);
 }
 
-void TMdPrm::upVal( )
+void TMdPrm::load_( )
 {
-    vector<string>	als;
-    AutoHD<TVal> vl;
-    string	nId;
-    uint32_t ndSt = 0;
+    if(SYS->cfgCtx() && toEnable() && !enableStat())	enable();
+    loadIO();
+}
 
-    vlList(als);
-    for(unsigned iA = 0; iA < als.size(); ++iA) {
-	vl = vlAt(als[iA]);
-	nId = TSYS::strLine(vl.at().fld().reserve(), 2);
-	if(nId.empty())	continue;
+void TMdPrm::loadIO( bool force )
+{
+    if(!enableStat() || !isLogic() || !lCtx) return;
 
-	vl.at().set(owner().getValMIt(str2uint(nId),&ndSt), 0, true);
-	vl.at().fld().setLen(ndSt);
+    //Load IO and init links
+    TConfig cfg(&mod->prmIOE());
+    cfg.cfg("PRM_ID").setS(ownerPath(true));
+    cfg.cfg("VALUE").setExtVal(true);
+    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+
+    for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
+	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
+	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
+	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force no translated
+	else if(lCtx->func()->io(iIO)->type() != IO::String)
+	    lCtx->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));		//Force no translated
+	else lCtx->setS(iIO, cfg.cfg("VALUE").getS());
     }
+    lCtx->chkLnkNeed = lCtx->initLnks();
+}
+
+void TMdPrm::save_( )
+{
+    TParamContr::save_();
+    saveIO();
+}
+
+void TMdPrm::saveIO( )
+{
+    //Save IO and init links
+    if(!enableStat() || !isLogic() || !lCtx) return;
+
+    TConfig cfg(&mod->prmIOE());
+    cfg.cfg("PRM_ID").setS(ownerPath(true));
+    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+    for(int iIO = 0; iIO < lCtx->func()->ioSize(); iIO++) {
+	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
+	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
+	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
+	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+    }
+}
+
+void TMdPrm::upValStd( )
+{
+    if(!isStd()) return;
+
+    MtxString w_err(dataRes());
+    AutoHD<TVal> pVal;
+    vector<string> ls;
+
+    elem().fldList(ls);
+    for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
+	pVal = vlAt(ls[iEl]);
+	if(!(pVal.at().fld().flg()&TVal::DirRead) || (pVal.at().fld().flg()&TVal::Dynamic)) continue;
+	pVal.at().set(owner().getVal(pVal.at().fld().reserve(),w_err), 0, true);
+    }
+
+    //Alarm set
+    acqErr.setVal(w_err.getVal());
+}
+
+void TMdPrm::upValLog( bool first, bool last, double frq )
+{
+    if(!isLogic())	return;
+
+    AutoHD<TVal> pVal;
+    vector<string> ls;
+
+    try {
+	if(lCtx->chkLnkNeed && !first && !last)	lCtx->chkLnkNeed = lCtx->initLnks();
+
+	//Set fixed system attributes
+	if(lCtx->idFreq >= 0)	lCtx->setR(lCtx->idFreq, frq);
+	if(lCtx->idStart >= 0)	lCtx->setB(lCtx->idStart, lCtx->isChangedProg(true) || first);
+	if(lCtx->idStop >= 0)	lCtx->setB(lCtx->idStop, last);
+	if(lCtx->idSh >= 0)	lCtx->setS(lCtx->idSh, id());
+	if(lCtx->idNm >= 0)	lCtx->setS(lCtx->idNm, name());
+	if(lCtx->idDscr >= 0)	lCtx->setS(lCtx->idDscr, descr());
+
+	//Get input links
+	lCtx->inputLinks();
+
+	//Calc template
+	lCtx->setMdfChk(true);
+	lCtx->calc();
+	if(SYS->modifCalc()) modif();
+
+	//Put output links
+	lCtx->outputLinks();
+
+	//Put fixed system attributes
+	if(lCtx->idNm >= 0 && lCtx->ioMdf(lCtx->idNm)) setName(lCtx->getS(lCtx->idNm));
+	if(lCtx->idDscr >= 0 && lCtx->ioMdf(lCtx->idDscr)) setDescr(lCtx->getS(lCtx->idDscr));
+
+	//Attribute's values update
+	elem().fldList(ls);
+	for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
+	    int id_lnk = lCtx->lnkId(ls[iEl]);
+	    if(id_lnk >= 0 && !lCtx->lnkActive(id_lnk)) id_lnk = -1;
+	    pVal = vlAt(ls[iEl]);
+	    if(pVal.at().fld().flg()&TVal::Dynamic)	continue;
+	    if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[iEl])), 0, true);
+	    else pVal.at().set(lCtx->lnkInput(id_lnk), 0, true);
+	}
+    } catch(TError &err) {
+	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_warning(nodePath().c_str(),_("Error of the calculation template."));
+    }
+
+    acqErr.setVal("");	//But it is not used for the type
+}
+
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
+    //  id, name - new attribute id and name;
+    //  tp - attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read only [ro];
+    //  selValsNms - two lines with values in first and it's names in first (separated by ";").
+    if(iid == "attrAdd" && prms.size() >= 1) {
+	if(!enableStat() || !isLogic())	return false;
+	TFld::Type tp = TFld::Real;
+	string stp, stp_ = (prms.size() >= 3) ? prms[2].getS() : "real";
+	stp.resize(stp_.length());
+	std::transform(stp_.begin(), stp_.end(), stp.begin(), ::tolower);
+	if(stp.find("boolean") != string::npos)		tp = TFld::Boolean;
+	else if(stp.find("integer") != string::npos)	tp = TFld::Integer;
+	else if(stp.find("real") != string::npos)	tp = TFld::Real;
+	else if(stp.find("string") != string::npos ||
+	    stp.find("text") != string::npos)		tp = TFld::String;
+	else if(stp.find("object") != string::npos)	tp = TFld::Object;
+
+	unsigned flg = TVal::Dynamic;
+	if(stp.find("sel") != string::npos)	flg |= TFld::Selectable;
+	if(stp.find("seled") != string::npos)	flg |= TFld::SelEdit;
+	if(stp.find("text") != string::npos)	flg |= TFld::FullText;
+	if(stp.find("ro") != string::npos)	flg |= TFld::NoWrite;
+
+	string	sVals = (prms.size() >= 4) ? prms[3].getS() : "";
+	string	sNms = TSYS::strLine(sVals, 1);
+	sVals = TSYS::strLine(sVals, 0);
+
+	MtxAlloc res(elem().resEl(), true);
+	unsigned aId = elem().fldId(prms[0].getS(), true);
+	if(aId < elem().fldSize()) {
+	    if(prms.size() >= 2 && prms[1].getS().size()) elem().fldAt(aId).setDescr(prms[1].getS());
+	    elem().fldAt(aId).setFlg(elem().fldAt(aId).flg()^((elem().fldAt(aId).flg()^flg)&(TFld::Selectable|TFld::SelEdit|TFld::FullText|TFld::NoWrite)));
+	    elem().fldAt(aId).setValues(sVals);
+	    elem().fldAt(aId).setSelNames(sNms);
+	    elem().fldAt(aId).setLen(SYS->sysTm());
+	}
+	else if(!vlPresent(prms[0].getS()))
+	    elem().fldAdd(new TFld(prms[0].getS().c_str(),prms[(prms.size()>=2)?1:0].getS().c_str(),tp,flg,
+				    i2s(SYS->sysTm()).c_str(),"",sVals.c_str(),sNms.c_str()));
+	return true;
+    }
+    //bool attrDel( string id ) - attribute <id> remove.
+    if(iid == "attrDel" && prms.size() >= 1) {
+	if(!enableStat() || !isLogic())	return false;
+	MtxAlloc res(elem().resEl(), true);
+	unsigned aId = elem().fldId(prms[0].getS(), true);
+	if(aId == elem().fldSize())	return false;
+	try { elem().fldDel(aId); } catch(TError&) { return false; }
+	return true;
+    }
+
+    return TParamContr::objFuncCall(iid, prms, user);
+}
+
+void TMdPrm::vlGet( TVal &val )
+{
+    if(!enableStat() || !owner().startStat()) {
+	if(val.name() == "err") {
+	    if(!enableStat())		val.setS(_("1:Parameter disabled."),0,true);
+	    else if(!owner().startStat()) val.setS(_("2:Acquisition stopped."),0,true);
+	} else val.setS(EVAL_STR, 0, true);
+	return;
+    }
+
+    if(owner().redntUse()) return;
+
+    if(val.name() == "err") {
+	if(owner().tmDelay > -1) val.setS(_("10:Error of connection or no response."), 0, true);
+	else if(!acqErr.getVal().empty()) val.setS(acqErr.getVal(), 0, true);
+	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr), 0, true);
+	else val.setS("0", 0, true);
+	/*else {
+	    //Checking the remote attributes for the error status
+	    uint32_t firstErr = 0;
+	    vector<uint32_t> astls;
+	    //MtxAlloc res(enRes, true);
+	    for(unsigned iA = 0; iA < pEl.fldSize(); iA++) {
+		astls.push_back(pEl.fldAt(iA).len());
+		if(pEl.fldAt(iA).len() && !firstErr) firstErr = pEl.fldAt(iA).len();
+	    }
+	    //res.unlock();
+	    string aLs;
+	    for(unsigned iA = 0; iA < astls.size(); iA++) aLs += TSYS::strMess(":0x%x",astls[iA]);
+	    val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
+	}*/
+    }
+}
+
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
+{
+    if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
+
+    if(vl.isEVal() || vl == pvl)return;
+
+    //Send to active reserve station
+    bool isRdnt = vlSetRednt(vo, vl, pvl);
+
+    //Direct write
+    bool wrRez = false;
+    // Standard type request
+    if(isStd() && !isRdnt)
+	wrRez = owner().setVal(vl, vo.fld().reserve(), acqErr);
+    // Logical type request
+    else if(isLogic()) {
+	int id_lnk = lCtx->lnkId(vo.name());
+	if(id_lnk >= 0 && !lCtx->lnkActive(id_lnk)) id_lnk = -1;
+	if(id_lnk < 0) { lCtx->set(lCtx->ioId(vo.name()), vl); wrRez = true; }
+	else if(!isRdnt) wrRez = lCtx->lnkOutput(id_lnk, vl);
+    }
+    if(!wrRez && !isRdnt) vo.setS(EVAL_STR, 0, true);
+}
+
+void TMdPrm::vlArchMake( TVal &val )
+{
+    TParamContr::vlArchMake(val);
+
+    if(val.arch().freeStat()) return;
+    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
+    val.arch().at().setHardGrid(true);
+    val.arch().at().setHighResTm(true);
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //Service commands process
-    string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")  { TParamContr::cntrCmdProc(opt); return; }
-
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",EVAL_STR,(owner().startStat()&&enableStat())?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
-	    "help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
-		"Variables wrote by separated lines into format: [ns:id].\n"
-		"Where:\n"
-		"  ns - names scope, number, zero value can missed;\n"
-		"  id - node identifier, number, string, bytes string and GUID.\n"
-		"Example:\n"
-		"  84 - root folder;\n"
-		"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string view;\n"
-		"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
-		"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and GUID view."));
-	ctrMkNode2("fld",opt,-1,"/prm/cfg/SEL_NDS",_("Node append"),(owner().startStat()&&enableStat())?0:RWRW__,"root",SDAQ_ID,
-	    "dest","select", "select","/prm/cfg/SEL_NDS_lst", NULL);
+	if(isStd()) {
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",EVAL_STR,(owner().startStat()&&enableStat())?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
+		"help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
+		    "Variables write by separate lines in the form \"{ns}:{id}[|[{flg}][|{id}[|{name}]]]\".\n"
+		    "Where:\n"
+		    "  ns  - name space, number; zero value can be omitted;\n"
+		    "  id  - node identifier by number, string, bytes string and GUID;\n"
+		    "  flg - flags of no requesting the metadata on the server:\n"
+		    "        value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/write mode (r-read, w-write);\n"
+		    "  id  - identifier of the created attribute;\n"
+		    "  name - name of the created attribute.\n"
+		    "Example:\n"
+		    "  84 - root folder;\n"
+		    "  3:\"BasicDevices2\"||var - basic devices node in the name space 3 and the string view with the force attribute ID;\n"
+		    "  4:\"61626364\"||var|Variable - node in the names space 4 and the byte string view with the force attribute ID and name;\n"
+		    "  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}|irw|var|Variable - node in the names space 4 and the GUID view with no requesting\n"
+		    "        the server metadata for RW Integer and the force attribute ID and name."));
+	    ctrMkNode2("fld",opt,-1,"/prm/cfg/SEL_NDS",_("Node append"),(owner().startStat()&&enableStat())?0:RWRW__,"root",SDAQ_ID,
+		"dest","select", "select","/prm/cfg/SEL_NDS_lst", NULL);
+	}
+	if(isLogic()) {
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
+	    if(enableStat())	lCtx->cntrCmdProc(opt);
+	}
 	return;
     }
 
     //Process command to page
-    if(a_path == "/prm/cfg/ND_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+    string a_path = opt->attr("path");
+    if(isStd() && a_path == "/prm/cfg/ND_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen");
 	opt->childAdd("rule")->setAttr("expr","\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}")->setAttr("color","darkblue");
 	opt->childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*)\\b")->setAttr("color","darkorange");
-	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","\\|[bifsorw]*|")->setAttr("color","red");
+	/*opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");*/
     }
-    else if(a_path == "/prm/cfg/SEL_NDS") {
+    else if(isStd() && a_path == "/prm/cfg/SEL_NDS") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(nodePath()+"selND","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    //Read for type check
@@ -830,7 +1303,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    if(!isSet || isStructVar)	TBDS::genDBSet(nodePath()+"selND", opt->text(), opt->attr("user"));
 	}
     }
-    else if(a_path == "/prm/cfg/SEL_NDS_lst" && ctrChkNode(opt)) {
+    else if(isStd() && a_path == "/prm/cfg/SEL_NDS_lst" && ctrChkNode(opt)) {
 	string selNd = TBDS::genDBGet(nodePath()+"selND",TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder), opt->attr("user"));
 	size_t stC = selNd.rfind(")"), stP = selNd.rfind("(", stC);
 	string cNodeId = (stP != string::npos && stC != string::npos) ? TSYS::strDecode(selNd.substr(stP+1,stC-stP-1)) : i2s(OpcUa_RootFolder);
@@ -868,76 +1341,91 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		" ("+TSYS::strEncode(rn->childGet(iN)->attr("nodeId"),TSYS::Custom,"()")+")");
 	}
     }
+    else if(isLogic() && a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
+	cfg("TMPL").setS(opt->text());
+	disable();
+	modif();
+    }
+    else if(isLogic() && enableStat() && lCtx->cntrCmdProc(opt))	;
     else TParamContr::cntrCmdProc(opt);
 }
 
-void TMdPrm::vlGet( TVal &val )
+//***************************************************
+//* Logical type parameter's context                *
+TMdPrm::TLogCtx::TLogCtx( TCntrNode *iobj, const string &name ) : TPrmTempl::Impl(iobj, name.c_str()),
+    chkLnkNeed(false), idFreq(-1), idStart(-1), idStop(-1), idErr(-1), idSh(-1), idNm(-1), idDscr(-1)
 {
-    if(!enableStat() || !owner().startStat()) {
-	if(val.name() == "err") {
-	    if(!enableStat())		val.setS(_("1:Parameter disabled."),0,true);
-	    else if(!owner().startStat()) val.setS(_("2:Acquisition stopped."),0,true);
-	}
-	else val.setS(EVAL_STR, 0, true);
-	return;
-    }
 
-    if(owner().redntUse()) return;
-
-    if(val.name() == "err") {
-	if(!owner().acqErr.getVal().empty()) val.setS(owner().acqErr.getVal(),0,true);
-	else {
-	    //Checking the remote attributes for the error status
-	    uint32_t firstErr = 0;
-	    vector<uint32_t> astls;
-	    MtxAlloc res(enRes, true);
-	    for(unsigned iA = 0; iA < pEl.fldSize(); iA++) {
-		astls.push_back(pEl.fldAt(iA).len());
-		if(pEl.fldAt(iA).len() && !firstErr) firstErr = pEl.fldAt(iA).len();
-	    }
-	    res.unlock();
-	    string aLs;
-	    for(unsigned iA = 0; iA < astls.size(); iA++) aLs += TSYS::strMess(":0x%x",astls[iA]);
-	    val.setS(TSYS::strMess(_("0x%x: Attribute's errors %s"),firstErr,aLs.c_str()),0,true);
-	}
-    }
 }
 
-void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
+bool TMdPrm::TLogCtx::lnkInit( int num, bool toRecnt )
 {
-    if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
+    //Common link forms
+    if(!TPrmTempl::Impl::lnkInit(num,toRecnt))	return false;
 
-    //Send to active reserve station
-    if(vlSetRednt(vo,vl,pvl))	return;
+    MtxAlloc res(lnkRes, true);
+    map<int,SLnk>::iterator it = lnks.find(num);
+    if(it == lnks.end() || it->second.addrSpec.size())	return false;
 
-    if(vl.isEVal() || vl == pvl)return;
+    NodeId lN = NodeId::fromAddr(it->second.addr, true);
+    if(!lN.isNull()) {
+	unsigned clntHndl = ((TMdPrm*)obj)->owner().sess.mSubScr[0].monitoredItemAdd(lN);
+	it->second.addrSpec = it->second.addr+"\n0\n"+u2s(clntHndl);
+	return true;
+    }
 
-    //Direct write
-    XML_N req("opc.tcp");
-
-    string wrVl;
-    AutoHD<TArrayObj> arr;
-    if(vl.type() == TVariant::Object && !(arr=vl.getO()).freeStat())
-	for(size_t iA = 0; iA < arr.at().arSize(); iA++) wrVl += arr.at().arGet(iA).getS() + "\n";
-    else wrVl = vl.getS();
-    req.setAttr("id", "Write")->
-	childAdd("node")->setAttr("nodeId", TSYS::strLine(vo.fld().reserve(),0))->
-			  setAttr("attributeId", i2s(AId_Value))->
-			  setAttr("VarTp", TSYS::strLine(vo.fld().reserve(),1))->
-			  setText(wrVl);
-    owner().reqService(req);
-    if(!req.attr("err").empty()) mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
-    else if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))
-	mess_err(nodePath().c_str(), "Write error status: %s", req.childGet(0)->attr("Status").c_str());
+    return false;
 }
 
-void TMdPrm::vlArchMake( TVal &val )
+bool TMdPrm::TLogCtx::lnkActive( int num )
 {
-    TParamContr::vlArchMake(val);
+    MtxAlloc res(lnkRes, true);
+    map<int,SLnk>::iterator it = lnks.find(num);
+    if(it != lnks.end() && it->second.addrSpec.size())	return true;
+    return TPrmTempl::Impl::lnkActive(num);
+}
 
-    if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
-    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
-    val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(true);
+TVariant TMdPrm::TLogCtx::lnkInput( int num )
+{
+    MtxAlloc res(lnkRes, true);
+    map<int,SLnk>::iterator it = lnks.find(num);
+    if(it == lnks.end()) return EVAL_REAL;
+    string addrSpec = it->second.addrSpec;
+    res.unlock();
+
+    return addrSpec.size() ? ((TMdPrm*)obj)->owner().getVal(addrSpec, ((TMdPrm*)obj)->acqErr) : TPrmTempl::Impl::lnkInput(num);
+}
+
+bool TMdPrm::TLogCtx::lnkOutput( int num, const TVariant &vl )
+{
+    MtxAlloc res(lnkRes, true);
+    map<int,SLnk>::iterator it = lnks.find(num);
+    if(it == lnks.end()) return false;
+    string addrSpec = it->second.addrSpec;
+    res.unlock();
+
+    if(addrSpec.size()) ((TMdPrm*)obj)->owner().setVal(vl, addrSpec, ((TMdPrm*)obj)->acqErr);
+    else return TPrmTempl::Impl::lnkOutput(num, vl);
+
+    return true;
+}
+
+void TMdPrm::TLogCtx::cleanLnks( bool andFunc )
+{
+    TPrmTempl::Impl::cleanLnks(andFunc);
+    idFreq = idStart = idStop = idErr = idSh = idNm = idDscr = -1;
+}
+
+string TMdPrm::TLogCtx::lnkHelp( )
+{
+    return _("Special address format:\n"
+	"OPC-UA node writes in the form \"{ns}:{id}\", where:\n"
+	"    ns - name space, number; zero value can be omitted;\n"
+	"    id - node identifier by number, string, bytes string and GUID.\n"
+	"Examples:\n"
+	"    84 - root directory;\n"
+	"    3:\"BasicDevices2\" - basic devices node in the name space 3 and the string view;\n"
+	"    4:\"61626364\" - node in the names space 4 and the byte string view;\n"
+	"    4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names space 4 and the GUID view.\n\n"
+	"Common address format:\n") + TPrmTempl::Impl::lnkHelp();
 }

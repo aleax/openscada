@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTCfg translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2004-2019.
+# Roman Savochenko <roman@oscada.org>, 2004-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 16:57+0200\n"
+"POT-Creation-Date: 2021-07-12 19:53+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "Name"
-msgstr "Ім'я"
+msgstr "Назва"
 
 msgid "Type"
 msgstr "Тип"
@@ -114,11 +114,9 @@ msgstr "Примусово завантажити дані елементу з �
 msgid ""
 "The button for loading the item data from DB forcibly, not only when it "
 "changed"
-msgstr ""
-"Кнопка примусового завантаження даних елементу з БД, не тільки коли змінено"
+msgstr "Кнопка примусового завантаження даних елементу з БД, не тільки коли змінено"
 
-msgid ""
-"Press for loading the item data from DB forcibly, not only when it changed."
+msgid "Press for loading the item data from DB forcibly, not only when it changed."
 msgstr ""
 "Натиснути для примусового завантаження даних елементу з БД, не тільки коли "
 "змінено."
@@ -141,13 +139,10 @@ msgstr "Примусово зберегти у БД"
 msgid "Save the item data to DB forcibly"
 msgstr "Примусово зберегти дані елементу у БД"
 
-msgid ""
-"The button for saving the item data to DB forcibly, not only when it changed"
-msgstr ""
-"Кнопка примусового збереження даних елементу у БД, не тільки коли змінено"
+msgid "The button for saving the item data to DB forcibly, not only when it changed"
+msgstr "Кнопка примусового збереження даних елементу у БД, не тільки коли змінено"
 
-msgid ""
-"Press for saving the item data to DB forcibly, not only when it changed."
+msgid "Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 "Натиснути для примусового збереження даних елементу у БД, не тільки коли "
 "змінено."
@@ -374,14 +369,11 @@ msgstr "Вузол '%1' вже присутній."
 msgid "... and yet %d nodes"
 msgstr "... та ще %d вузли"
 
-msgid "Are you sure of deleting the nodes '%1'?"
-msgstr "Ви дійсно бажаєте видалити вузли '%1'?"
+msgid "Are you sure of deleting the nodes: %1 ?"
+msgstr "Ви дійсно бажаєте видалити вузли: %1 ?"
 
 msgid "Deleting the nodes"
 msgstr "Видалення вузлів"
-
-msgid "Copying is not possible."
-msgstr "Копіювання неможливе."
 
 msgid "Selected"
 msgstr "Обраний"
@@ -398,8 +390,19 @@ msgstr "Копіювання вузлу '%1' до '%2'.\n"
 msgid "Do not ask for more."
 msgstr "Не запитувати більш."
 
-msgid "The node '%1' is already present. Continue?"
-msgstr "Вузол '%1' вже присутній. Продовжити?"
+msgid ""
+"The node '%1' is already present.\n"
+"Continue?"
+msgstr ""
+"Вузол '%1' вже присутній.\n"
+"Продовжити?"
+
+msgid ""
+"Copy/Move node '%1' error '%2'.\n"
+"Continue other nodes?"
+msgstr ""
+"Помилка Копіювання/Переміщення вузла '%1': '%2'.\n"
+"Продовжити інші вузли?"
 
 msgid "List of messages in the status bar:"
 msgstr "Перелік повідомлень рядка статусу:"
@@ -438,7 +441,7 @@ msgid "The manual '%1' was not found offline or online!"
 msgstr "Не знайдено підручника '%1' локально або у мережі!"
 
 msgid "<EVAL>"
-msgstr ""
+msgstr "<EVAL>"
 
 msgid "On"
 msgstr "Вкл"
@@ -469,9 +472,8 @@ msgstr "Час розширення/поновлення '%s': %f мс."
 msgid "Sending the changes to the selected ones"
 msgstr "Надсилання змін до обраних"
 
-#, c-format
-msgid "Send the command '%s' to other selected nodes \"%s\"?"
-msgstr "Надіслати команду '%s' до інших обраних вузлів \"%s\"?"
+msgid "Send the command '%1' to other selected nodes: %2 ?"
+msgstr "Надіслати команду '%1' до інших обраних вузлів: %2 ?"
 
 #, c-format
 msgid "Unknown host '%s'."
@@ -500,9 +502,6 @@ msgstr "%s| Перехід за посиланням '%s'!"
 #, c-format
 msgid "%s| Pressed down '%s'!"
 msgstr "%s| Натиснуто '%s'!"
-
-msgid "Value is missing: "
-msgstr "Значення відсутнє: "
 
 #, c-format
 msgid "%s| Changed '%s' from '%s' to '%s'!"
@@ -685,7 +684,7 @@ msgid "Name:"
 msgstr "Ім'я:"
 
 msgid "Ok"
-msgstr ""
+msgstr "Добре"
 
 msgid "Item type:"
 msgstr "Тип елементу:"
@@ -754,7 +753,7 @@ msgid "Initial user of the configurator"
 msgstr "Початковий користувач конфігуратору"
 
 msgid "ToolTip limit, zero to disable"
-msgstr "Обмеження ToolTip, ноль для вимкнення"
+msgstr "Обмеження ToolTip, нуль для вимкнення"
 
 msgid "Go to the configuration of the list of remote stations"
 msgstr "Перейти до конфігурації переліку віддалених станцій"
@@ -770,3 +769,4 @@ msgstr "QTCfg діалог"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Обрання ідентифікатору та ім'я вузлу"
+

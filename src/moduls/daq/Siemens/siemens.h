@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.h
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -75,7 +75,7 @@ enum ISOTCP_PDU_TAG { ISOTCP_OpenS7Connection = 0xF0, ISOTCP_Read = 0x04, ISOTCP
 //************************************************
 class TMdContr;
 
-class TMdPrm : public TParamContr, public TPrmTempl::Impl
+class TMdPrm: public TParamContr
 {
     public:
 	//Methods
@@ -84,24 +84,36 @@ class TMdPrm : public TParamContr, public TPrmTempl::Impl
 
 	TCntrNode &operator=( const TCntrNode &node );
 
+	bool isSimple( ) const;
+	bool isLogic( ) const;
+
 	void enable( );
 	void disable( );
 
-	void calc( bool first, bool last, double frq );	//Calc template's algoritmes
+	void upValSmpl( );
+	void upValLog( bool first, bool last, double frq );
+
+	TElem *dynElCntr( )	{ return &pEl; }
+	TElem &elem( )		{ return pEl; }
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	TMdContr &owner( ) const;
+
+	//Attributes
+	MtxString acqErr;
 
     protected:
 	//Methods
 	void load_( );
 	void save_( );
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void setType( const string &tpId );
 
     private:
 	//Methods
 	void postEnable( int flag );
 	void postDisable( int flag );
-
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void vlGet( TVal &vo );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
@@ -110,21 +122,39 @@ class TMdPrm : public TParamContr, public TPrmTempl::Impl
 	void loadIO( bool force = false );
 	void saveIO( );
 
-	//Links specific
-	bool lnkInit( int num, bool toRecnt = false );
-	bool lnkActive( int num );
-	TVariant lnkInput( int num );
-	bool lnkOutput( int num, const TVariant &vl );
-	string lnkHelp( );
-
 	//Attributes
 	TElem	pEl;				//Work atribute elements
 
-	bool	chkLnkNeed;
-	int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
+	// Logical type by template
+	//Data
+	//***************************************************
+	//* Logical type parameter's context                *
+	class TLogCtx : public TPrmTempl::Impl
+	{
+	    public:
+	    //Methods
+	    TLogCtx( TCntrNode *iobj, const string &name );
 
-	ResString	acqErr;
-	time_t		acqErrTm;
+	    bool lnkInit( int num, bool toRecnt = false );
+	    bool lnkActive( int num );
+	    TVariant lnkInput( int num );
+	    bool lnkOutput( int num, const TVariant &vl );
+
+	    void cleanLnks( bool andFunc = false );
+
+	    bool cntrCmdProc( XMLNode *opt, const string &pref = "/cfg" );
+
+	    //Attributes
+	    bool chkLnkNeed;	// Check lnks need flag
+	    int	idFreq, idStart, idStop, idErr, idSh, idNm, idDscr;	//Fixed system attributes identifiers
+
+	    protected:
+	    //Methods
+	    string lnkHelp( );
+	};
+
+	//Attributes
+	TLogCtx	*lCtx;
 };
 
 //************************************************
@@ -145,7 +175,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double period( )	{ return mPer; }
+	int64_t period( )	{ return mPer; }
 	string cron( )		{ return cfg("SCHEDULE").getS(); }
 	string addr( ) const	{ return cfg("ADDR").getS(); }
 	string addrTr( )	{ return cfg("ADDR_TR").getS(); }
@@ -156,8 +186,8 @@ class TMdContr: public TController
 
 	void connectRemotePLC( bool initOnly = false );
 	void disconnectRemotePLC( );
-	void getDB( unsigned n_db, long offset, string &buffer );
-	void putDB( unsigned n_db, long offset, const string &buffer );
+	void getDB( int n_db, long offset, string &buffer );
+	void putDB( int n_db, long offset, const string &buffer );
 
 	void redntDataUpdate( );
 
@@ -179,11 +209,12 @@ class TMdContr: public TController
 	void stop_( );
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
-	void prmEn( const string &id, bool val );	//Enable parameter to process list
+	void prmEn( TMdPrm *prm, bool val );
 	void regVal( const string &ival, bool wr );	//Register value for acquisition
+
 	// Values process
-	TVariant getVal( const string &iaddr, ResString &err );
-	void setVal( const TVariant &ivl, const string &iaddr, ResString &err );
+	TVariant getVal( const string &iaddr, MtxString &err );
+	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
 
 	// Service
 	void postDisable( int flag );				//Delete all DB if flag 1
@@ -224,8 +255,9 @@ class TMdContr: public TController
 		&mType,			//Connection type
 		&mSlot,
 		&mDev,			//CIF device number
-		&restTm;		//Restore timeout in s
+		&restTm;		//Restore timeout in seconds
 	char	&mAssincWR;		//Asynchronous write mode
+	int64_t	mPer;
 
 	bool	prcSt,			//Process task active
 		callSt,			//Calc now stat
@@ -250,7 +282,7 @@ class TMdContr: public TController
 	ResRW	reqDataRes,		//Access to generic request's data, mostly acqBlks
 		reqDataAsWrRes;		//Access to writeBlks
 
-	double	mPer, numR, numW, numErr;//Counters for read, wrote bytes and connection errors.
+	double	numR, numW, numErr;//Counters for read, wrote bytes and connection errors.
 	float	tmDelay;		//Delay time for next try connect
 };
 

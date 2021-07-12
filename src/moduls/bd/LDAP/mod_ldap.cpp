@@ -33,7 +33,7 @@
 #define MOD_NAME	_("Directory by LDAP")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.6.2"
+#define MOD_VER		"0.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of directories by LDAP.")
 #define MOD_LICENSE	"GPL2"
@@ -246,7 +246,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
     if(!owner().enableStat())	return false;
     mLstUse = SYS->sysTm();
 
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     vector< vector<string> >	inTbl, *tbl = &inTbl;
     MtxAlloc res(owner().connRes);

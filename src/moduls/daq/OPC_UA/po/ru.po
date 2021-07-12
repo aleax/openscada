@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-16 19:18+0300\n"
+"POT-Creation-Date: 2021-07-12 11:50+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -17,6 +17,9 @@ msgstr ""
 
 msgid "Parameters table"
 msgstr "Таблица параметров"
+
+msgid "Logical parameters table"
+msgstr "Таблица логических параметров"
 
 msgid "Acquisition schedule"
 msgstr "Планирование сбора"
@@ -66,13 +69,34 @@ msgstr "Стандарт"
 msgid "Nodes list"
 msgstr "Список узлов"
 
+msgid "Logical"
+msgstr "Логический"
+
+msgid "Parameter template"
+msgstr "Шаблон параметра"
+
+msgid "Parameter ID"
+msgstr "ИД параметра"
+
+msgid "Identifier"
+msgstr "Идентификатор"
+
+msgid "Value"
+msgstr "Значение"
+
 #, c-format
 msgid "Root folder (%d)"
 msgstr "Корневая директория (%d)"
 
+msgid "Task terminated! "
+msgstr "Задача прервана! "
+
+msgid "Error connecting."
+msgstr "Ошибка подключения."
+
 #, c-format
-msgid "Connection error. Restoring in %.6g s."
-msgstr "Ошибка подключения. Восстановление через %.6g с."
+msgid "Restoring in %.6g s. "
+msgstr "Восстановление через %.6g с. "
 
 msgid "Acquisition. "
 msgstr "Сбор. "
@@ -97,6 +121,7 @@ msgstr ""
 "Канал безопасности %u, токен %u, время жизни %s; Запроса ИД %u, держатель "
 "%u; Сеанс %s. "
 
+#, c-format
 msgid "Subscription %u, publishes %u, keep alive %s; Monitored items %u. "
 msgstr "Подписка %u, публикаций %u, удержание живым %s; Элеметнов мониторинга %u. "
 
@@ -114,8 +139,20 @@ msgstr "ОСТАНОВЛЕН"
 msgid "Remote host error"
 msgstr "Ошибка удалённого хоста"
 
+#, c-format
+msgid "Error '%s': 0x%x"
+msgstr "Ошибка '%s': 0x%x"
+
+#, c-format
+msgid "Write error status: %s"
+msgstr "Статус ошибки записи: %s"
+
 msgid "OK"
 msgstr "НОРМА"
+
+#, c-format
+msgid "10:Generic error: %s."
+msgstr "10:Общая ошибка: %s."
 
 msgid "Zero for disable periodic sync."
 msgstr "Ноль для отключения периодической синхронизации."
@@ -138,9 +175,6 @@ msgstr "Атрибуты"
 
 msgid "Attribute"
 msgstr "Атрибут"
-
-msgid "Value"
-msgstr "Значение"
 
 msgid "Unknown"
 msgstr "Неизвестен"
@@ -244,25 +278,85 @@ msgstr "Исполняемый"
 msgid "UserExecutable"
 msgstr "ИсполняемыйПользов"
 
+msgid "Error of the calculation template."
+msgstr "Ошибка вычисления шаблона."
+
+msgid "1:Parameter disabled."
+msgstr "1:Параметр отключен."
+
+msgid "2:Acquisition stopped."
+msgstr "2:Сбор остановлен."
+
+msgid "10:Error of connection or no response."
+msgstr "10:Ошибка соединения или нет ответа."
+
 msgid ""
 "Variables and it containers (Objects) list. All variables will put into the "
 "parameter attributes list.\n"
-"Variables wrote by separated lines into format: [ns:id].\n"
+"Variables write by separate lines in the form \"{ns}:{id}[|[{flg}][|{id}[|"
+"{name}]]]\".\n"
 "Where:\n"
-"  ns - names scope, number, zero value can missed;\n"
-"  id - node identifier, number, string, bytes string and GUID.\n"
+"  ns  - name space, number; zero value can be omitted;\n"
+"  id  - node identifier by number, string, bytes string and GUID;\n"
+"  flg - flags of no requesting the metadata on the server:\n"
+"        value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/"
+"write mode (r-read, w-write);\n"
+"  id  - identifier of the created attribute;\n"
+"  name - name of the created attribute.\n"
 "Example:\n"
 "  84 - root folder;\n"
-"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string "
-"view;\n"
-"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
-"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and "
-"GUID view."
+"  3:\"BasicDevices2\"||var - basic devices node in the name space 3 and the "
+"string view with the force attribute ID;\n"
+"  4:\"61626364\"||var|Variable - node in the names space 4 and the byte "
+"string view with the force attribute ID and name;\n"
+"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}|irw|var|Variable - node in the "
+"names space 4 and the GUID view with no requesting\n"
+"        the server metadata for RW Integer and the force attribute ID and "
+"name."
 msgstr ""
 "Список переменных и контейнеров (Объектов). Все переменные будут помещены в "
 "перечень атрибутов параметра.\n"
-"Переменные записываются отдельными строками в формате: [ns:id].\n"
+"Переменные записываются отдельными строками в форме \"{ns}:{id}[|[{flg}][|"
+"{id}[|{name}]]]\".\n"
 "Где:\n"
+"  ns  - область имён, числом; нулевое значение может быть опущено;\n"
+"  id  - идентификатор узла, числом, строкой, строкой байт или GUID;\n"
+"  flg - флажки неосуществления запроса целевых данных на сервере:\n"
+"        тип значения (b-Логический,i-Целое,f-Вещественное,s-Строка,o-"
+"Объект), режим чтения/записи (r-чтение, w-запись);\n"
+"  id  - идентификатор создаваемого атрибута;\n"
+"  name - имя создаваемого атрибута.\n"
+"Пример:\n"
+"  84 - корневая директория;\n"
+"  3:\"BasicDevices2\"||var - узел базовых устройств в области имён 3 и в "
+"виде строки с прямым ИД атрибута;\n"
+"  4:\"61626364\"||var|Variable - узел в области имён 4 и в виде строки байт "
+"с прямым ИД и названием атрибута;\n"
+"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}|irw|var|Variable - узел в области "
+"имён 4 и в виде GUID с неосуществлением запроса\n"
+"        целевых данных на предмет Целого Чтения-Записи и прямым ИД и "
+"названием атрибута."
+
+msgid "Node append"
+msgstr "Добавить узел"
+
+msgid ""
+"Special address format:\n"
+"OPC-UA node writes in the form \"{ns}:{id}\", where:\n"
+"    ns - name space, number; zero value can be omitted;\n"
+"    id - node identifier by number, string, bytes string and GUID.\n"
+"Examples:\n"
+"    84 - root directory;\n"
+"    3:\"BasicDevices2\" - basic devices node in the name space 3 and the "
+"string view;\n"
+"    4:\"61626364\" - node in the names space 4 and the byte string view;\n"
+"    4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names space 4 and "
+"the GUID view.\n"
+"\n"
+"Common address format:\n"
+msgstr ""
+"Формат специального адреса:\n"
+"OPC-UA узел записывается в форме \"{ns}:{id}\", где:\n"
 "  ns - область имён, числом; нулевое значение может быть опущено;\n"
 "  id - идентификатор узла, числом, строкой, строкой байт или GUID.\n"
 "Пример:\n"
@@ -271,23 +365,9 @@ msgstr ""
 "строки;\n"
 "  4:\"61626364\" - узел в области имён 4 и в виде строки байт;\n"
 "  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - узел в области имён 4 и в виде "
-"GUID."
-
-msgid "Node append"
-msgstr "Добавить узел"
-
-msgid "1:Parameter disabled."
-msgstr "1:Параметр отключен."
-
-msgid "2:Acquisition stopped."
-msgstr "2:Сбор остановлен."
-
-#, c-format
-msgid "0x%x: Attribute's errors %s"
-msgstr "0x%x: Ошибки атрибутов %s"
-
-msgid "Identifier"
-msgstr "Идентификатор"
+"GUID.\n"
+"\n"
+"Формат общего адреса:\n"
 
 msgid "Name"
 msgstr "Имя"
@@ -403,9 +483,9 @@ msgstr "Время очереди повторной передачи, сек."
 msgid "Set to 0 for automatic by cntrKeepAlive*publInterv"
 msgstr "Установить в 0 для автоматического по cntrKeepAlive*publInterv"
 
+#, c-format
 msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
-msgstr ""
-"%d(%s): от %s(живой %s), канал безопасности %u; Запросы публикации %u"
+msgstr "%d(%s): от %s(живой %s), канал безопасности %u; Запросы публикации %u"
 
 msgid "Closed"
 msgstr "Закрыто"
@@ -422,12 +502,14 @@ msgstr "Познее"
 msgid "KeepAlive"
 msgstr "УдержаниеЖивым"
 
+#, c-format
 msgid ""
 "%d: %s, session %d; Publish %s, interval %s, sequence %d, lifetime %d, keep "
 "alive %d; Monitored items %u; Retransmission queue %u"
 msgstr ""
-"%d: %s, сеанс %d; Публикация %s, интервал %s, последовательность %d, время жизни %d, "
-"удержание живым %d; Элементы мониторинга %u; Очередь повторной отправки %u"
+"%d: %s, сеанс %d; Публикация %s, интервал %s, последовательность %d, время "
+"жизни %d, удержание живым %d; Элементы мониторинга %u; Очередь повторной "
+"отправки %u"
 
 msgid "Disabled"
 msgstr "Отключен"
@@ -449,3 +531,4 @@ msgstr "Сервер OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Предоставляет реализацию OPC-UA сервиса сервера."
+

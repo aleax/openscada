@@ -75,7 +75,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0),
     mModifCalc(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
-    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL),
+    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
     srand(TSYS::curTime()%1000000);

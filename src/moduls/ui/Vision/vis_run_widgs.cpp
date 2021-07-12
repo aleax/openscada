@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -707,6 +707,8 @@ void RunPageView::closeEvent( QCloseEvent *event )
 
     //Freeing the notificators configuration for the page
     mainWin()->ntfReg(-1, "", id());
+
+    event->ignore();	//!!!! To real close from the control interface
 }
 
 void RunPageView::toPgCache( )

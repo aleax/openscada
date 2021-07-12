@@ -1653,7 +1653,7 @@ INSERT INTO tmplib_tests_io VALUES('test','in3','Input3',1,160,'DB Test|10',4,'�
 INSERT INTO tmplib_tests_io VALUES('test','in2','Input2',1,160,'DB Test|8|r8',3,'Вхід2','DB Тест|8','Вход2','DB Тест|8');
 INSERT INTO tmplib_tests_io VALUES('test','in1','Input1',1,160,'DB Test|6|i4',2,'Вхід1','DB Тест|6','Вход1','DB Тест|6');
 INSERT INTO tmplib_tests_io VALUES('test','in','Input',1,160,'DB Test|4',1,'Вхід','DB Тест|4','Вход','DB Тест|4');
-INSERT INTO tmplib_tests_io VALUES('test','di','DI',3,160,'DB Test|2.1',0,'','','','');
+INSERT INTO tmplib_tests_io VALUES('test','di','DI',3,160,'DB Test|2.1',0,'','DB Тест|2.1','','DB Тест|2.1');
 INSERT INTO tmplib_tests_io VALUES('gasPoint','F','Flow, m3/h',2,144,'F|var',0,'Витрати, м3/год','','Расход, м3/ч','');
 INSERT INTO tmplib_tests_io VALUES('gasPoint','Q','Volume, m3',2,16,'0',1,'Об''єм, м3','','Объём, м3','');
 INSERT INTO tmplib_tests_io VALUES('gasPoint','P','Pressure, kgH/sm2',2,144,'P|var',2,'Тиск, кГс/см2','','Давление, кГс/см2','');
@@ -9361,7 +9361,7 @@ curMode = mode;
 INSERT INTO lib_Controllers VALUES('test','test','test','test','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko
-Version: 1.1.0
+Version: 1.1.1
 ','','',1,10,0,'/*using Special.FLibSYS;
 
 out+=10;

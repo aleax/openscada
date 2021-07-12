@@ -329,10 +329,10 @@ INSERT INTO LogLevPrm_gen_io VALUES('P4','var','23.7104231699894','','');
 INSERT INTO LogLevPrm_gen_io VALUES('P4','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO LogLevPrm_gen_io VALUES('P4','min','0','','');
 INSERT INTO LogLevPrm_gen_io VALUES('P4','max','50','','');
-INSERT INTO LogLevPrm_gen_io VALUES('P4','aMin','30','','');
-INSERT INTO LogLevPrm_gen_io VALUES('P4','aMax','10','','');
-INSERT INTO LogLevPrm_gen_io VALUES('P4','wMin','25','','');
-INSERT INTO LogLevPrm_gen_io VALUES('P4','wMax','15','','');
+INSERT INTO LogLevPrm_gen_io VALUES('P4','aMin','10','','');
+INSERT INTO LogLevPrm_gen_io VALUES('P4','aMax','30','','');
+INSERT INTO LogLevPrm_gen_io VALUES('P4','wMin','15','','');
+INSERT INTO LogLevPrm_gen_io VALUES('P4','wMax','25','','');
 INSERT INTO LogLevPrm_gen_io VALUES('P4','iAdd','0','','');
 INSERT INTO LogLevPrm_gen_io VALUES('P4','iMult','1','','');
 INSERT INTO LogLevPrm_gen_io VALUES('P4','f_start','0','','');
@@ -1210,9 +1210,11 @@ INSERT INTO wlb_originals_io VALUES('Diagram','parNum','1',0,'','','','','','','
 INSERT INTO wlb_originals_io VALUES('Document','time','0',0,'','','','','','','','','');
 INSERT INTO wlb_originals_io VALUES('Document','n','0',0,'','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'OPC_UA_Prm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ND_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO OPC_UA_Prm_test VALUES('test','','','','','','','',1,'4:"DAQ.System.AutoDA.CPULoad.load"
+INSERT INTO OPC_UA_Prm_test VALUES('test','','','','','','','',1,'4:"DAQ.System.AutoDA.CPULoad.load"||loadCPU|CPU Load
 4:"DAQ.System.AutoDA.MemInfo.use"
-4:"DAQ.System.AutoDA.MemInfo.free"');
+4:"DAQ.System.AutoDA.MemInfo.free"
+4:"DAQ.LogicLev.gen.F3.var"|fr|F3
+4:"DAQ.LogicLev.gen.F4.ed"|srw|edF4|F4 dimension"');
 CREATE TABLE IF NOT EXISTS 'ModBusPrm_testTCP' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ATTR_LS" TEXT DEFAULT '' ,"ru#ATTR_LS" TEXT DEFAULT '' ,"uk#ATTR_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO ModBusPrm_testTCP VALUES('test','','','','','','','',1,'R:0:r:reg0:Register 0
 R:1:r:reg1:Register 1

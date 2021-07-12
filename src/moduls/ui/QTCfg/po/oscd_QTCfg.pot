@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 17:07+0200\n"
+"POT-Creation-Date: 2021-07-12 19:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -363,13 +363,10 @@ msgstr ""
 msgid "... and yet %d nodes"
 msgstr ""
 
-msgid "Are you sure of deleting the nodes '%1'?"
+msgid "Are you sure of deleting the nodes: %1 ?"
 msgstr ""
 
 msgid "Deleting the nodes"
-msgstr ""
-
-msgid "Copying is not possible."
 msgstr ""
 
 msgid "Selected"
@@ -387,7 +384,14 @@ msgstr ""
 msgid "Do not ask for more."
 msgstr ""
 
-msgid "The node '%1' is already present. Continue?"
+msgid ""
+"The node '%1' is already present.\n"
+"Continue?"
+msgstr ""
+
+msgid ""
+"Copy/Move node '%1' error '%2'.\n"
+"Continue other nodes?"
 msgstr ""
 
 msgid "List of messages in the status bar:"
@@ -446,8 +450,7 @@ msgstr ""
 msgid "Sending the changes to the selected ones"
 msgstr ""
 
-#, c-format
-msgid "Send the command '%s' to other selected nodes \"%s\"?"
+msgid "Send the command '%1' to other selected nodes: %2 ?"
 msgstr ""
 
 #, c-format
@@ -476,9 +479,6 @@ msgstr ""
 
 #, c-format
 msgid "%s| Pressed down '%s'!"
-msgstr ""
-
-msgid "Value is missing: "
 msgstr ""
 
 #, c-format

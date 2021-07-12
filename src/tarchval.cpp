@@ -546,7 +546,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 	    return eval;
 	}
     }
-    //Proccess flow buffer
+    //Process the flow buffer
     else {
 	if(hgResTm) {
 	    int c_end = buf.tmHigh->size()-1;
@@ -800,7 +800,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 	    }
 	}
     }
-    //Proccess flow buffer
+    //Process the flow buffer
     else {
 	if(hgResTm) {
 	    SHg b_el = { tm, value };
@@ -1091,7 +1091,8 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 	    if(!pattrSrc.at().arch().freeStat() && &pattrSrc.at().arch().at() != this) {
 		if(!noex) {
 		    pattrSrc.free();
-		    throw err_sys(_("Archive '%s' is already connected to the target parameter '%s'."),
+		    // Appears at group copy on Vinnica Aviaries 
+		    throw err_sys(TError::Arch_Val_DblVSrc, _("Archive '%s' is already connected to the target parameter '%s'."),
 			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
 		}
 	    }
@@ -1110,7 +1111,8 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 	    if(!pattrSrc.at().arch().freeStat() && &pattrSrc.at().arch().at() != this) {
 		if(!noex) {
 		    pattrSrc.free();
-		    throw err_sys(_("Archive '%s' is already connected to the target parameter '%s'."),
+		    // Appears at group copy on Vinnica Aviaries 
+		    throw err_sys(TError::Arch_Val_DblVSrc, _("Archive '%s' is already connected to the target parameter '%s'."),
 			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
 		}
 	    }

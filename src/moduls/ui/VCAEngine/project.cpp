@@ -1249,7 +1249,7 @@ void Page::setEnable( bool val, bool force )
     if(prjFlags()&Page::Empty) cfg("PARENT").setS("root");
     else if(prjFlags()&Page::Link) {
 	//Checking for the recursion
-	if(parentNm().empty() || path().find(parentNm()) != string::npos)
+	if(parentNm().empty() || path() == ("/"+TSYS::pathLev(path(),0)+parentNm()))
 	    throw err_sys(_("The target page '%s' of the link is empty or recursive!"), parentNm().c_str());
 
 	mParent = ownerProj()->nodeAt(parentNm());

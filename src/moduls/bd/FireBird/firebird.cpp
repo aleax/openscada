@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.4"
+#define MOD_VER		"2.5.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -532,7 +532,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
     if(tblStrct.empty()) throw err_sys(_("The table is empty."));
     mLstUse = SYS->sysTm();
 
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     //Check for no present and no empty keys allow
     if(row == 0) {

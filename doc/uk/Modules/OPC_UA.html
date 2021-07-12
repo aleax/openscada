@@ -30,7 +30,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Клієнт OPC-UA
 </td>
-<td> 2.1 </td>
+<td> 2.3 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -88,12 +88,12 @@
 <li> <b>Спонсорування, 2 роки ТП на 13 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Дмитро Ликов, ТОВ Вектор</li>
 <li> <b>Спонсорування, перенесення коду протоколу до LGPL бібліотеки, значного вдосконалення та документування на 8.4 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Олександр Леута, MYSCADA</li>
 <li> <b>Спонсорування, роботу з UAExpert 1.4 та kepware2 на 0.9 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Устьянцев Михайло</li>
-<li> <b>Спонсорування, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Update4#OPC_UA" title="Special:MyLanguage/Documents/Release 0.9/Update4">роботу з UAExpert 1.5, реалізації клієнтського Publish та Chunks, значної уніфікації</a> та цілковитої ревізії документу на 9.5 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Fund" title="Special:MyLanguage/Fund">Фонд</a></li>
+<li> <b>Спонсорування, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Update4#OPC_UA" title="Special:MyLanguage/Documents/Release 0.9/Update4">роботу з UAExpert 1.5, реалізації клієнтського Publish та Chunks, значної уніфікації</a>, підтримки Логічного Рівня та цілковитої ревізії документу на 10.4 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Fund" title="Special:MyLanguage/Fund">Фонд</a></li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">Задача розширення модуля</a></li>
 <li> <b>Зробити (To Do):</b></li></ul>
 <dl><dd> + відревізувати представницьку сторінку документації;</dd>
 <dd> - вирішити суперечність у <i>Client::messIO()</i> стосовно змішування режиму чистого запиту із режимом вільного читання/запису та часу очікування тут відповіді без прямої передачі таймауту підключення;</dd>
-<dd> - доповнити вбудованим Логічним Режимом DAQ-Параметрів;</dd>
+<dd> + доповнити вбудованим Логічним Режимом DAQ-Параметрів;</dd>
 <dd> - додати підтримку автентифікації до вхідної-серверної частини протоколу;</dd>
 <dd> - додати автоматичне створення вхідних транспортів та їх пре-конфігурацію із властивостей об'єкту КінцевогоВузла;</dd>
 <dd> + реалізувати запит-сервіс "Publish" та "шматки" у клієнтській частині;</dd>
@@ -121,65 +121,71 @@
 <li class="toclevel-1 tocsection-4"><a href="#.D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.B7.D0.B1.D0.BE.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="tocnumber">3</span> <span class="toctext">Модуль збору даних</span></a>
 <ul>
 <li class="toclevel-2 tocsection-5"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="tocnumber">3.1</span> <span class="toctext">Об'єкт контролеру</span></a></li>
-<li class="toclevel-2 tocsection-6"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">3.2</span> <span class="toctext">Параметри</span></a></li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-7"><a href="#.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_libOPC_UA"><span class="tocnumber">4</span> <span class="toctext">Бібліотека libOPC_UA</span></a>
+<li class="toclevel-2 tocsection-6"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="tocnumber">3.2</span> <span class="toctext">Параметри</span></a>
 <ul>
-<li class="toclevel-2 tocsection-8"><a href="#.D0.A1.D0.BB.D1.83.D0.B6.D0.B1.D0.BE.D0.B2.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8.2C_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D1.82.D0.B0_.D0.BA.D0.BB.D0.B0.D1.81_UA"><span class="tocnumber">4.1</span> <span class="toctext">Службові об'єкти, функції та клас UA</span></a>
+<li class="toclevel-3 tocsection-7"><a href="#.D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.28std.29"><span class="tocnumber">3.2.1</span> <span class="toctext">Стандартний (std)</span></a></li>
+<li class="toclevel-3 tocsection-8"><a href="#.D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28logic.29"><span class="tocnumber">3.2.2</span> <span class="toctext">Логічний (logic)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-9"><a href="#API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">3.3</span> <span class="toctext"><span>API користувацького програмування</span></span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#.D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_libOPC_UA"><span class="tocnumber">4</span> <span class="toctext">Бібліотека libOPC_UA</span></a>
 <ul>
-<li class="toclevel-3 tocsection-9"><a href="#.D0.94.D0.B0.D0.BD.D1.96"><span class="tocnumber">4.1.1</span> <span class="toctext">Дані</span></a></li>
-<li class="toclevel-3 tocsection-10"><a href="#.D0.97.D0.BE.D0.B2.D0.BD.D1.96.D1.88.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="tocnumber">4.1.2</span> <span class="toctext">Зовнішні функції</span></a></li>
-<li class="toclevel-3 tocsection-11"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B0.D0.B2.D1.82.D0.BE.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.BD.D0.BE.D0.B3.D0.BE_.D1.80.D0.BE.D0.B7.D0.B1.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_POSIX_.D0.BC.D1.8E.D1.82.D0.B5.D0.BA.D1.81.D1.83_.D0.B4.D0.BB.D1.8F_OPC_.28OPCAlloc.29"><span class="tocnumber">4.1.3</span> <span class="toctext">Об'єкт автоматичного розблоковування POSIX мютексу для OPC (OPCAlloc)</span></a></li>
-<li class="toclevel-3 tocsection-12"><a href="#.D0.9F.D0.BE.D0.BC.D0.B8.D0.BB.D0.BA.D0.B0_OPC_.28OPCError.29"><span class="tocnumber">4.1.4</span> <span class="toctext">Помилка OPC (OPCError)</span></a></li>
-<li class="toclevel-3 tocsection-13"><a href="#XML-.D1.82.D0.B5.D0.B3_.28XML_N.29"><span class="tocnumber">4.1.5</span> <span class="toctext">XML-тег (XML_N)</span></a></li>
-<li class="toclevel-3 tocsection-14"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_OPC-UA_.28NodeId.29"><span class="tocnumber">4.1.6</span> <span class="toctext">Об'єкт вузла OPC-UA (NodeId)</span></a></li>
-<li class="toclevel-3 tocsection-15"><a href="#.D0.9A.D0.BE.D1.80.D0.B5.D0.BD.D0.B5.D0.B2.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_OPC-UA_.28UA.29"><span class="tocnumber">4.1.7</span> <span class="toctext">Кореневий об'єкт протоколу OPC-UA (UA)</span></a>
+<li class="toclevel-2 tocsection-11"><a href="#.D0.A1.D0.BB.D1.83.D0.B6.D0.B1.D0.BE.D0.B2.D1.96_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82.D0.B8.2C_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97_.D1.82.D0.B0_.D0.BA.D0.BB.D0.B0.D1.81_UA"><span class="tocnumber">4.1</span> <span class="toctext">Службові об'єкти, функції та клас UA</span></a>
 <ul>
-<li class="toclevel-4 tocsection-16"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.96.D0.B2_.D0.B1.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B8_.28SecuritySetting.29"><span class="tocnumber">4.1.7.1</span> <span class="toctext">Включений об'єкт параметрів безпеки (SecuritySetting)</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-2 tocsection-17"><a href="#.D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.9A.D0.BB.D1.96.D1.94.D0.BD.D1.82.D1.83_.28Client-.3EUA.29"><span class="tocnumber">4.2</span> <span class="toctext">Основний об'єкт Клієнту (Client-&gt;UA)</span></a>
+<li class="toclevel-3 tocsection-12"><a href="#.D0.94.D0.B0.D0.BD.D1.96"><span class="tocnumber">4.1.1</span> <span class="toctext">Дані</span></a></li>
+<li class="toclevel-3 tocsection-13"><a href="#.D0.97.D0.BE.D0.B2.D0.BD.D1.96.D1.88.D0.BD.D1.96_.D1.84.D1.83.D0.BD.D0.BA.D1.86.D1.96.D1.97"><span class="tocnumber">4.1.2</span> <span class="toctext">Зовнішні функції</span></a></li>
+<li class="toclevel-3 tocsection-14"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B0.D0.B2.D1.82.D0.BE.D0.BC.D0.B0.D1.82.D0.B8.D1.87.D0.BD.D0.BE.D0.B3.D0.BE_.D1.80.D0.BE.D0.B7.D0.B1.D0.BB.D0.BE.D0.BA.D0.BE.D0.B2.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_POSIX_.D0.BC.D1.8E.D1.82.D0.B5.D0.BA.D1.81.D1.83_.D0.B4.D0.BB.D1.8F_OPC_.28OPCAlloc.29"><span class="tocnumber">4.1.3</span> <span class="toctext">Об'єкт автоматичного розблоковування POSIX мютексу для OPC (OPCAlloc)</span></a></li>
+<li class="toclevel-3 tocsection-15"><a href="#.D0.9F.D0.BE.D0.BC.D0.B8.D0.BB.D0.BA.D0.B0_OPC_.28OPCError.29"><span class="tocnumber">4.1.4</span> <span class="toctext">Помилка OPC (OPCError)</span></a></li>
+<li class="toclevel-3 tocsection-16"><a href="#XML-.D1.82.D0.B5.D0.B3_.28XML_N.29"><span class="tocnumber">4.1.5</span> <span class="toctext">XML-тег (XML_N)</span></a></li>
+<li class="toclevel-3 tocsection-17"><a href="#.D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.B2.D1.83.D0.B7.D0.BB.D0.B0_OPC-UA_.28NodeId.29"><span class="tocnumber">4.1.6</span> <span class="toctext">Об'єкт вузла OPC-UA (NodeId)</span></a></li>
+<li class="toclevel-3 tocsection-18"><a href="#.D0.9A.D0.BE.D1.80.D0.B5.D0.BD.D0.B5.D0.B2.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D1.83_OPC-UA_.28UA.29"><span class="tocnumber">4.1.7</span> <span class="toctext">Кореневий об'єкт протоколу OPC-UA (UA)</span></a>
 <ul>
-<li class="toclevel-3 tocsection-18"><a href="#.D0.9A.D0.BE.D0.BC.D0.BF.D0.BB.D0.B5.D0.BA.D1.81.D0.BD.D0.B8.D0.B9_.D1.81.D0.B5.D0.B0.D0.BD.D1.81_.D0.9A.D0.BB.D1.96.D1.94.D0.BD.D1.82.D1.83_.28Client::SClntSess.29"><span class="tocnumber">4.2.1</span> <span class="toctext">Комплексний сеанс Клієнту (Client::SClntSess)</span></a>
+<li class="toclevel-4 tocsection-19"><a href="#.D0.92.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BF.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.96.D0.B2_.D0.B1.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B8_.28SecuritySetting.29"><span class="tocnumber">4.1.7.1</span> <span class="toctext">Включений об'єкт параметрів безпеки (SecuritySetting)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-20"><a href="#.D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.9A.D0.BB.D1.96.D1.94.D0.BD.D1.82.D1.83_.28Client-.3EUA.29"><span class="tocnumber">4.2</span> <span class="toctext">Основний об'єкт Клієнту (Client-&gt;UA)</span></a>
 <ul>
-<li class="toclevel-4 tocsection-19"><a href="#.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B0_.D0.9A.D0.BB.D1.96.D1.94.D0.BD.D1.82.D1.83_.28Client::Subscr.29"><span class="tocnumber">4.2.1.1</span> <span class="toctext">Підписка Клієнту (Client::Subscr)</span></a>
+<li class="toclevel-3 tocsection-21"><a href="#.D0.9A.D0.BE.D0.BC.D0.BF.D0.BB.D0.B5.D0.BA.D1.81.D0.BD.D0.B8.D0.B9_.D1.81.D0.B5.D0.B0.D0.BD.D1.81_.D0.9A.D0.BB.D1.96.D1.94.D0.BD.D1.82.D1.83_.28Client::SClntSess.29"><span class="tocnumber">4.2.1</span> <span class="toctext">Комплексний сеанс Клієнту (Client::SClntSess)</span></a>
 <ul>
-<li class="toclevel-5 tocsection-20"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.9C.D0.BE.D0.BD.D1.96.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D1.83_.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B8_.D0.9A.D0.BB.D1.96.D1.94.D0.BD.D1.82.D1.83_.28Client::Subscr::MonitItem.29"><span class="tocnumber">4.2.1.1.1</span> <span class="toctext">Елемент Моніторингу Підписки Клієнту (Client::Subscr::MonitItem)</span></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-2 tocsection-21"><a href="#.D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server-.3EUA.29"><span class="tocnumber">4.3</span> <span class="toctext">Основний об'єкт Серверу (Server-&gt;UA)</span></a>
+<li class="toclevel-4 tocsection-22"><a href="#.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B0_.D0.9A.D0.BB.D1.96.D1.94.D0.BD.D1.82.D1.83_.28Client::Subscr.29"><span class="tocnumber">4.2.1.1</span> <span class="toctext">Підписка Клієнту (Client::Subscr)</span></a>
 <ul>
-<li class="toclevel-3 tocsection-22"><a href="#.D0.9A.D0.B0.D0.BD.D0.B0.D0.BB_.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B8_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::SecCnl.29"><span class="tocnumber">4.3.1</span> <span class="toctext">Канал Безпеки Серверу (Server::SecCnl)</span></a></li>
-<li class="toclevel-3 tocsection-23"><a href="#.D0.A1.D0.B5.D0.B0.D0.BD.D1.81_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Sess.29"><span class="tocnumber">4.3.2</span> <span class="toctext">Сеанс Серверу (Server::Sess)</span></a>
+<li class="toclevel-5 tocsection-23"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.9C.D0.BE.D0.BD.D1.96.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D1.83_.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B8_.D0.9A.D0.BB.D1.96.D1.94.D0.BD.D1.82.D1.83_.28Client::Subscr::MonitItem.29"><span class="tocnumber">4.2.1.1.1</span> <span class="toctext">Елемент Моніторингу Підписки Клієнту (Client::Subscr::MonitItem)</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-24"><a href="#.D0.9E.D1.81.D0.BD.D0.BE.D0.B2.D0.BD.D0.B8.D0.B9_.D0.BE.D0.B1.27.D1.94.D0.BA.D1.82_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server-.3EUA.29"><span class="tocnumber">4.3</span> <span class="toctext">Основний об'єкт Серверу (Server-&gt;UA)</span></a>
 <ul>
-<li class="toclevel-4 tocsection-24"><a href="#.D0.A2.D0.BE.D1.87.D0.BA.D0.B0_.D0.BF.D1.80.D0.BE.D0.B4.D0.BE.D0.B2.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D1.83_.D0.A1.D0.B5.D0.B0.D0.BD.D1.81.D1.83_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Sess::ContPoint.29"><span class="tocnumber">4.3.2.1</span> <span class="toctext">Точка продовження огляду Сеансу Серверу (Server::Sess::ContPoint)</span></a></li>
-</ul>
-</li>
-<li class="toclevel-3 tocsection-25"><a href="#.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B0_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Subscr.29"><span class="tocnumber">4.3.3</span> <span class="toctext">Підписка Серверу (Server::Subscr)</span></a>
+<li class="toclevel-3 tocsection-25"><a href="#.D0.9A.D0.B0.D0.BD.D0.B0.D0.BB_.D0.91.D0.B5.D0.B7.D0.BF.D0.B5.D0.BA.D0.B8_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::SecCnl.29"><span class="tocnumber">4.3.1</span> <span class="toctext">Канал Безпеки Серверу (Server::SecCnl)</span></a></li>
+<li class="toclevel-3 tocsection-26"><a href="#.D0.A1.D0.B5.D0.B0.D0.BD.D1.81_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Sess.29"><span class="tocnumber">4.3.2</span> <span class="toctext">Сеанс Серверу (Server::Sess)</span></a>
 <ul>
-<li class="toclevel-4 tocsection-26"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.9C.D0.BE.D0.BD.D1.96.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D1.83_.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B8_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Subscr::MonitItem.29"><span class="tocnumber">4.3.3.1</span> <span class="toctext">Елемент Моніторингу Підписки Серверу (Server::Subscr::MonitItem)</span></a>
+<li class="toclevel-4 tocsection-27"><a href="#.D0.A2.D0.BE.D1.87.D0.BA.D0.B0_.D0.BF.D1.80.D0.BE.D0.B4.D0.BE.D0.B2.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D1.83_.D0.A1.D0.B5.D0.B0.D0.BD.D1.81.D1.83_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Sess::ContPoint.29"><span class="tocnumber">4.3.2.1</span> <span class="toctext">Точка продовження огляду Сеансу Серверу (Server::Sess::ContPoint)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-3 tocsection-28"><a href="#.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B0_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Subscr.29"><span class="tocnumber">4.3.3</span> <span class="toctext">Підписка Серверу (Server::Subscr)</span></a>
 <ul>
-<li class="toclevel-5 tocsection-27"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F_.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.83_.D0.9C.D0.BE.D0.BD.D1.96.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D1.83_.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B8_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Subscr::MonitItem::Val.29"><span class="tocnumber">4.3.3.1.1</span> <span class="toctext">Елемент значення Елементу Моніторингу Підписки Серверу (Server::Subscr::MonitItem::Val)</span></a></li>
+<li class="toclevel-4 tocsection-29"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.9C.D0.BE.D0.BD.D1.96.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D1.83_.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B8_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Subscr::MonitItem.29"><span class="tocnumber">4.3.3.1</span> <span class="toctext">Елемент Моніторингу Підписки Серверу (Server::Subscr::MonitItem)</span></a>
+<ul>
+<li class="toclevel-5 tocsection-30"><a href="#.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.B7.D0.BD.D0.B0.D1.87.D0.B5.D0.BD.D0.BD.D1.8F_.D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.83_.D0.9C.D0.BE.D0.BD.D1.96.D1.82.D0.BE.D1.80.D0.B8.D0.BD.D0.B3.D1.83_.D0.9F.D1.96.D0.B4.D0.BF.D0.B8.D1.81.D0.BA.D0.B8_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::Subscr::MonitItem::Val.29"><span class="tocnumber">4.3.3.1.1</span> <span class="toctext">Елемент значення Елементу Моніторингу Підписки Серверу (Server::Subscr::MonitItem::Val)</span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toclevel-3 tocsection-28"><a href="#.D0.9A.D1.96.D0.BD.D1.86.D0.B5.D0.B2.D0.B0_.D0.A2.D0.BE.D1.87.D0.BA.D0.B0_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::EP.29"><span class="tocnumber">4.3.4</span> <span class="toctext">Кінцева Точка Серверу (Server::EP)</span></a></li>
+<li class="toclevel-3 tocsection-31"><a href="#.D0.9A.D1.96.D0.BD.D1.86.D0.B5.D0.B2.D0.B0_.D0.A2.D0.BE.D1.87.D0.BA.D0.B0_.D0.A1.D0.B5.D1.80.D0.B2.D0.B5.D1.80.D1.83_.28Server::EP.29"><span class="tocnumber">4.3.4</span> <span class="toctext">Кінцева Точка Серверу (Server::EP)</span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-29"><a href="#.D0.9F.D1.80.D0.B8.D0.B2.D0.B0.D1.82.D0.BD.D1.96_.D0.BA.D0.BB.D1.8E.D1.87.D1.96_.D1.82.D0.B0_.D1.81.D0.B5.D1.80.D1.82.D0.B8.D1.84.D1.96.D0.BA.D0.B0.D1.82.D0.B8"><span class="tocnumber">5</span> <span class="toctext">Приватні ключі та сертифікати</span></a></li>
-<li class="toclevel-1 tocsection-30"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зауваження</span></a></li>
-<li class="toclevel-1 tocsection-31"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8F_.D1.81.D1.83.D0.BC.D1.96.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.96_.D1.96.D0.B7_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F.D0.BC.D0.B8_OPC-UA_.D1.96.D0.BD.D1.88.D0.B8.D1.85_.D0.B2.D0.B8.D1.80.D0.BE.D0.B1.D0.BD.D0.B8.D0.BA.D1.96.D0.B2"><span class="tocnumber">7</span> <span class="toctext"><span>Таблиця сумісності із реалізаціями OPC-UA інших виробників</span></span></a></li>
-<li class="toclevel-1 tocsection-32"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">8</span> <span class="toctext">Посилання</span></a></li>
+<li class="toclevel-1 tocsection-32"><a href="#.D0.9F.D1.80.D0.B8.D0.B2.D0.B0.D1.82.D0.BD.D1.96_.D0.BA.D0.BB.D1.8E.D1.87.D1.96_.D1.82.D0.B0_.D1.81.D0.B5.D1.80.D1.82.D0.B8.D1.84.D1.96.D0.BA.D0.B0.D1.82.D0.B8"><span class="tocnumber">5</span> <span class="toctext">Приватні ключі та сертифікати</span></a></li>
+<li class="toclevel-1 tocsection-33"><a href="#.D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="tocnumber">6</span> <span class="toctext">Зауваження</span></a></li>
+<li class="toclevel-1 tocsection-34"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8F_.D1.81.D1.83.D0.BC.D1.96.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.96_.D1.96.D0.B7_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F.D0.BC.D0.B8_OPC-UA_.D1.96.D0.BD.D1.88.D0.B8.D1.85_.D0.B2.D0.B8.D1.80.D0.BE.D0.B1.D0.BD.D0.B8.D0.BA.D1.96.D0.B2"><span class="tocnumber">7</span> <span class="toctext"><span>Таблиця сумісності із реалізаціями OPC-UA інших виробників</span></span></a></li>
+<li class="toclevel-1 tocsection-35"><a href="#.D0.9F.D0.BE.D1.81.D0.B8.D0.BB.D0.B0.D0.BD.D0.BD.D1.8F"><span class="tocnumber">8</span> <span class="toctext">Посилання</span></a></li>
 </ul>
 </div>
 
@@ -211,17 +217,17 @@
 <li> Стан, у який переводити вузол при завантажені: "Включено".</li>
 <li> Тип кодування протоколу, на цей час це лише "Бінарний".</li>
 <li> URL кінцевої точки.</li>
-<li> Сертифікат серверу у форматі PEM.</li>
-<li> Приватний ключ у форматі PEM.</li>
-<li> Політики безпеки серверу.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:929px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main_uk.png"><img class="thumbimage" height="918" src="../files/OPC-UA_prt_ep_main_uk.png" width="927" /></a>  <div class="thumbcaption">Рис.3. Головна вкладка сторінки кінцевого вузла.</div></div></div></div>
+<li> Сертифікат серверу та приватний ключ у форматі PEM.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Приховано у ввімкненому стані.</dd></dl>
+<ul><li> Політики безпеки серверу.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:903px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prt_ep_main_uk.png"><img class="thumbimage" height="851" src="../files/OPC-UA_prt_ep_main_uk.png" width="901" /></a>  <div class="thumbcaption">Рис.3. Головна вкладка сторінки кінцевого вузла.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_.D0.B7.D0.B1.D0.BE.D1.80.D1.83_.D0.B4.D0.B0.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">3</span> Модуль збору даних</span></h2>
 <p>Модуль збору даних надає можливість опитування та запису атрибутів значення(13) вузлів типу "Змінна" у режимі прямого опитування запитом "Read" та асинхронним сервісом запиту "Publish".
 </p>
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">3.1</span> Об'єкт контролеру</span></h3>
 <p>Для додання джерела даних OPC-UA створюється та конфігурується об'єкт контролеру в OpenSCADA. Приклад вкладки конфігурації об'єкту контролеру даного типу зображено на рисунку 4.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:952px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main_uk.png"><img class="thumbimage" height="788" src="../files/OPC-UA_cntr_main_uk.png" width="950" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфігурації об'єкту контролера OPC-UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:928px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_main_uk.png"><img class="thumbimage" height="851" src="../files/OPC-UA_cntr_main_uk.png" width="926" /></a>  <div class="thumbcaption">Рис.4. Вкладка конфігурації об'єкту контролера OPC-UA.</div></div></div></div>
 <p>За допомогою цієї вкладки можна встановити:
 </p>
 <ul><li> Стан контролеру, а саме: деталізований загальний статус, "Ввімкнено", "Виконання" та ім'я БД, яка містить конфігурацію.</li>
@@ -233,33 +239,85 @@
 <li> URL кінцевого вузла віддаленої станції — сервера OPC-UA. На початку цю адресу можна вказати у вигляді "<b>opc.tcp://{IP|name}:{port}</b>", після чого, у випадку включення об'єкту контролера та наявності вказаного OPC-UA вузла, з'явиться можливість обрати уточнену адресу.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Часто зустрічається ситуація, коли уточнена адреса є символьною, який у цій мережі не резолвиться, через некоректне налаштування серверу. У таких випадках потрібно залишити початкову IP-адресу або ім'я яке резолвиться у IP правильно.</dd></dl>
 <ul><li> Політика безпеки та режим безпеки повідомлення.</li>
-<li> Сертифікат клієнту та приватний ключ у форматі PEM.</li>
-<li> Користувач та пароль для аутентифікації на сервері, порожнє значення включає анонімний доступ.</li>
+<li> Сертифікат клієнту та приватний ключ у форматі PEM.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Приховано у стані виконання.</dd></dl>
+<ul><li> Користувач та пароль для аутентифікації на сервері, порожнє значення включає анонімний доступ.</li>
 <li> Використовувати функцію "Read", інакше активується та використовується сервіс збору даних Publish (асинхронний) протоколу OPC-UA.</li></ul>
 <p>З метою полегшення ідентифікації вузлів на віддаленій станції, а також вибору їх для вставки у об'єкті параметру контролеру, в самому об'єкті контролеру передбачено вкладку навігації за вузлами віддаленої станції "Огляд вузлів серверу", де можна пройти за деревом об'єктів та ознайомитися з їх атрибутами (рис.5).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:719px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_cntr_browse_uk.png"><img class="thumbimage" height="690" src="../files/OPC-UA_cntr_browse_uk.png" width="717" /></a>  <div class="thumbcaption">Рис.5. Вкладка "Огляд вузлів серверу" сторінки об'єкту контролеру OPC-UA.</div></div></div></div>
 <h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">3.2</span> Параметри</span></h3>
-<p>Модуль збору даних надає лише один тип параметрів — "Стандарт". Додатковим конфігураційним полем параметру даного модуля (рис.6) є перелік вузлів OPC-UA та поле навігації за вузлами OPC-UA у один рядок, для вставки обраних вузлів типу "Змінна" до визначеного переліку. Атрибут у цьому переліку записується наступним чином: <b>{ns}:{id}</b>.
+<p>Модуль збору даних надає два типи параметру: "Стандартний (std)" та "Логічний (logic)". Додатковими конфігураційними полями параметрів цього модуля є:
 </p>
-<dl><dd>Де:
-<dl><dd><i>ns</i> — простір імен, числом; нульове значення може бути опущено;</dd>
-<dd><i>id</i> — ідентифікатор вузла, числом, рядком, рядком байт або GUID.</dd></dl></dd>
-<dd>Приклади:
+<ul><li> <i><b>Стандартний (std)</b></i>:
+<ul><li> <i>Перелік атрибутів</i> — містить структурований перелік конфігурації атрибутів ModBUS.</li></ul></li>
+<li> <i><b>Логічний (logic)</b></i>:
+<ul><li> <i>Шаблон параметру</i> — адреса шаблону параметру DAQ.</li></ul></li></ul>
+<h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D0.B8.D0.B9_.28std.29"><span class="mw-headline-number">3.2.1</span> Стандартний (std)</span></h4>
+<p>Додатковим конфігураційним полем параметру даного модуля (рис.6) є перелік вузлів OPC-UA та поле навігації за вузлами OPC-UA у один рядок для вставки обраних вузлів типу "Змінна" до визначеного переліку. Атрибут у цьому переліку записується як "<b>{ns}:{id}[|[{flg}][|{id}[|{name}]]]</b>".<br />
+Де:
+</p>
+<ul><li> <i>ns</i> — простір імен, числом; нульове значення може бути опущено;</li>
+<li> <i>id</i> — ідентифікатор вузла, числом, рядком, рядком байт або GUID;</li>
+<li> <i>flg</i> — прапорці нездійснення запиту цільових даних на сервері: тип значення (b-Логічний,i-Ціле,f-Реальне,s-Рядок,o-Об'єкт), режим запису/читання (r-читати, w-писати);</li>
+<li> <i>id</i> — ідентифікатор атрибуту що створюється;</li>
+<li> <i>name</i> — ім'я атрибуту що створюється.</li></ul>
+<p>Приклади:
+</p>
 <dl><dd><b>84</b> — кореневий вузол;</dd>
-<dd><b>3:"BasicDevices2"</b> — вузол базових пристроїв у просторі імен 3 та у вигляді рядка;</dd>
-<dd><b>4:"61626364"</b> — вузол у просторі імен 4 та у вигляді рядка байт;</dd>
-<dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — вузол у просторі імен 4 і у вигляді GUID.</dd></dl></dd></dl>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_uk.png"><img class="thumbimage" height="651" src="../files/OPC-UA_prm_uk.png" width="681" /></a>  <div class="thumbcaption">Рис.6. Вкладка конфігурації об'єкту параметра OPC-UA.</div></div></div></div>
+<dd><b>3:"BasicDevices2"||var</b> — вузол базових пристроїв у просторі імен 3 та у вигляді рядка із прямим ІД атрибуту;</dd>
+<dd><b>4:"61626364"||var|Variable</b> — вузол у просторі імен 4 та у вигляді рядка байт із прямим ІД та назвою атрибуту;</dd>
+<dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}|irw|var|Variable</b> — вузол у просторі імен 4 і у вигляді GUID із нездійсненням запиту цільових даних щодо Цілого Читання-Запису та прямим ІД і назвою атрибуту.</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_uk.png"><img class="thumbimage" height="668" src="../files/OPC-UA_prm_uk.png" width="687" /></a>  <div class="thumbcaption">Рис.6. Вкладка конфігурації об'єкту параметра OPC-UA.</div></div></div></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Вузли типу "Змінна" зі значенням у вигляді структури прочитати цілком зазвичай не можна тому потрібно її елементи вставляти до переліку вузлів читання окремо.
 </p><p>Відповідно до вказаного переліку вузлів виконується опитування та створення атрибутів параметру (рис.7).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:695px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr_uk.png"><img class="thumbimage" height="574" src="../files/OPC-UA_prm_atr_uk.png" width="693" /></a>  <div class="thumbcaption">Рис.7. Вкладка атрибутів параметру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_atr_uk.png"><img class="thumbimage" height="591" src="../files/OPC-UA_prm_atr_uk.png" width="687" /></a>  <div class="thumbcaption">Рис.7. Вкладка атрибутів параметру.</div></div></div></div>
+<h4><span class="mw-headline" id=".D0.9B.D0.BE.D0.B3.D1.96.D1.87.D0.BD.D0.B8.D0.B9_.28logic.29"><span class="mw-headline-number">3.2.2</span> Логічний (logic)</span></h4>
+<p>Головну сторінку конфігурації параметру логічного типу представлено на рисунку 8.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UALog_prm_uk.png"><img class="thumbimage" height="591" src="../files/OPC-UALog_prm_uk.png" width="782" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфігурації параметру логічного типа.</div></div></div></div>
+<p>Значення посилання при конфігурації шаблону (рис.9) записується у формі "<b>{ns}:{id}</b>".<br />
+Де:
+</p>
+<ul><li> <i>ns</i> — простір імен, числом; нульове значення може бути опущено;</li>
+<li> <i>id</i> — ідентифікатор вузла, числом, рядком, рядком байт або GUID.</li></ul>
+<p>Приклади:
+</p>
+<dl><dd><b>84</b> — кореневий вузол;</dd>
+<dd><b>3:"BasicDevices2"</b> — вузол базових пристроїв у просторі імен 3 та у вигляді рядка;</dd>
+<dd><b>4:"61626364"</b> — вузол у просторі імен 4 та у вигляді рядка байт;</dd>
+<dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}</b> — вузол у просторі імен 4 і у вигляді GUID.</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UALog_tmpl_uk.png"><img class="thumbimage" height="591" src="../files/OPC-UALog_tmpl_uk.png" width="782" /></a>  <div class="thumbcaption">Рис.9. Вкладка "Конфігурація шаблону" параметра логічного типу.</div></div></div></div>
+<p>Модулем передбачена особлива обробка низки атрибутів шаблону:
+</p>
+<ul><li> <i>f_frq</i> — частота обчислення процедури шаблону або час після останнього обчислення (негативне у секундах) для планування за CRON, тільки читання.</li>
+<li> <i>f_start</i> — ознака першого виконання процедури шаблону — запуск, тільки читання.</li>
+<li> <i>f_stop</i> — ознака останнього виконання процедури шаблону — зупинка, тільки читання.</li>
+<li> <i>f_err</i> — помилка параметру, повний доступ. Значення цього атрибуту шаблону потрапляє до атрибуту помилки параметру "err". Записати сюди <b>EVAL</b> для можливості встановлення ззовні атрибуту "err" та всіх інших у режимі Тільки для Читання.</li>
+<li> <i>SHIFR</i> — значення шифру параметру, тільки читання.</li>
+<li> <i>NAME</i> — значення назви параметру, тільки читання.</li>
+<li> <i>DESCR</i> — значення опису параметру, тільки читання.</li>
+<li> <i>this</i> — об'єкт даного параметру, дозволяє отримати доступ до атрибутів параметру, наприклад, для доступу до архівів-історії.</li></ul>
+<p>Відповідно до шаблону, що лежить у основі параметру, ми отримуємо набір атрибутів параметру (рис.10).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UALog_prm_atr_uk.png"><img class="thumbimage" height="591" src="../files/OPC-UALog_prm_atr_uk.png" width="782" /></a>  <div class="thumbcaption">Рис.10. Вкладка атрибутів параметру логічного типу.</div></div></div></div>
+<h3><span class="mw-headline" id="API_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">3.3</span> <span id="UserAPI" title="#UserAPI">API користувацького програмування</span></span></h3>
+<p>У зв'язку із підтримкою параметрів логічного типу, має сенс надання низки функцій користувацького API для їх виклику із шаблону логічного параметру.
+</p><p><b>Об'єкт "Параметр" [this]</b>
+</p>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — додання атрибуту <i>id</i> з ім'ям <i>name</i> та типом <i>tp</i>. Якщо атрибут вже присутній то будуть застосовані властивості, які можливо змінити "на ходу": ім'я, режим вибору та параметри вибору.
+<ul><li> <i>id, name</i> — ідентифікатор та ім'я нового атрибуту;</li>
+<li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим вибору [sel | seled] + тільки для читання [ro];</li>
+<li> <i>selValsNms</i> — два рядки зі значеннями у першому та їх іменами у другому, поділені ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">для включеного параметру логічного типу</span>] — видалення атрибуту <i>id</i>.</li></ul>
+<p><br />
+</p>
 <h2><span class="mw-headline" id=".D0.91.D1.96.D0.B1.D0.BB.D1.96.D0.BE.D1.82.D0.B5.D0.BA.D0.B0_libOPC_UA"><span class="mw-headline-number">4</span> Бібліотека libOPC_UA</span></h2>
 <p>Ґрунтуючись на напрацюваннях цього модуля, протокольний код OPC-UA було винесено до окремої бібліотеки та опубліковано під ліцензією LGPLv3. Такі дії виконано з метою надати можливість простого додання підтримки протоколу OPC-UA стороннім проектам. Бібліотека представлена двома файлами libOPC_UA.h, libOPC_UA.cpp; підтримується та міститься у складі цього модуля, тобто актуальну версію Ви можете завантажити тут: <a class="external free" href="http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/svn/trunk/OpenSCADA/src/moduls/daq/OPC_UA/libOPC_UA</a>.
-</p><p>Бібліотеку, як і цей модуль, написано на мові програмування C++. Статичну діаграму класів, яка відображає архітектуру бібліотеки, наведено на рисунку 8. Згідно до діаграми класів, бібліотеку виконано у просторі імен "OPC", а архітектурно її можна поділити на клієнтську "Client" та серверну "Server" частини, які успадковано від загального класу протоколу "UA". Крім безпосередньо класів протоколу "OPC-UA" бібліотека включає в себе набір функцій та класів для обробки або збереження даних протоколу, окремо з яких треба відзначити клас вузла мови XML "XML_N", використаний для уніфікації звернень до API бібліотеки.
+</p><p>Бібліотеку, як і цей модуль, написано на мові програмування C++. Статичну діаграму класів, яка відображає архітектуру бібліотеки, наведено на рисунку 11. Згідно до діаграми класів, бібліотеку виконано у просторі імен "OPC", а архітектурно її можна поділити на клієнтську "Client" та серверну "Server" частини, які успадковано від загального класу протоколу "UA". Крім безпосередньо класів протоколу "OPC-UA" бібліотека включає в себе набір функцій та класів для обробки або збереження даних протоколу, окремо з яких треба відзначити клас вузла мови XML "XML_N", використаний для уніфікації звернень до API бібліотеки.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:400px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="311" src="../../en/files/OPC-UA_libOPCUA_class.png" width="398" /></a>  <div class="thumbcaption">Рис.8. Статична діаграма класів бібліотеки libOPC_UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:400px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_libOPCUA_class.png"><img class="thumbimage" height="311" src="../../en/files/OPC-UA_libOPCUA_class.png" width="398" /></a>  <div class="thumbcaption">Рис.11. Статична діаграма класів бібліотеки libOPC_UA.</div></div></div></div>
 <p>Використання бібліотеки загалом полягає у спадкуванні класу "Client" та/або "Server" згідно до функцій кінцевої програми та наступної реалізації віртуальних функцій властивостей клієнта/сервера у контексті протоколу OPC-UA, а також транспортної частини комунікації, тобто — підключення/відкриття TCP-сокету та передачу/читання неструктурованого потоку даних. Наступні запити, та обробка їх даних  (для серверу), здійснюється через виклик функції запиту сервісу <i>reqService()</i> та/або обробки віртуальної функції запиту даних <i>reqData()</i>, тобто, фактично, інтеграція у модель даних додатку.
 </p><p>Після додання до клієнту підтримки асинхронного сервісу опитування даних сервісом "Publish", процес інтеграції доповнився періодичним викликом функції <i>Client::poll()</i> з метою опрацювання асинхронного сервісу. Функцію <i>Client::poll()</i> також забезпечено підтримкою синхронного режиму роботи, окремим аргументом, через уніфіковану інфраструктуру підписки-реєстрації елементів моніторингу, але функцією "Read". Тобто, наразі достатньо зареєструвати всі елементи моніторингу функцією <i>Client::Subscr::monitoredItemAdd()</i> а потім викликати функцію <i>Client::poll()</i> для отримання їх даних у потрібному режимі.
 </p><p>Після останнього перегляду коду у версії 2, інтеграція серверної частини додатково потребує обов'язкового запуску окремого потоку обробки всіх підписок, з викликом із нього функції <i>Server::EP::subScrCycle()</i> та аргументом лічильника циклів опрацювання підписок — періодичність виклику <i>Server::EP::subscrProcPer()</i>.
@@ -758,14 +816,14 @@ $ openssl genrsa -out key_c.pem -des3 -rand /var/log/messages 2048
 # Створення приватного ключа без пароля:
 $ openssl rsa -in key_c.pem -out key_c1.pem
 # Створення самопідписаного сертифікату:
-$ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.cnf -days 3650
+$ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.cnf -days 3650
 # Розташувати вміст файлу key_c1.pem у поле приватного ключа та cert_c.pem у поле сертифікату!
 </pre>
 <h2><span class="mw-headline" id=".D0.97.D0.B0.D1.83.D0.B2.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">6</span> Зауваження</span></h2>
 <p>У процесі реалізації модулів підтримки OPC-UA було виявлено низку невідповідностей офіційного SDK зі специфікацією OPC-UA:
 </p>
 <ul><li> OPC-UA Part 6 на сторінці 27 містить зображення процесу рукостискання для встановлення безпечного каналу. Пакет створення сесії, виходячи із цього процесу, підписується клієнтським симетричним ключем, а кодування серверним. На справді і підпис і шифрування здійснюється серверним ключем.</li>
-<li> OPC-UA Part 4 на сторінці 141 містить опис структури даних підпису, де перший йдуть дані підпису, а потім рядок алгоритму. На справді реалізовано зворотня послідовність.</li></ul>
+<li> OPC-UA Part 4 на сторінці 141 містить опис структури даних підпису, де перший йдуть дані підпису, а потім рядок алгоритму. На справді реалізовано зворотна послідовність.</li></ul>
 <h2><span class="mw-headline" id=".D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8F_.D1.81.D1.83.D0.BC.D1.96.D1.81.D0.BD.D0.BE.D1.81.D1.82.D1.96_.D1.96.D0.B7_.D1.80.D0.B5.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F.D0.BC.D0.B8_OPC-UA_.D1.96.D0.BD.D1.88.D0.B8.D1.85_.D0.B2.D0.B8.D1.80.D0.BE.D0.B1.D0.BD.D0.B8.D0.BA.D1.96.D0.B2"><span class="mw-headline-number">7</span> <span id="TableOfCompat" title="#TableOfCompat">Таблиця сумісності із реалізаціями OPC-UA інших виробників</span></span></h2>
 <table class="wikitable">
 
@@ -892,7 +950,7 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 <td> Pass </td>
 <td> Pass </td>
 <td> <span style="color: blue">Not tested</span> </td>
-<td> <span style="color: blue">NA</span> </td>
+<td> <span style="color: blue">Not tested</span> </td>
 <td>
 </td></tr>
 <tr>
@@ -917,5 +975,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./openssl_opcua.
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

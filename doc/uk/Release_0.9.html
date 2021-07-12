@@ -317,7 +317,7 @@
 <li> Адаптацію до роботи в оточені операційних систем QNX та MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7</span> Оновлення</span></h2>
 <h3><span class="mw-headline" id=".5B14.06.2021.5D_.D0.A7.D0.95.D0.A2.D0.92.D0.95.D0.A0.D0.A2.D0.95_.D0.BE.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F"><span class="mw-headline-number">7.1</span> [14.06.2021] ЧЕТВЕРТЕ оновлення</span></h3>
-<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 45 помилок та додає деякі удосконалення, які цілком ви можете почитати у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2755" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
+<p>Це оновлення <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релізу 0.9 LTS</a> виправляє біля 45 помилок та додає деякі удосконалення, які цілком ви можете почитати у <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2758" rel="nofollow noreferrer noopener" target="_blank">протоколі змін оновлення</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> <b><u>Важливі дії користувача за оновленням</u></b><br />
 </p>
 <ul><li> FIX:SYS: Загальне конфігураційне поле "WorkDir" попереджено від маркування як модифіковане при перемиканні проекту, чим і від збереження у конфігураційному файлі, але відсутній механізм автоматичного видалення цього поля із конфігураційного файлу старих проектів.</li></ul>
@@ -330,6 +330,7 @@
 <li> {DAQ,Protocol}.OPC_UA,libOPC_UA: 1.7 =&gt; <b>2.1</b>, 1.10 =&gt; <b>2.1</b>, 1.2 =&gt; <b>2.1</b></li></ul>
 <dl><dd> (<a href="#OPC_UA">доповнено реалізацією сервісу Publish, підтримкою шматків (CHUNKS) на клієнтській частині Збору Даних та загальним переглядом коду у цьому процесі</a>)</dd></dl>
 <ul><li> DAQ.ModBus: 2.12 =&gt; <b>3.1</b></li>
+<li> DAQ.DAQGate: 2.2 =&gt; <b>2.3</b></li>
 <li> DAQ.Siemens: 3.5 =&gt; <b>3.6</b></li>
 <li> Transport.Sockets: 4.2 =&gt; <b>4.3</b></li>
 <li> Transport.Serial: 2.5 =&gt; <b>2.6</b></li>
@@ -462,7 +463,8 @@
 <li> Server.SecCnl.{TokenId,TokenIdPrev} перейменовано у Server.SecCnl.{tokenId,tokenIdPrev}.</li></ul></dd></dl>
 <ul><li> ModBus: Вихідна частина RTU варіанту протоколу доповнена раннім перериванням очікування пакетів стандартних функцій [ERR,1...6,15,16], що збільшує загальну пропускну спроможність удвічі.
 <ul><li> ВВ параметрів Логічного Рівня увімкнено до перекладу, для не пов'язаних рядків та на кшталт до DAQ.LogicLev.</li>
-<li> Розбір атрибутів Збору Даних перемкнуто на використання TSYS::strLine() та TSYS::strParse(), чим дозволено символ ':' у назві та порожні рядки у тексті.</li></ul></li></ul>
+<li> Розбір атрибутів Збору Даних перемкнуто на використання TSYS::strLine() та TSYS::strParse(), чим дозволено символ ':' у назві та порожні рядки у тексті.</li></ul></li>
+<li> DAQGate: Режими синхронізації доповнено режимом запобігання синхронізації загалом для об'єктів збережених у кеші, шляхом дозволу значення <b>-1</b> конфігураційного поля "Період синхронізації з віддаленою станцією, секунд".</li></ul>
 <p><b><u>Архіви-Історія</u></b><br />
 </p>
 <ul><li> FIX:FSArch: Критично виправлено опрацювання файлів архіву значень, при спробі запису їх ІД до нульового рядку.</li>
@@ -1074,5 +1076,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/uk">Documents/Release_0.9/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/uk">Documents/Release_0.9/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

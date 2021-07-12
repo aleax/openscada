@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
 <td> Siemens DAQ and Beckhoff
 </td>
-<td> 3.6 </td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> daq_Siemens.so </td>
 <td> en,uk,ru,de </td>
@@ -44,8 +44,9 @@
 </th></tr>
 <tr>
 <td colspan="9"> Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol) and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the protocol TwinCAT ADS/AMS due it working with data blocks also.
-<ul><li> <b>To Do:</b></li></ul>
-<dl><dd> - append the builtin Standard Mode of the DAQ-Parameters.</dd></dl>
+<ul><li> <b>Sponsored by, for the Simple type support and the data area specifying on 1.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> INSERTEC LTDA</li>
+<li> <b>To Do:</b></li></ul>
+<dl><dd> + append the builtin Standard Mode of the DAQ-Parameters.</dd></dl>
 </td></tr></table>
 <p>The primary goal of this module was to support the Siemens S7 industrial controllers (S7-200,300,400,1200). Historically, access to the controllers of this company in the ProfiBus network is carried out only through its own communication processors (CP5412, CP5613, etc.) and its own protocol S7. The specified communication processors and APIs for the S7 protocol are quite expensive, besides, the drivers for the communication processors and the S7 API are closed, and also available only for the Intel + MS Windows platform (there was some information about the possibility of purchasing it for Linux).
 </p><p>As an alternative to communication processors of the company Siemens, which allows you to fully work with the Siemens controllers, is the range of communication products of the firm <a class="external text" href="http://hilscher.com" rel="nofollow noreferrer noopener" target="_blank">Hilscher</a>, through the communications processors CIF of the series ProfiBus (PB) and the library <a class="external text" href="http://libnodave.sourceforge.net" rel="nofollow noreferrer noopener" target="_blank">LibnoDave</a>.
@@ -60,10 +61,17 @@
 <ul>
 <li class="toclevel-1 tocsection-1"><a href="#Communication_controllers_CIF"><span class="tocnumber">1</span> <span class="toctext">Communication controllers CIF</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#Controller_object"><span class="tocnumber">2</span> <span class="toctext">Controller object</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Parameters"><span class="tocnumber">3</span> <span class="toctext"><span>Parameters</span></span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Asynchronous_writing_mode"><span class="tocnumber">4</span> <span class="toctext">Asynchronous writing mode</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#Notes"><span class="tocnumber">5</span> <span class="toctext"><span>Notes</span></span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Parameters"><span class="tocnumber">3</span> <span class="toctext"><span>Parameters</span></span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Logical_.28logic.29"><span class="tocnumber">3.1</span> <span class="toctext">Logical (logic)</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Simple_.28simple.29"><span class="tocnumber">3.2</span> <span class="toctext">Simple (simple)</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Asynchronous_writing_mode"><span class="tocnumber">4</span> <span class="toctext">Asynchronous writing mode</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#User_programming_API"><span class="tocnumber">5</span> <span class="toctext"><span>User programming API</span></span></a></li>
+<li class="toclevel-1 tocsection-8"><a href="#Appending_A._Data_Areas_of_the_ISO_TCP_connections_.28source_table_of_LibnoDave.29"><span class="tocnumber">6</span> <span class="toctext"><span>Appending A. Data Areas of the ISO_TCP connections</span> (source table of LibnoDave)</span></a></li>
+<li class="toclevel-1 tocsection-9"><a href="#Notes"><span class="tocnumber">7</span> <span class="toctext"><span>Notes</span></span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Links"><span class="tocnumber">8</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -101,31 +109,39 @@
 <li> CIF card used for access to the industrial controller through CIF communication processors.</li>
 <li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA output transport</a> for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests.</li></ul>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Parameters</span></span></h2>
-<p>Given the high intelligence of data sources, in the face of the industrial controllers of Siemens S7-200,300,400,1200, the parameter objects are executed on the basis of <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">templates</a>. This approach allows you not to be restricted to a rigid list of types of parameters, which also restricts the capabilities of controllers, but to allow the user to create the required types of parameters independently, or to use libraries of earlier developed types of parameters — templates.
-</p><p>Based on this, the module provides only one type of parameters — "Logical". The additional configuration fields of the parameters of this module (Fig.4) is the selection field of the parameter template.
+<p>The data acquisition module provides two types of parameter: "Logical (logic)" and "Simple (simple)". Additional configuration fields of the parameters of this module are:
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm.png"><img class="thumbimage" height="500" src="../files/Siemens_prm.png" width="716" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of a parameter.</div></div></div></div>
+<ul><li> <i><b>Logical (logic)</b></i>:
+<ul><li> <i>Parameter template</i> — address of the DAQ-parameter template.</li></ul></li>
+<li> <i><b>Simple (simple)</b></i>:
+<ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes Siemens.</li></ul></li></ul>
+<h4><span class="mw-headline" id="Logical_.28logic.29"><span class="mw-headline-number">3.1</span> Logical (logic)</span></h4>
+<p>Given of high intelligence of the data sources, in face of the industrial controllers of Siemens S7-200,300,400,1200, the type parameter objects are executed on the basis of <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">templates</a>. This approach allows you not to be restricted to a rigid list of types of parameters, which also restricts the capabilities of the controllers, but to allow the user to create the required types of parameters independently, or to use libraries of earlier developed types of parameters — templates.
+</p><p>The additional configuration fields of the type parameters (Fig.4) is the selection field of the parameter template.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:785px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_prm.png"><img class="thumbimage" height="589" src="../files/Siemens_prm.png" width="783" /></a>  <div class="thumbcaption">Fig.4. Configuration tab of the parameter.</div></div></div></div>
 <p>To configure the parameter template a corresponding tab is provided, the content of which is determined by the configuration of the template, that is the corresponding link fields and constant ones are created.
-</p><p>Siemens-DB end address writes in the form "<b>DB{N}.{off}[.{BOff}|{TpSz}]</b>", where:
+</p><p>Siemens-DB end address writes in the form "<b>(DB{N}|F).{off}[.[{tp}]{SzBit}]</b>", where:
 </p>
-<ul><li> <i>N</i> — Data Block number;</li>
+<ul><li> <b>DB</b>{<i>N</i>} — Data Block number in decimal, can be negative one for the specific data areas of the ISO_TCP connection types (see <a href="#DataAreas">Appending A</a> for the data areas);</li>
+<li> <b>F</b> — the Flags/Markers specific data area (131) of the ISO_TCP connection types;</li>
 <li> <i>off</i> — offset in the Data Block;</li>
-<li> <i>BOff</i> — bit of the byte for Boolean;</li>
-<li> <i>TpSz</i> — type and size for other to Boolean types in the form "<b>[{tp}]{sz}</b>", where:
-<ul><li> <i>tp</i> — type in one symbol from the list: b-Boolean, i-Signed integer, u-Unsigned integer, r-Real, s-String;</li>
-<li> <i>sz</i> — the type size: b=[0...7], iu=[1,2(def),4,8], r=[4(def).8], s=[0(def10)...100].</li></ul></li></ul>
+<li> <i>tp</i> — type in one symbol from the list: b-Boolean, i-Signed integer, u-Unsigned integer, r-Real, s-String;</li>
+<li> <i>SzBit</i> — type size for non Boolean or bit of byte for it: b=[0...7], iu=[1,2(def),4,8], r=[4(def).8], s=[0(def10)...100].</li></ul>
 <p>Examples of the end addresses:
 </p>
 <ul><li> "DB1.12.2", "DB1.0xC.2", "DB1.12.b2" — Boolean in DB 1, offset 12 and bit 2;</li>
 <li> "DB2.24", "DB2.0x18.8" — Integer or Real, taken from the template's IO type, in DB 2, offset 24, size default and 8;</li>
 <li> "DB3.36.i4", "DB3.0x24.r8" — directly specified Integer and Real in DB 3, offset 36, size 4 and 8;</li>
-<li> "DB4.48.20", "DB4.0x30.s20" — implicitly, from the template IO type, and directly specified String in DB 4, offset 48 and size 20.</li></ul>
-<p>The link types by default are determined by the parameter type in the template (Logical, Integer, Real, and String) and the definition of the link value (for group links). The definition of a group link in the template is written in the format "<b>{LnkName}|{OffDB[.{bit}]}[|{TpSz}]</b>", where:
+<li> "DB4.48.20", "DB4.0x30.s20" — implicitly, from the template IO type, and directly specified String in DB 4, offset 48 and size 20;</li>
+<li> "F.12.5" — Boolean in the Flags/Markers data area, offset 12 and bit 5.</li></ul>
+<p>The link types by default are determined by the parameter type in the template (Logical, Integer, Real, and String) and the definition of the link value (for group links). The definition of a group link in the template is written in the format "<b>{LnkName}|{OffDB}[.{bit}][|[{tp}]{sz}]</b>", where:
 </p>
 <ul><li> <i>LnkName</i> — name of the group link. All references with the same name are grouped and indicated as one reference to the data block or data block with the specified offset.</li>
 <li> <i>OffDB</i> — offset number in the data block. If you specify only the data block, when configuring the template, this offset will be specified for the parameter. If the configuration of the template also specifies an offset, both offsets will be summed together. This approach allows you to access several structures in one data block. The data block number and the offset can be specified in the decimal (3245) and hexadecimal format (0xCAD).</li>
-<li> <i>bit</i> — bit number for Boolean.</li>
-<li> <i>TpSz</i> — equal to the same field above.</li></ul>
+<li> <i>bit</i> — bit number for Boolean, [0...7].</li>
+<li> <i>tp</i> — type in one symbol from the list: i-Signed integer, u-Unsigned integer, r-Real, s-String;</li>
+<li> <i>sz</i> — type size: iu=[1,2(def),4,8], r=[4(def).8], s=[0(def10)...100].</li></ul>
 <p>Examples of the link types:
 </p>
 <ul><li> "Grp 1|0.0" — Boolean in "Grp 1", offset 0 and bit 0;</li>
@@ -140,7 +156,7 @@
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The module supports only the data blocks (DB) addressing of the controllers.
 </p><p>The module provides special processing of a number of attributes of the template:
 </p>
-<ul><li> <i>f_frq</i> — the frequency of the calculation of the template procedure or the time after the last calculation (negative in seconds) for planning from CRON, read-only.</li>
+<ul><li> <i>f_frq</i> — frequency of the calculation of the template procedure, read-only.</li>
 <li> <i>f_start</i> — first calculate of the template procedure — start, read-only.</li>
 <li> <i>f_stop</i> — last calculate of the template procedure — stop, read-only.</li>
 <li> <i>f_err</i> — parameter error, full access. Value of the attribute is set to the parameter's error attribute — "err".</li>
@@ -148,10 +164,139 @@
 <li> <i>NAME</i> — parameter name, read-only.</li>
 <li> <i>DESCR</i> — parameter description, read-only.</li>
 <li> <i>this</i> — parameter object, allows access to the attributes of the parameter, for example, to access the archives.</li></ul>
+<h4><span class="mw-headline" id="Simple_.28simple.29"><span class="mw-headline-number">3.2</span> Simple (simple)</span></h4>
+<p>Main page of configuration parameters of the simple type parameter is shown in Figure 9.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:685px;"><a class="image" href="http://oscada.org/wiki/File:SiemensSimpl_prm.png"><img class="thumbimage" height="669" src="../files/SiemensSimpl_prm.png" width="683" /></a>  <div class="thumbcaption">Fig.9. Configuration tab of the simple parameter type.</div></div></div></div>
+<p>One attribute line in the parameter of the attributes list can be written as "<b>(DB{N}|F).{off}.{tp}{SzBit}:{flg}:{id}[:{name}]</b>".<br />
+Where:
+</p>
+<ul><li> <b>DB</b>{<i>N</i>} — Data Block number in decimal, can be negative one for the specific data areas of the ISO_TCP connection types (see <a href="#DataAreas">Appending A</a> for the data areas);</li>
+<li> <b>F</b> — the Flags/Markers specific data area (131) of the ISO_TCP connection types;</li>
+<li> <i>off</i> — offset in the Data Block;</li>
+<li> <i>tp</i> — type in one symbol from the list: b-Boolean, i-Signed integer, u-Unsigned integer, r-Real, s-String;</li>
+<li> <i>SzBit</i> — type size for non Boolean or bit of byte for it: b=[0...7], iu=[1,2(def),4,8], r=[4(def).8], s=[0(def10)...100];</li>
+<li> <i>flg</i> — flags: read/write mode (r-read, w-write);</li>
+<li> <i>id</i> — identifier of the created attribute;</li>
+<li> <i>name</i> — name of the created attribute.</li></ul>
+<p>Examples:
+</p>
+<dl><dd>"DB1.12.b2:r:var:Variable" — Boolean in DB 1, offset 12 and bit 2;</dd>
+<dd>"DB2.24.u:rw:var:Variable", "DB2.0x18.r8:w:var" — Integer or Real in DB 2, offset 24, size default and 8;</dd>
+<dd>"DB4.0x30.s20:r:var:Variable" — String in DB 4, offset 48 and size 20;</dd>
+<dd>"F.12.b5:r:var:Variable" — Boolean in the Flags/Markers data area, offset 12 and bit 5.</dd></dl>
+<p>Line starting with the '#' character is considered as a comment and it is not processed.
+</p><p>In accordance with the specified attributes list, the acquisition and creation of attributes of the parameter are performed (Fig. 10).
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:685px;"><a class="image" href="http://oscada.org/wiki/File:SiemensSimpl_prm_atr.png"><img class="thumbimage" height="545" src="../files/SiemensSimpl_prm_atr.png" width="683" /></a>  <div class="thumbcaption">Fig.10. The attributes tab of the simple parameter type.</div></div></div></div>
 <h2><span class="mw-headline" id="Asynchronous_writing_mode"><span class="mw-headline-number">4</span> Asynchronous writing mode</span></h2>
 <p>The standard writing mode for SCADA systems, which interact with the PLC, is synchronous, because it allows you to control the correctness of the completion of the write operation. However, in the case of writing a set of parameters at once, such the approach is not efficient due to sending a lot of small queries to the controller that overloads it and takes a long range of time. Solving this problem is asynchronous writing of adjacent values by one block. This mode is supported by this module and allows you to write all parameters immediately by adjacent blocks of 240 bytes. Reading and writing in this mode are carried out by adjacent blocks with periodicity of the controller's polling.
 </p>
-<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">5</span> <span id="Notes" title="#Notes">Notes</span></span></h2>
+<h2><span class="mw-headline" id="User_programming_API"><span class="mw-headline-number">5</span> <span id="UserAPI" title="#UserAPI">User programming API</span></span></h2>
+<p>Due to the support of the logical type parameters, it makes sense to provide a number of functions of the user API for calling them from the template of the logical parameter.
+</p><p><b>The object "Parameter" [this]</b>
+</p>
+<ul><li> <i>bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — adds the attribute <i>id</i> with the name <i>name</i> and the type <i>tp</i>. If the attribute is already present, the properties will be applied that can be changed on the go: name, selection mode and selection options.
+<ul><li> <i>id, name</i> — identifier and name of the new attribute;</li>
+<li> <i>tp</i> — attribute type [boolean | integer | real | string | text | object] + selection mode [sel | seled] + read-only [ro];</li>
+<li> <i>selValsNms</i> — two lines with values in first and their names in second, separated by ";".</li></ul></li>
+<li> <i>bool attrDel( string id )</i> [<span style="color: red">for enabled parameter of the logical type</span>] — removes the attribute <i>id</i>.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Appending_A._Data_Areas_of_the_ISO_TCP_connections_.28source_table_of_LibnoDave.29"><span class="mw-headline-number">6</span> <span id="DataAreas" title="#DataAreas">Appending A. Data Areas of the ISO_TCP connections</span> (<a class="external text" href="http://www.proview.se/misc/libnodave/area.html" rel="nofollow noreferrer noopener" target="_blank">source table of LibnoDave</a>)</span></h2>
+<table class="wikitable">
+
+<tr>
+<th> Name </th>
+<th> Code </th>
+<th> Example item(German) </th>
+<th> Example item(English)
+</th></tr>
+<tr>
+<td> Data blocks </td>
+<td> 132 </td>
+<td> DB3.DBD4 </td>
+<td> DB3.DBD4
+</td></tr>
+<tr>
+<td> Flags/Markers </td>
+<td> 131 </td>
+<td> MW4 </td>
+<td> FW4
+</td></tr>
+<tr>
+<td> Input memory image </td>
+<td> 129 </td>
+<td> EB2 </td>
+<td> IB2
+</td></tr>
+<tr>
+<td> Output memory image </td>
+<td> 130 </td>
+<td> AD8 </td>
+<td> QD8
+</td></tr>
+<tr>
+<td> Timers </td>
+<td> 29 </td>
+<td> T2 </td>
+<td> T2
+</td></tr>
+<tr>
+<td> Counters </td>
+<td> 28 </td>
+<td> Z2 </td>
+<td> C2
+</td></tr>
+<tr>
+<td> Direct I/O </td>
+<td> 128 </td>
+<td> PEW4 </td>
+<td> PIW4
+</td></tr>
+<tr>
+<td> System information of 200 family </td>
+<td> 3 </td>
+<td> </td>
+<td>
+</td></tr>
+<tr>
+<td> Data (V-memory) in S7-200 </td>
+<td> 132 </td>
+<td> VW1234 </td>
+<td> VW1234
+</td></tr>
+<tr>
+<td> System flag area of 200 family </td>
+<td> 5 </td>
+<td> SMB0 </td>
+<td> SFB0?
+</td></tr>
+<tr>
+<td> Analog input words of 200 family </td>
+<td> 6 </td>
+<td> AEW0 </td>
+<td> AIW0?
+</td></tr>
+<tr>
+<td> Analog output words of 200 family </td>
+<td> 7 </td>
+<td> AAW0 </td>
+<td> AQW0?
+</td></tr>
+<tr>
+<td> IEC Timers </td>
+<td> 31 </td>
+<td> T2 </td>
+<td> T2
+</td></tr>
+<tr>
+<td> IEC Counters </td>
+<td> 30 </td>
+<td> Z2 </td>
+<td> C2
+</td></tr></table>
+<h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">7</span> <span id="Notes" title="#Notes">Notes</span></span></h2>
 <p>After a targeted search was found a few solutions of the problem of communication with industrial controllers of firm Siemens through various communication interfaces:
 </p>
 <ul><li> Found a lot of solutions from the company Siemens, which supplied with solutions that support the open operating system "Linux" (<a class="external free" href="http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm" rel="nofollow noreferrer noopener" target="_blank">http://www.automation.siemens.com/net/html_76/produkte/040_cp_1616.htm</a>, ...).</li></ul>
@@ -173,7 +318,7 @@
 <ul><li> Create a data block with the compatibility to S7-300/400 and/or disable this block optimisation to appear the offset column. Disable any protection of this data block. </li>
 <li> If you have the LibnoDave message "error 33028 context is not supported. Step7 says: Function not implemented or error in telegram.", you have S7-1200 V4.0 and you must <a class="external text" href="https://sourceforge.net/p/libnodave/discussion/205657/thread/7ec9f370/?limit=25" rel="nofollow noreferrer noopener" target="_blank">grant access for the interface functions Get/Put</a> into the PLC configuration.</li></ul>
 </td></tr></table>
-<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">6</span> Links</span></h2>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">8</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Siemens_cif2621.tgz" title="File:Siemens cif2621.tgz">Firm's Hilscher driver for boards family CIF</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Siemens_lastkernels.patch" title="File:Siemens lastkernels.patch">The patch to build driver for kernel Linux 2.6.29</a></li>
 <li> <a class="external" href="http://oscada.org/wiki/File:Siemens_crash_20160127_0911.crash.gz" title="File:Siemens crash 20160127 0911.crash.gz">Report for the crash, LibnoDave specific</a></li></ul>
@@ -183,5 +328,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/en">Modules/Siemens/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Siemens/en">Modules/Siemens/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

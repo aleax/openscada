@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.DBF file: dbf_mod.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.2"
+#define MOD_VER		"2.4.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBF files version 3.0.")
 #define LICENSE		"GPL2"
@@ -223,7 +223,8 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg, const string &cacheKey )
 {
     int i_clm;
 
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     ResAlloc res(mRes, false);
 

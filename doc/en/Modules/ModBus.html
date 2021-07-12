@@ -292,17 +292,17 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Request tries for the protocols RTU and ASCII. Indicates the number of attempts by the repetition of the request in case of incomplete or damaged answer.</li>
 <li> Maximum size of the request block in bytes. Useful for controllers with like limits.</li></ul>
 <h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3.2</span> Parameters</span></h3>
-<p>Data acquisition module provides two types of parameter: "Standard (std)" and "Logical (logic)". Additional configuration fields of the parameters of this module are:
+<p>The data acquisition module provides two types of parameter: "Standard (std)" and "Logical (logic)". Additional configuration fields of the parameters of this module are:
 </p>
 <ul><li> <i><b>Standard (std)</b></i>:
-<ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes ModBus.</li></ul></li>
+<ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes ModBUS.</li></ul></li>
 <li> <i><b>Logical (logic)</b></i>:
-<ul><li> <i>Parameter template</i> — address of a DAQ parameter template.</li></ul></li></ul>
+<ul><li> <i>Parameter template</i> — address of the DAQ-parameter template.</li></ul></li></ul>
 <h4><span class="mw-headline" id="Standard_.28std.29"><span class="mw-headline-number">3.2.1</span> Standard (std)</span></h4>
 <p>Main page of configuration parameters of the standard type is shown in Figure 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:670px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm.png"><img class="thumbimage" height="656" src="../files/ModBus_prm.png" width="668" /></a>  <div class="thumbcaption">Fig.9. Configuration tab of the standard parameter type.</div></div></div></div>
-<p>Attribute in the attributes list parameter can be written as follows: <b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>.<br />
+<p>One attribute line in the parameter of the attributes list can be written as "<b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>".<br />
 Where:
 </p>
 <ul><li> <i>dt</i> — Modbus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI" — input register[4], "CI"—input coil[2]);</li></ul>
@@ -319,21 +319,21 @@ Where:
 <dd>"R_i4:400,300:r:int32:Int32" — get int32 from registers 400 and 300;</dd>
 <dd>"R_b10:25:r:rBit:Reg bit", "R_b:25.10:r:rBit:Reg bit" — get bit 10 from register 25;</dd>
 <dd>"R_s:15,20:r:str:Reg blk" — get string (registers block) from register 15 and size 20."</dd></dl>
-<p>String starting with the '#' character is considered a comment and is not processed.
-</p><p>In accordance with the specified attributes list, an acquisition and creation of attributes of the parameter are performed (Fig. 10).
+<p>Line starting with the '#' character is considered as a comment and it is not processed.
+</p><p>In accordance with the specified attributes list, the acquisition and creation of attributes of the parameter are performed (Fig. 10).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:640px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr.png"><img class="thumbimage" height="533" src="../files/ModBus_prm_atr.png" width="638" /></a>  <div class="thumbcaption">Fig.10. Tab of attributes of the standard parameter type.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:640px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr.png"><img class="thumbimage" height="533" src="../files/ModBus_prm_atr.png" width="638" /></a>  <div class="thumbcaption">Fig.10. The attributes tab of the standard parameter type.</div></div></div></div>
 <h4><span class="mw-headline" id="Logical_.28logic.29"><span class="mw-headline-number">3.2.2</span> Logical (logic)</span></h4>
 <p>Main page of configuration parameters of the logical type is shown in Figure 11.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm.png"><img class="thumbimage" height="526" src="../files/ModBusLog_prm.png" width="711" /></a>  <div class="thumbcaption">Рис.11. Configuration tab of the logical parameter type.</div></div></div></div>
-<p>Link value, when configuring the template (Fig.12), is written in the format: <b>{dt}:{numb}[:{flg}]</b>.<br />
+<p>Link value, when configuring the template (Fig.12), is written in the form <b>{dt}:{numb}[:{flg}]</b>.<br />
 Where:
 </p>
 <ul><li> <i>dt</i> — ModBus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI"—input register[4], "CI"—input coil[2]);</li></ul>
 <dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s"—String (size by default is 10 and up to 100 registers);</dd></dl>
 <ul><li> <i>numb</i> — ModBus data address of the device (decimal, hexadecimal or octal) [0...65535];</li>
-<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~';</li></ul>
+<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~'.</li></ul>
 <p>Examples:
 </p>
 <dl><dd>"R:0x300:rw" — register access;</dd>
@@ -380,5 +380,5 @@ Where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2751</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
 </html>

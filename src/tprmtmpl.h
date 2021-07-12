@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.h
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -85,7 +85,7 @@ class TPrmTempl: public TFunction, public TConfig
 	    void inputLinks( );
 	    void outputLinks( );
 
-	    bool cntrCmdProc( XMLNode *opt, const string &pref = "/cfg" );
+	    virtual bool cntrCmdProc( XMLNode *opt, const string &pref = "/cfg" );
 
 	    protected:
 	    //Methods

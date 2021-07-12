@@ -400,16 +400,17 @@ void NodeId::setStrVal( const string &istr, NodeId::Type tp )
     str = istr;
 }
 
-NodeId NodeId::fromAddr( const string &strAddr )
+NodeId NodeId::fromAddr( const string &strAddr, bool strictStr )
 {
     int off = 0;
     string vl, dt, rez;
     char bf[3];
+    bool isObvisNS = false;
     uint16_t ns = strtoul(strParse(strAddr,0,":",&off).c_str(), NULL, 0);
-    if(off < (int)strAddr.size()) vl = strAddr.substr(off);
+    if(off < (int)strAddr.size()) { vl = strAddr.substr(off); isObvisNS = true; }
     else { vl = strAddr; ns = 0; }
 
-    //Check for Guid
+    //Checking for Guid
     if(vl.size() == 38 && vl[0] == '{' && vl[vl.size()-1] == '}' &&
 	vl[9] == '-' && vl[14] == '-' && vl[19] == '-' && vl[24] == '-')
     {
@@ -437,7 +438,7 @@ NodeId NodeId::fromAddr( const string &strAddr )
 	return NodeId(rez, ns, NodeId::Guid);
     }
 
-    //Check for string or opaque
+    //Checking for string or opaque
     if(vl.size() >= 2 && vl[0] == '\"' && vl[vl.size()-1] == '\"') {
 	bf[2] = 0;
 	char *endptr = 0;
@@ -448,11 +449,11 @@ NodeId NodeId::fromAddr( const string &strAddr )
 	return NodeId(vl.substr(1,vl.size()-2), ns);
     }
 
-    //Check for number
+    //Checking for the number
     bool isStr = false;
     for(unsigned iS = 0; iS < vl.size() && !isStr; iS++)
 	if(!isdigit(vl[iS])) isStr = true;
-    if(isStr) return NodeId(vl,ns);
+    if(isStr) return (isObvisNS || !strictStr) ? NodeId(vl,ns) : NodeId();
     return NodeId((uint32_t)strtoul(vl.c_str(),NULL,0), ns);
 }
 

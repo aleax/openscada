@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-06 19:00+0300\n"
+"POT-Creation-Date: 2021-07-12 16:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -237,7 +237,7 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-msgid "Clean up the the current violations table"
+msgid "Clear visible violations"
 msgstr ""
 
 msgid "Values"
@@ -769,6 +769,9 @@ msgstr ""
 msgid "Controller DB"
 msgstr ""
 
+msgid "Date of modification"
+msgstr ""
+
 msgid "Parameter"
 msgstr ""
 
@@ -796,9 +799,6 @@ msgid "Completely translate the procedure"
 msgstr ""
 
 msgid "Procedure"
-msgstr ""
-
-msgid "Date of modification"
 msgstr ""
 
 msgid "Template identifier"
@@ -1833,33 +1833,6 @@ msgstr ""
 msgid "Go to the configuration of the list of remote stations"
 msgstr ""
 
-msgid "Tasks"
-msgstr ""
-
-msgid "Thread"
-msgstr ""
-
-msgid "TID"
-msgstr ""
-
-msgid "Policy"
-msgstr ""
-
-msgid "Prior."
-msgstr ""
-
-msgid "CPU set"
-msgstr ""
-
-msgid "To set up the processors you use, write a row of numbers separated by a ':' character."
-msgstr ""
-
-msgid "Phase"
-msgstr ""
-
-msgid "To set up the task invoking phase."
-msgstr ""
-
 msgid "Translations"
 msgstr ""
 
@@ -1899,6 +1872,33 @@ msgid "Enable for checking the equal base messages for their translation equalit
 msgstr ""
 
 msgid "Pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing."
+msgstr ""
+
+msgid "Tasks"
+msgstr ""
+
+msgid "Thread"
+msgstr ""
+
+msgid "TID"
+msgstr ""
+
+msgid "Policy"
+msgstr ""
+
+msgid "Prior."
+msgstr ""
+
+msgid "CPU set"
+msgstr ""
+
+msgid "To set up the processors you use, write a row of numbers separated by a ':' character."
+msgstr ""
+
+msgid "Phase"
+msgstr ""
+
+msgid "To set up the task invoking phase."
 msgstr ""
 
 msgid "Debug"

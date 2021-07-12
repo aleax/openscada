@@ -7639,7 +7639,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.1.2
+Version: 1.1.3
 License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує для динамічного відображення активних порушень у табличному вигляді та із виділенням їх за кольором та текстом. Порушення отримуються із буферу поточних-активних порушень OpenSCADA. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Для детального вивчення актуальних порушень елементом передбачено функцію збільшення висоти угору або униз за отриманням фокусу.
@@ -7664,7 +7664,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.1.2
+Версія: 1.1.3
 Ліцензія: GPLv2','','Элемент на рисунке 1.5 служит для динамического отображения активных нарушений в табличном виде и с выделением их цветом и текстом. Нарушения получаются из буфера текущих-активных нарушений OpenSCADA. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 Для детального изучения актуальных нарушений элементом предусмотрено функцию увеличения высоты вверх или вниз при получении фокуса.
@@ -7689,7 +7689,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.1.2
+Версия: 1.1.3
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','dscr','The element-frame serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from the buffer of current-active violations of OpenSCADA and archive(s), specified in the configuration field <alArch>. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 
@@ -7728,7 +7728,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.2.1
+Version: 1.2.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення історії порушень та динамічного їх оновлення на поточний час у повноформатному табличному вигляді, із виділенням їх за кольором та текстом та можливістю багаторівневого фільтрування. Порушення отримуються із буферу поточних-активних порушень OpenSCADA та архіву(ів), визначеного конфігураційним полем <alArch>. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Загалом кадр містить елементи:
@@ -7766,7 +7766,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.2.1
+Версія: 1.2.2
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения истории нарушений и динамического их обновление для текущего времени в полноформатном табличном виде, с выделением их цветом и текстом и возможностью многоуровневого фильтрования. Нарушения получаются из буфера текущих-активных сообщений OpenSCADA и архива(ов), определённого конфигурационным полем <alArch>. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 В целом кадр содержит элементы:
@@ -7804,7 +7804,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.2.1
+Версия: 1.2.2
 Лицензия: GPLv2','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','view','7',32,'','','pass','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','');
@@ -13078,7 +13078,7 @@ INSERT INTO wlb_doc_io VALUES('docMessRep','tmpl','<body docProcLang="JavaLikeCa
 <?dp
 mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
 
-srcO = mCat.match("^al(.+):([^\\.]+)|^(.+):al");
+srcO = mCat.match("^al(.+):([^\\.]+)|^([^:]+).*:al");
 tVl = "";
 //From remote station
 if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
@@ -13221,14 +13221,14 @@ The document also provides a simple filtering for selected criteria: "Disabled",
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.5.0
+Version: 1.5.1
 License: GPLv2',32,'','','','Документ слугує для генерації звіту різного сорту повідомлень разом, включаючи: "Порушення", "Дії користувача-оператора" та "Системні". Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структури повідомлень: "Порушення", "Дії користувача-оператора" та "Системні". У якості джерела даних документу виступає архів повідомлень.
 
 Документ також надає просту фільтрацію за обраним критерієм: "Вимкнено", "Дата та час (dttm)", "Рівень (lev)", "Параметр (prm)", "Опис (dscr)", "Значення (alrm)".
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.5.0
+Версія: 1.5.1
 Ліцензія: GPLv2','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','dscr','The document is provided for generating a report of the hour values of up to 10 parameters for two working shift of day with the result sum for flows and related parameters. The document is the dynamic type, so you can specify the data time and depth (fixed). The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -23114,6 +23114,7 @@ KJVmkTB4ff7snYcvviIEeeU0TUTUKPLACE9CTFziCipabII/EEJs/CISwny8qvr6IihKBcX4hDlV
 1NgExJHSG4ewlDgXZWFImQdYhDXM7TSwySgFqmERlVKiyDpsYMgnoVEPDDQY9cBAAxYGBoYfP36w
 sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text',0,'JavaLikeCalc.JavaScript
 if(f_start)	isErr = false, alBlnk = false, cnt = 0, fixText = (text != "---");
+if(f_stop && !fixText)	{ text = "---"; return; }
 
 //Prepare/update the context menu
 if(f_start || ((cnt++)%max(1,f_frq*10)) == 0) {
@@ -23849,7 +23850,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 			else if(vC == "cat")	items += "<s>"+SYS.strEncode(iM.categ,"HTML")+"</s>";
 			else if(vC == "mess")	items += "<s>"+SYS.strEncode(iM.mess,"HTML")+"</s>";
 			else if(vC == "prm") {
-				srcO = iM.categ.match("^al(.+):([^\\.]+)|^(.+):al");
+				srcO = iM.categ.match("^al(.+):([^\\.]+)|^([^:]+).*:al");
 				tVl = "";
 				//From remote station
 				if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
@@ -23962,7 +23963,7 @@ BF2LsVCxzgcftOLiwj9+HLThB99nTP7JZyH27Oxweclkypj9bhNeLSmJMfPGm97ZcKv2pUzFr377
 u/fefbij63+jv2mOj49vd/L9H7IV2DRbgU2zFdg0W4FNsxXYNFuBTbMV2DRbgU2zFdg0W4FNsxXY
 NN94Af3qxfNnX+gr9Y38sXV+fv4PnB1oGOFeta8AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 function getSrc( categ, sourceCache ) {
-	srcO = categ.match("^al(.+):([^\\.]+)|^(.+):al");
+	srcO = categ.match("^al(.+):([^\\.]+)|^([^:]+).*:al");
 	tVl = "";
 	//From remote station
 	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {

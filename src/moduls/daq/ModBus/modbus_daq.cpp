@@ -73,10 +73,10 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("MAX_BLKSZ",_("Maximum size of the request block, bytes"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
     //Parameter type bd structure
-    // Standard parameter type by symple attributes list
+    // Standard parameter type by the simple attributes list
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"100000",""));
-    // Extended logical parameter type by DAQ parameter's template
+    // Extended logical parameter type by the DAQ parameter template
     t_prm = tpParmAdd("logic", "PRM_BD_L", _("Logical"));
     tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     //  Parameter template IO DB structure
@@ -141,7 +141,7 @@ string TMdContr::getStatus( )
 	if(!prcSt) val += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1) {
 	    val += TSYS::strMess(_("Error of connection. Restoring in %.6g s."), tmDelay);
-	    val.replace(0, 1, "10");
+	    val.replace(0, 1, i2s(TError::Tr_Connect));
 	}
 	else {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
@@ -725,6 +725,7 @@ void *TMdContr::Task( void *icntr )
 	try {
 	    if(!cntr.redntUse()) {
 	    if(cntr.tmDelay > 0) {
+		cntr.callSt = false;
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc prmRes(cntr.enRes, true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
@@ -778,8 +779,8 @@ void *TMdContr::Task( void *icntr )
 		    if((cntr.acqBlksCoil[iB].val.size()/8+((cntr.acqBlksCoil[iB].val.size()%8)?1:0)) != (pdu.size()-2))
 			cntr.acqBlksCoil[iB].err.setVal(_("15:Error in size of response PDU."));
 		    else {
-			for(unsigned i_c = 0; i_c < cntr.acqBlksCoil[iB].val.size(); i_c++)
-			    cntr.acqBlksCoil[iB].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+			for(unsigned iC = 0; iC < cntr.acqBlksCoil[iB].val.size(); iC++)
+			    cntr.acqBlksCoil[iB].val[iC] = (bool)((pdu[2+iC/8]>>(iC%8))&0x01);
 			cntr.numRCoil += cntr.acqBlksCoil[iB].val.size();
 		    }
 		}
@@ -806,8 +807,8 @@ void *TMdContr::Task( void *icntr )
 		    if((cntr.acqBlksCoilIn[iB].val.size()/8+((cntr.acqBlksCoilIn[iB].val.size()%8)?1:0)) != (pdu.size()-2))
 			cntr.acqBlksCoilIn[iB].err.setVal(_("15:Error in size of response PDU."));
 		    else {
-			for(unsigned i_c = 0; i_c < cntr.acqBlksCoilIn[iB].val.size(); i_c++)
-			    cntr.acqBlksCoilIn[iB].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+			for(unsigned iC = 0; iC < cntr.acqBlksCoilIn[iB].val.size(); iC++)
+			    cntr.acqBlksCoilIn[iB].val[iC] = (bool)((pdu[2+iC/8]>>(iC%8))&0x01);
 			cntr.numRCoilIn += cntr.acqBlksCoilIn[iB].val.size();
 		    }
 		}
@@ -906,7 +907,6 @@ void *TMdContr::Task( void *icntr )
 		cntr.tmDelay--;
 	    }
 
-	    //Calc acquisition process time
 	    cntr.callSt = false;
 
 	    }	// !cntr.redntUse()
@@ -999,7 +999,7 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff), err(mod->dataRe
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), acqErr(dataRes()), pEl("w_attr"), lCtx(NULL)
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), acqErr(dataRes()), pEl("ModBus_attr"), lCtx(NULL)
 {
     acqErr.setVal("");
     if(isLogic()) lCtx = new TLogCtx(this, name+"_ModBusPrm");
@@ -1059,9 +1059,9 @@ void TMdPrm::setType( const string &tpId )
 
 TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
-bool TMdPrm::isStd( ) const		{ return type().name == "std"; }
+bool TMdPrm::isStd( ) const		{ return (type().name == "std"); }
 
-bool TMdPrm::isLogic( ) const		{ return type().name == "logic"; }
+bool TMdPrm::isLogic( ) const		{ return (type().name == "logic"); }
 
 void TMdPrm::enable( )
 {
@@ -1086,7 +1086,7 @@ void TMdPrm::enable( )
 	    aflg = TSYS::strParse(sel, 0, ":", &elOff);
 	    aid = TSYS::strParse(sel, 0, ":", &elOff);
 	    if(aid.empty()) aid = ai;
-	    anm = sel.substr(elOff);//  TSYS::strParse(sel, 0, ":", &elOff);
+	    anm = sel.substr(elOff);
 	    if(anm.empty()) anm = aid;
 
 	    if(aid.empty() || (vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
@@ -1181,7 +1181,7 @@ void TMdPrm::enable( )
 
 	} catch(TError &err) { disable(); throw; }
 
-    //Check for delete DAQ parameter's attributes
+    //Checking to delete the DAQ parameter attributes
     for(int iP = 0; isStd() && iP < (int)pEl.fldSize(); iP++)
 	if(als.find(pEl.fldAt(iP).name()) == als.end())
 	    try{ pEl.fldDel(iP); iP--; }
@@ -1397,17 +1397,17 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(val.name() == "err") {
-	    if(!enableStat())			val.setS(_("1:Parameter disabled."),0,true);
-	    else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."),0,true);
-	}
-	else val.setS(EVAL_STR, 0, true);
+	    if(!enableStat())			val.setS(_("1:Parameter disabled."), 0, true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."), 0, true);
+	} else val.setS(EVAL_STR, 0, true);
 	return;
     }
 
     if(owner().redntUse()) return;
 
     if(val.name() == "err") {
-	if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
+	if(owner().tmDelay > -1) val.setS(_("10:Error of connection or no response."), 0, true);
+	else if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
 	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr), 0, true);
 	else val.setS("0",0,true);
     }
@@ -1456,7 +1456,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(isStd())
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",EVAL_STR,(owner().startStat()&&enableStat())?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 		"rows","8","SnthHgl","1",
-		"help",_("Attributes configuration list. List must be written by lines in the format: \"{dt}:{numb}[:{flg}[:{id}[:{name}]]]\".\n"
+		"help",_("Attributes configuration list. List must be written by lines in the form \"{dt}:{numb}[:{flg}[:{id}[:{name}]]]\".\n"
 		    "Where:\n"
 		    "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
 		    "       R and RI can be expanded by the suffixes:\n"
@@ -1475,7 +1475,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    "  \"R_s:15,20:r:str:Reg blk\" - get string (registers block) from the register 15 and the size 20."));
 	if(isLogic()) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
-	    if(enableStat())	lCtx->TPrmTempl::Impl::cntrCmdProc(opt);
+	    if(enableStat())	lCtx->cntrCmdProc(opt);
 	}
 	return;
     }
@@ -1493,7 +1493,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	disable();
 	modif();
     }
-    else if(isLogic() && enableStat() && lCtx->TPrmTempl::Impl::cntrCmdProc(opt))	;
+    else if(isLogic() && enableStat() && lCtx->cntrCmdProc(opt))	;
     else TParamContr::cntrCmdProc(opt);
 }
 

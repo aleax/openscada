@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-06 19:00+0300\n"
+"POT-Creation-Date: 2021-07-02 07:12+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -269,8 +269,8 @@ msgstr "Уровень"
 msgid "Message"
 msgstr "Сообщение"
 
-msgid "Clean up the the current violations table"
-msgstr "Очистить таблицу текущих нарушений"
+msgid "Clear visible violations"
+msgstr "Очистить видимые нарушения"
 
 msgid "Values"
 msgstr "Значения"
@@ -865,6 +865,9 @@ msgstr "Статус"
 msgid "Controller DB"
 msgstr "БД контроллера"
 
+msgid "Date of modification"
+msgstr "Дата модификации"
+
 msgid "Parameter"
 msgstr "Параметр"
 
@@ -896,9 +899,6 @@ msgstr "Полностью переводить процедуру"
 
 msgid "Procedure"
 msgstr "Процедура"
-
-msgid "Date of modification"
-msgstr "Дата модификации"
 
 msgid "Template identifier"
 msgstr "Идентификатор шаблона"
@@ -2206,37 +2206,6 @@ msgstr "Счётчик"
 msgid "Go to the configuration of the list of remote stations"
 msgstr "Переход к конфигурации перечня удалённых станций"
 
-msgid "Tasks"
-msgstr "Задачи"
-
-msgid "Thread"
-msgstr "Поток"
-
-msgid "TID"
-msgstr "TID"
-
-msgid "Policy"
-msgstr "Политика"
-
-msgid "Prior."
-msgstr "Приор."
-
-msgid "CPU set"
-msgstr "Уст. CPU"
-
-msgid ""
-"To set up the processors you use, write a row of numbers separated by a ':' "
-"character."
-msgstr ""
-"Для указания используемых процессоров записывайте строку номеров разделённых "
-"символом ':'."
-
-msgid "Phase"
-msgstr "Фаза"
-
-msgid "To set up the task invoking phase."
-msgstr "Для установки фазирования вызова задач."
-
 msgid "Translations"
 msgstr "Переводы"
 
@@ -2308,6 +2277,37 @@ msgstr ""
 "очень больших проектов которые ограничены во времени полной обработки "
 "таблицы."
 
+msgid "Tasks"
+msgstr "Задачи"
+
+msgid "Thread"
+msgstr "Поток"
+
+msgid "TID"
+msgstr "TID"
+
+msgid "Policy"
+msgstr "Политика"
+
+msgid "Prior."
+msgstr "Приор."
+
+msgid "CPU set"
+msgstr "Уст. CPU"
+
+msgid ""
+"To set up the processors you use, write a row of numbers separated by a ':' "
+"character."
+msgstr ""
+"Для указания используемых процессоров записывайте строку номеров разделённых "
+"символом ':'."
+
+msgid "Phase"
+msgstr "Фаза"
+
+msgid "To set up the task invoking phase."
+msgstr "Для установки фазирования вызова задач."
+
 msgid "Debug"
 msgstr "Отладка"
 
@@ -2378,6 +2378,7 @@ msgstr "Ошибка установки процессоров для поток
 msgid "only use the already multilanguage DBs with their modification"
 msgstr "только использовать уже многоязыковые БД с их модификацией"
 
+#, c-format
 msgid ""
 "creating or modification the configuration DBs as multilanguage ones with "
 "the pointed base language '%s'"

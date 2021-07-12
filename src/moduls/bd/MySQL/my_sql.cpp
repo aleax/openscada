@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.5.4"
+#define MOD_VER		"3.5.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -421,7 +421,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     //Check for no present and no empty keys allow
     if(row == 0) {
