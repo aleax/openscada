@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-09 11:37+0300\n"
+"POT-Creation-Date: 2021-07-26 09:59+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -307,8 +307,7 @@ msgid "View"
 msgstr "Ansicht"
 
 msgid "Text;Combo;Integer;Real;Time;Date;Date and time;Password"
-msgstr ""
-"Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
+msgstr "Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
 
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -531,10 +530,8 @@ msgstr ""
 "Die Dateivorlage schreibt sich wie in \"Images (*.png *.xpm *.jpg);;CSV-"
 "Datei (*.csv)\"."
 
-msgid ""
-"List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
-msgstr ""
-"Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
+msgid "List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
+msgstr "Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
 
 msgid "List of items-values by lines."
 msgstr "Liste der Werke-Werte durch Linien."
@@ -674,8 +671,7 @@ msgid "Border: style"
 msgstr "Rand: Stil"
 
 msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
-msgstr ""
-"Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
+msgstr "Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
 
 msgid "Color"
 msgstr "Farbe"
@@ -714,8 +710,7 @@ msgstr ": Wert"
 msgid ": config"
 msgstr ": Konfiguration"
 
-msgid ""
-"Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
+msgid "Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
 msgstr ""
 "Textwert in HTML. Verwenden Sie \"%{n}\" die Werte der Argumente \"n\" (aus "
 "1) zu halten."
@@ -1569,10 +1564,8 @@ msgid "Opened"
 msgstr "Geöffnet"
 
 #, c-format
-msgid ""
-"Error compiling the function '%s' by the language '%s' for the widget: %s"
-msgstr ""
-"Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
+msgid "Error compiling the function '%s' by the language '%s' for the widget: %s"
+msgstr "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
 #, c-format
 msgid "Processing at %s. "
@@ -1585,8 +1578,7 @@ msgid "the item: "
 msgstr "der Gegenstand: "
 
 msgid "It is a try of creating a widget in depth bigger to 10!"
-msgstr ""
-"Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
+msgstr "Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
 
 #, c-format
 msgid "Events: %s"
@@ -2092,6 +2084,9 @@ msgstr "Reelle Zahl"
 msgid "String"
 msgstr "Text"
 
+msgid "String (translate)"
+msgstr "Zeichenfolge (übersetzen)"
+
 msgid "Object"
 msgstr "Objekt"
 
@@ -2103,6 +2098,9 @@ msgstr "Reelle Zahlen Auswahl"
 
 msgid "Strings selection"
 msgstr "Strings Auswahl"
+
+msgid "Text (translate)"
+msgstr "Text (übersetzen)"
 
 msgid "DateTime"
 msgstr "DatumZeit"
@@ -2168,8 +2166,7 @@ msgstr ""
 msgid "Node presence"
 msgstr "Knotenpräsenz"
 
-msgid ""
-"Checking for the node presence, including widgets, attributes and other."
+msgid "Checking for the node presence, including widgets, attributes and other."
 msgstr ""
 "Überprüfen auf die Knotenpräsenz, einschließlich Widgets, Attribute und "
 "andere."
@@ -2217,3 +2214,4 @@ msgstr ""
 "vollständige Adresse des Attributs in <addr> angegeben wird, und indem: die "
 "Adresse des Widget in <addr> und die Attributkennung in <attr> separat "
 "angegeben werden."
+

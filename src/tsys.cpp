@@ -3101,10 +3101,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if(Mess->translEnMan()) {
 		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages of managing"),RWRW__,"root","root",2,"tp","str",
 		    "help",_("List of the processing languages, in the two-character representation and separated by the character ';'."));
-		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter, check for mismatch, pass"),RWRW__,"root","root",2,"tp","str",
+		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter, check/fix, pass"),RWRW__,"root","root",2,"tp","str",
 		    "help",_("Source filter of limiting the manager work in some DBs, the source just must contain such substring."));
-		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch","",RWRW__,"root","root",2,"tp","bool",
-		    "help",_("Enable for checking the equal base messages for their translation equality in different sources."));
+		ctrMkNode("fld",opt,-1,"/tr/chkAndFix","",RWRW__,"root","root",2,"tp","bool",
+		    "help",_("Enable for checking the base messages translation equality in different sources\n"
+			    "and fixing by: propagation the translations to empty sources, "
+			    "clearing the double to base translations "
+			    "and merging the base messages as the translations."));
 		ctrMkNode("fld",opt,-1,"/tr/pass","",RWRW__,"root","root",3,"tp","dec","min","0",
 		    "help",_("Pass the specified number of the table items from the top, "
 			    "useful for very big projects which are limited in time of the table complete processing."));
@@ -3458,9 +3461,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    TBDS::genDBSet(nodePath()+"TrPassN","0",opt->attr("user"));
 	}
     }
-    else if(a_path == "/tr/chkUnMatch") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrChkUnMatch",opt->text(),opt->attr("user"));
+    else if(a_path == "/tr/chkAndFix") {
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrChkAndFix",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/tr/pass") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrPassN","0",opt->attr("user")));
@@ -3468,7 +3471,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/tr/mess") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD)) {
-	    bool chkUnMatch = s2i(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
+	    bool chkAndFix = s2i(TBDS::genDBGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
 	    string tStr, trFltr = TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user"));
 	    unsigned passN = vmax(0, s2i(TBDS::genDBGet(nodePath()+"TrPassN","0",opt->attr("user"))));
 	    TConfig req;
@@ -3517,10 +3520,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    if(trFltr.size() && (is->first+"#"+is->second).find(trFltr) == string::npos) continue;
 
 		    string tMath, trSrc = TSYS::strParse(is->first, 0, "#"), trFld = TSYS::strParse(is->first, 1, "#");
-		    bool isCfg = false, haveMatch = false;
+		    bool isCfg = false;
 		    //  Source is the config file or the included DB
 		    if((isCfg=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
-			//  Needed for the DB structure preparing
+			//  Need for the DB structure preparing
 			req.elem().fldClear();
 			req.elem().fldAdd(new TFld(trFld.c_str(),trFld.c_str(),TFld::String,0));
 			for(unsigned iN = 1; iN < ns.size(); iN++)
@@ -3539,24 +3542,61 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 				if(!(iN && iN < (ns.size()-1))) continue;
 				tMath = req.cfg(Mess->translFld(ns[iN]->attr("id"),trFld,isCfg)).getS();
 				XMLNode *recNd = ns[iN]->childGet(-1);
-				if(firstInst) { recNd->setText(tMath); haveMatch = true; }
-				else {
-				    if(!s2i(recNd->attr("unmatch"))) {
-					if(tMath == recNd->text()) haveMatch = true;
-					else {
-					    if(recNd->text().empty()) recNd->setText(tMath);
-					    recNd->setText(_("<<<Unmatched sources!!!>>>\n")+recNd->text());
-					    recNd->setAttr("unmatch","1");
-					}
+				if(chkAndFix && tMath.empty())	recNd->setAttr("toPropagOnSp", "1");
+				if(firstInst)	recNd->setText(tMath);
+				else if(!s2i(recNd->attr("unmatch"))) {
+				    if(tMath.empty()) ;
+				    else if(recNd->text().empty())	recNd->setText(tMath);
+				    else if(tMath != recNd->text()) {
+					if(recNd->text().empty()) recNd->setText(tMath);
+					recNd->setText(string(_("<<<Unmatched sources>>>\n"))+"1. "+recNd->text()+"\n2. "+tMath);
+					recNd->setAttr("unmatch", "1")->attrDel("toPropagOnSp");
 				    }
 				}
 			    }
 			    firstInst = false;
-			    if(!chkUnMatch || !haveMatch) break;
+			    if(!chkAndFix) break;
 			}
-		    } else haveMatch = true;
-		    if(!chkUnMatch || !haveMatch) break;
+		    }
+		    if(!chkAndFix) break;
 		} catch(TError &err) { continue; }
+
+		//  Postprocessing the translation checking
+		for(unsigned iN = 0; chkAndFix && iN < ns.size(); iN++) {
+		    if(!(iN && iN < (ns.size()-1))) continue;
+		    XMLNode *recNd = ns[iN]->childGet(-1),
+			    *recNdBs = ns[0]->childGet(-1);
+		    string lng = ns[iN]->attr("dscr");
+		    bool needReload = false;
+		    if(!s2i(recNd->attr("unmatch")) && recNd->text().size()) {
+			//   Clearing the equel to base translation
+			if(recNd->text() == recNdBs->text()) {
+			    mess_warning((nodePath()+"Tr").c_str(), _("Clearing the equel to base translation '%s' for '%s'."),
+				lng.c_str(), recNdBs->text().c_str());
+			    Mess->translSet(recNdBs->text(), lng, "", &needReload, TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+			    recNd->setText("");
+			}
+			else if(s2i(recNd->attr("toPropagOnSp"))) {
+			    mess_warning((nodePath()+"Tr").c_str(), _("Propagation the translation '%s' to all empty sources for '%s'.'%s'."),
+				lng.c_str(), recNdBs->text().c_str(), recNd->text().c_str());
+			    Mess->translSet(recNdBs->text(), lng, recNd->text(), &needReload, TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+			}
+		    }
+		    if(recNd->text().size() && recNd->text() != recNdBs->text() && Mess->trMessIdx.find(recNd->text()) != Mess->trMessIdx.end()) {
+			mess_warning((nodePath()+"Tr").c_str(), _("Merging the base message to the translation '%s' for '%s' > '%s'."),
+			    lng.c_str(), recNd->text().c_str(), recNdBs->text().c_str());
+			//   Copying the real translations
+			for(unsigned iN2 = 1; iN2 < ns.size()-1; ++iN2) {
+			    XMLNode *recNd2 = ns[iN2]->childGet(-1);
+			    string lng2 = ns[iN2]->attr("dscr");
+			    Mess->translSet(recNd->text(), lng2, recNd2->text(), &needReload);
+			}
+
+			//   Replacing the message base
+			Mess->translSet(recNd->text(), Mess->lang2CodeBase(), recNdBs->text(), &needReload);
+		    }
+		    recNd->attrDel("unmatch")->attrDel("toPropagOnSp");
+		}
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {

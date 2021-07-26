@@ -436,7 +436,7 @@
 <ul><li> the object Client::Subscr::MonitItem was added as the monitored items representer with the access under the client resource common lock;</li></ul>
 <dl><dd><ul><li> the service requests appended for implementation, include processing the responses: CreateSubscription, DeleteSubscriptions, CreateMonitoredItems, Publish, Poll;</li>
 <li> implemented and tested in the secure policies support at Publish;</li>
-<li> the target Publish requests pool per subscription set in the virtual function publishReqsPool() with default value 2;</li></ul></dd></dl>
+<li> the target Publish requests pool per subscription set in the virtual function publishReqsPool() with default value 2.</li></ul></dd></dl>
 <ul><li> appended for the CHUNKS implementation both for requests and responses;</li>
 <li> completely revised and cleared in the common requesting function reqService() from doubling the arguments and parameters:</li></ul>
 <dl><dd><ul><li> appended for restoring sessions at reconnection the secure channel;</li>
@@ -449,7 +449,7 @@
 <li> ... and prevented from clearing in restoring the session and secure channel;</li>
 <li> appended for debug message of the request errors.</li></ul></dd>
 <dd> <i>LIB_SERVER</i>:</dd></dl>
-<ul><li> the server part adapted to work with UAExpert 1.5 for: the attribute AId_Descr of the DAQ-value set to the type OpcUa_LocalizedText, the integer types appended for declaration OpcUa_IntAuto and OpcUa_UIntAuto.</li>
+<ul><li> the server part adapted to work with UAExpert 1.5 for: the attribute AId_Descr of the DAQ-value set to the type OpcUa_LocalizedText, the integer types appended for declaration OpcUa_IntAuto and OpcUa_UIntAuto;</li>
 <li> the subscriptions processing returned to they processing in a separate task and the function subScrCycle() for:</li></ul>
 <dl><dd><ul><li> true counting all timeouts to disable;</li>
 <li> processing the periodicity of subscription and publishing;</li>

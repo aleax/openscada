@@ -1,3 +1,29 @@
+2021-07-26 Roman (stable)
+- !!!!:FIX:LibsDB.{OscadaLibs,vcaBase,vcaTest},{AGLKS,Boiler}.*:
+    Appended, cleaned and fixed for the multilanguage messages by applying the new translation fixing mechanisms.
+- !!!!:SYS: TFunction::IO object appended the flag IO::TransltText of marking the translate String IO directly.
+    !!!!: The DAQ-Parameter Template object appended of the types "String (translate)" and "Text (translate)".
+    !!!!:FIX: The "Translations" tab expansion and fixing for:
+	- the option "check for mismatch (TrChkUnMatch)" renamed to "check/fix (TrChkAndFix)" and expanded
+		of the translation fixing functions:
+	    - by propagation the translations to empty sources;
+	    - clearing the double to base translations;
+	    - merging the base messages as the translations.
+	- fixed in the matching check for all languages and clearing the service flags;
+	- information of the non matching was appended in the second message text.
+    !!!: The value (TValue) of the DAQ-Atributes use the flag TFld::TransltText for value getting
+	and the context information appended in the full text and translation.
+- !!: DAQ.{LogicLev,ModBus,OPC_UA,Siemens}:
+    The logical type DAQ-Attributes loading and saving appended for the translation disable at IO::TransltText missing.
+- FIX:DAQ.{ModBus,OPC_UA,Siemens}: The logical type DAQ-Attributes saving appended in miss disabling the translation.
+- !!!:UI.{QTStarter,WebVision,WebCfgD}:
+    Qt part, in the generic Qt Library, and Web appended for the table edition text apply at Enter and new line at Ctrl+Enter.
+- !!!:UI.VCAEngine: The UI-Attributes' types appended for "String (translate)" and "Text (translate)".
+    !!: The user attributes switched in them translation at direct setting the flag TFld::TransltText.
+- FIX:UI.WebCfgD: Fixed in the table set value updation for table data come with the flag "noReload".
+- FIX:UI.QTCfg: Fixed in broke names the selectable table columns after first incomplete "name-id" item.
+
+
 2021-07-12 Roman (stable)
 - FIX:LibsDB.OscadaLibs: The template library tests.test fixed in the IO "di" for the grouping.
 - LibsDB.vcaBase: doc.docMessRep,Main.{alarmsAct,alarmsSt}:
@@ -21,7 +47,7 @@
     DAQ.{ModBus,Siemens}:Added for clearing the call now flag at errors.
 - DAQ.ModBus: The source code some cleared.
 - !:Archives: The control interface button expanded for clearing the visible alarms, not all them only.
-- !!!!:FIX:{DAQ,Protocol}.OPC_UA: Appended for the Logical type DAQ-Parameter support.
+- !!!!:FIX:{DAQ,Protocol}.OPC_UA: Appended for the Logical type DAQ-Parameters support.
     !!: The Standard type DAQ-Parameters appended for the no requesting the metadata on the server mode
 	and the attributes direct ID and name.
     FIX:DAQ.OPC_UA: Fixed-finished in the parameter including support.

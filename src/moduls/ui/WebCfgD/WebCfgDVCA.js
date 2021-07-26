@@ -861,14 +861,14 @@ function selectChildRecArea( node, aPath, cBlk )
 			var rez = servSet(this.itPath, 'com=com', com, true);
 			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 			else this.srcNode.childNodes[col].childNodes[row].innerText = val;
-			if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()',500);
-			else this.setElements();
+			if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()', 500);
+			else this.setElements(true);
 		    }
 		}
 		dBlk.childNodes[1].appendChild(table);
 		cBlk.appendChild(dBlk);
 
-		table.setElements = function( ) {
+		table.setElements = function( saveCh ) {
 		    for(var iCol = 0; iCol < this.srcNode.childNodes.length; iCol++) {
 			var prcCol = this.srcNode.childNodes[iCol];
 			this.childNodes[0].childNodes[iCol+1].innerText = prcCol.getAttribute('dscr');
@@ -893,6 +893,8 @@ function selectChildRecArea( node, aPath, cBlk )
 			}
 			for(var iRow = 0; iRow < prcCol.childNodes.length; iRow++) {
 			    var tblCell = this.childNodes[iRow+1].childNodes[iCol+1];
+			    if(tblCell.isEnter && tblCell.childNodes.length && saveCh)
+				prcCol.childNodes[iRow].textContent = tblCell.childNodes[0].value;
 			    var cval = prcCol.childNodes[iRow].textContent;
 			    tblCell.isEdited = false; tblCell.cRow = iRow; tblCell.cCol = iCol;
 			    if(tblCell.isEnter) while(tblCell.childNodes.length) tblCell.removeChild(tblCell.lastChild);
@@ -1166,11 +1168,18 @@ function selectChildRecArea( node, aPath, cBlk )
 					this.parentNode.parentNode.comSet(this.cRow, this.cCol, curVal);
 					return false;
 				    }
-				    this.childNodes[0].onkeyup = function(e) {
-					if(!e) e = window.event;
-					if(e.keyCode == 13 && (this.nodeName != "TEXTAREA" || e.ctrlKey)) { this.parentNode.apply(); return true; }
-					if(e.keyCode == 27) { this.parentNode.parentNode.parentNode.setElements(); return true; }
-					return true;
+				    this.childNodes[0].onkeydown = function(e) {
+					if(e.keyCode == 13) {
+					    e.preventDefault();
+					    if(this.nodeName == "TEXTAREA" && e.ctrlKey) {	//NewLine insertion
+						var selStart = this.selectionStart;
+						this.value = this.value.slice(0, selStart) + "\n" + this.value.slice(this.selectionEnd);
+						this.selectionStart = this.selectionEnd = selStart + 1;
+						return true;
+					    }
+					    this.parentNode.apply();
+					}
+					if(e.keyCode == 27) this.parentNode.parentNode.parentNode.setElements();
 				    }
 				    this.firstChild.value = cval;
 				    this.childNodes[0].focus();

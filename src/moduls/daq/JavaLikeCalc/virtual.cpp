@@ -536,8 +536,8 @@ void Contr::loadFunc( bool onlyVl )
 	    if(!isDAQTmpl) setS(ioId, cfg.cfg("VAL").getS());
 	    else {
 		if(func()->io(ioId)->flg()&TPrmTempl::CfgLink)
-		    lnkAddrSet(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));	//Force no translated
-		else if(func()->io(ioId)->type() != IO::String) setS(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));		//Force no translated
+		    lnkAddrSet(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));	//Force to no translation
+		else if(func()->io(ioId)->type() != IO::String) setS(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));		//Force to no translation
 		else setS(ioId, cfg.cfg("VAL").getS());
 	    }
 	}

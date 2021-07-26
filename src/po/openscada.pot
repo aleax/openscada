@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 16:36+0300\n"
+"POT-Creation-Date: 2021-07-26 10:37+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1203,7 +1203,7 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-msgid "Real;Integer;Boolean;String;Text;Object;Integer numbers selection;Real numbers selection;Strings selection"
+msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object;Integer numbers selection;Real numbers selection;Strings selection"
 msgstr ""
 
 msgid "Input;Output"
@@ -1862,13 +1862,15 @@ msgstr ""
 msgid "List of the processing languages, in the two-character representation and separated by the character ';'."
 msgstr ""
 
-msgid "Source filter, check for mismatch, pass"
+msgid "Source filter, check/fix, pass"
 msgstr ""
 
 msgid "Source filter of limiting the manager work in some DBs, the source just must contain such substring."
 msgstr ""
 
-msgid "Enable for checking the equal base messages for their translation equality in different sources."
+msgid ""
+"Enable for checking the base messages translation equality in different sources\n"
+"and fixing by: propagation the translations to empty sources, clearing the double to base translations and merging the base messages as the translations."
 msgstr ""
 
 msgid "Pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing."
@@ -1971,7 +1973,19 @@ msgstr ""
 msgid "creating or modification the configuration DBs as multilanguage ones with the pointed base language '%s'"
 msgstr ""
 
-msgid "<<<Unmatched sources!!!>>>\n"
+msgid "<<<Unmatched sources>>>\n"
+msgstr ""
+
+#, c-format
+msgid "Clearing the equel to base translation '%s' for '%s'."
+msgstr ""
+
+#, c-format
+msgid "Propagation the translation '%s' to all empty sources for '%s'.'%s'."
+msgstr ""
+
+#, c-format
+msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
 msgstr ""
 
 msgid "Transports"
@@ -2194,6 +2208,12 @@ msgid "Attributes"
 msgstr ""
 
 msgid "Unknown"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "(translate)"
 msgstr ""
 
 msgid "Boolean"

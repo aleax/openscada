@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.5.3"
+#define MOD_VER		"2.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -493,9 +493,9 @@ void TMdPrm::loadIO( bool force )
 	    int iIO = tmpl->func()->ioId(cfg.cfg("ID").getS());
 	    if(iIO < 0) continue;
 	    if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
-		tmpl->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force no translated
-	    else if(tmpl->func()->io(iIO)->type() != IO::String)
-		tmpl->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force no translated
+		tmpl->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
+	    else if(tmpl->func()->io(iIO)->type() != IO::String || !(tmpl->func()->io(iIO)->flg()&IO::TransltText))
+		tmpl->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
 	    else tmpl->setS(iIO, cfg.cfg("VALUE").getS());
 	}
 	chkLnkNeed = tmpl->initLnks();
@@ -519,7 +519,8 @@ void TMdPrm::saveIO( )
 
 	for(int iIO = 0; iIO < tmpl->func()->ioSize(); iIO++) {
 	    cfg.cfg("ID").setS(tmpl->func()->io(iIO)->id());
-	    cfg.cfg("VALUE").setNoTransl(!(tmpl->func()->io(iIO)->type()==IO::String && !(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
+	    cfg.cfg("VALUE").setNoTransl(!(tmpl->func()->io(iIO)->type() == IO::String &&
+		    (tmpl->func()->io(iIO)->flg()&IO::TransltText) && !(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
 	    if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 		cfg.cfg("VALUE").setS(tmpl->lnkAddr(iIO));
 	    else cfg.cfg("VALUE").setS(tmpl->getS(iIO));

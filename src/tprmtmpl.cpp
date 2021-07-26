@@ -261,10 +261,10 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",
-			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object,
-			IO::Integer|(IO::Selectable<<8),IO::Real|(IO::Selectable<<8),IO::String|(IO::Selectable<<8)).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String;Text;Object;Integer numbers selection;Real numbers selection;Strings selection"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",
+			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::TransltText<<8),IO::String|(IO::FullText<<8),IO::String|((IO::FullText|IO::TransltText)<<8),
+			IO::Object,IO::Integer|(IO::Selectable<<8),IO::Real|(IO::Selectable<<8),IO::String|(IO::Selectable<<8)).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object;Integer numbers selection;Real numbers selection;Strings selection"));
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d",IO::Default,IO::Output).c_str(),"sel_list",_("Input;Output"));
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Attribute"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
@@ -317,7 +317,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    for(int id = 0; id < ioSize(); id++) {
 		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
-		if(n_type)	n_type->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&(IO::FullText|IO::Selectable))<<8)));
+		if(n_type)	n_type->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&(IO::FullText|IO::TransltText|IO::Selectable))<<8)));
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_attr)	n_attr->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
 		if(n_accs)	n_accs->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::CfgConst|TPrmTempl::CfgLink)));
@@ -365,7 +365,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		case 1:	io(row)->setName(sTrm(opt->text()));	break;
 		case 2:
 		    io(row)->setType((IO::Type)(s2i(opt->text())&0xFF));
-		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::Selectable)));
+		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::TransltText|IO::Selectable)));
 		    break;
 		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(IO::Output|IO::Return)));		break;
 		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));		break;
@@ -553,6 +553,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 	    unsigned fId = 0;
 	    unsigned flg = TVal::DirWrite|TVal::DirRead;
 	    if(func()->io(iIO)->flg()&IO::FullText)		flg |= TFld::FullText;
+	    if(func()->io(iIO)->flg()&IO::TransltText)		flg |= TFld::TransltText;
 	    string selVals, selNms;
 	    if(func()->io(iIO)->flg()&IO::Selectable) {
 		flg |= TFld::Selectable;

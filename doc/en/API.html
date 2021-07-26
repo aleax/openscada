@@ -1058,11 +1058,12 @@ Additional flags to the object TFld (enum TVal::AttrFlag):
 <p><b>Data:</b><br />
 Additional flags to the attribute's object of the function IO (enum TPrmTempl::IOTmplFlgs):
 </p>
-<ul><li> <i>TPrmTempl::AttrRead(0x10)</i> — Read only attribute;</li>
-<li> <i>TPrmTempl::AttrFull(0x20)</i> — Full access attribute;</li>
-<li> <i>TPrmTempl::CfgPublConst(0x40)</i> — Public constant;</li>
-<li> <i>TPrmTempl::CfgLink(0x80)</i> — External link;</li>
-<li> <i>TPrmTempl::LockAttr(0x100)</i> — Blocked attribute.</li></ul>
+<ul><li> <i>TPrmTempl::AttrRead</i> (0x10) — Read only attribute;</li>
+<li> <i>TPrmTempl::AttrFull</i> (0x20) — Full access attribute;</li>
+<li> <i>TPrmTempl::CfgPublConst</i> (0x40) — Public constant;</li>
+<li> <i>TPrmTempl::CfgLink</i> (0x80) — External link;</li>
+<li> <i>TPrmTempl::LockAttr</i> (0x100) — Blocked attribute.</li>
+<li> <i>reserves up to 0x800 and 0x1000 is already used by <a href="#IO">TFunction::IO</a></i></li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TPrmTempl( const char *id, const char *name = "" );</i> —  Initializing constructor of the template.</li>
@@ -1935,16 +1936,19 @@ The structure of information about the shared library (struct – TModSchedul::S
 <p><b>Data:</b><br />
 Parameter's type (enum — IO::Type):
 </p>
-<ul><li> <i>IO::String</i> — string/text;</li>
-<li> <i>IO::Integer</i> — integer;</li>
-<li> <i>IO::Real</i> — real;</li>
-<li> <i>IO::Boolean</i> — boolean;</li>
-<li> <i>IO::Object</i> — object.</li></ul>
+<ul><li> <i>IO::String</i> (0) — string/text;</li>
+<li> <i>IO::Integer</i> (1) — integer;</li>
+<li> <i>IO::Real</i> (2) — real;</li>
+<li> <i>IO::Boolean</i> (3) — boolean;</li>
+<li> <i>IO::Object</i> (4) — object.</li></ul>
 <p>Parameter's flags (enum — IO::IOFlgs):
 </p>
-<ul><li> <i>IO::Default</i> — default mode (input);</li>
-<li> <i>IO::Output</i> — output;</li>
-<li> <i>IO::Return</i> — return.</li></ul>
+<ul><li> <i>IO::Default</i> (0x00) — default mode (input);</li>
+<li> <i>IO::Output</i> (0x01) — output;</li>
+<li> <i>IO::Return</i> (0x02) — return;</li>
+<li> <i>IO::FullText</i> (0x04) — full-text string;</li>
+<li> <i>IO::Selectable</i> (0x08) — selectable;</li>
+<li> <i>IO::TransltText</i> (0x1000) — being translated string, <a href="#TPrmTempl">TPrmTempl</a> reserves the flags range [0x10...0x0800].</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>IO( const char *id, const char *name, IO::Type type, unsigned flgs, const char *def = "", bool hide = false, const char *rez = "" );</i> — Initializing constructor.</li>

@@ -490,13 +490,7 @@ INSERT INTO wlb_test_io VALUES('FormElTests','view','1',32,'','','line7','','','
 INSERT INTO wlb_test_io VALUES('FormElTests','cfg','El 1
 El 2
 El 3
-El 4',32,'','','line7','El 1
-El 2
-El 3
-El 4','','El 1
-El 2
-El 3
-El 4','','','');
+El 4',32,'','','line7','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','name','Simple\nbutton',32,'','','bt1','Проста\nкнопка','','Простая\nкнопка','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','geomX','4',32,'','','bt1','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','geomY','150',32,'','','bt1','','','','','','');
@@ -2353,8 +2347,8 @@ else if(curMin != lastMin && !(curMin%5)) {
 }','','',1000,'owner;name;dscr;',1580648793);
 CREATE TABLE IF NOT EXISTS 'wlb_test_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '0' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_test_uio VALUES('FormElTests','extValue','','Ext. value','Зовнішне значення','Внешнее значение',131076,'0|','','',6,'','','','','','');
-INSERT INTO wlb_test_uio VALUES('docTestGasNodeDayRep','closeDoc','','Close document','Закриття документа','Закрытие документа',131072,NULL,'','',8,'','','','','','');
-INSERT INTO wlb_test_uio VALUES('docTestGasNodeDayRep','lastDay','','Last day','Остання доба','Последний день',131073,'-1|','','',8,'','','','','','');
+INSERT INTO wlb_test_uio VALUES('docTestGasNodeDayRep','closeDoc','','Close document','Закриття документа','Закрывать документ',131072,NULL,'','',8,'','','','','','');
+INSERT INTO wlb_test_uio VALUES('docTestGasNodeDayRep','lastDay','','Last day','Останній день','Последний день',131073,'-1|','','',8,'','','','','','');
 INSERT INTO wlb_test_uio VALUES('docTestGasNodeDayRep','lastHour','','Last hour','Остання година','Последний час',131073,'-1|','','',8,'','','','','','');
 INSERT INTO wlb_test_uio VALUES('docTestGasNodeDayRep','lastMin','','Last minute','Остання хвилина','Последняя минута',131073,'-1|','','',8,'','','','','','');
 INSERT INTO wlb_test_uio VALUES('docTestGasNodeDayRep','repHour','','Report hour','Звітний час','Отчётный час',131073,'9|','','',9,'','','','','','');

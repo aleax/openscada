@@ -1417,7 +1417,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 					(elms.size() != elmi.size() && elms[sel_n] == t_linf->childGet(iEl)->text().c_str()))
 				    break;
 			    if(sel_n >= elms.size()) {
-				elms.insert(elms.begin(),t_linf->childGet(iEl)->text().c_str());
+				elms.push_front(t_linf->childGet(iEl)->text().c_str());
+				elmi.push_front(t_linf->childGet(iEl)->text().c_str());
 				sel_n = 0;
 			    }
 

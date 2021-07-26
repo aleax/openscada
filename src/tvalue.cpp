@@ -264,7 +264,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		if(n_e) {
 		    string sType = _("Unknown");
 		    switch(vl.at().fld().type()) {
-			case TFld::String:	sType = _("String");	break;
+			case TFld::String:
+			    sType = (vl.at().fld().flg()&TFld::FullText) ? _("Text") : _("String");
+			    if(vl.at().fld().flg()&TFld::TransltText)	sType = sType + " " + _("(translate)");
+			    break;
 			case TFld::Integer:	sType = _("Integer");	break;
 			case TFld::Real:	sType = _("Real");	break;
 			case TFld::Boolean:	sType = _("Boolean");	break;
@@ -293,10 +296,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list", opt, -1, "/arch/arch/atr", _("Attribute"), R_R_R_, "root", SARH_ID, 1, "tp", "str");
 		ctrMkNode("list", opt, -1, "/arch/arch/prc", _("Archiving"), RWRWR_, "root", SARH_ID, 1, "tp", "bool");
 		SYS->archive().at().modList(vLs);
-		for(unsigned i_ta = 0; i_ta < vLs.size(); i_ta++) {
-		    SYS->archive().at().at(vLs[i_ta]).at().valList(vLs2);
+		for(unsigned iTa = 0; iTa < vLs.size(); iTa++) {
+		    SYS->archive().at().at(vLs[iTa]).at().valList(vLs2);
 		    for(unsigned iA = 0; iA < vLs2.size(); iA++) {
-			string a_id = SYS->archive().at().at(vLs[i_ta]).at().valAt(vLs2[iA]).at().workId();
+			string a_id = SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().workId();
 			ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,RWRWR_,"root",SARH_ID,1,"tp","bool");
 		    }
 		}
@@ -316,7 +319,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText((vl.at().fld().type()==TFld::Real) ?
 		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : r2s(vl.at().getR(),6)) :
-		    ((Mess->translDyn() && vl.at().fld().type()==TFld::String) ? trLU(vl.at().getS(),l,u) :
+		    ((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ? trLU(vl.at().getS(),l,u) :
 		    vl.at().getS()));
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String) ? trSetLU(vl.at().getS(),l,u,opt->text()) : opt->text());
@@ -330,11 +333,11 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list", opt, -1, "/arch/arch/atr", "", R_R_R_);
 	    ctrMkNode("list", opt, -1, "/arch/arch/prc", "", RWRWR_);
 	    SYS->archive().at().modList(vLs);
-	    for(unsigned i_ta = 0; i_ta < vLs.size(); i_ta++) {
-		SYS->archive().at().at(vLs[i_ta]).at().valList(vLs2);
+	    for(unsigned iTa = 0; iTa < vLs.size(); iTa++) {
+		SYS->archive().at().at(vLs[iTa]).at().valList(vLs2);
 		for(unsigned iA = 0; iA < vLs2.size(); iA++)
 		    ctrMkNode("list", opt, -1,
-			("/arch/arch/"+SYS->archive().at().at(vLs[i_ta]).at().valAt(vLs2[iA]).at().workId()).c_str(), "", RWRWR_);
+			("/arch/arch/"+SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().workId()).c_str(), "", RWRWR_);
 	    }
 	    // Fill table
 	    vlList(vLs);

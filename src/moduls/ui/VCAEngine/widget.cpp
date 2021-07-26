@@ -1528,8 +1528,14 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    for(unsigned i_el = 0; i_el < lst.size(); i_el++) {
 		if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
 		if(n_name)	n_name->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().name());
-		if(n_type)	n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
-				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::FullText|TFld::Selectable|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
+		if(n_type) {
+		    if(wdg.at().attrAt(lst[i_el]).at().fld().flg()&TFld::Selectable)
+			n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
+				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::Selectable))<<4)));
+		    else
+			n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
+				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::FullText|TFld::TransltText|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
+		}
 		if(n_wa)	n_wa->childAdd("el")->setText( wdg.at().attrAt(lst[i_el]).at().fld().values()+"|"+
 							    wdg.at().attrAt(lst[i_el]).at().fld().selNames());
 		if(n_proc)	n_proc->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().flgSelf()&Attr::ProcAttr));
@@ -1588,7 +1594,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		}
 		else if(idcol == "type") {
 		    ttp = (TFld::Type)(s2i(opt->text())&0x0f);
-		    tflg = tflg^((tflg^((s2i(opt->text())>>4)|Attr::IsUser))&(TFld::FullText|TFld::Selectable|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
+		    tflg = tflg^((tflg^((s2i(opt->text())>>4)|Attr::IsUser))&(TFld::FullText|TFld::TransltText|TFld::Selectable|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
 		}
 		wdg.at().attrDel(idattr);
 		wdg.at().attrAdd(new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()), -1, false, false, true);
@@ -1655,11 +1661,13 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer))->setText(_("Integer"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Real))->setText(_("Real"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String))->setText(_("String"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(TFld::TransltText<<4)))->setText(_("String (translate)"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Object))->setText(_("Object"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer+(TFld::Selectable<<4)))->setText(_("Integer numbers selection"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Real+(TFld::Selectable<<4)))->setText(_("Real numbers selection"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(TFld::Selectable<<4)))->setText(_("Strings selection"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(TFld::FullText<<4)))->setText(_("Text"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+((TFld::FullText|TFld::TransltText)<<4)))->setText(_("Text (translate)"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Color<<4)))->setText(_("Color"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Image<<4)))->setText(_("Image"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Font<<4)))->setText(_("Font"));

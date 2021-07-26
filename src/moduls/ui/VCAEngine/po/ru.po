@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-09 11:37+0300\n"
+"POT-Creation-Date: 2021-07-26 09:59+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -522,8 +522,7 @@ msgstr ""
 "и содержимое загруженного файла начиная со следующей строки.\n"
 "Шаблон файлов в виде \"Изображение (*.png *.xpm *.jpg);;CSV-файл (*.csv)\"."
 
-msgid ""
-"List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
+msgid "List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
 msgstr ""
 "Список иерархических элементов в виде пути \"/{КАТ}/{КАТ}/{ЭЛЕМ}\" по "
 "строкам."
@@ -664,8 +663,7 @@ msgid "Border: style"
 msgstr "Граница: стиль"
 
 msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
-msgstr ""
-"Нет;Точечный;Пунктирный;Сплошной;Двойной;Канавка;Кромка;Вдавлен;Выступающий"
+msgstr "Нет;Точечный;Пунктирный;Сплошной;Двойной;Канавка;Кромка;Вдавлен;Выступающий"
 
 msgid "Color"
 msgstr "Цвет"
@@ -705,8 +703,7 @@ msgstr ": значение"
 msgid ": config"
 msgstr ": конфигурация"
 
-msgid ""
-"Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
+msgid "Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
 msgstr ""
 "Значение текста в HTML. Используйте \"%{n}\" для помещения значения "
 "аргумента \"n\" (от 1)."
@@ -940,8 +937,7 @@ msgid ": scale"
 msgstr ": шкала"
 
 msgid "Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"
-msgstr ""
-"Глобально;Маркеры;Решетка и маркеры;Маркеры (лог);Решетка и маркеры (лог)"
+msgstr "Глобально;Маркеры;Решетка и маркеры;Маркеры (лог);Решетка и маркеры (лог)"
 
 msgid ": properties"
 msgstr ": свойства"
@@ -1066,8 +1062,7 @@ msgid "Set value to \"< 0\" for get the current alarms."
 msgstr "Установите значение \"< 0\" для получения текущих нарушений."
 
 msgid "Set value to \"0\" for get all alarms, for \"lev\" < 0."
-msgstr ""
-"Установите значение в \"0\" для получения всех нарушений, для \"lev\" < 0."
+msgstr "Установите значение в \"0\" для получения всех нарушений, для \"lev\" < 0."
 
 msgid ""
 "Category template or the regular expression \"/{re}/\". For the template "
@@ -1557,8 +1552,7 @@ msgid "Opened"
 msgstr "Открыт"
 
 #, c-format
-msgid ""
-"Error compiling the function '%s' by the language '%s' for the widget: %s"
+msgid "Error compiling the function '%s' by the language '%s' for the widget: %s"
 msgstr "Ошибка компиляции функции '%s' на языке '%s' для виджета: %s"
 
 #, c-format
@@ -1945,8 +1939,7 @@ msgstr "Путь к родительскому виджету."
 msgid ""
 "Owner and groups (separated by ',') of the widget in the form \"{owner}:"
 "{groups}\"."
-msgstr ""
-"Владелец и группы (разделённые ',') виджета в форме \"{владелец}:{группы}\"."
+msgstr "Владелец и группы (разделённые ',') виджета в форме \"{владелец}:{группы}\"."
 
 msgid ""
 "Widget permission in the form \"{user}{group}{other}\".\n"
@@ -2077,6 +2070,9 @@ msgstr "Вещественный"
 msgid "String"
 msgstr "Строка"
 
+msgid "String (translate)"
+msgstr "Строка (перевод)"
+
 msgid "Object"
 msgstr "Объект"
 
@@ -2088,6 +2084,9 @@ msgstr "Выбор вещественных чисел"
 
 msgid "Strings selection"
 msgstr "Выбор строк"
+
+msgid "Text (translate)"
+msgstr "Текст (перевод)"
 
 msgid "DateTime"
 msgstr "ДатаВремя"
@@ -2152,8 +2151,7 @@ msgstr ""
 msgid "Node presence"
 msgstr "Присутствие узла"
 
-msgid ""
-"Checking for the node presence, including widgets, attributes and other."
+msgid "Checking for the node presence, including widgets, attributes and other."
 msgstr "Проверка узла на присутствие, включая виджеты, атрибуты и другие."
 
 msgid "Not user"
@@ -2197,3 +2195,4 @@ msgstr ""
 "Установка значения атрибута виджета. Установка может осуществляться как "
 "указанием полного адреса атрибута в <addr>, так и: отдельно адрес виджета в "
 "<addr> и идентификатор атрибута в <attr>."
+

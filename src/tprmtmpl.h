@@ -50,6 +50,7 @@ class TPrmTempl: public TFunction, public TConfig
 	    CfgConst	= 0x040,	//Configure as a constant
 	    CfgLink	= 0x080,	//Configure as a link
 	    LockAttr	= 0x100		//Lock attribute
+					//!!!! Reserves up to 0x800 and 0x1000 is already used by TFunction::IO
 	};
 
 	// Object of implementations of the DAQ templates

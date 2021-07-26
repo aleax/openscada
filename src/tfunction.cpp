@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -223,29 +223,29 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	TValFunc vfnc("JavaLikeObjFuncCalc",this);
 
 	//  Get return position
-	int r_pos, i_p, p_p;
-	for(r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++)
-	    if(vfnc.ioFlg(r_pos)&IO::Return) break;
+	int rPos, iP, pP;
+	for(rPos = 0; rPos < vfnc.func()->ioSize(); rPos++)
+	    if(vfnc.ioFlg(rPos)&IO::Return) break;
 	//  Process parameters
-	for(i_p = p_p = 0; true; i_p++) {
-	    p_p = (i_p>=r_pos) ? i_p+1 : i_p;
-	    if(p_p >= vfnc.func()->ioSize()) break;
+	for(iP = pP = 0; true; iP++) {
+	    pP = (iP>=rPos) ? iP+1 : iP;
+	    if(pP >= vfnc.func()->ioSize()) break;
 	    //   Set default value
-	    if(i_p >= (int)prms.size()) { vfnc.setS(p_p,vfnc.func()->io(p_p)->def()); continue; }
-	    vfnc.set(p_p,prms[i_p]);
+	    if(iP >= (int)prms.size()) { vfnc.setS(pP,vfnc.func()->io(pP)->def()); continue; }
+	    vfnc.set(pP,prms[iP]);
 	}
 	//  Make calc
 	vfnc.calc(user);
 	//  Process outputs
-	for(i_p = 0; i_p < (int)prms.size(); i_p++) {
-	    p_p = (i_p>=r_pos) ? i_p+1 : i_p;
-	    if(p_p >= vfnc.func()->ioSize()) break;
-	    if(!(vfnc.ioFlg(p_p)&IO::Output))   continue;
-	    prms[i_p] = vfnc.get(p_p);
-	    prms[i_p].setModify();
+	for(iP = 0; iP < (int)prms.size(); iP++) {
+	    pP = (iP>=rPos) ? iP+1 : iP;
+	    if(pP >= vfnc.func()->ioSize()) break;
+	    if(!(vfnc.ioFlg(pP)&IO::Output))   continue;
+	    prms[iP] = vfnc.get(pP);
+	    prms[iP].setModify();
 	}
 	//  Set return
-	if(r_pos < vfnc.func()->ioSize()) return vfnc.get(r_pos);
+	if(rPos < vfnc.func()->ioSize()) return vfnc.get(rPos);
 	return TVariant();
     }
 

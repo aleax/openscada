@@ -222,12 +222,14 @@ bool TableDelegate::eventFilter( QObject *object, QEvent *event )
 	    switch(static_cast<QKeyEvent *>(event)->key()) {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
-		    if(QApplication::keyboardModifiers()&Qt::ControlModifier) {
+		    if(static_cast<QKeyEvent *>(event)->text() == "<REFORWARD>") return false;
+		    if(!(QApplication::keyboardModifiers()&Qt::ControlModifier)) {
 			emit commitData(ted);
 			emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
 			return true;
 		    }
-		    else return false;
+		    QCoreApplication::postEvent(object, new QKeyEvent(QEvent::KeyPress,static_cast<QKeyEvent *>(event)->key(),Qt::NoModifier,"<REFORWARD>"));
+		    return true;
 		case Qt::Key_Escape:
 		    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);
 		    return true;

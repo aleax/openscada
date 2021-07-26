@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-02 07:12+0300\n"
+"POT-Creation-Date: 2021-07-26 10:37+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -1384,11 +1384,11 @@ msgid "Template"
 msgstr "Шаблон"
 
 msgid ""
-"Real;Integer;Boolean;String;Text;Object;Integer numbers selection;Real "
-"numbers selection;Strings selection"
+"Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object;"
+"Integer numbers selection;Real numbers selection;Strings selection"
 msgstr ""
-"Реальний;Цілий;Логічний;Рядок;Текст;Об'єкт;Вибір цілих чисел;Вибір реальних "
-"чисел;Вибір рядків"
+"Реальний;Цілий;Логічний;Рядок;Рядок (переклад);Текст;Текст (переклад);Об'єкт;"
+"Вибір цілих чисел;Вибір реальних чисел;Вибір рядків"
 
 msgid "Input;Output"
 msgstr "Вхід;Вихід"
@@ -2247,8 +2247,8 @@ msgstr ""
 "Перелік оброблюваних мов у двосимвольному представлені та поділені символом "
 "';'."
 
-msgid "Source filter, check for mismatch, pass"
-msgstr "Фільтр джерел, перевірка відповідності, пропуск"
+msgid "Source filter, check/fix, pass"
+msgstr "Фільтр джерел, перевірка/виправлення, пропуск"
 
 msgid ""
 "Source filter of limiting the manager work in some DBs, the source just must "
@@ -2258,11 +2258,16 @@ msgstr ""
 "містити такий підрядок."
 
 msgid ""
-"Enable for checking the equal base messages for their translation equality "
-"in different sources."
+"Enable for checking the base messages translation equality in different "
+"sources\n"
+"and fixing by: propagation the translations to empty sources, clearing the "
+"double to base translations and merging the base messages as the "
+"translations."
 msgstr ""
-"Вмикає перевірку однаковий базових повідомлень на однаковість їх перекладу у "
-"різних джерелах."
+"Увімкнути перевірку щодо однаковості перекладу базового повідомлення у "
+"різних джерелах\n"
+"та виправлення щодо: розповсюдження перекладу на порожні джерела, очищення "
+"дублювань базових повідомлень та поєднання базових повідомлень як переклади."
 
 msgid ""
 "Pass the specified number of the table items from the top, useful for very "
@@ -2380,8 +2385,20 @@ msgstr ""
 "створення або модифікація конфігураційних БД як багатомовні із вказаною "
 "базовою мовою '%s'"
 
-msgid "<<<Unmatched sources!!!>>>\n"
+msgid "<<<Unmatched sources>>>\n"
 msgstr "<<<Незбіг джерел!!!>>>\n"
+
+#, c-format
+msgid "Clearing the equel to base translation '%s' for '%s'."
+msgstr "Очищення перекладів, які однакові до бази '%s' щодо '%s'."
+
+#, c-format
+msgid "Propagation the translation '%s' to all empty sources for '%s'.'%s'."
+msgstr "Розповсюдження перекладу '%s' на всі порожні джерела щодо '%s'.'%s'."
+
+#, c-format
+msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
+msgstr "Поєднання базового повідомлення із перекладом '%s' щодо '%s' > '%s'."
 
 msgid "Transports"
 msgstr "Транспорти"
@@ -2630,6 +2647,12 @@ msgstr "Атрибути"
 
 msgid "Unknown"
 msgstr "Невідомий"
+
+msgid "Text"
+msgstr "Текст"
+
+msgid "(translate)"
+msgstr "(переклад)"
 
 msgid "Boolean"
 msgstr "Логічний"

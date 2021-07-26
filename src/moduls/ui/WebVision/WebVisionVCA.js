@@ -1873,17 +1873,24 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    tVl = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
 				    this.innerHTML = (this.outTp == "t") ? "<textarea style='height: "+this.clientHeight+"px;'/>" : "<input/>";
 				    this.firstChild.value = tVl;
-				    this.firstChild.onkeyup = function(e) {
+				    this.firstChild.onkeydown = function(e) {
 					e.stopImmediatePropagation();
-					if(e.keyCode == 13 && (this.nodeName != "TEXTAREA" || e.ctrlKey))
+					if(e.keyCode == 13) {
+					    e.preventDefault();
+					    if(this.nodeName == "TEXTAREA" && e.ctrlKey) {	//NewLine insertion
+						var selStart = this.selectionStart;
+						this.value = this.value.slice(0, selStart) + "\n" + this.value.slice(this.selectionEnd);
+						this.selectionStart = this.selectionEnd = selStart + 1;
+						return true;
+					    }
 					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+					}
 					if(e.keyCode == 27) {
 					    this.parentNode.isEnter = false; this.parentNode.offsetParent.edIt = null;
 					    this.parentNode.innerHTML = this.parentNode.svInnerHTML;
 					}
-					return true;
 				    }
-				    this.firstChild.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
+				    //this.firstChild.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.focus();
 				} else { this.isEnter = false; elTbl.edIt = null; }

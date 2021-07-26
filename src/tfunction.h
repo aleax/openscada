@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,11 +46,12 @@ class IO
 	//Data
 	enum Type { String, Integer, Real, Boolean, Object };
 	enum IOFlgs {
-	    Default	= 0x00,	//Default mode (Input IO)
+	    Default	= 0x00,		//Default mode (Input IO)
 	    Output	= 0x01,
 	    Return	= 0x02,
 	    FullText	= 0x04,
-	    Selectable	= 0x08
+	    Selectable	= 0x08,
+	    TransltText	= 0x1000	//!!!! But TPrmTempl reserves the flags range [0x10...0x0800]
 	};
 
 	//Methods
