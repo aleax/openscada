@@ -335,7 +335,9 @@ TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &
     ResAlloc res(extHostRes, false);
     ExtHost eh(user, "");
     for(unsigned iH = 0; iH < extHostLs.size(); ++iH)
-	if(extHostLs[iH].id == id && (user.empty() || user == extHostLs[iH].userOpen || (andSYS && extHostLs[iH].userOpen == "*"))) {
+	if(extHostLs[iH].id == id &&
+		((!andSYS && (user.empty() || user == extHostLs[iH].userOpen)) ||
+		(andSYS && extHostLs[iH].userOpen == "*"))) {
 	    if(eh.mode < 0) {
 		eh = extHostLs[iH];
 		eh.mode = (eh.userOpen == "*") ? ExtHost::System : ExtHost::User;
@@ -446,8 +448,14 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     //Password's hash processing
     if(!rqDir && node.attr("pHash").size()) {
 	if(host.pass != (TSecurity::pHashMagic+node.attr("pHash"))) {
-	    host.pass = TSecurity::pHashMagic + node.attr("pHash");
+	    // Try the peer for apply the hash also
+	    //!!!! Append next of processing several not system users/connections
+	    TTransportS::ExtHost hostP = extHostGet((user.empty()?"":"*"), station);
+	    bool setP = (hostP.id.size() && hostP.user == host.user && hostP.pass == host.pass);
+
+	    host.pass = hostP.pass = TSecurity::pHashMagic + node.attr("pHash");
 	    extHostSet(host);
+	    if(setP) extHostSet(hostP);
 	}
 	node.setAttr("pHash", "");
     }

@@ -209,7 +209,7 @@ class VisItProp : public QDialog
 	QPushButton	*buttAttrAdd,	//Add new attribute button
 			*buttAttrDel;	//Delete attribute record
 
-	bool		show_init, is_modif, ico_modif, lib_wdg;
+	bool		show_init, is_modif, ico_modif, lib_wdg, isPrcLoaded;
 	string		ed_it;
 };
 

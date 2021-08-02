@@ -216,8 +216,8 @@ void Project::load_( TConfig *icfg )
     vector<string> vlst;
     for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,true); ) {
 	vlst.clear();
-	for(int iS = 0; iS < 10; iS++)
-	    vlst.push_back(cStl.cfg(TSYS::strMess("V_%d",iS)).getS());
+	for(int iS = 0; iS < Project::StlMaximum; iS++)
+	    vlst.push_back(cStl.cfg("V_"+i2s(iS)).getS());
 	mStProp[cStl.cfg("ID").getS()] = vlst;
     }
 }
@@ -252,7 +252,7 @@ void Project::save_( )
     TConfig cStl(&mod->elPrjStl());
     for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
 	cStl.cfg("ID").setS(iStPrp->first);
-	for(unsigned iS = 0; iS < iStPrp->second.size() && iS < 10; iS++)
+	for(unsigned iS = 0; iS < iStPrp->second.size() && iS < Project::StlMaximum; iS++)
 	    cStl.cfg(TSYS::strMess("V_%d",iS)).setS(iStPrp->second[iS]);
 	SYS->db().at().dataSet(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl);
     }
@@ -415,7 +415,7 @@ int Project::stlSize( )
 
 void Project::stlCurentSet( int sid )
 {
-    mStyleIdW = (sid < 0 || sid >= stlSize()) ? -1 : sid;
+    mStyleIdW = (sid < 0 || sid >= stlSize()) ? Project::StlDisabled : sid;
     modif();
 }
 
@@ -757,7 +757,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/style/style") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(stlCurent()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    if(s2i(opt->text()) >= -1) stlCurentSet(s2i(opt->text()));
+	    if(s2i(opt->text()) >= Project::StlDisabled) stlCurentSet(s2i(opt->text()));
 	    else {
 		ResAlloc res(mStRes, true);
 
@@ -777,8 +777,9 @@ void Project::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/style/stLst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setAttr("id","-1")->setText(_("<Disabled>"));
-	if(stlSize() < 10) opt->childAdd("el")->setAttr("id","-2")->setText(_("<Create a new style>"));
+	opt->childAdd("el")->setAttr("id",i2s(Project::StlDisabled))->setText(_("<Disabled>"));
+	if(stlSize() < Project::StlMaximum)
+	    opt->childAdd("el")->setAttr("id",i2s(Project::StlCreate))->setText(_("<Create a new style>"));
 	for(int iSt = 0; iSt < stlSize(); iSt++)
 	    opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(stlGet(iSt),0,';'));
     }
@@ -807,7 +808,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && opt->attr("col") == "vl" && stlCurent() >=0 && stlCurent() < stlSize())
 	{
-	    ResAlloc res( mStRes, true );
+	    ResAlloc res(mStRes, true);
 	    map< string, vector<string> >::iterator iStPrp = mStProp.find(opt->attr("key_id"));
 	    if(iStPrp != mStProp.end()) { iStPrp->second[stlCurent()] = opt->text(); modif(); }
 	}
@@ -819,7 +820,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
 	    if(iStPrp->second.size() > 1 || iStPrp->first == "<Styles>")
 		iStPrp->second.erase(iStPrp->second.begin()+stlCurent());
-	stlCurentSet(-1);
+	stlCurentSet(Project::StlDisabled);
     }
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) {

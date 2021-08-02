@@ -5560,13 +5560,13 @@ else {
 INSERT INTO tmplib_base VALUES('simleBoard','Analog alarm by borders (obsolete)','Сигнал аналоговий за границями (застаріле)','Сигнал аналоговый по границам (устаревшее)','The template of simple parameter included borders and dimension variable.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','Шаблон простого параметру з перевіркою границь та одиницею виміру.
+Version: 1.0.1','Шаблон простого параметру з перевіркою границь та одиницею виміру.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0','Шаблон простого параметра с проверкой границ и единицей измерения.
+Версія: 1.0.1','Шаблон простого параметра с проверкой границ и единицей измерения.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0',10,1,'JavaLikeCalc.JavaScript
+Версия: 1.0.1',10,1,'JavaLikeCalc.JavaScript
 var=iMult*(in+iAdd);
 if(var>max)			f_err="1:Upper work border violation";
 else if(var<min)			f_err="2:Bottom work border violation";
@@ -5590,7 +5590,7 @@ else if(aMax>aMin && var>aMax)	f_err="3:Нарушение верхней ава
 else if(aMax>aMin && var<aMin)	f_err="4:Нарушение нижней аварийной границы";
 else if(wMax>wMin && var>wMax)	f_err="5:Нарушение верхней предупредительной границы";
 else if(wMax>wMin && var<wMin)	f_err="6:Нарушение нижней предупредительной границы";
-else f_err="0";','');
+else f_err="0";',1627833238);
 INSERT INTO tmplib_base VALUES('digitBlock','Discrete parameters block (obsolete)','Блок дискр. параметрів (застаріле)','Блок дискр. параметров (устарелое)','The block for union of Discrete parameters for one device control.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -5650,7 +5650,7 @@ Functions:
 ￼ !!!! In the absence of the "Input/Output" connection, the writing is not performed and there is the stand-alone operation.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон ручного вводу та сигналу аналогового виходу. Шаблон формує структуру параметру (складного тегу) ручного вводу, який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру, контроль переважно можна здійснювати через панель контролю Елемент кадр.
 
 Представницькою структурою параметру (складного тегу) ручного вводу є:
@@ -5686,7 +5686,7 @@ License: GPLv2','Загальний, представницький та уні�
 ￼ !!!! За відсутності підключення "Входу/Виходу" запису не здійснюється та відбувається автономна робота.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	{ f_err = "0"; alDelay_ = 0; }
 
@@ -5753,7 +5753,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1572284562);
+}','','',1627832983);
 INSERT INTO tmplib_base VALUES('anUnif','Analog signal, unified','Аналоговий сигнал, уніфікований','Аналоговый сигнал, унифицированный','Common, representative and unified template of analog input signals processing. The template forms a structure of complex analog parameter (tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 Functions:
@@ -5784,7 +5784,7 @@ Functions:
   - big motion speed of the end variable — error code 7 and alarm level 2.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.2
+Version: 2.1.3
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Функції:
@@ -5815,7 +5815,7 @@ License: GPLv2','Загальний, представницький та уні�
   - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.2
+Версія: 2.1.3
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	prevVar = EVAL_REAL;
@@ -5918,7 +5918,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1, firstNorm);
 	f_err = tErr;
 	alDelay_ = 0; firstNorm = false;
-}','','',1615650088);
+}','','',1627832581);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:
@@ -5978,7 +5978,7 @@ Mostly the same as the basic template "PID signal, unified, violation statuses" 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі але із ШІМ-виходом, розширеному бінарними станами індикації порушень та переважно схоже на шаблон "ПІД сигнал, уніфікований, стани порушень". Шаблон формує структуру імпульсного ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів бібліотеки основних елементів інтерфейсу користувача, просто вказавши об''єкт параметру.
 
 Представницька структура імпульсних ПІД-регуляторів переважно еквівалентна шаблону "ПІД сигнал, уніфікований, стани порушень" та містить низку атрибутів, специфічних до імпульсного виходу та атрибут визначення роботи цього регулятору у аналоговому режимі, тобто цей шаблон є навіть більш узагальнювальним:
@@ -5990,7 +5990,7 @@ License: GPLv2','Загальний, представницький та уні�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "ДІЯ"
-Версія: 1.1.0
+Версія: 1.1.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6046,7 +6046,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1572862020);
+}','','',1627833248);
 INSERT INTO tmplib_base VALUES('anUnifSt','Analog signal, unified, violation statuses','Аналоговий сигнал, уніфікований, стани порушень','Аналоговый сигнал, унифицированный, состояния нарушений','Common, representative and unified template of analog input signals processing, extended by binary states of indication the violations. The template grounded on the base template "Analog signal, unified" with its representative structure and some differences characteristic to independent development and expansion.
 
 Binary states were provided for the convenient use of algorithms of operation at the borders of violations of the parameter object, preferably in the block diagrams of general control algorithms.
@@ -6055,7 +6055,7 @@ Functions:
 Mostly the same as the basic "Analog signal, unified" and the borderline signs are additionally provided: "H", "L", "HH", "LL", "EVAL".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів, розширений бінарними станами індикації порушень. Шаблон засновано на базовому шаблоні "Аналоговий сигнал, уніфікований" з відповідною до нього представницькою структурою та деякими відмінностями, характерними до незалежного розвитку та розширення.
 
 Бінарні стани передбачалося для зручного використання у алгоритмах роботи за границями порушення об''єкту параметру, переважно у блокових схемах загальних алгоритмів керування.
@@ -6064,7 +6064,7 @@ License: GPLv2','Загальний, представницький та уні�
 Переважно відповідають базовому шаблону "Аналоговий сигнал, уніфікований" та додатково надаються ознаки порушень границь: "H", "L", "HH", "LL", "EVAL".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	prevVar = EVAL_REAL;
@@ -6165,7 +6165,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1572284562);
+}','','',1627832578);
 INSERT INTO tmplib_base VALUES('pidUnif','PID signal, unified, violation statuses','ПІД сигнал, уніфікований, стани порушень','ПИД сигнал, унифицированный, состояния нарушений','Common, representative and unified template of an interface to the Proportional Integral Differential (PID) regulator based on the common analog input signal, extended by binary states of indication the violations. The template forms a structure of the analog PID-regulator which can be easily connected to some cadres and widgets of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of the analog PID-regulators is:
@@ -6204,7 +6204,7 @@ big motion speed of the end variable — error code 7 and alarm level 2.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон інтерфейсу до Пропорційного Інтегрального Диференційного (ПІД) регулятору заснованому на аналоговому вхідному сигналі, розширеному бінарними станами індикації порушень. Шаблон формує структуру аналогового ПІД-регулятору, який може бути легко підключений до деяких кадрів та віджетів бібліотеки основних елементів інтерфейсу користувача, просто вказавши об''єкт параметру.
 
 Представницькою структурою аналогового ПІД-регулятору є:
@@ -6300,7 +6300,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1572861425);
+}','','',1627833164);
 INSERT INTO tmplib_base VALUES('SNMP','Network devices by SNMP','Мережеві пристрої за SNMP','Сетевые устройства по SNMP','Data combination of a device, accessible by the protocol SNMP, in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "SNMP" and to represent this data by the frame "Object properties" as a complex object with properties, signalling at single borders and writing. Considering the great specificity and variety of SNMP-accessible devices, this template is actually a billet and an example of creating a template based on it to a corresponding device with a specific to it processing of input properties, forming of violations and write capability.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -6543,7 +6543,7 @@ THE OUTPUT USER PROTOCOL PART "SMTP" provides operations with a SMTP-server for 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: SVItoVYR LTD
-Version: 1.0.1
+Version: 1.0.2
 License: GPLv2','Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
 
 ДИСПЕТЧЕР може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на Логічному рівні або об''єкті контролеру модуля JavaLikeCalc.
@@ -6554,7 +6554,7 @@ License: GPLv2','Комплексний шаблон повідомлення м
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "СВІТоВИР АВТоМАТИК"
-Версія: 1.0.1
+Версія: 1.0.2
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -6855,7 +6855,7 @@ if(!SMSTr)	SMSState = "Disabled!";
 else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
-}','','',1550428714);
+}','','',1627833128);
 INSERT INTO tmplib_base VALUES('UPS','Uninterruptible Power Supply','Джерело Безперебійного Живлення','Источник Бесперебойного Питания','Data combination of the Uninterruptible Power Supply in a complex object of the attribute "All items". The template designed to use together with the DAQ-module "System" in the part "UPS" and to represent this data by the frame "Object properties" as a complex object with properties, signalling at single borders and writing.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -11443,7 +11443,7 @@ if(val!=EVAL_REAL)
   else if(bWUp!=bWDwn && val>bWUp)	f_err="105:Upper warning border violation";
   else if(bWUp!=bWDwn && val<bWDwn)	f_err="106:Lower warning border violation";
   else f_err="0";
-}',0);
+}',1627833315);
 INSERT INTO tmplib_tests VALUES('ai_man','Manual input of AI','Ручний ввід AI','Ручной ввод AI','Manual input of a standard analog parameter.','Стандартний аналоговий параметр ручного вводу.','Стандартный аналоговый параметр ручного ввода.',10,0,'JavaLikeCalc.JavaScript
 //Check and write new value
 if(val!=val_o)
@@ -11466,7 +11466,7 @@ if(val!=EVAL_REAL)
   else if(bWUp!=bWDwn && val>bWUp)	f_err="105:Upper warning border violation";
   else if(bWUp!=bWDwn && val<bWDwn)	f_err="106:Lower warning border violation";
   else f_err="0";
-}',1572510316);
+}',1627833315);
 INSERT INTO tmplib_tests VALUES('test','Test','Тест','Тест','S7 controller testing','Тестування контролера S7','Тестирование контроллера S7',10,0,'
 ',1539451468);
 INSERT INTO tmplib_tests VALUES('gasPoint','Flow control point','','','','','',10,0,'JavaLikeCalc.JavaScript
@@ -13855,7 +13855,7 @@ CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEX
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','var','Variable',2,32,'0',1,'Змінна','','Переменная','','Променљива');
-INSERT INTO tmplib_base_io VALUES('simleBoard','ed','Dimension',0,32,'',2,'Одиниця виміру','','Единица измерения','','');
+INSERT INTO tmplib_base_io VALUES('simleBoard','ed','Dimension',0,4128,'',2,'Одиниця виміру','','Единица измерения','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','min','Lower work border',2,32,'0',3,'Нижня робоча границя','','Нижн. раб. граница','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','max','Upper work border',2,32,'100',4,'Верхня робоча границя','','Верхн. раб. граница','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','aMin','Lower alarm border',2,32,'0',5,'Нижня аварійна границя','','Нижняя аварийная граница','','Доњи услови укључивања аларма');
@@ -13874,7 +13874,7 @@ INSERT INTO tmplib_base_io VALUES('digitBlock','last_cmd','Last command',1,1,'0'
 INSERT INTO tmplib_base_io VALUES('digitBlock','w_tm','Process command counter',2,1,'0',7,'Лічильник обробки команди','','Счётчик отраб. команды','','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','inout','Input/Output',2,129,'Parameter|var',0,'Вхід/Вихід','','Вход/Выход','','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','var','Variable',2,16,'0',1,'Змінна','','Переменная','','Променљива');
-INSERT INTO tmplib_base_io VALUES('manInUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','','');
+INSERT INTO tmplib_base_io VALUES('manInUnif','ed','Dimension',0,4128,'',3,'Одиниця виміру','','Единица измерения','','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','','');
 INSERT INTO tmplib_base_io VALUES('manInUnif','scSqr','Scale: square',3,0,'0',6,'Шкала: квадратична','','Шкала: квадратичная','','');
@@ -13891,7 +13891,7 @@ INSERT INTO tmplib_base_io VALUES('manInUnif','plcMax','Maximum module scale',2,
 INSERT INTO tmplib_base_io VALUES('manInUnif','plcExcess','Allowed scale exceeding, %',2,64,'0',22,'Дозволене перевищення шкали, %','','Допустимое превышение шкалы модуля, %','','');
 INSERT INTO tmplib_base_io VALUES('anUnif','in','Input',2,128,'Input|var',0,'Вхід','Вхід|var','Вход','Вход|var','');
 INSERT INTO tmplib_base_io VALUES('anUnif','var','Variable',2,16,'0',2,'Змінна','','Переменная','','Променљива');
-INSERT INTO tmplib_base_io VALUES('anUnif','ed','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','','');
+INSERT INTO tmplib_base_io VALUES('anUnif','ed','Dimension',0,4128,'',3,'Одиниця виміру','','Единица измерения','','');
 INSERT INTO tmplib_base_io VALUES('anUnif','min','Scale: minimum',2,32,'0',4,'Шкала: мінімум','','Шкала: минимум','','');
 INSERT INTO tmplib_base_io VALUES('anUnif','max','Scale: maximum',2,32,'100',5,'Шкала: максимум','','Шкала: максимум','','');
 INSERT INTO tmplib_base_io VALUES('anUnif','scSqr','Scale: square',3,32,'0',6,'Шкала: квадратична','','Шкала: квадратичная','','');
@@ -13926,7 +13926,7 @@ INSERT INTO tmplib_base_io VALUES('pidUnifImp','impQup','Impulse output up',3,14
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','impQdwn','Impulse output down',3,144,'PID|impQdwnTm',6,'Імпульсний вихід до низу','ПІД|impQdwnTm','Имп. выход вниз','ПИД|impQdwnTm','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','auto','Mode: automate',3,160,'PID|auto',7,'Режим: автомат','ПІД|auto','Режим: автомат','ПИД|auto','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','analog','Mode: analog',3,144,'PID|analog',8,'Режим: аналоговий','ПІД|analog','Режим: аналоговый','ПИД|analog','');
-INSERT INTO tmplib_base_io VALUES('pidUnifImp','ed','Dimension',0,32,'',9,'Одиниця виміру','','Единица измерения','','');
+INSERT INTO tmplib_base_io VALUES('pidUnifImp','ed','Dimension',0,4128,'',9,'Одиниця виміру','','Единица измерения','','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','min','Scale: minimum',2,160,'PID|min',10,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','max','Scale: maximum',2,160,'PID|max',11,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max','');
 INSERT INTO tmplib_base_io VALUES('pidUnifImp','scSqr','Scale: square',3,32,'0',12,'Шкала: квадратична','','Шкала: квадратичная','','');
@@ -13972,8 +13972,8 @@ INSERT INTO tmplib_base_io VALUES('anUnifSt','H','Border up warning violation',3
 INSERT INTO tmplib_base_io VALUES('anUnifSt','L','Border down warning violation',3,17,'',4,'Порушення нижньої попереджув. границі','','Нарушение нижней предупредительной границы','','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','HH','Border up alarm violation',3,17,'',5,'Порушення верхньої аварійної границі','','Нарушение верхней аварийной границы','','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','LL','Border down alarm violation',3,17,'',6,'Порушення нижньої аварійної границі','','Нарушение нижней аварийной границы','','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','EVAL','Error value',3,17,'',39,'Помилка значення','','Ошибка значения','','');
-INSERT INTO tmplib_base_io VALUES('anUnifSt','ed','Dimension',0,32,'',8,'Одиниця виміру','','Единица измерения','','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','EVAL','Error value',3,17,'',35,'Помилка значення','','Ошибка значения','','');
+INSERT INTO tmplib_base_io VALUES('anUnifSt','ed','Dimension',0,4128,'',8,'Одиниця виміру','','Единица измерения','','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','min','Scale: minimum',2,32,'0',9,'Шкала: мінімум','','Шкала: минимум','','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','max','Scale: maximum',2,32,'100',10,'Шкала: максимум','','Шкала: максимум','','');
 INSERT INTO tmplib_base_io VALUES('anUnifSt','scSqr','Scale: square',3,32,'0',11,'Шкала: квадратична','','Шкала: квадратичная','','');
@@ -13999,7 +13999,7 @@ INSERT INTO tmplib_base_io VALUES('pidUnif','manIn','Manual input, %',2,160,'PID
 INSERT INTO tmplib_base_io VALUES('pidUnif','out','Output, %',2,160,'PID|out',4,'Вихід, %','ПІД|out','Выход, %','ПИД|out','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','auto','Mode: automate',3,160,'PID|auto',5,'Режим: автомат','ПІД|auto','Режим: автомат','ПИД|auto','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','casc','Mode: cascade',3,160,'PID|casc',6,'Режим: каскад','ПІД|casc','Режим: каскад','ПИД|casc','');
-INSERT INTO tmplib_base_io VALUES('pidUnif','ed','Dimension',0,32,'',7,'Одиниця виміру','','Единица измерения','','');
+INSERT INTO tmplib_base_io VALUES('pidUnif','ed','Dimension',0,4128,'',7,'Одиниця виміру','','Единица измерения','','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','min','Scale: minimum',2,160,'PID|min',8,'Шкала: мінімум','ПІД|min','Шкала: минимум','ПИД|min','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','max','Scale: maximum',2,160,'PID|max',9,'Шкала: максимум','ПІД|max','Шкала: максимум','ПИД|max','');
 INSERT INTO tmplib_base_io VALUES('pidUnif','scSqr','Scale: square',3,32,'0',10,'Шкала: квадратична','','Шкала: квадратичная','','');
@@ -14116,8 +14116,8 @@ INSERT INTO tmplib_base_io VALUES('ntf','emailState','Email notification current
 INSERT INTO tmplib_base_io VALUES('ntf','emailAuth','Auth, empty for disable',0,64,'user:pass',7,'Автентифікація, порожньо для вимкнення','','Аутентификация, пусто для выключения','','');
 INSERT INTO tmplib_base_io VALUES('ntf','emailSender','Sender',0,64,'noreply@oscada.org',8,'Відправник','','Отправитель','','');
 INSERT INTO tmplib_base_io VALUES('ntf','emailReceiver','Destination receiver address',0,64,'test@oscada.org',9,'Адреса призначення одержувача','','Адрес назначения получателя','','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailTopic','EMail topic',0,64,'Notification',10,'Тема Ел.пошти','Повідомлення','Тема Эл.почты','Уведомление','');
-INSERT INTO tmplib_base_io VALUES('ntf','emailMess','EMail message',0,64,'',11,'Повідомлення Ел.пошти','','Сообщение Эл.почты','','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailTopic','EMail topic',0,4160,'Notification',10,'Тема Ел.пошти','Повідомлення','Тема Эл.почты','Уведомление','');
+INSERT INTO tmplib_base_io VALUES('ntf','emailMess','EMail message',0,4160,'',11,'Повідомлення Ел.пошти','','Сообщение Эл.почты','','');
 INSERT INTO tmplib_base_io VALUES('ntf','SMSState','SMS notification current state',0,17,'',12,'Поточний стан повідомлення SMS','','Текущее состояние уведомления SMS','','');
 INSERT INTO tmplib_base_io VALUES('ntf','SMSPin','SMS-pin, empty for disable',0,64,'1111',14,'Пін-код SMS, порожньо для вимкнення','','Пин-код SMS, пусто для выключения','','');
 INSERT INTO tmplib_base_io VALUES('ntf','SMSTel','SMS destination receiver, tel. number',0,64,'+380XXXXXXXXX',15,'Адреса одержувача SMS, номер телефону','','Адрес получателя SMS, номер телефона','','');
@@ -14817,7 +14817,7 @@ INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','t','T, °С',2,17,'',4,'','','
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');
-INSERT INTO tmplib_tests_io VALUES('ai_simple','val_tp','Dimension',0,32,'',2,'Одиниця виміру','','Единица измерения','','');
+INSERT INTO tmplib_tests_io VALUES('ai_simple','val_tp','Dimension',0,4128,'',2,'Одиниця виміру','','Единица измерения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','bDwn','Lower value border',2,32,'0',3,'Нижня границя значення','','Нижняя граница значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','bUp','Upper value border',2,32,'100',4,'Верхня границя значення','','Верхняя граница значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','bWDwn','Lower technical border',2,32,'20',5,'Нижня технолог. границя','','Нижняя технологич. граница','','');
@@ -14827,7 +14827,7 @@ INSERT INTO tmplib_tests_io VALUES('ai_simple','bErrUp','Upper alarm border',2,3
 INSERT INTO tmplib_tests_io VALUES('ai_man','val_cod','Value''s source code',1,129,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_man','val','Value',2,32,'0',1,'Значення','','Значение','','Вредност');
 INSERT INTO tmplib_tests_io VALUES('ai_man','val_o','Previous value',2,0,'0',2,'Попередне значення','','Предыдущее значение','','');
-INSERT INTO tmplib_tests_io VALUES('ai_man','val_tp','Dimension',0,32,'',3,'Одиниця виміру','','Единица измерения','','');
+INSERT INTO tmplib_tests_io VALUES('ai_man','val_tp','Dimension',0,4128,'',3,'Одиниця виміру','','Единица измерения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_man','bDwn','Lower value border',2,32,'0',4,'Нижня границя значення','','Нижняя граница значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_man','bUp','Upper value border',2,32,'100',5,'Верхня границя значення','','Верхняя граница значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_man','bWDwn','Lower technical border',2,32,'20',6,'Нижня технолог. границя','','Нижняя технологич. граница','','');

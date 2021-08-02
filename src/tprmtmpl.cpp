@@ -507,15 +507,30 @@ TVariant TPrmTempl::Impl::lnkInput( int num )
     if(it == lnks.end())	return EVAL_REAL;
     if(it->second.addr.compare(0,4,"val:") == 0)return it->second.addr.substr(4);
     if(it->second.con.freeStat())		return EVAL_REAL;
+    if(it->second.hops > RECURS_DET_HOPS) {
+	it->second.addr = ""; it->second.con.free();
+	it->second.hops = 0;
+	mess_warning(obj->nodePath().c_str(), _("Detected of the link recursion."));
+	return EVAL_REAL;
+    }
+    it->second.hops++;
+
     AutoHD<TVal> con = it->second.con;
     int objOff = it->second.objOff;
     string addr = it->second.addr;
     res.unlock();
 
-    if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size())
-	return con.at().getO().at().propGet(addr.substr(objOff), '.');
+    TVariant rVal = EVAL_REAL;
 
-    return con.at().get();
+    try {
+	if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size())
+	    rVal = con.at().getO().at().propGet(addr.substr(objOff), '.');
+	else rVal = con.at().get();
+    } catch(TError&) { }
+
+    it->second.hops = 0;
+
+    return rVal;
 }
 
 bool TPrmTempl::Impl::lnkOutput( int num, const TVariant &vl )
@@ -526,15 +541,27 @@ bool TPrmTempl::Impl::lnkOutput( int num, const TVariant &vl )
     if(it == lnks.end() || it->second.con.freeStat() || (it->second.con.at().fld().flg()&TFld::NoWrite) ||
 	    !(ioFlg(num)&(IO::Output|IO::Return)))
 	return false;
+    if(it->second.hops > RECURS_DET_HOPS) {
+	it->second.addr = ""; it->second.con.free();
+	it->second.hops = 0;
+	mess_warning(obj->nodePath().c_str(), _("Detected of the link recursion."));
+	return EVAL_REAL;
+    }
+    it->second.hops++;
+
     AutoHD<TVal> con = it->second.con;
     int objOff = it->second.objOff;
     string addr = it->second.addr;
     res.unlock();
 
-    if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size()) {
-	con.at().getO().at().propSet(addr.substr(objOff), '.', vl);
-	con.at().setO(con.at().getO());	//For the modifying object sign
-    } else con.at().set(vl);
+    try {
+	if(con.at().fld().type() == TFld::Object && objOff < (int)addr.size()) {
+	    con.at().getO().at().propSet(addr.substr(objOff), '.', vl);
+	    con.at().setO(con.at().getO());	//For the modifying object sign
+	} else con.at().set(vl);
+    } catch(TError&) { }
+
+    it->second.hops = 0;
 
     return true;
 }
@@ -565,7 +592,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 	    if((fId=attrsCntr->fldId(func()->io(iIO)->id(),true)) < attrsCntr->fldSize()) {
 		if(attrsCntr->fldAt(fId).type() != tp)
 		    try{ attrsCntr->fldDel(fId); }
-		    catch(TError &err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+		    catch(TError &err){ mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 		else {
 		    attrsCntr->fldAt(fId).setFlg(flg);
 		    attrsCntr->fldAt(fId).setDescr(func()->io(iIO)->name().c_str());
@@ -587,7 +614,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
     for(int iP = 0; attrsCntr && iP < (int)attrsCntr->fldSize(); iP++)
 	if(als.find(attrsCntr->fldAt(iP).name()) == als.end())
 	    try{ attrsCntr->fldDel(iP); iP--; }
-	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 bool TPrmTempl::Impl::initLnks( bool toRecnt )

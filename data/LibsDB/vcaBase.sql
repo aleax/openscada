@@ -15877,7 +15877,7 @@ if(toBuild) {
 			//this.messInfo("pO.trData="+pO.trData);
 		}
 	}
-}','','',1000,'owner;name;dscr;evProc;',1583077155);
+}','','',1000,'owner;name;dscr;evProc;',1627831876);
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
@@ -24532,53 +24532,53 @@ INSERT INTO wlb_doc_uio VALUES('docRepDay','enGraph','Enable graph',131072,'1',1
 INSERT INTO wlb_doc_uio VALUES('docRepMonth','enGraph','Enable graph',131072,'1',1,'','','doc','Ввімкнути графік','','','Включить график','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','arch','Archiver, {ValArch};{MessArch}',131077,'FSArch.1h',1,'','','doc','Архіватор, {ValArch};{MessArch}','','','Архиватор, {ValArch};{MessArch}','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','enGraph','Enable graph',131072,'1',1,'','','doc','Ввімкнути графік','','','Включить график','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p1name','Parameter 1: name',131077,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','','Параметр 1: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p1ed','Parameter 1: dimension',131077,'',2,'Parameter1|ed','','doc','Параметр 1: од.виміру','','','Параметр 1: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1name','Parameter 1: name',131333,'',2,'Parameter1|NAME','','doc','Параметр 1: назва','','','Параметр 1: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p1ed','Parameter 1: dimension',131333,'',2,'Parameter1|ed','','doc','Параметр 1: од.виміру','','','Параметр 1: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p1var','Parameter 1: variable',196613,'',2,'Parameter1|var','','doc','Параметр 1: змінна','','','Параметр 1: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p1prec','Parameter 1: precision',131073,'0|',2,'Parameter1|prec','','doc','Параметр 1: точність','','','Параметр 1: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p1cntr','Parameter 1: is counter',131072,'0',1,'Parameter1|isCntr','','doc','Параметр 1: це лічильник','','','Параметр 1: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p2name','Parameter 2: name',131077,'',2,'Parameter2|NAME','','doc','Параметр 2: назва','','','Параметр 2: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p2ed','Parameter 2: dimension',131077,'',2,'Parameter2|ed','','doc','Параметр 2: од.виміру','','','Параметр 2: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2name','Parameter 2: name',131333,'',2,'Parameter2|NAME','','doc','Параметр 2: назва','','','Параметр 2: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p2ed','Parameter 2: dimension',131333,'',2,'Parameter2|ed','','doc','Параметр 2: од.виміру','','','Параметр 2: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p2var','Parameter 2: variable',196613,'',2,'Parameter2|var','','doc','Параметр 2: змінна','','','Параметр 2: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p2prec','Parameter 2: precision',131073,'0|',2,'Parameter2|prec','','doc','Параметр 2: точність','','','Параметр 2: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p2cntr','Parameter 2: is counter',131072,'0',1,'Parameter2|isCntr','','doc','Параметр 2: це лічильник','','','Параметр 2: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p3name','Parameter 3: name',131077,'',2,'Parameter3|NAME','','doc','Параметр 3: назва','','','Параметр 3: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p3ed','Parameter 3: dimension',131077,'',2,'Parameter3|ed','','doc','Параметр 3: од.виміру','','','Параметр 3: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3name','Parameter 3: name',131333,'',2,'Parameter3|NAME','','doc','Параметр 3: назва','','','Параметр 3: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p3ed','Parameter 3: dimension',131333,'',2,'Parameter3|ed','','doc','Параметр 3: од.виміру','','','Параметр 3: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p3var','Parameter 3: variable',196613,'',2,'Parameter3|var','','doc','Параметр 3: змінна','','','Параметр 3: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p3prec','Parameter 3: precision',131073,'0|',2,'Parameter3|prec','','doc','Параметр 3: точність','','','Параметр 3: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p3cntr','Parameter 3: is counter',131072,'0',1,'Parameter3|isCntr','','doc','Параметр 3: це лічильник','','','Параметр 3: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p4name','Parameter 4: name',131077,'',2,'Parameter4|NAME','','doc','Параметр 4: назва','','','Параметр 4: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p4ed','Parameter 4: dimension',131077,'',2,'Parameter4|ed','','doc','Параметр 4: од.виміру','','','Параметр 4: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4name','Parameter 4: name',131333,'',2,'Parameter4|NAME','','doc','Параметр 4: назва','','','Параметр 4: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p4ed','Parameter 4: dimension',131333,'',2,'Parameter4|ed','','doc','Параметр 4: од.виміру','','','Параметр 4: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p4var','Parameter 4: variable',196613,'',2,'Parameter4|var','','doc','Параметр 4: змінна','','','Параметр 4: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p4prec','Parameter 4: precision',131073,'0|',2,'Parameter4|prec','','doc','Параметр 4: точність','','','Параметр 4: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p4cntr','Parameter 4: is counter',131072,'0',1,'Parameter4|isCntr','','doc','Параметр 4: це лічильник','','','Параметр 4: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p5name','Parameter 5: name',131077,'',2,'Parameter5|NAME','','doc','Параметр 5: назва','','','Параметр 5: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p5ed','Parameter 5: dimension',131077,'',2,'Parameter5|ed','','doc','Параметр 5: од.виміру','','','Параметр 5: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5name','Parameter 5: name',131333,'',2,'Parameter5|NAME','','doc','Параметр 5: назва','','','Параметр 5: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p5ed','Parameter 5: dimension',131333,'',2,'Parameter5|ed','','doc','Параметр 5: од.виміру','','','Параметр 5: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p5var','Parameter 5: variable',196613,'',2,'Parameter5|var','','doc','Параметр 5: змінна','','','Параметр 5: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p5prec','Parameter 5: precision',131073,'0|',2,'Parameter5|prec','','doc','Параметр 5: точність','','','Параметр 5: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p5cntr','Parameter 5: is counter',131072,'0',1,'Parameter5|isCntr','','doc','Параметр 5: це лічильник','','','Параметр 5: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p6name','Parameter 6: name',131077,'',2,'Parameter6|NAME','','doc','Параметр 6: назва','','','Параметр 6: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p6ed','Parameter 6: dimension',131077,'',2,'Parameter6|ed','','doc','Параметр 6: од.виміру','','','Параметр 6: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6name','Parameter 6: name',131333,'',2,'Parameter6|NAME','','doc','Параметр 6: назва','','','Параметр 6: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p6ed','Parameter 6: dimension',131333,'',2,'Parameter6|ed','','doc','Параметр 6: од.виміру','','','Параметр 6: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p6var','Parameter 6: variable',196613,'',2,'Parameter6|var','','doc','Параметр 6: змінна','','','Параметр 6: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p6prec','Parameter 6: precision',131073,'0|',2,'Parameter6|prec','','doc','Параметр 6: точність','','','Параметр 6: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p6cntr','Parameter 6: is counter',131072,'0',1,'Parameter6|isCntr','','doc','Параметр 6: це лічильник','','','Параметр 6: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p7name','Parameter 7: name',131077,'',2,'Parameter7|NAME','','doc','Параметр 7: назва','','','Параметр 7: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p7ed','Parameter 7: dimension',131077,'',2,'Parameter7|ed','','doc','Параметр 7: од.виміру','','','Параметр 7: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7name','Parameter 7: name',131333,'',2,'Parameter7|NAME','','doc','Параметр 7: назва','','','Параметр 7: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p7ed','Parameter 7: dimension',131333,'',2,'Parameter7|ed','','doc','Параметр 7: од.виміру','','','Параметр 7: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p7var','Parameter 7: variable',196613,'',2,'Parameter7|var','','doc','Параметр 7: змінна','','','Параметр 7: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p7prec','Parameter 7: precision',131073,'0|',2,'Parameter7|prec','','doc','Параметр 7: точність','','','Параметр 7: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p7cntr','Parameter 7: is counter',131072,'0',1,'Parameter7|isCntr','','doc','Параметр 7: це лічильник','','','Параметр 7: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p8name','Parameter 8: name',131077,'',2,'Parameter8|NAME','','doc','Параметр 8: назва','','','Параметр 8: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p8ed','Parameter 8: dimension',131077,'',2,'Parameter8|ed','','doc','Параметр 8: од.виміру','','','Параметр 8: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8name','Parameter 8: name',131333,'',2,'Parameter8|NAME','','doc','Параметр 8: назва','','','Параметр 8: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p8ed','Parameter 8: dimension',131333,'',2,'Parameter8|ed','','doc','Параметр 8: од.виміру','','','Параметр 8: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p8var','Parameter 8: variable',196613,'',2,'Parameter8|var','','doc','Параметр 8: змінна','','','Параметр 8: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p8prec','Parameter 8: precision',131073,'0|',2,'Parameter8|prec','','doc','Параметр 8: точність','','','Параметр 8: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p8cntr','Parameter 8: is counter',131072,'0',1,'Parameter8|isCntr','','doc','Параметр 8: це лічильник','','','Параметр 8: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p9name','Parameter 9: name',131077,'',2,'Parameter9|NAME','','doc','Параметр 9: назва','','','Параметр 9: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p9ed','Parameter 9: dimension',131077,'',2,'Parameter9|ed','','doc','Параметр 9: од.виміру','','','Параметр 9: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9name','Parameter 9: name',131333,'',2,'Parameter9|NAME','','doc','Параметр 9: назва','','','Параметр 9: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p9ed','Parameter 9: dimension',131333,'',2,'Parameter9|ed','','doc','Параметр 9: од.виміру','','','Параметр 9: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p9var','Parameter 9: variable',196613,'',2,'Parameter9|var','','doc','Параметр 9: змінна','','','Параметр 9: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p9prec','Parameter 9: precision',131073,'0|',2,'Parameter9|prec','','doc','Параметр 9: точність','','','Параметр 9: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p9cntr','Parameter 9: is counter',131072,'0',1,'Parameter9|isCntr','','doc','Параметр 9: це лічильник','','','Параметр 9: это счётчик','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p10name','Parameter 10: name',131077,'',2,'Parameter10|NAME','','doc','Параметр 10: назва','','','Параметр 10: имя','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docRepYear','p10ed','Parameter 10: dimension',131077,'',2,'Parameter10|ed','','doc','Параметр 10: од.виміру','','','Параметр 10: ед.измерения','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10name','Parameter 10: name',131333,'',2,'Parameter10|NAME','','doc','Параметр 10: назва','','','Параметр 10: имя','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docRepYear','p10ed','Parameter 10: dimension',131333,'',2,'Parameter10|ed','','doc','Параметр 10: од.виміру','','','Параметр 10: ед.измерения','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p10var','Parameter 10: variable',196613,'',2,'Parameter10|var','','doc','Параметр 10: змінна','','','Параметр 10: переменная','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p10prec','Parameter 10: precision',131073,'0|',2,'Parameter10|prec','','doc','Параметр 10: точність','','','Параметр 10: точность','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p10cntr','Parameter 10: is counter',131072,'0',1,'Parameter10|isCntr','','doc','Параметр 10: це лічильник','','','Параметр 10: это счётчик','','','','','');
@@ -28999,7 +28999,7 @@ Manually entered data is stored or traditionally in an archive of values, with o
 The message archiver of the module FSArch must be set for the next attributes to correct work perform together this document: set "Prevent duplicates", "Consider duplicates and prevent, for equal time, category, level" and set "Time size of the archive files" to 3660 days. The module DBArch must work without such kind specific.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1
+Version: 1.2.2
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту місячних значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають переважно архіви значень DAQ-параметрів.
 
 Документом вперше запроваджено ручне введення архівних значень великого інтервалу часу вимірювання, яким у цьому випадку є місяць, як недетермінований інтервал. Найбільшу актуальність ця функція становить для лічильників, які з тієї або іншої причини неможливо підключити до системи прямо, із безперервним вимірюванням або періодичним вивантаженням ділянок архіву. Визначення параметру до ручного вводу здійснюється встановленням постійної isMan відповідного параметру, що вмикає елементи форми нагорі документу, за відповідних прав ("root" або у групі "ITW"), та доступ до даних для таблиці та тренду суворо за інтервалом документу — місяць, як і їх введення.
@@ -29013,7 +29013,7 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Архіватор повідомлень модуля FSArch має бути встановлено у наступних атрибутах для здійснення коректної роботи разом із цим документом: встановити "Запобігати дублікатам", "Вважати дублікатами та запобігати, для рівного часу, категорії, рівня" та встановити "Розмір файлів за часом" у 3660 діб. Модуль DBArch має працювати без такого роду специфіки.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.1
+Версія: 1.2.2
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','evProc','',32,'','','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:ITW',32,'','','lab_set','','','','','','','');

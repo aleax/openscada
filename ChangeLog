@@ -1,3 +1,20 @@
+2021-08-02 Roman (stable)
+- FIX:LibsDB.OscadaLibs: base.{anUnif,manInUnif,anUnifSt,pidUnifImp,simleBoard,ntf}: adapted for translation several attributes.
+- LibsDB.vcaBase: doc.docRepYear: adapted for translation several attributes.
+- !!!:FIX:SYS: The redundancy requests prevented of the host multiple requests, by using a request lock "reqM",
+    have to prevent of the redundancy connection sometime lost at changing the DAQ sources.
+- Transports: Password hash of the OpenSCADA external hosts connection set to deploy on the peer configuration record
+    with even user and password, than preventing the open password for the partially passive connections.
+    extHostGet() expanded for getting the host record without the opening user specifying.
+- !:FIX:DAQ: The logical level implementation appended of the multilevel recursion detection for the logical level links.
+- !!:UI.VCAEngine: The VCA-styles appended of they updating at the user change in runtime
+    and cleared by naming the special styles and they number limit.
+- FIX:UI.Vision: The Item Properties Edition Dialog prevented in lost changes of the tab "Processing" edition
+    at switching to other tab and hot opening other items.
+- FIX:UI.WebVision: Appended of tracing the user changing in the standard way
+    and of sending the "connect" request with the flag "userChange" for the user VCA-style change also.
+
+
 2021-07-26 Roman (stable)
 - !!!!:FIX:LibsDB.{OscadaLibs,vcaBase,vcaTest},{AGLKS,Boiler}.*:
     Appended, cleaned and fixed for the multilanguage messages by applying the new translation fixing mechanisms.

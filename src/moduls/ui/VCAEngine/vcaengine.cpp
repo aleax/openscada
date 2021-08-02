@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.2.0"
+#define MOD_VER		"7.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -187,18 +187,10 @@ void Engine::postEnable( int flag )
     prj_ses_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
     prj_ses_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000"));
 
-    //Make styles' IO DB structure: PrjStl(__ID__, V_0, V_1, V_2, V_3, V_4, V_5, V_6, V_7, V_8, V_9)
+    //Make styles' IO DB structure: PrjStl(__ID__, V_0, ... V_{Project::StlMaximum})
     prjStl_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
-    prjStl_el.fldAdd(new TFld("V_0",_("Value 0"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_1",_("Value 1"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_2",_("Value 2"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_3",_("Value 3"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_4",_("Value 4"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_5",_("Value 5"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_6",_("Value 6"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_7",_("Value 7"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_8",_("Value 8"),TFld::String,TFld::NoFlag,"100"));
-    prjStl_el.fldAdd(new TFld("V_9",_("Value 9"),TFld::String,TFld::NoFlag,"100"));
+    for(unsigned iStl = 0; iStl < Project::StlMaximum; ++iStl)
+	prjStl_el.fldAdd(new TFld(("V_"+i2s(iStl)).c_str(),TSYS::strMess(_("Value %d"),iStl).c_str(),TFld::String,TFld::NoFlag,"100"));
 
     //Init original widgets library
     wlbAdd("originals",_("Original widgets"));
@@ -655,9 +647,13 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    if(!sess.empty()) {
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("prj", sesAt(sess).at().projNm());
-		if(s2i(opt->attr("userChange")))
+		if(s2i(opt->attr("userChange"))) {
+		    sesAt(sess).at().setUser(opt->attr("user"));
+		    sesAt(sess).at().stlCurentSet();
+
 		    sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User was changed to '%s' on the station '%s'."),
 			opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
+		}
 	    }
 	    // Create session
 	    else if(!prj.empty()) {

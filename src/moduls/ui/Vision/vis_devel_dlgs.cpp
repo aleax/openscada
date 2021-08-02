@@ -353,6 +353,8 @@ VisDevelop *LibProjProp::owner( ) const	{ return (VISION::VisDevelop*)parentWidg
 
 void LibProjProp::showDlg( const string &iit, bool reload )
 {
+    if(isVisible() && !reload)	close();
+
     vector<string> ls;
     string sval;
     QImage ico_t;
@@ -787,7 +789,7 @@ void LibProjProp::isModify( QObject *snd )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	showDlg(ed_it, true);
     }
-    else if(update)	showDlg(ed_it,true);
+    else if(update)	showDlg(ed_it, true);
 
     is_modif = true;
 }
@@ -944,7 +946,7 @@ void LibProjProp::delStlItem( )
 	setAttr("key_id",stl_table->item(row,0)->text().toStdString());
     if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
-    showDlg(ed_it,true);
+    showDlg(ed_it, true);
 }
 
 void LibProjProp::stlTableChange( int row, int column )
@@ -965,7 +967,7 @@ void LibProjProp::stlTableChange( int row, int column )
 //* Widget properties dialog             *
 //****************************************
 VisItProp::VisItProp( VisDevelop *parent ) :
-    QDialog((QWidget*)parent), show_init(false), is_modif(false), ico_modif(false)
+    QDialog((QWidget*)parent), show_init(false), is_modif(false), ico_modif(false), isPrcLoaded(false)
 {
     QLabel *lab;
     QGroupBox *grp;
@@ -1245,11 +1247,14 @@ VisDevelop *VisItProp::owner( ) const	{ return (VISION::VisDevelop*)parentWidget
 
 void VisItProp::showDlg( const string &iit, bool reload )
 {
+    if(isVisible() && !reload)	close();
+
     vector<string> ls;
     string sval;
     QImage ico_t;
     ed_it = iit;
 
+    if(!reload)	isPrcLoaded = false;
     show_init = true;
 
     //Update elements present, visible and values
@@ -1406,6 +1411,8 @@ void VisItProp::tabChanged( int itb )
     switch(itb) {
 	case 1:	obj_attr->setWdg(ed_it);	break;
 	case 2: {
+	    if(isPrcLoaded)	break;
+
 	    show_init = true;
 
 	    XMLNode req("get");
@@ -1425,32 +1432,32 @@ void VisItProp::tabChanged( int itb )
 	    vector<string>	wlst;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/w_lst",TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_w = 0; i_w < req.childSize(); i_w++)
-		    wlst.push_back(req.childGet(i_w)->text());
-		    //wlst.push_back(req.childGet(i_w)->attr("id"));
+		for(unsigned iW = 0; iW < req.childSize(); iW++)
+		    wlst.push_back(req.childGet(iW)->text());
+		    //wlst.push_back(req.childGet(iW)->attr("id"));
 	    //  Fill table
 	    //  Delete no present root items
 	    for(int iR = 0; iR < obj_attr_cfg->topLevelItemCount(); iR++) {
-		unsigned i_w;
-		for(i_w = 0; i_w < wlst.size(); i_w++)
-		    if(obj_attr_cfg->topLevelItem(iR)->text(0) == wlst[i_w].c_str()) break;
-		if(i_w >= wlst.size())	delete obj_attr_cfg->topLevelItem(iR--);
+		unsigned iW;
+		for(iW = 0; iW < wlst.size(); iW++)
+		    if(obj_attr_cfg->topLevelItem(iR)->text(0) == wlst[iW].c_str()) break;
+		if(iW >= wlst.size())	delete obj_attr_cfg->topLevelItem(iR--);
 	    }
 	    //  Add root items
-	    for(unsigned i_w = 0; i_w < wlst.size(); i_w++) {
+	    for(unsigned iW = 0; iW < wlst.size(); iW++) {
 		QTreeWidgetItem *root_it;
 		int iR;
 		for(iR = 0; iR < obj_attr_cfg->topLevelItemCount(); iR++)
-		    if(obj_attr_cfg->topLevelItem(iR)->text(0) == wlst[i_w].c_str()) break;
+		    if(obj_attr_cfg->topLevelItem(iR)->text(0) == wlst[iW].c_str()) break;
 		if(iR < obj_attr_cfg->topLevelItemCount()) root_it = obj_attr_cfg->topLevelItem(iR);
 		else root_it = new QTreeWidgetItem(0);
 
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_attr_cfg->objectName().toStdString(),TSYS::PathEl))->
-		    setAttr("wdg",wlst[i_w].c_str());
+		    setAttr("wdg",wlst[iW].c_str());
 		if(owner()->cntrIfCmd(req)) continue;
 
-		root_it->setText(0,wlst[i_w].c_str());
-		root_it->setData(0,Qt::UserRole,0);
+		root_it->setText(0, wlst[iW].c_str());
+		root_it->setData(0, Qt::UserRole,0);
 		obj_attr_cfg->addTopLevelItem(root_it);
 
 		//  Delete no presents widget's items
@@ -1558,6 +1565,7 @@ void VisItProp::tabChanged( int itb )
 	    }
 
 	    show_init = false;
+	    isPrcLoaded = true;
 	    break;
 	}
 	case 3:	obj_lnk->setWdg(ed_it);	break;

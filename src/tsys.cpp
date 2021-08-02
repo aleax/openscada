@@ -1957,6 +1957,7 @@ string TSYS::rdStRequest( XMLNode &req, const string &st, bool toScan )
 
     //Same request
     for(map<string, TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); ++sit) {
+	MtxAlloc reqSt(sit->second.reqM);
 	if(!sit->second.isLive) continue;
 	if(toScan && st.size() && !prevPresent) {
 	    if(sit->first == st) prevPresent = true;

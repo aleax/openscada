@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,6 +43,11 @@ class Project : public TCntrNode, public TConfig
 	    Maximize		= 0x01,	//Maximize master window and resize content
 	    FullScreen		= 0x02,	//Full screen project run
 	    KeepAspectRatio	= 0x04,	//Keep master page aspect ratio on scale
+	};
+	enum Styles {
+	    StlCreate		= -2,
+	    StlDisabled		= -1,
+	    StlMaximum		= 10,
 	};
 
 	//Methods

@@ -60,10 +60,11 @@ class TPrmTempl: public TFunction, public TConfig
 	    //Data
 	    class SLnk {
 		public:
-		SLnk( const string &iaddr = "" ) : objOff(0), addr(iaddr) { }
+		SLnk( const string &iaddr = "" ) : objOff(0), addr(iaddr), hops(0) { }
 		int	objOff;
 		string	addr, addrSpec;
 		AutoHD<TVal> con;
+		unsigned char hops;
 	    };
 
 	    //Methods

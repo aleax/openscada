@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.0"
+#define MOD_VER		"2.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -144,7 +144,7 @@ void TMdContr::postDisable(int flag)
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
-    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 string TMdContr::getStatus( )
@@ -233,7 +233,7 @@ void *TMdContr::Task( void *icntr )
 			cntr.pHd[iP].at().tmCalcMax = vmax(cntr.pHd[iP].at().tmCalcMax, cntr.pHd[iP].at().tmCalc);
 			tCnt1 = tCnt2;
 		    }
-		} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	    isStart = false;
 	    cntr.enRes.unlock();
 	}
@@ -440,7 +440,7 @@ void TMdPrm::enable( )
 		break;
 	if(iL >= als.size())
 	    try{ pEl.fldDel(iP); iP--; }
-	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
     }
 
     if(isStd() && isFullEn && owner().startStat()) calc(true, false, DAQ_APER_FRQ);
@@ -681,8 +681,8 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(idNm >= 0 && tmpl->ioMdf(idNm))	setName(tmpl->getS(idNm));
 	if(idDscr >= 0 && tmpl->ioMdf(idDscr))	setDescr(tmpl->getS(idDscr));
     } catch(TError &err) {
-	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Error calculating template."));
+	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_warning(nodePath().c_str(), _("Error calculating template."));
     }
 }
 

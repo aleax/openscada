@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.3.0"
+#define MOD_VER		"6.3.1"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -511,6 +511,13 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/prj_"+vs.at().proj()+"'/>", "", ses.lang);
 		// The main requesting code
 		else {
+		    // Reconnection to change the user in the VCA session
+		    if(!vs.freeStat() && user != vs.at().user()) {
+			XMLNode req("connect");
+			req.setAttr("path", "/%2fserv%2fsess")->setAttr("sess", sesnm)->setAttr("remoteSrcAddr", sender)->setAttr("userChange", "1");
+			cntrIfCmd(req, ses);
+		    }
+
 		    // Try to connect the VCA-session at missing the Web-session
 		    if(vs.freeStat() && !ses.prm.size() && ses.isRoot()) {
 			XMLNode req("get"); req.setAttr("path", ses.url+"/%2fobj%2fst%2fen");

@@ -36,7 +36,7 @@ using namespace VCA;
 Session::Session( const string &iid, const string &iproj ) : mAlrmRes(true), mCalcRes(true), mDataRes(true),
     mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataResSes()), mReqUser(dataResSes()), mReqLang(dataResSes()),
     mPer(100), mPerReal(0), mPermit(RWRWR_), mEnable(false), mStart(false),
-    endrunReq(false), mBackgrnd(false), mConnects(0), mCalcClk(10), mReqTm(0), mUserActTm(0), mStyleIdW(-1)
+    endrunReq(false), mBackgrnd(false), mConnects(0), mCalcClk(10), mReqTm(0), mUserActTm(0), mStyleIdW(Project::StlDisabled)
 {
     mUser = "root";
     mPage = grpAdd("pg_");
@@ -93,9 +93,7 @@ void Session::setEnable( bool val )
 	    setPeriod(parent().at().period());
 
 	    //Loading the previous style
-	    string stVl = sessAttr("<Style>", user());
-	    if(stVl.empty() || parent().at().stlCurent() < 0) stVl = i2s(parent().at().stlCurent());
-	    stlCurentSet(s2i(stVl));
+	    stlCurentSet();
 
 	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Time of the previous style loading: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
@@ -544,6 +542,12 @@ void *Session::Task( void *icontr )
 
 void Session::stlCurentSet( int sid )
 {
+    if(sid == Project::StlMaximum) {
+	string stVl = sessAttr("<Style>", user());
+	if(stVl.empty() || parent().at().stlCurent() < 0) stVl = i2s(parent().at().stlCurent());
+	sid = s2i(stVl);
+    }
+
     if(mStyleIdW == sid) return;
 
     mStyleIdW = sid;
@@ -559,8 +563,7 @@ void Session::stlCurentSet( int sid )
 	    parent().at().stlPropList(pg_ls);
 	    for(unsigned iSP = 0; iSP < pg_ls.size(); iSP++)
 		mStProp[pg_ls[iSP]] = parent().at().stlPropGet(pg_ls[iSP], "", sid);
-	}
-	else mStyleIdW = -1;
+	} else mStyleIdW = Project::StlDisabled;
     }
 
     //Write to DB
@@ -792,7 +795,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_RD))	stlCurentSet(s2i(opt->text()));
     }
     else if(a_path == "/obj/cfg/stLst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setAttr("id","-1")->setText(_("<Disabled>"));
+	opt->childAdd("el")->setAttr("id",i2s(Project::StlDisabled))->setText(_("<Disabled>"));
 	if(enable())
 	    for(int iSt = 0; iSt < parent().at().stlSize(); iSt++)
 		opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(parent().at().stlGet(iSt),0,';'));
@@ -1845,7 +1848,8 @@ void SessWdg::wdgAdd( const string &iid, const string &name, const string &ipare
     //Limit for the deep
     int depth = 0;
     for(SessWdg *ownW = this; ownW->ownerSessWdg(); ownW = ownW->ownerSessWdg()) depth++;
-    if(depth > 10)	throw TError(nodePath().c_str(), _("It is a try of creating a widget in depth bigger to 10!"));
+    if(depth > RECURS_DET_HOPS)
+	throw TError(nodePath().c_str(), _("It is a try of creating a widget in depth bigger to %d!"), RECURS_DET_HOPS);
 
     chldAdd(inclWdg, new SessWdg(iid,iparent,ownerSess()));
 }
