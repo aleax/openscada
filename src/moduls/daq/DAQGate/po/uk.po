@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-28 11:56+0300\n"
+"POT-Creation-Date: 2021-08-08 15:08+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,8 +21,7 @@ msgstr "Шлюз джерел даних"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid ""
-"Allows to locate data sources of the remote OpenSCADA stations to local ones."
+msgid "Allows to locate data sources of the remote OpenSCADA stations to local ones."
 msgstr ""
 "Дозволяє виконувати шлюзування джерел даних віддалених OpenSCADA станцій до "
 "локальних."
@@ -34,7 +33,7 @@ msgid "Acquisition schedule"
 msgstr "Планування збору"
 
 msgid "Priority of the acquisition task"
-msgstr "Пріорітет задачі збору даних"
+msgstr "Пріоритет задачі збору даних"
 
 msgid "Timeout of restore, seconds"
 msgstr "Час відновлення, секунд"
@@ -82,6 +81,9 @@ msgstr "Присутність за станціями"
 msgid "Acquisition. "
 msgstr "Збір. "
 
+msgid "Sync. "
+msgstr "Синхронізація. "
+
 #, c-format
 msgid "Acquisition with the period: %s. "
 msgstr "Збір з періодом: %s. "
@@ -104,8 +106,7 @@ msgstr "Запитів до станції '%s': %.6g."
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."
-msgstr ""
-"Включення: станція '%s' опрацьовує елемент '%s' на предмет параметрів %d."
+msgstr "Включення: станція '%s' опрацьовує елемент '%s' на предмет параметрів %d."
 
 #, c-format
 msgid ""
@@ -143,7 +144,8 @@ msgid ""
 "Zero to disable the periodic sync and -1 for the sync disabling at the start "
 "also."
 msgstr ""
-"Нуль для виключення періодичної синхронізації та -1 також для виключення синхронізації при запуску."
+"Нуль для виключення періодичної синхронізації та -1 також для виключення "
+"синхронізації при запуску."
 
 msgid "List of remote OpenSCADA station IDs used in this controller."
 msgstr ""
@@ -199,3 +201,4 @@ msgstr "Конфігурація віддаленої станції"
 
 msgid "Controller is not started!"
 msgstr "Контролер не запущено!"
+

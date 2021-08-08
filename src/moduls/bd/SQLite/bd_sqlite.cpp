@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.5"
+#define MOD_VER		"3.1.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -497,10 +497,10 @@ void MTable::fieldSet( TConfig &cfg )
     // Add key list to queue
     bool next = false, noKeyFld = false,
 	 isForceUpdt = cfg.reqKeys();			//Force update by ReqKeys or reqKey() present
-    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+    for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
+	TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
 	if(!u_cfg.isKey()) continue;
-	req_where += (next?" AND \"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\"=" + getVal(u_cfg,TCfg::ExtValTwo);
+	req_where += (next?" AND \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + getVal(u_cfg,TCfg::ExtValTwo);
 	next = true;
 
 	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
@@ -527,14 +527,14 @@ void MTable::fieldSet( TConfig &cfg )
 	    req = "INSERT INTO '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' ";
 	    string ins_name, ins_value;
 	    next = false;
-	    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+	    for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
+		TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
 		if(!u_cfg.isKey() && !u_cfg.view()) continue;
 
-		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
-		ins_name += (next?",\"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\" " +
-		    (isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_el],TSYS::SQL,"\"")+"\" ") : "");
 		sval = getVal(u_cfg);
+		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl() && Mess->isMessTranslable(sval));
+		ins_name += (next?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\" " +
+		    (isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iEl],TSYS::SQL,"\"")+"\" ") : "");
 		ins_value += (next?",":"") + sval + " " + (isTransl?(","+sval+" "):"");
 		next = true;
 	    }
@@ -546,14 +546,38 @@ void MTable::fieldSet( TConfig &cfg )
     if(isForceUpdt) {
 	req = "UPDATE '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' SET ";
 	next = false;
-	for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+	for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
+	    TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
 	    if((u_cfg.isKey() && !u_cfg.extVal()) || !u_cfg.view()) continue;
 
-	    bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
-	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
-	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + getVal(u_cfg) + " ";
+	    sval = getVal(u_cfg);
+	    bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl());
+	    // Clearing all the translation at setting no translable message
+	    if(isTransl && sval.size() > 2 && !Mess->isMessTranslable(sval)) {
+		if(!trPresent) {
+		    req += (next?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " ";
+		    next = true;
+		}
+		for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
+		    sid = tblStrct[iFld][1];
+		    if(!(sid.size() > 3 && sid.compare(3,string::npos,cf_el[iEl]) == 0 && sid.compare(0,3,Mess->lang2CodeBase()+"#") != 0))
+			continue;
+		    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"='' ";
+		    next = true;
+		}
+	    }
+	    // Setting the translation
+	    else if(isTransl && trPresent)
+		req += (next?",\"":"\"") + TSYS::strEncode((Mess->lang2Code()+"#"+cf_el[iEl]),TSYS::SQL,"\"") + "\"=" + sval + " ";
+	    // No translation
+	    else 
+		req += (next?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " ";
 	    next = true;
+
+	    /*bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
+	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[iEl]) : cf_el[iEl];
+	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + getVal(u_cfg) + " ";
+	    next = true;*/
 	}
 	req += req_where;
     }

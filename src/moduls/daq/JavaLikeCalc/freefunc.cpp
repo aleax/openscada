@@ -174,8 +174,9 @@ void Func::loadIO( )
 	io(id)->setName(cfg.cfg("NAME").getS());
 	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	io(id)->setFlg(cfg.cfg("MODE").getI());
-	//cfg.cfg("DEF").setNoTransl(io(id)->type()!=IO::String);
-	io(id)->setDef(cfg.cfg("DEF").getS());
+	if(io(id)->type() != IO::String || !(io(id)->flg()&IO::TransltText))
+	    io(id)->setDef(cfg.cfg("DEF").getS(TCfg::ExtValOne));	//Force to no translation
+	else io(id)->setDef(cfg.cfg("DEF").getS());
 	io(id)->setHide(cfg.cfg("HIDE").getB());
     }
     //Remove holes
@@ -216,11 +217,11 @@ void Func::saveIO( )
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
 	cfg.cfg("MODE").setI(io(i_io)->flg());
-	cfg.cfg("DEF").setNoTransl(io(i_io)->type()!=IO::String);
+	cfg.cfg("DEF").setNoTransl(!(io(i_io)->type()==IO::String && io(i_io)->flg()&IO::TransltText));
 	cfg.cfg("DEF").setS(io(i_io)->def());
 	cfg.cfg("HIDE").setB(io(i_io)->hide());
 	cfg.cfg("POS").setI(i_io);
-	SYS->db().at().dataSet(io_bd,io_cfgpath,cfg);
+	SYS->db().at().dataSet(io_bd, io_cfgpath, cfg);
     }
 
     //Clear IO
@@ -2954,8 +2955,9 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String;Text;Object"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",
+			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::TransltText<<8),IO::String|(IO::FullText<<8),IO::String|((IO::FullText|IO::TransltText)<<8),IO::Object).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"));
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
 		    "sel_list",_("Input;Output;Return"));
@@ -2996,7 +2998,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    for(int id = 0; id < ioSize(); id++) {
 		if(nId)   nId->childAdd("el")->setText(io(id)->id());
 		if(nNm)   nNm->childAdd("el")->setText(io(id)->name());
-		if(nType) nType->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
+		if(nType) nType->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&(IO::FullText|IO::TransltText))<<8)));
 		if(nMode) nMode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
 		if(nHide) nHide->childAdd("el")->setText(io(id)->hide()?"1":"0");
 		if(nDef)  nDef->childAdd("el")->setText(io(id)->def());
@@ -3025,7 +3027,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 		case 1:	io(row)->setName(opt->text());	break;
 		case 2:
 		    io(row)->setType((IO::Type)(s2i(opt->text())&0xFF));
-		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&IO::FullText));
+		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::TransltText)));
 		    break;
 		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(IO::Output|IO::Return)));	break;
 		case 4:	io(row)->setHide(s2i(opt->text()));	break;

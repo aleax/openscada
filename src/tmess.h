@@ -139,6 +139,7 @@ class TMess
 	bool translEnMan( )			{ return mTranslEnMan; }
 	string translLangs( )			{ return mTranslLangs; }
 	string translFld( const string &lng, const string &fld, bool isCfg = false );
+	bool isMessTranslable( const string &vl );
 	void setLang2CodeBase( const string &vl );
 	void setTranslDyn( bool val, bool plan = true );
 	void setTranslEnMan( bool vl, bool passive = false );

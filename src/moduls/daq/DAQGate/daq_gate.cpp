@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.3.1"
+#define MOD_VER		"2.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -120,7 +120,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
     mSync(cfg("SYNCPER").getId()), mRestTm(cfg("TM_REST").getId()),
     mPrior(cfg("PRIOR").getId()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
-    prcSt(false), callSt(false), endrunReq(false), alSt(-1), mPer(1e9)
+    prcSt(false), callSt(false), syncSt(false), endrunReq(false), alSt(-1), mPer(1e9)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
@@ -136,6 +136,7 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(callSt)	val += TSYS::strMess(_("Acquisition. "));
+	if(syncSt)	val += TSYS::strMess(_("Sync. "));
 	if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
 	else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s[%s]. "),
@@ -180,6 +181,8 @@ void TMdContr::enable_( )
     list(prmLs);
     bool toSync = (syncPer() >= 0 || prmLs.empty());
     prmLs.clear();
+
+    syncSt = toSync;
 
     //Remote station scaning. Controllers and parameters scaning
     for(unsigned iSt = 0; iSt < mStatWork.size() && toSync; iSt++)
@@ -348,6 +351,8 @@ void TMdContr::enable_( )
 	    }
 	}
     }
+
+    syncSt = false;
 }
 
 void TMdContr::disable_( )
@@ -488,8 +493,7 @@ void *TMdContr::Task( void *icntr )
 		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
 		    if(syncCnt <= 0) syncCnt = cntr.syncPer();
 		    syncCnt = vmax(0, syncCnt-1e-6*(tCnt-tPrev));
-		}
-		else { div = 0; syncCnt = 1; }	//Disable sync
+		} else { div = 0; syncCnt = 1; }	//Disable sync
 
 		//Parameters list update
 		if((firstCall && cntr.syncPer() >= 0) || needEnable || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
@@ -500,9 +504,14 @@ void *TMdContr::Task( void *icntr )
 		//Mark no process
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 		    TMdPrm &pO = cntr.pHd[iP].at();
-		    if((!pO.isSynced && cntr.syncPer() >= 0) || (!div && syncCnt <= 0) || (div && itCnt > div && (((itCnt+iP)%div) == 0))) pO.sync();
+		    if((!pO.isSynced && cntr.syncPer() >= 0) || (!div && syncCnt <= 0) || (div && itCnt > div && (((itCnt+iP)%div) == 0))) {
+			cntr.syncSt = true;
+			pO.sync();
+		    }
 		    pO.isPrcOK = false;
 		}
+
+		cntr.syncSt = false;
 
 		//Station's cycle
 		for(unsigned iSt = 0; iSt < cntr.mStatWork.size(); iSt++) {

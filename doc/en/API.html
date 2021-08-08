@@ -243,6 +243,7 @@ Information variables of the program:
 <ul><li> <i>int8_t lev;</i> — station level;</li>
 <li> <i>bool isLive;</i> — flag "Station Alive";</li>
 <li> <i>float cnt;</i> — counter of requests to the remote station or timer of a re-connection try;</li>
+<li> <i>ResMtx reqM;</i> — the station requesting functional lock;</li>
 <li> <i>SStat( int8_t ilev, bool iisLive = false, float icnt = 0 )</i> — station object constructor with level <i>ilev</i>, initiated as "Alive" <i>iisLive</i> and counter <i>icnt</i>;</li>
 <li> <i>SStat( )</i> — constructor by default, initiated as as a missed and an inactive station;</li>
 <li> <i>bool isActive( )</i> — station is active.</li></ul>
@@ -265,6 +266,7 @@ Information variables of the program:
 </p>
 <ul><li> <i>NSTR_BUF_LEN</i> — Length of string buffers for numbers (50 symbols).</li>
 <li> <i>DAQ_APER_FRQ</i> — Frequency of representing the aperiodic invokes, like to "f_start", of the periodic processes in Hz (1000000).</li>
+<li> <i>RECURS_DET_HOPS</i> — Hops/depth number of the recursion detection.</li>
 <li> <i>BUF_ARCH_NM</i> — The archive buffer name ("&lt;buffer&gt;").</li>
 <li> <i>ALRM_ARCH_NM</i> — The alarms table name ("&lt;alarms&gt;").</li>
 <li> <i>ALRM_ARCH_CH_NM</i> — The alarms table name ("&lt;alarmsChange&gt;") just for changing.</li>
@@ -437,14 +439,14 @@ Information variables of the program:
 <p><b>Data:</b><br />
 Types (levels) of messages (enum — TMess::Type):
 </p>
-<ul><li> <i>Debug</i> (0) — debug; </li>
-<li> <i>Info</i> (1) — information; </li>
-<li> <i>Notice</i> (2) — the notification; </li>
-<li> <i>Warning </i> (3) — warning; </li>
-<li> <i>Error</i> (4) — error; </li>
-<li> <i>Crit</i> (5) — critical situation; </li>
-<li> <i>Alert</i> (6) — alert; </li>
-<li> <i>Emerg</i> (7) — emergency. </li></ul>
+<ul><li> <i>Debug</i> (0) — debug;</li>
+<li> <i>Info</i> (1) — information;</li>
+<li> <i>Notice</i> (2) — the notification;</li>
+<li> <i>Warning </i> (3) — warning;</li>
+<li> <i>Error</i> (4) — error;</li>
+<li> <i>Crit</i> (5) — critical situation;</li>
+<li> <i>Alert</i> (6) — alert;</li>
+<li> <i>Emerg</i> (7) — emergency.</li></ul>
 <p>Direction for the messages (enum — TMess::Direct):
 </p>
 <ul><li> <i>DIR_SYSLOG</i> (0x1) — to SYSLOG;</li>
@@ -516,6 +518,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>bool translEnMan( );</i> — The sign "Enabled translations manager", for activation of the built translation messages index and the translation manager.</li>
 <li> <i>string translLangs( );</i> — List of translation languages, into the manager.</li>
 <li> <i>string translFld( const string &amp;lng, const string &amp;fld, bool isCfg = false );</i> — Representing the translated field name by the field name <i>fld</i> and language <i>lng</i> for configuration <i>isCfg</i> or DB.</li>
+<li> <i>bool isMessTranslable( const string &amp;vl );</i> — Checking the message <i>vl</i> for availability of it translation, has no only space, digit and punctuation symbols.</li>
 <li> <i>void setLang2CodeBase( const string &amp;vl );</i> — Setting the language of the basic message of text variables in the bi-symbolic codepage (en). </li>
 <li> <i>void setTranslDyn( bool val, bool plan = true );</i> — Setting the mode "Dynamic translation" or the <i>plan</i> to value <i>val</i> for next start.</li>
 <li> <i>void setTranslEnMan( bool vl, bool passive = false );</i> — Setting "Enabled translation manager" to value <i>vl</i> and passive mode <i>passive</i>.</li>
@@ -1497,6 +1500,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string extHostsDB( );</i> — Database for the storing the list of external hosts.</li>
 <li> <i>void extHostList( const string &amp;user, vector&lt;ExtHost&gt; &amp;list, bool andSYS = false, int upRiseLev = -1 );</i> — The <i>list</i> of external hosts for <i>user</i>, include system <i>andSYS</i> and the uprising level <i>upRiseLev</i> (-1 - starting from the host's entry level).</li>
 <li> <i>ExtHost extHostGet( const string &amp;user, const string &amp;id, bool andSYS = false );</i> — Getting the information object from the external host <i>id</i> on behalf of the user <i>user</i>, include system <i>andSYS</i> ( "*" — for the system hosts).</li>
+<li> <i>ExtHost extHostSeek( const string &amp;id, int lev );</i> — Direct hosts scanning at the station <i>id</i> and the level <i>lev</i>. The scanning starts at <i>lev</i> in 0 and stops at return empty host ID.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; extHost( TTransportS::ExtHost host, const string &amp;pref = "" );</i> — Creation - request of the output transport to service the external host <i>host</i> with the prefix of the identification of the system node <i>pref</i>.</li>
 <li> <i>void extHostSet( const ExtHost &amp;host, bool andSYS = false );</i> — Setting of the external host/station <i>host</i>, include system <i>andSYS</i>.</li>
 <li> <i>void extHostDel( const string &amp;user, const string &amp;id, bool andSYS = false );</i> — Deleting of the external host/station <i>id</i> on behalf of the user <i>user</i>, include system <i>andSYS</i> ( "*" — for the system hosts).</li>
@@ -4135,5 +4139,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2759</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2762</td></tr></table></body>
 </html>

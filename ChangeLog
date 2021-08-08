@@ -1,3 +1,15 @@
+2021-08-08 Roman (stable)
+- FIX:AGLKS.St: The style rule 'labColorGrph1' fixed for the Default.
+- !!!!:SYS,DAQ.JavaLikeCalc: The flag IO::TransltText used also for the TFunction object.
+- !!!!:SYS,DB.SQLite: The translation messages appended of checking the messages for they transable
+	by the new function TMess::isMessTranslable().
+    !!!!:DB.SQLite: The translation setting mechanism expanded for clearing the translation at setting not translable ones
+	and will be used next to mark the fuzzy translation at direct changing the base or one translation.
+- !:FIX:Transports: Propagation of the password hash of the OpenSCADA external hosts connection was fixed in the host creation
+    and the same propagation expanded to all host connections with the equal connection user, by the new function extHostSeek().
+- DAQ.DAQGate: The controller object status appended in display the sync state.
+
+
 2021-08-02 Roman (stable)
 - FIX:LibsDB.OscadaLibs: base.{anUnif,manInUnif,anUnifSt,pidUnifImp,simleBoard,ntf}: adapted for translation several attributes.
 - LibsDB.vcaBase: doc.docRepYear: adapted for translation several attributes.

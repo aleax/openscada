@@ -186,7 +186,8 @@ class TMdContr: public TController
 		&mPlaceCntrToVirtPrm;		//Placing different controllers to the different virtual parameters
 
 	bool	prcSt,				//Process task active
-		callSt,				//Calc now stat
+		callSt,				//Call now stat
+		syncSt,				//Sync start
 		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
 	vector< pair<string,StHd> > mStatWork;	//Work stations and it status

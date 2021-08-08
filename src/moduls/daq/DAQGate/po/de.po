@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-28 11:56+0300\n"
+"POT-Creation-Date: 2021-08-08 15:08+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -26,8 +26,7 @@ msgstr "OpenSCADA Datenquellen"
 msgid "Roman Savochenko"
 msgstr "Roman Savotscheko"
 
-msgid ""
-"Allows to locate data sources of the remote OpenSCADA stations to local ones."
+msgid "Allows to locate data sources of the remote OpenSCADA stations to local ones."
 msgstr ""
 "Ermöglicht das Lokalisieren von Datenquellen von Remote-OpenSCADA-Stationen "
 "zu lokalen."
@@ -70,8 +69,7 @@ msgid "Allow the automatic removal of parameters and attributes"
 msgstr "Erlaube das automatische Entfernen von Parametern und Attributen"
 
 msgid "Placing different controllers to the separate virtual parameters"
-msgstr ""
-"Platzieren verschiedener Controller für die separaten virtuellen Parameter"
+msgstr "Platzieren verschiedener Controller für die separaten virtuellen Parameter"
 
 msgid "Standard"
 msgstr "Standard"
@@ -87,6 +85,9 @@ msgstr "Präsenz an Stationen"
 
 msgid "Acquisition. "
 msgstr "Erwerb. "
+
+msgid "Sync. "
+msgstr "Synchronisieren. "
 
 #, c-format
 msgid "Acquisition with the period: %s. "
@@ -110,8 +111,7 @@ msgstr "Anfragen an die Station '%s': %.6g."
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."
-msgstr ""
-"Aktivieren: Stationen '%s' Verarbeitung Elemente '%s' für Parameter %d."
+msgstr "Aktivieren: Stationen '%s' Verarbeitung Elemente '%s' für Parameter %d."
 
 #, c-format
 msgid ""
@@ -148,7 +148,9 @@ msgstr "Null, um den Zugriff auf das Remote-Archiv zu deaktivieren."
 msgid ""
 "Zero to disable the periodic sync and -1 for the sync disabling at the start "
 "also."
-msgstr "Zero deaktivieren periodische Synchronisation, und -1, um die Synchronisierung auch beim Start zu deaktivieren."
+msgstr ""
+"Zero deaktivieren periodische Synchronisation, und -1, um die "
+"Synchronisierung auch beim Start zu deaktivieren."
 
 msgid "List of remote OpenSCADA station IDs used in this controller."
 msgstr ""
@@ -204,3 +206,4 @@ msgstr "Konfiguration einer entfernten Station"
 
 msgid "Controller is not started!"
 msgstr "Controller ist nicht gestartet!"
+

@@ -335,9 +335,7 @@ TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &
     ResAlloc res(extHostRes, false);
     ExtHost eh(user, "");
     for(unsigned iH = 0; iH < extHostLs.size(); ++iH)
-	if(extHostLs[iH].id == id &&
-		((!andSYS && (user.empty() || user == extHostLs[iH].userOpen)) ||
-		(andSYS && extHostLs[iH].userOpen == "*"))) {
+	if(extHostLs[iH].id == id && (user.empty() || user == extHostLs[iH].userOpen || (andSYS && extHostLs[iH].userOpen == "*"))) {
 	    if(eh.mode < 0) {
 		eh = extHostLs[iH];
 		eh.mode = (eh.userOpen == "*") ? ExtHost::System : ExtHost::User;
@@ -347,6 +345,15 @@ TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &
     if(eh.userOpen == "*" && user.size() && user != eh.userOpen) eh.userOpen = user;
 
     return eh;
+}
+
+TTransportS::ExtHost TTransportS::extHostSeek( const string &id, int lev )
+{
+    ResAlloc res(extHostRes, false);
+    for(unsigned iH = 0; iH < extHostLs.size(); ++iH)
+	if(extHostLs[iH].id == id && !(lev--))	return extHostLs[iH];
+
+    return ExtHost("", "");
 }
 
 void TTransportS::extHostSet( const ExtHost &host, bool andSYS, bool load )
@@ -448,14 +455,12 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     //Password's hash processing
     if(!rqDir && node.attr("pHash").size()) {
 	if(host.pass != (TSecurity::pHashMagic+node.attr("pHash"))) {
-	    // Try the peer for apply the hash also
-	    //!!!! Append next of processing several not system users/connections
-	    TTransportS::ExtHost hostP = extHostGet((user.empty()?"":"*"), station);
-	    bool setP = (hostP.id.size() && hostP.user == host.user && hostP.pass == host.pass);
-
-	    host.pass = hostP.pass = TSecurity::pHashMagic + node.attr("pHash");
-	    extHostSet(host);
-	    if(setP) extHostSet(hostP);
+	    TTransportS::ExtHost hostP("", "");
+	    for(int lev = 0; (hostP=extHostSeek(station,lev)).id.size(); lev++) {
+		if(hostP.user != host.user) continue;
+		hostP.pass = TSecurity::pHashMagic + node.attr("pHash");
+		extHostSet(hostP);
+	    }
 	}
 	node.setAttr("pHash", "");
     }

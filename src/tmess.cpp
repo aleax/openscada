@@ -203,6 +203,15 @@ void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const stri
 
 string TMess::translFld( const string &lng, const string &fld, bool isCfg )	{ return isCfg ? fld+"_"+lng : lng+"#"+fld; }
 
+bool TMess::isMessTranslable( const string &mess )
+{
+    bool isTrSymb = false;
+    for(unsigned iCh = 0; iCh < mess.size() && !isTrSymb; ++iCh)
+	isTrSymb = !(isspace(mess[iCh]) || isdigit(mess[iCh]) || ispunct(mess[iCh]));
+
+    return isTrSymb;
+}
+
 void TMess::setLang2CodeBase( const string &vl )
 {
     mLang2CodeBase = vl;
@@ -400,7 +409,7 @@ string TMess::translSetLU( const string &base, const string &lang, const string 
 
 void TMess::translReg( const string &mess, const string &src, const string &prms )
 {
-    if(!translEnMan()) return;
+    if(!translEnMan() || !isMessTranslable(mess)) return;
 
     if(src.compare(0,5,"uapi:") == 0) {
 	vector<string> ls;

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-26 10:37+0300\n"
+"POT-Creation-Date: 2021-08-08 10:57+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -188,8 +188,7 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -348,8 +347,7 @@ msgid "Requested %d records for time %s."
 msgstr "Запитано %d записів протягом %s."
 
 #, c-format
-msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки "
 "%lld (%lld-%lld)."
@@ -610,8 +608,7 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid ""
-"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid "Tables"
@@ -1074,8 +1071,14 @@ msgstr "Кількість виконань"
 msgid "Spent time"
 msgstr "Витрачено часу"
 
+msgid "Text"
+msgstr "Текст"
+
 msgid "String"
 msgstr "Рядок"
+
+msgid "(translate)"
+msgstr "(переклад)"
 
 msgid "Integer"
 msgstr "Цілий"
@@ -1352,8 +1355,7 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -1419,6 +1421,9 @@ msgstr "Порожнє значення недозволене."
 
 msgid "Error of parameter ID."
 msgstr "Помилковий ID параметру."
+
+msgid "Detected of the link recursion."
+msgstr "Виявлено рекурсію звя'язків."
 
 msgid "Template configuration"
 msgstr "Конфігурація шаблону"
@@ -1917,8 +1922,7 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проекту! Схоже проект '%s' вже виконується."
 
 msgid "Loading."
@@ -2648,12 +2652,6 @@ msgstr "Атрибути"
 msgid "Unknown"
 msgstr "Невідомий"
 
-msgid "Text"
-msgstr "Текст"
-
-msgid "(translate)"
-msgstr "(переклад)"
-
 msgid "Boolean"
 msgstr "Логічний"
 
@@ -2834,3 +2832,4 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+

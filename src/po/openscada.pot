@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-26 10:37+0300\n"
+"POT-Creation-Date: 2021-08-08 10:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -966,7 +966,13 @@ msgstr ""
 msgid "Spent time"
 msgstr ""
 
+msgid "Text"
+msgstr ""
+
 msgid "String"
+msgstr ""
+
+msgid "(translate)"
 msgstr ""
 
 msgid "Integer"
@@ -1234,6 +1240,9 @@ msgid "Empty value is not allowed."
 msgstr ""
 
 msgid "Error of parameter ID."
+msgstr ""
+
+msgid "Detected of the link recursion."
 msgstr ""
 
 msgid "Template configuration"
@@ -2208,12 +2217,6 @@ msgid "Attributes"
 msgstr ""
 
 msgid "Unknown"
-msgstr ""
-
-msgid "Text"
-msgstr ""
-
-msgid "(translate)"
 msgstr ""
 
 msgid "Boolean"

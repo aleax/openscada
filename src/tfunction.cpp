@@ -332,7 +332,10 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    if(n_nm)	n_nm->childAdd("el")->setText(io(iIO)->name());
 	    if(n_type) {
 		switch(io(iIO)->type()) {
-		    case IO::String:	tmp_str = _("String");	break;
+		    case IO::String:
+			tmp_str = (io(iIO)->flg()&IO::FullText) ? _("Text") : _("String");
+			if(io(iIO)->flg()&IO::TransltText) tmp_str = tmp_str + " "+_("(translate)");
+			break;
 		    case IO::Integer:	tmp_str = _("Integer");	break;
 		    case IO::Real:	tmp_str = _("Real");	break;
 		    case IO::Boolean:	tmp_str = _("Bool");	break;

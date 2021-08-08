@@ -3858,7 +3858,7 @@ INSERT INTO prj_AGLKS_stl VALUES('labColorGood','#00FF00','#008600','','','','',
 INSERT INTO prj_AGLKS_stl VALUES('labColorWarning','#ffff00','#B4B400','','','','','','','','');
 INSERT INTO prj_AGLKS_stl VALUES('labColor','white','black','','','','','','','','');
 INSERT INTO prj_AGLKS_stl VALUES('backColorVal','black','white','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph1','#b000b0','#ae77c3-200','','','','','','','','');
+INSERT INTO prj_AGLKS_stl VALUES('labColorGrph1','#ae77c3-200','#ae77c3-200','','','','','','','','');
 INSERT INTO prj_AGLKS_stl VALUES('labColorGrph2','orange-200','orange-200','','','','','','','','');
 INSERT INTO prj_AGLKS_stl VALUES('labColorGrph3','blue-200','blue-200','','','','','','','','');
 INSERT INTO prj_AGLKS_stl VALUES('labColorGrph4','lightgreen-200','#199696-200','','','','','','','','');
