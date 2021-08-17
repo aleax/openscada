@@ -29,7 +29,7 @@
 #define MOD_NAME	_("DB gate")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.0.1"
+#define MOD_VER		"1.0.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
 #define MOD_LICENSE	"GPL2"
@@ -157,6 +157,8 @@ TTable *MBD::openTable( const string &inm, bool create )
 
 int MBD::cntrIfCmd( XMLNode &node, bool ownNode )
 {
+    MtxAlloc reqSt(reqM, true);
+
     string reqStat = TSYS::strParse(addr(), 0, ".");
     if(!reqStat.size())	node.setAttr("err", i2s(TError::Tr_UnknownHost)+":"+TSYS::strMess(_("Station missed '%s'."),reqStat.c_str()));
 

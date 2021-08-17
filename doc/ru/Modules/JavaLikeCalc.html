@@ -31,7 +31,7 @@
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Вычислитель на Java-подобном языке.
 </td>
-<td> 5.2 </td>
+<td> 5.3 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -329,9 +329,9 @@ rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
 rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
 <dl><dd><ul><li> <i>real toReal();</i> — преобразует текущую строку в вещественное число.</li>
 <li> <i>int toInt( int base = 10 );</i> — преобразует текущую строку в целое число, в соответствии с основанием <i>base</i> (от 2 до 36). Если основание равно 0 то будет учитываться префиксная запись для определения основания (123-десятичное; 0123-восьмеричное; 0x123-шестнадцатеричное).</li>
-<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — выделяет из исходной строки элемент <i>pos</i>, для разделителя элементов <i>sep</i> и от смещения <i>off</i>. Результирующее смещение помещается назад в <i>off</i>.</li>
+<li> <i>string {parse,parseEnd}( int pos, string sep = ".", int off = {0,{length}}, bool mergeSepSymb = false );</i> — выделяет из исходной строки элемент <i>pos</i>, для разделителя элементов <i>sep</i> и от смещения <i>off</i>. <i>mergeSepSymb</i> определяет разрешение объединения группы одинаковых символов в один разделитель. Результирующее смещение помещается назад в <i>off</i>. <i>parseEnd()</i> делает тоже самое, но с конца.</li>
 <li> <i>string parseLine( int pos, int off = 0 );</i> — выделяет строку с номером <i>pos</i> и от смещения <i>off</i>. Результирующее смещение помещается назад в <i>off</i>.</li>
-<li> <i>string parsePath( int pos, int off = 0 );</i> — выделяет из исходного пути элемент <i>pos</i> и от смещения <i>off</i>. Результирующее смещение помещается назад в <i>off</i>.</li>
+<li> <i>string {parsePath,parsePathEnd}( int pos, int off = {0,{length}} );</i> — выделяет из исходного пути элемент <i>pos</i> и от смещения <i>off</i>. Результирующее смещение помещается назад в <i>off</i>. <i>parsePathEnd</i> делает тоже самое, но с конца.</li>
 <li> <i>string path2sep( string sep = "." );</i> — преобразует путь в текущей строке в строку с разделителем <i>sep</i>.</li>
 <li> <i>string trim( string cfg = " \n\t\r" );</i> — обрезает строку с начала и конца, для символов <i>cfg</i>.</li></ul></dd></dl>
 <p><br />

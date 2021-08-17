@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.1.1"
+#define MOD_VER		"4.2.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1712,7 +1712,7 @@ TCntrNode &TMdPrm::operator=( const TCntrNode &node )
     TParamContr::operator=(node);
 
     const TMdPrm *src_n = dynamic_cast<const TMdPrm*>(&node);
-    if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx) return *this;
+    if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx || !lCtx->func()) return *this;
 
     //IO values copy
     for(int iIO = 0; iIO < src_n->lCtx->ioSize(); iIO++)
@@ -1800,39 +1800,39 @@ void TMdPrm::enable( )
 	}
     }
     //Template's function connect for logical type parameter
-    else if(isLogic() && lCtx)
+    else if(isLogic() && lCtx && !lCtx->func())
 	try {
 	    //vector<string> als;
-	    bool to_make = false;
-	    if(!lCtx->func()) {
-		string m_tmpl = cfg("TMPL").getS();
+	    string m_tmpl = cfg("TMPL").getS();
+	    if(!lCtx->func() && m_tmpl.size()) {
 		lCtx->setFunc(&SYS->daq().at().tmplLibAt(TSYS::strParse(m_tmpl,0,".")).at().
-					at(TSYS::strParse(m_tmpl,1,".")).at().func().at());
-		to_make = true;
+						      at(TSYS::strParse(m_tmpl,1,".")).at().func().at());
+		lCtx->setVfName(id()+"_Siemens_tmplprm");
 	    }
 	    // Init attrubutes
-	    lCtx->addLinksAttrs(&pEl);
+	    if(lCtx->func()) {
+		lCtx->addLinksAttrs(&pEl);
 
-	    // Load IO at enabling
-	    if(to_make) loadIO(true);
+		// Load IO at enabling
+		loadIO(true);
 
-	    // Init links
-	    lCtx->chkLnkNeed = lCtx->initLnks(true);
+		// Init links
+		lCtx->chkLnkNeed = lCtx->initLnks(true);
 
-	    // Init system attributes identifiers
-	    lCtx->idFreq  = lCtx->ioId("f_frq");
-	    lCtx->idStart = lCtx->ioId("f_start");
-	    lCtx->idStop  = lCtx->ioId("f_stop");
-	    lCtx->idErr   = lCtx->ioId("f_err");
-	    lCtx->idSh    = lCtx->ioId("SHIFR");
-	    lCtx->idNm    = lCtx->ioId("NAME");
-	    lCtx->idDscr  = lCtx->ioId("DESCR");
-	    int idThis    = lCtx->ioId("this");
-	    if(idThis >= 0) lCtx->setO(idThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+		// Init system attributes identifiers
+		lCtx->idFreq  = lCtx->ioId("f_frq");
+		lCtx->idStart = lCtx->ioId("f_start");
+		lCtx->idStop  = lCtx->ioId("f_stop");
+		lCtx->idErr   = lCtx->ioId("f_err");
+		lCtx->idSh    = lCtx->ioId("SHIFR");
+		lCtx->idNm    = lCtx->ioId("NAME");
+		lCtx->idDscr  = lCtx->ioId("DESCR");
+		int idThis    = lCtx->ioId("this");
+		if(idThis >= 0) lCtx->setO(idThis, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
-	    // First call
-	    if(owner().startStat() && !owner().redntUse()) upValLog(true, false, DAQ_APER_FRQ);
-
+		// First call
+		if(owner().startStat() && !owner().redntUse()) upValLog(true, false, DAQ_APER_FRQ);
+	    }
 	} catch(TError &err) { disable(); throw; }
 
     //Checking to delete the DAQ parameter attributes
@@ -1878,7 +1878,7 @@ void TMdPrm::load_( )
 
 void TMdPrm::loadIO( bool force )
 {
-    if(!enableStat() || !isLogic() || !lCtx) return;
+    if(!enableStat() || !isLogic() || !lCtx || !lCtx->func()) return;
 
     //Load IO and init links
     TConfig cfg(&mod->prmIOE());
@@ -1886,6 +1886,7 @@ void TMdPrm::loadIO( bool force )
     cfg.cfg("VALUE").setExtVal(true);
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
+    //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
 	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
@@ -1906,9 +1907,9 @@ void TMdPrm::save_( )
 
 void TMdPrm::saveIO( )
 {
-    //Save IO and init links
-    if(!enableStat() || !isLogic() || !lCtx) return;
+    if(!enableStat() || !isLogic() || !lCtx || !lCtx->func()) return;
 
+    //Save IO and init links
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(ownerPath(true));
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
@@ -1944,7 +1945,7 @@ void TMdPrm::upValSmpl( )
 
 void TMdPrm::upValLog( bool first, bool last, double frq )
 {
-    if(!isLogic())	return;
+    if(!isLogic() || !lCtx->func())	return;
 
     AutoHD<TVal> pVal;
     vector<string> ls;
@@ -2148,7 +2149,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    "  \"F.12.b5:r:var:Variable\" - Boolean in the Flags/Markers data area, offset 12 and bit 5."));
 	if(isLogic()) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
-	    if(enableStat())	lCtx->cntrCmdProc(opt);
+	    if(enableStat() && lCtx->func() && lCtx->cntrCmdProc(opt)) ;
 	}
 	return;
     }

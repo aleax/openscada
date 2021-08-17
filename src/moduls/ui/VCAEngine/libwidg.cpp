@@ -92,7 +92,7 @@ void WidgetLib::postDisable( int flag )
 {
     if(flag) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this,true);
+	SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB",*this,true);
 
 	//Delete function's files
 	// Delete widgets table
@@ -171,7 +171,7 @@ void WidgetLib::load_( TConfig *icfg )
     mess_debug(nodePath().c_str(),_("Loading widgets library."));
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
+    else SYS->db().at().dataGet(DB()+"."+mod->wlbTable(), mod->nodePath()+"LIB", *this);
 
     passAutoEn = true;
 
@@ -204,7 +204,7 @@ void WidgetLib::save_( )
 {
     mess_debug(nodePath().c_str(),_("Saving widgets library."));
 
-    SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB",*this);
 
     //Check for need copy mime data to other DB and same copy
     if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB())) {
@@ -668,12 +668,12 @@ void LWidget::load_( TConfig *icfg )
     vector<string> als;
     attrList(als);
     string tAttrs = cfg("ATTRS").getS();
-    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	if(!attrPresent(als[i_a])) continue;
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos) {
+    for(unsigned iA = 0; iA < als.size(); iA++) {
+	if(!attrPresent(als[iA])) continue;
+	AutoHD<Attr> attr = attrAt(als[iA]);
+	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
 	    attr.at().setModif(0);
-	    inheritAttr(als[i_a]);
+	    inheritAttr(als[iA]);
 	}
     }
 
@@ -1027,12 +1027,12 @@ void CWidget::load_( TConfig *icfg )
     vector<string> als;
     attrList(als);
     string tAttrs = cfg("ATTRS").getS();
-    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
-	if(!attrPresent(als[i_a])) continue;
-	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos) {
+    for(unsigned iA = 0; iA < als.size(); iA++) {
+	if(!attrPresent(als[iA])) continue;
+	AutoHD<Attr> attr = attrAt(als[iA]);
+	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
 	    attr.at().setModif(0);
-	    inheritAttr(als[i_a]);
+	    inheritAttr(als[iA]);
 	}
     }
 

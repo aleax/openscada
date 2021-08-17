@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.1.0"
+#define MOD_VER		"3.1.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -551,9 +551,11 @@ void MTable::fieldSet( TConfig &cfg )
 	    if((u_cfg.isKey() && !u_cfg.extVal()) || !u_cfg.view()) continue;
 
 	    sval = getVal(u_cfg);
-	    bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl());
+	    bool isTransl = u_cfg.fld().flg()&TFld::TransltText;
 	    // Clearing all the translation at setting no translable message
-	    if(isTransl && sval.size() > 2 && !Mess->isMessTranslable(sval)) {
+	    // ???? Implement the base message and its translations mark as fuzzy at changing
+	    // ???? Propagate the last changes to DB.{MySQL,PostgreSQL,FireBird} at finish
+	    if(isTransl && (u_cfg.noTransl() || sval.size() > 2 && !Mess->isMessTranslable(sval))) {
 		if(!trPresent) {
 		    req += (next?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " ";
 		    next = true;

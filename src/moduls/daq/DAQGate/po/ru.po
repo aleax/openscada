@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-08 15:08+0300\n"
+"POT-Creation-Date: 2021-08-16 17:57+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -21,7 +21,8 @@ msgstr "Шлюз источников данных"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allows to locate data sources of the remote OpenSCADA stations to local ones."
+msgid ""
+"Allows to locate data sources of the remote OpenSCADA stations to local ones."
 msgstr ""
 "Позволяет выполнять шлюзование источников данных удалённых OpenSCADA станций "
 "на локальные."
@@ -78,11 +79,11 @@ msgstr "Кеш конфигурации атрибутов"
 msgid "Presence at the stations"
 msgstr "Присутствие по станциям"
 
-msgid "Acquisition. "
-msgstr "Сбор. "
-
 msgid "Sync. "
 msgstr "Синхронизация. "
+
+msgid "Acquisition. "
+msgstr "Сбор. "
 
 #, c-format
 msgid "Acquisition with the period: %s. "
@@ -201,4 +202,3 @@ msgstr "Конфигурация удалённой станции"
 
 msgid "Controller is not started!"
 msgstr "Контроллер не запущен!"
-

@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.4.0"
+#define MOD_VER		"2.4.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -135,12 +135,15 @@ string TMdContr::getStatus( )
     string val = TController::getStatus();
 
     if(startStat() && !redntUse()) {
-	if(callSt)	val += TSYS::strMess(_("Acquisition. "));
 	if(syncSt)	val += TSYS::strMess(_("Sync. "));
-	if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
-	else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	else {
+	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
+	    if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
+	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	}
 	val += TSYS::strMess(_("Spent time: %s[%s]. "),
-		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
+	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
+
 	bool isWork = false;
 	for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
 	    if(mStatWork[iSt].second.cntr > -1)
@@ -703,6 +706,7 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool noConnect )
     bool stPresent = false;
     for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
 	if(mStatWork[iSt].first == reqStat) {
+	    MtxAlloc reqSt(mStatWork[iSt].second.reqM, true);
 	    if(mStatWork[iSt].second.cntr > 0 || (mStatWork[iSt].second.cntr > -1 && noConnect)) break;
 	    stPresent = true;
 	    try {

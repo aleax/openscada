@@ -334,6 +334,7 @@ class TSYS : public TCntrNode
 	static string strTrim( const string &val, const string &cfg = " \n\t\r" );
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
+	static string strParseEnd( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 	static string strLine( const string &str, int level, int *off = NULL );
 	static string pathLev( const string &path, int level, bool decode = true, int *off = NULL );
 	static string pathLevEnd( const string &path, int level, bool decode = true, int *off = NULL );

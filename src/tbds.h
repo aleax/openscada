@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -253,7 +253,7 @@ class TBDS : public TSubSYS, public TElem
 
 	void perSYSCall( unsigned int cnt );
 
-	// Open/close table.
+	// Open/close table
 	AutoHD<TTable> open( const string &bdn, bool create = false );
 	void close( const string &bdn, bool del = false );
 

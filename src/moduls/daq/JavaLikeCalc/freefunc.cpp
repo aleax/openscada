@@ -1606,16 +1606,25 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// int toInt( int base = 0 ) - convert this string to integer number
 		//  base - radix of subject sequence
 		if(prop == "toInt") return (int64_t)strtoll(vl.getS().c_str(), NULL, (prms.size()>=1?prms[0].getI():10));
-		// string parse( int pos, string sep = ".", int off = 0 ) - get token with number <pos> from the string when separated by <sep>
+		// string parse( int pos, string sep = ".", int off = 0, bool mergeSepSymb = false ) - get token with number <pos> from the string, separated by <sep>
 		//       and from offset <off>
 		//  pos - item position
 		//  sep - items separator
 		//  off - start position
 		if(prop == "parse" && prms.size()) {
 		    int off = (prms.size() >= 3) ? prms[2].getI() : 0;
-		    string rez = TSYS::strParse(vl.getS(), prms[0].getI(),
-						(prms.size()>=2) ? prms[1].getS() : ".", &off,
-						(prms.size()>=4) ? prms[3].getB() : false);
+		    string rez = TSYS::strParse(vl.getS(), prms[0].getI(), (prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4)?prms[3].getB():false);
+		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
+		    return rez;
+		}
+		// string parseEnd( int pos, string sep = ".", int off = {length}, bool mergeSepSymb = false ) - get token with number <pos> from the string end, separated by <sep>
+		//       and from offset <off>
+		//  pos - item position
+		//  sep - items separator
+		//  off - start position
+		if(prop == "parseEnd" && prms.size()) {
+		    int off = (prms.size() >= 3) ? prms[2].getI() : vl.getS().size();
+		    string rez = TSYS::strParseEnd(vl.getS(), prms[0].getI(), (prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4)?prms[3].getB():false);
 		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
 		    return rez;
 		}
@@ -1634,6 +1643,15 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "parsePath" && prms.size()) {
 		    int off = (prms.size() >= 2) ? prms[1].getI() : 0;
 		    string rez = TSYS::pathLev(vl.getS(), prms[0].getI(), true, &off);
+		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
+		    return rez;
+		}
+		// string parsePathEnd( int pos, int off = {length} ) - get path token with number <pos> from the string end and from offset <off>
+		//  pos - item position
+		//  off - start position
+		if(prop == "parsePathEnd" && prms.size()) {
+		    int off = (prms.size() >= 2) ? prms[1].getI() : vl.getS().size();
+		    string rez = TSYS::pathLevEnd(vl.getS(), prms[0].getI(), true, &off);
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}

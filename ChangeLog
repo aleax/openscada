@@ -1,3 +1,38 @@
+2021-08-16 Roman (stable)
+- FIX:LibsDB.OscadaLibs: base.ntf: The SMTP notifier switched in removing the messages from queue also for the SMTP errors
+    and with warnings about those, since observing some continual errors and flooding by the notifications.
+- LibsDB.vcaBase: Main.{ElCadr,anShow,anShow1,ElViewGraph,TextLab}: Switched back to the translation for the attributes:
+    prmDemention, pName, pDscr, pNAME, digComs, digStts, DESCR, NAME, st_text.
+- !!!!:FIX:SYS: strParse() rewrote and tested in processing the group symbols merging at the scan,
+	by position the offset to the next token begin.
+    !!!:FIX: pathLevEnd() rewrote and tested in positioning the offset to the next token end and limited in the up for the path size.
+    !!!: Appended of a new function strParseEnd() of parsing the separated string from the end.
+    !: pathLev() scheduled to rewrite in positioning the offset to the next token begin.
+    FIX:SYS: Completed in the redundancy requests preventing, by the true lock.
+    strParse(), strLine() and pathLev() offset limited in the down for 0.
+- !:DB: The functions TBDS::{dataGet,dataDel}() scheduled for changing the checking order for the configuration file before,
+	like to TBDS::dataSet().
+    SQLite: Appended of clearing translations at setting, for the fields marked as NO TRANSLATE.
+	Scheduled to implement the base message and its translations mark as fuzzy at changing.
+	Scheduled to propagate the last changes to DB.{MySQL,PostgreSQL,FireBird} at finish.
+- FIX:Archive.DBArch: Appended of detection some value sources freeze in the block archiving.
+- FIX:DB.DBGate,DAQ.DAQGate: Prevented of the host multiple requests, by using a request lock "reqM".
+- DAQ.DAQGate: The controller object state "Sync" display set to exclusively display without "Acquisition"
+- !!:DAQ.JavaLikeCalc: Appended in the new User API string function parseEnd(), parsePathEnd()
+    and parse() expanded of the argument "mergeSepSymb" description, where all these functions were tested.
+- DAQ.LogicLev: Some reformatted in the functions loadIO() and saveIO() to uniformity with DAQ.{ModBus,OPC_UA,Siemens}.
+. !!:DAQ.{ModBus,OPC_UA,Siemens}: Switched to the possibility to work with empty template, just as the parameters container.
+- !!:UI.VCAEngine: Attributes loading and saving prevented in translate:
+	- "IO_VAL" for linked as Constant, Input and Style;
+	- "CFG_TMPL" for linked as Style;
+	- "CFG_VAL" for links not Constant, Input not "val:" and no links.
+    !:FIX: Fixed in the table name obtain at loading and saving for the configuration file "<cfg>",
+	by using the new function TSYS::strParseEnd(). The DB and table using also unified in attrsLoad() as in attrsSave().
+    Scheduled in implementing the old selected objects deletion only from DB, starting from the VCA objects.
+    Scheduled for testing of TBDS::{dataGet,dataDel}() changing the checking order for the configuration file before,
+	like to TBDS::dataSet(), in storing, loading and deleting the library and project objects.
+
+
 2021-08-08 Roman (stable)
 - FIX:AGLKS.St: The style rule 'labColorGrph1' fixed for the Default.
 - !!!!:SYS,DAQ.JavaLikeCalc: The flag IO::TransltText used also for the TFunction object.

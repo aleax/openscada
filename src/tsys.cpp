@@ -1177,32 +1177,71 @@ string TSYS::strSepParse( const string &path, int level, char sep, int *off )
 
 string TSYS::strParse( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
 {
-    int an_dir = off ? *off : 0;
-    int t_lev = 0;
-    size_t t_dir;
-
+    int an_dir = vmax(0, off ? *off : 0);
     if(an_dir >= (int)path.size() || sep.empty()) return "";
+
+    int t_lev = 0;
+    string rezTk;
+    bool isFound = false;
     while(true) {
-	t_dir = path.find(sep,an_dir);
+	size_t t_dir = path.find(sep, an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = path.size();
-	    return (t_lev==level) ? path.substr(an_dir) : "";
+	    return (t_lev == level) ? path.substr(an_dir) : "";
 	}
 	else if(t_lev == level) {
-	    if(off) *off = t_dir+sep.size();
-	    return path.substr(an_dir,t_dir-an_dir);
+	    rezTk = path.substr(an_dir, t_dir-an_dir);
+	    isFound = true;
 	}
+	an_dir = t_dir + sep.size();
+
 	if(mergeSepSymb && sep.size() == 1)
-	    for(an_dir = t_dir; an_dir < (int)path.size() && path[an_dir] == sep[0]; ) an_dir++;
-	else an_dir = t_dir+sep.size();
+	    while(an_dir < (int)path.size() && path[an_dir] == sep[0]) an_dir++;
+	if(isFound) {
+	    if(off) *off = an_dir;
+	    break;
+	}
 	t_lev++;
     }
-    return "";
+
+    return rezTk;
+}
+
+string TSYS::strParseEnd( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
+{
+    int an_dir = vmin((int)path.size(), off ? *off : (int)path.size()-1);
+    if(an_dir < 0 || sep.empty() || path.empty()) return "";
+
+    int t_lev = 0;
+    string rezTk;
+    bool isFound = false;
+    while(true) {
+	size_t t_dir = path.rfind(sep, an_dir);
+	if(t_dir == string::npos) {
+	    if(off) *off = -1;
+	    return (t_lev == level) ? path.substr(0,an_dir+1) : "";
+	}
+	else if(t_lev == level) {
+	    rezTk = path.substr(t_dir+sep.size(), an_dir-(t_dir+sep.size()-1));
+	    isFound = true;
+	}
+	an_dir = t_dir - sep.size();
+
+	if(mergeSepSymb && sep.size() == 1)
+	    while(an_dir >= 0 && path[an_dir] == sep[0]) an_dir--;
+	if(isFound) {
+	    if(off) *off = an_dir;
+	    break;
+	}
+	t_lev++;
+    }
+
+    return rezTk;
 }
 
 string TSYS::strLine( const string &str, int level, int *off )
 {
-    int an_dir = off ? *off : 0;
+    int an_dir = vmax(0, off ? *off : 0);
     int t_lev = 0, edLnSmbSz = 1;
     size_t t_dir;
 
@@ -1227,9 +1266,11 @@ string TSYS::strLine( const string &str, int level, int *off )
 
 string TSYS::pathLev( const string &path, int level, bool decode, int *off )
 {
-    int an_dir = off ? *off : 0;
+    int an_dir = vmax(0, off ? *off : 0);
     int t_lev = 0;
     size_t t_dir;
+
+    //???? Rewrite like to strParse
 
     //First separators pass
     while(an_dir < (int)path.size() && path[an_dir] == '/') an_dir++;
@@ -1254,29 +1295,33 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
 
 string TSYS::pathLevEnd( const string &path, int level, bool decode, int *off )
 {
-    int an_dir = (off && *off >= 0) ? *off : path.size()-1;
+    int an_dir = vmin((int)path.size(), off ? *off : (int)path.size()-1);
+    if(an_dir < 0 || path.empty()) return "";
+
     int t_lev = 0;
-    size_t t_dir;
-
-    //Last separators pass
-    while(an_dir >= 0 && path[an_dir] == '/') an_dir--;
-    if(an_dir < 0) return "";
-
-    //Path level process
+    string rezTk;
+    bool isFound = false;
     while(true) {
-	t_dir = path.rfind("/", an_dir);
+	size_t t_dir = path.rfind("/", an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = -1;
 	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(0,an_dir),TSYS::PathEl) : path.substr(0,an_dir)) : "";
 	}
 	else if(t_lev == level) {
-	    if(off) *off = t_dir;
-	    return decode ? TSYS::strDecode(path.substr(t_dir+1,an_dir-t_dir),TSYS::PathEl) : path.substr(t_dir+1,an_dir-t_dir);
+	    rezTk = decode ? TSYS::strDecode(path.substr(t_dir+1,an_dir-t_dir),TSYS::PathEl) : path.substr(t_dir+1,an_dir-t_dir);
+	    isFound = true;
 	}
-	an_dir = t_dir;
-	t_lev++;
+	an_dir = t_dir - 1;
+
 	while(an_dir >= 0 && path[an_dir] == '/') an_dir--;
+	if(isFound) {
+	    if(off) *off = an_dir;
+	    break;
+	}
+	t_lev++;
     }
+
+    return rezTk;
 }
 
 string TSYS::path2sepstr( const string &path, char sep )
@@ -1957,7 +2002,7 @@ string TSYS::rdStRequest( XMLNode &req, const string &st, bool toScan )
 
     //Same request
     for(map<string, TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); ++sit) {
-	MtxAlloc reqSt(sit->second.reqM);
+	MtxAlloc reqSt(sit->second.reqM, true);
 	if(!sit->second.isLive) continue;
 	if(toScan && st.size() && !prevPresent) {
 	    if(sit->first == st) prevPresent = true;

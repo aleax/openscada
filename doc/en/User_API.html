@@ -312,9 +312,9 @@ rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
 rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
 <dl><dd><ul><li> <i>real toReal();</i> — converts this string to a real number.</li>
 <li> <i>int toInt( int base = 0 );</i> — converts this string to an integer number in accordance with <i>base</i> (from 2 to 36). If the base is 0, then the prefix will be considered a prefix for determining the base (123-decimal; 0123-octal; 0x123-hex).</li>
-<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — gets a token with the number <i>pos</i> from the string when separated by <i>sep</i> and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string {parse,parseEnd}( int pos, string sep = ".", int off = {0,{length}}, bool mergeSepSymb = false );</i> — gets a token with the number <i>pos</i> from the string when separated by <i>sep</i> and from the offset <i>off</i>. <i>mergeSepSymb</i> specifies of allowing of merging of the group of identical symbols to one separator. Result offset is returned back to <i>off</i>. <i>parseEnd()</i> does the same but from the end.</li>
 <li> <i>string parseLine( int pos, int off = 0 );</i> — gets a line with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string parsePath( int pos, int off = 0 );</i> — gets a path token with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string {parsePath,parsePathEnd}( int pos, int off = {0,{length}} );</i> — gets a path token with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>. <i>parsePathEnd</i> does the same but from the end.</li>
 <li> <i>string path2sep( string sep = "." );</i> — converts path into this string to separated by <i>sep</i> string.</li>
 <li> <i>string trim( string cfg = " \n\t\r" );</i> — trims the string at the begin and the end for the symbols <i>cfg</i>.</li></ul></dd></dl>
 <p><br />

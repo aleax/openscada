@@ -90,6 +90,8 @@ class MBD : public TBD
 	void postDisable( int flag );
 
 	TTable *openTable( const string &name, bool create );
+
+	ResMtx	reqM;
 };
 
 //************************************************

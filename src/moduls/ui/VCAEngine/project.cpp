@@ -102,7 +102,7 @@ void Project::postDisable( int flag )
 {
     if(flag) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ/", *this, true);
+	SYS->db().at().dataDel(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this, true);
 
 	//Delete function's files
 	// Delete widgets table
@@ -184,7 +184,7 @@ void Project::load_( TConfig *icfg )
     mess_debug(nodePath().c_str(), _("Loading the project."));
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ/", *this);
+    else SYS->db().at().dataGet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this);
 
     //Create new pages
     map<string, bool> itReg;
@@ -226,7 +226,7 @@ void Project::save_( )
 {
     if(enableByNeed)	return;
 
-    SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ/",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ",*this);
 
     //Check for need copy mime data and sessions data to other DB and same copy
     if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB())) {

@@ -157,6 +157,8 @@ class TMdContr: public TController
 	    float cntr;
 	    map<string, time_t>	lstMess;
 	    map<string, int>	lstMessCnt;
+
+	    ResMtx	reqM;
 	};
 	class SPrmsStack
 	{
