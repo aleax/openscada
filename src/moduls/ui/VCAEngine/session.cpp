@@ -1301,7 +1301,7 @@ AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off ) const
 	catch(TError &err) { return AutoHD<Widget>(); }
 
     int offt = off;
-    string iw = TSYS::pathLev(wdg,lev,true,&offt);
+    string iw = TSYS::pathLev(wdg, lev, true, &offt);
     if(iw.compare(0,3,"pg_") == 0) {
 	if(pagePresent(iw.substr(3))) return pageAt(iw.substr(3)).at().wdgAt(wdg, 0, offt);
 	else return AutoHD<Widget>();

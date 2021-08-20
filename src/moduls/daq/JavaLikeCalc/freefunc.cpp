@@ -1637,13 +1637,17 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
-		// string parsePath( int pos, int off = 0 ) - get path token with number <pos> from the string and from offset <off>
+		// string parsePath( int pos, int offCmptbl = 0, int off = 0 ) - get path token with number <pos> from the string and from offset <off>
 		//  pos - item position
-		//  off - start position
+		//  offCmptbl - start position, for the compatibility - finish position to '/'
+		//  off - start position - finish position to the next token begin
 		if(prop == "parsePath" && prms.size()) {
-		    int off = (prms.size() >= 2) ? prms[1].getI() : 0;
-		    string rez = TSYS::pathLev(vl.getS(), prms[0].getI(), true, &off);
-		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
+		    bool isOff = (prms.size() >= 3);
+		    bool isOffCmptbl = (!isOff && prms.size() >= 2);
+		    int off = isOff ? prms[2].getI() : (isOffCmptbl ? prms[1].getI() : 0);
+		    string rez = TSYS::pathLev(vl.getS(), prms[0].getI(), true, (isOffCmptbl?&off:NULL), (isOff?&off:NULL));
+		    if(isOff) { prms[2].setI(off); prms[2].setModify(); }
+		    else if(isOffCmptbl) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
 		// string parsePathEnd( int pos, int off = {length} ) - get path token with number <pos> from the string end and from offset <off>

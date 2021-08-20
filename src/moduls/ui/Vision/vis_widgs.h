@@ -317,7 +317,7 @@ namespace VISION
 
 	public:
 	    //Public methods
-	    WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
+	    WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget* parent = 0, Qt::WindowFlags f = Qt::Widget );
 	    ~WdgView( );
 
 	    string	id( )		{ return idWidget; }

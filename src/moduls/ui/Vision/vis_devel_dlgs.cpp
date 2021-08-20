@@ -404,7 +404,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_db->setValue(req.text().c_str());
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl)+":"+TSYS::pathLev(ed_it,0));
+	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl)+":"+TSYS::pathLev(ed_it,0));
 	    if(!owner()->cntrIfCmd(req)) {
 		string els;
 		for(unsigned iL = 0; iL < req.childSize(); iL++)
@@ -599,7 +599,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		for(unsigned iR = 0; iR < req.childGet(iC)->childSize(); iR++) {
 		    QTableWidgetItem *iTW = new QTableWidgetItem(req.childGet(iC)->childGet(iR)->text().c_str());
 		    stl_table->setItem(iR, iC, iTW);
-		    iTW->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((iC==1)?Qt::ItemIsEditable:(Qt::ItemFlags)0));
+		    iTW->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|((iC==1)?Qt::ItemIsEditable:Qt::NoItemFlags));
 		    if(iC == 1) iTW->setData(Qt::TextAlignmentRole, Qt::AlignCenter);
 		}
 	    }

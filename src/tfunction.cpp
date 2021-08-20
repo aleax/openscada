@@ -371,7 +371,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))
 	opt->setText(tm2s(1e-6*SYS->cntrGet(nodePath('.'))));
     else if(a_path.substr(0,8) == "/exec/io" && mTVal) {
-	string io_id = TSYS::pathLev(a_path,2);
+	string io_id = TSYS::pathLev(a_path, 2);
 	for(unsigned iIO = 0; iIO < mIO.size(); iIO++)
 	    if(io_id == io(iIO)->id()) {
 		if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))

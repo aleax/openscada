@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -342,7 +342,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 {
     try {
 	string s_br = sep ? TSYS::strDecode(TSYS::strSepParse(path,lev,sep,&off),TSYS::PathEl) :
-			    TSYS::pathLev(path,lev,true,&off);
+			    TSYS::pathLev(path, lev, true, &off);
 	if(s_br.empty()) {
 	    if(nodeMode() == Disabled) throw err_sys(_("Node is disabled!"));
 	    return this;
@@ -384,7 +384,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     string dElp, dEl, tEl;
     int nDel = 0;
     for(int off = 0; !(tEl=TSYS::pathLev(dst,0,true,&off)).empty(); nDel++)
-    { if(nDel) dElp += ("/"+dEl); dEl = tEl; }
+    { if(nDel) dElp += "/" + dEl; dEl = tEl; }
     if(!nDel) throw srcN.at().err_sys(_("Copy from '%s' to '%s' is not possible."), src.c_str(), dst.c_str());
 
     //Connect to destination containers node
@@ -945,7 +945,7 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
     string req = nd->attr("path");
     string reqt, reqt1;
 
-    for(int iOff = 0, iOff1 = 0; (reqt=TSYS::pathLev(req,0,true,&iOff)).size(); woff=iOff)
+    for(int iOff = 0, iOff1 = 0; (reqt=TSYS::pathLev(req,0,true,&iOff)).size(); woff = iOff)
 	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&iOff1)))
 	    return false;
 
@@ -955,7 +955,7 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
 
     //Find element
     while((reqt=TSYS::pathLev(path,0,true,&woff)).size()) {
-	XMLNode *obj1 = obj->childGet("id",reqt,true);
+	XMLNode *obj1 = obj->childGet("id", reqt, true);
 	if(!obj1) return false;
 	obj = obj1;
     }

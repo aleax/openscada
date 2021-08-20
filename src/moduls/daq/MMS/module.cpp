@@ -38,7 +38,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.2"
+#define MOD_VER		"1.4.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -574,7 +574,7 @@ string TMdPrm::attrPrc( )
 	if(vlPresent(aid)) for(aid += "_1"; vlPresent(aid); ) aid = TSYS::strLabEnum(aid);
 
 	anm = TSYS::strParse(itS,0,":",&offIt);
-	if(anm.empty()) anm = TSYS::pathLev(var,1);
+	if(anm.empty()) anm = TSYS::pathLev(var, 1);
 
 	// Find for already presented attribute
 	unsigned srchPos;

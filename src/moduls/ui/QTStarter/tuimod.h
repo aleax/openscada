@@ -132,11 +132,6 @@ public:
     void updLookFeel( );
 
     bool notify( QObject *receiver, QEvent *event );
-#if QT_VERSION < 0x050000
-    void saveState( QSessionManager &manager );
-#else
-    void saveStateRequest( QSessionManager &sessionManager );
-#endif
 
     int stExec( );
     void stClear( bool inDestr = false );
@@ -154,6 +149,7 @@ protected:
     void timerEvent( QTimerEvent *event );
 
 private slots:
+    void saveSessState( QSessionManager &manager );
     void startDialog( );
     void callQtModule( );
     void makeStarterMenu( QWidget *mn = NULL );

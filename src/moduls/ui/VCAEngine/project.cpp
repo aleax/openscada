@@ -515,7 +515,7 @@ void Project::pageEnable( const string &pg, bool vl )
     int pL = 0;
     string pPg, pPath;
     for(int off = 0; (pPg=TSYS::pathLev(pg,0,false,&off)).size() && off < (int)pg.size(); pL++)
-	if(pL) pPath += "/"+pPg;
+	if(pL) pPath += "/" + pPg;
     if(pPg.compare(0,3,"pg_") == 0)	pPg = pPg.substr(3);
 
     //Call the connected sessions for add-remove a page
@@ -1343,7 +1343,7 @@ AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off ) const
 	catch(TError &err) { return AutoHD<Widget>(); }
 
     int offt = off;
-    string iw = TSYS::pathLev(wdg,lev,true,&offt);
+    string iw = TSYS::pathLev(wdg, lev, true, &offt);
     if(iw.compare(0,3,"pg_") == 0) {
 	if(pagePresent(iw.substr(3))) return pageAt(iw.substr(3)).at().wdgAt(wdg, 0, offt);
 	else return AutoHD<Widget>();
@@ -1487,7 +1487,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 
 	    opt->childAdd("el")->setText(c_path);
 	    for(int c_off = 0; (c_el=TSYS::pathLev(lnk,0,true,&c_off)).size(); c_lv++) {
-		c_path += "/"+c_el;
+		c_path += "/" + c_el;
 		opt->childAdd("el")->setText(c_path);
 	    }
 	    try {
@@ -1623,7 +1623,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    opt->childAdd("el")->setText(c_path);
 		    bool isAbs = (m_prm.compare(obj_tp.size(),1,"/") == 0);
 		    for( ;(cEl=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++) {
-			c_path += ((c_lv||isAbs)?"/":"")+cEl;
+			c_path += ((c_lv||isAbs)?"/":"") + cEl;
 			opt->childAdd("el")->setText(c_path);
 		    }
 		    if(!c_lv)  opt->childAdd("el")->setText(c_path+"/prj_"+ownerProj()->id());

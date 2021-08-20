@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.4"
+#define MOD_VER		"3.6.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -794,8 +794,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	}
 
 	int uri_pos = 0;
-	string name_mod = TSYS::pathLev(uris, 0, false, &uri_pos);
-	while(uri_pos < (int)uris.size() && uris[uri_pos] == '/') uri_pos++;
+	string name_mod = TSYS::pathLev(uris, 0, false, NULL, &uri_pos);
 	uri = "/" + uris.substr(uri_pos);
 
 	//Process the internal commands

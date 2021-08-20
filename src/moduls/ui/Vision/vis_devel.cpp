@@ -1161,7 +1161,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	else {
 	    //  Get parent widget id
 	    string baseNm = "item";
-	    if(!par_nm.empty())	baseNm = TSYS::pathLev(par_nm,1,true).substr(4);
+	    if(!par_nm.empty())	baseNm = TSYS::pathLev(par_nm, 1).substr(4);
 	    for(int iW = 0; iW < (int)req.childSize(); iW++)
 		if(req.childGet(iW)->attr("id") == baseNm) { baseNm = TSYS::strLabEnum(baseNm); iW = -1; }
 	    dlg.setId(baseNm.c_str());
@@ -1250,7 +1250,7 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	//Get owner object path and deleted item identifier
 	string it_own, it_id;
 	int pElCnt = 0;
-	string it_tmp = TSYS::pathLev(del_wdg,pElCnt++);
+	string it_tmp = TSYS::pathLev(del_wdg, pElCnt++);
 	do {
 	    it_own= it_own+(it_id.empty() ? "" : ("/"+it_id));
 	    it_id = it_tmp;
@@ -1259,7 +1259,7 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	pElCnt--;
 
 	XMLNode req("del");
-	string sid1 = TSYS::pathLev(it_own,0);
+	string sid1 = TSYS::pathLev(it_own, 0);
 	//Check for widget's library
 	if(sid1.empty()) {
 	    if(!it_id.compare(0,4,"wlb_")) req.setAttr("path", "/%2fprm%2fcfg%2fwlb")->setAttr("id", it_id.substr(4));
@@ -1297,8 +1297,8 @@ void VisDevelop::visualItProp( )
     //if( work_wdg.empty() )	return;
     string prop_wdg = TSYS::strSepParse(work_wdg,0,';');
 
-    string sel1 = TSYS::pathLev(prop_wdg,0);
-    string sel2 = TSYS::pathLev(prop_wdg,1);
+    string sel1 = TSYS::pathLev(prop_wdg, 0);
+    string sel2 = TSYS::pathLev(prop_wdg, 1);
 
     if(sel1.size() && !sel2.size()) {
 	if(!prjLibPropDlg) {
@@ -1391,7 +1391,7 @@ void VisDevelop::visualItClear( const string &elWa )
     else {
 	string work_tmp;
 	for(int off = 0; (work_tmp=TSYS::pathLev(elWa,0,true,&off)).size(); ) {
-	    if(workAttr.size()) workWdgLoc += "/"+workAttr;
+	    if(workAttr.size()) workWdgLoc += "/" + workAttr;
 	    workAttr = work_tmp;
 	}
 	if(workAttr.size() > 2 && workAttr.substr(0,2) == "a_") workAttr = workAttr.substr(2);
@@ -1423,7 +1423,7 @@ void VisDevelop::visualItDownParent( const string &elWa )
     else {
 	string work_tmp;
 	for(int off = 0; (work_tmp=TSYS::pathLev(elWa,0,true,&off)).size(); ) {
-	    if(workAttr.size()) workWdgLoc += "/"+workAttr;
+	    if(workAttr.size()) workWdgLoc += "/" + workAttr;
 	    workAttr = work_tmp;
 	}
 	if(workAttr.size() > 2 && workAttr.substr(0,2) == "a_") workAttr = workAttr.substr(2);
@@ -1469,11 +1469,11 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	//Destination elements calc
 	int n_del = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(work_wdg_w,0,true,&off)).empty(); n_del++)
-	{ if(n_del) d_elp += ("/"+d_el); d_el = t_el; }
+	{ if(n_del) d_elp += "/" + d_el; d_el = t_el; }
 	//Src elements calc
 	int n_sel = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(copy_buf_el,0,true,&off)).empty(); n_sel++)
-	{ if(n_sel) s_elp += ("/"+s_el); s_el = t_el; }
+	{ if(n_sel) s_elp += "/" + s_el; s_el = t_el; }
 
 	string d_el_ = d_el;
 
@@ -1636,9 +1636,9 @@ void VisDevelop::editToolUpdate( )
     int n_sel = 0;
     int n_del = 0;
     for(int off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); n_sel++)
-    { s_elp += ("/"+s_el); s_el = t_el; }
+    { s_elp += "/" + s_el; s_el = t_el; }
     for(int off = 0; !(t_el=TSYS::pathLev(work_wdg,0,true,&off)).empty(); n_del++)
-    { d_elp += ("/"+d_el); d_el = t_el; }
+    { d_elp += "/" + d_el; d_el = t_el; }
     if((s_el.substr(0,4) == "prj_" || s_el.substr(0,4) == "wlb_") ||										//Project and library copy
 	    (s_el.substr(0,3) == "pg_" && (d_el.substr(0,4) == "prj_" || d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_")) ||		//Page copy
 	    (s_el.substr(0,4) == "wdg_" && (d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_" || (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del==2))))	//Widget copy

@@ -230,17 +230,14 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //!!! Registered export function for process GET requests from OpenSCADA transport's protocol module HTTP.
 void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars )
 {
-    string ntrnd = TSYS::pathLev(url,0);
-    if( !ntrnd.size() )
-    {
+    string ntrnd = TSYS::pathLev(url, 0);
+    if(!ntrnd.size()) {
 	//> Make main page
 	page = w_head();
 	int i_col = 0;
 	page = page+"<table>\n";
-	for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
-	{
-	    try
-	    {
+	for(int i_el = 0; i_el < trnd_lst.size(); i_el++) {
+	    try {
 		if( (dynamic_cast<TVal*>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) &&
 		    !dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[i_el],0,'.').at()).arch().freeStat()) ||
 		    dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) )

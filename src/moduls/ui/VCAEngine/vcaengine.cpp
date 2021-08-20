@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.2.4"
+#define MOD_VER		"7.2.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -705,12 +705,12 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	bool disIconsCW	= s2i(opt->attr("disIconsCW"));
 	bool disIconsW	= s2i(opt->attr("disIconsW"));
 	string item = opt->attr("item");
-	string upd_lb   = TSYS::pathLev(item,0);
+	string upd_lb   = TSYS::pathLev(item, 0);
 	if(upd_lb.size() > 4 && upd_lb.substr(0,4) != "wlb_")	return;
 	if(upd_lb.size() > 4)	upd_lb = upd_lb.substr(4);
-	string upd_wdg  = TSYS::pathLev(item,1);
+	string upd_wdg  = TSYS::pathLev(item, 1);
 	if(upd_wdg.size() > 4)	upd_wdg = upd_wdg.substr(4);
-	string upd_wdgi = TSYS::pathLev(item,2);
+	string upd_wdgi = TSYS::pathLev(item, 2);
 	if(upd_wdgi.size() > 4)	upd_wdgi = upd_wdgi.substr(4);
 
 	// Widgets libraries

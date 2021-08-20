@@ -74,7 +74,8 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat,
 		bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)), winClose(false), isResizeManual(false), updTmMax(0), planePer(0),
+    QMainWindow(QDesktopWidget().screen(iScr)),	//!!!! Seems changed completely in Qt5
+    winClose(false), isResizeManual(false), updTmMax(0), planePer(0),
 #ifndef QT_NO_PRINTER
     prPg(NULL), prDiag(NULL), prDoc(NULL),
 #endif
@@ -571,14 +572,20 @@ void VisRun::printPg( const string &ipg )
     QPrintDialog dlg(prPg, this);
     dlg.setWindowTitle(QString(_("Printing the page: \"%1\" (%2)")).arg(pnm.c_str()).arg(pg.c_str()));
     if(dlg.exec() == QDialog::Accepted) {
+#if QT_VERSION >= 0x050300
+	QRect	paperRect = prPg->pageLayout().fullRectPixels(prPg->resolution()),
+		pgRect = prPg->pageLayout().paintRectPixels(prPg->resolution());
+#else
+	QRect	paperRect = prPg->paperRect(), pgRect = prPg->pageRect();
+#endif
 	int fntSize = 35;
-	QSize papl(2048,2048*prPg->paperRect().height()/prPg->paperRect().width());
-	QSize pagl(papl.width()*prPg->pageRect().width()/prPg->paperRect().width(), papl.height()*prPg->pageRect().height()/prPg->paperRect().height());
+	QSize papl(2048, 2048*paperRect.height()/paperRect.width());
+	QSize pagl(papl.width()*pgRect.width()/paperRect.width(), papl.height()*pgRect.height()/paperRect.height());
 
 	QPainter painter;
 	painter.begin(prPg);
-	painter.setWindow(QRect(QPoint(0,0),papl));
-	painter.setViewport(prPg->paperRect());
+	painter.setWindow(QRect(QPoint(),papl));
+	painter.setViewport(paperRect);
 
 	//Draw image
 # if QT_VERSION >= 0x050000
@@ -619,7 +626,7 @@ void VisRun::printDiag( const string &idg )
 	vector<string> lst;
 	for(unsigned iP = 0; iP < pgList.size(); iP++)
 	    if((rpg=findOpenPage(pgList[iP])))
-		rpg->shapeList("Diagram",lst);
+		rpg->shapeList("Diagram", lst);
 	if(lst.empty())	{ QMessageBox::warning(this,_("Printing a diagram"),_("There is no diagram!")); return; }
 	if(lst.size() == 1)	dg = lst[0];
 	else {
@@ -645,9 +652,15 @@ void VisRun::printDiag( const string &idg )
     QPrintDialog dlg(prDiag, this);
     dlg.setWindowTitle(QString(_("Printing the diagram: \"%1\" (%2)")).arg(dgnm.c_str()).arg(dg.c_str()));
     if(dlg.exec() == QDialog::Accepted) {
+#if QT_VERSION >= 0x050300
+	QRect	paperRect = prDiag->pageLayout().fullRectPixels(prDiag->resolution()),
+		pgRect = prDiag->pageLayout().paintRectPixels(prDiag->resolution());
+#else
+	QRect	paperRect = prDiag->paperRect(), pgRect = prDiag->pageRect();
+#endif
 	int fntSize = 35;
-	QSize papl(2048,2048*prDiag->paperRect().height()/prDiag->paperRect().width());
-	QSize pagl(papl.width()*prDiag->pageRect().width()/prDiag->paperRect().width(), papl.height()*prDiag->pageRect().height()/prDiag->paperRect().height());
+	QSize papl(2048, 2048*paperRect.height()/paperRect.width());
+	QSize pagl(papl.width()*pgRect.width()/paperRect.width(), papl.height()*pgRect.height()/paperRect.height());
 
 	ShapeDiagram::ShpDt *sD = (ShapeDiagram::ShpDt*)rwdg->shpData;
 	int elLine = sD->prms.size()/2+((sD->prms.size()%2)?1:0);
@@ -655,7 +668,7 @@ void VisRun::printDiag( const string &idg )
 	QPainter painter;
 	painter.begin(prDiag);
 	painter.setWindow(QRect(QPoint(0,0),papl));
-	painter.setViewport(prDiag->paperRect());
+	painter.setViewport(paperRect);
 
 	//Draw image
 # if QT_VERSION >= 0x050000
@@ -1691,11 +1704,11 @@ RunWdgView *VisRun::findOpenWidget( const string &wdg )
 {
     int woff = 0;
     for(int off = 0; true; woff = off) {
-	string sel = TSYS::pathLev(wdg,0,true,&off);
+	string sel = TSYS::pathLev(wdg, 0, true, &off);
 	if(sel.empty() || sel.substr(0,4) == "wdg_")	break;
     }
     RunPageView *rpg = findOpenPage(wdg.substr(0,woff));
-    if(!rpg )	return NULL;
+    if(!rpg)	return NULL;
     if(woff >= (int)wdg.size())	return rpg;
 
     return rpg->findOpenWidget(wdg);

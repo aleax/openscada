@@ -583,12 +583,7 @@ void ConfApp::treeSearch( )
 	    continue;
 	}
 	if(pi->child(iC)->text(0).contains(wvl,Qt::CaseInsensitive)) break;
-	else {
-	    // Get last item from path
-	    string itpth, tstr;
-	    for(int off = 0; (tstr=TSYS::pathLev(pi->child(iC)->text(2).toStdString(),0,true,&off)).size(); ) itpth = tstr;
-	    if(QString(itpth.c_str()).contains(wvl,Qt::CaseInsensitive)) break;
-	}
+	else if(QString(TSYS::pathLevEnd(pi->child(iC)->text(2).toStdString(),0).c_str()).contains(wvl,Qt::CaseInsensitive)) break;
     }
     if(iC < pi->childCount()) {
 	pi->treeWidget()->setCurrentItem(pi->child(iC), 0, QItemSelectionModel::Clear|QItemSelectionModel::Select);
@@ -715,7 +710,7 @@ void ConfApp::itDel( const string &iit )
 	string t_el, sel_own, sel_el;
 	int n_obj = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(rmit,0,true,&off)).empty(); n_obj++)
-	{ if(n_obj) sel_own += ("/"+sel_el); sel_el = t_el; }
+	{ if(n_obj) sel_own += "/" +sel_el; sel_el = t_el; }
 	if(n_obj > 2) {
 	    XMLNode req("info");
 	    req.setAttr("path", sel_own+"/%2fbr");
@@ -786,7 +781,7 @@ void ConfApp::itPaste( )
 	//Src elements calc
 	int nSel = 0;
 	for(off = 0; !(tEl=TSYS::pathLev(copyEl,0,true,&off)).empty(); nSel++)
-	{ if(nSel) sElp += ("/"+sEl); sEl = tEl; }
+	{ if(nSel) sElp += "/" + sEl; sEl = tEl; }
 
 	//if(TSYS::pathLev(copyEl,0) != TSYS::pathLev(toPath,0))
 	//{ mod->postMess(mod->nodePath().c_str(), _("Copying is not possible."), TUIMod::Error, this); return; }
@@ -801,7 +796,7 @@ void ConfApp::itPaste( )
 	if(s2i(rootW->attr("acs"))&SEC_WR) brs.push_back(string("-1\n0\n\n")+_("Selected"));
 
 	string statNm, statNmSrc, srcNm, dstNm;
-	off = 0; statNmSrc = TSYS::pathLev(copyEl, 0, true, &off);	srcNm = copyEl.substr(off);
+	off = 0; statNmSrc = TSYS::pathLev(copyEl, 0, true, &off);srcNm = copyEl.substr(off);
 	off = 0; statNm = TSYS::pathLev(toPath, 0, true, &off);	dstNm = toPath.substr(off);
 
 	XMLNode *branch = rootW->childGet("id", "br", true);
@@ -913,7 +908,7 @@ void ConfApp::editToolUpdate( )
 	    return;
 	string sElp, sEl, tEl;
 	for(int off = 0; !(tEl=TSYS::pathLev(copyBuf.substr(1),0,true,&off)).empty(); )
-	{ sElp += ("/"+sEl); sEl = tEl; }
+	{ sElp += "/" + sEl; sEl = tEl; }
 
 	if(rootAccess&SEC_WR) actItPaste->setEnabled(true);
     }
@@ -1487,7 +1482,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	    if(widget) {
 		lab = new QLabel(widget);
-		img = new ImgView(widget, 0, s2i(t_s.attr("h_sz")), s2i(t_s.attr("v_sz")));
+		img = new ImgView(widget, Qt::Widget, s2i(t_s.attr("h_sz")), s2i(t_s.attr("v_sz")));
 		img->setObjectName(br_path.c_str());
 		img->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 		img->setMinimumSize(200,200);
@@ -1903,7 +1898,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 			val_w->setType(LineEdit::Combo);
 		    }
 		    else if(tp == "dec" || tp == "hex" || tp == "oct") {
-			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).width("0000000000")+30);
+			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"0000000000").width()+30);
 			//val_w->setType(LineEdit::Text);
 			//QIntValidator *iv = new QIntValidator(val_w->workWdg());
 			//((QLineEdit*)val_w->workWdg())->setValidator(iv);
@@ -1917,7 +1912,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    }
 		    else if(tp == "hex" || tp == "oct")	val_w->setFixedWidth(5*15+30);*/
 		    else if(tp == "real") {
-			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).width("3.14159265e123")+30);
+			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"3.14159265e123").width()+30);
 			//val_w->setType(LineEdit::Text);
 #if QT_VERSION < 0x050000
 			QDoubleValidator *dv = new QDoubleValidator(val_w->workWdg());
@@ -2665,7 +2660,7 @@ void ConfApp::buttonClicked( )
 	if(n_el->attr("tp") == "lnk") {
 	    XMLNode req("get"); req.setAttr("path",selPath+"/"+button->objectName().toStdString());
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this); return; }
-	    string url = "/"+TSYS::pathLev(selPath,0)+req.text();
+	    string url = "/" + TSYS::pathLev(selPath,0) + req.text();
 	    mess_info(mod->nodePath().c_str(), _("%s| Went to the link '%s'!"), wUser->user().toStdString().c_str(), url.c_str());
 	    selectPage(url);
 	    return;

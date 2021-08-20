@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.4.2"
+#define MOD_VER		"2.4.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -786,7 +786,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 			break;
 		if(vS.empty()) cfg("CNTRPRM") = vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+setVl;
 	    }
-	    else TBDS::genDBSet(owner().nodePath()+"selCPRM",TSYS::pathLev(opt->text(),0),opt->attr("user"));
+	    else TBDS::genDBSet(owner().nodePath()+"selCPRM", TSYS::pathLev(opt->text(),0), opt->attr("user"));
 	}
     }
     else if(a_path == "/cntr/cfg/CPRM_lst" && ctrChkNode(opt))

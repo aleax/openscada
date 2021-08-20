@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.4.1"
+#define MOD_VER		"1.4.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -705,7 +705,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
     }
-    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SUI_ID,RWRWR_);
+    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SUI_ID, RWRWR_);
     else if(a_path.find("/prgm") == 0) {
 	ResAlloc res(cfgRes, false);
 	if(func() && a_path == "/prgm/io") {

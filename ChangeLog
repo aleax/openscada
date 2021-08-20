@@ -1,3 +1,23 @@
+2021-08-20 Roman (stable)
+- !:LibsDB.OscadaLibs: The test function test.test appended of the commented parts of testing the string streams parsing
+    by string.{parse,parseEnd,parsePath,parsePathEnd,parseLine}().
+- !!!!:SYS: The function pathLev() rewrote in positioning the offset to the next token begin,
+	but storing the old behaviour for the compatibility.
+    !!: strLine() also adapted to the new parsing concept.
+    !: Some source code format updated.
+    !: TModSchedul::chkAllowMod() switched in use TSYS::pathLevEnd() for the file name obtain.
+- !!:DAQ.JavaLikeCalc: The UserAPI function parsePath() adapted to the last expansion.
+- Protocol.HTTP: Switched to use TSYS::pathLev() in the new behaviour.
+- !!:UI.{QTStarter,QTCfg,Vision}: Cleaned from the Qt 5.15 warnings, resolving most of the deprecation messages.
+- !!:FIX:UI.QTStarter: Fixed at last in preventing the program starting by the desktop session resoring,
+	treating the signal saveStateRequest(QSessionManager&).
+    Rewrote in the logo image placing, to prevent of use the Qt5 specific function instead QLabel::pixmap().
+- !:UI.QTCfg: The search at the navigation tree switched to use TSYS::pathLevEnd().
+- !!!:UI.Vision: Parent of ModInspAttr changed to QAbstractItemModel, due to some new wrong reimplementation
+	in QAbstractTableModel of Qt5.15, like to the previous one sibling() in Qt5.11.
+    !!: The printing rewrote to use the new Qt5 class QPageLayout, for pages and diagrams.
+
+
 2021-08-16 Roman (stable)
 - FIX:LibsDB.OscadaLibs: base.ntf: The SMTP notifier switched in removing the messages from queue also for the SMTP errors
     and with warnings about those, since observing some continual errors and flooding by the notifications.

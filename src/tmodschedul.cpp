@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -325,7 +325,7 @@ bool TModSchedul::chkAllowMod( const string &name )
     string sel, nmFile;
     int path_els = 0;
 
-    for(int off = 0; (sel=TSYS::pathLev(name,0,true,&off)).size(); path_els++) nmFile = sel;
+    nmFile = TSYS::pathLevEnd(name, 0);
 
     if(allowList().empty())	return false;
     if(sTrm(allowList()) != "*") {

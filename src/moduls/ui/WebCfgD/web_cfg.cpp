@@ -40,7 +40,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.1.1"
+#define MOD_VER		"2.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -377,8 +377,8 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     else if(wp_com == "copy") {
 	XMLNode req("");
 	req.load(ses.content); req.setAttr("path", ses.url);
-	string	statNmSrc = TSYS::pathLev(req.attr("statNmSrc"), 0, true),
-		statNm = TSYS::pathLev(req.attr("statNm"), 0, true);
+	string	statNmSrc = TSYS::pathLev(req.attr("statNmSrc"), 0),
+		statNm = TSYS::pathLev(req.attr("statNm"), 0);
 
 	if(req.attr("statNm") == req.attr("statNmSrc")) {
 	    mod->cntrIfCmd(req, ses.user);

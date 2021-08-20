@@ -366,10 +366,10 @@ QModelIndex ModInspAttr::index( int row, int column, const QModelIndex &parent )
     return idx;
 }
 
-QModelIndex ModInspAttr::sibling( int row, int column, const QModelIndex &idx ) const
+/*QModelIndex ModInspAttr::sibling( int row, int column, const QModelIndex &idx ) const
 {
     return QAbstractItemModel::sibling(row, column, idx);	//For prevent wrong here the QAbstractTableModel implementation on Qt > 5.3
-}
+}*/
 
 QModelIndex ModInspAttr::parent( const QModelIndex &index ) const
 {
@@ -787,7 +787,11 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
     }
     else if(value.type() == QVariant::String && flag&ModInspAttr::Item::FullText) {
 	w_del = new QTextEdit(parent);
+#if QT_VERSION >= 0x050A00
+	((QTextEdit*)w_del)->setTabStopDistance(40);
+#else
 	((QTextEdit*)w_del)->setTabStopWidth(40);
+#endif
 	((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
 	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -1146,7 +1150,7 @@ QWidget *LinkItemDelegate::createEditor( QWidget *parent, const QStyleOptionView
 
     //Get combobox values
     XMLNode req("get");
-    req.setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(id_it.child(0,0).isValid()?"pl_":"ls_")+attr_id);
+    req.setAttr("path",wdg_it+"/%2flinks%2flnk%2f"+(index.model()->index(0,0,id_it).isValid()?"pl_":"ls_")+attr_id);
     if(!owner()->mainWin()->cntrIfCmd(req)) {
 	w_del = new QComboBox(parent);
 
@@ -1298,7 +1302,7 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 		drag->setPixmap(item->icon(0).pixmap(64,64));
 		drag->setHotSpot(QPoint(5,5));
 
-		drag->start(Qt::CopyAction);
+		drag->exec(Qt::CopyAction);
 	    }
 	}
     }
@@ -3203,7 +3207,11 @@ bool DevelWdgView::event( QEvent *event )
 	    }
 	    case QEvent::Wheel:
 		if(!(QApplication::keyboardModifiers()&Qt::ControlModifier)) break;
+#if QT_VERSION >= 0x050000
+		setVisScale(visScale()+(float)((QWheelEvent*)event)->angleDelta().y()/1200);
+#else
 		setVisScale(visScale()+(float)((QWheelEvent*)event)->delta()/1200);
+#endif
 		return true;
 	    case QEvent::FocusIn:
 		setFocus(true);

@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <QApplication>
 #include <QDesktopWidget>
 #include <QIcon>
 #include <QMessageBox>
@@ -43,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"7.13.6"
+#define MOD_VER		"7.14.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -193,8 +194,10 @@ QIcon TVision::icon( )
 
 QMainWindow *TVision::openWindow( )
 {
-#if QT_VERSION >= 0x040600
     //Get allowed screens count
+#if QT_VERSION >= 0x050000
+    mScrnCnt = QApplication::screens().size();
+#else
     mScrnCnt = QDesktopWidget().screenCount();
 #endif
 

@@ -2089,7 +2089,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	mSource = TSYS::strParse(opt->text(), 0, " ");
     }
     else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, srcData(), false, '.');
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SARH_ID, RWRWR_);
     else if(a_path == "/arch/arch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD)) {
 	    //Fill archivers table
@@ -2467,7 +2467,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setDB(opt->text());
     }
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SARH_ID, RWRWR_);
     else if(a_path == "/arch/arch" && ctrChkNode(opt)) {
 	// Fill Archives table
 	XMLNode *n_arch = ctrMkNode("list",opt,-1,"/arch/arch/0","");

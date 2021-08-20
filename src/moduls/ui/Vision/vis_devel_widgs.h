@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.h
 /***************************************************************************
- *   Copyright (C) 2006-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@ namespace VISION
 //****************************************
 class VisDevelop;
 
-class ModInspAttr: public QAbstractTableModel
+class ModInspAttr: public QAbstractItemModel //QAbstractTableModel
 {
     Q_OBJECT
 
@@ -128,7 +128,7 @@ class ModInspAttr: public QAbstractTableModel
 	Qt::ItemFlags flags( const QModelIndex &index ) const;
 	QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 	QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
-	QModelIndex sibling( int row, int column, const QModelIndex &idx ) const;
+	//QModelIndex sibling( int row, int column, const QModelIndex &idx ) const;
 	QModelIndex parent( const QModelIndex &index ) const;
 
 	int rowCount( const QModelIndex &parent = QModelIndex() ) const;

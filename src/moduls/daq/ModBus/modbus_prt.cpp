@@ -1450,7 +1450,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(progLang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProgLang(opt->text());
     }
-    else if(a_path.substr(0,7) == "/nd/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
+    else if(a_path.substr(0,7) == "/nd/cfg") TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/plang/list") {
 	vector<string> lls, ls;
 	//Templates

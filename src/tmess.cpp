@@ -115,7 +115,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 	if(debugCats.find(categ) == debugCats.end()) {
 	    string curCatLev, tCat;
 	    for(int off = 0; (tCat=TSYS::pathLev(categ,0,true,&off)).size(); ) {
-		curCatLev += "/"+tCat;
+		curCatLev += "/" + tCat;
 		if(debugCats.find(curCatLev) == debugCats.end()) debugCats[curCatLev] = false;
 	    }
 	}

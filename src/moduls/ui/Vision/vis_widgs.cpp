@@ -899,7 +899,11 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 
     ed_fld = new QTextEdit(this);
     ed_fld->setContextMenuPolicy(Qt::CustomContextMenu);
+#if QT_VERSION >= 0x050A00
+    ed_fld->setTabStopDistance(20);
+#else
     ed_fld->setTabStopWidth(20);
+#endif
     ed_fld->setAcceptRichText(false);
     ed_fld->setLineWrapMode(QTextEdit::NoWrap);
     setFocusProxy(ed_fld);
@@ -980,7 +984,7 @@ void TextEdit::changed( )
 	but_box->setEnabled(true);
 
 	string labApply = _("Apply"), labCncl = _("Cancel");
-	bool noLab = (QFontMetrics(but_box->font()).width((labApply+labCncl).c_str())+30) > width();
+	bool noLab = (QFontMetrics(but_box->font()).size(Qt::TextSingleLine,(labApply+labCncl).c_str()).width()+30) > width();
 	but_box->button(QDialogButtonBox::Apply)->setText(noLab?"":labApply.c_str());
 	but_box->button(QDialogButtonBox::Cancel)->setText(noLab?"":labCncl.c_str());
     }

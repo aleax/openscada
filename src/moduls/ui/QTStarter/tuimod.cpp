@@ -57,7 +57,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.10.0"
+#define MOD_VER		"5.11.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -606,12 +606,14 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 //*************************************************
 StApp::StApp( int &argv, char **args ) : QApplication(argv, args), origStl(mod->dataRes()),
     inExec(false), transl(NULL), trayMenu(NULL), tray(NULL), stDlg(NULL), initExec(false),
-    simulRightMKeyTm(0), mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPoint(),Qt::NoButton,0,0)
+    simulRightMKeyTm(0), mouseBtPress(0), mouseBtRecv(NULL), mouseBtHold(QEvent::None,QPoint(),Qt::NoButton,Qt::NoButton,Qt::NoModifier)
 {
     setApplicationName(PACKAGE_STRING);
     setQuitOnLastWindowClosed(false);
 
     startTimer(1e3*prmWait_DL);
+
+    connect(this, SIGNAL(saveStateRequest(QSessionManager&)), this, SLOT(saveSessState(QSessionManager&)));
 }
 
 StApp::~StApp( )
@@ -644,15 +646,6 @@ bool StApp::notify( QObject *receiver, QEvent *event )
     }
 
     return QApplication::notify(receiver, event);
-}
-
-#if QT_VERSION < 0x050000
-void StApp::saveState( QSessionManager &manager )
-#else
-void StApp::saveStateRequest( QSessionManager &manager )
-#endif
-{
-    manager.setRestartHint(QSessionManager::RestartNever);
 }
 
 int StApp::stExec( )
@@ -751,10 +744,10 @@ void StApp::timerEvent( QTimerEvent *event )
     if(mod->mQtLookMdf)	updLookFeel();
 
     if(mouseBtPress && 1e-6*(TSYS::curTime()-mouseBtPress) >= simulRightMKeyTm) {
-	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHold.pos(), Qt::RightButton, 0, 0);
+	QMouseEvent evPress(QEvent::MouseButtonPress, mouseBtHold.pos(), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
 	sendEvent(mouseBtRecv, &evPress);
 
-	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHold.pos(), Qt::RightButton, 0, 0);
+	QMouseEvent evRels(QEvent::MouseButtonRelease, mouseBtHold.pos(), Qt::RightButton, Qt::NoButton, Qt::NoModifier);
 	sendEvent(mouseBtRecv, &evRels);
 
 	if(dynamic_cast<QWidget*>(mouseBtRecv)) {
@@ -944,6 +937,11 @@ bool StApp::callQtModule( const string &nm )
     return true;
 }
 
+void StApp::saveSessState( QSessionManager &manager )
+{
+    manager.setRestartHint(QSessionManager::RestartNever);
+}
+
 void StApp::startDialog( )
 {
     if(!stDlg) stDlg = new StartDialog();
@@ -1022,15 +1020,16 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
     wnd_lay->setMargin(6);
     wnd_lay->setSpacing(4);
 
-    QLabel *logo = new QLabel(this);
-    logo->setPixmap(QPixmap(":/images/logo.png"));
-    if(logo->pixmap()) {
+    QPixmap pxImg(":/images/logo.png");
+    if(!pxImg.isNull()) {
+	QLabel *logo = new QLabel(this);
+	logo->setPixmap(pxImg);
 	logo->setAutoFillBackground(true);
 	QPalette plt = logo->palette();
-	plt.setBrush(QPalette::Window, logo->pixmap()->copy(logo->pixmap()->width()-1,0,1,logo->pixmap()->height()));
+	plt.setBrush(QPalette::Window, pxImg.copy(pxImg.width()-1, 0, 1, pxImg.height()));
 	logo->setPalette(plt);
+	wnd_lay->addWidget(logo);
     }
-    wnd_lay->addWidget(logo, 0, 0);
 
     //Append the title and the list of Qt modules of OpenSCADA
     QFont labFont = font();
@@ -1038,7 +1037,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
     if(!SYS->prjCustMode() && SYS->prjNm().size()) {
 	QLabel *lab = new QLabel(_("Qt modules of OpenSCADA"), this);
 	lab->setFont(labFont);
-	wnd_lay->addWidget(lab, 0, 0);
+	wnd_lay->addWidget(lab);
     }
 
     if(SYS->prjCustMode() || SYS->prjNm().size()) {
@@ -1074,7 +1073,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
 			      .arg(QtMod.at().modInfo("Description").c_str())
 			      .arg(QtMod.at().modInfo("License").c_str()));
 	    QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQtModule()));
-	    wnd_lay->addWidget(butt, 0, 0);
+	    wnd_lay->addWidget(butt);
 	}
 
 	//Append the horizontal line and the title of projects of OpenSCADA
@@ -1083,11 +1082,11 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
 	    gFrame->setLineWidth(4);
 	    gFrame->setFrameShape(QFrame::HLine);
 	    gFrame->setFrameShadow(QFrame::Sunken);
-	    wnd_lay->addWidget(gFrame, 0, 0);
+	    wnd_lay->addWidget(gFrame);
 
 	    QLabel *lab = new QLabel(_("Projects of OpenSCADA"), this);
 	    lab->setFont(labFont);
-	    wnd_lay->addWidget(lab, 0, 0);
+	    wnd_lay->addWidget(lab);
 	}
     }
 
@@ -1106,7 +1105,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
 	connect(prjsLs, SIGNAL(itemSelectionChanged()), this, SLOT(projSelect()));
 	connect(prjsLs, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(projSwitch()));
 	connect(prjsLs, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(prjsLsCtxMenuRequested(const QPoint&)));
-	wnd_lay->addWidget(prjsLs, 0, 0);
+	wnd_lay->addWidget(prjsLs);
 	updatePrjList();
 
 	prjsBt = new QPushButton(QIcon(":/images/ok.png"), SYS->prjNm().size()?_("Switch to the selected project"):_("Call the selected project"), this);
@@ -1114,18 +1113,18 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
 	prjsBt->setToolTip(SYS->prjNm().size()?_("Switch to the selected project"):_("Call the selected project"));
 	prjsBt->setWhatsThis(SYS->prjNm().size()?_("The button for switch to the selected project."):_("The button for call the selected project."));
 	QObject::connect(prjsBt, SIGNAL(clicked(bool)), this, SLOT(projSwitch()));
-	wnd_lay->addWidget(prjsBt, 0, 0);
+	wnd_lay->addWidget(prjsBt);
 
 	QFrame *gFrame = new QFrame(this);
 	gFrame->setFrameShape(QFrame::HLine);
 	gFrame->setFrameShadow(QFrame::Plain);
-	wnd_lay->addWidget(gFrame, 0, 0);
+	wnd_lay->addWidget(gFrame);
 
 	QPushButton *prjAddUpdt = new QPushButton(QIcon(":/images/it_add.png"), _("Create/update project"), this);
 	prjAddUpdt->setToolTip(_("New projects creating or updating of presented ones, like to desktop links"));
 	prjAddUpdt->setWhatsThis(_("The button for new projects creating or updating of presented ones, like to desktop links."));
 	QObject::connect(prjAddUpdt, SIGNAL(clicked(bool)), this, SLOT(projCreateUpdt()));
-	wnd_lay->addWidget(prjAddUpdt, 0, 0);
+	wnd_lay->addWidget(prjAddUpdt);
     }
 
     wnd_lay->addItem(new QSpacerItem(20,20,QSizePolicy::Minimum,QSizePolicy::Expanding));
@@ -1134,14 +1133,14 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
     gFrame->setLineWidth(4);
     gFrame->setFrameShape(QFrame::HLine);
     gFrame->setFrameShadow(QFrame::Sunken);
-    wnd_lay->addWidget(gFrame, 0, 0);
+    wnd_lay->addWidget(gFrame);
 
     QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit the program"), this);
     butt->setObjectName("*exit*");
     butt->setToolTip(_("Exit the program"));
     butt->setWhatsThis(_("The button for exit the program."));
     QObject::connect(butt, SIGNAL(clicked(bool)), mod->QtApp, SLOT(callQtModule()));
-    wnd_lay->addWidget(butt, 0, 0);
+    wnd_lay->addWidget(butt);
 }
 
 void StartDialog::showEvent( QShowEvent* )

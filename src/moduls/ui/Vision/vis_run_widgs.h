@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run_widgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2016 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,7 +40,7 @@ namespace VISION
 
 	public:
 	    //Public methods
-	    RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
+	    RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = Qt::Widget );
 	    ~RunWdgView( );
 
 	    string name( );
@@ -91,7 +91,7 @@ namespace VISION
 
 	public:
 	    //Public methods
-	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
+	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = Qt::Widget );
 	    ~RunPageView( );
 
 	    unsigned reqTm( )	{ return reqtm; }

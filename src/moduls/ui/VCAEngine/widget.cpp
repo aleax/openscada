@@ -756,7 +756,7 @@ AutoHD<Widget> Widget::wdgAt( const string &wdg, int lev, int off ) const
     if(lev < 0) return chldAt(inclWdg, wdg);
 
     AutoHD<Widget> rez;
-    string iw = TSYS::pathLev(wdg,lev,true,&off);
+    string iw = TSYS::pathLev(wdg, lev, true, &off);
     if(iw.compare(0,4,"wdg_") == 0) iw = iw.substr(4);
     if(iw.empty())	rez = AutoHD<Widget>(const_cast<Widget*>(this));
     else if(iw == "..") {
@@ -1399,7 +1399,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		else if(obj_tp == "wdg:") {
 		    opt->childAdd("el")->setText(c_path);
 		    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++) {
-			c_path += (c_lv?"/":"")+c_el;
+			c_path += (c_lv?"/":"") + c_el;
 			opt->childAdd("el")->setText(c_path);
 		    }
 
