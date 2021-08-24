@@ -185,8 +185,9 @@ void TMdContr::start_( )
 {
     if(prcSt) return;
 
-    servSt = 0;
-    tmDelay = 0;
+    // Deactivate the main session to reset/clear the monitored items
+    if(sess.mSubScr.size() && sess.mSubScr[0].isActivated())
+	sess.mSubScr[0].activate(false);
 
     // Reenable parameters
     try {
@@ -198,6 +199,9 @@ void TMdContr::start_( )
 	    if(at(pls[iP]).at().enableStat()) at(pls[iP]).at().enable();
 	isReload = false;
     } catch(TError&) { isReload = false; throw; }
+
+    servSt = 0;
+    tmDelay = 0;
 
     //Start the gathering data task
     if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -334,13 +338,18 @@ TVariant TMdContr::getValMIt( unsigned mItId, uint32_t *st )
 {
     uint32_t ndSt = 0;
 
-    OPCAlloc resDt(mtxData);
+    OPCAlloc resDt(mtxData, true);
     Subscr::MonitItem *mIt = (mItId < sess.mSubScr[0].mItems.size()) ? &sess.mSubScr[0].mItems[mItId] : NULL;
-    if(mUseRead) ndSt = (mIt && !str2uint(mIt->val.attr("nodata"))) ? str2uint(mIt->val.attr("Status")) : OpcUa_BadMonitoredItemIdInvalid;
-    else ndSt = (!mIt || !mIt->active || str2uint(mIt->val.attr("nodata"))) ? OpcUa_BadMonitoredItemIdInvalid :
+    if(!mIt) ndSt = OpcUa_BadMonitoredItemIdInvalid;
+    else if(mUseRead)
+	ndSt = !str2uint(mIt->val.attr("nodata")) ? str2uint(mIt->val.attr("Status")) : OpcUa_BadMonitoredItemIdInvalid;
+    else ndSt = (!mIt->active || str2uint(mIt->val.attr("nodata"))) ? OpcUa_BadMonitoredItemIdInvalid :
 			(ndSt=mIt->st) ? ndSt : str2uint(mIt->val.attr("Status"));
 
-    if(!mIt || ndSt)	return EVAL_REAL;
+    if(!mIt || ndSt) {
+	if(st) *st = ndSt;
+	return EVAL_REAL;
+    }
     else {
 	unsigned varTp = 0;
 	if((varTp=s2i(mIt->val.attr("VarTp")))&OpcUa_Array) {
@@ -387,6 +396,7 @@ TVariant TMdContr::getVal( const string &iaddr, MtxString &err )
 
     uint32_t ndSt = 0;
     TVariant rez = getValMIt(str2uint(nId), &ndSt);
+
     if(ndSt && err.getVal().empty())
 	err = TSYS::strMess(_("Error '%s': 0x%x"), TSYS::strLine(iaddr,0).c_str(), ndSt);
 
@@ -918,6 +928,7 @@ void TMdPrm::enable( )
 	}
     }
     //Template's function connect for logical type parameter
+    else if(isLogic() && lCtx && lCtx->func())	lCtx->chkLnkNeed = lCtx->initLnks(true);
     else if(isLogic() && lCtx && !lCtx->func())
 	try {
 	    //vector<string> als;
@@ -1284,7 +1295,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	/*opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");*/
     }
     else if(isStd() && a_path == "/prm/cfg/SEL_NDS") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(nodePath()+"selND","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"selND","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    //Read for type check
 	    string cNodeId;
@@ -1300,11 +1311,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    if(req.childSize() > 1 && s2i(req.childGet(1)->text()) == OpcUa_Structure)	isStructVar = true;
 		    string nLs = ndList(), nS;
 		    for(int off = 0; (nS=TSYS::strLine(nLs,0,&off)).size(); )
-			if(nS == cNodeId) break;
-		    if(nS.empty()) { setNdList(nLs+((nLs.size() && nLs[nLs.size()-1] != '\n')?"\n":"")+cNodeId); isSet = true; }
+			if(TSYS::strParse(nS,0,"|") == cNodeId) break;
+		    if(nS.empty()) setNdList(nLs+((nLs.size() && nLs[nLs.size()-1] != '\n')?"\n":"")+cNodeId);
+		    isSet = true;
 		}
 	    }
-	    if(!isSet || isStructVar)	TBDS::genDBSet(nodePath()+"selND", opt->text(), opt->attr("user"));
+	    if(!isSet || isStructVar)
+		TBDS::genDBSet(nodePath()+"selND", opt->text(), opt->attr("user"));
 	}
     }
     else if(isStd() && a_path == "/prm/cfg/SEL_NDS_lst" && ctrChkNode(opt)) {

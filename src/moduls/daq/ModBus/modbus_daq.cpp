@@ -1146,6 +1146,7 @@ void TMdPrm::enable( )
 	}
     }
     //Template's function connect for logical type parameter
+    else if(isLogic() && lCtx && lCtx->func())	lCtx->chkLnkNeed = lCtx->initLnks(true);
     else if(isLogic() && lCtx && !lCtx->func())
 	try {
 	    //unsigned fId = 0;

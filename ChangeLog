@@ -1,3 +1,17 @@
+2021-08-24 Roman (stable)
+- FIX:DB.SQLite: Fixed for clearing translations at setting, for the fields marked as NO TRANSLATE.
+- !!:FIX:DAQ.DAQGate: Prevented in remote requesting the main/own parameter attributes SHIFR, NAME, DESCR
+    at the DAQGate cascading.
+- FIX:DAQ.{ModBus,OPC_UA,Siemens}: Fixed in the logic level links (re)init at the parameters (re)enabling,
+    after implement the no template enabling.
+- !!:FIX:DAQ.OPC_UA: Fixed for the mtxData locking in TMdContr::getValMIt();
+    !: The parameter side nodes browser expanded for checking the expanded nodes' list format in the presence detection.
+    TMdContr::getValMIt() some improved in the errors processing.
+- FIX:DAQ.Siemens: The lnkInit() function fixed in detection the short format both for DB and F,
+	with appending the size from the DAQ-Template.
+    The logical level parameters enabled to show the connection/acquisition errors in the "Error(err)" attribute.
+
+
 2021-08-20 Roman (stable)
 - !:LibsDB.OscadaLibs: The test function test.test appended of the commented parts of testing the string streams parsing
     by string.{parse,parseEnd,parsePath,parsePathEnd,parseLine}().

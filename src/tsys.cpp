@@ -2482,7 +2482,7 @@ void *TSYS::RdTask( void * )
 	    if(!SYS->at(subLs[iL]).at().rdProcess())
 		subLs.erase(subLs.begin()+(iL--));
 
-	//Wait to next iteration
+	//Waiting the next iteration
 	TSYS::taskSleep((int64_t)(SYS->rdTaskPer()*1e9));
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 

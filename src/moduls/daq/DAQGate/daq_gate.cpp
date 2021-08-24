@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.4.3"
+#define MOD_VER		"2.4.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -209,8 +209,8 @@ void TMdContr::enable_( )
 		else {	//Parameters group to the root
 		    req.clear()->setName("get")->setAttr("path", "/"+mStatWork[iSt].first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
 		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), "%s", req.text().c_str());
-		    else for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-			prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+req.childGet(i_ch)->attr("id"));
+		    else for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
+			prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+req.childGet(iCh)->attr("id"));
 		}
 
 		if(messLev() == TMess::Debug)
@@ -909,7 +909,7 @@ void TMdPrm::save_( )
     }
     cfg("ATTRS").setS(attrsNd.save(XMLNode::BrAllPast));
 
-    //Save to cache
+    //Save to the cache
     TParamContr::save_();
 }
 
@@ -1037,8 +1037,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	bool isEmpty = (!prmAddr().size() || !TSYS::pathLev(prmAddr(),1).size());
 
 	TParamContr::cntrCmdProc(opt);
-	ctrRemoveNode(opt,"/prm");
-	if(isEmpty) { ctrRemoveNode(opt,"/val"); ctrRemoveNode(opt,"/arch"); }
+	ctrRemoveNode(opt, "/prm");
+	if(isEmpty) { ctrRemoveNode(opt,"/val"); ctrRemoveNode(opt, "/arch"); }
 
 	if(ctrMkNode("area",opt,0,"/prm",_("Parameter"))) {
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
@@ -1079,6 +1079,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/st/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/prm/st/nm" && ctrChkNode(opt))	opt->setText(name());
+    else if(a_path == "/prm/cfg/SHIFR" || a_path == "/prm/cfg/NAME" || a_path == "/prm/cfg/DESCR")
+	TParamContr::cntrCmdProc(opt);
     else if(a_path.compare(0,4,"/prm") == 0) {
 	//Request to remote host
 	string scntr;

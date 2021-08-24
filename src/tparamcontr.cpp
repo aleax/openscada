@@ -503,10 +503,10 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     else if(mPrm >= 0 && a_path == "/iPrms/nmb" && ctrChkNode(opt)) {
 	vector<string> c_list;
 	list(c_list);
-	unsigned e_c = 0;
+	unsigned eC = 0;
 	for(unsigned iA = 0; iA < c_list.size(); iA++)
-	    if(at(c_list[iA]).at().enableStat()) e_c++;
-	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
+	    if(at(c_list[iA]).at().enableStat()) eC++;
+	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),eC));
     }
     else if((a_path == "/br/prm_" || a_path == "/iPrms/prm")) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {

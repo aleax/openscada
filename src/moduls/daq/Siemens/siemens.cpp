@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.2.0"
+#define MOD_VER		"4.2.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1800,6 +1800,7 @@ void TMdPrm::enable( )
 	}
     }
     //Template's function connect for logical type parameter
+    else if(isLogic() && lCtx && lCtx->func())	lCtx->chkLnkNeed = lCtx->initLnks(true);
     else if(isLogic() && lCtx && !lCtx->func())
 	try {
 	    //vector<string> als;
@@ -1949,6 +1950,7 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 
     AutoHD<TVal> pVal;
     vector<string> ls;
+    acqErr.setVal("");	//Clean up before the updating at links processing
 
     try {
 	if(lCtx->chkLnkNeed && !first && !last)	lCtx->chkLnkNeed = lCtx->initLnks();
@@ -1990,8 +1992,6 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error of the calculation template."));
     }
-
-    acqErr.setVal("");	//But it is not used for the type
 }
 
 TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -2192,17 +2192,19 @@ bool TMdPrm::TLogCtx::lnkInit( int num, bool toRecnt )
     it->second.addrSpec = "";
     int rez = 0, db = -1, off = -1;
     char tp[11];
-    if((rez=sscanf(it->second.addr.c_str(),"DB%d.%i.%10s",&db,&off,tp)) == 2 || rez == 3) ;
-    else if((rez=sscanf(it->second.addr.c_str(),"F.%i.%10s",&off,tp)) == 1 || rez == 2) { db = -daveFlags; rez += 1; }
+    bool isShort = false;
+    if((isShort=(rez=sscanf(it->second.addr.c_str(),"DB%d.%i.%10s",&db,&off,tp)) == 2) || rez == 3) ;
+    else if((isShort=(rez=sscanf(it->second.addr.c_str(),"F.%i.%10s",&off,tp)) == 1) || rez == 2)
+    { db = -daveFlags; rez += 1; }
     else return false;
     if(off < 0)	return false;
 
-    string stp = (rez == 2) ? TSYS::strParse(TSYS::strLine(func()->io(num)->def(),0),2,"|") : tp;
+    string stp = isShort ? TSYS::strParse(TSYS::strLine(func()->io(num)->def(),0),2,"|") : tp;
     if(stp.empty() || isdigit(stp[0]))
 	switch(ioType(num)) {
 	    case IO::Boolean: stp.insert(0, "b");	break;
 	    case IO::Integer: stp.insert(0, "i");	break;
-	    case IO::Real:	  stp.insert(0, "r");	break;
+	    case IO::Real:    stp.insert(0, "r");	break;
 	    case IO::String:  stp.insert(0, "s");	break;
 	    default:	break;
 	}
