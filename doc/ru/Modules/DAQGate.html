@@ -31,7 +31,7 @@
 <td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Шлюз источников данных
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
@@ -41,15 +41,6 @@
 <td> Роман Савоченко </td>
 <td> Позволяет выполнять шлюзование источников данных удалённых OpenSCADA станций в локальные.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">1</span> <span class="toctext">Объект контроллера</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Параметры</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Замечания</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Ссылки</span></a></li>
-</ul>
-</div>
-
 <p>Основной функцией данного модуля является отражение данных <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">подсистемы "Сбор данных"</a> удалённых OpenSCADA станций на локальные. В своей работе модуль использует <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">Собственный Протокол OpenSCADA</a> и сервисные функции подсистемы "Сбор данных".
 </p><p>Модулем реализуются следующие функции:
 </p>
@@ -63,6 +54,15 @@
 <p>Использование доступных схем резервирования наглядно представлено на рисунке 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:515px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_red_ru.png"><img class="thumbimage" height="351" src="../files/DAQ_red_ru.png" width="513" /></a>  <div class="thumbcaption">Рис.1. Горизонтальное и вертикальное резервирование.</div></div></div></div>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="tocnumber">1</span> <span class="toctext">Объект контроллера</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Параметры</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">3</span> <span class="toctext">Замечания</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.A1.D1.81.D1.8B.D0.BB.D0.BA.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Ссылки</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">1</span> Объект контроллера</span></h2>
 <p>Для добавления источника данных создаётся и конфигурируется объект контроллера OpenSCADA. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 2.
 </p>

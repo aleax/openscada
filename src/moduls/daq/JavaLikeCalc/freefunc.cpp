@@ -2732,7 +2732,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: Function %d=tr(%d).", cprg, ptr->rez, ptr->a);
 #endif
-		reg[ptr->rez] = Mess->translGetLU(getValS(val,reg[ptr->a]),val->lang(),val->user(),"uapi:"+val->func()->stor());
+		reg[ptr->rez] = Mess->translGetLU(getValS(val,reg[ptr->a]), val->lang(), val->user(), "uapi:"+val->func()->stor());
 		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::CProc:

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Gateway of the data sources
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
@@ -41,15 +41,6 @@
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font> </td>
 <td> Allows to locate data sources of the remote OpenSCADA stations to local ones.
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#Controller_object"><span class="tocnumber">1</span> <span class="toctext">Controller object</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Notes"><span class="tocnumber">3</span> <span class="toctext">Notes</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
-</ul>
-</div>
-
 <p>Main function of this module is the data reflection of <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem "Data acquisition"</a> of the remote OpenSCADA stations on the local ones. In its work, the module uses the <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA self protocol</a> and service functions of the subsystem "Data acquisition".
 </p><p>The module realizes following functions:
 </p>
@@ -63,6 +54,15 @@
 <p>Using of the available redundancy schemes is graphically represented in Figure 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:515px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_red.png"><img class="thumbimage" height="351" src="../files/DAQ_red.png" width="513" /></a>  <div class="thumbcaption">Fig.1. Horizontal and vertical redundancy.</div></div></div></div>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Controller_object"><span class="tocnumber">1</span> <span class="toctext">Controller object</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Parameters"><span class="tocnumber">2</span> <span class="toctext">Parameters</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Notes"><span class="tocnumber">3</span> <span class="toctext">Notes</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Links"><span class="tocnumber">4</span> <span class="toctext">Links</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
 <p>To add a data source a controller object of OpenSCADA is created and configured. An example of the configuration tab for a controller object of this type is shown in Figure 2.
 </p>

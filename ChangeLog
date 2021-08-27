@@ -1,3 +1,15 @@
+2021-08-26 Roman (stable)
+- FIX:TMess: translReg() fixed in working the service request of loading the translation index
+	independently on the arguments.
+    The structure SRec appended for the default values in the constructor and by the comparing function.
+- !!!!:FIX:Archive,DAQ.DAQGate: TArchiveS::messPut() fixed in processing of messages setting at empty "arch".
+    !!: The message redundancy improved in the last message control in preventing the dubles.
+    !: Archive: Disabled for the first start replay of the local archive for active messages,
+	since the alarms set and clear now forcibly.
+- !!:FIX:DAQ.DAQGate: Moved to the standard messages redundancy mechanism.
+- FIX:UI.VCAEngine: The translation fixed-allowed in "IO_VAL" for empty Constants.
+
+
 2021-08-24 Roman (stable)
 - FIX:DB.SQLite: Fixed for clearing translations at setting, for the fields marked as NO TRANSLATE.
 - !!:FIX:DAQ.DAQGate: Prevented in remote requesting the main/own parameter attributes SHIFR, NAME, DESCR

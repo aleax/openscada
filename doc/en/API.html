@@ -453,13 +453,15 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>DIR_STDOUT</i> (0x2) — to standard output;</li>
 <li> <i>DIR_STDERR</i> (0x4) — to standard errors output;</li>
 <li> <i>DIR_ARCHIVE</i> (0x8) — to messages archive.</li></ul>
-<p>The structure of the message (class — TMess:: SRec):
+<p>The structure of the message (class — TMess::SRec):
 </p>
-<ul><li> <i>time_t time; </i> — time of the message; </li>
-<li> <i>int utime;</i> — microsecond of the message time; </li>
-<li> <i>string categ;</i> — category of messages (usually the way inside the system); </li>
-<li> <i>int8_t level;</i> — the level of the message; </li>
-<li> <i>string mess;</i> — message. </li></ul>
+<ul><li> <i>SRec( ); SRec( time_t itm, int iutime = 0, const string &amp;icat = "", int8_t ilev = 0, const string &amp;imess = "" );</i> — the class constructors;</li>
+<li> <i>bool operator==( SRec &amp;vl );</i> — the object comparing;</li>
+<li> <i>time_t time; </i> — time of the message;</li>
+<li> <i>int utime;</i> — microsecond of the message time;</li>
+<li> <i>string categ;</i> — category of messages (usually the way inside the system);</li>
+<li> <i>int8_t level;</i> — the level of the message;</li>
+<li> <i>string mess;</i> — message.</li></ul>
 <p><b>Templates:</b>
 </p>
 <ul><li> <i>_( mess )</i> — Wrapper over the translation of the messages function for the provision of the accepted by the most of the programs translation of the messages.</li>

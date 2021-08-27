@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.4.4"
+#define MOD_VER		"2.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -427,53 +427,8 @@ void *TMdContr::Task( void *icntr )
 
     for(unsigned int itCnt = 0; !cntr.endrunReq; itCnt++) {
 	if(cntr.redntUse()) {
-	    //Request to the redundant host by messages
-	    if(cntr.mMessLev.getI() >= 0) {
-		XMLNode req("CntrReqs");
-		for(unsigned iSt = 0; iSt < cntr.mStatWork.size(); iSt++) {
-		    int tm_grnd = cntr.mStatWork[iSt].second.lstMess["<<redundant>>"];
-		    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/sub_Archive/%2fserv%2fmess")->
-				setAttr("tm_grnd", i2s(tm_grnd))->
-				setAttr("cat", cntr.mStatWork[iSt].first+":*")->setAttr("lev", cntr.mMessLev);
-		    // Alarms force request
-		    if(!tm_grnd && cntr.mMessLev.getI() >= 0) reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
-		    else reqCh->setAttr("lev", cntr.mMessLev.getS());
-		}
-
-		SYS->daq().at().rdStRequest(cntr.workId(), req);
-
-		// Result messages processing
-		for(unsigned iSt = 0; iSt < cntr.mStatWork.size() && iSt < req.childSize(); iSt++) {
-		    XMLNode *prmNd = req.childGet(iSt);
-		    for(unsigned iM = 0; iM < prmNd->childSize(); iM++) {
-			XMLNode *m = prmNd->childGet(iM);
-			SYS->archive().at().messPut(s2i(m->attr("time")), s2i(m->attr("utime")), m->attr("cat"), s2i(m->attr("lev")), m->text());
-		    }
-
-		    // The bottom time border processing
-		    for(map<string, time_t>::iterator iLM = cntr.mStatWork[iSt].second.lstMess.begin();
-								iLM != cntr.mStatWork[iSt].second.lstMess.end(); ++iLM)
-			//  The new algorithm
-			if(!iLM->second) iLM->second = SYS->sysTm()-3600*cntr.restDtTm();
-			else {
-			    time_t mRdTm = iLM->second, mRdTm_ = s2i(prmNd->attr("tm"));
-			    int mRdEqTm = cntr.mStatWork[iSt].second.lstMessCnt[iLM->first];
-			    if(mRdTm_ > mRdTm)	{ mRdTm = mRdTm_; mRdEqTm = 0; }
-			    else if(prmNd->childSize() && (++mRdEqTm) > 2)	{ mRdTm++; mRdEqTm = 0; }
-			    iLM->second = mRdTm;
-			    cntr.mStatWork[iSt].second.lstMessCnt[iLM->first] = mRdEqTm;
-
-			    if(mess_lev() == TMess::Debug)
-				mess_debug(cntr.nodePath().c_str(), "Redundancy for '%s': %s: %d",
-				    iLM->first.c_str(), TSYS::atime2str(mRdTm).c_str(), prmNd->childSize());
-			}
-
-			//  The old algorithm
-			//iLM->second = iLM->second ? s2i(prmNd->attr("tm"))+1 : SYS->sysTm()-3600*cntr.restDtTm();
-		}
-		TSYS::taskSleep(SYS->rdTaskPer()*1e9);
-	    }
-	    else TSYS::taskSleep(prmWait_DL*1e9);
+	    //Just using the standard message archives redundancy
+	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
 	    continue;
 	}
 
@@ -566,7 +521,7 @@ void *TMdContr::Task( void *icntr )
 		    //Requests to the controllers messages prepare
 		    if(cntr.mMessLev.getI() >= 0)	//Else disabled
 			for(map<string,bool>::iterator i_c = cntrLstMA.begin(); i_c != cntrLstMA.end(); ++i_c) {
-			    int tm_grnd = cntr.mStatWork[iSt].second.lstMess[i_c->first];
+			    int tm_grnd = cntr.mStatWork[iSt].second.lstMess[i_c->first].time;
 			    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/"+i_c->first+"/%2fserv%2fmess")->setAttr("tm_grnd", i2s(tm_grnd));
 			    if(!tm_grnd && cntr.mMessLev.getI() >= 0)	//Alarms force request
 				reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
@@ -590,39 +545,31 @@ void *TMdContr::Task( void *icntr )
 			string pId	= TSYS::pathLev(prmNd->attr("path"), 2);
 			string tVl;
 			if(pId == "/serv/mess") {
+			    TMess::SRec &lstRdMess = cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr];
+			    TMess::SRec lstRdMess_;
+			    vector<TMess::SRec> mess;
 			    for(unsigned iM = 0; iM < prmNd->childSize(); iM++) {
 				XMLNode *m = prmNd->childGet(iM);
-				SYS->archive().at().messPut(s2i(m->attr("time")), s2i(m->attr("utime")),
-				    cntr.mStatWork[iSt].first+":"+m->attr("cat"), s2i(m->attr("lev")), m->text());
+				mess.push_back(TMess::SRec(s2i(m->attr("time")),s2i(m->attr("utime")),
+						    cntr.mStatWork[iSt].first+":"+m->attr("cat"),s2i(m->attr("lev")),m->text()));
+				if(mess.back().time >= lstRdMess_.time) {
+				    lstRdMess_ = mess.back();
+				    if(lstRdMess_ == lstRdMess) mess.pop_back();
+				}
 			    }
 
 			    // The bottom time border processing
-			    //  The new algorithm
-			    if(!cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr])
-				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
-				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] = SYS->sysTm()-3600*cntr.restDtTm();
+			    if(!lstRdMess.time) lstRdMess = TMess::SRec(SYS->sysTm()-3600*cntr.restDtTm());
 			    else {
-				time_t	mRdTm = cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr],
-					mRdTm_ = s2i(prmNd->attr("tm"));
-				int mRdEqTm = cntr.mStatWork[iSt].second.lstMessCnt[aMod+"/"+aCntr];
-				if(mRdTm_ > mRdTm)		{ mRdTm = mRdTm_; mRdEqTm = 0; }
-				else if(prmNd->childSize() && (++mRdEqTm) > 2)	{ mRdTm++; mRdEqTm = 0; }
-				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
-				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] = mRdTm;
-				cntr.mStatWork[iSt].second.lstMessCnt[aMod+"/"+aCntr] = mRdEqTm;
+				if(lstRdMess_.time > lstRdMess.time) lstRdMess = lstRdMess_;
+				else if(lstRdMess_.time) lstRdMess = TMess::SRec(lstRdMess_.time+1);
 
 				if(mess_lev() == TMess::Debug)
 				    mess_debug(cntr.nodePath().c_str(), "Gate proceeding for '%s': %s: %d",
-					(aMod+"/"+aCntr).c_str(), TSYS::atime2str(mRdTm).c_str(), prmNd->childSize());
+					(aMod+"/"+aCntr).c_str(), TSYS::atime2str(cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr].time).c_str(), prmNd->childSize());
 			    }
 
-			    //  The old algorithm
-			    /*cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] =
-				cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr] ? s2i(prmNd->attr("tm"))+1 :
-										    SYS->sysTm()-3600*cntr.restDtTm();
-			    cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] =
-				cntr.mStatWork[iSt].second.lstMess["<<redundant>>"] ? s2i(prmNd->attr("tm"))+1 :
-										    SYS->sysTm()-3600*cntr.restDtTm();*/
+			    SYS->archive().at().messPut(mess);
 			}
 			else {
 			    TMdPrm &prm = cntr.pHd[s2i(prmNd->attr("lcPs"))].at();

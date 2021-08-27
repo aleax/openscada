@@ -78,7 +78,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
 
 	// Redundancy
-	time_t redntTm( )	{ return mRdTm; }	//Time of the last redundancy operation
+	time_t redntTm( )	{ return lstRdMess.time; }	//Time of the last redundancy operation
 	//  In redundancy now
 	bool redntUse( )	{ return mRdUse; }
 	void setRedntUse( bool vl )		{ mRdUse = vl; }
@@ -133,8 +133,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	unsigned mRdUse  : 1;
 	unsigned mRdFirst: 1;
-	time_t	mRdTm;
-	unsigned mRdEqTm;
+	TMess::SRec lstRdMess;
 };
 
 //************************************************

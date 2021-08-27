@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.2.5"
+#define MOD_VER		"7.2.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -483,7 +483,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     cEl.cfg("CFG_VAL").setExtVal(true);
     cEl.cfg("IO_VAL").setExtVal(true);
 
-    string tstr;
+    string tstr, tCfgVal;
     for(int off = 0; !(tstr = TSYS::strSepParse(attrs,0,';',&off)).empty(); ) {
 	if(!w.attrPresent(tstr)) continue;
 	AutoHD<Attr> attr = w.attrAt(tstr);
@@ -499,13 +499,17 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	if(!SYS->db().at().dataGet(fullDB+"_io",nodePath()+tbl+"_io",cEl,false,true)) continue;
 
 	unsigned selfFlg = cEl.cfg("SELF_FLG").getI();
-	if(!(attr.at().flgGlob()&Attr::NotStored))
-	    attr.at().setS((selfFlg&(Attr::CfgConst|Attr::CfgLnkIn|Attr::FromStyle)) ? cEl.cfg("IO_VAL").getS(TCfg::ExtValOne) : cEl.cfg("IO_VAL").getS(), true);
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);
-	attr.at().setCfgTempl((selfFlg&Attr::FromStyle)?cEl.cfg("CFG_TMPL").getS(TCfg::ExtValOne):cEl.cfg("CFG_TMPL").getS());
-	tstr = cEl.cfg("CFG_VAL").getS(TCfg::ExtValOne);
+
+	tCfgVal = cEl.cfg("CFG_VAL").getS(TCfg::ExtValOne);
 	attr.at().setCfgVal((!cEl.cfg("CFG_VAL").noTransl() && (selfFlg&Attr::CfgConst ||
-				(selfFlg&Attr::CfgLnkIn && tstr.compare(0,4,"val:") == 0))) ? cEl.cfg("CFG_VAL").getS() : tstr);
+				(selfFlg&Attr::CfgLnkIn && tCfgVal.compare(0,4,"val:") == 0))) ? cEl.cfg("CFG_VAL").getS() : tCfgVal);
+
+	if(!(attr.at().flgGlob()&Attr::NotStored))
+	    attr.at().setS((selfFlg&(Attr::CfgLnkIn|Attr::FromStyle) || (selfFlg&Attr::CfgConst && tCfgVal.size())) ?
+					cEl.cfg("IO_VAL").getS(TCfg::ExtValOne) : cEl.cfg("IO_VAL").getS(), true);
+
+	attr.at().setCfgTempl((selfFlg&Attr::FromStyle)?cEl.cfg("CFG_TMPL").getS(TCfg::ExtValOne):cEl.cfg("CFG_TMPL").getS());
     }
 
     if(ldGen)	return;
@@ -523,14 +527,25 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fldCnt++,cEl,false,true); ) {
 	string sid = cEl.cfg("ID").getS();
 	if(!TSYS::pathLev(sid,1).empty()) continue;
+
 	unsigned type = cEl.cfg("IO_TYPE").getI();
 	unsigned flg = type >> 4;
 	type = type&0x0f;
+
 	unsigned selfFlg = cEl.cfg("SELF_FLG").getI();
+
 	if(!w.attrPresent(sid)) w.attrAdd(new TFld(sid.c_str(),cEl.cfg("NAME").getS().c_str(),(TFld::Type)type,flg));
+
 	AutoHD<Attr> attr = w.attrAt(sid);
+
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) continue;
-	string IO_VAL = attr.at().isTransl() && !(selfFlg&(Attr::CfgConst|Attr::CfgLnkIn|Attr::FromStyle)) ? cEl.cfg("IO_VAL").getS() : cEl.cfg("IO_VAL").getS(TCfg::ExtValOne);
+
+	tCfgVal = cEl.cfg("CFG_VAL").getS(TCfg::ExtValOne);
+	attr.at().setCfgVal((Attr::isTransl(TFld::Type(type),flg,selfFlg) && (selfFlg&Attr::CfgConst ||
+				(selfFlg&Attr::CfgLnkIn && tCfgVal.compare(0,4,"val:") == 0))) ? cEl.cfg("CFG_VAL").getS() : tCfgVal);
+
+	string IO_VAL = attr.at().isTransl() && !(selfFlg&(Attr::CfgLnkIn|Attr::FromStyle) || (selfFlg&Attr::CfgConst && tCfgVal.size())) ?
+					cEl.cfg("IO_VAL").getS() : cEl.cfg("IO_VAL").getS(TCfg::ExtValOne);
 	attr.at().setS(IO_VAL);
 	if(type == TFld::Integer || type == TFld::Real || (flg&(TFld::Selectable|TFld::SelEdit))) {
 	    attr.at().setS(TSYS::strSepParse(IO_VAL,0,'|'));
@@ -539,12 +554,12 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	}
 	//!!!! Temporary placed for existing DBs clean up to early fix from using Values and Names to unproper types.
 	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
+
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)((selfFlg&(~Attr::VizerSpec))|(attr.at().flgSelf()&Attr::VizerSpec)));
+
 	attr.at().setCfgTempl((selfFlg&Attr::FromStyle)?cEl.cfg("CFG_TMPL").getS(TCfg::ExtValOne):cEl.cfg("CFG_TMPL").getS());
+
 	attr.at().setCfgVal(Attr::isTransl(TFld::Type(type),flg,selfFlg)?cEl.cfg("CFG_VAL").getS():cEl.cfg("CFG_VAL").getS(TCfg::ExtValOne));
-	tstr = cEl.cfg("CFG_VAL").getS(TCfg::ExtValOne);
-	attr.at().setCfgVal((Attr::isTransl(TFld::Type(type),flg,selfFlg) && (selfFlg&Attr::CfgConst ||
-				(selfFlg&Attr::CfgLnkIn && tstr.compare(0,4,"val:") == 0))) ? cEl.cfg("CFG_VAL").getS() : tstr);
     }
 }
 
@@ -571,7 +586,8 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    if((attr.at().flgSelf()&Attr::IsInher) && (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::CfgLnkOut)) && attr.at().cfgVal().size())
 		cEl.cfg("IO_VAL").setS("");	//!!!! Do not save the original value of the inherited and linked attributes
 	    else {
-		cEl.cfg("IO_VAL").setNoTransl(!(attr.at().isTransl() && !(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::FromStyle))));
+		cEl.cfg("IO_VAL").setNoTransl(!(attr.at().isTransl() &&
+				!(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::FromStyle) || (attr.at().flgSelf()&Attr::CfgConst && attr.at().cfgVal().size()))));
 		cEl.cfg("IO_VAL").setS(attr.at().getS());
 	    }
 	    cEl.cfg("SELF_FLG").setI(attr.at().flgSelf());
@@ -585,7 +601,8 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	//User attributes storing
 	else if(!ldGen) {
 	    cElu.cfg("ID").setS(als[iA]);
-	    cElu.cfg("IO_VAL").setNoTransl(!(attr.at().isTransl() && !(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn|Attr::FromStyle))));
+	    cElu.cfg("IO_VAL").setNoTransl(!(attr.at().isTransl() &&
+			!(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::FromStyle) || (attr.at().flgSelf()&Attr::CfgConst && attr.at().cfgVal().size()))));
 	    cElu.cfg("IO_VAL").setS(attr.at().getS());
 	    if(attr.at().type() == TFld::Integer || attr.at().type() == TFld::Real || (attr.at().flgGlob()&(TFld::Selectable|TFld::SelEdit))) {
 		cElu.cfg("IO_VAL").setS(cElu.cfg("IO_VAL").getS()+"|"+attr.at().fld().values());

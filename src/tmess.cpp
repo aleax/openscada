@@ -239,8 +239,7 @@ void TMess::setTranslEnMan( bool vl, bool passive )
 	if(vl) {
 	    SYS->modifG(); SYS->load();	//Built messages load
 	    translReg("", "uapi:");	//User API messages load
-	}
-	else trMessIdx.clear();
+	} else trMessIdx.clear();
     }
 
     mTranslSet = false;
@@ -258,7 +257,8 @@ string TMess::translGet( const string &base, const string &lang, const string &s
     } else if(src.compare(0,5,"uapi:") != 0) return base;
 
     MtxAlloc res(mRes, true);
-    //Request from cache at first
+
+    //Request from the cache at first
     map<string,CacheEl>::iterator itr = trMessCache.find(cKey);
     if(itr != trMessCache.end()) { itr->second.tm = SYS->sysTm(); rez = itr->second.val; }
     else {
@@ -409,8 +409,9 @@ string TMess::translSetLU( const string &base, const string &lang, const string 
 
 void TMess::translReg( const string &mess, const string &src, const string &prms )
 {
-    if(!translEnMan() || !isMessTranslable(mess)) return;
+    if(!translEnMan()) return;
 
+    //Service request of loading the translation index
     if(src.compare(0,5,"uapi:") == 0) {
 	vector<string> ls;
 	if(src.size() > 5) ls.push_back(src.substr(5));
@@ -431,8 +432,9 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[iL]+"." mess_TrUApiTbl,"",io_cnt++,req,false,true); )
 		    trMessIdx[req.cfg("base").getS()]["db:"+ls[iL]+"." mess_TrUApiTbl "#base"] = prms;
     }
+    //Same translations registration
     else {
-	if(sTrm(mess).empty()) return;
+	if(sTrm(mess).empty() || !isMessTranslable(mess)) return;
 	MtxAlloc res(mRes, true);
 	trMessIdx[mess][src] = prms;
     }
