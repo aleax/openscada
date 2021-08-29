@@ -207,13 +207,13 @@ namespace VISION
 	    void cancel( );
 	    void valChanged( const QString& );
 
-	protected:
-	    bool event( QEvent * e );
-
-	private slots:
+	public slots:
 	    void changed( );
 	    void applySlot( );
 	    void cancelSlot( );
+
+	protected:
+	    bool event( QEvent * e );
 
 	private:
 	    LType	m_tp;

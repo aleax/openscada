@@ -808,12 +808,12 @@ void LibProjProp::closeEvent( QCloseEvent *ce )
     bool notApplyPresent = false;
     for(int iIt = 0; !notApplyPresent && iIt < lnEdWs.size(); ++iIt) notApplyPresent = lnEdWs[iIt]->isEdited();
     for(int iIt = 0; !notApplyPresent && iIt < txtEdWs.size(); ++iIt) notApplyPresent = txtEdWs[iIt]->isEdited();
-    if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
-	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
-    {
-	for(int iIt = 0; iIt < lnEdWs.size(); ++iIt) if(lnEdWs[iIt]->isEdited()) isModify(lnEdWs[iIt]);
-	for(int iIt = 0; iIt < txtEdWs.size(); ++iIt) if(txtEdWs[iIt]->isEdited()) isModify(txtEdWs[iIt]);
-    }
+    bool isApply = (notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
+	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply);
+    for(int iIt = 0; iIt < lnEdWs.size(); ++iIt)
+	if(lnEdWs[iIt]->isEdited()) isApply ? lnEdWs[iIt]->applySlot() : lnEdWs[iIt]->cancelSlot();
+    for(int iIt = 0; iIt < txtEdWs.size(); ++iIt)
+	if(txtEdWs[iIt]->isEdited()) isApply ? txtEdWs[iIt]->applySlot() : txtEdWs[iIt]->cancelSlot();
 
     if(is_modif) emit apply(ed_it);
 
@@ -967,7 +967,7 @@ void LibProjProp::stlTableChange( int row, int column )
 //* Widget properties dialog             *
 //****************************************
 VisItProp::VisItProp( VisDevelop *parent ) :
-    QDialog((QWidget*)parent), show_init(false), is_modif(false), ico_modif(false), isPrcLoaded(false)
+    QDialog((QWidget*)parent), show_init(false), is_modif(false), ico_modif(false)
 {
     QLabel *lab;
     QGroupBox *grp;
@@ -1254,7 +1254,6 @@ void VisItProp::showDlg( const string &iit, bool reload )
     QImage ico_t;
     ed_it = iit;
 
-    if(!reload)	isPrcLoaded = false;
     show_init = true;
 
     //Update elements present, visible and values
@@ -1411,8 +1410,6 @@ void VisItProp::tabChanged( int itb )
     switch(itb) {
 	case 1:	obj_attr->setWdg(ed_it);	break;
 	case 2: {
-	    if(isPrcLoaded)	break;
-
 	    show_init = true;
 
 	    XMLNode req("get");
@@ -1504,8 +1501,8 @@ void VisItProp::tabChanged( int itb )
 	    if(obj_attr_cfg->topLevelItemCount()) obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
 	    //  Calculate period
-	    proc_per->setValue("");
 	    if(!proc_per->isEdited()) {
+		proc_per->setValue("");
 		gnd = TCntrNode::ctrId(root,proc_per->objectName().toStdString(),true);
 		proc_per->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 		if(gnd) {
@@ -1539,9 +1536,9 @@ void VisItProp::tabChanged( int itb )
 		if(!owner()->cntrIfCmd(req)) proc_text_tr->setChecked(s2i(req.text()));
 	    }
 	    //  Calc procedure
-	    int edPosSave = (proc_text->text().size()) ? proc_text->workWdg()->textCursor().position() : -1;
-	    proc_text->setText("");
 	    if(!proc_text->isEdited()) {
+		int edPosSave = (proc_text->text().size()) ? proc_text->workWdg()->textCursor().position() : -1;
+		proc_text->setText("");
 		gnd = TCntrNode::ctrId(root, proc_text->objectName().toStdString(), true);
 		proc_text->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 		if(gnd) {
@@ -1565,7 +1562,6 @@ void VisItProp::tabChanged( int itb )
 	    }
 
 	    show_init = false;
-	    isPrcLoaded = true;
 	    break;
 	}
 	case 3:	obj_lnk->setWdg(ed_it);	break;
@@ -1686,13 +1682,12 @@ void VisItProp::closeEvent( QCloseEvent *ce )
     bool notApplyPresent = false;
     for(int iIt = 0; !notApplyPresent && iIt < lnEdWs.size(); ++iIt)  notApplyPresent = lnEdWs[iIt]->isEdited();
     for(int iIt = 0; !notApplyPresent && iIt < txtEdWs.size(); ++iIt) notApplyPresent = txtEdWs[iIt]->isEdited();
-
-    if(notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
-	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
-    {
-	for(int iIt = 0; iIt < lnEdWs.size(); ++iIt) if(lnEdWs[iIt]->isEdited()) isModify(lnEdWs[iIt]);
-	for(int iIt = 0; iIt < txtEdWs.size(); ++iIt) if(txtEdWs[iIt]->isEdited()) isModify(txtEdWs[iIt]);
-    }
+    bool isApply = (notApplyPresent && QMessageBox::information(this,_("Saving the changes"),_("Some changes were made!\nSave the changes to the DB before the closing?"),
+	    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply);
+    for(int iIt = 0; iIt < lnEdWs.size(); ++iIt)
+	if(lnEdWs[iIt]->isEdited()) isApply ? lnEdWs[iIt]->applySlot() : lnEdWs[iIt]->cancelSlot();
+    for(int iIt = 0; iIt < txtEdWs.size(); ++iIt)
+	if(txtEdWs[iIt]->isEdited()) isApply ? txtEdWs[iIt]->applySlot() : txtEdWs[iIt]->cancelSlot();
 
     if(is_modif) emit apply(ed_it);
 

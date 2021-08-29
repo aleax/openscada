@@ -510,7 +510,7 @@ void *Session::Task( void *icontr )
     Session &ses = *(Session *)icontr;
 
     ses.endrunReq = false;
-    ses.mStart	   = true;
+    ses.mStart	  = true;
 
     ses.list(pls);
     while(!ses.endrunReq) {
@@ -2091,7 +2091,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 	    // Load events to process
 	    string wevent = eventGet(true);
 
-	    // Process input links and constants
+	    // Processing the input links and constants
 	    AutoHD<Attr> attr;
 	    AutoHD<TVal> vl;
 	    inLnkGet = true;
@@ -2277,10 +2277,9 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		int detOff = obj_tp.size();	//Links subdetail process
 		AutoHD<TVal> vl = SYS->daq().at().attrAt(TSYS::strParse(cfg.cfgVal(),0,"#",&detOff));
 		if(vl.at().fld().type() == TFld::Object && detOff < (int)cfg.cfgVal().size()) {
-		    vl.at().getO().at().propSet(cfg.cfgVal().substr(detOff),0,cfg.get());
+		    vl.at().getO().at().propSet(cfg.cfgVal().substr(detOff), 0, cfg.get());
 		    vl.at().setO(vl.at().getO());	//For modify object sign
-		}
-		else vl.at().set(cfg.get());
+		} else vl.at().set(cfg.get());
 
 		//SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().set(cfg.get());
 	    }

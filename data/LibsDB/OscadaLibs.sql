@@ -6543,7 +6543,7 @@ THE OUTPUT USER PROTOCOL PART "SMTP" provides operations with a SMTP-server for 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: SVItoVYR LTD
-Version: 1.0.3
+Version: 1.0.4
 License: GPLv2','Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
 
 ДИСПЕТЧЕР може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на Логічному рівні або об''єкті контролеру модуля JavaLikeCalc.
@@ -6554,8 +6554,8 @@ License: GPLv2','Комплексний шаблон повідомлення м
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "СВІТоВИР АВТоМАТИК"
-Версія: 1.0.3
-Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+Версія: 1.0.4
+Ліцензія: GPLv2','',120,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
 //-----------------------------------------------

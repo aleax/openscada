@@ -429,7 +429,14 @@ void Widget::inheritAttr( const string &iattr )
 	    continue;
 	}
 
+	//All configuration before, to prepare
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)pattr.at().flgSelf());
+	if(isLink() && !parent().at().isLink())	// No inherit calc flag for links
+	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
+	attr.at().setCfgTempl(pattr.at().cfgTempl());
+	attr.at().setCfgVal(pattr.at().cfgVal());
+
+	//The value in the end
 	if(!(attr.at().flgGlob()&(Attr::OnlyRead|Attr::NotStored)))
 	    switch(attr.at().type()) {
 		case TFld::Boolean:	attr.at().setB(pattr.at().getB(), attr.at().flgGlob()&Attr::Active);	break;
@@ -439,11 +446,6 @@ void Widget::inheritAttr( const string &iattr )
 		default: break;
 	    }
 
-	// No inherit calc flag for links
-	if(isLink() && !parent().at().isLink())
-	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
-	attr.at().setCfgTempl(pattr.at().cfgTempl());
-	attr.at().setCfgVal(pattr.at().cfgVal());
 	attr.at().setModif(0);
     }
 
@@ -715,8 +717,8 @@ TVariant Widget::objFuncCall_w( const string &id, vector<TVariant> &prms, const 
 
 bool Widget::attrChange( Attr &cfg, TVariant prev )
 {
-    //Process Active attribute's mode
-    if(cfg.flgGlob()&Attr::Active && !prev.isNull() && !parent().freeStat())	parent().at().attrChange(cfg,prev);
+    if(cfg.flgGlob()&Attr::Active && !prev.isNull() && !parent().freeStat())
+	parent().at().attrChange(cfg, prev);
     if(cfg.owner() != this) return false;
 
     //Update heritors attributes
@@ -1273,7 +1275,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	AutoHD<Widget> srcwdg(this);
 	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
 	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
-	if(nattr.size())	srcwdg = wdgAt(nwdg);
+	if(nattr.size()) srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
 	string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	// Search first not config field if default field is config.
@@ -1330,9 +1332,9 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    string cfg_addr = (obj_tp.size()<cfg_val.size()) ? cfg_val.substr(obj_tp.size()) : "";
 
 	    AutoHD<TValue> prm;
-	    if(obj_tp == "prm:")	prm = SYS->daq().at().prmAt(cfg_addr,0,true);
+	    if(obj_tp == "prm:") prm = SYS->daq().at().prmAt(cfg_addr,0,true);
 	    AutoHD<Widget> dstwdg;
-	    if(obj_tp == "wdg:" && cfg_addr.size())	dstwdg = srcwdg.at().wdgAt(cfg_addr,0);
+	    if(obj_tp == "wdg:" && cfg_addr.size()) dstwdg = srcwdg.at().wdgAt(cfg_addr,0);
 
 	    srcwdg.at().attrList(a_ls);
 	    for(unsigned iA = 0; iA < a_ls.size(); iA++)
@@ -1340,7 +1342,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    !(srcwdg.at().attrAt(a_ls[iA]).at().flgSelf()&Attr::CfgConst))
 		{
 		    srcwdg.at().attrAt(a_ls[iA]).at().setCfgVal(cfg_val);
-		    string p_attr = TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(),1,'|');
+		    string p_attr = TSYS::strSepParse(srcwdg.at().attrAt(a_ls[iA]).at().cfgTempl(), 1, '|');
 		    if(!prm.freeStat() || !dstwdg.freeStat()) {
 			if((!prm.freeStat() && prm.at().vlPresent(p_attr)) ||
 				(!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)))
@@ -2069,11 +2071,12 @@ void Attr::setCfgVal( const string &vl )
     string t_val = cfgVal();
     if(t_val == vl) return;
     owner()->mtxAttr().lock();
-    cfg = cfgTempl()+"\n"+vl;
+    cfg = cfgTempl() + "\n" + vl;
     owner()->mtxAttr().unlock();
+
     if(!owner()->attrChange(*this,TVariant())) {
 	owner()->mtxAttr().lock();
-	cfg = cfgTempl()+"\n"+t_val;
+	cfg = cfgTempl() + "\n" + t_val;
 	owner()->mtxAttr().unlock();
     }
     else {

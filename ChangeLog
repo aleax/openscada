@@ -1,3 +1,15 @@
+2021-08-29 Roman (stable)
+- FIX:LibsDB.OscadaLibs: base.ntf: The safe timeout of the template execution set to 120,
+    since the early triggering for busy SMTP-servers.
+- FIX:UI.VCAEngine: The applying order of the function Widget::inheritAttr() changed to all configuration before,
+    in preventing the Widget::attrChange() invoking for old configurations,
+    observed on Attr::setCfgVal() in writing 0 by already disabled/cleared links.
+- !!:FIX:UI.Vision: The tab "Processing" of the visual items edition dialog was fixed at last in missing the IO updation
+    at adding someone, after preventing the changes loss here at switching the tabs
+    by using the natural applying/canceling functions applySlot()/cancelSlot() and removing the mark isPrcLoaded
+    both for the Items and Libraries/Projects edition dialogs.
+
+
 2021-08-26 Roman (stable)
 - FIX:TMess: translReg() fixed in working the service request of loading the translation index
 	independently on the arguments.

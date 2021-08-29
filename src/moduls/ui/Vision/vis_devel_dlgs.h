@@ -62,9 +62,9 @@ class LibProjProp: public QDialog
 
     protected:
 	//Protected methods
-	void keyPressEvent(QKeyEvent *e);
+	void keyPressEvent( QKeyEvent* e );
 	void closeEvent( QCloseEvent* );
-	void showEvent( QShowEvent * event );
+	void showEvent( QShowEvent* event );
 
     signals:
 	void apply(const string &);
@@ -209,7 +209,7 @@ class VisItProp : public QDialog
 	QPushButton	*buttAttrAdd,	//Add new attribute button
 			*buttAttrDel;	//Delete attribute record
 
-	bool		show_init, is_modif, ico_modif, lib_wdg, isPrcLoaded;
+	bool		show_init, is_modif, ico_modif, lib_wdg;
 	string		ed_it;
 };
 

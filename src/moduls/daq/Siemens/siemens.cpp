@@ -1554,7 +1554,6 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    cntr.callSt = false;
-
 	    }	// !cntr.redntUse()
 
 	} catch(TError &err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
