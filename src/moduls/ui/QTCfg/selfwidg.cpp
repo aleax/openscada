@@ -475,7 +475,11 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     edFld->setStyle(new QCommonStyle());	//Force style set for resize allow everywhere
 #endif*/
     edFld->setContextMenuPolicy(Qt::CustomContextMenu);
+#if QT_VERSION >= 0x050A00
+    edFld->setTabStopDistance(20);
+#else
     edFld->setTabStopWidth(20);
+#endif
     edFld->setAcceptRichText(false);
     connect(edFld, SIGNAL(textChanged()), this, SLOT(changed()));
     connect(edFld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()));

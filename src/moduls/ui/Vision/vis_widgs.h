@@ -207,13 +207,13 @@ namespace VISION
 	    void cancel( );
 	    void valChanged( const QString& );
 
-	protected:
-	    bool event( QEvent * e );
-
-	private slots:
+	public slots:
 	    void changed( );
 	    void applySlot( );
 	    void cancelSlot( );
+
+	protected:
+	    bool event( QEvent * e );
 
 	private:
 	    LType	m_tp;
@@ -317,7 +317,7 @@ namespace VISION
 
 	public:
 	    //Public methods
-	    WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
+	    WdgView( const string &iwid, int ilevel, QMainWindow *mainWind, QWidget* parent = 0, Qt::WindowFlags f = Qt::Widget );
 	    ~WdgView( );
 
 	    string	id( )		{ return idWidget; }

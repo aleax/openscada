@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-02 07:12+0300\n"
+"POT-Creation-Date: 2021-08-29 10:10+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1421,6 +1421,9 @@ msgstr "Пустое значение недопустимо."
 
 msgid "Error of parameter ID."
 msgstr "Ошибка ID параметра."
+
+msgid "Detected of the link recursion."
+msgstr "Обнаружено рекурсию связей."
 
 msgid "Template configuration"
 msgstr "Конфигурация шаблона"

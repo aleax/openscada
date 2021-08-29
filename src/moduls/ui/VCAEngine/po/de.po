@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-09 11:37+0300\n"
+"POT-Creation-Date: 2021-08-29 10:23+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1584,9 +1584,9 @@ msgstr "Verbrachte Zeit in der Branche: "
 msgid "the item: "
 msgstr "der Gegenstand: "
 
-msgid "It is a try of creating a widget in depth bigger to 10!"
+msgid "It is a try of creating a widget in depth bigger to %d!"
 msgstr ""
-"Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
+"Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu %d zu erstellen!"
 
 #, c-format
 msgid "Events: %s"
@@ -1661,35 +1661,8 @@ msgstr "Arbeitsstil"
 msgid "Flags"
 msgstr "Schalter"
 
-msgid "Value 0"
-msgstr "Wert 0"
-
-msgid "Value 1"
-msgstr "Wert 1"
-
-msgid "Value 2"
-msgstr "Wert 2"
-
-msgid "Value 3"
-msgstr "Wert 3"
-
-msgid "Value 4"
-msgstr "Wert 4"
-
-msgid "Value 5"
-msgstr "Wert 5"
-
-msgid "Value 6"
-msgstr "Wert 6"
-
-msgid "Value 7"
-msgstr "Wert 7"
-
-msgid "Value 8"
-msgstr "Wert 8"
-
-msgid "Value 9"
-msgstr "Wert 9"
+msgid "Value %d"
+msgstr "Wert %d"
 
 msgid "Original widgets"
 msgstr "Original Widgets"

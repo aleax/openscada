@@ -136,7 +136,11 @@ QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewIte
     if(val_user.isValid()) w_del = new QComboBox(parent);
     else if(value.type() == QVariant::String && !index.data(OneLineString).toBool()) {
 	w_del = new QTextEdit(parent);
+#if QT_VERSION >= 0x050A00
+	((QTextEdit*)w_del)->setTabStopDistance(40);
+#else
 	((QTextEdit*)w_del)->setTabStopWidth(40);
+#endif
 	((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
 	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

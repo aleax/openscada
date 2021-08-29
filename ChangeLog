@@ -1,3 +1,74 @@
+2021-08-29 Roman 0.9.4.1
+- FIX:LibsDB.OscadaLibs: base.ntf: The safe timeout of the template execution set to 120,
+	since the early triggering for busy SMTP-servers.
+    FIX: The SMTP notifier switched in removing the messages from queue also for the SMTP errors
+	and with warnings about those, since observing some continual errors and flooding by the notifications.
+- FIX:AGLKS.St: OPC_UA.test.test: Expanded for use the type and RW parameter hints.
+    vca: The style rule 'labColorGrph1' fixed for the Default.
+- !!!!:FIX:SYS: The module version of the subsystem "Archives" rose to 14.
+    !!!: The redundancy requests prevented of the host multiple requests, by using a request lock "reqM",
+	have to prevent of the redundancy connection sometime lost at changing the DAQ sources.
+    FIX:TMess: The structure SRec appended for the default values in the constructor and by the comparing function.
+- FIX:DAQ,Archives,UI.QTCfg: DAQ-Parameters copy prevented from an error of presence already the binding archive.
+    FIX:UI.QTCfg: Such errors also prevented on termination the group copying operation by a new acceptation dialogue.
+- !!!!:FIX:Archive,DAQ.DAQGate: TArchiveS::messPut() fixed in processing of messages setting at empty "arch".
+    !!: The message redundancy improved in the last message control in preventing the dubles.
+    !: Archive: Disabled for the first start replay of the local archive for active messages,
+	since the alarms set and clear now forcibly.
+. !!:FIX:DAQ.{ModBus,OPC_UA,Siemens}: Switched to the possibility to work with empty template, just as the parameters container.
+	FIX: The logical type DAQ-Attributes saving appended in miss disabling the translation.
+	The DAQ-Parameters of the Ligical type appended for the common connection errors display
+	    in the attribute "err".
+	FIX: DAQ.{ModBus,Siemens}: Added for clearing the call now flag at errors.
+- FIX:DB.DBGate,DAQ.DAQGate: Prevented of the host multiple requests, by using a request lock "reqM".
+- !:FIX:DAQ: The logical level implementation appended of the multilevel recursion detection for the logical level links.
+    The function TPrmTempl::Impl::cntrCmdProc() set as the virtual one, to allow of implementing the DAQ-source specific.
+    The DAQ-Parameter type switched to show the name always, not only at the selection.
+    !!!!:FIX:Siemens: Appended for the Simple type of the DAQ-parameters.
+	!!!: Appended for the data area specifying as a negative DB with code of this area,
+	    and the Flags/Marks processing (0x83) added in a specific way, by the prefix "F".
+	!: Enabled for the parameters hierarchical including.
+	FIX: Fixed in sending the opening connection requests at the connection lost in the ISO-TCP own implementation.
+	The logical level parameters enabled to show the connection/acquisition errors in the "Error(err)" attribute.
+    !!!!:FIX:{DAQ,Protocol}.OPC_UA: Appended for the Logical type DAQ-Parameters support.
+	!!:FIX: Fixed for the mtxData locking in TMdContr::getValMIt();
+	!!: The Standard type DAQ-Parameters appended for the no requesting the metadata on the server mode
+	    and the attributes direct ID and name.
+	!: The parameter side nodes browser expanded for checking the expanded nodes' list format in the presence detection.
+	FIX:DAQ.OPC_UA: Fixed-finished in the parameter including support.
+	TMdContr::getValMIt() some improved in the errors processing.
+	The certificate and key disabled in show for the enabled/started objects.
+    !!:FIX:DAQGate: Moved to the standard messages redundancy mechanism.
+	!!: Prevented in remote requesting the main/own parameter attributes SHIFR, NAME, DESCR at the DAQGate cascading.
+	The controller object status appended in display the sync state.
+    LogicLev: Some reformatted in the functions loadIO() and saveIO() to uniformity with DAQ.{ModBus,OPC_UA,Siemens}.
+    ModBus: The source code some cleared.
+- FIX:Archive.DBArch: Appended of detection some value sources freeze in the block archiving.
+- FIX:UI.{VCAEngine,Vision}: The field "Period of the calculating" of the tab "Processing"
+    of the widget properties edition allowed to control constantly, independently at the procedure presence
+    and for the included pages/widgets calculation common control.
+- !!:FIX:UI.VCAEngine: The VCA-styles appended of they updating at the user change in runtime
+	and cleared by naming the special styles and they number limit.
+    FIX: The applying order of the function Widget::inheritAttr() changed to all configuration before,
+	in preventing the Widget::attrChange() invoking for old configurations,
+	observed on Attr::setCfgVal() in writing 0 by already disabled/cleared links.
+    FIX: Fixed in detection the page links recursion.
+- !!:UI.{QTStarter,QTCfg,Vision}: Cleaned from the Qt 5.15 warnings, resolving most of the deprecation messages.
+    !!!:Vision: Parent of ModInspAttr changed to QAbstractItemModel, due to some new wrong reimplementation
+	    in QAbstractTableModel of Qt5.15, like to the previous one sibling() in Qt5.11.
+	!!: The printing rewrote to use the new Qt5 class QPageLayout, for pages and diagrams.
+	FIX: The Item Properties Edition Dialog prevented in loss changes of the tab "Processing" edition
+	    at switching to other tab and hot opening other items.
+	FIX: The subwindows closing is set to real close not from the close event but the OpenSCADA control interface.
+    !!:FIX:QTStarter: Fixed at last in preventing the program starting by the desktop session resoring,
+	    treating the signal saveStateRequest(QSessionManager&).
+	Rewrote in the logo image placing, to prevent of use the Qt5 specific function instead QLabel::pixmap().
+    FIX:QTCfg: Fixed in broke names the selectable table columns after first incomplete "name-id" item.
+- FIX:UI.WebCfgD: Fixed in the table set value updation for table data come with the flag "noReload".
+- FIX:UI.WebVision: Appended of tracing the user changing in the standard way
+    and of sending the "connect" request with the flag "userChange" for the user VCA-style change also.
+
+
 2021-07-03 Roman 0.9.4
 - FIX:LibsDB.OscadaLibs: The template library tests.test fixed in the IO "di" for the grouping.
 - FIX:LibsDB.vcaBase: Main.grpCadr: Cleared from spare modification and the group name set to "<page>" for the unification.

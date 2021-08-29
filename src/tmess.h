@@ -88,8 +88,10 @@ class TMess
 	class SRec {
 	    public:
 		SRec( ) : time(0), categ(""), level(TMess::Debug), mess("") { }
-		SRec( time_t itm, int iutime, const string &icat, int8_t ilev, const string &imess ) :
+		SRec( time_t itm, int iutime = 0, const string &icat = "", int8_t ilev = 0, const string &imess = "" ) :
 		    time(itm), utime(iutime), categ(icat), level(ilev), mess(imess) { }
+
+		bool operator==( SRec &vl ) { return (time == vl.time && utime == vl.utime && categ == vl.categ && level == vl.level && mess == vl.mess); }
 
 		time_t	time;
 		int	utime;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-16 19:18+0300\n"
+"POT-Creation-Date: 2021-07-12 16:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Parameters table"
+msgstr ""
+
+msgid "Logical parameters table"
 msgstr ""
 
 msgid "Acquisition schedule"
@@ -68,12 +71,33 @@ msgstr ""
 msgid "Nodes list"
 msgstr ""
 
+msgid "Logical"
+msgstr ""
+
+msgid "Parameter template"
+msgstr ""
+
+msgid "Parameter ID"
+msgstr ""
+
+msgid "Identifier"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
 #, c-format
 msgid "Root folder (%d)"
 msgstr ""
 
+msgid "Task terminated! "
+msgstr ""
+
+msgid "Error connecting."
+msgstr ""
+
 #, c-format
-msgid "Connection error. Restoring in %.6g s."
+msgid "Restoring in %.6g s. "
 msgstr ""
 
 msgid "Acquisition. "
@@ -113,7 +137,19 @@ msgstr ""
 msgid "Remote host error"
 msgstr ""
 
+#, c-format
+msgid "Error '%s': 0x%x"
+msgstr ""
+
+#, c-format
+msgid "Write error status: %s"
+msgstr ""
+
 msgid "OK"
+msgstr ""
+
+#, c-format
+msgid "10:Generic error: %s."
 msgstr ""
 
 msgid "Zero for disable periodic sync."
@@ -132,9 +168,6 @@ msgid "Attributes"
 msgstr ""
 
 msgid "Attribute"
-msgstr ""
-
-msgid "Value"
 msgstr ""
 
 msgid "Unknown"
@@ -239,20 +272,7 @@ msgstr ""
 msgid "UserExecutable"
 msgstr ""
 
-msgid ""
-"Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
-"Variables wrote by separated lines into format: [ns:id].\n"
-"Where:\n"
-"  ns - names scope, number, zero value can missed;\n"
-"  id - node identifier, number, string, bytes string and GUID.\n"
-"Example:\n"
-"  84 - root folder;\n"
-"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string view;\n"
-"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
-"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and GUID view."
-msgstr ""
-
-msgid "Node append"
+msgid "Error of the calculation template."
 msgstr ""
 
 msgid "1:Parameter disabled."
@@ -261,11 +281,42 @@ msgstr ""
 msgid "2:Acquisition stopped."
 msgstr ""
 
-#, c-format
-msgid "0x%x: Attribute's errors %s"
+msgid "10:Error of connection or no response."
 msgstr ""
 
-msgid "Identifier"
+msgid ""
+"Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
+"Variables write by separate lines in the form \"{ns}:{id}[|[{flg}][|{id}[|{name}]]]\".\n"
+"Where:\n"
+"  ns  - name space, number; zero value can be omitted;\n"
+"  id  - node identifier by number, string, bytes string and GUID;\n"
+"  flg - flags of no requesting the metadata on the server:\n"
+"        value type (b-Boolean,i-Integer,f-Float,s-String,o-Object), read/write mode (r-read, w-write);\n"
+"  id  - identifier of the created attribute;\n"
+"  name - name of the created attribute.\n"
+"Example:\n"
+"  84 - root folder;\n"
+"  3:\"BasicDevices2\"||var - basic devices node in the name space 3 and the string view with the force attribute ID;\n"
+"  4:\"61626364\"||var|Variable - node in the names space 4 and the byte string view with the force attribute ID and name;\n"
+"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}|irw|var|Variable - node in the names space 4 and the GUID view with no requesting\n"
+"        the server metadata for RW Integer and the force attribute ID and name."
+msgstr ""
+
+msgid "Node append"
+msgstr ""
+
+msgid ""
+"Special address format:\n"
+"OPC-UA node writes in the form \"{ns}:{id}\", where:\n"
+"    ns - name space, number; zero value can be omitted;\n"
+"    id - node identifier by number, string, bytes string and GUID.\n"
+"Examples:\n"
+"    84 - root directory;\n"
+"    3:\"BasicDevices2\" - basic devices node in the name space 3 and the string view;\n"
+"    4:\"61626364\" - node in the names space 4 and the byte string view;\n"
+"    4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names space 4 and the GUID view.\n"
+"\n"
+"Common address format:\n"
 msgstr ""
 
 msgid "Name"

@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.5.3"
+#define MOD_VER		"2.5.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -144,7 +144,7 @@ void TMdContr::postDisable(int flag)
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
-    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
 string TMdContr::getStatus( )
@@ -233,7 +233,7 @@ void *TMdContr::Task( void *icntr )
 			cntr.pHd[iP].at().tmCalcMax = vmax(cntr.pHd[iP].at().tmCalcMax, cntr.pHd[iP].at().tmCalc);
 			tCnt1 = tCnt2;
 		    }
-		} catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	    isStart = false;
 	    cntr.enRes.unlock();
 	}
@@ -440,7 +440,7 @@ void TMdPrm::enable( )
 		break;
 	if(iL >= als.size())
 	    try{ pEl.fldDel(iP); iP--; }
-	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
     }
 
     if(isStd() && isFullEn && owner().startStat()) calc(true, false, DAQ_APER_FRQ);
@@ -479,27 +479,25 @@ void TMdPrm::load_( )
 
 void TMdPrm::loadIO( bool force )
 {
+    if(!isStd() || !tmpl->func()) return;
+
     //Load IO and init links
-    if(isStd() && tmpl->func()) {
-	//if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+    TConfig cfg(&mod->prmIOE());
+    cfg.cfg("PRM_ID").setS(ownerPath(true), TCfg::ForceUse);
+    cfg.cfg("VALUE").setExtVal(true);
+    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
-	TConfig cfg(&mod->prmIOE());
-	cfg.cfg("PRM_ID").setS(ownerPath(true), TCfg::ForceUse);
-	cfg.cfg("VALUE").setExtVal(true);
-	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
-
-	//IO values loading and links set, by seek
-	for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,false,true); ) {
-	    int iIO = tmpl->func()->ioId(cfg.cfg("ID").getS());
-	    if(iIO < 0) continue;
-	    if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
-		tmpl->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force no translated
-	    else if(tmpl->func()->io(iIO)->type() != IO::String)
-		tmpl->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force no translated
-	    else tmpl->setS(iIO, cfg.cfg("VALUE").getS());
-	}
-	chkLnkNeed = tmpl->initLnks();
+    //IO values loading and links set, by seek
+    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,false,true); ) {
+	int iIO = tmpl->func()->ioId(cfg.cfg("ID").getS());
+	if(iIO < 0) continue;
+	if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+	    tmpl->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
+	else if(tmpl->func()->io(iIO)->type() != IO::String)
+	    tmpl->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
+	else tmpl->setS(iIO, cfg.cfg("VALUE").getS());
     }
+    chkLnkNeed = tmpl->initLnks();
 }
 
 void TMdPrm::save_( )
@@ -511,20 +509,20 @@ void TMdPrm::save_( )
 
 void TMdPrm::saveIO( )
 {
-    //Save IO and init links
-    if(isStd() && tmpl->func()) {
-	TConfig cfg(&mod->prmIOE());
-	cfg.cfg("PRM_ID").setS(ownerPath(true));
-	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+    if(!isStd() || !tmpl->func()) return;
 
-	for(int iIO = 0; iIO < tmpl->func()->ioSize(); iIO++) {
-	    cfg.cfg("ID").setS(tmpl->func()->io(iIO)->id());
-	    cfg.cfg("VALUE").setNoTransl(!(tmpl->func()->io(iIO)->type()==IO::String && !(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
-	    if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
-		cfg.cfg("VALUE").setS(tmpl->lnkAddr(iIO));
-	    else cfg.cfg("VALUE").setS(tmpl->getS(iIO));
-	    SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
-	}
+    //Save IO and init links
+    TConfig cfg(&mod->prmIOE());
+    cfg.cfg("PRM_ID").setS(ownerPath(true));
+    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+    for(int iIO = 0; iIO < tmpl->func()->ioSize(); iIO++) {
+	cfg.cfg("ID").setS(tmpl->func()->io(iIO)->id());
+	cfg.cfg("VALUE").setNoTransl(!(tmpl->func()->io(iIO)->type() == IO::String &&
+		!(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
+	if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+	    cfg.cfg("VALUE").setS(tmpl->lnkAddr(iIO));
+	else cfg.cfg("VALUE").setS(tmpl->getS(iIO));
+	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
     }
 }
 
@@ -680,8 +678,8 @@ void TMdPrm::calc( bool first, bool last, double frq )
 	if(idNm >= 0 && tmpl->ioMdf(idNm))	setName(tmpl->getS(idNm));
 	if(idDscr >= 0 && tmpl->ioMdf(idDscr))	setDescr(tmpl->getS(idDscr));
     } catch(TError &err) {
-	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-	mess_warning(nodePath().c_str(),_("Error calculating template."));
+	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+	mess_warning(nodePath().c_str(), _("Error calculating template."));
     }
 }
 

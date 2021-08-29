@@ -861,14 +861,14 @@ function selectChildRecArea( node, aPath, cBlk )
 			var rez = servSet(this.itPath, 'com=com', com, true);
 			if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
 			else this.srcNode.childNodes[col].childNodes[row].innerText = val;
-			if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()',500);
-			else this.setElements();
+			if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()', 500);
+			else this.setElements(true);
 		    }
 		}
 		dBlk.childNodes[1].appendChild(table);
 		cBlk.appendChild(dBlk);
 
-		table.setElements = function( ) {
+		table.setElements = function( saveCh ) {
 		    for(var iCol = 0; iCol < this.srcNode.childNodes.length; iCol++) {
 			var prcCol = this.srcNode.childNodes[iCol];
 			this.childNodes[0].childNodes[iCol+1].innerText = prcCol.getAttribute('dscr');
@@ -893,6 +893,8 @@ function selectChildRecArea( node, aPath, cBlk )
 			}
 			for(var iRow = 0; iRow < prcCol.childNodes.length; iRow++) {
 			    var tblCell = this.childNodes[iRow+1].childNodes[iCol+1];
+			    if(tblCell.isEnter && tblCell.childNodes.length && saveCh)
+				prcCol.childNodes[iRow].textContent = tblCell.childNodes[0].value;
 			    var cval = prcCol.childNodes[iRow].textContent;
 			    tblCell.isEdited = false; tblCell.cRow = iRow; tblCell.cCol = iCol;
 			    if(tblCell.isEnter) while(tblCell.childNodes.length) tblCell.removeChild(tblCell.lastChild);

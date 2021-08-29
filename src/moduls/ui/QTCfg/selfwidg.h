@@ -199,7 +199,7 @@ class ImgView : public QWidget
     Q_OBJECT
     public:
 	//Methods
-	ImgView( QWidget * parent = 0, Qt::WindowFlags f = 0, int ihSz = 0, int ivSz = 0 );
+	ImgView( QWidget * parent = 0, Qt::WindowFlags f = Qt::Widget, int ihSz = 0, int ivSz = 0 );
 	~ImgView( );
 
 	QImage &image( )	{ return mImg; }

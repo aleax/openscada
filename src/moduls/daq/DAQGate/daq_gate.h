@@ -155,8 +155,9 @@ class TMdContr: public TController
 	    StHd( ) : cntr(0) { lstMess.clear(); }
 
 	    float cntr;
-	    map<string, time_t>	lstMess;
-	    map<string, int>	lstMessCnt;
+	    map<string, TMess::SRec>	lstMess;
+
+	    ResMtx	reqM;
 	};
 	class SPrmsStack
 	{
@@ -186,7 +187,8 @@ class TMdContr: public TController
 		&mPlaceCntrToVirtPrm;		//Placing different controllers to the different virtual parameters
 
 	bool	prcSt,				//Process task active
-		callSt,				//Calc now stat
+		callSt,				//Call now stat
+		syncSt,				//Sync start
 		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
 	vector< pair<string,StHd> > mStatWork;	//Work stations and it status

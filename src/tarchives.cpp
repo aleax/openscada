@@ -442,7 +442,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 
     MtxAlloc res(mRes);
     //Alarms processing. For level less 0 alarm is set
-    if(archMap.empty() || archMap[BUF_ARCH_NM] || archMap[ALRM_ARCH_NM] || archMap[ALRM_ARCH_CH_NM]) {
+    if(arch.empty() || archMap[BUF_ARCH_NM] || archMap[ALRM_ARCH_NM] || archMap[ALRM_ARCH_CH_NM]) {
 	res.lock();
 	map<string,TMess::SRec>::iterator p = mAlarms.find(categ);
 	if(p != mAlarms.end() && level < 0 && abs(level) == p->second.level && SYS->rdEnable() &&
@@ -456,7 +456,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     }
 
     //Put the message to the buffer
-    if(archMap.empty() || archMap[BUF_ARCH_NM]) {
+    if(arch.empty() || archMap[BUF_ARCH_NM]) {
 	res.lock();
 	mBuf[headBuf].time  = tm;
 	mBuf[headBuf].utime = utm;
@@ -483,7 +483,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	    at(tLst[iT]).at().messList(oLst);
 	    for(unsigned iO = 0; iO < oLst.size(); iO++) {
 		AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
-		if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
+		if(archtor.at().startStat() && (arch.empty() || archMap[archtor.at().workId()]))
 		    try { archtor.at().put(ml); }
 		    catch(TError &er) {
 			mess_sys(TMess::Error, _("Put message to the archiver '%s' error: %s"),
@@ -516,7 +516,7 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     //Get records from buffer
     MtxAlloc res(mRes, true);
     unsigned iBuf = headBuf;
-    while(level >= 0 && (archMap.empty() || archMap[BUF_ARCH_NM]) /*&& SYS->sysTm() < upTo*/) {
+    while(level >= 0 && (arch.empty() || archMap[BUF_ARCH_NM]) /*&& SYS->sysTm() < upTo*/) {
 	if(mBuf[iBuf].time >= bTm && mBuf[iBuf].time && mBuf[iBuf].time <= eTm &&
 		abs(mBuf[iBuf].level) >= level && re.test(mBuf[iBuf].categ)) {
 	    //Unsorted, but can be wrong for some internal procedures waiting for the last message in the end
@@ -541,7 +541,7 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
 	    at(tLst[iT]).at().messList(oLst);
 	    for(unsigned iO = 0; iO < oLst.size() && SYS->sysTm() < upTo; iO++) {
 		AutoHD<TMArchivator> archtor = at(tLst[iT]).at().messAt(oLst[iO]);
-		if(archtor.at().startStat() && (!archMap.size() || archMap[archtor.at().workId()]))
+		if(archtor.at().startStat() && (arch.empty() || archMap[archtor.at().workId()]))
 		    //!! But possible only one archiver, from all, processing and next continued by the limit
 		    result = fmin(result, archtor.at().get(bTm,eTm,recs,category,level,arch.size()?upTo:0));
 	    }
@@ -1308,7 +1308,7 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 //************************************************
 TMArchivator::TMArchivator( const string &iid, const string &idb, TElem *cf_el ) :
     TConfig(cf_el), runSt(false), messHead(-1), mId(cfg("ID")), mLevel(cfg("LEVEL")), mStart(cfg("START").getBd()),
-    mDB(idb), mRdUse(true), mRdFirst(true), mRdTm(0), mRdEqTm(0)
+    mDB(idb), mRdUse(true), mRdFirst(true)
 {
     mId = iid;
 }
@@ -1369,19 +1369,19 @@ void TMArchivator::redntDataUpdate( )
     vector<TMess::SRec> mess;
 
     //Init the point from which the archives sync
-    if(!mRdTm) mRdTm = vmax(0, (end()?end():SYS->sysTm())-(time_t)(owner().owner().rdRestDtOverTm()*86400));
+    if(!lstRdMess.time) lstRdMess = TMess::SRec(vmax(0,(end()?end():SYS->sysTm())-(time_t)(owner().owner().rdRestDtOverTm()*86400)));
 
     //First start replay of the local archive for active messages
-    if(mRdFirst && end() > mRdTm) {
-	get(mRdTm, end(), mess);
+    /*if(mRdFirst && end() > lstRdMess.time) {
+	get(lstRdMess.time, end(), mess);
 	owner().owner().messPut(mess, ALRM_ARCH_NM);
-    }
+    }*/
 
     //Prepare and call request for messages
     // end()+1 used for decrease traffic by request end() messages in each cycle. The messages in <= end() will transfer direct.
     XMLNode req("get");
     req.setAttr("path", nodePath()+"/%2fserv%2fmess")->
-	setAttr("bTm", ll2s(mRdTm/* vmax(0,end()+1-(mRdFirst?owner().owner().rdRestDtOverTm()*86400:0))*/));
+	setAttr("bTm", ll2s(lstRdMess.time /*vmax(0,end()+1-(mRdFirst?owner().owner().rdRestDtOverTm()*86400:0))*/));
 
     //Send request to first active station for the archiver
     if(owner().owner().rdStRequest(workId(),req,"",!mRdFirst).empty()) return;
@@ -1390,23 +1390,22 @@ void TMArchivator::redntDataUpdate( )
     //Processing the result
     mess.clear();
     XMLNode *mO = NULL;
-    time_t mRdTm_ = 0;
+    TMess::SRec lstRdMess_;
     for(unsigned iM = 0; iM < req.childSize(); ++iM)
 	if((mO=req.childGet(iM)) && mO->name() == "it") {
 	    mess.push_back(TMess::SRec(s2ll(mO->attr("tm")),s2i(mO->attr("tmu")),mO->attr("cat"),s2i(mO->attr("lev")),mO->text()));
-	    mRdTm_ = fmax(mRdTm_, mess.back().time);
+	    if(mess.back().time >= lstRdMess_.time) {
+		lstRdMess_ = mess.back();
+		if(lstRdMess_ == lstRdMess) mess.pop_back();
+	    }
 	}
 
     // The bottom time border processing
-    //  The new algorithm
-    if(mRdTm_ > mRdTm)	{ mRdTm = mRdTm_; mRdEqTm = 0; }
-    else if(mRdTm_ && (++mRdEqTm) > 2)	{ mRdTm++; mRdEqTm = 0; }
-
-    //  The old algorithm
-    //mRdTm = s2ll(req.attr("tm"))+1;
+    if(lstRdMess_.time > lstRdMess.time) lstRdMess = lstRdMess_;
+    else if(lstRdMess_.time) lstRdMess = TMess::SRec(lstRdMess_.time+1);
 
     if(mess_lev() == TMess::Debug)
-	mess_debug(nodePath().c_str(), "Redundancy %s: %d", TSYS::atime2str(mRdTm).c_str(), req.childSize());
+	mess_debug(nodePath().c_str(), "Redundancy %s: %d", TSYS::atime2str(lstRdMess.time).c_str(), req.childSize());
 
     put(mess, true);
     owner().owner().messPut(mess, ALRM_ARCH_NM);	//Just for alarms
@@ -1426,7 +1425,6 @@ void TMArchivator::stop( )
     runSt = false;
 
     messHead = -1;
-    mRdEqTm = 0;
 }
 
 bool TMArchivator::put( vector<TMess::SRec> &mess, bool force )

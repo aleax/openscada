@@ -62,9 +62,9 @@ class LibProjProp: public QDialog
 
     protected:
 	//Protected methods
-	void keyPressEvent(QKeyEvent *e);
+	void keyPressEvent( QKeyEvent* e );
 	void closeEvent( QCloseEvent* );
-	void showEvent( QShowEvent * event );
+	void showEvent( QShowEvent* event );
 
     signals:
 	void apply(const string &);

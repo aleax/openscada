@@ -309,7 +309,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
     }
     if(rel_cfg && !w->allAttrLoad()) {
 	bool mk_new = false;
-	Qt::Alignment wAlign = 0;
+	int wAlign = 0;
 	QFont elFnt = shD->font;
 	//if(elFnt.pixelSize() > 0) elFnt.setPixelSize((int)((float)elFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))));
 
@@ -786,7 +786,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 	    // Fix widget
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
-	if(wAlign) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg, wAlign);
+	if(wAlign) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg, (Qt::AlignmentFlag)wAlign);
     }
 
     if(rel_cfg && !w->allAttrLoad() && shD->addrWdg)
@@ -2330,7 +2330,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
-	    mrkWidth = pnt.fontMetrics().width("000000");
+	    mrkWidth = pnt.fontMetrics().size(Qt::TextSingleLine,"000000").width();
 	    if(sclHor&FD_MARKS) {
 		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(FD_MARKS);
 		else tAr.adjust(0, 0, 0, -mrkHeight);
@@ -2519,7 +2519,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		    pnt.setPen(mrkPen);
 		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,iV):iV)) + (isPerc?" %":"");
 		    pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
-		    markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
+		    markWdth = vmax(markWdth, pnt.fontMetrics().size(Qt::TextSingleLine,labVal.c_str()).width());
 		}
 	    }
 	}
@@ -2705,7 +2705,7 @@ void ShapeDiagram::makeXYPicture( WdgView *w )
 		    pnt.setPen(mrkPen);
 		    bool isPerc = hsPercT && ((hsMaxT-iH-hDiv)/hDiv <= -0.1);
 		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,iH):iH)) + (isPerc?" %":"");
-		    int wdth = pnt.fontMetrics().width(labVal.c_str());
+		    int wdth = pnt.fontMetrics().size(Qt::TextSingleLine, labVal.c_str()).width();
 		    int tpos = vmax(0, vmin(endMarkBrd-3-wdth,h_pos-wdth/2));
 		    if((tpos+wdth) <= (endMarkBrd-3) && tpos >= (begMarkBrd+3)) {
 			pnt.drawText(tpos, tAr.y()+tAr.height()+mrkHeight, labVal.c_str());
@@ -2878,7 +2878,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
-	    mrkWidth = pnt.fontMetrics().width("000000");
+	    mrkWidth = pnt.fontMetrics().size(Qt::TextSingleLine, "000000").width();
 	    if(sclHor&FD_MARKS) {
 		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(FD_MARKS);
 		else tAr.adjust(0,0,0,-mrkHeight);
@@ -3023,7 +3023,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		    pnt.setPen(mrkPen);
 		    labVal = TSYS::strMess("%0.5g",iV)+(isPerc?" %":"");
 		    pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
-		    markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
+		    markWdth = vmax(markWdth, pnt.fontMetrics().size(Qt::TextSingleLine,labVal.c_str()).width());
 		}
 	    }
 	}
@@ -3061,7 +3061,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		pnt.setPen(mrkPen);
 		labH = TSYS::strMess("%0.5g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
 
-		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(labH.c_str());
+		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().size(Qt::TextSingleLine, labH.c_str()).width();
 		endMarkBrd = vmin(endMarkBrd,markBrd);
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,labH.c_str());
 	    }
@@ -3076,7 +3076,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		if(sclHor&FD_MARKS) {
 		    pnt.setPen(mrkPen);
 		    labH = TSYS::strMess("%0.5g", iH/labDiv);
-		    int wdth = pnt.fontMetrics().width(labH.c_str());
+		    int wdth = pnt.fontMetrics().size(Qt::TextSingleLine, labH.c_str()).width();
 		    int tpos = vmax(h_pos-wdth/2, 0);
 		    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
 			pnt.drawText(tpos, tAr.y()+tAr.height()+mrkHeight, labH.c_str());
@@ -3205,7 +3205,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    //mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
-	    mrkWidth = pnt.fontMetrics().width("000000");
+	    mrkWidth = pnt.fontMetrics().size(Qt::TextSingleLine, "000000").width();
 	    if(sclHor&FD_MARKS) {
 		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(FD_MARKS);
 		else tAr.adjust(0,0,0,-2*mrkHeight);
@@ -3393,7 +3393,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    pnt.setPen(mrkPen);
 		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,iV):iV)) + (isPerc?" %":"");
 		    pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
-		    markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
+		    markWdth = vmax(markWdth, pnt.fontMetrics().size(Qt::TextSingleLine, labVal.c_str()).width());
 		}
 	    }
 	}
@@ -3455,12 +3455,12 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 		int markBrd = 0, markY = tAr.y()+tAr.height()+mrkHeight;
 		if(hvLev < 6) {
-		    markBrd = tAr.x() + tAr.width() - pnt.fontMetrics().width(lab_tm.c_str());
+		    markBrd = tAr.x() + tAr.width() - pnt.fontMetrics().size(Qt::TextSingleLine, lab_tm.c_str()).width();
 		    endMarkBrd = vmin(endMarkBrd, markBrd);
 		    pnt.drawText(markBrd, markY, lab_tm.c_str());
 		    markY += mrkHeight;
 		}
-		markBrd = tAr.x() + tAr.width() - pnt.fontMetrics().width(lab_dt.c_str());
+		markBrd = tAr.x() + tAr.width() - pnt.fontMetrics().size(Qt::TextSingleLine, lab_dt.c_str()).width();
 		endMarkBrd = vmin(endMarkBrd, markBrd);
 		pnt.drawText(markBrd, markY, lab_dt.c_str());
 	    }
@@ -3509,7 +3509,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    pnt.setPen(mrkPen);
 		    if(hvLev < 6) {
 			if(lab_tm.size()) {
-			    wdth = pnt.fontMetrics().width(lab_tm.c_str());
+			    wdth = pnt.fontMetrics().size(Qt::TextSingleLine, lab_tm.c_str()).width();
 			    tpos = vmax(h_pos-wdth/2,0);
 			    if(first_m || ((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))) {
 				if(first_m) tpos = vmax(begMarkBrd, tpos);
@@ -3520,7 +3520,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 			markY += mrkHeight;
 		    }
 		    if(lab_dt.size()) {
-			wdth = pnt.fontMetrics().width(lab_dt.c_str());
+			wdth = pnt.fontMetrics().size(Qt::TextSingleLine, lab_dt.c_str()).width();
 			tpos = vmax(h_pos-wdth/2, 0);
 			if(first_m || ((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))) {
 			    if(first_m) tpos = vmax(begMarkBrd, tpos);

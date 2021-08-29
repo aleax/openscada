@@ -669,9 +669,9 @@ void ConfApp::itAdd( )
     XMLNode req("get");
     req.setAttr("path",selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
     if(!cntrIfCmd(req))
-	for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
-	    if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
-	       (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
+	for(unsigned iLel = 0; iLel < req.childSize(); iLel++)
+	    if((req.childGet(iLel)->attr("id").size() && req.childGet(iLel)->attr("id") == dlg.id().toStdString()) ||
+	       (!req.childGet(iLel)->attr("id").size() && req.childGet(iLel)->text() == dlg.id().toStdString()))
 	    {
 		mod->postMess(mod->nodePath().c_str(), QString(_("The node '%1' is already present.")).arg(dlg.id()).toStdString(), TUIMod::Info, this);
 		return;
@@ -715,7 +715,7 @@ void ConfApp::itDel( const string &iit )
 	string t_el, sel_own, sel_el;
 	int n_obj = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(rmit,0,true,&off)).empty(); n_obj++)
-	{ if(n_obj) sel_own += ("/"+sel_el); sel_el = t_el; }
+	{ if(n_obj) sel_own += "/" +sel_el; sel_el = t_el; }
 	if(n_obj > 2) {
 	    XMLNode req("info");
 	    req.setAttr("path", sel_own+"/%2fbr");
@@ -786,7 +786,7 @@ void ConfApp::itPaste( )
 	//Src elements calc
 	int nSel = 0;
 	for(off = 0; !(tEl=TSYS::pathLev(copyEl,0,true,&off)).empty(); nSel++)
-	{ if(nSel) sElp += ("/"+sEl); sEl = tEl; }
+	{ if(nSel) sElp += "/" + sEl; sEl = tEl; }
 
 	//if(TSYS::pathLev(copyEl,0) != TSYS::pathLev(toPath,0))
 	//{ mod->postMess(mod->nodePath().c_str(), _("Copying is not possible."), TUIMod::Error, this); return; }
@@ -801,7 +801,7 @@ void ConfApp::itPaste( )
 	if(s2i(rootW->attr("acs"))&SEC_WR) brs.push_back(string("-1\n0\n\n")+_("Selected"));
 
 	string statNm, statNmSrc, srcNm, dstNm;
-	off = 0; statNmSrc = TSYS::pathLev(copyEl, 0, true, &off);	srcNm = copyEl.substr(off);
+	off = 0; statNmSrc = TSYS::pathLev(copyEl, 0, true, &off);srcNm = copyEl.substr(off);
 	off = 0; statNm = TSYS::pathLev(toPath, 0, true, &off);	dstNm = toPath.substr(off);
 
 	XMLNode *branch = rootW->childGet("id", "br", true);
@@ -830,11 +830,11 @@ void ConfApp::itPaste( )
 	    XMLNode req("get");
 	    req.setAttr("path", toPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'));
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
-	    for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
-		if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
-		   (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
+	    for(unsigned iLel = 0; iLel < req.childSize(); iLel++)
+		if((req.childGet(iLel)->attr("id").size() && req.childGet(iLel)->attr("id") == dlg.id().toStdString()) ||
+		   (!req.childGet(iLel)->attr("id").size() && req.childGet(iLel)->text() == dlg.id().toStdString()))
 		{
-		    InputDlg dlg1(this, actItPaste->icon(), QString(_("The node '%1' is already present. Continue?")).arg(dstNm.c_str()),
+		    InputDlg dlg1(this, actItPaste->icon(), QString(_("The node '%1' is already present.\nContinue?")).arg(dstNm.c_str()),
 					_("Moving or copying the node"), 0, 0);
 		    if(isMult) {
 			prcAlrPres = new QCheckBox(_("Do not ask for more."), &dlg1);
@@ -846,30 +846,44 @@ void ConfApp::itPaste( )
 		}
 	}
 
-	//Local copy visual item
-	if(statNm == statNmSrc) {
-	    XMLNode req("copy");
-	    req.setAttr("path", "/"+statNm+"/%2fobj")->setAttr("src", srcNm)->setAttr("dst", dstNm);
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); pageRefresh(); return; }
-	}
-	//Interstation copy
-	else {
-	    XMLNode req("add");
-	    //Create the destination node
-	    req.setAttr("path", selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'))->
-		setAttr("id", dlg.id().toStdString())->setText(dlg.id().toStdString());
-	    /*if(s2i(TSYS::strSepParse(dlg.target(),1,'\n')))
-		req.setAttr("id", dlg.id().toStdString())->setText(dlg.name().toStdString());
-	    else req.setText(dlg.id().toStdString());*/
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TUIMod::Info, this); return; }
+	try {
+	    //Local copy visual item
+	    if(statNm == statNmSrc) {
+		XMLNode req("copy");
+		req.setAttr("path", "/"+statNm+"/%2fobj")->setAttr("src", srcNm)->setAttr("dst", dstNm);
+		if(cntrIfCmd(req))
+		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
+	    }
+	    //Interstation copy
+	    else {
+		XMLNode req("add");
+		//Create the destination node
+		req.setAttr("path", selPath+"/%2fbr%2f"+TSYS::strSepParse(dlg.target(),2,'\n'))->
+		    setAttr("id", dlg.id().toStdString())->setText(dlg.id().toStdString());
+		/*if(s2i(TSYS::strSepParse(dlg.target(),1,'\n')))
+		    req.setAttr("id", dlg.id().toStdString())->setText(dlg.name().toStdString());
+		else req.setText(dlg.id().toStdString());*/
+		if(cntrIfCmd(req))
+		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
 
-	    //Get context of the source node
-	    req.clear()->setName("save")->setAttr("path", "/"+statNmSrc+srcNm+"/%2fobj")->setAttr("ctx", "1");
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
+		//Get context of the source node
+		req.clear()->setName("save")->setAttr("path", "/"+statNmSrc+srcNm+"/%2fobj")->setAttr("ctx", "1");
+		if(cntrIfCmd(req))
+		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
 
-	    //Load context of the source node to the destination one
-	    req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj");
-	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); pageRefresh(); return; }
+		//Load context of the source node to the destination one
+		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj");
+		if(cntrIfCmd(req))
+		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
+	    }
+	} catch(TError &err) {
+	    if(elOff >= copyBuf.size()) mod->postMess(err.cat.c_str(), err.mess.c_str(), TUIMod::Error, this);
+	    else if(InputDlg(this,actItPaste->icon(),
+			QString(_("Copy/Move node '%1' error '%2'.\nContinue other nodes?")).arg(dstNm.c_str()).arg(err.mess.c_str()),
+			_("Moving or copying the node"),0,0).exec() == QDialog::Accepted)
+		    continue;
+	    pageRefresh();
+	    return;
 	}
 
 	//Remove source widget
@@ -899,7 +913,7 @@ void ConfApp::editToolUpdate( )
 	    return;
 	string sElp, sEl, tEl;
 	for(int off = 0; !(tEl=TSYS::pathLev(copyBuf.substr(1),0,true,&off)).empty(); )
-	{ sElp += ("/"+sEl); sEl = tEl; }
+	{ sElp += "/" + sEl; sEl = tEl; }
 
 	if(rootAccess&SEC_WR) actItPaste->setEnabled(true);
     }
@@ -1403,7 +1417,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 					(elms.size() != elmi.size() && elms[sel_n] == t_linf->childGet(iEl)->text().c_str()))
 				    break;
 			    if(sel_n >= elms.size()) {
-				elms.insert(elms.begin(),t_linf->childGet(iEl)->text().c_str());
+				elms.push_front(t_linf->childGet(iEl)->text().c_str());
+				elmi.push_front(t_linf->childGet(iEl)->text().c_str());
 				sel_n = 0;
 			    }
 
@@ -1472,7 +1487,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 	    if(widget) {
 		lab = new QLabel(widget);
-		img = new ImgView(widget, 0, s2i(t_s.attr("h_sz")), s2i(t_s.attr("v_sz")));
+		img = new ImgView(widget, Qt::Widget, s2i(t_s.attr("h_sz")), s2i(t_s.attr("v_sz")));
 		img->setObjectName(br_path.c_str());
 		img->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 		img->setMinimumSize(200,200);
@@ -1888,7 +1903,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 			val_w->setType(LineEdit::Combo);
 		    }
 		    else if(tp == "dec" || tp == "hex" || tp == "oct") {
-			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).width("0000000000")+30);
+			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"0000000000").width()+30);
 			//val_w->setType(LineEdit::Text);
 			//QIntValidator *iv = new QIntValidator(val_w->workWdg());
 			//((QLineEdit*)val_w->workWdg())->setValidator(iv);
@@ -1902,7 +1917,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    }
 		    else if(tp == "hex" || tp == "oct")	val_w->setFixedWidth(5*15+30);*/
 		    else if(tp == "real") {
-			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).width("3.14159265e123")+30);
+			val_w->setFixedWidth(QFontMetrics(val_w->workWdg()->font()).size(Qt::TextSingleLine,"3.14159265e123").width()+30);
 			//val_w->setType(LineEdit::Text);
 #if QT_VERSION < 0x050000
 			QDoubleValidator *dv = new QDoubleValidator(val_w->workWdg());
@@ -2650,7 +2665,7 @@ void ConfApp::buttonClicked( )
 	if(n_el->attr("tp") == "lnk") {
 	    XMLNode req("get"); req.setAttr("path",selPath+"/"+button->objectName().toStdString());
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this); return; }
-	    string url = "/"+TSYS::pathLev(selPath,0)+req.text();
+	    string url = "/" + TSYS::pathLev(selPath,0) + req.text();
 	    mess_info(mod->nodePath().c_str(), _("%s| Went to the link '%s'!"), wUser->user().toStdString().c_str(), url.c_str());
 	    selectPage(url);
 	    return;

@@ -73,10 +73,10 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("MAX_BLKSZ",_("Maximum size of the request block, bytes"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
     //Parameter type bd structure
-    // Standard parameter type by symple attributes list
+    // Standard parameter type by the simple attributes list
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"100000",""));
-    // Extended logical parameter type by DAQ parameter's template
+    // Extended logical parameter type by the DAQ parameter template
     t_prm = tpParmAdd("logic", "PRM_BD_L", _("Logical"));
     tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     //  Parameter template IO DB structure
@@ -141,7 +141,7 @@ string TMdContr::getStatus( )
 	if(!prcSt) val += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1) {
 	    val += TSYS::strMess(_("Error of connection. Restoring in %.6g s."), tmDelay);
-	    val.replace(0, 1, "10");
+	    val.replace(0, 1, i2s(TError::Tr_Connect));
 	}
 	else {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
@@ -725,6 +725,7 @@ void *TMdContr::Task( void *icntr )
 	try {
 	    if(!cntr.redntUse()) {
 	    if(cntr.tmDelay > 0) {
+		cntr.callSt = false;
 		//Get data from blocks to parameters or calc for logical type parameters
 		MtxAlloc prmRes(cntr.enRes, true);
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++)
@@ -778,8 +779,8 @@ void *TMdContr::Task( void *icntr )
 		    if((cntr.acqBlksCoil[iB].val.size()/8+((cntr.acqBlksCoil[iB].val.size()%8)?1:0)) != (pdu.size()-2))
 			cntr.acqBlksCoil[iB].err.setVal(_("15:Error in size of response PDU."));
 		    else {
-			for(unsigned i_c = 0; i_c < cntr.acqBlksCoil[iB].val.size(); i_c++)
-			    cntr.acqBlksCoil[iB].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+			for(unsigned iC = 0; iC < cntr.acqBlksCoil[iB].val.size(); iC++)
+			    cntr.acqBlksCoil[iB].val[iC] = (bool)((pdu[2+iC/8]>>(iC%8))&0x01);
 			cntr.numRCoil += cntr.acqBlksCoil[iB].val.size();
 		    }
 		}
@@ -806,8 +807,8 @@ void *TMdContr::Task( void *icntr )
 		    if((cntr.acqBlksCoilIn[iB].val.size()/8+((cntr.acqBlksCoilIn[iB].val.size()%8)?1:0)) != (pdu.size()-2))
 			cntr.acqBlksCoilIn[iB].err.setVal(_("15:Error in size of response PDU."));
 		    else {
-			for(unsigned i_c = 0; i_c < cntr.acqBlksCoilIn[iB].val.size(); i_c++)
-			    cntr.acqBlksCoilIn[iB].val[i_c] = (bool)((pdu[2+i_c/8]>>(i_c%8))&0x01);
+			for(unsigned iC = 0; iC < cntr.acqBlksCoilIn[iB].val.size(); iC++)
+			    cntr.acqBlksCoilIn[iB].val[iC] = (bool)((pdu[2+iC/8]>>(iC%8))&0x01);
 			cntr.numRCoilIn += cntr.acqBlksCoilIn[iB].val.size();
 		    }
 		}
@@ -906,7 +907,6 @@ void *TMdContr::Task( void *icntr )
 		cntr.tmDelay--;
 	    }
 
-	    //Calc acquisition process time
 	    cntr.callSt = false;
 
 	    }	// !cntr.redntUse()
@@ -999,7 +999,7 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff), err(mod->dataRe
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), acqErr(dataRes()), pEl("w_attr"), lCtx(NULL)
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name, tp_prm), acqErr(dataRes()), pEl("ModBus_attr"), lCtx(NULL)
 {
     acqErr.setVal("");
     if(isLogic()) lCtx = new TLogCtx(this, name+"_ModBusPrm");
@@ -1034,7 +1034,7 @@ TCntrNode &TMdPrm::operator=( const TCntrNode &node )
     TParamContr::operator=(node);
 
     const TMdPrm *src_n = dynamic_cast<const TMdPrm*>(&node);
-    if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx) return *this;
+    if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx || !lCtx->func()) return *this;
 
     //IO values copy
     for(int iIO = 0; iIO < src_n->lCtx->ioSize(); iIO++)
@@ -1059,9 +1059,9 @@ void TMdPrm::setType( const string &tpId )
 
 TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
-bool TMdPrm::isStd( ) const		{ return type().name == "std"; }
+bool TMdPrm::isStd( ) const		{ return (type().name == "std"); }
 
-bool TMdPrm::isLogic( ) const		{ return type().name == "logic"; }
+bool TMdPrm::isLogic( ) const		{ return (type().name == "logic"); }
 
 void TMdPrm::enable( )
 {
@@ -1086,7 +1086,7 @@ void TMdPrm::enable( )
 	    aflg = TSYS::strParse(sel, 0, ":", &elOff);
 	    aid = TSYS::strParse(sel, 0, ":", &elOff);
 	    if(aid.empty()) aid = ai;
-	    anm = sel.substr(elOff);//  TSYS::strParse(sel, 0, ":", &elOff);
+	    anm = sel.substr(elOff);
 	    if(anm.empty()) anm = aid;
 
 	    if(aid.empty() || (vlPresent(aid) && !pEl.fldPresent(aid)) || als.find(aid) != als.end())	continue;
@@ -1146,42 +1146,43 @@ void TMdPrm::enable( )
 	}
     }
     //Template's function connect for logical type parameter
-    else if(isLogic() && lCtx)
+    else if(isLogic() && lCtx && lCtx->func())	lCtx->chkLnkNeed = lCtx->initLnks(true);
+    else if(isLogic() && lCtx && !lCtx->func())
 	try {
-	    bool to_make = false;
 	    //unsigned fId = 0;
-	    if(!lCtx->func()) {
-		string m_tmpl = cfg("TMPL").getS();
+	    string m_tmpl = cfg("TMPL").getS();
+	    if(!lCtx->func() && m_tmpl.size()) {
 		lCtx->setFunc(&SYS->daq().at().tmplLibAt(TSYS::strParse(m_tmpl,0,".")).at().
 						      at(TSYS::strParse(m_tmpl,1,".")).at().func().at());
-		to_make = true;
+		lCtx->setVfName(id()+"_ModBus_tmplprm");
 	    }
 	    // Init attrubutes
-	    lCtx->addLinksAttrs(&pEl);
+	    if(lCtx->func()) {
+		lCtx->addLinksAttrs(&pEl);
 
-	    // Load IO at enabling
-	    if(to_make) loadIO(true);
+		// Load IO at enabling
+		loadIO(true);
 
-	    // Init links
-	    lCtx->chkLnkNeed = lCtx->initLnks(true);
+		// Init links
+		lCtx->chkLnkNeed = lCtx->initLnks(true);
 
-	    // Init system attributes identifiers
-	    lCtx->idFreq  = lCtx->ioId("f_frq");
-	    lCtx->idStart = lCtx->ioId("f_start");
-	    lCtx->idStop  = lCtx->ioId("f_stop");
-	    lCtx->idErr   = lCtx->ioId("f_err");
-	    lCtx->idSh    = lCtx->ioId("SHIFR");
-	    lCtx->idNm    = lCtx->ioId("NAME");
-	    lCtx->idDscr  = lCtx->ioId("DESCR");
-	    int id_this    = lCtx->ioId("this");
-	    if(id_this >= 0) lCtx->setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
+		// Init system attributes identifiers
+		lCtx->idFreq  = lCtx->ioId("f_frq");
+		lCtx->idStart = lCtx->ioId("f_start");
+		lCtx->idStop  = lCtx->ioId("f_stop");
+		lCtx->idErr   = lCtx->ioId("f_err");
+		lCtx->idSh    = lCtx->ioId("SHIFR");
+		lCtx->idNm    = lCtx->ioId("NAME");
+		lCtx->idDscr  = lCtx->ioId("DESCR");
+		int id_this    = lCtx->ioId("this");
+		if(id_this >= 0) lCtx->setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
-	    // First call
-	    if(owner().startStat() && !owner().redntUse()) upValLog(true, false, DAQ_APER_FRQ);
-
+		// First call
+		if(owner().startStat() && !owner().redntUse()) upValLog(true, false, DAQ_APER_FRQ);
+	    }
 	} catch(TError &err) { disable(); throw; }
 
-    //Check for delete DAQ parameter's attributes
+    //Checking to delete the DAQ parameter attributes
     for(int iP = 0; isStd() && iP < (int)pEl.fldSize(); iP++)
 	if(als.find(pEl.fldAt(iP).name()) == als.end())
 	    try{ pEl.fldDel(iP); iP--; }
@@ -1224,8 +1225,7 @@ void TMdPrm::load_( )
 
 void TMdPrm::loadIO( bool force )
 {
-    if(!enableStat() || !isLogic() || !lCtx) return;
-    //if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+    if(!enableStat() || !isLogic() || !lCtx || !lCtx->func()) return;
 
     //Load IO and init links
     TConfig cfg(&mod->prmIOE());
@@ -1233,13 +1233,14 @@ void TMdPrm::loadIO( bool force )
     cfg.cfg("VALUE").setExtVal(true);
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
+    //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
 	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
-	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force no translated
+	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
 	else if(lCtx->func()->io(iIO)->type() != IO::String)
-	    lCtx->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));		//Force no translated
+	    lCtx->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));		//Force to no translation
 	else lCtx->setS(iIO, cfg.cfg("VALUE").getS());
     }
     lCtx->chkLnkNeed = lCtx->initLnks();
@@ -1253,15 +1254,18 @@ void TMdPrm::save_( )
 
 void TMdPrm::saveIO( )
 {
-    //Save IO and init links
-    if(!enableStat() || !isLogic() || !lCtx) return;
+    if(!enableStat() || !isLogic() || !lCtx || !lCtx->func()) return;
 
+    //Save IO and init links
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(ownerPath(true));
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
     for(int iIO = 0; iIO < lCtx->func()->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
-	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink) cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
+	cfg.cfg("VALUE").setNoTransl(!(lCtx->func()->io(iIO)->type() == IO::String &&
+		!(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
+	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
+	    cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
 	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
     }
@@ -1288,7 +1292,7 @@ void TMdPrm::upValStd( )
 
 void TMdPrm::upValLog( bool first, bool last, double frq )
 {
-    if(!isLogic())	return;
+    if(!isLogic() || !lCtx->func())	return;
 
     AutoHD<TVal> pVal;
     vector<string> ls;
@@ -1397,17 +1401,17 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat()) {
 	if(val.name() == "err") {
-	    if(!enableStat())			val.setS(_("1:Parameter disabled."),0,true);
-	    else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."),0,true);
-	}
-	else val.setS(EVAL_STR, 0, true);
+	    if(!enableStat())			val.setS(_("1:Parameter disabled."), 0, true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition stopped."), 0, true);
+	} else val.setS(EVAL_STR, 0, true);
 	return;
     }
 
     if(owner().redntUse()) return;
 
     if(val.name() == "err") {
-	if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
+	if(owner().tmDelay > -1) val.setS(_("10:Error of connection or no response."), 0, true);
+	else if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
 	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr), 0, true);
 	else val.setS("0",0,true);
     }
@@ -1456,7 +1460,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(isStd())
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/ATTR_LS",EVAL_STR,(owner().startStat()&&enableStat())?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 		"rows","8","SnthHgl","1",
-		"help",_("Attributes configuration list. List must be written by lines in the format: \"{dt}:{numb}[:{flg}[:{id}[:{name}]]]\".\n"
+		"help",_("Attributes configuration list. List must be written by lines in the form \"{dt}:{numb}[:{flg}[:{id}[:{name}]]]\".\n"
 		    "Where:\n"
 		    "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
 		    "       R and RI can be expanded by the suffixes:\n"
@@ -1475,7 +1479,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    "  \"R_s:15,20:r:str:Reg blk\" - get string (registers block) from the register 15 and the size 20."));
 	if(isLogic()) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
-	    if(enableStat())	lCtx->TPrmTempl::Impl::cntrCmdProc(opt);
+	    if(enableStat() && lCtx->func())	lCtx->cntrCmdProc(opt);
 	}
 	return;
     }
@@ -1493,7 +1497,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	disable();
 	modif();
     }
-    else if(isLogic() && enableStat() && lCtx->TPrmTempl::Impl::cntrCmdProc(opt))	;
+    else if(isLogic() && enableStat() && lCtx->func() && lCtx->cntrCmdProc(opt))	;
     else TParamContr::cntrCmdProc(opt);
 }
 

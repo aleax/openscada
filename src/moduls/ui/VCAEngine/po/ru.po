@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-09 11:37+0300\n"
+"POT-Creation-Date: 2021-08-29 10:23+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1571,8 +1571,8 @@ msgstr "Затрачено времени на ветвь: "
 msgid "the item: "
 msgstr "элемент: "
 
-msgid "It is a try of creating a widget in depth bigger to 10!"
-msgstr "Попытка создания виджета на глубину более 10!"
+msgid "It is a try of creating a widget in depth bigger to %d!"
+msgstr "Попытка создания виджета на глубину более %d!"
 
 #, c-format
 msgid "Events: %s"
@@ -1647,35 +1647,8 @@ msgstr "Рабочий стиль"
 msgid "Flags"
 msgstr "Флаги"
 
-msgid "Value 0"
-msgstr "Значение 0"
-
-msgid "Value 1"
-msgstr "Значение 1"
-
-msgid "Value 2"
-msgstr "Значение 2"
-
-msgid "Value 3"
-msgstr "Значение 3"
-
-msgid "Value 4"
-msgstr "Значение 4"
-
-msgid "Value 5"
-msgstr "Значение 5"
-
-msgid "Value 6"
-msgstr "Значение 6"
-
-msgid "Value 7"
-msgstr "Значение 7"
-
-msgid "Value 8"
-msgstr "Значение 8"
-
-msgid "Value 9"
-msgstr "Значение 9"
+msgid "Value %d"
+msgstr "Значение %d"
 
 msgid "Original widgets"
 msgstr "Базовые виджеты"

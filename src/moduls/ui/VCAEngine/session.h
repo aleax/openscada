@@ -78,7 +78,7 @@ class Session : public TCntrNode
 	void setBackgrnd( bool val )		{ mBackgrnd = val; }
 	int connect( );
 	void disconnect( int conId = 0 );
-	void stlCurentSet( int sid );
+	void stlCurentSet( int sid = Project::StlMaximum );
 
 	bool modifChk( unsigned int tm, unsigned int iMdfClc, bool isCnt = false );
 
