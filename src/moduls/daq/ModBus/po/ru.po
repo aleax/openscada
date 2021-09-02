@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 11:45+0300\n"
+"POT-Creation-Date: 2021-09-01 09:17+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -81,9 +81,21 @@ msgstr "Значение"
 msgid "Task terminated! "
 msgstr "Задача прервана! "
 
+msgid "No transport."
+msgstr "Нет транспорта."
+
+msgid "Empty transport."
+msgstr "Пустой транспорт."
+
+msgid "Error the transport."
+msgstr "Ошибка транспорта."
+
+msgid "Error the connection."
+msgstr "Ошибка соединения."
+
 #, c-format
-msgid "Error of connection. Restoring in %.6g s."
-msgstr "Ошибка соединения. Восстановление через %.6g с."
+msgid "Restoring in %.6g s."
+msgstr "Восстановление через %.6g с."
 
 msgid "Acquisition. "
 msgstr "Сбор. "
@@ -97,12 +109,24 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
-msgid ""
-"Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, "
-"%g coils. Errors of connection %g, of response %g."
-msgstr ""
-"Затрачено времени: %s[%s]. Прочитано %g(%g) регистров, %g(%g) битов. "
-"Записано %g регистров, %g битов. Ошибок соединения %g, запроса %g."
+msgid "Spent time: %s[%s]. "
+msgstr "Затрачено времени: %s[%s]. "
+
+#, c-format
+msgid "Read %g(%g) registers, %g(%g) coils. "
+msgstr "Прочитано %g(%g) регистров, %g(%g) битов. "
+
+#, c-format
+msgid "Wrote %g registers, %g coils. "
+msgstr "Записано %g регистров, %g битов. "
+
+#, c-format
+msgid "In the buffer %d. "
+msgstr "В буфере %d. "
+
+#, c-format
+msgid "Errors of connection %g, of response %g. "
+msgstr "Ошибок соединения %g, запроса %g. "
 
 #, c-format
 msgid "Connection to the data source: %s."
@@ -327,8 +351,7 @@ msgid "13:Error of the server response"
 msgstr "13:Ошибка ответа сервера"
 
 #, c-format
-msgid ""
-"13:The response Transaction ID %d is not suitable to the request one %d."
+msgid "13:The response Transaction ID %d is not suitable to the request one %d."
 msgstr "13:ID транзакции ответа %d не соответствует запросу %d."
 
 msgid "Not full response"
@@ -559,7 +582,7 @@ msgid "Turn off the node for this operation"
 msgstr "Отключите узел для этой операции"
 
 msgid "New IO"
-msgstr "Новый IO"
+msgstr "Новый ВВ"
 
 msgid "Deleting a locked attribute is not allowed."
 msgstr "Удаление заблокированного атрибута недопустимо."
@@ -586,3 +609,4 @@ msgid ""
 msgstr ""
 "Предоставляет реализацию протоколов ModBus. Поддерживаются Modbus/TCP, "
 "Modbus/RTU и Modbus/ASCII протоколы."
+

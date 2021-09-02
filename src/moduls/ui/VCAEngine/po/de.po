@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-26 09:59+0300\n"
+"POT-Creation-Date: 2021-08-29 10:24+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -307,7 +307,8 @@ msgid "View"
 msgstr "Ansicht"
 
 msgid "Text;Combo;Integer;Real;Time;Date;Date and time;Password"
-msgstr "Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
+msgstr ""
+"Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
 
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -530,8 +531,10 @@ msgstr ""
 "Die Dateivorlage schreibt sich wie in \"Images (*.png *.xpm *.jpg);;CSV-"
 "Datei (*.csv)\"."
 
-msgid "List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
-msgstr "Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
+msgid ""
+"List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
+msgstr ""
+"Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
 
 msgid "List of items-values by lines."
 msgstr "Liste der Werke-Werte durch Linien."
@@ -671,7 +674,8 @@ msgid "Border: style"
 msgstr "Rand: Stil"
 
 msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
-msgstr "Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
+msgstr ""
+"Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
 
 msgid "Color"
 msgstr "Farbe"
@@ -710,7 +714,8 @@ msgstr ": Wert"
 msgid ": config"
 msgstr ": Konfiguration"
 
-msgid "Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
+msgid ""
+"Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
 msgstr ""
 "Textwert in HTML. Verwenden Sie \"%{n}\" die Werte der Argumente \"n\" (aus "
 "1) zu halten."
@@ -1564,8 +1569,10 @@ msgid "Opened"
 msgstr "Geöffnet"
 
 #, c-format
-msgid "Error compiling the function '%s' by the language '%s' for the widget: %s"
-msgstr "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
+msgid ""
+"Error compiling the function '%s' by the language '%s' for the widget: %s"
+msgstr ""
+"Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
 #, c-format
 msgid "Processing at %s. "
@@ -1577,8 +1584,9 @@ msgstr "Verbrachte Zeit in der Branche: "
 msgid "the item: "
 msgstr "der Gegenstand: "
 
-msgid "It is a try of creating a widget in depth bigger to 10!"
-msgstr "Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu 10 zu erstellen!"
+msgid "It is a try of creating a widget in depth bigger to %d!"
+msgstr ""
+"Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu %d zu erstellen!"
 
 #, c-format
 msgid "Events: %s"
@@ -1653,35 +1661,8 @@ msgstr "Arbeitsstil"
 msgid "Flags"
 msgstr "Schalter"
 
-msgid "Value 0"
-msgstr "Wert 0"
-
-msgid "Value 1"
-msgstr "Wert 1"
-
-msgid "Value 2"
-msgstr "Wert 2"
-
-msgid "Value 3"
-msgstr "Wert 3"
-
-msgid "Value 4"
-msgstr "Wert 4"
-
-msgid "Value 5"
-msgstr "Wert 5"
-
-msgid "Value 6"
-msgstr "Wert 6"
-
-msgid "Value 7"
-msgstr "Wert 7"
-
-msgid "Value 8"
-msgstr "Wert 8"
-
-msgid "Value 9"
-msgstr "Wert 9"
+msgid "Value %d"
+msgstr "Wert %d"
 
 msgid "Original widgets"
 msgstr "Original Widgets"
@@ -2166,7 +2147,8 @@ msgstr ""
 msgid "Node presence"
 msgstr "Knotenpräsenz"
 
-msgid "Checking for the node presence, including widgets, attributes and other."
+msgid ""
+"Checking for the node presence, including widgets, attributes and other."
 msgstr ""
 "Überprüfen auf die Knotenpräsenz, einschließlich Widgets, Attribute und "
 "andere."
@@ -2214,4 +2196,3 @@ msgstr ""
 "vollständige Adresse des Attributs in <addr> angegeben wird, und indem: die "
 "Adresse des Widget in <addr> und die Attributkennung in <attr> separat "
 "angegeben werden."
-

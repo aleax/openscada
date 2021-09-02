@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-26 09:59+0300\n"
+"POT-Creation-Date: 2021-08-29 10:24+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1244,7 +1244,8 @@ msgstr ""
 msgid "the item: "
 msgstr ""
 
-msgid "It is a try of creating a widget in depth bigger to 10!"
+#, c-format
+msgid "It is a try of creating a widget in depth bigger to %d!"
 msgstr ""
 
 #, c-format
@@ -1320,34 +1321,8 @@ msgstr ""
 msgid "Flags"
 msgstr ""
 
-msgid "Value 0"
-msgstr ""
-
-msgid "Value 1"
-msgstr ""
-
-msgid "Value 2"
-msgstr ""
-
-msgid "Value 3"
-msgstr ""
-
-msgid "Value 4"
-msgstr ""
-
-msgid "Value 5"
-msgstr ""
-
-msgid "Value 6"
-msgstr ""
-
-msgid "Value 7"
-msgstr ""
-
-msgid "Value 8"
-msgstr ""
-
-msgid "Value 9"
+#, c-format
+msgid "Value %d"
 msgstr ""
 
 msgid "Original widgets"

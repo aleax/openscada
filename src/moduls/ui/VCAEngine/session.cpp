@@ -1343,7 +1343,7 @@ void SessPage::calc( bool first, bool last, int pos )
 
     if(mClosePgCom) { mClosePgCom = false; setProcess(false); return; }
 
-    //Put calculate to include pages
+    //Call the included pages calculation
     if(!first && !last) {	//Only for ordinal calls by first's and last's calls direct from setProcess() gone.
 	vector<string> ls;
 	pageList(ls);

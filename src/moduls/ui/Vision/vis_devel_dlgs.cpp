@@ -1170,22 +1170,22 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setMargin(9);
     glay->setSpacing(6);
 
+    lab = new QLabel(_("Period of the calculating, milliseconds:"),wdg_proc_fr);
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab, 1, 0);
+    proc_per = new LineEdit(wdg_proc_fr, LineEdit::Text, false, false);
+    proc_per->setObjectName("/proc/calc/per");
+    connect(proc_per, SIGNAL(apply()), this, SLOT(isModify()));
+    glay->addWidget(proc_per, 1, 1);
+
     lab = new QLabel(_("Procedure language:"),wdg_proc_fr);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
-    glay->addWidget(lab, 1, 0);
+    glay->addWidget(lab, 1, 2);
     proc_lang = new QComboBox(wdg_proc_fr);
     proc_lang->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred));
     proc_lang->setObjectName("/proc/calc/progLng");
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
-    glay->addWidget(proc_lang, 1, 1);
-
-    lab = new QLabel(_("Period of the calculating, milliseconds:"),wdg_proc_fr);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
-    glay->addWidget(lab, 1, 2);
-    proc_per = new LineEdit(wdg_proc_fr, LineEdit::Text, false, false);
-    proc_per->setObjectName("/proc/calc/per");
-    connect(proc_per, SIGNAL(apply()), this, SLOT(isModify()));
-    glay->addWidget(proc_per, 1, 3);
+    glay->addWidget(proc_lang, 1, 3);
 
     lab = new QLabel(_("Translate:"),wdg_proc_fr);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Gateway of the data sources
 </td>
-<td> 2.5 </td>
+<td> 2.6 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
@@ -66,7 +66,7 @@
 <h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">1</span> Controller object</span></h2>
 <p>To add a data source a controller object of OpenSCADA is created and configured. An example of the configuration tab for a controller object of this type is shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:854px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png"><img class="thumbimage" height="849" src="../files/DAQGate_tr_cntr.png" width="852" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:985px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png"><img class="thumbimage" height="945" src="../files/DAQGate_tr_cntr.png" width="983" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller object.</div></div></div></div>
 <p>With this tab you can set:
 </p>
 <ul><li> State of the controller object, that is: status, "Enabled", "Running" and the database name containing the configuration.</li>
@@ -76,9 +76,11 @@
 <li> Acquisition schedule policy and priority of the data acquisition task. </li>
 <li> Time interval of repetition attempts to restore communication with the lost station, in seconds.</li>
 <li> Maximum depth of data of the archive values and messages to restore when start, in the hours. Zero for disable the remote archive access.</li>
-<li> Level of requested messages of the data sources.</li>
+<li> Asynchronous writing. Enables of writing in the common acquisition cycle for the buffer of accumulated values, by one request.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Useful for slow and not reliable networks-connections since the writing buffer stores data before the connection restore and the real writing.</dd></dl>
+<ul><li> Level of requested messages of the data sources.</li>
 <li> Synchronization time with the remote station in seconds. Zero to disable the periodic sync and -1 for the sync disabling at the start also.</li>
-<li> List of the reflected remote stations. Several stations in the list enable the vertical redundancy mechanism.</li>
+<li> Remote OpenSCADA station of the reflected data. Several stations in the list enable the vertical redundancy mechanism.</li>
 <li> List of the reflected controller objects and parameters. The list can be used as for controller objects for the reflection of all their parameters, and for individual parameters too.</li>
 <li> Command to go to configuration of the <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA remote stations list</a>.</li>
 <li> Allow the automatic removal of parameters and attributes to update to the actual state.</li></ul>
@@ -107,5 +109,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DAQGate/en">Modules/DAQGate/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2762</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DAQGate/en">Modules/DAQGate/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2769</td></tr></table></body>
 </html>

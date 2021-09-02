@@ -140,16 +140,27 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse()) {
 	if(!prcSt) val += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1) {
-	    val += TSYS::strMess(_("Error of connection. Restoring in %.6g s."), tmDelay);
-	    val.replace(0, 1, i2s(TError::Tr_Connect));
+	    int errCode = TError::Tr_Connect;
+	    if(addr().empty())	{ val += TSYS::strMess(_("No transport.")); errCode = TError::Tr_ErrTransport; }
+	    else try {
+		    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
+		    if(tr.at().addr().empty()) { val += TSYS::strMess(_("Empty transport.")); errCode = TError::Tr_ErrTransport; }
+		} catch(TError&) { val += TSYS::strMess(_("Error the transport.")); errCode = TError::Tr_ErrTransport; }
+	    if(errCode == TError::Tr_Connect)	val += TSYS::strMess(_("Error the connection."));
+	    val += " " + TSYS::strMess(_("Restoring in %.6g s."), tmDelay);
+	    val.replace(0, 1, i2s(errCode));
 	}
 	else {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
 	    if(period())val += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    val += TSYS::strMess(_("Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of response %g."),
-			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(),
-			numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp);
+	    val += TSYS::strMess(_("Spent time: %s[%s]. "),
+			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
+			tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
+	    val += TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. "), numRReg, numRRegIn, numRCoil, numRCoilIn);
+	    val += TSYS::strMess(_("Wrote %g registers, %g coils. "), numWReg, numWCoil);
+	    if(asynchWrs.size()) val += TSYS::strMess(_("In the buffer %d. "), asynchWrs.size());
+	    val += TSYS::strMess(_("Errors of connection %g, of response %g. "), numErrCon, numErrResp);
 	}
     }
 
@@ -183,7 +194,7 @@ void TMdContr::start_( )
     tmDelay = 0;
 
     //Reenable parameters for data blocks structure update
-    // Asynchronous writings queue clean up
+    // Asynchronous writings buffer clean up
     aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
 
     // Clear data blocks
@@ -884,7 +895,7 @@ void *TMdContr::Task( void *icntr )
 	    isStart = false;
 	    prmRes.unlock();
 
-	    //Writing the asynchronous writings' queue
+	    //Writing the asynchronous writings' buffer
 	    MtxAlloc resAsWr(cntr.aWrRes, true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
@@ -1410,7 +1421,7 @@ void TMdPrm::vlGet( TVal &val )
     if(owner().redntUse()) return;
 
     if(val.name() == "err") {
-	if(owner().tmDelay > -1) val.setS(_("10:Error of connection or no response."), 0, true);
+	if(owner().tmDelay > -1) val.setS(owner().getStatus(), 0, true);
 	else if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
 	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr), 0, true);
 	else val.setS("0",0,true);

@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.5.0"
+#define MOD_VER		"2.6.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -92,10 +92,11 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
     fldAdd(new TFld("TM_REST",_("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;1000"));
     fldAdd(new TFld("TM_REST_DT",_("Depth time of restore data, hours"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
+    fldAdd(new TFld("WR_ASYNCH",_("Asynchronous writing"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("GATH_MESS_LEV",_("Level of requested messages"),TFld::Integer,TFld::Selectable,"1","1",
 	"-1;0;1;2;3;4;5;6;7",_("==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
     fldAdd(new TFld("SYNCPER",_("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","-1;1000"));
-    fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
+    fldAdd(new TFld("STATIONS",_("Remote station"),TFld::String,TFld::NoFlag,"100"));
     fldAdd(new TFld("CNTRPRM",_("List of the remote controller objects and parameters"),TFld::String,TFld::FullText,"200"));
     fldAdd(new TFld("ALLOW_DEL_PA",_("Allow the automatic removal of parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("CNTR_TO_VPRM",_("Placing different controllers to the separate virtual parameters"),TFld::Boolean,TFld::NoFlag,"1","0"));
@@ -117,9 +118,9 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) {
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem), enRes(true),
-    mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
-    mSync(cfg("SYNCPER").getId()), mRestTm(cfg("TM_REST").getId()),
-    mPrior(cfg("PRIOR").getId()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
+    mSched(cfg("SCHEDULE")), mStat(cfg("STATIONS")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
+    mSync(cfg("SYNCPER").getId()), mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
+    mAsynchWr(cfg("WR_ASYNCH").getBd()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
     prcSt(false), callSt(false), syncSt(false), endrunReq(false), alSt(-1), mPer(1e9)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
@@ -145,11 +146,19 @@ string TMdContr::getStatus( )
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
 
 	bool isWork = false;
-	for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
-	    if(mStatWork[iSt].second.cntr > -1)
-		val += TSYS::strMess(_("Error the station '%s', restoring in %.3g s."),mStatWork[iSt].first.c_str(),mStatWork[iSt].second.cntr);
+	for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st)
+	    if(st->second.cntr > -1)
+		val += TSYS::strMess(_("Error '%s', restoring in %.3g s."), st->first.c_str(), st->second.cntr);
 	    else {
-		val += TSYS::strMess(_("Requests to the station '%s': %.6g."),mStatWork[iSt].first.c_str(),-mStatWork[iSt].second.cntr);
+		int inWrBuf = 0;
+		st->second.aWrRes.lock();
+		for(map<string, map<string,string> >::iterator iPrm = st->second.asynchWrs.begin(); iPrm != st->second.asynchWrs.end(); ++iPrm)
+		    inWrBuf += iPrm->second.size();
+		st->second.aWrRes.unlock();
+
+		val += TSYS::strMess(_("Requests to '%s': %.6g; "), st->first.c_str(), -st->second.cntr);
+		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "), st->second.numR, st->second.numRA, st->second.numRM);
+		val += TSYS::strMess(_("wrote %g values, in the buffer %d. "), st->second.numW, inWrBuf);
 		isWork = true;
 	    }
 	if(!isWork) val.replace(0, 1, "10");
@@ -163,6 +172,14 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new 
 void TMdContr::load_( )
 {
     //TController::load_();
+
+    //Conversion the stations list format
+    if(mStat.getS().size() && mStat.getS().find("\n") != string::npos) {
+	string statV, statFin;
+	for(int stOff = 0; (statV=TSYS::strLine(mStat,0,&stOff)).size(); )
+	    statFin += (statFin.size()?";":"") + statV;
+	mStat = statFin;
+    }
 }
 
 void TMdContr::enable_( )
@@ -178,8 +195,8 @@ void TMdContr::enable_( )
 
     //Stations list update
     if(!mStatWork.size())
-	for(int stOff = 0; (statV=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&stOff)).size(); )
-	    mStatWork.push_back(pair<string,StHd>(statV,StHd()));
+	for(int stOff = 0; (statV=TSYS::strParse(mStat,0,";",&stOff)).size(); )
+	    mStatWork[statV] = StHd();
 
     list(prmLs);
     bool toSync = (syncPer() >= 0 || prmLs.empty());
@@ -188,7 +205,7 @@ void TMdContr::enable_( )
     syncSt = toSync;
 
     //Remote station scaning. Controllers and parameters scaning
-    for(unsigned iSt = 0; iSt < mStatWork.size() && toSync; iSt++)
+    for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end() && toSync; ++st)
 	for(int cpOff = 0; (cpEl=TSYS::strSepParse(cfg("CNTRPRM").getS(),0,'\n',&cpOff)).size(); )
 	    try {
 		// Parse parameters list
@@ -207,7 +224,7 @@ void TMdContr::enable_( )
 		prmLs.clear();
 		if(!prmId.empty() && prmId != "*") prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+prmId);	//Concrete parameter to the root
 		else {	//Parameters group to the root
-		    req.clear()->setName("get")->setAttr("path", "/"+mStatWork[iSt].first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
+		    req.clear()->setName("get")->setAttr("path", "/"+st->first+"/DAQ/"+daqTp+"/"+cntrId+"/"+prmPath+"%2fbr%2fprm_");
 		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), "%s", req.text().c_str());
 		    else for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
 			prmLs.push_back(daqTp+"/"+cntrId+"/"+prmPath+"prm_"+req.childGet(iCh)->attr("id"));
@@ -215,12 +232,12 @@ void TMdContr::enable_( )
 
 		if(messLev() == TMess::Debug)
 		    mess_debug_(nodePath().c_str(), _("Enabling: station '%s' processing item '%s' for parameters %d."),
-						mStatWork[iSt].first.c_str(), cpEl.c_str(), prmLs.size());
+						st->first.c_str(), cpEl.c_str(), prmLs.size());
 
 		// Processing the root parameters
 		for(unsigned iP = 0; iP < prmLs.size(); iP++) {
 		    //  The root parameter ID, NAME and included parameters list request
-		    XMLNode *nT = req.clear()->setName("CntrReqs")->setAttr("path","/"+mStatWork[iSt].first+"/DAQ/"+prmLs[iP]);
+		    XMLNode *nT = req.clear()->setName("CntrReqs")->setAttr("path","/"+st->first+"/DAQ/"+prmLs[iP]);
 		    nT->childAdd("get")->setAttr("path","%2fprm%2fcfg%2fSHIFR");
 		    nT->childAdd("get")->setAttr("path","%2fprm%2fcfg%2fNAME");
 		    nT->childAdd("get")->setAttr("path","%2fbr%2fprm_")->setAttr("recurs","1");
@@ -278,7 +295,7 @@ void TMdContr::enable_( )
 			curP.at().enable();
 			if(enableStat()) curP.at().load();
 		    }
-		    curP.at().setStats(mStatWork[iSt].first);
+		    curP.at().setStats(st->first);
 		    gPrmLs.push_back(curP.at().ownerPath(true));
 
 		    //  Process included parameters
@@ -316,7 +333,7 @@ void TMdContr::enable_( )
 			    curW.at().enable();
 			    if(enableStat()) curW.at().load();
 			}
-			curW.at().setStats(mStatWork[iSt].first);
+			curW.at().setStats(st->first);
 			gPrmLs.push_back(curW.at().ownerPath(true));
 
 			//   Next level process
@@ -331,8 +348,8 @@ void TMdContr::enable_( )
     //Removing remotely missed parameters in case all remote stations active status by the actual list
     if(mAllowToDelPrmAttr && toSync) {
 	bool prmChkToDel = true;
-	for(unsigned iSt = 0; prmChkToDel && iSt < mStatWork.size(); iSt++)
-	    if(mStatWork[iSt].second.cntr >= 0) prmChkToDel = false;
+	for(map<string,StHd>::iterator st = mStatWork.begin(); prmChkToDel && st != mStatWork.end(); ++st)
+	    if(st->second.cntr >= 0) prmChkToDel = false;
 	if(prmChkToDel && enableStat()) {
 	    MtxAlloc res(enRes, true);
 	    for(unsigned iPrm = 0, iGPrm = 0; iPrm < pHd.size(); ) {
@@ -372,8 +389,16 @@ void TMdContr::start_( )
     //mStatWork.clear();
     //enable_();	//Comment for prevent long time start in no connection present case
 
-    //Clear stations request counter
-    for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++) mStatWork[iSt].second.cntr = -1;
+    //Clearing station parameters
+    for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st) {
+	st->second.cntr = -1;
+	st->second.numR = st->second.numRA = st->second.numW = st->second.numRM = 0;
+ 
+	// Asynchronous writings buffer clean up
+	st->second.aWrRes.lock();
+	st->second.asynchWrs.clear();
+	st->second.aWrRes.unlock();
+    }
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -425,6 +450,8 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
     bool firstCall = true;
 
+    string stLs = cntr.mStat;
+
     for(unsigned int itCnt = 0; !cntr.endrunReq; itCnt++) {
 	if(cntr.redntUse()) {
 	    //Just using the standard message archives redundancy
@@ -438,12 +465,11 @@ void *TMdContr::Task( void *icntr )
 	try {
 	    //Allow stations presenting
 	    bool isAccess = false, needEnable = false;
-	    for(unsigned iSt = 0; iSt < cntr.mStatWork.size(); iSt++) {
-		if(firstCall)	cntr.mStatWork[iSt].second.cntr = 0;	//Reset counter for connection alarm state update
-		if(cntr.mStatWork[iSt].second.cntr > 0)
-		    cntr.mStatWork[iSt].second.cntr = vmax(0,cntr.mStatWork[iSt].second.cntr-1e-6*(tCnt-tPrev));
-		if(cntr.mStatWork[iSt].second.cntr <= 0)	isAccess = true;
-		if(cntr.mStatWork[iSt].second.cntr == 0)	needEnable = true;	//!!!! May be only for all == 0 stations
+	    for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st) {
+		if(firstCall)	st->second.cntr = 0;	//Reset counter for connection alarm state update
+		if(st->second.cntr > 0) st->second.cntr = vmax(0, st->second.cntr-1e-6*(tCnt-tPrev));
+		if(st->second.cntr <= 0) isAccess = true;
+		if(st->second.cntr == 0) needEnable = true;	//!!!! May be only for all == 0 stations
 	    }
 	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(1e9); continue; }
 	    else {
@@ -471,10 +497,59 @@ void *TMdContr::Task( void *icntr )
 
 		cntr.syncSt = false;
 
-		//Station's cycle
-		for(unsigned iSt = 0; iSt < cntr.mStatWork.size(); iSt++) {
-		    if(cntr.mStatWork[iSt].second.cntr > 0) continue;
-		    XMLNode req("CntrReqs"); req.setAttr("path", "/"+cntr.mStatWork[iSt].first+"/DAQ/");
+		//Acquisition cycle of the stations
+		//for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st) {
+		string statV;
+		for(int stOff = 0; (statV=TSYS::strParse(stLs,0,";",&stOff)).size(); ) {
+		    map<string,StHd>::iterator st = cntr.mStatWork.find(statV);
+		    if(st == cntr.mStatWork.end() || st->second.cntr > 0) continue;
+
+		    StHd &stO = st->second;
+		    XMLNode req("CntrReqs"); req.setAttr("path", "/"+st->first+"/DAQ/");
+
+		    // Writing the asynchronous writings' buffer
+		    if(stO.asynchWrs.size()) {
+			//  Getting the buffer to process
+			MtxAlloc resAsWr(stO.aWrRes, true);
+			map<string, map<string,string> > aWrs = stO.asynchWrs;
+			stO.asynchWrs.clear();
+			resAsWr.unlock();
+
+			//  Processing
+			int vlToWr = 0;
+			for(map<string, map<string,string> >::iterator iPrm = aWrs.begin(); iPrm != aWrs.end(); ++iPrm) {
+			    int pOff = 0;
+			    req.childAdd("set")->setAttr("path", iPrm->first+"/%2fserv%2fattr");
+			    for(map<string,string>::iterator iAttr = iPrm->second.begin(); iAttr != iPrm->second.end(); ++iAttr) {
+				req.childGet(-1)->childAdd("el")->setAttr("id",iAttr->first)->setText(iAttr->second);
+				vlToWr++;
+			    }
+			}
+
+			// Same request
+			if(!cntr.cntrIfCmd(req)) { aWrs.clear(); stO.numW += vlToWr; }
+			else if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), "%s", req.text().c_str());
+
+			req.childClear();
+
+			// Return back not wrote values
+			if(aWrs.size()) {
+			    resAsWr.lock();
+			    if(stO.asynchWrs.empty()) stO.asynchWrs = aWrs;
+			    else {
+				for(map<string, map<string,string> >::iterator iPrm = aWrs.begin(); iPrm != aWrs.end(); ++iPrm)
+				    if(stO.asynchWrs.find(iPrm->first) == stO.asynchWrs.end()) stO.asynchWrs[iPrm->first] = iPrm->second;
+				    else {
+					for(map<string,string>::iterator iAttr = iPrm->second.begin(); iAttr != iPrm->second.end(); ++iAttr)
+					    if(stO.asynchWrs[iPrm->first].find(iAttr->first) == stO.asynchWrs[iPrm->first].end())
+						stO.asynchWrs[iPrm->first][iAttr->first] = iAttr->second;
+				    }
+			    }
+			    resAsWr.unlock();
+			}
+		    }
+
+		    if(stO.cntr > 0) continue;
 		    map<string, bool> cntrLstMA;
 		    string scntr;
 
@@ -483,7 +558,7 @@ void *TMdContr::Task( void *icntr )
 			TMdPrm &prm = cntr.pHd[iP].at();
 			if(prm.isPrcOK) continue;
 			for(int c_off = 0; (scntr=TSYS::strSepParse(prm.stats(),0,';',&c_off)).size(); ) {
-			    if(scntr != cntr.mStatWork[iSt].first) continue;
+			    if(scntr != st->first) continue;
 			    string aMod	= TSYS::pathLev(prm.prmAddr(), 0);
 			    string aCntr = TSYS::pathLev(prm.prmAddr(), 1);
 			    cntrLstMA[aMod+"/"+aCntr] = true;
@@ -520,9 +595,9 @@ void *TMdContr::Task( void *icntr )
 
 		    //Requests to the controllers messages prepare
 		    if(cntr.mMessLev.getI() >= 0)	//Else disabled
-			for(map<string,bool>::iterator i_c = cntrLstMA.begin(); i_c != cntrLstMA.end(); ++i_c) {
-			    int tm_grnd = cntr.mStatWork[iSt].second.lstMess[i_c->first].time;
-			    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/"+i_c->first+"/%2fserv%2fmess")->setAttr("tm_grnd", i2s(tm_grnd));
+			for(map<string,bool>::iterator iC = cntrLstMA.begin(); iC != cntrLstMA.end(); ++iC) {
+			    int tm_grnd = stO.lstMess[iC->first].time;
+			    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/"+iC->first+"/%2fserv%2fmess")->setAttr("tm_grnd", i2s(tm_grnd));
 			    if(!tm_grnd && cntr.mMessLev.getI() >= 0)	//Alarms force request
 				reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
 			    else reqCh->setAttr("lev", cntr.mMessLev.getS());
@@ -545,13 +620,13 @@ void *TMdContr::Task( void *icntr )
 			string pId	= TSYS::pathLev(prmNd->attr("path"), 2);
 			string tVl;
 			if(pId == "/serv/mess") {
-			    TMess::SRec &lstRdMess = cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr];
+			    TMess::SRec &lstRdMess = stO.lstMess[aMod+"/"+aCntr];
 			    TMess::SRec lstRdMess_;
 			    vector<TMess::SRec> mess;
 			    for(unsigned iM = 0; iM < prmNd->childSize(); iM++) {
 				XMLNode *m = prmNd->childGet(iM);
 				mess.push_back(TMess::SRec(s2i(m->attr("time")),s2i(m->attr("utime")),
-						    cntr.mStatWork[iSt].first+":"+m->attr("cat"),s2i(m->attr("lev")),m->text()));
+						    st->first+":"+m->attr("cat"),s2i(m->attr("lev")),m->text()));
 				if(mess.back().time >= lstRdMess_.time) {
 				    lstRdMess_ = mess.back();
 				    if(lstRdMess_ == lstRdMess) mess.pop_back();
@@ -566,10 +641,11 @@ void *TMdContr::Task( void *icntr )
 
 				if(mess_lev() == TMess::Debug)
 				    mess_debug(cntr.nodePath().c_str(), "Gate proceeding for '%s': %s: %d",
-					(aMod+"/"+aCntr).c_str(), TSYS::atime2str(cntr.mStatWork[iSt].second.lstMess[aMod+"/"+aCntr].time).c_str(), prmNd->childSize());
+					(aMod+"/"+aCntr).c_str(), TSYS::atime2str(stO.lstMess[aMod+"/"+aCntr].time).c_str(), prmNd->childSize());
 			    }
 
 			    SYS->archive().at().messPut(mess);
+			    stO.numRM += mess.size();
 			}
 			else {
 			    TMdPrm &prm = cntr.pHd[s2i(prmNd->attr("lcPs"))].at();
@@ -587,13 +663,16 @@ void *TMdContr::Task( void *icntr )
 				if(aNd->name() == "el") {
 				    vl.at().setS(aNd->text(), cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0, true);
 				    vl.at().setReqFlg(false);
+				    stO.numR++;
 				}
 				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize()) {
 				    int64_t btm = atoll(aNd->attr("tm").c_str());
 				    int64_t per = atoll(aNd->attr("per").c_str());
 				    TValBuf buf(vl.at().arch().at().valType(), 0, per, false, true);
-				    for(unsigned iV = 0; iV < aNd->childSize(); iV++)
+				    for(unsigned iV = 0; iV < aNd->childSize(); iV++) {
 					buf.setS(aNd->childGet(iV)->text(), btm+per*iV);
+					stO.numRA++;
+				    }
 				    vl.at().arch().at().setVals(buf, buf.begin(), buf.end(), "");
 				}
 			    }
@@ -620,6 +699,7 @@ void *TMdContr::Task( void *icntr )
 
 		resPrm.unlock();
 	    }
+
 	    firstCall = false;
 	} catch(TError &err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
@@ -639,8 +719,8 @@ string TMdContr::catsPat( )
 {
     string curPat = TController::catsPat();
 
-    string statV;
-    for(int stOff = 0; (statV=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&stOff)).size(); )
+    string statV, stLs = mStat;
+    for(int stOff = 0; (statV=TSYS::strParse(stLs,0,";",&stOff)).size(); )
 	curPat += "|^"+statV+":";
 
     return curPat;
@@ -651,10 +731,10 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool noConnect )
     string reqStat = TSYS::pathLev(node.attr("path"), 0);
 
     bool stPresent = false;
-    for(unsigned iSt = 0; iSt < mStatWork.size(); iSt++)
-	if(mStatWork[iSt].first == reqStat) {
-	    MtxAlloc reqSt(mStatWork[iSt].second.reqM, true);
-	    if(mStatWork[iSt].second.cntr > 0 || (mStatWork[iSt].second.cntr > -1 && noConnect)) break;
+    for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st)
+	if(st->first == reqStat) {
+	    MtxAlloc reqSt(st->second.reqM, true);
+	    if(st->second.cntr > 0 || (st->second.cntr > -1 && noConnect)) break;
 	    stPresent = true;
 	    try {
 		node.setAttr("conTm", enableStat()?"":"1000");	//Set one second timeout to disabled controller for start procedure speed up.
@@ -663,15 +743,15 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool noConnect )
 		    alSt = 0;
 		    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
 		}
-		mStatWork[iSt].second.cntr -= 1;
+		st->second.cntr -= 1;
 		return rez;
 	    } catch(TError &err) {
 		if(alSt <= 0) {
 		    alSt = 1;
 		    alarmSet(TSYS::strMess(_("Connection to the data source '%s': %s."),
-						mStatWork[iSt].first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
+						st->first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
 		}
-		if(callSt) mStatWork[iSt].second.cntr = mRestTm;
+		if(callSt) st->second.cntr = mRestTm;
 		throw;
 	    }
 	}
@@ -690,11 +770,13 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable the access to the remote archive."), NULL);
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/WR_ASYNCH",EVAL_STR,RWRWR_,"root",SDAQ_ID,
+	    "help",_("Enables of writing in the common acquisition cycle for the buffer of accumulated values, by one request.\n"
+		    "Useful for slow and not reliable networks-connections since the writing buffer stores data before the connection restore and the real writing."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SYNCPER",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable the periodic sync and -1 for the sync disabling at the start also."), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/STATIONS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+	    "dest","select", "select","/cntr/cfg/SEL_STAT_lst",
 	    "help",_("List of remote OpenSCADA station IDs used in this controller."), "rows", "2", NULL);
-	ctrMkNode2("fld",opt,-4,"/cntr/cfg/SEL_STAT",_("Append station"),enableStat()?0:RWRW__,"root",SDAQ_ID,
-	    "dest","select", "select","/cntr/cfg/SEL_STAT_lst", NULL);
 	ctrMkNode2("comm",opt,-4,"/cntr/cfg/host_lnk",_("Go to configuration of the remote stations list"),enableStat()?0:RWRW__,"root",SDAQ_ID,
 	    "tp","lnk", NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/CNTRPRM",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
@@ -708,20 +790,13 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/SEL_STAT") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText("");
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR) && opt->text().size()) {
-	    string vLs = cfg("STATIONS"), vS;
-	    for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size(); )
-		if(TSYS::strParse(vS,0,":") == opt->text())
-		    break;
-	    if(vS.empty()) cfg("STATIONS") = vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+opt->text();
-	}
-    }
-    else if(a_path == "/cntr/cfg/SEL_STAT_lst" && ctrChkNode(opt)) {
+    if(a_path == "/cntr/cfg/SEL_STAT_lst" && ctrChkNode(opt)) {
 	vector<TTransportS::ExtHost> list;
 	SYS->transport().at().extHostList("*", list);
-	for(unsigned iL = 0; iL < list.size(); iL++) opt->childAdd("el")->setText(list[iL].id);
+	for(unsigned iL = 0; iL < list.size(); iL++)
+	    if(!TRegExp("(^|;)"+list[iL].id+"(;|$)","m").test(mStat))
+		opt->childAdd("el")->setText((mStat.getS().size()?mStat+";":"")+list[iL].id);
+	opt->childAdd("el")->setText("");
     }
     else if(a_path == "/cntr/cfg/CPRM_TREE") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(owner().nodePath()+"selCPRM","",opt->attr("user")));
@@ -737,10 +812,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/cntr/cfg/CPRM_lst" && ctrChkNode(opt))
-	for(unsigned iSt = 0; enableStat() && iSt < mStatWork.size(); iSt++) {
-	    if(mStatWork[iSt].second.cntr > 0) continue;
+	for(map<string,StHd>::iterator st = mStatWork.begin(); enableStat() && st != mStatWork.end(); ++st) {
+	    if(st->second.cntr > 0) continue;
 	    XMLNode req("list");
-	    req.setAttr("path", "/"+mStatWork[iSt].first+"/DAQ/%2fserv%2fPrmAttr")->
+	    req.setAttr("path", "/"+st->first+"/DAQ/%2fserv%2fPrmAttr")->
 		setAttr("base", TBDS::genDBGet(owner().nodePath()+"selCPRM","",opt->attr("user")))->
 		setAttr("toPrm","1")->setAttr("sep",".");
 	    if(cntrIfCmd(req) == 0) {
@@ -921,15 +996,27 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     //Send to active reserve station
     if(vlSetRednt(vo,vl,pvl))	return;
 
-    //Direct write
-    XMLNode req("set");
     string scntr;
-    for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); )
-	try {
+
+    for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); ) {
+	map<string,TMdContr::StHd>::iterator st = owner().mStatWork.find(scntr);
+	if(st == owner().mStatWork.end())	continue;
+
+	//Registering for the later common writing in the asynchronous mode and pass updating the just writed values
+	if(owner().mAsynchWr) {
+	    st->second.aWrRes.lock();
+	    st->second.asynchWrs[prmAddr()][vo.name()] = vl.getS();
+	    st->second.aWrRes.unlock();
+	}
+	//Direct write
+	else try {
+	    XMLNode req("set");
 	    req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/%2fserv%2fattr")->
 		childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat").c_str(),req.text().c_str());
+	    st->second.numW++;
 	} catch(TError &err) { continue; }
+    }
 }
 
 bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )

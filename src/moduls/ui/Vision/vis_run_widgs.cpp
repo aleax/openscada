@@ -646,7 +646,9 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 			req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",pg_it_prev);
 			mainWin()->cntrIfCmd(req);
 		    }
-		    ((RunWdgView*)children().at(iCh))->setPgOpenSrc(pg_it);
+		    // Changing the pages only through 'pgOpenSrc' but the source page direct update may cause collisions on fast switching
+		    ((RunWdgView*)children().at(iCh))->attrSet("pgOpenSrc", pg_it, A_NO_ID, true);	//!!!! Only to the model
+		    //((RunWdgView*)children().at(iCh))->setPgOpenSrc(pg_it);
 		}
 		return true;
 	    }

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 11:45+0300\n"
+"POT-Creation-Date: 2021-09-01 09:17+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -86,9 +86,21 @@ msgstr "Wert"
 msgid "Task terminated! "
 msgstr "Task gekündigt! "
 
+msgid "No transport."
+msgstr "Kein Transport."
+
+msgid "Empty transport."
+msgstr "Leertransport."
+
+msgid "Error the transport."
+msgstr "Fehler beim Transport."
+
+msgid "Error the connection."
+msgstr "Fehler beim Verbinden."
+
 #, c-format
-msgid "Error of connection. Restoring in %.6g s."
-msgstr "Fehler beim Verbinden. Wiederherstellung in %.6g sek."
+msgid "Restoring in %.6g s."
+msgstr "Wiederherstellung in %.6g sek."
 
 msgid "Acquisition. "
 msgstr "Erwerb. "
@@ -102,12 +114,24 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
 #, c-format
-msgid ""
-"Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, "
-"%g coils. Errors of connection %g, of response %g."
-msgstr ""
-"Verbrauchte Zeit: %s[%s]. Gelesen %g(%g) Register, %g(%g) Bits. Geschrieben "
-"%g Register, %g Bits. Fehler in der Verbindung %g, in der Antwort %g."
+msgid "Spent time: %s[%s]. "
+msgstr "Verbrauchte Zeit: %s[%s]. "
+
+#, c-format
+msgid "Read %g(%g) registers, %g(%g) coils. "
+msgstr "Gelesen %g(%g) Register, %g(%g) Bits. "
+
+#, c-format
+msgid "Wrote %g registers, %g coils. "
+msgstr "Geschrieben %g Register, %g Bits. "
+
+#, c-format
+msgid "In the buffer %d. "
+msgstr "Im Puffer %d. "
+
+#, c-format
+msgid "Errors of connection %g, of response %g. "
+msgstr "Fehler in der Verbindung %g, in der Antwort %g. "
 
 #, c-format
 msgid "Connection to the data source: %s."
@@ -335,10 +359,8 @@ msgid "13:Error of the server response"
 msgstr "13:Fehler der Serverantwort"
 
 #, c-format
-msgid ""
-"13:The response Transaction ID %d is not suitable to the request one %d."
-msgstr ""
-"13:Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
+msgid "13:The response Transaction ID %d is not suitable to the request one %d."
+msgstr "13:Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
 
 msgid "Not full response"
 msgstr "Nicht voll antworten"
@@ -373,8 +395,7 @@ msgid "1:%02X:Function is not supported."
 msgstr "1:%02X:Funktion wird nicht unterstützt."
 
 msgid "2:Request address is not allowed or the query range is too large."
-msgstr ""
-"2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
+msgstr "2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Illegale Datenwert in der Anfrage."
@@ -503,7 +524,7 @@ msgid "Data"
 msgstr "Daten"
 
 msgid "IO"
-msgstr ""
+msgstr "IO"
 
 msgid ""
 "For the \"Id\" field, a specific ModBus data record form is provided:\n"
@@ -597,3 +618,4 @@ msgid ""
 msgstr ""
 "Bietet die Implementierung von ModBus-Protokollen. ModBus/TCP, ModBus/RTU "
 "und ModBus/ASCII-Protokolle werden unterstützt."
+

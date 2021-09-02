@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 16:43+0300\n"
+"POT-Creation-Date: 2021-09-01 09:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,8 +83,20 @@ msgstr ""
 msgid "Task terminated! "
 msgstr ""
 
+msgid "No transport."
+msgstr ""
+
+msgid "Empty transport."
+msgstr ""
+
+msgid "Error the transport."
+msgstr ""
+
+msgid "Error the connection."
+msgstr ""
+
 #, c-format
-msgid "Error of connection. Restoring in %.6g s."
+msgid "Restoring in %.6g s."
 msgstr ""
 
 msgid "Acquisition. "
@@ -99,7 +111,23 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of response %g."
+msgid "Spent time: %s[%s]. "
+msgstr ""
+
+#, c-format
+msgid "Read %g(%g) registers, %g(%g) coils. "
+msgstr ""
+
+#, c-format
+msgid "Wrote %g registers, %g coils. "
+msgstr ""
+
+#, c-format
+msgid "In the buffer %d. "
+msgstr ""
+
+#, c-format
+msgid "Errors of connection %g, of response %g. "
 msgstr ""
 
 #, c-format

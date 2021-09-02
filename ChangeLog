@@ -1,3 +1,19 @@
+2021-09-02 Roman (stable)
+- LibsDB.vcaBase: Main.RootPgSo: Appended of preventing of call the termination control panel in some cases.
+- SYS: The TError codes appended of Tr_ErrTransport for the transport errors mark.
+- FIX:UI.{VCAEngine,Vision}: The field "Period of the calculating" of the tab "Processing"
+    of the widget properties edition allowed to control constantly, independently at the procedure presence
+    and for the included pages/widgets calculation common control.
+- !!!!:DAQ.DAQGate: Appended of the asynchronous mode implementation.
+    The configuration field of the remote stations selection moved in simple combobox.
+    The controller object status appended of the counters of read/archive's/wrote values, read messages
+	and the writing buffer status.
+- !:DAQ.ModBus: The controller object status appended of the transport error state (code 12)
+	and the writing buffer status in the asynchronous writing.
+    The parameter objects error at the common controller errors is taken now directly from the controller object status.
+- !:UI.Vision: The container pages switching moved to switch only from the VCA-engine - just sending "pgOpenSrc" there.
+
+
 2021-08-29 Roman (stable)
 - FIX:LibsDB.OscadaLibs: base.ntf: The safe timeout of the template execution set to 120,
     since the early triggering for busy SMTP-servers.
@@ -92,7 +108,7 @@
 
 
 2021-08-08 Roman (stable)
-- FIX:AGLKS.St: The style rule 'labColorGrph1' fixed for the Default.
+- FIX:AGLKS.vca: The style rule 'labColorGrph1' fixed for the Default.
 - !!!!:SYS,DAQ.JavaLikeCalc: The flag IO::TransltText used also for the TFunction object.
 - !!!!:SYS,DB.SQLite: The translation messages appended of checking the messages for they transable
 	by the new function TMess::isMessTranslable().

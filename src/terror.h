@@ -43,6 +43,7 @@ class TError
 	    Core_TaskCrt = 4,
 	    Tr_Connect = 10,
 	    Tr_UnknownHost = 11,
+	    Tr_ErrTransport = 12,
 	    DB_SQL_Connect = 20,
 	    DB_SQL_Query = 21,
 	    Arch_Val_OldBufVl = 30,

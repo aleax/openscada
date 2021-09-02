@@ -10133,6 +10133,7 @@ rzW9GU+cIKAEVKHCOP4NrQkgmJreob8AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'Ja
 calcCnt++;
 
 if(f_start) {
+	lastInfo = lastInfo_ = "";
 	play_en = demoPlayProc.length;
 	if(!play_en)	this.infoW.attrSet("geomH",this.play.attr("geomY")+this.play.attr("geomH")-this.infoW.attr("geomY"));
 	//Checking the signal object''s presenting and creating needed
@@ -10247,7 +10248,11 @@ if(f_start) {
 }
 
 if(pgCont_pgOpenSrc != lastView) {
-	this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));
+	//Call the termination page in the info container only if it no change here with the view change
+	if(this.infoW.attr("pgOpenSrc").length && this.infoW.attr("pgOpenSrc") == lastInfo && lastInfo.indexOf("/pg_control/pg_terminator") < 0 &&
+			this.wdgAt(this.infoW.attr("pgOpenSrc"),true).attr("pgOpenSrc") == lastInfo_)
+		this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));
+
 	//Checking for SO selection change
 	curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
 	lastSO = lastView.parsePath(2).slice(3);
@@ -10301,6 +10306,9 @@ if(pgCont_pgOpenSrc != lastView) {
 
 	lastView = pgCont_pgOpenSrc;
 }
+
+lastInfo = this.infoW.attr("pgOpenSrc");
+lastInfo_ = lastInfo.length ? this.wdgAt(lastInfo,true).attr("pgOpenSrc") : "";
 
 //Cvitation button''s
 cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;
@@ -10359,7 +10367,7 @@ if(play_value) {
 if((tVl=defUser.toInt()) && (tVl2=defUser.parse(1,"-")).length) {
 	if((SYS.time()-this.ownerSess().userActTm()) < tVl*60)	userSetVis = "";
 	else if(this.ownerSess().reqUser() != tVl2.parse(0,":"))	userSetVis = tVl2;
-}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1616490446);
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1630247900);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -17669,7 +17677,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','backColor','gray',96,'','','','','backColor','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','backColor','gray',96,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','name','',32,'','','cvt_sound','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','en','1',40,'','','cvt_sound','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomX','985',32,'','','cvt_sound','','','','','','','');
@@ -18384,7 +18392,7 @@ INSERT INTO wlb_Main_io VALUES('ElCadr','en','0',40,'','','lev_sp','','','','','
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomX','65',32,'','','lev_sp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomY','94',32,'','','lev_sp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','20',32,'','','lev_sp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','path','/wlb_Main/wdg_RootPgSo',40,'','','','/wlb_Main/wdg_RootPgSo','','/wlb_Main/wdg_RootPgSo','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','path','/wlb_Main/wdg_RootPgSo',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','img','pg_next',0,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraph','name','Result graphics',32,'','','','Зведені графіки','','Сводные графики','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraph','geomW','900',32,'','','','','','','','','','');
@@ -28031,7 +28039,7 @@ INSERT INTO wlb_Main_uio VALUES('grph_panel','valArch','Archiver',131077,NULL,14
 INSERT INTO wlb_Main_uio VALUES('grph_panel','curSek','Cursor',139265,'<EVAL>|',14,'<page>|curSek','','','Курсор','','','Курсор','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','type','Type',131073,'<EVAL>|',14,'<page>|type','','','Тип','<EVAL>||','','Тип','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grph_panel','curUSek','Cursor, microseconds',131073,'<EVAL>|',14,'<page>|curUSek','','','Курсор, мікросекунди','','','Курсор, микросекунды','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','lastView','Last view',131077,NULL,8,'','','','Останній вигляд',NULL,'','Последний вид','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','lastView','Last view',131077,NULL,8,'','','','Останній вигляд','','','Последний вид','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmManIn','Parameter: manual input',131076,'<EVAL>|',14,'<page>|manIn','','','Параметр: ручний ввід','','','Параметр: ручной ввод','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pModeA','Parameter: regulator mode: auto',131072,NULL,10,'Parameter|auto','','','Параметр: режим регулятору: автомат','','','Параметр: режим регулятора: автомат','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pModeC','Parameter: regulator mode: cascade',131072,NULL,10,'Parameter|casc','','','Параметр: режим регулятору: каскад','','','Параметр: режим регулятора: каскад','','','','','','');
