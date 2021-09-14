@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -158,7 +158,7 @@ void Func::loadIO( )
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(), TCfg::ForceUse);
     cfg.cfg("DEF").setExtVal(true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,false,true); fldCnt++) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,TBDS::UseCache); fldCnt++) {
 	string sid = cfg.cfg("ID").getS();
 
 	//Position storing
@@ -228,7 +228,7 @@ void Func::saveIO( )
     cfg.cfgViewAll(false);
     for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg); )
 	if(ioId(cfg.cfg("ID").getS()) < 0) {
-	    if(!SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,true,false,true))	break;
+	    if(!SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fldCnt--;
 	}
 }
@@ -237,7 +237,7 @@ void Func::del( )
 {
     if(!owner().DB().size()) return;
 
-    SYS->db().at().dataDel(owner().fullDB(), mod->nodePath()+owner().tbl(), *this, true);
+    SYS->db().at().dataDel(owner().fullDB(), mod->nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
 
     //Delete io from DB
     delIO();

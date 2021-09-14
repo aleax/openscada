@@ -136,10 +136,10 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive,iarchivator), mBeg(0), mEnd(0), mPer(0)
 {
-    //> Load message archive parameters
+    //Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true))
+    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException))
     {
 	mBeg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
 	mEnd = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);

@@ -163,10 +163,10 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, true);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDb = 0; iDb < itLs.size(); iDb++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,false,true); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
 		if(!epPresent(id)) epAdd(id,(itLs[iDb]==SYS->workDB())?"*.*":itLs[iDb]);
 		epAt(id).at().load(&gCfg);
@@ -303,7 +303,7 @@ TCntrNode &OPCEndPoint::operator=( const TCntrNode &node )
 
 void OPCEndPoint::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 }
 
 TProt &OPCEndPoint::owner( ) const	{ return *(TProt*)nodePrev(); }
@@ -382,7 +382,7 @@ void OPCEndPoint::save_( )
     prmNd.setAttr("LimRetrQueueTm", i2s(limRetrQueueTm()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
-    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 }
 
 void OPCEndPoint::setEnable( bool vl )

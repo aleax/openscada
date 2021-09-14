@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <unistd.h>
+#include <algorithm>
 
 #include "tsys.h"
 #include "tmess.h"
@@ -45,6 +46,7 @@ TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true), mTblLife
     elDB.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"1000"));
     elDB.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
     elDB.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    elDB.fldAdd(new TFld("LS_PR",_("Priority in list"),TFld::Integer,0,"2","0","0;99"));
     elDB.fldAdd(new TFld("TRTM_CLS_ON_OPEN",_("Transaction closing: after opening, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(3*prmServTask_PER).c_str()));
     elDB.fldAdd(new TFld("TRTM_CLS_ON_REQ",_("Transaction closing: after request, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(prmServTask_PER).c_str()));
     elDB.fldAdd(new TFld("TRPR_CLS_TASK",_("Transaction closing: separate task priority"),TFld::Integer,TFld::NoFlag,"3","0"));
@@ -52,8 +54,17 @@ TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true), mTblLife
 
 TBDS::~TBDS( )	{ }
 
-string TBDS::realDBName( const string &bdn )
+string TBDS::realDBName( const string &bdn, bool back )
 {
+    if(back) {
+	bool isEqSz = false;
+	if(bdn.find(SYS->workDB()) == 0 && ((isEqSz=(bdn.size()==SYS->workDB().size())) || bdn[SYS->workDB().size()] == '.'))
+	    return string("*.*") + (isEqSz ? "" : bdn.substr(SYS->workDB().size()));
+	else if(bdn.find(DB_CFG) == 0 && ((isEqSz=(bdn.size()==strlen(DB_CFG))) || bdn[strlen(DB_CFG)] == '.'))
+	    return string("*.*") + (isEqSz ? "" : bdn.substr(strlen(DB_CFG)));
+	return bdn;
+    }
+
     int off = 0;
     string bd_t = TSYS::strParse(bdn, 0, ".", &off);
     string bd_n = TSYS::strParse(bdn, 0, ".", &off);
@@ -65,22 +76,32 @@ string TBDS::realDBName( const string &bdn )
 	   ((bd_n=="*") ? TSYS::strParse(SYS->workDB(),1,".") : bd_n)+(bd_tbl.empty() ? "" : "."+bd_tbl);
 }
 
-void TBDS::dbList( vector<string> &ls, bool checkSel )
+void TBDS::dbList( vector<string> &ls, char flg )
 {
     ls.clear();
 
-    if(checkSel && !SYS->selDB().empty()) {
+    if((flg&LsCheckSel) && !SYS->selDB().empty()) {
 	if(SYS->selDB() != DB_CFG) ls.push_back(SYS->selDB());
 	return;
     }
 
     vector<string> tdb_ls, db_ls;
     modList(tdb_ls);
+    vector< pair<int,string> > sortIts;
     for(unsigned iTp = 0; iTp < tdb_ls.size(); iTp++) {
-	SYS->db().at().at(tdb_ls[iTp]).at().list(db_ls);
+	AutoHD<TTypeBD> tbd = SYS->db().at().at(tdb_ls[iTp]);
+	tbd.at().list(db_ls);
 	for(unsigned iDB = 0; iDB < db_ls.size(); iDB++)
-	    ls.push_back(tdb_ls[iTp]+"."+db_ls[iDB]);
+	    if(!(flg&LsInclGenFirst) || (tdb_ls[iTp]+"."+db_ls[iDB]) != SYS->workDB())
+		sortIts.push_back(pair<int,string>(tbd.at().at(db_ls[iDB]).at().lsPr(),tdb_ls[iTp]+"."+db_ls[iDB]));
     }
+
+    sort(sortIts.begin(), sortIts.end());
+    reverse(sortIts.begin(), sortIts.end());
+
+    if(flg&LsInclGenFirst) ls.push_back("*.*");
+    for(unsigned iLs = 0; iLs < sortIts.size(); ++iLs)
+	ls.push_back(sortIts[iLs].second);
 }
 
 void TBDS::perSYSCall( unsigned int cnt )
@@ -156,20 +177,19 @@ void TBDS::close( const string &bdn, bool del )
     }
 }
 
-string TBDS::fullDBSYS( )	{ return SYS->workDB()+".SYS"; }
+string TBDS::fullDBSYS( )	{ return "*.*.SYS"; }
 
-string TBDS::fullDB( )		{ return SYS->workDB()+".DB"; }
+string TBDS::fullDB( )		{ return "*.*.DB"; }
 
-bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &cfg, bool forceCfg, bool useCache, XMLNode *localCfgCtx )
+bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &cfg, char rFlg, XMLNode *localCfgCtx )
 {
     int c_lev = 0;
     string bdn = realDBName(ibdn);
     bool isCfgCtx = (localCfgCtx || ((ibdn.size() || path.size()) && SYS->cfgCtx()));
 
-    //cfg.cfgToDefault();	//reset the not key and viewed fields
     cfg.setTrcSet(true);
 
-    if(isCfgCtx || (path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
 	XMLNode *nd = NULL, *fnd = NULL, *el;
 	string vl, vl_tr;
@@ -271,7 +291,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
 	AutoHD<TTable> tbl = open(bdn);
 	if(!tbl.freeStat()) {
-	    bool rez = tbl.at().fieldSeek(lev-c_lev, cfg, (useCache?TSYS::addr2str(&cfg):""));
+	    bool rez = tbl.at().fieldSeek(lev-c_lev, cfg, ((rFlg&TBDS::UseCache)?TSYS::addr2str(&cfg):""));
 	    //tbl.free(); close(bdn);
 	    return rez;
 	}
@@ -280,15 +300,81 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     return false;
 }
 
-bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool forceCfg, bool noEx, XMLNode *localCfgCtx )
+bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char rFlg, XMLNode *localCfgCtx )
 {
     bool db_true = false;
     string bdn = realDBName(ibdn);
     bool isCfgCtx = (localCfgCtx || ((ibdn.size() || path.size()) && SYS->cfgCtx()));
     TError dbErr;
 
+    //Load from config
+    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+	ResAlloc res(SYS->cfgRes(), false);
+	XMLNode *nd = NULL, *fnd = NULL, *el;
+	string vl, vl_tr;
+	bool isPresent = false;
+	vector<string> cf_el;
+
+	if(isCfgCtx) {
+	    nd = localCfgCtx ? localCfgCtx : SYS->cfgCtx();
+	    if(path.size()) {
+		fnd = nd->childGet("id", path, true);
+		for(int iTbl = 0; !fnd && (fnd=nd->childGet("tbl",iTbl,true)); iTbl++)
+		    if(fnd->attr("dstId").size() && fnd->attr("dstId") != path)	fnd = NULL;
+		    else fnd->setAttr("dstId", path);
+		nd = fnd;
+	    }
+	}
+	else {
+	    res.lock(false);
+	    nd = SYS->cfgNode(SYS->id()+"/"+path);
+	}
+
+	// Scan fields and fill Configuration
+	for(unsigned iFld = 0, iEl; nd && iFld < nd->childSize(); iFld++) {
+	    el = nd->childGet(iFld);
+	    if(el->name() == "fld") {
+		cfg.cfgList(cf_el);
+
+		//  Check keywords
+		for(iEl = 0; iEl < cf_el.size(); iEl++)
+		    if(cfg.cfg(cf_el[iEl]).isKey() && cfg.cfg(cf_el[iEl]).getS() != el->attr(cf_el[iEl])) break;
+		if(iEl == cf_el.size()) {
+		    for(iEl = 0; iEl < cf_el.size(); iEl++) {
+			TCfg &cf = cfg.cfg(cf_el[iEl]);
+			vl = el->attr(cf_el[iEl], true, &isPresent);
+			//  Checking for the field's tag, to store big values
+			if(!isPresent && (fnd=el->childGet(cf_el[iEl],0,true))) { vl = fnd->text(true); isPresent = true; }
+			//  Checking for the translation
+			if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
+			    vl_tr = "";
+			    if(Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) {
+				vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
+				//  Checking for the field's tag, to store big values
+				if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
+			    }
+			    if(!cf.extVal()) {
+				cf.setS((vl_tr.size() && !Mess->translDyn()) ? vl_tr : vl);
+				Mess->translReg(vl, "cfg:"+path+"#"+cf_el[iEl]);
+			    }
+			    else {
+				cf.setS(vl, TCfg::ExtValOne);
+				cf.setS(vl_tr, TCfg::ExtValTwo);
+				cf.setS("cfg:"+path+"#"+cf_el[iEl], TCfg::ExtValThree);
+			    }
+			}
+			else if(isPresent)	cf.setS(vl);
+			else cf.toDefault(true);
+			//  Extended context
+			if(localCfgCtx && cf.isKey() && cf.extVal())	cf.setS(el->attr(cf_el[iEl]+"_ext"), TCfg::ExtValTwo);
+		    }
+		    return true;
+		}
+	    }
+	}
+    }
+
     //Load from DB
-    //???? Move after the config checking, like to dataSet()
     if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
 	AutoHD<TTable> tbl = open(bdn);
 	if(!tbl.freeStat()) {
@@ -298,76 +384,11 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
 		db_true = false;
 		dbErr = err;
 	    }
-	    if(db_true && !forceCfg) return true;
+	    if(db_true) return true;
 	}
     }
 
-    //Load from Config-file if tbl no present
-    ResAlloc res(SYS->cfgRes(), false);
-    XMLNode *nd = NULL, *fnd = NULL, *el;
-    string vl, vl_tr;
-    bool isPresent = false;
-    vector<string> cf_el;
-
-    if(isCfgCtx) {
-	nd = localCfgCtx ? localCfgCtx : SYS->cfgCtx();
-	if(path.size()) {
-	    fnd = nd->childGet("id", path, true);
-	    for(int iTbl = 0; !fnd && (fnd=nd->childGet("tbl",iTbl,true)); iTbl++)
-		if(fnd->attr("dstId").size() && fnd->attr("dstId") != path)	fnd = NULL;
-		else fnd->setAttr("dstId", path);
-	    nd = fnd;
-	}
-    }
-    else {
-	res.lock(false);
-	nd = SYS->cfgNode(SYS->id()+"/"+path);
-    }
-
-    // Scan fields and fill Configuration
-    for(unsigned iFld = 0, iEl; nd && iFld < nd->childSize(); iFld++) {
-	el = nd->childGet(iFld);
-	if(el->name() == "fld") {
-	    cfg.cfgList(cf_el);
-
-	    //  Check keywords
-	    for(iEl = 0; iEl < cf_el.size(); iEl++)
-		if(cfg.cfg(cf_el[iEl]).isKey() && cfg.cfg(cf_el[iEl]).getS() != el->attr(cf_el[iEl])) break;
-	    if(iEl == cf_el.size()) {
-		for(iEl = 0; iEl < cf_el.size(); iEl++) {
-		    TCfg &cf = cfg.cfg(cf_el[iEl]);
-		    vl = el->attr(cf_el[iEl], true, &isPresent);
-		    //  Checking for the field's tag, to store big values
-		    if(!isPresent && (fnd=el->childGet(cf_el[iEl],0,true))) { vl = fnd->text(true); isPresent = true; }
-		    //  Checking for the translation
-		    if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
-			vl_tr = "";
-			if(Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) {
-			    vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
-			    //  Checking for the field's tag, to store big values
-			    if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
-			}
-			if(!cf.extVal()) {
-			    cf.setS((vl_tr.size() && !Mess->translDyn()) ? vl_tr : vl);
-			    Mess->translReg(vl, "cfg:"+path+"#"+cf_el[iEl]);
-			}
-			else {
-			    cf.setS(vl, TCfg::ExtValOne);
-			    cf.setS(vl_tr, TCfg::ExtValTwo);
-			    cf.setS("cfg:"+path+"#"+cf_el[iEl], TCfg::ExtValThree);
-			}
-		    }
-		    else if(isPresent)	cf.setS(vl);
-		    else cf.toDefault(true);
-		    //  Extended context
-		    if(localCfgCtx && cf.isKey() && cf.extVal())	cf.setS(el->attr(cf_el[iEl]+"_ext"), TCfg::ExtValTwo);
-		}
-		return true;
-	    }
-	}
-    }
-
-    if(!db_true && !noEx) {
+    if(!db_true && !(rFlg&TBDS::NoException)) {
 	if(dbErr.cat.empty()) throw err_sys("%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
 	throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.empty() ? _("The requested entry is missing.") : dbErr.mess.c_str());
     }
@@ -375,15 +396,15 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
     return db_true;
 }
 
-bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool forceCfg, bool noEx, XMLNode *localCfgCtx )
+bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char rFlg, XMLNode *localCfgCtx )
 {
     string bdn = realDBName(ibdn);
 
     bool isCfgCtx = (localCfgCtx || ((ibdn.size() || path.size()) && SYS->cfgCtx()));
-    bool toChangeExistsCfg = (!isCfgCtx && !forceCfg && bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG);
+    bool toChangeExistsCfg = (!isCfgCtx && ibdn.find("*.*") == 0 && !(rFlg&OnlyCfg || TSYS::strParse(bdn,0,".") == DB_CFG));
 
     //Save to config
-    if(isCfgCtx || (path.size() && (forceCfg || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG))) {
+    if(isCfgCtx || (path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || toChangeExistsCfg || TSYS::strParse(bdn,0,".") == DB_CFG))) {
 	ResAlloc res(SYS->cfgRes());
 	XMLNode *nd = NULL, *wel = NULL, *fnd;
 	vector<string> cf_el;
@@ -465,65 +486,34 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
     }
 
     //Save to DB
-    if(!isCfgCtx && !forceCfg && bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
-	AutoHD<TTable> tbl = open(bdn,true);
+    if(!isCfgCtx && bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
+	AutoHD<TTable> tbl = open(bdn, true);
 	if(!tbl.freeStat()) {
 	    bool db_true = true;
 	    try { tbl.at().fieldSet(cfg); }
 	    catch(TError &err) {
 		//mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
 		db_true = false;
-		if(!noEx) throw;
+		if(!(rFlg&TBDS::NoException)) throw;
 	    }
 	    return db_true;
 	}
     }
 
-    if(!noEx) throw err_sys(_("Error writing to DB or configuration file."));
+    if(!(rFlg&TBDS::NoException)) throw err_sys(_("Error writing to DB or configuration file."));
 
     return false;
 }
 
-bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool useKeyAll, bool forceCfg, bool noEx )
+bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char rFlg )
 {
     vector<string> cels;
     string bdn = realDBName(ibdn);
     bool db_true = false;
     TError dbErr;
 
-    //???? Move after the config checking, like to dataSet()
-    if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
-	AutoHD<TTable> tbl = open(bdn);
-	if(!tbl.freeStat()) {
-	    try {
-		//Select for using all keys
-		if(useKeyAll) {
-		    cfg.cfgList(cels);
-		    for(unsigned iEl = 0; iEl < cels.size(); ) {
-			if(cfg.cfg(cels[iEl]).isKey() && !cfg.cfg(cels[iEl]).keyUse()) cfg.cfg(cels[iEl]).setKeyUse(true);
-			else { cels.erase(cels.begin()+iEl); continue; }
-			iEl++;
-		    }
-		}
-
-		tbl.at().fieldDel(cfg);
-
-		db_true = true;
-
-		//Restore for not using keys selection
-		if(useKeyAll)
-		    for(unsigned iEl = 0; iEl < cels.size(); iEl++)
-			cfg.cfg(cels[iEl]).setKeyUse(false);
-	    } catch(TError &err) {
-		dbErr = err;
-		//mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-	    }
-	    //tbl.free(); close(bdn);
-	}
-    }
-
     //Delete from config
-    if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG || !db_true)) {
+    if(path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG)) {
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	vector<string> cf_el;
@@ -539,13 +529,47 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 	    if(iEl == cf_el.size()) {
 		SYS->modifCfg(true);
 		nd->childDel(iFld);
+		if(!nd->childSize()) nd->parent()->childDel(nd);
 		SYS->modifCfg();
-		return true;
+		db_true = true;
+		break;
+		//return true;
 	    }
 	}
     }
 
-    if(!db_true && !noEx && !dbErr.cat.empty()) throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.c_str());
+    //Delete from the database
+    if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
+	AutoHD<TTable> tbl = open(bdn);
+	if(!tbl.freeStat()) {
+	    try {
+		//Select for using all keys
+		if(rFlg&TBDS::UseAllKeys) {
+		    cfg.cfgList(cels);
+		    for(unsigned iEl = 0; iEl < cels.size(); ) {
+			if(cfg.cfg(cels[iEl]).isKey() && !cfg.cfg(cels[iEl]).keyUse()) cfg.cfg(cels[iEl]).setKeyUse(true);
+			else { cels.erase(cels.begin()+iEl); continue; }
+			iEl++;
+		    }
+		}
+
+		tbl.at().fieldDel(cfg);
+
+		db_true = true;
+
+		//Restore for not using keys selection
+		if(rFlg&TBDS::UseAllKeys)
+		    for(unsigned iEl = 0; iEl < cels.size(); iEl++)
+			cfg.cfg(cels[iEl]).setKeyUse(false);
+	    } catch(TError &err) {
+		dbErr = err;
+		//mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
+	    }
+	    //tbl.free(); close(bdn);
+	}
+    }
+
+    if(!db_true && !(rFlg&TBDS::NoException) && !dbErr.cat.empty()) throw TError(dbErr.cat.c_str(), "%s", dbErr.mess.c_str());
 
     return db_true;
 }
@@ -562,7 +586,7 @@ void TBDS::genDBSet( const string &path, const string &val, const string &user, 
 	    TConfig db_el(&dbs.at());
 	    db_el.cfg("user").setS(user);
 	    db_el.cfg("id").setS(dbs.at().mSYSStPref ? SYS->id()+"/"+path : path);
-	    db_el.cfg("val").setNoTransl(!(rFlg&TBDS::UseTranslate));
+	    db_el.cfg("val").setNoTransl(!(rFlg&TBDS::UseTranslation));
 	    db_el.cfg("val").setS(val);
 
 	    try {
@@ -577,7 +601,7 @@ void TBDS::genDBSet( const string &path, const string &val, const string &user, 
 	if(genDBGet(path,"",user,(rFlg|OnlyCfg)) == val) return;
 	ResAlloc res(SYS->cfgRes(), true);
 	XMLNode *tgtN = NULL;
-	if((rFlg&TBDS::UseTranslate) && Mess->lang2Code().size())
+	if((rFlg&TBDS::UseTranslation) && Mess->lang2Code().size())
 	    tgtN = SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code(), true);
 	if(!tgtN) tgtN = SYS->cfgNode(SYS->id()+"/"+path, true);
 	if(tgtN) { tgtN->setText(val,true); SYS->modifCfg(); }
@@ -597,7 +621,7 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
 	    TConfig db_el(&dbs.at());
 	    db_el.cfg("user").setS(user);
 	    db_el.cfg("id").setS(dbs.at().mSYSStPref ? SYS->id()+"/"+path : path);
-	    db_el.cfg("val").setNoTransl(!(rFlg&TBDS::UseTranslate));
+	    db_el.cfg("val").setNoTransl(!(rFlg&TBDS::UseTranslation));
 	    try {
 		tbl.at().fieldGet(db_el);
 		rez = db_el.cfg("val").getS();
@@ -610,7 +634,7 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
 	//Get from the config-file
 	ResAlloc res(SYS->cfgRes(), false);
 	XMLNode *tgtN = NULL;
-	if(rFlg&TBDS::UseTranslate) {
+	if(rFlg&TBDS::UseTranslation) {
 	    //if((tgtN=SYS->cfgNode(SYS->id()+"/"+path))) Mess->translReg(tgtN->text(true), "cfgSYS:"+path);
 	    if(Mess->lang2Code().size()) tgtN = SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code());
 	}
@@ -639,13 +663,15 @@ void TBDS::load_( )
     mSYSStPref = (bool)s2i(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg));
 
     //DB open
-    // Open, load and enable generic DB
-    string db_tp = TSYS::strSepParse(fullDB(), 0, '.');
-    string db_nm = TSYS::strSepParse(fullDB(), 1, '.');
-    if(modPresent(db_tp) && !at(db_tp).at().openStat(db_nm)) {
-	at(db_tp).at().open(db_nm);
-	at(db_tp).at().at(db_nm).at().load();
-	at(db_tp).at().at(db_nm).at().enable();
+    // Open, load and enable the generic DB
+    if(SYS->workDB().size() && SYS->workDB() != DB_CFG) {
+	string db_tp = TSYS::strSepParse(SYS->workDB(), 0, '.');
+	string db_nm = TSYS::strSepParse(SYS->workDB(), 1, '.');
+	if(modPresent(db_tp) && !at(db_tp).at().openStat(db_nm)) {
+	    at(db_tp).at().open(db_nm);
+	    at(db_tp).at().at(db_nm).at().load();
+	    at(db_tp).at().at(db_nm).at().enable();
+	}
     }
 
     // Open other DB stored into the table 'DB' and the config-file
@@ -655,7 +681,7 @@ void TBDS::load_( )
 	//if(SYS->chkSelDB(fullDB())) {	//!!!! Must be forced one for config file rescan, release test
 	    TConfig c_el(&elDB);
 	    //c_el.cfgViewAll(false);
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fldCnt++,c_el,true,true); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fldCnt++,c_el,TBDS::UseCache); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
 		if(!modPresent(type) || itReg[type+"."+id])	continue;
@@ -759,7 +785,7 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TBD                                          *
 //************************************************
-TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mEn(false), mId(cfg("ID")), mToEn(cfg("EN").getBd()),
+TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mEn(false), mId(cfg("ID")), mToEn(cfg("EN").getBd()), mLsPr(cfg("LS_PR").getId()),
     mTrTm_ClsOnOpen(cfg("TRTM_CLS_ON_OPEN").getRd()), mTrTm_ClsOnReq(cfg("TRTM_CLS_ON_REQ").getRd()), mTrPr_ClsTask(cfg("TRPR_CLS_TASK").getId()),
     userSQLTrans(EVAL_BOOL), mDisByUser(true)
 {
@@ -811,7 +837,7 @@ void TBD::preDisable( int flag )
 
 void TBD::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true, true);
+    if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, TBDS::UseAllKeys);
 }
 
 bool TBD::cfgChange( TCfg &co, const TVariant &pc )
@@ -878,7 +904,7 @@ void TBD::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB_CFG))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
+    else SYS->db().at().dataGet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this);
 
     if(!enableStat() && toEnable())
 	try { enable(); } catch(TError&) { mDisByUser = false; }
@@ -886,7 +912,7 @@ void TBD::load_( TConfig *icfg )
 
 void TBD::save_( )
 {
-    SYS->db().at().dataSet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
+    SYS->db().at().dataSet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this);
 }
 
 TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -963,34 +989,34 @@ void TBD::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/serv/fieldStruct" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	TConfig cfg;
 	at(opt->attr("tbl")).at().fieldStruct(cfg);
-	SYS->db().at().dataSet("", "", cfg, false, false, opt);
+	SYS->db().at().dataSet("", "", cfg, TBDS::NoFlg, opt);
 	return;
     }
     else if(a_path == "/serv/fieldSeek" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	TConfig cfg;
-	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
+	SYS->db().at().dataSeek("", "", 0, cfg, TBDS::NoFlg, opt);
 	opt->setAttr("fRez", i2s(at(opt->attr("tbl")).at().fieldSeek(s2i(opt->attr("row")),cfg,opt->attr("cacheKey"))));
 	opt->childClear();
-	SYS->db().at().dataSet("", "", cfg, false, false, opt);
+	SYS->db().at().dataSet("", "", cfg, TBDS::NoFlg, opt);
 	return;
     }
     else if(a_path == "/serv/fieldGet" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_RD)) {
 	TConfig cfg;
-	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
+	SYS->db().at().dataSeek("", "", 0, cfg, TBDS::NoFlg, opt);
 	at(opt->attr("tbl")).at().fieldGet(cfg);
 	opt->childClear();
-	SYS->db().at().dataSet("", "", cfg, false, false, opt);
+	SYS->db().at().dataSet("", "", cfg, TBDS::NoFlg, opt);
 	return;
     }
     else if(a_path == "/serv/fieldSet" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	TConfig cfg;
-	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
+	SYS->db().at().dataSeek("", "", 0, cfg, TBDS::NoFlg, opt);
 	at(opt->attr("tbl")).at().fieldSet(cfg);
 	return;
     }
     else if(a_path == "/serv/fieldDel" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	TConfig cfg;
-	SYS->db().at().dataSeek("", "", 0, cfg, false, false, opt);
+	SYS->db().at().dataSeek("", "", 0, cfg, TBDS::NoFlg, opt);
 	at(opt->attr("tbl")).at().fieldDel(cfg);
 	return;
     }
@@ -1016,6 +1042,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
 		    "dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
 		    "help",_("Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
+		ctrMkNode2("fld",opt,-1,"/prm/cfg/LS_PR",EVAL_STR,RWRWR_,"root",SDB_ID,
+		    "help",_("Useful for libraries placed in several databases for specifying the priority of the project - used ones."),NULL);
 		if(mTrTm_ClsOnReq < prmServTask_PER)
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/TRPR_CLS_TASK",EVAL_STR,RWRWR_,"root",SDB_ID,1,"help",TMess::labTaskPrior());
 		else ctrRemoveNode(opt,"/prm/cfg/TRPR_CLS_TASK");

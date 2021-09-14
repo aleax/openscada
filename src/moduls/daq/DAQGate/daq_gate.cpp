@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.0"
+#define MOD_VER		"2.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -358,8 +358,8 @@ void TMdContr::enable_( )
 		    string pId = pHd[iPrm].at().id();
 		    try {
 			TParamContr *pCntr = dynamic_cast<TParamContr*>(pHd[iPrm].at().nodePrev());
-			if(pCntr) pCntr->del(pId, TParamContr::RM_NoArch);
-			else del(pId, TParamContr::RM_NoArch);
+			if(pCntr) pCntr->del(pId, TParamContr::NodeRemove_NoArch);
+			else del(pId, TParamContr::NodeRemove_NoArch);
 			continue;
 		    } catch(TError &err) {
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());

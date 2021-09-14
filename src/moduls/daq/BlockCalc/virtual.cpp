@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.11.1"
+#define MOD_VER		"1.12.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -208,13 +208,13 @@ void Contr::postDisable( int flag )
     try {
 	if(flag) {
 	    //Delete parameter's tables
-	    string wbd = DB()+"."+cfg("BLOCK_SH").getS();
+	    string wbd = DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS();
 	    SYS->db().at().open(wbd);
-	    SYS->db().at().close(wbd,true);
+	    SYS->db().at().close(wbd, true);
 
 	    wbd = wbd+"_io";
 	    SYS->db().at().open(wbd);
-	    SYS->db().at().close(wbd,true);
+	    SYS->db().at().close(wbd, true);
 	}
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
@@ -235,7 +235,7 @@ void Contr::load_( )
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
     map<string, bool>	itReg;
 
-    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string id = cEl.cfg("ID").getS();
 	if(!chldPresent(mBl,id)) {
 	    blkAdd(id);

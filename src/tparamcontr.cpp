@@ -161,10 +161,10 @@ string TParamContr::add( const string &iid, unsigned type )
     return (mPrm < 0) ? "" : chldAdd(mPrm, owner().ParamAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID),type));
 }
 
-void TParamContr::del( const string &iid, int full )
+void TParamContr::del( const string &iid, int flags )
 {
     if(mPrm < 0) return;
-    chldDel(mPrm, iid, -1, full);
+    chldDel(mPrm, iid, -1, flags);
 }
 
 AutoHD<TParamContr> TParamContr::at( const string &iid, const string &who ) const
@@ -189,7 +189,7 @@ void TParamContr::LoadParmCfg( )
 
 	    // Search new into DB and Config-file
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().DB()+"."+owner().owner().tpPrmAt(iTp).DB(&owner()),
-		    owner().owner().nodePath()+owner().owner().tpPrmAt(iTp).DB(&owner()),fld_cnt++,cEl,false,true); )
+		    owner().owner().nodePath()+owner().owner().tpPrmAt(iTp).DB(&owner()),fld_cnt++,cEl,TBDS::UseCache); )
 	    {
 		try {
 		    string shfr = cEl.cfg("SHIFR").getS();
@@ -246,8 +246,9 @@ void TParamContr::preDisable( int flag )
     for(unsigned iA = 0; iA < aLs.size(); iA++)
 	if(!vlAt(aLs[iA]).at().arch().freeStat()) {
 	    string arh_id = vlAt(aLs[iA]).at().arch().at().id();
-	    if((flag>>8) == RM_Full) SYS->archive().at().valDel(arh_id, true);
-	    else SYS->archive().at().valAt(arh_id).at().stop();
+	    if(flag&NodeRemove_NoArch)
+		SYS->archive().at().valAt(arh_id).at().stop();
+	    else SYS->archive().at().valDel(arh_id, true);
 	}
 
     if(enableStat())	disable();
@@ -258,7 +259,7 @@ void TParamContr::postDisable( int flag )
     if(flag) {
 	//Delete the parameter from DB
 	cfg("OWNER") = ownerPath();
-	SYS->db().at().dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, true);
+	SYS->db().at().dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, TBDS::UseAllKeys);
     }
 }
 

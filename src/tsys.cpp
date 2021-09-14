@@ -230,21 +230,21 @@ void TSYS::setModDir( const string &mdir, bool init )
 
 XMLNode *TSYS::cfgNode( const string &path, bool create )
 {
-    string s_el, ndNm;
+    string sEl, ndNm;
 
-    XMLNode *t_node = &rootN;
-    if(t_node->name() != "OpenSCADA") {
+    XMLNode *tNode = &rootN;
+    if(tNode->name() != "OpenSCADA") {
 	if(!create) return NULL;
-	t_node->setName("OpenSCADA");
+	tNode->setName("OpenSCADA");
     }
 
-    for(int l_off = 0, nLev = 0; true; nLev++) {
-	s_el = TSYS::pathLev(path, 0, true, &l_off);
-	if(s_el.empty()) return t_node;
+    for(int lOff = 0, nLev = 0; true; nLev++) {
+	sEl = TSYS::pathLev(path, 0, true, &lOff);
+	if(sEl.empty()) return tNode;
 	bool ok = false;
-	for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
-	    if(strcasecmp(t_node->childGet(i_f)->attr("id").c_str(),s_el.c_str()) == 0) {
-		t_node = t_node->childGet(i_f);
+	for(unsigned iF = 0; !ok && iF < tNode->childSize(); iF++)
+	    if(strcasecmp(tNode->childGet(iF)->attr("id").c_str(),sEl.c_str()) == 0) {
+		tNode = tNode->childGet(iF);
 		ok = true;
 	    }
 	if(!ok) {
@@ -252,14 +252,15 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 	    ndNm = "prm";
 	    switch(nLev) {
 		case 0: ndNm = "station";	break;
-		case 1: if(s_el.compare(0,4,"sub_") == 0) ndNm = "node";	break;
-		case 2: if(s_el.compare(0,4,"mod_") == 0) ndNm = "node";	break;
+		case 1: if(sEl.compare(0,4,"sub_") == 0) ndNm = "node";	break;
+		case 2: if(sEl.compare(0,4,"mod_") == 0) ndNm = "node";	break;
 	    }
-	    if(ndNm == "prm") t_node = t_node->childIns(0,ndNm)->setAttr("id",s_el);
-	    else t_node = t_node->childAdd(ndNm)->setAttr("id",s_el);
+	    if(ndNm == "prm") tNode = tNode->childIns(0,ndNm)->setAttr("id", sEl);
+	    else tNode = tNode->childAdd(ndNm)->setAttr("id", sEl);
         }
     }
-    return t_node;
+
+    return tNode;
 }
 
 void TSYS::modifCfg( bool chkPossibleWR )
@@ -722,7 +723,7 @@ void TSYS::cfgPrmLoad( )
 
     //System parameters
     setClockRT(s2i(TBDS::genDBGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
-    mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
+    mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation);
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
     setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
     setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
@@ -848,7 +849,7 @@ void TSYS::save_( )
     mess_sys(TMess::Info, _("Saving."));
 
     //System parameters
-    TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslate);
+    TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslation);
     TBDS::genDBSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_ModDir)	TBDS::genDBSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
@@ -3053,10 +3054,10 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 	closedir(IdDir);
 	free(sDir);
     }
-    sort(its.begin(),its.end());
+    sort(its.begin(), its.end());
     for(unsigned i_it = 0; i_it < its.size(); i_it++)
 	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
-    sort(fits.begin(),fits.end());
+    sort(fits.begin(), fits.end());
     for(unsigned i_it = 0; i_it < fits.size(); i_it++)
 	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
 }
@@ -3596,8 +3597,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			//  Getting from the config file or the DB source
 			bool seekRez = false;
 			for(int inst = 0; true; inst++) {
-			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, true)
-					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, true);
+			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
+					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
 			    if(!seekRez) break;
 			    for(unsigned iN = 0; iN < ns.size(); iN++) {
 				if(!(iN && iN < (ns.size()-1))) continue;

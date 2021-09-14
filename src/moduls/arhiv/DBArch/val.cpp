@@ -76,7 +76,7 @@ void ModVArch::postDisable( int flag )
 	    SYS->db().at().open(addr()+"."+vTbl);
 	    SYS->db().at().close(addr()+"."+vTbl, true);
 
-	    if(!SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg,true,false,true)) break;
+	    if(!SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    aCnt--;
 	}
     }
@@ -151,7 +151,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 
     //Loading and processing the main table with the meta-information.
     TConfig cfg(&mod->archEl());
-    for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,true); ) {
+    for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,TBDS::UseCache); ) {
 	string vTbl = cfg.cfg("TBL").getS(), aNm;
 	if(vTbl.find(archTbl()+"_") == string::npos) continue;
 	//Table per parameter mode
@@ -579,7 +579,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 	tC = (tC/(10*period()))*(10*period());
 	cfg.cfg("MARK").setI(tC/(10*period()), true);
 	int eC = 0;
-	for( ; SYS->db().at().dataSeek(tblAddr,"",eC++,cfg,false,true); ) {
+	for( ; SYS->db().at().dataSeek(tblAddr,"",eC++,cfg,TBDS::UseCache); ) {
 	    cTm = 1000000ll * cfg.cfg("TM").getI();
 	    if(cTm < ibeg || cTm > iend) continue;
 	    switch(archive().valType()) {
@@ -631,7 +631,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     cf.cfg("MARK").setI(itm/(10*period()));
     cf.cfg("TM").setI(itm/1000000);
     //cf.cfg("TMU").setI(itm%1000000);
-    if(SYS->db().at().dataGet(tblAddr,"",cf,false,true)) {
+    if(SYS->db().at().dataGet(tblAddr,"",cf,TBDS::NoException)) {
 	if(tm) *tm = itm;
 	switch(archive().valType()) {
 	    case TFld::Boolean:	return cf.cfg(vlFld).getB();
@@ -706,7 +706,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	cfg.cfg("PRM1").setS(ll2s(mPer), true);
 	cfg.cfg("PRM2").setS(i2s(archive().valType(true)), true);
 
-	return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true) ? iend : 0;
+	return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException) ? iend : 0;
     }
 
     //The group table processing
@@ -788,7 +788,7 @@ bool ModVArchEl::readMeta( )
     //Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true)) {
+    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException)) {
 	mBeg = s2ll(cfg.cfg("BEGIN").getS());
 	mEnd = s2ll(cfg.cfg("END").getS());
 	mPer = s2ll(cfg.cfg("PRM1").getS());

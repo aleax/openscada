@@ -202,7 +202,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 	}
 	p->vlAt("RS").at().setI(val, 0, true);
     }
-    else if(p->modTp.getS() == "I-8014") {	//Individual I-8014 processing ????
+    else if(p->modTp.getS() == "I-8014") {	//Individual I-8014 processing
 	//Check and first init for I-8014
 	if(!ePrm->init)	{
 	    p->owner().pBusRes.lock();

@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.1.4"
+#define PRT_MVER	"2.2.0"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -194,8 +194,8 @@ class TProt: public TProtocol, public Server
 	void epList( vector<string> &ls ) const			{ chldList(mEndPnt,ls); }
 	bool epPresent( const string &id ) const		{ return chldPresent(mEndPnt,id); }
 	string epAdd( const string &id, const string &db = "*.*" );
-	void epDel( const string &id )				{ chldDel(mEndPnt,id); }
-	AutoHD<OPCEndPoint> epAt( const string &id ) const	{ return chldAt(mEndPnt,id); }
+	void epDel( const string &id )				{ chldDel(mEndPnt, id); }
+	AutoHD<OPCEndPoint> epAt( const string &id ) const	{ return chldAt(mEndPnt, id); }
 
 	void discoveryUrls( vector<string> &ls );
 	bool inReq( string &request, const string &inPrtId, string *answ = NULL );

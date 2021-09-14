@@ -97,10 +97,10 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, true);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,false,true); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
 		if(!nPresent(id)) nAdd(id, (itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		nAt(id).at().load(&gCfg);
@@ -643,7 +643,7 @@ void Node::postEnable( int flag )
 void Node::postDisable( int flag )
 {
     if(flag) {
-	SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+	SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 	TConfig cfg(&owner().nodeIOEl());
 	cfg.cfg("NODE_ID").setS(id(), true);
 	SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
@@ -768,7 +768,7 @@ void Node::loadIO( )
 	TConfig cfg(&owner().nodeIOEl());
 	cfg.cfg("NODE_ID").setS(id(), TCfg::ForceUse);
 	cfg.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,false,true); ) {
+	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,TBDS::UseCache); ) {
 	    string sid = cfg.cfg("ID").getS();
 	    int iid = f->ioId(sid);
 
@@ -842,7 +842,7 @@ void Node::saveIO( )
 	    { data ? cfg.cfg("VALUE").setS(data->lnkAddr(iIO)) : cfg.cfg("VALUE").setView(false); }
 	    else if(data && data->func()) cfg.cfg("VALUE").setS(data->getS(iIO));
 	    else cfg.cfg("VALUE").setS(f->io(iIO)->def());
-	    SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);
+	    SYS->db().at().dataSet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
 	}
 
 	//Clear IO
@@ -850,7 +850,7 @@ void Node::saveIO( )
 	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg); ) {
 	    string sio = cfg.cfg("ID").getS();
 	    if(f->ioId(sio) < 0) {
-		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,true,false,true)) break;
+		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
 	}

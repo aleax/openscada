@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,13 +76,13 @@ class TController : public TCntrNode, public TConfig
 	int64_t timeStamp( );
 	virtual string getStatus( );
 
-	string DB( )		{ return mDB; }
+	string DB( bool qTop = false )		{ return storage(mDB, qTop); }
 	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
-	void setDB( const string &idb )		{ mDB = idb; modifG(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	bool toEnable( )		{ return mAEn; }
 	bool toStart( )			{ return mAStart; }
@@ -99,7 +99,7 @@ class TController : public TCntrNode, public TConfig
 	void list( vector<string> &list ) const	{ chldList(mPrm, list); }
 	bool present( const string &id ) const	{ return chldPresent(mPrm, id); }
 	string add( const string &id, unsigned type );
-	void del( const string &id, int full = TParamContr::RM_Exit )	{ chldDel(mPrm, id, -1, full); }
+	void del( const string &id, int flags = NodeNoFlg )	{ chldDel(mPrm, id, -1, flags); }
 	AutoHD<TParamContr> at( const string &id, const string &who = "th_contr" ) const	{ return chldAt(mPrm, id); }
 
 	// Redundancy

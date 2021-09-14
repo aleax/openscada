@@ -1348,7 +1348,7 @@ void WdgTree::selectItem( bool force )
 
 void WdgTree::updateTree( const string &vca_it, bool initial )
 {
-    //???? Make for the images loading depending from the connetion productivity, seems:
+    //Make for the images loading depending from the connetion productivity, seems:
     // - First time:
     //   - enable all the icons loading in the local connection
     //   - OR disable the icons loading of the container widgets in the first time
@@ -3105,7 +3105,7 @@ bool DevelWdgView::event( QEvent *event )
 			fMoveHold = true;
 			holdPnt = curp;
 		    }
-		    update();	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
+		    update();	//!!!! For QT's included widget's update bug hack (Document,Protocol and other)
 		    return true;
 		}
 		break;
@@ -3158,7 +3158,7 @@ bool DevelWdgView::event( QEvent *event )
 		}
 
 		if(fSelChange) {
-		    setSelect(true, PrcChilds|NoUpdate);	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
+		    setSelect(true, PrcChilds|NoUpdate);	//!!!! For QT's included widget's update bug hack (Document,Protocol and other)
 		    fSelChange = false;
 		}
 

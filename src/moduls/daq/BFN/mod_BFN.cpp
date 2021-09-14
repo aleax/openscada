@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.19"
+#define MOD_VER		"0.6.20"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -165,7 +165,7 @@ void TTpContr::save_( )
     // Clear no present codes
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
 	if(mSymbCode.find(c_el.cfg("ID").getI()) != mSymbCode.end()) continue;
-	SYS->db().at().dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, true, false, true);
+	SYS->db().at().dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
 	fld_cnt--;
     }
 
@@ -181,7 +181,7 @@ void TTpContr::save_( )
     // Clear no present codes
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
 	if(mSymbAlrm.find(c_el.cfg("ID").getI()) != mSymbAlrm.end()) continue;
-	SYS->db().at().dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, true, false, true);
+	SYS->db().at().dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
 	fld_cnt--;
     }
 }

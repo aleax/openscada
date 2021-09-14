@@ -87,7 +87,7 @@ string TSecurity::usrAdd( const string &name, const string &idb )
 void TSecurity::usrDel( const string &name, bool complete )
 {
     if(usrAt(name).at().sysItem())	throw err_sys(_("System user removal is not possible."));
-    chldDel(mUsr, name, -1, complete);
+    chldDel(mUsr, name, -1, complete?NodeRemove:NodeNoFlg);
 }
 
 string TSecurity::grpAdd( const string &name, const string &idb )
@@ -98,7 +98,7 @@ string TSecurity::grpAdd( const string &name, const string &idb )
 void TSecurity::grpDel( const string &name, bool complete )
 {
     if(grpAt(name).at().sysItem())	throw err_sys(_("System group removal is not possible."));
-    chldDel(mGrp, name, -1, complete);
+    chldDel(mGrp, name, -1, complete?NodeRemove:NodeNoFlg);
 }
 
 char TSecurity::access( const string &user, char mode, const string &owner, const string &groups, int access )
@@ -141,13 +141,13 @@ void TSecurity::load_( )
 	vector<string> itLs;
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,false,true); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,TBDS::UseCache); ) {
 		name = g_cfg.cfg("NAME").getS();
-		if(!usrPresent(name))	usrAdd(name, (itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
-		usrAt(name).at().load(&g_cfg);
+		if(!usrPresent(name)) usrAdd(name, itLs[iIt]);
+		if(usrAt(name).at().DB() == itLs[iIt]) usrAt(name).at().load(&g_cfg);
+		usrAt(name).at().setDB(itLs[iIt], true);
 		itReg[name] = true;
 	    }
 
@@ -171,13 +171,13 @@ void TSecurity::load_( )
 	itReg.clear();
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,false,true); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,TBDS::UseCache); ) {
 		name = g_cfg.cfg("NAME").getS();
-		if(!grpPresent(name))	grpAdd(name,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
-		grpAt(name).at().load(&g_cfg);
+		if(!grpPresent(name)) grpAdd(name, itLs[iIt]);
+		if(grpAt(name).at().DB() == itLs[iIt]) grpAt(name).at().load(&g_cfg);
+		grpAt(name).at().setDB(itLs[iIt], true);
 		itReg[name] = true;
 	    }
 
@@ -400,7 +400,10 @@ int TUser::permitCmpr( const string &user )
 
 void TUser::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+    if(flag) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 
     //Remove the user from the groups
     vector<string> gls;
@@ -437,6 +440,7 @@ void TUser::load_( TConfig *icfg )
 void TUser::save_( )
 {
     SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+    setDB(DB(), true);
 
     //Save used groups
     vector<string> ls;
@@ -488,6 +492,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    }
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
+	    if(DB(true).size())
+		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID);
 	}
 	return;
     }
@@ -503,6 +509,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/prm/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SSEC_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/ico" && ctrChkNode(opt)) opt->setText(picture());
     else if(a_path == "/prm/PASS") {
 	if(ctrChkNode(opt,"get",RWRW__,name().c_str(),SSEC_ID,SEC_RD))	opt->setText("**********");
@@ -557,7 +565,10 @@ TCntrNode &TGroup::operator=( const TCntrNode &node )
 
 void TGroup::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+    if(flag) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 TSecurity &TGroup::owner( ) const	{ return *(TSecurity*)nodePrev(); }
@@ -575,6 +586,7 @@ void TGroup::load_( TConfig *icfg )
 void TGroup::save_( )
 {
     SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+    setDB(DB(), true);
 }
 
 bool TGroup::user( const string &inm )
@@ -623,6 +635,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/prm/USERS",EVAL_STR,RWRWR_,"root",SSEC_ID,1,"s_com","add,del");
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SSEC_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
+	    if(DB(true).size())
+		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID);
 	}
 	return;
     }
@@ -633,6 +647,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SSEC_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/prm/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SSEC_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/prm/USERS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    string val;

@@ -83,7 +83,7 @@ void DA::loadLnk(SLnk& lnk)
     string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
 
     cfg.cfg("ID").setS(lnk.prmName);
-    if(SYS->db().at().dataGet(io_bd, io_table, cfg, false, true)) {
+    if(SYS->db().at().dataGet(io_bd,io_table,cfg,TBDS::NoException)) {
 	lnk.prmAttr = cfg.cfg("VALUE").getS();
 	lnk.aprm = SYS->daq().at().attrAt(lnk.prmAttr, '.', true);
     }
@@ -97,7 +97,7 @@ void DA::loadVal(SLnk& lnk)
     string io_table = mPrm.owner().owner().nodePath() + mPrm.typeDBName() + "_io";
 
     cfg.cfg("ID").setS(lnk.prmName);
-    if(SYS->db().at().dataGet(io_bd, io_table, cfg, false, true)) {
+    if(SYS->db().at().dataGet(io_bd,io_table,cfg,TBDS::NoException)) {
 	lnk.vlattr.at().setS(cfg.cfg("ATTR_VALUE").getS(), 0, true);
 	//lnk.aprm = SYS->daq().at().attrAt(lnk.prmAttr, '.', true);
     }

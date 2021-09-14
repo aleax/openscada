@@ -558,7 +558,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
     else if(tm < 0)		tm = 0;	//prmWait_TM;	//Do not wait anything by default
 
     AutoHD<TCntrNode> chN = chldAt(igr, name);
-    if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, (flag<<8));
+    if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, flag);
     chN.free();
 
     MtxAlloc res(mChM, true);
@@ -572,6 +572,51 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
     }
     delete p->second;
     (*chGrp)[igr].elem.erase(p);
+}
+
+string TCntrNode::storage( const string &cnt, bool forQueueOfData ) const
+{
+    const_cast<TCntrNode*>(this)->dataRes().lock();
+    string prcS = cnt;
+    const_cast<TCntrNode*>(this)->dataRes().unlock();
+
+    //The work DB
+    if(!forQueueOfData) return TSYS::strLine(prcS, 0);
+
+    //The queue
+    string work = TSYS::strLine(prcS, 0), tLn;
+    for(int pos = 1 /*queue start*/; (tLn=TSYS::strLine(prcS,pos)).size(); ++pos)
+	if(tLn != work) return tLn;
+
+    return "";
+}
+
+void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
+{
+    dataRes().lock();
+    string prcS = cnt, prcS_, tLn;
+    dataRes().unlock();
+
+    //The queue
+    string work = TSYS::strLine(prcS,0);
+    if(forQueueOfData)	prcS_ = work + "\n";
+    //The work DB
+    else if(vl.empty() || vl == work)	return;
+
+    if(vl.size()) prcS_ += vl + "\n";
+
+    bool isFound = false;
+    for(int pos = 1 /*queue start*/; (tLn=TSYS::strLine(prcS,pos)).size(); ++pos) {
+	// Pass for equal items
+	if(forQueueOfData && tLn == vl)	continue;
+	// Pass for removing first not work item
+	if(forQueueOfData && vl.empty() && !isFound && tLn != work) { isFound = true; continue; }
+	prcS_ += tLn + "\n";
+    }
+
+    dataRes().lock();
+    cnt = prcS_;
+    dataRes().unlock();
 }
 
 void TCntrNode::setNodeFlg( char flg )
@@ -1058,8 +1103,8 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	SYS->db().at().dbList(c_list);
 	if(nodePath() != "/") opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
 	opt->childAdd("el")->setText(tblList.size() ? (DB_CFG"."+tblList) : DB_CFG);
-	for(unsigned i_db = 0; i_db < c_list.size(); i_db++)
-	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
+	for(unsigned iDB = 0; iDB < c_list.size(); iDB++)
+	    opt->childAdd("el")->setText(tblList.size() ? c_list[iDB]+"."+tblList : c_list[iDB]);
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");

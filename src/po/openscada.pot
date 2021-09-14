@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-08 10:57+0300\n"
+"POT-Creation-Date: 2021-09-13 08:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -465,6 +465,9 @@ msgstr ""
 msgid "To enable"
 msgstr ""
 
+msgid "Priority in list"
+msgstr ""
+
 msgid "Transaction closing: after opening, seconds"
 msgstr ""
 
@@ -536,6 +539,9 @@ msgid "Load the program from this DB"
 msgstr ""
 
 msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgstr ""
+
+msgid "Useful for libraries placed in several databases for specifying the priority of the project - used ones."
 msgstr ""
 
 msgid "Tables"
@@ -1373,6 +1379,10 @@ msgid "Include"
 msgstr ""
 
 msgid "User DB"
+msgstr ""
+
+#, c-format
+msgid "Remove from '%s'"
 msgstr ""
 
 msgid "Group "

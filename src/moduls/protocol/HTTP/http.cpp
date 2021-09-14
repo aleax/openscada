@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.5"
+#define MOD_VER		"3.6.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -157,8 +157,6 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //bool pgAccess( string URL ) - Checking for page access pointed by the <URL>.
     //  URL       - URL of the checking page.
     if(iid == "pgAccess" && prms.size()) {
-	// ???? Check for the allowed pages cache
-
 	TRegExp re;
 	string rules, rule;
 	// Check for deny
@@ -329,7 +327,7 @@ int TProt::sesOpen( const string &name, const string &srcAddr, const string &use
 	    cEl.cfg("TIME").setI(time(NULL));
 	    cEl.cfg("ADDR").setS(srcAddr);
 	    cEl.cfg("AGENT").setS(userAgent);
-	    SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, false, true);
+	    SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::NoException);
 	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     return sess_id;
@@ -349,7 +347,7 @@ void TProt::sesClose( int sid )
 	try {
 	    TConfig cEl(&elAuth);
 	    cEl.cfg("ID").setI(sid);
-	    SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, true, false, true);
+	    SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::UseAllKeys|TBDS::NoException);
 	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
@@ -372,7 +370,7 @@ string TProt::sesCheck( int sid, const string &chUser )
 			mAuth[cEl.cfg("ID").getI()] = SAuth(cEl.cfg("USER").getS(), cEl.cfg("TIME").getI(), cEl.cfg("ADDR").getS(), cEl.cfg("AGENT").getS());
 		    // Removing for inconsistent duples for re-login
 		    else if(authEl != mAuth.end() && cEl.cfg("USER").getS() != authEl->second.name) {
-			if(!SYS->db().at().dataDel(authSessTbl(),mod->nodePath()+"AuthSessions/",cEl,true,false,true)) break;
+			if(!SYS->db().at().dataDel(authSessTbl(),mod->nodePath()+"AuthSessions/",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
 			fldCnt--;
 		    }
 		    // Updating for the authentication session time
@@ -388,7 +386,7 @@ string TProt::sesCheck( int sid, const string &chUser )
 		    try {
 			TConfig cEl(&elAuth);
 			cEl.cfg("ID").setI(authEl->first);
-			SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, true, false, true);
+			SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::UseAllKeys|TBDS::NoException);
 		    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 		mess_info(nodePath().c_str(), _("The authentication session for the user '%s' is expired. Host: %s."),
@@ -411,7 +409,7 @@ string TProt::sesCheck( int sid, const string &chUser )
 		cEl.cfg("USER").setS(authEl->second.name);
 		cEl.cfg("ADDR").setS(authEl->second.addr);
 		cEl.cfg("AGENT").setS(authEl->second.agent);
-		SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, false, true);
+		SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::NoException);
 	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 	authEl->second.tAuth = cur_tm;

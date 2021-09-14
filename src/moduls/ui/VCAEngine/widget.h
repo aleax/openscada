@@ -234,7 +234,7 @@ class Widget : public TCntrNode
 	void wdgList( vector<string> &list, bool fromLnk = false ) const;
 	bool wdgPresent( const string &wdg ) const;
 	virtual void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
-	void wdgDel( const string &wid, bool full = false )	{ chldDel(inclWdg, wid, -1, full); }
+	void wdgDel( const string &wid, bool full = false )	{ chldDel(inclWdg, wid, -1, full?NodeRemove:NodeNoFlg); }
 	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	// Data access

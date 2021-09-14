@@ -132,7 +132,7 @@ void TDAQS::load_( )
 
     map<string, bool>	itReg;
 
-    //Load templates libraries of parameter
+    //Loading the template libraries of the DAQ-parameter
     try {
 	// Search and create new libraries
 	TConfig cEl(&elLib());
@@ -140,14 +140,14 @@ void TDAQS::load_( )
 	vector<string> dbLs;
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
+	SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,false,true); ) {
-		string l_id = cEl.cfg("ID").getS();
-		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]));
-		tmplLibAt(l_id).at().load(&cEl);
-		itReg[l_id] = true;
+	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,TBDS::UseCache); ) {
+		string lId = cEl.cfg("ID").getS();
+		if(!tmplLibPresent(lId)) tmplLibReg(new TPrmTmplLib(lId.c_str(),"",dbLs[iIt]));
+		if(tmplLibAt(lId).at().DB() == dbLs[iIt]) tmplLibAt(lId).at().load(&cEl);
+		tmplLibAt(lId).at().setDB(dbLs[iIt], true);
+		itReg[lId] = true;
 	    }
 
 	//  Check for remove items removed from DB
@@ -162,7 +162,7 @@ void TDAQS::load_( )
 	mess_sys(TMess::Error, _("Error loading template libraries."));
     }
 
-    //Load parameters
+    //Loading the DAQ-controller objects
     try {
 	AutoHD<TTypeDAQ> wmod;
 	vector<string> modLs, dbLs;
@@ -174,15 +174,15 @@ void TDAQS::load_( )
 	    //gCfg.cfgViewAll(false);
 	    itReg.clear();
 
-	    // Search into DB and create new controllers
-	    SYS->db().at().dbList(dbLs, true);
-	    dbLs.push_back(DB_CFG);
+	    // Search into the storage and create new controller objects
+	    SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,false,true); ) {
+		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,TBDS::UseCache); ) {
 		    string mId = gCfg.cfg("ID").getS();
 		    try {
-			if(!wmod.at().present(mId)) wmod.at().add(mId,(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
-			wmod.at().at(mId).at().load(&gCfg);
+			if(!wmod.at().present(mId)) wmod.at().add(mId, dbLs[iIt]);
+			if(wmod.at().at(mId).at().DB() == dbLs[iIt]) wmod.at().at(mId).at().load(&gCfg);
+			wmod.at().at(mId).at().setDB(dbLs[iIt], true);
 			itReg[mId] = true;
 		    } catch(TError &err) {
 			mess_err(err.cat.c_str(), "%s", err.mess.c_str());

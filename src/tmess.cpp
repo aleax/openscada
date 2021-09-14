@@ -282,14 +282,14 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"Tr",TFld::String,0));
 		    req.cfg("base").setS(base);
 		}
-		if(SYS->db().at().dataGet(*iA+"." mess_TrUApiTbl,"/" mess_TrUApiTbl,req,false,true)) {
+		if(SYS->db().at().dataGet(*iA+"." mess_TrUApiTbl,"/" mess_TrUApiTbl,req,TBDS::NoException)) {
 		    rez = req.cfg(tStrVl).getS();
 		    break;
 		}
 		// Create new record into the translation table of the data source
 		else if((iA+1) == addrs.rend() /*&& lang2CodeBase().size()*/) {
 		    if(lang2CodeBase().size() && lang2CodeBase() == trLang)	req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
-		    SYS->db().at().dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, false, true);
+		    SYS->db().at().dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, TBDS::NoException);
 		}
 	    }
 	    trMessCache[cKey] = CacheEl(rez, SYS->sysTm());
@@ -315,8 +315,8 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 			//  Get from config file or DB source
 			bool seekRez = false;
 			for(int inst = 0; rez.empty(); inst++) {
-			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, true)
-					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, true);
+			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
+					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
 			    if(!seekRez) break;
 			    rez = req.cfg(reqFld).getS();
 			}
@@ -380,8 +380,8 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 		req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
 	    }
 	    req.cfg(setFld).setS(mess, TCfg::ForceUse);
-	    setRes = isCfg ? SYS->db().at().dataSet("", trSrc.substr(4), req, true, true)
-			   : SYS->db().at().dataSet(trSrc.substr(3), "", req, false, true);
+	    setRes = isCfg ? SYS->db().at().dataSet("", trSrc.substr(4), req, TBDS::NoException)
+			   : SYS->db().at().dataSet(trSrc.substr(3), "", req, TBDS::NoException);
 	}
 	//  Move the source to new base
 	if(setRes && chBase) {
@@ -426,10 +426,10 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 	MtxAlloc res(mRes, true);
 	for(unsigned iL = 0; iL < ls.size(); iL++)
 	    if(ls[iL] == DB_CFG)
-		for(int io_cnt = 0; SYS->db().at().dataSeek("","/" mess_TrUApiTbl,io_cnt++,req,false,true); )
+		for(int io_cnt = 0; SYS->db().at().dataSeek("","/" mess_TrUApiTbl,io_cnt++,req,TBDS::UseCache); )
 		    trMessIdx[req.cfg("base").getS()]["cfg:/" mess_TrUApiTbl] = prms;
 	    else
-		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[iL]+"." mess_TrUApiTbl,"",io_cnt++,req,false,true); )
+		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[iL]+"." mess_TrUApiTbl,"",io_cnt++,req,TBDS::UseCache); )
 		    trMessIdx[req.cfg("base").getS()]["db:"+ls[iL]+"." mess_TrUApiTbl "#base"] = prms;
     }
     //Same translations registration

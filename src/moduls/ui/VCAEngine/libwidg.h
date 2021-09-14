@@ -76,7 +76,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	AutoHD<LWidget> at( const string &id ) const;
 	string add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );
-	void del( const string &id, bool full = false )	{ chldDel(mWdg, id, -1, full); }
+	void del( const string &id, bool full = false )	{ chldDel(mWdg, id, -1, full?NodeRemove:NodeNoFlg); }
 
     protected:
 	//Methods

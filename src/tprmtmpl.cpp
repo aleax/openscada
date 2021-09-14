@@ -64,15 +64,15 @@ void TPrmTempl::postEnable( int flag )
     }
 }
 
-void TPrmTempl::postDisable(int flag)
+void TPrmTempl::postDisable( int flag )
 {
     if(flag) {
-	SYS->db().at().dataDel(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this, true);
+	SYS->db().at().dataDel(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
 
 	//Delete template's IO
 	TConfig cfg(&owner().owner().elTmplIO());
 	cfg.cfg("TMPL_ID").setS(id(), true);
-	SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
+	SYS->db().at().dataDel(owner().fullDB()+"_io", owner().owner().nodePath()+owner().tbl()+"_io/", cfg);
     }
 }
 
@@ -162,7 +162,7 @@ void TPrmTempl::load_( TConfig *icfg )
     vector<string> u_pos;
     TConfig ioCfg(&owner().owner().elTmplIO());
     ioCfg.cfg("TMPL_ID").setS(id(), true);
-    for(int ioCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,false,true); ) {
+    for(int ioCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,TBDS::UseCache); ) {
 	string sid = ioCfg.cfg("ID").getS();
 
 	// Position storing
@@ -222,7 +222,7 @@ void TPrmTempl::save_( )
     for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); ) {
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr) {
-	    if(!SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true,false,true))	break;
+	    if(!SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fld_cnt--;
 	}
     }
@@ -792,7 +792,7 @@ string TPrmTempl::Impl::lnkHelp( )
 //* TPrmTmplLib                                   *
 //*************************************************
 TPrmTmplLib::TPrmTmplLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&SYS->daq().at().elLib()), runSt(false), mId(cfg("ID")), work_lib_db(lib_db)
+    TConfig(&SYS->daq().at().elLib()), runSt(false), mId(cfg("ID")), mDB(lib_db)
 {
     mId = id;
     setName( name );
@@ -812,7 +812,7 @@ TCntrNode &TPrmTmplLib::operator=( const TCntrNode &node )
 
     //Configuration copy
     exclCopy(*src_n, "ID;DB;");
-    work_lib_db = src_n->work_lib_db;
+    mDB = src_n->mDB;
 
     //Templates copy
     vector<string> ls;
@@ -826,23 +826,26 @@ TCntrNode &TPrmTmplLib::operator=( const TCntrNode &node )
     return *this;
 }
 
-void TPrmTmplLib::preDisable(int flag)
+void TPrmTmplLib::preDisable( int flag )
 {
     start(false);
 }
 
-void TPrmTmplLib::postDisable(int flag)
+void TPrmTmplLib::postDisable( int flag )
 {
     if(flag) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
+	SYS->db().at().dataDel(DB(flag&NodeRemoveOnlyStor)+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this, TBDS::UseAllKeys);
 
+	//???? Append the generic tables removing interface with the Configuration File
 	//Delete temlate librarie's DBs
-	SYS->db().at().open(fullDB());
-	SYS->db().at().close(fullDB(), true);
+	SYS->db().at().open(fullDB(flag&NodeRemoveOnlyStor));
+	SYS->db().at().close(fullDB(flag&NodeRemoveOnlyStor), true);
 
-	SYS->db().at().open(fullDB()+"_io");
-	SYS->db().at().close(fullDB()+"_io", true);
+	SYS->db().at().open(fullDB(flag&NodeRemoveOnlyStor)+"_io");
+	SYS->db().at().close(fullDB(flag&NodeRemoveOnlyStor)+"_io", true);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
 
@@ -858,10 +861,14 @@ void TPrmTmplLib::setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 
 void TPrmTmplLib::setFullDB( const string &vl )
 {
-    size_t dpos = vl.rfind(".");
-    work_lib_db = (dpos!=string::npos) ? vl.substr(0,dpos) : "";
+    int off = vl.size();
+    cfg("DB").setS(TSYS::strParseEnd(vl,0,".",&off));
+    setDB(vl.substr(0,off+1));
+
+    /*size_t dpos = vl.rfind(".");
+    mDB = (dpos!=string::npos) ? vl.substr(0,dpos) : "";
     cfg("DB").setS((dpos!=string::npos) ? vl.substr(dpos+1) : "");
-    modifG();
+    modifG();*/
 }
 
 void TPrmTmplLib::load_( TConfig *icfg )
@@ -875,7 +882,7 @@ void TPrmTmplLib::load_( TConfig *icfg )
     map<string, bool>	itReg;
     TConfig cEl(&owner().elTmpl());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId);
 	at(fId).at().load(&cEl);
@@ -894,6 +901,7 @@ void TPrmTmplLib::load_( TConfig *icfg )
 void TPrmTmplLib::save_( )
 {
     SYS->db().at().dataSet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
+    setDB(DB(), true);
 }
 
 void TPrmTmplLib::start( bool val )
@@ -940,9 +948,12 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		//???? Move to the not editable combobox and without the table for empty or equal to ID
 		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
 		    "help",_("DB address in format \"{DB module}.{DB name}.{Table name}\".\nSet '*.*.{Table name}' for use the main work DB."));
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID);
 		ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration"))) {
@@ -967,6 +978,8 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFullDB(opt->text());
     }
+    else if(a_path == "/lib/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/lib/st/timestamp" && ctrChkNode(opt)) {
 	vector<string> tls;
 	list(tls);

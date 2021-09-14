@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.2.3"
+#define MOD_VER		"4.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -141,7 +141,7 @@ void TTpContr::load_( )
     string bd_tbl = modId()+"_CIFdevs";
     for(int iB = 0; iB < MAX_DEV_BOARDS; iB++) {
 	cfg.cfg("ID").setI(iB);
-	if(SYS->db().at().dataGet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg,false,true)) {
+	if(SYS->db().at().dataGet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg,TBDS::NoException)) {
 	    cif_devs[iB].pbaddr = cfg.cfg("ADDR").getI();
 	    cif_devs[iB].pbspeed = cfg.cfg("SPEED").getI();
 	}
@@ -467,15 +467,16 @@ TMdContr::~TMdContr( )
 
 void TMdContr::postDisable( int flag )
 {
-    TController::postDisable(flag);
     try {
 	if(flag) {
 	    //Delete parameter's io table
-	    string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
+	    string tbl = DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io";
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
+    TController::postDisable(flag);
 }
 
 string TMdContr::getStatus( )
@@ -1889,7 +1890,7 @@ void TMdPrm::loadIO( bool force )
     //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
+	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
 	else if(lCtx->func()->io(iIO)->type() != IO::String || !(lCtx->func()->io(iIO)->flg()&IO::TransltText))
@@ -1920,7 +1921,7 @@ void TMdPrm::saveIO( )
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
-	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 

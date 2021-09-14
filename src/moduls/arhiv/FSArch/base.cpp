@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: base.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -175,7 +175,7 @@ void ModArch::perSYSCall( unsigned int cnt )
 	cEl.cfgViewAll(false);
 	for(int fldCnt = 0; time(NULL) < end_tm && SYS->db().at().dataSeek(mod->filesDB(),mod->nodePath()+"Pack",fldCnt++,cEl); )
 	    if(stat(cEl.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
-		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",cEl,true,false,true))	break;
+		if(!SYS->db().at().dataDel(mod->filesDB(),mod->nodePath()+"Pack",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
     } catch(TError &err) { mess_sys(TMess::Error, "%s", err.mess.c_str()); }

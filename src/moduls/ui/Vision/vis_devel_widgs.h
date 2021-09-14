@@ -504,7 +504,7 @@ class DevelWdgView: public WdgView
 	string selectChilds( int *cnt = NULL, vector<DevelWdgView*> *wdgs = NULL );	//Get selected include widgets list
 	bool edit( )		{ return fWdgEdit; }		//Edit mode state
 
-	void setSelect( bool vl, char flgs = 0 );// bool childs = true, bool onlyFlag = false, bool noUpdate = false );
+	void setSelect( bool vl, char flags = 0 );// bool childs = true, bool onlyFlag = false, bool noUpdate = false );
 	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
 	void setVisScale( float val );

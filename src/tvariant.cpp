@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -761,7 +761,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     // Array sort( ) - lexicographic items sorting
     if(id == "sort") {
 	dataM.lock();
-	sort(mEls.begin(),mEls.end(),compareLess);
+	sort(mEls.begin(), mEls.end(), compareLess);
 	dataM.unlock();
 	return this;
     }

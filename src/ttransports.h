@@ -61,9 +61,9 @@ class TTransportIn : public TCntrNode, public TConfig
 	bool toStart( )		{ return mStart; }
 	bool startStat( ) const	{ return runSt; }
 
-	string DB( )		{ return mDB; }
+	string DB( bool qTop = false )		{ return storage(mDB, qTop); }
 	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCRIPT").setS(idscr); }
@@ -71,7 +71,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	void setProtocols( const string &prt )	{ cfg("PROT").setS(prt); }
 	void setToStart( bool val )		{ mStart = val; modif(); }
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	virtual void start( )	{ }
 	virtual void stop( );
@@ -152,9 +152,9 @@ class TTransportOut : public TCntrNode, public TConfig
 	int64_t	lstReqTm( )		{ return mLstReqTm; }
 	virtual	string getStatus( );
 
-	string DB( )		{ return mDB; }
+	string DB( bool qTop = false )		{ return storage(mDB, qTop); }
 	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
@@ -164,7 +164,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setConPrm( const string &nm, const TVariant &vl );
 	void clearConPrm( );
 
-	void setDB( const string &vl )			{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	virtual void start( int time = 0 );
 	virtual void stop( )		{ };
@@ -239,14 +239,14 @@ class TTypeTransport: public TModule
 	void inList( vector<string> &list ) const		{ chldList(mIn, list); }
 	bool inPresent( const string &id ) const		{ return chldPresent(mIn, id); }
 	string inAdd( const string &id, const string &db = "*.*" );
-	void inDel( const string &id, bool complete = false )	{ chldDel(mIn, id, -1, complete); }
+	void inDel( const string &id, bool complete = false )	{ chldDel(mIn, id, -1, complete?NodeRemove:NodeNoFlg); }
 	AutoHD<TTransportIn> inAt( const string &id ) const	{ return chldAt(mIn, id); }
 
 	// Output transports
 	void outList( vector<string> &list ) const		{ chldList(mOut, list); }
 	bool outPresent( const string &id ) const		{ return chldPresent(mOut, id); }
 	string outAdd( const string &id, const string &idb = "*.*" );
-	void outDel( const string &id, bool complete = false )	{ chldDel(mOut, id, -1, complete); }
+	void outDel( const string &id, bool complete = false )	{ chldDel(mOut, id, -1, complete?NodeRemove:NodeNoFlg); }
 	AutoHD<TTransportOut> outAt( const string &id ) const	{ return chldAt(mOut, id); }
 	virtual	string outAddrHelp( )				{ return ""; }
 

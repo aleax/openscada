@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-08 10:57+0300\n"
+"POT-Creation-Date: 2021-09-13 08:35+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -187,7 +187,8 @@ msgid "Redundancy"
 msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr "Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
+msgstr ""
+"Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
 
 msgid "Message archivers"
 msgstr "Архиваторы сообщений"
@@ -347,7 +348,8 @@ msgid "Requested %d records for time %s."
 msgstr "Запрошено %d записей в течении %s."
 
 #, c-format
-msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
 "(%lld-%lld)."
@@ -528,6 +530,9 @@ msgstr "Кодовая страница"
 msgid "To enable"
 msgstr "Включать"
 
+msgid "Priority in list"
+msgstr "Приоритет в списке"
+
 msgid "Transaction closing: after opening, seconds"
 msgstr "Закрытие транзакции: после открытия, секунд"
 
@@ -609,8 +614,14 @@ msgstr "Таблицы которые в БД, но не открыты на д�
 msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
-msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
+
+msgid ""
+"Useful for libraries placed in several databases for specifying the priority "
+"of the project - used ones."
+msgstr "Полезно для библиотек размещённых в нескольких базах данных для определения приоритетных - используемых."
 
 msgid "Tables"
 msgstr "Таблицы"
@@ -1357,7 +1368,8 @@ msgstr "2:Сбор остановлен."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
 msgid "Inclusion"
@@ -1580,6 +1592,10 @@ msgstr "Включен"
 
 msgid "User DB"
 msgstr "БД пользователя"
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Удалить из '%s'"
 
 msgid "Group "
 msgstr "Группа "
@@ -1925,8 +1941,10 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
-msgstr "Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
+msgstr ""
+"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
@@ -2222,8 +2240,8 @@ msgid ""
 "your mind that all standard OpenSCADA libraries's formed for the base "
 "language English(en), so other base languages will break these DBs at change!"
 msgstr ""
-"Включает поддержку многоязыковости текстовых переменных в конфигурационных "
-"БД через выбор базового языка.\n"
+"Включает поддержку многоязычности текстовых переменных в конфигурационных БД "
+"через выбор базового языка.\n"
 "Вы можете выбрать или ввести другой язык кроме Английский(en), но имейте "
 "ввиду, что все стандартные библиотеки OpenSCADA сформированы для базового "
 "языка Английский(en), т.е другой базовый язык будет портить эти БД при "
@@ -2385,14 +2403,14 @@ msgid "Error installing processors for the thread."
 msgstr "Ошибка установки процессоров для потока."
 
 msgid "only use the already multilanguage DBs with their modification"
-msgstr "только использовать уже многоязыковые БД с их модификацией"
+msgstr "только использовать уже многоязычные БД с их модификацией"
 
 #, c-format
 msgid ""
 "creating or modification the configuration DBs as multilanguage ones with "
 "the pointed base language '%s'"
 msgstr ""
-"создание или модификация конфигурационных БД как многоязыковые с указанным "
+"создание или модификация конфигурационных БД как многоязычные с указанным "
 "базовым языком '%s'"
 
 msgid "<<<Unmatched sources>>>\n"
@@ -2838,4 +2856,3 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
-

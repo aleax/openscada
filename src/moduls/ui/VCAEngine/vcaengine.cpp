@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.2.8"
+#define MOD_VER		"7.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -267,10 +267,10 @@ void Engine::load_( )
 	vector<string> itLs;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, true);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+wlbTable(),nodePath()+"LIB",libCnt++,cEl,false,true); ) {
+	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+wlbTable(),nodePath()+"LIB",libCnt++,cEl,TBDS::UseCache); ) {
 		string lId = cEl.cfg("ID").getS();
 		//if(itReg.find(lId) != itReg.end()) continue;
 		if(!wlbPresent(lId)) wlbAdd(lId,"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
@@ -304,10 +304,10 @@ void Engine::load_( )
 	itReg.clear();
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, true);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int lib_cnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,cEl,false,true); ) {
+	    for(int lib_cnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,cEl,TBDS::UseCache); ) {
 		string prj_id = cEl.cfg("ID").getS();
 		if(!prjPresent(prj_id)) {
 		    prjAdd(prj_id,"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
@@ -496,7 +496,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	cEl.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 	cEl.cfg("CFG_VAL").setNoTransl(!attr.at().isTransl());
 
-	if(!SYS->db().at().dataGet(fullDB+"_io",nodePath()+tbl+"_io",cEl,false,true)) continue;
+	if(!SYS->db().at().dataGet(fullDB+"_io",nodePath()+tbl+"_io",cEl,TBDS::NoException)) continue;
 
 	unsigned selfFlg = cEl.cfg("SELF_FLG").getI();
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);
@@ -524,7 +524,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     cEl.cfg("IO_VAL").setExtVal(true);
     cEl.cfg("CFG_TMPL").setExtVal(true);
     cEl.cfg("CFG_VAL").setExtVal(true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fldCnt++,cEl,TBDS::UseCache); ) {
 	string sid = cEl.cfg("ID").getS();
 	if(!TSYS::pathLev(sid,1).empty()) continue;
 
@@ -596,7 +596,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    cEl.cfg("CFG_VAL").setNoTransl(!(attr.at().isTransl(true) && (attr.at().flgSelf()&Attr::CfgConst ||
 						(attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().compare(0,4,"val:") == 0))));
 	    cEl.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(fullDB+"_io", nodePath()+tbl+"_io", cEl, false, true);
+	    SYS->db().at().dataSet(fullDB+"_io", nodePath()+tbl+"_io", cEl, TBDS::NoException);
 	}
 	//User attributes storing
 	else if(!ldGen) {
@@ -616,7 +616,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    cElu.cfg("CFG_VAL").setNoTransl(!(attr.at().isTransl(true) && (attr.at().flgSelf()&Attr::CfgConst ||
 						(attr.at().flgSelf()&Attr::CfgLnkIn && attr.at().cfgVal().compare(0,4,"val:") == 0))));
 	    cElu.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(fullDB+"_uio", nodePath()+tbl+"_uio", cElu, false, true);
+	    SYS->db().at().dataSet(fullDB+"_uio", nodePath()+tbl+"_uio", cElu, TBDS::NoException);
 	}
     }
 
@@ -627,7 +627,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    string sid = cEl.cfg("ID").getS();
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
-	    if(!SYS->db().at().dataDel(fullDB+"_io",nodePath()+tbl+"_io",cEl,true,false,true))	break;
+	    if(!SYS->db().at().dataDel(fullDB+"_io",nodePath()+tbl+"_io",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fldCnt--;
 	}
 
@@ -637,7 +637,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    string sid = cElu.cfg("ID").getS();
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
-	    if(!SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",cElu,true,false,true)) break;
+	    if(!SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",cElu,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fldCnt--;
 	}
     }

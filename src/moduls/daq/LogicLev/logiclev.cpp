@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.2"
+#define MOD_VER		"2.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -134,17 +134,18 @@ TMdContr::~TMdContr( )
     if(startStat()) stop();
 }
 
-void TMdContr::postDisable(int flag)
+void TMdContr::postDisable( int flag )
 {
-    TController::postDisable(flag);
     try {
 	if(flag) {
 	    //Delete parameter's io table
-	    string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
+	    string tbl = DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io";
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
+    TController::postDisable(flag);
 }
 
 string TMdContr::getStatus( )
@@ -488,7 +489,7 @@ void TMdPrm::loadIO( bool force )
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
     //IO values loading and links set, by seek
-    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,TBDS::UseCache); ) {
 	int iIO = tmpl->func()->ioId(cfg.cfg("ID").getS());
 	if(iIO < 0) continue;
 	if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
@@ -522,7 +523,7 @@ void TMdPrm::saveIO( )
 	if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(tmpl->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(tmpl->getS(iIO));
-	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 

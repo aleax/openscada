@@ -46,6 +46,7 @@ class TError
 	    Tr_ErrTransport = 12,
 	    DB_SQL_Connect = 20,
 	    DB_SQL_Query = 21,
+	    DB_TrRemoved = 22,
 	    Arch_Val_OldBufVl = 30,
 	    Arch_Val_DblVSrc = 31,
 	    EXT = 100

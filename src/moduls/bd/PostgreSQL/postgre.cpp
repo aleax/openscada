@@ -730,7 +730,7 @@ void MTable::fieldSet( TConfig &cfg )
 		ins_name = ins_name + (next?",\"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\" " +
 			(isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_el],TSYS::SQL,"\"")+"\" ") : "");
 		sval = getVal(u_cfg);
-		ins_value = ins_value + (next?",":"") + sval + " " + (isTransl?(","+sval+" "):"");	//???? E'{Val}'
+		ins_value = ins_value + (next?",":"") + sval + " " + (isTransl?(","+sval+" "):"");
 		next = true;
 	    }
 	    req += "(" + ins_name + ") VALUES (" + ins_value + ")";
@@ -747,7 +747,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    sval = getVal(u_cfg);
-	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + sval + " ";	//???? E'{Val}'
+	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + sval + " ";
 	    next = true;
 	}
 	req += req_where;

@@ -65,9 +65,9 @@ class TMArchivator : public TCntrNode, public TConfig
 	int	level( )		{ return mLevel; }
 	void	categ( vector<string> &list );
 
-	string	DB( ) const		{ return mDB; }
+	string	DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string	tbl( );
-	string	fullDB( )		{ return DB()+'.'+tbl(); }
+	string	fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &vl )	{ cfg("NAME").setS(vl); }
 	void setDscr( const string &vl )	{ cfg("DESCR").setS(vl); }
@@ -75,7 +75,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
 	void setLevel( int lev )		{ mLevel = lev; }
 
-	void setDB( const string &idb )		{ mDB = idb; modifG(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	// Redundancy
 	time_t redntTm( )	{ return lstRdMess.time; }	//Time of the last redundancy operation
@@ -157,14 +157,14 @@ class TTypeArchivator: public TModule
 	void messList( vector<string> &list ) const		{ chldList(mMess, list); }
 	bool messPresent( const string &id ) const		{ return chldPresent(mMess, id); }
 	string messAdd( const string &id, const string &idb = "*.*" );
-	void messDel( const string &id, bool full = false )	{ chldDel(mMess, id, -1, full); }
+	void messDel( const string &id, bool full = false )	{ chldDel(mMess, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<TMArchivator> messAt( const string &id ) const	{ return chldAt(mMess, id); }
 
 	// Values
 	void valList( vector<string> &list ) const		{ chldList(mVal, list); }
 	bool valPresent( const string &id ) const		{ return chldPresent(mVal, id); }
 	string valAdd( const string &id, const string &idb = "*.*" );
-	void valDel( const string &id, bool full = false )	{ chldDel(mVal, id, -1, full); }
+	void valDel( const string &id, bool full = false )	{ chldDel(mVal, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<TVArchivator> valAt( const string &id ) const	{ return chldAt(mVal, id); }
 
 	TArchiveS &owner( ) const;

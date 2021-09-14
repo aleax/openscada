@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: vcaengine.h
 /***************************************************************************
- *   Copyright (C) 2006-2015 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,21 +61,21 @@ class Engine : public TUI
 	void wlbList( vector<string> &ls ) const		{ chldList(idWlb, ls); }
 	bool wlbPresent( const string &id ) const		{ return chldPresent(idWlb, id); }
 	string wlbAdd( const string &id, const string &inm = "", const string &idb = "*.*" );
-	void wlbDel( const string &id, bool full = false )	{ chldDel(idWlb, id, -1, full); }
+	void wlbDel( const string &id, bool full = false )	{ chldDel(idWlb, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<WidgetLib> wlbAt( const string &id ) const;
 
 	// Projects
 	void prjList( vector<string> &ls ) const		{ chldList(idPrj, ls); }
 	bool prjPresent( const string &id ) const		{ return chldPresent(idPrj, id); }
 	string prjAdd( const string &id, const string &inm = "", const string &idb = "*.*" );
-	void prjDel( const string &id, bool full = false )	{ chldDel(idPrj, id, -1, full); }
+	void prjDel( const string &id, bool full = false )	{ chldDel(idPrj, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<Project> prjAt( const string &id ) const;
 
 	// Sessions
 	void sesList( vector<string> &ls ) const		{ chldList(idSes, ls); }
 	bool sesPresent( const string &id ) const		{ return chldPresent(idSes, id); }
 	void sesAdd( const string &id, const string &proj = "" );
-	void sesDel( const string &id, bool full = false )	{ chldDel(idSes, id, -1, full); }
+	void sesDel( const string &id, bool full = false )	{ chldDel(idSes, id, -1, full?NodeRemove:NodeNoFlg); }
 	AutoHD<Session> sesAt( const string &id ) const;
 
 	// User functions

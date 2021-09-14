@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.4.2"
+#define MOD_VER		"1.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -120,10 +120,10 @@ void TWEB::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, true);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,false,true); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
 		if(!uPgPresent(id)) uPgAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
 		uPgAt(id).at().load(&gCfg);
@@ -369,7 +369,7 @@ TCntrNode &UserPg::operator=( const TCntrNode &node )
 
 void UserPg::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 }
 
 TWEB &UserPg::owner( ) const	{ return *(TWEB*)nodePrev(); }
@@ -494,7 +494,7 @@ void UserPg::loadIO( )
 	TConfig cf(&owner().uPgIOEl());
 	cf.cfg("PG_ID").setS(id(), TCfg::ForceUse);
 	cf.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,true); ) {
+	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,TBDS::UseCache); ) {
 	    string sid = cf.cfg("ID").getS();
 	    int iid = func()->ioId(sid);
 	    if(iid < 0)	continue;
@@ -529,7 +529,7 @@ void UserPg::saveIO( )
 	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) cf.cfg("VALUE").setS(lnkAddr(iIO));  //f->io(iIO)->rez());
 	    else cf.cfg("VALUE").setS(getS(iIO));
-	    SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf);
+	    SYS->db().at().dataSet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cf);
 	}
 
 	//Clear IO
@@ -537,7 +537,7 @@ void UserPg::saveIO( )
 	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf); ) {
 	    string sio = cf.cfg("ID").getS();
 	    if(func()->ioId(sio) < 0) {
-		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,true,false,true)) break;
+		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
 	}

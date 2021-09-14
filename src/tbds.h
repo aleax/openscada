@@ -111,6 +111,7 @@ class TBD : public TCntrNode, public TConfig
 	string	dscr( )			{ return cfg("DESCR").getS(); }
 	string	addr( ) const		{ return cfg("ADDR").getS(); }
 	string	codePage( )		{ return cfg("CODEPAGE").getS(); }
+	int64_t	lsPr( )			{ return mLsPr; }
 	double	trTm_ClsOnOpen( )	{ return mTrTm_ClsOnOpen; }
 	double	trTm_ClsOnReq( )	{ return mTrTm_ClsOnReq; }
 	int	trPr_ClsTask( )		{ return mTrPr_ClsTask; }
@@ -119,11 +120,12 @@ class TBD : public TCntrNode, public TConfig
 	bool toEnable( )		{ return mToEn; }
 	bool disabledByUser( )		{ return mDisByUser; }
 
-	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
-	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
-	void setAddr( const string &iaddr )	{ cfg("ADDR").setS(iaddr); }
-	void setCodePage( const string &icp )	{ cfg("CODEPAGE").setS(icp); }
-	void setToEnable( bool ivl )		{ mToEn = ivl; modif(); }
+	void setName( const string &nm )	{ cfg("NAME").setS(nm); }
+	void setDscr( const string &dscr )	{ cfg("DESCR").setS(dscr); }
+	void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
+	void setCodePage( const string &cp )	{ cfg("CODEPAGE").setS(cp); }
+	void setLsPr( int64_t vl )		{ mLsPr = vl; }
+	void setToEnable( bool vl )		{ mToEn = vl; }
 
 	virtual void enable( );
 	virtual void disable( );
@@ -134,7 +136,7 @@ class TBD : public TCntrNode, public TConfig
 	void list( vector<string> &list ) const		{ chldList(mTbl, list); }
 	bool openStat( const string &table ) const	{ return chldPresent(mTbl, table); }
 	virtual void open( const string &table, bool create );
-	virtual void close( const string &table, bool del = false, long tm = -1 )	{ chldDel(mTbl, table, tm, del); }
+	virtual void close( const string &table, bool del = false, long tm = -1 )	{ chldDel(mTbl, table, tm, del?NodeRemove:NodeNoFlg); }
 	AutoHD<TTable> at( const string &name ) const	{ return chldAt(mTbl, name); }
 
 	// SQL request interface
@@ -179,6 +181,7 @@ class TBD : public TCntrNode, public TConfig
 	// Base options
 	TCfg	&mId;	//ID
 	char	&mToEn;
+	int64_t	&mLsPr;
 	double	&mTrTm_ClsOnOpen, &mTrTm_ClsOnReq;
 	int64_t	&mTrPr_ClsTask;
 
@@ -210,7 +213,7 @@ class TTypeBD : public TModule
 	void list( vector<string> &list ) const		{ chldList(mDB, list); }
 	bool openStat( const string &idb ) const	{ return chldPresent(mDB, idb); }
 	string open( const string &id );
-	void close( const string &id, bool erase = false ) { chldDel(mDB, id, -1, erase); }
+	void close( const string &id, bool erase = false ) { chldDel(mDB, id, -1, erase?NodeRemove:NodeNoFlg); }
 	AutoHD<TBD> at( const string &id ) const	{ return chldAt(mDB, id); }
 
 	TBDS &owner( ) const;
@@ -235,9 +238,19 @@ class TBDS : public TSubSYS, public TElem
 {
     public:
 	//Data
-	enum ReqGen {
-	    OnlyCfg	= 0x01,		//Only from cinfig request
-	    UseTranslate= 0x02		//Use translation for request
+	enum DBLsFlg {
+	    LsNoFlg	= 0,
+	    LsCheckSel	= 0x01,
+	    LsInclGenFirst = 0x02
+	};
+	enum ReqGenFlg {
+	    NoFlg	= 0,
+	    NoException	= 0x01,		//Do not generate the exceptions
+	    OnlyCfg	= 0x02,		//Force request to the configuration file, in genDBGet(), genDBSet() and dataSet() only
+	    // Specific ones
+	    UseTranslation = 0x04,	//Use translation for request, in genDBGet() and genDBSet() only
+	    UseCache	= 0x04,		//Use the cache, in dataSeek() only
+	    UseAllKeys	= 0x04		//Use all keys, in dataDel() only
 	};
 
 	//Public methods
@@ -246,8 +259,9 @@ class TBDS : public TSubSYS, public TElem
 
 	int subVer( )		{ return SDB_VER; }
 
-	static string realDBName( const string &bdn );
-	void dbList( vector<string> &ls, bool checkSel = false );
+	static string realDBName( const string &bdn, bool back = false );
+	void dbList( vector<string> &ls, char flags = LsNoFlg );
+
 	int tblLifeTime( )	{ return mTblLifeTime; }
 	void setTblLifeTime( int vl )	{ mTblLifeTime = vmax(10, vmin(1000,vl)); modif(); }
 
@@ -258,14 +272,15 @@ class TBDS : public TSubSYS, public TElem
 	void close( const string &bdn, bool del = false );
 
 	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
-	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false, bool useCache = false, XMLNode *localCfgCtx = NULL );
-	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );
-	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );
-	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );	//Next test for noEx=false
+	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	bool dataGet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	bool dataSet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	bool dataDel( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg );
 
 	// Generic DB table
-	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", char rFlg = 0 );
-	static void genDBSet( const string &path, const string &val, const string &user = "root", char rFlg = 0 );
+	//???? Adapt to the new storage policy and test on UI.QTStarter, adapt and use dataGet() and dataSet() for these
+	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", char flags = NoFlg );
+	static void genDBSet( const string &path, const string &val, const string &user = "root", char flags = NoFlg );
 
 	string fullDBSYS( );
 	string fullDB( );

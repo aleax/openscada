@@ -56,9 +56,9 @@ class TUser : public TCntrNode, public TConfig
 	bool	auth( const string &pass, string *hash = NULL );
 	int	permitCmpr( const string &user );
 
-	string	DB( )		{ return mDB; }
+	string	DB( bool qTop = false )		{ return storage(mDB, qTop); }
 	string	tbl( );
-	string	fullDB( )	{ return DB()+'.'+tbl(); }
+	string	fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
 
 	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
@@ -67,7 +67,7 @@ class TUser : public TCntrNode, public TConfig
 	void setPass( const string &n_pass );
 	void setSysItem( bool vl )		{ mSysIt = vl; }
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
     protected:
 	//Methods
@@ -110,15 +110,15 @@ class TGroup : public TCntrNode, public TConfig
 	string	users( )	{ return cfg("USERS").getS(); }
 	bool	sysItem( )	{ return mSysIt; }
 
-	string DB( )		{ return mDB; }
+	string DB( bool qTop = false )		{ return storage(mDB, qTop); }
 	string tbl( );
-	string fullDB( )	{ return DB() + '.' + tbl(); }
+	string fullDB( bool qTop = false )	{ return DB(qTop) + '.' + tbl(); }
 
 	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
 	void setSysItem( bool vl )		{ mSysIt = vl; }
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	bool user( const string &name );
 	void userAdd( const string &name );
@@ -159,19 +159,19 @@ class TSecurity : public TSubSYS
 	char access( const string &user, char mode, const string &owner, const string &group, int access );
 
 	// Users
-	void usrList( vector<string> &list ) const	{ chldList(mUsr,list); }
+	void usrList( vector<string> &list ) const	{ chldList(mUsr, list); }
 	void usrGrpList( const string &name, vector<string> &list );
-	bool usrPresent( const string &name ) const	{ return chldPresent(mUsr,name); }
+	bool usrPresent( const string &name ) const	{ return chldPresent(mUsr, name); }
 	string usrAdd( const string &name, const string &db = "*.*" );
 	void usrDel( const string &name, bool complete = false );
-	AutoHD<TUser> usrAt( const string &name ) const	{ return chldAt(mUsr,name); }
+	AutoHD<TUser> usrAt( const string &name ) const	{ return chldAt(mUsr, name); }
 
 	// Groups
-	void grpList( vector<string> &list ) const		{ chldList(mGrp,list); }
-	bool grpPresent( const string &name ) const		{ return chldPresent(mGrp,name); }
+	void grpList( vector<string> &list ) const		{ chldList(mGrp, list); }
+	bool grpPresent( const string &name ) const		{ return chldPresent(mGrp, name); }
 	string grpAdd( const string &name, const string &db = "*.*" );
 	void grpDel( const string &name, bool complete = false );
-	AutoHD<TGroup> grpAt( const string &name ) const	{ return chldAt(mGrp,name); }
+	AutoHD<TGroup> grpAt( const string &name ) const	{ return chldAt(mGrp, name); }
 
 	//Public attributes
 	static const string pHashMagic;

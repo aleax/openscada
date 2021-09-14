@@ -167,22 +167,23 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	string	name( );
 	string	descr( );
 
-	string	DB( )		{ return work_lib_db; }
-	string	tbl( )		{ return cfg("DB").getS(); }
-	string	fullDB( )	{ return DB()+'.'+tbl(); }
+	string	DB( bool qTop = false )		{ return storage(mDB, qTop); }
+	string	tbl( )				{ return cfg("DB").getS(); }
+	string	fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
 
 	bool startStat( ) const	{ return runSt; }
 	void start( bool val );
 
 	void setName( const string &vl );
 	void setDescr( const string &vl );
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 	void setFullDB( const string &vl );
 
 	void list( vector<string> &ls ) const		{ chldList(m_ptmpl,ls); }
 	bool present( const string &id ) const		{ return chldPresent(m_ptmpl,id); }
 	AutoHD<TPrmTempl> at( const string &id ) const	{ return chldAt(m_ptmpl,id); }
 	void add( const string &id, const string &name = "" );
-	void del( const string &id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
+	void del( const string &id, bool full_del = false )	{ chldDel(m_ptmpl,id, -1, full_del?NodeRemove:NodeNoFlg); }
 
 	TDAQS &owner( ) const;
 
@@ -207,7 +208,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	bool	runSt;
 	int	m_ptmpl;
 	TCfg	&mId;
-	string	work_lib_db;
+	string	mDB;
 };
 
 }

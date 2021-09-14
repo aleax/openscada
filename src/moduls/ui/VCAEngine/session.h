@@ -87,7 +87,7 @@ class Session : public TCntrNode
 	bool present( const string &id ) const		{ return chldPresent(mPage,id); }
 	AutoHD<SessPage> at( const string &id ) const;
 	void add( const string &id, const string &parent = "" );
-	void del( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
+	void del( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full?NodeRemove:NodeNoFlg); }
 
 	vector<string> openList( );
 	bool openCheck( const string &id );
@@ -366,7 +366,7 @@ class SessPage : public SessWdg
 	bool pagePresent( const string &id ) const		{ return chldPresent(mPage, id); }
 	AutoHD<SessPage> pageAt( const string &id ) const;
 	void pageAdd( const string &id, const string &parent = "" );
-	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
+	void pageDel( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full?NodeRemove:NodeNoFlg); }
 
 	//  The access redirection for the links
 	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;

@@ -219,7 +219,8 @@ class TSYS : public TCntrNode
 	int	savePeriod( )	{ return mSavePeriod; }
 	bool	modifCalc( )	{ return mModifCalc; }
 
-	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
+	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; /*modifG();*/ }	//!!!! Do not mark all objects modification
+											//     and to save/load all them use the force operations
 	void	setMainCPUs( const string &vl );
 	void	setClockRT( bool vl )		{ mClockRT = vl; modif(); }
 	void	setTaskInvPhs( int vl );

@@ -127,15 +127,15 @@ void TArchiveS::load_( )
 	vector<string> dbLs;
 
 	// Search int DB and create new archivers
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
+	SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,false,true); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,TBDS::UseCache); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
 		if(!modPresent(type))	continue;
-		if(!at(type).at().messPresent(id)) at(type).at().messAdd(id, (dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
-		at(type).at().messAt(id).at().load(&cEl);
+		if(!at(type).at().messPresent(id)) at(type).at().messAdd(id, dbLs[iIt]);
+		if(at(type).at().messAt(id).at().DB() == dbLs[iIt]) at(type).at().messAt(id).at().load(&cEl);
+		at(type).at().messAt(id).at().setDB(dbLs[iIt], true);
 		itReg[type+"."+id] = true;
 	    }
 
@@ -163,15 +163,15 @@ void TArchiveS::load_( )
 	itReg.clear();
 
 	//  Search into DB and create new archivers
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
+	SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,false,true); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,TBDS::UseCache); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
 		if(!modPresent(type))	continue;
-		if(!at(type).at().valPresent(id)) at(type).at().valAdd(id, (dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
-		at(type).at().valAt(id).at().load(&cEl);
+		if(!at(type).at().valPresent(id)) at(type).at().valAdd(id, dbLs[iIt]);
+		if(at(type).at().valAt(id).at().DB() == dbLs[iIt]) at(type).at().valAt(id).at().load(&cEl);
+		at(type).at().valAt(id).at().setDB(dbLs[iIt], true);
 		itReg[type+"."+id] = true;
 	    }
 
@@ -199,15 +199,15 @@ void TArchiveS::load_( )
 	itReg.clear();
 
 	//  Search into DB and create new archives
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
+	SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,false,true); ) {
+	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,TBDS::UseCache); ) {
 		id = cEl.cfg("ID").getS();
-		if(!valPresent(id)) valAdd(id,(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
-		//   For force loading after creation from archiver storage
-		else if(valAt(id).at().DB() == "*.*" && dbLs[iIt] != SYS->workDB()) valAt(id).at().setDB(dbLs[iIt]);
-		valAt(id).at().load(&cEl);
+		if(!valPresent(id)) valAdd(id, dbLs[iIt]);
+		//???? For force loading after creation from archiver storage
+		//else if(valAt(id).at().DB() == "*.*" && dbLs[iIt] != SYS->workDB()) valAt(id).at().setDB(dbLs[iIt]);
+		if(valAt(id).at().DB() == dbLs[iIt]) valAt(id).at().load(&cEl);
+		valAt(id).at().setDB(dbLs[iIt], true);
 		itReg[id] = true;
 	    }
 
@@ -1337,7 +1337,11 @@ void TMArchivator::preDisable( int flag )
 
 void TMArchivator::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
+    if(flag) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->archive().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 TTypeArchivator &TMArchivator::owner( ) const	{ return *(TTypeArchivator*)nodePrev(); }
@@ -1362,7 +1366,11 @@ void TMArchivator::load_( TConfig *icfg )
     mRdUse = redntMode();
 }
 
-void TMArchivator::save_( )	{ SYS->db().at().dataSet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this); }
+void TMArchivator::save_( )
+{
+    SYS->db().at().dataSet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
+    setDB(DB(), true);
+}
 
 void TMArchivator::redntDataUpdate( )
 {
@@ -1535,6 +1543,8 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archiver DB"),RWRWR_,"root","root",4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SARH_ID);
 		ctrMkNode("fld",opt,-1,"/prm/st/end",_("End"),R_R_R_,"root","root",1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/prm/st/beg",_("Begin"),R_R_R_,"root","root",1,"tp","time");
 	    }
@@ -1576,6 +1586,8 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/prm/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/prm/st/end" && ctrChkNode(opt))		opt->setText(i2s(end()));
     else if(a_path == "/prm/st/beg" && ctrChkNode(opt))		opt->setText(i2s(begin()));
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);

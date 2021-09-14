@@ -4524,7 +4524,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    break;
     }
     sort(sortIts.begin(), sortIts.end());
-    if(shD->viewOrd&0x4) reverse(sortIts.begin(),sortIts.end());
+    if(shD->viewOrd&0x4) reverse(sortIts.begin(), sortIts.end());
 
     //Write to the table
     shD->addrWdg->setRowCount(sortIts.size());

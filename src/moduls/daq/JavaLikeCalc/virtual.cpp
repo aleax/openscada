@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.3.2"
+#define MOD_VER		"5.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -291,10 +291,10 @@ void TpContr::load_( )
 	map<string, bool> itReg;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, true);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
 	itLs.push_back(DB_CFG);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,true); ) {
+	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,TBDS::UseCache); ) {
 		string l_id = cEl.cfg("ID").getS();
 		if(!lbPresent(l_id)) {
 		    lbReg(new Lib(l_id.c_str(),"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]));
@@ -437,9 +437,9 @@ void Contr::postDisable( int flag )
     try {
 	if(flag) {
 	    //Delete IO value's table
-	    string db = DB()+"."+TController::id()+"_val";
+	    string db = DB(flag&NodeRemoveOnlyStor)+"."+TController::id()+"_val";
 	    SYS->db().at().open(db);
-	    SYS->db().at().close(db,true);
+	    SYS->db().at().close(db, true);
 	}
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
@@ -530,7 +530,7 @@ void Contr::loadFunc( bool onlyVl )
 	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
 
-	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,true); ) {
+	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,TBDS::UseCache); ) {
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
 	    if(ioId < 0 || (!isDAQTmpl && (func()->io(ioId)->flg()&Func::SysAttr))) continue;
 	    if(!isDAQTmpl) setS(ioId, cfg.cfg("VAL").getS());
@@ -579,7 +579,7 @@ void Contr::save_( )
 	cfg.cfgViewAll(false);
 	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0) {
-		if(!SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,true,false,true))	break;
+		if(!SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
     }

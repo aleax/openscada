@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.h
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -151,7 +151,7 @@ class TWEB: public TUI
 	void uPgList( vector<string> &ls ) const	{ chldList(mPgU,ls); }
 	bool uPgPresent( const string &id ) const	{ return chldPresent(mPgU,id); }
 	string uPgAdd( const string &id, const string &db = "*.*" );
-	void uPgDel( const string &id )			{ chldDel(mPgU,id); }
+	void uPgDel( const string &id )			{ chldDel(mPgU, id); }
 	AutoHD<UserPg> uPgAt( const string &id ) const	{ return chldAt(mPgU, id); }
 
 	TElem &uPgEl( )		{ return mUPgEl; }

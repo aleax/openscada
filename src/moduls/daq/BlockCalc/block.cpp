@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2017,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -71,13 +71,13 @@ void Block::postDisable( int flag )
     if(flag) {
 	//Delete block from BD
 	string tbl = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
-	SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this,true);
+	SYS->db().at().dataDel(tbl, mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this, TBDS::UseAllKeys);
 
 	//Delete block's IO from BD
 	TConfig cfg(&owner().owner().blockIOE());
 	tbl = tbl+"_io";
 	cfg.cfg("BLK_ID").setS(id(), true);		//Delete all block id records
-	SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io",cfg);
+	SYS->db().at().dataDel(tbl, mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io", cfg);
     }
 }
 
@@ -103,7 +103,7 @@ void Block::load_( TConfig *icfg )
 void Block::save_( )
 {
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
-    SYS->db().at().dataSet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
+    SYS->db().at().dataSet(bd, mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this);
 
     //Save IO config
     saveIO();
@@ -130,7 +130,7 @@ void Block::loadIO( const string &blk_db, const string &blk_id, bool force )
     while(ioSize() > (int)mLnk.size()) { mLnk.push_back(SLnk()); mLnk.back().tp = FREE; }
 
     //IO values loading and links set, by seek
-    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,TBDS::UseCache); ) {
 	int io = func()->ioId(cfg.cfg("ID").getS());
 	if(io < 0) continue;
 	setS(io, cfg.cfg("VAL").getS());
@@ -154,7 +154,7 @@ void Block::saveIO( )
 	    cfg.cfg("LNK").setS((mLnk[iLn].tp == FREE)?"":mLnk[iLn].lnk);	//Link
 	    cfg.cfg("VAL").setS(getS(iLn));					//Value
 
-	    SYS->db().at().dataSet(bd,mod->nodePath()+bd_tbl,cfg);
+	    SYS->db().at().dataSet(bd, mod->nodePath()+bd_tbl, cfg);
 	} catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Block link '%s' save error."),func()->io(iLn)->id().c_str());

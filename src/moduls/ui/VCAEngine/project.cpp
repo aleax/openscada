@@ -102,7 +102,7 @@ void Project::postDisable( int flag )
 {
     if(flag) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this, true);
+	SYS->db().at().dataDel(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this, TBDS::UseAllKeys);
 
 	//Delete function's files
 	// Delete widgets table
@@ -191,7 +191,7 @@ void Project::load_( TConfig *icfg )
     TConfig cEl(&mod->elPage());
     //cEl.cfgViewAll(false);
     cEl.cfg("OWNER").setS("/"+id(), true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId, "", "");
 	at(fId).at().load(&cEl);
@@ -214,7 +214,7 @@ void Project::load_( TConfig *icfg )
     TConfig cStl(&mod->elPrjStl());
     string svl;
     vector<string> vlst;
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,TBDS::UseCache); ) {
 	vlst.clear();
 	for(int iS = 0; iS < Project::StlMaximum; iS++)
 	    vlst.push_back(cStl.cfg("V_"+i2s(iS)).getS());
@@ -226,7 +226,7 @@ void Project::save_( )
 {
     if(enableByNeed)	return;
 
-    SYS->db().at().dataSet(DB()+"."+mod->prjTable(),mod->nodePath()+"PRJ",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this);
 
     //Check for need copy mime data and sessions data to other DB and same copy
     if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB())) {
@@ -241,8 +241,8 @@ void Project::save_( )
 	// Session's data copy
 	string wtbl = tbl()+"_ses";
 	TConfig cEl(&mod->elPrjSes());
-	for(int fldCnt = 0; SYS->db().at().dataSeek(mOldDB+"."+wtbl,"",fldCnt,cEl,false,true); fldCnt++)
-	    SYS->db().at().dataSet(DB()+"."+wtbl,"",cEl);
+	for(int fldCnt = 0; SYS->db().at().dataSeek(mOldDB+"."+wtbl,"",fldCnt,cEl,TBDS::UseCache); fldCnt++)
+	    SYS->db().at().dataSet(DB()+"."+wtbl, "", cEl);
     }
 
     mOldDB = TBDS::realDBName(DB());
@@ -254,7 +254,7 @@ void Project::save_( )
 	cStl.cfg("ID").setS(iStPrp->first);
 	for(unsigned iS = 0; iS < iStPrp->second.size() && iS < Project::StlMaximum; iS++)
 	    cStl.cfg(TSYS::strMess("V_%d",iS)).setS(iStPrp->second[iS]);
-	SYS->db().at().dataSet(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl);
+	SYS->db().at().dataSet(fullDB()+"_stl", nodePath()+tbl()+"_stl", cStl);
     }
 
     // Checking for the removed properties
@@ -262,7 +262,7 @@ void Project::save_( )
     cStl.cfgViewAll(false);
     for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl); ) {
 	if(mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
-	    if(!SYS->db().at().dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,true,false,true))	break;
+	    if(!SYS->db().at().dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fldCnt--;
 	}
     }
@@ -314,7 +314,7 @@ void Project::mimeDataList( vector<string> &list, const string &idb ) const
     cEl.cfgViewAll(false);
 
     list.clear();
-    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,true); fldCnt++)
+    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,TBDS::UseCache); fldCnt++)
 	list.push_back(cEl.cfg("ID").getS());
 }
 
@@ -331,7 +331,7 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
 	TConfig cEl(&mod->elWdgData());
 	if(!mimeData) cEl.cfg("DATA").setView(false);
 	cEl.cfg("ID").setS( dbid );
-	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,cEl,false,true)) {
+	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,cEl,TBDS::NoException)) {
 	    mimeType = cEl.cfg("MIME").getS();
 	    if(mimeData) *mimeData = cEl.cfg("DATA").getS();
 	    return true;
@@ -381,7 +381,7 @@ void Project::mimeDataSet( const string &iid, const string &mimeType, const stri
     cEl.cfg("MIME").setS(mimeType);
     if(!mimeData.size()) cEl.cfg("DATA").setView(false);
     else cEl.cfg("DATA").setS(mimeData);
-    SYS->db().at().dataSet(wdb+"."+wtbl,mod->nodePath()+wtbl,cEl,false,true);
+    SYS->db().at().dataSet(wdb+"."+wtbl ,mod->nodePath()+wtbl, cEl, TBDS::NoException);
 }
 
 void Project::mimeDataDel( const string &iid, const string &idb )
@@ -390,7 +390,7 @@ void Project::mimeDataDel( const string &iid, const string &idb )
     string wdb  = idb.empty() ? DB() : idb;
     TConfig cEl(&mod->elWdgData());
     cEl.cfg("ID").setS(iid, true);
-    SYS->db().at().dataDel(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, false, false, true);
+    SYS->db().at().dataDel(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, TBDS::NoException);
 }
 
 void Project::stlList( vector<string> &ls )
@@ -975,7 +975,7 @@ void Page::postDisable( int flag )
 	string tbl = ownerProj()->tbl();
 
 	//Remove from library table
-	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, *this, true);
+	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, *this, TBDS::UseAllKeys);
 
 	//Remove widget's IO from library IO table
 	TConfig cEl(&mod->elWdgIO());
@@ -1105,7 +1105,7 @@ void Page::load_( TConfig *icfg )
     string tbl = ownerProj()->tbl();
     string tbl_io = tbl+"_io";
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    else SYS->db().at().dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
     setParentNm(cfg("PARENT").getS());
 
     //Inheriting the modified attributes
@@ -1129,7 +1129,7 @@ void Page::load_( TConfig *icfg )
     TConfig cEl(&mod->elPage());
     //cEl.cfgViewAll(false);
     cEl.cfg("OWNER").setS(ownerFullId()+"/"+id(), true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!pagePresent(fId))
 	    try { pageAdd(fId, "", ""); }
@@ -1185,13 +1185,13 @@ void Page::loadIO( )
 	// Lost inherited widget due to it removing into the parent
 	else if(mod->nodeAt(spar,0,0,0,true).freeStat() && sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0) {
 	    if(wdgPresent(sid)) wdgDel(sid);
-	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true);
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys);
 	    fldCnt--;
 	    continue;
 	}
 	// Record without any changes
 	else if(!cEl.cfg("ATTRS").getS().size()) {
-	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true);
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys);
 	    fldCnt--;
 	}
 	if(!wdgPresent(sid))
@@ -1222,7 +1222,7 @@ void Page::save_( )
 
     //Save generic widget's data
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Save widget's attributes
     saveIO();
@@ -1308,8 +1308,8 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	TConfig cEl(&mod->elInclWdg());
 	cEl.cfg("IDW").setS(path());
 	cEl.cfg("ID").setS(wid);
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true) && cEl.cfg("PARENT").getS() == "<deleted>") {
-	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,TBDS::NoException) && cEl.cfg("PARENT").getS() == "<deleted>") {
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys|TBDS::NoException);
 	    toRestoreInher = parent().at().wdgPresent(wid);
 	}
     }
@@ -1733,7 +1733,7 @@ void PageWdg::postDisable( int flag )
 	    cfg("PARENT").setS("<deleted>");
 	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 	}
-	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
+	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, TBDS::UseAllKeys);
 
 	//Remove widget's work and users IO from library IO table
 	string tAttrs = cfg("ATTRS").getS();

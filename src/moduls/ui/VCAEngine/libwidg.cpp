@@ -92,7 +92,7 @@ void WidgetLib::postDisable( int flag )
 {
     if(flag) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB",*this,true);
+	SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB", *this, TBDS::UseAllKeys);
 
 	//Delete function's files
 	// Delete widgets table
@@ -179,7 +179,7 @@ void WidgetLib::load_( TConfig *icfg )
     map<string, bool>	itReg;
     TConfig cEl(&mod->elWdg());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) { add(fId, "", ""); at(fId).at().setEnableByNeed(); }
 	at(fId).at().load(&cEl);
@@ -204,7 +204,7 @@ void WidgetLib::save_( )
 {
     mess_debug(nodePath().c_str(),_("Saving widgets library."));
 
-    SYS->db().at().dataSet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->wlbTable(), mod->nodePath()+"LIB", *this);
 
     //Check for need copy mime data to other DB and same copy
     if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB())) {
@@ -249,7 +249,7 @@ void WidgetLib::mimeDataList( vector<string> &list, const string &idb ) const
     cEl.cfgViewAll(false);
 
     list.clear();
-    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,false,true); fldCnt++)
+    for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,TBDS::UseCache); fldCnt++)
 	list.push_back(cEl.cfg("ID").getS());
 }
 
@@ -266,7 +266,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	TConfig cEl(&mod->elWdgData());
 	if(!mimeData) cEl.cfg("DATA").setView(false);
 	cEl.cfg("ID").setS(dbid);
-	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,cEl,false,true)) {
+	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,cEl,TBDS::NoException)) {
 	    mimeType = cEl.cfg("MIME").getS();
 	    if(mimeData) *mimeData = cEl.cfg("DATA").getS();
 	    return true;
@@ -316,7 +316,7 @@ void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const st
     cEl.cfg("MIME").setS(mimeType);
     if(!mimeData.size()) cEl.cfg("DATA").setView(false);
     else cEl.cfg("DATA").setS(mimeData);
-    SYS->db().at().dataSet(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, false, true);
+    SYS->db().at().dataSet(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, TBDS::NoException);
 }
 
 void WidgetLib::mimeDataDel( const string &iid, const string &idb )
@@ -325,7 +325,7 @@ void WidgetLib::mimeDataDel( const string &iid, const string &idb )
     string wdb  = idb.empty() ? DB() : idb;
     TConfig cEl(&mod->elWdgData());
     cEl.cfg("ID").setS(iid,true);
-    SYS->db().at().dataDel(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, false, false, true);
+    SYS->db().at().dataDel(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, TBDS::NoException);
 }
 
 string WidgetLib::add( const string &iid, const string &name, const string &orig )
@@ -532,7 +532,7 @@ void LWidget::postDisable( int flag )
 	string tbl = ownerLib().tbl();
 
 	//Remove from library table
-	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, *this, true);
+	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, *this, TBDS::UseAllKeys);
 
 	//Remove widget's IO from library IO table
 	TConfig cEl(&mod->elWdgIO());
@@ -713,7 +713,7 @@ void LWidget::loadIO( )
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl()+"_incl";
     cEl.cfg("IDW").setS(id(),true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,TBDS::UseCache); ) {
 	string sid  = cEl.cfg("ID").getS();
 	if(cEl.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);
@@ -786,8 +786,8 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
 	TConfig cEl( &mod->elInclWdg() );
 	cEl.cfg("IDW").setS(id());
 	cEl.cfg("ID").setS(wid);
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true) && cEl.cfg("PARENT").getS() == "<deleted>") {
-	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, true, false, true);
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,TBDS::NoException) && cEl.cfg("PARENT").getS() == "<deleted>") {
+	    SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys|TBDS::NoException);
 	    toRestoreInher = parent().at().wdgPresent(wid);
 	}
     }
@@ -958,7 +958,7 @@ void CWidget::postDisable( int flag )
 	    cfg("PARENT").setS("<deleted>");
 	    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 	}
-	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, true);
+	else SYS->db().at().dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, TBDS::UseAllKeys);
 
 	//Remove widget's work and users IO from library IO table
 	string tAttrs = cfg("ATTRS").getS();
@@ -1021,7 +1021,7 @@ void CWidget::load_( TConfig *icfg )
     string tbl = ownerLWdg().ownerLib().tbl()+"_incl";
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,*this);
+    else SYS->db().at().dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Inherit modify attributes
     vector<string> als;
@@ -1060,7 +1060,7 @@ void CWidget::save_( )
     cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, ownerLWdg().id(), id(), true));
 
     //Save generic widget's data
-    SYS->db().at().dataSet(db+"."+tbl+"_incl",mod->nodePath()+tbl+"_incl",*this);
+    SYS->db().at().dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
 
     //Save widget's attributes
     saveIO();

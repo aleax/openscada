@@ -122,15 +122,16 @@ TMdContr::~TMdContr( )
 
 void TMdContr::postDisable( int flag )
 {
-    TController::postDisable(flag);
     try {
 	if(flag) {
 	    //Delete logical parameter's io table
-	    string tbl = DB()+"."+cfg("PRM_BD_L").getS()+"_io";
+	    string tbl = DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD_L").getS()+"_io";
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl, true);
 	}
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
+    TController::postDisable(flag);
 }
 
 string TMdContr::getStatus( )
@@ -1036,7 +1037,7 @@ void TMdPrm::postDisable( int flag )
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(ownerPath(true), true);
-	SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+	SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -1247,7 +1248,7 @@ void TMdPrm::loadIO( bool force )
     //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
+	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
 	else if(lCtx->func()->io(iIO)->type() != IO::String || !(lCtx->func()->io(iIO)->flg()&IO::TransltText))
@@ -1278,7 +1279,7 @@ void TMdPrm::saveIO( )
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
-	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 

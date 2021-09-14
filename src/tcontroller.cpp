@@ -94,14 +94,17 @@ void TController::postDisable( int flag )
 {
     if(flag) {
 	//Delete DB record
-	SYS->db().at().dataDel(fullDB(), owner().nodePath()+"DAQ", *this, true);
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+"DAQ", *this, TBDS::UseAllKeys);
 
-	//Delete parameter's tables
+	//???? Append the generic tables removing interface with the Configuration File
+	//Delete parameter tables
 	for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++) {
-	    string tbl = DB()+"."+owner().tpPrmAt(iTp).DB(this);
+	    string tbl = DB(flag&NodeRemoveOnlyStor)+"."+owner().tpPrmAt(iTp).DB(this);
 	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl,true);
+	    SYS->db().at().close(tbl, true);
 	}
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
 
@@ -182,7 +185,8 @@ void TController::save_( )
     mess_sys(TMess::Info, _("Controller configuration saving."));
 
     //Update type controller bd record
-    SYS->db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);
+    SYS->db().at().dataSet(fullDB(), owner().nodePath()+"DAQ", *this);
+    setDB(DB(), true);
 }
 
 void TController::start( )
@@ -283,7 +287,7 @@ void TController::LoadParmCfg( )
 
 	    // Search new into DB and Config-file
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(DB()+"."+owner().tpPrmAt(iTp).DB(this),
-					owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,false,true); )
+					owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,TBDS::UseCache); )
 	    {
 		try {
 		    string shfr = cEl.cfg("SHIFR").getS();
@@ -517,6 +521,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/cntr/st/runSt",_("Running"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/cntr/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID);
 		ctrMkNode("fld",opt,-1,"/cntr/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration"))) {
@@ -598,6 +604,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/cntr/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/cntr/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/cntr/st/enSt") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enSt?"1":"0");

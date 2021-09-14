@@ -915,7 +915,11 @@ void TVArchive::preDisable( int flag )
 
 void TVArchive::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+    if(flag) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 bool TVArchive::cfgChange( TCfg &co, const TVariant &pc )
@@ -1037,6 +1041,7 @@ void TVArchive::load_( TConfig *icfg )
 void TVArchive::save_( )
 {
     SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+    setDB(DB(), true);
 }
 
 void TVArchive::start( )
@@ -2017,6 +2022,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/bBeg",_("Buffer begin"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archive DB"),RWRWR_,"root",SARH_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SARH_ID);
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
@@ -2084,6 +2091,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/prm/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/prm/cfg/Source") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(srcData()+(srcPAttr(true).freeStat()?"":" (+)"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	mSource = TSYS::strParse(opt->text(), 0, " ");
@@ -2270,7 +2279,11 @@ void TVArchivator::preDisable( int flag )	{ if(startStat()) stop(flag); }
 
 void TVArchivator::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
+    if(flag) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->archive().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 bool TVArchivator::cfgChange( TCfg &co, const TVariant &pc )
@@ -2370,6 +2383,7 @@ void TVArchivator::load_( TConfig *icfg )
 void TVArchivator::save_( )
 {
     SYS->db().at().dataSet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
+    setDB(DB(), true);
 }
 
 void *TVArchivator::Task( void *param )
@@ -2435,6 +2449,8 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 		if(archPeriod()) ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archiver DB"),RWRWR_,"root","root",4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SARH_ID);
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
@@ -2467,6 +2483,8 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/prm/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SARH_ID, RWRWR_);
     else if(a_path == "/arch/arch" && ctrChkNode(opt)) {
 	// Fill Archives table

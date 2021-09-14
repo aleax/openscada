@@ -405,7 +405,7 @@ string Session::sessAttr( const string &idw, const string &id, bool onlyAllow )
     cEl.cfg("IO_VAL").setView(!onlyAllow);
     string db  = parent().at().DB();
     string tbl = parent().at().tbl()+"_ses";
-    return (SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true)) ? (onlyAllow?"1":cEl.cfg("IO_VAL").getS()) : "";
+    return (SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,TBDS::NoException)) ? (onlyAllow?"1":cEl.cfg("IO_VAL").getS()) : "";
 }
 
 void Session::sessAttrSet( const string &idw, const string &id, const string &val )
@@ -416,7 +416,7 @@ void Session::sessAttrSet( const string &idw, const string &id, const string &va
     cEl.cfg("IO_VAL").setS(val);
     string db  = parent().at().DB();
     string tbl = parent().at().tbl()+"_ses";
-    SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl, false, true);
+    SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::NoException);
 }
 
 void Session::alarmSet( const string &wpath, const string &alrm )

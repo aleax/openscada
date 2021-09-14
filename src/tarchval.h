@@ -194,9 +194,9 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	bool	toStart( )  		{ return mStart; }
 	bool	startStat( ) const	{ return runSt; }
 
-	string	DB( ) const		{ return mDB; }
+	string	DB( bool qTop = false ) const		{ return storage(mDB, qTop); }
 	string	tbl( );
-	string	fullDB( )		{ return DB()+'.'+tbl(); }
+	string	fullDB( bool qTop = false )		{ return DB(qTop)+'.'+tbl(); }
 
 	int64_t	end( const string &arch = BUF_ARCH_NM );
 	int64_t	begin( const string &arch = BUF_ARCH_NM );
@@ -213,7 +213,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void setCombMode( CombMode vl )		{ mCombMode = (int)vl; }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
-	void setDB( const string &idb )		{ mDB = idb; modifG(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	void setValType( TFld::Type vl )	{ mVType = vl; }
 	void setHardGrid( bool vl )		{ mBHGrd = vl; setUpBuf(); modif(); }
@@ -316,9 +316,9 @@ class TVArchivator : public TCntrNode, public TConfig
 	bool toStart( )		{ return mStart; }
 	bool startStat( ) const	{ return runSt; }
 
-	string DB( ) const	{ return mDB; }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
@@ -328,7 +328,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void setSelPrior( int vl )		{ mSelPrior = std::max(0,std::min(1000,vl)); modif(); }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
-	void setDB( const string &idb )		{ mDB = idb; modif(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modif(); }
 
 	virtual void start( );
 	virtual void stop( bool full_del = false );

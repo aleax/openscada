@@ -91,7 +91,7 @@ void TTransportS::outTrList( vector<string> &ls )
     }
 }
 
-string TTransportS::extHostsDB( )	{ return SYS->workDB()+".CfgExtHosts"; }
+string TTransportS::extHostsDB( )	{ return "*.*.CfgExtHosts"; }
 
 void TTransportS::load_( )
 {
@@ -109,16 +109,15 @@ void TTransportS::load_( )
 	vector<string> itLs;
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,false,true); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,TBDS::UseCache); ) {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(!modPresent(type))	continue;
-		if(!at(type).at().inPresent(id))
-		    at(type).at().inAdd(id,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
-		at(type).at().inAt(id).at().load(&c_el);
+		if(!at(type).at().inPresent(id)) at(type).at().inAdd(id, itLs[iIt]);
+		if(at(type).at().inAt(id).at().DB() == itLs[iIt]) at(type).at().inAt(id).at().load(&c_el);
+		at(type).at().inAt(id).at().setDB(itLs[iIt], true);
 		itReg[type+"."+id] = true;
 	    }
 
@@ -146,16 +145,15 @@ void TTransportS::load_( )
 	itReg.clear();
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,false,true); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,TBDS::UseCache); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(!modPresent(type))	continue;
-		if(!at(type).at().outPresent(id))
-		    at(type).at().outAdd(id,(itLs[iIt]==SYS->workDB())?"*.*":itLs[iIt]);
-		at(type).at().outAt(id).at().load(&c_el);
+		if(!at(type).at().outPresent(id)) at(type).at().outAdd(id, itLs[iIt]);
+		if(at(type).at().outAt(id).at().DB() == itLs[iIt]) at(type).at().outAt(id).at().load(&c_el);
+		at(type).at().outAt(id).at().setDB(itLs[iIt], true);
 		itReg[type+"."+id] = true;
 	    }
 
@@ -177,11 +175,13 @@ void TTransportS::load_( )
 
     // Load external hosts
     try {
+	map<string, bool> regIds;
 	TConfig c_el(&elExt);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true,true); ) {
+	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,TBDS::UseCache); ) {
 	    ExtHost host("", "");
 	    host.userOpen	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
+	    if(regIds[host.userOpen+":"+host.id]) continue;	//Preventing the loading both config and DB
 	    host.name		= c_el.cfg("NAME").getS();
 	    host.transp		= c_el.cfg("TRANSP").getS();
 	    host.addr		= c_el.cfg("ADDR").getS();
@@ -189,6 +189,7 @@ void TTransportS::load_( )
 	    host.pass		= c_el.cfg("PASS").getS();
 	    host.upRiseLev	= c_el.cfg("UpRiseLev").getI();
 	    extHostSet(host, false, true);
+	    regIds[host.userOpen+":"+host.id] = true;
 	}
 	extHostLoad = time(NULL);
     } catch(TError &err) {
@@ -211,13 +212,13 @@ void TTransportS::save_( )
 	c_el.cfg("USER").setS(extHostLs[iH].user);
 	c_el.cfg("PASS").setS(extHostLs[iH].pass);
 	c_el.cfg("UpRiseLev").setI(extHostLs[iH].upRiseLev);
-	SYS->db().at().dataSet(extHostsDB(),nodePath()+"ExtTansp",c_el);
+	SYS->db().at().dataSet(extHostsDB(), nodePath()+"ExtTansp", c_el);
     }
     //Clear external transports
     c_el.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); )
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el); )
 	if(!extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size()) {
-	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp",c_el,true,true,true);
+	    SYS->db().at().dataDel(extHostsDB(), nodePath()+"ExtTansp", c_el, TBDS::UseAllKeys|TBDS::NoException);
 	    fld_cnt--;
 	}
 }
@@ -695,7 +696,10 @@ void TTransportIn::preEnable( int flag )
 void TTransportIn::postDisable( int flag )
 {
     try { stop(); } catch(...){ }		//Stop at any disabling
-    if(flag) SYS->db().at().dataDel(fullDB(), SYS->transport().at().nodePath()+tbl(), *this, true);
+    if(flag) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 bool TTransportIn::cfgChange( TCfg &co, const TVariant &pc )
@@ -744,6 +748,7 @@ void TTransportIn::load_( TConfig *icfg )
 void TTransportIn::save_( )
 {
     SYS->db().at().dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
+    setDB(DB(), true);
 }
 
 void TTransportIn::stop( )
@@ -897,6 +902,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",STR_ID);
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);
@@ -923,6 +930,8 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/prm/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/prm/cfg/p_mod" && ctrChkNode(opt)) {
 	string curPrt = protocols();
 	vector<string> mLst, itLst;
@@ -1046,7 +1055,10 @@ void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); mLogLstDt = 0; 
 
 void TTransportOut::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
+    if(flag) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor) ,SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
@@ -1074,6 +1086,7 @@ void TTransportOut::load_( TConfig *icfg )
 void TTransportOut::save_( )
 {
     SYS->db().at().dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
+    setDB(DB(), true);
 }
 
 void TTransportOut::preEnable( int flag )
@@ -1203,6 +1216,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Connect"),RWRWR_,"root",STR_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Transport DB"),RWRWR_,"root",STR_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",STR_ID);
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);
@@ -1243,6 +1258,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/prm/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
     else if(a_path == "/req/tm" && ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD))
 	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));

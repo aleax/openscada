@@ -94,7 +94,7 @@ class Project : public TCntrNode, public TConfig
 	AutoHD<Page> at( const string &id ) const;
 	string add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
-	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
+	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full?NodeRemove:NodeNoFlg ); }
 
 	// Mime data access
 	void mimeDataList( vector<string> &list, const string &idb = "" ) const;
@@ -222,7 +222,7 @@ class Page : public Widget, public TConfig
 	AutoHD<Page> pageAt( const string &id ) const;
 	string pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
-	void pageDel( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full); }
+	void pageDel( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full?NodeRemove:NodeNoFlg); }
 
 	// Data access
 	void resourceList( vector<string> &ls );

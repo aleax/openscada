@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -136,9 +136,16 @@ class TCntrNode
 	    SelfModifyS	= 0x08,		//Self modify store
 	    SelfSaveForceOnChild = 0x10	//Save force on childs modify flag set
 	};
-	enum EnFlag {
+	// Node's enable and disable flags
+	enum EnDisFlag {
+	    NodeNoFlg	= 0,
+	    //  Enable flags
 	    NodeConnect	= 0x01,		//Connect node to control tree
-	    NodeRestore	= 0x02		//Restore node enabling after broken disabling.
+	    NodeRestore	= 0x02,		//Restore node enabling after broken disabling.
+	    //  Disable flags
+	    NodeRemove	= 0x01,		//Completely remove node
+	    NodeRemoveOnlyStor = 0x02	//Remove node from the storage
+	    //  > 0x100 - reserved for the node specific 
 	};
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 
@@ -215,8 +222,8 @@ class TCntrNode
 	GrpEl	&grpAt( int8_t id );
 	unsigned grpAdd( const string &id, bool ordered = false );
 	void	grpDel( int8_t id );
-	virtual string chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
-	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0 );
+	virtual string chldAdd( int8_t gr, TCntrNode *node, int pos = -1, bool noExp = false );
+	void chldDel( int8_t gr, const string &name, long tm = -1, int flags = NodeNoFlg );
 
 	virtual void preEnable( int flag )	{ }
 	virtual void postEnable( int flag )	{ }
@@ -228,6 +235,10 @@ class TCntrNode
 	virtual void load_( )			{ }	//In the begin
 	virtual void load__( )			{ }	//In the end
 	virtual void save_( )			{ }
+
+	// Storage
+	string storage( const string &cnt, bool forQueueOfData = false ) const;
+	void setStorage( string &cnt, const string &vl, bool forQueueOfData = false );	//Empty <vl> and <forQueueOfData> removes the first storage from the queue
 
     private:
 	//Data

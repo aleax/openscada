@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tparamcontr.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,10 +41,8 @@ class TParamContr : public TConfig, public TValue
 {
     public:
 	//Public data
-	enum RemoveMode {
-	    RM_Exit	= 0,
-	    RM_Full	= 1,
-	    RM_NoArch	= 2
+	enum EnDisFlag {
+	    NodeRemove_NoArch = 0x100
 	};
 
 	//Methods
@@ -76,7 +74,7 @@ class TParamContr : public TConfig, public TValue
 	void list( vector<string> &list ) const;
 	bool present( const string &id ) const;
 	string add( const string &id, unsigned type = 0 );
-	void del( const string &id, int full = RM_Exit );
+	void del( const string &id, int flags = NodeNoFlg );
 	AutoHD<TParamContr> at( const string &id, const string &who = "th_prm" ) const;
 
 	TTypeParam &type( ) const	{ return *tpParm; }

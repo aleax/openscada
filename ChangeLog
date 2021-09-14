@@ -1,3 +1,26 @@
+2021-09-14 Roman (conceptual)
+- !!!!:SYS,*: TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data
+	    in different storages and offer a queue of source DB for the mechanism of sequentially removing duplicates.
+    !!!!: The objects are adapted for tracking the multiple storages and are appended of the sequentially removing duplicates:
+	    Security.{User,Group}, Transport.{Input,Output}, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}.
+    !!: TCntrNode::{chldDel,nodeDis}() moved to direct use the the new TCntrNode::EnDisFlag: NodeNoFlg, NodeRemove, NodeRemoveOnlyStor;
+	and the space after > 0x100 was reserved for the node specific, where the TParamContr::EnDisFlag set only to NodeRemove_NoArch.
+    The "Work DB" configuration field changing disabled on the modification marking of all nodes.
+    The TError codes appended of DB_TrRemoved for mark the translation removing in DB.
+- !!!!:DB: The data storage conception is commonly unified in the direct storage specification
+	and definition the Generic Storage "*.*" as a combination of the Configuration File and the work Data Base,
+	when the Configuration File is the priority one for accessing the allowed data and the work Data Base for new data.
+    !!!!: TBDS::{dataSeek,dataGet,dataSet,dataDel,genDBGet,genDBSet}() moved to the bit flags TBDS::ReqGenFlg:
+	NoFlg, NoException, OnlyCfg, UseTranslation (renamed from UseTranslate), UseCache, UseAllKeys. 
+    !!!!: The TBDS::dbList() moved to the bit flags TBDS::DBLsFlg: LsNoFlg, LsCheckSel, LsInclGenFirst.
+    !!!:SQLite: Implemented for the base message and its translations mark as fuzzy at changing and warning the translation removing.
+    !!: The TBD object appended of the configuration field "Priority in list" for control order of the databases from TBDS::dbList(),
+	than control the loading order.
+    The TBDS::realDBName() appended of the back conversion argument.
+- !:Transport: The extHostsDB() was appended of preventing loading both config and DB.
+- DAQ: The attribute "work_lib_db" of the TPrmTmplLib object renamed to the standard "mDB".
+
+
 2021-09-02 Roman (stable)
 - LibsDB.vcaBase: Main.RootPgSo: Appended of preventing of call the termination control panel in some cases.
 - SYS: The TError codes appended of Tr_ErrTransport for the transport errors mark.

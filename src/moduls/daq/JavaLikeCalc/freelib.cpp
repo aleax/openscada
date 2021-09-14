@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -76,7 +76,7 @@ void Lib::postDisable( int flag )
 {
     if(flag && DB().size()) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this,true);
+	SYS->db().at().dataDel(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this, TBDS::UseAllKeys);
 
 	//Delete function's files
 	SYS->db().at().open(fullDB());
@@ -112,7 +112,7 @@ void Lib::load_( TConfig *icfg )
     map<string, bool>   itReg;
     TConfig cEl(&mod->elFnc());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId);
 	at(fId).at().load(&cEl);
@@ -133,7 +133,7 @@ void Lib::save_( )
 {
     if(DB().empty())	return;
 
-    SYS->db().at().dataSet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
+    SYS->db().at().dataSet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
 }
 
 void Lib::setStart( bool val )
