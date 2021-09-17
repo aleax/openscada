@@ -638,8 +638,8 @@ void TMess::save( )
 
 const char *TMess::labDB( )
 {
-    return _("DB address in format \"{DB module}.{DB name}\".\n"
-	     "Set '*.*' for use the main work DB.");
+    return _("Storage address in the format \"{DB module}.{DB name}\".\n"
+	     "Set '*.*' to use the Generic Storage.");
 }
 
 const char *TMess::labSecCRON( )

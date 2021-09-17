@@ -39,7 +39,7 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.3"
+#define MOD_VER		"2.4.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBF files version 3.0.")
 #define LICENSE		"GPL2"
@@ -100,7 +100,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB())
+    if(flag&NodeRemove && owner().fullDeleteDB())
 	if(rmdir(addr().c_str()) != 0) mess_sys(TMess::Warning, _("Error deleting DB."));
 }
 
@@ -206,7 +206,7 @@ void MTable::postDisable( int flag )
 {
     if(mModify) save();
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	string n_tbl = name();
 
 	//Set file extend

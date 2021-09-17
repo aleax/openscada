@@ -695,9 +695,11 @@ void TTransportIn::preEnable( int flag )
 
 void TTransportIn::postDisable( int flag )
 {
-    try { stop(); } catch(...){ }		//Stop at any disabling
-    if(flag) {
+    if(!(flag&NodeRemoveOnlyStor))
+	try { stop(); } catch(...){ }		//Stop at any disabling
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
@@ -717,7 +719,7 @@ TCntrNode &TTransportIn::operator=( const TCntrNode &node )
 
     exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
-    setDB(src_n->mDB);
+    setDB(src_n->DB());
     load_();
 
     return *this;
@@ -733,7 +735,7 @@ string TTransportIn::name( )
 
 string TTransportIn::workId( )		{ return owner().modId()+"."+id(); }
 
-string TTransportIn::tbl( )		{ return owner().owner().subId()+"_in"; }
+string TTransportIn::tbl( ) const	{ return owner().owner().subId()+"_in"; }
 
 string TTransportIn::getStatus( )	{ return startStat() ? _("Receiving data. ") : _("Disconnected. "); }
 
@@ -1011,7 +1013,7 @@ TCntrNode &TTransportOut::operator=( const TCntrNode &node )
 
     exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
-    setDB(src_n->mDB);
+    setDB(src_n->DB());
     load_();
 
     return *this;
@@ -1027,7 +1029,7 @@ string TTransportOut::name( )
 
 string TTransportOut::workId( )		{ return owner().modId()+"."+id(); }
 
-string TTransportOut::tbl( )		{ return owner().owner().subId()+"_out"; }
+string TTransportOut::tbl( ) const	{ return owner().owner().subId()+"_out"; }
 
 TVariant TTransportOut::conPrm( const string &nm )
 {
@@ -1055,7 +1057,7 @@ void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); mLogLstDt = 0; 
 
 void TTransportOut::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor) ,SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }

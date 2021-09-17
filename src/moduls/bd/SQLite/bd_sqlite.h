@@ -118,6 +118,8 @@ class BDMod: public TTypeBD
 	BDMod( string name );
 	~BDMod( );
 
+	int lsPr( )	{ return 9; }
+
 	AutoHD<MBD> at( const string &name )	{ return TTypeBD::at(name); }
 
     protected:

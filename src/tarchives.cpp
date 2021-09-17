@@ -204,7 +204,7 @@ void TArchiveS::load_( )
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,TBDS::UseCache); ) {
 		id = cEl.cfg("ID").getS();
 		if(!valPresent(id)) valAdd(id, dbLs[iIt]);
-		//???? For force loading after creation from archiver storage
+		//!!!! For force loading after creation from archiver storage
 		//else if(valAt(id).at().DB() == "*.*" && dbLs[iIt] != SYS->workDB()) valAt(id).at().setDB(dbLs[iIt]);
 		if(valAt(id).at().DB() == dbLs[iIt]) valAt(id).at().load(&cEl);
 		valAt(id).at().setDB(dbLs[iIt], true);
@@ -1321,7 +1321,7 @@ TCntrNode &TMArchivator::operator=( const TCntrNode &node )
     //Configuration copy
     exclCopy(*src_n, "ID;ADDR;START;");
     cfg("MODUL").setS(owner().modId());
-    mDB = src_n->mDB;
+    setDB(src_n->DB());
 
     //if(src_n->startStat() && toStart() && !startStat()) start();
 
@@ -1337,7 +1337,7 @@ void TMArchivator::preDisable( int flag )
 
 void TMArchivator::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->archive().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }

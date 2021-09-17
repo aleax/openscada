@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <algorithm>
 
 #include "vcaengine.h"
 #include "libwidg.h"
@@ -33,7 +34,7 @@ using namespace VCA;
 //* WidgetLib: Widgets library                   *
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elWdgLib()), mId(cfg("ID")), workLibDB(lib_db), mEnable(false), passAutoEn(false)
+    TConfig(&mod->elWdgLib()), mId(cfg("ID")), mDB(lib_db), mEnable(false), passAutoEn(false)
 {
     mId = id;
     cfg("NAME").setS(name);
@@ -54,21 +55,14 @@ TCntrNode &WidgetLib::operator=( const TCntrNode &node )
     //Copy generic configuration
     exclCopy(*src_n, "ID;");
     cfg("DB_TBL").setS("wlb_"+id());
-    workLibDB = src_n->workLibDB;
+    setDB(src_n->DB());
+    mDB_MimeSrc = src_n->fullDB();
 
     if(!src_n->enable()) return *this;
     if(!enable()) setEnable(true);
 
-    vector<string> pls;
-    //Mime data copy
-    src_n->mimeDataList(pls);
-    string mimeType, mimeData;
-    for(unsigned iM = 0; iM < pls.size(); iM++) {
-	src_n->mimeDataGet(pls[iM], mimeType, &mimeData);
-	mimeDataSet(pls[iM], mimeType, mimeData);
-    }
-
     // Copying the included widgets
+    vector<string> pls;
     src_n->list(pls);
     for(unsigned iP = 0; iP < pls.size(); iP++) {
 	if(!present(pls[iP])) add(pls[iP], "");
@@ -90,26 +84,18 @@ void WidgetLib::preDisable( int flag )
 
 void WidgetLib::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB", *this, TBDS::UseAllKeys);
+	SYS->db().at().dataDel(DB(flag&NodeRemoveOnlyStor)+"."+mod->wlbTable(),mod->nodePath()+"LIB", *this, TBDS::UseAllKeys);
 
 	//Delete function's files
-	// Delete widgets table
-	SYS->db().at().open(fullDB());
-	SYS->db().at().close(fullDB(),true);
-	// Delete attributes table
-	SYS->db().at().open(fullDB()+"_io");
-	SYS->db().at().close(fullDB()+"_io",true);
-	// Delete user attributes table
-	SYS->db().at().open(fullDB()+"_uio");
-	SYS->db().at().close(fullDB()+"_uio",true);
-	// Delete include widgets table
-	SYS->db().at().open(fullDB()+"_incl");
-	SYS->db().at().close(fullDB()+"_incl",true);
-	// Delete mime-data table
-	SYS->db().at().open(fullDB()+"_mime");
-	SYS->db().at().close(fullDB()+"_mime",true);
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), mod->nodePath()+tbl());
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", mod->nodePath()+tbl()+"_io");
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_uio", mod->nodePath()+tbl()+"_uio");
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_incl", mod->nodePath()+tbl()+"_incl");
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_mime", mod->nodePath()+tbl()+"_mime");
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
 
@@ -156,12 +142,11 @@ string WidgetLib::getStatus( )
     return rez;
 }
 
-void WidgetLib::setFullDB( const string &it )
+void WidgetLib::setFullDB( const string &vl )
 {
-    size_t dpos = it.rfind(".");
-    workLibDB = (dpos!=string::npos) ? it.substr(0,dpos) : "";
-    cfg("DB_TBL").setS((dpos!=string::npos) ? it.substr(dpos+1) : "");
-    modifG();
+    int off = vl.size();
+    cfg("DB_TBL").setS(TSYS::strParseEnd(vl,0,".",&off));
+    setDB(vl.substr(0,off+1));
 }
 
 void WidgetLib::load_( TConfig *icfg )
@@ -196,8 +181,6 @@ void WidgetLib::load_( TConfig *icfg )
     }
 
     passAutoEn = false;
-
-    mOldDB = TBDS::realDBName(DB());
 }
 
 void WidgetLib::save_( )
@@ -206,18 +189,20 @@ void WidgetLib::save_( )
 
     SYS->db().at().dataSet(DB()+"."+mod->wlbTable(), mod->nodePath()+"LIB", *this);
 
-    //Check for need copy mime data to other DB and same copy
-    if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB())) {
+    //Mime data copy
+    if(mDB_MimeSrc.size() || DB(true).size()) {
+	if(mDB_MimeSrc.empty()) mDB_MimeSrc = DB(true);
 	vector<string> pls;
-	mimeDataList(pls, mOldDB);
+	mimeDataList(pls, mDB_MimeSrc);
 	string mimeType, mimeData;
 	for(unsigned iM = 0; iM < pls.size(); iM++) {
-	    mimeDataGet(pls[iM], mimeType, &mimeData, mOldDB);
+	    mimeDataGet(pls[iM], mimeType, &mimeData, mDB_MimeSrc);
 	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
 	}
+	mDB_MimeSrc = "";
     }
 
-    mOldDB = TBDS::realDBName(DB());
+    setDB(DB(), true);
 }
 
 void WidgetLib::setEnable( bool val, bool force )
@@ -243,14 +228,17 @@ void WidgetLib::setEnable( bool val, bool force )
 
 void WidgetLib::mimeDataList( vector<string> &list, const string &idb ) const
 {
-    string wtbl = tbl()+"_mime";
-    string wdb  = idb.empty() ? DB() : idb;
+    string wdb = DB(), wtbl;
+    if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
+    wtbl = (wtbl.empty()?tbl():wtbl) + "_mime";
+
     TConfig cEl(&mod->elWdgData());
     cEl.cfgViewAll(false);
 
     list.clear();
     for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,TBDS::UseCache); fldCnt++)
-	list.push_back(cEl.cfg("ID").getS());
+	if(std::find(list.begin(),list.end(),cEl.cfg("ID").getS()) == list.end())
+	    list.push_back(cEl.cfg("ID").getS());
 }
 
 bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
@@ -261,8 +249,11 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
     if(!is_file) {
 	//Get resource file from DB
 	string dbid = is_res ? iid.substr(4) : iid;
-	string wtbl = tbl()+"_mime";
-	string wdb  = idb.empty() ? DB() : idb;
+
+	string wdb = DB(), wtbl;
+	if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
+	wtbl = (wtbl.empty()?tbl():wtbl) + "_mime";
+
 	TConfig cEl(&mod->elWdgData());
 	if(!mimeData) cEl.cfg("DATA").setView(false);
 	cEl.cfg("ID").setS(dbid);
@@ -309,8 +300,10 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 
 void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData, const string &idb )
 {
-    string wtbl = tbl()+"_mime";
-    string wdb  = idb.empty() ? DB() : idb;
+    string wdb = DB(), wtbl;
+    if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
+    wtbl = (wtbl.empty()?tbl():wtbl) + "_mime";
+
     TConfig cEl(&mod->elWdgData());
     cEl.cfg("ID").setS(iid);
     cEl.cfg("MIME").setS(mimeType);
@@ -363,7 +356,9 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Library DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:wlb_"+id()).c_str(),
-		    "help",_("DB address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the main working DB, set '*.*'."));
+		    "help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID);
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
@@ -396,6 +391,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setFullDB(opt->text());
     }
+    else if(a_path == "/obj/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/obj/st/timestamp" && ctrChkNode(opt)) {
 	vector<string> tls;
 	list(tls);
@@ -527,7 +524,7 @@ WidgetLib &LWidget::ownerLib( ) const	{ return *(WidgetLib*)nodePrev(); }
 
 void LWidget::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&NodeRemove) {
 	string db  = ownerLib().DB();
 	string tbl = ownerLib().tbl();
 
@@ -949,7 +946,7 @@ void CWidget::preDisable( int flag )
 
 void CWidget::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&NodeRemove) {
 	string db  = ownerLWdg().ownerLib().DB();
 	string tbl = ownerLWdg().ownerLib().tbl();
 

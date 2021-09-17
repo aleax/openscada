@@ -76,6 +76,17 @@ string TBDS::realDBName( const string &bdn, bool back )
 	   ((bd_n=="*") ? TSYS::strParse(SYS->workDB(),1,".") : bd_n)+(bd_tbl.empty() ? "" : "."+bd_tbl);
 }
 
+string TBDS::dbPart( const string &bdn, bool tbl )
+{
+    int off = 0;
+    string p1 = TSYS::strParse(bdn, 0, ".", &off);
+    string p2 = TSYS::strParse(bdn, 0, ".", &off);
+    string p3 = TSYS::strParse(bdn, 0, ".", &off);
+
+    return (p1 == DB_CFG) ? (tbl ? p2 : p1) :
+			    (tbl ? p3 : p1+"."+p2);
+}
+
 void TBDS::dbList( vector<string> &ls, char flg )
 {
     ls.clear();
@@ -93,7 +104,8 @@ void TBDS::dbList( vector<string> &ls, char flg )
 	tbd.at().list(db_ls);
 	for(unsigned iDB = 0; iDB < db_ls.size(); iDB++)
 	    if(!(flg&LsInclGenFirst) || (tdb_ls[iTp]+"."+db_ls[iDB]) != SYS->workDB())
-		sortIts.push_back(pair<int,string>(tbd.at().at(db_ls[iDB]).at().lsPr(),tdb_ls[iTp]+"."+db_ls[iDB]));
+		sortIts.push_back(pair<int,string>(tbd.at().at(db_ls[iDB]).at().lsPr()*10+tbd.at().lsPr(),
+						    tdb_ls[iTp]+"."+db_ls[iDB]));
     }
 
     sort(sortIts.begin(), sortIts.end());
@@ -134,7 +146,7 @@ void TBDS::perSYSCall( unsigned int cnt )
     TSubSYS::perSYSCall(cnt);
 }
 
-AutoHD<TTable> TBDS::open( const string &bdn, bool create )
+AutoHD<TTable> TBDS::tblOpen( const string &bdn, bool create )
 {
     AutoHD<TTable> tbl;
 
@@ -145,8 +157,8 @@ AutoHD<TTable> TBDS::open( const string &bdn, bool create )
 	if(bdT == "*") bdT = TSYS::strSepParse(SYS->workDB(),0,'.');
 	if(bdN == "*") bdN = TSYS::strSepParse(SYS->workDB(),1,'.');
 	if(bdT == DB_CFG) return tbl;
-	AutoHD<TBD> obd = at(bdT).at().at(bdN);
-	MtxAlloc res(obd.at().resTbls, true);	//!!!! For prevent multiple entry and creation try
+	AutoHD<TBD> obd = SYS->db().at().at(bdT).at().at(bdN);
+	MtxAlloc res(obd.at().resTbls, true);	//!!!! To prevent for the multiple entry and creation try
 	if(obd.at().enableStat()) {
 	    if(!obd.at().openStat(bdTbl)) obd.at().open(bdTbl, create);
 	    tbl = obd.at().at(bdTbl);
@@ -158,7 +170,7 @@ AutoHD<TTable> TBDS::open( const string &bdn, bool create )
     return tbl;
 }
 
-void TBDS::close( const string &bdn, bool del )
+void TBDS::tblClose( const string &bdn, bool del )
 {
     try {
 	string bdT = TSYS::strSepParse(bdn,0,'.');
@@ -167,19 +179,15 @@ void TBDS::close( const string &bdn, bool del )
 	if(bdT == "*") bdT = TSYS::strSepParse(SYS->workDB(),0,'.');
 	if(bdN == "*") bdN = TSYS::strSepParse(SYS->workDB(),1,'.');
 	if(bdT == DB_CFG) return;
-	AutoHD<TBD> obd = at(bdT).at().at(bdN);
-	MtxAlloc res(obd.at().resTbls, true);	//!!!! For prevent multiple entry and closing try
+	AutoHD<TBD> obd = SYS->db().at().at(bdT).at().at(bdN);
+	MtxAlloc res(obd.at().resTbls, true);	//!!!! To prevent for the multiple entry and creation try
 	if(obd.at().enableStat() && obd.at().openStat(bdTbl) && obd.at().at(bdTbl).at().nodeUse() == 1)
 	    obd.at().close(bdTbl, del);
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(), "%s", err.mess.c_str());
-	mess_sys(TMess::Warning, _("Error closing database '%s'!"), bdn.c_str());
+	SYS->db().at().mess_sys(TMess::Warning, _("Error closing database '%s'!"), bdn.c_str());
     }
 }
-
-string TBDS::fullDBSYS( )	{ return "*.*.SYS"; }
-
-string TBDS::fullDB( )		{ return "*.*.DB"; }
 
 bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &cfg, char rFlg, XMLNode *localCfgCtx )
 {
@@ -289,7 +297,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     }
 
     if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
-	AutoHD<TTable> tbl = open(bdn);
+	AutoHD<TTable> tbl = TBDS::tblOpen(bdn);
 	if(!tbl.freeStat()) {
 	    bool rez = tbl.at().fieldSeek(lev-c_lev, cfg, ((rFlg&TBDS::UseCache)?TSYS::addr2str(&cfg):""));
 	    //tbl.free(); close(bdn);
@@ -376,7 +384,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char r
 
     //Load from DB
     if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
-	AutoHD<TTable> tbl = open(bdn);
+	AutoHD<TTable> tbl = TBDS::tblOpen(bdn);
 	if(!tbl.freeStat()) {
 	    db_true = true;
 	    try { tbl.at().fieldGet(cfg); }
@@ -487,7 +495,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char r
 
     //Save to DB
     if(!isCfgCtx && bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
-	AutoHD<TTable> tbl = open(bdn, true);
+	AutoHD<TTable> tbl = TBDS::tblOpen(bdn, true);
 	if(!tbl.freeStat()) {
 	    bool db_true = true;
 	    try { tbl.at().fieldSet(cfg); }
@@ -518,29 +526,32 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char r
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	vector<string> cf_el;
 
-	// Search present field
-	for(unsigned iFld = 0, iEl; nd && iFld < nd->childSize(); iFld++) {
+	// Searching the present field(s)
+	for(int iFld = 0, iEl; nd && iFld < (int)nd->childSize(); iFld++) {
 	    XMLNode *el = nd->childGet(iFld);
 	    if(el->name() != "fld")	continue;
-	    //Check keywords
+
+	    // Checking for the keywords
 	    cfg.cfgList(cf_el);
-	    for(iEl = 0; iEl < cf_el.size(); iEl++)
-	        if(cfg.cfg(cf_el[iEl]).isKey() && cfg.cfg(cf_el[iEl]).getS() != el->attr(cf_el[iEl])) break;
+	    for(iEl = 0; iEl < (int)cf_el.size(); iEl++) {
+		TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
+	        if(u_cfg.isKey() && u_cfg.keyUse() && u_cfg.getS() != el->attr(cf_el[iEl])) break;
+	    }
 	    if(iEl == cf_el.size()) {
 		SYS->modifCfg(true);
-		nd->childDel(iFld);
-		if(!nd->childSize()) nd->parent()->childDel(nd);
+		nd->childDel(iFld--);
 		SYS->modifCfg();
 		db_true = true;
-		break;
-		//return true;
+		continue;
 	    }
 	}
+	// Removing empty table nodes
+	if(nd && !nd->childSize()) nd->parent()->childDel(nd);
     }
 
     //Delete from the database
     if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG) {
-	AutoHD<TTable> tbl = open(bdn);
+	AutoHD<TTable> tbl = TBDS::tblOpen(bdn);
 	if(!tbl.freeStat()) {
 	    try {
 		//Select for using all keys
@@ -574,6 +585,27 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char r
     return db_true;
 }
 
+bool TBDS::dataDelTbl( const string &ibdn, const string &path, char flags )
+{
+    string bdn = realDBName(ibdn);
+    bool db_true = false;
+
+    //Delete from config
+    if(path.size() && (ibdn.empty() || ibdn.find("*.*") == 0 || TSYS::strParse(bdn,0,".") == DB_CFG)) {
+	ResAlloc res(SYS->cfgRes(), false);
+	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
+	if(nd) { nd->parent()->childDel(nd); db_true = true; }
+    }
+
+    //Delete from the database
+    if(bdn.size() && TSYS::strParse(bdn,0,".") != DB_CFG && !TBDS::tblOpen(bdn).freeStat()) {
+	TBDS::tblClose(bdn, true);
+	db_true = true;
+    }
+
+    return db_true;
+}
+
 void TBDS::genDBSet( const string &path, const string &val, const string &user, char rFlg )
 {
     bool bd_ok = false;
@@ -581,7 +613,7 @@ void TBDS::genDBSet( const string &path, const string &val, const string &user, 
     //Set to DB
     if(SYS->present(SDB_ID) && !(rFlg&TBDS::OnlyCfg)) {
 	AutoHD<TBDS> dbs = SYS->db();
-	AutoHD<TTable> tbl = dbs.at().open(dbs.at().fullDBSYS(), true);
+	AutoHD<TTable> tbl = TBDS::tblOpen(TBDS::fullDBSYS(), true);
 	if(!tbl.freeStat()) {
 	    TConfig db_el(&dbs.at());
 	    db_el.cfg("user").setS(user);
@@ -616,7 +648,7 @@ string TBDS::genDBGet( const string &path, const string &oval, const string &use
     //Try getting from the generic DB
     if(SYS->present(SDB_ID) && !(rFlg&TBDS::OnlyCfg)) {
 	AutoHD<TBDS> dbs = SYS->db();
-	AutoHD<TTable> tbl = dbs.at().open(SYS->db().at().fullDBSYS());
+	AutoHD<TTable> tbl = TBDS::tblOpen(TBDS::fullDBSYS());
 	if(!tbl.freeStat()) {
 	    TConfig db_el(&dbs.at());
 	    db_el.cfg("user").setS(user);
@@ -785,7 +817,7 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TBD                                          *
 //************************************************
-TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mEn(false), mId(cfg("ID")), mToEn(cfg("EN").getBd()), mLsPr(cfg("LS_PR").getId()),
+TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mEn(false), mId(cfg("ID")), mToEn(cfg("EN").getBd()),
     mTrTm_ClsOnOpen(cfg("TRTM_CLS_ON_OPEN").getRd()), mTrTm_ClsOnReq(cfg("TRTM_CLS_ON_REQ").getRd()), mTrPr_ClsTask(cfg("TRPR_CLS_TASK").getId()),
     userSQLTrans(EVAL_BOOL), mDisByUser(true)
 {
@@ -837,7 +869,8 @@ void TBD::preDisable( int flag )
 
 void TBD::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, TBDS::UseAllKeys);
+    if(flag&NodeRemove)
+	SYS->db().at().dataDel(TBDS::fullDB(), owner().owner().nodePath()+"DB/", *this, TBDS::UseAllKeys);
 }
 
 bool TBD::cfgChange( TCfg &co, const TVariant &pc )
@@ -881,7 +914,6 @@ void TBD::disable( )
     if(!enableStat()) return;
 
     //Close all tables
-    //!!!! Comment the part for omit tables closing temporary before the AutoHD proper locking fix, mostly reproduced on remote MySQL
     try {
 	vector<string> t_list;
 	list(t_list);
@@ -904,7 +936,7 @@ void TBD::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB_CFG))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this);
+    else SYS->db().at().dataGet(TBDS::fullDB(), owner().owner().nodePath()+"DB/", *this);
 
     if(!enableStat() && toEnable())
 	try { enable(); } catch(TError&) { mDisByUser = false; }
@@ -912,7 +944,7 @@ void TBD::load_( TConfig *icfg )
 
 void TBD::save_( )
 {
-    SYS->db().at().dataSet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this);
+    SYS->db().at().dataSet(TBDS::fullDB(), owner().owner().nodePath()+"DB/", *this);
 }
 
 TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -1043,7 +1075,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		    "dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
 		    "help",_("Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
 		ctrMkNode2("fld",opt,-1,"/prm/cfg/LS_PR",EVAL_STR,RWRWR_,"root",SDB_ID,
-		    "help",_("Useful for libraries placed in several databases for specifying the priority of the project - used ones."),NULL);
+		    "help",_("Priority in the range [0...99]. Useful for libraries placed in several databases for specifying the priority of the project - used ones."),NULL);
 		if(mTrTm_ClsOnReq < prmServTask_PER)
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/TRPR_CLS_TASK",EVAL_STR,RWRWR_,"root",SDB_ID,1,"help",TMess::labTaskPrior());
 		else ctrRemoveNode(opt,"/prm/cfg/TRPR_CLS_TASK");

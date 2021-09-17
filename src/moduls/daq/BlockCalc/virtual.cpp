@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.0"
+#define MOD_VER		"1.12.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -206,15 +206,12 @@ void Contr::postDisable( int flag )
 {
     if(startStat()) stop();
     try {
-	if(flag) {
-	    //Delete parameter's tables
-	    string wbd = DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS();
-	    SYS->db().at().open(wbd);
-	    SYS->db().at().close(wbd, true);
-
-	    wbd = wbd+"_io";
-	    SYS->db().at().open(wbd);
-	    SYS->db().at().close(wbd, true);
+	if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	    //Delete parameter tables
+	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS(),
+					mod->nodePath()+cfg("BLOCK_SH").getS());
+	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS()+"_io",
+					mod->nodePath()+cfg("BLOCK_SH").getS()+"_io");
 	}
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
@@ -468,7 +465,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"), -1, NodeRemove);
     }
     else if(a_path == "/scheme/sch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
@@ -485,7 +482,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"), -1, NodeRemove);
     }
     else if(a_path == "/scheme/nmb" && ctrChkNode(opt)) {
 	vector<string> lst;

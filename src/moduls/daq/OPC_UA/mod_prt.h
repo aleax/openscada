@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.2.0"
+#define PRT_MVER	"2.2.1"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
@@ -105,9 +105,9 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	string getStatus( );
 
-	string DB( ) const	{ return mDB; }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const;
-	string fullDB( ) const	{ return DB()+'.'+tbl(); }
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &name )	{ mName = name; }
 	void setDescr( const string &idsc )	{ mDescr = idsc; }
@@ -115,7 +115,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	void setEnable( bool vl );
 	void setPublish( const string &inPrtId );
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	uint32_t reqData( int reqTp, XML_N &req );
 

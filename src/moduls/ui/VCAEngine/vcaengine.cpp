@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.3.0"
+#define MOD_VER		"7.3.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -255,10 +255,6 @@ void Engine::load_( )
 
     if(mess_lev() == TMess::Debug)	d_tm = TSYS::curTime();
 
-    //???? Test of TBDS::{dataGet,dataDel}() changing the checking order for the configuration file before,
-    //     like to TBDS::dataSet(), in storing, loading and deleting the library and project objects.
-    //???? Implement the old selected objects deletion only from DB
-
     //Load widgets libraries
     try {
 	// Search and create new libraries
@@ -267,14 +263,13 @@ void Engine::load_( )
 	vector<string> itLs;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+wlbTable(),nodePath()+"LIB",libCnt++,cEl,TBDS::UseCache); ) {
 		string lId = cEl.cfg("ID").getS();
-		//if(itReg.find(lId) != itReg.end()) continue;
-		if(!wlbPresent(lId)) wlbAdd(lId,"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
-		wlbAt(lId).at().load(&cEl);
+		if(!wlbPresent(lId)) wlbAdd(lId,"", itLs[iDB]);
+		if(wlbAt(lId).at().DB() == itLs[iDB]) wlbAt(lId).at().load(&cEl);
+		wlbAt(lId).at().setDB(itLs[iDB], true);
 		itReg[lId] = true;
 		if(mess_lev() == TMess::Debug) {
 		    mess_sys(TMess::Debug, _("Time of the library '%s' loading: %f ms."), lId.c_str(), 1e-3*(TSYS::curTime()-d_tm));
@@ -304,16 +299,16 @@ void Engine::load_( )
 	itReg.clear();
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int lib_cnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,cEl,TBDS::UseCache); ) {
 		string prj_id = cEl.cfg("ID").getS();
 		if(!prjPresent(prj_id)) {
-		    prjAdd(prj_id,"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
+		    prjAdd(prj_id, "", itLs[iDB]);
 		    if(cEl.cfg("EN_BY_NEED").getB()) prjAt(prj_id).at().setEnableByNeed();
 		}
-		prjAt(prj_id).at().load(&cEl);
+		if(prjAt(prj_id).at().DB() == itLs[iDB]) prjAt(prj_id).at().load(&cEl);
+		prjAt(prj_id).at().setDB(itLs[iDB], true);
 		itReg[prj_id] = true;
 		if(mess_lev() == TMess::Debug) {
 		    mess_sys(TMess::Debug, _("Time of the project '%s' loading: %f ms."), prj_id.c_str(), 1e-3*(TSYS::curTime()-d_tm));

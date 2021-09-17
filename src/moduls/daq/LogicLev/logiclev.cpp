@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.3"
+#define MOD_VER		"2.6.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -137,12 +137,9 @@ TMdContr::~TMdContr( )
 void TMdContr::postDisable( int flag )
 {
     try {
-	if(flag) {
-	    //Delete parameter's io table
-	    string tbl = DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io";
-	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl, true);
-	}
+	if(flag&(NodeRemove|NodeRemoveOnlyStor))
+	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io",
+					owner().nodePath()+cfg("PRM_BD").getS()+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     TController::postDisable(flag);
@@ -352,7 +349,7 @@ void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(ownerPath(true), true);

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: xml.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,8 +55,8 @@ class XMLNode
 	    XMLHeader		= 0x20,		//Include standard XML header
 	    XHTMLHeader		= 0x40,		//Include standard XHTML header
 	    Clean		= 0x80,		//Clean service tags: <??>, <!-- -->
-	    MissTagEnc		= 0x100,	//Miss for tag's name encoding
-	    MissAttrEnc		= 0x200		//Miss for attribute's name encoding
+	    MissTagEnc		= 0x100,	//Omit for tag's name encoding
+	    MissAttrEnc		= 0x200		//Omit for attribute's name encoding
 	};
 
 	//Methods

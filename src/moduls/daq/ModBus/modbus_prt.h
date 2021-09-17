@@ -41,7 +41,7 @@ using namespace OSCADA;
 #define PRT_NAME	"ModBus"
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.9.0"
+#define PRT_MVER	"2.9.1"
 #define PRT_AUTHORS	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"
@@ -115,9 +115,9 @@ class Node : public TFunction, public TConfig
 
 	string getStatus( );
 
-	string DB( ) const	{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const;
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &name )	{ mName = name; }
 	void setDescr( const string &idsc )	{ mDscr = idsc; }
@@ -127,7 +127,7 @@ class Node : public TFunction, public TConfig
 	void setProgTr( bool vl )		{ cfg("DT_PR_TR") = vl; }
 	void setProg( const string &iprg );
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	bool req( const string &tr, const string &prt, unsigned char node, string &pdu );
 

@@ -167,9 +167,9 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	string	name( );
 	string	descr( );
 
-	string	DB( bool qTop = false )		{ return storage(mDB, qTop); }
-	string	tbl( )				{ return cfg("DB").getS(); }
-	string	fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
+	string	DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string	tbl( ) const			{ return cfg("DB").getS(); }
+	string	fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	bool startStat( ) const	{ return runSt; }
 	void start( bool val );

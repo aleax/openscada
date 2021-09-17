@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <algorithm>
 
 #include <tsys.h>
 
@@ -33,7 +34,7 @@ using namespace VCA;
 //* Project					 *
 //************************************************
 Project::Project( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elProject()), enableByNeed(false), mId(cfg("ID")), workPrjDB(lib_db), mPermit(cfg("PERMIT").getId()),
+    TConfig(&mod->elProject()), enableByNeed(false), mId(cfg("ID")), mDB(lib_db), mPermit(cfg("PERMIT").getId()),
     mPer(cfg("PER").getId())/*, mFlgs(cfg("FLGS").getId())*/, mStyleIdW(cfg("STYLE").getId()),
     mEnable(false), mFuncM(true)
 {
@@ -56,19 +57,11 @@ TCntrNode &Project::operator=( const TCntrNode &node )
     //Copy generic configuration
     exclCopy(*src_n, "ID;");
     cfg("DB_TBL").setS("prj_"+id());
-    workPrjDB = src_n->workPrjDB;
+    setDB(src_n->DB());
+    mDB_MimeSrc = src_n->fullDB();
 
     if(!src_n->enable()) return *this;
     if(!enable()) setEnable(true);
-
-    //Mime data copy
-    vector<string> pls;
-    src_n->mimeDataList(pls);
-    string mimeType, mimeData;
-    for(unsigned iM = 0; iM < pls.size(); iM++) {
-	src_n->mimeDataGet(pls[iM], mimeType, &mimeData);
-	mimeDataSet(pls[iM], mimeType, mimeData);
-    }
 
     //Styles copy
     const_cast<Project*>(this)->mStRes.lock(true);
@@ -78,6 +71,7 @@ TCntrNode &Project::operator=( const TCntrNode &node )
     const_cast<Project*>(src_n)->mStRes.unlock();
 
     //Copy included pages
+    vector<string> pls;
     src_n->list(pls);
     for(unsigned iP = 0; iP < pls.size(); iP++) {
 	if(!present(pls[iP])) add(pls[iP],"");
@@ -100,32 +94,20 @@ void Project::preDisable( int flag )
 
 void Project::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this, TBDS::UseAllKeys);
+	SYS->db().at().dataDel(DB(flag&NodeRemoveOnlyStor)+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this, TBDS::UseAllKeys);
 
 	//Delete function's files
-	// Delete widgets table
-	SYS->db().at().open(fullDB());
-	SYS->db().at().close(fullDB(),true);
-	// Delete attributes table
-	SYS->db().at().open(fullDB()+"_io");
-	SYS->db().at().close(fullDB()+"_io",true);
-	// Delete users attributes table
-	SYS->db().at().open(fullDB()+"_uio");
-	SYS->db().at().close(fullDB()+"_uio",true);
-	// Delete include widgets table
-	SYS->db().at().open(fullDB()+"_incl");
-	SYS->db().at().close(fullDB()+"_incl",true);
-	// Delete mime-data table
-	SYS->db().at().open(fullDB()+"_mime");
-	SYS->db().at().close(fullDB()+"_mime",true);
-	// Delete session's table
-	SYS->db().at().open(fullDB()+"_ses");
-	SYS->db().at().close(fullDB()+"_ses",true);
-	// Delete style's table
-	SYS->db().at().open(fullDB()+"_stl");
-	SYS->db().at().close(fullDB()+"_stl",true);
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), mod->nodePath()+tbl());
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", mod->nodePath()+tbl()+"_io");
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_uio", mod->nodePath()+tbl()+"_uio");
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_incl", mod->nodePath()+tbl()+"_incl");
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_mime", mod->nodePath()+tbl()+"_mime");
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_ses", mod->nodePath()+tbl()+"_ses");
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_stl", mod->nodePath()+tbl()+"_stl");
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
 
@@ -167,12 +149,11 @@ void Project::setOwner( const string &it )
     modif();
 }
 
-void Project::setFullDB( const string &it )
+void Project::setFullDB( const string &vl )
 {
-    size_t dpos = it.rfind(".");
-    workPrjDB = (dpos!=string::npos) ? it.substr(0,dpos) : "";
-    cfg("DB_TBL").setS((dpos!=string::npos) ? it.substr(dpos+1) : "");
-    modifG();
+    int off = vl.size();
+    cfg("DB_TBL").setS(TSYS::strParseEnd(vl,0,".",&off));
+    setDB(vl.substr(0,off+1));
 }
 
 void Project::load_( TConfig *icfg )
@@ -207,8 +188,6 @@ void Project::load_( TConfig *icfg )
 		del(itLs[iIt]);
     }
 
-    mOldDB = TBDS::realDBName(DB());
-
     //Load styles
     ResAlloc res(mStRes, true);
     TConfig cStl(&mod->elPrjStl());
@@ -228,24 +207,27 @@ void Project::save_( )
 
     SYS->db().at().dataSet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this);
 
-    //Check for need copy mime data and sessions data to other DB and same copy
-    if(!mOldDB.empty() && mOldDB != TBDS::realDBName(DB())) {
-	// Mime data copy
+    //Mime data copy
+    if(mDB_MimeSrc.size() || DB(true).size()) {
+	if(mDB_MimeSrc.empty()) mDB_MimeSrc = DB(true);
+
 	vector<string> pls;
-	mimeDataList(pls,mOldDB);
+	mimeDataList(pls, mDB_MimeSrc);
 	string mimeType, mimeData;
 	for(unsigned iM = 0; iM < pls.size(); iM++) {
-	    mimeDataGet(pls[iM], mimeType, &mimeData, mOldDB);
+	    mimeDataGet(pls[iM], mimeType, &mimeData, mDB_MimeSrc);
 	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
 	}
-	// Session's data copy
-	string wtbl = tbl()+"_ses";
-	TConfig cEl(&mod->elPrjSes());
-	for(int fldCnt = 0; SYS->db().at().dataSeek(mOldDB+"."+wtbl,"",fldCnt,cEl,TBDS::UseCache); fldCnt++)
-	    SYS->db().at().dataSet(DB()+"."+wtbl, "", cEl);
+	mDB_MimeSrc = "";
     }
 
-    mOldDB = TBDS::realDBName(DB());
+    //Session's data copy
+    if(DB(true).size()) {
+	string wtbl = tbl() + "_ses";
+	TConfig cEl(&mod->elPrjSes());
+	for(int fldCnt = 0; SYS->db().at().dataSeek(DB(true)+"."+wtbl,"",fldCnt,cEl,TBDS::UseCache); fldCnt++)
+	    SYS->db().at().dataSet(DB()+"."+wtbl, "", cEl);
+    }
 
     //Saving the styles
     ResAlloc res(mStRes, false);
@@ -266,6 +248,8 @@ void Project::save_( )
 	    fldCnt--;
 	}
     }
+
+    setDB(DB(), true);
 }
 
 void Project::setEnable( bool val )
@@ -308,14 +292,17 @@ AutoHD<Page> Project::at( const string &id ) const	{ return chldAt(mPage,id); }
 
 void Project::mimeDataList( vector<string> &list, const string &idb ) const
 {
-    string wtbl = tbl()+"_mime";
-    string wdb  = idb.empty() ? DB() : idb;
+    string wdb = DB(), wtbl;
+    if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
+    wtbl = (wtbl.empty()?tbl():wtbl) + "_mime";
+
     TConfig cEl(&mod->elWdgData());
     cEl.cfgViewAll(false);
 
     list.clear();
     for(int fldCnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,mod->nodePath()+wtbl,fldCnt,cEl,TBDS::UseCache); fldCnt++)
-	list.push_back(cEl.cfg("ID").getS());
+	if(std::find(list.begin(),list.end(),cEl.cfg("ID").getS()) == list.end())
+	    list.push_back(cEl.cfg("ID").getS());
 }
 
 bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
@@ -326,8 +313,11 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
     if(!is_file) {
 	//Get resource file from DB
 	string dbid = is_res ? iid.substr(4) : iid;
-	string wtbl = tbl()+"_mime";
-	string wdb  = idb.empty() ? DB() : idb;
+
+	string wdb = DB(), wtbl;
+	if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
+	wtbl = (wtbl.empty()?tbl():wtbl) + "_mime";
+
 	TConfig cEl(&mod->elWdgData());
 	if(!mimeData) cEl.cfg("DATA").setView(false);
 	cEl.cfg("ID").setS( dbid );
@@ -374,8 +364,10 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
 
 void Project::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData, const string &idb )
 {
-    string wtbl = tbl()+"_mime";
-    string wdb  = idb.empty() ? DB() : idb;
+    string wdb = DB(), wtbl;
+    if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
+    wtbl = (wtbl.empty()?tbl():wtbl) + "_mime";
+
     TConfig cEl(&mod->elWdgData());
     cEl.cfg("ID").setS(iid);
     cEl.cfg("MIME").setS(mimeType);
@@ -549,7 +541,9 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
-		    "help",_("DB address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the main working DB, set '*.*'."));
+		    "help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID);
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
@@ -617,6 +611,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setFullDB(opt->text());
     }
+    else if(a_path == "/obj/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/obj/st/timestamp" && ctrChkNode(opt)) {
 	vector<string> tls;
 	list(tls);
@@ -970,7 +966,7 @@ void Page::postEnable( int flag )
 
 void Page::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&NodeRemove) {
 	string db  = ownerProj()->DB();
 	string tbl = ownerProj()->tbl();
 
@@ -1724,7 +1720,7 @@ void PageWdg::preDisable( int flag )
 
 void PageWdg::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&NodeRemove) {
 	string db  = ownerPage().ownerProj()->DB();
 	string tbl = ownerPage().ownerProj()->tbl();
 

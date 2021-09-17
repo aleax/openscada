@@ -64,7 +64,7 @@ void Func::postEnable( int flag )
 void Func::postDisable( int flag )
 {
     setStart(false);
-    if(flag && !owner().DB().empty())
+    if(flag&NodeRemove && !owner().DB().empty())
 	try{ del(); }
 	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }

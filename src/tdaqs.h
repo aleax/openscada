@@ -68,7 +68,7 @@ class TDAQS : public TSubSYS
 	void tmplLibList( vector<string> &list ) const		{ chldList(mTmpLib,list); }
 	bool tmplLibPresent( const string &id ) const		{ return chldPresent(mTmpLib,id); }
 	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmpLib,lib); }
-	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmpLib, id, -1, flg); }
+	void tmplLibUnreg( const string &id, int flags = NodeNoFlg ) { chldDel(mTmpLib, id, -1, flags); }
 	AutoHD<TPrmTmplLib> tmplLibAt( const string &id ) const	{ return chldAt(mTmpLib,id); }
 
 	// Redundancy

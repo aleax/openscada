@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 08:35+0300\n"
+"POT-Creation-Date: 2021-09-17 15:14+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -188,8 +188,7 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -334,6 +333,10 @@ msgstr "Виконується"
 msgid "Archiver DB"
 msgstr "БД архіватору"
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Видалити із '%s'"
+
 msgid "End"
 msgstr "Кінець"
 
@@ -348,8 +351,7 @@ msgid "Requested %d records for time %s."
 msgstr "Запитано %d записів протягом %s."
 
 #, c-format
-msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки "
 "%lld (%lld-%lld)."
@@ -613,14 +615,15 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid ""
-"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
-"Useful for libraries placed in several databases for specifying the priority "
-"of the project - used ones."
-msgstr "Корисно для бібліотек розташованих у декількох базах даних для визначення пріоритетних - використовуваних."
+"Priority in the range [0...99]. Useful for libraries placed in several "
+"databases for specifying the priority of the project - used ones."
+msgstr ""
+"Пріоритет у діапазоні [0...99]. Корисно для бібліотек розташованих у "
+"декількох базах даних для визначення пріоритетних - використовуваних."
 
 msgid "Tables"
 msgstr "Таблиці"
@@ -1128,11 +1131,11 @@ msgid "Error getting object from non-object IO %d!"
 msgstr "Помилка отримання об'єкту з не об'єктного IO %d!"
 
 msgid ""
-"DB address in format \"{DB module}.{DB name}\".\n"
-"Set '*.*' for use the main work DB."
+"Storage address in the format \"{DB module}.{DB name}\".\n"
+"Set '*.*' to use the Generic Storage."
 msgstr ""
-"Адреса БД у форматі \"{Модуль БД}.{Ім'я БД}\".\n"
-"Вставити '*.*' для використання основної робочої БД."
+"Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\".\n"
+"Встановити '*.*' для використання Загального Сховку."
 
 msgid ""
 "Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
@@ -1366,8 +1369,7 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -1491,11 +1493,11 @@ msgid "Library DB"
 msgstr "БД бібліотеки"
 
 msgid ""
-"DB address in format \"{DB module}.{DB name}.{Table name}\".\n"
-"Set '*.*.{Table name}' for use the main work DB."
+"Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the Generic Storage, set '*.*.{Table name}'."
 msgstr ""
-"Адреса БД у форматі \"{Модуль БД}.{Ім'я БД}.{Ім'я Таблиці}\".\n"
-"Вставити '*.*.{Ім'я Таблиці}' для використання основної робочої БД."
+"Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}.{Ім'я Таблиці}\".\n"
+"Встановити '*.*.{Ім'я Таблиці}' для використання Загального Сховища."
 
 msgid "Parameter templates"
 msgstr "Шаблони параметрів"
@@ -1590,10 +1592,6 @@ msgstr "Включено до"
 
 msgid "User DB"
 msgstr "БД користувача"
-
-#, c-format
-msgid "Remove from '%s'"
-msgstr "Видалити із '%s'"
 
 msgid "Group "
 msgstr "Група "
@@ -1938,8 +1936,7 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проекту! Схоже проект '%s' вже виконується."
 
 msgid "Loading."
@@ -2849,3 +2846,4 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+

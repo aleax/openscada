@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-13 08:35+0300\n"
+"POT-Creation-Date: 2021-09-17 15:14+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -298,6 +298,10 @@ msgstr ""
 msgid "Archiver DB"
 msgstr ""
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr ""
+
 msgid "End"
 msgstr ""
 
@@ -541,7 +545,7 @@ msgstr ""
 msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr ""
 
-msgid "Useful for libraries placed in several databases for specifying the priority of the project - used ones."
+msgid "Priority in the range [0...99]. Useful for libraries placed in several databases for specifying the priority of the project - used ones."
 msgstr ""
 
 msgid "Tables"
@@ -1018,8 +1022,8 @@ msgid "Error getting object from non-object IO %d!"
 msgstr ""
 
 msgid ""
-"DB address in format \"{DB module}.{DB name}\".\n"
-"Set '*.*' for use the main work DB."
+"Storage address in the format \"{DB module}.{DB name}\".\n"
+"Set '*.*' to use the Generic Storage."
 msgstr ""
 
 msgid ""
@@ -1287,8 +1291,8 @@ msgid "Library DB"
 msgstr ""
 
 msgid ""
-"DB address in format \"{DB module}.{DB name}.{Table name}\".\n"
-"Set '*.*.{Table name}' for use the main work DB."
+"Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the Generic Storage, set '*.*.{Table name}'."
 msgstr ""
 
 msgid "Parameter templates"
@@ -1379,10 +1383,6 @@ msgid "Include"
 msgstr ""
 
 msgid "User DB"
-msgstr ""
-
-#, c-format
-msgid "Remove from '%s'"
 msgstr ""
 
 msgid "Group "

@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.0"
+#define MOD_VER		"5.4.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -291,19 +291,18 @@ void TpContr::load_( )
 	map<string, bool> itReg;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,TBDS::UseCache); ) {
-		string l_id = cEl.cfg("ID").getS();
-		if(!lbPresent(l_id)) {
-		    lbReg(new Lib(l_id.c_str(),"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]));
+		string lId = cEl.cfg("ID").getS();
+		if(!lbPresent(lId)) lbReg(new Lib(lId.c_str(),"",itLs[iDB]));
+		if(lbAt(lId).at().DB() == itLs[iDB])
 		    try {
-			lbAt(l_id).at().load(&cEl);
-			//lbAt(l_id).at().setStart(true);		//Do not try start into the loading but possible broblems like into openscada --help
+			lbAt(lId).at().load(&cEl);
+			//lbAt(lId).at().setStart(true);		//!!!! Do not try start into the loading but possible broblems like into openscada --help
 		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-		}
-		itReg[l_id] = true;
+		lbAt(lId).at().setDB(itLs[iDB], true);
+		itReg[lId] = true;
 	    }
 
 	//  Check for remove items removed from DB
@@ -435,12 +434,9 @@ TCntrNode &Contr::operator=( const TCntrNode &node )
 void Contr::postDisable( int flag )
 {
     try {
-	if(flag) {
-	    //Delete IO value's table
-	    string db = DB(flag&NodeRemoveOnlyStor)+"."+TController::id()+"_val";
-	    SYS->db().at().open(db);
-	    SYS->db().at().close(db, true);
-	}
+	if(flag&(NodeRemove|NodeRemoveOnlyStor))
+	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+TController::id()+"_val",
+					mod->nodePath()+TController::id()+"_val");
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);

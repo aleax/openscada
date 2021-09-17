@@ -170,7 +170,7 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, 1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, NodeRemove);
     }
     else TModule::cntrCmdProc(opt);
 }

@@ -901,7 +901,7 @@ TCntrNode &TVArchive::operator=( const TCntrNode &node )
 
     //Configuration copy
     exclCopy(*src_n, "ID;SrcMode;Source;");
-    mDB = src_n->mDB;
+    setDB(src_n->DB());
 
     if(src_n->startStat() && toStart() && !startStat())	start();
 
@@ -915,7 +915,7 @@ void TVArchive::preDisable( int flag )
 
 void TVArchive::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
@@ -2258,7 +2258,7 @@ TCntrNode &TVArchivator::operator=( const TCntrNode &node )
 
     //Configuration copy
     exclCopy(*src_n, "ID;ADDR;START;");
-    mDB = src_n->mDB;
+    setDB(src_n->DB());
 
     //if(src_n->startStat() && toStart() && !startStat()) start();
 
@@ -2279,7 +2279,7 @@ void TVArchivator::preDisable( int flag )	{ if(startStat()) stop(flag); }
 
 void TVArchivator::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->archive().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }

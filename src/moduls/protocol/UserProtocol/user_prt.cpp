@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -122,14 +122,14 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(unsigned fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!uPrtPresent(id)) uPrtAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
-		uPrtAt(id).at().load(&gCfg);
-		gCfg.cfg("DAQTmpl").setS("");	//!!!! To prevent the new field from duplicating on different not updated tables.
+		if(!uPrtPresent(id)) uPrtAdd(id, itLs[iDB]);
+		if(uPrtAt(id).at().DB() == itLs[iDB]) uPrtAt(id).at().load(&gCfg);
+		uPrtAt(id).at().setDB(itLs[iDB], true);
+		//gCfg.cfg("DAQTmpl").setS("");	//To prevent the new field from duplicating on different not updated tables.
 		itReg[id] = true;
 	    }
 
@@ -203,7 +203,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPrtAt(lst[i_f]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", uPrtAdd(opt->attr("id"))); uPrtAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mPrtU,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mPrtU,opt->attr("id"), -1, NodeRemove);
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -287,7 +287,11 @@ TCntrNode &UserPrt::operator=( const TCntrNode &node )
 
 void UserPrt::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 TProt &UserPrt::owner( ) const	{ return *(TProt*)nodePrev(); }
@@ -478,6 +482,8 @@ void UserPrt::save_( )
     SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 
     saveIO();
+
+    setDB(DB(), true);
 }
 
 void UserPrt::saveIO( )
@@ -619,6 +625,8 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/up/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
@@ -681,6 +689,8 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/up/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/up/cfg/inPROGLang") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());

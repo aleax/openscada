@@ -67,9 +67,9 @@ class Project : public TCntrNode, public TConfig
 	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
 	string	getStatus( );
 
-	string DB( ) const	{ return workPrjDB; }		//Current library DB
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }	//Current library DB
 	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
-	string fullDB( ) const	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
 	void setName( const string &it )	{ cfg("NAME").setS(it); }
 	void setDescr( const string &it )	{ cfg("DESCR").setS(it); }
@@ -80,6 +80,7 @@ class Project : public TCntrNode, public TConfig
 	void setPeriod( int it )		{ mPer = it; modif(); }
 	void setToEnByNeed( bool vl )		{ cfg("EN_BY_NEED").setB(vl); }
 
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 	void setFullDB( const string &it );
 
@@ -144,8 +145,8 @@ class Project : public TCntrNode, public TConfig
     private:
 	//Attributes
 	TCfg	&mId;		//Identifier
-	string	workPrjDB,	//Work DB
-		mOldDB;
+	string	mDB,		//Work DB
+		mDB_MimeSrc;	//After the copy mostly
 	int64_t	&mPermit,	//Access permission
 		&mPer,		//Calculate period
 		&mStyleIdW;	//Work style

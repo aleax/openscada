@@ -97,13 +97,13 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!nPresent(id)) nAdd(id, (itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
-		nAt(id).at().load(&gCfg);
+		if(!nPresent(id)) nAdd(id, itLs[iDB]);
+		if(nAt(id).at().DB() == itLs[iDB]) nAt(id).at().load(&gCfg);
+		nAt(id).at().setDB(itLs[iDB], true);
 		itReg[id] = true;
 	    }
 
@@ -455,7 +455,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", nAdd(opt->attr("id"))); nAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mNode,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mNode, opt->attr("id"), -1, NodeRemove);
     }
     else if(a_path == "/rep/repLen") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(prtLen()));
@@ -642,11 +642,14 @@ void Node::postEnable( int flag )
 
 void Node::postDisable( int flag )
 {
-    if(flag) {
-	SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
 	TConfig cfg(&owner().nodeIOEl());
 	cfg.cfg("NODE_ID").setS(id(), true);
-	SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor)+"_io", owner().nodePath()+tbl()+"_io", cfg);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
 
@@ -658,7 +661,7 @@ string Node::name( )
     return tNm.size() ? tNm : id();
 }
 
-string Node::tbl( )		{ return owner().modId()+"_node"; }
+string Node::tbl( ) const	{ return owner().modId()+"_node"; }
 
 int Node::addr( ) const		{ return cfg("ADDR").getI(); }
 
@@ -816,9 +819,11 @@ void Node::loadIO( )
 void Node::save_( )
 {
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(), *this);
+    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 
     saveIO();
+
+    setDB(DB(), true);
 }
 
 void Node::saveIO( )
@@ -1364,6 +1369,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str", "dest","select", "select","/db/list", "help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/nd/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/nd/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration"))) {
@@ -1432,6 +1439,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/nd/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/nd/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt)) {
 	if(mode() != MD_GT_NET) opt->childAdd("el")->setText("*");

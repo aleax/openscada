@@ -65,16 +65,15 @@ void ModVArch::postDisable( int flag )
 {
     TVArchivator::postDisable(flag);
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Removing the grouping mode tables and records
 	TConfig cfg(&mod->archEl());
 	for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg); ) {
 	    string vTbl = cfg.cfg("TBL").getS(), aNm;
 	    if(vTbl.find(archTbl()+"_") == string::npos) continue;
 
-	    //Removing for groups table of the grouping mode
-	    SYS->db().at().open(addr()+"."+vTbl);
-	    SYS->db().at().close(addr()+"."+vTbl, true);
+	    //Removing the groups table of the grouping mode
+	    SYS->db().at().dataDelTbl(addr()+"."+vTbl);
 
 	    if(!SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    aCnt--;
@@ -195,10 +194,9 @@ void ModVArch::checkArchivator( unsigned int cnt )
 		    gO->beg = s2ll(cfg.cfg("BEGIN").getS());
 		    gO->end = s2ll(cfg.cfg("END").getS());
 		    gO->per = s2ll(cfg.cfg("PRM1").getS());
-		    //  Check for delete the archives group table
+		    //  Checking for deleting the archives group table
 		    if(maxSize() && gO->end <= (TSYS::curTime()-(int64_t)(maxSize()*86400e6))) {
-			SYS->db().at().open(addr()+"."+vTbl);
-			SYS->db().at().close(addr()+"."+vTbl, true);
+			SYS->db().at().dataDelTbl(addr()+"."+vTbl);
 			gO->beg = gO->end = gO->per = 0;
 		    }
 		}
@@ -319,7 +317,7 @@ bool ModVArch::grpLimits( SGrp &oG, int64_t *ibeg, int64_t *iend )
     if(ibeg && iend && wEnd <= oG.end && wBeg >= oG.beg) return false;
 
     try {
-	AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(oG.pos), true);
+	AutoHD<TTable> tbl = TBDS::tblOpen(addr()+"."+archTbl(oG.pos), true);
 
 	MtxAlloc res(reqRes, true);
 
@@ -370,7 +368,7 @@ void ModVArch::pushAccumVals( )
 	if(!oG.accmBeg || !oG.accmEnd) continue;
 
 	try {
-	    AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(iG), true);
+	    AutoHD<TTable> tbl = TBDS::tblOpen(addr()+"."+archTbl(iG), true);
 	    if(tbl.freeStat()) continue;
 
 	    TConfig	cfg(&oG.tblEl);
@@ -516,9 +514,8 @@ void ModVArchEl::fullErase( )
 	cfg.cfg("TBL").setS(archTbl(), true);
 	SYS->db().at().dataDel(archivator().addr()+"."+mod->mainTbl(), "", cfg);
 
-	//Remove archive's DB table
-	SYS->db().at().open(archivator().addr()+"."+archTbl());
-	SYS->db().at().close(archivator().addr()+"."+archTbl(), true);
+	//Removing the archive DB table
+	SYS->db().at().dataDelTbl(archivator().addr()+"."+archTbl());
     }
 }
 
@@ -662,7 +659,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
     TConfig cfg(&reqEl);
     if(!archivator().groupPrms()) {
 	//Table struct init
-	AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archTbl(), true);
+	AutoHD<TTable> tbl = TBDS::tblOpen(archivator().addr()+"."+archTbl(), true);
 	if(tbl.freeStat()) return 0;
 
 	//Write data to the table
@@ -725,7 +722,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 
     //Direct writing to the group table
     // Table struct init
-    AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archivator().archTbl(gO->pos), true);
+    AutoHD<TTable> tbl = TBDS::tblOpen(archivator().addr()+"."+archivator().archTbl(gO->pos), true);
     if(tbl.freeStat()) return 0;
 
     cfg.setElem(&gO->tblEl);
@@ -792,10 +789,9 @@ bool ModVArchEl::readMeta( )
 	mBeg = s2ll(cfg.cfg("BEGIN").getS());
 	mEnd = s2ll(cfg.cfg("END").getS());
 	mPer = s2ll(cfg.cfg("PRM1").getS());
-	// Check for delete archivator table
+	// Checking for deleting the archiver table
 	if(archivator().maxSize() && mEnd <= (TSYS::curTime()-(int64_t)(archivator().maxSize()*86400e6))) {
-	    SYS->db().at().open(archivator().addr()+"."+archTbl());
-	    SYS->db().at().close(archivator().addr()+"."+archTbl(), true);
+	    SYS->db().at().dataDelTbl(archivator().addr()+"."+archTbl());
 	    mBeg = mEnd = mPer = 0;
 	}
     } else rez = false;

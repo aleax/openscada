@@ -66,7 +66,7 @@ void TPrmTempl::postEnable( int flag )
 
 void TPrmTempl::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&NodeRemove) {
 	SYS->db().at().dataDel(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
 
 	//Delete template's IO
@@ -812,7 +812,7 @@ TCntrNode &TPrmTmplLib::operator=( const TCntrNode &node )
 
     //Configuration copy
     exclCopy(*src_n, "ID;DB;");
-    mDB = src_n->mDB;
+    setDB(src_n->DB());
 
     //Templates copy
     vector<string> ls;
@@ -833,17 +833,13 @@ void TPrmTmplLib::preDisable( int flag )
 
 void TPrmTmplLib::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	//Delete libraries record
 	SYS->db().at().dataDel(DB(flag&NodeRemoveOnlyStor)+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this, TBDS::UseAllKeys);
 
-	//???? Append the generic tables removing interface with the Configuration File
 	//Delete temlate librarie's DBs
-	SYS->db().at().open(fullDB(flag&NodeRemoveOnlyStor));
-	SYS->db().at().close(fullDB(flag&NodeRemoveOnlyStor), true);
-
-	SYS->db().at().open(fullDB(flag&NodeRemoveOnlyStor)+"_io");
-	SYS->db().at().close(fullDB(flag&NodeRemoveOnlyStor)+"_io", true);
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl());
+	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", owner().nodePath()+tbl()+"_io/");
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -864,11 +860,6 @@ void TPrmTmplLib::setFullDB( const string &vl )
     int off = vl.size();
     cfg("DB").setS(TSYS::strParseEnd(vl,0,".",&off));
     setDB(vl.substr(0,off+1));
-
-    /*size_t dpos = vl.rfind(".");
-    mDB = (dpos!=string::npos) ? vl.substr(0,dpos) : "";
-    cfg("DB").setS((dpos!=string::npos) ? vl.substr(dpos+1) : "");
-    modifG();*/
 }
 
 void TPrmTmplLib::load_( TConfig *icfg )
@@ -951,7 +942,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 		//???? Move to the not editable combobox and without the table for empty or equal to ID
 		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
-		    "help",_("DB address in format \"{DB module}.{DB name}.{Table name}\".\nSet '*.*.{Table name}' for use the main work DB."));
+		    "help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
 		if(DB(true).size())
 		    ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID);
 		ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");

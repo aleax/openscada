@@ -217,7 +217,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 
 	//Main request prepare
 	mbap.reserve(pdu.size()+17);
-	mbap.assign("\x7F\x00\x00\x01",4);		//???? Where the take for client
+	mbap.assign("\x7F\x00\x00\x01",4);		//!!!! Where the take for client
 	mbap += ePrm->pass;				//Password
 	mbap += (char)0;				//Unused
 	uint32_t cntrN = TSYS::i32_BE(p->cfg("PLC").getI());

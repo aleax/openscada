@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.5"
+#define MOD_VER		"2.5.6"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -103,7 +103,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
+    if(flag&NodeRemove && owner().fullDeleteDB()) {
 	MtxAlloc resource(connRes, true);
 	PGconn *tcon = NULL;
 	PGresult *res;
@@ -501,7 +501,7 @@ bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[1][0] == "<<empty>
 void MTable::postDisable( int flag )
 {
     owner().transCommit();
-    if(flag) {
+    if(flag&NodeRemove) {
 	try { owner().sqlReq("DROP TABLE \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\""); }
 	catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
     }

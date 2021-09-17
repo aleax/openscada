@@ -49,15 +49,16 @@ class WidgetLib : public TCntrNode, public TConfig
 	string ico( ) const	{ return cfg("ICO").getS(); }	//Icon
 	string getStatus( );
 
-	string DB( ) const	{ return workLibDB; }		//Current library DB
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }	//Current library DB
 	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
-	string fullDB( ) const	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
 
 	void setName( const string &it )	{ cfg("NAME").setS(it); }
 	void setDescr( const string &it )	{ cfg("DESCR").setS(it); }
 	void setIco( const string &it )		{ cfg("ICO").setS(it); }
-	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
+	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 	void setFullDB( const string &it );
 
 	// Enable stat
@@ -99,7 +100,8 @@ class WidgetLib : public TCntrNode, public TConfig
     private:
 	//Attributes
 	TCfg	&mId;
-	string	workLibDB, mOldDB;
+	string	mDB,
+		mDB_MimeSrc;	//After the copy mostly
 	bool	mEnable;
 	bool	passAutoEn;
 };

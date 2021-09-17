@@ -33,7 +33,7 @@
 #define MOD_NAME	_("Directory by LDAP")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.6.3"
+#define MOD_VER		"0.6.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of directories by LDAP.")
 #define MOD_LICENSE	"GPL2"
@@ -101,7 +101,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
+    if(flag&NodeRemove && owner().fullDeleteDB()) {
 	MtxAlloc resource(connRes, true);
     }
 }

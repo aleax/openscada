@@ -76,9 +76,9 @@ class TController : public TCntrNode, public TConfig
 	int64_t timeStamp( );
 	virtual string getStatus( );
 
-	string DB( bool qTop = false )		{ return storage(mDB, qTop); }
-	string tbl( );
-	string fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const;
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &nm );
 	void setDescr( const string &dscr );

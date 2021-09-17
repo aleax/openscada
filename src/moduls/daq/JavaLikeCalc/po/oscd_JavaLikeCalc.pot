@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-08 15:17+0300\n"
+"POT-Creation-Date: 2021-09-17 15:23+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -197,8 +197,12 @@ msgid "Library DB"
 msgstr ""
 
 msgid ""
-"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the main working DB, set '*.*'."
+"Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the Generic Storage, set '*.*.{Table name}'."
+msgstr ""
+
+#, c-format
+msgid "Remove from '%s'"
 msgstr ""
 
 msgid "Configuration"

@@ -78,9 +78,9 @@ class UserPg : public TCntrNode, public TConfig, public TPrmTempl::Impl
 
 	string	getStatus( );
 
-	string	DB( ) const		{ return mDB; }
+	string	DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string	tbl( ) const;
-	string	fullDB( ) const	{ return DB()+'.'+tbl(); }
+	string	fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &name )	{ cfg("NAME").setS(name); }
 	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
@@ -89,7 +89,7 @@ class UserPg : public TCntrNode, public TConfig, public TPrmTempl::Impl
 	void setProgLang( const string &ilng );
 	void setProg( const string &iprg );
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	void HTTP( const string &req, SSess &s, TProtocolIn *iprt );
 

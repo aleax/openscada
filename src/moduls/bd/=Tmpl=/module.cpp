@@ -114,7 +114,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
+    if(flag&NodeRemove && owner().fullDeleteDB()) {
 	//!!! Process here the full deleting of the database code
 	MtxAlloc resource(connRes, true);
     }
@@ -230,7 +230,7 @@ void MTable::postDisable( int flag )
 {
     //!!! Commit the transaction
     owner().transCommit();
-    if(flag) {
+    if(flag&NodeRemove) {
         //!!! The code for the table drop
     }
 }

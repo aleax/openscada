@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.2.4"
+#define MOD_VER		"4.2.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -468,12 +468,9 @@ TMdContr::~TMdContr( )
 void TMdContr::postDisable( int flag )
 {
     try {
-	if(flag) {
-	    //Delete parameter's io table
-	    string tbl = DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io";
-	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl, true);
-	}
+	if(flag&(NodeRemove|NodeRemoveOnlyStor))
+	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io",
+					owner().nodePath()+cfg("PRM_BD").getS()+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
@@ -1699,7 +1696,7 @@ void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
-    if(flag && isLogic()) {
+    if(flag&NodeRemove && isLogic()) {
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id(), true);

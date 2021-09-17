@@ -61,9 +61,9 @@ class TTransportIn : public TCntrNode, public TConfig
 	bool toStart( )		{ return mStart; }
 	bool startStat( ) const	{ return runSt; }
 
-	string DB( bool qTop = false )		{ return storage(mDB, qTop); }
-	string tbl( );
-	string fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const;
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCRIPT").setS(idscr); }
@@ -152,9 +152,9 @@ class TTransportOut : public TCntrNode, public TConfig
 	int64_t	lstReqTm( )		{ return mLstReqTm; }
 	virtual	string getStatus( );
 
-	string DB( bool qTop = false )		{ return storage(mDB, qTop); }
-	string tbl( );
-	string fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const;
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }

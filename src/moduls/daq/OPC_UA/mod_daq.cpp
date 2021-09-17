@@ -108,12 +108,9 @@ TMdContr::~TMdContr( )
 void TMdContr::postDisable( int flag )
 {
     try {
-	if(flag) {
-	    //Delete parameter's io table
-	    string tbl = DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD_L").getS()+"_io";
-	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl, true);
-	}
+	if(flag&(NodeRemove|NodeRemoveOnlyStor))
+	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD_L").getS()+"_io",
+					owner().nodePath()+cfg("PRM_BD_L").getS()+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
@@ -770,7 +767,7 @@ void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
-    if(flag && isLogic()) {
+    if(flag&NodeRemove && isLogic()) {
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id(), true);

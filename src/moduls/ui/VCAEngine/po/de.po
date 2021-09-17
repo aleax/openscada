@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 10:24+0300\n"
+"POT-Creation-Date: 2021-09-17 16:13+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -76,11 +76,15 @@ msgid "Library DB"
 msgstr "Datenbank der Bibliothek"
 
 msgid ""
-"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the main working DB, set '*.*'."
+"Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the Generic Storage, set '*.*.{Table name}'."
 msgstr ""
-"Datenbank Parameter im Format \"{DB-Modul}.{DB-Name}.{Name der Tabelle}\".\n"
-"Für die Hauptdatenbank '*.*' verwenden."
+"Speicheradresse im Format \"{DB-Modul}.{DB-Name}.{Table name}\".\n"
+"Um den generischen Speicher zu verwenden, legen Sie '*.*.{Table name}' fest."
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Entfernen von '%s'"
 
 msgid "Date of modification"
 msgstr "Änderungsdatum"
@@ -307,8 +311,7 @@ msgid "View"
 msgstr "Ansicht"
 
 msgid "Text;Combo;Integer;Real;Time;Date;Date and time;Password"
-msgstr ""
-"Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
+msgstr "Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit;Passwort"
 
 msgid "Confirm"
 msgstr "Bestätigen"
@@ -531,10 +534,8 @@ msgstr ""
 "Die Dateivorlage schreibt sich wie in \"Images (*.png *.xpm *.jpg);;CSV-"
 "Datei (*.csv)\"."
 
-msgid ""
-"List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
-msgstr ""
-"Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
+msgid "List of the hierarchical items by the path \"/{DIR}/{DIR}/{ITEM}\" per line."
+msgstr "Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
 
 msgid "List of items-values by lines."
 msgstr "Liste der Werke-Werte durch Linien."
@@ -674,8 +675,7 @@ msgid "Border: style"
 msgstr "Rand: Stil"
 
 msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
-msgstr ""
-"Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
+msgstr "Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
 
 msgid "Color"
 msgstr "Farbe"
@@ -714,8 +714,7 @@ msgstr ": Wert"
 msgid ": config"
 msgstr ": Konfiguration"
 
-msgid ""
-"Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
+msgid "Text value in HTML. Use \"%{x}\" for argument \"x\" (from 1) value insert."
 msgstr ""
 "Textwert in HTML. Verwenden Sie \"%{n}\" die Werte der Argumente \"n\" (aus "
 "1) zu halten."
@@ -1569,10 +1568,8 @@ msgid "Opened"
 msgstr "Geöffnet"
 
 #, c-format
-msgid ""
-"Error compiling the function '%s' by the language '%s' for the widget: %s"
-msgstr ""
-"Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
+msgid "Error compiling the function '%s' by the language '%s' for the widget: %s"
+msgstr "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
 #, c-format
 msgid "Processing at %s. "
@@ -1584,9 +1581,9 @@ msgstr "Verbrachte Zeit in der Branche: "
 msgid "the item: "
 msgstr "der Gegenstand: "
 
+#, c-format
 msgid "It is a try of creating a widget in depth bigger to %d!"
-msgstr ""
-"Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu %d zu erstellen!"
+msgstr "Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu %d zu erstellen!"
 
 #, c-format
 msgid "Events: %s"
@@ -1661,6 +1658,7 @@ msgstr "Arbeitsstil"
 msgid "Flags"
 msgstr "Schalter"
 
+#, c-format
 msgid "Value %d"
 msgstr "Wert %d"
 
@@ -2012,16 +2010,6 @@ msgstr "Arbeitsbereich"
 msgid "Calculation"
 msgstr "Berechnung"
 
-msgid "Procedure language"
-msgstr "Verfahrenssprache"
-
-msgid ""
-"Select the blank language to reset the widget procedure and language to the "
-"parent widget."
-msgstr ""
-"Wählen Sie die leere Sprache das Widget Verfahren und Sprache auf das "
-"übergeordnete Widget zurückgesetzt werden."
-
 msgid "Period of the calculating, milliseconds"
 msgstr "Zeitraum der Berechnung, Millisekunden"
 
@@ -2031,6 +2019,16 @@ msgid ""
 msgstr ""
 "Verwenden Sie -1 (<0), wenn Sie den Berechnungszeitraum für das "
 "übergeordnete Widget/Seite/Projekt verwenden möchten."
+
+msgid "Procedure language"
+msgstr "Verfahrenssprache"
+
+msgid ""
+"Select the blank language to reset the widget procedure and language to the "
+"parent widget."
+msgstr ""
+"Wählen Sie die leere Sprache das Widget Verfahren und Sprache auf das "
+"übergeordnete Widget zurückgesetzt werden."
 
 msgid "Procedure"
 msgstr "Verfahren"
@@ -2147,8 +2145,7 @@ msgstr ""
 msgid "Node presence"
 msgstr "Knotenpräsenz"
 
-msgid ""
-"Checking for the node presence, including widgets, attributes and other."
+msgid "Checking for the node presence, including widgets, attributes and other."
 msgstr ""
 "Überprüfen auf die Knotenpräsenz, einschließlich Widgets, Attribute und "
 "andere."
@@ -2196,3 +2193,4 @@ msgstr ""
 "vollständige Adresse des Attributs in <addr> angegeben wird, und indem: die "
 "Adresse des Widget in <addr> und die Attributkennung in <attr> separat "
 "angegeben werden."
+

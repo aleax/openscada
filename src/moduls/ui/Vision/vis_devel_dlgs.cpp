@@ -130,6 +130,12 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_db->setObjectName("/obj/st/db");
     connect(obj_db, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_db, 2, 2);
+    obj_remFromDB = new QPushButton(tab_w);
+    obj_remFromDB->setObjectName("/obj/st/removeFromDB");
+    obj_remFromDB->setAutoDefault(false);
+    obj_remFromDB->setVisible(false);
+    connect(obj_remFromDB, SIGNAL(released()), this, SLOT(isModify()));
+    glay->addWidget(obj_remFromDB, 2, 3);
 
     /*lab = new QLabel(_("Used:"), tab_w);
     glay->addWidget(lab, 2, 1);
@@ -392,14 +398,14 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if(!owner()->cntrIfCmd(req)) obj_st->setText(req.text().c_str());
 	}else obj_st->setText("");
 	// Enable stat
-	gnd = TCntrNode::ctrId(root,obj_enable->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_enable->objectName().toStdString(), true);
 	obj_enable->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_enable->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_enable->setChecked(s2i(req.text()));
 	}
 	// DB value
-	gnd = TCntrNode::ctrId(root,obj_db->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_db->objectName().toStdString(), true);
 	obj_db->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
@@ -412,6 +418,11 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		obj_db->setCfg(els.c_str());
 	    }
 	}
+	// Remove from DB
+	gnd = TCntrNode::ctrId(root, obj_remFromDB->objectName().toStdString(), true);
+	obj_remFromDB->setVisible(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+	if(gnd) obj_remFromDB->setText(gnd->attr("dscr").c_str());
+
 	// Used
 	/*gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
 	if(gnd) {
@@ -762,8 +773,11 @@ void LibProjProp::isModify( QObject *snd )
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }
-    else if(oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName())
+    else if(oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName()) {
 	req.setText(((LineEdit*)snd)->value().toStdString());
+	update = (oname==obj_db->objectName());
+    }
+    else if(oname == obj_remFromDB->objectName()) update = true;
     else if(oname == stl_name->objectName()) { req.setText(((LineEdit*)snd)->value().toStdString()); update = true; }
     else if(oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == stl_select->objectName()) {
 	int cPos = ((QComboBox*)snd)->currentIndex();

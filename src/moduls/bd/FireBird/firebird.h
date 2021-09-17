@@ -124,6 +124,8 @@ class BDMod: public TTypeBD
 	BDMod( string name );
 	~BDMod( );
 
+	int lsPr( )	{ return 3; }
+
 	static string sqlReqCode( const string &req, char symb = '\'' );
 
     private:

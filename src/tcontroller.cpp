@@ -62,7 +62,7 @@ TCntrNode &TController::operator=( const TCntrNode &node )
 
     //Configuration copy
     exclCopy(*src_n, "ID;");
-    setDB(src_n->mDB);
+    setDB(src_n->DB());
 
     //Individual DB names restore
     for(unsigned iTp = 0; iTp < owner().tpPrmSize() && iTp < dbNms.size(); iTp++)
@@ -84,7 +84,7 @@ TCntrNode &TController::operator=( const TCntrNode &node )
     return *this;
 }
 
-void TController::preDisable(int flag)
+void TController::preDisable( int flag )
 {
     if(startStat())	stop();
     if(enableStat())	disable();
@@ -92,17 +92,14 @@ void TController::preDisable(int flag)
 
 void TController::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	//Delete DB record
 	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+"DAQ", *this, TBDS::UseAllKeys);
 
-	//???? Append the generic tables removing interface with the Configuration File
 	//Delete parameter tables
-	for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++) {
-	    string tbl = DB(flag&NodeRemoveOnlyStor)+"."+owner().tpPrmAt(iTp).DB(this);
-	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl, true);
-	}
+	for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++)
+	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+owner().tpPrmAt(iTp).DB(this),
+					owner().nodePath()+owner().tpPrmAt(iTp).DB(this));
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -132,7 +129,7 @@ int64_t TController::timeStamp( )
     return mTimeStamp;
 }
 
-string TController::tbl( )	{ return owner().owner().subId()+"_"+owner().modId(); }
+string TController::tbl( ) const	{ return owner().owner().subId()+"_"+owner().modId(); }
 
 string TController::getStatus( )
 {

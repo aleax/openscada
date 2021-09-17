@@ -63,15 +63,14 @@ void ModMArch::postDisable( int flag )
 {
     TMArchivator::postDisable(flag);
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Remove info record
 	TConfig cfg(&mod->archEl());
 	cfg.cfg("TBL").setS(archTbl(),true);
 	SYS->db().at().dataDel(addr()+"."+mod->mainTbl(), "", cfg);
 
-	//Remove archive's DB table
-	SYS->db().at().open(addr()+"."+archTbl());
-	SYS->db().at().close(addr()+"."+archTbl(), true);
+	//Removing the archive DB table
+	SYS->db().at().dataDelTbl(addr()+"."+archTbl());
     }
 }
 
@@ -151,7 +150,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
     if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
 
-    AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(), true);
+    AutoHD<TTable> tbl = TBDS::tblOpen(addr()+"."+archTbl(), true);
     if(tbl.freeStat()) return false;
 
     TConfig cfg(&reqEl);
@@ -255,8 +254,7 @@ bool ModMArch::readMeta( )
 	mEnd = s2i(wcfg.cfg("END").getS());
 	// Check for delete archivator table
 	if(maxSize() && mEnd <= (time(NULL)-(time_t)(maxSize()*86400))) {
-	    SYS->db().at().open(addr()+"."+archTbl());
-	    SYS->db().at().close(addr()+"."+archTbl(), true);
+	    SYS->db().at().dataDelTbl(addr()+"."+archTbl());
 	    mBeg = mEnd = 0;
 	}
     } else rez = false;

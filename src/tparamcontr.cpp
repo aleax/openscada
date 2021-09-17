@@ -256,7 +256,7 @@ void TParamContr::preDisable( int flag )
 
 void TParamContr::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Delete the parameter from DB
 	cfg("OWNER") = ownerPath();
 	SYS->db().at().dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, TBDS::UseAllKeys);
@@ -399,7 +399,7 @@ void TParamContr::setType( const string &tpId )
 	//Wait for disconnect other
 	while(nodeUse(true) > 1) TSYS::sysSleep(1e-3);
 	//Remove from DB
-	postDisable(true);
+	postDisable(NodeRemove);
 
 	//Create temporary structure
 	TConfig tCfg(&type());

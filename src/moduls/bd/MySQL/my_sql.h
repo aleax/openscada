@@ -125,6 +125,8 @@ class BDMod: public TTypeBD
 	BDMod( string name );
 	~BDMod( );
 
+	int lsPr( )	{ return 5; }
+
     private:
 	//Private methods
 	TBD *openBD( const string &iid );

@@ -111,7 +111,7 @@ class TBD : public TCntrNode, public TConfig
 	string	dscr( )			{ return cfg("DESCR").getS(); }
 	string	addr( ) const		{ return cfg("ADDR").getS(); }
 	string	codePage( )		{ return cfg("CODEPAGE").getS(); }
-	int64_t	lsPr( )			{ return mLsPr; }
+	int	lsPr( )			{ return cfg("LS_PR").getI(); }
 	double	trTm_ClsOnOpen( )	{ return mTrTm_ClsOnOpen; }
 	double	trTm_ClsOnReq( )	{ return mTrTm_ClsOnReq; }
 	int	trPr_ClsTask( )		{ return mTrPr_ClsTask; }
@@ -124,7 +124,7 @@ class TBD : public TCntrNode, public TConfig
 	void setDscr( const string &dscr )	{ cfg("DESCR").setS(dscr); }
 	void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
 	void setCodePage( const string &cp )	{ cfg("CODEPAGE").setS(cp); }
-	void setLsPr( int64_t vl )		{ mLsPr = vl; }
+	void setLsPr( int vl )			{ cfg("LS_PR").setI(vl); }
 	void setToEnable( bool vl )		{ mToEn = vl; }
 
 	virtual void enable( );
@@ -181,7 +181,6 @@ class TBD : public TCntrNode, public TConfig
 	// Base options
 	TCfg	&mId;	//ID
 	char	&mToEn;
-	int64_t	&mLsPr;
 	double	&mTrTm_ClsOnOpen, &mTrTm_ClsOnReq;
 	int64_t	&mTrPr_ClsTask;
 
@@ -206,6 +205,8 @@ class TTypeBD : public TModule
 	//Public methods
 	TTypeBD( const string &id );
 	virtual ~TTypeBD( );
+
+	virtual int lsPr( )	{ return 0; }
 
 	bool fullDeleteDB( )	{ return fullDBDel; }
 
@@ -253,37 +254,41 @@ class TBDS : public TSubSYS, public TElem
 	    UseAllKeys	= 0x04		//Use all keys, in dataDel() only
 	};
 
-	//Public methods
-	TBDS( );
-	~TBDS( );
-
-	int subVer( )		{ return SDB_VER; }
+	//Generic static block
+	static string fullDBSYS( )	{ return "*.*.SYS"; }
+	static string fullDB( )		{ return "*.*.DB"; }
 
 	static string realDBName( const string &bdn, bool back = false );
+	static string dbPart( const string &bdn, bool tbl = false );
+
 	void dbList( vector<string> &ls, char flags = LsNoFlg );
 
-	int tblLifeTime( )	{ return mTblLifeTime; }
-	void setTblLifeTime( int vl )	{ mTblLifeTime = vmax(10, vmin(1000,vl)); modif(); }
-
-	void perSYSCall( unsigned int cnt );
-
 	// Open/close table
-	AutoHD<TTable> open( const string &bdn, bool create = false );
-	void close( const string &bdn, bool del = false );
+	static AutoHD<TTable> tblOpen( const string &bdn, bool create = false );
+	static void tblClose( const string &bdn, bool del = false );
 
 	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
 	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
 	bool dataGet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
 	bool dataSet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg );
+	bool dataDelTbl( const string &bdn, const string &path = "", char flags = NoFlg );
 
 	// Generic DB table
 	//???? Adapt to the new storage policy and test on UI.QTStarter, adapt and use dataGet() and dataSet() for these
 	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", char flags = NoFlg );
 	static void genDBSet( const string &path, const string &val, const string &user = "root", char flags = NoFlg );
 
-	string fullDBSYS( );
-	string fullDB( );
+	//Public methods
+	TBDS( );
+	~TBDS( );
+
+	int subVer( )		{ return SDB_VER; }
+
+	int tblLifeTime( )	{ return mTblLifeTime; }
+	void setTblLifeTime( int vl )	{ mTblLifeTime = vmax(10, vmin(1000,vl)); modif(); }
+
+	void perSYSCall( unsigned int cnt );
 
 	TElem &openDB_E( )	{ return elDB; }
 

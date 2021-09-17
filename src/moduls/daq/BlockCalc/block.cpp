@@ -68,7 +68,7 @@ void Block::preDisable( int flag )
 
 void Block::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Delete block from BD
 	string tbl = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
 	SYS->db().at().dataDel(tbl, mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this, TBDS::UseAllKeys);

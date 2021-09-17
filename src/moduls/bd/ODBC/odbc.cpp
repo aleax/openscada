@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.ODBC file: odbc.cpp
 /***************************************************************************
- *   Copyright (C) 2015-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2015-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.9"
+#define MOD_VER		"0.2.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -102,7 +102,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
+    if(flag&NodeRemove && owner().fullDeleteDB()) {
 	MtxAlloc resource(connRes, true);
     }
 }
@@ -425,7 +425,7 @@ MTable::~MTable( )	{ }
 void MTable::postDisable( int flag )
 {
     owner().transCommit();
-    /*if(flag)
+    /*if(flag&NodeRemove)
 	try { owner().sqlReq("DROP TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"`"); }
 	catch(TError err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }*/
 }

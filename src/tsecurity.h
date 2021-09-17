@@ -56,9 +56,9 @@ class TUser : public TCntrNode, public TConfig
 	bool	auth( const string &pass, string *hash = NULL );
 	int	permitCmpr( const string &user );
 
-	string	DB( bool qTop = false )		{ return storage(mDB, qTop); }
-	string	tbl( );
-	string	fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
+	string	DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string	tbl( ) const;
+	string	fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }
@@ -110,9 +110,9 @@ class TGroup : public TCntrNode, public TConfig
 	string	users( )	{ return cfg("USERS").getS(); }
 	bool	sysItem( )	{ return mSysIt; }
 
-	string DB( bool qTop = false )		{ return storage(mDB, qTop); }
-	string tbl( );
-	string fullDB( bool qTop = false )	{ return DB(qTop) + '.' + tbl(); }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const;
+	string fullDB( bool qTop = false ) const{ return DB(qTop) + '.' + tbl(); }
 
 	void setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setLongDescr( const string &vl )	{ cfg("LONGDESCR").setS(vl); }

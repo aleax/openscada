@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.2.0"
+#define MOD_VER		"3.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -111,7 +111,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB())
+    if(flag&NodeRemove && owner().fullDeleteDB())
 	if(remove(TSYS::strSepParse(addr(),0,';').c_str()) != 0)
 	    throw err_sys(_("Error deleting DB: %s"), strerror(errno));
 }
@@ -306,7 +306,7 @@ MTable::~MTable( )
 void MTable::postDisable( int flag )
 {
     owner().transCommit();
-    if(flag)
+    if(flag&NodeRemove)
 	try{ owner().sqlReq("DROP TABLE '"+TSYS::strEncode(name(),TSYS::SQL,"'")+"';"); }
 	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }

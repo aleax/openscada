@@ -311,7 +311,7 @@ TCntrNode &TUser::operator=( const TCntrNode &node )
     if(!src_n) return *this;
 
     exclCopy(*src_n, "NAME;");
-    setDB(src_n->mDB);
+    setDB(src_n->DB());
 
     return *this;
 }
@@ -400,7 +400,7 @@ int TUser::permitCmpr( const string &user )
 
 void TUser::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -414,7 +414,7 @@ void TUser::postDisable( int flag )
 
 TSecurity &TUser::owner( ) const	{ return *(TSecurity*)nodePrev(); }
 
-string TUser::tbl( )			{ return string(owner().subId())+"_user"; }
+string TUser::tbl( ) const		{ return string(owner().subId())+"_user"; }
 
 bool TUser::cfgChange( TCfg &co, const TVariant &pc )
 {
@@ -558,14 +558,14 @@ TCntrNode &TGroup::operator=( const TCntrNode &node )
     if(!src_n) return *this;
 
     exclCopy(*src_n, "NAME;");
-    setDB(src_n->mDB);
+    setDB(src_n->DB());
 
     return *this;
 }
 
 void TGroup::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -573,7 +573,7 @@ void TGroup::postDisable( int flag )
 
 TSecurity &TGroup::owner( ) const	{ return *(TSecurity*)nodePrev(); }
 
-string TGroup::tbl( )			{ return owner().subId()+"_grp"; }
+string TGroup::tbl( ) const		{ return owner().subId()+"_grp"; }
 
 void TGroup::load_( TConfig *icfg )
 {

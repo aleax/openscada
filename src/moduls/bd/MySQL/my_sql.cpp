@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.5.5"
+#define MOD_VER		"3.5.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -101,7 +101,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB())
+    if(flag&NodeRemove && owner().fullDeleteDB())
 	try {
 	    MYSQL tcon;
 
@@ -375,7 +375,7 @@ bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[1][0] == "<<empty>
 void MTable::postDisable( int flag )
 {
     owner().transCommit();
-    if(flag)
+    if(flag&NodeRemove)
 	try { owner().sqlReq("DROP TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"`"); }
 	catch(TError &err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
 }

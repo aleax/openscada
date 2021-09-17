@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.ODBC file: odbc.h
 /***************************************************************************
- *   Copyright (C) 2015-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2015-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

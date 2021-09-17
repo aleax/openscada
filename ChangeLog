@@ -1,3 +1,21 @@
+2021-09-17 Roman (conceptual)
+- !!!!:SYS,*: The objects are adapted for tracking the multiple storages and are appended of the sequentially removing duplicates:
+	DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.{VCAEngine,Vision}.{WdgLib,Proj}.
+    !!: Most of the objects moved to use the new function dataDelTbl():
+	DAQ.{TController,TPrmTmplLib,JavaLikeCalc,LogicLev,BlockCalc,ModBus,Siemens,OPC_UA}, Archive.DBArch, UI.{VCAEngine,Vision}.{WdgLib,Proj}.
+    !:FIX:Archive.*,Security.{User,Group},Transport.{In,Out},DAQ.{TController,TPrmTmplLib,JavaLikeCalc}, UI.{VCAEngine,Vision}.{WdgLib,Proj}:
+	Storing objects fixed in set DB() at the copy.
+    !: The flags TCntrNode::{NodeRemove,NodeRemoveOnlyStor} used everywhere of the function postDisable() checking and chldDel() call.
+    Storage functions {DB,tbl,fullDB}() set to static: Security.{User,Group}, Transport.{In,Out}, DAQ.{TController,TPrmTmplLib,JavaLikeCalc}.
+- !!!:FIX:DB: The functions TBDS::{open,close}() renamed to TBDS::{tblOpen,tblClose}() and set to static ones.
+    !!:FIX: The TBDS::dataDel() fixed-appended in removing multiple items and appended of removing the empty table nodes.
+    !!: The static methods of TBDS appended of the new function dbPart() of getting the storage address parts
+	and appended of the new function dataDelTbl() of the common tables removing, also in the Configuration File.
+    !: Root object of the DB subsystem appended of DB priority base [0...9] in the generic storages list.
+- !!:FIX:UI.VCAEngine: Fixed in the mime data copy at the widget libraries and the projects copy, moving the copy to the copy save,
+    with expanding the mime operations for work with completely specified DBs.
+
+
 2021-09-14 Roman (conceptual)
 - !!!!:SYS,*: TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data
 	    in different storages and offer a queue of source DB for the mechanism of sequentially removing duplicates.

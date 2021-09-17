@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.0"
+#define MOD_VER		"1.5.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -120,13 +120,13 @@ void TWEB::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel);
-	itLs.push_back(DB_CFG);
+	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
 	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!uPgPresent(id)) uPgAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
-		uPgAt(id).at().load(&gCfg);
+		if(!uPgPresent(id)) uPgAdd(id, itLs[iDB]);
+		if(uPgAt(id).at().DB() == itLs[iDB]) uPgAt(id).at().load(&gCfg);
+		uPgAt(id).at().setDB(itLs[iDB], true);
 		itReg[id] = true;
 	    }
 
@@ -317,7 +317,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setAttr("id",lst[iF])->setText(uPgAt(lst[iF]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	{ opt->setAttr("id", uPgAdd(opt->attr("id"))); uPgAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	chldDel(mPgU,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	chldDel(mPgU,opt->attr("id"), -1, NodeRemove);
     }
     else TUI::cntrCmdProc(opt);
 }
@@ -369,7 +369,11 @@ TCntrNode &UserPg::operator=( const TCntrNode &node )
 
 void UserPg::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 TWEB &UserPg::owner( ) const	{ return *(TWEB*)nodePrev(); }
@@ -512,6 +516,8 @@ void UserPg::save_( )
     SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 
     saveIO();
+
+    setDB(DB(), true);
 }
 
 void UserPg::saveIO( )
@@ -639,6 +645,8 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/up/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID);
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
@@ -688,6 +696,8 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/up/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/up/cfg/PROGLang") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(progLang());

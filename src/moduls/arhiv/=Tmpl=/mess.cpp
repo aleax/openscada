@@ -55,7 +55,7 @@ void ModMArch::postDisable( int flag )
 {
     TMArchivator::postDisable( flag );
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Remove info record
 	TConfig cfg(&mod->archEl());
 	cfg.cfg("TBL").setS(archTbl(),true);

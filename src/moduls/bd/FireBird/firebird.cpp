@@ -31,7 +31,7 @@
 #define MOD_NAME	_("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.5"
+#define MOD_VER		"2.5.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -106,7 +106,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
+    if(flag&NodeRemove && owner().fullDeleteDB()) {
 	//Attach to DB
 	// Prepare database parameter buffer (DPB)
 	char *dpb = (char*)malloc(50);
@@ -485,7 +485,7 @@ bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[1][0] == "<<empty>
 void MTable::postDisable( int flag )
 {
     owner().transCommit();
-    if(flag) {
+    if(flag&NodeRemove) {
 	try { owner().sqlReq("DROP TABLE \"" + mod->sqlReqCode(name(),'"') + "\""); }
 	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
     }
