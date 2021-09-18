@@ -707,40 +707,40 @@ void TSYS::cfgFileSave( )
 void TSYS::cfgPrmLoad( )
 {
     //Global limits
-    limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genDBGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ),"root",TBDS::OnlyCfg))));
-    limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genDBGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ),"root",TBDS::OnlyCfg))));
-    limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genDBGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ),"root",TBDS::OnlyCfg))));
-    limUserFile_SZ = vmax(1048576, vmin(100048576,s2i(TBDS::genDBGet(nodePath()+"limUserFile_SZ",i2s(limUserFile_SZ),"root",TBDS::OnlyCfg))));
-    limUserIts_N = vmax(1000, vmin(1000000000,s2i(TBDS::genDBGet(nodePath()+"limUserIts_N",i2s(limUserIts_N),"root",TBDS::OnlyCfg))));
-    limCacheIts_N = vmax(100, vmin(100000,s2i(TBDS::genDBGet(nodePath()+"limCacheIts_N",i2s(limCacheIts_N),"root",TBDS::OnlyCfg))));
+    limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genPrmGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ),"root",TBDS::OnlyCfg))));
+    limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genPrmGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ),"root",TBDS::OnlyCfg))));
+    limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genPrmGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ),"root",TBDS::OnlyCfg))));
+    limUserFile_SZ = vmax(1048576, vmin(100048576,s2i(TBDS::genPrmGet(nodePath()+"limUserFile_SZ",i2s(limUserFile_SZ),"root",TBDS::OnlyCfg))));
+    limUserIts_N = vmax(1000, vmin(1000000000,s2i(TBDS::genPrmGet(nodePath()+"limUserIts_N",i2s(limUserIts_N),"root",TBDS::OnlyCfg))));
+    limCacheIts_N = vmax(100, vmin(100000,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_N",i2s(limCacheIts_N),"root",TBDS::OnlyCfg))));
 
     //Global parameters
-    prmStrBuf_SZ = vmax(1000, vmin(1000000,s2i(TBDS::genDBGet(nodePath()+"prmStrBuf_SZ",i2s(prmStrBuf_SZ),"root",TBDS::OnlyCfg))));
-    prmWait_DL = vmax(0.001, vmin(1,s2r(TBDS::genDBGet(nodePath()+"prmWait_DL",r2s(prmWait_DL),"root",TBDS::OnlyCfg))));
-    prmWait_TM = vmax(5, vmin(10,s2i(TBDS::genDBGet(nodePath()+"prmWait_TM",i2s(prmWait_TM),"root",TBDS::OnlyCfg))));
-    prmInterf_TM = vmax(7, vmin(15,s2i(TBDS::genDBGet(nodePath()+"prmInterf_TM",i2s(prmInterf_TM),"root",TBDS::OnlyCfg))));
-    prmServTask_PER = vmax(1, vmin(120,s2i(TBDS::genDBGet(nodePath()+"prmServTask_PER",i2s(prmServTask_PER),"root",TBDS::OnlyCfg))));
+    prmStrBuf_SZ = vmax(1000, vmin(1000000,s2i(TBDS::genPrmGet(nodePath()+"prmStrBuf_SZ",i2s(prmStrBuf_SZ),"root",TBDS::OnlyCfg))));
+    prmWait_DL = vmax(0.001, vmin(1,s2r(TBDS::genPrmGet(nodePath()+"prmWait_DL",r2s(prmWait_DL),"root",TBDS::OnlyCfg))));
+    prmWait_TM = vmax(5, vmin(10,s2i(TBDS::genPrmGet(nodePath()+"prmWait_TM",i2s(prmWait_TM),"root",TBDS::OnlyCfg))));
+    prmInterf_TM = vmax(7, vmin(15,s2i(TBDS::genPrmGet(nodePath()+"prmInterf_TM",i2s(prmInterf_TM),"root",TBDS::OnlyCfg))));
+    prmServTask_PER = vmax(1, vmin(120,s2i(TBDS::genPrmGet(nodePath()+"prmServTask_PER",i2s(prmServTask_PER),"root",TBDS::OnlyCfg))));
 
     //System parameters
-    setClockRT(s2i(TBDS::genDBGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
-    mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation);
-    mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
-    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
-    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
-    setDocDir(TBDS::genDBGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
-    setMainCPUs(TBDS::genDBGet(nodePath()+"MainCPUs",mainCPUs()));
-    setTaskInvPhs(s2i(TBDS::genDBGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
-    setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
-    setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod",i2s(savePeriod()))));
-    setModifCalc(s2i(TBDS::genDBGet(nodePath()+"ModifCalc",i2s(modifCalc()))));
+    setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
+    mName = TBDS::genPrmGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation);
+    mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
+    setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
+    setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
+    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
+    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
+    setMainCPUs(TBDS::genPrmGet(nodePath()+"MainCPUs",mainCPUs()));
+    setTaskInvPhs(s2i(TBDS::genPrmGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
+    setSaveAtExit(s2i(TBDS::genPrmGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
+    setSavePeriod(s2i(TBDS::genPrmGet(nodePath()+"SavePeriod",i2s(savePeriod()))));
+    setModifCalc(s2i(TBDS::genPrmGet(nodePath()+"ModifCalc",i2s(modifCalc()))));
 
     //Redundancy parameters
-    setRdStLevel(s2i(TBDS::genDBGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
-    setRdTaskPer(s2r(TBDS::genDBGet(nodePath()+"RdTaskPer",r2s(rdTaskPer()))));
-    setRdRestConnTm(s2i(TBDS::genDBGet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()))));
-    setRdPrimCmdTr(s2i(TBDS::genDBGet(nodePath()+"RdPrimCmdTr",i2s(rdPrimCmdTr()))));
-    string stLs = TBDS::genDBGet(nodePath()+"RdStList"), stId;
+    setRdStLevel(s2i(TBDS::genPrmGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
+    setRdTaskPer(s2r(TBDS::genPrmGet(nodePath()+"RdTaskPer",r2s(rdTaskPer()))));
+    setRdRestConnTm(s2i(TBDS::genPrmGet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()))));
+    setRdPrimCmdTr(s2i(TBDS::genPrmGet(nodePath()+"RdPrimCmdTr",i2s(rdPrimCmdTr()))));
+    string stLs = TBDS::genPrmGet(nodePath()+"RdStList"), stId;
     mRdRes.lock(true);
     for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
 	if(mSt.find(stId) == mSt.end()) mSt[stId] = SStat();
@@ -849,30 +849,30 @@ void TSYS::save_( )
     mess_sys(TMess::Info, _("Saving."));
 
     //System parameters
-    TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslation);
-    TBDS::genDBSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_ModDir)	TBDS::genDBSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_IcoDir)	TBDS::genDBSet(nodePath()+"IcoDir", icoDir(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_DocDir)	TBDS::genDBSet(nodePath()+"DocDir", docDir(), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"MainCPUs", mainCPUs());
-    TBDS::genDBSet(nodePath()+"ClockRT", i2s(clockRT()));
-    TBDS::genDBSet(nodePath()+"TaskInvPhs", i2s(taskInvPhs()));
-    TBDS::genDBSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
-    TBDS::genDBSet(nodePath()+"SavePeriod", i2s(savePeriod()));
-    TBDS::genDBSet(nodePath()+"ModifCalc", i2s(modifCalc()));
+    TBDS::genPrmSet(nodePath()+"StName", mName, "root", TBDS::UseTranslation);
+    TBDS::genPrmSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_WorkDir)TBDS::genPrmSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_ModDir)	TBDS::genPrmSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_IcoDir)	TBDS::genPrmSet(nodePath()+"IcoDir", icoDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_DocDir)	TBDS::genPrmSet(nodePath()+"DocDir", docDir(), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"MainCPUs", mainCPUs());
+    TBDS::genPrmSet(nodePath()+"ClockRT", i2s(clockRT()));
+    TBDS::genPrmSet(nodePath()+"TaskInvPhs", i2s(taskInvPhs()));
+    TBDS::genPrmSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
+    TBDS::genPrmSet(nodePath()+"SavePeriod", i2s(savePeriod()));
+    TBDS::genPrmSet(nodePath()+"ModifCalc", i2s(modifCalc()));
 
     //Redundancy parameters
-    TBDS::genDBSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
     mRdRes.lock(false);
     string stLs;
     for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
 	stLs += sit->first+";";
     mRdRes.unlock();
-    TBDS::genDBSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
 
     Mess->save();	//Messages load
 }
@@ -2169,7 +2169,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.taskArg = arg;
     htsk.flgs = 0;
     htsk.thr = 0;
-    htsk.phase = s2i(TBDS::genDBGet(SYS->nodePath()+"TaskPhase:"+path,i2s(mTasks.size()-1)));
+    htsk.phase = s2i(TBDS::genPrmGet(SYS->nodePath()+"TaskPhase:"+path,i2s(mTasks.size()-1)));
     htsk.prior = priority%100;
     res.release();
 
@@ -2326,7 +2326,7 @@ void *TSYS::taskWrap( void *stas )
 #if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     //Load and init CPU set
     if(SYS->nCPU() > 1 && !(tsk->flgs&STask::Detached)) {
-	tsk->cpuSet = TBDS::genDBGet(SYS->nodePath()+"CpuSet:"+tsk->path);
+	tsk->cpuSet = TBDS::genPrmGet(SYS->nodePath()+"CpuSet:"+tsk->path);
 	cpu_set_t cpuset;
 	CPU_ZERO(&cpuset);
 	string sval;
@@ -3466,7 +3466,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 
 	    int rez = pthread_setaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
 	    res.release();
-	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first, it->second.cpuSet);
+	    TBDS::genPrmSet(nodePath()+"CpuSet:"+it->first, it->second.cpuSet);
 	    if(rez == EINVAL) throw err_sys(_("Attempt to set missing processor."));
 	    if(rez) throw err_sys(_("Error installing processors for the thread."));
 	}
@@ -3480,7 +3480,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    int tVl = vmax(0, vmin(100,s2i(opt->text())));
 	    it->second.phase = tVl;
 	    res.release();
-	    TBDS::genDBSet(nodePath()+"TaskPhase:"+it->first, i2s(tVl));
+	    TBDS::genPrmSet(nodePath()+"TaskPhase:"+it->first, i2s(tVl));
 	}
     }
     else if(a_path == "/tr/status" && ctrChkNode(opt)) {
@@ -3517,25 +3517,25 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	Mess->setTranslLangs(opt->text());
     }
     else if(a_path == "/tr/fltr") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	{
-	    TBDS::genDBSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
-	    TBDS::genDBSet(nodePath()+"TrPassN","0",opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"TrPassN","0",opt->attr("user"));
 	}
     }
     else if(a_path == "/tr/chkAndFix") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrChkAndFix",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genPrmSet(nodePath()+"TrChkAndFix",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/tr/pass") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrPassN","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrPassN",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrPassN","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genPrmSet(nodePath()+"TrPassN",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/tr/mess") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD)) {
-	    bool chkAndFix = s2i(TBDS::genDBGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
-	    string tStr, trFltr = TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user"));
-	    unsigned passN = vmax(0, s2i(TBDS::genDBGet(nodePath()+"TrPassN","0",opt->attr("user"))));
+	    bool chkAndFix = s2i(TBDS::genPrmGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
+	    string tStr, trFltr = TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user"));
+	    unsigned passN = vmax(0, s2i(TBDS::genPrmGet(nodePath()+"TrPassN","0",opt->attr("user"))));
 	    TConfig req;
 	    vector<XMLNode*> ns;
 
@@ -3597,8 +3597,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			//  Getting from the config file or the DB source
 			bool seekRez = false;
 			for(int inst = 0; true; inst++) {
-			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
-					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
+			    seekRez = isCfg ? TBDS::dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
+					    : TBDS::dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
 			    if(!seekRez) break;
 			    for(unsigned iN = 0; iN < ns.size(); iN++) {
 				if(!(iN && iN < (ns.size()-1))) continue;
@@ -3635,13 +3635,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			if(recNd->text() == recNdBs->text()) {
 			    mess_warning((nodePath()+"Tr").c_str(), _("Clearing the equel to base translation '%s' for '%s'."),
 				lng.c_str(), recNdBs->text().c_str());
-			    Mess->translSet(recNdBs->text(), lng, "", &needReload, TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+			    Mess->translSet(recNdBs->text(), lng, "", &needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
 			    recNd->setText("");
 			}
 			else if(s2i(recNd->attr("toPropagOnSp"))) {
 			    mess_warning((nodePath()+"Tr").c_str(), _("Propagation the translation '%s' to all empty sources for '%s'.'%s'."),
 				lng.c_str(), recNdBs->text().c_str(), recNd->text().c_str());
-			    Mess->translSet(recNdBs->text(), lng, recNd->text(), &needReload, TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+			    Mess->translSet(recNdBs->text(), lng, recNd->text(), &needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
 			}
 		    }
 		    if(recNd->text().size() && recNd->text() != recNdBs->text() && Mess->trMessIdx.find(recNd->text()) != Mess->trMessIdx.end()) {
@@ -3664,7 +3664,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
 	    bool needReload = false;
 	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->lang2CodeBase():opt->attr("col")), opt->text(),
-				&needReload, TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+				&needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
 	    if(!needReload) opt->setAttr("noReload","1");
 	}
     }

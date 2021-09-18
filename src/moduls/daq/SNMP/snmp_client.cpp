@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@
 #define MOD_NAME	_("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.6"
+#define MOD_VER		"0.9.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -683,25 +683,24 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
     else if(a_path == "/prm/cfg/MIB") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genPrmGet(nodePath()+"selOID","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    if(opt->text() == _("<<Append current>>")) {
 		oid oidn[MAX_OID_LEN];
 		size_t oidn_len = MAX_OID_LEN;
-		string baseIt = TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user"));
+		string baseIt = TBDS::genPrmGet(nodePath()+"selOID","",opt->attr("user"));
 		if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len)) {
 		    string vLs = OIDList(), vS;
 		    for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size() && vS != baseIt; ) ;
 		    if(vS.empty()) setOIDList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+baseIt);
 		}
-	    }
-	    else TBDS::genDBSet(nodePath()+"selOID", opt->text(), opt->attr("user"));
+	    } else TBDS::genPrmSet(nodePath()+"selOID", opt->text(), opt->attr("user"));
 	}
     }
     else if(a_path == "/prm/cfg/MIB_lst" && ctrChkNode(opt)) {
 	oid oidn[MAX_OID_LEN];
 	size_t oidn_len = MAX_OID_LEN;
-	string baseIt = TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user")), baseIt_, baseIt_s;
+	string baseIt = TBDS::genPrmGet(nodePath()+"selOID","",opt->attr("user")), baseIt_, baseIt_s;
 	struct tree *subTr = get_tree_head();
 	if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len)) subTr = get_tree(oidn, oidn_len, subTr);
 	else baseIt = ".iso";

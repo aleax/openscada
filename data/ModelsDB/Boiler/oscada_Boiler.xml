@@ -16,7 +16,6 @@
 	<prm id="SavePeriod">0</prm>
 
 	<node id="sub_BD">
-	    <prm id="SYSStPref">0</prm>
 	    <tbl id="DB">
 		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_uk="Основна БД" NAME_ru="Основная БД" ADDR="St.db" CODEPAGE="UTF-8" />
 	    </tbl>

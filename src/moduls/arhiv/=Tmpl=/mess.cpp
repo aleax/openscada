@@ -59,7 +59,7 @@ void ModMArch::postDisable( int flag )
 	//Remove info record
 	TConfig cfg(&mod->archEl());
 	cfg.cfg("TBL").setS(archTbl(),true);
-	SYS->db().at().dataDel(addr()+"."+mod->mainTbl(), "", cfg);
+	TBDS::dataDel(addr()+"."+mod->mainTbl(), "", cfg);
     }
 }
 
@@ -74,7 +74,7 @@ void ModMArch::load_( )
     //> Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException)) {
+    if(TBDS::dataGet(addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException)) {
 	mBeg = atoi(cfg.cfg("BEGIN").getS().c_str());
 	mEnd = atoi(cfg.cfg("END").getS().c_str());
     }

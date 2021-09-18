@@ -380,9 +380,9 @@ void ModMArch::checkArchivator( bool now )
 	    TConfig cEl(&mod->packFE());
 	    cEl.cfgViewAll(false);
 
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(infoTbl,mod->nodePath()+"Pack",fldCnt++,cEl); )
+	    for(int fldCnt = 0; TBDS::dataSeek(infoTbl,mod->nodePath()+"Pack",fldCnt++,cEl); )
 		if(stat(cEl.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
-		    if(!SYS->db().at().dataDel(infoTbl,mod->nodePath()+"Pack",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
+		    if(!TBDS::dataDel(infoTbl,mod->nodePath()+"Pack",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
 		    fldCnt--;
 	    }
 	}
@@ -636,7 +636,7 @@ void MFileArch::attach( const string &iname, bool full )
 	    if(!infoOK) {
 		TConfig cEl(&mod->packFE());
 		cEl.cfg("FILE").setS(name());
-		if(SYS->db().at().dataGet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()),mod->nodePath()+"Pack/",cEl,TBDS::NoException)) {
+		if(TBDS::dataGet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()),mod->nodePath()+"Pack/",cEl,TBDS::NoException)) {
 		    mBeg = strtol(cEl.cfg("BEGIN").getS().c_str(),NULL,16);
 		    mEnd = strtol(cEl.cfg("END").getS().c_str(),NULL,16);
 		    mChars = cEl.cfg("PRM1").getS();
@@ -1083,7 +1083,7 @@ void MFileArch::check( bool free )
 	    cEl.cfg("END").setS(ll2s(end(),TSYS::Hex));
 	    cEl.cfg("PRM1").setS(charset());
 	    cEl.cfg("PRM2").setS(i2s(xmlM()));
-	    SYS->db().at().dataSet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, TBDS::NoException);
+	    TBDS::dataSet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, TBDS::NoException);
 	}
 	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file

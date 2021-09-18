@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.1"
+#define MOD_VER		"2.6.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -799,16 +799,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText("");
     }
     else if(a_path == "/cntr/cfg/CPRM_TREE") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(owner().nodePath()+"selCPRM","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genPrmGet(owner().nodePath()+"selCPRM","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    if(opt->text() == _("<<Append current>>")) {
-		string vLs = cfg("CNTRPRM"), vS, setVl = TBDS::genDBGet(owner().nodePath()+"selCPRM","",opt->attr("user"));
+		string vLs = cfg("CNTRPRM"), vS, setVl = TBDS::genPrmGet(owner().nodePath()+"selCPRM","",opt->attr("user"));
 		for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size(); )
 		    if(TSYS::strParse(vS,0,":") == setVl)
 			break;
 		if(vS.empty()) cfg("CNTRPRM") = vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+setVl;
 	    }
-	    else TBDS::genDBSet(owner().nodePath()+"selCPRM", TSYS::pathLev(opt->text(),0), opt->attr("user"));
+	    else TBDS::genPrmSet(owner().nodePath()+"selCPRM", TSYS::pathLev(opt->text(),0), opt->attr("user"));
 	}
     }
     else if(a_path == "/cntr/cfg/CPRM_lst" && ctrChkNode(opt))
@@ -816,7 +816,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    if(st->second.cntr > 0) continue;
 	    XMLNode req("list");
 	    req.setAttr("path", "/"+st->first+"/DAQ/%2fserv%2fPrmAttr")->
-		setAttr("base", TBDS::genDBGet(owner().nodePath()+"selCPRM","",opt->attr("user")))->
+		setAttr("base", TBDS::genPrmGet(owner().nodePath()+"selCPRM","",opt->attr("user")))->
 		setAttr("toPrm","1")->setAttr("sep",".");
 	    if(cntrIfCmd(req) == 0) {
 		*opt = req;

@@ -140,9 +140,9 @@ void TDAQS::load_( )
 	vector<string> dbLs;
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,TBDS::UseCache); ) {
+	    for(int libCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,TBDS::UseCache); ) {
 		string lId = cEl.cfg("ID").getS();
 		if(!tmplLibPresent(lId)) tmplLibReg(new TPrmTmplLib(lId.c_str(),"",dbLs[iIt]));
 		if(tmplLibAt(lId).at().DB() == dbLs[iIt]) tmplLibAt(lId).at().load(&cEl);
@@ -175,9 +175,9 @@ void TDAQS::load_( )
 	    itReg.clear();
 
 	    // Search into the storage and create new controller objects
-	    SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	    TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,TBDS::UseCache); ) {
+		for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,TBDS::UseCache); ) {
 		    string mId = gCfg.cfg("ID").getS();
 		    try {
 			if(!wmod.at().present(mId)) wmod.at().add(mId, dbLs[iIt]);
@@ -199,7 +199,7 @@ void TDAQS::load_( )
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //Load parameters from the config-file and SYS DB
-    setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
+    setRdRestDtTm(s2r(TBDS::genPrmGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
 }
 
 void TDAQS::load__( )
@@ -215,7 +215,7 @@ void TDAQS::load__( )
 void TDAQS::save_( )
 {
     //Save parameters to SYS DB
-    TBDS::genDBSet(nodePath()+"RdRestDtTm", r2s(rdRestDtTm()));
+    TBDS::genPrmSet(nodePath()+"RdRestDtTm", r2s(rdRestDtTm()));
 }
 
 TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

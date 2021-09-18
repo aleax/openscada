@@ -188,7 +188,7 @@ void TParamContr::LoadParmCfg( )
 	    cEl.cfg("OWNER").setS(ownerPath(true), TCfg::ForceUse);
 
 	    // Search new into DB and Config-file
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().DB()+"."+owner().owner().tpPrmAt(iTp).DB(&owner()),
+	    for(int fld_cnt = 0; TBDS::dataSeek(owner().DB()+"."+owner().owner().tpPrmAt(iTp).DB(&owner()),
 		    owner().owner().nodePath()+owner().owner().tpPrmAt(iTp).DB(&owner()),fld_cnt++,cEl,TBDS::UseCache); )
 	    {
 		try {
@@ -259,7 +259,7 @@ void TParamContr::postDisable( int flag )
     if(flag&NodeRemove) {
 	//Delete the parameter from DB
 	cfg("OWNER") = ownerPath();
-	SYS->db().at().dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, TBDS::UseAllKeys);
     }
 }
 
@@ -279,7 +279,7 @@ void TParamContr::load_( TConfig *icfg )
 
 	//cfgViewAll(true);
 	cfg("OWNER") = ownerPath();
-	SYS->db().at().dataGet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
+	TBDS::dataGet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
     }
 
     LoadParmCfg();
@@ -289,7 +289,7 @@ void TParamContr::save_( )
 {
     cfg("OWNER") = ownerPath();
     cfg("TIMESTAMP") = (int64_t)SYS->sysTm();
-    SYS->db().at().dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
+    TBDS::dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
     if(SYS->cfgCtx(true)) SYS->cfgCtx(true)->setAttr("prmTp", type().name);
 
     //Save archives

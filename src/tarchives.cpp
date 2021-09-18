@@ -109,13 +109,13 @@ void TArchiveS::load_( )
     //Load parameters from command line
 
     //Load parameters
-    setMessBufLen(s2i(TBDS::genDBGet(nodePath()+"MessBufSize",i2s(messBufLen()))));
-    setMessPeriod(s2i(TBDS::genDBGet(nodePath()+"MessPeriod",i2s(messPeriod()))));
-    setValPeriod(s2i(TBDS::genDBGet(nodePath()+"ValPeriod",i2s(valPeriod()))));
-    setValPrior(s2i(TBDS::genDBGet(nodePath()+"ValPriority",i2s(valPrior()))));
-    setValForceCurTm(s2i(TBDS::genDBGet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()))));
-    setAutoIdMode((AutoIdMode)s2i(TBDS::genDBGet(nodePath()+"AutoIdMode",i2s(autoIdMode()))));
-    setRdRestDtOverTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtOverTm",r2s(rdRestDtOverTm()))));
+    setMessBufLen(s2i(TBDS::genPrmGet(nodePath()+"MessBufSize",i2s(messBufLen()))));
+    setMessPeriod(s2i(TBDS::genPrmGet(nodePath()+"MessPeriod",i2s(messPeriod()))));
+    setValPeriod(s2i(TBDS::genPrmGet(nodePath()+"ValPeriod",i2s(valPeriod()))));
+    setValPrior(s2i(TBDS::genPrmGet(nodePath()+"ValPriority",i2s(valPrior()))));
+    setValForceCurTm(s2i(TBDS::genPrmGet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()))));
+    setAutoIdMode((AutoIdMode)s2i(TBDS::genPrmGet(nodePath()+"AutoIdMode",i2s(autoIdMode()))));
+    setRdRestDtOverTm(s2r(TBDS::genPrmGet(nodePath()+"RdRestDtOverTm",r2s(rdRestDtOverTm()))));
 
     //LidDB
     // Message archivers load
@@ -127,9 +127,9 @@ void TArchiveS::load_( )
 	vector<string> dbLs;
 
 	// Search int DB and create new archivers
-	SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,TBDS::UseCache); ) {
+	    for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fldCnt++,cEl,TBDS::UseCache); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
 		if(!modPresent(type))	continue;
@@ -163,9 +163,9 @@ void TArchiveS::load_( )
 	itReg.clear();
 
 	//  Search into DB and create new archivers
-	SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,TBDS::UseCache); ) {
+	    for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_val_proc",nodePath()+subId()+"_val_proc",fldCnt++,cEl,TBDS::UseCache); ) {
 		id = cEl.cfg("ID").getS();
 		type = cEl.cfg("MODUL").getS();
 		if(!modPresent(type))	continue;
@@ -199,9 +199,9 @@ void TArchiveS::load_( )
 	itReg.clear();
 
 	//  Search into DB and create new archives
-	SYS->db().at().dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,TBDS::UseCache); ) {
+	    for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,TBDS::UseCache); ) {
 		id = cEl.cfg("ID").getS();
 		if(!valPresent(id)) valAdd(id, dbLs[iIt]);
 		//!!!! For force loading after creation from archiver storage
@@ -227,13 +227,13 @@ void TArchiveS::load_( )
 void TArchiveS::save_( )
 {
     //Save parameters
-    TBDS::genDBSet(nodePath()+"MessBufSize", i2s(messBufLen()));
-    TBDS::genDBSet(nodePath()+"MessPeriod", i2s(messPeriod()));
-    TBDS::genDBSet(nodePath()+"ValPeriod", i2s(valPeriod()));
-    TBDS::genDBSet(nodePath()+"ValPriority", i2s(valPrior()));
-    TBDS::genDBSet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()));
-    TBDS::genDBSet(nodePath()+"AutoIdMode",i2s(autoIdMode()));
-    TBDS::genDBSet(nodePath()+"RdRestDtOverTm",r2s(rdRestDtOverTm()));
+    TBDS::genPrmSet(nodePath()+"MessBufSize", i2s(messBufLen()));
+    TBDS::genPrmSet(nodePath()+"MessPeriod", i2s(messPeriod()));
+    TBDS::genPrmSet(nodePath()+"ValPeriod", i2s(valPeriod()));
+    TBDS::genPrmSet(nodePath()+"ValPriority", i2s(valPrior()));
+    TBDS::genPrmSet(nodePath()+"ValForceCurTm",i2s(valForceCurTm()));
+    TBDS::genPrmSet(nodePath()+"AutoIdMode",i2s(autoIdMode()));
+    TBDS::genPrmSet(nodePath()+"RdRestDtOverTm",r2s(rdRestDtOverTm()));
 }
 
 string TArchiveS::valAdd( const string &iid, const string &idb )
@@ -1031,7 +1031,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    "help",_("Message archivers.\nDo not set the field for processing the request by the buffer and all archivers.\nSet '<buffer>' for processing by the buffer."));
 		XMLNode *tNd = NULL;
 		if((tNd=ctrMkNode("table",opt,-1,"/m_arch/view/mess",_("Messages"),RWRW__,"root",SARH_ID))) {
-		    if(tNd && s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0)
+		    if(tNd && s2i(TBDS::genPrmGet(nodePath()+"messLev","0",opt->attr("user"))) < 0)
 			tNd->setAttr("key","1")->setAttr("s_com","del");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/0a",_("mcsec"),R_R___,"root",SARH_ID,1,"tp","dec");
@@ -1039,7 +1039,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/2",_("Level"),R_R___,"root",SARH_ID,1,"tp","dec");
 		    ctrMkNode("list",opt,-1,"/m_arch/view/mess/3",_("Message"),R_R___,"root",SARH_ID,1,"tp","str");
 		}
-		if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && mAlarms.size())
+		if(s2i(TBDS::genPrmGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && mAlarms.size())
 		    ctrMkNode("comm",opt,-1,"/m_arch/view/alClean",_("Clear visible violations"),RWRW__,"root",SARH_ID);
 	    }
 	}
@@ -1068,27 +1068,27 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/m_arch/view/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
-	    opt->setText(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(nodePath()+"messTm","0",opt->attr("user")));
 	    if(!s2i(opt->text()))	opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
-	    TBDS::genDBSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/size") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	TBDS::genDBSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messSize","60",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/cat") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genDBSet(nodePath()+"messCat",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messCat","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messCat",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/lvl") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genDBSet(nodePath()+"messLev",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messLev","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messLev",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/m_arch/view/archtor") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genDBSet(nodePath()+"messArch",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messArch","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messArch",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/m_arch/lstAMess" && ctrChkNode(opt,"get",R_R___)) {
 	map<string, bool> itsMap;
@@ -1101,7 +1101,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		itsMap[lsm[iM]+"."+lsa[iA]] = true;
 	}
 
-	string curVal = TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")), tVl, tVl1;
+	string curVal = TBDS::genPrmGet(nodePath()+"messArch","",opt->attr("user")), tVl, tVl1;
 	for(int off = 0; (tVl=TSYS::strParse(curVal,0,";",&off)).size(); tVl1 += (tVl1.size()?";":"")+tVl)
 	{ opt->childAdd("el")->setText(tVl1); itsMap[tVl] = false; }
 
@@ -1111,13 +1111,13 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/m_arch/view/mess"){
 	if(ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
 	    vector<TMess::SRec> rec;
-	    time_t gtm = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	    time_t gtm = s2i(TBDS::genPrmGet(nodePath()+"messTm","0",opt->attr("user")));
 	    if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
-	    int gsz = s2i(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
+	    int gsz = s2i(TBDS::genPrmGet(nodePath()+"messSize","60",opt->attr("user")));
 	    messGet(gtm-gsz, gtm, rec,
-		TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
-		s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))),
-		TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")));
+		TBDS::genPrmGet(nodePath()+"messCat","",opt->attr("user")),
+		s2i(TBDS::genPrmGet(nodePath()+"messLev","0",opt->attr("user"))),
+		TBDS::genPrmGet(nodePath()+"messArch","",opt->attr("user")));
 
 	    XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0","",R_R___,"root",SARH_ID);
 	    XMLNode *n_tmu	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0a","",R_R___,"root",SARH_ID);
@@ -1132,7 +1132,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		if(n_mess)	n_mess->childAdd("el")->setText(rec[iRec].mess);
 	    }
 	}
-	if(s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && ctrChkNode(opt,"del",RWRW__,"root",SARH_ID,SEC_WR)) {
+	if(s2i(TBDS::genPrmGet(nodePath()+"messLev","0",opt->attr("user"))) < 0 && ctrChkNode(opt,"del",RWRW__,"root",SARH_ID,SEC_WR)) {
 	    mRes.lock();
 	    mAlarms.erase(opt->attr("key_1"));
 	    mRes.unlock();
@@ -1140,13 +1140,13 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/m_arch/view/alClean" && ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR)) {
 	vector<TMess::SRec> rec;
-	time_t gtm = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	time_t gtm = s2i(TBDS::genPrmGet(nodePath()+"messTm","0",opt->attr("user")));
 	if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
-	int gsz = s2i(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")));
+	int gsz = s2i(TBDS::genPrmGet(nodePath()+"messSize","60",opt->attr("user")));
 	messGet(gtm-gsz, gtm, rec,
-	    TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
-	    s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user"))),
-	    TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")));
+	    TBDS::genPrmGet(nodePath()+"messCat","",opt->attr("user")),
+	    s2i(TBDS::genPrmGet(nodePath()+"messLev","0",opt->attr("user"))),
+	    TBDS::genPrmGet(nodePath()+"messArch","",opt->attr("user")));
 	mRes.lock();
 	for(unsigned iRec = 0; iRec < rec.size(); ++iRec)
 	    mAlarms.erase(rec[iRec].categ);
@@ -1338,7 +1338,7 @@ void TMArchivator::preDisable( int flag )
 void TMArchivator::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->archive().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->archive().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -1361,14 +1361,14 @@ void TMArchivator::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB()))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
+    else TBDS::dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
 
     mRdUse = redntMode();
 }
 
 void TMArchivator::save_( )
 {
-    SYS->db().at().dataSet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
     setDB(DB(), true);
 }
 
@@ -1593,31 +1593,31 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SARH_ID,RWRWR_);
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD)) {
-	    opt->setText(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(nodePath()+"messTm","0",opt->attr("user")));
 	    if(!s2i(opt->text()))	opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
-	    TBDS::genDBSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/size") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messSize","10",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genDBSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messSize","10",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messSize",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/cat") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genDBSet(nodePath()+"messCat",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messCat","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messCat",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/lvl") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genDBSet(nodePath()+"messLev",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"messLev","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))	TBDS::genPrmSet(nodePath()+"messLev",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/mess" && runSt && ctrChkNode(opt,"get",R_R___,"root",SARH_ID)) {
 	vector<TMess::SRec> rec;
-	time_t end = s2i(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
+	time_t end = s2i(TBDS::genPrmGet(nodePath()+"messTm","0",opt->attr("user")));
 	if(!end) end = (time_t)(TSYS::curTime()/1000000);
-	time_t beg = end - s2i(TBDS::genDBGet(nodePath()+"messSize","10",opt->attr("user")));
-	string cat = TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user"));
-	char   lev = s2i(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")));
+	time_t beg = end - s2i(TBDS::genPrmGet(nodePath()+"messSize","10",opt->attr("user")));
+	string cat = TBDS::genPrmGet(nodePath()+"messCat","",opt->attr("user"));
+	char   lev = s2i(TBDS::genPrmGet(nodePath()+"messLev","0",opt->attr("user")));
 
 	int64_t stTm = 0;
 	if(mess_lev() == TMess::Debug) stTm = TSYS::curTime();

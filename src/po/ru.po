@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-17 15:14+0300\n"
+"POT-Creation-Date: 2021-09-18 15:03+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -187,7 +187,8 @@ msgid "Redundancy"
 msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr "Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
+msgstr ""
+"Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
 
 msgid "Message archivers"
 msgstr "Архиваторы сообщений"
@@ -351,7 +352,8 @@ msgid "Requested %d records for time %s."
 msgstr "Запрошено %d записей в течении %s."
 
 #, c-format
-msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
 "(%lld-%lld)."
@@ -520,9 +522,6 @@ msgstr "Последнее чтение буфера"
 msgid "Data Bases"
 msgstr "Базы Данных"
 
-msgid "Value ID"
-msgstr "ID значения"
-
 msgid "DB type (module)"
 msgstr "Тип БД (модуль)"
 
@@ -554,18 +553,17 @@ msgstr "Запрошенная запись отсутствует."
 msgid "Error writing to DB or configuration file."
 msgstr "Ошибка записи в БД или конфигурационный файл."
 
-#, c-format
+msgid "Value ID"
+msgstr "ID значения"
+
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"SYSStPref    <0|1>      Use the station ID in the common table (SYS).\n"
 "TblLifeTime  <seconds>  Opened tables lifetime (by default 600 seconds).\n"
 "\n"
 msgstr ""
 "========================= Опции подсистемы \"БД\" =========================\n"
 "---------- Параметры секции '%s' конфигурационного файла ----------\n"
-"SYSStPref    <0|1>      Использовать идентификатор станции в общей таблице "
-"(SYS).\n"
 "TblLifeTime  <секунд>   Время жизни открытых таблиц (по умолчанию 600 "
 "секунд).\n"
 "\n"
@@ -616,7 +614,8 @@ msgstr "Таблицы которые в БД, но не открыты на д�
 msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
-msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -1371,7 +1370,8 @@ msgstr "2:Сбор остановлен."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
 msgid "Inclusion"
@@ -1939,8 +1939,10 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
-msgstr "Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
+msgstr ""
+"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
@@ -2852,4 +2854,3 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
-

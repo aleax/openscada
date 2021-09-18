@@ -163,9 +163,9 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDb = 0; iDb < itLs.size(); iDb++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,TBDS::UseCache); ) {
+	    for(int fldCnt = 0; TBDS::dataSeek(itLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
 		if(!epPresent(id)) epAdd(id, itLs[iDb]);
 		if(epAt(id).at().DB() == itLs[iDb]) epAt(id).at().load(&gCfg);
@@ -304,7 +304,7 @@ TCntrNode &OPCEndPoint::operator=( const TCntrNode &node )
 void OPCEndPoint::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -348,7 +348,7 @@ void OPCEndPoint::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
-	SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+	TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
     }
 
     //Security policies parse
@@ -386,7 +386,7 @@ void OPCEndPoint::save_( )
     prmNd.setAttr("LimRetrQueueTm", i2s(limRetrQueueTm()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
-    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 
     setDB(DB(), true);
 }

@@ -29,7 +29,7 @@
 #define MOD_NAME	_("DB gate")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.1.1"
+#define MOD_VER		"1.1.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
 #define MOD_LICENSE	"GPL2"
@@ -294,7 +294,7 @@ void MTable::fieldStruct( TConfig &cfg )
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldStruct")->setAttr("tbl", name());
     owner().cntrIfCmd(req);
-    SYS->db().at().dataSeek("", "", 0, cfg, TBDS::NoFlg, &req);
+    TBDS::dataSeek("", "", 0, cfg, TBDS::NoFlg, &req);
 }
 
 bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
@@ -307,9 +307,9 @@ bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 	setAttr("tbl", name())->
 	setAttr("row", i2s(row))->
 	setAttr("cacheKey", cacheKey);
-    SYS->db().at().dataSet("", "", cfg, TBDS::NoFlg, &req);
+    TBDS::dataSet("", "", cfg, TBDS::NoFlg, &req);
     owner().cntrIfCmd(req);
-    SYS->db().at().dataSeek("", "", 0, cfg, TBDS::NoFlg, &req);
+    TBDS::dataSeek("", "", 0, cfg, TBDS::NoFlg, &req);
 
     return s2i(req.attr("fRez"));
 }
@@ -318,16 +318,16 @@ void MTable::fieldGet( TConfig &cfg )
 {
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldGet")->setAttr("tbl", name());
-    SYS->db().at().dataSet("", "", cfg, TBDS::NoFlg, &req);
+    TBDS::dataSet("", "", cfg, TBDS::NoFlg, &req);
     owner().cntrIfCmd(req);
-    SYS->db().at().dataGet("", "", cfg, TBDS::NoFlg, &req);
+    TBDS::dataGet("", "", cfg, TBDS::NoFlg, &req);
 }
 
 void MTable::fieldSet( TConfig &cfg )
 {
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldSet")->setAttr("tbl", name());
-    SYS->db().at().dataSet("", "", cfg, TBDS::NoFlg, &req);
+    TBDS::dataSet("", "", cfg, TBDS::NoFlg, &req);
     owner().cntrIfCmd(req);
 }
 
@@ -336,6 +336,6 @@ void MTable::fieldDel( TConfig &cfg )
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldDel")->setAttr("tbl", name());
     cfg.cfgViewAll(false);
-    SYS->db().at().dataSet("", "", cfg, TBDS::NoFlg, &req);
+    TBDS::dataSet("", "", cfg, TBDS::NoFlg, &req);
     owner().cntrIfCmd(req);
 }

@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.3.1"
+#define MOD_VER		"6.3.2"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -279,24 +279,24 @@ void TWEB::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setSessTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
-    setSessLimit(s2i(TBDS::genDBGet(nodePath()+"SessLimit",i2s(sessLimit()))));
-    setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
-    setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
-    setPNGCompLev(s2i(TBDS::genDBGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
-    setImgResize(s2i(TBDS::genDBGet(nodePath()+"ImgResize",i2s(imgResize()))));
-    setCustCSS(TBDS::genDBGet(nodePath()+"CustCSS",custCSS()));
+    setSessTime(s2i(TBDS::genPrmGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
+    setSessLimit(s2i(TBDS::genPrmGet(nodePath()+"SessLimit",i2s(sessLimit()))));
+    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
+    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
+    setPNGCompLev(s2i(TBDS::genPrmGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
+    setImgResize(s2i(TBDS::genPrmGet(nodePath()+"ImgResize",i2s(imgResize()))));
+    setCustCSS(TBDS::genPrmGet(nodePath()+"CustCSS",custCSS()));
 }
 
 void TWEB::save_( )
 {
-    TBDS::genDBSet(nodePath()+"SessTimeLife", i2s(sessTime()));
-    TBDS::genDBSet(nodePath()+"SessLimit", i2s(sessLimit()));
-    TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
-    TBDS::genDBSet(nodePath()+"CachePgSz",  i2s(cachePgSz()));
-    TBDS::genDBSet(nodePath()+"PNGCompLev", i2s(PNGCompLev()));
-    TBDS::genDBSet(nodePath()+"ImgResize", i2s(imgResize()));
-    TBDS::genDBSet(nodePath()+"CustCSS", custCSS());
+    TBDS::genPrmSet(nodePath()+"SessTimeLife", i2s(sessTime()));
+    TBDS::genPrmSet(nodePath()+"SessLimit", i2s(sessLimit()));
+    TBDS::genPrmSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
+    TBDS::genPrmSet(nodePath()+"CachePgSz",  i2s(cachePgSz()));
+    TBDS::genPrmSet(nodePath()+"PNGCompLev", i2s(PNGCompLev()));
+    TBDS::genPrmSet(nodePath()+"ImgResize", i2s(imgResize()));
+    TBDS::genPrmSet(nodePath()+"CustCSS", custCSS());
 }
 
 void TWEB::modStart( )	{ runSt = true; }

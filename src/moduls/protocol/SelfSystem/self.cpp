@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.1"
+#define MOD_VER		"1.9.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -149,18 +149,18 @@ void TProt::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setAuthTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(authTime()))));
-    setComprLev(s2i(TBDS::genDBGet(nodePath()+"ComprLev",i2s(comprLev()))));
-    setComprBrd(s2i(TBDS::genDBGet(nodePath()+"ComprBrd",i2s(comprBrd()))));
-    setSingleUserHostLimit(s2i(TBDS::genDBGet(nodePath()+"SingleUserHostLimit",i2s(singleUserHostLimit()))));
+    setAuthTime(s2i(TBDS::genPrmGet(nodePath()+"SessTimeLife",i2s(authTime()))));
+    setComprLev(s2i(TBDS::genPrmGet(nodePath()+"ComprLev",i2s(comprLev()))));
+    setComprBrd(s2i(TBDS::genPrmGet(nodePath()+"ComprBrd",i2s(comprBrd()))));
+    setSingleUserHostLimit(s2i(TBDS::genPrmGet(nodePath()+"SingleUserHostLimit",i2s(singleUserHostLimit()))));
 }
 
 void TProt::save_( )
 {
-    TBDS::genDBSet(nodePath()+"SessTimeLife",i2s(authTime()));
-    TBDS::genDBSet(nodePath()+"ComprLev",i2s(comprLev()));
-    TBDS::genDBSet(nodePath()+"ComprBrd",i2s(comprBrd()));
-    TBDS::genDBSet(nodePath()+"SingleUserHostLimit",i2s(singleUserHostLimit()));
+    TBDS::genPrmSet(nodePath()+"SessTimeLife",i2s(authTime()));
+    TBDS::genPrmSet(nodePath()+"ComprLev",i2s(comprLev()));
+    TBDS::genPrmSet(nodePath()+"ComprBrd",i2s(comprBrd()));
+    TBDS::genPrmSet(nodePath()+"SingleUserHostLimit",i2s(singleUserHostLimit()));
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }

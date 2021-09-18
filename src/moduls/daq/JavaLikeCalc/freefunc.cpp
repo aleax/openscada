@@ -145,7 +145,7 @@ void Func::load_( TConfig *icfg )
     if(owner().DB().empty() || (!SYS->chkSelDB(owner().DB())))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
+    else TBDS::dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
     loadIO();
 }
@@ -158,7 +158,7 @@ void Func::loadIO( )
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(), TCfg::ForceUse);
     cfg.cfg("DEF").setExtVal(true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,TBDS::UseCache); fldCnt++) {
+    for(int fldCnt = 0; TBDS::dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,TBDS::UseCache); fldCnt++) {
 	string sid = cfg.cfg("ID").getS();
 
 	//Position storing
@@ -196,7 +196,7 @@ void Func::save_( )
     if(owner().DB().empty()) return;
 
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
+    TBDS::dataSet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
     //Save io config
     saveIO();
@@ -221,14 +221,14 @@ void Func::saveIO( )
 	cfg.cfg("DEF").setS(io(i_io)->def());
 	cfg.cfg("HIDE").setB(io(i_io)->hide());
 	cfg.cfg("POS").setI(i_io);
-	SYS->db().at().dataSet(io_bd, io_cfgpath, cfg);
+	TBDS::dataSet(io_bd, io_cfgpath, cfg);
     }
 
     //Clear IO
     cfg.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg); )
+    for(int fldCnt = 0; TBDS::dataSeek(io_bd,io_cfgpath,fldCnt++,cfg); )
 	if(ioId(cfg.cfg("ID").getS()) < 0) {
-	    if(!SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
+	    if(!TBDS::dataDel(io_bd,io_cfgpath,cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fldCnt--;
 	}
 }
@@ -237,7 +237,7 @@ void Func::del( )
 {
     if(!owner().DB().size()) return;
 
-    SYS->db().at().dataDel(owner().fullDB(), mod->nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
+    TBDS::dataDel(owner().fullDB(), mod->nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
 
     //Delete io from DB
     delIO();
@@ -247,7 +247,7 @@ void Func::delIO( )
 {
     TConfig cfg(&mod->elFncIO());
     cfg.cfg("F_ID").setS(id(), true);
-    SYS->db().at().dataDel(owner().fullDB()+"_io", mod->nodePath()+owner().tbl()+"_io", cfg);
+    TBDS::dataDel(owner().fullDB()+"_io", mod->nodePath()+owner().tbl()+"_io", cfg);
 }
 
 void Func::valAtt( TValFunc *vfnc )

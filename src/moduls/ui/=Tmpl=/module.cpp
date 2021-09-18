@@ -134,15 +134,15 @@ void TWEB::load_( )
 
     //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA DB or from main config-file.
     //> Load parameters from config-file
-    string trnds = TBDS::genDBGet(nodePath()+"Trends"), trnd_el;
+    string trnds = TBDS::genPrmGet(nodePath()+"Trends"), trnd_el;
     trnd_lst.clear();
     for( int el_off = 0; (trnd_el=TSYS::strSepParse(trnds,0,';',&el_off)).size(); )
 	trnd_lst.push_back(trnd_el);
-    n_col = atoi(TBDS::genDBGet(nodePath()+"n_col",TSYS::int2str(n_col)).c_str());
-    h_sz = atoi(TBDS::genDBGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());
-    v_sz = atoi(TBDS::genDBGet(nodePath()+"v_sz",TSYS::int2str(v_sz)).c_str());
-    trnd_len = atoi(TBDS::genDBGet(nodePath()+"trnd_len",TSYS::int2str(trnd_len)).c_str());
-    trnd_tm  = atoi(TBDS::genDBGet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm)).c_str());
+    n_col = atoi(TBDS::genPrmGet(nodePath()+"n_col",TSYS::int2str(n_col)).c_str());
+    h_sz = atoi(TBDS::genPrmGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());
+    v_sz = atoi(TBDS::genPrmGet(nodePath()+"v_sz",TSYS::int2str(v_sz)).c_str());
+    trnd_len = atoi(TBDS::genPrmGet(nodePath()+"trnd_len",TSYS::int2str(trnd_len)).c_str());
+    trnd_tm  = atoi(TBDS::genPrmGet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm)).c_str());
 }
 
 //!!! Inherited (virtual) save object's node method. Call from OpenSCADA kernel. Append your module need data savings
@@ -153,12 +153,12 @@ void TWEB::save_( )
     string trnds;
     for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
 	trnds+=trnd_lst[i_el]+";";
-    TBDS::genDBSet(nodePath()+"Trends",trnds);
-    TBDS::genDBSet(nodePath()+"n_col",TSYS::int2str(n_col));
-    TBDS::genDBSet(nodePath()+"h_sz",TSYS::int2str(h_sz));
-    TBDS::genDBSet(nodePath()+"v_sz",TSYS::int2str(v_sz));
-    TBDS::genDBSet(nodePath()+"trnd_len",TSYS::int2str(trnd_len));
-    TBDS::genDBSet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm));
+    TBDS::genPrmSet(nodePath()+"Trends",trnds);
+    TBDS::genPrmSet(nodePath()+"n_col",TSYS::int2str(n_col));
+    TBDS::genPrmSet(nodePath()+"h_sz",TSYS::int2str(h_sz));
+    TBDS::genPrmSet(nodePath()+"v_sz",TSYS::int2str(v_sz));
+    TBDS::genPrmSet(nodePath()+"trnd_len",TSYS::int2str(trnd_len));
+    TBDS::genPrmSet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm));
 }
 
 //!!! OpenSCADA control interface comands process virtual function.

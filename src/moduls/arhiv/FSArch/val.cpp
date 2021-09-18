@@ -225,7 +225,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	if(!infoOK) {
 	    TConfig cEl(&mod->packFE());
 	    cEl.cfg("FILE").setS(anm);
-	    if(SYS->db().at().dataGet((infoTbl.size()?infoTbl:mod->filesDB()),mod->nodePath()+"Pack/",cEl,TBDS::NoException)) {
+	    if(TBDS::dataGet((infoTbl.size()?infoTbl:mod->filesDB()),mod->nodePath()+"Pack/",cEl,TBDS::NoException)) {
 		if(abeg)	*abeg = strtoll(cEl.cfg("BEGIN").getS().c_str(),NULL,16);
 		if(aend)	*aend = strtoll(cEl.cfg("END").getS().c_str(),NULL,16);
 		if(archive)	*archive = cEl.cfg("PRM1").getS().substr(0, limArchID_SZ);
@@ -272,7 +272,7 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    cEl.cfg("PRM1").setS(aId);
 	    cEl.cfg("PRM2").setS(ll2s(head.period,TSYS::Hex));
 	    cEl.cfg("PRM3").setS(i2s(head.vtp|(head.vtpExt<<4)));
-	    SYS->db().at().dataSet((infoTbl.size()?infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, TBDS::NoException);
+	    TBDS::dataSet((infoTbl.size()?infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, TBDS::NoException);
 	}
 	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file
@@ -371,9 +371,9 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 	    TConfig cEl(&mod->packFE());
 	    cEl.cfgViewAll(false);
 
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(infoTbl,mod->nodePath()+"Pack",fldCnt++,cEl); )
+	    for(int fldCnt = 0; TBDS::dataSeek(infoTbl,mod->nodePath()+"Pack",fldCnt++,cEl); )
 		if(stat(cEl.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
-		    if(!SYS->db().at().dataDel(infoTbl,mod->nodePath()+"Pack",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
+		    if(!TBDS::dataDel(infoTbl,mod->nodePath()+"Pack",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
 		    fldCnt--;
 		}
 	}
@@ -1272,7 +1272,7 @@ void VFileArch::check( )
 	    cEl.cfg("PRM1").setS(owner().archive().id());
 	    cEl.cfg("PRM2").setS(ll2s(period(),TSYS::Hex));
 	    cEl.cfg("PRM3").setS(i2s(type()));
-	    SYS->db().at().dataSet((owner().archivator().infoTbl.size()?owner().archivator().infoTbl:mod->filesDB()),
+	    TBDS::dataSet((owner().archivator().infoTbl.size()?owner().archivator().infoTbl:mod->filesDB()),
 		mod->nodePath()+"Pack/", cEl, TBDS::NoException);
 	}
 	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {

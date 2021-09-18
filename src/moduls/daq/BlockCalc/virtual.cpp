@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.2"
+#define MOD_VER		"1.12.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -208,10 +208,10 @@ void Contr::postDisable( int flag )
     try {
 	if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	    //Delete parameter tables
-	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS(),
-					mod->nodePath()+cfg("BLOCK_SH").getS());
-	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS()+"_io",
-					mod->nodePath()+cfg("BLOCK_SH").getS()+"_io");
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS(),
+				mod->nodePath()+cfg("BLOCK_SH").getS());
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS()+"_io",
+				mod->nodePath()+cfg("BLOCK_SH").getS()+"_io");
 	}
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
@@ -232,7 +232,7 @@ void Contr::load_( )
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
     map<string, bool>	itReg;
 
-    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,TBDS::UseCache); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string id = cEl.cfg("ID").getS();
 	if(!chldPresent(mBl,id)) {
 	    blkAdd(id);

@@ -109,9 +109,9 @@ void TTransportS::load_( )
 	vector<string> itLs;
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,TBDS::UseCache); ) {
+	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el,TBDS::UseCache); ) {
 		id   = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(!modPresent(type))	continue;
@@ -145,9 +145,9 @@ void TTransportS::load_( )
 	itReg.clear();
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,TBDS::UseCache); ) {
+	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el,TBDS::UseCache); ) {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("MODULE").getS();
 		if(!modPresent(type))	continue;
@@ -177,7 +177,7 @@ void TTransportS::load_( )
     try {
 	map<string, bool> regIds;
 	TConfig c_el(&elExt);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,TBDS::UseCache); ) {
+	for(int fld_cnt = 0; TBDS::dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,TBDS::UseCache); ) {
 	    ExtHost host("", "");
 	    host.userOpen	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
@@ -212,13 +212,13 @@ void TTransportS::save_( )
 	c_el.cfg("USER").setS(extHostLs[iH].user);
 	c_el.cfg("PASS").setS(extHostLs[iH].pass);
 	c_el.cfg("UpRiseLev").setI(extHostLs[iH].upRiseLev);
-	SYS->db().at().dataSet(extHostsDB(), nodePath()+"ExtTansp", c_el);
+	TBDS::dataSet(extHostsDB(), nodePath()+"ExtTansp", c_el);
     }
     //Clear external transports
     c_el.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el); )
+    for(int fld_cnt = 0; TBDS::dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el); )
 	if(!extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size()) {
-	    SYS->db().at().dataDel(extHostsDB(), nodePath()+"ExtTansp", c_el, TBDS::UseAllKeys|TBDS::NoException);
+	    TBDS::dataDel(extHostsDB(), nodePath()+"ExtTansp", c_el, TBDS::UseAllKeys|TBDS::NoException);
 	    fld_cnt--;
 	}
 }
@@ -455,11 +455,11 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     node.setAttr("path", path);
     //Password's hash processing
     if(!rqDir && node.attr("pHash").size()) {
-	if(host.pass != (TSecurity::pHashMagic+node.attr("pHash"))) {
+	if(host.pass != (SEC_HASH_MAGIC+node.attr("pHash"))) {
 	    TTransportS::ExtHost hostP("", "");
 	    for(int lev = 0; (hostP=extHostSeek(station,lev)).id.size(); lev++) {
 		if(hostP.user != host.user) continue;
-		hostP.pass = TSecurity::pHashMagic + node.attr("pHash");
+		hostP.pass = SEC_HASH_MAGIC + node.attr("pHash");
 		extHostSet(hostP);
 	    }
 	}
@@ -550,8 +550,8 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    else if(col == "addr")	host.addr = opt->text();
 	    else if(col == "user")	host.user = opt->text();
 	    else if(col == "pass") {
-		if(opt->text().compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
-		    host.pass = opt->text().substr(TSecurity::pHashMagic.size());
+		if(opt->text().find(SEC_HASH_MAGIC) == 0)
+		    host.pass = opt->text().substr(strlen(SEC_HASH_MAGIC));
 		else host.pass = opt->text();
 	    }
 	    else if(col == "mode")	host.mode = s2i(opt->text());
@@ -648,13 +648,13 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 void TTypeTransport::load_( )
 {
     //Load parameters
-    setOutLifeTime(s2i(TBDS::genDBGet(nodePath()+"OutLifeTime",i2s(outLifeTime()))));
+    setOutLifeTime(s2i(TBDS::genPrmGet(nodePath()+"OutLifeTime",i2s(outLifeTime()))));
 }
 
 void TTypeTransport::save_( )
 {
     //Save parameters
-    TBDS::genDBSet(nodePath()+"OutLifeTime",i2s(outLifeTime()));
+    TBDS::genPrmSet(nodePath()+"OutLifeTime",i2s(outLifeTime()));
 }
 
 void TTypeTransport::perSYSCall( unsigned int cnt )
@@ -698,7 +698,7 @@ void TTransportIn::postDisable( int flag )
     if(!(flag&NodeRemoveOnlyStor))
 	try { stop(); } catch(...){ }		//Stop at any disabling
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -744,12 +744,12 @@ void TTransportIn::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
+    else TBDS::dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
 void TTransportIn::save_( )
 {
-    SYS->db().at().dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
     setDB(DB(), true);
 }
 
@@ -1058,7 +1058,7 @@ void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); mLogLstDt = 0; 
 void TTransportOut::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor) ,SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor) ,SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
@@ -1082,12 +1082,12 @@ void TTransportOut::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
+    else TBDS::dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
 void TTransportOut::save_( )
 {
-    SYS->db().at().dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
     setDB(DB(), true);
 }
 
@@ -1264,32 +1264,32 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	postDisable(NodeRemoveOnlyStor);
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
     else if(a_path == "/req/tm" && ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD))
-	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));
+	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));
     else if(a_path == "/req/mode") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genDBSet(owner().nodePath()+"ReqMode",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ReqMode",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/req/toTmOut") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genDBSet(owner().nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ToTmOut",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/req/inBufSz") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))
-	    opt->setText(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
-	    TBDS::genDBSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(prmStrBuf_SZ,s2i(opt->text())))), opt->attr("user"));
+	    TBDS::genPrmSet(owner().nodePath()+"InBufSz", i2s(vmax(0,vmin(prmStrBuf_SZ,s2i(opt->text())))), opt->attr("user"));
     }
     else if(a_path == "/req/req") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
-	    int mode = s2i(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
+	    int mode = s2i(TBDS::genPrmGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
 	    switch(mode) {
 		case 0:
-		    TBDS::genDBSet(owner().nodePath()+"ReqReq",
+		    TBDS::genPrmSet(owner().nodePath()+"ReqReq",
 			TSYS::strDecode(TSYS::strEncode(opt->text(),TSYS::Bin),TSYS::Bin," "), opt->attr("user"));
 		    break;
 		default:
-		    TBDS::genDBSet(owner().nodePath()+"ReqReq",opt->text(), opt->attr("user"));
+		    TBDS::genPrmSet(owner().nodePath()+"ReqReq",opt->text(), opt->attr("user"));
 		    break;
 	    }
 	}
@@ -1298,16 +1298,16 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/req/answ") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqAnsw","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genDBSet(owner().nodePath()+"ReqAnsw",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqAnsw","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ReqAnsw",opt->text(),opt->attr("user"));
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",STR_ID,SEC_RD)) {
 	    opt->setAttr("font","Courier");
 	}
     }
     else if(a_path == "/req/send" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
 	string answ;
-	int mode = s2i(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
-	string req = TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user"));
+	int mode = s2i(TBDS::genPrmGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
+	string req = TBDS::genPrmGet(owner().nodePath()+"ReqReq","",opt->attr("user"));
 
 	switch(mode) {
 	    case 0:	req = TSYS::strEncode(req,TSYS::Bin);	break;
@@ -1330,7 +1330,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	int64_t stm = TSYS::curTime();
 	try {
-	    int inBufSz = s2i(TBDS::genDBGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
+	    int inBufSz = s2i(TBDS::genPrmGet(owner().nodePath()+"InBufSz",i2s(prmStrBuf_SZ),opt->attr("user")));
 	    char buf[inBufSz];
 	    if(!startStat()) start();
 	    MtxAlloc resN(reqRes(), true);
@@ -1339,17 +1339,17 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		if(req.size()) answ.assign(buf, resp_len);
 		else answ.append(buf, resp_len);
 
-		bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
+		bool ToTmOut = (bool)s2i(TBDS::genPrmGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
 		while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < prmInterf_TM) {
 		    try { resp_len = messIO(NULL, 0, buf, inBufSz); } catch(TError &err) { break; }
 		    answ.append(buf, resp_len);
 		}
 	    }
 
-	    TBDS::genDBSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
-	    TBDS::genDBSet(owner().nodePath()+"ReqAnsw", (mode==0)?TSYS::strDecode(answ,TSYS::Bin,"<text>"):answ, opt->attr("user"));
+	    TBDS::genPrmSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
+	    TBDS::genPrmSet(owner().nodePath()+"ReqAnsw", (mode==0)?TSYS::strDecode(answ,TSYS::Bin,"<text>"):answ, opt->attr("user"));
 	} catch(TError &err) {
-	    TBDS::genDBSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
+	    TBDS::genPrmSet(owner().nodePath()+"ReqTm", tm2s(1e-6*(TSYS::curTime()-stm)), opt->attr("user"));
 	    throw;
 	}
     }

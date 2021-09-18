@@ -76,11 +76,11 @@ void Lib::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor) && DB().size()) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB(flag&NodeRemoveOnlyStor)+"."+mod->libTable(), mod->nodePath()+"lib/", *this, TBDS::UseAllKeys);
+	TBDS::dataDel(DB(flag&NodeRemoveOnlyStor)+"."+mod->libTable(), mod->nodePath()+"lib/", *this, TBDS::UseAllKeys);
 
 	//Delete function's files
-	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), mod->nodePath()+tbl());
-	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", mod->nodePath()+tbl()+"_io");
+	TBDS::dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), mod->nodePath()+tbl());
+	TBDS::dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", mod->nodePath()+tbl()+"_io");
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -104,13 +104,13 @@ void Lib::load_( TConfig *icfg )
     if(DB().empty() || (!SYS->chkSelDB(DB())))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
+    else TBDS::dataGet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
 
     //Load functions
     map<string, bool>   itReg;
     TConfig cEl(&mod->elFnc());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId);
 	at(fId).at().load(&cEl);
@@ -131,7 +131,7 @@ void Lib::save_( )
 {
     if(DB().empty())	return;
 
-    SYS->db().at().dataSet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
+    TBDS::dataSet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
     setDB(DB(), true);
 }
 

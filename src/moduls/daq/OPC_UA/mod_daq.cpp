@@ -109,8 +109,8 @@ void TMdContr::postDisable( int flag )
 {
     try {
 	if(flag&(NodeRemove|NodeRemoveOnlyStor))
-	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD_L").getS()+"_io",
-					owner().nodePath()+cfg("PRM_BD_L").getS()+"_io");
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD_L").getS()+"_io",
+				owner().nodePath()+cfg("PRM_BD_L").getS()+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
@@ -771,7 +771,7 @@ void TMdPrm::postDisable( int flag )
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id(), true);
-	SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+	TBDS::dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -1020,7 +1020,7 @@ void TMdPrm::loadIO( bool force )
     //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
+	if(!TBDS::dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
 	else if(lCtx->func()->io(iIO)->type() != IO::String || !(lCtx->func()->io(iIO)->flg()&IO::TransltText))
@@ -1051,7 +1051,7 @@ void TMdPrm::saveIO( )
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
-	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+	TBDS::dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -1293,7 +1293,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	/*opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");*/
     }
     else if(isStd() && a_path == "/prm/cfg/SEL_NDS") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"selND","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"selND","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    //Read for type check
 	    string cNodeId;
@@ -1315,11 +1315,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	    if(!isSet || isStructVar)
-		TBDS::genDBSet(nodePath()+"selND", opt->text(), opt->attr("user"));
+		TBDS::genPrmSet(nodePath()+"selND", opt->text(), opt->attr("user"));
 	}
     }
     else if(isStd() && a_path == "/prm/cfg/SEL_NDS_lst" && ctrChkNode(opt)) {
-	string selNd = TBDS::genDBGet(nodePath()+"selND",TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder), opt->attr("user"));
+	string selNd = TBDS::genPrmGet(nodePath()+"selND",TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder), opt->attr("user"));
 	size_t stC = selNd.rfind(")"), stP = selNd.rfind("(", stC);
 	string cNodeId = (stP != string::npos && stC != string::npos) ? TSYS::strDecode(selNd.substr(stP+1,stC-stP-1)) : i2s(OpcUa_RootFolder);
 

@@ -67,10 +67,10 @@ void ModMArch::postDisable( int flag )
 	//Remove info record
 	TConfig cfg(&mod->archEl());
 	cfg.cfg("TBL").setS(archTbl(),true);
-	SYS->db().at().dataDel(addr()+"."+mod->mainTbl(), "", cfg);
+	TBDS::dataDel(addr()+"."+mod->mainTbl(), "", cfg);
 
 	//Removing the archive DB table
-	SYS->db().at().dataDelTbl(addr()+"."+archTbl());
+	TBDS::dataDelTbl(addr()+"."+archTbl());
     }
 }
 
@@ -190,7 +190,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
     cfg.cfg("TBL").setS(archTbl(),true);
     cfg.cfg("BEGIN").setS(i2s(mBeg),true);
     cfg.cfg("END").setS(i2s(mEnd),true);
-    bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(), "", cfg, TBDS::NoException);
+    bool rez = TBDS::dataSet(addr()+"."+mod->mainTbl(), "", cfg, TBDS::NoException);
 
     tmProc = TSYS::curTime() - t_cnt; tmProcMax = vmax(tmProcMax, tmProc);
 
@@ -217,7 +217,7 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
 	tC = (tC/60)*60;
 	cfg.cfg("MIN").setI(tC/60, true);
 	int eC = 0;
-	for( ; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",eC++,cfg,TBDS::UseCache) && SYS->sysTm() < upTo; ) {
+	for( ; TBDS::dataSeek(addr()+"."+archTbl(),"",eC++,cfg,TBDS::UseCache) && SYS->sysTm() < upTo; ) {
 	    TMess::SRec rc(cfg.cfg("TM").getI(), cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(),
 			    (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
 	    if(rc.time >= bTm && rc.time <= eTm && abs(rc.level) >= level && re.test(rc.categ)) {
@@ -249,12 +249,12 @@ bool ModMArch::readMeta( )
     //Load message archive parameters
     TConfig wcfg(&mod->archEl());
     wcfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg,TBDS::NoException)) {
+    if(TBDS::dataGet(addr()+"."+mod->mainTbl(),"",wcfg,TBDS::NoException)) {
 	mBeg = s2i(wcfg.cfg("BEGIN").getS());
 	mEnd = s2i(wcfg.cfg("END").getS());
 	// Check for delete archivator table
 	if(maxSize() && mEnd <= (time(NULL)-(time_t)(maxSize()*86400))) {
-	    SYS->db().at().dataDelTbl(addr()+"."+archTbl());
+	    TBDS::dataDelTbl(addr()+"."+archTbl());
 	    mBeg = mEnd = 0;
 	}
     } else rez = false;

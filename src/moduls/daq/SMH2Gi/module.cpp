@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.6"
+#define MOD_VER		"1.1.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -163,13 +163,13 @@ void TTpContr::perSYSCall( unsigned int cnt )
 void TTpContr::load_( )
 {
     //Load parameters from config-file
-    setMRCDirDevs(TBDS::genDBGet(nodePath()+"MRCDirDevs",MRCDirDevs()));
+    setMRCDirDevs(TBDS::genPrmGet(nodePath()+"MRCDirDevs",MRCDirDevs()));
 }
 
 void TTpContr::save_( )
 {
     //Save parameters to config-file
-    TBDS::genDBSet(nodePath()+"MRCDirDevs",MRCDirDevs());
+    TBDS::genPrmSet(nodePath()+"MRCDirDevs",MRCDirDevs());
 }
 
 void TTpContr::cntrCmdProc( XMLNode *opt )

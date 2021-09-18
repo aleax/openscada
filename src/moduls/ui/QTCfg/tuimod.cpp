@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.6.0"
+#define MOD_VER		"5.6.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -126,10 +126,10 @@ void TUIMod::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file and DB
-    setTmConChk(TBDS::genDBGet(nodePath()+"TmConChk",tmConChk()));
-    setStartPath(TBDS::genDBGet(nodePath()+"StartPath",startPath()));
-    setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
-    setToolTipLim(s2i(TBDS::genDBGet(nodePath()+"ToolTipLim",i2s(toolTipLim()))));
+    setTmConChk(TBDS::genPrmGet(nodePath()+"TmConChk",tmConChk()));
+    setStartPath(TBDS::genPrmGet(nodePath()+"StartPath",startPath()));
+    setStartUser(TBDS::genPrmGet(nodePath()+"StartUser",startUser()));
+    setToolTipLim(s2i(TBDS::genPrmGet(nodePath()+"ToolTipLim",i2s(toolTipLim()))));
 }
 
 void TUIMod::save_( )
@@ -137,10 +137,10 @@ void TUIMod::save_( )
     mess_debug(nodePath().c_str(),_("Saving the module."));
 
     //Save parameters to DB
-    TBDS::genDBSet(nodePath()+"TmConChk", tmConChk());
-    TBDS::genDBSet(nodePath()+"StartPath", startPath());
-    TBDS::genDBSet(nodePath()+"StartUser", startUser());
-    TBDS::genDBSet(nodePath()+"ToolTipLim",i2s(toolTipLim()));
+    TBDS::genPrmSet(nodePath()+"TmConChk", tmConChk());
+    TBDS::genPrmSet(nodePath()+"StartPath", startPath());
+    TBDS::genPrmSet(nodePath()+"StartUser", startUser());
+    TBDS::genPrmSet(nodePath()+"ToolTipLim",i2s(toolTipLim()));
 }
 
 void TUIMod::postEnable( int flag )

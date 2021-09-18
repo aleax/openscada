@@ -94,12 +94,12 @@ void TController::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	//Delete DB record
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+"DAQ", *this, TBDS::UseAllKeys);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+"DAQ", *this, TBDS::UseAllKeys);
 
 	//Delete parameter tables
 	for(unsigned iTp = 0; iTp < owner().tpPrmSize(); iTp++)
-	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+owner().tpPrmAt(iTp).DB(this),
-					owner().nodePath()+owner().tpPrmAt(iTp).DB(this));
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+owner().tpPrmAt(iTp).DB(this),
+				owner().nodePath()+owner().tpPrmAt(iTp).DB(this));
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -166,7 +166,7 @@ void TController::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
-	SYS->db().at().dataGet(fullDB(), owner().nodePath()+"DAQ", *this);
+	TBDS::dataGet(fullDB(), owner().nodePath()+"DAQ", *this);
     }
 
     mRdUse = owner().redntAllow() && (bool)redntMode();
@@ -182,7 +182,7 @@ void TController::save_( )
     mess_sys(TMess::Info, _("Controller configuration saving."));
 
     //Update type controller bd record
-    SYS->db().at().dataSet(fullDB(), owner().nodePath()+"DAQ", *this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+"DAQ", *this);
     setDB(DB(), true);
 }
 
@@ -283,7 +283,7 @@ void TController::LoadParmCfg( )
 	    cEl.cfg("OWNER").setS("", TCfg::ForceUse);
 
 	    // Search new into DB and Config-file
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(DB()+"."+owner().tpPrmAt(iTp).DB(this),
+	    for(int fldCnt = 0; TBDS::dataSeek(DB()+"."+owner().tpPrmAt(iTp).DB(this),
 					owner().nodePath()+owner().tpPrmAt(iTp).DB(this),fldCnt++,cEl,TBDS::UseCache); )
 	    {
 		try {
@@ -572,9 +572,9 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/t_prm" && owner().tpPrmSize()) {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
-	    opt->setText(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR) )
-	    TBDS::genDBSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
     else if((a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize()) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
@@ -588,7 +588,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    opt->setAttr("id", add(opt->attr("id"),owner().tpPrmToId(TBDS::genDBGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")))));
+	    opt->setAttr("id", add(opt->attr("id"),owner().tpPrmToId(TBDS::genPrmGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")))));
 	    at(opt->attr("id")).at().setName(opt->text());
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), true);
@@ -621,17 +621,17 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/tm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) {
-	    opt->setText(TBDS::genDBGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")));
 	    if(!s2i(opt->text())) opt->setText(i2s(TSYS::curTime()/1000000));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
-	    TBDS::genDBSet(SYS->daq().at().nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(SYS->daq().at().nodePath()+"messTm",(s2i(opt->text())>=TSYS::curTime()/1000000)?"0":opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/size") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	    opt->setText(TBDS::genDBGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	    TBDS::genDBSet(SYS->daq().at().nodePath()+"messSize",opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(SYS->daq().at().nodePath()+"messSize",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/mess/lvl") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(mMessLev.getS());
@@ -639,9 +639,9 @@ void TController::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID)) {
 	vector<TMess::SRec> rec;
-	time_t gtm = s2i(TBDS::genDBGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")));
+	time_t gtm = s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")));
 	if(!gtm) gtm = (time_t)(TSYS::curTime()/1000000);
-	int gsz = s2i(TBDS::genDBGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")));
+	int gsz = s2i(TBDS::genPrmGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")));
 	SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/("+catsPat()+")/", messLev(), "");
 
 	XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SDAQ_ID);

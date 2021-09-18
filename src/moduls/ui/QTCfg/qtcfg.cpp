@@ -445,7 +445,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     statusBar()->showMessage(_("Ready"), 2000);
 
     //Generic state restore
-    string rst = TBDS::genDBGet(mod->nodePath()+"st", "800:600", wUser->user().toStdString());
+    string rst = TBDS::genPrmGet(mod->nodePath()+"st", "800:600", wUser->user().toStdString());
     int off = 0,
 	wH = s2i(TSYS::strParse(rst,0,":",&off)),
 	wW = s2i(TSYS::strParse(rst,0,":",&off));
@@ -1042,7 +1042,7 @@ void ConfApp::closeEvent( QCloseEvent* ce )
     if(endRunTimer->isActive()) {
 	//Save the generic state
 	QByteArray st = splitter->saveState();
-	TBDS::genDBSet(mod->nodePath()+"st", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), wUser->user().toStdString());
+	TBDS::genPrmSet(mod->nodePath()+"st", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), wUser->user().toStdString());
 
 	// Timers early stop
 	endRunTimer->stop();

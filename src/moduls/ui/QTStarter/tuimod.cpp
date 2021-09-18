@@ -57,7 +57,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.11.1"
+#define MOD_VER		"5.11.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -218,25 +218,24 @@ void TUIMod::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setStartMod(TBDS::genDBGet(nodePath()+"StartMod",startMod()));
-    setCloseToTray(s2i(TBDS::genDBGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
-    setStyle(TBDS::genDBGet(nodePath()+"Style",style()));
-    setFont(TBDS::genDBGet(nodePath()+"Font",font()));
-    setPalette(TBDS::genDBGet(nodePath()+"Palette",palette()));
-    setStyleSheets(TBDS::genDBGet(nodePath()+"StyleSheets",styleSheets()));
+    setStartMod(TBDS::genPrmGet(nodePath()+"StartMod",startMod()));
+    setCloseToTray(s2i(TBDS::genPrmGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
+    setStyle(TBDS::genPrmGet(nodePath()+"Style",style()));
+    setFont(TBDS::genPrmGet(nodePath()+"Font",font()));
+    setPalette(TBDS::genPrmGet(nodePath()+"Palette",palette()));
+    setStyleSheets(TBDS::genPrmGet(nodePath()+"StyleSheets",styleSheets()));
 }
 
 void TUIMod::save_( )
 {
     mess_debug(nodePath().c_str(),_("Saving the module."));
 
-    //???? Test on these after adaption TBDS::genDBSet() to the new storage policy
-    TBDS::genDBSet(nodePath()+"StartMod", startMod());
-    TBDS::genDBSet(nodePath()+"CloseToTray", i2s(closeToTray()));
-    TBDS::genDBSet(nodePath()+"Style", style());
-    TBDS::genDBSet(nodePath()+"Font", font());
-    TBDS::genDBSet(nodePath()+"Palette", palette());
-    TBDS::genDBSet(nodePath()+"StyleSheets", styleSheets());
+    TBDS::genPrmSet(nodePath()+"StartMod", startMod());
+    TBDS::genPrmSet(nodePath()+"CloseToTray", i2s(closeToTray()));
+    TBDS::genPrmSet(nodePath()+"Style", style());
+    TBDS::genPrmSet(nodePath()+"Font", font());
+    TBDS::genPrmSet(nodePath()+"Palette", palette());
+    TBDS::genPrmSet(nodePath()+"StyleSheets", styleSheets());
 }
 
 void TUIMod::modStart( )
@@ -520,7 +519,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	    else if(opt->text() != _("<Select a profile to combine>")) {
 		TConfig cEl(&elLF);
 		cEl.cfg("NAME").setS(opt->text());
-		if(SYS->db().at().dataGet("",nodePath()+"LookFeel",cEl,TBDS::NoException)) {
+		if(TBDS::dataGet("",nodePath()+"LookFeel",cEl,TBDS::NoException)) {
 		    string tVl;
 		    if((tVl=cEl.cfg("STYLE").getS()).size())
 			if(style(true).empty()) setStyle(tVl);
@@ -549,7 +548,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText(_("<Clear>"));
 	opt->childAdd("el")->setText(_("<Read back>"));
 	TConfig cEl(&elLF);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LookFeel",fld_cnt++,cEl); )
+	for(int fld_cnt = 0; TBDS::dataSeek("",nodePath()+"LookFeel",fld_cnt++,cEl); )
 	    opt->childAdd("el")->setText(cEl.cfg("NAME").getS());
     }
     else if(a_path == "/prm/LF/stl") {

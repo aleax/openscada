@@ -36,7 +36,7 @@
 #define MOD_NAME	_("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.20"
+#define MOD_VER		"0.6.21"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -107,11 +107,11 @@ void TTpContr::postEnable( int flag )
     symbAlrm_el.fldAdd(new TFld("TEXT","Text",TFld::String,TFld::TransltText,"100"));
 }
 
-string TTpContr::symbDB( )	{ return TBDS::genDBGet(nodePath()+"symbDB","*.*"); }
+string TTpContr::symbDB( )	{ return TBDS::genPrmGet(nodePath()+"symbDB","*.*"); }
 
 void TTpContr::setSymbDB( const string &idb )
 {
-    TBDS::genDBSet(nodePath()+"symbDB",idb);
+    TBDS::genPrmSet(nodePath()+"symbDB",idb);
     modif();
 }
 
@@ -139,14 +139,14 @@ void TTpContr::load_( )
     TConfig c_el(&symbCode_el);
     MtxAlloc res(mSymbRes, true);
     mSymbCode.clear();
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
+    for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
 	mSymbCode[c_el.cfg("ID").getI()] = c_el.cfg("TEXT").getS();
 
     //Load Alarm symbols
     wtbl = MOD_ID"_SymbAlarm";
     c_el.setElem(&symbAlrm_el);
     mSymbAlrm.clear();
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
+    for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
 	mSymbAlrm[c_el.cfg("ID").getI()] = AlrmSymb(c_el.cfg("TEXT").getS(),c_el.cfg("CODE").getI());
 }
 
@@ -160,12 +160,12 @@ void TTpContr::save_( )
     for(map<unsigned,string>::iterator is = mSymbCode.begin(); is != mSymbCode.end(); is++) {
 	c_el.cfg("ID").setI(is->first);
 	c_el.cfg("TEXT").setS(is->second);
-	SYS->db().at().dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
+	TBDS::dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
     }
     // Clear no present codes
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
+    for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
 	if(mSymbCode.find(c_el.cfg("ID").getI()) != mSymbCode.end()) continue;
-	SYS->db().at().dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
+	TBDS::dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
 	fld_cnt--;
     }
 
@@ -176,12 +176,12 @@ void TTpContr::save_( )
 	c_el.cfg("ID").setI(is->first);
 	c_el.cfg("CODE").setI(is->second.code);
 	c_el.cfg("TEXT").setS(is->second.text);
-	SYS->db().at().dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
+	TBDS::dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
     }
     // Clear no present codes
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
+    for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
 	if(mSymbAlrm.find(c_el.cfg("ID").getI()) != mSymbAlrm.end()) continue;
-	SYS->db().at().dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
+	TBDS::dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
 	fld_cnt--;
     }
 }

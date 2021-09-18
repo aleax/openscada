@@ -1,3 +1,15 @@
+2021-09-18 Roman (conceptual)
+- !!!!:SYS,DB: The generic parameters accessing functions TBDS::genDBGet() and TBDS::genPrmSet() moved under the new storage conception
+	using TBDS::dataGet() and TBDS::dataSet() respectively, and renamed to genPrmGet() and genPrmSet() everywhere.
+    !!!: The table "SYS" structure of the generic parameters moved to the static method "elSYS".
+    !!:SYS.Building: configure.ac: Core library version rose to 4:5:0.
+    !!: The module version of the subsystem "BD" rose to 23.
+    !!: The TBDS Generic parameter "SYSStPref" removed.
+    !: The TBDS::ReqGenFlg flags appended the flag "CfgPrm" of requesting the Configuration File data as the Generic Parameters.
+    !: The functions moved and used everywhere as static ones: TBDS::{dbList,dataSeek,dataGet,dataSet,dataDel,dataDelTbl}().
+- !:Security: The static method "pHashMagic" moved to the definition SEC_HASH_MAGIC.
+
+
 2021-09-17 Roman (conceptual)
 - !!!!:SYS,*: The objects are adapted for tracking the multiple storages and are appended of the sequentially removing duplicates:
 	DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.{VCAEngine,Vision}.{WdgLib,Proj}.

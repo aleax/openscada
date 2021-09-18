@@ -282,14 +282,14 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"Tr",TFld::String,0));
 		    req.cfg("base").setS(base);
 		}
-		if(SYS->db().at().dataGet(*iA+"." mess_TrUApiTbl,"/" mess_TrUApiTbl,req,TBDS::NoException)) {
+		if(TBDS::dataGet(*iA+"." mess_TrUApiTbl,"/" mess_TrUApiTbl,req,TBDS::NoException)) {
 		    rez = req.cfg(tStrVl).getS();
 		    break;
 		}
 		// Create new record into the translation table of the data source
 		else if((iA+1) == addrs.rend() /*&& lang2CodeBase().size()*/) {
 		    if(lang2CodeBase().size() && lang2CodeBase() == trLang)	req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
-		    SYS->db().at().dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, TBDS::NoException);
+		    TBDS::dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, TBDS::NoException);
 		}
 	    }
 	    trMessCache[cKey] = CacheEl(rez, SYS->sysTm());
@@ -315,8 +315,8 @@ string TMess::translGet( const string &base, const string &lang, const string &s
 			//  Get from config file or DB source
 			bool seekRez = false;
 			for(int inst = 0; rez.empty(); inst++) {
-			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
-					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
+			    seekRez = isCfg ? TBDS::dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
+					    : TBDS::dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
 			    if(!seekRez) break;
 			    rez = req.cfg(reqFld).getS();
 			}
@@ -380,8 +380,8 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 		req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
 	    }
 	    req.cfg(setFld).setS(mess, TCfg::ForceUse);
-	    setRes = isCfg ? SYS->db().at().dataSet("", trSrc.substr(4), req, TBDS::NoException)
-			   : SYS->db().at().dataSet(trSrc.substr(3), "", req, TBDS::NoException);
+	    setRes = isCfg ? TBDS::dataSet("", trSrc.substr(4), req, TBDS::NoException)
+			   : TBDS::dataSet(trSrc.substr(3), "", req, TBDS::NoException);
 	}
 	//  Move the source to new base
 	if(setRes && chBase) {
@@ -415,10 +415,7 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
     if(src.compare(0,5,"uapi:") == 0) {
 	vector<string> ls;
 	if(src.size() > 5) ls.push_back(src.substr(5));
-	else {
-	    SYS->db().at().dbList(ls);
-	    ls.push_back("<cfg>");
-	}
+	else { TBDS::dbList(ls); ls.push_back("<cfg>"); }
 
 	TConfig req;
 	req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
@@ -426,10 +423,10 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 	MtxAlloc res(mRes, true);
 	for(unsigned iL = 0; iL < ls.size(); iL++)
 	    if(ls[iL] == DB_CFG)
-		for(int io_cnt = 0; SYS->db().at().dataSeek("","/" mess_TrUApiTbl,io_cnt++,req,TBDS::UseCache); )
+		for(int io_cnt = 0; TBDS::dataSeek("","/" mess_TrUApiTbl,io_cnt++,req,TBDS::UseCache); )
 		    trMessIdx[req.cfg("base").getS()]["cfg:/" mess_TrUApiTbl] = prms;
 	    else
-		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[iL]+"." mess_TrUApiTbl,"",io_cnt++,req,TBDS::UseCache); )
+		for(int io_cnt = 0; TBDS::dataSeek(ls[iL]+"." mess_TrUApiTbl,"",io_cnt++,req,TBDS::UseCache); )
 		    trMessIdx[req.cfg("base").getS()]["db:"+ls[iL]+"." mess_TrUApiTbl "#base"] = prms;
     }
     //Same translations registration
@@ -601,13 +598,13 @@ void TMess::load( )
     if((argVl=SYS->cmdOpt("log")).size()) setLogDirect(s2i(argVl));
 
     //Load params config-file
-    setMessLevel(s2i(TBDS::genDBGet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg)));
-    setSelDebCats(TBDS::genDBGet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg));
-    setLogDirect(s2i(TBDS::genDBGet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg)));
-    setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
-    mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
-    setTranslDyn(s2i(TBDS::genDBGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()),"root",TBDS::OnlyCfg)), false);
-    setTranslEnMan(translDyn() || s2i(TBDS::genDBGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg)), true);
+    setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg)));
+    setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg));
+    setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg)));
+    setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
+    mLang2CodeBase = TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
+    setTranslDyn(s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()),"root",TBDS::OnlyCfg)), false);
+    setTranslEnMan(translDyn() || s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg)), true);
 }
 
 void TMess::unload( )
@@ -627,13 +624,13 @@ void TMess::unload( )
 
 void TMess::save( )
 {
-    TBDS::genDBSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
-    if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genDBSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
+    TBDS::genPrmSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);
+    TBDS::genPrmSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
+    TBDS::genPrmSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
+    if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genPrmSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
+    TBDS::genPrmSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
+    TBDS::genPrmSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
+    TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
 }
 
 const char *TMess::labDB( )

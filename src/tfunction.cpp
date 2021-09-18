@@ -365,8 +365,8 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/exec/n_clc" && mTVal) {
-	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","1",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"ntCalc","1",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genPrmSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))
 	opt->setText(tm2s(1e-6*SYS->cntrGet(nodePath('.'))));
@@ -382,7 +382,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    }
     }
     else if(a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR)) {
-	int n_tcalc = s2i(TBDS::genDBGet(nodePath()+"ntCalc","1",opt->attr("user")));
+	int n_tcalc = s2i(TBDS::genPrmGet(nodePath()+"ntCalc","1",opt->attr("user")));
 	string wuser = opt->attr("user");
 	time_t tm_lim = SYS->sysTm()+prmWait_TM+1;
 	int64_t t_cnt = TSYS::curTime();

@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.2.5"
+#define MOD_VER		"4.2.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -141,7 +141,7 @@ void TTpContr::load_( )
     string bd_tbl = modId()+"_CIFdevs";
     for(int iB = 0; iB < MAX_DEV_BOARDS; iB++) {
 	cfg.cfg("ID").setI(iB);
-	if(SYS->db().at().dataGet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg,TBDS::NoException)) {
+	if(TBDS::dataGet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg,TBDS::NoException)) {
 	    cif_devs[iB].pbaddr = cfg.cfg("ADDR").getI();
 	    cif_devs[iB].pbspeed = cfg.cfg("SPEED").getI();
 	}
@@ -158,7 +158,7 @@ void TTpContr::save_( )
 	cfg.cfg("ID").setI(iB);
 	cfg.cfg("ADDR").setI(cif_devs[iB].pbaddr);
 	cfg.cfg("SPEED").setI(cif_devs[iB].pbspeed);
-	SYS->db().at().dataSet(SYS->workDB()+"."+bd_tbl, mod->nodePath()+bd_tbl, cfg);
+	TBDS::dataSet(SYS->workDB()+"."+bd_tbl, mod->nodePath()+bd_tbl, cfg);
     }
 }
 
@@ -426,12 +426,12 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/PB/dev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	    opt->setText(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	    TBDS::genDBSet(mod->nodePath()+"lifeLsDev",opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(mod->nodePath()+"lifeLsDev",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/PB/lifels" && ctrChkNode(opt)) {
-	int board = s2i(TBDS::genDBGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
+	int board = s2i(TBDS::genPrmGet(mod->nodePath()+"lifeLsDev","0",opt->attr("user")));
 	string lifeLst;
 	try {
 	    getLifeListPB(board, lifeLst);
@@ -469,8 +469,8 @@ void TMdContr::postDisable( int flag )
 {
     try {
 	if(flag&(NodeRemove|NodeRemoveOnlyStor))
-	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io",
-					owner().nodePath()+cfg("PRM_BD").getS()+"_io");
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io",
+				owner().nodePath()+cfg("PRM_BD").getS()+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
@@ -1700,7 +1700,7 @@ void TMdPrm::postDisable( int flag )
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id(), true);
-	SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+	TBDS::dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -1887,7 +1887,7 @@ void TMdPrm::loadIO( bool force )
     //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
+	if(!TBDS::dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
 	else if(lCtx->func()->io(iIO)->type() != IO::String || !(lCtx->func()->io(iIO)->flg()&IO::TransltText))
@@ -1918,7 +1918,7 @@ void TMdPrm::saveIO( )
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
-	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+	TBDS::dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 

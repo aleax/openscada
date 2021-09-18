@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.6"
+#define MOD_VER		"3.6.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -109,19 +109,19 @@ void TProt::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setDeny(TBDS::genDBGet(nodePath()+"Deny",deny()));
-    setAllow(TBDS::genDBGet(nodePath()+"Allow",allow()));
-    setTmpl(TBDS::genDBGet(nodePath()+"Tmpl",tmpl()));
-    setTmplMainPage(TBDS::genDBGet(nodePath()+"TmplMainPage",tmplMainPage()));
-    setAuthSessDB(TBDS::genDBGet(nodePath()+"AuthSessDB",authSessDB()));
-    setSpaceUID(s2i(TBDS::genDBGet(nodePath()+"SpaceUID",i2s(spaceUID()))));
-    setAllowUsersAuth(TBDS::genDBGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
-    setAuthTime(s2i(TBDS::genDBGet(nodePath()+"AuthTime",i2s(authTime()))));
+    setDeny(TBDS::genPrmGet(nodePath()+"Deny",deny()));
+    setAllow(TBDS::genPrmGet(nodePath()+"Allow",allow()));
+    setTmpl(TBDS::genPrmGet(nodePath()+"Tmpl",tmpl()));
+    setTmplMainPage(TBDS::genPrmGet(nodePath()+"TmplMainPage",tmplMainPage()));
+    setAuthSessDB(TBDS::genPrmGet(nodePath()+"AuthSessDB",authSessDB()));
+    setSpaceUID(s2i(TBDS::genPrmGet(nodePath()+"SpaceUID",i2s(spaceUID()))));
+    setAllowUsersAuth(TBDS::genPrmGet(nodePath()+"AllowUsersAuth",allowUsersAuth()));
+    setAuthTime(s2i(TBDS::genPrmGet(nodePath()+"AuthTime",i2s(authTime()))));
     // Load auto-login config
     MtxAlloc res(authM, true);
     XMLNode aLogNd("aLog");
     try {
-	aLogNd.load(TBDS::genDBGet(nodePath()+"AutoLogin"));
+	aLogNd.load(TBDS::genPrmGet(nodePath()+"AutoLogin"));
 	for(unsigned iN = 0, iAL = 0; iN < aLogNd.childSize(); iN++) {
 	    SAutoLogin al(aLogNd.childGet(iN)->attr("addrs"),aLogNd.childGet(iN)->attr("user"));
 	    for(iAL = 0; iAL < mALog.size() && !(mALog[iAL]==al); ++iAL) ;
@@ -132,21 +132,21 @@ void TProt::load_( )
 
 void TProt::save_( )
 {
-    TBDS::genDBSet(nodePath()+"Deny", deny());
-    TBDS::genDBSet(nodePath()+"Allow", allow());
-    TBDS::genDBSet(nodePath()+"Tmpl", tmpl());
-    TBDS::genDBSet(nodePath()+"TmplMainPage", tmplMainPage());
-    TBDS::genDBSet(nodePath()+"AuthSessDB", authSessDB());
-    TBDS::genDBSet(nodePath()+"SpaceUID", i2s(spaceUID()));
-    TBDS::genDBSet(nodePath()+"AllowUsersAuth",allowUsersAuth());
-    TBDS::genDBSet(nodePath()+"AuthTime", i2s(authTime()));
+    TBDS::genPrmSet(nodePath()+"Deny", deny());
+    TBDS::genPrmSet(nodePath()+"Allow", allow());
+    TBDS::genPrmSet(nodePath()+"Tmpl", tmpl());
+    TBDS::genPrmSet(nodePath()+"TmplMainPage", tmplMainPage());
+    TBDS::genPrmSet(nodePath()+"AuthSessDB", authSessDB());
+    TBDS::genPrmSet(nodePath()+"SpaceUID", i2s(spaceUID()));
+    TBDS::genPrmSet(nodePath()+"AllowUsersAuth",allowUsersAuth());
+    TBDS::genPrmSet(nodePath()+"AuthTime", i2s(authTime()));
 
     //Save auto-login config
     MtxAlloc res(authM, true);
     XMLNode aLogNd("aLog");
     for(unsigned iN = 0; iN < mALog.size(); iN++)
 	aLogNd.childAdd("it")->setAttr("addrs", mALog[iN].addrs)->setAttr("user", mALog[iN].user);
-    TBDS::genDBSet(nodePath()+"AutoLogin", aLogNd.save());
+    TBDS::genPrmSet(nodePath()+"AutoLogin", aLogNd.save());
 }
 
 TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -327,7 +327,7 @@ int TProt::sesOpen( const string &name, const string &srcAddr, const string &use
 	    cEl.cfg("TIME").setI(time(NULL));
 	    cEl.cfg("ADDR").setS(srcAddr);
 	    cEl.cfg("AGENT").setS(userAgent);
-	    SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::NoException);
+	    TBDS::dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::NoException);
 	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     return sess_id;
@@ -347,7 +347,7 @@ void TProt::sesClose( int sid )
 	try {
 	    TConfig cEl(&elAuth);
 	    cEl.cfg("ID").setI(sid);
-	    SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::UseAllKeys|TBDS::NoException);
+	    TBDS::dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::UseAllKeys|TBDS::NoException);
 	} catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }
 
@@ -363,14 +363,14 @@ string TProt::sesCheck( int sid, const string &chUser )
 	if(authSessTbl().size())
 	    try {
 		TConfig cEl(&elAuth);
-		for(int fldCnt = 0; SYS->db().at().dataSeek(authSessTbl(),mod->nodePath()+"AuthSessions/",fldCnt++,cEl); ) {
+		for(int fldCnt = 0; TBDS::dataSeek(authSessTbl(),mod->nodePath()+"AuthSessions/",fldCnt++,cEl); ) {
 		    authEl = mAuth.find(cEl.cfg("ID").getI());
 		    // Appending entries of the external authentication sessions
 		    if(authEl == mAuth.end() && SYS->security().at().usrPresent(cEl.cfg("USER").getS()))
 			mAuth[cEl.cfg("ID").getI()] = SAuth(cEl.cfg("USER").getS(), cEl.cfg("TIME").getI(), cEl.cfg("ADDR").getS(), cEl.cfg("AGENT").getS());
 		    // Removing for inconsistent duples for re-login
 		    else if(authEl != mAuth.end() && cEl.cfg("USER").getS() != authEl->second.name) {
-			if(!SYS->db().at().dataDel(authSessTbl(),mod->nodePath()+"AuthSessions/",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
+			if(!TBDS::dataDel(authSessTbl(),mod->nodePath()+"AuthSessions/",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
 			fldCnt--;
 		    }
 		    // Updating for the authentication session time
@@ -386,7 +386,7 @@ string TProt::sesCheck( int sid, const string &chUser )
 		    try {
 			TConfig cEl(&elAuth);
 			cEl.cfg("ID").setI(authEl->first);
-			SYS->db().at().dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::UseAllKeys|TBDS::NoException);
+			TBDS::dataDel(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::UseAllKeys|TBDS::NoException);
 		    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 		mess_info(nodePath().c_str(), _("The authentication session for the user '%s' is expired. Host: %s."),
@@ -409,7 +409,7 @@ string TProt::sesCheck( int sid, const string &chUser )
 		cEl.cfg("USER").setS(authEl->second.name);
 		cEl.cfg("ADDR").setS(authEl->second.addr);
 		cEl.cfg("AGENT").setS(authEl->second.agent);
-		SYS->db().at().dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::NoException);
+		TBDS::dataSet(authSessTbl(), mod->nodePath()+"AuthSessions/", cEl, TBDS::NoException);
 	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
 	authEl->second.tAuth = cur_tm;

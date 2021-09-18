@@ -67,12 +67,12 @@ void TPrmTempl::postEnable( int flag )
 void TPrmTempl::postDisable( int flag )
 {
     if(flag&NodeRemove) {
-	SYS->db().at().dataDel(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
 
 	//Delete template's IO
 	TConfig cfg(&owner().owner().elTmplIO());
 	cfg.cfg("TMPL_ID").setS(id(), true);
-	SYS->db().at().dataDel(owner().fullDB()+"_io", owner().owner().nodePath()+owner().tbl()+"_io/", cfg);
+	TBDS::dataDel(owner().fullDB()+"_io", owner().owner().nodePath()+owner().tbl()+"_io/", cfg);
     }
 }
 
@@ -156,13 +156,13 @@ void TPrmTempl::load_( TConfig *icfg )
     if(!SYS->chkSelDB(owner().DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this);
+    else TBDS::dataGet(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this);
 
     //Load IO
     vector<string> u_pos;
     TConfig ioCfg(&owner().owner().elTmplIO());
     ioCfg.cfg("TMPL_ID").setS(id(), true);
-    for(int ioCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,TBDS::UseCache); ) {
+    for(int ioCnt = 0; TBDS::dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,TBDS::UseCache); ) {
 	string sid = ioCfg.cfg("ID").getS();
 
 	// Position storing
@@ -201,7 +201,7 @@ void TPrmTempl::save_( )
 
     //Self save
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(w_db, w_cfgpath, *this);
+    TBDS::dataSet(w_db, w_cfgpath, *this);
 
     //Save IO
     TConfig cfg(&owner().owner().elTmplIO());
@@ -215,14 +215,14 @@ void TPrmTempl::save_( )
 	cfg.cfg("VALUE").setNoTransl(!(io(iIO)->type()==IO::String || io(iIO)->flg()&(TPrmTempl::CfgLink|IO::Selectable)));
 	cfg.cfg("VALUE").setS(io(iIO)->def());
 	cfg.cfg("POS").setI(iIO);
-	SYS->db().at().dataSet(w_db+"_io", w_cfgpath+"_io", cfg);
+	TBDS::dataSet(w_db+"_io", w_cfgpath+"_io", cfg);
     }
     //Clear IO
     cfg.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); ) {
+    for(int fld_cnt = 0; TBDS::dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); ) {
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr) {
-	    if(!SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
+	    if(!TBDS::dataDel(w_db+"_io",w_cfgpath+"_io",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fld_cnt--;
 	}
     }
@@ -667,7 +667,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		// Check the selected param
 		bool is_lnk = func()->io(iIO)->flg()&TPrmTempl::CfgLink;
 		if(is_lnk && TSYS::strLine(func()->io(iIO)->def(),0).size() &&
-		    !s2i(TBDS::genDBGet(obj->nodePath()+"onlAttr","0",opt->attr("user"))))
+		    !s2i(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user"))))
 		{
 		    string nprm = TSYS::strSepParse(TSYS::strLine(func()->io(iIO)->def(),0),0,'|');
 		    // Check already to present parameters
@@ -707,8 +707,8 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
     if(a_path.find(pref) != 0)	return false;
     a_path = a_path.substr(pref.size());
     if(a_path == "/attr_only") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(obj->nodePath()+"onlAttr","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genDBSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genPrmSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
     }
     else if(a_path.compare(0,8,"/prm/pr_") == 0) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
@@ -835,11 +835,11 @@ void TPrmTmplLib::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB(flag&NodeRemoveOnlyStor)+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this, TBDS::UseAllKeys);
+	TBDS::dataDel(DB(flag&NodeRemoveOnlyStor)+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this, TBDS::UseAllKeys);
 
 	//Delete temlate librarie's DBs
-	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl());
-	SYS->db().at().dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", owner().nodePath()+tbl()+"_io/");
+	TBDS::dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl());
+	TBDS::dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", owner().nodePath()+tbl()+"_io/");
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -867,13 +867,13 @@ void TPrmTmplLib::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
+    else TBDS::dataGet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
 
     //Load templates
     map<string, bool>	itReg;
     TConfig cEl(&owner().elTmpl());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId);
 	at(fId).at().load(&cEl);
@@ -891,7 +891,7 @@ void TPrmTmplLib::load_( TConfig *icfg )
 
 void TPrmTmplLib::save_( )
 {
-    SYS->db().at().dataSet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
+    TBDS::dataSet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
     setDB(DB(), true);
 }
 

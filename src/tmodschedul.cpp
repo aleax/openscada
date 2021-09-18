@@ -89,10 +89,10 @@ void TModSchedul::load_( )
     if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
 
     //Load parameters from command line
-    setChkPer(s2i(TBDS::genDBGet(nodePath()+"ChkPer",i2s(chkPer()))));
-    SYS->setModDir(TBDS::genDBGet(nodePath()+"ModPath",SYS->modDir()), true);
-    setAllowList(TBDS::genDBGet(nodePath()+"ModAllow",allowList(),"root",TBDS::OnlyCfg));
-    setDenyList(TBDS::genDBGet(nodePath()+"ModDeny",denyList(),"root",TBDS::OnlyCfg));
+    setChkPer(s2i(TBDS::genPrmGet(nodePath()+"ChkPer",i2s(chkPer()))));
+    SYS->setModDir(TBDS::genPrmGet(nodePath()+"ModPath",SYS->modDir()), true);
+    setAllowList(TBDS::genPrmGet(nodePath()+"ModAllow",allowList(),"root",TBDS::OnlyCfg));
+    setDenyList(TBDS::genPrmGet(nodePath()+"ModDeny",denyList(),"root",TBDS::OnlyCfg));
 }
 
 void TModSchedul::unload( )
@@ -120,9 +120,9 @@ void TModSchedul::unload( )
 
 void TModSchedul::save_( )
 {
-    TBDS::genDBSet(nodePath()+"ChkPer", i2s(chkPer()));
-    TBDS::genDBSet(nodePath()+"ModAllow", allowList(), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"ModDeny", denyList(), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"ChkPer", i2s(chkPer()));
+    TBDS::genPrmSet(nodePath()+"ModAllow", allowList(), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"ModDeny", denyList(), "root", TBDS::OnlyCfg);
 }
 
 void TModSchedul::dirScan( const string &paths, vector<string> &files )

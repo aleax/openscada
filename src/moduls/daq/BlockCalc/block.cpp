@@ -71,13 +71,13 @@ void Block::postDisable( int flag )
     if(flag&NodeRemove) {
 	//Delete block from BD
 	string tbl = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
-	SYS->db().at().dataDel(tbl, mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(tbl, mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this, TBDS::UseAllKeys);
 
 	//Delete block's IO from BD
 	TConfig cfg(&owner().owner().blockIOE());
 	tbl = tbl+"_io";
 	cfg.cfg("BLK_ID").setS(id(), true);		//Delete all block id records
-	SYS->db().at().dataDel(tbl, mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io", cfg);
+	TBDS::dataDel(tbl, mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io", cfg);
     }
 }
 
@@ -94,7 +94,7 @@ void Block::load_( TConfig *icfg )
     if(!SYS->chkSelDB(owner().DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(owner().DB()+"."+owner().cfg("BLOCK_SH").getS(), mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this);
+    else TBDS::dataGet(owner().DB()+"."+owner().cfg("BLOCK_SH").getS(), mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this);
 
     //Load IO config
     loadIO();
@@ -103,7 +103,7 @@ void Block::load_( TConfig *icfg )
 void Block::save_( )
 {
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
-    SYS->db().at().dataSet(bd, mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this);
+    TBDS::dataSet(bd, mod->nodePath()+owner().cfg("BLOCK_SH").getS(), *this);
 
     //Save IO config
     saveIO();
@@ -130,7 +130,7 @@ void Block::loadIO( const string &blk_db, const string &blk_id, bool force )
     while(ioSize() > (int)mLnk.size()) { mLnk.push_back(SLnk()); mLnk.back().tp = FREE; }
 
     //IO values loading and links set, by seek
-    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,TBDS::UseCache); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,TBDS::UseCache); ) {
 	int io = func()->ioId(cfg.cfg("ID").getS());
 	if(io < 0) continue;
 	setS(io, cfg.cfg("VAL").getS());
@@ -154,7 +154,7 @@ void Block::saveIO( )
 	    cfg.cfg("LNK").setS((mLnk[iLn].tp == FREE)?"":mLnk[iLn].lnk);	//Link
 	    cfg.cfg("VAL").setS(getS(iLn));					//Value
 
-	    SYS->db().at().dataSet(bd, mod->nodePath()+bd_tbl, cfg);
+	    TBDS::dataSet(bd, mod->nodePath()+bd_tbl, cfg);
 	} catch(TError &err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Block link '%s' save error."),func()->io(iLn)->id().c_str());
@@ -434,7 +434,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    ioList(list);
 		    for(unsigned i_io = 0; i_io < list.size(); i_io++) {
 			int id = ioId(list[i_io]);
-			if(ioHide(id) && !s2i(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")))) continue;
+			if(ioHide(id) && !s2i(TBDS::genPrmGet(owner().nodePath()+"showHide","0",opt->attr("user")))) continue;
 			const char *tip = "str";
 			switch(ioType(id)) {
 			    case IO::String:	tip = "str";	break;
@@ -458,7 +458,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    for(unsigned i_io = 0; i_io < list.size(); i_io++) {
 			int id = ioId(list[i_io]);
 
-			if(ioHide(id) && !s2i(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")))) continue;
+			if(ioHide(id) && !s2i(TBDS::genPrmGet(owner().nodePath()+"showHide","0",opt->attr("user")))) continue;
 
 			// Add link's type
 			ctrMkNode("fld",opt,-1,(string("/lnk/io/1|")+list[i_io]).c_str(),
@@ -514,8 +514,8 @@ void Block::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path.compare(0,9,"/blck/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
     else if((a_path == "/lio/show/hide" || a_path == "/lnk/show/hide") && enable()) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"showHide","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genDBSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"showHide","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"showHide",opt->text(),opt->attr("user"));
     }
     else if(a_path.substr(0,7) == "/lio/io" && enable()) {
 	int id = ioId(TSYS::pathLev(a_path,2));

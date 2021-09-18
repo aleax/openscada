@@ -1200,7 +1200,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    ctrMkNode("fld",opt,-1,"/links/showAttr",_("Show attributes"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    if(ctrMkNode("area",opt,-1,"/links/lnk",_("Links"))) {
 		bool shwAttr =	s2i(opt->attr("showAttr")) ||
-				s2i(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
+				s2i(TBDS::genPrmGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
 		vector<string> incllist, alist, list;
 		wdgList(incllist);
 		for(int iW = -1; iW < (int)incllist.size(); iW++) {
@@ -1266,9 +1266,9 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
     string a_path = opt->attr("path");
     if(a_path == "/links/showAttr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	    opt->setText(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
+	    opt->setText(TBDS::genPrmGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	    TBDS::genDBSet(mod->nodePath()+"showAttr",opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(mod->nodePath()+"showAttr",opt->text(),opt->attr("user"));
     }
     else if(a_path.compare(0,14,"/links/lnk/pr_") == 0) {
 	vector<string> a_ls;
@@ -1465,7 +1465,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     if(opt->name() == "info") {
 	if(ctrMkNode("area",opt,-1,"/proc",_("Processing"))) {
 	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/proc/w_lst");
-	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
+	    wattr = TBDS::genPrmGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	    if(!wdgPresent(wattr))	wattr = ".";
 	    if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/proc/attr/id",_("Identifier"),RWRWR_,"root",SUI_ID,1,"tp","str");
@@ -1494,12 +1494,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/proc/wdg") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
+	    wattr = TBDS::genPrmGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	    if(wattr != "." && !wdgPresent(wattr))	wattr = ".";
 	    opt->setText(wattr);
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	    TBDS::genDBSet(mod->nodePath()+"wdgAttr",opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(mod->nodePath()+"wdgAttr",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/proc/w_lst" && ctrChkNode(opt)) {
 	vector<string> lst;
@@ -1511,7 +1511,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     else if(a_path == "/proc/attr") {
 	wattr = opt->attr("wdg");
 	if(wattr.empty())
-	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
+	    wattr = TBDS::genPrmGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	if(wattr != "." && !wdgPresent(wattr))	wattr = ".";
 
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {

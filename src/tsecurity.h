@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,6 +24,8 @@
 #define SSEC_ID		"Security"
 
 #include "tbds.h"
+
+#define SEC_HASH_MAGIC	"phash://"
 
 #define SEC_XT 0x01
 #define SEC_WR 0x02
@@ -172,9 +174,6 @@ class TSecurity : public TSubSYS
 	string grpAdd( const string &name, const string &db = "*.*" );
 	void grpDel( const string &name, bool complete = false );
 	AutoHD<TGroup> grpAt( const string &name ) const	{ return chldAt(mGrp, name); }
-
-	//Public attributes
-	static const string pHashMagic;
 
     protected:
 	//Methods

@@ -1,8 +1,7 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2017,2019-2021                                     *
- *                      by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2013-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.3"
+#define MOD_VER		"1.4.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -686,7 +685,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    childAdd("rule")->setAttr("expr","^[^:]+")->setAttr("color","blue");
     }
     else if(a_path == "/prm/cfg/SEL_VAR") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"selVAR","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"selVAR","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    if(TSYS::pathLev(opt->text(),1).size()) {
 		string vLs = varList(), vS;
@@ -695,11 +694,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			break;
 		if(vS.empty()) setVarList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+opt->text());
 	    }
-	    TBDS::genDBSet(owner().nodePath()+"selVAR",TSYS::pathLev(opt->text(),0),opt->attr("user"));
+	    TBDS::genPrmSet(owner().nodePath()+"selVAR",TSYS::pathLev(opt->text(),0),opt->attr("user"));
 	}
     }
     else if(a_path == "/prm/cfg/SEL_VAR_lst" && ctrChkNode(opt)) {
-	string	selVAR = TSYS::pathLev(TBDS::genDBGet(owner().nodePath()+"selVAR","",opt->attr("user")), 0);
+	string	selVAR = TSYS::pathLev(TBDS::genPrmGet(owner().nodePath()+"selVAR","",opt->attr("user")), 0);
 	string	lst = owner().getNameList(selVAR), lstEl;
 	opt->childAdd("el")->setText(selVAR.empty()?"*":"");
 	for(int off = 0; (lstEl=TSYS::strLine(lst,0,&off)).size(); ) opt->childAdd("el")->setText(lstEl);

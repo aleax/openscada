@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"7.15.0"
+#define MOD_VER		"7.15.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -129,15 +129,15 @@ void TVision::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file and DB
-    setUserStart(TBDS::genDBGet(nodePath()+"StartUser",""));
-    setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
-    setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
-    setExitLstRunPrjCls(s2i(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
-    setDropCommonWdgStls(s2i(TBDS::genDBGet(nodePath()+"DropCommonWdgStls",i2s(dropCommonWdgStls()))));
-    setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
-    setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
-    setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
-    setRestoreTime(s2i(TBDS::genDBGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
+    setUserStart(TBDS::genPrmGet(nodePath()+"StartUser",""));
+    setUserPass(TBDS::genPrmGet(nodePath()+"UserPass",""));
+    setRunPrjs(TBDS::genPrmGet(nodePath()+"RunPrjs",""));
+    setExitLstRunPrjCls(s2i(TBDS::genPrmGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
+    setDropCommonWdgStls(s2i(TBDS::genPrmGet(nodePath()+"DropCommonWdgStls",i2s(dropCommonWdgStls()))));
+    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
+    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
+    setVCAStation(TBDS::genPrmGet(nodePath()+"VCAstation","."));
+    setRestoreTime(s2i(TBDS::genPrmGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
 }
 
 void TVision::save_( )
@@ -145,15 +145,15 @@ void TVision::save_( )
     mess_debug(nodePath().c_str(),_("Saving the module."));
 
     //Save parameters to DB
-    TBDS::genDBSet(nodePath()+"StartUser", userStart());
-    TBDS::genDBSet(nodePath()+"UserPass", userPass());
-    TBDS::genDBSet(nodePath()+"RunPrjs", runPrjs());
-    TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
-    TBDS::genDBSet(nodePath()+"DropCommonWdgStls", i2s(dropCommonWdgStls()));
-    TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
-    TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
-    TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
-    TBDS::genDBSet(nodePath()+"RestoreTime",i2s(restoreTime()));
+    TBDS::genPrmSet(nodePath()+"StartUser", userStart());
+    TBDS::genPrmSet(nodePath()+"UserPass", userPass());
+    TBDS::genPrmSet(nodePath()+"RunPrjs", runPrjs());
+    TBDS::genPrmSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
+    TBDS::genPrmSet(nodePath()+"DropCommonWdgStls", i2s(dropCommonWdgStls()));
+    TBDS::genPrmSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
+    TBDS::genPrmSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
+    TBDS::genPrmSet(nodePath()+"VCAstation", VCAStation());
+    TBDS::genPrmSet(nodePath()+"RestoreTime",i2s(restoreTime()));
 }
 
 void TVision::postEnable( int flag )
@@ -167,7 +167,7 @@ string TVision::uiPropGet( const string &prop, const string &user )
 
     XMLNode prmNd;
     try {
-	prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user));
+	prmNd.load(TBDS::genPrmGet(nodePath()+"uiProps","",user));
 	return prmNd.attr(prop);
     } catch(TError &err) { }
 
@@ -179,10 +179,10 @@ void TVision::uiPropSet( const string &prop, const string &vl, const string &use
     MtxAlloc res(mnWindsRes, true);
 
     XMLNode prmNd("UI");
-    try { prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user)); }
+    try { prmNd.load(TBDS::genPrmGet(nodePath()+"uiProps","",user)); }
     catch(TError &err)	{ }
     prmNd.setAttr(prop,vl);
-    TBDS::genDBSet(nodePath()+"uiProps",prmNd.save(XMLNode::BrAllPast),user);
+    TBDS::genPrmSet(nodePath()+"uiProps",prmNd.save(XMLNode::BrAllPast),user);
 }
 
 QIcon TVision::icon( )
@@ -384,8 +384,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/u_pass") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(string(userPass().size(),'*')/* "*******" */);
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    if(opt->text().compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
-		setUserPass(opt->text().substr(TSecurity::pHashMagic.size()));
+	    if(opt->text().find(SEC_HASH_MAGIC) == 0)
+		setUserPass(opt->text().substr(strlen(SEC_HASH_MAGIC)));
 	    else setUserPass(opt->text());
 	}
     }
@@ -481,8 +481,8 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
     try {
 	int rez = SYS->transport().at().cntrIfCmd(node, "UIVision", (isLoc?user:("\n"+user+"\n"+password)));
 	//Password's hash processing
-	if(node.attr("pHash").size() && userStart() == user && userPass() != (TSecurity::pHashMagic+node.attr("pHash"))) {
-	    setUserPass(TSecurity::pHashMagic + node.attr("pHash"));
+	if(node.attr("pHash").size() && userStart() == user && userPass() != (SEC_HASH_MAGIC+node.attr("pHash"))) {
+	    setUserPass(SEC_HASH_MAGIC + node.attr("pHash"));
 	    node.setAttr("pHash", "");
 	}
 	return rez;

@@ -34,8 +34,6 @@ using namespace OSCADA;
 //*************************************************
 //* TSecurity					  *
 //*************************************************
-const string TSecurity::pHashMagic = "phash://";
-
 TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"), false)
 {
     mUsr = TCntrNode::grpAdd("usr_");
@@ -141,9 +139,9 @@ void TSecurity::load_( )
 	vector<string> itLs;
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,TBDS::UseCache); ) {
+	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_user",nodePath()+subId()+"_user",fld_cnt++,g_cfg,TBDS::UseCache); ) {
 		name = g_cfg.cfg("NAME").getS();
 		if(!usrPresent(name)) usrAdd(name, itLs[iIt]);
 		if(usrAt(name).at().DB() == itLs[iIt]) usrAt(name).at().load(&g_cfg);
@@ -171,9 +169,9 @@ void TSecurity::load_( )
 	itReg.clear();
 
 	//  Search new into DB and Config-file
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,TBDS::UseCache); ) {
+	    for(int fld_cnt = 0; TBDS::dataSeek(itLs[iIt]+"."+subId()+"_grp",nodePath()+subId()+"_grp",fld_cnt++,g_cfg,TBDS::UseCache); ) {
 		name = g_cfg.cfg("NAME").getS();
 		if(!grpPresent(name)) grpAdd(name, itLs[iIt]);
 		if(grpAt(name).at().DB() == itLs[iIt]) grpAt(name).at().load(&g_cfg);
@@ -344,8 +342,8 @@ bool TUser::auth( const string &ipass, string *hash )
 #if defined(HAVE_CRYPT_H)
     string pass = cfg("PASS").getS();
     string salt = (pass.compare(0,3,"$1$") == 0) ? "$1$"+name() : name();	//Check for MD5 or the old method
-    if(hash && ipass.compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
-	return (ipass.compare(TSecurity::pHashMagic.size(),pass.size(),pass) == 0);
+    if(hash && ipass.find(SEC_HASH_MAGIC) == 0)
+	return (ipass.compare(strlen(SEC_HASH_MAGIC),pass.size(),pass) == 0);
 # if defined(__USE_GNU) && !defined(__UCLIBC__)
     crypt_data data;
     data.initialized = 0;
@@ -401,7 +399,7 @@ int TUser::permitCmpr( const string &user )
 void TUser::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 
@@ -434,12 +432,12 @@ void TUser::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+    else TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
 }
 
 void TUser::save_( )
 {
-    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+tbl(), *this);
     setDB(DB(), true);
 
     //Save used groups
@@ -566,7 +564,7 @@ TCntrNode &TGroup::operator=( const TCntrNode &node )
 void TGroup::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
@@ -580,12 +578,12 @@ void TGroup::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+    else TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
 }
 
 void TGroup::save_( )
 {
-    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+tbl(), *this);
     setDB(DB(), true);
 }
 

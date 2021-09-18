@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.2"
+#define MOD_VER		"5.4.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -280,7 +280,7 @@ void TpContr::load_( )
     //Load parameters from command line
 
     //Load parameters
-    setSafeTm(s2i(TBDS::genDBGet(nodePath()+"SafeTm",i2s(safeTm()))));
+    setSafeTm(s2i(TBDS::genPrmGet(nodePath()+"SafeTm",i2s(safeTm()))));
 
     //Load function's libraries
     try {
@@ -291,9 +291,9 @@ void TpContr::load_( )
 	map<string, bool> itReg;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,TBDS::UseCache); ) {
+	    for(int libCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,TBDS::UseCache); ) {
 		string lId = cEl.cfg("ID").getS();
 		if(!lbPresent(lId)) lbReg(new Lib(lId.c_str(),"",itLs[iDB]));
 		if(lbAt(lId).at().DB() == itLs[iDB])
@@ -321,7 +321,7 @@ void TpContr::load_( )
 void TpContr::save_( )
 {
     //Save parameters
-    TBDS::genDBSet(nodePath()+"SafeTm",i2s(safeTm()));
+    TBDS::genPrmSet(nodePath()+"SafeTm",i2s(safeTm()));
 }
 
 void TpContr::modStart( )
@@ -435,8 +435,8 @@ void Contr::postDisable( int flag )
 {
     try {
 	if(flag&(NodeRemove|NodeRemoveOnlyStor))
-	    SYS->db().at().dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+TController::id()+"_val",
-					mod->nodePath()+TController::id()+"_val");
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+TController::id()+"_val",
+				mod->nodePath()+TController::id()+"_val");
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
@@ -526,7 +526,7 @@ void Contr::loadFunc( bool onlyVl )
 	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
 
-	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,TBDS::UseCache); ) {
+	for(int fldCnt = 0; TBDS::dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,TBDS::UseCache); ) {
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
 	    if(ioId < 0 || (!isDAQTmpl && (func()->io(ioId)->flg()&Func::SysAttr))) continue;
 	    if(!isDAQTmpl) setS(ioId, cfg.cfg("VAL").getS());
@@ -568,14 +568,14 @@ void Contr::save_( )
 		if(func()->io(iio)->flg()&TPrmTempl::CfgLink)	cfg.cfg("VAL").setS(lnkAddr(iio));
 		else cfg.cfg("VAL").setS(getS(iio));
 	    }
-	    SYS->db().at().dataSet(val_bd, mod->nodePath()+bd_tbl, cfg);
+	    TBDS::dataSet(val_bd, mod->nodePath()+bd_tbl, cfg);
 	}
 
 	//Clear VAL
 	cfg.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg); )
+	for(int fldCnt = 0; TBDS::dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0) {
-		if(!SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
+		if(!TBDS::dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
     }

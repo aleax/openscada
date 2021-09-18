@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-17 15:14+0300\n"
+"POT-Creation-Date: 2021-09-18 15:03+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -457,9 +457,6 @@ msgstr ""
 msgid "Data Bases"
 msgstr ""
 
-msgid "Value ID"
-msgstr ""
-
 msgid "DB type (module)"
 msgstr ""
 
@@ -491,11 +488,13 @@ msgstr ""
 msgid "Error writing to DB or configuration file."
 msgstr ""
 
+msgid "Value ID"
+msgstr ""
+
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"SYSStPref    <0|1>      Use the station ID in the common table (SYS).\n"
 "TblLifeTime  <seconds>  Opened tables lifetime (by default 600 seconds).\n"
 "\n"
 msgstr ""

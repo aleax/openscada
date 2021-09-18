@@ -97,9 +97,9 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,TBDS::UseCache); ) {
+	    for(int fldCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
 		if(!nPresent(id)) nAdd(id, itLs[iDB]);
 		if(nAt(id).at().DB() == itLs[iDB]) nAt(id).at().load(&gCfg);
@@ -643,11 +643,11 @@ void Node::postEnable( int flag )
 void Node::postDisable( int flag )
 {
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 
 	TConfig cfg(&owner().nodeIOEl());
 	cfg.cfg("NODE_ID").setS(id(), true);
-	SYS->db().at().dataDel(fullDB(flag&NodeRemoveOnlyStor)+"_io", owner().nodePath()+tbl()+"_io", cfg);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor)+"_io", owner().nodePath()+tbl()+"_io", cfg);
 
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
@@ -751,7 +751,7 @@ void Node::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
-	SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(), *this);
+	TBDS::dataGet(fullDB(),owner().nodePath()+tbl(), *this);
 	//cfg("MODE").setI(cfg("MODE").getI());
     }
 
@@ -771,7 +771,7 @@ void Node::loadIO( )
 	TConfig cfg(&owner().nodeIOEl());
 	cfg.cfg("NODE_ID").setS(id(), TCfg::ForceUse);
 	cfg.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,TBDS::UseCache); ) {
+	for(int ioCnt = 0; TBDS::dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,TBDS::UseCache); ) {
 	    string sid = cfg.cfg("ID").getS();
 	    int iid = f->ioId(sid);
 
@@ -819,7 +819,7 @@ void Node::loadIO( )
 void Node::save_( )
 {
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 
     saveIO();
 
@@ -847,15 +847,15 @@ void Node::saveIO( )
 	    { data ? cfg.cfg("VALUE").setS(data->lnkAddr(iIO)) : cfg.cfg("VALUE").setView(false); }
 	    else if(data && data->func()) cfg.cfg("VALUE").setS(data->getS(iIO));
 	    else cfg.cfg("VALUE").setS(f->io(iIO)->def());
-	    SYS->db().at().dataSet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
+	    TBDS::dataSet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
 	}
 
 	//Clear IO
 	cfg.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg); ) {
+	for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg); ) {
 	    string sio = cfg.cfg("ID").getS();
 	    if(f->ioId(sio) < 0) {
-		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
+		if(!TBDS::dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
 	}

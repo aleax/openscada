@@ -68,14 +68,14 @@ void ModVArch::postDisable( int flag )
     if(flag&NodeRemove) {
 	//Removing the grouping mode tables and records
 	TConfig cfg(&mod->archEl());
-	for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg); ) {
+	for(int aCnt = 0; TBDS::dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg); ) {
 	    string vTbl = cfg.cfg("TBL").getS(), aNm;
 	    if(vTbl.find(archTbl()+"_") == string::npos) continue;
 
 	    //Removing the groups table of the grouping mode
-	    SYS->db().at().dataDelTbl(addr()+"."+vTbl);
+	    TBDS::dataDelTbl(addr()+"."+vTbl);
 
-	    if(!SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
+	    if(!TBDS::dataDel(addr()+"."+mod->mainTbl(),"",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    aCnt--;
 	}
     }
@@ -150,7 +150,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 
     //Loading and processing the main table with the meta-information.
     TConfig cfg(&mod->archEl());
-    for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,TBDS::UseCache); ) {
+    for(int aCnt = 0; TBDS::dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,TBDS::UseCache); ) {
 	string vTbl = cfg.cfg("TBL").getS(), aNm;
 	if(vTbl.find(archTbl()+"_") == string::npos) continue;
 	//Table per parameter mode
@@ -196,7 +196,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 		    gO->per = s2ll(cfg.cfg("PRM1").getS());
 		    //  Checking for deleting the archives group table
 		    if(maxSize() && gO->end <= (TSYS::curTime()-(int64_t)(maxSize()*86400e6))) {
-			SYS->db().at().dataDelTbl(addr()+"."+vTbl);
+			TBDS::dataDelTbl(addr()+"."+vTbl);
 			gO->beg = gO->end = gO->per = 0;
 		    }
 		}
@@ -352,7 +352,7 @@ void ModVArch::grpMetaUpd( SGrp &oG, const string *aLs )
     cfg.cfg("PRM1").setS(ll2s(oG.per), true);
     if(aLs) cfg.cfg("PRM2").setS(*aLs, true);
     try {
-	SYS->db().at().dataSet(addr()+"."+mod->mainTbl(), "", cfg);
+	TBDS::dataSet(addr()+"."+mod->mainTbl(), "", cfg);
 	oG.dbOK = true;
     } catch(TError&) { oG.dbOK = false; throw; }
 }
@@ -512,10 +512,10 @@ void ModVArchEl::fullErase( )
 	//Remove info record
 	TConfig cfg(&mod->archEl());
 	cfg.cfg("TBL").setS(archTbl(), true);
-	SYS->db().at().dataDel(archivator().addr()+"."+mod->mainTbl(), "", cfg);
+	TBDS::dataDel(archivator().addr()+"."+mod->mainTbl(), "", cfg);
 
 	//Removing the archive DB table
-	SYS->db().at().dataDelTbl(archivator().addr()+"."+archTbl());
+	TBDS::dataDelTbl(archivator().addr()+"."+archTbl());
     }
 }
 
@@ -576,7 +576,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 	tC = (tC/(10*period()))*(10*period());
 	cfg.cfg("MARK").setI(tC/(10*period()), true);
 	int eC = 0;
-	for( ; SYS->db().at().dataSeek(tblAddr,"",eC++,cfg,TBDS::UseCache); ) {
+	for( ; TBDS::dataSeek(tblAddr,"",eC++,cfg,TBDS::UseCache); ) {
 	    cTm = 1000000ll * cfg.cfg("TM").getI();
 	    if(cTm < ibeg || cTm > iend) continue;
 	    switch(archive().valType()) {
@@ -628,7 +628,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     cf.cfg("MARK").setI(itm/(10*period()));
     cf.cfg("TM").setI(itm/1000000);
     //cf.cfg("TMU").setI(itm%1000000);
-    if(SYS->db().at().dataGet(tblAddr,"",cf,TBDS::NoException)) {
+    if(TBDS::dataGet(tblAddr,"",cf,TBDS::NoException)) {
 	if(tm) *tm = itm;
 	switch(archive().valType()) {
 	    case TFld::Boolean:	return cf.cfg(vlFld).getB();
@@ -703,7 +703,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	cfg.cfg("PRM1").setS(ll2s(mPer), true);
 	cfg.cfg("PRM2").setS(i2s(archive().valType(true)), true);
 
-	return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException) ? iend : 0;
+	return TBDS::dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException) ? iend : 0;
     }
 
     //The group table processing
@@ -785,13 +785,13 @@ bool ModVArchEl::readMeta( )
     //Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException)) {
+    if(TBDS::dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException)) {
 	mBeg = s2ll(cfg.cfg("BEGIN").getS());
 	mEnd = s2ll(cfg.cfg("END").getS());
 	mPer = s2ll(cfg.cfg("PRM1").getS());
 	// Checking for deleting the archiver table
 	if(archivator().maxSize() && mEnd <= (TSYS::curTime()-(int64_t)(archivator().maxSize()*86400e6))) {
-	    SYS->db().at().dataDelTbl(archivator().addr()+"."+archTbl());
+	    TBDS::dataDelTbl(archivator().addr()+"."+archTbl());
 	    mBeg = mEnd = mPer = 0;
 	}
     } else rez = false;

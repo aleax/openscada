@@ -21,7 +21,7 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		22		//BDS type modules version
+#define SDB_VER		23		//BDS type modules version
 #define SDB_ID		"BD"
 
 #include <stdio.h>
@@ -235,7 +235,7 @@ class TTypeBD : public TModule
 //************************************************
 class TSYS;
 
-class TBDS : public TSubSYS, public TElem
+class TBDS : public TSubSYS
 {
     public:
 	//Data
@@ -247,11 +247,12 @@ class TBDS : public TSubSYS, public TElem
 	enum ReqGenFlg {
 	    NoFlg	= 0,
 	    NoException	= 0x01,		//Do not generate the exceptions
-	    OnlyCfg	= 0x02,		//Force request to the configuration file, in genDBGet(), genDBSet() and dataSet() only
+	    OnlyCfg	= 0x02,		//Force request to the configuration file, in genPrmGet(), genPrmSet() and dataSet() only
+	    CfgPrm	= 0x04,		//Use Parameters of the Configuration File, in dataGet() and dataSet() only
 	    // Specific ones
-	    UseTranslation = 0x04,	//Use translation for request, in genDBGet() and genDBSet() only
-	    UseCache	= 0x04,		//Use the cache, in dataSeek() only
-	    UseAllKeys	= 0x04		//Use all keys, in dataDel() only
+	    UseTranslation = 0x08,	//Use translation for request, in genPrmGet() and genPrmSet() only
+	    UseCache	= 0x08,		//Use the cache, in dataSeek() only
+	    UseAllKeys	= 0x08		//Use all keys, in dataDel() only
 	};
 
 	//Generic static block
@@ -261,23 +262,22 @@ class TBDS : public TSubSYS, public TElem
 	static string realDBName( const string &bdn, bool back = false );
 	static string dbPart( const string &bdn, bool tbl = false );
 
-	void dbList( vector<string> &ls, char flags = LsNoFlg );
+	static void dbList( vector<string> &ls, char flags = LsNoFlg );
 
 	// Open/close table
 	static AutoHD<TTable> tblOpen( const string &bdn, bool create = false );
 	static void tblClose( const string &bdn, bool del = false );
 
 	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
-	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
-	bool dataGet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
-	bool dataSet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
-	bool dataDel( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg );
-	bool dataDelTbl( const string &bdn, const string &path = "", char flags = NoFlg );
+	static bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	static bool dataGet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	static bool dataSet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	static bool dataDel( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg );
+	static bool dataDelTbl( const string &bdn, const string &path = "", char flags = NoFlg );
 
-	// Generic DB table
-	//???? Adapt to the new storage policy and test on UI.QTStarter, adapt and use dataGet() and dataSet() for these
-	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", char flags = NoFlg );
-	static void genDBSet( const string &path, const string &val, const string &user = "root", char flags = NoFlg );
+	// Generic Parameters
+	static string genPrmGet( const string &path, const string &oval = "", const string &user = "root", char flags = NoFlg );
+	static void genPrmSet( const string &path, const string &val, const string &user = "root", char flags = NoFlg );
 
 	//Public methods
 	TBDS( );
@@ -305,8 +305,8 @@ class TBDS : public TSubSYS, public TElem
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Private attributes
+	static TElem elSYS;
 	TElem	elDB;
-	bool	mSYSStPref;
 	int	mTblLifeTime;			//Tables lifetime
 };
 
