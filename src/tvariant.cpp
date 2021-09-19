@@ -295,8 +295,8 @@ void TVariant::setS( const string &ivl )
 		val.sMini[ivl.size()] = 0;
 		mSize = ivl.size();
 	    }
-	    //!!!! Direct memory allocation mostly used now for constant strings like to key TCfg for prevent its "const char *" pointer changing.
-	    //     Maybe further there has a sense to use STL string also but check it to equal for the assign and then the pointer changing omit.
+	    //!!!! Direct memory allocation mostly used now for constant strings like to the TCfg keyw to prevent they "const char *" pointer changing.
+	    //     Maybe further here has a sense to use STL string also but check it to equal for the assign, then the pointer changing omit.
 	    else if(mStdStringOmit) {		//For middle blocks up to prmStrBuf_SZ
 		if(ivl.size() > 30000000)	throw TError("TVariant", _("Very large string for non STL string (> 30 MB)!"));
 		if(mStdString) { delete val.s; mStdString = false; }

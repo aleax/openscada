@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Робочий інтерфейс користувача (Qt)
 </td>
-<td> 7.14 </td>
+<td> 7.15 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -261,18 +261,19 @@
 <p>Унизу вікна розробки СВУ розташовується рядок статусу. Праворуч рядка статусу розташовуються індикатори візуального масштабу редагованого кадру, режиму зміни розміру елементів, режиму поточної станції рушія СВУ та користувача, від ім'я якого ведеться розробка інтерфейсу СВУ. За подвійним кліком на індикаторі користувача можна користувача змінити, ввівши нове ім'я та пароль користувача. У головному полі рядка статусу виводяться різні інформаційні повідомлення та повідомлення допомоги.
 </p><p>Для редагування властивостей візуальних елементів передбачено два діалоги. Перший діалог дозволяє редагувати властивості контейнерів візуальних елементів (рис.2.b) — бібліотек віджетів та проектів. Другий діалог для редагування властивостей самих візуальних елементів (рис.2.d). Зміни, внесені у діалогах, одразу-ж потрапляють до рушія СВУ. Для збереження цих змін у БД, або відновлення з БД, потрібно скористатися відповідними інструментами головного вікна розробки.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:791px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_uk.png"><img class="thumbimage" height="525" src="../files/Vision_wlbpg_uk.png" width="789" /></a>  <div class="thumbcaption">Рис.2.b. Діалог редагування властивостей контейнерів візуальних елементів.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_uk.png"><img class="thumbimage" height="631" src="../files/Vision_wlbpg_uk.png" width="715" /></a>  <div class="thumbcaption">Рис.2.b. Діалог редагування властивостей контейнерів візуальних елементів.</div></div></div></div>
 <p>За допомогою головної вкладки цього діалогу можна встановити:
 </p>
-<ul><li> Стан контейнеру елементів, а саме: "Ввімкнено", БД контейнеру, лічильник використання, дата та час останньої модифікації.</li>
-<li> Ідентифікатор, ім'я та опис контейнеру.</li>
-<li> Для проекту:
-<ul><li> користувач, група користувачів та доступ для: користувача, групи користувачів та всіх інших;</li>
-<li> період обчислення проекту при виконанні.</li></ul></li></ul>
+<ul><li> Стан контейнеру елементів, а саме: "Ввімкнено", БД контейнеру (з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів), лічильник використання, дата та час останньої модифікації.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Об'єкти все ще підтримують визначення надлишкової адреси сховку із таблицею до того часу як ви перейменуєте її у стандартну форму "<b>wlb_{ObjID}</b>" для бібліотек віджетів та "<b>prj_{ObjID}</b>" для проектів.</dd></dl>
+<ul><li> Ідентифікатор, ім'я та опис контейнеру.</li>
+<li> Для проекту:</li></ul>
+<dl><dd><ul><li> користувач, група користувачів та доступ для: користувача, групи користувачів та всіх інших;</li>
+<li> період обчислення проекту при виконанні.</li></ul></dd></dl>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:886px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_diag_uk.png"><img class="thumbimage" height="396" src="../files/Vision_wlbpg_diag_uk.png" width="884" /></a>  <div class="thumbcaption">Рис.2.с. Вкладка "Діагностика" проекту.</div></div></div></div>
 <p>У цій вкладці Ви можете, для отримання діагностичних повідомлень: обрати час, освіжити до поточного часу та обрати розмір-глибину.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_uk.png"><img class="thumbimage" height="493" src="../files/Vision_wdg_uk.png" width="618" /></a>  <div class="thumbcaption">Рис.2.d. Діалог редагування властивостей візуальних елементів.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:698px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_uk.png"><img class="thumbimage" height="770" src="../files/Vision_wdg_uk.png" width="696" /></a>  <div class="thumbcaption">Рис.2.d. Діалог редагування властивостей візуальних елементів.</div></div></div></div>
 <p>За допомогою головної вкладки цього діалогу можна встановити:
 </p>
 <ul><li> Стан елементу, а саме: "Ввімкнено", батьківський віджет, тип сторінки (для сторінок проекту), лічильник використання, дата та час останьої модифікації.</li>
@@ -945,5 +946,5 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/uk">Modules/Vision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2769</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/uk">Modules/Vision/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
 </html>

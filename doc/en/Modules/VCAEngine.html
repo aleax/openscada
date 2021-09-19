@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.2 </td>
+<td> 7.3 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -3295,22 +3295,24 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <p>In addition to the list of opened sessions, the tab in Figure 4.2 contains a table with a list of sessions that must be created and started up at the boot time of OpenSCADA. Creation of sessions through this tool can be useful for Web-based interface. In this case, when connecting, Web-user data is ready and ensures the continuity of the formation of archival documents.
 </p><p>Configuration of the container widgets in the face of libraries and widget projects is done through pages in Figure 4.3 (for project) and Figure 4.5 (for widgets library). The widgets library contains the widgets, and project — the pages. Both types contain a tab of configuration Mime-data used by widgets (Fig.4.6). The project page also contains the tab "Diagnostics" (Fig.4.4) for debugging and monitoring the execution of pages in sessions.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg.png"><img class="thumbimage" height="658" src="../files/VCAeng_pg.png" width="754" /></a>  <div class="thumbcaption">Fig.4.3. Configuration page of the projects.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:780px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg.png"><img class="thumbimage" height="691" src="../files/VCAeng_pg.png" width="778" /></a>  <div class="thumbcaption">Fig.4.3. Configuration page of the projects.</div></div></div></div>
 <p>From this page you can set:
 </p>
-<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration), date and time of last modification, counter of the use.</li>
-<li> Identifier, name, description and icon of the container.</li>
+<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>prj_{ObjID}</b>".</dd></dl>
+<ul><li> Identifier, name, description and icon of the container.</li>
 <li> Owner, group and access rights to the container.</li>
 <li> Period for computing of the sessions based on the given project.</li>
 <li> Signal of enabling as needed.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1052px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag.png"><img class="thumbimage" height="513" src="../files/VCAeng_pg_diag.png" width="1050" /></a>  <div class="thumbcaption">Fig.4.4. Tab "Diagnostics" of the projects.</div></div></div></div>
 <p>From this tab you can select time (or refresh to current) and size to obtain the diagnostic messages of the sessions of running this project.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:705px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="573" src="../files/VCAeng_wlb.png" width="703" /></a>  <div class="thumbcaption">Fig.4.5. Configuration page of the widgets libraries.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:809px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="593" src="../files/VCAeng_wlb.png" width="807" /></a>  <div class="thumbcaption">Fig.4.5. Configuration page of the widgets libraries.</div></div></div></div>
 <p>From this page you can set:
 </p>
-<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration), date and time of last modification, counter of the use.</li>
-<li> Identifier, name, description and icon of the container.</li></ul>
+<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>wlb_{ObjID}</b>".</dd></dl>
+<ul><li> Identifier, name, description and icon of the container.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:705px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime.png"><img class="thumbimage" height="573" src="../files/VCAeng_mime.png" width="703" /></a>  <div class="thumbcaption">Fig.4.6. Configuration tab of Mime-data of the container.</div></div></div></div>
 <p>Configuration of the project's session differs significantly from configuration of the project (Fig.4.7), but also contains pages of the project.
 </p>
@@ -3340,5 +3342,5 @@ Deprecated, but supported, the API is represented by a group of functions direct
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2769</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
 </html>

@@ -163,12 +163,13 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( ) const			{ return mId; }
 	string	name( );
 	string	descr( );
 
+	bool isStdStorAddr( ) const		{ return (tbl() == ("tmplib_"+id())); }	//????[v1.0] Remove
 	string	DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
-	string	tbl( ) const			{ return cfg("DB").getS(); }
+	string	tbl( ) const			{ return cfg("DB").getS().empty() ? ("tmplib_"+id()) : cfg("DB").getS(); }
 	string	fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	bool startStat( ) const	{ return runSt; }

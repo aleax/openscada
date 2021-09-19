@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: io.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2014,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2013-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -305,7 +305,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	TVariant &vals = prms[0];
 	TpDescr &tpD = getTp((prms.size()>=2) ? prms[1].getS() : "char");
 	int64_t rez = 0;
-	//!!!! Check for real data type
+	//?!?! Check for the real data type
 
 	//Char stream
 	if(tpD.ch && vals.type() == TVariant::String) {

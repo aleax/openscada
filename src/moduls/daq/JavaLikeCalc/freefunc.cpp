@@ -897,7 +897,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
 	rez = regAt(regNew(false,op1_pos));	//Set recomend to op1_pos for appending fast, mostly for strings.
 	rez->setType(rez_tp);
     }
-    //!!!! Free operands after alloc rezult for prevent operations from self by some problems with object
+    //!!!! Free operands after the alloc rezult prevents of the operations from self by some problems with the object
     //if(rez != op1) op1->free();
     //if(rez != op2) op2->free();
     // Add code

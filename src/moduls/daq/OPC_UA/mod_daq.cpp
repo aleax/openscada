@@ -304,7 +304,7 @@ int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int 
 {
     if(!connect()) connect(true);
     try {
-	//!!!! Check for the timeout error or not
+	//?!?! Check for the timeout error or not
 	return tr.at().messIO(obuf, len_ob, ibuf, len_ib, time);
     } catch(TError&) { return 0; }
 }

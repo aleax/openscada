@@ -36,7 +36,6 @@ Lib::Lib( const string &id, const string &name, const string &lib_db ) :
 {
     mId = id;
     cfg("NAME").setS(name);
-    cfg("DB").setS(string("flb_")+id);
     mFnc = grpAdd("fnc_");
     if(DB().empty()) modifClr();
 }
@@ -170,9 +169,12 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(DB().size()) {
-		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
-			"tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
-			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+		    if(isStdStorAddr())
+			ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+			    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		    else ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+			    "tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
+			    "help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
 		    if(DB(true).size())
 			ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID);
 		    ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
@@ -197,8 +199,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(s2i(opt->text()));
     }
     else if(a_path == "/lib/st/db" && DB().size()) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fullDB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFullDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(isStdStorAddr()?DB():fullDB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	isStdStorAddr() ? setDB(opt->text()) : setFullDB(opt->text());
     }
     else if(a_path == "/lib/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
 	postDisable(NodeRemoveOnlyStor);

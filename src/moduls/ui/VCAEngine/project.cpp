@@ -40,7 +40,6 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
 {
     mId = id;
     cfg("NAME").setS(name);
-    cfg("DB_TBL").setS(string("prj_")+id);
     mPage= grpAdd("pg_");
 }
 
@@ -55,8 +54,7 @@ TCntrNode &Project::operator=( const TCntrNode &node )
     if(!src_n) return *this;
 
     //Copy generic configuration
-    exclCopy(*src_n, "ID;");
-    cfg("DB_TBL").setS("prj_"+id());
+    exclCopy(*src_n, "ID;DB_TBL;");
     setDB(src_n->DB());
     mDB_MimeSrc = src_n->fullDB();
 
@@ -539,9 +537,12 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/obj/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/obj/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
-		    "tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
-		    "help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+		if(isStdStorAddr())
+		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
+			"tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		else ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
+			"tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
+			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
 		if(DB(true).size())
 		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID);
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
@@ -608,8 +609,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
     }
     else if(a_path == "/obj/st/db") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(fullDB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setFullDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(isStdStorAddr()?DB():fullDB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	isStdStorAddr() ? setDB(opt->text()) : setFullDB(opt->text());
     }
     else if(a_path == "/obj/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
 	postDisable(NodeRemoveOnlyStor);

@@ -50,7 +50,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Server OPC-UA
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -212,7 +212,7 @@
 <p>Endpoint node of the OPC-UA protocol is actually the server object of OPC-UA. Endpoint nodes in OPC-UA can be either local or remote. Local ones are designed to provide resources of OpenSCADA station by the protocol OPC-UA, while remote endpoint nodes are both for the service and review of available OPC-UA units, and to forwarding of the requests to remote stations. In this version of the module is only supported the configuration of the local endpoint nodes.
 </p><p>General configuration of the endpoint node is made on the main tab of the endpoint node's page (Fig.3) with parameters:
 </p>
-<ul><li> Node status, as follow: common status, lists of the active sessions and subscriptions, "Enabled" and the name of the database containing the configuration.</li>
+<ul><li> Node status, as follow: common status, lists of the active sessions and subscriptions, "Enabled" and the name of the database containing the configuration, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
 <li> Identifier, name and description of the node.</li>
 <li> State, in which to transfer the node at the start: "Enabled".</li>
 <li> Type of the protocol encoding, at the moment it is only "Binary".</li>
@@ -974,5 +974,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2769</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
 </html>

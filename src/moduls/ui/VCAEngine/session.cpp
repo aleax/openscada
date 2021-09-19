@@ -1234,7 +1234,7 @@ void SessPage::setProcess( bool val, bool lastFirstCalc )
     MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
     //Change process state for included pages
-    //!!!! Need for rewrite by process included to containers but not included to the subtree !!!!
+    //!!!! Need to rewrite by process included to containers but not included to the subtree
     vector<string> ls;
     pageList(ls);
     for(unsigned iL = 0; iL < ls.size(); iL++)

@@ -57,7 +57,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.11.2"
+#define MOD_VER		"5.11.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -353,7 +353,7 @@ void TUIMod::splashSet( SplashFlag flg )
 	splash->showMessage(mess, Qt::AlignBottom|Qt::AlignLeft);
 
 	for(int iTr = 0; iTr < 3; iTr++) {
-	    QtApp->processEvents();	//!!!! To show the message on Qt5
+	    QtApp->processEvents();	//!!!! To show the messages on Qt5
 	    TSYS::sysSleep(0.01);	//!!!! To ensure the splash visibility at the exit on Qt5
 	}
     }

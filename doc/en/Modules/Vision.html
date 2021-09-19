@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 7.14 </td>
+<td> 7.15 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -261,18 +261,19 @@
 <p>At the bottom of the development window of the VCA there is the status line. On the right side of the status line there are indicators of the visual scale of the edited frame, of the mode of changing of the size of the elements, of the mode of the VCA engine station and the user on whose behalf the development of the VCA interface is done. By double-clicking on the indicator of the user it can be changed the current user, entering the new username and password. In the main field of the status line it is displayed various information and assistance messages.
 </p><p>To edit properties of the visual elements there are two dialogues. The first dialogue allows you to edit the properties of containers of the visual elements, (Fig.2.b) — widgets libraries and projects. The second dialogue serves to edit the properties of the visual elements (Fig.2.d). Changes, made in the dialogues, at once, get to the VCA engine. To save these changes to the database, or restore from the database, it is necessary to use the appropriate tools of the main development window.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:724px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg.png"><img class="thumbimage" height="530" src="../files/Vision_wlbpg.png" width="722" /></a>  <div class="thumbcaption">Fig.2.b. Dialogue of editing of the properties of the containers of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg.png"><img class="thumbimage" height="633" src="../files/Vision_wlbpg.png" width="715" /></a>  <div class="thumbcaption">Fig.2.b. Dialogue of editing of the properties of the containers of the visual elements.</div></div></div></div>
 <p>With the help of the main tab of that dialog you can set:
 </p>
-<ul><li> State of the elements' container, that is: "Enabled", database of the container, usage counter, date and time of the last modification.</li>
-<li> Identifier, name and description of the container.</li>
-<li> For the project:
-<ul><li> user, group of users and the access for: user, users' group and all other;</li>
-<li> period of the project calculating in the execution.</li></ul></li></ul>
+<ul><li> State of the elements' container, that is: "Enabled", database of the container (with tracking the availability of the data in different storages and providing the sequentially removing duplicates), usage counter, date and time of the last modification.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The objects still support of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>wlb_{ObjID}</b>" for the widget libraries and "<b>prj_{ObjID}</b>" for the projects.</dd></dl>
+<ul><li> Identifier, name and description of the container.</li>
+<li> For the project:</li></ul>
+<dl><dd><ul><li> user, group of users and the access for: user, users' group and all other;</li>
+<li> period of the project calculating in the execution.</li></ul></dd></dl>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_diag.png"><img class="thumbimage" height="394" src="../files/Vision_wlbpg_diag.png" width="809" /></a>  <div class="thumbcaption">Fig.2.c. Tab "Diagnostics" of the project.</div></div></div></div>
 <p>From this tab you can, for obtain the diagnostic messages: select the time, refresh to the current tiem and select the size-deep.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:631px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg.png"><img class="thumbimage" height="499" src="../files/Vision_wdg.png" width="629" /></a>  <div class="thumbcaption">Fig.2.d. Dialogue of editing of the properties of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:615px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg.png"><img class="thumbimage" height="770" src="../files/Vision_wdg.png" width="613" /></a>  <div class="thumbcaption">Fig.2.d. Dialogue of editing of the properties of the visual elements.</div></div></div></div>
 <p>With the help of the main tab of that dialog you can set:
 </p>
 <ul><li> State of the element, that is: "Enabled", parent widget, page type (for pages of the project), usage counter, date and time of the last modification.</li>
@@ -942,5 +943,5 @@ An example of editing a frame based on this primitive is shown in Figure 2.a, an
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2769</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
 </html>

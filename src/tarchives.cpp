@@ -204,7 +204,7 @@ void TArchiveS::load_( )
 	    for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_val",nodePath()+subId()+"_val",fldCnt++,cEl,TBDS::UseCache); ) {
 		id = cEl.cfg("ID").getS();
 		if(!valPresent(id)) valAdd(id, dbLs[iIt]);
-		//!!!! For force loading after creation from archiver storage
+		//!!!! For force loading after creation from the archiver storage
 		//else if(valAt(id).at().DB() == "*.*" && dbLs[iIt] != SYS->workDB()) valAt(id).at().setDB(dbLs[iIt]);
 		if(valAt(id).at().DB() == dbLs[iIt]) valAt(id).at().load(&cEl);
 		valAt(id).at().setDB(dbLs[iIt], true);

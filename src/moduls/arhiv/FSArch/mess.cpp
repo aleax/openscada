@@ -915,7 +915,7 @@ bool MFileArch::put( TMess::SRec mess )
 		fOK = fOK && (fwrite(s_buf.c_str(),s_buf.size(),1,f) == 1);
 		cacheUpdate(FTM(mess), mv_off);
 		//  Put the last value to the cache
-		//cacheSet(FTM(mess), mv_beg, true);	//!!!! This may be wrong for several records with the equal time
+		//cacheSet(FTM(mess), mv_beg, true);	//!!!! That can be wrong for several records with the equal time
 	    }
 	}
 	fseek(f, 0, SEEK_END);

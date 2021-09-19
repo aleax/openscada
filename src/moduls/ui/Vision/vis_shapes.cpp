@@ -1225,7 +1225,7 @@ void ShapeFormEl::buttonReleased( )
 		    mod->postMess(mod->nodePath().c_str(),
 			QString(_("Error writing the data to the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error);
 	    }
-	    //!!!! Clear the attribute "value". But it can be spare for multiple connections to one session.
+	    //!!!! Clearing the attribute "value", but it can be spare for multiple connections to one session.
 	    w->attrSet("value", "", A_NO_ID, true);
 	    break;
 	}
@@ -4001,7 +4001,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	int trcPer = shD->trcPer*1e6;
 	if(shD->tTimeCurent && trcPer && shD->valArch.empty() &&
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd()) < 2*arh_per
-		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Cause to uneven call for current and archive
+		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Causes to uneven call for current and archive
 	{
 	    XMLNode req("get");
 	    req.setAttr("path", addr()+"/%2fserv%2fval")->

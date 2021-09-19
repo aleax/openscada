@@ -1193,7 +1193,7 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     vector<pair<float,TVArchEl*> >	propArchs;
     for(unsigned iA = 0; iA < archEl.size(); iA++) {
 	TVArchivator &archPr = archEl[iA]->archivator();
-	if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&		//!!!! iend >= archEl[iA]->begin() need for request beside to the border
+	if(((arch.empty() && archPr.selPrior()) || arch == archPr.workId()) &&		//!!!! iend >= archEl[iA]->begin() need for requests outward the border
 		((!ibeg || ibeg <= archEl[iA]->end()) && (!iend || iend >= archEl[iA]->begin())) && ibeg <= iend)
 	    propArchs.push_back(pair<float,TVArchEl*>((float)archPr.selPrior()/(archPr.valPeriod()?archPr.valPeriod():1), archEl[iA]));
     }
@@ -1201,7 +1201,7 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 
     //Processing the range at the priority
     for(vector<pair<float,TVArchEl*> >::reverse_iterator iA = propArchs.rbegin(); iA != propArchs.rend(); ++iA) {
-	if(iA->second->begin() > iend)	continue;	//Try the block from the next archiver, !!!!
+	if(iA->second->begin() > iend)	continue;	//!!!! Try a block from the next archiver
 
 	if(!isFreeBuf && arch.empty()) {
 	    wBuf = new TValBuf(buf.valType(), 0, buf.period(), true, true);
@@ -1238,7 +1238,7 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     //Check for put to buffer
     if(((arch.empty() && TValBuf::end()) || arch == BUF_ARCH_NM) && iend > TValBuf::begin()) {
 	bool onlyBuf = (ibeg >= TValBuf::end()) &&
-	    (iend-ibeg)/TValBuf::period() <= TValBuf::size();	//!!!! Allow for writing new data blocks in the redundancy and DAQGate
+	    (iend-ibeg)/TValBuf::period() <= TValBuf::size();	//!!!! Allow of writing new data blocks for the redundancy and DAQGate
 	TValBuf::setVals(buf, vmax(ibeg,iend-TValBuf::size()*TValBuf::period()), iend);
 	if(arch == BUF_ARCH_NM || onlyBuf) return;	//To prevent spare writings direct to the archivers
     }
@@ -1247,7 +1247,7 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     ResAlloc res(aRes, false);
     for(unsigned iA = 0; iA < archEl.size(); iA++)
 	if((arch.empty() || arch == archEl[iA]->archivator().workId()))
-		//&& (!archEl[iA]->lastGet() || ibeg < archEl[iA]->lastGet()))	//!!!! Impossible write direct else
+		//&& (!archEl[iA]->lastGet() || ibeg < archEl[iA]->lastGet()))	//!!!! Impossible to write directly else
 	    try { archEl[iA]->setVals(buf, ibeg, iend/*vmin(iend,archEl[iA]->lastGet())*/); }
 	    catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 }

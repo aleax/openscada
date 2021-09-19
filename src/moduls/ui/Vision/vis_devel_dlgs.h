@@ -156,7 +156,6 @@ class VisItProp : public QDialog
     private slots:
 	//Private slots
 	void selectIco( );
-	void selectParent( );
 	void isModify( QObject *snd = NULL );
 
 	void addAttr( );
@@ -191,8 +190,8 @@ class VisItProp : public QDialog
 //			*obj_tmstmp;	//TimeStamp
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat
-	QComboBox	*obj_parent,	//Parent widget
-			*pg_tp;		//Page: Page type
+	LineEdit	*obj_parent;	//Parent widget
+	QComboBox	*pg_tp;		//Page: Page type
 
 	LineEdit	*obj_name;	//Name
 	TextEdit	*obj_descr;	//Description

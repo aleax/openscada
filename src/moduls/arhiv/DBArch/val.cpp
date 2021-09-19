@@ -715,7 +715,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	if(!gO->dbOK && pDt.realSize()) return 0;	//Prevent the accumulated data loss at DB errors
 	pDt = buf;
 	//Checking for freezing some first sources, at stopping the controller objects
-	if((!gO->accmBeg || !gO->accmEnd) && (TSYS::curTime()-iend) < (2*period()))	//!!!! Get 2 from Vision, WebVision trends
+	if((!gO->accmBeg || !gO->accmEnd) && (TSYS::curTime()-iend) < (2*period()))	//?!?! Get 2 from Vision, WebVision trends
 	{ gO->accmBeg = ibeg; gO->accmEnd = iend; }
 	return vmin(gO->accmEnd, iend);
     }

@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.2"
+#define MOD_VER		"4.3.3"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -487,11 +487,11 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 		if(wL == 0) { mess_err(nodePath().c_str(), _("Write: the answer is zero byte.")); break; }
 		else if(wL < 0) {
 		    if(errno == EAGAIN) {
-			tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
+			tv.tv_sec = 1; tv.tv_usec = 0;		//?!?! Where get the time?
 			FD_ZERO(&rw_fd); FD_SET(sId, &rw_fd);
 			int kz = select(sId+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(sId,&rw_fd)) { wL = 0; continue; }
-			//!!!! Maybe some flush !!!!
+			//?!?! Maybe some flush
 		    }
 		    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 		    break;
@@ -803,11 +803,11 @@ void *TSocketIn::ClTask( void *s_inf )
 		    if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: the answer is zero byte.")); break; }
 		    else if(wL < 0) {
 			if(errno == EAGAIN) {
-			    tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
+			    tv.tv_sec = 1; tv.tv_usec = 0;		//?!?! Where get the time?
 			    FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
 			    kz = select(s.sock+1, NULL, &rw_fd, NULL, &tv);
 			    if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
-			    //!!!! May be some flush !!!!
+			    //?!?! Maybe some flush
 			}
 			string err = TSYS::strMess(_("Write: error '%s (%d)'."), strerror(errno), errno);
 			if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("Error transmitting: %s"),err.c_str()));
@@ -1437,7 +1437,7 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), err.c_str());
 		    if(logLen()) pushLogMess(err.c_str());
 		    if(writeReq) {
-			//!!!! For the force socket, the initial input connection, we must keep the connection up to the last
+			//!!!! For the force sockets, the initial input connection, we must keep the connection up to the last
 			if(type == SOCK_FORCE) {
 			    if(reqTry >= wAttempts) stop();
 			    else goto repeate;

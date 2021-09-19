@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.1.24								*
+ *   Version: 2.1.25								*
  *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
  *	* The function XML_N::childClear() appended by a result of returning	*

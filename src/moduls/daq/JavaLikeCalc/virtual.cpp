@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.3"
+#define MOD_VER		"5.4.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -125,7 +125,7 @@ void TpContr::postEnable( int flag )
     lb_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
-    lb_el.fldAdd(new TFld("DB",_("Database"),TFld::String,TFld::NoFlag,"30"));
+    lb_el.fldAdd(new TFld("DB",_("Database"),TFld::String,TFld::NoFlag,"30"));			//????[v1.0] Remove
 
     //Function's structure
     fnc_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
@@ -299,7 +299,7 @@ void TpContr::load_( )
 		if(lbAt(lId).at().DB() == itLs[iDB])
 		    try {
 			lbAt(lId).at().load(&cEl);
-			//lbAt(lId).at().setStart(true);		//!!!! Do not try start into the loading but possible broblems like into openscada --help
+			//lbAt(lId).at().setStart(true);	//!!!! Do not try to start into the loading but possible broblems like to "$ openscada --help"
 		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 		lbAt(lId).at().setDB(itLs[iDB], true);
 		itReg[lId] = true;

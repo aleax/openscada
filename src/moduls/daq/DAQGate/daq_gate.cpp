@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.2"
+#define MOD_VER		"2.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -189,7 +189,7 @@ void TMdContr::enable_( )
     XMLNode req("list");
 
     //Clear present parameters configuration
-    //!!!! Disabled by store the station configuration and no actual more only for first level parameters
+    //!!!! Disabled by store the station configuration and is not actual more only for the first level parameters
     //list(prmLs);
     //for(unsigned iP = 0; iP < prmLs.size(); iP++) at(prmLs[iP]).at().setStats("");
 
@@ -469,7 +469,7 @@ void *TMdContr::Task( void *icntr )
 		if(firstCall)	st->second.cntr = 0;	//Reset counter for connection alarm state update
 		if(st->second.cntr > 0) st->second.cntr = vmax(0, st->second.cntr-1e-6*(tCnt-tPrev));
 		if(st->second.cntr <= 0) isAccess = true;
-		if(st->second.cntr == 0) needEnable = true;	//!!!! May be only for all == 0 stations
+		if(st->second.cntr == 0) needEnable = true;	//?!?! Maybe only for all == 0 stations
 	    }
 	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(1e9); continue; }
 	    else {
@@ -845,7 +845,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    //if(vlCfg())	setVlCfg(NULL);		//!!!! For prevent SHIFR and other losses at the parameter restore, by lock, after it deletion try
+    //if(vlCfg())	setVlCfg(NULL);		//!!!! To prevent SHIFR and other losses at the parameter restore, by lock, after it deletion try
     if(!vlElemPresent(&pEl))	vlElemAtt(&pEl);
 }
 

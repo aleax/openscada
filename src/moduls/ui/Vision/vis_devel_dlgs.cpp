@@ -408,15 +408,19 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	gnd = TCntrNode::ctrId(root, obj_db->objectName().toStdString(), true);
 	obj_db->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_db->setValue(req.text().c_str());
-	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl)+":"+TSYS::pathLev(ed_it,0));
+	    if(dynamic_cast<QComboBox*>(obj_db->workWdg()))
+		((QComboBox*)obj_db->workWdg())->setEditable(gnd->attr("dest")=="sel_ed");
+
+	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) {
 		string els;
 		for(unsigned iL = 0; iL < req.childSize(); iL++)
 		    els += req.childGet(iL)->text() + "\n";
 		obj_db->setCfg(els.c_str());
 	    }
+
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) obj_db->setValue(req.text().c_str());
 	}
 	// Remove from DB
 	gnd = TCntrNode::ctrId(root, obj_remFromDB->objectName().toStdString(), true);
@@ -1062,10 +1066,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     lab = new QLabel(_("Parent widget:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
     glay->addWidget(lab, 3, 1);
-    obj_parent = new QComboBox(tab_w);
+    obj_parent = new LineEdit(tab_w, LineEdit::Combo);
     obj_parent->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     obj_parent->setObjectName("/wdg/st/parent");
-    connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
+    connect(obj_parent, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_parent, 3, 2, 1, 4);
 
     /*lab = new QLabel(_("Used:"), tab_w);
@@ -1308,9 +1312,24 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    if(!owner()->cntrIfCmd(req)) obj_enable->setChecked(s2i(req.text()));
 	}
 	// Parent widget
-	gnd = TCntrNode::ctrId(root,obj_parent->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_parent->objectName().toStdString(), true);
 	obj_parent->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	if(gnd) selectParent();
+	if(gnd) {
+	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(obj_parent->objectName().toStdString(), TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) {
+		obj_parent->setValue(req.text().c_str());
+
+		//Get values list
+		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/w_lst",TSYS::PathEl));
+		owner()->cntrIfCmd(req);
+
+		//Load combobox
+		string els;
+		for(unsigned iL = 0; iL < req.childSize(); iL++)
+		    els += req.childGet(iL)->text() + "\n";
+		obj_parent->setCfg(els.c_str());
+	    }
+	}
 	// Used
 	/*gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
 	if(gnd) {
@@ -1593,26 +1612,6 @@ void VisItProp::progChanged( )
     }
 }
 
-void VisItProp::selectParent( )
-{
-    XMLNode req("get");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_parent->objectName().toStdString(),TSYS::PathEl));
-    if(!owner()->cntrIfCmd(req)) {
-	QString cur_val = req.text().c_str();
-
-	//Get values list
-	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/w_lst",TSYS::PathEl));
-	owner()->cntrIfCmd(req);
-
-	//Load combobox
-	obj_parent->clear();
-	for(unsigned iL = 0; iL < req.childSize(); iL++)
-	    obj_parent->addItem(req.childGet(iL)->text().c_str());
-	if(obj_parent->findText(cur_val) < 0) obj_parent->addItem(cur_val);
-	obj_parent->setCurrentIndex(obj_parent->findText(cur_val));
-    }
-}
-
 void VisItProp::selectIco( )
 {
     QImage ico_t;
@@ -1658,12 +1657,14 @@ void VisItProp::isModify( QObject *snd )
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }
-    else if(oname == obj_parent->objectName() || oname == proc_lang->objectName()) {
+    else if(oname == proc_lang->objectName()) {
 	req.setText(((QComboBox*)snd)->currentText().toStdString());
 	update = true;
     }
-    else if(oname == obj_name->objectName() || oname == proc_per->objectName())
+    else if(oname == obj_name->objectName() || oname == proc_per->objectName() || oname == obj_parent->objectName()) {
 	req.setText(((LineEdit*)snd)->value().toStdString());
+	update = (oname == obj_parent->objectName());
+    }
     else if(oname == obj_descr->objectName() || oname == proc_text->objectName()) {
 	req.setText(((TextEdit*)snd)->text().toStdString());
 	update = true;
@@ -1679,11 +1680,8 @@ void VisItProp::isModify( QObject *snd )
 	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	showDlg(ed_it, true);
     }
-    else {
-	//Post command updating
-	if(oname == obj_parent->objectName())	selectParent();
-	if(update) showDlg(ed_it, true);
-    }
+    //Post command updating
+    else if(update) showDlg(ed_it, true);
 
     is_modif = true;
 }

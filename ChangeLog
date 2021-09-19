@@ -1,10 +1,23 @@
+2021-09-19 Roman (stable)
+- !!:LibsDB.OscadaLibs: The "DB" field content and the table base ID of UserFuncLibs.{techApp,servProc,Controller}
+    renamed to the standard one "flb_techApp", "flb_servProc", "flb_Controller" respectively,
+    before the "DB" field scheduled removing in OpenSCADA v1.0.
+- !!!!:SYS,DAQ.{TemplateLib,JavaLikeCalc.Lib},UI.{VCAEngine,Vision}.{WdgLib,Proj}:
+	The spare storage addresses, with tables, were shortened to the standard storage address with the table name unification,
+	where the previous not standard names leave to be edited up to the 1.0 release.
+    !!!:SYS: The whole source code labels and they comments were revised.
+- !:UI.{QTCfg,WebCfgD}: Appended of sorting the externel OpenSCADA hosts by name.
+- FIX:UI.VCAEngine: The widget libraries and projects copy fixed in the spare copy "DB_TBL".
+- !!:UI.Vision: The parent field of the widgets was allowed for direct edition, not only selection, by moving to LineEdit.
+
+
 2021-09-18 Roman (conceptual)
 - !!!!:SYS,DB: The generic parameters accessing functions TBDS::genDBGet() and TBDS::genPrmSet() moved under the new storage conception
 	using TBDS::dataGet() and TBDS::dataSet() respectively, and renamed to genPrmGet() and genPrmSet() everywhere.
     !!!: The table "SYS" structure of the generic parameters moved to the static method "elSYS".
     !!:SYS.Building: configure.ac: Core library version rose to 4:5:0.
     !!: The module version of the subsystem "BD" rose to 23.
-    !!: The TBDS Generic parameter "SYSStPref" removed.
+    !!:SYS,data/*.xml: The TBDS Generic parameter "SYSStPref" removed.
     !: The TBDS::ReqGenFlg flags appended the flag "CfgPrm" of requesting the Configuration File data as the Generic Parameters.
     !: The functions moved and used everywhere as static ones: TBDS::{dbList,dataSeek,dataGet,dataSet,dataDel,dataDelTbl}().
 - !:Security: The static method "pHashMagic" moved to the definition SEC_HASH_MAGIC.

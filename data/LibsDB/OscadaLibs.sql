@@ -131,7 +131,7 @@ Founded: October 2005
 Sponsored by: DIYA Ltd
 Version: 2.0.1
 License: GPLv2
-DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','techApp','Технологічні апарати','Бібліотека моделей технологічних апаратів для створення комплексних моделей технологічних процесів, блокових схем модуля DAQ.BlockCalc.
+DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','flb_techApp','Технологічні апарати','Бібліотека моделей технологічних апаратів для створення комплексних моделей технологічних процесів, блокових схем модуля DAQ.BlockCalc.
 
 Бібліотека створюється для надання моделей апаратів технологічних процесів. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java.
 
@@ -164,7 +164,7 @@ Author: Roman Savochenko <roman@oscada.org>
 Founded: November 2017
 Version: 1.2.1
 License: GPLv2
-DOC: Libs_Service_procedures|Libs/Service_procedures','lib_servProc','Сервісні процедури','Бібліотека сервісних процедур різноманітного застосування.
+DOC: Libs_Service_procedures|Libs/Service_procedures','flb_servProc','Сервісні процедури','Бібліотека сервісних процедур різноманітного застосування.
 
 Бібліотека створюється для надання сервісних функцій виконання службових завдань довкола оточення OpenSCADA. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
 
@@ -260,7 +260,7 @@ INSERT INTO UserFuncLibs VALUES('Controller','Controllers','Library of programs 
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.1
-License: GPLv2','lib_Controllers','Контролери','Програми контролерів базованих на JavaLikeCalc.
+License: GPLv2','flb_Controller','Контролери','Програми контролерів базованих на JavaLikeCalc.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.1.1
@@ -282,26 +282,26 @@ License: GPL','flb_web','XHTML-шаблон','Бібліотека функці�
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 0.2.0
 Лицензия: GPL',0);
-CREATE TABLE IF NOT EXISTS 'lib_servProc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO lib_servProc_io VALUES('procArh','fromarch','From archive',0,0,'Archive.va_ai3_code',0,0,'З архіву','','Из архива','');
-INSERT INTO lib_servProc_io VALUES('procArh','toarch','To archive',0,0,'Archive.va_ai3_dP',0,1,'У архів','','В архив','');
-INSERT INTO lib_servProc_io VALUES('procArh','begs','Begin time',0,0,'2006-08-08 9:21:56',0,2,'Час початку','','Время начала','');
-INSERT INTO lib_servProc_io VALUES('procArh','ends','End time',0,0,'2006-08-08 11:21:55',0,3,'Час закінчення','','Время конца','');
-INSERT INTO lib_servProc_io VALUES('crc16','in','Input',0,0,'',0,0,'Вхід','','Вход','');
-INSERT INTO lib_servProc_io VALUES('crc16','out','Result',1,1,'',0,1,'Результат','','Результат','');
-INSERT INTO lib_servProc_io VALUES('releaseTests','sub','Subsystem (-1:All;0:SYS;1:Security;2:Transport;...',1,0,'-1',0,0,'Підсистема (-1:Всі;0:SYS;1:Безпека;2:Транспорти;...)','','Подсистема (-1:Все;0:SYS;1:Безопасность;2:Транспорты;...)','');
-INSERT INTO lib_servProc_io VALUES('releaseTests','rez','Result',0,5,'',0,1,'Результат','','Результат','');
-INSERT INTO lib_servProc_io VALUES('crc16','poly','Polynomial (reversion)',1,0,'40961',0,2,'','','','');
-INSERT INTO lib_servProc_io VALUES('archPackFStests','tm','Start time (14.03.2015 21:37)',1,0,'1426361839',0,0,'','','','');
-INSERT INTO lib_servProc_io VALUES('archPackFStests','per','Period, seconds',1,0,'60',0,1,'','','','');
-INSERT INTO lib_servProc_io VALUES('archPackFStests','addr','Archive address',0,0,'test123',0,2,'','','','');
-INSERT INTO lib_servProc_io VALUES('archPackFStests','step','Step (0-8), -1 for all',1,0,'-1',0,4,'','','','');
-INSERT INTO lib_servProc_io VALUES('archPackFStests','archiver','Archiver address',0,0,'FSArch.1m',0,3,'','','','');
-INSERT INTO lib_servProc_io VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
-INSERT INTO lib_servProc_io VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
-INSERT INTO lib_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'Результат','','Результат','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,3,'','','','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
+CREATE TABLE IF NOT EXISTS 'flb_servProc_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO flb_servProc_io VALUES('procArh','fromarch','From archive',0,0,'Archive.va_ai3_code',0,0,'З архіву','','Из архива','');
+INSERT INTO flb_servProc_io VALUES('procArh','toarch','To archive',0,0,'Archive.va_ai3_dP',0,1,'У архів','','В архив','');
+INSERT INTO flb_servProc_io VALUES('procArh','begs','Begin time',0,0,'2006-08-08 9:21:56',0,2,'Час початку','','Время начала','');
+INSERT INTO flb_servProc_io VALUES('procArh','ends','End time',0,0,'2006-08-08 11:21:55',0,3,'Час закінчення','','Время конца','');
+INSERT INTO flb_servProc_io VALUES('crc16','in','Input',0,0,'',0,0,'Вхід','','Вход','');
+INSERT INTO flb_servProc_io VALUES('crc16','out','Result',1,1,'',0,1,'Результат','','Результат','');
+INSERT INTO flb_servProc_io VALUES('releaseTests','sub','Subsystem (-1:All;0:SYS;1:Security;2:Transport;...',1,0,'-1',0,0,'Підсистема (-1:Всі;0:SYS;1:Безпека;2:Транспорти;...)','','Подсистема (-1:Все;0:SYS;1:Безопасность;2:Транспорты;...)','');
+INSERT INTO flb_servProc_io VALUES('releaseTests','rez','Result',0,5,'',0,1,'Результат','','Результат','');
+INSERT INTO flb_servProc_io VALUES('crc16','poly','Polynomial (reversion)',1,0,'40961',0,2,'','','','');
+INSERT INTO flb_servProc_io VALUES('archPackFStests','tm','Start time (14.03.2015 21:37)',1,0,'1426361839',0,0,'','','','');
+INSERT INTO flb_servProc_io VALUES('archPackFStests','per','Period, seconds',1,0,'60',0,1,'','','','');
+INSERT INTO flb_servProc_io VALUES('archPackFStests','addr','Archive address',0,0,'test123',0,2,'','','','');
+INSERT INTO flb_servProc_io VALUES('archPackFStests','step','Step (0-8), -1 for all',1,0,'-1',0,4,'','','','');
+INSERT INTO flb_servProc_io VALUES('archPackFStests','archiver','Archiver address',0,0,'FSArch.1m',0,3,'','','','');
+INSERT INTO flb_servProc_io VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
+INSERT INTO flb_servProc_io VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
+INSERT INTO flb_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'Результат','','Результат','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,3,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
 Works/Technical_Support/Agreement:en,uk,ru:Technical_Support_Agreement.html
 About:en,uk,ru:About.html
@@ -379,11 +379,11 @@ Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html
 Libs/Electrical_elements:en,uk,ru:Libs_Electrical_elements.html
 Libs/Documents:en,uk,ru:Libs_Documents.html
 Libs/Prescriptions:en,uk,ru:Libs_Prescriptions.html',0,4,'','','','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,5,'','','','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'Результат','','Результат','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','reqTr','Tries of the requests',1,1,'3',0,2,'','','','');
-INSERT INTO lib_servProc_io VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
-INSERT INTO lib_servProc_io VALUES('docOffLine','prgVer','Program version',0,0,'',0,1,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,5,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'Результат','','Результат','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','reqTr','Tries of the requests',1,1,'3',0,2,'','','','');
+INSERT INTO flb_servProc_io VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','prgVer','Program version',0,0,'',0,1,'','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -7093,8 +7093,8 @@ else {
 //Error set
 if(tErr.length)	f_err = tErr;
 else f_err = "0";','','',1571249552);
-CREATE TABLE IF NOT EXISTS 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO lib_Controllers VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
+CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -7429,7 +7429,7 @@ if(curMode == 1 || curMode == 2) {
 }
 curMode = mode;
 //mode = curMode;','','',1559660641);
-INSERT INTO lib_Controllers VALUES('test','test','','','Different tests of the JavaLikeCalc language for execution into the controller mode.
+INSERT INTO flb_Controller VALUES('test','test','','','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko
 Version: 1.2.0
@@ -7694,7 +7694,7 @@ for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
     rec += DBTbl[i_rw][i_fld]+"\t";
   SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
 }*/','','',1629440988);
-INSERT INTO lib_Controllers VALUES('test1','test1','','','Different tests of the JavaLikeCalc language for execution into the controller mode.
+INSERT INTO flb_Controller VALUES('test1','test1','','','Different tests of the JavaLikeCalc language for execution into the controller mode.
 
 Author: Roman Savochenko
 Version: 1.0.0','','',1,10,0,'//clc=0;
@@ -7719,7 +7719,7 @@ Version: 1.0.0','','',1,10,0,'//clc=0;
 //Close value archive
 //Special.FLibSYS.avalClose(a_id);
 //p_tm=c_tm;','','',1560101785);
-INSERT INTO lib_Controllers VALUES('ntfDispatch','Notifications dispatcher (replaced)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
+INSERT INTO flb_Controller VALUES('ntfDispatch','Notifications dispatcher (replaced)','','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Notifications dispatcher by EMail and SMS for pointed messages of OpenSCADA messages buffer.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -7825,8 +7825,8 @@ else {
 	SMSState = tr("Sent %1. In queue %2.").replace("%1",SMSSentN.toString()).replace("%2",SMSQueueN.toString());
 	if(SMSErr.length) SMSState += " "+tr("Error: %1.").replace("%1",SMSErr);
 }','','',1560101769);
-CREATE TABLE IF NOT EXISTS 'lib_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO lib_servProc VALUES('procArh','Archives recalculation','Перерахунок архівів','Пересчёт архивов','Value archives recalculation.
+CREATE TABLE IF NOT EXISTS 'flb_servProc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO flb_servProc VALUES('procArh','Archives recalculation','Перерахунок архівів','Пересчёт архивов','Value archives recalculation.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,600,0,'using Special.FLibSYS;
@@ -7871,7 +7871,7 @@ while( begwtm<endtm )
     a_dst.copy(bf_dst,begwtm,0,endwtm,0);
     begwtm = endwtm;
 }','','',1560097197);
-INSERT INTO lib_servProc VALUES('crc16','CRC 16','','','Standard Cyclic Redundancy Check (CRC) with free setting the polynomial, by default 0x8005. It isn''t actual more by the common CRC implementing.
+INSERT INTO flb_servProc VALUES('crc16','CRC 16','','','Standard Cyclic Redundancy Check (CRC) with free setting the polynomial, by default 0x8005. It isn''t actual more by the common CRC implementing.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.0.0','','',1,10,0,'out = 0xFFFF;
@@ -7879,7 +7879,7 @@ for(i = 0; i < in.length; i++) {
   out = out^in.charCodeAt(i);
   for(j = 0; j < 8; j++) out = (out&1) ? ((out>>1)^poly) : out >> 1;
 }','','',1560097197);
-INSERT INTO lib_servProc VALUES('releaseTests','TEST: Release','Тести випуску','Тесты выпуска','Set of formal tests of the OpenSCADA releases:
+INSERT INTO flb_servProc VALUES('releaseTests','TEST: Release','Тести випуску','Тесты выпуска','Set of formal tests of the OpenSCADA releases:
   - 0:System
   - 1:Security User/Group tests
   - 2:Transport subsystem tests
@@ -8571,7 +8571,7 @@ SYS.fileWrite("ReleaseTests.html", "<?xml version=''1.0'' ?>\n"
 	"</TABLE>\n"
 	"</body>"
 	"</html>");','','',1560097197);
-INSERT INTO lib_servProc VALUES('archPackFStests','TEST: Packing of the archiver on FS','','','Tests set for packing of the value archives to File System, to check the optimization algorithm. The stages are provided:
+INSERT INTO flb_servProc VALUES('archPackFStests','TEST: Packing of the archiver on FS','','','Tests set for packing of the value archives to File System, to check the optimization algorithm. The stages are provided:
   - Stage 0: Filling the main values: "1,1,10,10,100,100,1000,1000,10000,10000,EVAL"
   - Stage 1: Changing to different value 20: "1,1,20,10,100,100,1000,1000,10000,10000,EVAL"
   - Stage 2: Setting a value for merging (equal) to the up (10): "1,1,20,10,10,100,1000,1000,10000,10000,EVAL"
@@ -8640,7 +8640,7 @@ if(step < 0 || step == 8) {
 	buf = vArhBuf(1, 10, per*1000000, true, true);
 	buf.set(10000, tm+9*per, 0); arh.copy(buf, buf.begin(), 0, buf.end(), 0, archiver);
 }','','',1560097170);
-INSERT INTO lib_servProc VALUES('wacko2media','EXT: WackoWiki to MediaWiki','','','Procedure of conversion Wiki-dialect from WackoWiki to MediaWiki. Used to move OpenSCADA Wiki to MediaWiki.
+INSERT INTO flb_servProc VALUES('wacko2media','EXT: WackoWiki to MediaWiki','','','Procedure of conversion Wiki-dialect from WackoWiki to MediaWiki. Used to move OpenSCADA Wiki to MediaWiki.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.1.0','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
@@ -8739,7 +8739,7 @@ for(pos = 0; pos < ibuf.length; ) {
 }
 
 return obuf;','','',1560098890);
-INSERT INTO lib_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
+INSERT INTO flb_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.2.0','','',1,360,0,'trNm = "offLine";
@@ -12383,9 +12383,9 @@ if(FCS != ((resp.charCodeAt(resp.length-1)<<8)+ resp.charCodeAt(resp.length-2)))
 io.setText(resp.slice(10,resp.length-2));
 io.setAttr("cntr", resp[7]);
 io.setAttr("err", "0");',1,1512240522);
-CREATE TABLE IF NOT EXISTS 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO techApp VALUES('lag','Lag','Затримка','Запаздывание','Lag model. Can be used for lag imitation of the sensor variables.','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Модель задержки. Может использоваться для имитации запаздывания значений датчиков.',1,10,0,'out -= (out-in)/(t_lg*f_frq);',1556609878);
-INSERT INTO techApp VALUES('noise','Noise: 2 harmonic + rand','Шум: 2 гармоніки + випадковий.','Шум: 2 гармоники + случайное','Noise model. Contains three parts:
+CREATE TABLE IF NOT EXISTS 'flb_techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO flb_techApp VALUES('lag','Lag','Затримка','Запаздывание','Lag model. Can be used for lag imitation of the sensor variables.','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Модель задержки. Может использоваться для имитации запаздывания значений датчиков.',1,10,0,'out -= (out-in)/(t_lg*f_frq);',1556609878);
+INSERT INTO flb_techApp VALUES('noise','Noise: 2 harmonic + rand','Шум: 2 гармоніки + випадковий.','Шум: 2 гармоники + случайное','Noise model. Contains three parts:
 - first harmonic part;
 - second harmonic part;
 - noise based on generator of the randomize numbers.','Модель шуму. Містить три складові:
@@ -12397,7 +12397,7 @@ INSERT INTO techApp VALUES('noise','Noise: 2 harmonic + rand','Шум: 2 гар�
 - шум на основе генератора случайных чисел.',1,10,0,'tmp_g1 = (tmp_g1 > 6.28) ? 0 : tmp_g1+6.28/(per_g1*f_frq);
 tmp_g2 = (tmp_g2 > 6.28) ? 0 : tmp_g2+6.28/(per_g2*f_frq);
 out = off + a_g1*sin(tmp_g1) + a_g2*sin(tmp_g2) + a_rnd*(rand(2)-1);',1556609878);
-INSERT INTO techApp VALUES('ballCrane','Ball crane','Кульовий кран','Шаровый кран','Model of the ball crane. Includes for the going and estrangement time.','Модель кульового крану. Включає час ходу та час відриву.','Модель шарового крана. Включает время хода и время отрыва.',1,10,0,'if(!(st_close && !com) && !(st_open && com)) {
+INSERT INTO flb_techApp VALUES('ballCrane','Ball crane','Кульовий кран','Шаровый кран','Model of the ball crane. Includes for the going and estrangement time.','Модель кульового крану. Включає час ходу та час відриву.','Модель шарового крана. Включает время хода и время отрыва.',1,10,0,'if(!(st_close && !com) && !(st_open && com)) {
   tmp_up = (pos > 0 && pos < 100) ? 0 : (tmp_up>0&&lst_com==com)?tmp_up-1/f_frq:t_up;
   pos += (tmp_up > 0) ? 0 : (100*(com?1:-1))/(t_full*f_frq);
   pos = (pos > 100) ? 100 : (pos<0)?0:pos;
@@ -12405,11 +12405,11 @@ INSERT INTO techApp VALUES('ballCrane','Ball crane','Кульовий кран',
   st_close = (pos <= 0) ? true : false;
   lst_com = com;
 }',1556609878);
-INSERT INTO techApp VALUES('separator','Separator','Сепаратор','Сепаратор','Separator model with two phases, liquid and gas.','Модель сепаратору з двома фазами, рідинною та газовою.','Модель сепаратора с двумя фазами, жидкой и газовой.',1,10,0,'Flq = max(0, Fi*PercLq);
+INSERT INTO flb_techApp VALUES('separator','Separator','Сепаратор','Сепаратор','Separator model with two phases, liquid and gas.','Модель сепаратору з двома фазами, рідинною та газовою.','Модель сепаратора с двумя фазами, жидкой и газовой.',1,10,0,'Flq = max(0, Fi*PercLq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo+Flq, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
 Llq = max(0, min(100,Llq+0.27*(Flq-Fo_lq)/(Vap*Qlq*f_frq)));
 Po_lq = Po + Llq*Vap/Qlq;',1556609878);
-INSERT INTO techApp VALUES('valve','Valve','Клапан','Клапан','Valve model, includes:
+INSERT INTO flb_techApp VALUES('valve','Valve','Клапан','Клапан','Valve model, includes:
 - two valves in the one;
 - super-critical speed;
 - temperature changing at the throttling;
@@ -12437,16 +12437,16 @@ if(noBack) Fi = max(0, Fi);
 Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
 
 To = max(0, min(2e3,To+(abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*f_frq)));',1556609878);
-INSERT INTO techApp VALUES('lagClean','Lag: clean','Затримка: чиста','Задержка: чистая','Model of clean(transportable) lag. Realizes by incorporating several links of a simple delay. Appointed for lags into long pipes.','Модель чистої(транспортної) затримки. Реалізується шляхом включення декількох ланок простої затримки. Призначено для імітації затримок у довгих трубопроводах.','Модель чистого(транспортного) запаздывания. Реализуется путём включения нескольких простых звеньев запаздывания. Предназначен для имитации запаздывания в длинных трубопроводах.',1,10,0,'cl1 -= (cl1-in)/(t_lg*f_frq/4);
+INSERT INTO flb_techApp VALUES('lagClean','Lag: clean','Затримка: чиста','Задержка: чистая','Model of clean(transportable) lag. Realizes by incorporating several links of a simple delay. Appointed for lags into long pipes.','Модель чистої(транспортної) затримки. Реалізується шляхом включення декількох ланок простої затримки. Призначено для імітації затримок у довгих трубопроводах.','Модель чистого(транспортного) запаздывания. Реализуется путём включения нескольких простых звеньев запаздывания. Предназначен для имитации запаздывания в длинных трубопроводах.',1,10,0,'cl1 -= (cl1-in)/(t_lg*f_frq/4);
 cl2 -= (cl2-cl1)/(t_lg*f_frq/4);
 cl3 -= (cl3-cl2)/(t_lg*f_frq/4);
 out -= (out-cl3)/(t_lg*f_frq/4);',1556609878);
-INSERT INTO techApp VALUES('net','Network: load','Мережа: навантаження','Сеть: нагрузка','Loading with constant pressure on the network. Contains a parameter for connection the noise.','Навантаження з фіксованим тиском мережі. Містить параметр для підключення шуму.','Нагрузка с фиксированным давлением сети. Содержит параметр для подключения шума.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, EVAL_REAL, Po, 293, So, 10, Q0, Kpr, 0.01, f_frq);',1556609878);
-INSERT INTO techApp VALUES('src_press','Source: pressure','Джерело: тиск','Источник: давление','Source of the constant pressure. Contains a parameter for connection the noise.','Джерело з фіксованим тиском. Містить параметр для підключення шуму.','Источник с фиксированным давлением. Содержит параметр для подключения шума.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit, Pi*Noise, 293, So, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);',1556609878);
-INSERT INTO techApp VALUES('cooler','Air cooler','Повітряний холодильник','Воздушный холодильник','Model of the air cooler for gas flow.','Модель повітряного охолоджувача газового потоку.','Модель воздушного охладителя газового потока.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('net','Network: load','Мережа: навантаження','Сеть: нагрузка','Loading with constant pressure on the network. Contains a parameter for connection the noise.','Навантаження з фіксованим тиском мережі. Містить параметр для підключення шуму.','Нагрузка с фиксированным давлением сети. Содержит параметр для подключения шума.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, EVAL_REAL, Po, 293, So, 10, Q0, Kpr, 0.01, f_frq);',1556609878);
+INSERT INTO flb_techApp VALUES('src_press','Source: pressure','Джерело: тиск','Источник: давление','Source of the constant pressure. Contains a parameter for connection the noise.','Джерело з фіксованим тиском. Містить параметр для підключення шуму.','Источник с фиксированным давлением. Содержит параметр для подключения шума.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit, Pi*Noise, 293, So, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);',1556609878);
+INSERT INTO flb_techApp VALUES('cooler','Air cooler','Повітряний холодильник','Воздушный холодильник','Model of the air cooler for gas flow.','Модель повітряного охолоджувача газового потоку.','Модель воздушного охладителя газового потока.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
 Qr = Q0 + Q0*0.95*(Pi-1);
 To += (Fi*(Ti-To)+Wc*(Tair-To)/Rt)/(Ct*(Si*li+So*lo)*Qr*f_frq);',1556609878);
-INSERT INTO techApp VALUES('compressor','Gas compressor','Компресор газовий','Компрессор газовый','Model of the gas compressor. Implements the surge effect.
+INSERT INTO flb_techApp VALUES('compressor','Gas compressor','Компресор газовий','Компрессор газовый','Model of the gas compressor. Implements the surge effect.
 The surge counts from the dynamic-gas curve, and next there counts the surge margin coefficient.','Модель газового компресора. Враховує ефект помпажу.
 Помпаж розраховується за газово-динамічною кривою, виходячи з якої розраховується коефіцієнт запасу за помпажем.','Модель газового компрессора. Учитывает эффект помпажа. Помпаж вычисляется по газо-динамической кривой, исходя из которой получается коэффициент запаса по помпажу.',1,10,0,'Pmax = max(Pi, Po);
 Pmin = min(Pi, Po);
@@ -12460,23 +12460,23 @@ Fit -= (Fit-Fi)/max(1,(lo*f_frq)/max(1e-4,abs(Fi/(Qrf*So))));
 Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
 
 To += (abs(Fi)*(Ti*pow(Po/Pi,0.3)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*(V+So*lo)*Qr*f_frq);',1556609878);
-INSERT INTO techApp VALUES('src_flow','Source: flow','Джерело: витрати','Источник: расход','Source of the constant flow. Contains a parameter for connection the noise.','Джерело з фіксованими витратами. Містить параметр для підключення шуму.','Источник с фиксированным расходом. Содержит параметр для подключения шума.',1,10,0,'Po = max(0, min(100,Po+0.27*(Noise*Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));',1556609878);
-INSERT INTO techApp VALUES('pipe1_1','Pipe 1->1','Труба 1->1','Труба 1->1','Model of the pipe by the scheme "1 -> 1".','Модель вузла труб за схемою "1 -> 1".','Модель узла труб по схеме "1 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, Ft1, Pti, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('src_flow','Source: flow','Джерело: витрати','Источник: расход','Source of the constant flow. Contains a parameter for connection the noise.','Джерело з фіксованими витратами. Містить параметр для підключення шуму.','Источник с фиксированным расходом. Содержит параметр для подключения шума.',1,10,0,'Po = max(0, min(100,Po+0.27*(Noise*Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));',1556609878);
+INSERT INTO flb_techApp VALUES('pipe1_1','Pipe 1->1','Труба 1->1','Труба 1->1','Model of the pipe by the scheme "1 -> 1".','Модель вузла труб за схемою "1 -> 1".','Модель узла труб по схеме "1 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, Ft1, Pti, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Ft1, Pti, 293, So, Fto, Pt1, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fto, Pt1, 293, So, Fo, Po, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);',1556609878);
-INSERT INTO techApp VALUES('pipe1_2','Pipe 1->2','Труба 1->2','Труба 1->2','Model of the pipe by the scheme "1 -> 2".','Модель вузла труб за схемою "1 -> 2".','Модель узла труб по схеме "1 -> 2".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('pipe1_2','Pipe 1->2','Труба 1->2','Труба 1->2','Model of the pipe by the scheme "1 -> 2".','Модель вузла труб за схемою "1 -> 2".','Модель узла труб по схеме "1 -> 2".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
 Fi = F1tmp + F2tmp;',1556609878);
-INSERT INTO techApp VALUES('pipe1_3','Pipe 1->3','Труба 1->3','Труба 1->3','Model of the pipe by the scheme "1 -> 3".','Модель вузла труб за схемою "1 -> 3".','Модель узла труб по схеме "1 -> 3".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('pipe1_3','Pipe 1->3','Труба 1->3','Труба 1->3','Model of the pipe by the scheme "1 -> 3".','Модель вузла труб за схемою "1 -> 3".','Модель узла труб по схеме "1 -> 3".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
 Fi = F1tmp + F2tmp + F3tmp;',1556609878);
-INSERT INTO techApp VALUES('pipe1_4','Pipe 1->4','Труба 1->4','Труба 1->4','Model of the pipe by the scheme "1 -> 4".','Модель вузла труб за схемою "1 -> 4".','Модель узла труб по схеме "1 -> 4".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('pipe1_4','Pipe 1->4','Труба 1->4','Труба 1->4','Model of the pipe by the scheme "1 -> 4".','Модель вузла труб за схемою "1 -> 4".','Модель узла труб по схеме "1 -> 4".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(F4tmp, Pi, 293, So4, Fo4, Po4, 293, So4, lo4, Q0, Kpr, 0.01, f_frq);
 Fi = F1tmp + F2tmp + F3tmp + F4tmp;',1556609878);
-INSERT INTO techApp VALUES('valveMech','Valve: processing mechanism','Клапан: виконавчий механізм','Клапан: исполнительный механизм','Model of the valve processing mechanism. Includes the going and estrangement time.','Модель виконавчого механізму клапана. Включає час ходу та час відриву.','Модель исполнительного механизма клапана. Включает время хода и время отрыва.',1,10,0,'if((pos >= 99 && com >= 99) || (pos <= 1 && com <= 1)) {
+INSERT INTO flb_techApp VALUES('valveMech','Valve: processing mechanism','Клапан: виконавчий механізм','Клапан: исполнительный механизм','Model of the valve processing mechanism. Includes the going and estrangement time.','Модель виконавчого механізму клапана. Включає час ходу та час відриву.','Модель исполнительного механизма клапана. Включает время хода и время отрыва.',1,10,0,'if((pos >= 99 && com >= 99) || (pos <= 1 && com <= 1)) {
   tmp_up = t_up;
   if( pos >= 99) { pos = 100; st_open = true; }
   else { pos = 0; st_close = true; }
@@ -12488,14 +12488,14 @@ else {
   pos += (lst_com-pos)/(0.5*t_full*f_frq);
 }
 pos_sensor += (pos-pos_sensor)/(t_sensor*f_frq);',1556609878);
-INSERT INTO techApp VALUES('diaphragm','Diaphragm','Діафрагма','Диафрагма','Diaphragm model.','Модель діафрагми.','Модель диафрагмы.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Sdf, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('diaphragm','Diaphragm','Діафрагма','Диафрагма','Diaphragm model.','Модель діафрагми.','Модель диафрагмы.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Sdf, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 dP -= (dP-100*(Pi-Po))/f_frq;',1556609878);
-INSERT INTO techApp VALUES('pipe3_1','Pipe 3->1','Труба 3->1','Труба 3->1','Model of the pipe by the scheme "3 -> 1".','Модель вузла труб за схемою "3 -> 1".','Модель узла труб по схеме "3 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('pipe3_1','Pipe 3->1','Труба 3->1','Труба 3->1','Model of the pipe by the scheme "3 -> 1".','Модель вузла труб за схемою "3 -> 1".','Модель узла труб по схеме "3 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi3, Pi3, 293, Si3, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 Po = max(0, min(100,Po+0.27*(Fi1+Fi2+Fi3-Fo)/(Q0*Kpr*So*lo*f_frq)));
 To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+Fi3*(Ti3-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));',1556609878);
-INSERT INTO techApp VALUES('pipeBase','Pipe-base','Труба-база','Труба-база','Implementation of the basic foundations of the pipe model:
+INSERT INTO flb_techApp VALUES('pipeBase','Pipe-base','Труба-база','Труба-база','Implementation of the basic foundations of the pipe model:
 - flow in the pipe, taking into account: the speed, pressure difference, resistance due to friction and the critical flow;
 - calculation of the pressure;
 - accounting for the environment density and degree of the compressibility for both gases and liquids.','Реалізація базових основ моделі труби:
@@ -12510,12 +12510,12 @@ Qr = Q0+Q0*Kpr*(Pmax-1);
 Fit = 630*(4*Si*So*Qr/(Ktr*lo*1.7724*Si+4*So*Qr))*sign(Pi-Po)*pow(Qr*(Pmax-max(Pmax*0.528,Pmin)),0.5);
 Fi -= (Fi-Fit)/max(1,(lo*f_frq)/max(1,abs(Fit/(Qr*So))));
 if(!Fo.isEVal()) Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));',1556609878);
-INSERT INTO techApp VALUES('heatExch','Heat exchanger','Теплообмінник','Теплообменник','Model of the heat exchanger, calculating the heat exchange of the two streams.','Модель теплообміннику, що розраховує теплообмін двох потоків.','Модель теплообменника, рассчитывающая теплообмен двух потоков.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, Ti1, Si1, Fo1, Po1, 293, So1, lo1, Q0i1, Kpr1, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('heatExch','Heat exchanger','Теплообмінник','Теплообменник','Model of the heat exchanger, calculating the heat exchange of the two streams.','Модель теплообміннику, що розраховує теплообмін двох потоків.','Модель теплообменника, рассчитывающая теплообмен двух потоков.',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, Ti1, Si1, Fo1, Po1, 293, So1, lo1, Q0i1, Kpr1, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, Ti2, Si2, Fo2, Po2, 293, So2, lo2, Q0i2, Kpr2, 0.01, f_frq);
 
 To1 = max(0, min(1e4,(Fi1*Ti1*Ci1+ki*Fi2*Ti2*Ci2)/(Fi1*Ci1+ki*Fi2*Ci2)));
 To2 = max(0, min(1e4,(ki*Fi1*Ti1*Ci1+Fi2*Ti2*Ci2)/(ki*Fi1*Ci1+Fi2*Ci2)));',1556609878);
-INSERT INTO techApp VALUES('boilerBarrel','Boiler: barrel','Котел: барабан','Котёл: барабан','The model of the boiler''s barrel. ','Модель барабану котлоагрегату.','Модель барабана котлоагрегата.',1,10,0,'// Water
+INSERT INTO flb_techApp VALUES('boilerBarrel','Boiler: barrel','Котел: барабан','Котёл: барабан','The model of the boiler''s barrel. ','Модель барабану котлоагрегату.','Модель барабана котлоагрегата.',1,10,0,'// Water
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po1, 293, So1, lo1, 1e3, 0.001, 0.01, f_frq);
 Fi1 = max(0, Fi1);
 
@@ -12538,7 +12538,7 @@ Po1 = max(0, min(100,Po1+0.27*(Fstm-Fo)/(1.2*0.98*((1-Lo/100)*Vi1+So1*lo1)*f_frq
 
 // Smoke gas
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, Fo2, Po2, 293, Si2, 30, 1.2, 0.98, 0.01, f_frq);',1556609878);
-INSERT INTO techApp VALUES('boilerBurner','Boiler: burner','Котел: топка','Котёл: топка','The fire-chamber model of the boiler unit, which operates on three types of fuel, initially is: blast-furnace, coke and natural gases.','Модель топки котлоагрегату, який працює на трьох видах палива, початково це: доменний, коксовий та природний гази.','Модель топки котлоагрегата, работающего на трех видах топлива, исходно это: доменный, коксовый и природный газы.',1,10,0,'using DAQ.JavaLikeCalc.lib_techApp;
+INSERT INTO flb_techApp VALUES('boilerBurner','Boiler: burner','Котел: топка','Котёл: топка','The fire-chamber model of the boiler unit, which operates on three types of fuel, initially is: blast-furnace, coke and natural gases.','Модель топки котлоагрегату, який працює на трьох видах палива, початково це: доменний, коксовий та природний гази.','Модель топки котлоагрегата, работающего на трех видах топлива, исходно это: доменный, коксовый и природный газы.',1,10,0,'using DAQ.JavaLikeCalc.lib_techApp;
 pipeBase(Fi1, Pi1, Ti1, Si1, EVAL_REAL, Po, 293, So, lo, 1.2, 0.95, 0.01, f_frq); Fi1 = max(0, Fi1);
 pipeBase(Fi2, Pi2, Ti2, Si2, EVAL_REAL, Po, 293, So, lo, 0.7, 0.95, 0.01, f_frq); Fi2 = max(0, Fi2);
 pipeBase(Fi3, Pi3, Ti3, Si3, EVAL_REAL, Po, 293, So, lo, 1.33, 0.95, 0.01, f_frq); Fi3 = max(0, Fi3);
@@ -12554,7 +12554,7 @@ delta_t = Q/(F_DG*1.047);
 To = max(0, min(2000,(delta_t+(Ti4-273)+(Ti3-273)*(Fi3/Fi1)+(Ti2-273)*(Fi2/Fi1)+(Ti1-273)*(Fi1/Fi4))+273));
 
 Po = max(0, min(10,Po+0.27*(F_DG-Fo)/(1.2*0.95*(So*lo+V)*f_frq)));',1556609878);
-INSERT INTO techApp VALUES('pipe2_1','Pipe 2->1','Труба 2->1','Труба 2->1','Model of the pipe by the scheme "2 -> 1".','Модель вузла труб за схемою "2 -> 1".','Модель узла труб по схеме "2 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
+INSERT INTO flb_techApp VALUES('pipe2_1','Pipe 2->1','Труба 2->1','Труба 2->1','Model of the pipe by the scheme "2 -> 1".','Модель вузла труб за схемою "2 -> 1".','Модель узла труб по схеме "2 -> 1".',1,10,0,'DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
 Po = max(0, min(100,Po+0.27*(Fi1+Fi2-Fo)/(Q0*Kpr*So*lo*f_frq)));
 To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));',1556609878);
@@ -14933,426 +14933,426 @@ INSERT INTO tmplib_tests_io VALUES('gasPoint','P','Pressure, kgH/sm2',2,144,'P|v
 INSERT INTO tmplib_tests_io VALUES('gasPoint','T','Temperature, °C',2,144,'T|var',3,'Температура, °С','','Температура, °С','','');
 INSERT INTO tmplib_tests_io VALUES('gasPoint','dP','Differential pressure, kgH/m2',2,16,'0',4,'Перепад, кГс/м2','','Перепад, кГс/м2','','');
 INSERT INTO tmplib_tests_io VALUES('gasPoint','DS','Density, kg/m3',2,16,'0',5,'Щильність, кг/м3','','Плотность, кг/м3','','');
-CREATE TABLE IF NOT EXISTS 'techApp_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO techApp_io VALUES('lag','out','Output',2,2,'0',0,0,'Вихід','Выход','','','');
-INSERT INTO techApp_io VALUES('lag','in','Input',2,0,'0',0,1,'Вхід','Вход','','','');
-INSERT INTO techApp_io VALUES('lag','t_lg','Lag time, seconds',2,0,'10',0,2,'Час затримки, секунд','Время запаздывания, секунд','','','');
-INSERT INTO techApp_io VALUES('lag','f_frq','Calculation frequency, Hz',2,0,'100',1,3,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('noise','out','Output',2,2,'0',0,0,'Вихід','Выход','','','');
-INSERT INTO techApp_io VALUES('noise','off','Main offset',2,0,'1',0,1,'Загальний зсув','Общее смещение','','','');
-INSERT INTO techApp_io VALUES('noise','a_g1','Amplitude of the harmonic 1',2,0,'10',0,2,'Амплітуда гармоніки 1','Амплитуда гармоники 1','','','');
-INSERT INTO techApp_io VALUES('noise','per_g1','Period of the harmonic part 1, seconds',2,0,'10',0,3,'Період гармоніки 1, секунд','Период гармоники 1, секунд','','','');
-INSERT INTO techApp_io VALUES('noise','a_g2','Amplitude of the harmonic 2',2,0,'5',0,4,'Амплітуда гармоніки 2','Амплитуда гармоники 2','','','');
-INSERT INTO techApp_io VALUES('noise','per_g2','Period of the harmonic part 2, seconds',2,0,'0.1',0,5,'Період гармоніки 2, секунд','Период гармоники 2, секунд','','','');
-INSERT INTO techApp_io VALUES('noise','a_rnd','Amplitude of the random numbers',2,0,'1',0,6,'Амплітуда випадкових значень','Амплитуда случайных значений','','','');
-INSERT INTO techApp_io VALUES('noise','f_frq','Calculation frequency, Hz',2,0,'100',1,7,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('noise','tmp_g1','Counter of the harmonic 1',2,0,'0',1,8,'Лічильник гармоніки 1','Счётчик гармоники 1','','','');
-INSERT INTO techApp_io VALUES('noise','tmp_g2','Counter of the harmonic 2',2,0,'0',1,9,'Лічильник гармоніки 2','Счётчик гармоники 2','','','');
-INSERT INTO techApp_io VALUES('ballCrane','pos','Position, %',2,1,'0',0,0,'Положення, %','Положение, %','','','Положај, %');
-INSERT INTO techApp_io VALUES('ballCrane','com','Command',3,0,'0',0,1,'Команда','Команда','','','Команда');
-INSERT INTO techApp_io VALUES('ballCrane','st_open','State "Opened"',3,1,'0',0,2,'Стан "Відкрито"','Состояние "Открыто"','','','');
-INSERT INTO techApp_io VALUES('ballCrane','st_close','State "Closed"',3,1,'1',0,3,'Стан "Закрито"','Состояние "Закрыто"','','','');
-INSERT INTO techApp_io VALUES('ballCrane','t_full','Going time, seconds',2,0,'5',0,4,'Час ходу, секунд','Время хода, секунд','','','');
-INSERT INTO techApp_io VALUES('ballCrane','t_up','Estrangement time, seconds',2,0,'0.5',0,5,'Час відриву, секунд','Время отрыва, секунд','','','');
-INSERT INTO techApp_io VALUES('ballCrane','f_frq','Calculation frequency, Hz',2,0,'100',1,6,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('ballCrane','tmp_up','Estrangement counter',2,0,'0',1,7,'Лічильник відриву','Счётчик отрыва','','','');
-INSERT INTO techApp_io VALUES('ballCrane','lst_com','Last command',3,0,'0',1,8,'Остання команда','Последняя команда','','','');
-INSERT INTO techApp_io VALUES('separator','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('separator','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('separator','Si','Input cutset, m2',2,0,'0.2',0,2,'Вхідний перетин, м2','Входное сечение, м2','','','');
-INSERT INTO techApp_io VALUES('separator','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('separator','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('separator','So','Output cutset, m2',2,0,'0.2',0,5,'Вихідний перетин, м2','Выходное сечение, м2','','','');
-INSERT INTO techApp_io VALUES('separator','lo','Output length, m',2,0,'10',0,6,'Вихідна довжина, м','Выходная длина, м','','','');
-INSERT INTO techApp_io VALUES('separator','Fo_lq','Output liquid flow, ton/h',2,0,'0',0,7,'Вихідні витрати рідини, т/год','Выходной расход жидкости, т/ч','','','');
-INSERT INTO techApp_io VALUES('separator','Po_lq','Output liquid pressure, at',2,1,'1',0,8,'Вихідний тиск рідини, ата','Выходное давление жидкости, ата','','','');
-INSERT INTO techApp_io VALUES('separator','Llq','Liquid level, %',2,1,'0',0,9,'Рівень рідини, %','Уровень жидкости, %','','','');
-INSERT INTO techApp_io VALUES('separator','PercLq','% liquid',2,0,'0.01',0,10,'% рідини','% жидкости','','','');
-INSERT INTO techApp_io VALUES('separator','Vap','Device capacity, m3',2,0,'10',0,11,'Об''єм апарату, м3','Объём аппарата, м3','','','');
-INSERT INTO techApp_io VALUES('separator','Q0','Norm density of the environment, kg/m3',2,0,'1',0,12,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('separator','Qlq','Liquid density, kg/m3',2,0,'1000',0,13,'Щільність рідини, кг/м3','Плотность жидкости, кг/м3','','','');
-INSERT INTO techApp_io VALUES('separator','f_frq','Calculation frequency, Hz',2,0,'200',1,14,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('valve','t_v1','Valve 1 opening time, seconds',2,0,'10',0,10,'Час відкриття клапану 1, секунди','Время хода клапана 1, секунд','','','');
-INSERT INTO techApp_io VALUES('valve','t_v2','Valve 2 opening time, seconds',2,0,'5',0,13,'Час відкриття клапану 2, секунди','Время хода клапана 2, секунд','','','');
-INSERT INTO techApp_io VALUES('valve','tmp_l1','Lag of the position 1',2,1,'0',1,23,'Затримка положення 1','Задержка положения 1','','','');
-INSERT INTO techApp_io VALUES('valve','tmp_l2','Lag of the position 2',2,1,'0',1,24,'Затримка положення 2','Задержка положения 2','','','');
-INSERT INTO techApp_io VALUES('valve','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('valve','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('valve','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','','');
-INSERT INTO techApp_io VALUES('valve','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('valve','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('valve','To','Output temperature, K',2,1,'273',0,5,'Вихідна температура, К','Выходная температура, К','','','');
-INSERT INTO techApp_io VALUES('valve','So','Output pipe cutset, m2',2,0,'.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
-INSERT INTO techApp_io VALUES('valve','lo','Output pipe length, m',2,0,'10',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
-INSERT INTO techApp_io VALUES('valve','S_v1','Valve 1 cutset, m2',2,0,'.1',0,8,'Перетин клапану 1, м2','Сечение клапана 1, м2','','','');
-INSERT INTO techApp_io VALUES('valve','S_v2','Valve 2 cutset, m2',2,0,'.05',0,11,'Перетин клапану 2, м2','Сечение клапана 2, м2','','','');
-INSERT INTO techApp_io VALUES('valve','l_v1','Valve 1 position, %',2,0,'0',0,9,'Положення клапану 1, %','Положение клапана 1, %','','','');
-INSERT INTO techApp_io VALUES('valve','l_v2','Valve 2 position, %',2,0,'0',0,12,'Положення клапану 2, %','Положение клапана 2, %','','','');
-INSERT INTO techApp_io VALUES('valve','Q0','Norm density of the environment, kg/m3',2,0,'1',0,14,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('valve','Kln','Coefficient of the linearity',2,0,'1',0,15,'Коефіцієнт нелінійності','Коэффициент нелинейности','','','');
-INSERT INTO techApp_io VALUES('valve','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,16,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('valve','Ct','Heat capacity of the environment',2,0,'20',0,17,'Теплоємність середовища','Теплоёмкость среды','','','');
-INSERT INTO techApp_io VALUES('valve','Riz','Heat resistance of the isolation',2,0,'20',0,18,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','','');
-INSERT INTO techApp_io VALUES('valve','noBack','Back valve',3,0,'0',0,19,'Зворотній клапан','Обратный клапан','','','');
-INSERT INTO techApp_io VALUES('valve','Fwind','Air speed',2,0,'1',0,20,'Швидкість повітря','Скорость воздуха','','','');
-INSERT INTO techApp_io VALUES('valve','Twind','Air temperature, K',2,0,'273',0,21,'Температура повітря, К','Температура воздуха, К','','','');
-INSERT INTO techApp_io VALUES('valve','f_frq','Calculation frequency, Hz',2,0,'200',1,22,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('src_press','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('lagClean','out','Output',2,2,'0',0,0,'Вихід','Выход','','','');
-INSERT INTO techApp_io VALUES('lagClean','in','Input',2,0,'0',0,1,'Вхід','Вход','','','');
-INSERT INTO techApp_io VALUES('lagClean','t_lg','Lag time, seconds',2,0,'10',0,2,'Час затримки, секунд','Время запаздывания, секунд','','','');
-INSERT INTO techApp_io VALUES('lagClean','f_frq','Calculation frequency, Hz',2,0,'100',1,3,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('lagClean','cl1','Link 1',2,0,'0',1,4,'Ланка 1','Звено 1','','','');
-INSERT INTO techApp_io VALUES('lagClean','cl2','Link 2',2,0,'0',1,5,'Ланка 2','Звено 2','','','');
-INSERT INTO techApp_io VALUES('lagClean','cl3','Link 3',2,0,'0',1,6,'Ланка 3','Звено 3','','','');
-INSERT INTO techApp_io VALUES('net','Fi','Input flow, ton/h',2,1,'10',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('net','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('net','Po','Output pressure setpoint, at',2,0,'1',0,2,'Вихідне завдання тиску, ата','Выходное задание давления, ата','','','');
-INSERT INTO techApp_io VALUES('net','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
-INSERT INTO techApp_io VALUES('net','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,4,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('net','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','','');
-INSERT INTO techApp_io VALUES('net','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('net','f_frq','Calculation frequency, Hz',2,0,'200',1,7,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('src_press','Pi','Input pressure setpoint, at',2,0,'10',0,0,'Завдання вхідного тиску, ата','Задание входного давления, ата','','','');
-INSERT INTO techApp_io VALUES('src_press','Fo','Output flow, ton/h',2,0,'0',0,1,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('src_press','Po','Output pressure, at',2,1,'1',0,2,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('src_press','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
-INSERT INTO techApp_io VALUES('src_press','lo','Output pipe length, m',2,0,'100',0,4,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
-INSERT INTO techApp_io VALUES('src_press','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','','');
-INSERT INTO techApp_io VALUES('src_press','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('src_press','f_frq','Calculation frequency, Hz',2,0,'200',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('src_press','Fit','Input flow, lagged',2,1,'0',1,9,'Вхідні витрати, утримані','Входной расход, удержанный','','','');
-INSERT INTO techApp_io VALUES('cooler','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('cooler','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('cooler','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','','');
-INSERT INTO techApp_io VALUES('cooler','Si','Cooler''s pipes cutset, m2',2,0,'0.05',0,3,'Перетин трубок, м2','Сечение трубок, м2','','','');
-INSERT INTO techApp_io VALUES('cooler','li','Full cooler''s pipes length, m',2,0,'10',0,4,'Загальна довжина трубок, м','Общая длина трубок, м','','','');
-INSERT INTO techApp_io VALUES('cooler','Fo','Output flow, ton/h',2,0,'0',0,5,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('cooler','Po','Output pressure, at',2,1,'1',0,6,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('cooler','To','Output temperature, K',2,1,'273',0,7,'Вихідна температура, К','Выходная температура, К','','','');
-INSERT INTO techApp_io VALUES('cooler','So','Output pipe cutset, m2',2,0,'.2',0,8,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
-INSERT INTO techApp_io VALUES('cooler','lo','Output pipe length, m',2,0,'10',0,9,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
-INSERT INTO techApp_io VALUES('cooler','Tair','Cooling air temperature, К',2,0,'283',0,10,'Температура охолодження повітря, К','Температура охлаждения воздуха, К','','','');
-INSERT INTO techApp_io VALUES('cooler','Wc','Cooler performance',2,0,'200',0,11,'Продуктивність холодильника','Производительность холодильника','','','');
-INSERT INTO techApp_io VALUES('cooler','Q0','Norm density of the environment, kg/m3',2,0,'1',0,12,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('cooler','Ct','Heat capacity of the environment',2,0,'100',0,13,'Теплоємність середовища','Теплоёмкость среды','','','');
-INSERT INTO techApp_io VALUES('cooler','Rt','Heat resistance',2,0,'1',0,14,'Тепловий опір','Тепловое сопротивление','','','');
-INSERT INTO techApp_io VALUES('cooler','f_frq','Calculation frequency, Hz',2,0,'200',1,15,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('src_flow','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('compressor','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('compressor','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('compressor','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','','');
-INSERT INTO techApp_io VALUES('compressor','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('compressor','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('compressor','To','Output temperature, K',2,1,'273',0,5,'Вихідна температура, К','Выходная температура, К','','','');
-INSERT INTO techApp_io VALUES('compressor','So','Output pipe cutset, m2',2,0,'0.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
-INSERT INTO techApp_io VALUES('compressor','lo','Output pipe length, m',2,0,'2',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
-INSERT INTO techApp_io VALUES('compressor','Kmrg','Surge protect margin coefficient',2,1,'0.1',0,8,'Коефіцієнт запасу за помпажем','Коэффициент запаса по помпажу','','','');
-INSERT INTO techApp_io VALUES('compressor','N','Turnovers, 1000 x turn/min',2,0,'0',0,9,'Оберти компресору, тис. об./хвил','Обороты компрессора, тыс. об./мин','','','');
-INSERT INTO techApp_io VALUES('compressor','V','Compressor capacity, m3',2,0,'7',0,10,'Об''єм компресору, м3','Объём компрессора, м3','','','');
-INSERT INTO techApp_io VALUES('compressor','Kpmp','Surge coefficient, surge point',2,0,'0.066',0,11,'Коефіцієнт помпажу, точка помпажу','Коэффициент помпажа, точка помпажа','','','');
-INSERT INTO techApp_io VALUES('compressor','Kslp','Slope coefficient of the surge curve',2,0,'0.08',0,12,'Коефіцієнт нахилу помпажної кривої','Коэффициент наклона помпажной кривой','','','');
-INSERT INTO techApp_io VALUES('compressor','Q0','Norm density of the environment, kg/m3',2,0,'1',0,13,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('compressor','Ct','Heat capacity of the environment',2,0,'100',0,15,'Теплоємність середовища','Теплоёмкость среды','','','');
-INSERT INTO techApp_io VALUES('compressor','Riz','Heat resistance of the isolation',2,0,'100',0,16,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','','');
-INSERT INTO techApp_io VALUES('compressor','Fwind','Air speed',2,0,'1',0,17,'Швидкість повітря','Скорость воздуха','','','');
-INSERT INTO techApp_io VALUES('compressor','Twind','Air temperature, K',2,0,'273',0,18,'Температура повітря, К','Температура воздуха, К','','','');
-INSERT INTO techApp_io VALUES('compressor','f_frq','Calculation frequency, Hz',2,0,'200',1,19,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,11,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('compressor','Fit','Input flow, lagged',2,1,'0',1,20,'Вхідні витрати, утримані','Входной расход, удержанный','','','');
-INSERT INTO techApp_io VALUES('src_flow','Fi','Input flow setpoint, ton/h',2,0,'10',0,0,'Завдання вхідних витрат, т/год','Задание входного расхода, т/ч','','','');
-INSERT INTO techApp_io VALUES('src_flow','Fo','Output flow, ton/h',2,0,'10',0,1,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('src_flow','Po','Output pressure, at',2,1,'1',0,2,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('src_flow','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
-INSERT INTO techApp_io VALUES('src_flow','lo','Output pipe length, m',2,0,'100',0,4,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
-INSERT INTO techApp_io VALUES('src_flow','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','','');
-INSERT INTO techApp_io VALUES('src_flow','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('src_flow','f_frq','Calculation frequency, Hz',2,0,'100',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Fo','Output flow, ton/h',2,0,'0',0,2,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Po','Output pressure, at',2,1,'1',0,3,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','So','Output cutset, m2',2,0,'.2',0,4,'Вихідний перетин, м2','Выходное сечение, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','lo','Output length, m',2,0,'10',0,5,'Вихідна довжина, м','Выходная длина, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','f_frq','Calculation frequency, Hz',2,0,'200',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Pti','Pti',2,1,'1',1,9,'','','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Fto','Fto',2,1,'0',1,10,'','','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Pt1','Pt1',2,1,'1',1,11,'','','','','');
-INSERT INTO techApp_io VALUES('pipe1_1','Ft1','Ft1',2,1,'0',1,12,'','','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','So1','Output 1 cutset, m2',2,0,'.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','So2','Output 2 cutset, m2',2,0,'.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Q0','Norm density of the environment, kg/m3',2,0,'1',0,10,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','f_frq','Calculation frequency, Hz',2,0,'100',1,12,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','F1tmp','Temporary flow 1',2,1,'0',1,13,'Тимчасові витрати 1','Временный расход 1','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','F2tmp','Temporary flow 2',2,1,'0',1,14,'Тимчасові витрати 2','Временный расход 2','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Pot1','Temporary pressure 1',2,1,'1',1,15,'Тимчасовий тиск 1','Временное давление 1','','','');
-INSERT INTO techApp_io VALUES('pipe1_2','Pot2','Temporary pressure 2',2,1,'1',1,16,'Тимчасовий тиск 2','Временное давление 2','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','So1','Output 1 cutset, m2',2,0,'0.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','So2','Output 2 cutset, m2',2,0,'0.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Fo3','Output 3 flow, ton/h',2,0,'0',0,10,'Вихідні витрати 3, т/год','Выходной расход 3, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Po3','Output 3 pressure, at',2,1,'1',0,11,'Вихідний тиск 3, ата','Выходное давление 3, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','So3','Output 3 cutset, m2',2,0,'0.2',0,12,'Вихідний перетин труби 3, м2','Выходное сечение 3, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','lo3','Output 3 length, m',2,0,'10',0,13,'Вихідна довжина труби 3, м','Выходная длина 3, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Q0','Norm density of the environment, kg/m3',2,0,'1',0,14,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','f_frq','Calculation frequency, Hz',2,0,'200',1,16,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','F1tmp','Temporary flow 1',2,1,'0',0,17,'Тимчасові витрати 1','Временный расход 1','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','F2tmp','Temporary flow 2',2,1,'0',0,18,'Тимчасові витрати 2','Временный расход 2','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','F3tmp','Temporary flow 3',2,1,'0',0,19,'Тимчасові витрати 3','Временный расход 3','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Pot1','Temporary pressure 1',2,1,'1',1,20,'Тимчасовий тиск 1','Временное давление 1','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Pot2','Temporary pressure 2',2,1,'1',1,21,'Тимчасовий тиск 2','Временное давление 2','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Pot3','Temporary pressure 3',2,1,'1',1,22,'Тимчасовий тиск 3','Временное давление 3','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','So1','Output 1 cutset, m2',2,0,'0.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','So2','Output 2 cutset, m2',2,0,'0.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Fo3','Output 3 flow, ton/h',2,0,'0',0,10,'Вихідні витрати 3, т/год','Выходной расход 3, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Po3','Output 3 pressure, at',2,1,'1',0,11,'Вихідний тиск 3, ата','Выходное давление 3, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','So3','Output 3 cutset, m2',2,0,'0.2',0,12,'Вихідний перетин труби 3, м2','Выходное сечение 3, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','lo3','Output 3 length, m',2,0,'10',0,13,'Вихідна довжина труби 3, м','Выходная длина 3, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Fo4','Output 4 flow, ton/h',2,0,'0',0,14,'Вихідні витрати 4, т/год','Выходной расход 4, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Po4','Output 4 pressure, at',2,1,'1',0,15,'Вихідний тиск 4, ата','Выходное давление 4, ата','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','So4','Output 4 cutset, m2',2,0,'0.2',0,16,'Вихідний перетин труби 4, м2','Выходное сечение 4, м2','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','lo4','Output 4 length, m',2,0,'10',0,17,'Вихідна довжина труби 4, м','Выходная длина 4, м','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Q0','Norm density of the environment, kg/m3',2,0,'1',0,18,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','f_frq','Calculation frequency, Hz',2,0,'200',1,20,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','F1tmp','Temporary flow 1',2,1,'0',1,21,'Тимчасові витрати 1','Временный расход 1','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','F2tmp','Temporary flow 2',2,1,'0',1,22,'Тимчасові витрати 2','Временный расход 2','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','F3tmp','Temporary flow 3',2,1,'0',1,23,'Тимчасові витрати 3','Временный расход 3','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','F4tmp','Temporary flow 4',2,1,'0',1,24,'Тимчасові витрати 4','Временный расход 4','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Pot1','Temporary pressure 1',2,1,'1',1,25,'Тимчасовий тиск 1','Временное давление 1','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Pot2','Temporary pressure 2',2,1,'1',1,26,'Тимчасовий тиск 2','Временное давление 2','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Pot3','Temporary pressure 3',2,1,'1',1,27,'Тимчасовий тиск 3','Временное давление 3','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Pot4','Temporary pressure 4',2,1,'1',1,28,'Тимчасовий тиск 4','Временное давление 4','','','');
-INSERT INTO techApp_io VALUES('valveMech','pos','Position, %',2,1,'0',0,0,'Положення, %','Положение, %','','','Положај, %');
-INSERT INTO techApp_io VALUES('valveMech','pos_sensor','Position by the sensor, %',2,1,'0',0,1,'Положення за давачем, %','Положение по датчику, %','','','');
-INSERT INTO techApp_io VALUES('valveMech','com','Command',2,0,'0',0,2,'Команда','Команда','','','Команда');
-INSERT INTO techApp_io VALUES('valveMech','st_open','State "Opened"',3,1,'0',0,3,'Стан "Відкрито"','Состояние "Открыто"','','','');
-INSERT INTO techApp_io VALUES('valveMech','st_close','State "Closed"',3,1,'1',0,4,'Стан "Закрито"','Состояние "Закрыто"','','','');
-INSERT INTO techApp_io VALUES('valveMech','t_full','Going time, seconds',2,0,'3',0,5,'Час ходу, секунд','Время хода, секунд','','','');
-INSERT INTO techApp_io VALUES('valveMech','t_up','Estrangement time, seconds',2,0,'1',0,6,'Час відриву, секунд','Время отрыва, секунд','','','');
-INSERT INTO techApp_io VALUES('valveMech','t_sensor','Sensor lag time, seconds',2,0,'1',0,7,'Час затримки сенсору, секунд','Время задержки сенсора, секунд','','','');
-INSERT INTO techApp_io VALUES('valveMech','f_frq','Calculation frequency, Hz',2,0,'100',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('valveMech','tmp_up','Estrangement counter',2,1,'0',0,9,'Лічильник відриву','Счётчик отрыва','','','');
-INSERT INTO techApp_io VALUES('valveMech','lst_com','Last command',2,1,'0',0,10,'Остання команда','Последняя команда','','','');
-INSERT INTO techApp_io VALUES('diaphragm','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('diaphragm','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('diaphragm','Fo','Output flow, ton/h',2,0,'0',0,2,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('diaphragm','Po','Output pressure, at',2,1,'1',0,3,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('diaphragm','dP','Pressure difference, kPa',2,1,'0',0,4,'Перепад тиску, кПа','Перепад давления, кПа','','','');
-INSERT INTO techApp_io VALUES('diaphragm','Sdf','Diaphragm cutset, m2',2,0,'0.1',0,5,'Перетин діафрагми, м2','Сечение диафрагмы, м2','','','');
-INSERT INTO techApp_io VALUES('diaphragm','So','Output pipe cutset, m2',2,0,'0.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
-INSERT INTO techApp_io VALUES('diaphragm','lo','Output pipe length, m',2,0,'10',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
-INSERT INTO techApp_io VALUES('diaphragm','Q0','Norm density of the environment, kg/m3',2,0,'1',0,8,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('diaphragm','f_frq','Calculation frequency, Hz',2,0,'100',1,10,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,18,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Fi1','Input 1 flow, ton/h',2,1,'0',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Ti1','Input 1 temperature, K',2,0,'273',0,2,'Вхідна температура 1, К','Входная температура 1, К','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Si1','Input 1 cutset, m2',2,0,'0.2',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Fi2','Input 2 flow, ton/h',2,1,'0',0,4,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Pi2','Input 2 pressure, at',2,0,'1',0,5,'Вхідний тиск 2, ата','Входное давление 2, ата','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Ti2','Input 2 temperature, K',2,0,'273',0,6,'Вхідна температура 2, К','Входная температура 2, К','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Si2','Input 2 cutset, m2',2,0,'0.2',0,7,'Вхідний перетин 2, м2','Входное сечение 2, м2','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Fi3','Input 3 flow, ton/h',2,1,'0',0,8,'Вхідні витрати 3, т/год','Входной расход 3, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Pi3','Input 3 pressure, at',2,0,'1',0,9,'Вхідний тиск 3, ата','Входное давление 3, ата','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Ti3','Input 3 temperature, K',2,0,'273',0,10,'Вхідна температура 3, К','Входная температура 3, К','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Si3','Input 3 cutset, m2',2,0,'0.2',0,11,'Вхідний перетин 3, м2','Входное сечение 3, м2','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Fo','Output flow, ton/h',2,0,'0',0,12,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Po','Output pressure, at',2,1,'1',0,13,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','To','Output temperature, K',2,1,'273',0,14,'Вихідна температура, К','Выходная температура, К','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','So','Output cutset, m2',2,0,'.2',0,15,'Вихідний перетин, м2','Выходное сечение, м2','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','lo','Output length, m',2,0,'10',0,16,'Вихідна довжина, м','Выходная длина, м','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,17,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Ct','Heat capacity of the environment',2,0,'20',0,19,'Теплоємність середовища','Теплоёмкость среды','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Riz','Heat resistance of the isolation',2,0,'20',0,20,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Fwind','Air speed',2,0,'1',0,21,'Швидкість повітря','Скорость воздуха','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','Twind','Air temperature, К',2,0,'273',0,22,'Температура повітря, К','Температура воздуха, К','','','');
-INSERT INTO techApp_io VALUES('pipe3_1','f_frq','Calculation frequency, Hz',2,0,'100',1,23,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('compressor','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,14,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Ti','Input temperature, K',2,0,'293',0,2,'Вхідна температура, К','Входная температура, К','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Si','Input cutset, m2',2,0,'.2',0,3,'Вхідний перетин, м2','Входное сечение, м2','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Fo','Output flow, ton/h',2,0,'0',0,4,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Po','Output pressure, at',2,1,'1',0,5,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipeBase','To','Output temperature, K',2,1,'293',0,6,'Вихідна температура, К','Выходная температура, К','','','');
-INSERT INTO techApp_io VALUES('pipeBase','So','Output cutset, m2',2,0,'.2',0,7,'Вихідний перетин, м2','Выходное сечение, м2','','','');
-INSERT INTO techApp_io VALUES('pipeBase','lo','Output length, m',2,0,'10',0,8,'Вихідна довжина, м','Выходная длина, м','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Q0','Norm density of the environment, kg/m3',2,0,'1',0,9,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.98',0,10,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('pipeBase','Ktr','Coefficient of friction',2,0,'0.01',0,11,'Коефіцієнт тертя','Коэффициент трения','','','');
-INSERT INTO techApp_io VALUES('pipeBase','f_frq','Calculation frequency, Hz',2,0,'100',0,12,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('heatExch','Fi1','Input 1 flow, ton/h',2,0,'20',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','','');
-INSERT INTO techApp_io VALUES('heatExch','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','','');
-INSERT INTO techApp_io VALUES('heatExch','Ti1','Input 1 temperature, K',2,0,'20',0,2,'Вхідна температура 1, К','Входная температура 1, К','','','');
-INSERT INTO techApp_io VALUES('heatExch','Si1','Input 1 cutset, m2',2,0,'1',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','','');
-INSERT INTO techApp_io VALUES('heatExch','li1','Input 1 length, m',2,0,'10',0,4,'Вхідна довжина 1, м','Входная длина 1, м','','','');
-INSERT INTO techApp_io VALUES('heatExch','Q0i1','Input 1 norm density, kg/m3',2,0,'1',0,5,'Вхідна нормальна щільність 1, кг/м3','Входная нормальная плотность 1, кг/м3','','','');
-INSERT INTO techApp_io VALUES('heatExch','Kpr1','Input 1 coefficient of the compressibility [0...1]',2,0,'0.9',0,6,'Вхідний коефіцієнт стискання середовища 1 [0...1]','Входной коэффициент сжимаемости среды 1 [0...1]','','','');
-INSERT INTO techApp_io VALUES('heatExch','Ci1','Input 1 heat capacity',2,0,'1',0,7,'Вхідна теплоємність 1','Входная теплоёмкость 1','','','');
-INSERT INTO techApp_io VALUES('heatExch','Fi2','Input 2 flow, ton/h',2,0,'20',0,8,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','','');
-INSERT INTO techApp_io VALUES('heatExch','Pi2','Input 2 pressure, at',2,0,'1',0,9,'Вхідний тиск 2, ата','Входное давление 2, ата','','','');
-INSERT INTO techApp_io VALUES('heatExch','Ti2','Input 2 temperature, K',2,0,'40',0,10,'Вхідна температура 2, К','Входная температура 2, К','','','');
-INSERT INTO techApp_io VALUES('heatExch','Si2','Input 2 cutset, m2',2,0,'1',0,11,'Вхідний перетин 2, м2','Входное сечение 2, м2','','','');
-INSERT INTO techApp_io VALUES('heatExch','li2','Input 2 length, m',2,0,'10',0,12,'Вхідна довжина 2, м','Входная длина 2, м','','','');
-INSERT INTO techApp_io VALUES('heatExch','Q0i2','Input 2 norm density, kg/m3',2,0,'1',0,13,'Вхідна нормальна щільність 2, кг/м3','Входная нормальная плотность 2, кг/м3','','','');
-INSERT INTO techApp_io VALUES('heatExch','Kpr2','Input 2 coefficient of the compressibility [0...1]',2,0,'0.9',0,14,'Вхідний коефіцієнт стискання середовища 2 [0...1]','Входной коэффициент сжимаемости среды 2 [0...1]','','','');
-INSERT INTO techApp_io VALUES('heatExch','Ci2','Input 2 heat capacity',2,0,'1',0,15,'Вхідна теплоємність 2','Входная теплоёмкость 2','','','');
-INSERT INTO techApp_io VALUES('heatExch','ki','Heat transfer coefficient',2,0,'0.9',0,16,'Коефіцієнт тепловіддачі','Коэффициент теплоотдачи ','','','');
-INSERT INTO techApp_io VALUES('heatExch','Fo1','Output 1 flow, ton/h',2,0,'0',0,17,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','','');
-INSERT INTO techApp_io VALUES('heatExch','Po1','Output 1 pressure, at',2,1,'1',0,18,'Вихідний тиск 1, ата','Выходное давление 1, ата','','','');
-INSERT INTO techApp_io VALUES('heatExch','To1','Output 1 temperature, K',2,1,'273',0,19,'Вихідна температура 1, К','Выходная температура 1, K','','','');
-INSERT INTO techApp_io VALUES('heatExch','So1','Output 1 cutset, m2',2,1,'1',0,20,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','','');
-INSERT INTO techApp_io VALUES('heatExch','lo1','Output 1 length, m',2,1,'10',0,21,'Вихідна довжина труби 1, м','Выходная длина 1, м','','','');
-INSERT INTO techApp_io VALUES('heatExch','Fo2','Output 2 flow, ton/h',2,0,'0',0,22,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','','');
-INSERT INTO techApp_io VALUES('heatExch','Po2','Output 2 pressure, at',2,1,'1',0,23,'Вихідний тиск 2, ата','Выходное давление 2, ата','','','');
-INSERT INTO techApp_io VALUES('heatExch','To2','Output 2 temperature, K',2,1,'273',0,24,'Вихідна температура 2, К','Выходная температура 2, K','','','');
-INSERT INTO techApp_io VALUES('heatExch','So2','Output 2 cutset, m2',2,1,'1',0,25,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','','');
-INSERT INTO techApp_io VALUES('heatExch','lo2','Output 2 length, m',2,1,'10',0,26,'Вихідна довжина труби 2, м','Выходная длина 2, м','','','');
-INSERT INTO techApp_io VALUES('heatExch','f_frq','Calculation frequency, Hz',2,0,'200',0,27,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Fi1','Input water flow, ton/h',2,1,'22',0,0,'Вхідні витрати води, т/год','Входной расход воды, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Pi1','Input water pressure, at',2,0,'43',0,1,'Вхідний тиск води, ата','Входное давление воды, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Ti1','Input water temperature, K',2,0,'523',0,2,'Вхідна температура води, К','Входная температура воды, K','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Si1','Input water pipes cutset, m2',2,0,'0.6',0,3,'Вхідний перетин труб з водою, м2','Входное сечение труб с водой, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Fi2','Input smoke gas flow, ton/h',2,1,'',0,4,'Вхідні витрати димових газів, т/год','Входной расход дымовых газов, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Pi2','Input smoke gas pressure, at',2,0,'1.3',0,5,'Вхідний тиск димових газів, ата','Входное давление дымовых газов, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Ti2','Input smoke gas temperature, K',2,0,'1700',0,6,'Вхідна температура димових газів, К','Входная температура дымовых газов, K','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Si2','Input smoke gas pipes cutset, m2',2,0,'10',0,7,'Вхідний перетин труби димових газів, м2','Входное сечение трубы дымовых газов, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Vi1','Barrel volume, m3',2,0,'3',0,8,'Об''єм барабану, м3','Объем барабана, м3','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Lo','Barrel level, %',2,1,'10',0,9,'Рівень у барабані, %','Уровень в барабане, %','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','S','Heating surface, m2',2,0,'15',0,10,'Поверхня нагріву, м2','Поверхность нагрева, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','k','Heat transfer coefficient',2,0,'0.8',0,11,'Коефіцієнт тепловіддачі','Коэффициент теплоотдачи ','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Fo','Output steam flow, ton/h',2,0,'20',0,12,'Вихідні витрати пару, т/год','Выходной расход пара, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Po1','Output steam pressure, at',2,1,'41.68',0,13,'Вихідний тиск пари, ата','Выходное давление пара, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','To1','Output steam temperature, K',2,1,'10',0,14,'Вихідна температура пари, К','Выходная температура пара, K','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','So1','Output steam pipe cutset, m2',2,0,'0.5',0,15,'Вихідний перетин труби пару, м2','Выходное сечение трубы по пару, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','lo1','Output steam pipe length, m',2,0,'5',0,16,'Вихідна довжина труби пару, м','Выходная длина трубы пара, м','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Fo2','Output smoke gas flow, ton/h',2,0,'180',0,17,'Вихідні витрати димових газів, т/год','Выходной расход дымовых газов, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Po2','Output smoke gas pressure, at',2,1,'1',0,18,'Вихідний тиск димових газів, ата','Выходное давление дымовых газов, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','To2','Output smoke gas temperature, K',2,0,'0',0,19,'Вихідна температура димових газів, К','Выходная температура дымовых газов, K','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Fstm','Inner barrel steam flow, ton/h',2,1,'0',0,20,'Витрати пару у барабані, т/год','Расход пара в барабане, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','Tv','Inner water temperature, K',2,1,'0',0,21,'Температура води у барабані, K','Температура воды в барабане, K','','','');
-INSERT INTO techApp_io VALUES('boilerBarrel','f_frq','Calculation frequency, Hz',2,0,'200',0,22,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Fi1','Input blast furnace gas flow, ton/h',2,1,'',0,0,'Вхідні витрати доменного газу, т/год','Входной расход доменного газа, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Pi1','Input blast furnace gas pressure, at',2,0,'',0,1,'Вхідний тиск доменного газу, ата','Входное давление доменного газа, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Ti1','Input blast furnace gas temperature, K',2,0,'40',0,2,'Вхідна температура димових газів, К','Входная температура доменного газа, K','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Si1','Input blast furnace gas pipe cutset, m2',2,0,'',0,3,'Вхідний перетин труби димових газів, м2','Входное сечение трубы доменного газа, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Fi2','Input natural gas flow, ton/h',2,1,'',0,4,'Вхідні витрати природного газу, т/год','Входной расход природного газа, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Pi2','Input natural gas pressure, at',2,0,'',0,5,'Вхідний тиск природного газу, ата','Входное давление природного газа, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Ti2','Input natural gas temperature, K',2,0,'20',0,6,'Вхідна температура природного газу, К','Входная температура природного газа, K','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Si2','Input natural gas pipe cutset, m2',2,0,'',0,7,'Вхідний перетин труби природного газу, м2','Входное сечение трубы природного газа, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Fi3','Input coke oven gas flow, ton/h',2,1,'',0,8,'Вхідні витрати коксового газу, т/год','Входной расход коксового газа, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Pi3','Input coke oven gas pressure, at',2,0,'',0,9,'Вхідний тиск коксового газу, ата','Входное давление коксового газа, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Ti3','Input coke oven gas temperature, K',2,0,'0',0,10,'Вхідна температура коксового газу, К','Входная температура коксового газа, K','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Si3','Input coke oven gas pipe cutset, m2',2,0,'',0,11,'Вхідний перетин труби коксового газу, м2','Входное сечение трубы коксового газа, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Fi4','Input air flow, ton/h',2,1,'',0,12,'Вхідні витрати повітря, т/год','Входной расход воздуха, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Pi4','Input air pressure, at',2,0,'',0,13,'Вхідний тиск повітря, ата','Входное давление воздуха, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Ti4','Input air temperature, K',2,0,'20',0,14,'Вхідна температура повітря, К','Входная температура воздуха, K','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Si4','Input air pipe cutset, m2',2,0,'',0,15,'Вхідний перетин труби повітря, м2','Входное сечение трубы воздуха, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Fo','Output smoke gas flow, ton/h',2,0,'',0,16,'Вихідні витрати димових газів, т/год','Выходной расход дымовых газов, т/ч','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','Po','Output smoke gas pressure, at',2,1,'',0,17,'Вихідний тиск димових газів, ата','Выходное давление дымовых газов, ата','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','To','Output smoke gas temperature, K',2,1,'',0,18,'Вихідна температура димових газів, К','Выходная температура дымовых газов, K','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','So','Output smoke gas pipe cutset, m2',2,0,'90',0,19,'Вихідний перетин труби димових газів, м2','Выходное сечение трубы дымовых газов, м2','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','lo','Output smoke gas pipe length, m',2,0,'',0,20,'Вихідна довжина труби димових газів, м','Выходная длина трубы дымовых газов, м','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','V','Burner volume, m3',2,0,'830',0,21,'Об''єм топки, м3','Объём топки, м3','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','CO','Percentage of CO in the flue stack gases, %',2,1,'',0,22,'Відсоток вмісту CO у димових газах, %','Процент содержания CO в дымовых газах, %','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','O2','Percentage of O2 in the flue stack gases, %',2,1,'',0,23,'Відсоток вмісту O2 у димових газах, %','Процент содержания O2 в дымовых газах, %','','','');
-INSERT INTO techApp_io VALUES('boilerBurner','f_frq','Calculation frequency, Hz',2,0,'200',0,24,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Fi1','Input 1 flow, ton/h',2,1,'0',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Ti1','Input 1 temperature, K',2,0,'273',0,2,'Вхідна температура 1, К','Входная температура 1, К','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Si1','Input 1 cutset, m2',2,0,'0.2',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Fi2','Input 2 flow, ton/h',2,1,'0',0,4,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Pi2','Input 2 pressure, at',2,0,'1',0,5,'Вхідний тиск 2, ата','Входное давление 2, ата','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Ti2','Input 2 temperature, K',2,0,'273',0,6,'Вхідна температура 2, К','Входная температура 2, К','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Si2','Input 2 cutset, m2',2,0,'0.2',0,7,'Вхідний перетин 2, м2','Входное сечение 2, м2','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Fo','Output flow, ton/h',2,0,'0',0,8,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Po','Output pressure, at',2,1,'1',0,9,'Вихідний тиск, ата','Выходное давление, ата','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','To','Output temperature, K',2,1,'273',0,10,'Вихідна температура, К','Выходная температура, К','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','So','Output cutset, m2',2,0,'.2',0,11,'Вихідний перетин, м2','Выходное сечение, м2','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','lo','Output length, m',2,0,'10',0,12,'Вихідна довжина, м','Выходная длина, м','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,13,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,14,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Ct','Heat capacity of the environment',2,0,'20',0,15,'Теплоємність середовища','Теплоёмкость среды','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Riz','Heat resistance of the isolation',2,0,'20',0,16,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Fwind','Air speed',2,0,'1',0,17,'Швидкість повітря','Скорость воздуха','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','Twind','Air temperature, К',2,0,'273',0,18,'Температура повітря, К','Температура воздуха, К','','','');
-INSERT INTO techApp_io VALUES('pipe2_1','f_frq','Calculation frequency, Hz',2,0,'100',1,19,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
-INSERT INTO techApp_io VALUES('pipe1_3','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,15,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('pipe1_4','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,19,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-INSERT INTO techApp_io VALUES('diaphragm','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,9,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
-CREATE TABLE IF NOT EXISTS 'lib_Controllers_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
-INSERT INTO lib_Controllers_io VALUES('prescr','dbDB','DB: DB with tables name',0,1,'',0,4,'БД: Имя БД с таблицами','','БД: Ім''я БД з таблицями','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','dbComs','DB: Table with commands',0,1,'',0,5,'БД: Таблица с командами','','БД: Таблиця з командами','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','dbProgs','DB: Table with programs',0,1,'',0,6,'БД: Таблица с программами','','БД: Таблиця з програмами','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run(1); Pause(2); Pass command(3)',1,1,'',0,8,'Режим: Завершение(-2); Ошибка(-1); Стоп(0); Исполнение(1); Пауза(2); Пропустить команду(3)','','Режим: Завершення(-2); Помилка(-1); Стоп(0); Виконання(1); Пауза(2); Пропустити команду(3)','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','prog','Name of the selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','startTm','Start time, seconds',1,0,'',0,11,'Время запуска, секунды','','Час запуску, секунди','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','curCom','Current command-step',0,0,'',0,12,'Текущая комманда-шаг','','Поточна команда-крок','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','work','Work program',4,0,'',0,13,'Рабочая программа','','Робоча програма','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','comsCntr','Commands controller',0,0,'',0,7,'Контроллер команд','','Контролер команд','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','comLs','Commands list',4,0,'',0,14,'Список команд','','Перелік команд','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','clcCnt','Cycles counter',1,0,'',0,15,'Счётчик циклов','','Лічильник циклів','','');
-INSERT INTO lib_Controllers_io VALUES('test','offset','Offset',1,0,'100',0,4,'Смещение','','Зміщення','','');
-INSERT INTO lib_Controllers_io VALUES('test','out','Out',2,1,'',0,5,'Вых.','','Вих.','','');
-INSERT INTO lib_Controllers_io VALUES('test','test','Test',0,1,'',0,6,'Тест','','Тест','','');
-INSERT INTO lib_Controllers_io VALUES('test','rez','Result',0,1,'',0,7,'Результат','','Результат','','');
-INSERT INTO lib_Controllers_io VALUES('test1','clc','Clock',2,0,'',0,0,'Часы','','Годинник','','');
-INSERT INTO lib_Controllers_io VALUES('test1','p_tm','Previous time (s)',1,1,'0',0,1,'Предыдущее время (с)','','Попередній час (с)','','');
-INSERT INTO lib_Controllers_io VALUES('test1','rez','Result',2,1,'0',0,2,'Результат','','Результат','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','f_start','Function start flag',3,0,'0',0,1,'Флаг запуска функции','','Прапорець запуску функції','','Ознака за покретања функције');
-INSERT INTO lib_Controllers_io VALUES('prescr','f_stop','Function stop flag',3,0,'0',0,2,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('prescr','this','This controller object link',4,0,'0',0,3,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','f_start','Function start flag',3,0,'',0,15,'Флаг запуска функции','','Прапорець запуску функції','','Ознака за покретања функције');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailTopic','EMail topic',0,0,'Notification',0,8,'Тема Эл.почты','Уведомление','Тема Ел.пошти','Повідомлення','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailMess','EMail message',0,0,'',0,9,'Сообщение Эл.почты','','Повідомлення Ел.пошти','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,17,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','f_stop','Function stop flag',3,0,'0',0,16,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','this','This controller object link',4,0,'0',0,18,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','tmOut','Maximum notification timeout, seconds',1,0,'5',0,0,'Максимальный таймаут сообщения, секунд','','Максимальний таймаут повідомлення, секунд','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTrId','SMS serial transport, empty for disable',0,0,'SMS',0,11,'Последовательный транспорт SMS, пусто для выключения','','Послідовний транспорт SMS, порожньо для вимкнення','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSPin','SMS pin, empty for disable',0,0,'1111',0,12,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('test','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('test','f_start','Function start flag',3,0,'0',0,1,'Флаг запуска функции','','Прапорець запуску функції','','Ознака за покретања функције');
-INSERT INTO lib_Controllers_io VALUES('test','f_stop','Function stop flag',3,0,'0',0,2,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('test','this','This controller object link',4,0,'0',0,3,'','','','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailServer','Output transport for SMTP connection, empty for disable',0,0,'Sockets.out_SMTP',0,4,'Выходной транспорт SMTP подключений, пусто для выключения','','Вихідний транспорт SMTP підключень, порожньо для вимкнення','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailAuth','Auth, empty for disable',0,0,'user:pass',0,5,'Аутентификация, пусто для выключения','','Автентифікація, порожньо для вимкнення','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailSender','Sender',0,0,'noreply@oscada.org',0,6,'Отправитель','','Відправник','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailReceiver','Destination receiver address',0,0,'test@oscada.org',0,7,'Адрес назначения получателя','','Адреса призначення одержувача','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTel','SMS destination receiver, tel. number',0,0,'+380XXXXXXXXX',0,13,'Адрес получателя SMS, номер телефона','','Адреса одержувача SMS, номер телефону','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','emailState','Email notification current state',0,1,'',0,3,'Текущее состояние уведомления Эл.почтой','','Поточний стан повідомлення Ел.поштою','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSState','SMS notification current state',0,1,'',0,10,'Текущее состояние уведомления SMS','','Поточний стан повідомлення SMS','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','SMSTextMd','SMS in the text mode, else PDU',3,0,'0',0,14,'SMS в текстовом режиме, иначе PDU','','SMS у текстовому режимі, інакше PDU','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','messLev','Messages level, negative for alarms',1,0,'1',0,1,'Уровень сообщений, негативный для нарушений','','Рівень повідомлень, негативний для порушень','','');
-INSERT INTO lib_Controllers_io VALUES('ntfDispatch','messCat','Messages category, template or regular expression',0,0,'al*:*',0,2,'Категория сообщений, шаблон или регулярное выражение','','Категорія повідомлень, шаблон або регулярний вираз','','');
-INSERT INTO lib_Controllers_io VALUES('test','inFarg','inFarg',1,1,'3.14',0,8,'','','','','');
+CREATE TABLE IF NOT EXISTS 'flb_techApp_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO flb_techApp_io VALUES('lag','out','Output',2,2,'0',0,0,'Вихід','Выход','','','');
+INSERT INTO flb_techApp_io VALUES('lag','in','Input',2,0,'0',0,1,'Вхід','Вход','','','');
+INSERT INTO flb_techApp_io VALUES('lag','t_lg','Lag time, seconds',2,0,'10',0,2,'Час затримки, секунд','Время запаздывания, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('lag','f_frq','Calculation frequency, Hz',2,0,'100',1,3,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('noise','out','Output',2,2,'0',0,0,'Вихід','Выход','','','');
+INSERT INTO flb_techApp_io VALUES('noise','off','Main offset',2,0,'1',0,1,'Загальний зсув','Общее смещение','','','');
+INSERT INTO flb_techApp_io VALUES('noise','a_g1','Amplitude of the harmonic 1',2,0,'10',0,2,'Амплітуда гармоніки 1','Амплитуда гармоники 1','','','');
+INSERT INTO flb_techApp_io VALUES('noise','per_g1','Period of the harmonic part 1, seconds',2,0,'10',0,3,'Період гармоніки 1, секунд','Период гармоники 1, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('noise','a_g2','Amplitude of the harmonic 2',2,0,'5',0,4,'Амплітуда гармоніки 2','Амплитуда гармоники 2','','','');
+INSERT INTO flb_techApp_io VALUES('noise','per_g2','Period of the harmonic part 2, seconds',2,0,'0.1',0,5,'Період гармоніки 2, секунд','Период гармоники 2, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('noise','a_rnd','Amplitude of the random numbers',2,0,'1',0,6,'Амплітуда випадкових значень','Амплитуда случайных значений','','','');
+INSERT INTO flb_techApp_io VALUES('noise','f_frq','Calculation frequency, Hz',2,0,'100',1,7,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('noise','tmp_g1','Counter of the harmonic 1',2,0,'0',1,8,'Лічильник гармоніки 1','Счётчик гармоники 1','','','');
+INSERT INTO flb_techApp_io VALUES('noise','tmp_g2','Counter of the harmonic 2',2,0,'0',1,9,'Лічильник гармоніки 2','Счётчик гармоники 2','','','');
+INSERT INTO flb_techApp_io VALUES('ballCrane','pos','Position, %',2,1,'0',0,0,'Положення, %','Положение, %','','','Положај, %');
+INSERT INTO flb_techApp_io VALUES('ballCrane','com','Command',3,0,'0',0,1,'Команда','Команда','','','Команда');
+INSERT INTO flb_techApp_io VALUES('ballCrane','st_open','State "Opened"',3,1,'0',0,2,'Стан "Відкрито"','Состояние "Открыто"','','','');
+INSERT INTO flb_techApp_io VALUES('ballCrane','st_close','State "Closed"',3,1,'1',0,3,'Стан "Закрито"','Состояние "Закрыто"','','','');
+INSERT INTO flb_techApp_io VALUES('ballCrane','t_full','Going time, seconds',2,0,'5',0,4,'Час ходу, секунд','Время хода, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('ballCrane','t_up','Estrangement time, seconds',2,0,'0.5',0,5,'Час відриву, секунд','Время отрыва, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('ballCrane','f_frq','Calculation frequency, Hz',2,0,'100',1,6,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('ballCrane','tmp_up','Estrangement counter',2,0,'0',1,7,'Лічильник відриву','Счётчик отрыва','','','');
+INSERT INTO flb_techApp_io VALUES('ballCrane','lst_com','Last command',3,0,'0',1,8,'Остання команда','Последняя команда','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Si','Input cutset, m2',2,0,'0.2',0,2,'Вхідний перетин, м2','Входное сечение, м2','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('separator','So','Output cutset, m2',2,0,'0.2',0,5,'Вихідний перетин, м2','Выходное сечение, м2','','','');
+INSERT INTO flb_techApp_io VALUES('separator','lo','Output length, m',2,0,'10',0,6,'Вихідна довжина, м','Выходная длина, м','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Fo_lq','Output liquid flow, ton/h',2,0,'0',0,7,'Вихідні витрати рідини, т/год','Выходной расход жидкости, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Po_lq','Output liquid pressure, at',2,1,'1',0,8,'Вихідний тиск рідини, ата','Выходное давление жидкости, ата','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Llq','Liquid level, %',2,1,'0',0,9,'Рівень рідини, %','Уровень жидкости, %','','','');
+INSERT INTO flb_techApp_io VALUES('separator','PercLq','% liquid',2,0,'0.01',0,10,'% рідини','% жидкости','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Vap','Device capacity, m3',2,0,'10',0,11,'Об''єм апарату, м3','Объём аппарата, м3','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Q0','Norm density of the environment, kg/m3',2,0,'1',0,12,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('separator','Qlq','Liquid density, kg/m3',2,0,'1000',0,13,'Щільність рідини, кг/м3','Плотность жидкости, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('separator','f_frq','Calculation frequency, Hz',2,0,'200',1,14,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('valve','t_v1','Valve 1 opening time, seconds',2,0,'10',0,10,'Час відкриття клапану 1, секунди','Время хода клапана 1, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('valve','t_v2','Valve 2 opening time, seconds',2,0,'5',0,13,'Час відкриття клапану 2, секунди','Время хода клапана 2, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('valve','tmp_l1','Lag of the position 1',2,1,'0',1,23,'Затримка положення 1','Задержка положения 1','','','');
+INSERT INTO flb_techApp_io VALUES('valve','tmp_l2','Lag of the position 2',2,1,'0',1,24,'Затримка положення 2','Задержка положения 2','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('valve','To','Output temperature, K',2,1,'273',0,5,'Вихідна температура, К','Выходная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('valve','So','Output pipe cutset, m2',2,0,'.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
+INSERT INTO flb_techApp_io VALUES('valve','lo','Output pipe length, m',2,0,'10',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
+INSERT INTO flb_techApp_io VALUES('valve','S_v1','Valve 1 cutset, m2',2,0,'.1',0,8,'Перетин клапану 1, м2','Сечение клапана 1, м2','','','');
+INSERT INTO flb_techApp_io VALUES('valve','S_v2','Valve 2 cutset, m2',2,0,'.05',0,11,'Перетин клапану 2, м2','Сечение клапана 2, м2','','','');
+INSERT INTO flb_techApp_io VALUES('valve','l_v1','Valve 1 position, %',2,0,'0',0,9,'Положення клапану 1, %','Положение клапана 1, %','','','');
+INSERT INTO flb_techApp_io VALUES('valve','l_v2','Valve 2 position, %',2,0,'0',0,12,'Положення клапану 2, %','Положение клапана 2, %','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Q0','Norm density of the environment, kg/m3',2,0,'1',0,14,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Kln','Coefficient of the linearity',2,0,'1',0,15,'Коефіцієнт нелінійності','Коэффициент нелинейности','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,16,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Ct','Heat capacity of the environment',2,0,'20',0,17,'Теплоємність середовища','Теплоёмкость среды','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Riz','Heat resistance of the isolation',2,0,'20',0,18,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','','');
+INSERT INTO flb_techApp_io VALUES('valve','noBack','Back valve',3,0,'0',0,19,'Зворотній клапан','Обратный клапан','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Fwind','Air speed',2,0,'1',0,20,'Швидкість повітря','Скорость воздуха','','','');
+INSERT INTO flb_techApp_io VALUES('valve','Twind','Air temperature, K',2,0,'273',0,21,'Температура повітря, К','Температура воздуха, К','','','');
+INSERT INTO flb_techApp_io VALUES('valve','f_frq','Calculation frequency, Hz',2,0,'200',1,22,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('lagClean','out','Output',2,2,'0',0,0,'Вихід','Выход','','','');
+INSERT INTO flb_techApp_io VALUES('lagClean','in','Input',2,0,'0',0,1,'Вхід','Вход','','','');
+INSERT INTO flb_techApp_io VALUES('lagClean','t_lg','Lag time, seconds',2,0,'10',0,2,'Час затримки, секунд','Время запаздывания, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('lagClean','f_frq','Calculation frequency, Hz',2,0,'100',1,3,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('lagClean','cl1','Link 1',2,0,'0',1,4,'Ланка 1','Звено 1','','','');
+INSERT INTO flb_techApp_io VALUES('lagClean','cl2','Link 2',2,0,'0',1,5,'Ланка 2','Звено 2','','','');
+INSERT INTO flb_techApp_io VALUES('lagClean','cl3','Link 3',2,0,'0',1,6,'Ланка 3','Звено 3','','','');
+INSERT INTO flb_techApp_io VALUES('net','Fi','Input flow, ton/h',2,1,'10',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('net','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('net','Po','Output pressure setpoint, at',2,0,'1',0,2,'Вихідне завдання тиску, ата','Выходное задание давления, ата','','','');
+INSERT INTO flb_techApp_io VALUES('net','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
+INSERT INTO flb_techApp_io VALUES('net','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,4,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('net','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','','');
+INSERT INTO flb_techApp_io VALUES('net','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('net','f_frq','Calculation frequency, Hz',2,0,'200',1,7,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','Pi','Input pressure setpoint, at',2,0,'10',0,0,'Завдання вхідного тиску, ата','Задание входного давления, ата','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','Fo','Output flow, ton/h',2,0,'0',0,1,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','Po','Output pressure, at',2,1,'1',0,2,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','lo','Output pipe length, m',2,0,'100',0,4,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','f_frq','Calculation frequency, Hz',2,0,'200',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('src_press','Fit','Input flow, lagged',2,1,'0',1,9,'Вхідні витрати, утримані','Входной расход, удержанный','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Si','Cooler''s pipes cutset, m2',2,0,'0.05',0,3,'Перетин трубок, м2','Сечение трубок, м2','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','li','Full cooler''s pipes length, m',2,0,'10',0,4,'Загальна довжина трубок, м','Общая длина трубок, м','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Fo','Output flow, ton/h',2,0,'0',0,5,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Po','Output pressure, at',2,1,'1',0,6,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','To','Output temperature, K',2,1,'273',0,7,'Вихідна температура, К','Выходная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','So','Output pipe cutset, m2',2,0,'.2',0,8,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','lo','Output pipe length, m',2,0,'10',0,9,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Tair','Cooling air temperature, К',2,0,'283',0,10,'Температура охолодження повітря, К','Температура охлаждения воздуха, К','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Wc','Cooler performance',2,0,'200',0,11,'Продуктивність холодильника','Производительность холодильника','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Q0','Norm density of the environment, kg/m3',2,0,'1',0,12,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Ct','Heat capacity of the environment',2,0,'100',0,13,'Теплоємність середовища','Теплоёмкость среды','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','Rt','Heat resistance',2,0,'1',0,14,'Тепловий опір','Тепловое сопротивление','','','');
+INSERT INTO flb_techApp_io VALUES('cooler','f_frq','Calculation frequency, Hz',2,0,'200',1,15,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,7,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Ti','Input temperature, K',2,0,'273',0,2,'Вхідна температура, К','Входная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Fo','Output flow, ton/h',2,0,'0',0,3,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Po','Output pressure, at',2,1,'1',0,4,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','To','Output temperature, K',2,1,'273',0,5,'Вихідна температура, К','Выходная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','So','Output pipe cutset, m2',2,0,'0.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','lo','Output pipe length, m',2,0,'2',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Kmrg','Surge protect margin coefficient',2,1,'0.1',0,8,'Коефіцієнт запасу за помпажем','Коэффициент запаса по помпажу','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','N','Turnovers, 1000 x turn/min',2,0,'0',0,9,'Оберти компресору, тис. об./хвил','Обороты компрессора, тыс. об./мин','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','V','Compressor capacity, m3',2,0,'7',0,10,'Об''єм компресору, м3','Объём компрессора, м3','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Kpmp','Surge coefficient, surge point',2,0,'0.066',0,11,'Коефіцієнт помпажу, точка помпажу','Коэффициент помпажа, точка помпажа','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Kslp','Slope coefficient of the surge curve',2,0,'0.08',0,12,'Коефіцієнт нахилу помпажної кривої','Коэффициент наклона помпажной кривой','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Q0','Norm density of the environment, kg/m3',2,0,'1',0,13,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Ct','Heat capacity of the environment',2,0,'100',0,15,'Теплоємність середовища','Теплоёмкость среды','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Riz','Heat resistance of the isolation',2,0,'100',0,16,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Fwind','Air speed',2,0,'1',0,17,'Швидкість повітря','Скорость воздуха','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Twind','Air temperature, K',2,0,'273',0,18,'Температура повітря, К','Температура воздуха, К','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','f_frq','Calculation frequency, Hz',2,0,'200',1,19,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,11,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Fit','Input flow, lagged',2,1,'0',1,20,'Вхідні витрати, утримані','Входной расход, удержанный','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','Fi','Input flow setpoint, ton/h',2,0,'10',0,0,'Завдання вхідних витрат, т/год','Задание входного расхода, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','Fo','Output flow, ton/h',2,0,'10',0,1,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','Po','Output pressure, at',2,1,'1',0,2,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','So','Output pipe cutset, m2',2,0,'0.1',0,3,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','lo','Output pipe length, m',2,0,'100',0,4,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','Noise','Input flow''s noise',2,0,'1',0,5,'Шум вхідних витрат','Шум входного расхода','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('src_flow','f_frq','Calculation frequency, Hz',2,0,'100',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Fo','Output flow, ton/h',2,0,'0',0,2,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Po','Output pressure, at',2,1,'1',0,3,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','So','Output cutset, m2',2,0,'.2',0,4,'Вихідний перетин, м2','Выходное сечение, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','lo','Output length, m',2,0,'10',0,5,'Вихідна довжина, м','Выходная длина, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,6,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','f_frq','Calculation frequency, Hz',2,0,'200',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Pti','Pti',2,1,'1',1,9,'','','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Fto','Fto',2,1,'0',1,10,'','','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Pt1','Pt1',2,1,'1',1,11,'','','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_1','Ft1','Ft1',2,1,'0',1,12,'','','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','So1','Output 1 cutset, m2',2,0,'.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','So2','Output 2 cutset, m2',2,0,'.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Q0','Norm density of the environment, kg/m3',2,0,'1',0,10,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','f_frq','Calculation frequency, Hz',2,0,'100',1,12,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','F1tmp','Temporary flow 1',2,1,'0',1,13,'Тимчасові витрати 1','Временный расход 1','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','F2tmp','Temporary flow 2',2,1,'0',1,14,'Тимчасові витрати 2','Временный расход 2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Pot1','Temporary pressure 1',2,1,'1',1,15,'Тимчасовий тиск 1','Временное давление 1','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_2','Pot2','Temporary pressure 2',2,1,'1',1,16,'Тимчасовий тиск 2','Временное давление 2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','So1','Output 1 cutset, m2',2,0,'0.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','So2','Output 2 cutset, m2',2,0,'0.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Fo3','Output 3 flow, ton/h',2,0,'0',0,10,'Вихідні витрати 3, т/год','Выходной расход 3, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Po3','Output 3 pressure, at',2,1,'1',0,11,'Вихідний тиск 3, ата','Выходное давление 3, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','So3','Output 3 cutset, m2',2,0,'0.2',0,12,'Вихідний перетин труби 3, м2','Выходное сечение 3, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','lo3','Output 3 length, m',2,0,'10',0,13,'Вихідна довжина труби 3, м','Выходная длина 3, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Q0','Norm density of the environment, kg/m3',2,0,'1',0,14,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','f_frq','Calculation frequency, Hz',2,0,'200',1,16,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','F1tmp','Temporary flow 1',2,1,'0',0,17,'Тимчасові витрати 1','Временный расход 1','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','F2tmp','Temporary flow 2',2,1,'0',0,18,'Тимчасові витрати 2','Временный расход 2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','F3tmp','Temporary flow 3',2,1,'0',0,19,'Тимчасові витрати 3','Временный расход 3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Pot1','Temporary pressure 1',2,1,'1',1,20,'Тимчасовий тиск 1','Временное давление 1','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Pot2','Temporary pressure 2',2,1,'1',1,21,'Тимчасовий тиск 2','Временное давление 2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Pot3','Temporary pressure 3',2,1,'1',1,22,'Тимчасовий тиск 3','Временное давление 3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Fo1','Output 1 flow, ton/h',2,0,'0',0,2,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Po1','Output 1 pressure, at',2,1,'1',0,3,'Вихідний тиск 1, ата','Выходное давление 1, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','So1','Output 1 cutset, m2',2,0,'0.2',0,4,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','lo1','Output 1 length, m',2,0,'10',0,5,'Вихідна довжина труби 1, м','Выходная длина 1, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Fo2','Output 2 flow, ton/h',2,0,'0',0,6,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Po2','Output 2 pressure, at',2,1,'1',0,7,'Вихідний тиск 2, ата','Выходное давление 2, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','So2','Output 2 cutset, m2',2,0,'0.2',0,8,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','lo2','Output 2 length, m',2,0,'10',0,9,'Вихідна довжина труби 2, м','Выходная длина 2, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Fo3','Output 3 flow, ton/h',2,0,'0',0,10,'Вихідні витрати 3, т/год','Выходной расход 3, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Po3','Output 3 pressure, at',2,1,'1',0,11,'Вихідний тиск 3, ата','Выходное давление 3, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','So3','Output 3 cutset, m2',2,0,'0.2',0,12,'Вихідний перетин труби 3, м2','Выходное сечение 3, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','lo3','Output 3 length, m',2,0,'10',0,13,'Вихідна довжина труби 3, м','Выходная длина 3, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Fo4','Output 4 flow, ton/h',2,0,'0',0,14,'Вихідні витрати 4, т/год','Выходной расход 4, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Po4','Output 4 pressure, at',2,1,'1',0,15,'Вихідний тиск 4, ата','Выходное давление 4, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','So4','Output 4 cutset, m2',2,0,'0.2',0,16,'Вихідний перетин труби 4, м2','Выходное сечение 4, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','lo4','Output 4 length, m',2,0,'10',0,17,'Вихідна довжина труби 4, м','Выходная длина 4, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Q0','Norm density of the environment, kg/m3',2,0,'1',0,18,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','f_frq','Calculation frequency, Hz',2,0,'200',1,20,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','F1tmp','Temporary flow 1',2,1,'0',1,21,'Тимчасові витрати 1','Временный расход 1','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','F2tmp','Temporary flow 2',2,1,'0',1,22,'Тимчасові витрати 2','Временный расход 2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','F3tmp','Temporary flow 3',2,1,'0',1,23,'Тимчасові витрати 3','Временный расход 3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','F4tmp','Temporary flow 4',2,1,'0',1,24,'Тимчасові витрати 4','Временный расход 4','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Pot1','Temporary pressure 1',2,1,'1',1,25,'Тимчасовий тиск 1','Временное давление 1','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Pot2','Temporary pressure 2',2,1,'1',1,26,'Тимчасовий тиск 2','Временное давление 2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Pot3','Temporary pressure 3',2,1,'1',1,27,'Тимчасовий тиск 3','Временное давление 3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Pot4','Temporary pressure 4',2,1,'1',1,28,'Тимчасовий тиск 4','Временное давление 4','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','pos','Position, %',2,1,'0',0,0,'Положення, %','Положение, %','','','Положај, %');
+INSERT INTO flb_techApp_io VALUES('valveMech','pos_sensor','Position by the sensor, %',2,1,'0',0,1,'Положення за давачем, %','Положение по датчику, %','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','com','Command',2,0,'0',0,2,'Команда','Команда','','','Команда');
+INSERT INTO flb_techApp_io VALUES('valveMech','st_open','State "Opened"',3,1,'0',0,3,'Стан "Відкрито"','Состояние "Открыто"','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','st_close','State "Closed"',3,1,'1',0,4,'Стан "Закрито"','Состояние "Закрыто"','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','t_full','Going time, seconds',2,0,'3',0,5,'Час ходу, секунд','Время хода, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','t_up','Estrangement time, seconds',2,0,'1',0,6,'Час відриву, секунд','Время отрыва, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','t_sensor','Sensor lag time, seconds',2,0,'1',0,7,'Час затримки сенсору, секунд','Время задержки сенсора, секунд','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','f_frq','Calculation frequency, Hz',2,0,'100',1,8,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','tmp_up','Estrangement counter',2,1,'0',0,9,'Лічильник відриву','Счётчик отрыва','','','');
+INSERT INTO flb_techApp_io VALUES('valveMech','lst_com','Last command',2,1,'0',0,10,'Остання команда','Последняя команда','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','Fo','Output flow, ton/h',2,0,'0',0,2,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','Po','Output pressure, at',2,1,'1',0,3,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','dP','Pressure difference, kPa',2,1,'0',0,4,'Перепад тиску, кПа','Перепад давления, кПа','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','Sdf','Diaphragm cutset, m2',2,0,'0.1',0,5,'Перетин діафрагми, м2','Сечение диафрагмы, м2','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','So','Output pipe cutset, m2',2,0,'0.2',0,6,'Вихідний перетин труби, м2','Выходное сечение трубы, м2','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','lo','Output pipe length, m',2,0,'10',0,7,'Вихідна довжина труби, м','Выходная длина трубы, м','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','Q0','Norm density of the environment, kg/m3',2,0,'1',0,8,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','f_frq','Calculation frequency, Hz',2,0,'100',1,10,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,18,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Fi1','Input 1 flow, ton/h',2,1,'0',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Ti1','Input 1 temperature, K',2,0,'273',0,2,'Вхідна температура 1, К','Входная температура 1, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Si1','Input 1 cutset, m2',2,0,'0.2',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Fi2','Input 2 flow, ton/h',2,1,'0',0,4,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Pi2','Input 2 pressure, at',2,0,'1',0,5,'Вхідний тиск 2, ата','Входное давление 2, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Ti2','Input 2 temperature, K',2,0,'273',0,6,'Вхідна температура 2, К','Входная температура 2, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Si2','Input 2 cutset, m2',2,0,'0.2',0,7,'Вхідний перетин 2, м2','Входное сечение 2, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Fi3','Input 3 flow, ton/h',2,1,'0',0,8,'Вхідні витрати 3, т/год','Входной расход 3, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Pi3','Input 3 pressure, at',2,0,'1',0,9,'Вхідний тиск 3, ата','Входное давление 3, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Ti3','Input 3 temperature, K',2,0,'273',0,10,'Вхідна температура 3, К','Входная температура 3, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Si3','Input 3 cutset, m2',2,0,'0.2',0,11,'Вхідний перетин 3, м2','Входное сечение 3, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Fo','Output flow, ton/h',2,0,'0',0,12,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Po','Output pressure, at',2,1,'1',0,13,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','To','Output temperature, K',2,1,'273',0,14,'Вихідна температура, К','Выходная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','So','Output cutset, m2',2,0,'.2',0,15,'Вихідний перетин, м2','Выходное сечение, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','lo','Output length, m',2,0,'10',0,16,'Вихідна довжина, м','Выходная длина, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,17,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Ct','Heat capacity of the environment',2,0,'20',0,19,'Теплоємність середовища','Теплоёмкость среды','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Riz','Heat resistance of the isolation',2,0,'20',0,20,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Fwind','Air speed',2,0,'1',0,21,'Швидкість повітря','Скорость воздуха','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','Twind','Air temperature, К',2,0,'273',0,22,'Температура повітря, К','Температура воздуха, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe3_1','f_frq','Calculation frequency, Hz',2,0,'100',1,23,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('compressor','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,14,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Fi','Input flow, ton/h',2,1,'0',0,0,'Вхідні витрати, т/год','Входной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Pi','Input pressure, at',2,0,'1',0,1,'Вхідний тиск, ата','Входное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Ti','Input temperature, K',2,0,'293',0,2,'Вхідна температура, К','Входная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Si','Input cutset, m2',2,0,'.2',0,3,'Вхідний перетин, м2','Входное сечение, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Fo','Output flow, ton/h',2,0,'0',0,4,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Po','Output pressure, at',2,1,'1',0,5,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','To','Output temperature, K',2,1,'293',0,6,'Вихідна температура, К','Выходная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','So','Output cutset, m2',2,0,'.2',0,7,'Вихідний перетин, м2','Выходное сечение, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','lo','Output length, m',2,0,'10',0,8,'Вихідна довжина, м','Выходная длина, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Q0','Norm density of the environment, kg/m3',2,0,'1',0,9,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.98',0,10,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','Ktr','Coefficient of friction',2,0,'0.01',0,11,'Коефіцієнт тертя','Коэффициент трения','','','');
+INSERT INTO flb_techApp_io VALUES('pipeBase','f_frq','Calculation frequency, Hz',2,0,'100',0,12,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Fi1','Input 1 flow, ton/h',2,0,'20',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Ti1','Input 1 temperature, K',2,0,'20',0,2,'Вхідна температура 1, К','Входная температура 1, К','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Si1','Input 1 cutset, m2',2,0,'1',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','li1','Input 1 length, m',2,0,'10',0,4,'Вхідна довжина 1, м','Входная длина 1, м','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Q0i1','Input 1 norm density, kg/m3',2,0,'1',0,5,'Вхідна нормальна щільність 1, кг/м3','Входная нормальная плотность 1, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Kpr1','Input 1 coefficient of the compressibility [0...1]',2,0,'0.9',0,6,'Вхідний коефіцієнт стискання середовища 1 [0...1]','Входной коэффициент сжимаемости среды 1 [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Ci1','Input 1 heat capacity',2,0,'1',0,7,'Вхідна теплоємність 1','Входная теплоёмкость 1','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Fi2','Input 2 flow, ton/h',2,0,'20',0,8,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Pi2','Input 2 pressure, at',2,0,'1',0,9,'Вхідний тиск 2, ата','Входное давление 2, ата','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Ti2','Input 2 temperature, K',2,0,'40',0,10,'Вхідна температура 2, К','Входная температура 2, К','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Si2','Input 2 cutset, m2',2,0,'1',0,11,'Вхідний перетин 2, м2','Входное сечение 2, м2','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','li2','Input 2 length, m',2,0,'10',0,12,'Вхідна довжина 2, м','Входная длина 2, м','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Q0i2','Input 2 norm density, kg/m3',2,0,'1',0,13,'Вхідна нормальна щільність 2, кг/м3','Входная нормальная плотность 2, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Kpr2','Input 2 coefficient of the compressibility [0...1]',2,0,'0.9',0,14,'Вхідний коефіцієнт стискання середовища 2 [0...1]','Входной коэффициент сжимаемости среды 2 [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Ci2','Input 2 heat capacity',2,0,'1',0,15,'Вхідна теплоємність 2','Входная теплоёмкость 2','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','ki','Heat transfer coefficient',2,0,'0.9',0,16,'Коефіцієнт тепловіддачі','Коэффициент теплоотдачи ','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Fo1','Output 1 flow, ton/h',2,0,'0',0,17,'Вихідні витрати 1, т/год','Выходной расход 1, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Po1','Output 1 pressure, at',2,1,'1',0,18,'Вихідний тиск 1, ата','Выходное давление 1, ата','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','To1','Output 1 temperature, K',2,1,'273',0,19,'Вихідна температура 1, К','Выходная температура 1, K','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','So1','Output 1 cutset, m2',2,1,'1',0,20,'Вихідний перетин труби 1, м2','Выходное сечение 1, м2','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','lo1','Output 1 length, m',2,1,'10',0,21,'Вихідна довжина труби 1, м','Выходная длина 1, м','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Fo2','Output 2 flow, ton/h',2,0,'0',0,22,'Вихідні витрати 2, т/год','Выходной расход 2, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','Po2','Output 2 pressure, at',2,1,'1',0,23,'Вихідний тиск 2, ата','Выходное давление 2, ата','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','To2','Output 2 temperature, K',2,1,'273',0,24,'Вихідна температура 2, К','Выходная температура 2, K','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','So2','Output 2 cutset, m2',2,1,'1',0,25,'Вихідний перетин труби 2, м2','Выходное сечение 2, м2','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','lo2','Output 2 length, m',2,1,'10',0,26,'Вихідна довжина труби 2, м','Выходная длина 2, м','','','');
+INSERT INTO flb_techApp_io VALUES('heatExch','f_frq','Calculation frequency, Hz',2,0,'200',0,27,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Fi1','Input water flow, ton/h',2,1,'22',0,0,'Вхідні витрати води, т/год','Входной расход воды, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Pi1','Input water pressure, at',2,0,'43',0,1,'Вхідний тиск води, ата','Входное давление воды, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Ti1','Input water temperature, K',2,0,'523',0,2,'Вхідна температура води, К','Входная температура воды, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Si1','Input water pipes cutset, m2',2,0,'0.6',0,3,'Вхідний перетин труб з водою, м2','Входное сечение труб с водой, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Fi2','Input smoke gas flow, ton/h',2,1,'',0,4,'Вхідні витрати димових газів, т/год','Входной расход дымовых газов, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Pi2','Input smoke gas pressure, at',2,0,'1.3',0,5,'Вхідний тиск димових газів, ата','Входное давление дымовых газов, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Ti2','Input smoke gas temperature, K',2,0,'1700',0,6,'Вхідна температура димових газів, К','Входная температура дымовых газов, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Si2','Input smoke gas pipes cutset, m2',2,0,'10',0,7,'Вхідний перетин труби димових газів, м2','Входное сечение трубы дымовых газов, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Vi1','Barrel volume, m3',2,0,'3',0,8,'Об''єм барабану, м3','Объем барабана, м3','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Lo','Barrel level, %',2,1,'10',0,9,'Рівень у барабані, %','Уровень в барабане, %','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','S','Heating surface, m2',2,0,'15',0,10,'Поверхня нагріву, м2','Поверхность нагрева, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','k','Heat transfer coefficient',2,0,'0.8',0,11,'Коефіцієнт тепловіддачі','Коэффициент теплоотдачи ','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Fo','Output steam flow, ton/h',2,0,'20',0,12,'Вихідні витрати пару, т/год','Выходной расход пара, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Po1','Output steam pressure, at',2,1,'41.68',0,13,'Вихідний тиск пари, ата','Выходное давление пара, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','To1','Output steam temperature, K',2,1,'10',0,14,'Вихідна температура пари, К','Выходная температура пара, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','So1','Output steam pipe cutset, m2',2,0,'0.5',0,15,'Вихідний перетин труби пару, м2','Выходное сечение трубы по пару, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','lo1','Output steam pipe length, m',2,0,'5',0,16,'Вихідна довжина труби пару, м','Выходная длина трубы пара, м','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Fo2','Output smoke gas flow, ton/h',2,0,'180',0,17,'Вихідні витрати димових газів, т/год','Выходной расход дымовых газов, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Po2','Output smoke gas pressure, at',2,1,'1',0,18,'Вихідний тиск димових газів, ата','Выходное давление дымовых газов, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','To2','Output smoke gas temperature, K',2,0,'0',0,19,'Вихідна температура димових газів, К','Выходная температура дымовых газов, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Fstm','Inner barrel steam flow, ton/h',2,1,'0',0,20,'Витрати пару у барабані, т/год','Расход пара в барабане, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','Tv','Inner water temperature, K',2,1,'0',0,21,'Температура води у барабані, K','Температура воды в барабане, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBarrel','f_frq','Calculation frequency, Hz',2,0,'200',0,22,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Fi1','Input blast furnace gas flow, ton/h',2,1,'',0,0,'Вхідні витрати доменного газу, т/год','Входной расход доменного газа, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Pi1','Input blast furnace gas pressure, at',2,0,'',0,1,'Вхідний тиск доменного газу, ата','Входное давление доменного газа, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Ti1','Input blast furnace gas temperature, K',2,0,'40',0,2,'Вхідна температура димових газів, К','Входная температура доменного газа, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Si1','Input blast furnace gas pipe cutset, m2',2,0,'',0,3,'Вхідний перетин труби димових газів, м2','Входное сечение трубы доменного газа, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Fi2','Input natural gas flow, ton/h',2,1,'',0,4,'Вхідні витрати природного газу, т/год','Входной расход природного газа, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Pi2','Input natural gas pressure, at',2,0,'',0,5,'Вхідний тиск природного газу, ата','Входное давление природного газа, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Ti2','Input natural gas temperature, K',2,0,'20',0,6,'Вхідна температура природного газу, К','Входная температура природного газа, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Si2','Input natural gas pipe cutset, m2',2,0,'',0,7,'Вхідний перетин труби природного газу, м2','Входное сечение трубы природного газа, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Fi3','Input coke oven gas flow, ton/h',2,1,'',0,8,'Вхідні витрати коксового газу, т/год','Входной расход коксового газа, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Pi3','Input coke oven gas pressure, at',2,0,'',0,9,'Вхідний тиск коксового газу, ата','Входное давление коксового газа, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Ti3','Input coke oven gas temperature, K',2,0,'0',0,10,'Вхідна температура коксового газу, К','Входная температура коксового газа, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Si3','Input coke oven gas pipe cutset, m2',2,0,'',0,11,'Вхідний перетин труби коксового газу, м2','Входное сечение трубы коксового газа, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Fi4','Input air flow, ton/h',2,1,'',0,12,'Вхідні витрати повітря, т/год','Входной расход воздуха, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Pi4','Input air pressure, at',2,0,'',0,13,'Вхідний тиск повітря, ата','Входное давление воздуха, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Ti4','Input air temperature, K',2,0,'20',0,14,'Вхідна температура повітря, К','Входная температура воздуха, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Si4','Input air pipe cutset, m2',2,0,'',0,15,'Вхідний перетин труби повітря, м2','Входное сечение трубы воздуха, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Fo','Output smoke gas flow, ton/h',2,0,'',0,16,'Вихідні витрати димових газів, т/год','Выходной расход дымовых газов, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','Po','Output smoke gas pressure, at',2,1,'',0,17,'Вихідний тиск димових газів, ата','Выходное давление дымовых газов, ата','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','To','Output smoke gas temperature, K',2,1,'',0,18,'Вихідна температура димових газів, К','Выходная температура дымовых газов, K','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','So','Output smoke gas pipe cutset, m2',2,0,'90',0,19,'Вихідний перетин труби димових газів, м2','Выходное сечение трубы дымовых газов, м2','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','lo','Output smoke gas pipe length, m',2,0,'',0,20,'Вихідна довжина труби димових газів, м','Выходная длина трубы дымовых газов, м','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','V','Burner volume, m3',2,0,'830',0,21,'Об''єм топки, м3','Объём топки, м3','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','CO','Percentage of CO in the flue stack gases, %',2,1,'',0,22,'Відсоток вмісту CO у димових газах, %','Процент содержания CO в дымовых газах, %','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','O2','Percentage of O2 in the flue stack gases, %',2,1,'',0,23,'Відсоток вмісту O2 у димових газах, %','Процент содержания O2 в дымовых газах, %','','','');
+INSERT INTO flb_techApp_io VALUES('boilerBurner','f_frq','Calculation frequency, Hz',2,0,'200',0,24,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Fi1','Input 1 flow, ton/h',2,1,'0',0,0,'Вхідні витрати 1, т/год','Входной расход 1, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Pi1','Input 1 pressure, at',2,0,'1',0,1,'Вхідний тиск 1, ата','Входное давление 1, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Ti1','Input 1 temperature, K',2,0,'273',0,2,'Вхідна температура 1, К','Входная температура 1, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Si1','Input 1 cutset, m2',2,0,'0.2',0,3,'Вхідний перетин 1, м2','Входное сечение 1, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Fi2','Input 2 flow, ton/h',2,1,'0',0,4,'Вхідні витрати 2, т/год','Входной расход 2, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Pi2','Input 2 pressure, at',2,0,'1',0,5,'Вхідний тиск 2, ата','Входное давление 2, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Ti2','Input 2 temperature, K',2,0,'273',0,6,'Вхідна температура 2, К','Входная температура 2, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Si2','Input 2 cutset, m2',2,0,'0.2',0,7,'Вхідний перетин 2, м2','Входное сечение 2, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Fo','Output flow, ton/h',2,0,'0',0,8,'Вихідні витрати, т/год','Выходной расход, т/ч','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Po','Output pressure, at',2,1,'1',0,9,'Вихідний тиск, ата','Выходное давление, ата','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','To','Output temperature, K',2,1,'273',0,10,'Вихідна температура, К','Выходная температура, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','So','Output cutset, m2',2,0,'.2',0,11,'Вихідний перетин, м2','Выходное сечение, м2','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','lo','Output length, m',2,0,'10',0,12,'Вихідна довжина, м','Выходная длина, м','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Q0','Norm density of the environment, kg/m3',2,0,'1',0,13,'Нормальна щільність середовища, кг/м3','Нормальная плотность среды, кг/м3','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,14,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Ct','Heat capacity of the environment',2,0,'20',0,15,'Теплоємність середовища','Теплоёмкость среды','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Riz','Heat resistance of the isolation',2,0,'20',0,16,'Тепловий опір ізоляції','Тепловое сопротивление изоляции','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Fwind','Air speed',2,0,'1',0,17,'Швидкість повітря','Скорость воздуха','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','Twind','Air temperature, К',2,0,'273',0,18,'Температура повітря, К','Температура воздуха, К','','','');
+INSERT INTO flb_techApp_io VALUES('pipe2_1','f_frq','Calculation frequency, Hz',2,0,'100',1,19,'Частота обчислення, Гц','Частота вычисления, Гц','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_3','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,15,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('pipe1_4','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,19,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+INSERT INTO flb_techApp_io VALUES('diaphragm','Kpr','Coefficient of the compressibility [0...1]',2,0,'0.95',0,9,'Коефіцієнт стискання середовища [0...1]','Коэффициент сжимаемости среды [0...1]','','','');
+CREATE TABLE IF NOT EXISTS 'flb_Controller_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
+INSERT INTO flb_Controller_io VALUES('prescr','dbDB','DB: DB with tables name',0,1,'',0,4,'БД: Имя БД с таблицами','','БД: Ім''я БД з таблицями','','');
+INSERT INTO flb_Controller_io VALUES('prescr','dbComs','DB: Table with commands',0,1,'',0,5,'БД: Таблица с командами','','БД: Таблиця з командами','','');
+INSERT INTO flb_Controller_io VALUES('prescr','dbProgs','DB: Table with programs',0,1,'',0,6,'БД: Таблица с программами','','БД: Таблиця з програмами','','');
+INSERT INTO flb_Controller_io VALUES('prescr','mode','Mode: Finish(-2); Error(-1); Stop(0); Run(1); Pause(2); Pass command(3)',1,1,'',0,8,'Режим: Завершение(-2); Ошибка(-1); Стоп(0); Исполнение(1); Пауза(2); Пропустить команду(3)','','Режим: Завершення(-2); Помилка(-1); Стоп(0); Виконання(1); Пауза(2); Пропустити команду(3)','','');
+INSERT INTO flb_Controller_io VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','','');
+INSERT INTO flb_Controller_io VALUES('prescr','prog','Name of the selected program',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','','');
+INSERT INTO flb_Controller_io VALUES('prescr','startTm','Start time, seconds',1,0,'',0,11,'Время запуска, секунды','','Час запуску, секунди','','');
+INSERT INTO flb_Controller_io VALUES('prescr','curCom','Current command-step',0,0,'',0,12,'Текущая комманда-шаг','','Поточна команда-крок','','');
+INSERT INTO flb_Controller_io VALUES('prescr','work','Work program',4,0,'',0,13,'Рабочая программа','','Робоча програма','','');
+INSERT INTO flb_Controller_io VALUES('prescr','comsCntr','Commands controller',0,0,'',0,7,'Контроллер команд','','Контролер команд','','');
+INSERT INTO flb_Controller_io VALUES('prescr','comLs','Commands list',4,0,'',0,14,'Список команд','','Перелік команд','','');
+INSERT INTO flb_Controller_io VALUES('prescr','clcCnt','Cycles counter',1,0,'',0,15,'Счётчик циклов','','Лічильник циклів','','');
+INSERT INTO flb_Controller_io VALUES('test','offset','Offset',1,0,'100',0,4,'Смещение','','Зміщення','','');
+INSERT INTO flb_Controller_io VALUES('test','out','Out',2,1,'',0,5,'Вых.','','Вих.','','');
+INSERT INTO flb_Controller_io VALUES('test','test','Test',0,1,'',0,6,'Тест','','Тест','','');
+INSERT INTO flb_Controller_io VALUES('test','rez','Result',0,1,'',0,7,'Результат','','Результат','','');
+INSERT INTO flb_Controller_io VALUES('test1','clc','Clock',2,0,'',0,0,'Часы','','Годинник','','');
+INSERT INTO flb_Controller_io VALUES('test1','p_tm','Previous time (s)',1,1,'0',0,1,'Предыдущее время (с)','','Попередній час (с)','','');
+INSERT INTO flb_Controller_io VALUES('test1','rez','Result',2,1,'0',0,2,'Результат','','Результат','','');
+INSERT INTO flb_Controller_io VALUES('prescr','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','','');
+INSERT INTO flb_Controller_io VALUES('prescr','f_start','Function start flag',3,0,'0',0,1,'Флаг запуска функции','','Прапорець запуску функції','','Ознака за покретања функције');
+INSERT INTO flb_Controller_io VALUES('prescr','f_stop','Function stop flag',3,0,'0',0,2,'','','','','');
+INSERT INTO flb_Controller_io VALUES('prescr','this','This controller object link',4,0,'0',0,3,'','','','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','f_start','Function start flag',3,0,'',0,15,'Флаг запуска функции','','Прапорець запуску функції','','Ознака за покретања функције');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','emailTopic','EMail topic',0,0,'Notification',0,8,'Тема Эл.почты','Уведомление','Тема Ел.пошти','Повідомлення','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','emailMess','EMail message',0,0,'',0,9,'Сообщение Эл.почты','','Повідомлення Ел.пошти','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,17,'','','','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','f_stop','Function stop flag',3,0,'0',0,16,'','','','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','this','This controller object link',4,0,'0',0,18,'','','','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','tmOut','Maximum notification timeout, seconds',1,0,'5',0,0,'Максимальный таймаут сообщения, секунд','','Максимальний таймаут повідомлення, секунд','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','SMSTrId','SMS serial transport, empty for disable',0,0,'SMS',0,11,'Последовательный транспорт SMS, пусто для выключения','','Послідовний транспорт SMS, порожньо для вимкнення','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','SMSPin','SMS pin, empty for disable',0,0,'1111',0,12,'','','','','');
+INSERT INTO flb_Controller_io VALUES('test','f_frq','Function calculate frequency (Hz)',2,0,'1000',0,0,'','','','','');
+INSERT INTO flb_Controller_io VALUES('test','f_start','Function start flag',3,0,'0',0,1,'Флаг запуска функции','','Прапорець запуску функції','','Ознака за покретања функције');
+INSERT INTO flb_Controller_io VALUES('test','f_stop','Function stop flag',3,0,'0',0,2,'','','','','');
+INSERT INTO flb_Controller_io VALUES('test','this','This controller object link',4,0,'0',0,3,'','','','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','emailServer','Output transport for SMTP connection, empty for disable',0,0,'Sockets.out_SMTP',0,4,'Выходной транспорт SMTP подключений, пусто для выключения','','Вихідний транспорт SMTP підключень, порожньо для вимкнення','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','emailAuth','Auth, empty for disable',0,0,'user:pass',0,5,'Аутентификация, пусто для выключения','','Автентифікація, порожньо для вимкнення','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','emailSender','Sender',0,0,'noreply@oscada.org',0,6,'Отправитель','','Відправник','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','emailReceiver','Destination receiver address',0,0,'test@oscada.org',0,7,'Адрес назначения получателя','','Адреса призначення одержувача','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','SMSTel','SMS destination receiver, tel. number',0,0,'+380XXXXXXXXX',0,13,'Адрес получателя SMS, номер телефона','','Адреса одержувача SMS, номер телефону','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','emailState','Email notification current state',0,1,'',0,3,'Текущее состояние уведомления Эл.почтой','','Поточний стан повідомлення Ел.поштою','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','SMSState','SMS notification current state',0,1,'',0,10,'Текущее состояние уведомления SMS','','Поточний стан повідомлення SMS','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','SMSTextMd','SMS in the text mode, else PDU',3,0,'0',0,14,'SMS в текстовом режиме, иначе PDU','','SMS у текстовому режимі, інакше PDU','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','messLev','Messages level, negative for alarms',1,0,'1',0,1,'Уровень сообщений, негативный для нарушений','','Рівень повідомлень, негативний для порушень','','');
+INSERT INTO flb_Controller_io VALUES('ntfDispatch','messCat','Messages category, template or regular expression',0,0,'al*:*',0,2,'Категория сообщений, шаблон или регулярное выражение','','Категорія повідомлень, шаблон або регулярний вираз','','');
+INSERT INTO flb_Controller_io VALUES('test','inFarg','inFarg',1,1,'3.14',0,8,'','','','','');
 CREATE TABLE IF NOT EXISTS 'flb_regEl_io' ("F_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DEF" TEXT DEFAULT '' ,"uk#DEF" TEXT DEFAULT '' ,"HIDE" INTEGER DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DEF" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO flb_regEl_io VALUES('pidUnif','var','Variable','Змінна',2,0,'0','',0,0,'Переменная','','Променљива');
 INSERT INTO flb_regEl_io VALUES('pidUnif','sp','Setpoint','Завдання',2,0,'0','',0,1,'Задание','','');

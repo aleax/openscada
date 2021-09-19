@@ -240,7 +240,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     if(!s2i(SYS->cmdOpt("showWin"))) resize(600, 400);
 
     //Establish connection to the remote station
-    // !!!! Disable by default the requesting into different thread before resolve the mouse release event in the same widget processing the press event.
+    //?!?! Disabled by default for the requesting into different threads before resolving the mouse release event in the same widget processing the press event
     if(SYS->cmdOptPresent("ReqInDifThread")) initHost();
 
     initSess(prjSes_it, crSessForce);	//init session
@@ -308,7 +308,7 @@ VisRun::~VisRun( )
     QObjectList chLst = children();
     for(int iC = 0; iC < chLst.size(); iC++) {
 	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
-	if(cw)	delete cw;//cw->deleteLater();	//!!!! direct deleting due to this step is last one
+	if(cw)	delete cw;//cw->deleteLater();	//!!!! Direct deleting due to this step is the last one
     }
 }
 
@@ -1193,7 +1193,7 @@ void VisRun::aboutQt( )		{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str
 void VisRun::fullScreen( bool vl )
 {
     setWindowState(vl?Qt::WindowFullScreen:Qt::WindowNoState);
-    //!!!! But switching to the WindowMaximized performs only through the WindowNoState
+    //!!!! But switching to the WindowMaximized is performed only through the WindowNoState
     if(!vl && s2i(SYS->cmdOpt("showWin"))) {
 	QCoreApplication::processEvents();
 	setWindowState(Qt::WindowMaximized);
@@ -1614,8 +1614,8 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	if(master_pg) {
 	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
 	    cntrIfCmd(req);
-	    //!!!! Without next rows the master page removing performs just into setWidget() of the scroll area
-	    ((QScrollArea *)centralWidget())->takeWidget();
+	    //!!!! Without the next rows the master page removing performs just into setWidget() of the scroll area
+	    ((QScrollArea*)centralWidget())->takeWidget();
 	    master_pg->deleteLater();
 	}
 

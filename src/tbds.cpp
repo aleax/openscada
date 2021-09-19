@@ -157,7 +157,7 @@ AutoHD<TTable> TBDS::tblOpen( const string &bdn, bool create )
 	if(bdN == "*") bdN = TSYS::strSepParse(SYS->workDB(),1,'.');
 	if(bdT == DB_CFG) return tbl;
 	AutoHD<TBD> obd = SYS->db().at().at(bdT).at().at(bdN);
-	MtxAlloc res(obd.at().resTbls, true);	//!!!! To prevent for the multiple entry and creation try
+	MtxAlloc res(obd.at().resTbls, true);	//!!!! To prevent of the multiple entry and creation try
 	if(obd.at().enableStat()) {
 	    if(!obd.at().openStat(bdTbl)) obd.at().open(bdTbl, create);
 	    tbl = obd.at().at(bdTbl);
@@ -179,7 +179,7 @@ void TBDS::tblClose( const string &bdn, bool del )
 	if(bdN == "*") bdN = TSYS::strSepParse(SYS->workDB(),1,'.');
 	if(bdT == DB_CFG) return;
 	AutoHD<TBD> obd = SYS->db().at().at(bdT).at().at(bdN);
-	MtxAlloc res(obd.at().resTbls, true);	//!!!! To prevent for the multiple entry and creation try
+	MtxAlloc res(obd.at().resTbls, true);	//!!!! To prevent of the multiple entry and creation try
 	if(obd.at().enableStat() && obd.at().openStat(bdTbl) && obd.at().at(bdTbl).at().nodeUse() == 1)
 	    obd.at().close(bdTbl, del);
     } catch(TError &err) {
@@ -689,19 +689,17 @@ void TBDS::load_( )
     try {
 	string id, type;
 	map<string, bool> itReg;
-	//if(SYS->chkSelDB(fullDB())) {	//!!!! Must be forced one for config file rescan, release test
-	    TConfig c_el(&elDB);
-	    //c_el.cfgViewAll(false);
-	    for(int fldCnt = 0; dataSeek(fullDB(),nodePath()+"DB/",fldCnt++,c_el,UseCache); ) {
-		id = c_el.cfg("ID").getS();
-		type = c_el.cfg("TYPE").getS();
-		if(!modPresent(type) || itReg[type+"."+id])	continue;
-		if((type+"."+id) != SYS->workDB() && !at(type).at().openStat(id))
-		    at(type).at().open(id);
-		try{ at(type).at().at(id).at().load(&c_el); } catch(TError&) { }
-		itReg[type+"."+id] = true;
-	    }
-	//}
+	TConfig c_el(&elDB);
+	//c_el.cfgViewAll(false);
+	for(int fldCnt = 0; dataSeek(fullDB(),nodePath()+"DB/",fldCnt++,c_el,UseCache); ) {
+	    id = c_el.cfg("ID").getS();
+	    type = c_el.cfg("TYPE").getS();
+	    if(!modPresent(type) || itReg[type+"."+id])	continue;
+	    if((type+"."+id) != SYS->workDB() && !at(type).at().openStat(id))
+		at(type).at().open(id);
+	    try{ at(type).at().at(id).at().load(&c_el); } catch(TError&) { }
+	    itReg[type+"."+id] = true;
+	}
     } catch(TError &err) {
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	mess_sys(TMess::Error, _("Error finding and opening a new database."));

@@ -624,7 +624,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_IntAuto/*OpcUa_Int64*/))->setText(nVal->getS(&tm));	break;
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
 				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
-				    case TFld::Object: {	//!!!! With structures support append detect ones
+				    case TFld::Object: {	//?!?! With structures support append the detection ones
 					AutoHD<TArrayObj> arr = nVal->getO(&tm);
 					string rVl;
 					if(arr.freeStat()) { dtOK = false; break; }
@@ -663,7 +663,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Integer: req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Int32));	return 0;
 				    case TFld::Real:    req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Double));	return 0;
 				    case TFld::String:  req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_String));	return 0;
-				    case TFld::Object: {	//!!!! With structures support append detect ones
+				    case TFld::Object: {	//?!?! With structures support append the detection ones
 					int64_t tm = 0;
 					AutoHD<TArrayObj> arr = nVal->getO(&tm);
 					if(arr.freeStat()) break;

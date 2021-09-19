@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Рушій Середовища Візуалізації та Управління
 </td>
-<td> 7.2 </td>
+<td> 7.3 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -3353,22 +3353,24 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <p>Крім переліку відкритих сеансів, вкладка на рисунку 4.2 містить таблицю з переліком сеансів, які мають створюватися та запускатися у момент завантаження OpenSCADA. Створення сеансів за посередництвом цього механізму може бути корисним для Web-інтерфейсу. У такому випадку, при підключені Web-користувача, всі дані вже готові та забезпечується неперервність формування архівних документів.
 </p><p>Конфігурація контейнерів віджетів, у особі бібліотек віджетів та проектів, виконується за посередництвом сторінок на рисунку 4.3 (для проекту) та рисунку 4.5 (для бібліотеки віджетів). Бібліотека віджетів містить віджети, а проект — сторінки. Обидва типи контейнеру містять вкладку конфігурації Mime-даних, що використовуються віджетами (рис.4.6). Сторінка проекту, також, містить вкладку "Діагностика" (рис.4.4) для налагодження та контролю за виконанням сторінки у сеансах.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_uk.png"><img class="thumbimage" height="658" src="../files/VCAeng_pg_uk.png" width="809" /></a>  <div class="thumbcaption">Рис.4.3. Сторінка конфігурації проектів.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:846px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_uk.png"><img class="thumbimage" height="691" src="../files/VCAeng_pg_uk.png" width="844" /></a>  <div class="thumbcaption">Рис.4.3. Сторінка конфігурації проектів.</div></div></div></div>
 <p>За допомогою цієї сторінки можна встановити:
 </p>
-<ul><li> Стан контейнеру, а саме: "Ввімкнено", ім'я БД (що містить конфігурацію), дата та час останньої модифікації, лічильник використання.</li>
-<li> Ідентифікатор, ім'я, опис та іконка контейнеру.</li>
+<ul><li> Стан контейнеру, а саме: "Ввімкнено", ім'я БД (що містить конфігурацію та з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів), дата та час останньої модифікації, лічильник використання.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Об'єкт все ще підтримує визначення надлишкової адреси сховку із таблицею до того часу як ви перейменуєте її у стандартну форму "<b>prj_{ObjID}</b>".</dd></dl>
+<ul><li> Ідентифікатор, ім'я, опис та іконка контейнеру.</li>
 <li> Власник, група користувачів та права доступу до елементу.</li>
 <li> Період обчислення сеансів, заснованих на даному проекті.</li>
 <li> Ознака увімкнення за потреби.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1000px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag_uk.png"><img class="thumbimage" height="523" src="../files/VCAeng_pg_diag_uk.png" width="998" /></a>  <div class="thumbcaption">Рис.4.4. Вкладка "Діагностика" проекту.</div></div></div></div>
 <p>У цій вкладці Ви можете обрати час (або оновити до поточного) та розмір для отримання діагностичних повідомлень сеансів виконання даного проекту.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb_uk.png"><img class="thumbimage" height="573" src="../files/VCAeng_wlb_uk.png" width="680" /></a>  <div class="thumbcaption">Рис.4.5. Сторінка конфігурації бібліотек віджетів.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:871px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb_uk.png"><img class="thumbimage" height="589" src="../files/VCAeng_wlb_uk.png" width="869" /></a>  <div class="thumbcaption">Рис.4.5. Сторінка конфігурації бібліотек віджетів.</div></div></div></div>
 <p>За допомогою цієї сторінки можна встановити:
 </p>
-<ul><li> Стан контейнеру, а саме: "Ввімкнено", ім'я БД (що містить конфігурацію), дата та час останньої модифікації, лічильник використання.</li>
-<li> Ідентифікатор, ім'я, опис та іконка контейнеру.</li></ul>
+<ul><li> Стан контейнеру, а саме: "Ввімкнено", ім'я БД (що містить конфігурацію та з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів), дата та час останньої модифікації, лічильник використання.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Об'єкт все ще підтримує визначення надлишкової адреси сховку із таблицею до того часу як ви перейменуєте її у стандартну форму "<b>wlb_{ObjID}</b>".</dd></dl>
+<ul><li> Ідентифікатор, ім'я, опис та іконка контейнеру.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime_uk.png"><img class="thumbimage" height="573" src="../files/VCAeng_mime_uk.png" width="680" /></a>  <div class="thumbcaption">Рис.4.6. Вкладка конфігурації mime-даних контейнеру.</div></div></div></div>
 <p>Конфігурація сеансу проекту значно відрізняється від конфігурації проекту (рис.4.7), однак, також, містить сторінки проекту.
 </p>
@@ -3398,5 +3400,5 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2769</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/uk">Modules/VCAEngine/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
 </html>

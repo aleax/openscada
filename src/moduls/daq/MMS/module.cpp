@@ -37,7 +37,7 @@
 #define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.4"
+#define MOD_VER		"1.4.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -378,7 +378,7 @@ void *TMdContr::Task( void *icntr )
 			case MMS::VT_BitString: case MMS::VT_OctString: case MMS::VT_VisString:
 			    cntr.mVars[nId].val = value->text();
 			    break;
-			case MMS::VT_Array: case MMS::VT_Struct: {		//!!!! Need for test
+			case MMS::VT_Array: case MMS::VT_Struct: {		//?!?! Need for test
 			    vector<StackTp> stack;
 			    TArrayObj *curArr = new TArrayObj();
 			    cntr.mVars[nId].val = curArr;
@@ -772,7 +772,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 		    childAdd("it")->setAttr("itemId", TSYS::pathLev(nId,1))->setAttr("dataType", i2s(vTp));
     if(TSYS::pathLev(nId,0) != "*") value->setAttr("domainId", TSYS::pathLev(nId,0));
     switch(vTp) {
-	case MMS::VT_Array: case MMS::VT_Struct: {	//!!!! Need for test
+	case MMS::VT_Array: case MMS::VT_Struct: {	//?!?! Need for test
 	    TArrayObj *curArr = NULL;
 	    if(vl.type() != TVariant::Object || !(curArr=dynamic_cast<TArrayObj*>(&vl.getO().at()))) break;
 	    vector<TMdContr::StackTp> stack;

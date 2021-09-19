@@ -41,7 +41,7 @@
 #define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.7"
+#define MOD_VER		"1.1.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -934,7 +934,7 @@ void MRCParam::getVals( TParamContr *ip )
 	    { char t_sw = data[i_p]; data[i_p] = data[i_p+1]; data[i_p+1] = t_sw; }
 
 	    // MR_broadcast_t.Data
-	    //????  Digital outputs prepare and place
+	    //?!?!  Digital outputs prepare and place
 	    vl = 0;
 	    for(int i_d = 11; i_d >= 0; i_d--) {
 		vl = vl << 1;
@@ -1008,7 +1008,7 @@ void MRCParam::getVals( TParamContr *ip )
 	//Send outputs
 	if(!rezReq.size() && (ePrm->DO || ePrm->AO)) {
 	    data.clear();
-	    //???? Digital outputs prepare and place
+	    //?!?! Digital outputs prepare and place
 	    if(ePrm->DO) {
 		int vl = 0;
 		for(int i_d = (ePrm->DO-1); i_d >= 0; i_d--) {

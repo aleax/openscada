@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: gd.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,6 +59,6 @@ void GDObj::propSet( const string &id, TVariant val )
 
 TVariant GDObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    //????
+    //?!?!
     throw TError("GDObj",_("Error the function '%s' or missing its parameters."),id.c_str());
 }

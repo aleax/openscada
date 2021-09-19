@@ -392,7 +392,7 @@ void VCASess::pgCacheProc( const string &addr, bool fClose )
 	    // Removing page's objects - same the cached data
 	    objList(oLs);
 	    for(unsigned iO = 0; iO < oLs.size(); iO++)
-		//!!!! Means removing the page strictly and representative of the included widgets - ".wdg_"
+		//!!!! Means of removing the page strictly and representative of the included widgets - ".wdg_"
 		if(oLs[iO] == tAddr || oLs[iO].find(tAddr+".wdg_") == 0)
 		    objDel(oLs[iO]);
 
@@ -503,7 +503,7 @@ void VCAFormEl::getReq( SSess &ses )
 	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(cntr,3,"|"));
 	fCtx = "";
 
-	//!!!! Clear the attribute "value". But it can be spare for multiple connections to one session.
+	//!!!! Clearing the attribute "value", but it can be spare for multiple connections to one session
 	XMLNode req("set");
 	size_t nURLoff = ses.url.rfind("/");
 	req.setAttr("path", ((nURLoff==string::npos)?ses.url:ses.url.substr(0,nURLoff))+"/%2fserv%2fattr");
@@ -1316,7 +1316,7 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 		while( t < t_end );
 		gdImageAlphaBlending(iim,1);
 	    }
-	    //!!!! Spare and brake the coordinats for other figures with share points
+	    //?!?! Spare and brake the coordinats for other figures with share points
 	    /*(pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
 		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n2] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x,
@@ -1774,7 +1774,7 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	    arc_b = length( el_p3, el_p4 );
 	    t_start = item.ctrlPos4.x;
 	    t_end = item.ctrlPos4.y;
-	    //!!!! Spare and brake the coordinats for other figures with share points
+	    //?!?! Spare and brake the coordinats for other figures with share points
 	    /*(pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
 		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n2] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x,
@@ -2710,7 +2710,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	tmp_clr = gdImageColorResolveAlpha(im1, (uint8_t)(inundationItems[i].P_color>>16), (uint8_t)(inundationItems[i].P_color>>8),
 						(uint8_t)inundationItems[i].P_color, 127 - (uint8_t)(inundationItems[i].P_color>>24));
 
-	//!!!! May by that is enough to draw all shapes in one cicle
+	//?!?! Maybe that is enough to draw all shapes in one cicle
 	for(unsigned j = 0; j < shape_temp.size(); j++) {
 	    shapeItems[shape_temp[j]].width = 1;
 	    shapeItems[shape_temp[j]].border_width = 0;
@@ -5631,7 +5631,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
 		    labVal = TSYS::strMess("%0.5g",iV)+(isPerc?" %":"");
 		    gdImageStringFTEx(im, &brect[0], clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
-			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);	//!!!! Check for correct work combining mode
+			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);	//!!!! Checking for correct work of the combining mode
 		    markWdth = vmax(markWdth, brect[2]-brect[6]);
 		}
 	    }
@@ -6616,7 +6616,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	int trcPer = owner().trcPer*1000000;
 	if(owner().tTimeCurent && trcPer && owner().valArch.empty() &&
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd()) < 2*arh_per
-		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Cause to uneven call for current and archive
+		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Causes to uneven call for current and archive
 	{
 	    XMLNode req("get");
 	    req.setAttr("path", addr()+"/%2fserv%2fval")->

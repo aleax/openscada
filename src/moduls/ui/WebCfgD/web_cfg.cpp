@@ -22,6 +22,7 @@
 #include <time.h>
 #include <string.h>
 #include <string>
+#include <algorithm>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -40,7 +41,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.1.2"
+#define MOD_VER		"2.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -193,6 +194,8 @@ void TWEB::imgConvert( SSess &ses, string &vl )
 #endif
 }
 
+bool TWEB::compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 )	{ return v1.name < v2.name; }
+
 void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator prmEl;
@@ -290,10 +293,11 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		XMLNode req("chlds");
 		prmEl = ses.prm.find("grp");
 		string gbr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
-		// Get information about allow stations
+		// Getting information about the available stations
 		if(zero_lev.empty()) {
 		    vector<TTransportS::ExtHost> stls;
 		    SYS->transport().at().extHostList(ses.user, stls);
+		    sort(stls.begin(), stls.end(), compareHosts);
 		    stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 		    for(unsigned iSt = 0; iSt < stls.size(); iSt++) {
 			XMLNode *chN = req.childAdd("el")->setAttr("id",stls[iSt].id)->

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfgD file: web_cfg.h
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -73,6 +73,8 @@ class TWEB: public TUI
 	//Methods
 	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
 	    const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+
+	static bool compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 );
 
 	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );

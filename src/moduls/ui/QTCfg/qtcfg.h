@@ -214,6 +214,7 @@ private:
     void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool comm = false );
 
     // Control requests
+    static bool compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 );
     void initHosts( );
     int cntrIfCmd( XMLNode &node );
     int cntrIfCmdHosts( XMLNode &node );

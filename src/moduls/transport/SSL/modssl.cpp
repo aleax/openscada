@@ -41,7 +41,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.0"
+#define MOD_VER		"3.4.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -122,7 +122,7 @@ void TTransSock::postEnable( int flag )
 
 void TTransSock::preDisable( int flag )
 {
-    //!!!! Due to SSL_library_init() some time crashable at second call, seen on Ubuntu 16.04
+    //!!!! Due to SSL_library_init() is some time crashable at second call, saw on Ubuntu 16.04
     if(SYS->stopSignal() == SIGUSR2) throw err_sys("Hold when overloaded to another project.");
 }
 
@@ -1237,7 +1237,7 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), err.c_str());
 		    if(logLen()) pushLogMess(err.c_str());
 		    if(writeReq) {
-			//!!!! Must reconnect to prevent the possibility of getting response of the previous request.
+			//!!!! Must be reconnected to prevent the possibility of getting response of the previous request.
 			stop();
 			if(reqTry < wAttempts) { start(); goto repeate; }
 		    }

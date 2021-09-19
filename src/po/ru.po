@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-18 15:03+0300\n"
+"POT-Creation-Date: 2021-09-19 10:26+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -556,6 +556,7 @@ msgstr "Ошибка записи в БД или конфигурационны�
 msgid "Value ID"
 msgstr "ID значения"
 
+#, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"

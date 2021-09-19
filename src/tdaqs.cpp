@@ -40,7 +40,7 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data Acquisition"),true), mElErr("Error"), 
     mElLib.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
     mElLib.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     mElLib.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    mElLib.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
+    mElLib.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
 
     //Template DB structure
     mElTmpl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
@@ -494,7 +494,7 @@ bool TDAQS::rdProcess( XMLNode *reqSt )
 	AutoHD<TController> cntr = at(TSYS::strParse(cls[iC],0,".")).at().at(TSYS::strParse(cls[iC],1,"."));
 
 	// Process remote run controllers, before the redundancy status change
-	// !!!!: Moved here from the end
+	// !!!! Moved here from the end
 	if(cntr.at().startStat() && cntr.at().redntUse()) cntr.at().redntDataUpdate();
 
 	// Check contoller run plane

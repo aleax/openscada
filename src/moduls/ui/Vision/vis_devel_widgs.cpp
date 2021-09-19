@@ -528,7 +528,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		}
 	    }
 
-	    if(!mainWin()->cntrIfCmd(req) /*&& req.text() == val*/) {	//!!!! Commented by dynamic translation mode specific
+	    if(!mainWin()->cntrIfCmd(req) /*&& req.text() == val*/) {	//!!!! Commented by specifics of the dynamic translation mode
 		//Send change request to opened to edit widget
 		if(dw)	dw->chRecord(chCtx);
 
@@ -1382,7 +1382,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
     if(disIconsCW)	req.setAttr("disIconsCW", "1");
     owner()->cntrIfCmd(req);
 
-    //!!!! Maybe take maximum from the requesting time
+    //?!?! Maybe take maximum from the requesting time
     if(1e-6*(TSYS::curTime()-d_cnt) > 5) {
 	if(disIconsCW) disIconsW = true;
 	else disIconsCW = true;
@@ -1544,7 +1544,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		//   Get parent name
 		if(!root_allow && wdgN->attr("parent") == "root") root_allow = true;
 		//   Add action
-		/*if(upd_wdg.empty()) iA = use_act.size();	//!!!! Cause menu grow after global update
+		/*if(upd_wdg.empty()) iA = use_act.size();	//!!!! Causes the menu grow after global update
 		else*/
 		for(iA = 0; iA < use_act.size(); iA++)
 		    if(use_act[iA]->objectName() == wipath.c_str())
@@ -2378,7 +2378,7 @@ void DevelWdgView::wdgPopup( )
 	    popup.addAction(mainWin()->actVisItDel);
 	    popup.addAction(mainWin()->actVisItClear);
 	    popup.addAction(mainWin()->actVisItChDown);
-	    /*if(sel_cnt == 1) {	//!!!! For what?
+	    /*if(sel_cnt == 1) {	//?!?! For what?
 		popup.addAction(mainWin()->actVisItProp);
 		popup.addAction(mainWin()->actVisItEdit);
 	    }*/
@@ -3105,7 +3105,7 @@ bool DevelWdgView::event( QEvent *event )
 			fMoveHold = true;
 			holdPnt = curp;
 		    }
-		    update();	//!!!! For QT's included widget's update bug hack (Document,Protocol and other)
+		    update();	//!!!! To hack the QT's included widget's update (Document,Protocol and other)
 		    return true;
 		}
 		break;
@@ -3158,7 +3158,7 @@ bool DevelWdgView::event( QEvent *event )
 		}
 
 		if(fSelChange) {
-		    setSelect(true, PrcChilds|NoUpdate);	//!!!! For QT's included widget's update bug hack (Document,Protocol and other)
+		    setSelect(true, PrcChilds|NoUpdate);	//!!!! To hack the QT's included widget's update (Document,Protocol and other)
 		    fSelChange = false;
 		}
 
@@ -3228,7 +3228,7 @@ bool DevelWdgView::event( QEvent *event )
 			!fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus())
 		{
 		    if(editWdg)	editWdg->setSelect(false, PrcChilds);
-		    //setSelect(false);	//!!!! To prevent spare requests for to the remote station at the window moving.
+		    //setSelect(false);	//!!!! To prevent spare requests for to the remote station at the window moving
 		}
 		return true;
 	    case QEvent::MouseMove: {

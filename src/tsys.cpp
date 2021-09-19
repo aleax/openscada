@@ -2068,8 +2068,8 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
 		" " + (toCreate?"create":"proc") +
 		" " + prj).c_str());
 
-    //Check for the project folder presence and main items creation at miss or wrong the projects manager procedure
-    //!!!!
+    //Check for the project folder presence and main items creation at missing or wrong the projects manager procedure
+    //?!?!
 
     //Check for the project folder availability and switch to the project
     string  prjDir = prjUserDir() + "/" + prj,
@@ -2321,7 +2321,7 @@ void *TSYS::taskWrap( void *stas )
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
-    //tsk->prior = param.sched_priority;	//!!!! Commented for nice
+    //tsk->prior = param.sched_priority;	//!!!! Commented for NICE allowing
 
 #if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     //Load and init CPU set
@@ -2361,7 +2361,7 @@ void *TSYS::taskWrap( void *stas )
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	SYS->mess_sys(TMess::Error, _("Task %u unexpected terminated by an exception."), tsk->thr);
     }
-    //!!!! The code causes: FATAL: exception not rethrown
+    //!!!! The code causes - FATAL, do not rethrow
     //catch(...)	{ mess_sys(TMess::Error, _("Task %u unexpected terminated by an unknown exception."), tsk->thr); }
 
     //Mark for task finish

@@ -47,13 +47,14 @@ class Lib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )		{ return mId; }
+	string id( ) const	{ return mId; }
 	string name( );
 	string descr( )		{ return cfg("DESCR").getS(); }
 	bool startStat( ) const	{ return runSt; }
 
+	bool isStdStorAddr( ) const		{ return (tbl() == ("flb_"+id())); }	//????[v1.0] Remove
 	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
-	string tbl( ) const			{ return cfg("DB").getS(); }
+	string tbl( ) const			{ return cfg("DB").getS().empty() ? ("flb_"+id()) : cfg("DB").getS(); }
 	string fullDB( bool qTop = false ) const { return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }

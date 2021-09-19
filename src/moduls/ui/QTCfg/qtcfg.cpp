@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <algorithm>
 
 #include <QToolTip>
 #include <QTreeWidget>
@@ -950,7 +951,7 @@ void ConfApp::pageRefresh( int tm )
 
     try {
 	//Tree part update.
-	//!!!! That is bad here for big items number, at last for about 2000 ones, in updating at selecting any item
+	//!!!! That is bad here for big items number, at least for about 2000 ones, in updating at selecting any item
 	if(CtrTree->currentItem() && !pgDisplay && dynamic_cast<QAction*>(sender()))
 	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent() : CtrTree->currentItem(), true);
 
@@ -1440,7 +1441,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		    int tblWdth = tbl->maximumViewportSize().width() -
 				    ((tbl->verticalScrollBar()&&tbl->verticalScrollBar()->isVisible())?tbl->verticalScrollBar()->size().width():0);
-			//!!!! tbl->verticalScrollBar()->size().width() newer can be used here due it initially has 100 and does not update more
 		    int averWdth = tbl->columnCount() ? (tblWdth/tbl->columnCount()) : 0;
 		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0;
 		    //   Count width params
@@ -2031,7 +2031,7 @@ void ConfApp::pageDisplay( const string path )
     actNext->setEnabled(next.size());
 
     if(path != pgInfo.attr("path")) {
-	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure for proper working of the checking for not applied editable widgets
+	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure of proper working of the checking for not applied editable widgets
 
 	// Trace the control tree
 	QTreeWidgetItem *tIt;
@@ -2557,10 +2557,13 @@ string ConfApp::getPrintVal( const string &vl )
     return isBool ? "B["+TSYS::strDecode(vl,TSYS::Bin)+"]" : vl;
 }
 
+bool ConfApp::compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 )	{ return v1.name < v2.name; }
+
 void ConfApp::initHosts( )
 {
     vector<TTransportS::ExtHost> stls;
     SYS->transport().at().extHostList(wUser->user().toStdString(), stls);
+    sort(stls.begin(), stls.end(), compareHosts);
     stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 
     //Remove for not present hosts

@@ -50,7 +50,7 @@
 <td> <a href="../Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Сервер OPC-UA
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -212,7 +212,7 @@
 <p>Кінцевий вузол протоколу OPC-UA це фактично об'єкт серверу OPC-UA. Кінцеві вузли у OPC-UA можуть бути як локальними, так і віддаленими. Локальні кінцеві вузли призначено для надання ресурсів станції OpenSCADA за протоколом OPC-UA, в той-же час віддалені кінцеві вузли слугують для виконання як сервісу огляду доступних OPC-UA вузлів, так і для шлюзування запитів до віддалених станцій. У цій версії модуля підтримується тільки конфігурація локальних кінцевих вузлів.
 </p><p>Загальна конфігурація кінцевого вузла здійснюється на головній вкладці сторінки кінцевого вузла (рис.3) параметрами:
 </p>
-<ul><li> Стан вузла, а саме: загальний статус, перелік активних сеансів та підписок, "Включено" та ім'я БД, яка містить конфігурацію.</li>
+<ul><li> Стан вузла, а саме: загальний статус, перелік активних сеансів та підписок, "Включено" та ім'я БД, яка містить конфігурацію, з відстеженням наявності даних у різних сховищах та наданням послідовного видалення дублікатів.</li>
 <li> Ідентифікатор, Ім'я та опис вузла.</li>
 <li> Стан, у який переводити вузол при завантажені: "Включено".</li>
 <li> Тип кодування протоколу, на цей час це лише "Бінарний".</li>
@@ -975,5 +975,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2769</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
 </html>

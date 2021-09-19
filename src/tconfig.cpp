@@ -57,7 +57,7 @@ TConfig &TConfig::exclCopy( const TConfig &config, const string &passCpLs, bool 
 
     //Copy elements for single/builtin elements structure
     if(cpElsToSingle && single && mElem) {
-	//!!!!
+	//?!?!
     }
 
     cfgList(listEl);
@@ -366,7 +366,7 @@ string TCfg::getS( ) const
 	if((fld().flg()&TFld::TransltText) && !noTransl()) {
 	    string rezT = TSYS::strSepParse(rez, 1, 0), rezSrc = TSYS::strSepParse(rez, 2, 0);
 	    rez = TSYS::strSepParse(rez, 0, 0);
-	    if(rez.size() && rezSrc.size()) Mess->translReg(rez, rezSrc);	//!!!! May be too busy
+	    if(rez.size() && rezSrc.size()) Mess->translReg(rez, rezSrc);	//!!!! Can be very busy
 	    return rezT.size() ? rezT : rez;
 	}
 	else return TSYS::strSepParse(rez, 0, 0);

@@ -291,7 +291,7 @@ void Widget::setEnable( bool val, bool force )
 	mess_sys(TMess::Debug, _("Disabling the widget."));
 
 	//Disable heritors widgets.
-	//!!!! Before all but else the heritors lost some attributes
+	//!!!! Before all but else the heritors lose some attributes
 	for(unsigned iH = 0; iH < herit().size(); )
 	    if(herit()[iH].at().enable())
 		try { herit()[iH].at().setEnable(false); }
@@ -550,7 +550,7 @@ string Widget::wChDown( const string &ia )
     AutoHD<Attr> attr;
     for(unsigned iA = 0; iA < ls.size(); iA++) {
 	if(!attrPresent(ls[iA]) || !(attr=attrAt(ls[iA])).at().modif()) continue;
-	//!!!! Check for type and generic flags changes
+	//!!!! Checking for the type and generic flags changing
 	if(!parw.at().attrPresent(ls[iA])) {
 	    if(!(attr.at().flgGlob()&Attr::IsUser)) continue;
 	    parw.at().attrAdd(new TFld(ls[iA].c_str(),"",attr.at().type(),attr.at().fld().flg()));

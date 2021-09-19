@@ -634,7 +634,10 @@ void LineEdit::setValue( const QString &txt )
 	    break;
 	case Combo:
 	    if(((QComboBox*)ed_fld)->findText(txt) < 0) ((QComboBox*)ed_fld)->addItem(txt);
-	    if(txt != value())	((QComboBox*)ed_fld)->setEditText(txt);
+	    if(txt != value()) {
+		((QComboBox*)ed_fld)->setEditText(txt);
+		((QComboBox*)ed_fld)->setCurrentIndex(((QComboBox*)ed_fld)->findText(txt));
+	    }
 	    break;
     }
     if(ed_fld) ed_fld->blockSignals(false);
@@ -1135,7 +1138,7 @@ void WdgView::childsClear( )
     QObjectList chLst = children();
     for(int iC = 0; iC < chLst.size(); iC++) {
 	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
-	if(cw)	delete cw;//cw->deleteLater(); //!!!! direct deleting due to this step is last one mostly
+	if(cw)	delete cw;//cw->deleteLater(); //!!!! Direct deleting due to this step is last one mostly
     }
 }
 

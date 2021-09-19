@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-08 10:51+0300\n"
+"POT-Creation-Date: 2021-09-19 11:01+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -179,6 +179,7 @@ msgstr "Verbunden"
 msgid "Disconnected"
 msgstr "Getrennt"
 
+#, c-format
 msgid "%s %s-developing: %s"
 msgstr "%s %s-Entwicklung: %s"
 

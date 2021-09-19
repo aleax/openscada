@@ -32,7 +32,7 @@
 #define DAQ_APER_FRQ	1000000	// Frequency of representing the aperiodic invokes, like to f_start, of the periodic processes in Hz
 #define RECURS_DET_HOPS	20	// Hops/depth number of the recursion detection
 
-// !!!!(to v1.0) Left for the compatibility
+// ????[API,v1.0] Remove - left for the compatibility
 #define OBJ_ID_SZ	"20"
 #define OBJ_NM_SZ	"100"
 #define ARCH_ID_SZ	"70"

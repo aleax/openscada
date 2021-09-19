@@ -11,20 +11,20 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (2% translated)">українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
 </div>
 <p>This page describes an application programming interface (API) of OpenSCADA.
-</p><p>OpenSCADA is the project of an open SCADA-system based on the modular principle. The document contains an exhaustive description of the internal system architecture of OpenSCADA. In addition to information on the architecture the background information on methods and attributes of the system is provided.<br />
-The document is intended for programmers wishing to understand the architecture of OpenSCADA and develop extensions for it. The document is not intended for users and integrators of OpenSCADA!
-</p><p>For understanding of this document it is necessary for you to know the concept of Object Oriented Programming (OOP) and Universal Modeling Language (UML), and for the possibility of studying the source code of the project it is required the knowledge of programming language C++. In addition, the document contains the mentioning of the following technologies: relational databases, XML.
+</p><p>OpenSCADA is a project of the open SCADA-system based on the modular principle. The document contains exhaustive information of the internal architecture of the OpenSCADA objects. Additionally there is provided of information about the object's attributes and methods.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This document is intended for programmers wishing to understand the architecture of OpenSCADA and to develop extensions for it. The document is not intended mostly for users and integrators of OpenSCADA, although some things can be useful to them to understand the work.
+</p><p>For the possibility of understanding the document it is necessary for you to know the concept of Object Oriented Programming (OOP) and Universal Modelling Language (UML), and for the possibility of studying the source code of the project it is required the knowledge of the programming language C++. Additionally the document contains of mentioning of the following technologies: relational databases, XML.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#The_internal_structure.2C_OpenSCADA_API"><span class="tocnumber">1</span> <span class="toctext">The internal structure, OpenSCADA API</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#The_overall_structure_of_the_system._Modularity_.28TSYS.2C_TSubSYS.2C_TModule.29"><span class="tocnumber">2</span> <span class="toctext">The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></a>
+<li class="toclevel-1 tocsection-1"><a href="#Internal_structure"><span class="tocnumber">1</span> <span class="toctext">Internal structure</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Overall_structure_of_the_program_.E2.80.94_modularity"><span class="tocnumber">2</span> <span class="toctext">Overall structure of the program — modularity</span></a>
 <ul>
 <li class="toclevel-2 tocsection-3"><a href="#The_root_object_system_.28TSYS.29"><span class="tocnumber">2.1</span> <span class="toctext"><span>The root object system (TSYS)</span></span></a></li>
 <li class="toclevel-2 tocsection-4"><a href="#Object_of_the_messages_system_.28TMess.29"><span class="tocnumber">2.2</span> <span class="toctext"><span>Object of the messages system (TMess)</span></span></a></li>
@@ -32,7 +32,7 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-6"><a href="#Object_Module_.28TModule.29"><span class="tocnumber">2.4</span> <span class="toctext"><span>Object Module (TModule)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-7"><a href="#Subsystem_.22Database.22_.28TBDS.29"><span class="tocnumber">3</span> <span class="toctext"><span>Subsystem "Database" (TBDS)</span></span></a>
+<li class="toclevel-1 tocsection-7"><a href="#Subsystem_.22DB.22"><span class="tocnumber">3</span> <span class="toctext"><span>Subsystem "DB"</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-8"><a href="#Object_of_subsystem_.22Database.22_.28TBDS.29"><span class="tocnumber">3.1</span> <span class="toctext"><span>Object of subsystem "Database" (TBDS)</span></span></a></li>
 <li class="toclevel-2 tocsection-9"><a href="#Modular_object_of_types_of_databases_.28TTypeBD.29"><span class="tocnumber">3.2</span> <span class="toctext"><span>Modular object of types of databases (TTypeBD)</span></span></a></li>
@@ -40,7 +40,7 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-11"><a href="#The_object_of_the_table_.28TTable.29"><span class="tocnumber">3.4</span> <span class="toctext"><span>The object of the table (TTable)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-12"><a href="#The_subsystem_.22Data_acquisition.22_.28TDAQS.29"><span class="tocnumber">4</span> <span class="toctext">The subsystem "Data acquisition" (TDAQS)</span></a>
+<li class="toclevel-1 tocsection-12"><a href="#Subsystem_.22Data_acquisition.22"><span class="tocnumber">4</span> <span class="toctext">Subsystem "Data acquisition"</span></a>
 <ul>
 <li class="toclevel-2 tocsection-13"><a href="#Object_of_subsystem_.22Data_acquisition.22_.28TDAQS.29"><span class="tocnumber">4.1</span> <span class="toctext"><span>Object of subsystem "Data acquisition" (TDAQS)</span></span></a></li>
 <li class="toclevel-2 tocsection-14"><a href="#Modular_object_of_the_controller.27s_type_.28TTypeDAQ.29"><span class="tocnumber">4.2</span> <span class="toctext"><span>Modular object of the controller's type (TTypeDAQ)</span></span></a></li>
@@ -57,7 +57,7 @@ The document is intended for programmers wishing to understand the architecture 
 </li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-23"><a href="#Subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "Archives" (TArchiveS)</span></span></a>
+<li class="toclevel-1 tocsection-23"><a href="#Subsystem_.22Archives-History.22"><span class="tocnumber">5</span> <span class="toctext"><span>Subsystem "Archives-History"</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-24"><a href="#The_object_of_the_subsystem_.22Archives.22_.28TArchiveS.29"><span class="tocnumber">5.1</span> <span class="toctext"><span>The object of the subsystem "Archives" (TArchiveS)</span></span></a></li>
 <li class="toclevel-2 tocsection-25"><a href="#The_object_of_the_values.27_archive_.28TVArchive.29"><span class="tocnumber">5.2</span> <span class="toctext"><span>The object of the values' archive (TVArchive)</span></span></a></li>
@@ -68,7 +68,7 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-30"><a href="#The_object_of_the_archive.27s_element_in_the_archiver_.28TVArchEl.29"><span class="tocnumber">5.7</span> <span class="toctext"><span>The object of the archive's element in the archiver (TVArchEl)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-31"><a href="#Subsystem_.22Transports.22_.28TTransportS.29"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "Transports" (TTransportS)</span></span></a>
+<li class="toclevel-1 tocsection-31"><a href="#Subsystem_.22Transports.22"><span class="tocnumber">6</span> <span class="toctext"><span>Subsystem "Transports"</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-32"><a href="#The_object_of_the_.22Transports.22_subsystem_.28TTransportS.29"><span class="tocnumber">6.1</span> <span class="toctext"><span>The object of the "Transports" subsystem (TTransportS)</span></span></a></li>
 <li class="toclevel-2 tocsection-33"><a href="#The_modular_object_of_the_transports.27_type_.28TTypeTransport.29"><span class="tocnumber">6.2</span> <span class="toctext"><span>The modular object of the transports' type (TTypeTransport)</span></span></a></li>
@@ -76,33 +76,33 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-35"><a href="#The_object_of_the_output_transports_.28TTransportOut.29"><span class="tocnumber">6.4</span> <span class="toctext"><span>The object of the output transports (TTransportOut)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-36"><a href="#Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></a>
+<li class="toclevel-1 tocsection-36"><a href="#Subsystem_.22Transport_protocols.22"><span class="tocnumber">7</span> <span class="toctext"><span>Subsystem "Transport protocols"</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-37"><a href="#The_object_of_the_.22Communication_interfaces.27_protocols.22_subsystem_.28TProtocolS.29"><span class="tocnumber">7.1</span> <span class="toctext"><span>The object of the "Communication interfaces' protocols" subsystem (TProtocolS)</span></span></a></li>
 <li class="toclevel-2 tocsection-38"><a href="#The_modular_object_of_the_protocol_.28TProtocol.29"><span class="tocnumber">7.2</span> <span class="toctext"><span>The modular object of the protocol (TProtocol)</span></span></a></li>
 <li class="toclevel-2 tocsection-39"><a href="#The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="tocnumber">7.3</span> <span class="toctext"><span>The object of the input protocol's session (TProtocolIn)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-40"><a href="#Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces" (TUIS)</span></a>
+<li class="toclevel-1 tocsection-40"><a href="#Subsystem_.22User_interfaces.22"><span class="tocnumber">8</span> <span class="toctext">Subsystem "User interfaces"</span></a>
 <ul>
 <li class="toclevel-2 tocsection-41"><a href="#The_object_of_the_.22User_interfaces.22_subsystem_.28TUIS.29"><span class="tocnumber">8.1</span> <span class="toctext"><span>The object of the "User interfaces" subsystem (TUIS)</span></span></a></li>
 <li class="toclevel-2 tocsection-42"><a href="#The_modular_object_of_the_user_interface_.28TUI.29"><span class="tocnumber">8.2</span> <span class="toctext"><span>The modular object of the user interface (TUI)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-43"><a href="#Subsystem_.22Specials.22_.28TSpecialS.29"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Specials" (TSpecialS)</span></a>
+<li class="toclevel-1 tocsection-43"><a href="#Subsystem_.22Specials.22"><span class="tocnumber">9</span> <span class="toctext">Subsystem "Specials"</span></a>
 <ul>
 <li class="toclevel-2 tocsection-44"><a href="#The_object_of_the_.22Specials.22_subsystem_.28TSpecialS.29"><span class="tocnumber">9.1</span> <span class="toctext"><span>The object of the "Specials" subsystem (TSpecialS)</span></span></a></li>
 <li class="toclevel-2 tocsection-45"><a href="#The_modular_object_of_the_specials_.28TSpecial.29"><span class="tocnumber">9.2</span> <span class="toctext"><span>The modular object of the specials (TSpecial)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-46"><a href="#Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Security" (TSeсurity)</span></a>
+<li class="toclevel-1 tocsection-46"><a href="#Subsystem_.22Security.22"><span class="tocnumber">10</span> <span class="toctext">Subsystem "Security"</span></a>
 <ul>
 <li class="toclevel-2 tocsection-47"><a href="#The_object_of_the_.22Security.22_subsystem_.28TSe.D1.81urity.29"><span class="tocnumber">10.1</span> <span class="toctext"><span>The object of the "Security" subsystem (TSeсurity)</span></span></a></li>
 <li class="toclevel-2 tocsection-48"><a href="#The_user.27s_object_.28TUser.29"><span class="tocnumber">10.2</span> <span class="toctext"><span>The user's object (TUser)</span></span></a></li>
 <li class="toclevel-2 tocsection-49"><a href="#The_users.27_group_object_.28TGroup.29"><span class="tocnumber">10.3</span> <span class="toctext"><span>The users' group object (TGroup)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-50"><a href="#Subsystem_.E2.80.9CModules.27_sheduling.E2.80.9D_.28TModSchedul.29"><span class="tocnumber">11</span> <span class="toctext">Subsystem “Modules' sheduling” (TModSchedul)</span></a>
+<li class="toclevel-1 tocsection-50"><a href="#Subsystem_.22Modules_scheduler.22"><span class="tocnumber">11</span> <span class="toctext">Subsystem "Modules scheduler"</span></a>
 <ul>
 <li class="toclevel-2 tocsection-51"><a href="#The_object_of_the_subsystem_.22Modules.27_sheduling.22_.28TModSchedul.29"><span class="tocnumber">11.1</span> <span class="toctext"><span>The object of the subsystem "Modules' sheduling" (TModSchedul)</span></span></a></li>
 </ul>
@@ -114,88 +114,89 @@ The document is intended for programmers wishing to understand the architecture 
 <li class="toclevel-2 tocsection-55"><a href="#The_object_of_the_function.27s_value_.28TValFunc.29"><span class="tocnumber">12.3</span> <span class="toctext"><span>The object of the function's value (TValFunc)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-56"><a href="#Data_in_OpenSCADA_and_their_storage_in_the_DB_.28TConfig.29"><span class="tocnumber">13</span> <span class="toctext">Data in OpenSCADA and their storage in the DB (TConfig)</span></a>
+<li class="toclevel-1 tocsection-56"><a href="#Data_in_OpenSCADA_and_their_storage"><span class="tocnumber">13</span> <span class="toctext"><span>Data in OpenSCADA and their storage</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-57"><a href="#Data_object_.28TConfig.29"><span class="tocnumber">13.1</span> <span class="toctext"><span>Data object (TConfig)</span></span></a></li>
-<li class="toclevel-2 tocsection-58"><a href="#Data_cell_.28TCfg.29"><span class="tocnumber">13.2</span> <span class="toctext"><span>Data cell (TCfg)</span></span></a></li>
-<li class="toclevel-2 tocsection-59"><a href="#Data_structure_object_.28TElem.29"><span class="tocnumber">13.3</span> <span class="toctext"><span>Data structure object (TElem)</span></span></a></li>
-<li class="toclevel-2 tocsection-60"><a href="#Data_structure_cell_.28TFld.29"><span class="tocnumber">13.4</span> <span class="toctext"><span>Data structure cell (TFld)</span></span></a></li>
-<li class="toclevel-2 tocsection-61"><a href="#The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="tocnumber">13.5</span> <span class="toctext"><span>The object which preacts about changing of the structure (TValElem)</span></span></a></li>
-<li class="toclevel-2 tocsection-62"><a href="#Data_cell_.28TVariant.29"><span class="tocnumber">13.6</span> <span class="toctext"><span>Data cell (TVariant)</span></span></a></li>
-<li class="toclevel-2 tocsection-63"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
+<li class="toclevel-2 tocsection-57"><a href="#Data_storing_conception"><span class="tocnumber">13.1</span> <span class="toctext"><span>Data storing conception</span></span></a></li>
+<li class="toclevel-2 tocsection-58"><a href="#Data_object_.28TConfig.29"><span class="tocnumber">13.2</span> <span class="toctext"><span>Data object (TConfig)</span></span></a></li>
+<li class="toclevel-2 tocsection-59"><a href="#Data_cell_.28TCfg.29"><span class="tocnumber">13.3</span> <span class="toctext"><span>Data cell (TCfg)</span></span></a></li>
+<li class="toclevel-2 tocsection-60"><a href="#Data_structure_object_.28TElem.29"><span class="tocnumber">13.4</span> <span class="toctext"><span>Data structure object (TElem)</span></span></a></li>
+<li class="toclevel-2 tocsection-61"><a href="#Data_structure_cell_.28TFld.29"><span class="tocnumber">13.5</span> <span class="toctext"><span>Data structure cell (TFld)</span></span></a></li>
+<li class="toclevel-2 tocsection-62"><a href="#The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="tocnumber">13.6</span> <span class="toctext"><span>The object which preacts about changing of the structure (TValElem)</span></span></a></li>
+<li class="toclevel-2 tocsection-63"><a href="#Data_cell_.28TVariant.29"><span class="tocnumber">13.7</span> <span class="toctext"><span>Data cell (TVariant)</span></span></a></li>
+<li class="toclevel-2 tocsection-64"><a href="#User_object_.28TVarObj.29"><span class="tocnumber">13.8</span> <span class="toctext"><span>User object (TVarObj)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-64"><a href="#The_control_interface_of_OpenSCADA_and_the_dynamic_tree_of_the_control_nodes_.28TCntrNode.29"><span class="tocnumber">14</span> <span class="toctext"><span>The control interface of OpenSCADA and the dynamic tree of the control nodes (TCntrNode)</span></span></a>
+<li class="toclevel-1 tocsection-65"><a href="#Control_interface_of_OpenSCADA_and_the_dynamic_tree_of_the_control_nodes"><span class="tocnumber">14</span> <span class="toctext"><span>Control interface of OpenSCADA and the dynamic tree of the control nodes</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-65"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
-<li class="toclevel-2 tocsection-66"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
-<li class="toclevel-2 tocsection-67"><a href="#Tags_of_the_description_of_the_information_structure_of_the_control_interface"><span class="tocnumber">14.3</span> <span class="toctext">Tags of the description of the information structure of the control interface</span></a>
+<li class="toclevel-2 tocsection-66"><a href="#The_syntax_of_the_request_and_response_of_the_control_interface"><span class="tocnumber">14.1</span> <span class="toctext">The syntax of the request and response of the control interface</span></a></li>
+<li class="toclevel-2 tocsection-67"><a href="#Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="tocnumber">14.2</span> <span class="toctext">Tag of the information structure for describing the groups of child branches of the page</span></a></li>
+<li class="toclevel-2 tocsection-68"><a href="#Tags_of_the_description_of_the_information_structure_of_the_control_interface"><span class="tocnumber">14.3</span> <span class="toctext">Tags of the description of the information structure of the control interface</span></a>
 <ul>
-<li class="toclevel-3 tocsection-68"><a href="#Area_tag_.22area.22"><span class="tocnumber">14.3.1</span> <span class="toctext">Area tag "area"</span></a></li>
-<li class="toclevel-3 tocsection-69"><a href="#Data_tags"><span class="tocnumber">14.3.2</span> <span class="toctext">Data tags</span></a>
+<li class="toclevel-3 tocsection-69"><a href="#Area_tag_.22area.22"><span class="tocnumber">14.3.1</span> <span class="toctext">Area tag "area"</span></a></li>
+<li class="toclevel-3 tocsection-70"><a href="#Data_tags"><span class="tocnumber">14.3.2</span> <span class="toctext">Data tags</span></a>
 <ul>
-<li class="toclevel-4 tocsection-70"><a href="#Tag_.22fld.22"><span class="tocnumber">14.3.2.1</span> <span class="toctext">Tag "fld"</span></a></li>
-<li class="toclevel-4 tocsection-71"><a href="#Tag_.22list.22"><span class="tocnumber">14.3.2.2</span> <span class="toctext">Tag "list"</span></a></li>
-<li class="toclevel-4 tocsection-72"><a href="#Tag_.22table.22"><span class="tocnumber">14.3.2.3</span> <span class="toctext">Tag "table"</span></a></li>
-<li class="toclevel-4 tocsection-73"><a href="#Tag_.22img.22"><span class="tocnumber">14.3.2.4</span> <span class="toctext">Tag "img"</span></a></li>
-<li class="toclevel-4 tocsection-74"><a href="#Commands_with_the_parameters._Tag_.22comm.22"><span class="tocnumber">14.3.2.5</span> <span class="toctext">Commands with the parameters. Tag "comm"</span></a></li>
-<li class="toclevel-4 tocsection-75"><a href="#Branches_.28child_nodes.29"><span class="tocnumber">14.3.2.6</span> <span class="toctext">Branches (child nodes)</span></a></li>
+<li class="toclevel-4 tocsection-71"><a href="#Tag_.22fld.22"><span class="tocnumber">14.3.2.1</span> <span class="toctext">Tag "fld"</span></a></li>
+<li class="toclevel-4 tocsection-72"><a href="#Tag_.22list.22"><span class="tocnumber">14.3.2.2</span> <span class="toctext">Tag "list"</span></a></li>
+<li class="toclevel-4 tocsection-73"><a href="#Tag_.22table.22"><span class="tocnumber">14.3.2.3</span> <span class="toctext">Tag "table"</span></a></li>
+<li class="toclevel-4 tocsection-74"><a href="#Tag_.22img.22"><span class="tocnumber">14.3.2.4</span> <span class="toctext">Tag "img"</span></a></li>
+<li class="toclevel-4 tocsection-75"><a href="#Commands_with_the_parameters._Tag_.22comm.22"><span class="tocnumber">14.3.2.5</span> <span class="toctext">Commands with the parameters. Tag "comm"</span></a></li>
+<li class="toclevel-4 tocsection-76"><a href="#Branches_.28child_nodes.29"><span class="tocnumber">14.3.2.6</span> <span class="toctext">Branches (child nodes)</span></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toclevel-2 tocsection-76"><a href="#Hierarchical_dependences_of_the_information_elements_of_the_control_language"><span class="tocnumber">14.4</span> <span class="toctext">Hierarchical dependences of the information elements of the control language</span></a></li>
-<li class="toclevel-2 tocsection-77"><a href="#Object_of_the_dynamic_tree_node_.28TCntrNode.29"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
+<li class="toclevel-2 tocsection-77"><a href="#Hierarchical_dependences_of_the_information_elements_of_the_control_language"><span class="tocnumber">14.4</span> <span class="toctext">Hierarchical dependences of the information elements of the control language</span></a></li>
+<li class="toclevel-2 tocsection-78"><a href="#Object_of_the_dynamic_tree_node_.28TCntrNode.29"><span class="tocnumber">14.5</span> <span class="toctext"><span>Object of the dynamic tree node (TCntrNode)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-78"><a href="#Resources_locking_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="tocnumber">15</span> <span class="toctext">Resources locking in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></a>
+<li class="toclevel-1 tocsection-79"><a href="#Resources_locking"><span class="tocnumber">15</span> <span class="toctext">Resources locking</span></a>
 <ul>
-<li class="toclevel-2 tocsection-79"><a href="#Resource_R.2FW_lock_object_.28ResRW.29"><span class="tocnumber">15.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
-<li class="toclevel-2 tocsection-80"><a href="#Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="tocnumber">15.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-81"><a href="#Template_.28AutoHD.29"><span class="tocnumber">15.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
-<li class="toclevel-2 tocsection-82"><a href="#Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="tocnumber">15.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
-<li class="toclevel-2 tocsection-83"><a href="#Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="tocnumber">15.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
-<li class="toclevel-2 tocsection-84"><a href="#Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="tocnumber">15.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
-<li class="toclevel-2 tocsection-85"><a href="#Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="tocnumber">15.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
-<li class="toclevel-2 tocsection-86"><a href="#Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="tocnumber">15.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
+<li class="toclevel-2 tocsection-80"><a href="#Resource_R.2FW_lock_object_.28ResRW.29"><span class="tocnumber">15.1</span> <span class="toctext"><span>Resource R/W lock object (ResRW)</span></span></a></li>
+<li class="toclevel-2 tocsection-81"><a href="#Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="tocnumber">15.2</span> <span class="toctext"><span>Automatic resource RW unlock object (ResAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-82"><a href="#Template_.28AutoHD.29"><span class="tocnumber">15.3</span> <span class="toctext"><span>Template (AutoHD)</span></span></a></li>
+<li class="toclevel-2 tocsection-83"><a href="#Resources_allocation_object.2C_by_mutex_.28ResMtx.29"><span class="tocnumber">15.4</span> <span class="toctext"><span>Resources allocation object, by mutex (ResMtx)</span></span></a></li>
+<li class="toclevel-2 tocsection-84"><a href="#Object_of_the_string_with_the_access_shared_by_the_resource_.28ResString.29"><span class="tocnumber">15.5</span> <span class="toctext"><span>Object of the string with the access shared by the resource (ResString)</span></span></a></li>
+<li class="toclevel-2 tocsection-85"><a href="#Conditional_variable_object.2C_by_mutex_.28CondVar.29"><span class="tocnumber">15.6</span> <span class="toctext"><span>Conditional variable object, by mutex (CondVar)</span></span></a></li>
+<li class="toclevel-2 tocsection-86"><a href="#Object_of_automatic_unlock_POSIX_mutex_.28MtxAlloc.29"><span class="tocnumber">15.7</span> <span class="toctext"><span>Object of automatic unlock POSIX mutex (MtxAlloc)</span></span></a></li>
+<li class="toclevel-2 tocsection-87"><a href="#Object_of_the_string_with_the_access_shared_by_the_global_the_data_resource_.28mutex.29_.28MtxString.29"><span class="tocnumber">15.8</span> <span class="toctext"><span>Object of the string with the access shared by the global the data resource (mutex) (MtxString)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-87"><a href="#Other_generic_objects_.28XMLNode.2C_TError.29"><span class="tocnumber">16</span> <span class="toctext">Other generic objects (XMLNode, TError)</span></a>
+<li class="toclevel-1 tocsection-88"><a href="#Other_generic_objects"><span class="tocnumber">16</span> <span class="toctext">Other generic objects</span></a>
 <ul>
-<li class="toclevel-2 tocsection-88"><a href="#XML-tag_.28XMLNode.29"><span class="tocnumber">16.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
-<li class="toclevel-2 tocsection-89"><a href="#Error_exception_.28TError.29"><span class="tocnumber">16.2</span> <span class="toctext"><span>Error exception (TError)</span></span></a></li>
+<li class="toclevel-2 tocsection-89"><a href="#XML-tag_.28XMLNode.29"><span class="tocnumber">16.1</span> <span class="toctext"><span>XML-tag (XMLNode)</span></span></a></li>
+<li class="toclevel-2 tocsection-90"><a href="#Error_exception_.28TError.29"><span class="tocnumber">16.2</span> <span class="toctext"><span>Error exception (TError)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-90"><a href="#Organization_and_structure_of_the_database_of_the_system_components"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
+<li class="toclevel-1 tocsection-91"><a href="#Organization_and_structure_of_the_database_of_the_system_components"><span class="tocnumber">17</span> <span class="toctext">Organization and structure of the database of the system components</span></a>
 <ul>
-<li class="toclevel-2 tocsection-91"><a href="#System_tables"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
-<li class="toclevel-2 tocsection-92"><a href="#Tables_of_the_.22Data_acquisition.22_subsystem"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-93"><a href="#Tables_of_the_.22Transports.22_subsystem"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-94"><a href="#Tables_of_the_.22Archives.22_subsystem"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-95"><a href="#Tables_of_the_.22Security.22_subsystem"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
-<li class="toclevel-2 tocsection-96"><a href="#The_structure_of_the_databases_of_the_modules"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
+<li class="toclevel-2 tocsection-92"><a href="#System_tables"><span class="tocnumber">17.1</span> <span class="toctext">System tables</span></a></li>
+<li class="toclevel-2 tocsection-93"><a href="#Tables_of_the_.22Data_acquisition.22_subsystem"><span class="tocnumber">17.2</span> <span class="toctext">Tables of the "Data acquisition" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-94"><a href="#Tables_of_the_.22Transports.22_subsystem"><span class="tocnumber">17.3</span> <span class="toctext">Tables of the "Transports" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-95"><a href="#Tables_of_the_.22Archives.22_subsystem"><span class="tocnumber">17.4</span> <span class="toctext">Tables of the "Archives" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-96"><a href="#Tables_of_the_.22Security.22_subsystem"><span class="tocnumber">17.5</span> <span class="toctext">Tables of the "Security" subsystem</span></a></li>
+<li class="toclevel-2 tocsection-97"><a href="#The_structure_of_the_databases_of_the_modules"><span class="tocnumber">17.6</span> <span class="toctext">The structure of the databases of the modules</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-97"><a href="#Service_functions_of_the_OpenSCADA_control_interface"><span class="tocnumber">18</span> <span class="toctext"><span>Service functions of the OpenSCADA control interface</span></span></a>
+<li class="toclevel-1 tocsection-98"><a href="#Service_functions_of_the_OpenSCADA_control_interface"><span class="tocnumber">18</span> <span class="toctext"><span>Service functions of the OpenSCADA control interface</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-98"><a href="#Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
-<li class="toclevel-2 tocsection-99"><a href="#Access_to_archived_data_of_the_archives_of_messages"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
-<li class="toclevel-2 tocsection-100"><a href="#Access_to_archived_data_of_the_values.27_archive"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
+<li class="toclevel-2 tocsection-99"><a href="#Group_access_to_the_values_of_the_parameter.27s_attributes_of_the_subsystem_.22Data_acquisition.22.2C_as_well_as_to_the_detailed_information"><span class="tocnumber">18.1</span> <span class="toctext">Group access to the values of the parameter's attributes of the subsystem "Data acquisition", as well as to the detailed information</span></a></li>
+<li class="toclevel-2 tocsection-100"><a href="#Access_to_archived_data_of_the_archives_of_messages"><span class="tocnumber">18.2</span> <span class="toctext">Access to archived data of the archives of messages</span></a></li>
+<li class="toclevel-2 tocsection-101"><a href="#Access_to_archived_data_of_the_values.27_archive"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-101"><a href="#API_of_modules_of_the_modular_subsystems"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of the modular subsystems</span></span></a></li>
-<li class="toclevel-1 tocsection-102"><a href="#Debugging_and_Testing_OpenSCADA"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-103"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
-<li class="toclevel-1 tocsection-104"><a href="#.D0.A1onventional_signs_in_the_text_and_source_code"><span class="tocnumber">22</span> <span class="toctext">Сonventional signs in the text and source code</span></a></li>
-<li class="toclevel-1 tocsection-105"><a href="#Links"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-102"><a href="#API_of_modules_of_the_modular_subsystems"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of the modular subsystems</span></span></a></li>
+<li class="toclevel-1 tocsection-103"><a href="#Debugging_and_Testing_OpenSCADA"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-104"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
+<li class="toclevel-1 tocsection-105"><a href="#Conventional_signs_in_the_text_and_source_code"><span class="tocnumber">22</span> <span class="toctext">Conventional signs in the text and source code</span></a></li>
+<li class="toclevel-1 tocsection-106"><a href="#Links"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
-<h2><span class="mw-headline" id="The_internal_structure.2C_OpenSCADA_API"><span class="mw-headline-number">1</span> The internal structure, OpenSCADA API</span></h2>
+<h2><span class="mw-headline" id="Internal_structure"><span class="mw-headline-number">1</span> Internal structure</span></h2>
 <p>For the purpose of visual and affordable perception of OpenSCADA architecture in general the Figure 1 shows the static class diagram of OpenSCADA on the universal modeling language (UML). Based on the chart it is clear that OpenSCADA contains modular subsystems: "Archives", "Databases", "Transports", "Transport protocols", "User interfaces", "Data acquisition" and "Special", as well as subsystems: "Safety" and "Module's management". The chart graphically presents the relationship between modular subsystems and modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:API_uml_classdep.png"><img class="thumbimage" height="836" src="files/API_uml_classdep.png" width="716" /></a>  <div class="thumbcaption">Fig. 1. Static class diagram.</div></div></div></div>
-<h2><span class="mw-headline" id="The_overall_structure_of_the_system._Modularity_.28TSYS.2C_TSubSYS.2C_TModule.29"><span class="mw-headline-number">2</span> The overall structure of the system. Modularity (TSYS, TSubSYS, TModule)</span></h2>
+<h2><span class="mw-headline" id="Overall_structure_of_the_program_.E2.80.94_modularity"><span class="mw-headline-number">2</span> Overall structure of the program — modularity</span></h2>
 <p>The root, from which we construct the whole system is the object of TSYS. The root contains a subsystem (TSubSYS). Subsystems can be: the ordinary and modular. The difference between the modular subsystems is clearly shown in Fig. 1. Thus, the modular subsystems necessarily contain a list of modular structures (TModule), such as subsystem TArchiveS contain modular objects TTypeArchivator. At the same time, the normal subsystem does not contain such objects. For example TSecurity  subsystem (Figure 2).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:703px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_struct.png"><img class="thumbimage" height="360" src="files/Oscada_struct.png" width="701" /></a>  <div class="thumbcaption">Fig. 2. Hierarchical structure of OpenSCADA.</div></div></div></div>
@@ -615,11 +616,11 @@ The data structure which identifies the module (class — TModule::SAt):
 </p>
 <ul><li> <i>void modInfoMainSet( const string &amp;name, const string &amp;type, const string &amp;vers, const string &amp;author, const string &amp;descr, const string &amp;license, const string &amp;source );</i> — Main module information set.</li>
 <li> <i>void modFuncReg (ExpFunc * func);</i> — Registration of the exported by module functions.</li></ul>
-<h2><span class="mw-headline" id="Subsystem_.22Database.22_.28TBDS.29"><span class="mw-headline-number">3</span> <span id="TBDS" title="#TBDS">Subsystem "Database" (TBDS)</span></span></h2>
-<p>Subsystem "Databases" is represented by the object <i>TBDS</i>, which contains a modular objects of the following types of DB <i>TTypeBD</i>. Each type of database contains objects of individual databases of that type <i>TBD</i>. Each database in its turn, contains the objects of their tables TTable (Fig. 3).
+<h2><span class="mw-headline" id="Subsystem_.22DB.22"><span class="mw-headline-number">3</span> <span id="TBDS" title="#TBDS">Subsystem "DB"</span></span></h2>
+<p>Subsystem "Databases" is represented by the object <i>TBDS</i>, which contains a modular objects of the following types of DB <i>TTypeBD</i>. Each type of database contains objects of individual databases of that type <i>TBD</i>. Each database in its turn, contains the objects of their tables <i>TTable</i> (Fig. 3).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:370px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_db_str.png"><img class="thumbimage" height="297" src="files/Oscada_subsys_db_str.png" width="368" /></a>  <div class="thumbcaption">Fig. 3. Hierarchical structure of the subsystem "DB".</div></div></div></div>
-<p>The subsystem provides the basic functions to access the type of database, as well as generalized functions for the manipulation of the databases and tables. For example, to hide the source of data, which may be a configuration file, the functions of an abstract access to the data source are provided. For the storage system-wide data the system table and the function of the abstract to access it are provided. Consequently, system-wide data can be stored in the configuration file and in the database table. Priority source, in this case, is the database table.
+<p>The subsystem provides the basic functions to access the type of database, as well as generalized functions for the manipulation of the databases and tables. For example, to hide the source of data, which may be a configuration file, the functions of an abstract access to the data source are provided. For the storage system-wide data the system table and the function of the abstract to access it are provided. Consequently, system-wide data can be stored in the configuration file and in the database table. More about the data organisation conception you can read in the <a href="#Data">Data in OpenSCADA and their storage</a> section.
 </p><p>Being a modular object, the type of database (TTypeBD) provides access to the implementation of the mechanism of one or another database. Access is made through a public databases of the module of a given type of database. Open/registered database is described in the table of databases to be opened or in the configuration file. There is, the so-called, the working database, which is always opens and is shown in the configuration file. DB which support the SQL-queries can grant access based on direct SQL-queries.
 </p><p>While working, the components of OpenSCADA open tables (TTable) available in the database and work with them.
 </p>
@@ -628,30 +629,45 @@ The data structure which identifies the module (class — TModule::SAt):
 
 <tr>
 <td><b>Inherits:</b></td>
-<td><i><a href="#TSubSYS">TSubSYS</a>, <a href="#TElem">TElem</a></i>
+<td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
-Flags of the queries to the system table (enum – TDBS::ReqGen):
+Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 </p>
-<ul><li> <i>OnlyCfg</i> — request only to the configuration file.</li>
-<li> <i>UseTranslate</i> — use the translation of text variable.</li></ul>
+<ul><li> <i>LsNoFlg</i> (0) — no list flag;</li>
+<li> <i>LsCheckSel</i> (0x01) —  points to the necessity of verifying the fact of boot from the selected database and to insert to the db list the only selected one;</li>
+<li> <i>LsInclGenFirst</i> (0x02) — include the Generic Storage "<b>*.*</b>" in the first.</li></ul>
+<p>Flags of the queries to the storage (enum – TDBS::ReqGenFlg):
+</p>
+<ul><li> <i>NoFlg</i> (0) — no query flag;</li>
+<li> <i>NoException</i> (0x01) — do not generate the exceptions, return error result;</li>
+<li> <i>OnlyCfg</i> (0x02) — force request to the configuration file, in genPrmGet(), genPrmSet() and dataSet() only;</li>
+<li> <i>CfgPrm</i> (0x04) — use Parameters of the Configuration File;</li></ul>
+<dl><dd> <i>Specific flags</i></dd></dl>
+<ul><li> <i>UseTranslation</i> (0x08) — use the translation of the text variable, in genPrmGet() and genPrmSet() only;</li>
+<li> <i>UseCache</i> (0x08) — use the cache, in dataSeek() only, defines the seek cache using — preloading the result in whole and significant acceleration, as the unique cacheKey this function uses the <i>cfg</i> address.</li>
+<li> <i>UseAllKeys</i> (0x08) — use all keys, in dataDel() only, is used to indicate the necessity of the all keys set fro their using while deleting with the restoration of the original state of the keys selection when the function is finished. If this flag is not set, the early selected keys are used to perform the operation.</li></ul>
+<p><b>Public generic static methods:</b>
+</p>
+<ul><li> <i>static string fullDBSYS( );</i> — The full name of the system table.</li>
+<li> <i>static string fullDB( );</i> — The full name of the table with a description of the registered databases.</li>
+<li> <i>static string realDBName( const string &amp;bdn, bool back = false );</i> — Conversion of the full template name of the database or table (of view *.*.myTbl) in the real name. Actually the replacement of the special elements '*' by the elements of the working DB. Use <i>back</i> for the backward conversion.</li>
+<li> <i>static string dbPart( const string &amp;bdn, bool tbl = false );</i> — Getting the generic storage address part or the table at <i>tbl</i> from the common storage name <i>bdn</i>.</li>
+<li> <i>static void dbList( vector&lt;string&gt; &amp;ls, char flags = LsNoFlg );</i> — List of available databases with the DBLsFlg <i>flags</i>.</li>
+<li> <i>static AutoHD&lt;TTable&gt; tblOpen( const string &amp;bdn, bool create = false );</i> — Opening the table <i>bdn</i> of the storage by it full path with the creation <i>create</i> at absence.</li>
+<li> <i>static void tblClose( const string &amp;bdn, bool del = false );</i> — Closing the table <i>bdn</i> of the storage by it full path with deleting at <i>del</i>.</li>
+<li> <i>static bool dataSeek( const string &amp;bdn, const string &amp;path, int lev, TConfig &amp;cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );</i> — Complete scanning of the records on the storage according to the ReqGenFlg <i>flags</i>. If the DB name <i>bdn</i> or path <i>path</i> to the Configuration File are not pointed, their processing is skipped. More about conditions of using the Configuration File and the Data Bases read in the <a href="#DataConcept">Data storing conception</a>. <i>localCfgCtx</i> is used for loading from the local configuration context, prepared in <i>dataSet()</i>, and it missing causes for checking and using, at presence, the global configuration context <i>SYS-&gt;cfgCtx()</i>.</li>
+<li> <i>static bool dataGet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );</i> — Getting the record from the storage according to the ReqGenFlg <i>flags</i>. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not pointed, their processing is skipped. More about conditions of using the Configuration File and the Data Bases read in the <a href="#DataConcept">Data storing conception</a>. <i>localCfgCtx</i> is used for loading from the local configuration context, prepared in <i>dataSet()</i>, and it missing causes for checking and using, at presence, the global configuration context <i>SYS-&gt;cfgCtx()</i>.</li>
+<li> <i>static bool dataSet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );</i> — Setting/Saving the record to the storage according to the ReqGenFlg <i>flags</i>. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not pointed, their processing is skipped. More about conditions of using the Configuration File and the Data Bases read in the <a href="#DataConcept">Data storing conception</a>. <i>localCfgCtx</i> is used for saving to the local configuration context, is prepared for <i>dataSeek()</i> and <i>dataGet()</i>, and it missing causes for checking and using, at presence, the global configuration context <i>SYS-&gt;cfgCtx()</i>.</li>
+<li> <i>static bool dataDel( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, char flags = NoFlg );</i> — Deleting the record in the storage according to the ReqGenFlg <i>flags</i>. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not pointed, their processing is skipped. More about conditions of using the Configuration File and the Data Bases read in the <a href="#DataConcept">Data storing conception</a>.</li>
+<li> <i>static bool dataDelTbl( const string &amp;bdn, const string &amp;path = "", char flags = NoFlg );</i> — The data container table common removing from the storage <i>bbn</i> and the configuration file <i>path</i>, according to the ReqGenFlg <i>flags</i>.</li>
+<li> <i>static string genPrmGet( const string &amp;path, const string &amp;oval = "", const string &amp;user = "root", char flags = NoFlg );</i> — Getting the generic parameter <i>path</i> from the Generic Storage "<b>*.*.SYS</b>" on behalf of the <i>user</i> and according to the ReqGenFlg <i>flags</i>. If the data are not available the value <i>oval</i> is returned. On the Configuration File there are used the object parameters by the tags "prm" and on the Data Base there is used the table "SYS".</li>
+<li> <i>static void genPrmSet( const string &amp;path, const string &amp;val, const string &amp;user = "root", char flags = NoFlg );</i> — Setting/Saving the generic parameter <i>path</i> to the Generic Storage "<b>*.*.SYS</b>" of the <i>user</i> and according to the ReqGenFlg <i>flags</i>.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem version.</li>
-<li> <i>static string realDBName( const string &amp;bdn );</i> — Conversion of the full template name of the database or table (of view *.*.myTbl) in the real name. Actually the replacement of the special elements '*' by the elements of the working DB.</li>
-<li> <i>void dbList( vector&lt;string&gt; &amp;ls, bool checkSel = false );</i> — A list of available databases.. <i>checkSel</i> points to the necessity to verify the fact of boot from the selected database and to insert to the db list the only selected one.</li>
 <li> <i>int tblLifeTime( );</i> — Lifetime of the inactive tables closing, in seconds.</li>
 <li> <i>void setTblLifeTime( int vl );</i> — Sets lifetime of the inactive tables closing in <i>vl</i> seconds.</li>
-<li> <i>AutoHD&lt;TTable&gt; open( const string &amp;bdn, bool create = false );</i> — Opening the table <i>bdn</i> of the DB by its full path with the creation <i>create</i> in the case of its absence.</li>
-<li> <i>void close( const string &amp;bdn, bool del = false );</i> — Closing the table <i>bdn</i> of the DB by its full path with the possibility of deleting of it after closing <i>del</i>.</li>
-<li> <i>bool dataSeek( const string &amp;bdn, const string &amp;path, int lev, TConfig &amp;cfg, bool forceCfg = false, bool useCache = false, XMLNode *localCfgCtx = NULL );</i> — Total scanning of the records of the data source. The configuration file or the DB is the source of the data. In the case of DB absence the configuration file is used. If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>useCache</i> defines the seek cache using — preloading the result in whole and significant acceleration, as the unique cacheKey this function uses the <i>cfg</i> address. <i>localCfgCtx</i> uses for loading from the local configuration context, prepared in <i>dataSet()</i>, and it missing causes for checking and using, at presence, the global configuration context SYS-&gt;cfgCtx().</li>
-<li> <i>bool dataGet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );</i> — Getting the record from the data source (database or configuration file). If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>localCfgCtx</i> uses for loading from the local configuration context, prepared in <i>dataSet()</i>, and it missing causes for checking and using, at presence, the global configuration context SYS-&gt;cfgCtx().</li>
-<li> <i>void dataSet( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );</i> — Set/Save the record in the data source (database or configuration file). If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>localCfgCtx</i> uses for saving to the local configuration context, prepares for <i>dataSeek() and dataGet()</i>, and it missing causes for checking and using, at presence, the global configuration context SYS-&gt;cfgCtx().</li>
-<li> <i>bool dataDel( const string &amp;bdn, const string &amp;path, TConfig &amp;cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );</i> — Deleting the record in the data source (database or configuration file). If the DB name <i>bdn</i> or path <i>path</i> to the configuration file are not indicated, their processing is skipped. <i>useKeyAll</i> is used to indicate the necessity of the all keys set fro their using while deleting with the restoration of the original state of the keys selection when the function is finished. If this flag is not set, the early selected keys are used to perform the operation.</li>
-<li> <i>static string genDBGet( const string &amp;path, const string &amp;oval = "", const string &amp;user = "root", char rFlg = 0 );</i> — Get system-wide data from the configuration file or system tables on behalf of user name <i>user</i>. If data are not available the value <i>oval</i> is returned.</li>
-<li> <i>static void genDBSet( const string &amp;path, const string &amp;val, const string &amp;user = "root", char rFlg = 0 );</i> — Set/Save the system-wide data in the configuration file or system tables on behalf of user name <i>user</i>.</li>
-<li> <i>string fullDBSYS( );</i> — The full name of the system table.</li>
-<li> <i>string fullDB( );</i> — The full name of the table with a description of the registered databases.</li>
 <li> <i>TElem &amp;openDB_E( )</i> — The structure of the table of registered databases.</li>
 <li> <i>AutoHD&lt;TTypeBD&gt; at( const string &amp;iid )</i> — Referencing to the DB module(DB type).</li></ul>
 <h3><span class="mw-headline" id="Modular_object_of_types_of_databases_.28TTypeBD.29"><span class="mw-headline-number">3.2</span> <span id="TTypeBD" title="#TTypeBD">Modular object of types of databases (TTypeBD)</span></span></h3>
@@ -667,7 +683,8 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>bool fullDeleteDB( );</i> — Sign of the complete removal of the database.</li>
+<ul><li> <i>virtual int lsPr( )</i> — The DB priority base [0...9] in the generic storages list.</li>
+<li> <i>bool fullDeleteDB( );</i> — Sign of the complete removal of the database.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of registered (opened) databases.</li>
 <li> <i>bool openStat( const string &amp;idb ) const;</i> — Check the availability of the specified opened database.</li>
 <li> <i>string open( const string &amp;id );</i> — Opening of the database. Returns the end created identifier.</li>
@@ -694,6 +711,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>string dscr( );</i> — DB description.</li>
 <li> <i>string addr( ) const;</i> — Address of the database. The form of recording is different for each type of database.</li>
 <li> <i>string codePage( );</i> — Codepage in which the data of the database are stored.</li>
+<li> <i>int lsPr( );</i> — The DB priority in the generic storages list, in the range [0...99].</li>
 <li> <i>double trTm_ClsOnOpen( );</i> — Transaction closing: after opening, seconds.</li>
 <li> <i>double trTm_ClsOnReq( );</i> — Transaction closing: after request, seconds.</li>
 <li> <i>int trPr_ClsTask( );</i> — Transaction closing: separate task priority.</li>
@@ -704,6 +722,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the DB description.</li>
 <li> <i>void setAddr( const string &amp;iaddr );</i> — Setting the DB address.</li>
 <li> <i>void setCodePage( const string &amp;icp );</i> — Setting of the codepage for the storage of the DB data.</li>
+<li> <i>void setLsPr( int vl );</i> — Setting the DB priority in the generic storages list, in the range [0...99].</li>
 <li> <i>void setToEnable( bool ivl );</i> — Setting of the sign: "To Enable".</li>
 <li> <i>virtual void enable( );</i> — Enabling of the DB.</li>
 <li> <i>virtual void disable( );</i> — Disabling of the DB.</li>
@@ -741,7 +760,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>virtual void fieldSet( TConfig &amp;cfg );</i> — Setting the values of the specified record. In the case of absence the record will be removed.</li>
 <li> <i>virtual void fieldDel( TConfig &amp;cfg );</i> — Deleting of the specified record.</li>
 <li> <i>TBD &amp;owner( ) const;</i> — DB – the owner of the table.</li></ul>
-<h2><span class="mw-headline" id="The_subsystem_.22Data_acquisition.22_.28TDAQS.29"><span class="mw-headline-number">4</span> The subsystem "Data acquisition" (TDAQS)</span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Data_acquisition.22"><span class="mw-headline-number">4</span> Subsystem "Data acquisition"</span></h2>
 <p>The subsystem "Data acquisition" is represented by the <i>TDAQS</i> object which contains modular objects of the data sources' types <i>TTypeDAQ</i> and the objects of the libraries of parameters' templates of subsystem "Data acquisition" <i>TPrmTmplLib</i>. Object of the data sources types contains objects of the controllers TController and objects of the  parameters' types <i>TTypeParam</i>. Parameters' types objects are provided by the controller module and contain the DB structure of the separate parameters' types (analog, digital ...). Controllers' objects contain parameters' objects <i>TParamContr</i>. Each parameter is associated with only one type of the parameter. For the attribute storage parameter is inherited from the values object <i>TValue</i>, which contains the attributes' values <i>TVal</i>. The library of the parameters' templates of this subsystem contains templates' objects <i>TPrmTmpl</i>. An example of the described hierarchical structure is shown in Fig. 4.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:309px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.png"><img class="thumbimage" height="335" src="files/Oscada_subsys_daq_str.png" width="307" /></a>  <div class="thumbcaption">Fig. 4. Hierarchical structure of the subsystem "Data acquisition".</div></div></div></div>
@@ -771,7 +790,7 @@ Flags of the queries to the system table (enum – TDBS::ReqGen):
 <li> <i>void tmplLibList( vector&lt;string&gt; &amp;list ) const;</i> — The list of available parameters' templates.</li>
 <li> <i>bool tmplLibPresent( const string &amp;id ) const;</i> — Check the availability of the parameter's template <i>id</i>.</li>
 <li> <i>void tmplLibReg( TPrmTmplLib *lib );</i> — Registration of the parameter's template <i>lib</i>.</li>
-<li> <i>void tmplLibUnreg( const string &amp;id, int flg = 0 );</i> — Deleting/removing of the registration of the parameter's template <i>id</i>.</li>
+<li> <i>void tmplLibUnreg( const string &amp;id, int flags = NodeNoFlg );</i> — Deleting/removing of the registration of the parameter's template <i>id</i>, according to the <i>flags</i>.</li>
 <li> <i>AutoHD&lt;TPrmTmplLib&gt; tmplLibAt( const string &amp;id ) const;</i> — Connection to the parameter's template <i>id</i>.</li>
 <li> <i>double rdRestDtTm( );</i> — Maximum depth of the archive data recovery when starting in hours.</li>
 <li> <i>void setRdRestDtTm( double vl );</i> — Set of the maximum depth of the archive data recovery when starting in hours.</li>
@@ -843,12 +862,12 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>string descr( );</i> — Controller's description.</li>
 <li> <i>int64_t timeStamp( );</i> — Timestamp of the object changing as maximum of timestamps of the included parameter objects.</li>
 <li> <i>virtual string getStatus( );</i> — Request function of the controller's status.</li>
-<li> <i>string DB( );</i> — DB name of the controller's instance.</li>
-<li> <i>string tbl( );</i> — The name of the table of DB of the controller's instance.</li>
-<li> <i>string fullDB( );</i> — The full name of the table of DB of the controller's instance.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — Storage name of the controller's instance, <i>qTop</i> for the storage queue top.</li>
+<li> <i>string tbl( ) const;</i> — The name of the table of DB of the controller's instance.</li>
+<li> <i>string fullDB( bool qTop = false ) const;</i> — The full name of the table of storage of the controller's instance, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setName( const string &amp;nm );</i> — Set the controller's name.</li>
 <li> <i>void setDescr( const string &amp;dscr );</i> — Set the controller's description.</li>
-<li> <i>void setDB( const string &amp;idb );</i> — Setting of the DB name of the controller's instance.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the storage name of the controller's instance, <i>qTop</i> for the storage queue top.</li>
 <li> <i>bool toEnable( );</i> — Sign "To enable the controller".</li>
 <li> <i>bool toStart( );</i> — Sign "To start the controller".</li>
 <li> <i>bool enableStat( ) const;</i> — Status "Enable".</li>
@@ -860,8 +879,8 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void disable( );</i> — Controller's stopping.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — Parameter's list in the controller.</li>
 <li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the parameter <i>id</i>.</li>
-<li> <i>string add( const string &amp;id, unsigned type );</i> — Addition of the parameter <i>id</i> of the type <i>type</i>. Returns the end created identifier.</li>
-<li> <i>void del( const string &amp;id, bool full = false );</i> — Deleting of the parameter <i>id</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
+<li> <i>string add( const string &amp;id, unsigned type );</i> — Addition the parameter <i>id</i> of the type <i>type</i>. Returns the end created identifier.</li>
+<li> <i>void del( const string &amp;id, int flags = NodeNoFlg );</i> — Deleting the parameter <i>id</i>, according the {TCntrNode,TParamContr}::EnDisFlag <i>flags</i>.</li>
 <li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;id, const string &amp;who = "th_contr" ) const;</i> — Connection to the controller's parameter <i>id</i>.</li>
 <li> <i>bool redntUse( Redundant md = Asymmetric );</i> — Redundancy state for mode <i>md</i>.</li>
 <li> <i>void setRedntUse( bool vl );</i> — Changing of the getting the data from the backup station mode.</li>
@@ -923,6 +942,10 @@ Redundancy modes (enum TController::Redundant):
 <td> <b>Inherited:</b> </td>
 <td> Objects of the module's parameters of subsystem "Data acquisition".
 </td></tr></table>
+<p><b>Data:</b><br />
+Flags of the enabling/disabling modes of the node (enum TParamContr::EnDisFlag):
+</p>
+<ul><li> <i>TParamContr::NodeRemove_NoArch</i> (0x100) — do not remove archives at the DAQ-Parameter node removing.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TParamContr( const string &amp;name, TTypeParam *tpprm );</i> — Initializing constructor.</li>
@@ -941,7 +964,7 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — Parameter's list in the parameter.</li>
 <li> <i>bool present( const string &amp;id ) const;</i> — Check for the availability of the parameter <i>id</i>.</li>
 <li> <i>string add( const string &amp;id, unsigned type = 0 );</i> — Addition of the parameter <i>id</i> of the type <i>type</i>. Returns the end created identifier.</li>
-<li> <i>void del( const string &amp;id, bool full = false );</i> — Deleting of the parameter <i>id</i>. If the field <i>full</i> is specified the controller will be completely removed.</li>
+<li> <i>void del( const string &amp;id, int flags = NodeNoFlg );</i> — Deleting the parameter <i>id</i>, according the {TCntrNode,TParamContr}::EnDisFlag <i>flags</i>.</li>
 <li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;id, const string &amp;who = "th_prm" ) const;</i> — Connection to the controller's parameter <i>id</i>.</li>
 <li> <i>TTypeParam &amp;type( ) const;</i> — Parameter's type.</li>
 <li> <i>virtual TElem *dynElCntr( );</i> — Container of the dynamic elements of the DAQ attributes.</li>
@@ -1039,13 +1062,14 @@ Additional flags to the object TFld (enum TVal::AttrFlag):
 <li> <i>string id( );</i> — Library ID.</li>
 <li> <i>string name( );</i> — Library name.</li>
 <li> <i>string descr( );</i> — Library description.</li>
-<li> <i>string DB( );</i> — DB of the library instance.</li>
-<li> <i>string tbl( );</i> — DB table of the library instance.</li>
-<li> <i>string fullDB( );</i> — Full address of the DB table of the library instance.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — DB of the library instance, <i>qTop</i> for the storage queue top.</li>
+<li> <i>string tbl( ) const;</i> — DB table of the library instance.</li>
+<li> <i>string fullDB( bool qTop = false ) const;</i> — Full address of the DB table of the library instance, <i>qTop</i> for the storage queue top.</li>
 <li> <i>bool startStat( );</i> — Sign "Library started".</li>
 <li> <i>void start( bool val );</i> — Satart/stop of the library.</li>
 <li> <i>void setName( const string &amp;vl );</i> — Setting of the library name.</li>
 <li> <i>void setDescr( const string &amp;vl );</i> — Setting of the library description.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the storage name of the library, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setFullDB( const string &amp;vl );</i> — Setting of the full address of the DB table of the library instance.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;ls ) const;</i> — Templates list in the library.</li>
 <li> <i>bool present( const string &amp;id ) const;</i> — Check for the presence of the template <i>id</i> in the library.</li>
@@ -1129,7 +1153,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <p><b>Protected methods:</b><br />
 </p>
 <ul><li> <i>virtual string lnkHelp( );</i> — Returns help for the links address' syntax.</li></ul>
-<h2><span class="mw-headline" id="Subsystem_.22Archives.22_.28TArchiveS.29"><span class="mw-headline-number">5</span> <span id="TArchiveS" title="#TArchiveS">Subsystem "Archives" (TArchiveS)</span></span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Archives-History.22"><span class="mw-headline-number">5</span> <span id="TArchiveS" title="#TArchiveS">Subsystem "Archives-History"</span></span></h2>
 <p>Subsystem "Archives" is represented by an object TArchiveS, which contains at the subsystem level the modular objects of the archivers types TTypeArchivator. Each object of the archiver type contains objects of the messages' archivers  TMArchivator and values' archivers TVArchivator. In addition, the subsystem object contains the methods of the messages archive and objects of the values' archives TVArchive. The object of the values' archive TVArchive contains the buffer of values through the inheritance of the buffer object TValBuf. To connect the archive of values with the archivers the object of the value element TVArchEl is provided. This object is contained in the archiver and it is referenced by the archive. Structure of the subsystem "Archives" is presented in Fig. 5.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:221px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_arch_str.png"><img class="thumbimage" height="251" src="files/Oscada_subsys_arch_str.png" width="219" /></a>  <div class="thumbcaption">Fig. 5. Hierarchical structure of the subsystem "Archives".</div></div></div></div>
@@ -1218,9 +1242,9 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>string srcData( );</i> — Parameters of the data source, in the case of access mode to the parameter this is the address of the parameter.</li>
 <li> <i>bool toStart( );</i> — Sign: "Start the archive when starting the system".</li>
 <li> <i>bool startStat( );</i> — Status: "Archive started".</li>
-<li> <i>string DB( ) const;</i> — DB address of the values' archive.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — Storage address of the values' archive, <i>qTop</i> for the storage queue top.</li>
 <li> <i>string tbl( );</i> — DB table of the values' archive.</li>
-<li> <i>string fullDB( );</i> — Full name of the DB table of the values' archive.</li>
+<li> <i>string fullDB( bool qTop = false );</i> — Full name of the storage table of the values' archive, <i>qTop</i> for the storage queue top.</li>
 <li> <i>int64_t end( const string &amp;arch = BUF_ARCH_NM );</i> — End of the archive time at whole (arch="") or the specified archiver, buffer (arch="&lt;bufer&gt;").</li>
 <li> <i>int64_t begin( const string &amp;arch = BUF_ARCH_NM );</i> — Start of the archive time at whole (arch="") or the specified archiver, buffer (arch="&lt;bufer&gt;").</li>
 <li> <i>int64_t period( const string &amp;arch = BUF_ARCH_NM );</i> — Periodicity of the archive buffer or the specified archiver (microseconds).</li>
@@ -1233,7 +1257,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of the archive.</li>
 <li> <i>void setSrcMode( SrcMode vl = SaveCur, const string &amp;isrc = "&lt;*&gt;", bool noex = false );</i> — Setting the linkage mode with the data source.</li>
 <li> <i>void setToStart( bool vl );</i> — Setting the sign: "Start the archive when starting the system".</li>
-<li> <i>void setDB( const string &amp;idb );</i> — Setting the DB address of the values' archive.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting the storage address of the values' archive, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setValType( TFld::Type vl );</i> — Setting the type of the archived value.</li>
 <li> <i>void setHardGrid( bool vl );</i> — Setting the using of the hard grid in the archive buffer.</li>
 <li> <i>void setHighResTm( bool vl );</i> — Setting of using of the high-resolution time in the archive buffer (microseconds).</li>
@@ -1349,15 +1373,15 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>string &amp;addr( ) const;</i> — Address of the archiver's storage.</li>
 <li> <i>int &amp;level( );</i> — The level of messages, serviced by the archiver.</li>
 <li> <i>void categ( vector&lt;string&gt; &amp;list );</i> — Categories (templates) of messages, serviced by the archiver.</li>
-<li> <i>string DB( ) const;</i> — DB address of the archiver.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — Storage address of the archiver, <i>qTop</i> for the storage queue top.</li>
 <li> <i>string tbl( );</i> — Table address of the archiver's DB.</li>
-<li> <i>string fullDB( );</i> — The full table address of the archiver's DB.</li>
+<li> <i>string fullDB( bool qTop = false );</i> — The full table address of the archiver's storage, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setName( const string &amp;vl );</i> — Setting the archiver's name.</li>
 <li> <i>void setDscr( const string &amp;vl );</i> — Setting the archiver's description.</li>
 <li> <i>void setToStart( bool vl );</i> — Setting the sign "To start the archiver".</li>
 <li> <i>void setAddr( const string &amp;vl );</i> — Setting the address of the archiver's storage.</li>
 <li> <i>void setLevel( int lev );</i> — Setting the level of messages, serviced by the archiver.</li>
-<li> <i>void setDB( const string &amp;idb );</i> — Setting the DB adress of the archiver.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting the storage address of the archiver, <i>qTop</i> for the storage queue top.</li>
 <li> <i>time_t redntTm( );</i> — Time of the last redundancy operation.</li>
 <li> <i>bool redntUse( );</i> — Getting the data from the backup station mode.</li>
 <li> <i>void setRedntUse( bool vl );</i> — Changing of the getting the data from the backup station mode.</li>
@@ -1404,9 +1428,9 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>int selPrior( );</i> — Selection priority for mode "All" archivers.</li>
 <li> <i>bool toStart( );</i> — The sign "To start the archiver".</li>
 <li> <i>bool startStat( );</i> — Archivers' status "Run".</li>
-<li> <i>string DB( ) const;</i> — DB address of the archiver.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — Storage address of the archiver, <i>qTop</i> for the storage queue top.</li>
 <li> <i>string tbl( );</i> — Table address of the archiver's DB.</li>
-<li> <i>string fullDB( );</i> — The full table address of the archiver's DB.</li>
+<li> <i>string fullDB( bool qTop = false );</i> — The full table address of the archiver's storage, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setName( const string &amp;inm );</i> — Setting the archiver's name.</li>
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the archiver's description.</li>
 <li> <i>void setAddr( const string &amp;vl );</i> — Setting the address of the archiver's storage.</li>
@@ -1414,7 +1438,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>void setArchPeriod( int iper );</i> — Setting the frequency of the values' archiving by the archiver. Time after which the archiver makes archiving of the frame of values from the archive's buffer.</li>
 <li> <i>void setSelPrior( int vl );</i> — Set selection priority for mode "All" archivers.</li>
 <li> <i>void setToStart( bool vl );</i> — Setting the sign "To start the archiver".</li>
-<li> <i>void setDB( const string &amp;idb );</i> — Setting the DB adress of the archiver.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting the storage address of the archiver, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( );</i> — Start of the archiver.</li>
 <li> <i>virtual void stop( bool full_del = false );</i> — Stop of the archiver with the possibility of it's full deleting <i>full_del</i>.</li>
 <li> <i>void archiveList( vector&lt;string&gt; &amp;ls );</i> — The archive's list, serviced by the archiver.</li>
@@ -1460,7 +1484,7 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <ul><li> <i>virtual TVariant getValProc( int64_t *tm, bool up_ord );</i> — The processing function of the single value from the archive request.</li>
 <li> <i>virtual void getValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — Function of the processing the request of the module to get the data.</li>
 <li> <i>virtual void setValsProc( TValBuf &amp;buf, int64_t beg, int64_t end, bool toAccum );</i> — Function of the processing the request of the module to set the data, through the accumulation <i>toAccum</i>.</li></ul>
-<h2><span class="mw-headline" id="Subsystem_.22Transports.22_.28TTransportS.29"><span class="mw-headline-number">6</span> <span id="TTransportS" title="#TTransportS">Subsystem "Transports" (TTransportS)</span></span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Transports.22"><span class="mw-headline-number">6</span> <span id="TTransportS" title="#TTransportS">Subsystem "Transports"</span></span></h2>
 <p>"Transports" subsystem is represented by the TTransportS object, which contains modular objects of the transports' types TTypeTransport on the subsystem-level. Each type of transport contains objects TTransportIn of the input and TTransportOut of the output transports. The overall structure of the subsystem is shown in Fig. 6.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:293px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_tr_str.png"><img class="thumbimage" height="296" src="files/Oscada_subsys_tr_str.png" width="291" /></a>  <div class="thumbcaption">Fig. 6. Hierarchical structure of the subsystem "Transports".</div></div></div></div>
@@ -1492,8 +1516,8 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string user;</i> — Users of the external host/station.</li>
 <li> <i>string pass;</i> — Password of the external host/station user.</li>
 <li> <i>uint8_t upRiseLev;</i> — External hosts uprising level/depth of this host/station.</li>
-<li> <i>int8_t	mode;</i> — Host mode.</li>
-<li> <i>time_t	mdf;</i> — Modification time.</li></ul>
+<li> <i>int8_t mode;</i> — Host mode.</li>
+<li> <i>time_t mdf;</i> — Modification time.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
@@ -1568,15 +1592,15 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>virtual string getStatus( );</i> — Getting the status of the input transport.</li>
 <li> <i>bool toStart( );</i> — The sign "To start".</li>
 <li> <i>bool startStat( );</i> — The status "Running".</li>
-<li> <i>string DB( );</i> — Transport's DB address.</li>
-<li> <i>string tbl( );</i> — Transport's DB table.</li>
-<li> <i>string fullDB( );</i> — The full name of the transport's DB table.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — Transport's storage address, <i>qTop</i> for the storage queue top.</li>
+<li> <i>string tbl( ) const;</i> — Transport's DB table.</li>
+<li> <i>string fullDB( bool qTop = false ) const;</i> — Full name of the transport's storage table, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setName( const string &amp;inm );</i> — Setting the name of transport in <i>inm</i>.</li>
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport in <i>idscr</i>.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport in <i>addr</i>.</li>
 <li> <i>void setProtocols( const string &amp;prt );</i> — Setting of the linked transport protocols.</li>
 <li> <i>void setToStart( bool val );</i> — Setting of the sign "To start".</li>
-<li> <i>void setDB( const string &amp;vl );</i> — Setting of the transport's DB address.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
 <li> <i>virtual void stop( );</i> — Stop of the transport.</li>
 <li> <i>virtual int writeTo( const string &amp;sender, const string &amp;data );</i> — Sending <i>data</i> backward to the <i>sender</i>.</li>
@@ -1618,9 +1642,9 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
 <li> <i>int64_t lstReqTm( );</i> — Status "Last request time".</li>
 <li> <i>virtual string getStatus( );</i> — Getting the status of the transport.</li>
-<li> <i>string DB( );</i> — Transport's DB address.</li>
-<li> <i>string tbl( );</i> — Transport's DB table.</li>
-<li> <i>string fullDB( );</i> — The full name of the transport's DB table.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — Transport's storage address, <i>qTop</i> for the storage queue top.</li>
+<li> <i>string tbl( ) const;</i> — Transport's DB table.</li>
+<li> <i>string fullDB( bool qTop = false ) const;</i> — Full name of the transport's DB table, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setName( const string &amp;inm );</i> — Setting the name of transport.</li>
 <li> <i>void setDscr( const string &amp;idscr );</i> — Setting the description of transport.</li>
 <li> <i>void setAddr( const string &amp;addr );</i> — Setting the address of transport.</li>
@@ -1628,7 +1652,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>virtual void setAttempts( unsigned short vl );</i> — Setting the connection attempts.</li>
 <li> <i>void setConPrm( const string &amp;nm, const TVariant &amp;vl );</i> — Setting the connection parameter <i>nm</i> to value <i>vl</i>.</li>
 <li> <i>void clearConPrm( );</i> — Clearing the connection parameters.</li>
-<li> <i>void setDB( const string &amp;vl );</i> — Setting of the transport's DB address.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( int time = 0 );</i> — Start of the transport with connection time <i>time</i>.</li>
 <li> <i>virtual void stop( );</i> — Stop of the transport.</li>
 <li> <i>virtual int messIO(  const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );</i> — Sending of the data over the transport. The waiting time <i>time</i> of the connection (in milliseconds). The <i>time</i> in negative disables the transport's request/respond mode and allow independent reading/writing to a buffer IO, with the reading timeout <i>time</i> in absolute.</li>
@@ -1642,7 +1666,7 @@ External hosts mode (enum — ExtHost::Mode):
 </p>
 <ul><li> <i>bool runSt;</i> — The sign "Running".</li>
 <li> <i>int64_t mLstReqTm;</i> — The last request time.</li></ul>
-<h2><span class="mw-headline" id="Subsystem_.22Communication_interfaces.27_protocols.22_.28TProtocolS.29"><span class="mw-headline-number">7</span> <span id="TProtocolS" title="#TProtocolS">Subsystem "Communication interfaces' protocols" (TProtocolS)</span></span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Transport_protocols.22"><span class="mw-headline-number">7</span> <span id="TProtocolS" title="#TProtocolS">Subsystem "Transport protocols"</span></span></h2>
 <p>Subsystem "Communication interfaces' protocols" is presented by the TProtocolS object, which contains modular objects of the separate protocols TProtocol on the a subsystem's level. Each protocol contains objects of the opened sessions of the input protocols TProtocolIn.
 </p><p>TProtocolS object provides an access to the both: the input and the output protocols of the individual types of transport protocols. The inner side of output protocol based on the steaming principle with the individual structure of the stream for each implementation of the protocol.
 </p>
@@ -1700,7 +1724,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>int writeTo( const string &amp;data );</i> — Sending the messages <i>data</i> backward to the sender, into srcAddr().</li>
 <li> <i>virtual bool mess( const string &amp;request, string &amp;answer );</i> — Transfer of unstructured data to their processing by the protocol.</li>
 <li> <i>TProtocol &amp;owner( ) const;</i> — The protocol, the owner of input sessions.</li></ul>
-<h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22_.28TUIS.29"><span class="mw-headline-number">8</span> Subsystem "User interfaces" (TUIS)</span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22"><span class="mw-headline-number">8</span> Subsystem "User interfaces"</span></h2>
 <p>The subsystem "User Interfaces" is presented by the TUIS object, which contains modular objects of the TUI user interfaces' on the subsystem's level.
 </p>
 <h3><span class="mw-headline" id="The_object_of_the_.22User_interfaces.22_subsystem_.28TUIS.29"><span class="mw-headline-number">8.1</span> <span id="TUIS" title="#TUIS">The object of the "User interfaces" subsystem (TUIS)</span></span></h3>
@@ -1739,7 +1763,7 @@ Requests parameters (enum — GetOpts):
 <p><b>Protected attributes:</b>
 </p>
 <ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
-<h2><span class="mw-headline" id="Subsystem_.22Specials.22_.28TSpecialS.29"><span class="mw-headline-number">9</span> Subsystem "Specials" (TSpecialS)</span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Specials.22"><span class="mw-headline-number">9</span> Subsystem "Specials"</span></h2>
 <p>The subsystem "Specials" is presented by TSpecialS object, which contains modular objects of TSpecial special on the subsystem's level.
 </p>
 <h3><span class="mw-headline" id="The_object_of_the_.22Specials.22_subsystem_.28TSpecialS.29"><span class="mw-headline-number">9.1</span> <span id="TSpecialS" title="#TSpecialS">The object of the "Specials" subsystem (TSpecialS)</span></span></h3>
@@ -1766,7 +1790,7 @@ Requests parameters (enum — GetOpts):
 <p><b>Protected attributes:</b>
 </p>
 <ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
-<h2><span class="mw-headline" id="Subsystem_.22Security.22_.28TSe.D1.81urity.29"><span class="mw-headline-number">10</span> Subsystem "Security" (TSeсurity)</span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Security.22"><span class="mw-headline-number">10</span> Subsystem "Security"</span></h2>
 <p>Security subsystem is presented by an object TSesurity, which contains group objects of TGroup and users TUser.
 </p><p>User object TUser contains user information and checks the authenticity of the user in accordance with the specified password.
 </p><p>TGroup user object contains information about the group of users and checks the user's belonging to the group.
@@ -1778,9 +1802,13 @@ Requests parameters (enum — GetOpts):
 <td><b>Inherits:</b></td>
 <td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
-<p><b>Public data:</b>
+<p><b>Data (definition):</b><br />
 </p>
-<ul><li> <i>static const string pHashMagic;</i> — String-pointer (prefix) of the password into hash.</li></ul>
+<ul><li> <i>SEC_HASH_MAGIC</i> — String-pointer (prefix) of the passwords in the hash.</li></ul>
+<dl><dd> <i>Masks of the security access</i></dd></dl>
+<ul><li> <i>SEC_XT</i> — Execution (0x01);</li>
+<li> <i>SEC_WR</i> — Writing (0x02);</li>
+<li> <i>SEC_RD</i> — Reading (0x04).</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>bool access( const string &amp;user, char mode, int owner, int groups, int access );</i> — Check the access of the <i>user</i> in the <i>mode</i> to the resource with the <i>owner</i>, <i>groups</i> (separated ',') and permition <i>access</i>.</li>
@@ -1809,20 +1837,20 @@ Requests parameters (enum — GetOpts):
 <li> <i>string descr( );</i> — User description.</li>
 <li> <i>string longDescr( );</i> — User long description.</li>
 <li> <i>string picture( );</i> — User image.</li>
-<li> <i>string	lang( );</i> — User language, only into the dynamic translation text variables mode.</li>
+<li> <i>string lang( );</i> — User language, only into the dynamic translation text variables mode.</li>
 <li> <i>bool sysItem( );</i> — Sign of the system user.</li>
 <li> <i>bool auth( const string &amp;pass, string *hash = NULL );</i> — Check the authenticity of the user by the password <i>pass</i>. The password hash, if it is supports, placing into the <i>hash</i>.</li>
 <li> <i>int permitCmpr( const string &amp;user );</i> — Comparing the <i>user</i> permition with the user object. Returns -1 for lesser, 1 for greater and 0 for even permition.</li>
-<li> <i>string DB( );</i> — User DB address.</li>
-<li> <i>string tbl( );</i> — Address of the table of user's DB.</li>
-<li> <i>string fullDB( );</i> — The full name of the table of user's DB.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — User storage address, <i>qTop</i> for the storage queue top.</li>
+<li> <i>string tbl( ) const;</i> — Address of the table of user's storage.</li>
+<li> <i>string fullDB( bool qTop = false ) const;</i> — Full name of the table of user's storage, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setDescr( const string &amp;vl );</i> — Setting user's description to <i>vl</i>.</li>
 <li> <i>void setLongDescr( const string &amp;vl );</i> — Setting user's long description to <i>vl</i>.</li>
 <li> <i>void setPicture( const string &amp;pct );</i> — Setting user's image to <i>pct</i>.</li>
 <li> <i>void setLang( const string &amp;vl );</i> — Setting user's language to <i>vl</i>.</li>
 <li> <i>void setPass( const string &amp;pass );</i> — Setting user's password to <i>pass</i>.</li>
 <li> <i>void setSysItem( bool vl );</i> — Setting the sign of system user to <i>vl</i>.</li>
-<li> <i>void setDB( const string &amp;vl );</i> — Setting user's DB address.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting the user's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>TSeсurity &amp;owner( ) const;</i> — "Security" subsystem - the owner of the user.</li></ul>
 <h3><span class="mw-headline" id="The_users.27_group_object_.28TGroup.29"><span class="mw-headline-number">10.3</span> <span id="TGroup" title="#TGroup">The users' group object (TGroup)</span></span></h3>
 <table class="wikitable">
@@ -1838,17 +1866,17 @@ Requests parameters (enum — GetOpts):
 <li> <i>string descr( );</i> — Users group description.</li>
 <li> <i>string longDescr( );</i> — Users group long description.</li>
 <li> <i>bool sysItem( );</i> — The sign of the system user.</li>
-<li> <i>string DB( );</i> — Users' group DB address.</li>
-<li> <i>string tbl( );</i> — Address of the table of the users' group DB.</li>
-<li> <i>string fullDB( );</i> — The full name of the table of the users' group DB.</li>
+<li> <i>string DB( bool qTop = false ) const;</i> — Users' group storage address, <i>qTop</i> for the storage queue top.</li>
+<li> <i>string tbl( ) const;</i> — Address of the table of the users' group DB.</li>
+<li> <i>string fullDB( bool qTop = false ) const;</i> — Full name of the table of the users' group storage, <i>qTop</i> for the storage queue top.</li>
 <li> <i>void setDescr( const string &amp;vl );</i> — Setting users group description to <i>vl</i>.</li>
 <li> <i>void setLongDescr( const string &amp;vl );</i> — Setting users group long description to <i>vl</i>.</li>
-<li> <i>void setDB( const string &amp;vl );</i> — Setting the users' group DB address.</li>
+<li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting the users' group storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>bool user( const string &amp;name );</i> — Check for the user's belonging to the group <i>name</i>.</li>
 <li> <i>void userAdd( const string &amp;name );</i> — Addition of the user <i>name</i> to the group.</li>
 <li> <i>void userDel( const string &amp;name );</i> — Deleting of the user <i>name</i> from the group.</li>
 <li> <i>TSeсurity &amp;owner( ) const;</i> — "Security" subsystem - the owner of the users' group.</li></ul>
-<h2><span class="mw-headline" id="Subsystem_.E2.80.9CModules.27_sheduling.E2.80.9D_.28TModSchedul.29"><span class="mw-headline-number">11</span> Subsystem “Modules' sheduling” (TModSchedul)</span></h2>
+<h2><span class="mw-headline" id="Subsystem_.22Modules_scheduler.22"><span class="mw-headline-number">11</span> Subsystem "Modules scheduler"</span></h2>
 <p>Subsystem “Modules' sheduling” is presented by the object TModSchedul.
 </p><p>The subsystem contains the control mechanism for modules contained in shared libraries.
 </p>
@@ -2022,13 +2050,42 @@ Parameter's type (enum — IO::Type):
 <p><b>Public attributes:</b>
 </p>
 <ul><li> <i>void *exCtx;</i> — The function execution context.</li></ul>
-<h2><span class="mw-headline" id="Data_in_OpenSCADA_and_their_storage_in_the_DB_.28TConfig.29"><span class="mw-headline-number">13</span> Data in OpenSCADA and their storage in the DB (TConfig)</span></h2>
-<p>Storing data in the system based on the objects <i>TConfig</i> and <i>TElem</i>. These objects store the structure and fields' values of the database, allowing for direct loading and saving the configuration via the "DB" subsystem. For the specialized different types data storage the TVariant object is provided.
-</p><p><i>TElem</i> object contains the structure of database record. Structure of the record contains extensive information about the elements, their types, sizes and other parameters. Information in this structure is enough to create, control and manage the real structure of the database. Elementary unit of the record is the cell <i>Tfld</i>.
-</p><p><i>TConfig</i> object is the heir of <i>TElem</i> and contains the actual values of elements. <i>TConfig</i> is used as the parameter in the functions of the manipulating with the table's records in the "DB" subsystem. Elementary unit of the record is the cell <i>TCfg</i>.
-</p><p>To provide an opportunity to inform the data storehouse about the changes in the structure it is provides an object <i>TValElem</i>, from which it is inherited the storehouse <i>TConfig</i> and the list of which is contained in the <i>TElem</i> structure.
+<h2><span class="mw-headline" id="Data_in_OpenSCADA_and_their_storage"><span class="mw-headline-number">13</span> <span id="Data" title="#Data">Data in OpenSCADA and their storage</span></span></h2>
+<p>Storing data in the program is based on the objects <i><a href="#TConfig">TConfig</a></i> and <i><a href="#TElem">TElem</a></i>. These objects store the structure and field values of the storage, allowing for direct loading and saving the configuration via the <a href="#TBDS">"DB" subsystem</a>. For the specialised different types of the data storage the <i><a href="#TVariant">TVariant</a></i> object is provided.
+</p><p>The <i>TElem</i> object contains the structure of database record. Structure of the record contains extensive information about the elements, their types, sizes and other parameters. Information in that structure is enough to create, control and manage the real structure of the database. Elementary unit of the record is the cell <i><a href="#TFld">TFld</a></i>.
+</p><p>The <i>TConfig</i> object is the heir of <i>TElem</i> and contains the actual values of elements. <i>TConfig</i> is used as the parameter in the functions of the manipulating with the table records in the "DB" subsystem. Elementary unit of the record is the cell <i><a href="#TCfg">TCfg</a></i>.
+</p><p>To provide an opportunity to inform the data storehouse about the changes in the structure it is provides an object <i><a href="#TValElem">TValElem</a></i>, from which it is inherited the storehouse <i>TConfig</i> and the list of which is contained in the <i>TElem</i> structure.
 </p>
-<h3><span class="mw-headline" id="Data_object_.28TConfig.29"><span class="mw-headline-number">13.1</span> <span id="TConfig" title="#TConfig">Data object (TConfig)</span></span></h3>
+<h3><span class="mw-headline" id="Data_storing_conception"><span class="mw-headline-number">13.1</span> <span id="DataConcept" title="#DataConcept">Data storing conception</span></span></h3>
+<p>OpenSCADA commonly defines and uses as the storage only the Configuration File and the Data Bases of different types of the "DB" subsystem. Where the Configuration File has the highest priority as an obligatory and always present storage.
+</p><p>The Generic Storage is a common system configuration field of selection a storage for common program data and as default storage value of OpenSCADA nodes to store. As the Generic Storage there can be selected whether the Configuration File "<b>&lt;cfg&gt;</b>" or a DB "<b>{DB module}.{DB name}</b>", and the same is pointed as "<b>*.*</b>" for enabling the implicit data accessing method in OpenSCADA nodes.
+</p><p>There are provided two variants of the data accessing:
+</p>
+<ol><li> directly and exclusively at the specified storage name;</li>
+<li> implicitly at specifying the Generic Storage name "<b>*.*</b>", what commonly means of accessing to the Configuration File firstly and the Generic Storage DB secondary, at the data missing in the Configuration File.</li></ol>
+<p>The "DB" subsystem (the class <i>TBDS</i>) provides the functions <i>dataSeek()</i>, <i>dataGet()</i>, <i>dataSet()</i>, <i>dataDel()</i> of accessing the data which perform the data accessing variants in such ways:
+</p>
+<ul><li> <i>dataSeek()</i> — the data seeking function:</li></ul>
+<dl><dd><ol><li> seeking data only the directly specified storage;</li>
+<li> throughout seeking the Configuration File and the Generic Storage DB.</li></ol></dd></dl>
+<ul><li> <i>dataGet()</i> — the data getting function:</li></ul>
+<dl><dd><ol><li> getting data only the directly specified storage;</li>
+<li> getting the present data in the Configuration File, next the Generic Storage DB data at missing in the Configuration File.</li></ol></dd></dl>
+<ul><li> <i>dataSet()</i> — the data setting function:</li></ul>
+<dl><dd><ol><li> setting data only to the directly specified storage;</li>
+<li> setting the present data in the Configuration File, next the Generic Storage DB data at missing in the Configuration File; provides the flag <i>TBDS::OnlyCfg</i> support to force the new data creation in the Configuration File.</li></ol></dd></dl>
+<ul><li> <i>dataDel()</i> — the data deleting function:</li></ul>
+<dl><dd><ol><li> deleting data only in the directly specified storage;</li>
+<li> deleting the data both in the Configuration File and the Generic Storage DB.</li></ol></dd></dl>
+<p>The testing scenarios of the data accessing:
+</p>
+<ul><li> creating and loading to/from the work Data Base of the Generic Storage: DB, Security.{User,Group}, Transport.{Input,Output}, ExtTansp, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}, DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.VCAEngine.{WdgLib,Proj}.</li>
+<li> saving and loading to/from the Configuration File of the Generic Storage (with presence in the work Data Base): DB, Security.{User,Group}, Transport.{Input,Output}, ExtTansp, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}, DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.VCAEngine.{WdgLib,Proj}.</li>
+<li> complete removing from the Generic Storage (both the Configuration File and the work Data Base): DB, Security.{User,Group}, Transport.{Input,Output}, ExtTansp, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}, DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.VCAEngine.{WdgLib,Proj}.</li>
+<li> creating and loading directly to/from the library Data Base: Security.{User,Group}, Transport.{Input,Output}, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}, DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.VCAEngine.{WdgLib,Proj}.</li>
+<li> saving directly to the Configuration File, removing from the library Data Base and loading from the Configuration File: Security.{User,Group}, Transport.{Input,Output}, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}, DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.VCAEngine.{WdgLib,Proj}.</li>
+<li> removing from the Configuration File as a main part of the Generic Storage: Security.{User,Group}, Transport.{Input,Output}, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}, DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.VCAEngine.{WdgLib,Proj}.</li></ul>
+<h3><span class="mw-headline" id="Data_object_.28TConfig.29"><span class="mw-headline-number">13.2</span> <span id="TConfig" title="#TConfig">Data object (TConfig)</span></span></h3>
 <table class="wikitable">
 
 <tr>
@@ -2064,7 +2121,7 @@ Parameter's type (enum — IO::Type):
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual bool cfgChange( TCfg &amp;co, const TVariant &amp;pc );</i> — Is called in the case of changing the contents of the configuration element.</li></ul>
-<h3><span class="mw-headline" id="Data_cell_.28TCfg.29"><span class="mw-headline-number">13.2</span> <span id="TCfg" title="#TCfg">Data cell (TCfg)</span></span></h3>
+<h3><span class="mw-headline" id="Data_cell_.28TCfg.29"><span class="mw-headline-number">13.3</span> <span id="TCfg" title="#TCfg">Data cell (TCfg)</span></span></h3>
 <table class="wikitable">
 
 <tr>
@@ -2117,7 +2174,7 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 <li> <i>void setI( int64_t val ); TCfg &amp;operator=( int64_t vl ); void setI( int64_t val, uint8_t RqFlg );</i> — Set the value of the integer type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>void setB( char val ); TCfg &amp;operator=( bool vl ); void setB( char val, uint8_t RqFlg );</i> — Set the value of the boolean type to the <i>val</i> with the request flags <i>RqFlg</i>.</li>
 <li> <i>TConfig &amp;owner( ) const;</i> — The object of container-owner.</li></ul>
-<h3><span class="mw-headline" id="Data_structure_object_.28TElem.29"><span class="mw-headline-number">13.3</span> <span id="TElem" title="#TElem">Data structure object (TElem)</span></span></h3>
+<h3><span class="mw-headline" id="Data_structure_object_.28TElem.29"><span class="mw-headline-number">13.4</span> <span id="TElem" title="#TElem">Data structure object (TElem)</span></span></h3>
 <table class="wikitable">
 
 <tr>
@@ -2141,7 +2198,7 @@ Additional flags to <i>TFld</i> (enum — TCfg::AttrFlg):
 <li> <i>void valAtt( TValElem *cnt );</i> — Is called automatically when the structure is attached to the data storage <i>cnt</i>.</li>
 <li> <i>void valDet( TValElem *cnt );</i> — Is called automatically when the structure is detached from the data storage <i>cnt</i>.</li>
 <li> <i>ResMtx &amp;resEl( );</i> — Mutex for access to containers of the fields.</li></ul>
-<h3><span class="mw-headline" id="Data_structure_cell_.28TFld.29"><span class="mw-headline-number">13.4</span> <span id="TFld" title="#TFld">Data structure cell (TFld)</span></span></h3>
+<h3><span class="mw-headline" id="Data_structure_cell_.28TFld.29"><span class="mw-headline-number">13.5</span> <span id="TFld" title="#TFld">Data structure cell (TFld)</span></span></h3>
 <p><b>Data:</b><br />
 Cell's type (enum – TFld::Type):
 </p>
@@ -2208,7 +2265,7 @@ Cell's type (enum – TFld::Type):
 <li> <i>double selNm2VlR( const string &amp;name );</i> — Get the value of real type from the selectable name <i>name</i>.</li>
 <li> <i>bool selNm2VlB( const string &amp;name );</i> — Get the value of boolean type from the selectable name <i>name</i>.</li>
 <li> <i>XMLNode *cntrCmdMake( XMLNode *opt, const string &amp;path, int pos, const string &amp;user = "root", const string &amp;grp = "root", int perm = 0664 );</i> — Create a form element in accordance with the parameters of the cell.</li></ul>
-<h3><span class="mw-headline" id="The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="mw-headline-number">13.5</span> <span id="TValElem" title="#TValElem">The object which preacts about changing of the structure (TValElem)</span></span></h3>
+<h3><span class="mw-headline" id="The_object_which_preacts_about_changing_of_the_structure_.28TValElem.29"><span class="mw-headline-number">13.6</span> <span id="TValElem" title="#TValElem">The object which preacts about changing of the structure (TValElem)</span></span></h3>
 <table class="wikitable">
 
 <tr>
@@ -2220,9 +2277,9 @@ Cell's type (enum – TFld::Type):
 <ul><li> <i>virtual void detElem( TElem *el );</i> — Notification by the element <i>el</i> of the container about it's wish to detach.</li>
 <li> <i>virtual void addFld( TElem *el, unsigned id ) = 0;</i> — Notification about the addition of the cell <i>id</i> of the element <i>el</i>.</li>
 <li> <i>virtual void delFld( TElem *el, unsigned id ) = 0;</i> — Notification about the deleting of the cell <i>id</i> of the element <i>el</i>.</li></ul>
-<h3><span class="mw-headline" id="Data_cell_.28TVariant.29"><span class="mw-headline-number">13.6</span> <span id="TVariant" title="#TVariant">Data cell (TVariant)</span></span></h3>
+<h3><span class="mw-headline" id="Data_cell_.28TVariant.29"><span class="mw-headline-number">13.7</span> <span id="TVariant" title="#TVariant">Data cell (TVariant)</span></span></h3>
 <p><b>Data:</b><br />
-Error values for the different data types (define):
+Error values for the different data types (definition):
 </p>
 <ul><li> <i>EVAL_BOOL</i> — Error value of the boolean type (2);</li>
 <li> <i>EVAL_INT</i> — Error value of the integer type (-2147483647);</li>
@@ -2270,7 +2327,7 @@ Error values for the different data types (define):
 <li> <i>virtual void setR( double val );</i> — Set to the value the real one.</li>
 <li> <i>virtual void setS( const string &amp;val );</i> — Set to the value the string one.</li>
 <li> <i>virtual void setO( AutoHD&lt;TVarObj&gt; val );</i> — Set the object.</li></ul>
-<h3><span class="mw-headline" id="User_object_.28TVarObj.29"><span class="mw-headline-number">13.7</span> <span id="TVarObj" title="#TVarObj">User object (TVarObj)</span></span></h3>
+<h3><span class="mw-headline" id="User_object_.28TVarObj.29"><span class="mw-headline-number">13.8</span> <span id="TVarObj" title="#TVarObj">User object (TVarObj)</span></span></h3>
 <table class="wikitable">
 
 <tr>
@@ -2291,7 +2348,7 @@ Error values for the different data types (define):
 <li> <i>virtual string getStrXML( const string &amp;oid = "" );</i> — Conversion of the contents of the object in the XML flow.</li>
 <li> <i>static AutoHD&lt;TVarObj&gt; parseStrXML( const string &amp;str, XMLNode *nd = NULL, AutoHD&lt;TVarObj&gt; prev = NULL );</i> — Backward serialization for XML-stream to object.</li>
 <li> <i>virtual TVariant funcCall( const string &amp;id, vector&lt;TVariant&gt; &amp;prms );</i> — Call of the object function with the ID <i>id</i> and with the parameters <i>prms</i>.</li></ul>
-<h2><span class="mw-headline" id="The_control_interface_of_OpenSCADA_and_the_dynamic_tree_of_the_control_nodes_.28TCntrNode.29"><span class="mw-headline-number">14</span> <span id="CntrNode" title="#CntrNode">The control interface of OpenSCADA and the dynamic tree of the control nodes (TCntrNode)</span></span></h2>
+<h2><span class="mw-headline" id="Control_interface_of_OpenSCADA_and_the_dynamic_tree_of_the_control_nodes"><span class="mw-headline-number">14</span> <span id="CntrNode" title="#CntrNode">Control interface of OpenSCADA and the dynamic tree of the control nodes</span></span></h2>
 <p>For complete coverage of the key components of the system by the network of the same structure objects the object of the dynamic tree node TCntrNode is provided. This objects provides the following functions:
 </p>
 <ul><li> providing of the uniform access to system components, including the blocks of the dynamic access;</li>
@@ -2884,11 +2941,11 @@ Where:
 <table class="wikitable">
 
 <tr>
-<td><b>Inherited:</b></td>
-<td>By all the dynamic and controlled objects directly or through the childs.
+<td> <b>Inherited:</b> </td>
+<td> By all the dynamic and controlled objects directly or through children.
 </td></tr></table>
 <p><b>Data:</b><br />
-Named rights of access to control elements (define):
+Named rights of access to control elements (definition):
 </p>
 <ul><li> <i>R_R_R_</i> (0444) — access to all read-only;</li>
 <li> <i>R_R___</i> (0440) — read access only to the owner and group;</li>
@@ -2907,10 +2964,16 @@ Named rights of access to control elements (define):
 <li> <i>TCntrNode::SelfModify</i> — sign of the node's modification (0x04);</li>
 <li> <i>TCntrNode::SelfModifyS</i> — sign for node's modification save into <i>load_()</i> (0x08).</li>
 <li> <i>TCntrNode::SelfSaveForceOnChild</i> — force save, call "save_()", if changed-saving child nodes (0x10).</li></ul>
-<p>Flags of the enabling/disabling modes of the node (enum TCntrNode::Flag):
+<p>Flags of the enabling/disabling modes of the node (enum TCntrNode::EnDisFlag):
 </p>
-<ul><li> <i>TCntrNode::NodeConnect</i> — connection of the node;</li>
-<li> <i>TCntrNode::NodeRestore</i> — restoration of the connection of the node.</li></ul>
+<ul><li> <i>TCntrNode::NodeNoFlg</i> (0) — no node flag;</li></ul>
+<dl><dd> <i>Enable flags</i></dd></dl>
+<ul><li> <i>TCntrNode::NodeConnect</i> (0x01) — connection of the node;</li>
+<li> <i>TCntrNode::NodeRestore</i> (0x02) — restoration of the connection of the node;</li></ul>
+<dl><dd> <i>Disable flags</i></dd></dl>
+<ul><li> <i>TCntrNode::NodeRemove</i> (0x01) — node complete removing also from the storage;</li>
+<li> <i>TCntrNode::NodeRemoveOnlyStor</i> (0x02) — node removing only from the storage;</li></ul>
+<dl><dd> <i>&gt; 0x100 - reserved for the node specific</i></dd></dl>
 <p>Modification of the node flags (enum TCntrNode::ModifFlag):
 </p>
 <ul><li> <i>TCntrNode::Self</i> — the given node is modified;</li>
@@ -2973,15 +3036,17 @@ Named rights of access to control elements (define):
 <li> <i>unsigned grpAdd( const string &amp;id, bool ordered = false );</i> — Adding the container of the child nodes with the prefix <i>id</i> and the possibility of an orderly storage <i>ordered</i>. Returns the ID of the new container.</li>
 <li> <i>void grpDel( int8_t id );</i> — Deleting the container of the child nodes <i>id</i>.</li>
 <li> <i>virtual string chldAdd( int8_t igr, TCntrNode *node, int pos = -1 );</i> — Adds the child node <i>node</i> to the container <i>gr</i> and position <i>pos</i>. Returns the actual node identifier or name, after it cleaning and shrinking.</li>
-<li> <i>void chldDel( int8_t igr, const string &amp;name, long tm = -1, int flag = 0 );</i> — Deleting the child node <i>name</i> from the container <i>gr</i> with the flag <i>flag</i>.</li>
+<li> <i>void chldDel( int8_t gr, const string &amp;name, long tm = -1, int flags = NodeNoFlg );</i> — Deleting the child node <i>name</i> from the container <i>gr</i> according the EnDisFlag <i>flags</i>.</li>
 <li> <i>virtual void preEnable( int flag );</i> — The connection preact. It is called before the actual connection.</li>
 <li> <i>virtual void postEnable( int flag );</i> — The connection preact. It is called after the actual connection.</li>
 <li> <i>virtual void preDisable( int flag );</i> — The disconnection preact. It is called before the actual disconnection.</li>
 <li> <i>virtual void postDisable( int flag );</i> — The disconnection preact. It is called before the actual disconnection (before deleting).</li>
 <li> <i>virtual void load_( ); virtual void load_( TConfig *cfg );</i> — The function of the node specific loading, for ready configuration <i>cfg</i> also.</li>
 <li> <i>virtual void load__( );</i> — The function of the node specific loading in the loading end.</li>
-<li> <i>virtual void save_( );</i> — The function of the saving child node calling.</li></ul>
-<h2><span class="mw-headline" id="Resources_locking_in_OpenSCADA_.28Res.2C_ResAlloc.2C_ResMtx.2C_MtxAlloc.2C_AutoHD.29"><span class="mw-headline-number">15</span> Resources locking in OpenSCADA (Res, ResAlloc, ResMtx, MtxAlloc, AutoHD)</span></h2>
+<li> <i>virtual void save_( );</i> — The function of the saving child node calling.</li>
+<li> <i>string storage( const string &amp;cnt, bool forQueueOfData = false ) const;</i> — getting the work or the queued latest storage at <i>forQueueOfData</i> for the storage container <i>cnt</i>.</li>
+<li> <i>void setStorage( string &amp;cnt, const string &amp;vl, bool forQueueOfData = false );</i> — setting the work or the queued latest storage at <i>forQueueOfData</i> for the storage container <i>cnt</i>. Empty <i>vl</i> and <i>forQueueOfData</i> removes the first storage from the queue.</li></ul>
+<h2><span class="mw-headline" id="Resources_locking"><span class="mw-headline-number">15</span> Resources locking</span></h2>
 <p>Most of the units and subsystems of OpenSCADA are dynamic, ie they allow the creation/deletion/configuration while the system is working. Taking into account the multi-threading of the system, this functionality imposes stringent requirements for synchronization of threads. For synchronization in the system the resources are used, functions of which are localized in the objects "Res" and "ResAlloc". Object "Res" provides storage of the resource, providing the functions of capture/release for the read and write. In object "ResAlloc" the automatic release of the resource functions are implemented. Automatic resource involves the creation of a local resource object with its automatic release at fracture (in the destructor). Using of automatic resource makes the work with resources when using the exceptions much easier.
 </p><p>Any dynamic system object is inherited from "TCntrNode" object, which contains a mechanism to connect via the "AutoHD" template. The main function of the template is to store the link to the object and the capture of the resource, excluding the deleting of the object at the time of use. Template supports copying the resource and its release in case of destruction of the template object. For clarity of the access to the objects generated by "TCntrNode" the "AutoHD" template supports casting, based on the dynamic cast.
 </p>
@@ -3057,7 +3122,7 @@ Named rights of access to control elements (define):
 <li> <i>void setVal( const string &amp;vl );</i> — Setting the string's value to <i>vl</i>.</li>
 <li> <i>const string &amp;getVal( );</i> — Getting the string's value.</li>
 <li> <i>const string &amp;getValRef( );</i> — Getting a direct reference to the string <i>std::string</i>. The resource is ignored when you use this function!</li></ul>
-<h2><span class="mw-headline" id="Other_generic_objects_.28XMLNode.2C_TError.29"><span class="mw-headline-number">16</span> Other generic objects (XMLNode, TError)</span></h2>
+<h2><span class="mw-headline" id="Other_generic_objects"><span class="mw-headline-number">16</span> Other generic objects</span></h2>
 <p>XML in OpenSACDA is represented by the object of the XML-tag — XMLNode.
 </p><p>Errors of the exceptions are handled by the error object "TError".
 </p>
@@ -3126,6 +3191,7 @@ Error codes (enum — TError::Codes):
 <li> <i>TError::Tr_ErrTransport (12)</i> — transport level, transport error; </li>
 <li> <i>TError::DB_SQL_Connect (20)</i> — DB level, error the SQL-connection;</li>
 <li> <i>TError::DB_SQL_Query (21)</i> — DB level, error the SQL-query;</li>
+<li> <i>TError::DB_TrRemoved (22)</i> — DB level, translation removed;</li>
 <li> <i>TError::Arch_Val_OldBufVl (30)</i> — archives level, old value placing to the value buffer;</li>
 <li> <i>TError::Arch_Val_DblVSrc (31)</i> — double value source setting try;</li>
 <li> <i>TError::EXT (100)</i> — extended errors of OpenSCADA modules to use as TError::EXT+{N}.</li></ul>
@@ -4123,10 +4189,13 @@ extern "C"
 <li> declarations of public methods of the class should be thoroughly described with the individual description of each parameter;</li>
 <li> declarations of public attributes should also be thoroughly commented;</li>
 <li> text functions do not need to be thoroughly commented, but the implicit places are to be commented.</li></ul>
-<h2><span class="mw-headline" id=".D0.A1onventional_signs_in_the_text_and_source_code"><span class="mw-headline-number">22</span> Сonventional signs in the text and source code</span></h2>
-<p>???? — doubt in the usefulness of this section;<br />
-?!?! — the section is not fully implemented;<br />
-!!!! — the section requires a rethinking.
+<h2><span class="mw-headline" id="Conventional_signs_in_the_text_and_source_code"><span class="mw-headline-number">22</span> Conventional signs in the text and source code</span></h2>
+<p><b>????[{TAGS}]</b> — must be implemented shortly or according to the schedule in <i>TAGS</i>:
+</p>
+<ul><li> <i>API</i> — at the API significant changing in the stable;</li>
+<li> <i>v1.0</i> — at some specified release.</li></ul>
+<p><b>?!?!</b> — section is not completely implemented and can be implemented not at the schedule but an occasion;<br />
+<b>!!!!</b> — section requires rethinking and explains-clears-warns such sort of implementing-commenting.
 </p>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">23</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:API_uml_classdep.odg" title="File:API uml classdep.odg">Diagram: Static class diagram.</a></li>
@@ -4142,5 +4211,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2769</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
 </html>

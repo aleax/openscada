@@ -67,9 +67,10 @@ class Project : public TCntrNode, public TConfig
 	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
 	string	getStatus( );
 
-	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }	//Current library DB
-	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
-	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
+	bool isStdStorAddr( ) const		{ return (tbl() == ("prj_"+id())); }	//????[v1.0] Remove
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const	{ return cfg("DB_TBL").getS().empty() ? ("prj_"+id()) : cfg("DB_TBL").getS(); }
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &it )	{ cfg("NAME").setS(it); }
 	void setDescr( const string &it )	{ cfg("DESCR").setS(it); }

@@ -535,7 +535,7 @@ bool TextEdit::hasFocus( ) const	{ return edFld->hasFocus(); }
 void TextEdit::setText( const QString &text )
 {
     isInit = true;
-    edFld->blockSignals(true);	//!!!!: Block to prevent the status bar update and crash here sometime
+    edFld->blockSignals(true);	//!!!! The block to prevent the status bar updating and crashes here sometime
     edFld->setPlainText(text);
     edFld->blockSignals(false);
     edFld->document()->setModified(false);

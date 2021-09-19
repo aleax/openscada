@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.10"
+#define MOD_VER		"0.2.11"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -336,7 +336,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
 	    //Prepare & Execute the statement
 	    if(SQLPrepare(hstmt,(SQLTCHAR*)Mess->codeConvOut(codePage().c_str(),req).c_str(),SQL_NTS) != SQL_SUCCESS)
 		throw TError("", "SQLPrepare: %s", errors().c_str());
-	    if((sts=SQLExecute(hstmt)) != SQL_SUCCESS && sts != SQL_SUCCESS_WITH_INFO)	//!!!! Get details for SQL_SUCCESS_WITH_INFO about RO and other
+	    if((sts=SQLExecute(hstmt)) != SQL_SUCCESS && sts != SQL_SUCCESS_WITH_INFO)	//?!?! Get details for SQL_SUCCESS_WITH_INFO about RO and other
 		throw TError("", "SQLExecute: %s", errors().c_str());
 	}
 
@@ -376,7 +376,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
 		tbl->push_back(row);
 	    }
 	}
-	//if(sts == SQL_ERROR) throw err_sys("SQLMoreResults: %s", errors().c_str());	//!!!! Only single result support !!!!
+	//if(sts == SQL_ERROR) throw err_sys("SQLMoreResults: %s", errors().c_str());	//!!!! Only single result is supported
     } catch(TError &ier) { err = ier.mess; }
 
 #if (ODBCVER < 0x0300)

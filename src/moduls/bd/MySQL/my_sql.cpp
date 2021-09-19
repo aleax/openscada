@@ -34,13 +34,13 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.5.6"
+#define MOD_VER		"3.5.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
 //************************************************
 
-#define MYSQL_RECONNECT		0		//!!!! MySQL/MariaDB reconnect some time crashable due to a need of releasing some locks
+#define MYSQL_RECONNECT		0		//!!!! The MySQL/MariaDB reconnect some time crashable due to a need of releasing some locks
 #define SEEK_PRELOAD_LIM	100
 
 BDMySQL::BDMod *BDMySQL::mod;

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.3.4"
+#define MOD_VER		"7.3.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -113,7 +113,7 @@ void Engine::postEnable( int flag )
     lbwdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
     lbwdg_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     lbwdg_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    lbwdg_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));
+    lbwdg_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
     lbwdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
 
     //Make library widgets' data container: {LibWidgetMime,ProjMime}(__ID__, MIME, DATA)
@@ -161,7 +161,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
     prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     prj_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    prj_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));
+    prj_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
     prj_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
     prj_el.fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"root"));
     prj_el.fldAdd(new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"UI"));
@@ -547,7 +547,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	    attr.at().fld().setValues(TSYS::strSepParse(IO_VAL,1,'|'));
 	    if(flg&(TFld::Selectable|TFld::SelEdit)) attr.at().fld().setSelNames(TSYS::strSepParse(IO_VAL,2,'|'));
 	}
-	//!!!! Temporary placed for existing DBs clean up to early fix from using Values and Names to unproper types.
+	//????[v1.0] Remove - temporary placed to clean up the existing DBs, to early fix from using Values and Names for unproper types.
 	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
 
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)((selfFlg&(~Attr::VizerSpec))|(attr.at().flgSelf()&Attr::VizerSpec)));
