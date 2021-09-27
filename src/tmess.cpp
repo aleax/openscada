@@ -633,11 +633,9 @@ void TMess::save( )
     TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
 }
 
-const char *TMess::labDB( )
-{
-    return _("Storage address in the format \"{DB module}.{DB name}\".\n"
-	     "Set '*.*' to use the Generic Storage.");
-}
+const char *TMess::labStor( )	{ return _("Storage address in the format \"{DB module}.{DB name}\"."); }
+
+const char *TMess::labStorGen( ){ return _("Set '*.*' to use the Generic Storage."); }
 
 const char *TMess::labSecCRON( )
 {

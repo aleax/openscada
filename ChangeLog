@@ -1,3 +1,22 @@
+2021-09-27 Roman (stable)
+- !!!:DOC: The "Program Manual" document appended of the new section "Execution the ready OpenSCADA project in the service-background space"
+	and revised in the section "Startup and execution"
+    !!: The "Quick start" manual included the new section "Execution the ready OpenSCADA project in the service-background space"
+	into own section "Background and remote execution — server, PLC execution environment and remote development".
+- !!!!:SYS: The label TMess::labDB() separated to two ones: TMess::labStor() and TMess::labStorGen().
+    !: The OpenSCADA control request "list:/db/list" expanded of the optons support
+	and the option "onlydb" for generation only the DB list.
+- !:FIX:DB.SQLite: Fixed in direct processing of the setting no string fields and checking the translated fields for missing - new ones.
+- !!:FIX:DAQ: The controller objects manual start defined for some specific hot doings of the object enabling,
+	when the doing was prevented from call twice at the normal start:
+    - DAQGate: resync the remote source data at the sync period >= 0;
+    - ModBus: force reformation of the acquisition blocks;
+    - OPC_UA: force reformation of the monitored items list;
+    - Siemens: force reformation of the acquisition blocks.
+- !!:FIX.DAQ.DAQGate: Unified in the sync commonly and fixed in the attributes sync.
+- Archive.DBArch,Protocol.HTTP: Switched to select only DBs.
+
+
 2021-09-19 Roman (stable)
 - !!:LibsDB.OscadaLibs: The "DB" field content and the table base ID of UserFuncLibs.{techApp,servProc,Controller}
     renamed to the standard one "flb_techApp", "flb_servProc", "flb_Controller" respectively,

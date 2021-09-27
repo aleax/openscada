@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.2.6"
+#define MOD_VER		"4.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -453,7 +453,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
 	::TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
 	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), restTm(cfg("TM_REST").getId()), mAssincWR(cfg("ASINC_WR").getBd()),
-	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), isReload(false), isInitiated(false), alSt(-1), conErr(dataRes()), mInvokeID(-1),
+	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), isInitiated(false), alSt(-1), conErr(dataRes()), mInvokeID(-1),
 	di(NULL), dc(NULL), enRes(true), numR(0), numW(0), numErr(0), tmDelay(0)
 {
     cfg("PRM_BD").setS("SiemensPrm_"+id());
@@ -523,6 +523,9 @@ void TMdContr::disable_( )
     //Clear acquisition data blocks and asynchronous write mode data blocks
     reqDataRes.resRequestW(true); acqBlks.clear(); reqDataRes.resRelease();
     reqDataAsWrRes.resRequestW(true); writeBlks.clear(); reqDataAsWrRes.resRelease();
+
+    //Clear the processing parameters list
+    enRes.lock(); pHd.clear(); enRes.unlock();
 }
 
 void TMdContr::start_( )
@@ -533,21 +536,6 @@ void TMdContr::start_( )
 
     //Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
-
-    //Clear acquisition data blocks and asynchronous write mode data blocks
-    reqDataRes.resRequestW(true); acqBlks.clear(); reqDataRes.resRelease();
-    reqDataAsWrRes.resRequestW(true); writeBlks.clear(); reqDataAsWrRes.resRelease();
-
-    //Reenable parameters
-    try {
-	vector<string> pls;
-	list(pls);
-
-	isReload = true;
-	for(unsigned iP = 0; iP < pls.size(); iP++)
-	    if(at(pls[iP]).at().enableStat()) at(pls[iP]).at().enable();
-	isReload = false;
-    } catch(TError&) { isReload = false; throw; }
 
     //Counters reset
     numR = numW = numErr = 0;
@@ -564,9 +552,6 @@ void TMdContr::stop_( )
 
     alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
-
-    //Clear the process parameters list
-    enRes.lock(); pHd.clear(); enRes.unlock();
 
     disconnectRemotePLC();
 }
@@ -1051,8 +1036,7 @@ void TMdContr::reqService( XMLNode &io )
     try {
 	//Reconnect for lost connection
 	if(tmDelay >= 0) connectRemotePLC();
-
-	tr.at().start((enableStat() && !isReload) ? 0 : 1000);
+	if(!tr.at().startStat()) tr.at().start(enableStat() ? 0 : 1000);
 
 	io.setAttr("err", "");
 	if(!isInitiated) {
@@ -1304,7 +1288,7 @@ void TMdContr::protIO( XMLNode &io )
 
 int TMdContr::messIO( const char *oBuf, int oLen, char *iBuf, int iLen )
 {
-    return tr.at().messIO(oBuf, oLen, iBuf, iLen, ((enableStat() && !isReload)?0:1000));
+    return tr.at().messIO(oBuf, oLen, iBuf, iLen, enableStat()?0:1000);
 }
 
 void TMdContr::reset( )
@@ -1602,6 +1586,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/st/runSt",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.\n"
+		    "Restart to apply the removed PLC links in run."));
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
 	if(!(type() == CIF_PB || type() == ISO_TCP || type() == ISO_TCP243 || type() == SELF_ISO_TCP)) ctrRemoveNode(opt,"/cntr/cfg/SLOT");
 	if(type() != CIF_PB) ctrRemoveNode(opt,"/cntr/cfg/CIF_DEV");
@@ -1633,7 +1620,23 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
+    if(a_path == "/cntr/st/runSt" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && s2i(opt->text()) && enableStat()) {
+	//Clear acquisition data blocks and asynchronous write mode data blocks
+	reqDataRes.resRequestW(true); acqBlks.clear(); reqDataRes.resRelease();
+	reqDataAsWrRes.resRequestW(true); writeBlks.clear(); reqDataAsWrRes.resRelease();
+
+	// Reloading the parameters' data
+	vector<string> pls;
+	list(pls);
+
+	for(unsigned iP = 0; iP < pls.size(); iP++)
+	    if(at(pls[iP]).at().enableStat())
+		at(pls[iP]).at().loadDATA(true);
+
+	// Now same starting
+	start();
+    }
+    else if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
 	for(unsigned iS = 0; iS < sls.size(); iS++)
@@ -1740,10 +1743,17 @@ TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat() && !owner().isReload) return;
+    if(enableStat()) return;
 
     TParamContr::enable();
 
+    loadDATA();
+
+    owner().prmEn(this, true);	//Put to process
+}
+
+void TMdPrm::loadDATA( bool incl )
+{
     map<string, bool> als;
 
     //Parse Siemens attributes and convert to string list for simple type parameter
@@ -1839,7 +1849,13 @@ void TMdPrm::enable( )
 	    try{ pEl.fldDel(iP); iP--; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 
-    owner().prmEn(this, true);	//Put to process
+    //Call the included paramers' data reload
+    if(incl) {
+	vector<string> prmLs;
+	list(prmLs);
+	for(unsigned iP = 0; iP < prmLs.size(); iP++)
+	    at(prmLs[iP]).at().loadDATA(incl);
+    }
 }
 
 void TMdPrm::disable( )

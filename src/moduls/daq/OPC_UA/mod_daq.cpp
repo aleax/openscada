@@ -93,7 +93,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TCon
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
     mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), restTm(cfg("TM_REST").getId()), mUseRead(cfg("UseRead").getBd()),
-    mPer(1e9), prcSt(false), callSt(false), isReload(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
+    mPer(1e9), prcSt(false), callSt(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+id());
@@ -177,26 +177,14 @@ void TMdContr::disable_( )
     sess.mSubScr.clear();
 
     tr.free();
+
+    //Clear the processing parameters list
+    enRes.lock(); pHd.clear(); enRes.unlock();
 }
 
 void TMdContr::start_( )
 {
     if(prcSt) return;
-
-    // Deactivate the main session to reset/clear the monitored items
-    if(sess.mSubScr.size() && sess.mSubScr[0].isActivated())
-	sess.mSubScr[0].activate(false);
-
-    // Reenable parameters
-    try {
-	vector<string> pls;
-	list(pls);
-
-	isReload = true;
-	for(unsigned iP = 0; iP < pls.size(); iP++)
-	    if(at(pls[iP]).at().enableStat()) at(pls[iP]).at().enable();
-	isReload = false;
-    } catch(TError&) { isReload = false; throw; }
 
     servSt = 0;
     tmDelay = 0;
@@ -212,9 +200,6 @@ void TMdContr::stop_( )
 
     alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
-
-    //Clear the process parameters list
-    enRes.lock(); pHd.clear(); enRes.unlock();
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -568,6 +553,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/st/runSt",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Manual restart of the enabled controller object causes the force reformation of the monitored items list.\n"
+		    "Restart to apply the removed PLC links in run."));
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/EndPoint",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "dest","sel_ed", "select","/cntr/cfg/elLst", NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
@@ -594,9 +582,26 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
+
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/AuthPass" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
+    if(a_path == "/cntr/st/runSt" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && s2i(opt->text()) && enableStat()) {
+	// Deactivate the main session to reset/clear the monitored items
+	if(sess.mSubScr.size() && sess.mSubScr[0].isActivated())
+	    sess.mSubScr[0].activate(false);
+
+	// Reloading the parameters' data
+	vector<string> pls;
+	list(pls);
+
+	for(unsigned iP = 0; iP < pls.size(); iP++)
+	    if(at(pls[iP]).at().enableStat())
+		at(pls[iP]).at().loadDATA(true);
+
+	// Now same starting
+	start();
+    }
+    else if(a_path == "/cntr/cfg/AuthPass" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
 	opt->setText(string(mAuthPass.getS().size(),'*'));
     else if(a_path == "/cntr/cfg/elLst" && ctrChkNode(opt)) {
 	ResAlloc res(resOPC, false);
@@ -811,10 +816,17 @@ TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat() && !owner().isReload) return;
+    if(enableStat()) return;
 
     TParamContr::enable();
 
+    loadDATA();
+
+    owner().prmEn(this, true);
+}
+
+void TMdPrm::loadDATA( bool incl )
+{
     XML_N req("opc.tcp");
     map<string, bool> als;
 
@@ -854,7 +866,7 @@ void TMdPrm::enable( )
 	    }
 	    // Attribute creating from the server information
 	    else {
-		// Request for node class request
+		// Request the node class
 		req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_NodeClass));
 		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_BrowseName));
@@ -972,7 +984,13 @@ void TMdPrm::enable( )
 		pEl.fldDel(iP); iP--;
 	    } catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 
-    owner().prmEn(this, true);
+    //Call the included paramers' data reload
+    if(incl) {
+	vector<string> prmLs;
+	list(prmLs);
+	for(unsigned iP = 0; iP < prmLs.size(); iP++)
+	    at(prmLs[iP]).at().loadDATA(incl);
+    }
 }
 
 void TMdPrm::disable( )

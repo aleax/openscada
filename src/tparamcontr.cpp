@@ -216,7 +216,7 @@ void TParamContr::LoadParmCfg( )
 		del(itLs[iIt]);
     }
 
-    //Force load present parameters
+    //Force loading the available parameters
     vector<string> prmLs;
     list(prmLs);
     for(unsigned iP = 0; iP < prmLs.size(); iP++) {

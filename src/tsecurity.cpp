@@ -489,7 +489,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),RWRWR_,"root",SSEC_ID,1,"tp","bool");
 	    }
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,
-		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		"tp","str","dest","select","select","/db/list",
+		"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
 	    if(DB(true).size())
 		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID);
 	}
@@ -632,7 +633,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	    TConfig::cntrCmdMake(opt,"/prm",0,"root",SSEC_ID,RWRWR_);
 	    ctrMkNode("list",opt,-1,"/prm/USERS",EVAL_STR,RWRWR_,"root",SSEC_ID,1,"s_com","add,del");
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SSEC_ID,4,
-		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		"tp","str","dest","select","select","/db/list",
+		"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
 	    if(DB(true).size())
 		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID);
 	}

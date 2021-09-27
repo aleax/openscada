@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-01 09:17+0300\n"
+"POT-Creation-Date: 2021-09-27 08:43+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -155,6 +155,14 @@ msgstr "OK"
 #, c-format
 msgid "10:Generic error: %s."
 msgstr "10:Allgemeiner Fehler: %s."
+
+msgid ""
+"Manual restart of the enabled controller object causes the force reformation "
+"of the acquisition blocks.\n"
+"Restart to apply the removed PLC links in run."
+msgstr ""
+"Ein manueller Neustart des freigegebenen Reglerobjekts bewirkt die Zwangsneubildung der Erfassungsblöcke.\n"
+"Starten Sie neu, um die entfernten SPS-Links im Lauf zu übernehmen."
 
 msgid "Default port of the ModuBus/TCP is 502."
 msgstr "Der Standardport des ModBus/TCP ist 502."
@@ -513,6 +521,10 @@ msgstr "Aktiviert"
 
 msgid "DB"
 msgstr "DB"
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Entfernen von '%s'"
 
 msgid "Configuration"
 msgstr "Konfiguration"

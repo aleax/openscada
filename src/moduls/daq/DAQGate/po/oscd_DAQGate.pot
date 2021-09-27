@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-02 09:20+0300\n"
+"POT-Creation-Date: 2021-09-27 09:05+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -138,6 +138,11 @@ msgstr ""
 
 #, c-format
 msgid "Station missed '%s'."
+msgstr ""
+
+msgid ""
+"Manual restart of the enabled controller object causes the force resync at the sync period >= 0.\n"
+"Restart to refresh the removed source data configuration."
 msgstr ""
 
 msgid "Zero to disable the access to the remote archive."

@@ -107,7 +107,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	mSched(cfg("SCHEDULE")), mPrt(cfg("PROT")), mAddr(cfg("ADDR")),
 	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), mAsynchWr(cfg("WR_ASYNCH").getBd()),
 	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
-	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), isReload(false), alSt(-1),
+	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), alSt(-1),
 	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
@@ -169,6 +169,9 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new 
 
 void TMdContr::disable_( )
 {
+    // Asynchronous writings buffer clean up
+    aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
+
     //Clear acquisition data block
     reqRes.resRequestW(true);
     acqBlks.clear();
@@ -176,6 +179,9 @@ void TMdContr::disable_( )
     acqBlksCoil.clear();
     acqBlksCoilIn.clear();
     reqRes.resRelease();
+
+    //Clear process parameters list
+    enRes.lock(); pHd.clear(); enRes.unlock();
 }
 
 void TMdContr::load_( )
@@ -191,29 +197,6 @@ void TMdContr::start_( )
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
     tmDelay = 0;
 
-    //Reenable parameters for data blocks structure update
-    // Asynchronous writings buffer clean up
-    aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
-
-    // Clear data blocks
-    reqRes.resRequestW(true);
-    acqBlks.clear();
-    acqBlksIn.clear();
-    acqBlksCoil.clear();
-    acqBlksCoilIn.clear();
-    reqRes.resRelease();
-
-    // Reenable parameters
-    try {
-	vector<string> pls;
-	list(pls);
-
-	isReload = true;
-	for(unsigned iP = 0; iP < pls.size(); iP++)
-	    if(at(pls[iP]).at().enableStat()) at(pls[iP]).at().enable();
-	isReload = false;
-    } catch(TError&) { isReload = false; throw; }
-
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
@@ -225,13 +208,6 @@ void TMdContr::stop_( )
 
     alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
-
-    //Clear statistic
-    numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
-
-    //Clear process parameters list
-    MtxAlloc res(enRes, true);
-    pHd.clear();
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -970,6 +946,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/st/runSt",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.\n"
+		    "Restart to apply the removed PLC links in run."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,
 	    4,"tp","str","dest","select","select","/cntr/cfg/trLst","help",_("Default port of the ModuBus/TCP is 502."));
@@ -989,7 +968,30 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
+    if(a_path == "/cntr/st/runSt" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && s2i(opt->text()) && enableStat()) {
+	// Asynchronous writings buffer clean up
+	aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
+
+	// Data blocks clean up
+	reqRes.resRequestW(true);
+	acqBlks.clear();
+	acqBlksIn.clear();
+	acqBlksCoil.clear();
+	acqBlksCoilIn.clear();
+	reqRes.resRelease();
+
+	// Reloading the parameters' data
+	vector<string> pls;
+	list(pls);
+
+	for(unsigned iP = 0; iP < pls.size(); iP++)
+	    if(at(pls[iP]).at().enableStat())
+		at(pls[iP]).at().loadDATA(true);
+
+	// Now same starting
+	start();
+    }
+    else if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
@@ -1074,10 +1076,17 @@ bool TMdPrm::isLogic( ) const		{ return (type().name == "logic"); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat() && !owner().isReload) return;
+    if(enableStat()) return;
 
     TParamContr::enable();
 
+    loadDATA();
+
+    owner().prmEn(this, true);	//Put to process
+}
+
+void TMdPrm::loadDATA( bool incl )
+{
     map<string, bool> als;
 
     //Parse ModBus attributes and convert to string list for standard type parameter
@@ -1197,7 +1206,13 @@ void TMdPrm::enable( )
 	    try{ pEl.fldDel(iP); iP--; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 
-    owner().prmEn(this, true);	//Put to process
+    //Call the included paramers' data reload
+    if(incl) {
+	vector<string> prmLs;
+	list(prmLs);
+	for(unsigned iP = 0; iP < prmLs.size(); iP++)
+	    at(prmLs[iP]).at().loadDATA(incl);
+    }
 }
 
 void TMdPrm::disable( )

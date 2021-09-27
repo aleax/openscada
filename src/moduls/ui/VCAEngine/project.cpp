@@ -539,7 +539,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		if(isStdStorAddr())
 		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
-			"tp","str","dest","select","select","/db/list","help",TMess::labDB());
+			"tp","str","dest","select","select","/db/list",
+			"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
 		else ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
 			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));

@@ -31,7 +31,7 @@
 <td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Gateway of the data sources
 </td>
-<td> 2.6 </td>
+<td> 2.7 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
@@ -69,9 +69,10 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:985px;"><a class="image" href="http://oscada.org/wiki/File:DAQGate_tr_cntr.png"><img class="thumbimage" height="945" src="../files/DAQGate_tr_cntr.png" width="983" /></a>  <div class="thumbcaption">Fig.2. Configuration tab of a controller object.</div></div></div></div>
 <p>With this tab you can set:
 </p>
-<ul><li> State of the controller object, that is: status, "Enabled", "Running" and the database name containing the configuration.</li>
-<li> Identifier, name and description of the controller.</li>
-<li> The state "Enabled" and "Running", in which the controller object must be translated at start up.</li>
+<ul><li> State of the controller object, that is: status, "Enabled", "Running" and the database name containing the configuration.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force resync at the sync period &gt;= 0.</dd></dl>
+<ul><li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running" in which the controller object must be translated at start up.</li>
 <li> Table of the parameters cache storage those are created even when the data source is not available.</li>
 <li> Acquisition schedule policy and priority of the data acquisition task. </li>
 <li> Time interval of repetition attempts to restore communication with the lost station, in seconds.</li>

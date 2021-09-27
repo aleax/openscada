@@ -145,7 +145,9 @@ class TMdContr: public TController
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &co, const TVariant &pc );
+
 	void prmEn( TMdPrm *prm, bool val );
+	void sync( bool onlyPrmLs = false );
 
     private:
 	//Data

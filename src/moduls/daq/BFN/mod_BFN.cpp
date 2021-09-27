@@ -195,7 +195,8 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	TTypeDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/symbs",_("Symbols"))) {
 	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,
-		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		"tp","str","dest","select","select","/db/list",
+		"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
 	    if(ctrMkNode("table",opt,-1,"/symbs/codes",_("Codes"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/symbs/codes/text",_("Text"),RWRWR_,"root",SDAQ_ID,1,"tp","str");

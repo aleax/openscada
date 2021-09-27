@@ -162,7 +162,8 @@ class TMess
 	void translReg( const string &mess, const string &src, const string &prms = "" );
 
 	// Often used, generic text messages
-	static const char *labDB( );
+	static const char *labStor( );
+	static const char *labStorGen( );
 	static const char *labSecCRON( );
 	static const char *labSecCRONsel( );
 	static const char *labTaskPrior( );

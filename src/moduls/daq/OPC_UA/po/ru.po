@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 11:50+0300\n"
+"POT-Creation-Date: 2021-09-27 09:13+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -153,6 +153,14 @@ msgstr "НОРМА"
 #, c-format
 msgid "10:Generic error: %s."
 msgstr "10:Общая ошибка: %s."
+
+msgid ""
+"Manual restart of the enabled controller object causes the force reformation "
+"of the monitored items list.\n"
+"Restart to apply the removed PLC links in run."
+msgstr ""
+"Ручной перезапуск включенного объекта контроллера вызывает принудительное переформирование перечня элементов мониторинга.\n"
+"Перезапустите для применения удалённых при исполнении связей ПЛК."
 
 msgid "Zero for disable periodic sync."
 msgstr "Ноль для отключения периодической синхронизации."
@@ -455,6 +463,10 @@ msgstr "Включен"
 
 msgid "DB"
 msgstr "БД"
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Удалить из '%s'"
 
 msgid "Configuration"
 msgstr "Конфигурация"

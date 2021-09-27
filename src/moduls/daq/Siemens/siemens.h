@@ -87,6 +87,7 @@ class TMdPrm: public TParamContr
 	bool isSimple( ) const;
 	bool isLogic( ) const;
 
+	void loadDATA( bool incl = false );
 	void enable( );
 	void disable( );
 
@@ -97,6 +98,8 @@ class TMdPrm: public TParamContr
 	TElem &elem( )		{ return pEl; }
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
+	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 
 	TMdContr &owner( ) const;
 
@@ -262,7 +265,6 @@ class TMdContr: public TController
 	bool	prcSt,			//Process task active
 		callSt,			//Calc now stat
 		endrunReq,		//Request to stop of the Process task
-		isReload,
 		isInitiated;		//Only for SELF_ISO_TCP
 	int8_t	alSt;			//Alarm state
 	MtxString conErr;		//Connection error

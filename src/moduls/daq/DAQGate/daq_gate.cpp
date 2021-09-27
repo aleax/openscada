@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.3"
+#define MOD_VER		"2.7.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -182,16 +182,13 @@ void TMdContr::load_( )
     }
 }
 
-void TMdContr::enable_( )
+void TMdContr::enable_( )	{ sync(); }
+
+void TMdContr::sync( bool onlyPrmLs )
 {
     string statV, cpEl, daqTp, cntrId, prmId, pIt, cntrPath, prmPath;
     vector<string> prmLs, prmLs1, gPrmLs;
     XMLNode req("list");
-
-    //Clear present parameters configuration
-    //!!!! Disabled by store the station configuration and is not actual more only for the first level parameters
-    //list(prmLs);
-    //for(unsigned iP = 0; iP < prmLs.size(); iP++) at(prmLs[iP]).at().setStats("");
 
     //Stations list update
     if(!mStatWork.size())
@@ -263,7 +260,7 @@ void TMdContr::enable_( )
 			if(!curP.at().enableStat()) {
 			    curP.at().enable();
 			    if(enableStat()) curP.at().load();
-			}
+			} else if(!onlyPrmLs) curP.at().sync();
 
 			//   Placing the parameter to the virtual parameter
 			curP.at().list(prmLs1);
@@ -291,12 +288,12 @@ void TMdContr::enable_( )
 			} else curP = at(prmId);
 		    }
 
+		    curP.at().setStats(st->first);
+		    gPrmLs.push_back(curP.at().ownerPath(true));
 		    if(!curP.at().enableStat()) {
 			curP.at().enable();
 			if(enableStat()) curP.at().load();
-		    }
-		    curP.at().setStats(st->first);
-		    gPrmLs.push_back(curP.at().ownerPath(true));
+		    } else if(!onlyPrmLs) curP.at().sync();
 
 		    //  Process included parameters
 		    string prmPath = prmLs[iP], prmPathW = prmPath, prmPathW_;
@@ -329,12 +326,12 @@ void TMdContr::enable_( )
 			    curW.at().setPrmAddr(prmPathW_);
 			} else curW = curP.at().at(prmId);
 
+			curW.at().setStats(st->first);
+			gPrmLs.push_back(curW.at().ownerPath(true));
 			if(!curW.at().enableStat()) {
 			    curW.at().enable();
 			    if(enableStat()) curW.at().load();
-			}
-			curW.at().setStats(st->first);
-			gPrmLs.push_back(curW.at().ownerPath(true));
+			} else if(!onlyPrmLs) curW.at().sync();
 
 			//   Next level process
 			if(prmW->childSize()) {
@@ -385,9 +382,6 @@ void TMdContr::disable_( )
 void TMdContr::start_( )
 {
     if(prcSt) return;
-
-    //mStatWork.clear();
-    //enable_();	//Comment for prevent long time start in no connection present case
 
     //Clearing station parameters
     for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st) {
@@ -464,12 +458,12 @@ void *TMdContr::Task( void *icntr )
 
 	try {
 	    //Allow stations presenting
-	    bool isAccess = false, needEnable = false;
+	    bool isAccess = false, needToResync = false;
 	    for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st) {
 		if(firstCall)	st->second.cntr = 0;	//Reset counter for connection alarm state update
 		if(st->second.cntr > 0) st->second.cntr = vmax(0, st->second.cntr-1e-6*(tCnt-tPrev));
 		if(st->second.cntr <= 0) isAccess = true;
-		if(st->second.cntr == 0) needEnable = true;	//?!?! Maybe only for all == 0 stations
+		if(st->second.cntr == 0) needToResync = true;	//?!?! Maybe only for all == 0 stations
 	    }
 	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(1e9); continue; }
 	    else {
@@ -480,8 +474,11 @@ void *TMdContr::Task( void *icntr )
 		} else { div = 0; syncCnt = 1; }	//Disable sync
 
 		//Parameters list update
-		if((firstCall && cntr.syncPer() >= 0) || needEnable || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
-		    try { cntr.enable_(); } catch(TError &err) { }
+		if(/*(firstCall && cntr.syncPer() >= 0) ||*/ (!firstCall && needToResync) || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
+		    try {
+			cntr.syncSt = true;
+			cntr.sync(!needToResync);
+		    } catch(TError &err) { }
 
 		MtxAlloc resPrm(cntr.enRes, true);
 
@@ -765,6 +762,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/st/runSt",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Manual restart of the enabled controller object causes the force resync at the sync period >= 0.\n"
+		"Restart to refresh the removed source data configuration."));
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),RWRWR_,"root",SDAQ_ID,
 	    "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON(), NULL);
@@ -790,7 +790,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/SEL_STAT_lst" && ctrChkNode(opt)) {
+    if(a_path == "/cntr/st/runSt" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && s2i(opt->text()) && enableStat()) {
+	sync();
+	start();
+    }
+    else if(a_path == "/cntr/cfg/SEL_STAT_lst" && ctrChkNode(opt)) {
 	vector<TTransportS::ExtHost> list;
 	SYS->transport().at().extHostList("*", list);
 	for(unsigned iL = 0; iL < list.size(); iL++)
@@ -860,6 +864,8 @@ void TMdPrm::enable( )
     TParamContr::enable();
 
     owner().prmEn(this, true);	//Put to process
+
+    if(!isSynced || owner().syncPer() >= 0)	sync();	//Sync for the attributes list
 }
 
 void TMdPrm::disable( )
@@ -892,8 +898,6 @@ void TMdPrm::load_( )
     //TParamContr::load_();
 
     loadIO();
-
-    if(owner().syncPer() >= 0)	sync();	//Sync for the attributes list
 }
 
 void TMdPrm::loadIO( )
@@ -910,6 +914,7 @@ void TMdPrm::loadIO( )
 	    vlAt("err").at().setS(_("10:Data not available."), 0, true);
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
 	}
+	if(attrsNd.childSize())	isSynced = true;
     } catch(TError &err) { }
 }
 

@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"3.3.7"
+#define DAQ_MVER	"3.4.0"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -69,6 +69,7 @@ class TMdPrm: public TParamContr
 	bool isStd( ) const;
 	bool isLogic( ) const;
 
+	void loadDATA( bool incl = false );
 	void enable( );
 	void disable( );
 
@@ -79,6 +80,8 @@ class TMdPrm: public TParamContr
 	TElem &elem( )		{ return pEl; }
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
+	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 
 	TMdContr &owner( ) const;
 
@@ -222,8 +225,7 @@ class TMdContr: public TController
 
 	bool	prcSt,				//Process task active
 		callSt,				//Calc now stat
-		endrunReq,			//Request to stop of the Process task
-		isReload;
+		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
 	vector<SDataRec>	acqBlks;	//Acquisition data blocks for registers
 	vector<SDataRec>	acqBlksIn;	//Acquisition data blocks for input registers

@@ -171,7 +171,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 		if(DB().size()) {
 		    if(isStdStorAddr())
 			ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
-			    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+			    "tp","str","dest","select","select","/db/list",
+			    "help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
 		    else ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 			    "tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
 			    "help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));

@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.2.1"
+#define MOD_VER		"3.2.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -563,7 +563,8 @@ void MTable::fieldSet( TConfig &cfg )
 
 	    // ???? Propagate the last changes to DB.{MySQL,PostgreSQL,FireBird}
 	    // No translation
-	    if(!trPresent) { req += (next?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " "; next = true; }
+	    if(!trPresent || u_cfg.fld().type() != TFld::String)
+	    { req += (next?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " "; next = true; }
 	    // Clearing all the translation at setting no translable message
 	    else if(isTransl && (u_cfg.noTransl() || (sval.size() > 2 && !Mess->isMessTranslable(sval)))) {
 		if(u_cfg.noTransl()) {
@@ -582,10 +583,10 @@ void MTable::fieldSet( TConfig &cfg )
 	    else {
 		sid = (isTransl?(Mess->lang2Code()+"#"):"") + cf_el[iEl];
 		//  Checking whether the field changed
-		bool isChanged = false;
-		for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++)
-		    if(tbl[0][iFld] == sid) { isChanged = (sval != ("'"+tbl[1][iFld]+"'")); break; }
-		if(isChanged) {
+		bool isChanged = false, isPresent = false;
+		for(unsigned iFld = 0; iFld < tbl[0].size() && !isPresent; iFld++)
+		    if(tbl[0][iFld] == sid) { isChanged = (sval != ("'"+tbl[1][iFld]+"'")); isPresent = true; }
+		if(isChanged || !isPresent) {
 		    toWarnReload = (isTransl && sval.size() <= 2);
 
 		    // The same field

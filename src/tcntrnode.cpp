@@ -1095,14 +1095,16 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		}
 	}
     }
-    else if((a_path == "/db/list" || a_path.compare(0,11,"/db/tblList") == 0) && ctrChkNode(opt)) {
+    else if((a_path.find("/db/list") == 0 || a_path.find("/db/tblList") == 0) && ctrChkNode(opt)) {
 	string tblList = "";
-	if(a_path.compare(0,11,"/db/tblList") == 0)
+	if(a_path.find("/db/tblList") == 0)
 	    if(!(tblList=TSYS::strParse(a_path,1,":")).size())	tblList = _("[TableName]");
 	vector<string> c_list;
 	TBDS::dbList(c_list);
-	if(nodePath() != "/") opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
-	opt->childAdd("el")->setText(tblList.size() ? (DB_CFG"."+tblList) : DB_CFG);
+	if(TSYS::strParse(a_path,1,":").find("onlydb") == string::npos) {
+	    if(nodePath() != "/") opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
+	    opt->childAdd("el")->setText(tblList.size() ? (DB_CFG"."+tblList) : DB_CFG);
+	}
 	for(unsigned iDB = 0; iDB < c_list.size(); iDB++)
 	    opt->childAdd("el")->setText(tblList.size() ? c_list[iDB]+"."+tblList : c_list[iDB]);
     }
