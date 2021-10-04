@@ -45,9 +45,10 @@
 #define STD_INTERF_TM	7
 #define SERV_TASK_PER	10
 
-#define BUF_ARCH_NM	"<buffer>"
-#define ALRM_ARCH_NM	"<alarms>"
-#define ALRM_ARCH_CH_NM	"<alarmsChange>"
+#define ARCH_BUF	"<buffer>"
+#define ARCH_ALRM	"<alarms>"
+#define ARCH_ALRM_CH	"<alarmsChange>"
+#define ARCH_NOALRM	"<noalarms>"
 #define DB_CFG		"<cfg>"
 #define DB_NULL		"<NULL>"
 

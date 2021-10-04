@@ -268,9 +268,10 @@ Information variables of the program:
 <ul><li> <i>NSTR_BUF_LEN</i> — Length of string buffers for numbers (50 symbols).</li>
 <li> <i>DAQ_APER_FRQ</i> — Frequency of representing the aperiodic invokes, like to "f_start", of the periodic processes in Hz (1000000).</li>
 <li> <i>RECURS_DET_HOPS</i> — Hops/depth number of the recursion detection.</li>
-<li> <i>BUF_ARCH_NM</i> — The archive buffer name ("&lt;buffer&gt;").</li>
-<li> <i>ALRM_ARCH_NM</i> — The alarms table name ("&lt;alarms&gt;").</li>
-<li> <i>ALRM_ARCH_CH_NM</i> — The alarms table name ("&lt;alarmsChange&gt;") just for changing.</li>
+<li> <i>ARCH_BUF</i> — Name of requesting the messages buffer ("&lt;buffer&gt;").</li>
+<li> <i>ARCH_ALRM</i> — Name of requesting the actual alarms table ("&lt;alarms&gt;").</li>
+<li> <i>ARCH_ALRM_CH</i> — Name of requesting for records change of the the actual alarms table ("&lt;alarmsChange&gt;").</li>
+<li> <i>ARCH_NOALRM</i> — Name of requesting for the buffer and archivers and without the actual alarms table ("&lt;noalarms&gt;").</li>
 <li> <i>__func__</i> — The full name of the calling function.</li>
 <li> <i>vmin (a,b)</i> — Determination of the minimum value.</li>
 <li> <i>vmax (a,b)</i> — Definition of the maximum value.</li></ul>
@@ -1202,7 +1203,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>void setActMess( TMArchivator *a, bool val );</i> — Setting of the messages archivator <i>a</i> into the active status <i>val</i>. Active archivator will be provided by the subsystem with the flow of messages.</li>
 <li> <i>void setActVal( TVArchive *a, bool val );</i> — Setting of the value archive <i>a</i> into the active status <i>val</i>. Active archive will be provided by the subsystem with the periodic flow of values (is determined by the periodicity of the archive).</li>
 <li> <i>AutoHD&lt;TTypeArchivator&gt; at( const string &amp;name );</i> — Connection/addressing to the archiver's type (module) <i>name</i>.</li>
-<li> <i>void messPut( time_t tm, int utm, const string &amp;categ, int8_t level, const string &amp;mess, const string &amp;arch = "" );</i> — Location of the value <i>mess</i> with the level <i>level</i> of the category <i>categ</i> and time <i>tm+utm</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';').</li>
+<li> <i>void messPut( time_t tm, int utm, const string &amp;categ, int8_t level, const string &amp;mess, const string &amp;arch = "" ); void messPut( const TMess::SRec &amp;rec, const string &amp;arch = "" );</i> — Location of the message <i>mess</i> with the <i>level</i> of the category <i>categ</i> and time <i>tm+utm</i>, or the complete TMess::SRec structure <i>rec</i>, into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';').</li>
 <li> <i>void messPut( const vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;arch = "" );</i> — Location of the group of values <i>recs</i> into the buffer, and then into the messages' archive or direct to the pointed archivators <i>arch</i> (separated by symbol ';').</li>
 <li> <i>time_t messGet( time_t bTm, time_t eTm, vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;category = "", int8_t level = TMess::Debug, const string &amp;arch = "", time_t upTo = 0 );</i> — Values' request <i>reqs</i> for the specified period of time <i>bTm, eTm</i> for the specified category (by the template) <i>category</i> and level <i>level</i> from the archivators <i>arch</i> (separated by symbol ';'). Return time of the request stop, useful for continue from the point.</li>
 <li> <i>time_t messBeg( const string &amp;arch = "" );</i> — Beginning of the messages' archive as a whole or for the specified archiver <i>arch</i>.</li>
@@ -1245,9 +1246,9 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>string DB( bool qTop = false ) const;</i> — Storage address of the values' archive, <i>qTop</i> for the storage queue top.</li>
 <li> <i>string tbl( );</i> — DB table of the values' archive.</li>
 <li> <i>string fullDB( bool qTop = false );</i> — Full name of the storage table of the values' archive, <i>qTop</i> for the storage queue top.</li>
-<li> <i>int64_t end( const string &amp;arch = BUF_ARCH_NM );</i> — End of the archive time at whole (arch="") or the specified archiver, buffer (arch="&lt;bufer&gt;").</li>
-<li> <i>int64_t begin( const string &amp;arch = BUF_ARCH_NM );</i> — Start of the archive time at whole (arch="") or the specified archiver, buffer (arch="&lt;bufer&gt;").</li>
-<li> <i>int64_t period( const string &amp;arch = BUF_ARCH_NM );</i> — Periodicity of the archive buffer or the specified archiver (microseconds).</li>
+<li> <i>int64_t end( const string &amp;arch = ARCH_BUF );</i> — End of the archive time at whole (arch="") or the specified archiver, buffer (arch="&lt;bufer&gt;").</li>
+<li> <i>int64_t begin( const string &amp;arch = ARCH_BUF );</i> — Start of the archive time at whole (arch="") or the specified archiver, buffer (arch="&lt;bufer&gt;").</li>
+<li> <i>int64_t period( const string &amp;arch = ARCH_BUF );</i> — Periodicity of the archive buffer or the specified archiver (microseconds).</li>
 <li> <i>TFld::Type valType( bool full = false );</i> — Type of the archived value. <i>full</i> — request full type, else only generic.</li>
 <li> <i>bool hardGrid( );</i> — Using of the hard grid in the archive buffer.</li>
 <li> <i>bool highResTm( );</i> — Using of the high-resolution time in the archive buffer (microseconds).</li>
@@ -4211,5 +4212,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
 </html>

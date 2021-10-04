@@ -1,3 +1,31 @@
+2021-10-03 Roman (stable)
+- !!:LibsDB.OscadaLibs: tmplib_base.anUnif: Expanded in the common field DESCR using for the specific parameters redefinition
+    by the new fields "CustomFlds" and "CustomAlarms"
+- !!:FIX:LibsDB.vcaBase: wlb_Main.{alarmsAct,alarmsSt}: Expanded by the new user field "Type" as name of the alarm level
+	from the new configuration attribute "types".
+    !: Expanded in the alarm level show up to 128 and coloring up to 9 levels.
+    FIX: The default sorting at the field of the alarm time set back to "1" as not default descending order.
+    FIX: The field "colDscrCustNames" type set to the "String (translated)"
+- !!!!:FIX:SYS: The message level limit expanded up to [-128...127]
+	and all levels more for TMess::Emerg process for external as TMess::Emerg, not TMess::Debug.
+    !!:FIX: The lock file processing-updating moved to update always, not only at the running, at the file availability,
+	due to the possibility of multiple starting on VERY long starting projects.
+- !!!:Archive,DAQ.DAQGate: The archivers redundancy and DAQ.DAQGate switched in the initial messages requesting to:
+	- request the active alarms
+	- request the archive in deep and up to the alarms requesting time, without the alarms activation;
+	- ordinal-periodic request of the last messages, without the alarms activation.
+- !!:Archive: Definitions of the archive specific names renamed for BUF_ARCH_NM, ALRM_ARCH_NM, ALRM_ARCH_CH_NM to ARCH_BUF, ARCH_ALRM, ARCH_ALRM_CH;
+	and appended for ARCH_NOALRM ("<noalarms>").
+    Appended of the function "void TArchives::messPut( const TMess::SRec &rec, const string &arch = "" )" variant.
+- !!:DAQ.DAQGate: Performing the attributes sync returned back to the acquisition task and the enabling, starting processes only shedule the sync.
+- UI.QTStarter: Updating the projects list appended yet the checking of the dialog visibility.
+- FIX:UI.Vision: Fixed in the force pages (from the call arguments) open after the complete initialisation,
+    then opening all configured pages before.
+- FIX:UI.WebVision: The view Table of the primitive FormEl fixed in specifying
+	the column sorting value "0" as ascending-default and "1" as descending from the top, like to the UI.Vision bechaviour
+    and the numbers (integer,float) sort-comparing was implemented separately.
+
+
 2021-09-27 Roman (stable)
 - !!!:DOC: The "Program Manual" document appended of the new section "Execution the ready OpenSCADA project in the service-background space"
 	and revised in the section "Startup and execution"

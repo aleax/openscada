@@ -2110,7 +2110,10 @@ int TSYS::prjLockUpdPer( )
 
 bool TSYS::prjLock( const char *cmd )
 {
-    if(strcmp(cmd,"free") == 0 && prjLockFile.size())	return (remove(prjLockFile.c_str()) == 0);
+    if(strcmp(cmd,"free") == 0 && prjLockFile.size() && remove(prjLockFile.c_str()) == 0) {
+	prjLockFile = "";
+	return true;
+    }
 
     int hd = -1;
     if(strcmp(cmd,"hold") == 0) {
@@ -2129,9 +2132,12 @@ bool TSYS::prjLock( const char *cmd )
 	}
 
 	//Hold the lock file
-	if((hd=open(prjLockFile.c_str(),O_CREAT|O_EXCL|O_WRONLY,permCrtFiles())) < 0) return false;
+	if((hd=open(prjLockFile.c_str(),O_CREAT|O_EXCL|O_WRONLY,permCrtFiles())) < 0)
+	    return false;
     }
-    else if(strcmp(cmd,"update") == 0 && (hd=open(prjLockFile.c_str(),O_WRONLY)) < 0) return false;
+    else if(strcmp(cmd,"update") == 0 && (prjLockFile.empty() || (hd=open(prjLockFile.c_str(),O_WRONLY)) < 0))
+	return false;
+
     if(hd >= 0) {
 	string lockInfo = TSYS::strMess("%010d %020d", (int)getpid(), (int)sysTm());
 	write(hd, lockInfo.data(), lockInfo.size());
@@ -2378,11 +2384,12 @@ void *TSYS::ServTask( void * )
     for(unsigned int iCnt = 1; !TSYS::taskEndRun(); iCnt++) {
 	SYS->isServPrc = true;
 
-	if(SYS->isRunning()) {
-	    try {
-		//Lock file update
-		if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer())) SYS->prjLock("update");
+	//Lock file update
+	if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer()))
+	    SYS->prjLock("update");
 
+	if(SYS->isRunning())
+	    try {
 		//CPU frequency calculation (per ten seconds)
 		if(!(iCnt%10))	SYS->clkCalc();
 
@@ -2408,7 +2415,7 @@ void *TSYS::ServTask( void * )
 			catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 		}
 	    } catch(TError&) { }
-	}
+
 	else if(!SYS->mainThr.freeStat()) SYS->mainThr.at().perSYSCall(0);
 
 	SYS->isServPrc = false;

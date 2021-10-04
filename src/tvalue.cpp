@@ -211,13 +211,13 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		if(vl.at().arch().freeStat()) { opt->childDel(aNd); iA--; continue; }
 
 		AutoHD<TVArchive> arch = vl.at().arch();
-		int64_t vper = arch.at().period(BUF_ARCH_NM);
+		int64_t vper = arch.at().period(ARCH_BUF);
 		int64_t reqBeg = s2ll(aNd->attr("tm"));	//!!!! Some spare request of the last requested value
 							//     to prevent EVAL here at the connection lose
 				//(s2ll(aNd->attr("tm"))/vper+1)*vper;
-		int64_t vBufBeg = arch.at().begin(BUF_ARCH_NM);
+		int64_t vBufBeg = arch.at().begin(ARCH_BUF);
 		int64_t vbeg = vmax(reqBeg, vBufBeg);
-		int64_t vend = arch.at().end(BUF_ARCH_NM);
+		int64_t vend = arch.at().end(ARCH_BUF);
 
 		//  Longing to equivalent archivators
 		if(vbeg == vBufBeg) {

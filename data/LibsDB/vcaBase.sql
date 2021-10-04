@@ -12624,7 +12624,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 	sortAr = new Array();
 	for(iM = 0; iM < curAlMess.length; iM++)
 		//!!!! Define here self sort criteries
-		sortAr.push(">"+(curAlMess[iM].mess.parse(3,messItSep).length?"0":"1")+curAlMess[iM].level+">"+iM.toString(10,6)+"\n"+iM);
+		sortAr.push(">"+(curAlMess[iM].mess.parse(3,messItSep).length?"0":"1")+curAlMess[iM].level.toString(10,3)+">"+iM.toString(10,6)+"\n"+iM);
 	sortAr = sortAr.sort().reverse();
 
 	//The table content update
@@ -12634,6 +12634,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 		if(vC == "atm")			items += "<s>"+tr("Alarm time")+"</s>";
 		else if(vC == "qttm")	items += "<s>"+tr("Quittance time")+"</s>";
 		else if(vC == "lev")	items += "<s>"+tr("Lev.")+"</s>";
+		else if(vC == "type")	items += "<s align=''center''>"+tr("Type")+"</s>";
 		else if(vC == "cat")	items += "<s>"+tr("Category")+"</s>";
 		else if(vC == "mess")	items += "<s>"+tr("Message")+"</s>";
 		else if(vC == "prm")	items += "<s>"+tr("Source")+"</s>";
@@ -12658,6 +12659,7 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 			if(vC == "atm")	items += "<s>"+SYS.strftime(iM.tm,formDtTm.replace("%MS",(iM.utm/1000).toString(10,3)).replace("%US",iM.utm.toString(10,6)))+"</s>";
 			else if(vC == "qttm")	items += ((tVl=iM.mess.parse(3,messItSep)).length ? "<s>"+tVl+"</s>" : "<b edit=''1''>0</b>");
 			else if(vC == "lev")	items += "<i>"+abs(iM.level)+"</i>";
+			else if(vC == "type")	items += "<s>"+types.parse(abs(iM.level),";")+"</s>";
 			else if(vC == "cat")	items += "<s>"+SYS.strEncode(iM.categ,"HTML")+"</s>";
 			else if(vC == "mess")	items += "<s>"+SYS.strEncode(iM.mess,"HTML")+"</s>";
 			else if(vC == "prm") {
@@ -12748,7 +12750,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.Archive.messPut(iM.tm, iM.utm, iM.categ, iM.level, iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 										iM.mess.parse(3,messItSep)+messItSep+iM.mess.parse(4,messItSep)+messItSep+set);
 	}
-}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1567951356);
+}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1633263229);
 INSERT INTO wlb_Main VALUES('alarmsSt','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE60lEQVRYhe2YTW8kRwGGn/qumpn2jJ1db+z1JpsEwgJCCkJw4PeQPwEX
 Llw5w50rd05RDhyQkDgmkdkQstpo7bXX3vXMdFd31wcHx4CEcjASGSLNc6y3q/p9qrtVUov33/9Z
@@ -12948,6 +12950,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 			else if(sR_ == "qttm")	tvl = iMo.mess.parse(3, messItSep);
 			else if(sR_ == "nrmtm")tvl = iMo.mess.parse(4, messItSep);
 			else if(sR_ == "lev")	tvl = iMo.level;
+			else if(sR_ == "type")	tvl = types.parse(abs(iMo.level), ";");
 			else if(sR_ == "cat")	tvl = iMo.categ;
 			else if(sR_ == "mess")	tvl = iMo.mess;
 			else if(sR_ == "prm")	{
@@ -12980,6 +12983,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 			else if(vC == "qttm")	tvl = tr("Quittance time");
 			else if(vC == "nrmtm")	{ tvl = tr("Norm"); colVars[vC] = new Object(); }
 			else if(vC == "lev")	tvl = tr("Lev.");
+			else if(vC == "type")	tvl = tr("Type");
 			else if(vC == "cat")	tvl = tr("Category");
 			else if(vC == "mess")	tvl = tr("Message");
 			else if(vC == "prm")	tvl = tr("Source");
@@ -12993,7 +12997,7 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 				colVars[vC] = new Object();
 			}
 			if(tvl.length) {
-				alarms_items += "<s"+(toEdit?" edit=''1''":"")+((vC=="atm")?" sort=''0''":"")+">"+tvl+"</s>";
+				alarms_items += "<s"+(toEdit?" edit=''1''":"")+((vC=="atm")?" sort=''1''":"")+">"+tvl+"</s>";
 				if(makeReport) rep += "<th>"+tvl+"</th>";
 				sort_items += "\n"+tvl+" ("+vC+")\n"+tvl+", "+tr("reversed")+" ("+vC+":!)";
 				for(iF = 0; iF < fMax; iF++)
@@ -13018,10 +13022,11 @@ if((((cnt++)%(f_frq*1) == 0 && !wTm) || f_start || toUpdate) && !f_stop) {
 				else if(vC == "qttm")	{ sVl = iM.mess.parse(3, messItSep); aRow += (sVl.length ? "<s>"+sVl+"</s>" : "<b edit=''1''>0</b>"); }
 				else if(vC == "nrmtm")	{
 					if(!(sVl=iM.mess.parse(4,messItSep)).length && !wTm) sVl = tr("Active");
-					aRow += "<s>"+sVl+"</s>";
+					aRow += "<s align=''center''>"+sVl+"</s>";
 					if(!sVl.toInt()) colVars[vC][sVl] = true;
 				}
 				else if(vC == "lev")	{ sVl = abs(iM.level).toString(); aRow += "<i>"+sVl+"</i>"; }
+				else if(vC == "type")	{ sVl = types.parse(abs(iM.level), ";"); aRow += "<s align=''center''>"+sVl+"</s>"; }
 				else if(vC == "cat")	{ sVl = iM.categ; aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
 				else if(vC == "mess")	{ sVl = iM.mess; aRow += "<s>"+SYS.strEncode(sVl,"HTML")+"</s>"; }
 				else if(vC == "prm")	{
@@ -13181,7 +13186,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1568897202);
+//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1633263229);
 INSERT INTO wlb_Main VALUES('ImgLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAN
 EklEQVR4nOWb6W5dyXWFv7XPcCfegRRHiZJIiZRavE31QLtjuQ1ET+GH8O88gB8gT2IgzxD/cAAD
 toLYgdyA3XHakhrd7pZkURTHe0+t/LiUqO5I1MBBRrKAQxI8VXVWrbNr195VdQSY/8fI93//M/Dr
@@ -23189,6 +23194,7 @@ The main user extension is the ability to define visible table fields from a lis
 - atm — time of the violation appearing;
 - qttm — time of the violation confirmation;
 - lev — level of the violation;
+- type — type-name of the violation from the level <lev> and the attribute "types";
 - cat — category of the violation;
 - mess — full and unparsed text of the violation message;
 - prm — address of the DAQ-parameter of the data source;
@@ -23203,7 +23209,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.1.3
+Version: 1.2.0
 License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує для динамічного відображення активних порушень у табличному вигляді та із виділенням їх за кольором та текстом. Порушення отримуються із буферу поточних-активних порушень OpenSCADA. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Для детального вивчення актуальних порушень елементом передбачено функцію збільшення висоти угору або униз за отриманням фокусу.
@@ -23214,6 +23220,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 - atm — час виникнення порушення;
 - qttm — час підтвердження порушення;
 - lev — рівень порушення;
+- type — тип-назва порушення із рівня <lev> та атрибуту "types";
 - cat — категорія порушення;
 - mess — повний та нерозібраний текст повідомлення порушення;
 - prm — адреса DAQ-параметру джерела порушення;
@@ -23228,7 +23235,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.1.3
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элемент на рисунке 1.5 служит для динамического отображения активных нарушений в табличном виде и с выделением их цветом и текстом. Нарушения получаются из буфера текущих-активных нарушений OpenSCADA. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 Для детального изучения актуальных нарушений элементом предусмотрено функцию увеличения высоты вверх или вниз при получении фокуса.
@@ -23239,6 +23246,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 - atm — время возникновения нарушения;
 - qttm — время подтверждения нарушения;
 - lev — уровень нарушения;
+- type — тип-название нарушения из уровня <lev> и атрибута "types";
 - cat — категория нарушения;
 - mess — полный и неразобранный текст сообщения нарушения;
 - prm — адрес DAQ-параметра источника нарушения;
@@ -23253,7 +23261,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.1.3
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','dscr','The element-frame serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from the buffer of current-active violations of OpenSCADA and archive(s), specified in the configuration field <alArch>. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 
@@ -23278,6 +23286,7 @@ The main user extension is the ability to define visible table fields from a lis
 - qttm — time of the violation confirmation;
 - nrmtm — time of coming-returning the violation to the state "NORMA";
 - lev — level of the violation;
+- type — type-name of the violation from the level <lev> and the attribute "types";
 - cat — category of the violation;
 - mess — full and unparsed text of the violation message;
 - prm — address of the DAQ-parameter of the data source;
@@ -23292,7 +23301,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.2.2
+Version: 1.3.0
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення історії порушень та динамічного їх оновлення на поточний час у повноформатному табличному вигляді, із виділенням їх за кольором та текстом та можливістю багаторівневого фільтрування. Порушення отримуються із буферу поточних-активних порушень OpenSCADA та архіву(ів), визначеного конфігураційним полем <alArch>. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Загалом кадр містить елементи:
@@ -23316,6 +23325,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 - qttm — час підтвердження порушення;
 - nrmtm — час переходу-повернення порушення у стан "НОРМА";
 - lev — рівень порушення;
+- type — тип-назва порушення із рівня <lev> та атрибуту "types";
 - cat — категорія порушення;
 - mess — повний та нерозібраний текст повідомлення порушення;
 - prm — адреса DAQ-параметру джерела порушення;
@@ -23330,7 +23340,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.2.2
+Версія: 1.3.0
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения истории нарушений и динамического их обновление для текущего времени в полноформатном табличном виде, с выделением их цветом и текстом и возможностью многоуровневого фильтрования. Нарушения получаются из буфера текущих-активных сообщений OpenSCADA и архива(ов), определённого конфигурационным полем <alArch>. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 В целом кадр содержит элементы:
@@ -23354,6 +23364,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 - qttm — время подтверждения нарушения;
 - nrmtm — время перехода-возврата нарушения в состояние "НОРМА";
 - lev — уровень нарушения;
+- type — тип-название нарушения из уровня <lev> и атрибута "types";
 - cat — категория нарушения;
 - mess — полный и неразобранный текст сообщения нарушения;
 - prm — адрес DAQ-параметра источника нарушения;
@@ -23368,7 +23379,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.2.2
+Версия: 1.3.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','view','7',32,'','','pass','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','','');
@@ -28240,7 +28251,7 @@ INSERT INTO wlb_Main_uio VALUES('grpGraph10','sclWinCtx','Scale: by window save 
 ',0,'','','trnd1','Масштаб: контекст вікном','','','Масштаб: контекст окном','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Вибір: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','','Избор: Сачувати избор корисника','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph10','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Вибір: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','','Избор: Сачувати избор корисника','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','colms','Columns, by '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','colms','Columns, by '','' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnFocus','Expand on focus: pixels (0-disabled,>-down,<-up)',131073,'0|',8,'','','','Розширяти при фокусі: пікселів (0-відключено,>-донизу,<-догори)','','','Расширять при фокусе: пикселей (0-отключено,>-вниз,<-вверх)','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: элементов (<=0-отключено)','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Формат дати та часу (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','Формат даты и времени (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','','','','');
@@ -28257,10 +28268,10 @@ INSERT INTO wlb_Main_uio VALUES('alarmsAct','digComs','Quittance: commands',1310
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','st_open','Quittance: state',131072,'0',8,'','','','Підтвердження: стан','','','Подтверждение: состояние','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','DESCR','Quittance: description',131077,'',8,'','','','Підтвердження: опис','','','Подтверждение: описание','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','NAME','Quittance: name',131077,'',8,'','','','Підтвердження: ім''я','','','Подтверждение: имя','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','colDscrCustNames','Names list of the user fields, separated by '';''',131077,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','colDscrCustNames','Names list of the user fields, separated by '';''',131333,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','alArch','Alarms archiver, "{ArhMod}.{Arh}"',131077,'FSArch.alarms',8,'','','','Архіватор сигналів, "{ArhMod}.{Arh}"','','','Архиватор сигналов, "{ArhMod}.{Arh}"','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','colDscrCustNames','Names list of the custom fields, separated by '';''',131205,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','colms','Columns, by '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,qttm,nrmtm,lev,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','colDscrCustNames','Names list of the custom fields, separated by '';''',131333,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','colms','Columns, by '','' (atm,qttm,nrmtm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,qttm,nrmtm,lev,type,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Формат дати та часу (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','Формат даты и времени (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','hHdrVis','Show header: horizontal',131072,'1',8,'','','','Показувати заголовок: горизонтальний','','','Показывать заголовок: горизонтальный','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','highLght','Highlight rules, {lev}{quiet}{act}:{color}:{font}:{fontColor}',131205,'501:gray
@@ -28367,6 +28378,8 @@ INSERT INTO wlb_Main_uio VALUES('storeHouse','classEditable','Class: editable',1
 INSERT INTO wlb_Main_uio VALUES('storeHouse','dataEditable','Data: editable',131072,'0',9,'','','','Дані: редаговане','','','Данные: редактированный','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','defUser','Default to return, {minutes)-{user}',131077,'',9,'','','','Типово для повернення, {хвилини)-{користувач}','','','Типичное для возврата, {минут)-{пользователь}','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','userSetVis','User setting',131077,'',8,'','','','Встановлення користувача','','','Установка пользователя','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','types','Types list at the level from 0, separated by '';''',131333,'Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency',8,'','','','Перелік типів за рівнем від 0, поділені '';''','Налагодж.;Інформ.;Зауваж.;Попередж.;Помилка;Критично;Тривога;Аварія','','Перечень типов по уровню от 0, разделены '';''','Отладка;Информ.;Отметка;Предупр.;Ошибка;Критически;Тревога;Авария','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','types','Types list at the level from 0, separated by '';''',131333,'Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency',8,'','','','Перелік типів за рівнем від 0, поділені '';''','Налагодж.;Інформ.;Зауваж.;Попередж.;Помилка;Критично;Тривога;Аварія','','Перечень типов по уровню от 0, разделены '';''','Отладка;Информ.;Отметка;Предупр.;Ошибка;Критически;Тревога;Авария','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_io VALUES('docRepDay','name','Day report of the hour-averaged values',32,'','','','Добовий звіт середніх за годину значень','','Суточный отчёт среднечасовых значений','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','geomZ','1',32,'','','doc','','','','','','','');

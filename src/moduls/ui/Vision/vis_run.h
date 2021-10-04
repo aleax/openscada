@@ -327,7 +327,10 @@ class VisRun : public QMainWindow
 	bool		crSessForce;		//Force session creation flag
 	bool		mKeepAspectRatio;	//Keep aspect ratio on scale
 	bool		mWinPosCntrSave;	//Windows position control and save
-	string 		prjSes_it, work_sess, src_prj;//Work session and source project
+	string 		prjSes_it,		//Project session item
+			work_sess,		//Work session
+			src_prj,		//Source project
+			openPgs;		//Pages for open after the start
 	string		focusWdf;
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period

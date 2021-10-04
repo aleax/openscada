@@ -57,7 +57,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.11.3"
+#define MOD_VER		"5.11.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -345,7 +345,7 @@ void TUIMod::splashSet( SplashFlag flg )
 
 	//Updating messages
 	vector<TMess::SRec> recs;
-	SYS->archive().at().messGet(splashTm/*time(NULL)-120*/, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
+	SYS->archive().at().messGet(splashTm/*time(NULL)-120*/, time(NULL), recs, "", TMess::Debug, ARCH_BUF);
 	QString mess;
 	for(int iM = recs.size()-1; iM >= 0 && iM > ((int)recs.size()-10); iM--)
 	    mess += QString("%1\n").arg(recs[iM].mess.c_str());
@@ -1261,7 +1261,7 @@ void StartDialog::updatePrjList( const string &stage )
 
 void StartDialog::timerEvent( QTimerEvent *event )
 {
-    updatePrjList();
+    if(isVisible()) updatePrjList();
 }
 
 void StartDialog::about( )

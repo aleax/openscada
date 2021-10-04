@@ -974,7 +974,7 @@ string TVArchive::tbl( )	{ return owner().subId()+"_val"; }
 int64_t TVArchive::end( const string &arch )
 {
     int64_t rez = 0;
-    if(arch.empty() || arch == BUF_ARCH_NM) {
+    if(arch.empty() || arch == ARCH_BUF) {
 	rez = TValBuf::end();
 	if(!arch.empty()) return rez;
     }
@@ -993,7 +993,7 @@ int64_t TVArchive::begin( const string &arch )
 {
     int64_t cTm = TSYS::curTime();
     int64_t rez = cTm;
-    if(arch.empty() || arch == BUF_ARCH_NM) {
+    if(arch.empty() || arch == ARCH_BUF) {
 	rez = TValBuf::begin();
 	if(!arch.empty()) return rez;
     }
@@ -1011,7 +1011,7 @@ int64_t TVArchive::begin( const string &arch )
 
 int64_t TVArchive::period( const string &arch )
 {
-    if(arch.empty() || arch == BUF_ARCH_NM) return TValBuf::period();
+    if(arch.empty() || arch == ARCH_BUF) return TValBuf::period();
     ResAlloc res(aRes, false);
     for(unsigned iA = 0; iA < archEl.size(); iA++)
 	if(arch == archEl[iA]->archivator().workId())
@@ -1134,7 +1134,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool onlyLocal )
 {
     //Get from the buffer
-    if((arch.empty() || arch == BUF_ARCH_NM) && (!tm || (begin() && *tm >= begin() && end() /*&& *tm <= end()*/)))
+    if((arch.empty() || arch == ARCH_BUF) && (!tm || (begin() && *tm >= begin() && end() /*&& *tm <= end()*/)))
 	switch(TValBuf::valType()) {
 	    case TFld::Integer:	return TValBuf::getI(tm, up_ord);
 	    case TFld::String:	return TValBuf::getS(tm, up_ord);
@@ -1176,8 +1176,8 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     try {
 
     //Getting from the buffer
-    if((arch.empty() || arch == BUF_ARCH_NM) && vOK(ibeg,iend)) {
-	if(!isFreeBuf && arch != BUF_ARCH_NM) {
+    if((arch.empty() || arch == ARCH_BUF) && vOK(ibeg,iend)) {
+	if(!isFreeBuf && arch != ARCH_BUF) {
 	    wBuf = new TValBuf(buf.valType(), 0, buf.period(), true, true);
 	    tBuf.push_back(wBuf);
 	}
@@ -1185,7 +1185,7 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 	ibeg_ = vmax(ibeg, iend-TValBuf::period()*limit);
 	TValBuf::getVals(*wBuf, ibeg_, iend);
 	iend = wBuf->begin()-1;
-	if(arch == BUF_ARCH_NM) return;
+	if(arch == ARCH_BUF) return;
     }
 
     //Getting the priority archivers list for requested range
@@ -1236,11 +1236,11 @@ void TVArchive::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string &arch )
 {
     //Check for put to buffer
-    if(((arch.empty() && TValBuf::end()) || arch == BUF_ARCH_NM) && iend > TValBuf::begin()) {
+    if(((arch.empty() && TValBuf::end()) || arch == ARCH_BUF) && iend > TValBuf::begin()) {
 	bool onlyBuf = (ibeg >= TValBuf::end()) &&
 	    (iend-ibeg)/TValBuf::period() <= TValBuf::size();	//!!!! Allow of writing new data blocks for the redundancy and DAQGate
 	TValBuf::setVals(buf, vmax(ibeg,iend-TValBuf::size()*TValBuf::period()), iend);
-	if(arch == BUF_ARCH_NM || onlyBuf) return;	//To prevent spare writings direct to the archivers
+	if(arch == ARCH_BUF || onlyBuf) return;	//To prevent spare writings direct to the archivers
     }
 
     //Put to the archivers
@@ -1810,7 +1810,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    opt->setAttr("end", ll2s(end(arch)));
 	    opt->setAttr("beg", ll2s(begin(arch)));
 	    opt->setAttr("vtp", i2s(TValBuf::valType()));
-	    if(arch.empty() || arch == BUF_ARCH_NM) opt->setAttr("per",ll2s(TValBuf::period()));
+	    if(arch.empty() || arch == ARCH_BUF) opt->setAttr("per",ll2s(TValBuf::period()));
 	    else {
 		ResAlloc res(aRes, false);
 		for(unsigned iA = 0; iA < archEl.size(); iA++)
@@ -1839,9 +1839,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    TValBuf buf(TValBuf::valType(), 0/*100000*/, vmax(TValBuf::period(),period), true, true);
 
 	    //  Get the values buffer
-	    if((arch.empty() || arch == BUF_ARCH_NM) && vOK(tm_grnd,tm)) {
+	    if((arch.empty() || arch == ARCH_BUF) && vOK(tm_grnd,tm)) {
 		TValBuf::getVals(buf, tm_grnd, tm);
-		opt->setAttr("arch", BUF_ARCH_NM);
+		opt->setAttr("arch", ARCH_BUF);
 	    }
 	    else {
 		ResAlloc res(aRes, false);
@@ -2085,9 +2085,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();
     }
     if(a_path == "/prm/st/bEnd" && ctrChkNode(opt))
-	opt->setText(atm2s(end(BUF_ARCH_NM)/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(end(BUF_ARCH_NM)%1000000));
+	opt->setText(atm2s(end(ARCH_BUF)/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(end(ARCH_BUF)%1000000));
     if(a_path == "/prm/st/bBeg" && ctrChkNode(opt))
-	opt->setText(atm2s(begin(BUF_ARCH_NM)/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(begin(BUF_ARCH_NM)%1000000));
+	opt->setText(atm2s(begin(ARCH_BUF)/1000000,"%d-%m-%Y %H:%M:%S.")+i2s(begin(ARCH_BUF)%1000000));
     else if(a_path == "/prm/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setDB(opt->text());
@@ -2189,7 +2189,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/val/lstAVal" && ctrChkNode(opt,"get",R_R___)) {
 	opt->childAdd("el")->setText("");
-	opt->childAdd("el")->setText(BUF_ARCH_NM);
+	opt->childAdd("el")->setText(ARCH_BUF);
 	vector<string> lsm, lsa;
 	owner().modList(lsm);
 	for(unsigned i_m = 0; i_m < lsm.size(); i_m++) {

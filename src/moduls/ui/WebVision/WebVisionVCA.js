@@ -2111,7 +2111,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    col = Math.abs(col);
 				    isDesc = (Math.abs(this.sortCol) == col && this.sortCol && this.sortCol > 0);
 				    prcArr = Array.prototype.slice.call(this.tBodies[0].rows,0).sort(
-					    function(a,b) { return (isDesc?1:-1)*a.cells[col-1].textContent.localeCompare(b.cells[col-1].textContent); }
+					    function(a,b) {
+						if(a.cells[col-1].outTp == "i")	return (isDesc?-1:1)*(parseInt(a.cells[col-1].textContent)<parseInt(b.cells[col-1].textContent)?-1:1);
+						if(a.cells[col-1].outTp == "r")	return (isDesc?-1:1)*(parseFloat(a.cells[col-1].textContent)<parseFloat(b.cells[col-1].textContent)?-1:1);
+						return (isDesc?-1:1)*a.cells[col-1].textContent.localeCompare(b.cells[col-1].textContent);
+					    }
 					);
 				    for(iR = 0; iR < prcArr.length; ++iR) {
 					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent)) {

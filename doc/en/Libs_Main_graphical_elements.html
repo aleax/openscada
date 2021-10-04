@@ -593,11 +593,12 @@ In the runtime mode, in the main field of the element, there are displayed the i
 <table class="wikitable">
 
 <tr>
-<td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id="Alarms_.E2.80.94_active_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Alarms — active (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id="Alarms_.E2.80.94_active_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Alarms — active (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -610,6 +611,7 @@ In the runtime mode, in the main field of the element, there are displayed the i
 <ul><li> <i>atm</i> — time of the violation appearing;</li>
 <li> <i>qttm</i> — time of the violation confirmation (quietation), for quieted violations;</li>
 <li> <i>lev</i> — level of the violation;</li>
+<li> <i>type</i> — type-name of the violation from the level <i>lev</i> and the attribute "types";</li>
 <li> <i>cat</i> — category of the violation;</li>
 <li> <i>mess</i> — full and unparsed text of the violation message;</li>
 <li> <i>prm</i> — address of the DAQ-parameter of the data source;</li>
@@ -677,7 +679,7 @@ In the runtime mode, a table is created to list the active violations, by define
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Columns, by ',' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Columns, by ',' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
 <td> String </td>
 <td> Determine in the desired sequence and the fields filling.
 </td></tr>
@@ -686,7 +688,7 @@ In the runtime mode, a table is created to list the active violations, by define
 <td> Highlight rules, {lev}{quitt}:{color}:{font}:{fontColor} </td>
 <td> Text </td>
 <td> Highlight rules, where:
-<ul><li> <i>lev</i> — level of the message [0...7];</li>
+<ul><li> <i>lev</i> — level of the message [0...9];</li>
 <li> <i>quitt</i> — sign of the message confirmation (quietation) [0|1];</li>
 <li> <i>color</i> — background color of the message row;</li>
 <li> <i>font</i> — text font of the message row;</li>
@@ -702,8 +704,14 @@ In the runtime mode, a table is created to list the active violations, by define
 <tr>
 <td> colDscrCustNames </td>
 <td> Names list of the user fields, separated by ';' </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> At the support of user fields and their visibility, their names are given here.
+</td></tr>
+<tr>
+<td> types </td>
+<td> Types list at the level from 0, separated by ';' </td>
+<td> String (translate) </td>
+<td> Types-names of alarms at their level, typically "Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency"
 </td></tr></table>
 <p><br />
 </p>
@@ -1896,11 +1904,12 @@ In the runtime mode, you can see:
 <table class="wikitable">
 
 <tr>
-<td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id="Alarms_.E2.80.94_state_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Alarms — state (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span> </td>
-<td> 1.2 </td>
+<td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id="Alarms_.E2.80.94_state_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Alarms — state (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -1925,6 +1934,7 @@ In the runtime mode, you can see:
 <li> <i>qttm</i> — time of the violation confirmation;</li>
 <li> <i>nrmtm</i> — time of coming-returning the violation to the state "NORM";</li>
 <li> <i>lev</i> — level of the violation;</li>
+<li> <i>type</i> — type-name of the violation from the level <i>lev</i> and the attribute "types";</li>
 <li> <i>cat</i> — category of the violation;</li>
 <li> <i>mess</i> — full and unparsed text of the violation message;</li>
 <li> <i>prm</i> — address of the DAQ-parameter of the data source;</li>
@@ -2007,7 +2017,7 @@ In the runtime mode, a table is created from the active violations list, for the
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Columns, by ',' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Columns, by ',' (atm,qttm,nrmtm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
 <td> String </td>
 <td> Determine in the desired sequence and the fields filling.
 </td></tr>
@@ -2016,7 +2026,7 @@ In the runtime mode, a table is created from the active violations list, for the
 <td> Highlight rules, {lev}{quitt}{act}:{color}:{font}:{fontColor} </td>
 <td> Text </td>
 <td> Highlight rules, where:
-<ul><li> <i>lev</i> — level of the message [0...7];</li>
+<ul><li> <i>lev</i> — level of the message [0...9];</li>
 <li> <i>quitt</i> — sign of the message confirmation [0|1];</li>
 <li> <i>act</i> — sign of the message activity [0|1];</li>
 <li> <i>color</i> — background color of the message row;</li>
@@ -2036,8 +2046,14 @@ In the runtime mode, a table is created from the active violations list, for the
 <tr>
 <td> colDscrCustNames </td>
 <td> Names list of the user fields, separated by ';' </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> At the support of user fields and their visibility, their names are given here.
+</td></tr>
+<tr>
+<td> types </td>
+<td> Types list at the level from 0, separated by ';' </td>
+<td> String (translate) </td>
+<td> Types-names of alarms at their level, typically "Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency"
 </td></tr></table>
 <p><br />
 </p>
@@ -3059,5 +3075,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
 </html>

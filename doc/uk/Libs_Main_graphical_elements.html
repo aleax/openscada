@@ -593,11 +593,12 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.B5_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Порушення — активне (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.B5_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Порушення — активне (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
@@ -610,6 +611,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <ul><li> <i>atm</i> — час виникнення порушення;</li>
 <li> <i>qttm</i> — час підтвердження (квітації) порушення, для підтверджених порушень;</li>
 <li> <i>lev</i> — рівень порушення;</li>
+<li> <i>type</i> — тип-назва порушення із рівня <i>lev</i> та атрибуту "types";</li>
 <li> <i>cat</i> — категорія порушення;</li>
 <li> <i>mess</i> — повний та нерозібраний текст повідомлення порушення;</li>
 <li> <i>prm</i> — адреса DAQ-параметру джерела порушення;</li>
@@ -686,7 +688,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> Правила підсвітлення, {lev}{quitt}:{color}:{font}:{fontColor} </td>
 <td> Текст </td>
 <td> Правила підсвітлення, де:
-<ul><li> <i>lev</i> — рівень повідомлення [0...7];</li>
+<ul><li> <i>lev</i> — рівень повідомлення [0...9];</li>
 <li> <i>quitt</i> — ознака підтвердження (квітації) повідомлення [0|1];</li>
 <li> <i>color</i> — колір фону рядка з повідомленням;</li>
 <li> <i>font</i> — шрифт тексту рядка з повідомленням;</li>
@@ -702,8 +704,14 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> colDscrCustNames </td>
 <td> Перелік назв користувацьких полів, поділених ';' </td>
-<td> Рядок </td>
+<td> Рядок (переклад) </td>
 <td> За підтримки користувацьких полів, та їх видимістю, тут наводяться їх назви.
+</td></tr>
+<tr>
+<td> types </td>
+<td> Перелік типів за рівнем від 0, поділені ';' </td>
+<td> Рядок (переклад) </td>
+<td> Типи-назви порушень за їх рівнем, типово "Налагодж.;Інформ.;Зауваж.;Попередж.;Помилка;Критично;Тривога;Аварія".
 </td></tr></table>
 <p><br />
 </p>
@@ -1896,11 +1904,12 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D1.81.D1.82.D0.B0.D0.BD_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Порушення — стан (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span> </td>
-<td> 1.2 </td>
+<td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D1.81.D1.82.D0.B0.D0.BD_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Порушення — стан (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
@@ -1925,6 +1934,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li> <i>qttm</i> — час підтвердження порушення;</li>
 <li> <i>nrmtm</i> — час переходу-повернення порушення у стан "НОРМА";</li>
 <li> <i>lev</i> — рівень порушення;</li>
+<li> <i>type</i> — тип-назва порушення із рівня <i>lev</i> та атрибуту "types";</li>
 <li> <i>cat</i> — категорія порушення;</li>
 <li> <i>mess</i> — повний та нерозібраний текст повідомлення порушення;</li>
 <li> <i>prm</i> — адреса DAQ-параметру джерела порушення;</li>
@@ -2016,7 +2026,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> Правила підсвітлення, {lev}{quitt}{act}:{color}:{font}:{fontColor} </td>
 <td> Текст </td>
 <td> Правила підсвітлення, де:
-<ul><li> <i>lev</i> — рівень повідомлення [0...7];</li>
+<ul><li> <i>lev</i> — рівень повідомлення [0...9];</li>
 <li> <i>quitt</i> — ознака підтвердження повідомлення [0|1];</li>
 <li> <i>act</i> — ознака активності повідомлення [0|1];</li>
 <li> <i>color</i> — колір фону рядка з повідомленням;</li>
@@ -2036,8 +2046,14 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> colDscrCustNames </td>
 <td> Перелік назв користувацьких полів, поділених ';' </td>
-<td> Рядок </td>
+<td> Рядок (переклад) </td>
 <td> За підтримки користувацьких полів, та їх видимістю, тут наводяться їх назви.
+</td></tr>
+<tr>
+<td> types </td>
+<td> Перелік типів за рівнем від 0, поділені ';' </td>
+<td> Рядок (переклад) </td>
+<td> Типи-назви порушень за їх рівнем, типово "Налагодж.;Інформ.;Зауваж.;Попередж.;Помилка;Критично;Тривога;Аварія".
 </td></tr></table>
 <p><br />
 </p>
@@ -3059,5 +3075,5 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
 </html>

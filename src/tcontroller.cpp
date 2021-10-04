@@ -443,7 +443,7 @@ void TController::alarmSet( const string &mess, int lev, const string &prm, bool
 	//Checking for presence at set and missing at unset
 	if(!force) {
 	    vector<TMess::SRec> recs;
-	    SYS->archive().at().messGet(0, SYS->sysTm(), recs, aCat, -1, ALRM_ARCH_NM);
+	    SYS->archive().at().messGet(0, SYS->sysTm(), recs, aCat, -1, ARCH_ALRM);
 	    if((lev >= 0 && !recs.size()) || (lev < 0 && recs.size() && aMess == recs[0].mess && lev == recs[0].level))
 		return;
 	}

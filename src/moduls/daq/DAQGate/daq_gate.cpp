@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.7.1"
+#define MOD_VER		"2.8.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -184,6 +184,14 @@ void TMdContr::load_( )
 
 void TMdContr::enable_( )	{ sync(); }
 
+//Remote controller-source data sync for only the parameters at <onlyPrmLs> or complete - the parameters and them attributes, in the condition:
+// - loaded parameters from the cache is means synced;
+// - enabling means of the parameter list sync only at syncPer() >= 0 or missing the parameters, with the present parameters mark for not synced
+// - starting means of just starting in the automatic mode
+//      and for the manual mode: the parameter list sync only at syncPer() >= 0 or missing the parameters, with the present parameters mark for not synced
+//   - just after starting the parameters sync if performed for not synced ones (scheduled in enabling and the manual starting)
+//   - the parameter list and the parameters themself is synced periodically in the syncPer() > 0
+//   - the complete sync is performed at the reconnection and syncPer() >= 0
 void TMdContr::sync( bool onlyPrmLs )
 {
     string statV, cpEl, daqTp, cntrId, prmId, pIt, cntrPath, prmPath;
@@ -260,7 +268,11 @@ void TMdContr::sync( bool onlyPrmLs )
 			if(!curP.at().enableStat()) {
 			    curP.at().enable();
 			    if(enableStat()) curP.at().load();
-			} else if(!onlyPrmLs) curP.at().sync();
+			}
+			else if(!onlyPrmLs) {
+			    if(startStat()) curP.at().sync();
+			    else curP.at().isSynced = false;
+			}
 
 			//   Placing the parameter to the virtual parameter
 			curP.at().list(prmLs1);
@@ -293,7 +305,11 @@ void TMdContr::sync( bool onlyPrmLs )
 		    if(!curP.at().enableStat()) {
 			curP.at().enable();
 			if(enableStat()) curP.at().load();
-		    } else if(!onlyPrmLs) curP.at().sync();
+		    }
+		    else if(!onlyPrmLs) {
+			if(startStat()) curP.at().sync();
+			else curP.at().isSynced = false;
+		    }
 
 		    //  Process included parameters
 		    string prmPath = prmLs[iP], prmPathW = prmPath, prmPathW_;
@@ -331,7 +347,11 @@ void TMdContr::sync( bool onlyPrmLs )
 			if(!curW.at().enableStat()) {
 			    curW.at().enable();
 			    if(enableStat()) curW.at().load();
-			} else if(!onlyPrmLs) curW.at().sync();
+			}
+			else if(!onlyPrmLs) {
+			    if(startStat()) curW.at().sync();
+			    else curW.at().isSynced = false;
+			}
 
 			//   Next level process
 			if(prmW->childSize()) {
@@ -590,14 +610,24 @@ void *TMdContr::Task( void *icntr )
 			}
 		    }
 
-		    //Requests to the controllers messages prepare
+		    //Messages requesting for ones of the remote controller in the stages
+		    //1. Active alarms requesting, for "lev" < 0, "tm_grnd" = 0
+		    //2. History (no alarms set) messages requesting, from "tm_grnd" = cntr.restDtTm() and to "tm" = the last message time of stage 1
+		    //3... Actual messages requesting, from "tm_grnd" = the last message time
 		    if(cntr.mMessLev.getI() >= 0)	//Else disabled
 			for(map<string,bool>::iterator iC = cntrLstMA.begin(); iC != cntrLstMA.end(); ++iC) {
 			    int tm_grnd = stO.lstMess[iC->first].time;
 			    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/"+iC->first+"/%2fserv%2fmess")->setAttr("tm_grnd", i2s(tm_grnd));
-			    if(!tm_grnd && cntr.mMessLev.getI() >= 0)	//Alarms force request
-				reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
-			    else reqCh->setAttr("lev", cntr.mMessLev.getS());
+
+			    //Alarms force request
+			    if(!tm_grnd && cntr.mMessLev.getI() >= 0)	reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
+			    //Normal request
+			    else {
+				reqCh->setAttr("lev", cntr.mMessLev.getS());
+				// First initial request
+				if(stO.lstMess[iC->first].categ.empty() && !stO.lstMess[iC->first].mess.empty())
+				    reqCh->setAttr("tm", stO.lstMess[iC->first].mess);
+			    }
 			}
 
 		    if(!req.childSize()) continue;
@@ -631,8 +661,13 @@ void *TMdContr::Task( void *icntr )
 			    }
 
 			    // The bottom time border processing
-			    if(!lstRdMess.time) lstRdMess = TMess::SRec(SYS->sysTm()-3600*cntr.restDtTm());
+			    bool isHistReq = false;
+			    if(!lstRdMess.time)
+				lstRdMess = TMess::SRec(SYS->sysTm()-3600*cntr.restDtTm(), 0, "", 0, cntr.restDtTm()?prmNd->attr("tm"):"");
 			    else {
+				//  First initial request for not active alarms
+				if(isHistReq=(lstRdMess.categ.empty() && !lstRdMess.mess.empty()))	lstRdMess.mess = "";
+
 				if(lstRdMess_.time > lstRdMess.time) lstRdMess = lstRdMess_;
 				else if(lstRdMess_.time) lstRdMess = TMess::SRec(lstRdMess_.time+1);
 
@@ -641,7 +676,7 @@ void *TMdContr::Task( void *icntr )
 					(aMod+"/"+aCntr).c_str(), TSYS::atime2str(stO.lstMess[aMod+"/"+aCntr].time).c_str(), prmNd->childSize());
 			    }
 
-			    SYS->archive().at().messPut(mess);
+			    SYS->archive().at().messPut(mess, isHistReq?ARCH_NOALRM:"");	//No alarms setting at the initial
 			    stO.numRM += mess.size();
 			}
 			else {
@@ -677,7 +712,7 @@ void *TMdContr::Task( void *icntr )
 		    }
 		}
 
-		//Mark not processed parameters to EVAL
+		//Mark not processed parameters as EVAL
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 		    TMdPrm &prm = cntr.pHd[iP].at();
 		    if(prm.isPrcOK || prm.isEVAL) continue;
@@ -865,7 +900,10 @@ void TMdPrm::enable( )
 
     owner().prmEn(this, true);	//Put to process
 
-    if(!isSynced || owner().syncPer() >= 0)	sync();	//Sync for the attributes list
+    if(owner().syncPer() >= 0) {
+	if(!owner().startStat()) isSynced = false;	//Schedule the sync at running
+	else if(!isSynced) sync();			//Sync for the attributes list
+    }
 }
 
 void TMdPrm::disable( )

@@ -1304,8 +1304,7 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 {
     bool isSess = false;
-    src_prj = work_sess = "";
-    string openPgs;
+    src_prj = work_sess = openPgs = "";
 
     //Connect/create session
     int off = 0;
@@ -1420,18 +1419,6 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	    callPage(pN->childGet(iCh)->text()/*, toRestore*/);
 	}
 	reqtm = strtoul(pN->attr("tm").c_str(), NULL, 10);
-    }
-
-    //Open direct-selected page or openned before ones
-    if(openPgs.size()) {
-	req.clear()->setName("CntrReqs")->setAttr("path", "/ses_"+work_sess);
-	string pIt;
-	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
-	    req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
-	cntrIfCmd(req);
-	// Force call to prevent blinking
-	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
-	    callPage(pIt);
     }
 
     QCoreApplication::processEvents();
@@ -1963,6 +1950,15 @@ void VisRun::updatePage( )
 
 	    fullUpdatePgs();
 	}
+    }
+
+    //Open direct-selected page or openned before ones
+    if(wPrcCnt == 0 && openPgs.size()) {
+	req.clear()->setName("CntrReqs")->setAttr("path", "/ses_"+work_sess);
+	string pIt;
+	for(int off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
+	    req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
+	if(!cntrIfCmd(req)) openPgs = "";
     }
 
     wPrcCnt++;

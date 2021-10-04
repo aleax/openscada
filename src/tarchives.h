@@ -190,6 +190,8 @@ class TVArchive;
 
 class TArchiveS : public TSubSYS
 {
+    friend class TMArchivator;
+
     public:
 	//Public data
 	enum AutoIdMode { BothPrmAttrId = 0, OnlyPrmId, OnlyAttrId, AllCntrPrmAttrId };
@@ -235,6 +237,7 @@ class TArchiveS : public TSubSYS
 
 	// Message archive function
 	void messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess, const string &arch = "" );
+	void messPut( const TMess::SRec &rec, const string &arch = "" );
 	void messPut( const vector<TMess::SRec> &recs, const string &arch = "" );
 	time_t messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs, const string &category = "",
 	    int8_t level = TMess::Debug, const string &arch = "", time_t upTo = 0 );
@@ -307,7 +310,7 @@ class TArchiveS : public TSubSYS
 	ResRW	mRdRes;
 	double	mRdRestDtOverTm;	//Overtime of the redundant history reload at start in hours
 	map<string, map<string,bool> > mRdArchM;
-	unsigned mRdFirst	: 1;
+	time_t	mRdAlarms;
 };
 
 }

@@ -88,7 +88,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> <span id="anUnif" title="#anUnif"><h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.2C_.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9_.28anUnif.29"><span class="mw-headline-number">1.1</span> Аналоговий сигнал, уніфікований (<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">anUnif</a>)</span></h3></span>
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -157,6 +157,10 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul><li> перевищення попереджувальної границі кінцевою змінною [<b>wMin</b>...<b>wMax</b>] — код помилки 5,6 та рівень аварії 2;</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Вимикається встановленням однакових або інверсних значень границі</dd></dl>
 <ul><li> велика швидкість зміни <b>speed</b> кінцевої змінної — код помилки 7 та рівень аварії 2.</li></ul></dd></dl>
+<ul><li> Перевизначення специфічних параметрів у загальному атрибуті <b>DESCR</b>:</li></ul>
+<dl><dd><ul><li> <i>перший рядок</i> — як опис повідомлень порушень;</li>
+<li> поле <i>CustomFlds</i> — визначення <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">користувацьких полів</a> повідомлень порушень у формі "<b>CustomFlds: {CustFld0} =&gt; {CustFld1} =&gt; ... =&gt; {CustFldN}</b>";</li>
+<li> поле <i>CustomAlarms</i> — перевизначення стандартних рівнів порушень для повідомлень порушень у формі "<b>CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}</b>".</li></ul></dd></dl>
 <p><b><u>ВВ шаблону</u></b><br />
 </p>
 <table class="wikitable">
@@ -3180,5 +3184,5 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2773</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
 </html>

@@ -5782,9 +5782,13 @@ Functions:
   - exceeding the end variable of the warning border [wMin...wMax] — error code 5,6 and alarm level 2;
      !!! Disabled at setting for equal or inverted values of the border
   - big motion speed of the end variable — error code 7 and alarm level 2.
+- Specific parameters redefinition in the common attribute "DESCR":
+  - the first line — as description of the alarm messages;
+  - the field "CustomFlds" — specifying of the custom fields of the alarm messages in the form "CustomFlds: {CustFld0} => {CustFld1} => ... => {CustFldN}";
+  - the field "CustomAlarms" — redefinition of the standard alarm levels of the alarm messages in the form "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.3
+Version: 2.2.0
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Функції:
@@ -5813,10 +5817,26 @@ License: GPLv2','Загальний, представницький та уні�
   - перевищення попереджувальної границі кінцевою змінною [wMin...wMax] — код помилки 5,6 та рівень аварії 2;
      !!! Вимикається встановленням однакових або інверсних значень границі
   - велика швидкість зміни speed кінцевої змінної — код помилки 7 та рівень аварії 2.
+- Перевизначення специфічних параметрів у загальному атрибуті "DESCR":
+  - перший рядок — як опис повідомлень порушень;
+  - поле "CustomFlds" — визначення користувацьких полів повідомлень порушень у формі "CustomFlds: {CustFld0} => {CustFld1} => ... => {CustFldN}";
+  - поле "CustomAlarms" — перевизначення стандартних рівнів порушень для повідомлень порушень у формі "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.3
+Версія: 2.2.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
+function custAlarm(lev) {
+	rez = 0;
+	if(lev = 0)			rez = 5;
+	else if(lev = 1)	rez = 4;
+	else if(lev = 2)	rez = 2;
+
+	if((tVl=DESCR.match("^CustomAlarms: *(.+?) *$","m")).length)
+		rez = tVl[1].parse(lev, ";").toInt();
+
+	return rez;
+}
+
 if(f_start) {
 	prevVar = EVAL_REAL;
 	alDelay_ = 0; firstNorm = alNormForceStart;
@@ -5860,19 +5880,19 @@ if(inProc.length)	{
 
 //Input data check and postprocess
 if(in.isEVal()) {
-	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
+	tErr = "1:"+tr("No data or connection with source"); levErr = -custAlarm(0);
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
+	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -custAlarm(0);
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
+	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -custAlarm(0);
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
@@ -5893,20 +5913,20 @@ else {
 	if(!tErr) {
 		bndVarHyst = (max-min)*HystBnd/100;
 		if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-		{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; }
+		{ tErr = "3:"+tr("Upper alarm border error"); levErr = -custAlarm(1); }
 		else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-		{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; }
+		{ tErr = "4:"+tr("Lower alarm border error"); levErr = -custAlarm(1); }
 		else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-		{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; }
+		{ tErr = "5:"+tr("Upper warning border error"); levErr = -custAlarm(2); }
 		else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-		{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; }
-		else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+		{ tErr = "6:"+tr("Lower warning border error"); levErr = -custAlarm(2); }
+		else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -custAlarm(2); }
 	}
 }
 
 //Alarms forming
 if(alSup) {
-	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	if(f_err.toInt())	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("SUPPRESSED"), 1);
 	f_err = "0";
 }
 else {
@@ -5914,11 +5934,11 @@ else {
 	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
-	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else	this.alarmSet(DESCR+": "+tr("NORM"), 1, firstNorm);
+	if(tErr.toInt())	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tErr.parse(1,":"), levErr);
+	else	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("NORM"), 1, firstNorm);
 	f_err = tErr;
 	alDelay_ = 0; firstNorm = false;
-}','','',1627832581);
+}','','',1633262559);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:
