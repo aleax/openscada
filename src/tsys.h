@@ -29,6 +29,7 @@
 
 //Other global constants
 #define NSTR_BUF_LEN	50	// Length of string buffers for numbers
+#define MESS_LEV_MAX	99	// Message maximum level
 #define DAQ_APER_FRQ	1000000	// Frequency of representing the aperiodic invokes, like to f_start, of the periodic processes in Hz
 #define RECURS_DET_HOPS	20	// Hops/depth number of the recursion detection
 

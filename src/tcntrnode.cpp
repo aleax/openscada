@@ -72,7 +72,7 @@ TCntrNode &TCntrNode::operator=( const TCntrNode &node )	{ return *this; }
 
 void TCntrNode::mess_sys( int8_t level, const char *fmt,  ... )
 {
-    if(level < TMess::Debug || level > INT8_MAX || !Mess || level < Mess->messLevel()) return;
+    if(level < TMess::Debug || level > TMess::MaxLev || !Mess || level < Mess->messLevel()) return;
 
     char str[prmStrBuf_SZ];
     va_list argptr;

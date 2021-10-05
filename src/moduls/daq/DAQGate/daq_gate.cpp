@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.8.1"
+#define MOD_VER		"2.8.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -485,7 +485,7 @@ void *TMdContr::Task( void *icntr )
 		if(st->second.cntr <= 0) isAccess = true;
 		if(st->second.cntr == 0) needToResync = true;	//?!?! Maybe only for all == 0 stations
 	    }
-	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(1e9); continue; }
+	    if(!isAccess) { tPrev = tCnt; TSYS::taskSleep(cntr.period()?cntr.period():1e9); continue; }
 	    else {
 		if(cntr.syncPer() > 0) {	//Enable sync
 		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
@@ -731,13 +731,11 @@ void *TMdContr::Task( void *icntr )
 
 		resPrm.unlock();
 	    }
-
-	    firstCall = false;
-	} catch(TError &err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
+	} catch(TError &err)	{ /*mess_err(err.cat.c_str(),err.mess.c_str());*/ }
 
 	//Calc acquisition process time
 	tPrev = tCnt;
-	cntr.callSt = false;
+	cntr.callSt = firstCall = false;
 
 	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }

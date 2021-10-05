@@ -106,7 +106,7 @@ void TMess::setLogDirect( int dir )
 
 void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 {
-    if(abs(vmin(INT8_MAX,vmax(INT8_MIN,level))) < messLevel()) return;
+    if(abs(vmin(TMess::MaxLev,vmax(-TMess::MaxLev,level))) < messLevel()) return;
 
     //messLevel() = TMess::Debug process for selected category and categories list combining
     if(messLevel() == TMess::Debug && level == TMess::Debug) {
@@ -149,7 +149,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
     char mess[prmStrBuf_SZ];
     vsnprintf(mess, sizeof(mess), fmt, ap);
 
-    level = vmin(INT8_MAX, vmax(INT8_MIN,level));
+    level = vmin(TMess::MaxLev, vmax(-TMess::MaxLev,level));
     int64_t ctm = TSYS::curTime();
     //string sMess = i2s(level) + "|" + categ + " | " + mess;
     string sMess = i2s(level) + "[" + categ + "] " + mess;
@@ -166,7 +166,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 	    case Crit:
 	    case Alert:
 	    case Emerg:		level_sys = ANDROID_LOG_FATAL;	break;
-	    default: 		level_sys = ANDROID_LOG_FATAL;
+	    default: 		level_sys = ANDROID_LOG_DEBUG;
 	}
 	__android_log_vprint(level_sys, PACKAGE_NAME, sMess.c_str(), ap);
     }
@@ -182,7 +182,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 	    case Crit:		level_sys = LOG_CRIT;	break;
 	    case Alert:		level_sys = LOG_ALERT;	break;
 	    case Emerg:		level_sys = LOG_EMERG;	break;
-	    default: 		level_sys = LOG_EMERG;
+	    default: 		level_sys = LOG_DEBUG;
 	}
 	syslog(level_sys, "%s", sMess.c_str());
     }
