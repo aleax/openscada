@@ -330,7 +330,7 @@ class VisRun : public QMainWindow
 	string 		prjSes_it,		//Project session item
 			work_sess,		//Work session
 			src_prj,		//Source project
-			openPgs;		//Pages for open after the start
+			openPgs;		//Pages for open after the start or at the complete connection restoring
 	string		focusWdf;
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period

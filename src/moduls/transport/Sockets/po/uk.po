@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-16 18:09+0300\n"
+"POT-Creation-Date: 2021-10-11 17:07+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -135,6 +135,10 @@ msgstr "RAWCAN сокет під'єднався до '%s'!"
 msgid "Connected"
 msgstr "Приєднано"
 
+#, c-format
+msgid "Closing the socket '%d' error '%s (%d)'!"
+msgstr "Закриття сокету '%d' за помилкою '%s (%d)'!"
+
 msgid "Disconnected"
 msgstr "Від'єднано"
 
@@ -153,6 +157,7 @@ msgstr "Запис: відповідь нуль байт."
 msgid "Write: error '%s (%d)'!"
 msgstr "Запис: помилка '%s (%d)'!"
 
+#, c-format
 msgid "%d:> Transmitted directly to '%s'\n"
 msgstr "%d:> Прямо передано до '%s'\n"
 
@@ -167,6 +172,7 @@ msgstr "Помилка створення потоку!"
 msgid "Read datagram %s from '%s'!"
 msgstr "Прочитано датаграму %s з '%s'!"
 
+#, c-format
 msgid "%d:< Received from '%s'\n"
 msgstr "%d:< Отримано з '%s'\n"
 
@@ -174,12 +180,12 @@ msgstr "%d:< Отримано з '%s'\n"
 msgid "Wrote datagram %s to '%s'!"
 msgstr "Записано датаграму %s до '%s'!"
 
+#, c-format
 msgid "%d:> Transmitted to '%s'\n"
 msgstr "%d:> Передано до '%s'\n"
 
 #, c-format
-msgid ""
-"Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
+msgid "Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
 "Отримано CAN повідомлення id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
 "%02X!"
@@ -480,3 +486,4 @@ msgstr "Інтервали часу"
 
 msgid "Attempts"
 msgstr "Спроб"
+

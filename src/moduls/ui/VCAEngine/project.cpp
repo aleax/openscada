@@ -205,7 +205,7 @@ void Project::save_( )
 
     TBDS::dataSet(DB()+"."+mod->prjTable(), mod->nodePath()+"PRJ", *this);
 
-    //Mime data copy
+    //Resources copy
     if(mDB_MimeSrc.size() || DB(true).size()) {
 	if(mDB_MimeSrc.empty()) mDB_MimeSrc = DB(true);
 
@@ -571,10 +571,10 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/page/nmb",_("Number"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","pg_","idSz","30");
 	}
-	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
-	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
+	if(ctrMkNode("area",opt,-1,"/mime",_("Resources")))
+	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Resources"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Identifier"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("MIME"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
 	    }
 	if(ctrMkNode("area",opt,-1,"/style",_("Styles"))) {
@@ -733,7 +733,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    // Request data
 	    if(idcol == "id") {
 		string mimeType, mimeData;
-		// Copy mime data to new record
+		// Copy resources to new record
 		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) {
 		    mimeDataSet(opt->text(), TUIS::mimeGet(idmime,mimeData,mimeType), mimeData);
 		    mimeDataDel(idmime);
@@ -741,7 +741,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    }
 	    else if(idcol == "tp") {
 		string mimeType;
-		// Copy mime data to new record
+		// Copy resources to new record
 		if(mimeDataGet("res:"+idmime, mimeType))
 		    mimeDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
@@ -1065,7 +1065,7 @@ string Page::calcProg( ) const
 string Page::calcProgStors( const string &attr )
 {
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
-    if(((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size())) && rez.find(ownerProj()->DB()) == string::npos)
+    if(((attr.size() && attrAt(attr).at().aModif()) || (!attr.size() && proc().size())) && rez.find(ownerProj()->DB()) == string::npos)
 	rez = ownerProj()->DB() + ";" + rez;
 
     return rez;
@@ -1113,8 +1113,8 @@ void Page::load_( TConfig *icfg )
     for(unsigned iA = 0; iA < als.size(); iA++) {
 	if(!attrPresent(als[iA])) continue;
 	AutoHD<Attr> attr = attrAt(als[iA]);
-	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
-	    attr.at().setModif(0);
+	if(attr.at().aModif() && tAttrs.find(als[iA]+";") == string::npos) {
+	    attr.at().setAModif_(0);
 	    inheritAttr(als[iA]);
 	}
     }
@@ -1787,7 +1787,7 @@ string PageWdg::calcProg( ) const	{ return parent().freeStat() ? "" : parent().a
 string PageWdg::calcProgStors( const string &attr )
 {
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
-    if(attr.size() && attrAt(attr).at().modif() && rez.find(ownerPage().ownerProj()->DB()) == string::npos)
+    if(attr.size() && attrAt(attr).at().aModif() && rez.find(ownerPage().ownerProj()->DB()) == string::npos)
 	rez = ownerPage().ownerProj()->DB() + ";" + rez;
 
     return rez;
@@ -1814,8 +1814,8 @@ void PageWdg::load_( TConfig *icfg )
     for(unsigned iA = 0; iA < als.size(); iA++) {
 	if(!attrPresent(als[iA])) continue;
 	AutoHD<Attr> attr = attrAt(als[iA]);
-	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
-	    attr.at().setModif(0);
+	if(attr.at().aModif() && tAttrs.find(als[iA]+";") == string::npos) {
+	    attr.at().setAModif_(0);
 	    inheritAttr(als[iA]);
 	}
     }

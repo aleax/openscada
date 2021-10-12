@@ -180,7 +180,7 @@ void VCASess::getReq( SSess &ses )
 	prmEl1 = ses.prm.find("FullTree");
 	XMLNode req("get");
 	req.setAttr("path", ses.url+"/%2fserv%2fattrBr")->setAttr("tm", (prmEl!=ses.prm.end())?prmEl->second:"0")->
-	    setAttr("FullTree", (prmEl1!=ses.prm.end()) ? prmEl1->second : "0");
+	    setAttr("FullTree", (prmEl1!=ses.prm.end()) ? prmEl1->second : "");
 	mod->cntrIfCmd(req, ses);
 
 	// Backend objects' attributes set
@@ -1786,8 +1786,7 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	}
     }
     //-- bezier curve --
-    if( item.type == 3)
-    {
+    else if(item.type == ShapeItem::Bezier && pnts[item.n1] != pnts[item.n2]) {
 	if( item.border_width == 0 )//--- Drawing the bezier curve with borders' width == 0 ---
 	{
 	    if( flag_allocate )
@@ -2239,8 +2238,7 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	}
     }
     //-- Line --
-    if( item.type == 1 )
-    {
+    else if(item.type == ShapeItem::Line && pnts[item.n1] != pnts[item.n2]) {
 	if( item.border_width == 0 )//--- Drawing the line with borders' width == 0 ---
 	{
 	    if( flag_allocate )

@@ -441,7 +441,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if((opPg=this.findOpenPage(pgId))) {
 	    opPg.fullUpdCnt = opPg.fullUpdCnt ? Math.max(0,opPg.fullUpdCnt-planePer) : tmFullUpd;
 	    if(updWdg || !opPg.fullUpdCnt)
-		servGet(pgId, 'com=attrsBr&FullTree='+(opPg.fullUpdCnt?0:1)+'&tm='+tmCnt, makeEl, opPg);
+		servGet(pgId, 'com=attrsBr&FullTree='+(opPg.fullUpdCnt?'':'1')+'&tm='+tmCnt, makeEl, opPg);
 	    return true;
 	}
 

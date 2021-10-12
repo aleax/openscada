@@ -1291,7 +1291,7 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 		QDataStream dataStream(&itemData, QIODevice::WriteOnly);
 		dataStream << QString(work_wdg.c_str());
 
-		// Prepare mime data
+		// Prepare resources
 		QMimeData *mimeData = new QMimeData;
 		mimeData->setData("application/OpenSCADA-libwdg", itemData);
 

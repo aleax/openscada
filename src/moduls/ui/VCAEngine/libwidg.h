@@ -178,7 +178,7 @@ class LWidget : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
+	void setWModif( Attr *a = NULL )	{ modif(); Widget::setWModif(a); }
 
     private:
 	//Attributes
@@ -240,7 +240,7 @@ class CWidget : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
+	void setWModif( Attr *a = NULL )	{ modif(); Widget::setWModif(a); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };

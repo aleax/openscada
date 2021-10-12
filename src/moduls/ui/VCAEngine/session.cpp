@@ -36,7 +36,7 @@ using namespace VCA;
 Session::Session( const string &iid, const string &iproj ) : mAlrmRes(true), mCalcRes(true), mDataRes(true),
     mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser(dataResSes()), mReqUser(dataResSes()), mReqLang(dataResSes()),
     mPer(100), mPerReal(0), mPermit(RWRWR_), mEnable(false), mStart(false),
-    endrunReq(false), mBackgrnd(false), mConnects(0), mCalcClk(10), mReqTm(0), mUserActTm(0), mStyleIdW(Project::StlDisabled)
+    endrunReq(false), mBackgrnd(false), mConnects(0), mCalcClk(CLK_START), mReqTm(0), mUserActTm(0), mStyleIdW(Project::StlDisabled)
 {
     mUser = "root";
     mPage = grpAdd("pg_");
@@ -241,14 +241,48 @@ void Session::disconnect( int conId )
     dataResSes().unlock();
 }
 
-bool Session::modifChk( unsigned int tm, unsigned int iMdfClc, bool isCnt )
+bool Session::clkChkModif( unsigned clkFrom, unsigned clkCh )
 {
-#ifdef MODIF_SLIDE_CUR_MECH
-    return (mCalcClk>=tm) ? (iMdfClc >= tm && iMdfClc <= mCalcClk) : (iMdfClc >= tm || iMdfClc <= mCalcClk);
-#else
-    return isCnt ? (tm == 0 || (iMdfClc > tm && iMdfClc <= mCalcClk))
-		 : (tm == 0 || (iMdfClc > tm && iMdfClc < mCalcClk));
-#endif
+    if(clkFrom == CLK_NO_ALL)	return true;
+    if(clkCh == CLK_NO_ALL)	return false;
+
+    //Checking the counter overrun
+    unsigned clkCur = calcClk();
+    if(clkCur < clkFrom) {
+	if(clkCur > clkCh) clkCh += UINT16_MAX+1-CLK_START;
+	clkCur += UINT16_MAX+1-CLK_START;
+    }
+
+    return (clkCh > clkFrom && clkCh < clkCur);
+}
+
+uint16_t Session::clkPairPrc( uint32_t &pair, bool set )
+{
+    //Getting the pair parts
+    uint16_t clkCur = mCalcClk,
+	    clkMdfForm = (pair>>16)&0xFFFF,
+	    clkMdfFix = pair&0xFFFF;
+    unsigned clkCurCor = clkCur,
+	    clkMdfFormCor = clkMdfForm;
+
+    //Checking the counter overload
+    if((clkMdfFix != CLK_NO_ALL && clkMdfFix > clkCur) || (clkMdfForm != CLK_NO_ALL && clkMdfForm > clkCur))
+	clkCurCor += UINT16_MAX+1-CLK_START;
+    if(clkMdfFix != CLK_NO_ALL && clkMdfForm != CLK_NO_ALL && clkMdfFix > clkMdfForm)
+	clkMdfFormCor += UINT16_MAX+1-CLK_START;
+
+    //Clearing old values
+    if(clkMdfFix != CLK_NO_ALL && (clkCurCor-clkMdfFix) > CLK_OLD)
+	clkMdfFix = CLK_NO_ALL;
+    if(clkMdfFormCor != CLK_NO_ALL && (clkCurCor-clkMdfFormCor) > CLK_OLD)
+	clkMdfFormCor = clkMdfForm = CLK_NO_ALL;
+
+    //Same processing
+    if(clkMdfFormCor < clkCurCor && clkMdfFormCor > clkMdfFix) clkMdfFix = clkMdfForm;
+    if(set) clkMdfForm = clkCur;
+    pair = (clkMdfForm<<16)|clkMdfFix;
+
+    return clkMdfFix;
 }
 
 string Session::ico( ) const		{ return (!parent().freeStat()) ? parent().at().ico() : ""; }
@@ -532,7 +566,7 @@ void *Session::Task( void *icontr )
 
 	//Sleep to next cycle
 	TSYS::taskSleep((int64_t)ses.period()*1000000);
-	if((ses.mCalcClk++) == 0) ses.mCalcClk = 10;
+	if((ses.mCalcClk++) == CLK_NO_ALL) ses.mCalcClk = CLK_START;
     }
 
     ses.mStart = false;
@@ -641,13 +675,9 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    if(!conIdOK) throw TError(nodePath().c_str(), _("Unregistered connection %d on the session."), conId);
 
 	    // Main process
-	    unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
+	    uint16_t tm = s2u(opt->attr("tm"));
 	    if(!tm) setUserActTm();
-#ifdef MODIF_SLIDE_CUR_MECH
-	    unsigned ntm = calcClk();
-#else
-	    unsigned ntm = calcClk() - 1;
-#endif
+	    uint16_t ntm = calcClk() - 1;
 	    vector<string> lst = openList();
 	    for(unsigned iF = 0; iF < lst.size(); iF++) {
 		XMLNode *pel = opt->childAdd("pg");
@@ -690,7 +720,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    if(opt->attr("mode") == "resource") {
 		MtxAlloc resAl(mAlrmRes, true);
 		map<uint8_t,Notify*>::iterator iN = mNotify.find(s2i(opt->attr("tp")));
-		unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
+		uint16_t tm = s2u(opt->attr("tm"));
 		string res, resTp, mess, lang, wdg = opt->attr("wdg");
 		if(iN != mNotify.end()) res = TSYS::strEncode(iN->second->ntfRes(tm,wdg,resTp,mess,lang), TSYS::base64);
 		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("resTp", resTp)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
@@ -915,7 +945,7 @@ void Session::Notify::ntf( int ialSt )
     alSt = ialSt;
 }
 
-string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &resTp, string &mess, string &lang )
+string Session::Notify::ntfRes( uint16_t &itm, string &wpath, string &resTp, string &mess, string &lang )
 {
     string rez;
 
@@ -932,7 +962,7 @@ string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &resTp, str
 
     // Queue processing
     if(f_queue) {
-	unsigned tm = itm;
+	uint16_t tm = itm;
 	itm = owner()->calcClk();
 
 	// Find entry, return it and the resource
@@ -940,7 +970,7 @@ string Session::Notify::ntfRes( unsigned &itm, string &wpath, string &resTp, str
 	int iQ, iFirst = -1, iNext = -1;
 	for(iQ = mQueue.size()-1; iQ >= 0; iQ--) {
 	    if(mQueue[iQ].quietance) continue;
-	    if(wpath.empty() || owner()->modifChk(tm,mQueue[iQ].clc) || iNext > 0)	break;	//First, new and next entries break
+	    if(wpath.empty() || owner()->clkChkModif(tm,mQueue[iQ].clc) || iNext > 0)	break;	//First, new and next entries break
 	    if(iFirst < 0) iFirst = iQ;
 	    if(wpath == mQueue[iQ].path) iNext = iQ;
 	}
@@ -1601,7 +1631,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
     Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), tmCalc(0), tmCalcMax(0),
-    mProc(false), inLnkGet(true), mToEn(false), mCalcClk(isess->calcClk()), mMdfClc(0), mCalcRes(true), mSess(isess)
+    mProc(false), inLnkGet(true), mToEn(false), mCalcClk(isess->calcClk()), mMdfClc(CLK_NO_ALL), mCalcRes(true), mSess(isess)
 {
     modifClr();
 
@@ -2030,10 +2060,10 @@ void SessWdg::prcElListUpdate( )
     }
 }
 
-void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &els )
+void SessWdg::getUpdtWdg( const string &ipath, uint16_t tm, vector<string> &els )
 {
     string wpath = ipath + "/" + id();
-    if(ownerSess()->modifChk(tm,mMdfClc,true)) els.push_back(wpath);
+    if(ownerSess()->clkChkModif(tm,wModif())) els.push_back(wpath);
 
     MtxAlloc resDt(ownerSess()->dataResSes(), true);
     for(unsigned iCh = 0; iCh < mWdgChldAct.size(); iCh++)
@@ -2045,14 +2075,22 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
 	} catch(TError &err) { }
 }
 
-
-unsigned int SessWdg::modifVal( Attr &cfg )
+uint32_t SessWdg::wModif( Attr *a )
 {
-    unsigned int rez = mCalcClk;
+    if(!a) return ownerSess()->clkPairPrc(mMdfClc);
+    if(!s2i(a->fld().reserve()) && !(a->flgSelf()&Attr::VizerSpec)) return CLK_NO_ALL;
 
-    if(s2i(cfg.fld().reserve()) || cfg.flgSelf()&Attr::VizerSpec) mMdfClc = rez;
+    return ownerSess()->clkPairPrc(a->aModif_());
+}
 
-    return rez;
+void SessWdg::setWModif( Attr *a )
+{
+    if(!a || (!s2i(a->fld().reserve()) && !(a->flgSelf()&Attr::VizerSpec))) return;
+
+    ownerSess()->clkPairPrc(a->aModif_(), true);
+
+    //The widget common part
+    ownerSess()->clkPairPrc(mMdfClc, true);
 }
 
 void SessWdg::calc( bool first, bool last, int pos )
@@ -2400,10 +2438,10 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	else req.setAttr("path", TSYS::strMess("/links/lnk/el_%s",prms[0].getS().c_str()));
 	return cntrCmdLinks(&req);
     }
-    // string mime(string addr, string type = "") - read mime data from the session table or primal source
+    // string {resource,mime}(string addr, string MIME = "") - read resources from the session table or primal source
     //  addr - address to mime by link attribute to mime or direct mime address
-    //  type - return attribute for mime type store
-    if(iid == "mime" && prms.size()) {
+    //  type - return stored data MIME
+    if((iid == "resource" || iid == "mime") && prms.size()) {
 	string addr = prms[0], rez, tp;
 	//Check for likely attribute
 	if(attrPresent(addr)) {
@@ -2415,11 +2453,11 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 
 	return TSYS::strDecode(rez, TSYS::base64);
     }
-    // int mimeSet(string addr, string data, string type = "") - set or clear data to the session table
+    // int {resourceSet,mimeSet}(string addr, string data, string MIME = "") - set or clear data to the session table
     //  addr - address to mime by link attribute to mime or direct mime address
-    //  data - set to the mime data, empty for clear into
-    //  type - mime type for store data
-    if(iid == "mimeSet" && prms.size() >= 2) {
+    //  data - set to the resources, empty for clear into
+    //  type - stored data MIME
+    if((iid == "resourceSet" || iid == "mimeSet") && prms.size() >= 2) {
 	string addr = prms[0];
 	//Check for likely attribute
 	AutoHD<Attr> a;
@@ -2457,20 +2495,20 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     if(a_path == "/serv/attr") {	//Attribute's value operations
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get values
-	    unsigned tm = s2ll(opt->attr("tm"));
+	    uint16_t tm = s2u(opt->attr("tm"));
 	    if(!tm) {
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->
 		    setText(i2s(ownerSess()->sec.at().access(u,SEC_RD|SEC_WR,owner(),grp(),permit())));
 		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id", "name")->setAttr("p", i2s(A_PG_NAME))->setText(name());
 	    }
-	    if(!tm || ownerSess()->modifChk(tm,mMdfClc,true)) {
+	    if(!tm || ownerSess()->clkChkModif(tm,wModif())) {
 		AutoHD<Attr> attr;
 		vector<string> als;
 		attrList(als);
 		for(unsigned iL = 0; iL < als.size(); iL++) {
 		    attr = attrAt(als[iL]);
-		    if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
-			    ownerSess()->modifChk(tm,attr.at().modif()))
+		    //if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
+		    if(ownerSess()->clkChkModif(tm,attr.at().aModif()))
 			opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
 					     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
@@ -2493,12 +2531,12 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	}
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get attributes all updated elements' of the branch
-	unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
+	uint16_t tm = s2u(opt->attr("tm"));
 	bool     fullTree = s2i(opt->attr("FullTree"));
 	int perm = ownerSess()->sec.at().access(u,(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
 
 	//Self attributes put
-	if(!tm || ownerSess()->modifChk(tm,mMdfClc,true)) {
+	if(!tm || ownerSess()->clkChkModif(tm,wModif())) {
 	    if(!tm) {
 		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id","name")->setAttr("p",i2s(A_PG_NAME))->setText(name());
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->setText(i2s(perm));
@@ -2508,8 +2546,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    attrList(als);
 	    for(unsigned iL = 0; iL < als.size(); iL++) {
 		attr = attrAt(als[iL]);
-		if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
-			ownerSess()->modifChk(tm, attr.at().modif()))
+		//if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
+		if(ownerSess()->clkChkModif(tm, attr.at().aModif()))
 		    opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
 				     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
@@ -2530,8 +2568,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		    wn->setName("w")->attrDel("path")->attrDel("user")->
 			attrDel("rez")->attrDel("tm")->attrDel("FullTree")->setAttr("id", lst[iF]);
 		    opt->childAdd(wn);
-		}
-		else delete wn;
+		} else delete wn;
 	    }
 	}
     }
@@ -2545,14 +2582,14 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	if(!attrPresent(tStr) && opt->attr("aNm").size()) {
 	    parent().at().attrAdd(new TFld(tStr.c_str(),opt->attr("aNm").c_str(),(TFld::Type)s2i(opt->attr("aTp")),
 			s2i(opt->attr("aFlg"))|Attr::IsUser,"",opt->text().c_str(),opt->attr("aVls").c_str(),opt->attr("aNms").c_str()));
-	    parent().at().attrAt(tStr).at().setModif(1);
+	    parent().at().attrAt(tStr).at().setAModif_(1);
 	    parent().at().modif();
 	}
 	if(parent().at().attrPresent(tStr))
 	    parent().at().attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(parent().at().attrAt(tStr).at().flgSelf()|Attr::VizerSpec), true);
 	if(attrPresent(tStr)) {
 	    attrAt(tStr).at().setFlgSelf((Attr::SelfAttrFlgs)(attrAt(tStr).at().flgSelf()|Attr::VizerSpec), true);
-	    attrAt(tStr).at().setModif(modifVal(attrAt(tStr).at()));	//Force set modify for allow load next
+	    attrAt(tStr).at().setAModif();	//Force set modify for allow load next
 	}
     }
     else return Widget::cntrCmdServ(opt);

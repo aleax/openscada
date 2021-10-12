@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-17 16:13+0300\n"
+"POT-Creation-Date: 2021-10-11 11:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,10 +105,10 @@ msgstr ""
 msgid "Widgets"
 msgstr ""
 
-msgid "Mime data"
+msgid "Resources"
 msgstr ""
 
-msgid "Mime type"
+msgid "MIME"
 msgstr ""
 
 msgid "Data"
@@ -1272,6 +1272,9 @@ msgid "The main engine of the visual control area."
 msgstr ""
 
 msgid "DB table"
+msgstr ""
+
+msgid "Resource data"
 msgstr ""
 
 msgid "Parent widget"

@@ -28,8 +28,6 @@
 #include "project.h"
 #include "session.h"
 
-//#define MODIF_SLIDE_CUR_MECH		//the slide current mark mechanism of the attributes changing detection with the doubles, old one
-
 #undef _
 #define _(mess) mod->I18N(mess)
 

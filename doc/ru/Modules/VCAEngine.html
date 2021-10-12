@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Движок Среды Визуализации и Управления
 </td>
-<td> 7.3 </td>
+<td> 7.4 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -243,7 +243,7 @@
 </p><p>Пользователем может быть создано множество стилей, каждый из которых будет хранить цветовые, шрифтовые и другие свойства элементов кадра. Простая смена стиля позволит быстро преобразить интерфейс ВУ, а возможность назначения индивидуального стиля для пользователя позволит учесть его особенности.
 </p><p>Для реализации этой возможности, при создании кадров, необходимо для свойств цвета, шрифта и других установить параметр "Конфигурация" (таблицы во вкладке "Обработка") в значение "Из стиля". А в параметре "Конфигурационный шаблон" указать идентификатор поля стиля. Далее, это поле автоматически появится в менеджере стилей и его можно будет там менять. Менеджер стилей доступен на странице конфигурации проекта во вкладке "Стили". На этой вкладке можно стили создавать, удалять и изменять, удалять их поля.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:679px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl_ru.png"><img class="thumbimage" height="650" src="../files/VCA_prj_stl_ru.png" width="677" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Стили" страницы конфигурации проекта.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:685px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl_ru.png"><img class="thumbimage" height="651" src="../files/VCA_prj_stl_ru.png" width="683" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Стили" страницы конфигурации проекта.</div></div></div></div>
 <p>В целом, стили доступны начиная с уровня проектов. На уровне библиотек виджетов можно только определять поля стилей у виджетов. На уровне проекта, при выборе стиля, включается работа со стилями, что предполагает доступ к полям стилей вместо непосредственных значений атрибутов. Фактически, это означает, что при чтении или записи атрибута виджета, указанные операции будут осуществляться над соответствующим полем выбранного стиля.
 </p><p>При запуске проекта на исполнения будет использован установленный в проекте стиль. В последствии, пользователь может выбрать стиль из перечня доступных. Выбранный пользователем стиль будет сохранён и использован при следующем запуске проекта.
 </p><p><br />
@@ -647,6 +647,7 @@ event = ev_rez;
 <ul><li> Для сервера/движка визуализации, атрибутом "notify{N}" в формате:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
 //flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]];
+//resStatic={ResourceFile}
 if(doRes) { Текст команды формирования ресурса. }
 if(doNtf) { Текст команды уведомления. }
 </pre>
@@ -664,7 +665,7 @@ if(doNtf) { Текст команды уведомления. }
 <li> <i>queue</i> — ресурсы уведомления определяются не только по глобальному признаку нарушения и квитации, а и согласно приоритетной очереди источников уведомления-ресурсов. Очередь формируется на стороне сервера визуализации, а для визуализаторов указывается необходимость работы с ней при запросе ресурсов.</li>
 <li> <i>qMergeMess</i> — объединять уведомления в очереди по равенству сообщения.</li>
 <li> <i>quietanceRet</i> — возможность отзыва-возврата квитации визуализатора, т.е. по сути — обратного включения уведомления.</li></ul>
-<p>Наличие поля "resStatic" включает получение ресурса непосредственно из mime-таблицы или файла, указывается в способ подобный <a href="#Media">примитиву "Медиа"</a>.
+<p>Наличие поля "resStatic" включает получение ресурса непосредственно из таблицы ресурсов или файла, указывается в способ подобный <a href="#Media">примитиву "Медиа"</a>.
 </p><p>Переменные обмена:
 </p>
 <ul><li> <i>en</i>[0,1] — уведомление включить (1) или выключить (0);</li>
@@ -1333,11 +1334,11 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> "src" — источник изображения:
 <ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы mime ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор mime-ресурса.<br /></li></ul>
+<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
+<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
 <p>Примеры:
 </p>
-<ul><li> "res:backLogo" — из таблицы mime ресурсов БД для идентификатора "backLogo";</li>
+<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
 <li> "backLogo" — как и предыдущий;</li>
 <li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -1390,8 +1391,8 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <dd><i>fill_img</i> — прямое изображение заполнения в виде "[{src}%3A]{name}", где:
 <dl><dd>"src" — источник изображения:
 <dl><dd><i>file</i> — непосредственно из локального файла по пути;</dd>
-<dd><i>res</i> — из таблицы mime-ресурсов БД.</dd></dl></dd>
-<dd>"name" — путь файла или идентификатор mime-ресурса.</dd></dl></dd>
+<dd><i>res</i> — из таблицы ресурсов БД.</dd></dl></dd>
+<dd>"name" — путь файла или идентификатор ресурса.</dd></dl></dd>
 <dd><i>i{n}</i> — динамическое изображение заполнения 'n'.<br /></dd></dl>
 <p>Например:
 </p>
@@ -1641,11 +1642,11 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> "src" — источник изображения:
 <ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы mime ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор mime-ресурса.<br /></li></ul>
+<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
+<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
 <p>Примеры:
 </p>
-<ul><li> "res:backLogo" — из таблицы mime ресурсов БД для идентификатора "backLogo";</li>
+<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
 <li> "backLogo" — как и предыдущий;</li>
 <li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png". </li></ul>
 </td></tr>
@@ -1865,11 +1866,11 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> "src" — источник изображения:
 <ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы mime ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор mime-ресурса.<br /></li></ul>
+<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
+<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
 <p>Примеры:
 </p>
-<ul><li> "res:backLogo" — из таблицы mime ресурсов БД для идентификатора "backLogo";</li>
+<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
 <li> "backLogo" — как и предыдущий;</li>
 <li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png". </li></ul>
 </td></tr>
@@ -2012,11 +2013,11 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> "src" — источник изображения:
 <ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы mime ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор mime-ресурса.<br /></li></ul>
+<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
+<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
 <p>Примеры:
 </p>
-<ul><li> "res:backLogo" — из таблицы mime ресурсов БД для идентификатора "backLogo";</li>
+<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
 <li> "backLogo" — как и предыдущий;</li>
 <li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png". </li></ul>
 </td></tr>
@@ -2047,12 +2048,12 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> "src" — источник:
 <ul><li> <i>file</i> — прямо из локального, визуализатор и движок, файла по пути;</li>
-<li> <i>res</i> — из таблицы mime ресурсов БД;</li>
+<li> <i>res</i> — из таблицы ресурсов БД;</li>
 <li> <i>stream</i> — URL потока проигрывания видео или аудио.</li></ul></li>
-<li> "name" — путь файла или идентификатор mime-ресурса.<br /></li></ul>
+<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
 <p>Примеры:
 </p>
-<ul><li> "res:workMedia" — из таблицы mime ресурсов БД для идентификатора "workMedia";</li>
+<ul><li> "res:workMedia" — из таблицы ресурсов БД для идентификатора "workMedia";</li>
 <li> "workMedia" — как и предыдущий;</li>
 <li> "file:/var/tmp/workMedia.mng" — из локального файла по пути "/var/tmp/workMedia.mng";</li>
 <li> "stream:http://localhost.localhost:5050" — проигрывание видео или аудио из URL.</li></ul>
@@ -2206,11 +2207,11 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> "src" — источник изображения:
 <ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы mime ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор mime-ресурса.<br /></li></ul>
+<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
+<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
 <p>Примеры:
 </p>
-<ul><li> "res:backLogo" — из таблицы mime ресурсов БД для идентификатора "backLogo";</li>
+<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
 <li> "backLogo" — как и предыдущий;</li>
 <li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png". </li></ul>
 </td></tr>
@@ -2476,11 +2477,11 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> "src" — источник изображения:
 <ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы mime ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор mime-ресурса.<br /></li></ul>
+<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
+<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
 <p>Примеры:
 </p>
-<ul><li> "res:backLogo" — из таблицы mime ресурсов БД для идентификатора "backLogo";</li>
+<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
 <li> "backLogo" — как и предыдущий;</li>
 <li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -2855,11 +2856,11 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> "src" — источник изображения:
 <ul><li> <i>file</i> — прямо из локального файла по пути;</li>
-<li> <i>res</i> — из таблицы mime ресурсов БД.</li></ul></li>
-<li> "name" — путь файла или идентификатор mime-ресурса.<br /></li></ul>
+<li> <i>res</i> — из таблицы ресурсов БД.</li></ul></li>
+<li> "name" — путь файла или идентификатор ресурса.<br /></li></ul>
 <p>Примеры:
 </p>
-<ul><li> "res:backLogo" — из таблицы mime ресурсов БД для идентификатора "backLogo";</li>
+<ul><li> "res:backLogo" — из таблицы ресурсов БД для идентификатора "backLogo";</li>
 <li> "backLogo" — как и предыдущий;</li>
 <li> "file:/var/tmp/backLogo.png" — из локального файла по пути "/var/tmp/backLogo.png". </li></ul>
 </td></tr>
@@ -2934,7 +2935,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <dd><i>ATTRS</i> — перечень атрибутов виджета, модифицированных пользователем.</dd></dl></dd></dl>
 <ul><li> <b>LibWidgetMime(<u>ID</u>, MIME, DATA)</b> — audio, video, media и другие ресурсы виджетов <i>ID</i> библиотеки.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — идентификатор ресурса;</dd>
-<dd><i>MIME</i> — Mime тип данных ресурса, в формате — "<b>{mimeType};{Size}</b>";</dd>
+<dd><i>MIME</i> — MIME ресурса, в формате — "<b>{MIME};{Size}</b>";</dd>
 <dd><i>DATA</i> — данные ресурса, кодированные Base64.</dd></dl></dd></dl>
 <ul><li> <b>Projs(<u>ID</u>, NAME, DSCR, DB_TBL, ICO, USER, GRP, PERMIT, PER, FLGS, STYLE)</b> — проекты <i>ID</i> интерфейса визуализации.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — идентификатор проекта;</dd>
@@ -3008,8 +3009,8 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 //Устанавливает ссылку восьмого тренда параметром
 this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </pre>
-<ul><li> <i>string mime( string addr, string type = "" )</i> — "mime" объект по адресу <i>addr</i> (прямая ссылка на ресурс или атрибут виджета с этой ссылкой) с типом в <i>type</i>, из таблицы сеанса или источника. Предназначено для редактирования "mime" объекта и подстановки его в контексте сеанса, например, изображений SVG.</li>
-<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — устанавливает "mime" объект в <i>data</i> с типом <i>type</i> по адресу <i>addr</i>.</li>
+<ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — ресурс объекта по адресу <i>addr</i> (прямая ссылка на ресурс или атрибут виджета с этой ссылкой) с типом <i>MIME</i>, из таблицы сеанса или источника. Предназначено для редактирования ресурса объекта и подстановки его в контексте сеанса, например, изображений SVG.</li>
+<li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — устанавливает ресурс объекта в <i>data</i> с типом <i>MIME</i> по адресу <i>addr</i>.</li>
 <li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формирует сообщения программы <i>mess</i> с категорией — путь к данному виджету.</li></ul>
 <p><b>Объект "Виджет", примитива "Документ" (this)</b>
 </p>
@@ -3351,9 +3352,9 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:761px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_main_ru.png"><img class="thumbimage" height="577" src="../files/VCAeng_main_ru.png" width="759" /></a>  <div class="thumbcaption">Рис.4.1. Главная конфигурационная страница модуля.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:742px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_sess_ru.png"><img class="thumbimage" height="563" src="../files/VCAeng_sess_ru.png" width="740" /></a>  <div class="thumbcaption">Рис.4.2. Вкладка "Сеансы" конфигурационной страницы модуля.</div></div></div></div>
 <p>Кроме списка открытых сеансов, вкладка на рисунке 4.2 содержит таблицу с перечнем сеансов, которые должны создаваться и запускаться в момент загрузки OpenSCADA. Создание сеансов посредством этого механизма может быть полезным для Web-интерфейса. В таком случае, при подключении Web-пользователя, все данные уже готовы и обеспечивается непрерывность формирования архивных документов.
-</p><p>Конфигурация контейнеров виджетов, в лице библиотек виджетов и проектов, выполняется посредством страниц на рисунке 4.3 (для проекта) и рисунке 4.5 (для библиотеки виджетов). Библиотека виджетов содержит виджеты, а проект — страницы. Оба типа контейнера содержат вкладку конфигурации Mime-данных, используемых виджетами (рис.4.6). Страница проекта, также, содержит вкладку "Диагностика" (рис.4.4) для отладки и контроля за исполнением страницы в сеансах.
+</p><p>Конфигурация контейнеров виджетов в лице библиотек виджетов и проектов выполняется посредством страниц на рисунке 4.3 (для проекта) и рисунке 4.5 (для библиотеки виджетов). Библиотека виджетов содержит виджеты, а проект — страницы. Оба типа контейнера содержат вкладку конфигурации ресурсов, используемых виджетами (рис.4.6). Страница проекта также содержит вкладку "Диагностика" (рис.4.4) для отладки и контроля за исполнением страницы в сеансах.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:871px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ru.png"><img class="thumbimage" height="690" src="../files/VCAeng_pg_ru.png" width="869" /></a>  <div class="thumbcaption">Рис.4.3. Страница конфигурации проектов.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:839px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ru.png"><img class="thumbimage" height="687" src="../files/VCAeng_pg_ru.png" width="837" /></a>  <div class="thumbcaption">Рис.4.3. Страница конфигурации проектов.</div></div></div></div>
 <p>С помощью этой страницы можно установить:
 </p>
 <ul><li> Состояние контейнера, а именно: "Включен", имя БД (содержащей конфигурацию и с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов), дата и время последней модификации, счётчик использования.</li></ul>
@@ -3362,16 +3363,16 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 <li> Владелец, группа пользователей и права доступа к элементу.</li>
 <li> Период вычисления сеансов, основанных на данном проекте.</li>
 <li> Признак включения по надобности.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:996px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag_ru.png"><img class="thumbimage" height="563" src="../files/VCAeng_pg_diag_ru.png" width="994" /></a>  <div class="thumbcaption">Рис.4.4. Вкладка "Диагностика" проекта.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1042px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag_ru.png"><img class="thumbimage" height="542" src="../files/VCAeng_pg_diag_ru.png" width="1040" /></a>  <div class="thumbcaption">Рис.4.4. Вкладка "Диагностика" проекта.</div></div></div></div>
 <p>В этой вкладке Вы можете выбрать время (или обновить к текущему) и размер для получения диагностических сообщений сеансов исполнения данного проекта.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb_ru.png"><img class="thumbimage" height="588" src="../files/VCAeng_wlb_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.4.5. Страница конфигурации библиотек виджетов.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:730px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb_ru.png"><img class="thumbimage" height="603" src="../files/VCAeng_wlb_ru.png" width="728" /></a>  <div class="thumbcaption">Рис.4.5. Страница конфигурации библиотек виджетов.</div></div></div></div>
 <p>С помощью этой страницы можно установить:
 </p>
 <ul><li> Состояние контейнера, а именно: "Включен", имя БД (содержащей конфигурацию и с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов) дата и время последней модификации, счётчик использования.</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Объект всё ещё поддерживает определение избыточного адреса хранилища с таблицей, до того момента как вы переименуете её в стандартную форму "<b>wlb_{ObjID}</b>".</dd></dl>
 <ul><li> Идентификатор, имя, описание и иконка контейнера.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime_ru.png"><img class="thumbimage" height="578" src="../files/VCAeng_mime_ru.png" width="773" /></a>  <div class="thumbcaption">Рис.4.6. Вкладка конфигурации mime-данных контейнера.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:693px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime_ru.png"><img class="thumbimage" height="603" src="../files/VCAeng_mime_ru.png" width="691" /></a>  <div class="thumbcaption">Рис.4.6. Вкладка конфигурации ресурсов контейнера.</div></div></div></div>
 <p>Конфигурация сеанса проекта значительно отличается от конфигурации проекта (рис.4.7), однако, также, содержит страницы проекта.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1065px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ses_ru.png"><img class="thumbimage" height="660" src="../files/VCAeng_pg_ses_ru.png" width="1063" /></a>  <div class="thumbcaption">Рис.4.7. Страница конфигурации сеансов проектов.</div></div></div></div>
@@ -3400,5 +3401,5 @@ this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/ru">Modules/VCAEngine/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2777</td></tr></table></body>
 </html>

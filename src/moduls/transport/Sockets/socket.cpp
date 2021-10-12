@@ -61,7 +61,7 @@
 #define MOD_NAME	_("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.3"
+#define MOD_VER		"4.3.5"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -433,7 +433,10 @@ void TSocketIn::stop( )
     runSt = false;
 
     shutdown(sockFd, SHUT_RDWR);
-    close(sockFd);
+
+    if(close(sockFd) == 0) sockFd = -1;
+    else mess_err(nodePath().c_str(), _("Closing the socket '%d' error '%s (%d)'!"), sockFd, strerror(errno), errno);
+
     if(type == SOCK_UNIX) remove(path.c_str());
 
     TTransportIn::stop();
@@ -444,7 +447,7 @@ void TSocketIn::stop( )
 void TSocketIn::check( )
 {
     try {
-	//Check for activity for initiative mode
+	//Check for activity the initiative mode
 	if(mode() == 2 && (toStart() || startStat()) && (!startStat() || time(NULL) > (lastConn()+keepAliveTm()))) {
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reconnect due to lack of input activity to '%s'."), addr().c_str());
 	    if(startStat()) stop();

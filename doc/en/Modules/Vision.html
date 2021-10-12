@@ -31,7 +31,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 7.15 </td>
+<td> 7.16 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -261,7 +261,7 @@
 <p>At the bottom of the development window of the VCA there is the status line. On the right side of the status line there are indicators of the visual scale of the edited frame, of the mode of changing of the size of the elements, of the mode of the VCA engine station and the user on whose behalf the development of the VCA interface is done. By double-clicking on the indicator of the user it can be changed the current user, entering the new username and password. In the main field of the status line it is displayed various information and assistance messages.
 </p><p>To edit properties of the visual elements there are two dialogues. The first dialogue allows you to edit the properties of containers of the visual elements, (Fig.2.b) — widgets libraries and projects. The second dialogue serves to edit the properties of the visual elements (Fig.2.d). Changes, made in the dialogues, at once, get to the VCA engine. To save these changes to the database, or restore from the database, it is necessary to use the appropriate tools of the main development window.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg.png"><img class="thumbimage" height="633" src="../files/Vision_wlbpg.png" width="715" /></a>  <div class="thumbcaption">Fig.2.b. Dialogue of editing of the properties of the containers of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:622px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg.png"><img class="thumbimage" height="631" src="../files/Vision_wlbpg.png" width="620" /></a>  <div class="thumbcaption">Fig.2.b. Dialogue of editing of the properties of the containers of the visual elements.</div></div></div></div>
 <p>With the help of the main tab of that dialog you can set:
 </p>
 <ul><li> State of the elements' container, that is: "Enabled", database of the container (with tracking the availability of the data in different storages and providing the sequentially removing duplicates), usage counter, date and time of the last modification.</li></ul>
@@ -270,7 +270,7 @@
 <li> For the project:</li></ul>
 <dl><dd><ul><li> user, group of users and the access for: user, users' group and all other;</li>
 <li> period of the project calculating in the execution.</li></ul></dd></dl>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_diag.png"><img class="thumbimage" height="394" src="../files/Vision_wlbpg_diag.png" width="809" /></a>  <div class="thumbcaption">Fig.2.c. Tab "Diagnostics" of the project.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_diag.png"><img class="thumbimage" height="382" src="../files/Vision_wlbpg_diag.png" width="773" /></a>  <div class="thumbcaption">Fig.2.c. Tab "Diagnostics" of the project.</div></div></div></div>
 <p>From this tab you can, for obtain the diagnostic messages: select the time, refresh to the current tiem and select the size-deep.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:615px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg.png"><img class="thumbimage" height="770" src="../files/Vision_wdg.png" width="613" /></a>  <div class="thumbcaption">Fig.2.d. Dialogue of editing of the properties of the visual elements.</div></div></div></div>
@@ -278,9 +278,9 @@
 </p>
 <ul><li> State of the element, that is: "Enabled", parent widget, page type (for pages of the project), usage counter, date and time of the last modification.</li>
 <li> Identifier, root, path, name and description of the element.</li></ul>
-<p>Dialogue of editing the properties of the containers of the visual elements contains two tabs: configuration tab of the the main parameters (Fig.2.b) and configuration tab of the mime-data of the container (Fig.2.e).
+<p>Dialogue of editing the properties of the containers of the visual elements contains two tabs: configuration tab of the the main parameters (Fig.2.b) and configuration tab of the container resources (Fig.2.e).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:395px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_mime.png"><img class="thumbimage" height="527" src="../files/Vision_wlbpg_mime.png" width="393" /></a>  <div class="thumbcaption">Fig.2.e. Editing tab of the mime-data of a container of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:395px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wlbpg_mime.png"><img class="thumbimage" height="545" src="../files/Vision_wlbpg_mime.png" width="393" /></a>  <div class="thumbcaption">Fig.2.e. Editing tab of the container resources of the visual element.</div></div></div></div>
 <p>Dialogue of editing the properties of the visual elements contains four tabs: configuration tab of the main parameters (Fig.2.b), tab of the element attributes (Fig.2.f), tab of the element processing (Fig.2.g) and tab of the element links (Fig.2.h). At different levels of the visual elements hierarchy some tabs can be available, but some are not.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:631px;"><a class="image" href="http://oscada.org/wiki/File:Vision_wdg_attr.png"><img class="thumbimage" height="529" src="../files/Vision_wdg_attr.png" width="629" /></a>  <div class="thumbcaption">Fig.2.f. Attributes tab of the editing dialogue of the properties of the visual element.</div></div></div></div>
@@ -292,7 +292,7 @@
 </p><p>User can create many themes, each of which will keep the color, font and other properties of the frame elements. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take into account his individual features.
 </p><p>To realize this opportunity, when creating a frame, it is necessary for the properties of color, font and others set the "Configuration" (of the table in the "Process" tab) in the value of "From style". And in the parameter "Configuration template" to specify the identifier of the style field. Next, this field will automatically appear in the style manager and can be modified there. The style manager is available on the project configuration page in the tab "Styles". In this tab, you can the styles create, delete and edit, delete their fields.
 </p>
-<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_prj_stl.png"><img alt="Vision prj stl.png" height="527" src="../files/Vision_prj_stl.png" width="393" /></a></div></div>
+<div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_prj_stl.png"><img alt="Vision prj stl.png" height="604" src="../files/Vision_prj_stl.png" width="393" /></a></div></div>
 <p>In general, the styles are available from the project level. At the level of the widget libraries you can only define the style fields for the widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style.
 </p><p>When starting a project, the project-style will be used. In the future, the user can choose a style from the list of available. The user-selected style will be saved and used the next time the project is launched.
 </p><p><br />
@@ -943,5 +943,5 @@ An example of editing a frame based on this primitive is shown in Figure 2.a, an
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/en">Modules/Vision/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2777</td></tr></table></body>
 </html>

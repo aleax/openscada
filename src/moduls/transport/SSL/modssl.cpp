@@ -28,6 +28,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <openssl/rand.h>
+#include <openssl/md5.h>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -41,7 +42,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.1"
+#define MOD_VER		"3.4.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -163,6 +164,18 @@ void TTransSock::load_( )
 
 }
 
+void TTransSock::perSYSCall( unsigned int cnt )
+{
+    TTypeTransport::perSYSCall(cnt);
+
+    //Checking the certificate file update
+    //?!?! and iniciative input protocols checking for the reconnect need
+    vector<string> trls;
+    inList(trls);
+    for(unsigned iTr = 0; !SYS->stopSignal() && iTr < trls.size(); iTr++)
+	((AutoHD<TSocketIn>)inAt(trls[iTr])).at().check(cnt);
+}
+
 TTransportIn *TTransSock::In( const string &name, const string &idb )	{ return new TSocketIn(name, idb, &owner().inEl()); }
 
 TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return new TSocketOut(name, idb, &owner().outEl()); }
@@ -190,6 +203,22 @@ string TTransSock::outAttemptsHelp( )
 	"Can be prioritatile specified into the address field as the third global argument, as such \"localhost:123||5:1||3\".");
 }
 
+string TTransSock::MD5( const string &file )
+{
+    int hd = open(file.c_str(), O_RDONLY);
+    if(hd < 0) return "";
+
+    string data;
+    char buf[prmStrBuf_SZ];
+    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) data.append(buf, len);
+    close(hd);
+
+    unsigned char result[MD5_DIGEST_LENGTH];
+    ::MD5((unsigned char*)data.data(), data.size(), result);
+
+    return string((char*)result, MD5_DIGEST_LENGTH);
+}
+
 //************************************************
 //* TSocketIn                                    *
 //************************************************
@@ -208,7 +237,7 @@ string TSocketIn::getStatus( )
 {
     string rez = TTransportIn::getStatus();
 
-    if(!startStat() && !stErr.empty())	rez += _("Error connecting: ") + stErr;
+    if(!startStat() && !stErrMD5.empty())	rez += _("Error connecting: ") + stErrMD5;
     else if(startStat()) {
 	rez += TSYS::strMess(_("Connections %d, opened %d, last %s, closed by the limit %d. Traffic in %s, out %s. "),
 	    connNumb, clId.size(), atm2s(lastConn()).c_str(), clsConnByLim, TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
@@ -262,7 +291,7 @@ void TSocketIn::start( )
     if(runSt) return;
 
     //Status clear
-    stErr = "";
+    stErrMD5 = "";
     trIn = trOut = prcTm = prcTmMax = 0;
     connNumb = clsConnByLim = 0;
 
@@ -279,7 +308,7 @@ void TSocketIn::stop( )
     if(!runSt)	return;
 
     //Status clear
-    stErr = "";
+    stErrMD5 = "";
     trIn = trOut = 0;
     connNumb = connTm = clsConnByLim = 0;
 
@@ -289,6 +318,27 @@ void TSocketIn::stop( )
     TTransportIn::stop();
 
     if(logLen()) pushLogMess(_("Disconnected"));
+}
+
+void TSocketIn::check( unsigned int cnt )
+{
+    try {
+	//Checking the certificate file change
+	string newMD5;
+	if(!(cnt%60) && startStat() && certKeyFile().size() && stErrMD5.size()
+		&& (newMD5=mod->MD5(certKeyFile())).size() && newMD5 != stErrMD5) {
+	    mess_note(nodePath().c_str(), _("The certificate file '%s' was updated, reconnecting the transport..."), certKeyFile().c_str());
+	    stop();
+	    start();
+	}
+
+	//?!?! Check for activity the initiative mode
+	/*if(mode() == 2 && (toStart() || startStat()) && (!startStat() || time(NULL) > (lastConn()+keepAliveTm()))) {
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reconnect due to lack of input activity to '%s'."), addr().c_str());
+	    if(startStat()) stop();
+	    start();
+	}*/
+    } catch(...) { }
 }
 
 unsigned TSocketIn::forksPerHost( const string &sender )
@@ -369,7 +419,7 @@ void *TSocketIn::Task( void *sock_in )
 	}
 
 	//Try the external PEM-file of the certificates and the private key
-	if(s.certKeyFile().size())	cfile = s.certKeyFile();
+	if(s.certKeyFile().size()) s.stErrMD5 = mod->MD5(cfile=s.certKeyFile());
 	//Write certificate and private key to temorary file
 	else {
 #if defined(__ANDROID__)
@@ -481,7 +531,7 @@ void *TSocketIn::Task( void *sock_in )
 		}
 	    }
 	}
-    } catch(TError &err) { s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { s.stErrMD5 = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Client tasks stop command
     s.endrunCl = true;

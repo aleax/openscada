@@ -67,6 +67,10 @@
 #define vmin(a,b) ((a) < (b) ? (a) : (b))
 #define vmax(a,b) ((a) > (b) ? (a) : (b))
 
+#ifndef UINT16_MAX
+# define UINT16_MAX (65535)
+#endif
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -527,6 +531,8 @@ inline string atm2s( time_t tm, const string &format = "", bool gmt = false )	{ 
 inline string tm2s( double tm )					{ return TSYS::time2str(tm); }
 
 inline int s2i( const string &val )		{ return atoi(val.c_str()); }
+inline long s2l( const string &val, int base = 10 )		{ return strtol(val.c_str(), NULL, base); }
+inline unsigned long s2u( const string &val, int base = 10 )	{ return strtoul(val.c_str(), NULL, base); }
 inline long long s2ll( const string &val )	{ return atoll(val.c_str()); }
 inline double s2r( const string &val )		{ return /*TSYS::str2real(val); }*/ atof(val.c_str()); }
 

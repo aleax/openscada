@@ -1,3 +1,26 @@
+2021-10-12 Roman (stable)
+- SYS: The global short functions appended of s2l() and s2u().
+- BD: The TBD object prevented in reload from it for the project work DB.
+- Transport.Sockets: The source code was some cleaned and the socket closing of the input transport appended for the result checking.
+- !:Transport.SSL: Appended for reloading the certificates file of the input transport at it change by the transport reconnect.
+- !!:UI.{VCAEngine,Vision}: The "Mime data" renamed to "Resources" and "Mime type" to "MIME".
+    The User API functions mime() and mimeSet() appended of the correct equivalents resource() and resourceSet().
+- UI.{Vision,WebVision}: The argument "FullTree" of requesting is removed for 0 value.
+- !!!!:UI.VCAEngine: Finishing the changes obtaining in the runtime mode by the clocking cycles through,
+	    after observing the race condition on the attributes changing, which cause to do not update the value on visualizers:
+	- rewrote for the modification control mechanism;
+	- specifying the forming and fixed cycles;
+	- reducing the main calculation clock to uint16;
+	- dividing the changes clock value of attributes and the widget commonly to the forming (uint16) and the fixed (uint16) = uint32;
+	- processing the changes clock value both at the modification and reading-checking;
+	- support of reloading the main calculation clock and clearing the old changes clock value;
+	- preventing the empty cycles for the common widgets requesting;
+	- removed for code of the previous slide current mark mechanism of the attributes changing detection with the doubles.
+    !: DB of the original widget library set to empty, to prevent of wrong removing at the work DB reloading.
+- FIX:UI.Vision: In the runtime fixed for the actual pages reopening and fitting the window size at the complete reconnection.
+- !:FIX:UI.WebVision: The bordered line and Bezier prevented of drawing at equal first and end points, what causes of all the widget fill.
+
+
 2021-10-05 Roman (stable)
 - SYS: The TMess::Type structure appended of an item "MaxLev" of the maximum message types/levels specifying.
     and all levels more for TMess::Emerg process for external as TMess::Debug again, but the external levels is not system ones.

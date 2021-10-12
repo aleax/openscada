@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (2% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=67576&amp;diff=67582" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (2% translated)">українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -434,6 +434,8 @@ Information variables of the program:
 <li> <i>inline string atm2s( time_t tm, const string &amp;format = "", bool gmt = false )</i> —&gt; TSYS::atime2str(tm, format, gmt);</li>
 <li> <i>inline string tm2s( double tm )</i> —&gt; TSYS::time2str(tm);</li>
 <li> <i>inline int s2i( const string &amp;val )</i> —&gt; atoi(val.c_str());</li>
+<li> <i>inline long s2l( const string &amp;val, int base = 10 )</i> —&gt; strtol(val.c_str(), NULL, base);</li>
+<li> <i>inline unsigned long s2u( const string &amp;val, int base = 10 )</i> —&gt; strtoul(val.c_str(), NULL, base);</li>
 <li> <i>inline long long s2ll( const string &amp;val )</i> —&gt; atoll(val.c_str());</li>
 <li> <i>inline double s2r( const string &amp;val )</i> — TSYS::str2real(val);</li>
 <li> <i>inline string sTrm( const string &amp;val, const string &amp;cfg = " \n\t\r")</i> —&gt; TSYS::strTrim(val, cfg);</li></ul>
@@ -448,7 +450,8 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>Error</i> (4) — error;</li>
 <li> <i>Crit</i> (5) — critical situation;</li>
 <li> <i>Alert</i> (6) — alert;</li>
-<li> <i>Emerg</i> (7) — emergency.</li></ul>
+<li> <i>Emerg</i> (7) — emergency;</li>
+<li> <i>MaxLev</i> (99) — maximum message level, where [0...7] are the standard named levels and more are the extended ones.</li></ul>
 <p>Direction for the messages (enum — TMess::Direct):
 </p>
 <ul><li> <i>DIR_SYSLOG</i> (0x1) — to SYSLOG;</li>
@@ -2372,7 +2375,7 @@ Error values for the different data types (definition):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -4212,5 +4215,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2777</td></tr></table></body>
 </html>

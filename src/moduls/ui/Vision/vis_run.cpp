@@ -428,7 +428,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 	}
     }
     //Remove the error message about the connection error
-    else if(rez != 10 && main && conErr) {
+    else if(rez != TError::Tr_Connect && main && conErr) {
 	if(masterPg()) conErr->deleteLater();
 	conErr = NULL;
 	updTmMax = planePer = 0;
@@ -691,17 +691,17 @@ void VisRun::printDiag( const string &idg )
 
 	// Draw trend's elements
 	XMLNode reqName("name");
-	for(unsigned i_e = 0; i_e < sD->prms.size(); i_e++) {
-	    QPoint pnt((i_e/elLine)*(pagl.width()/2),im.height()+fntSize*(2+i_e%elLine));
-	    if(sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid()) continue;
+	for(unsigned iE = 0; iE < sD->prms.size(); iE++) {
+	    QPoint pnt((iE/elLine)*(pagl.width()/2),im.height()+fntSize*(2+iE%elLine));
+	    if(sD->prms[iE].val().empty() || !sD->prms[iE].color().isValid()) continue;
 	    //  Trend name request
-	    reqName.setAttr("path",sD->prms[i_e].addr()+"/%2fserv%2fval");
-	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
+	    reqName.setAttr("path",sD->prms[iE].addr()+"/%2fserv%2fval");
+	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[iE].addr());
 
-	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[i_e].color()));
+	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[iE].color()));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
 	    painter.drawText(QRect(pnt.x()+fntSize,pnt.y(),pagl.width()/2,fntSize),Qt::AlignLeft,
-		QString("%1 [%2...%3]").arg(reqName.text().c_str()).arg(sD->prms[i_e].bordL()).arg(sD->prms[i_e].bordU()));
+		QString("%1 [%2...%3]").arg(reqName.text().c_str()).arg(sD->prms[iE].bordL()).arg(sD->prms[iE].bordU()));
 	}
 
 	painter.end();
@@ -965,7 +965,7 @@ void VisRun::exportDoc( const string &idoc )
 	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a document to export."), _("Exporting a document"), false, false, lang().c_str());
 	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
-	    sdlg.edLay()->addWidget( spg, 2, 1 );
+	    sdlg.edLay()->addWidget(spg, 2, 1);
 	    for(unsigned iL = 0; iL < lst.size(); iL++)
 		if((rwdg=findOpenWidget(lst[iL])))
 		    spg->addItem((rwdg->name()+" ("+lst[iL]+")").c_str(),lst[iL].c_str());
@@ -1416,7 +1416,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	pgList.clear();
 	for(unsigned iCh = 0; iCh < pN->childSize(); iCh++) {
 	    pgList.push_back(pN->childGet(iCh)->text());
-	    callPage(pN->childGet(iCh)->text()/*, toRestore*/);
+	    callPage(pN->childGet(iCh)->text());
 	}
 	reqtm = strtoul(pN->attr("tm").c_str(), NULL, 10);
     }
@@ -1635,14 +1635,18 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	//master_pg->load("");
 	master_pg->setFocusPolicy(Qt::StrongFocus);
 	((QScrollArea *)centralWidget())->setWidget(master_pg);
-	if(!(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized))) {
+
+	if(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized))	x_scale = y_scale = 1.0;
+	resizeEvent(NULL);
+
+	/*if(!(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized))) {
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
 	    resize(vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10));
 	}
 	else {
 	    x_scale = y_scale = 1.0;
 	    resizeEvent(NULL);
-	}
+	}*/
     }
     //Put to check for include
     else master_pg->callPage(pg_it, pgGrp, pgSrc);
@@ -1953,7 +1957,7 @@ void VisRun::updatePage( )
     }
 
     //Open direct-selected page or openned before ones
-    if(wPrcCnt == 0 && openPgs.size()) {
+    if(/*wPrcCnt == 0 &&*/ openPgs.size()) {
 	req.clear()->setName("CntrReqs")->setAttr("path", "/ses_"+work_sess);
 	string pIt;
 	for(int off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )

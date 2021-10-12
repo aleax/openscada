@@ -221,9 +221,9 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0);
 
-    //Add tab 'Mime data'
+    //Add tab 'Resources'
     //---------------------
-    wdg_tabs->addTab(new QWidget,_("Mime data"));
+    wdg_tabs->addTab(new QWidget,_("Resources"));
     tab_w = wdg_tabs->widget(1);
 
     dlg_lay = new QGridLayout(tab_w);
@@ -234,7 +234,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     mimeDataTable->setItemDelegate(new TableDelegate);
     mimeDataTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(mimeDataTable, SIGNAL(cellChanged(int,int)), this, SLOT(mimeDataChange(int,int)));
-    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Mime type") << _("Data size"));
+    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("MIME") << _("Data size"));
     dlg_lay->addWidget(mimeDataTable, 0, 0, 1, 4);
 
     buttDataAdd = new QPushButton(_("Add record"),tab_w);
@@ -563,7 +563,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}*/
     }
 
-    //Mime data page
+    //Resources page
     gnd = TCntrNode::ctrId(root, "/mime", true);
     wdg_tabs->setTabEnabled(1, gnd);
     if(gnd)	wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
@@ -703,7 +703,7 @@ void LibProjProp::tabChanged( int itb )
     if(itb == 1) {
 	show_init = true;
 
-	//Load mime data
+	//Load resources
 	XMLNode req("get");
 	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));
 	if(!owner()->cntrIfCmd(req)) {

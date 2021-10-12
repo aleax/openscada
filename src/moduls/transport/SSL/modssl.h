@@ -97,6 +97,8 @@ class TSocketIn: public TTransportIn
 
 	void start( );
 	void stop( );
+	void check( unsigned int cnt );	//Some periodic tests and checkings like to the certificate file update
+					//?!?! and the initiative connection
 
 	unsigned forksPerHost( const string &sender );
 
@@ -140,7 +142,7 @@ class TSocketIn: public TTransportIn
 	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes
-	string		stErr;			//Last error messages
+	string		stErrMD5;		//Last error messages or certificate file MD5
 	uint64_t	trIn, trOut;		//Traffic in and out counter
 	float		prcTm, prcTmMax;
 	int		connNumb, connTm, clsConnByLim;	//Close connections by limit
@@ -210,12 +212,16 @@ class TTransSock: public TTypeTransport
 	TTransSock( string name );
 	~TTransSock( );
 
+	void perSYSCall( unsigned int cnt );
+
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
 	string outAddrHelp( );
 	string outTimingsHelp( );
 	string outAttemptsHelp( );
+
+	string MD5( const string &file );
 
     protected:
 	void load_( );

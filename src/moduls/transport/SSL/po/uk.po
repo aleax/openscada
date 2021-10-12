@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 18:45+0300\n"
+"POT-Creation-Date: 2021-10-11 16:55+0300\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -95,6 +95,9 @@ msgstr "Під'єднано"
 
 msgid "Disconnected"
 msgstr "Від'єднано"
+
+msgid "The certificate file '%s' was updated, reconnecting the transport..."
+msgstr "Файл сертифікатів '%s' оновлено, перепідключення транспорту..."
 
 #, c-format
 msgid "Error opening the temporary file '%s': '%s'"

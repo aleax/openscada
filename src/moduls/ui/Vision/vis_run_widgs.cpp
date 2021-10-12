@@ -114,14 +114,14 @@ void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
     if(!aBr) {
 	aBr = new XMLNode("get");
 	aBr->setAttr("path", id()+"/%2fserv%2fattrBr")->
-	    setAttr("tm", u2s(full?0:mainWin()->reqTm()))->setAttr("FullTree", FullTree?"1":"0");
+	    setAttr("tm", u2s(full?0:mainWin()->reqTm()))->setAttr("FullTree", FullTree?"1":"");
 	cntrIfCmd(*aBr);
 	reqBrCr = true;
     }
 
     if(full)	setAllAttrLoad(true);
-    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++) {
-	XMLNode *cN = aBr->childGet(i_el);
+    for(unsigned iEl = 0; iEl < aBr->childSize(); iEl++) {
+	XMLNode *cN = aBr->childGet(iEl);
 	if(cN->name() == "el") attrSet(cN->attr("id"), cN->text(), s2i(cN->attr("p")));
     }
     if(full) {
@@ -148,7 +148,7 @@ void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
 	    if(qobject_cast<RunWdgView*>(children().at(iC)) && !qobject_cast<RunPageView*>(children().at(iC)) &&
 		    ((RunWdgView*)children().at(iC))->id() == (id()+"/wdg_"+aBr->childGet(iL)->attr("id")))
 	    {
-		((RunWdgView*)children().at(iC))->update(full,aBr->childGet(iL),FullTree);
+		((RunWdgView*)children().at(iC))->update(full, aBr->childGet(iL), FullTree);
 		break;
 	    }
 	if(iC < children().size()) continue;

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.3.7"
+#define MOD_VER		"7.4.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -118,8 +118,8 @@ void Engine::postEnable( int flag )
 
     //Make library widgets' data container: {LibWidgetMime,ProjMime}(__ID__, MIME, DATA)
     wdgdata_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"40"));
-    wdgdata_el.fldAdd(new TFld("MIME",_("Mime type"),TFld::String,TFld::NoFlag,"30"));
-    wdgdata_el.fldAdd(new TFld("DATA",_("Mime data"),TFld::String,TFld::NoFlag,"500000"));
+    wdgdata_el.fldAdd(new TFld("MIME",_("MIME"),TFld::String,TFld::NoFlag,"30"));
+    wdgdata_el.fldAdd(new TFld("DATA",_("Resource data"),TFld::String,TFld::NoFlag,"500000"));
 
     //Make widgets' DB structure: LibWigets(__ID__, ICO, PARENT, PROC, PROC_PER, ATTRS, TIMESTAMP)
     wdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
@@ -193,7 +193,7 @@ void Engine::postEnable( int flag )
 	prjStl_el.fldAdd(new TFld(("V_"+i2s(iStl)).c_str(),TSYS::strMess(_("Value %d"),iStl).c_str(),TFld::String,TFld::NoFlag,"100"));
 
     //Init original widgets library
-    wlbAdd("originals",_("Original widgets"));
+    wlbAdd("originals", _("Original widgets"), "");
     // Set default library icon
     if(TUIS::icoGet("VCA.lwdg_root",NULL,true).size())
 	wlbAt("originals").at().setIco(TSYS::strEncode(TUIS::icoGet("VCA.lwdg_root"),TSYS::base64));
@@ -571,7 +571,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
     cElu.cfg("IDC").setS(idc, true);
     for(unsigned iA = 0; iA < als.size(); iA++) {
 	AutoHD<Attr> attr = w.attrAt(als[iA]);
-	if(!attr.at().modif()) continue;
+	if(!attr.at().aModif()) continue;
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) m_attrs += als[iA]+";";
 	if(ldGen != (bool)(attr.at().flgGlob()&Attr::Generic)) continue;
 

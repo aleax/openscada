@@ -40,6 +40,7 @@
 <td> Транспорт </td>
 <td> Роман Савоченко </td>
 <td> Надає транспорт базований на безпечному шарі сокетів. Використано OpenSSL та підтримуються: SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2.
+<ul><li> <b>Спонсорування, зовнішнього файлу сертифікатів на 0.3 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Вінницька Птахофабрика</li></ul>
 </td></tr></table>
 <p>Модуль надає до програми підтримку транспортів, заснованих на шарі безпечних сокетів (SSL). У основі модуля лежить бібліотека <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Підтримуються вхідні та вихідні транспорти протоколів SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2; загальний перелік яких залежить від їх доступності у бібліотеці OpenSSL та за відсутності прямої вказівки обирається найбільш актуальний та безпечний.
 </p><p>Додати нові вхідні та вихідні безпечні сокети можна за посередництвом конфігурації <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">транспортної підсистеми</a> у будь якому конфігураторі OpenSCADA.
@@ -69,7 +70,8 @@
 <li> Обрання транспортних протоколів.</li>
 <li> Стан "Підключення", у який переводити транспорт при завантажені.</li>
 <li> PEM-файл сертифікатів та приватного ключа; або сертифікати, приватний ключ SSL безпосередньо та пароль приватного ключа SSL.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Приховано у підключеному стані.</dd></dl>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Приховано у підключеному стані.</dd>
+<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Відстежується у 60 секунд щодо оновлення, відтак перепідключення транспорту для актуалізації.</dd></dl>
 <ul><li> Максимальна кількість клієнтів, Максимальна кількість клієнтів за хостами та Розмір вхідного буферу.</li>
 <li> Keep alive запитів. Закриття підключення після вказаної кількості запитів. Нульове значення для вимкнення — не закривається ніколи.</li>
 <li> Keep alive час очікування, секунд. Закриття підключення після відсутності запитів протягом вказаного часу. Нульове значення для вимкнення — не закривається ніколи.</li></ul>
@@ -114,5 +116,5 @@ $ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/uk">Modules/SSL/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/uk">Modules/SSL/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2777</td></tr></table></body>
 </html>

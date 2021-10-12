@@ -72,7 +72,6 @@ class Attr
 	    FromStyle	= 0x40,		//Get value from style
 	    VizerSpec	= 0x80,		//Visualizer specified attribute, for allow it to modification control and transmit to the visualizer.
 					//Sets at and by a session of running project activation.
-
 	    SessAttrInh	= 0x10,		//Inherited attribute into the running session
 	    IsInher	= 0x20		//Inherited attribute
 	};
@@ -87,7 +86,8 @@ class Attr
 	TFld::Type type( );
 	int flgGlob( );		//Global attribite's flags
 	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)mFlgSelf; }
-	unsigned modif( )	{ return mModif; }
+	uint32_t aModif( );
+	uint32_t &aModif_( )	{ return mModif; }
 	string cfgTempl( );
 	string cfgVal( );
 	static bool isTransl( TFld::Type tp, int flgGlb, int flgSelf = -1 ) {
@@ -98,7 +98,8 @@ class Attr
 	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
 
 	void setFlgSelf( SelfAttrFlgs flg, bool sys = false );
-	void setModif( unsigned set )	{ mModif = set; }
+	void setAModif( );
+	void setAModif_( uint32_t set )	{ mModif = set; }
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );
 
@@ -140,7 +141,7 @@ class Attr
 	} mVal;
 	// Attributes
 	TFld		*mFld;		//Base field
-	unsigned	mModif;		//Modify counter
+	uint32_t	mModif;		//Counter of the modifications
 	unsigned short	mFlgSelf;	//Self attributes flags
 	unsigned short	mOi	:ATTR_OI_DEPTH;		//Order index, up to 256 attributes
 	unsigned short	mConn	:ATTR_CON_DEPTH;	//Connections counter
@@ -174,6 +175,7 @@ class Widget : public TCntrNode
 	string owner( ) const;					//Widget owner
 	string grp( ) const;					//Widget group
 	short  permit( ) const;					//Permission for access to widget
+	virtual uint32_t wModif( Attr *a = NULL );		//Common processing of the modification
 	virtual string getStatus( );
 	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( ) const { return ""; }		//Calc procedure language
@@ -191,6 +193,7 @@ class Widget : public TCntrNode
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp );
 	void setPermit( short iperm );
+	virtual void setWModif( Attr *a = NULL );
 	virtual void setCalcLang( const string &ilng )	{ };
 	virtual void setCalcProgTr( bool vl )		{ };
 	virtual void setCalcProg( const string &iprg )	{ };
@@ -262,7 +265,6 @@ class Widget : public TCntrNode
 	virtual bool cntrCmdProcess( XMLNode *opt );
 
 	virtual bool attrChange( Attr &cfg, TVariant prev );	//Process an attribute change local and into the terminator
-	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 	virtual TVariant vlGet( Attr &a );
 	virtual bool eventProc( const string &ev, Widget *src = NULL );	//Return "true" for terminate next processing
 

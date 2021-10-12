@@ -187,7 +187,7 @@ void WidgetLib::save_( )
 
     TBDS::dataSet(DB()+"."+mod->wlbTable(), mod->nodePath()+"LIB", *this);
 
-    //Mime data copy
+    //Resources copy
     if(mDB_MimeSrc.size() || DB(true).size()) {
 	if(mDB_MimeSrc.empty()) mDB_MimeSrc = DB(true);
 	vector<string> pls;
@@ -373,10 +373,10 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
 	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
-	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
-	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
+	if(ctrMkNode("area",opt,-1,"/mime",_("Resources")))
+	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Resources"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Identifier"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("MIME"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
 	    }
 	return;
@@ -466,7 +466,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    // Request data
 	    if(idcol == "id") {
 		string mimeType, mimeData;
-		// Copy mime data to new record
+		// Copy resources to new record
 		if(mimeDataGet("res:"+idmime,mimeType,&mimeData)) {
 		    mimeDataSet(opt->text(), TUIS::mimeGet(idmime,mimeData,mimeType), mimeData);
 		    mimeDataDel(idmime);
@@ -474,7 +474,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    }
 	    else if(idcol == "tp") {
 		string mimeType;
-		// Copy mime data to new record
+		// Copy resources to new record
 		if(mimeDataGet("res:"+idmime,mimeType))
 		    mimeDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
@@ -606,7 +606,7 @@ string LWidget::calcProg( ) const
 string LWidget::calcProgStors( const string &attr )
 {
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
-    if(((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size())) && rez.find(ownerLib().DB()) == string::npos)
+    if(((attr.size() && attrAt(attr).at().aModif()) || (!attr.size() && proc().size())) && rez.find(ownerLib().DB()) == string::npos)
 	rez = ownerLib().DB() + ";" + rez;
 
     return rez;
@@ -670,8 +670,8 @@ void LWidget::load_( TConfig *icfg )
     for(unsigned iA = 0; iA < als.size(); iA++) {
 	if(!attrPresent(als[iA])) continue;
 	AutoHD<Attr> attr = attrAt(als[iA]);
-	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
-	    attr.at().setModif(0);
+	if(attr.at().aModif() && tAttrs.find(als[iA]+";") == string::npos) {
+	    attr.at().setAModif_(0);
 	    inheritAttr(als[iA]);
 	}
     }
@@ -698,8 +698,8 @@ void LWidget::loadIO( )
 	attrList(aLs);
 	for(unsigned iA = 0; iA < aLs.size(); ++iA) {
 	    AutoHD<Attr> aO = attrAt(aLs[iA]);
-	    if((aO.at().flgGlob()&Attr::Active) && !aO.at().modif() && !aPrc[aLs[iA]]) {
-		aO.at().set(aO.at().get(true), true); aO.at().setModif(0);
+	    if((aO.at().flgGlob()&Attr::Active) && !aO.at().aModif() && !aPrc[aLs[iA]]) {
+		aO.at().set(aO.at().get(true), true); aO.at().setAModif(0);
 		aPrc[aLs[iA]] = act = true;
 	    }
 	}
@@ -1002,7 +1002,7 @@ string CWidget::calcProg( ) const	{ return parent().freeStat() ? "" : parent().a
 string CWidget::calcProgStors( const string &attr )
 {
     string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
-    if(attr.size() && attrAt(attr).at().modif() && rez.find(ownerLWdg().ownerLib().DB()) == string::npos)
+    if(attr.size() && attrAt(attr).at().aModif() && rez.find(ownerLWdg().ownerLib().DB()) == string::npos)
 	rez = ownerLWdg().ownerLib().DB() + ";" + rez;
 
     return rez;
@@ -1028,8 +1028,8 @@ void CWidget::load_( TConfig *icfg )
     for(unsigned iA = 0; iA < als.size(); iA++) {
 	if(!attrPresent(als[iA])) continue;
 	AutoHD<Attr> attr = attrAt(als[iA]);
-	if(attr.at().modif() && tAttrs.find(als[iA]+";") == string::npos) {
-	    attr.at().setModif(0);
+	if(attr.at().aModif() && tAttrs.find(als[iA]+";") == string::npos) {
+	    attr.at().setAModif_(0);
 	    inheritAttr(als[iA]);
 	}
     }

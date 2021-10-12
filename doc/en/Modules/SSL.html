@@ -40,6 +40,7 @@
 <td> Transport </td>
 <td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — this page initial translation</i></font> </td>
 <td> Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.
+<ul><li> <b>Sponsored by, for an external certificates file on 0.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li></ul>
 </td></tr></table>
 <p>The module provides support for secure sockets layer (SSL) based transports to the program. The module is based on the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Input and output transport protocols SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported; the general list of which depends on their availability in the OpenSSL library and, in the absence of a direct specification, it is selected for most relevant and safe.
 </p><p>You can add new input and output safe sockets through the configuration of <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
@@ -69,7 +70,8 @@
 <li> Selecting of the transport protocols.</li>
 <li> State "Connect", in which the transport must be switched at start up.</li>
 <li> PEM-file of the certificates and private key; or the certificates, private SSL key directly and password of the private SSL key.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the connected state.</dd></dl>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the connected state.</dd>
+<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Is traced in 60 seconds for updating, then the transport reconnect for actualisation.</dd></dl>
 <ul><li> Maximum number of clients, Maximum number of clients per host and Size of the input buffer.</li>
 <li> Keep alive requests. Closing the connection after the specified requests. Zero value to disable - not close ever.</li>
 <li> Keep alive timeout, seconds. Closing the connection after no requests at the specified timeout. Zero value to disable - not close ever.</li></ul>
@@ -114,5 +116,5 @@ $ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/en">Modules/SSL/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/en">Modules/SSL/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2777</td></tr></table></body>
 </html>

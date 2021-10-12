@@ -788,8 +788,8 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 //Sets the link to the parameter for the eight trend
 this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </pre>
-<ul><li> <i>string mime( string addr, string type = "" )</i> — "mime" object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the type in <i>type</i>, from the session table or the source. It is designed for the "mime" objects edition and that substitution to this session's context, for example, images SVG.</li>
-<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — sets the "mime" object to <i>data</i> with <i>type</i> by the address <i>addr</i>.</li>
+<ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — resource object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the <i>MIME</i>, from the session table or the source. It is designed for the resource objects edition and that substitution to this session's context, for example, images SVG.</li>
+<li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — sets the resource object to <i>data</i> with <i>MIME</i> by the address <i>addr</i>.</li>
 <li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li></ul>
 <p><b>Object "Widget" of the primitive "Document" (this)</b>
 </p>
@@ -965,5 +965,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2775</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2777</td></tr></table></body>
 </html>

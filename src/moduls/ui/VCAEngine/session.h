@@ -28,7 +28,10 @@
 
 #include "widget.h"
 
-#define DIS_SES_TM 30*60
+#define DIS_SES_TM	30*60	//Session disable inactivity timeout
+#define CLK_NO_ALL	0	//Clock of no changes for objects and all selection for requests
+#define CLK_START	10	//Starting numberg of the calculation clock
+#define CLK_OLD		600	//Clock number meant as old and specified to remove
 
 namespace VCA
 {
@@ -62,7 +65,7 @@ class Session : public TCntrNode
 	bool	backgrnd( )	{ return mBackgrnd; }		//Background session execution
 	int	connects( )	{ return mConnects; }		//Connections counter
 	time_t	reqTm( )	{ return mReqTm; }		//Last request time from client
-	unsigned &calcClk( )	{ return mCalcClk; }		//Calc clock
+	uint16_t &calcClk( )	{ return mCalcClk; }		//Calc clock
 	AutoHD<Project> parent( ) const;
 	int	stlCurent( )	{ return mStyleIdW; }
 
@@ -80,7 +83,8 @@ class Session : public TCntrNode
 	void disconnect( int conId = 0 );
 	void stlCurentSet( int sid = Project::StlMaximum );
 
-	bool modifChk( unsigned int tm, unsigned int iMdfClc, bool isCnt = false );
+	bool clkChkModif( unsigned clkFrom, unsigned clkCh );
+	uint16_t clkPairPrc( uint32_t &pair, bool set = false );
 
 	// Pages
 	void list( vector<string> &ls ) const		{ chldList(mPage,ls); }
@@ -139,7 +143,7 @@ class Session : public TCntrNode
 		    public:
 			//Methods
 			QueueIt( const string &ipath, uint8_t ilev, const string &icat, const string &imess,
-				const string &itpArg = "", unsigned iclc = 0 ) :
+				const string &itpArg = "", uint16_t iclc = 0 ) :
 			    lev(ilev), quietance(false), path(ipath), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
 			QueueIt( ) : lev(0), quietance(false)	{ }
 
@@ -150,7 +154,7 @@ class Session : public TCntrNode
 				cat,		//Category
 				mess,		//Message
 				tpArg;		//Type argument
-			unsigned clc;		//Clock
+			uint16_t clc;		//Clock
 		};
 
 		//Methods
@@ -163,7 +167,7 @@ class Session : public TCntrNode
 		string	props( );
 
 		void ntf( int alrmSt );	//Same notify for the alarm status
-		string ntfRes( unsigned &tm, string &wpath, string &resTp, string &mess, string &lang );	//The notification resource request
+		string ntfRes( uint16_t &tm, string &wpath, string &resTp, string &mess, string &lang );	//The notification resource request
 
 		void queueSet( const string &wpath, const string &alrm );
 		void queueQuietance( const string &wpath, uint8_t quitTmpl, bool ret = false );	//Notification quietance send
@@ -198,7 +202,7 @@ class Session : public TCntrNode
 
 		vector<QueueIt>	mQueue;
 		int	mQueueCurNtf;
-		unsigned mQueueCurTm;
+		uint16_t mQueueCurTm;
 		string	mQueueCurPath;
 
 		ResMtx	dataM;
@@ -223,7 +227,7 @@ class Session : public TCntrNode
 	int	mConnects;			//Connections counter
 	map<int, bool> mCons;			//Identifiers of the connections
 
-	unsigned	mCalcClk;		//Calc clock
+	uint16_t	mCalcClk;		//Calc clock
 	time_t		mReqTm, mUserActTm;	//Time of request and user action
 	AutoHD<Project>	mParent;
 
@@ -266,7 +270,7 @@ class SessWdg : public Widget, public TValFunc
 
 	virtual void prcElListUpdate( );
 	virtual void calc( bool first, bool last, int pos = 0 );
-	void getUpdtWdg( const string &path, unsigned int tm, vector<string> &els );
+	void getUpdtWdg( const string &path, uint16_t tm, vector<string> &els );
 
 	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on the inherit
@@ -317,19 +321,20 @@ class SessWdg : public Widget, public TValFunc
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
-	unsigned int modifVal( Attr &cfg );
+	uint32_t wModif( Attr *a = NULL );
+	void setWModif( Attr *a = NULL );
 
 	//Attributes
 	unsigned	mProc	: 1;
 	unsigned	inLnkGet: 1;
 	unsigned	mToEn	: 1;
 
-	unsigned int	&mCalcClk;
+	uint16_t	&mCalcClk;
 
     private:
 	//Attributes
 	string		mWorkProg;
-	unsigned int	mMdfClc;
+	uint32_t	mMdfClc;
 	ResMtx		mCalcRes;
 
 	vector<string>	mWdgChldAct,	//Active childs widget's list
@@ -403,7 +408,7 @@ class SessPage : public SessWdg
 	unsigned mPage		: 4;		//Pages container identifier
 	unsigned mClosePgCom	: 1;
 	unsigned mDisMan	: 1;		//Disable the page enabling at request by it's disabling in manual
-	unsigned int	mCalcClk_;
+	uint16_t	mCalcClk_;
 	ResMtx	mFuncM;
 	MtxString pathAsOpen, pathToClose;
 };

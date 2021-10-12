@@ -63,7 +63,7 @@ void PrWidget::setEnable( bool val, bool force )
 	    AutoHD<Attr> attr = attrAt(ls[iL]);
 	    if(!(attr.at().flgGlob()&Attr::Active)) continue;
 	    attr.at().setS(attr.at().getS(),true);
-	    attr.at().setModif(0);
+	    attr.at().setAModif_(0);
 	    attrList(ls);
 	}
     }
@@ -427,7 +427,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
     else if((cfg.flgGlob()&Attr::Active) && ((cfg.id() == "view" && cfg.owner()->attrAt("elType").at().getI() == F_LINE_ED) ||
 					     (cfg.id() == "mode" && cfg.owner()->attrAt("elType").at().getI() == F_BUTTON)))
     {
-	unsigned mdfSt = cfg.owner()->attrAt("value").at().modif();
+	unsigned mdfSt = cfg.owner()->attrAt("value").at().aModif_();
 	TFld::Type	ntp = TFld::String;
 	int		flg = Attr::Mutable;
 	Attr::SelfAttrFlgs sflg = cfg.owner()->attrAt("value").at().flgSelf();
@@ -458,7 +458,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	cfg.owner()->attrAt("value").at().setS(val);
 	cfg.owner()->attrAt("value").at().setCfgTempl(cfgTmpl);
 	cfg.owner()->attrAt("value").at().setCfgVal(cfgVal);
-	cfg.owner()->attrAt("value").at().setModif(mdfSt);	//!!!! Restore the original modification state
+	cfg.owner()->attrAt("value").at().setAModif_(mdfSt);	//!!!! Restore the original modification state
     }
 
     return Widget::attrChange(cfg, prev);

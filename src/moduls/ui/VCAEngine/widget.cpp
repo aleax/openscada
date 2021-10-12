@@ -82,11 +82,11 @@ TCntrNode &Widget::operator=( const TCntrNode &node )
     srcN->attrList(els);
     AutoHD<Attr> attr, pattr;
     for(unsigned iA = 0; iA < els.size(); iA++) {
-	if(!(pattr=srcN->attrAt(els[iA])).at().modif()) continue;	//Do not copy not modified attributes
+	if(!(pattr=srcN->attrAt(els[iA])).at().aModif()) continue;	//Do not copy not modified attributes
 	if(!attrPresent(els[iA])) {
 	    bool isInher = pattr.at().flgSelf()&Attr::IsInher;
 	    attrAdd(isInher ? &srcN->attrAt(els[iA]).at().fld() : new TFld(srcN->attrAt(els[iA]).at().fld()), -1, isInher);
-	    attrAt(els[iA]).at().setModif(1);
+	    attrAt(els[iA]).at().setAModif_(1);
 	}
 	attr  = attrAt(els[iA]);
 	attr.at().setFlgSelf(pattr.at().flgSelf());
@@ -230,6 +230,10 @@ short Widget::permit( ) const
 }
 
 void Widget::setPermit( short iperm )		{ attrAt("perm").at().setI(iperm); }
+
+uint32_t Widget::wModif( Attr *a )		{ return a ? a->aModif_() : 0; }
+
+void Widget::setWModif( Attr *a )		{ if(a) a->aModif_()++; }
 
 string Widget::getStatus( )
 {
@@ -413,12 +417,12 @@ void Widget::inheritAttr( const string &iattr )
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)0);
 	    attr.at().setCfgTempl("");
 	    attr.at().setCfgVal("");
-	    attr.at().setModif(0);
+	    attr.at().setAModif_(0);
 	    continue;
 	}
 	if(pattr.freeStat()) pattr = parent().at().attrAt(ls[iL]);
 	if(!(attr.at().flgSelf()&Attr::IsInher)) attr.at().setFld(&pattr.at().fld(), true);
-	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh) && !dynamic_cast<SessWdg*>(this)) {
+	if(attr.at().aModif() && !(attr.at().flgSelf()&Attr::SessAttrInh) && !dynamic_cast<SessWdg*>(this)) {
 	    //Force inheritance flags processing
 	    //!!!! Attr::ProcAttr also added
 	    int frcInherAtr = Attr::CfgConst | Attr::CfgLnkIn | Attr::CfgLnkOut | Attr::FromStyle | Attr::ProcAttr | Attr::VizerSpec;
@@ -446,7 +450,7 @@ void Widget::inheritAttr( const string &iattr )
 		default: break;
 	    }
 
-	attr.at().setModif(0);
+	attr.at().setAModif_(0);
     }
 
     setStlLock(false);
@@ -480,8 +484,8 @@ void Widget::wClear( )
     for(unsigned iA = 0; iA < ls.size(); iA++) {
 	if(!attrPresent(ls[iA])) continue;
 	AutoHD<Attr> attr = attrAt(ls[iA]);
-	if(attr.at().modif()) {
-	    attr.at().setModif(0);
+	if(attr.at().aModif()) {
+	    attr.at().setAModif_(0);
 	    inheritAttr(ls[iA]);
 	}
     }
@@ -549,7 +553,7 @@ string Widget::wChDown( const string &ia )
     if(ia.empty()) attrList(ls); else ls.push_back(ia);
     AutoHD<Attr> attr;
     for(unsigned iA = 0; iA < ls.size(); iA++) {
-	if(!attrPresent(ls[iA]) || !(attr=attrAt(ls[iA])).at().modif()) continue;
+	if(!attrPresent(ls[iA]) || !(attr=attrAt(ls[iA])).at().aModif()) continue;
 	//!!!! Checking for the type and generic flags changing
 	if(!parw.at().attrPresent(ls[iA])) {
 	    if(!(attr.at().flgGlob()&Attr::IsUser)) continue;
@@ -560,7 +564,7 @@ string Widget::wChDown( const string &ia )
 	attrP.at().setFlgSelf(attr.at().flgSelf());
 	attrP.at().setCfgVal(attr.at().cfgVal());
 	attrP.at().setCfgTempl(attr.at().cfgTempl());
-	attr.at().setModif(0);
+	attr.at().setAModif_(0);
 	inheritAttr(ls[iA]);
     }
 
@@ -623,7 +627,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
 	    a->setFlgSelf((Attr::SelfAttrFlgs)(a->flgSelf()|Attr::VizerSpec), true);
 
 	//Set modif for new attribute reload allow
-	if(forceMdf) a->setModif(modifVal(*a));
+	if(forceMdf) a->setAModif();
     } catch(...) { }
     mtxAttr().unlock();
 
@@ -989,8 +993,8 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if(a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID)) {
 	if(opt->attr("attr").empty()) wClear();
-	else if(attrAt(opt->attr("attr")).at().modif()) {
-	    attrAt(opt->attr("attr")).at().setModif(0);
+	else if(attrAt(opt->attr("attr")).at().aModif()) {
+	    attrAt(opt->attr("attr")).at().setAModif_(0);
 	    inheritAttr(opt->attr("attr"));
 	    modif();
 	}
@@ -1102,7 +1106,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		XMLNode *el = attr.at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 		if(el) {
 		    el->setAttr("len","")->setAttr("wdgFlg",i2s(attr.at().flgGlob()))->
-			setAttr("modif",u2s(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
+			setAttr("modif",u2s(attr.at().aModif()))->setAttr("p",attr.at().fld().reserve());
 		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
 		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to the parent widget."));
 		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("Owner and groups (separated by ',') of the widget in the form \"{owner}:{groups}\"."));
@@ -1553,7 +1557,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    }
 	    wdg.at().attrAdd(new TFld(newAId.c_str(),newANm.c_str(),TFld::String,Attr::IsUser), -1, false, false, true);
 	    //wdg.at().attrAt(newAId).at().setS(EVAL_STR);
-	    wdg.at().attrAt(newAId).at().setModif(1);
+	    wdg.at().attrAt(newAId).at().setAModif_(1);
 	    wdg.at().modif();
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) {
@@ -1603,7 +1607,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		wdg.at().attrAt(tid).at().setFlgSelf((Attr::SelfAttrFlgs)((sflgs&(~Attr::VizerSpec))|(wdg.at().attrAt(tid).at().flgSelf()&Attr::VizerSpec)));
 		wdg.at().attrAt(tid).at().setCfgVal(cfgval);
 		wdg.at().attrAt(tid).at().setCfgTempl(tmpl);
-		wdg.at().attrAt(tid).at().setModif(1);
+		wdg.at().attrAt(tid).at().setAModif_(1);
 	    }
 	    else {
 		if(idcol == "name") {
@@ -1913,11 +1917,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 		owner()->mtxAttr().lock();
 		*mVal.s = t_str;
 		owner()->mtxAttr().unlock();
-	    }
-	    else {
-		unsigned imdf = owner()->modifVal(*this);
-		mModif = imdf ? imdf : mModif+1;
-	    }
+	    } else setAModif();
 	    break;
 	}
 	default: break;
@@ -1940,10 +1940,7 @@ void Attr::setI( int64_t val, bool strongPrev, bool sys )
 	    int64_t t_val = mVal.i;
 	    mVal.i = val;
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	mVal.i = t_val;
-	    else {
-		unsigned imdf = owner()->modifVal(*this);
-		mModif = imdf ? imdf : mModif+1;
-	    }
+	    else setAModif();
 	    break;
 	}
 	default: break;
@@ -1966,10 +1963,7 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	    double t_val = mVal.r;
 	    mVal.r = val;
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	mVal.r = t_val;
-	    else {
-		unsigned imdf = owner()->modifVal(*this);
-		mModif = imdf ? imdf : mModif+1;
-	    }
+	    else setAModif();
 	    break;
 	}
 	default: break;
@@ -1990,10 +1984,7 @@ void Attr::setB( char val, bool strongPrev, bool sys )
 	    bool t_val = mVal.b;
 	    mVal.b = val;
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_val))) mVal.b = t_val;
-	    else {
-		unsigned imdf = owner()->modifVal(*this);
-		mModif = imdf ? imdf : mModif+1;
-	    }
+	    else setAModif();
 	    break;
 	}
 	default: break;
@@ -2018,12 +2009,7 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 		owner()->mtxAttr().lock();
 		*mVal.o = t_obj;
 		owner()->mtxAttr().unlock();
-	    }
-	    else {
-		unsigned imdf = owner()->modifVal(*this);
-		mModif = imdf ? imdf : mModif+1;
-		return;
-	    }
+	    } else setAModif();
 	    break;
 	}
 	default: break;
@@ -2058,11 +2044,7 @@ void Attr::setCfgTempl( const string &vl )
 	owner()->mtxAttr().lock();
 	cfg = t_tmpl+"\n"+cfgVal();
 	owner()->mtxAttr().unlock();
-    }
-    else {
-	unsigned imdf = owner()->modifVal(*this);
-	mModif = imdf ? imdf : mModif+1;
-    }
+    } else setAModif();
 }
 
 void Attr::setCfgVal( const string &vl )
@@ -2077,11 +2059,7 @@ void Attr::setCfgVal( const string &vl )
 	owner()->mtxAttr().lock();
 	cfg = cfgTempl() + "\n" + t_val;
 	owner()->mtxAttr().unlock();
-    }
-    else {
-	unsigned imdf = owner()->modifVal(*this);
-	mModif = imdf ? imdf : mModif+1;
-    }
+    } else setAModif();
 }
 
 void Attr::setFlgSelf( SelfAttrFlgs flg, bool sys )
@@ -2091,11 +2069,12 @@ void Attr::setFlgSelf( SelfAttrFlgs flg, bool sys )
     mFlgSelf = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
     if(sys) return;
     if(!owner()->attrChange(*this,TVariant()))	mFlgSelf = t_flg;
-    else {
-	unsigned imdf = owner()->modifVal(*this);
-	mModif = imdf ? imdf : mModif+1;
-    }
+    else setAModif();
 }
+
+unsigned Attr::aModif( )	{ return owner() ? owner()->wModif(this) : aModif_(); }
+
+void Attr::setAModif( )	{ if(owner()) owner()->setWModif(this); }
 
 void Attr::AHDConnect( )
 {
