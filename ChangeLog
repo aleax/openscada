@@ -1,4 +1,9 @@
 2021-10-12 Roman (stable)
+- !!!!:FIX:DB: The generic fields deletion function TBDS::dataDel() for the Configuration File fixed in treating the flag UseAllKeys,
+    so preventing all fields removing.
+
+
+2021-10-12 Roman (stable)
 - SYS: The global short functions appended of s2l() and s2u().
 - BD: The TBD object prevented in reload from it for the project work DB.
 - Transport.Sockets: The source code was some cleaned and the socket closing of the input transport appended for the result checking.

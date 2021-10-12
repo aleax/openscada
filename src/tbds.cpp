@@ -553,7 +553,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, char f
 	    cfg.cfgList(cf_el);
 	    for(iEl = 0; iEl < (int)cf_el.size(); iEl++) {
 		TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
-	        if(u_cfg.isKey() && u_cfg.keyUse() && u_cfg.getS() != el->attr(cf_el[iEl])) break;
+	        if(u_cfg.isKey() && (u_cfg.keyUse() || flags&UseAllKeys) && u_cfg.getS() != el->attr(cf_el[iEl])) break;
 	    }
 	    if(iEl == cf_el.size()) {
 		SYS->modifCfg(true);
