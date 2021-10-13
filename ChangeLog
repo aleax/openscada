@@ -1,3 +1,10 @@
+2021-10-13 Roman (stable)
+- FIX:UI.VCAEngine: Restored in reading only not user and visual and the visualisator specific attributes,
+    a problem detected on the attribute "perm" wrong, not prepared, reading.
+- FIX:UI.WebVision: The focus setting algorithm rewrote to acknowledge that setting from the VCA-Engine,
+    a problem detected on switching-focusing back to the previous items.
+
+
 2021-10-12 Roman (stable)
 - !!!!:FIX:DB: The generic fields deletion function TBDS::dataDel() for the Configuration File fixed in treating the flag UseAllKeys,
     so preventing all fields removing.

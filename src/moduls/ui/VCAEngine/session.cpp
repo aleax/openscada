@@ -2499,7 +2499,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    if(!tm) {
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->
 		    setText(i2s(ownerSess()->sec.at().access(u,SEC_RD|SEC_WR,owner(),grp(),permit())));
-		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id", "name")->setAttr("p", i2s(A_PG_NAME))->setText(name());
+		if(dynamic_cast<SessPage*>(this))
+		    opt->childAdd("el")->setAttr("id", "name")->setAttr("p", i2s(A_PG_NAME))->setText(name());
 	    }
 	    if(!tm || ownerSess()->clkChkModif(tm,wModif())) {
 		AutoHD<Attr> attr;
@@ -2507,8 +2508,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		attrList(als);
 		for(unsigned iL = 0; iL < als.size(); iL++) {
 		    attr = attrAt(als[iL]);
-		    //if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
-		    if(ownerSess()->clkChkModif(tm,attr.at().aModif()))
+		    if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec)
+			    && ownerSess()->clkChkModif(tm,attr.at().aModif()))
 			opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
 					     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
@@ -2538,7 +2539,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	//Self attributes put
 	if(!tm || ownerSess()->clkChkModif(tm,wModif())) {
 	    if(!tm) {
-		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id","name")->setAttr("p",i2s(A_PG_NAME))->setText(name());
+		if(dynamic_cast<SessPage*>(this))
+		    opt->childAdd("el")->setAttr("id","name")->setAttr("p",i2s(A_PG_NAME))->setText(name());
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->setText(i2s(perm));
 	    }
 	    AutoHD<Attr> attr;
@@ -2546,8 +2548,8 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    attrList(als);
 	    for(unsigned iL = 0; iL < als.size(); iL++) {
 		attr = attrAt(als[iL]);
-		//if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec) &&
-		if(ownerSess()->clkChkModif(tm, attr.at().aModif()))
+		if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec)
+			&& ownerSess()->clkChkModif(tm, attr.at().aModif()))
 		    opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
 				     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());

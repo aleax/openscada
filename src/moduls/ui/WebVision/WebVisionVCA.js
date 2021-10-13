@@ -391,14 +391,18 @@ function getTabIndex( wdgO, origPos )
 /***************************************************
  * setFocus - Command for set focus                *
  ***************************************************/
-function setFocus( wdg, onlyClr )
+function setFocus( wdg, ack )
 {
-    if(masterPage.focusWdf && masterPage.focusWdf == wdg) return;
+    if(masterPage.focusWdf == wdg) return;
 
     var attrs = new Object();
-    if(masterPage.focusWdf) { attrs.focus = '0'; attrs.event = 'ws_FocusOut'; setWAttrs(masterPage.focusWdf,attrs); }
-    masterPage.focusWdf = wdg;
-    if(!onlyClr) { attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage.focusWdf,attrs); }
+    if(masterPage.focusWdf) {
+	attrs.focus = '0'; attrs.event = 'ws_FocusOut';
+	setWAttrs(masterPage.focusWdf, attrs);
+    }
+    if(ack) masterPage.focusWdf = wdg;
+    attrs.focus = '1'; attrs.event = 'ws_FocusIn';
+    setWAttrs(wdg, attrs);
 }
 
 /****************************************************************************
@@ -735,6 +739,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	var isPrim = true;
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
 	    if(this.pg) {
+
 		elStyle += 'background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
 		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>###Page###: '"+this.addr+"'.<br/>###View access is not permitted.###</div>";
 	    }
