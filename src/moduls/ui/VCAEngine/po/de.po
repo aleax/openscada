@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 11:08+0300\n"
+"POT-Creation-Date: 2021-10-17 20:30+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1599,6 +1599,9 @@ msgstr "Ereignisse: %s"
 
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
+
+msgid "Focus"
+msgstr "Fokus"
 
 msgid "Processing"
 msgstr "Bearbeitung"

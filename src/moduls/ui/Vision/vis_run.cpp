@@ -312,18 +312,22 @@ VisRun::~VisRun( )
     }
 }
 
-void VisRun::setFocus( const string &addr )
+void VisRun::setFocus( const string &addr, bool ack )
 {
-    if(focusWdf.size() && focusWdf == addr) return;
+    if(focusWdf == addr) return;
+
     XMLNode req("set");
+
     if(focusWdf.size()) {
 	req.setAttr("path", focusWdf+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id","focus")->setText("0");
 	req.childAdd("el")->setAttr("id","event")->setText("ws_FocusOut");
 	cntrIfCmd(req);
     }
-    focusWdf = addr;
-    req.clear()->setAttr("path", focusWdf+"/%2fserv%2fattr");
+
+    if(ack) focusWdf = addr;
+
+    req.clear()->setAttr("path", addr+"/%2fserv%2fattr");
     req.childAdd("el")->setAttr("id","focus")->setText("1");
     req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
     cntrIfCmd(req);

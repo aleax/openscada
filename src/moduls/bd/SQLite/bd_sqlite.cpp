@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.2.2"
+#define MOD_VER		"3.2.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -486,6 +486,7 @@ void MTable::fieldSet( TConfig &cfg )
 	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
 	sid = tblStrct[iFld][1];
 	if(sid.size() > 3) {
+	    //???? Change the condition of the translation presence
 	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
 	    if(Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.compare(0,3,Mess->lang2CodeBase()+"#") == 0) trDblDef = true;
 	}

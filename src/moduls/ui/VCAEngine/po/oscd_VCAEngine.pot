@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 11:08+0300\n"
+"POT-Creation-Date: 2021-10-17 20:30+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1257,6 +1257,9 @@ msgid "Events: %s"
 msgstr ""
 
 msgid "Error calculating the widget. Process is disabled."
+msgstr ""
+
+msgid "Focus"
 msgstr ""
 
 msgid "Processing"

@@ -218,20 +218,20 @@ msgid "close"
 msgstr "закрити"
 
 msgid "Opened sessions of the projects"
-msgstr "Відкриті сеанси проектів"
+msgstr "Відкриті сеанси проєктів"
 
 msgid "Available projects"
-msgstr "Доступні проекти"
+msgstr "Доступні проєкти"
 
 msgid "There is no session and project of the VCA engine for the user!"
-msgstr "Немає жодного сеансу та проекту рушія СВУ для користувача!"
+msgstr "Немає жодного сеансу та проєкту рушія СВУ для користувача!"
 
 msgid "Sorry, the number of open sessions has reached a limit!"
 msgstr "Пробачте, кількість відкритих сеансів досягло обмеження!"
 
 #, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
-msgstr "Перехід до сеансу '%s' для проекту '%s' ..."
+msgstr "Перехід до сеансу '%s' для проєкту '%s' ..."
 
 msgid "Going to the main page ..."
 msgstr "Перехід до головної сторінки ..."
@@ -249,7 +249,7 @@ msgstr "Перехід до іншого сеансу ..."
 
 #, c-format
 msgid "The specified project/session '%s' is false!"
-msgstr "Вказаний проект/сеанс '%s' помилковий!"
+msgstr "Вказаний проєкт/сеанс '%s' помилковий!"
 
 #, c-format
 msgid "Error the page '%s': %s"

@@ -209,8 +209,11 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 
     switch(uiPrmPos) {
 	case A_COM_FOCUS:
-	    if((bool)s2i(val) == hasFocus())	break;
-	    if((bool)s2i(val))	setFocus(Qt::OtherFocusReason);
+	    //if((bool)s2i(val) == hasFocus())	break;
+	    if(s2i(val)) {
+		mainWin()->setFocus(id(), true);
+		setFocus(Qt::OtherFocusReason);
+	    } else clearFocus();
 	    return true;
 	case A_PERM:
 	    setPermCntr(s2i(val)&SEC_WR);
@@ -523,7 +526,7 @@ bool RunWdgView::event( QEvent *event )
 		return true;
 	    }
 	    break;
-	case QEvent::FocusIn:	mainWin()->setFocus(id());	return true;
+	case QEvent::FocusIn:	mainWin()->setFocus(id()); return true;
 	    /*attrs.push_back(std::make_pair("focus","1"));
 	    attrs.push_back(std::make_pair("event","ws_FocusIn"));
 	    attrsSet(attrs);

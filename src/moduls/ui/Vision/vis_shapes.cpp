@@ -1416,7 +1416,7 @@ void ShapeFormEl::setFocus( WdgView *w, QWidget *wdg, bool en, bool devel )
     //Process childs
     for(int iC = 0; iC < wdg->children().size(); iC++)
 	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
-	    setFocus(w,(QWidget*)wdg->children().at(iC),en,devel);
+	    setFocus(w, (QWidget*)wdg->children().at(iC), en, devel);
 }
 
 //************************************************
@@ -4854,7 +4854,7 @@ void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
     //Process childs
     for(int iC = 0; iC < wdg->children().size(); iC++)
 	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
-	    setFocus(view,(QWidget*)wdg->children().at(iC),en,devel);
+	    setFocus(view,(QWidget*)wdg->children().at(iC), en, devel);
 }
 
 //Shape node date

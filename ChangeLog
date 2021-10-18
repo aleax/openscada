@@ -1,3 +1,13 @@
+2021-10-18 Roman (stable)
+- !!:LibsDB.OscadaLibs: tmplib_base.digAlarm: Expanded in the common field DESCR using for the specific parameters redefinition
+    by the new fields "CustomFlds".
+- DB.SQLite: Scheduled for changing the condition of the translation presence.
+- !!:UI.{VCAEngine,QTStarter,Vision,WebVision}: The Ukrainian word "проекту" renamed to "проєкту" everywhere.
+- UI.VCAEngine: The attribute object appended of the visual state detection function isVisual() - used in the visualizers.
+- !:UI.Vision: Adjusted in the focus policy to the UI.WebVision way and appended the focus force clearing at lost,
+    to prevent the widget focus return at window activation, so you can use now the event "ws_FocusIn" in opening external subwindows.
+
+
 2021-10-13 Roman (stable)
 - FIX:UI.VCAEngine: Restored in reading only not user and visual and the visualisator specific attributes,
     a problem detected on the attribute "perm" wrong, not prepared, reading.

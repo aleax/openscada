@@ -173,7 +173,7 @@ class VisRun : public QMainWindow
 	bool	connOK( )	{ return !conErr; }
 	QAction *aFullScr( )	{ return actFullScr; }
 
-	void	setFocus( const string &addr );
+	void	setFocus( const string &addr, bool ack = false );
 
 	bool	winMenu( );
 	void	setWinMenu( bool act );

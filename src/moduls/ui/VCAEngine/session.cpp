@@ -2078,14 +2078,14 @@ void SessWdg::getUpdtWdg( const string &ipath, uint16_t tm, vector<string> &els 
 uint32_t SessWdg::wModif( Attr *a )
 {
     if(!a) return ownerSess()->clkPairPrc(mMdfClc);
-    if(!s2i(a->fld().reserve()) && !(a->flgSelf()&Attr::VizerSpec)) return CLK_NO_ALL;
+    if(!a->isVisual()) return CLK_NO_ALL;
 
     return ownerSess()->clkPairPrc(a->aModif_());
 }
 
 void SessWdg::setWModif( Attr *a )
 {
-    if(!a || (!s2i(a->fld().reserve()) && !(a->flgSelf()&Attr::VizerSpec))) return;
+    if(!a || !a->isVisual()) return;
 
     ownerSess()->clkPairPrc(a->aModif_(), true);
 
@@ -2296,7 +2296,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
     //Special session attributes process
     // Focus attribute process for active active
     if(cfg.id() == "active" && cfg.getB() && !cfg.owner()->attrPresent("focus"))
-	cfg.owner()->attrAdd(new TFld("focus","Focus",TFld::Boolean,TFld::NoFlag,"1","false","","","-2"));
+	cfg.owner()->attrAdd(new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","",i2s(A_COM_FOCUS).c_str()));
     //Alarm event for widget process
     else if(cfg.id() == "alarm" && enable() && !prev.isNull()) alarmSet(true);
     //Alarm status process
@@ -2508,8 +2508,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		attrList(als);
 		for(unsigned iL = 0; iL < als.size(); iL++) {
 		    attr = attrAt(als[iL]);
-		    if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec)
-			    && ownerSess()->clkChkModif(tm,attr.at().aModif()))
+		    if(attr.at().isVisual() && ownerSess()->clkChkModif(tm,attr.at().aModif()))
 			opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
 					     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
@@ -2548,8 +2547,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    attrList(als);
 	    for(unsigned iL = 0; iL < als.size(); iL++) {
 		attr = attrAt(als[iL]);
-		if(((!(attr.at().flgGlob()&Attr::IsUser) && s2i(attr.at().fld().reserve())) || attr.at().flgSelf()&Attr::VizerSpec)
-			&& ownerSess()->clkChkModif(tm, attr.at().aModif()))
+		if(attr.at().isVisual() && ownerSess()->clkChkModif(tm, attr.at().aModif()))
 		    opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
 				     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());

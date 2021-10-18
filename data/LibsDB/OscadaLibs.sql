@@ -5479,9 +5479,12 @@ Functions:
   - this [IN] — reference to the parameter object, what executing the template;
   - ctx [IN] — object of the user context, what saved between the execution cycles.
 - Processing of the discrete input in for the purpose of creating a violation and correspondingly setting the attribute err, at the condition "{st}:{lev}:{mess}", that is generation violation of the level lev and the text mess for the input status st (0|1).
+- Specific parameters redefinition in the common attribute DESCR:
+  - the first line — as description of the alarm messages;
+  - the field "CustomFlds" — specifying of the custom fields of the alarm messages in the form "CustomFlds: {CustFld0} => {CustFld1} => ... => {CustFldN}".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2','Загальний, представницький шаблон обробки окремого дискретного параметру (складного тегу) із формування сигналізації за визначеним критерієм. Шаблон формує структуру дискретного параметру (складного тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Шаблон надає окремі поля представницької структури дискретного параметру та додає поле помилки:
@@ -5500,9 +5503,12 @@ License: GPLv2','Загальний, представницький шаблон
   - this [IN] — посилання на об''єкт параметру, що виконує шаблон;
   - ctx [IN] — об''єкт користувацького контексту, що зберігається між циклами виклику.
 - Опрацювання дискретного входу in на предмет формування порушення та відповідного встановлення атрибуту err, за умови "{st}:{lev}:{mess}", тобто генерація порушення з рівнем lev та текстом mess за стану входу st (0|1).
+- Перевизначення специфічних параметрів у загальному атрибуті DESCR:
+  - перший рядок — як опис повідомлень порушень;
+  - поле "CustomFlds" — визначення користувацьких полів повідомлень порушень у формі "CustomFlds: {CustFld0} => {CustFld1} => ... => {CustFldN}".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -5544,7 +5550,7 @@ else {
 
 //Alarms forming
 if(alSup) {
-	if(f_err.toInt())	this.alarmSet(DESCR+": "+tr("SUPPRESSED"), 1);
+	if(f_err.toInt())	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("SUPPRESSED"), 1);
 	f_err = "0";
 }
 else {
@@ -5552,11 +5558,11 @@ else {
 	if(alDelay > 0 && alDelay_ <= 0 && tErr.toInt() != f_err.toInt())	tErr1 = tErr.toInt();
 	if(alDelay > 0 && alDelay_ > 0 && tErr.toInt() != tErr1)	{ alDelay_ = 0; tErr1 = tErr.toInt(); }
 	if(alDelay > 0 && alDelay_ < alDelay){ alDelay_ += 1/f_frq; return; }
-	if(tErr.toInt())	this.alarmSet(DESCR+": "+tErr.parse(1,":"), levErr);
-	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
+	if(tErr.toInt())	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tErr.parse(1,":"), levErr);
+	else	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1572284562);
+}','','',1634539389);
 INSERT INTO tmplib_base VALUES('simleBoard','Analog alarm by borders (obsolete)','Сигнал аналоговий за границями (застаріле)','Сигнал аналоговый по границам (устаревшее)','The template of simple parameter included borders and dimension variable.
 
 Author: Roman Savochenko <roman@oscada.org>

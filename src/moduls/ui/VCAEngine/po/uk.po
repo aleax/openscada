@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 11:08+0300\n"
+"POT-Creation-Date: 2021-10-17 20:30+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1272,32 +1272,32 @@ msgstr "Стор.: група"
 
 #, c-format
 msgid "The project '%s' is used now by %d sessions!"
-msgstr "Проект '%s' використовується %d сеансами!"
+msgstr "Проєкт '%s' використовується %d сеансами!"
 
 msgid "Loading the project."
-msgstr "Завантаження проекту."
+msgstr "Завантаження проєкту."
 
 msgid "Enabling the project."
-msgstr "Увімкнення проекту."
+msgstr "Увімкнення проєкту."
 
 msgid "Disabling the project."
-msgstr "Вимкнення проекту."
+msgstr "Вимкнення проєкту."
 
 #, c-format
 msgid "The page '%s' is already present!"
 msgstr "Сторінка '%s' вже присутня!"
 
 msgid "Project: "
-msgstr "Проект: "
+msgstr "Проєкт: "
 
 msgid "Page"
 msgstr "Сторінка"
 
 msgid "Project"
-msgstr "Проект"
+msgstr "Проєкт"
 
 msgid "Project DB"
-msgstr "БД проекту"
+msgstr "БД проєкту"
 
 msgid "Owner and group"
 msgstr "Власник та група"
@@ -1312,7 +1312,7 @@ msgid "Period of calculation"
 msgstr "Період обчислення"
 
 msgid "Project's session calculate period on milliseconds."
-msgstr "Період обчислення сеансу проекту у мілісекундах."
+msgstr "Період обчислення сеансу проєкту у мілісекундах."
 
 msgid "Enable as needed"
 msgstr "Вмикати за потреби"
@@ -1387,7 +1387,7 @@ msgid "Page is not a container or a template!"
 msgstr "Сторінка не є контейнером або шаблоном!"
 
 msgid "Project page: "
-msgstr "Сторінка проекту: "
+msgstr "Сторінка проєкту: "
 
 msgid "Page type"
 msgstr "Тип сторінки"
@@ -1448,7 +1448,7 @@ msgstr "Запуск сеансу."
 
 #, c-format
 msgid "Time of the styles loading from the project: %f ms."
-msgstr "Час завантаження стилів з проекту: %f мс."
+msgstr "Час завантаження стилів з проєкту: %f мс."
 
 #, c-format
 msgid "Time of the processing all the root pages: %f ms."
@@ -1588,6 +1588,9 @@ msgstr "Події: %s"
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Помилка обчислення віджета. Обробку вимкнено."
 
+msgid "Focus"
+msgstr "Фокус"
+
 msgid "Processing"
 msgstr "Обробка"
 
@@ -1673,10 +1676,10 @@ msgstr "Помилка завантаження бібліотеки відже�
 
 #, c-format
 msgid "Time of the project '%s' loading: %f ms."
-msgstr "Час завантаження проекту '%s': %f мс."
+msgstr "Час завантаження проєкту '%s': %f мс."
 
 msgid "Error loading the projects."
-msgstr "Помилка завантаження проектів."
+msgstr "Помилка завантаження проєктів."
 
 #, c-format
 msgid "Time of the library '%s' enabling: %f ms."
@@ -1684,7 +1687,7 @@ msgstr "Час включення бібліотеки '%s': %f мс."
 
 #, c-format
 msgid "Time of the project '%s' enabling: %f ms."
-msgstr "Час включення проекту '%s': %f мс."
+msgstr "Час включення проєкту '%s': %f мс."
 
 #, c-format
 msgid "The widget library '%s' is already present!"
@@ -1692,7 +1695,7 @@ msgstr "Бібліотека віджетів '%s' вже присутня!"
 
 #, c-format
 msgid "The project '%s' is already present!"
-msgstr "Проект '%s' вже присутній!"
+msgstr "Проєкт '%s' вже присутній!"
 
 #, c-format
 msgid "Connecting to the session is not permitted for '%s'."
@@ -2015,7 +2018,7 @@ msgid ""
 "period."
 msgstr ""
 "Використовуйте -1 (< 0) якщо бажаєте використання батьківського періоду "
-"обчислення віджету/сторінки/проекту."
+"обчислення віджету/сторінки/проєкту."
 
 msgid "Procedure language"
 msgstr "Мова процедури"
@@ -2136,7 +2139,7 @@ msgid ""
 "list. If set <pg> then returns the pages list for projects and sessions."
 msgstr ""
 "Повертає перелік віджетів, у контейнері віджетів, або дочірніх віджетів. "
-"Якщо встановлено <pg>, то повертається перелік сторінок проектів та сеансу."
+"Якщо встановлено <pg>, то повертається перелік сторінок проєктів та сеансу."
 
 msgid "Node presence"
 msgstr "Присутність вузлу"

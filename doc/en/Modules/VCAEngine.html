@@ -44,7 +44,8 @@
 </th></tr>
 <tr>
 <td colspan="9"> The main engine of the visual control area.
-<ul><li> <b>To Do:</b></li></ul>
+<ul><li> <b>Sponsored by, for finishing the changes obtaining mechanism on the visualisers runtime without spare requests and lost data on 1.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li>
+<li> <b>To Do:</b></li></ul>
 <dl><dd> - append the image files edition user API for raster (PNG, JPEG, GIF), by LibGD2, and vector (SVG):
 <dl><dd>+ append the images loading and saving their changes into the session table from the user procedures, allows to edit SVG (XML);</dd>
 <dd>- implement the main functions of the GD object (into <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
@@ -2836,13 +2837,14 @@ Where:
 <li> "<b>{DB_TBL}_mime</b>" — table of library resources and its widgets (structure "LibWidgetMime"), or the project and its pages (structure "ProjMime");</li>
 <li> "<b>{DB_TBL}_stl</b>" — table of values of styled parameters of the project (structure "PrjStlIO");</li>
 <li> "<b>{DB_TBL}_ses</b>" — table of data for the project execution mode, that is, sessions (the structure of "PrjSesIO").</li></ul>
-<p>Projections (structures) of basic tables are as follows:
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> <b>{DB_TBL}</b> is currently formed in the way "<b>wlb_{ID}</b>" for libraries and "<b>prj_{ID}</b>" for the projects, and the separate field <i>DB_TBL</i> of the tables "Libs", "Projs" is deprecated and will be removed in the OpenSCADA 1.0 release!
+</p><p>Projections (structures) of basic tables are as follows:
 </p>
 <ul><li> <b>Libs(<u>ID</u>, NAME, DSCR, DB_TBL, ICO)</b> — libraries of the widgets <i>ID</i>.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — identifier;</dd>
 <dd><i>NAME</i> — name;</dd>
 <dd><i>DSCR</i> — description;</dd>
-<dd><i>DB_TBL</i> — root of the tables of DB with the widgets;</dd>
+<dd><i>DB_TBL</i> (DEPRECATED) — root of the tables of DB with the widgets;</dd>
 <dd><i>ICO</i> — encoded (Base64) image of the icon of the library.</dd></dl></dd></dl>
 <ul><li> <b>LibWigets(<u>ID</u>, ICO, PARENT, PROC, PROC_PER, ATTRS, TIMESTAMP)</b> — widgets <i>ID</i> of the library.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — identifier;</dd>
@@ -2883,7 +2885,7 @@ Where:
 <dl><dd><dl><dd><i>ID</i> — identifier of the project;</dd>
 <dd><i>NAME</i> — name of the project;</dd>
 <dd><i>DSCR</i> — description of the project;</dd>
-<dd><i>DB_TBL</i> — root of the tables of DB with the pages;</dd>
+<dd><i>DB_TBL</i> (DEPRECATED) — root of the tables of DB with the pages;</dd>
 <dd><i>ICO</i> — encoded (Base64) image of the icon of the project;</dd>
 <dd><i>USER</i> — owner of the project;</dd>
 <dd><i>GRP</i> —  users group of the project;</dd>

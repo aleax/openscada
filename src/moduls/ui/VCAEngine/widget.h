@@ -84,6 +84,7 @@ class Attr
 	const string &id( ) const;
 	string name( ) const;
 	TFld::Type type( );
+	bool isVisual( )	{ return ((!(flgGlob()&Attr::IsUser) && s2i(fld().reserve())) || flgSelf()&Attr::VizerSpec); }
 	int flgGlob( );		//Global attribite's flags
 	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)mFlgSelf; }
 	uint32_t aModif( );

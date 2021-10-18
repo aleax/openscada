@@ -128,6 +128,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <a href="Libs_Documents.html#docRepMonth" title="Special:MyLanguage/Libs/Documents">Month report of the day-averaged values</a></li>
 <li> <a href="Libs_Documents.html#docRepYear" title="Special:MyLanguage/Libs/Documents">Year report of the month values</a></li>
 <li> <a href="Libs_Documents.html#docRep2WorkSh" title="Special:MyLanguage/Libs/Documents">Report of two working shifts</a></li></ul></li></ul>
+<ul><li> <b>Sponsored by, for expanding the common field DESCR using in the specific alarm parameters on 0.1 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> INSERTEC LTDA</li></ul>
 <p><b><u>Functions</u></b><br />
 </p>
 <ul><li> Generic processing of the raw analog input for:</li></ul>
@@ -1175,7 +1176,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> <span id="digAlarm" title="#digAlarm"><h3><span class="mw-headline" id="Alarm_discrete_.28digAlarm.29"><span class="mw-headline-number">1.5</span> Alarm discrete (<a href="Libs_Main.html#digAlarm" title="Special:MyLanguage/Libs/Main">digAlarm</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -1201,7 +1202,10 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <li> <i>f_frq</i> [IN] — frequency of calculation, the template IO;</li>
 <li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
 <li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
-<ul><li> Processing of the discrete input <b>in</b> for the purpose of creating a violation and correspondingly setting the attribute <b>err</b>, at the condition "<b>{st}:{lev}:{mess}</b>", that is generation violation of the level <i>lev</i> and the text <i>mess</i> for the input status <i>st</i> (0|1). What can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>.</li></ul>
+<ul><li> Processing of the discrete input <b>in</b> for the purpose of creating a violation and correspondingly setting the attribute <b>err</b>, at the condition "<b>{st}:{lev}:{mess}</b>", that is generation violation of the level <i>lev</i> and the text <i>mess</i> for the input status <i>st</i> (0|1). What can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>.</li>
+<li> Specific parameters redefinition in the common attribute <b>DESCR</b>:</li></ul>
+<dl><dd><ul><li> <i>the first line</i> — as description of the alarm messages;</li>
+<li> the field <i>CustomFlds</i> — specifying of <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the custom fields</a> of the alarm messages in the form "<b>CustomFlds: {CustFld0} =&gt; {CustFld1} =&gt; ... =&gt; {CustFldN}</b>".</li></ul></dd></dl>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
