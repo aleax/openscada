@@ -145,7 +145,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <i>min</i>, <i>max</i> [IN] — the main border IOs;</li>
 <li> <i>plcMin</i>, <i>plcMax</i> [IN] — the hardware border IOs;</li>
 <li> <i>plcImit</i>, <i>plcImitIn</i> [IN] — IOs of the simple imitation;</li>
-<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-79...0] and text of the error (the attribute "err" format);</li>
 <li> <i>f_frq</i> [IN] — frequency of calculation, the template IO;</li>
 <li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
 <li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
@@ -1198,11 +1198,11 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <ul><li> Direct obtaining, by link, of the initial state and formation of two representative states with the possibility of their inversion <b>stInv</b>.</li>
 <li> Complex preprocessing and complete generation-imitation of the discrete input on the internal programming language of OpenSCADA into the configuration IO <b>inProc</b>, where you can operate next service parameters:</li></ul>
 <dl><dd><ul><li> <i>in</i> [IN|OUT] — the same raw discrete input IO;</li>
-<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-79...0] and text of the error (the attribute "err" format);</li>
 <li> <i>f_frq</i> [IN] — frequency of calculation, the template IO;</li>
 <li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
 <li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
-<ul><li> Processing of the discrete input <b>in</b> for the purpose of creating a violation and correspondingly setting the attribute <b>err</b>, at the condition "<b>{st}:{lev}:{mess}</b>", that is generation violation of the level <i>lev</i> and the text <i>mess</i> for the input status <i>st</i> (0|1). What can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>.</li>
+<ul><li> Processing of the discrete input <b>in</b> for the purpose of creating a violation and correspondingly setting the attribute <b>err</b>, at the condition "<b>{st}:{lev}:{mess}</b>", that is violation generation of the level <i>lev</i> and the text <i>mess</i> for the input status <i>st</i> (0|1). What can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>.</li>
 <li> Specific parameters redefinition in the common attribute <b>DESCR</b>:</li></ul>
 <dl><dd><ul><li> <i>the first line</i> — as description of the alarm messages;</li>
 <li> the field <i>CustomFlds</i> — specifying of <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the custom fields</a> of the alarm messages in the form "<b>CustomFlds: {CustFld0} =&gt; {CustFld1} =&gt; ... =&gt; {CustFldN}</b>".</li></ul></dd></dl>
@@ -1421,7 +1421,7 @@ in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || stat
 <li> <i>text</i> [OUT] — direct text status setting;</li>
 <li> <i>coms</i> [IN] — list of available commands, of the corresponded IO;</li>
 <li> <i>com_text</i> [IN|OUT] — text of the received command;</li>
-<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-79...0] and text of the error (the attribute "err" format);</li>
 <li> <i>f_frq</i> [IN] — frequency of the calculation, the template IO;</li>
 <li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
 <li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>

@@ -422,8 +422,19 @@ void TController::redntDataUpdate( )
 
 string TController::catsPat( )
 {
-    return "^al"+owner().modId()+":"+id()+"(\\.|$)|^"+nodePath();
+    return "^[a-zA-Z]{2}"+owner().modId()+":"+id()+"(\\.|$)|^"+nodePath();
+    //return "^al"+owner().modId()+":"+id()+"(\\.|$)|^"+nodePath();
     //return "/^(al"+owner().modId()+":"+id()+"(\\.|$)|"+nodePath()+")/";
+}
+
+void TController::messSet( const string &mess, int lev, const string &type2Code, const string &prm, const string &cat )
+{
+    string pId = TSYS::strLine(prm, 0);
+    string pNm = TSYS::strLine(prm, 1);
+    string aCat = type2Code + owner().modId() + ":" + id() + (pId.size()?"."+pId:"") + (cat.size()?":"+cat:"");
+    string aMess = (pNm.size()?name()+" > "+pNm+": ":"") + mess;
+
+    message(aCat.c_str(), lev, aMess.c_str());
 }
 
 void TController::alarmSet( const string &mess, int lev, const string &prm, bool force )
@@ -460,8 +471,18 @@ TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, co
     if(iid == "descr")	return descr();
     // string status( ) - get controller status.
     if(iid == "status")	return getStatus();
+    // bool messSet( string mess, int lev, string type2Code = "OP", string prm = "", string cat = "") -
+    //		sets of the DAQ-sourced message <mess> with the level <lev>, for the parameter <prm> ({PrmId}),
+    //		additional category information <cat> and the type code <type2Code>.
+    //		This function forms the messages with the unified DAQ-transparency category "{type2Code}{ModId}:{CntrId}[.{PrmId}][:{cat}]"
+    if(iid == "messSet" && prms.size() >= 2) {
+	messSet(prms[0].getS(), prms[1].getI(), ((prms.size()>=3)?prms[2].getS():"OP"),
+	    ((prms.size()>=4)?prms[3].getS():""), ((prms.size()>=5)?prms[4].getS():""));
+	return true;
+    }
     // bool alarmSet( string mess, int lev = -5, string prm = "", bool force = false ) -
-    //		set alarm to message <mess> and level <lev> for parameter <prm> and omit the presence control at <force>.
+    //		sets/removes of the violation <mess> with the level <lev> (negative to set otherwise to remove), for the parameter <prm> ({PrmId}\n{PrmNm}).
+    //		The function forms the alarms with the category "al{ModId}:{CntrId}[.{PrmId}]" and the text "{CntrNm} > {PrmNm}: {MessText}".
     if(iid == "alarmSet" && prms.size() >= 1) {
 	alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit,
 	    (prms.size() >= 3) ? prms[2].getS() : "", (prms.size() >= 4) ? prms[3].getB() : false);
@@ -546,7 +567,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"root",SDAQ_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mess/lvl","",RWRW__,"root",SDAQ_ID,5,"tp","dec","dest","select",
 		"sel_id","0;1;2;3;4;5;6;7",
-		"sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+		"sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
 		"help",_("Display messages for larger or even levels.\n"
 			 "Also affects to specific-diagnostic messages generation by the data sources."));
 	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SDAQ_ID)) {

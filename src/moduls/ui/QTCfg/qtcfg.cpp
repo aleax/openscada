@@ -1428,7 +1428,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    thd_it->setData(Qt::DisplayRole, atm2s(s2i(t_linf->childGet(iEl)->text()),"%d-%m-%Y %H:%M:%S").c_str());
 			    thd_it->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
 			}
-			else thd_it->setData(Qt::DisplayRole, getPrintVal(t_linf->childGet(iEl)->text()).c_str());
+			else thd_it->setData(Qt::DisplayRole, TSYS::strEncode(t_linf->childGet(iEl)->text(),TSYS::ShieldBin).c_str());
 
 			//   Set access
 			if(!c_wr) thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
@@ -1780,7 +1780,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    // Fill Edit
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    string tVl;
-	    if(edit && !edit->isChanged() && rezReq >= 0 && ((tVl=getPrintVal(data_req.text())) != edit->text().toStdString() || !edit->text().size())) {
+	    if(edit && !edit->isChanged() && rezReq >= 0 && ((tVl=TSYS::strEncode(data_req.text(),TSYS::ShieldBin)) != edit->text().toStdString() || !edit->text().size())) {
 		int scrollPos = edit->edit()->verticalScrollBar()->value();
 		//Requesting the syntax higlihgt
 		if(s2i(t_s.attr("SnthHgl"))) {
@@ -1967,7 +1967,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_w = (LineEdit *)TSYS::str2addr(t_s.attr("addr_val_w"));
 	    }
 	    // Fill line
-	    string sval = getPrintVal(data_req.text());
+	    string sval = TSYS::strEncode(data_req.text(), TSYS::ShieldBin);
 	    if(t_s.attr("tpCh") == "hex" || (t_s.attr("tpCh").empty() && t_s.attr("tp") == "hex"))
 		sval = "0x" + QString::number(s2ll(data_req.text()),16).toUpper().toStdString();
 	    else if(t_s.attr("tpCh") == "oct" || (t_s.attr("tpCh").empty() && t_s.attr("tp") == "oct"))
@@ -2546,16 +2546,16 @@ void ConfApp::reqPrgrsSet( int cur, const QString &lab, int max )
     }
 }
 
-string ConfApp::getPrintVal( const string &vl )
+/*string ConfApp::getPrintVal( const string &vl )
 {
     bool isBool = false;
     for(unsigned iCh = 0; !isBool && iCh < vl.size(); ++iCh)
 	switch(vl[iCh]) {
-	    case 0: isBool = true; break;
+	    case 0 ... 8: isBool = true; break;
 	}
 
     return isBool ? "B["+TSYS::strDecode(vl,TSYS::Bin)+"]" : vl;
-}
+}*/
 
 bool ConfApp::compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 )	{ return v1.name < v2.name; }
 
@@ -2750,8 +2750,8 @@ void ConfApp::listBoxPopup( )
     string el_path = selPath+"/"+lbox->objectName().toStdString();
     XMLNode *n_el;
 
-    QAction *last_it, *actBr, *actAdd, *actIns, *actEd, *actDel, *actMoveUp, *actMoveDown;
-    last_it = actBr = actAdd = actIns = actEd = actDel = actMoveUp = actMoveDown = NULL;
+    QAction *last_it, *actBr, *actAdd, *actIns, *actEd, *actDel, *actMoveUp, *actMoveDown, *actCopy;
+    last_it = actBr = actAdd = actIns = actEd = actDel = actMoveUp = actMoveDown = actCopy = NULL;
 
     try {
 	n_el = SYS->ctrId(root, TSYS::strDecode(lbox->objectName().toStdString(),TSYS::PathEl));
@@ -2786,6 +2786,11 @@ void ConfApp::listBoxPopup( )
 		popup.addAction(actMoveDown);
 	    }
 	}
+	if(!lbox->selectedItems().isEmpty()) {
+	    popup.addSeparator();
+	    actCopy = last_it = new QAction(_("Copy text"),this);
+	    popup.addAction(actCopy);
+	}
 
 	if(last_it) {
 	    string p_text, p_id;
@@ -2813,7 +2818,13 @@ void ConfApp::listBoxPopup( )
 
 	    QAction *rez = popup.exec(QCursor::pos());
 	    if(!rez)	{ popup.clear(); return; }
-	    if(rez == actAdd || rez == actIns || rez == actEd) {
+
+	    if(rez == actCopy) {
+		QApplication::clipboard()->setText(lbox->selectedItems()[0]->text());
+		popup.clear();
+		return;
+	    }
+	    else if(rez == actAdd || rez == actIns || rez == actEd) {
 		ReqIdNameDlg dlg(this, this->windowIcon(), "", _("Setting the item name"));
 		vector<string> ils;
 		ils.push_back(n_el->attr("idSz")+"\n"+i2s(ind_m));
@@ -2924,7 +2935,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 	}
 	if(!tbl->selectedItems().isEmpty()) {
 	    popup.addSeparator();
-	    actCopy = last_it = new QAction(_("Copy"),this);
+	    actCopy = last_it = new QAction(_("Copy text"),this);
 	    popup.addAction(actCopy);
 	}
 

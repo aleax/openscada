@@ -41,7 +41,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.1.3"
+#define MOD_VER		"2.1.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -238,7 +238,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	}
 	else if(zero_lev == "doc") {
 	    XMLNode req(zero_lev); req.setText(TUIS::docGet("|"+TSYS::pathLev(ses.url,1),NULL,TUIS::GetPathURL));
-	    page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    page = pgCreator(iprt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
 	else {
 	    prmEl = ses.prm.find("com");
@@ -320,12 +320,12 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		    req.setAttr("path",ses.url+"/%2fobj")->setAttr("grp",gbr)->setAttr("icoCheck","1");
 		    mod->cntrIfCmd(req, ses.user);
 		}
-		page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+		page = pgCreator(iprt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	    }
 	    else if(wp_com == "info" || wp_com == "get" || wp_com == "modify") {
 		XMLNode req(wp_com); req.setAttr("path", ses.url);
 		mod->cntrIfCmd(req, ses.user);
-		page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+		page = pgCreator(iprt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	    }
 	    else if(wp_com == "img") {
 		string itp = "png";
@@ -363,13 +363,13 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     if(wp_com == "com") {
 	XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);
 	mod->cntrIfCmd(req, ses.user);
-	page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Full request to control interface
     else if(wp_com == "req") {
 	XMLNode req(""); req.load(ses.content);
 	mod->cntrIfCmd(req, ses.user);
-	page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     else if(wp_com == "img") {
 	if((cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty()) {
@@ -386,7 +386,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 
 	if(req.attr("statNm") == req.attr("statNmSrc")) {
 	    mod->cntrIfCmd(req, ses.user);
-	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
 	else {
 	    req.setAttr("rez", "0");
@@ -410,7 +410,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 		    if(mod->cntrIfCmd(reqExt,ses.user)) req.setAttr("rez", reqExt.attr("rez"))->setText(reqExt.text());
 		}
 	    }
-	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
     }
 }

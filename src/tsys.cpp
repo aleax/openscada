@@ -782,7 +782,7 @@ void TSYS::load_( )
     }
 
     bool cmd_help = (SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help"));
-    if(cmd_help) Mess->setMessLevel(7);
+    if(cmd_help) Mess->setMessLevel(TMess::Emerg);
     cfgFileLoad();
     mess_sys(TMess::Info, _("Loading."));
     cfgPrmLoad();
@@ -1525,9 +1525,23 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 			    else sout += in[iSz+1];
 		    }
 		    iSz++;
-		}
-		else sout += in[iSz];
+		} else sout += in[iSz];
 	    break;
+	case TSYS::ShieldBin: {
+	    sout.reserve(in.size());
+	    char buf[10];
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		switch(in[iSz]) {
+		    case 0 ... 8:
+		    case 0xB ... 0xC:
+		    case 0x0E ... 0x1F:
+			sprintf(buf, "\\%03o", in[iSz]);
+			sout += buf;
+			break;
+		    default: sout += in[iSz];
+		}
+	    break;
+	}
 	case TSYS::ToLower:
 	    sout.reserve(in.size());
 	    for(iSz = 0; iSz < (int)in.size(); iSz++)
@@ -2973,7 +2987,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // string strEncode( string src, string tp = "Bin", string opt1 = "" ) - String encode from <src> by <tp> and options <opt1>.
     //  src - source;
     //  tp  - encode type: "PathEl", "HttpURL", "HTML", "JavaScript", "SQL", "Custom", "Base64", "FormatPrint",
-    //			   "OscdID", "Bin", "Reverse", "ShieldSimb"
+    //			   "OscdID", "Bin", "Reverse", "ShieldSimb", "ToLower", "Limit", "ShieldBin"
     //  opt1 - option 1, symbols for "Custom"
     if(iid == "strEncode" && prms.size() >= 1) {
 	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
@@ -2992,6 +3006,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	else if(stp == "ShieldSimb")	tp = ShieldSimb;
 	else if(stp == "ToLower")	tp = ToLower;
 	else if(stp == "Limit")		tp = Limit;
+	else if(stp == "ShieldBin")	tp = ShieldBin;
 	else return "";
 	return strEncode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
     }
@@ -3127,7 +3142,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7",
-		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+		    "sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
 		    "help",_("Least messages level which is procesed by the program."));
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",_("To syslog"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",_("To stdout"),RWRWR_,"root","root",1,"tp","bool");

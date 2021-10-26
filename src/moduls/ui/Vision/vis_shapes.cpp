@@ -581,7 +581,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			bool isH = false;
 			QTableWidgetItem *hit = NULL, *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
-			if(!isH && (int)iR >= wdg->rowCount()) { wdg->setRowCount(iR+1); if(!wdg->rowCount()) toReFit = true; }
+			if(!isH && (int)iR >= wdg->rowCount()) { wdg->setRowCount(iR+1); toReFit = true; }	//!!!! Column width must be refitted at adding rows also
 			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); rPrec = tR->attr("prec"); }
 			for(unsigned iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR->childSize()) ||
 								    (int)iC < wdg->columnCount(); iCh1++)

@@ -1,3 +1,32 @@
+2021-10-26 Roman (stable)
+- FIX:LibsDB.OscadaLibs: tmplib_base.anUnif fixed in processing the default alarm levels
+    after the last expanding by the DESCR option "CustomAlarms".
+- !!!:LibsDB.vcaBase: wlb_Main.{alarmsAct,alarmsSt}: Adapted to process of sublevels of the main levels.
+    !!: wlb_Main.alarmsAct: Appended for the field "messCat" of specifying the alarm categories.
+    !!: wlb_Main.ElCadr: Adapted for the user action messages forming by the new DAQ-function messSet()
+	with the unified category structure for transferring between OpenSCADA stations of different levels.
+    !: wlb_doc.docUsersSet: Initially adapted to the new DAQ-transferred category structure.
+- !!!!:SYS,*: Generic adaption to sublevels {Main}[0...9] of the main message levels [0...7].
+    !!:XMLNode: Appended of the new saving option BinShield(0x400) for controlable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F],
+	what is significant for the WebBrowsers.
+    !: The common encoding function strEncode() and the User API one
+	appended the variant "ShieldBin" of shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].
+- !!!!:DAQ: Specified for the DAQ-transparency messages in the category form "{TP}{ModId}:{CntrId}[.{prm}][:{spec}]".
+    Appended of such messages creation function TController::messSet()
+	and the User API functions SYS.DAQ["Modul"]["Controller"].messSet(), SYS.DAQ["Modul"]["Controller"]["Parameter"].messSet().
+- !!:DAQ.Siemens: Appended of the new option "Maximum size of the request block, bytes" of specifying the maximum requesting block,
+	due to a problem observing when PLC returns the error "incorrect PDU size" at reading blocks about 200 bytes.
+- UI.{QTCfg,WebCfgD}: Items of the List element enabled for the word wrapping.
+- UI.QTCfg: The List element context menu appended of the text item copy function.
+    The text copy function of Tables renamed to "Copy text".
+    The binary symbols encoding of the text fields moved to use the new variant "ShieldBin" of the TSYS::strEncode() function.
+- !:FIX:UI.VCAEngine: Prevented in the attribute values inheriting for the output links,
+    then do not write to DAQ the obviosly wrong values at the hot edition of running projects and their items.
+- FIX:UI.Vision: The view Table of the primitive FormEl fixed in the table refitting at adding first row and adding rows in whole.
+- !!:UI.WebVision: Appended for the FrontEnd status display in the session status field with that requesting-scheduling at display the field.
+- FIX:UI.WebCfgD: Appended of encoding the XML traffic for the binary symbols shielding using the new option "BinShield".
+
+
 2021-10-18 Roman (stable)
 - !!:LibsDB.OscadaLibs: tmplib_base.digAlarm: Expanded in the common field DESCR using for the specific parameters redefinition
     by the new fields "CustomFlds".
@@ -52,7 +81,7 @@
 
 2021-10-04 Roman (stable)
 - !!:LibsDB.OscadaLibs: tmplib_base.anUnif: Expanded in the common field DESCR using for the specific parameters redefinition
-    by the new fields "CustomFlds" and "CustomAlarms"
+    by the new fields "CustomFlds" and "CustomAlarms".
 - !!:FIX:LibsDB.vcaBase: wlb_Main.{alarmsAct,alarmsSt}: Expanded by the new user field "Type" as name of the alarm level
 	from the new configuration attribute "types".
     !: Expanded in the alarm level show up to 128 and coloring up to 9 levels.

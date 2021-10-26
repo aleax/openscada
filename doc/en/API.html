@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=67576&amp;diff=67582" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (2% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (2% translated)">українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -227,13 +227,14 @@ Information variables of the program:
 <li> <i>JavaSc</i> — end of line character for JavaScript;</li>
 <li> <i>SQL</i> — SQL-query value;</li>
 <li> <i>Custom</i> — selective coding of the specified characters;</li>
-<li> <i>base64</i> — Mime encoding in the standard Base64;</li>
-<li> <i>FormatPrint</i> — Coding/masking of the formating elements for functions like "printf";</li>
-<li> <i>oscdID</i> — coding of the nodes' identifiers.</li>
-<li> <i>Bin</i> — Encoding of the binary data in text and vice versa.</li>
-<li> <i>Reverse</i> — Invert the order of characters in the line.</li>
-<li> <i>ShieldSimb</i> — Shielded symbols like "\n" encoding to real code.</li>
-<li> <i>ToLower</i> — Convert to lower case.</li></ul>
+<li> <i>base64</i> — encoding in the standard Base64;</li>
+<li> <i>FormatPrint</i> — coding/masking of the formating elements for functions like "printf";</li>
+<li> <i>oscdID</i> — coding of the nodes' identifiers;</li>
+<li> <i>Bin</i> — encoding of the binary data in text and vice versa;</li>
+<li> <i>Reverse</i> — invert the order of characters in the line;</li>
+<li> <i>ShieldSimb</i> — shielded symbols like to "\n" encoding to real code;</li>
+<li> <i>ToLower</i> — convert to the lower case;</li>
+<li> <i>ShieldBin</i> — shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li></ul>
 <p>Types of representations of the integer in the function TSYS::int2str(), and TSYS::ll2str() (enum — TSYS::IntView):
 </p>
 <ul><li> <i>Dec</i> — decimal;</li>
@@ -451,7 +452,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>Crit</i> (5) — critical situation;</li>
 <li> <i>Alert</i> (6) — alert;</li>
 <li> <i>Emerg</i> (7) — emergency;</li>
-<li> <i>MaxLev</i> (99) — maximum message level, where [0...7] are the standard named levels and more are the extended ones.</li></ul>
+<li> <i>MaxLev</i> (79) — maximum message level, where [0...7] are the generic named levels and the second digit is them sub-levels.</li></ul>
 <p>Direction for the messages (enum — TMess::Direct):
 </p>
 <ul><li> <i>DIR_SYSLOG</i> (0x1) — to SYSLOG;</li>
@@ -504,8 +505,9 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>string lang( );</i> — Language of the system, as en_US.UTF-8. </li>
 <li> <i>string lang2Code( );</i> — Language of the system in bi-symbolic codepage (en). </li>
 <li> <i>string &amp;charset( );</i> — The system codepage. </li>
-<li> <i>int logDirect( );</i> — Receivers to whom the system messages (stdout, stderr, syslog, archive) are sent; </li>
-<li> <i>int messLevel( );</i> — The level below which the messages are ignored. </li>
+<li> <i>int logDirect( );</i> — Receivers to whom the system messages (stdout, stderr, syslog, archive) are sent.</li>
+<li> <i>int messLevel( );</i> — The level below which the messages are ignored.</li>
+<li> <i>static bool messLevelTest( int8_t condLev, int8_t messLev );</i> — The message level testing for <i>messLev</i> &gt;= <i>condLev</i> counting the message sub-levels — the second digit, where <i>condLev</i> is ±[0...7] and <i>messLev</i> is ±[0...79].</li>
 <li> <i>string selDebCats( );</i> — Selected debug categories (by separated ';' list).</li>
 <li> <i>bool isUTF8( );</i> — Internal codepage is UTF-8.</li>
 <li> <i>void setLang( const string &amp;lang, bool init = false );</i> — Setting of the system language (localization). </li>
@@ -894,7 +896,8 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void setRedntRun( const string &amp;vl );</i> — Setting the configuration of the preferred execution.</li>
 <li> <i>virtual void redntDataUpdate( );</i> — An operation of the data receiving from the backup station execution. It is called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
 <li> <i>virtual string catsPat( );</i> — regular expression rules separated '|' list for the object's generated messages math by category.</li>
-<li> <i>void alarmSet( const string &amp;mess, int lev = -TMess::Crit, const string &amp;prm = "", bool force = false );</i> — Formation of an alarms (a violation) for the parameter object <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>), or the controller object in whole if the object is not specified, the message <i>mess</i> and level <i>lev</i>. The negative value of the level <i>lev</i> is used to set and positive for removal of the violation. This function generates the violation and message with a category <b>al{ModId}:{CntrId}[.{prm}]</b> and the text <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>. The alarms clearance, as the setting also, works in the toggling mode, so means of passing the clearance messages to the message buffer, and the same clearance, only at the according violations presence, what may be disabled setting <i>force</i>.</li>
+<li> <i>void messSet( const string &amp;mess, int lev, const string &amp;type2Code = "OP", const string &amp;prm = "", const string &amp;cat = "" );</i> — Formation of the DAQ-sourced messages for the parameter object <i>prm</i> (<b>{PrmId}</b>), or the controller object in whole if the object is not specified, the message <i>mess</i>, level <i>lev</i> and for the type code <i>type2Code</i>. This function generates the messages with the unified DAQ-transparency category <b>{type2Code}{ModId}:{CntrId}[.{prm}][:{cat}]</b>.</li>
+<li> <i>void alarmSet( const string &amp;mess, int lev = -TMess::Crit, const string &amp;prm = "", bool force = false );</i> — Formation of alarms (a violation) for the parameter object <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>), or the controller object in whole if the object is not specified, the message <i>mess</i> and level <i>lev</i>. The negative value of the level <i>lev</i> is used to set and positive for removal of the violation. This function generates the violation and message with the category <b>al{ModId}:{CntrId}[.{prm}]</b> and the text <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>. The alarms clearance, as the setting also, works in the toggling mode, so means of passing the clearance messages to the message buffer, and the same clearance, only at the according violations presence, what may be disabled setting <i>force</i>.</li>
 <li> <i>TTypeDAQ &amp;owner( ) const;</i> — The type of the data source (module) - the owner of the controller.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
@@ -3134,21 +3137,22 @@ Named rights of access to control elements (definition):
 <p><b>Data:</b><br />
 Options for XML-file loading (enum — XMLNode::LoadFlgs):
 </p>
-<ul><li> <i>XMLNode::LD_Full</i> — load XML full;</li>
-<li> <i>XMLNode::LD_NoTxtSpcRemEnBeg</i> — no remove spaces for begin and end tag's text, for not full mode.</li></ul>
+<ul><li> <i>XMLNode::LD_Full</i> (0x01) — load XML full;</li>
+<li> <i>XMLNode::LD_NoTxtSpcRemEnBeg</i> (0x02) — no remove spaces for begin and end tag's text, for not full mode.</li></ul>
 <p>Options of the function of XML-file generation (enum - XMLNode::SaveView):
 </p>
-<ul><li> <i>XMLNode::BrOpenPrev</i> — insert the end of the line before the opening tag;</li>
-<li> <i>XMLNode::BrOpenPast</i> — insert the end of the line after the opening tag;</li>
-<li> <i>XMLNode::BrClosePast</i> — insert the end of the line after the closing tag;</li>
-<li> <i>XMLNode::BrTextPast</i> — insert the end of the line after the tag text;</li>
-<li> <i>XMLNode::BrSpecBlkPast</i> — insert the end of the line after the computed instruction;</li>
-<li> <i>XMLNode::BrAllPast</i> — insert the end of the line after the all elements;</li>
-<li> <i>XMLNode::XMLHeader</i> — insert the standard xml-header;</li>
-<li> <i>XMLNode::Clean</i> — result clean from comments and procedure insertions;</li>
-<li> <i>XMLNode::XHTMLHeader</i> — insert the standard XHTML-header;</li>
-<li> <i>XMLNode::MissTagEnc</i> — to miss for tags name encoding.</li>
-<li> <i>XMLNode::MissAttrEnc</i> — to miss for attributes name encoding.</li></ul>
+<ul><li> <i>XMLNode::BrOpenPrev</i> (0x01) — insert the end of the line before the opening tag;</li>
+<li> <i>XMLNode::BrOpenPast</i> (0x02) — insert the end of the line after the opening tag;</li>
+<li> <i>XMLNode::BrClosePast</i> (0x04) — insert the end of the line after the closing tag;</li>
+<li> <i>XMLNode::BrTextPast</i> (0x08) — insert the end of the line after the tag text;</li>
+<li> <i>XMLNode::BrSpecBlkPast</i> (0x10) — insert the end of the line after the computed instruction;</li>
+<li> <i>XMLNode::BrAllPast</i> (0x1E) — insert the end of the line after the all elements;</li>
+<li> <i>XMLNode::XMLHeader</i> (0x20) — insert the standard xml-header;</li>
+<li> <i>XMLNode::XHTMLHeader</i> (0x40) — insert the standard XHTML-header;</li>
+<li> <i>XMLNode::Clean</i> (0x80) — result clean from comments and procedure insertions;</li>
+<li> <i>XMLNode::MissTagEnc</i> (0x100) — to miss for tags name encoding;</li>
+<li> <i>XMLNode::MissAttrEnc</i> (0x200) — to miss for attributes name encoding;</li>
+<li> <i>XMLNode::BinShield</i> (0x400) — shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>XMLNode( const string &amp;name = "" );</i> — Initialization of the tag with the <i>name</i>.</li>

@@ -428,8 +428,15 @@ TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, co
 {
     // TCntrNodeObj cntr() - get the controller node
     if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
+    // bool messSet( string mess, int lev, string type2Code = "OP", string cat = "") -
+    //		sets of the DAQ-sourced message <mess> with the level <lev>, for the parameter.
+    if(iid == "messSet" && prms.size() >= 2) {
+	owner().messSet(prms[0].getS(), prms[1].getI(), ((prms.size()>=3)?prms[2].getS():"OP"),
+	    ownerPath(true), ((prms.size()>=4)?prms[3].getS():""));
+	return true;
+    }
     // bool alarmSet( string mess, int lev = -5, bool force = false ) -
-    //		set alarm to message <mess> and level <lev> and omit the presence control at <force>.
+    //		sets/removes of the violation <mess> with the level <lev> (negative to set otherwise to remove) for the parameter.
     if(iid == "alarmSet" && prms.size() >= 1) {
 	owner().alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit,
 	    ownerPath(true)+"\n"+name(), (prms.size() >= 3) ? prms[2].getB() : false);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 09:39+0300\n"
+"POT-Creation-Date: 2021-10-25 16:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,6 +57,9 @@ msgid "CPU slot of the PLC"
 msgstr ""
 
 msgid "CIF board"
+msgstr ""
+
+msgid "Maximum size of the request block, bytes"
 msgstr ""
 
 msgid "Logical"

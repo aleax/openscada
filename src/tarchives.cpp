@@ -54,7 +54,7 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1"));
     elMess.fldAdd(new TFld("CATEG",_("Messages categories"),TFld::String,0,"100"));
     elMess.fldAdd(new TFld("LEVEL",_("Messages level"),TFld::Integer,TFld::Selectable,"1","0",
-	"0;1;2;3;4;5;6;7",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
+	"0;1;2;3;4;5;6;7",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])")));
     elMess.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
     elMess.fldAdd(new TFld("REDNT",_("Redundant"),TFld::Boolean,0,"1","0"));
     elMess.fldAdd(new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>"));
@@ -519,7 +519,7 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
     unsigned iBuf = headBuf;
     while(level >= 0 && (arch.empty() || archMap[ARCH_BUF]) /*&& SYS->sysTm() < upTo*/) {
 	if(mBuf[iBuf].time >= bTm && mBuf[iBuf].time && mBuf[iBuf].time <= eTm &&
-		abs(mBuf[iBuf].level) >= level && re.test(mBuf[iBuf].categ)) {
+		TMess::messLevelTest(level,mBuf[iBuf].level) && re.test(mBuf[iBuf].categ)) {
 	    //Unsorted, but can be wrong for some internal procedures waiting for the last message in the end
 	    //recs.push_back(mBuf[iBuf]);
 	    //Sorted
@@ -555,7 +555,7 @@ time_t TArchiveS::messGet( time_t bTm, time_t eTm, vector<TMess::SRec> &recs,
 	vector< pair<int64_t,TMess::SRec* > > mb;
 	for(map<string,TMess::SRec>::iterator p = mAlarms.begin(); p != mAlarms.end() /*&& SYS->sysTm() < upTo*/; p++)
 	    if((p->second.time >= bTm || bTm == eTm) && p->second.time <= eTm &&
-		    p->second.level >= abs(level) && re.test(p->second.categ))
+		    TMess::messLevelTest(level,p->second.level) && re.test(p->second.categ))
 		mb.push_back(pair<int64_t,TMess::SRec* >(FTM(p->second),&p->second));
 	sort(mb.begin(), mb.end());
 	for(unsigned iB = 0; iB < mb.size(); iB++) {
@@ -1024,8 +1024,8 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/m_arch/view/size","",RWRW__,"root",SARH_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl","",RWRW__,"root",SARH_ID,5,"tp","dec", "dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7;-1;-2;-3;-4;-5;-6;-7",
-		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);"
-			         "Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"),
+		    "sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X]);"
+			         "Information (1[X]), ALARMS;Notice (2[X]), ALARMS;Warning (3[X]), ALARMS;Error (4[X]), ALARMS;Critical (5[X]), ALARMS;Alert (6[X]), ALARMS;Emergency (7[X]), ALARMS"),
 		    "help",_("Receiving messages with a level greater or equal to the specified."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",TMess::labMessCat());
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivers"),RWRW__,"root",SARH_ID,4,"tp","str","dest","sel_ed","select","/m_arch/lstAMess",
@@ -1381,13 +1381,14 @@ void TMArchivator::redntDataUpdate( )
     bool isInitial = !lstRdMess.time;
     if(isInitial) lstRdMess = TMess::SRec(vmax(0,(end()?end():SYS->sysTm())-(time_t)(owner().owner().rdRestDtOverTm()*86400)));
 
-    //First start replay of the local archive for active messages
-    /*if(mRdFirst && end() > lstRdMess.time) {
+    //First start replay of the local archive for the active alarms invoking time update
+    //!!!! But that is spare since of reading all active alarms before
+    /*if(isInitial && end() > lstRdMess.time) {
 	get(lstRdMess.time, end(), mess);
-	owner().owner().messPut(mess, ARCH_ALRM);
+	owner().owner().messPut(mess, ARCH_ALRM_CH);
     }*/
 
-    //Prepare and call request for messages
+    //Preparing and call the request for messages
     // end()+1 used for decrease traffic by request end() messages in each cycle. The messages in <= end() will transfer direct.
     XMLNode req("get");
     req.setAttr("path", nodePath()+"/%2fserv%2fmess")->
@@ -1492,9 +1493,9 @@ bool TMArchivator::chkMessOK( const string &icateg, int8_t ilvl )
 
     categ(cat_ls);
 
-    if(abs(ilvl) >= level())
-	for(unsigned i_cat = 0; i_cat < cat_ls.size(); i_cat++)
-	    if(TRegExp(cat_ls[i_cat], "p").test(icateg))
+    if(TMess::messLevelTest(level(),ilvl))
+	for(unsigned iCat = 0; iCat < cat_ls.size(); iCat++)
+	    if(TRegExp(cat_ls[iCat], "p").test(icateg))
 		return true;
 
    return false;
@@ -1571,7 +1572,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/mess/size","",RWRW__,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mess/lvl","",RWRW__,"root",SARH_ID,5,"tp","dec", "dest","select",
 		"sel_id","0;1;2;3;4;5;6;7",
-		"sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+		"sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
 		"help",_("Receiving messages with a level greater or equal to the specified."));
 	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str", "help",TMess::labMessCat());
 	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SARH_ID)) {

@@ -441,7 +441,9 @@ void Widget::inheritAttr( const string &iattr )
 	attr.at().setCfgVal(pattr.at().cfgVal());
 
 	//The value in the end
-	if(!(attr.at().flgGlob()&(Attr::OnlyRead|Attr::NotStored)))
+	if(!(attr.at().flgGlob()&(Attr::OnlyRead|Attr::NotStored)) &&
+		!(attr.at().flgSelf()&Attr::CfgLnkOut))	//!!!! Do not get values from parent for output links,
+							//     what can cause wrong value writing to DAQ
 	    switch(attr.at().type()) {
 		case TFld::Boolean:	attr.at().setB(pattr.at().getB(), attr.at().flgGlob()&Attr::Active);	break;
 		case TFld::Integer:	attr.at().setI(pattr.at().getI(), attr.at().flgGlob()&Attr::Active);	break;

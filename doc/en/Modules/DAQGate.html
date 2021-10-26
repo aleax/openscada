@@ -47,15 +47,20 @@
 <ul><li> <b>Sponsored by, for asynchronous writing, improving commonly and in messaging with alarming on 0.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> INSERTEC LTDA, Vinnica Poultry Farm</li></ul>
 </td></tr></table>
 <p>Main function of this module is the data reflection of <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem "Data acquisition"</a> of the remote OpenSCADA stations on the local ones. In its work, the module uses the <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA self protocol</a> and service functions of the subsystem "Data acquisition".
-</p><p>The module realizes following functions:
+</p><p>The module realises the following functions:
 </p>
-<ul><li> Reflection of the parameters structure of the subsystem "Data acquisition" of the remote station. This structure can be periodically synchronized while working.</li>
+<ul><li> Reflection of the parameters structure of the subsystem "Data acquisition" of the remote station. This structure can be periodically synchronised while working.</li>
 <li> Access to the parameters configuration. Configuration of the controllers parameters of the remote stations is transparently reflected that lets you to change it remotely.</li>
 <li> Access to the current values of the parameters attributes and the possibility of their modification. Values of the parameters attributes are updated at a periodicity of execution of the local controller object. Requests for modification of the attributes are transmitted to the remote station.</li>
-<li> Reflection of the value archives of individual attributes of the parameters. The archives reflection is realized in two ways. The first method includes creating of the local archive for the attribute and its synchronization with the remote one, at the same time, there provided the archive recovering at the time of the remote station's inaccessibility. The second method is the translation of the requests of the local archive to the one of the remote station.</li>
-<li> Messages reflection from selected data sources of the remote station to local messages archive with the prefix "{Station}:", including violations (negative reports).</li>
-<li> Provides implementation of the vertical redundancy mechanism as an opportunity to reflect data from the multiple stations at the same level.</li>
-<li> Realization of the horizontal redundancy functions, that is working in the conjunction with the remote station of the same level.</li></ul>
+<li> Reflection of the value archives of individual attributes of the parameters. The archives reflection is realised in two ways:</li></ul>
+<dl><dd><ol><li> means the local archive creating for the attribute and its synchronisation with the remote one, at the same time, there provided the archive recovering at the time of the remote station's inaccessibility;</li>
+<li> means the translation of the requests of the local archive to the one of the remote station.</li></ol></dd></dl>
+<ul><li> Messages reflection from selected data sources of the remote station to local messages archive with the prefix "{Station}:", including violations (the negative level). The initial synchronisation procedure involves in general:</li></ul>
+<dl><dd><ol><li> requesting for all active alarms;</li>
+<li> requesting for messages of the specified sources on the depth specified by the parameter "Maximum depth of data of the archive values and messages to restore when start" and up to the time of the previous request, so all new alarms won't definitely appear;</li>
+<li> coming to the normal mode of tracing new messages and alarms about the specified sources.</li></ol></dd></dl>
+<ul><li> Provides implementation of the vertical redundancy mechanism as an opportunity to reflect data from the multiple stations at the same level.</li>
+<li> Realisation of the horizontal redundancy functions, that is working in the conjunction with the remote station of the same level.</li></ul>
 <p>Using of the available redundancy schemes is graphically represented in Figure 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:515px;"><a class="image" href="http://oscada.org/wiki/File:DAQ_red.png"><img class="thumbimage" height="351" src="../files/DAQ_red.png" width="513" /></a>  <div class="thumbcaption">Fig.1. Horizontal and vertical redundancy.</div></div></div></div>
@@ -100,13 +105,14 @@
 <p>In work with this module, in general, the following order is recommended:
 </p>
 <ul><li> For the time of active development, and thus to change the parameters structure of the remote station, it is necessary to enable synchronization with intervals of 60 seconds and to allow the deletion of parameters and attributes.</li>
-<li> Before starting up in the production, you need to: disable synchronization, by interval 0, prevent the removal of parameters and attributes, and save the current parameters structure by saving the controller object. This is to minimize traffic and load the remote station for the exchanging, which is especially important for high-loaded PLC, since synchronization, although it distributes the synchronization of individual parameters by the cycles of the exchange, but still is a resource-intensively function.</li>
+<li> Before starting up in the production, you need to: disable the periodic synchronisation (by interval <b>0</b>) or at the start also (by interval <b>-1</b>), prevent the removal of parameters and attributes and save the current parameters structure by saving the controller object. This is to minimise traffic and load the remote station for the exchanging, which is especially important for high-loaded PLC, since synchronisation, although it distributes the synchronisation of individual parameters by the cycles of the exchange, still is a resource-intensively function.</li>
 <li> Performance of service changes of the structure should be carried out as follows:
-<ul><li> the parameters structure of the remote station changes;</li>
-<li> synchronization is enabled, its period of 10 seconds is set;</li>
-<li> these 10 seconds are expected to be synchronized and checked for execution, by the changes presence;</li>
-<li> synchronization is disabled, its period of 0 seconds is set;</li>
-<li> the mirrored parameters structure is saved, while the controller object of the gateway is stored.</li></ul></li></ul>
+<ul><li> change the parameters structure of the remote station;</li>
+<li> set the sync periodicity to <b>0</b>, if was set <b>-1</b>;</li>
+<li> restart the controller object, that is toggle the state "Running";</li>
+<li> wait for the sync finish, that is disappearance from the controller object state for "Sync".</li>
+<li> return back the sync periodicity to the previous value;</li>
+<li> save the mirrored parameters structure by storing the controller object of the gateway.</li></ul></li></ul>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">4</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Daq_red.odg" title="File:Daq red.odg">Diagram: Horizontal and vertical redundancy.</a></li></ul>
 

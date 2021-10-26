@@ -42,7 +42,7 @@ using namespace VCA;
 //*************************************************
 //* VCASess					  *
 //*************************************************
-VCASess::VCASess( const string &iid ) : toRemoveSelf(false), mId(iid)
+VCASess::VCASess( const string &iid ) : toRemoveSelf(false), fStatusOrder(false), fStatusText(dataRes()), mId(iid)
 {
     open_ses = lst_ses_req	= time(NULL);
     id_objs	= grpAdd("obj_");
@@ -141,7 +141,8 @@ void VCASess::getReq( SSess &ses )
 	    req.childGet(0)->setAttr("per", req.childGet(1)->text())->
 			    setAttr("alarmSt", req.childGet(2)->attr("alarmSt"))->
 			    setAttr("cachePgSz", i2s(mod->cachePgSz()))->
-			    setAttr("cachePgLife", r2s(mod->cachePgLife()));
+			    setAttr("cachePgLife", r2s(mod->cachePgLife()))->
+			    setAttr("fStatusOrder", fStatusOrder?"1":"");
 
 	    // Getting opened pages from the cache
 	    for(unsigned iP = 0; iP < req.childGet(0)->childSize(); iP++)
@@ -308,6 +309,8 @@ void VCASess::postReq( SSess &ses )
 	    }
 	}
     }
+    //Frontend status
+    else if(wp_com == "fStatus") fStatusText = ses.content, fStatusOrder = false;
     else if(wp_com == "obj" && objProc(oAddr=TSYS::path2sepstr(ses.url),ses)) objAt(oAddr).at().postReq(ses);
 
     if(ses.page.empty())

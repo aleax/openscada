@@ -34,8 +34,6 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define MaxLenReq	240
-
 using std::string;
 using std::vector;
 using namespace OSCADA;
@@ -258,7 +256,8 @@ class TMdContr: public TController
 		&mType,			//Connection type
 		&mSlot,
 		&mDev,			//CIF device number
-		&restTm;		//Restore timeout in seconds
+		&restTm,		//Restore timeout in seconds
+		&blkMaxSz;		//Maximum request block size
 	char	&mAssincWR;		//Asynchronous write mode
 	int64_t	mPer;
 

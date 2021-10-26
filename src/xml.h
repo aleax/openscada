@@ -56,7 +56,8 @@ class XMLNode
 	    XHTMLHeader		= 0x40,		//Include standard XHTML header
 	    Clean		= 0x80,		//Clean service tags: <??>, <!-- -->
 	    MissTagEnc		= 0x100,	//Omit for tag's name encoding
-	    MissAttrEnc		= 0x200		//Omit for attribute's name encoding
+	    MissAttrEnc		= 0x200,	//Omit for attribute's name encoding
+	    BinShield		= 0x400		//Shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F]
 	};
 
 	//Methods

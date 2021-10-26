@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.3.0"
+#define MOD_VER		"4.4.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -102,6 +102,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("ADDR_TR",_("Output transport"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SLOT",_("CPU slot of the PLC"),TFld::Integer,TFld::NoFlag,"2","2","0;30"));
     fldAdd(new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3"));
+    fldAdd(new TFld("MAX_BLKSZ",_("Maximum size of the request block, bytes"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
     //Parameter type DB structure
     // Logical parameter type by the DAQ parameter template
@@ -452,7 +453,9 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
 	::TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mType(cfg("TYPE").getId()),
-	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()), restTm(cfg("TM_REST").getId()), mAssincWR(cfg("ASINC_WR").getBd()),
+	mSlot(cfg("SLOT").getId()), mDev(cfg("CIF_DEV").getId()),
+	restTm(cfg("TM_REST").getId()), blkMaxSz(cfg("MAX_BLKSZ").getId()),
+	mAssincWR(cfg("ASINC_WR").getBd()),
 	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), isInitiated(false), alSt(-1), conErr(dataRes()), mInvokeID(-1),
 	di(NULL), dc(NULL), enRes(true), numR(0), numW(0), numErr(0), tmDelay(0)
 {
@@ -596,14 +599,14 @@ void TMdContr::regVal( const string &iaddr, bool wr )
 	if(db < acqBlks[iB].db) break;
 	else if(acqBlks[iB].db == db) {
 	    if(off < acqBlks[iB].off) {
-		if((acqBlks[iB].val.size()+acqBlks[iB].off-off) < MaxLenReq) {
+		if((acqBlks[iB].val.size()+acqBlks[iB].off-off) < blkMaxSz) {
 		    acqBlks[iB].val.insert(0, acqBlks[iB].off-off, 0);
 		    acqBlks[iB].off = off;
 		}
 		else acqBlks.insert(acqBlks.begin()+iB,SDataRec(db,off,ivSz));
 	    }
 	    else if((off+ivSz) > (acqBlks[iB].off+(int)acqBlks[iB].val.size())) {
-		if((off+ivSz-acqBlks[iB].off) < MaxLenReq)
+		if((off+ivSz-acqBlks[iB].off) < blkMaxSz)
 		    acqBlks[iB].val.append((off+ivSz)-(acqBlks[iB].off+acqBlks[iB].val.size()), 0);
 		else continue;
 	    }
@@ -622,7 +625,7 @@ void TMdContr::regVal( const string &iaddr, bool wr )
 	    else if(writeBlks[iB].db == db) {
 		if(off < writeBlks[iB].off) {
 		    if((off+ivSz) >= writeBlks[iB].off &&
-			    (writeBlks[iB].val.size()+writeBlks[iB].off-off) < MaxLenReq)
+			    (writeBlks[iB].val.size()+writeBlks[iB].off-off) < blkMaxSz)
 		    {
 			writeBlks[iB].val.insert(0,writeBlks[iB].off-off,0);
 			writeBlks[iB].off = off;
@@ -631,7 +634,7 @@ void TMdContr::regVal( const string &iaddr, bool wr )
 		}
 		else if((off+ivSz) > (writeBlks[iB].off+(int)writeBlks[iB].val.size())) {
 		    if(off <= (writeBlks[iB].off+(int)writeBlks[iB].val.size()) &&
-			    (off+ivSz-writeBlks[iB].off) < MaxLenReq) {
+			    (off+ivSz-writeBlks[iB].off) < blkMaxSz) {
 			writeBlks[iB].val.append((off+ivSz)-(writeBlks[iB].off+writeBlks[iB].val.size()),0);
 			//Check for allow mergin to next block
 			if(iB+1 < writeBlks.size() && writeBlks[iB+1].db == db &&
@@ -1615,6 +1618,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR_TR",EVAL_STR,RWRWR_,"root",SDAQ_ID,3, "dest","select", "select","/cntr/cfg/trLst",
 		"help",_("OpenSCADA output transport for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests."));
 	else ctrRemoveNode(opt, "/cntr/cfg/ADDR_TR");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/MAX_BLKSZ",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
 

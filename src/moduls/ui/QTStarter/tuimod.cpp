@@ -57,7 +57,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.11.5"
+#define MOD_VER		"5.11.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -179,7 +179,7 @@ void TUIMod::postEnable( int flag )
 
 	splashSet(SPLSH_START);
     }
-    //Start main Qt thread if no help and no daemon
+    //Start main Qt thread if not help and not daemon
     else if(!(runSt || hideMode)) {
 	mEndRun = false;
 	SYS->taskCreate(nodePath('.',true), 0, Task, this);

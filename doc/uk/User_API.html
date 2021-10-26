@@ -400,7 +400,8 @@ var OK = re.test("12/30/1969"); </pre></li>
 <dd>0x40 — вставляти стандартний XHTML-заголовок;</dd>
 <dd>0x80 — очищати сервісні теги: &lt;??&gt;, &lt;!-- --&gt;;</dd>
 <dd>0x100 — не кодувати назви тегів;</dd>
-<dd>0x200 — не кодувати назви атрибутів.</dd></dl></dd></dl>
+<dd>0x200 — не кодувати назви атрибутів;</dd>
+<dd>0x400 — захист бінарних символів [\x0-\x8\xB-\xC\x0E-\x1F].</dd></dl></dd></dl>
 <ul><li> <i>XMLNodeObj getElementBy( string val, string attr = "id" )</i> — отримує елемент з дерева за атрибутом <i>attr</i> зі значенням <i>val</i>.</li>
 <li> <i>TArrayObj&lt;XMLNodeObj&gt; getElementsBy( string tag, string attrVal = "", string attr = "id" )</i> — отримує масив елементів з дерева за тегом <i>tag</i> (порожній для всіх) та атрибутом <i>attr</i> зі значенням <i>attrVal</i> (порожні для пропуску).</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.B0-.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.28SYS.29"><span class="mw-headline-number">3</span> <span id="SYS" title="#SYS">Програма-система (SYS)</span></span></h2>
@@ -468,7 +469,8 @@ SYS.cntrReq(req); </pre></li>
 <dd>"Reverse" — інверсія послідовності;</dd>
 <dd>"ShieldSimb" — захищені символи типу '\a', '\b', ..., '\0NNN', '\xNN' у бінарне представлення;</dd>
 <dd>"ToLower" — символи до нижнього регістру;</dd>
-<dd>"Limit" — обмеження рядку довжиною у <i>opt1</i>, враховуючи змінну довжину UTF-8.</dd></dl>
+<dd>"Limit" — обмеження рядку довжиною у <i>opt1</i>, враховуючи змінну довжину UTF-8;</dd>
+<dd>"ShieldBin" — захист бінарних символів [\x0-\x8\xB-\xC\x0E-\x1F].</dd></dl>
 </li>
 <li><i>string strDecode( string src, string tp = "Bin", string opt1 = "" );</i> — декодує рядок <i>src</i> за правилом <i>tp</i> та опції <i>opt1</i>. Доступні правила:
 <dl><dd>"PathEl", "HttpURL", "Custom" — символи вигляду "%NN" у бінарне представлення;</dd>
@@ -564,7 +566,13 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>string name( )</i> — ім'я об'єкту контролера.</li>
 <li> <i>string descr( )</i> — опис об'єкту та контролеру.</li>
 <li> <i>string status( )</i> — статус контролеру.</li>
-<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "", bool force = false )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття), для параметру <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>). Очищення порушень, так як і встановлення, працює у режимі перемикача, що передбачає пропуск повідомлень очищення до буферу повідомлень, та саме очищення, лише за наявності відповідного порушення, що може бути вимкнено встановленням <i>force</i>. Функція формує порушення з категорією <b>al{ModId}:{CntrId}[.{PrmId}]</b> та текстом <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>, де 
+<li> <i>bool messSet( string mess, int lev, string type2Code = "OP", string prm = "", string cat = "")</i> — встановлює повідомлення джерела даних <i>mess</i> із рівнем <i>lev</i>, для параметру <i>prm</i> (<b>{PrmId}</b>), додатковою інформацією категорії <i>cat</i> та кодом типу <i>type2Code</i>. Ця функція формує повідомлення з уніфікованою категорією транспортування через джерело даних <b>{type2Code}{ModId}:{CntrId}[.{PrmId}][:{cat}]</b>, де: 
+<ul><li> <i>type2Code</i> — двосимвольний код типу повідомлення, по замовченню означає дію оператору "OP";</li>
+<li> <i>ModId</i> — ідентифікатор модуля;</li>
+<li> <i>CntrId</i> — ідентифікатор об'єкту контролера;</li>
+<li> <i>PrmId</i> — ідентифікатор параметру, з аргументу <i>prm</i>;</li>
+<li> <i>cat</i> — додаткова інформація категорії яку визначено для типу <i>type2Code</i>.</li></ul></li>
+<li> <i>bool alarmSet( string mess, int lev = -5, string prm = "", bool force = false )</i> — встановлює/знімає порушення <i>mess</i> із рівнем <i>lev</i> (негативне для встановлення інакше зняття), для параметру <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>). Очищення порушень, так як і встановлення, працює у режимі перемикача, що передбачає пропуск повідомлень очищення до буферу повідомлень, та саме очищення, лише за наявності відповідного порушення, що може бути вимкнено встановленням <i>force</i>. Функція формує порушення з категорією <b>al{ModId}:{CntrId}[.{PrmId}]</b> та текстом <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>, де:
 <ul><li> <i>ModId</i> — ідентифікатор модуля;</li>
 <li> <i>CntrId</i> — ідентифікатор об'єкту контролера;</li>
 <li> <i>PrmId</i> — ідентифікатор параметру, з аргументу <i>prm</i>;</li>
@@ -578,6 +586,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <ul><li> <i>ElTp cfg( string nm )</i> — отримує значення конфігураційного поля <i>nm</i> об'єкту.</li>
 <li> <i>bool cfgSet( string nm, ElTp val )</i> [<span style="color:red">доступ до відповідної підсистеми</span>] — встановлює конфігураційне поля <i>nm</i> об'єкту у значення <i>val</i>.</li>
 <li> <i>TCntrNodeObj cntr( )</i> — повертає об'єкт контролеру цього параметру, незалежно від вкладеності.</li>
+<li> <i>bool messSet( string mess, int lev, string type2Code = "OP", string cat = "")</i> — встановлює повідомлення джерела даних <i>mess</i> із рівнем <i>lev</i>, для параметру.</li>
 <li> <i>bool alarmSet( string mess, int lev = -5, bool force = false )</i> — встановлює/знімає порушення <i>mess</i> з рівнем <i>lev</i> (негативне для встановлення інакше зняття) для цього параметру. Очищення порушень, так як і встановлення, працює у режимі перемикача, що передбачає пропуск повідомлень очищення до буферу повідомлень, та саме очищення, лише за наявності відповідного порушення, що може бути вимкнено встановленням <i>force</i>.</li></ul>
 <p>Функції об'єкту атрибута параметра контролера (SYS.DAQ["Modul"]["Controller"]["Parameter"]["Attribute"]):
 </p>

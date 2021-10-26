@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
 <td> Siemens DAQ and Beckhoff
 </td>
-<td> 4.3 </td>
+<td> 4.4 </td>
 <td> GPL2 </td>
 <td> daq_Siemens.so </td>
 <td> en,uk,ru,de </td>
@@ -85,7 +85,7 @@
 <h2><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">2</span> Controller object</span></h2>
 <p>To add a data source the controller object of OpenSCADA creates and configures. An example of a configuration tab for a controller object of this type is shown in Figure 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:718px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr.png"><img class="thumbimage" height="717" src="../files/Siemens_cntr.png" width="716" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:740px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr.png"><img class="thumbimage" height="830" src="../files/Siemens_cntr.png" width="738" /></a>  <div class="thumbcaption">Fig.3. Configuration tab of a controller object.</div></div></div></div>
 <p>Using this tab you can set:
 </p>
 <ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
@@ -108,7 +108,8 @@
 <li> <i>AMSPort</i> — port, writes in view of one digit 0-65535.</li></ul></li></ul></li>
 <li> CPU slot of the PLC in which the central processor of the controller is placed.</li>
 <li> CIF card used for access to the industrial controller through CIF communication processors.</li>
-<li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA output transport</a> for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests.</li></ul>
+<li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">OpenSCADA output transport</a> for the protocol ADS (port 48898, 801 for AMS) and ISO_TCP (port 102) for sending requests.</li>
+<li> Maximum size of the request block in bytes, useful for controllers with such limits.</li></ul>
 <h2><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Parameters</span></span></h2>
 <p>The data acquisition module provides two types of parameter: "Logical (logic)" and "Simple (simple)". Additional configuration fields of the parameters of this module are:
 </p>

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 6.3 </td>
+<td> 6.4 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -433,7 +433,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user";
 <li> Level of the PNG-images compression. The optimum is the minimum level 1, since large files get uncompressed, and higher compression levels create a higher load on the processor.</li>
 <li> Resizing raster images on the server side. Mostly to decrease too big images size then decrease the traffic, what causes to rise the server load.</li>
 <li> Custom interface CSS rules. CSS rules to override the standard ones what placed in the special token ##CUST_CSS## of the file WebVisionVCA.html.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1097px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg.png"><img class="thumbimage" height="603" src="../files/WebVision_wvis_cfg.png" width="1095" /></a>  <div class="thumbcaption">Fig.4. Configuration page of the module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1089px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_cfg.png"><img class="thumbimage" height="605" src="../files/WebVision_wvis_cfg.png" width="1087" /></a>  <div class="thumbcaption">Fig.4. Configuration page of the module.</div></div></div></div>
 <h2><span class="mw-headline" id="Efficiency_and_scalability"><span class="mw-headline-number">5</span> <span id="Efficiency" title="#Efficiency">Efficiency and scalability</span></span></h2>
 <p><b><u>31.07.2019</u></b><br />
 GROUNDS: The Web-sessions may create many objects servicing the VCA-session for generating images, processing documents and performing other background functions of the end user Web-interface. Moreover, in difference to <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a>, the VCA-sessions may be created, closed and recreated again multiple times for different users and remote hosts. In the time the memory heap is affected by the memory fragmentation, so the program consumes more memory than at the start. The table below represents the phenomenon for different environments and the first page of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the DemoDB (AGLKS) project</a> reopening:

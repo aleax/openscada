@@ -1873,7 +1873,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    text.reserve(100);
 	    int vpos_end = 0, vpos_cur;
 	    int64_t ibeg = buf.begin(), iend = buf.end();
-	    period = vmax(period,buf.period());
+	    period = vmax(period, buf.period());
 	    int mode = s2i(opt->attr("mode"));
 	    if(mode < 0 || mode > 2) throw err_sys(_("Data mode '%d' is not supported"), mode);
 	    switch(buf.valType()) {

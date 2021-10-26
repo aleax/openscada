@@ -1,7 +1,7 @@
 
 //OpenSCADA file: xml.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -129,8 +129,8 @@ XMLNode* XMLNode::childGet( const int index, bool noex ) const
 
 XMLNode* XMLNode::childGet( const string &name, const int numb, bool noex ) const
 {
-    for(int iCh = 0, i_n = 0; iCh < (int)childSize(); iCh++)
-	if(strcasecmp(childGet(iCh)->name().c_str(),name.c_str()) == 0 && i_n++ == numb)
+    for(int iCh = 0, iN = 0; iCh < (int)childSize(); iCh++)
+	if(strcasecmp(childGet(iCh)->name().c_str(),name.c_str()) == 0 && iN++ == numb)
 	    return childGet(iCh);
 
     if(noex) return NULL;
@@ -311,12 +311,20 @@ void XMLNode::encode( const string &s, string &rez, bool text, unsigned flg ) co
 {
     int	len;
     int32_t symb;
+    char buf[10];
 
     //Append UTF8 codes checking Mess->isUTF8(), at first it is for &nbsp; = \xC2\xA0"
     for(unsigned iSz = 0; iSz < s.size(); iSz++) {
 	const char *replStr = NULL;
 	switch(s[iSz]) {
-	    case 0:	replStr = "\\000";	break;	//Bynary symbol but for next problems are possible also and here needs check to Unicode
+	    case 0 ... 8:
+	    case 0xB ... 0xC:
+	    case 0x0E ... 0x1F:
+		if(!(flg&BinShield)) break;
+		sprintf(buf, "\\%03o", s[iSz]);
+		replStr = buf;
+		break;
+	    //case 0:	replStr = "\\000";	break;
 	    //case 0:	replStr = "&#000;";	break;
 	    case '>':	replStr = "&gt;";	break;
 	    case '<':	replStr = "&lt;";	break;

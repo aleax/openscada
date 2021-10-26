@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
 <td> Збір даних Siemens та Beckhoff
 </td>
-<td> 4.3 </td>
+<td> 4.4 </td>
 <td> GPL2 </td>
 <td> daq_Siemens.so </td>
 <td> en,uk,ru,de </td>
@@ -88,7 +88,7 @@
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">2</span> Об'єкт контролеру</span></h2>
 <p>Для додання джерела даних створюється та конфігурується об'єкт контролеру OpenSCADA. Приклад вкладки конфігурації объекту контролеру даного типу наведено на рисунку 3.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:831px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr_uk.png"><img class="thumbimage" height="717" src="../files/Siemens_cntr_uk.png" width="829" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації об'єкту контролеру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:766px;"><a class="image" href="http://oscada.org/wiki/File:Siemens_cntr_uk.png"><img class="thumbimage" height="830" src="../files/Siemens_cntr_uk.png" width="764" /></a>  <div class="thumbcaption">Рис.3. Вкладка конфігурації об'єкту контролеру.</div></div></div></div>
 <p>За допомогою цієї вкладки можна встановити:
 </p>
 <ul><li> Стан об'єкту контролеру, а саме: Статус, "Ввімкнено", "Виконується" та ім'я БД, яка містить конфігурацію.</li></ul>
@@ -111,7 +111,8 @@
 <li> <i>AMSPort</i> — порт, записується у вигляді числа 0-65535.</li></ul></li></ul></li>
 <li> Слот ЦП ПЛК у який встановлено центральний процесор контролеру.</li>
 <li> CIF плата, використана для доступу до промислового контролеру за посередництвом CIF комунікаційних процесорів.</li>
-<li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">Вихідний транспорт OpenSCADA</a> для протоколу ADS (порт 48898, 801 для AMS) та ISO_TCP (порт 102) для надсилання запитів.</li></ul>
+<li> <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">Вихідний транспорт OpenSCADA</a> для протоколу ADS (порт 48898, 801 для AMS) та ISO_TCP (порт 102) для надсилання запитів.</li>
+<li> Максимальний розмір блоку запиту у байтах, корисний для контролерів з таким обмеженням.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D0.B8"><span class="mw-headline-number">3</span> <span id="Parameters" title="#Parameters">Параметри</span></span></h2>
 <p>Модуль збору даних надає два типи параметру: "Логічний (logic)" та "Простий (simple)". Додатковими конфігураційними полями параметрів цього модуля є:
 </p>

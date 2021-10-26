@@ -106,7 +106,7 @@ void TMess::setLogDirect( int dir )
 
 void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 {
-    if(abs(vmin(TMess::MaxLev,vmax(-TMess::MaxLev,level))) < messLevel()) return;
+    if(!messLevelTest(messLevel(),level)) return;
 
     //messLevel() = TMess::Debug process for selected category and categories list combining
     if(messLevel() == TMess::Debug && level == TMess::Debug) {
@@ -154,10 +154,12 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
     //string sMess = i2s(level) + "|" + categ + " | " + mess;
     string sMess = i2s(level) + "[" + categ + "] " + mess;
 
+    int level_in = (int8_t)abs(level), level_sys;
+    if(level_in > Emerg) level_in = level_in/10;
+
 #if defined(__ANDROID__)
     if(mLogDir&(DIR_SYSLOG|DIR_STDOUT|DIR_STDERR)) {
-	int level_sys;
-	switch((int8_t)abs(level)) {
+	switch(level_in) {
 	    case Debug:		level_sys = ANDROID_LOG_DEBUG;	break;
 	    case Info:		level_sys = ANDROID_LOG_INFO;	break;
 	    case Notice:	level_sys = ANDROID_LOG_DEFAULT;break;
@@ -166,14 +168,13 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 	    case Crit:
 	    case Alert:
 	    case Emerg:		level_sys = ANDROID_LOG_FATAL;	break;
-	    default: 		level_sys = ANDROID_LOG_DEBUG;
+	    default: 		level_sys = ANDROID_LOG_FATAL;
 	}
 	__android_log_vprint(level_sys, PACKAGE_NAME, sMess.c_str(), ap);
     }
 #else
     if(mLogDir&DIR_SYSLOG) {
-	int level_sys;
-	switch((int8_t)abs(level)) {
+	switch(level_in) {
 	    case Debug:		level_sys = LOG_DEBUG;	break;
 	    case Info:		level_sys = LOG_INFO;	break;
 	    case Notice:	level_sys = LOG_NOTICE;	break;
@@ -182,7 +183,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 	    case Crit:		level_sys = LOG_CRIT;	break;
 	    case Alert:		level_sys = LOG_ALERT;	break;
 	    case Emerg:		level_sys = LOG_EMERG;	break;
-	    default: 		level_sys = LOG_DEBUG;
+	    default: 		level_sys = LOG_EMERG;
 	}
 	syslog(level_sys, "%s", sMess.c_str());
     }
@@ -443,6 +444,14 @@ string TMess::lang( )
     if(((lng=getenv("LANGUAGE")) && strlen(lng)) || ((lng=getenv("LC_MESSAGES")) && strlen(lng)) || ((lng=getenv("LANG")) && strlen(lng)))
 	return lng;
     else return "C";
+}
+
+bool TMess::messLevelTest( int8_t condLev, int8_t messLev )
+{
+    condLev = vmax(Debug, vmin(Emerg,abs(condLev)));
+    messLev = abs(messLev);
+
+    return (((messLev <= Emerg)?messLev:messLev/10) >= condLev);
 }
 
 string TMess::selDebCats( )

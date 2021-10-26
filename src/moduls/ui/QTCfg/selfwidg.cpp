@@ -56,7 +56,10 @@ using namespace QTCFG;
 //************************************************
 //* ListView: List view widget                   *
 //************************************************
-ListView::ListView( QWidget * parent ) : QListWidget(parent)	{ }
+ListView::ListView( QWidget * parent ) : QListWidget(parent)
+{
+    setWordWrap(true);
+}
 
 QSize ListView::sizeHint( ) const	{ return QSize(QListWidget::sizeHint().width(), QFontMetrics(font()).height()*4); }
 

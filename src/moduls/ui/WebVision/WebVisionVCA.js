@@ -2847,15 +2847,16 @@ function makeUI( callBackRez )
     planePer = Math.min(Math.max(1e-3*modelPer,elTm*10), planePer + (Math.max(1e-3*modelPer,elTm*3)-planePer)/100);
     var sleepTm = Math.max(0, planePer-elTm);
     prcTm = elTm + sleepTm;
-    //console.log("sleepTm: "+sleepTm+"s; prcTm: "+prcTm+"s; elTm: "+elTm+"s; planePer: "+planePer+"s.");
+
+    // The frontend status request
+    if(pgNode && parseInt(pgNode.getAttribute("fStatusOrder")))
+	servSet('/'+sessId, 'com=fStatus', "Counter="+tmCnt_+"; "+
+	    "Period: "+planePer.toPrecision(3)+"("+prcTm+")s, "+
+	    "Time elapsed: "+elTm.toPrecision(3)+"s, sleep: "+sleepTm.toPrecision(3)+"s.", true);
+
     setTimeout(makeUI, sleepTm*1e3);
-    //if(mainTmId) clearTimeout(mainTmId);
-    //mainTmId = setTimeout(makeUI, 1000);
 
-    //prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTmMain.getTime())));
-    //setTimeout(makeUI,prcTm*1e3);
-
-    //Execution performance test
+    //Execution the performance test
     /*var startChkTm = (new Date()).getTime();
     for(var i_cnt = 0; i_cnt < 1000000; i_cnt++)
 	var trez = Math.sin(Math.PI);

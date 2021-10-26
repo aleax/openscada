@@ -115,6 +115,7 @@ class TController : public TCntrNode, public TConfig
 	virtual void redntDataUpdate( );
 
 	virtual string catsPat( );	//Individual categories pattern for messages of the controller
+	void messSet( const string &mess, int lev, const string &type2Code = "OP", const string &prm = "", const string &cat = "" );
 	void alarmSet( const string &mess, int lev = -TMess::Crit, const string &prm = "", bool force = false );
 
 	TTypeDAQ &owner( ) const;

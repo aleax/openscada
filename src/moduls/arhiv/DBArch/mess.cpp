@@ -220,7 +220,7 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
 	for( ; TBDS::dataSeek(addr()+"."+archTbl(),"",eC++,cfg,TBDS::UseCache) && SYS->sysTm() < upTo; ) {
 	    TMess::SRec rc(cfg.cfg("TM").getI(), cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(),
 			    (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
-	    if(rc.time >= bTm && rc.time <= eTm && abs(rc.level) >= level && re.test(rc.categ)) {
+	    if(rc.time >= bTm && rc.time <= eTm && TMess::messLevelTest(level,rc.level) && re.test(rc.categ)) {
 		bool equal = false;
 		int i_p = mess.size();
 		for(int i_m = mess.size()-1; i_m >= 0; i_m--) {

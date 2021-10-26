@@ -595,7 +595,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.B5_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Порушення — активне (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span>
 </td>
-<td> 1.2 </td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -686,10 +686,11 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Правила підсвітлення, {lev}{quitt}:{color}:{font}:{fontColor} </td>
+<td> Правила підсвітлення, {lev}[{slev}]{quitt}:{color}:{font}:{fontColor} </td>
 <td> Текст </td>
 <td> Правила підсвітлення, де:
-<ul><li> <i>lev</i> — рівень повідомлення [0...9];</li>
+<ul><li> <i>lev</i> — основний рівень повідомлення [0...7];</li>
+<li> <i>slev</i> — підрівень повідомлення [0...9], опціонально;</li>
 <li> <i>quitt</i> — ознака підтвердження (квітації) повідомлення [0|1];</li>
 <li> <i>color</i> — колір фону рядка з повідомленням;</li>
 <li> <i>font</i> — шрифт тексту рядка з повідомленням;</li>
@@ -697,9 +698,9 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <p>Наприклад:
 </p>
 <pre style="white-space: pre-wrap">
-5:gray
-4:red
-1:yellow
+50:gray
+40:red
+150:yellow
 </pre>
 </td></tr>
 <tr>
@@ -713,6 +714,12 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> Перелік типів за рівнем від 0, поділені ';' </td>
 <td> Рядок (переклад) </td>
 <td> Типи-назви порушень за їх рівнем, типово "Налагодж.;Інформ.;Зауваж.;Попередж.;Помилка;Критично;Тривога;Аварія".
+</td></tr>
+<tr>
+<td> messCat </td>
+<td> Категорія повідомлень </td>
+<td> Рядок </td>
+<td> Категорія опрацьовуваних повідомлень порушень, типово порожнє для всіх порушень.
 </td></tr></table>
 <p><br />
 </p>
@@ -1907,7 +1914,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.BD.D1.8F_.E2.80.94_.D1.81.D1.82.D0.B0.D0.BD_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Порушення — стан (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span>
 </td>
-<td> 1.3 </td>
+<td> 1.4 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -2025,10 +2032,11 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Правила підсвітлення, {lev}{quitt}{act}:{color}:{font}:{fontColor} </td>
+<td> Правила підсвітлення, {lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor} </td>
 <td> Текст </td>
 <td> Правила підсвітлення, де:
-<ul><li> <i>lev</i> — рівень повідомлення [0...9];</li>
+<ul><li> <i>lev</i> — основний рівень повідомлення [0...7];</li>
+<li> <i>slev</i> — підрівень повідомлення [0...9], опціонально;</li>
 <li> <i>quitt</i> — ознака підтвердження повідомлення [0|1];</li>
 <li> <i>act</i> — ознака активності повідомлення [0|1];</li>
 <li> <i>color</i> — колір фону рядка з повідомленням;</li>
@@ -2039,10 +2047,10 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <pre style="white-space: pre-wrap">
 501:gray
 401:red
-101:yellow
+1501:yellow
 511:gray:Arial 11 0 1
 411:red:Arial 11 0 1
-111:yellow:Arial 11 0 1
+1511:yellow:Arial 11 0 1
 </pre>
 </td></tr>
 <tr>
@@ -2307,8 +2315,9 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="ElCadr" title="#ElCadr"><h3><span class="mw-headline" id=".D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BA.D0.B0.D0.B4.D1.80_.28ElCadr.29"><span class="mw-headline-number">4.2</span> Елемент кадр (<a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElCadr</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> <span id="ElCadr" title="#ElCadr"><h3><span class="mw-headline" id=".D0.95.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BA.D0.B0.D0.B4.D1.80_.28ElCadr.29"><span class="mw-headline-number">4.2</span> Елемент кадр (<a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElCadr</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 

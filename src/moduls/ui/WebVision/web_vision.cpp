@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.3.8"
+#define MOD_VER		"6.4.0"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -655,12 +655,16 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	for(unsigned iS = 0; iS < vSesLs.size(); iS++) {
 	    AutoHD<VCASess> ses = vcaSesAt(vSesLs[iS]);
 	    ses.at().objList(vSesObjs);
-	    opt->childAdd("el")->setText(TSYS::strMess(_("%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."),
+	    string stVal = TSYS::strMess(_("%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."),
 		atm2s(ses.at().openTm(),"%Y-%m-%dT%H:%M:%S").c_str(),
 		ses.at().id().c_str(), ses.at().proj().c_str(),
 		ses.at().user().c_str(),  ses.at().sender().c_str(),
 		atm2s(ses.at().lstReq(),"%Y-%m-%dT%H:%M:%S").c_str(),
-		ses.at().pgCacheSize(), ses.at().cacheResSize(), TSYS::cpct2str(ses.at().cacheResLen()).c_str(), vSesObjs.size()));
+		ses.at().pgCacheSize(), ses.at().cacheResSize(), TSYS::cpct2str(ses.at().cacheResLen()).c_str(), vSesObjs.size());
+	    if(ses.at().fStatusText.getVal().size())
+		stVal = stVal + " " + _("FrontEnd: ") + ses.at().fStatusText.getVal();
+	    ses.at().fStatusOrder = true;
+	    opt->childAdd("el")->setText(stVal);
 	}
     }
     else if(a_path == "/prm/cfg/lf_tm") {

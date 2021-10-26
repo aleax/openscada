@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 19:53+0300\n"
+"POT-Creation-Date: 2021-10-22 13:56+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -506,6 +506,9 @@ msgstr ""
 msgid "Down"
 msgstr ""
 
+msgid "Copy text"
+msgstr ""
+
 msgid "Setting the item name"
 msgstr ""
 
@@ -551,9 +554,6 @@ msgid "Move Up (Ctrl+Up)"
 msgstr ""
 
 msgid "Move Down (Ctrl+Down)"
-msgstr ""
-
-msgid "Copy"
 msgstr ""
 
 #, c-format

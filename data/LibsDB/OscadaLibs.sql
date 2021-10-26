@@ -5794,7 +5794,7 @@ Functions:
   - the field "CustomAlarms" — redefinition of the standard alarm levels of the alarm messages in the form "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.0
+Version: 2.2.1
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Функції:
@@ -5829,13 +5829,13 @@ License: GPLv2','Загальний, представницький та уні�
   - поле "CustomAlarms" — перевизначення стандартних рівнів порушень для повідомлень порушень у формі "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.2.0
+Версія: 2.2.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function custAlarm(lev) {
 	rez = 0;
-	if(lev = 0)			rez = 5;
-	else if(lev = 1)	rez = 4;
-	else if(lev = 2)	rez = 2;
+	if(lev == 0)			rez = 5;
+	else if(lev == 1)	rez = 4;
+	else if(lev == 2)	rez = 2;
 
 	if((tVl=DESCR.match("^CustomAlarms: *(.+?) *$","m")).length)
 		rez = tVl[1].parse(lev, ";").toInt();
@@ -5944,7 +5944,7 @@ else {
 	else	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("NORM"), 1, firstNorm);
 	f_err = tErr;
 	alDelay_ = 0; firstNorm = false;
-}','','',1633262559);
+}','','',1634973902);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:

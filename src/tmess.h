@@ -82,7 +82,7 @@ class TMess
 
     public:
 	//Data
-	enum Type { Debug, Info, Notice, Warning, Error, Crit, Alert, Emerg, MaxLev = 99 };
+	enum Type { Debug, Info, Notice, Warning, Error, Crit, Alert, Emerg, MaxLev = 79 };
 	enum Direct { DIR_SYSLOG = 0x1, DIR_STDOUT = 0x2, DIR_STDERR = 0x4, DIR_ARCHIVE = 0x8 };
 
 	class SRec {
@@ -121,6 +121,7 @@ class TMess
 	string &charset( )	{ return IOCharSet; }
 	int logDirect( )	{ return mLogDir; }
 	int messLevel( )	{ return mMessLevel; }
+	static bool messLevelTest( int8_t condLev, int8_t messLev );
 	string selDebCats( );
 	bool isUTF8( )		{ return mIsUTF8; }
 

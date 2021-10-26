@@ -219,7 +219,7 @@ private:
     int cntrIfCmd( XMLNode &node );
     int cntrIfCmdHosts( XMLNode &node );
 
-    string getPrintVal( const string &vl );
+    //string getPrintVal( const string &vl );
 
     //Attributes
     QTimer	*endRunTimer, *autoUpdTimer, *reqPrgrsTimer;

@@ -968,7 +968,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 		result = bRec.time;
 		bRec.level = (TMess::Type)s2i(mNode->childGet(iCh)->attr("lv"));
 		bRec.categ = mNode->childGet(iCh)->attr("cat");
-		if(abs(bRec.level) < level || !re.test(bRec.categ)) continue;
+		if(!TMess::messLevelTest(level,bRec.level) || !re.test(bRec.categ)) continue;
 		bRec.mess  = mNode->childGet(iCh)->text();
 		bool equal = false;
 		int iP = mess.size();
@@ -1015,7 +1015,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 	    if(bRec.time > eTm) break;
 	    if(bRec.time >= bTm) {
 		result = bRec.time;
-		if(abs(bRec.level) < level) continue;
+		if(!TMess::messLevelTest(level,bRec.level)) continue;
 		char m_cat[1001], m_mess[100001];
 		if(sscanf(buf,"%*x:%*d %*d %1000s %100000s",m_cat,m_mess) != 2) continue;
 		bRec.categ = TSYS::strDecode(Mess->codeConvIn(mChars,m_cat), TSYS::HttpURL);

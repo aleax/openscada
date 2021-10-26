@@ -494,6 +494,10 @@ class VCASess : public TCntrNode
 	//Attributes
 	bool	toRemoveSelf;		//Mostly used at removing the VCA-session but presence the Web-session
 
+	// Frontend status
+	bool	fStatusOrder;
+	MtxString fStatusText;
+
     private:
 	//Data
 	class CacheEl
