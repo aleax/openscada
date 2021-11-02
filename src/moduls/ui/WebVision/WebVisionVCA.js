@@ -465,7 +465,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     }
 
     //Creating/replacing the main page
-    if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
+    if(this == masterPage && (!this.addr.length || pgGrp == 'main' || !pgGrp.length || pgGrp == this.attrs['pgGrp'])) {
 	if(this.addr.length) {
 	    servSet(this.addr, 'com=pgClose&cacheCntr', '');
 	    this.pwClean(true);
@@ -2851,7 +2851,7 @@ function makeUI( callBackRez )
     // The frontend status request
     if(pgNode && parseInt(pgNode.getAttribute("fStatusOrder")))
 	servSet('/'+sessId, 'com=fStatus', "Counter="+tmCnt_+"; "+
-	    "Period: "+planePer.toPrecision(3)+"("+prcTm+")s, "+
+	    "Period: "+prcTm.toPrecision(3)+"<"+planePer.toPrecision(3)+"("+(1e-3*modelPer).toPrecision(3)+")s, "+
 	    "Time elapsed: "+elTm.toPrecision(3)+"s, sleep: "+sleepTm.toPrecision(3)+"s.", true);
 
     setTimeout(makeUI, sleepTm*1e3);

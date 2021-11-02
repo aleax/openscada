@@ -104,7 +104,7 @@ void Session::setEnable( bool val )
 	    parent().at().list(pg_ls);
 	    for(unsigned iP = 0; iP < pg_ls.size(); iP++)
 		if(!present(pg_ls[iP]))
-		    add(pg_ls[iP],parent().at().at(pg_ls[iP]).at().path());
+		    add(pg_ls[iP],parent().at().at(pg_ls[iP]).at().addr());
 
 	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Time of the root pages creating: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
@@ -369,7 +369,7 @@ void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
     }
 
     pBase = oppg;
-    if(pBase.empty() && src) pBase = src->path();
+    if(pBase.empty() && src) pBase = src->addr();
 
     //Individual commands process
     try {
@@ -418,11 +418,11 @@ void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
 	//Open founded page
 	if(!cpg.freeStat()) {
 	    //!!!! <oppg> here mostly wrong for multiple container pages
-	    //if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().path() != cpg.at().path())
+	    //if(!oppg.empty() && ((AutoHD<SessPage>)mod->nodeAt(oppg)).at().addr() != cpg.at().addr())
 	    //	((AutoHD<SessPage>)mod->nodeAt(oppg)).at().attrAt("pgOpenSrc").at().setS("");
 
 	    cpg.at().setPathAsOpen(cpgAddr);	//To descry links
-	    if(src) cpg.at().attrAt("pgOpenSrc").at().setS(src->path(), true);
+	    if(src) cpg.at().attrAt("pgOpenSrc").at().setS(src->addr(), true);
 	    else cpg.at().attrAt("pgOpen").at().setB(true, true);
 	}
     }
@@ -972,15 +972,15 @@ string Session::Notify::ntfRes( uint16_t &itm, string &wpath, string &resTp, str
 	    if(mQueue[iQ].quietance) continue;
 	    if(wpath.empty() || owner()->clkChkModif(tm,mQueue[iQ].clc) || iNext > 0)	break;	//First, new and next entries break
 	    if(iFirst < 0) iFirst = iQ;
-	    if(wpath == mQueue[iQ].path) iNext = iQ;
+	    if(wpath == mQueue[iQ].addr) iNext = iQ;
 	}
 	if(iQ < 0 && iFirst >= 0) iQ = iFirst;	//Return to first entry
 	if(iQ >= 0) {
-	    wpath = mQueue[iQ].path;
+	    wpath = mQueue[iQ].addr;
 	    mess = mQueue[iQ].mess;
 	    //  Get the resource directly
 	    if(!mQueue[iQ].tpArg.empty())
-		rez = TSYS::strDecode(((AutoHD<SessWdg>)mod->nodeAt(TSYS::strParse(mQueue[iQ].path,0,";"))).at().
+		rez = TSYS::strDecode(((AutoHD<SessWdg>)mod->nodeAt(TSYS::strParse(mQueue[iQ].addr,0,";"))).at().
 				resourceGet(mQueue[iQ].tpArg,&resTp), TSYS::base64);
 	    //  Call the resource producing procedure
 	    else commCall(false, true, rez, resTp, mQueue[iQ].mess, lang);
@@ -1011,7 +1011,7 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
 
     unsigned iQ = 0;
     // Check for the entry to present
-    while(iQ < mQueue.size() && mQueue[iQ].path.find(qIt.path) == string::npos && (!f_qMergeMess || qIt.mess != mQueue[iQ].mess)) iQ++;
+    while(iQ < mQueue.size() && mQueue[iQ].addr.find(qIt.addr) == string::npos && (!f_qMergeMess || qIt.mess != mQueue[iQ].mess)) iQ++;
     //while(iQ < mQueue.size() && mQueue[iQ].path != qIt.path) iQ++;
 
     // Clean up the entry from queue
@@ -1021,7 +1021,7 @@ void Session::Notify::queueSet( const string &wpath, const string &alrm )
     }
     // Update presented and same level entry
     if(iQ < mQueue.size() && f_qMergeMess && qIt.mess == mQueue[iQ].mess) {
-	if(mQueue[iQ].path.find(qIt.path) == string::npos) mQueue[iQ].path += qIt.path;
+	if(mQueue[iQ].addr.find(qIt.addr) == string::npos) mQueue[iQ].addr += qIt.addr;
 	mQueue[iQ].lev = vmax(mQueue[iQ].lev, qIt.lev);
 	mQueue[iQ].quietance = false;
     }
@@ -1056,7 +1056,7 @@ void Session::Notify::queueQuietance( const string &wpath, uint8_t quitTmpl, boo
 	bool toQuitt = false;
 	if(!wpath.size()) toQuitt = true;
 	else for(int off = 0; !toQuitt && (tStr=TSYS::strParse(wpath,0,";",&off)).size(); )
-	    for(int off1 = 0; !toQuitt && (tStr1=TSYS::strParse(mQueue[iQ].path,0,";",&off1)).size(); )
+	    for(int off1 = 0; !toQuitt && (tStr1=TSYS::strParse(mQueue[iQ].addr,0,";",&off1)).size(); )
 		toQuitt = tStr1.compare(0,tStr.size(),tStr) == 0;
 	if(toQuitt) mQueue[iQ].quietance = !ret;
     }
@@ -1185,9 +1185,9 @@ void SessPage::postEnable( int flag )
     linkToParent();
 }
 
-string SessPage::path( ) const		{ return path(false); }
+string SessPage::addr( ) const		{ return addr(false); }
 
-string SessPage::path( bool orig ) const{ return (!pathAsOpen.getVal().size() || orig) ? ownerFullId(true)+"/pg_"+id() : pathAsOpen.getVal(); }
+string SessPage::addr( bool orig ) const{ return (!pathAsOpen.getVal().size() || orig) ? ownerFullId(true)+"/pg_"+id() : pathAsOpen.getVal(); }
 
 string SessPage::getStatus( )
 {
@@ -1199,8 +1199,8 @@ string SessPage::getStatus( )
 
 void SessPage::setPathAsOpen( const string &ip )
 {
-    if((!pathAsOpen.size() && ip == path(true)) || ip == path()) return;
-    pathToClose = ownerSess()->openCheck(path(true)) ? path(true): pathAsOpen;
+    if((!pathAsOpen.size() && ip == addr(true)) || ip == addr()) return;
+    pathToClose = ownerSess()->openCheck(addr(true)) ? addr(true): pathAsOpen;
     pathAsOpen = ip;
 }
 
@@ -1221,7 +1221,7 @@ void SessPage::setEnable( bool val, bool force )
 	bool pgOpen = (!(parent().at().prjFlags()&Page::Empty) && parent().at().attrAt("pgOpen").at().getB());
 	if((pgOpen || force || parent().at().attrAt("pgNoOpenProc").at().getB()) && !enable()) {
 	    SessWdg::setEnable(true);
-	    if(pgOpen) ownerSess()->openReg(path());
+	    if(pgOpen) ownerSess()->openReg(addr());
 	}
 	// Processing of the child pages
 	if(!force) {
@@ -1229,7 +1229,7 @@ void SessPage::setEnable( bool val, bool force )
 	    parent().at().pageList(pg_ls);
 	    for(unsigned iP = 0; iP < pg_ls.size(); iP++)
 		if(!pagePresent(pg_ls[iP]))
-		    pageAdd(pg_ls[iP], parent().at().pageAt(pg_ls[iP]).at().path());
+		    pageAdd(pg_ls[iP], parent().at().pageAt(pg_ls[iP]).at().addr());
 
 	    //Enabling of the included pages
 	    pageList(pg_ls);
@@ -1244,7 +1244,7 @@ void SessPage::setEnable( bool val, bool force )
 
 	//Unregister opened page
 	if(!(parent().at().prjFlags()&Page::Empty) && attrPresent("pgOpen") && attrAt("pgOpen").at().getB())
-	    ownerSess()->openUnreg(path());
+	    ownerSess()->openUnreg(addr());
 
 	//Disabling the include pages
 	pageList(pg_ls);
@@ -1281,8 +1281,8 @@ void SessPage::setProcess( bool val, bool lastFirstCalc )
 AutoHD<Page> SessPage::parent( ) const
 {
     /*if(!enable()) {
-	if(parentNm() == "..") return AutoHD<TCntrNode>(nodePrev());
-	else return mod->nodeAt(parentNm(), 0, 0, 0, true);
+	if(parentAddr() == "..") return AutoHD<TCntrNode>(nodePrev());
+	else return mod->nodeAt(parentAddr(), 0, 0, 0, true);
     }*/
     return Widget::parent();
 }
@@ -1299,7 +1299,7 @@ void SessPage::chldList( int8_t igr, vector<string> &list, bool noex, bool onlyE
 {
     AutoHD<TCntrNode> lNd;
     if(!parent().freeStat() && (parent().at().prjFlags()&Page::Link) && igr == mPage)
-	lNd = ownerSess()->nodeAt(parent().at().parentNm(), 0, 0, 0, true);
+	lNd = ownerSess()->nodeAt(parent().at().parentAddr(), 0, 0, 0, true);
 
     if(!lNd.freeStat())	lNd.at().chldList(igr, list, noex, onlyEn);
     else TCntrNode::chldList(igr, list, noex, onlyEn);
@@ -1309,7 +1309,7 @@ bool SessPage::chldPresent( int8_t igr, const string &name ) const
 {
     AutoHD<TCntrNode> lNd;
     if(!parent().freeStat() && (parent().at().prjFlags()&Page::Link) && igr == mPage)
-	lNd = ownerSess()->nodeAt(parent().at().parentNm(), 0, 0, 0, true);
+	lNd = ownerSess()->nodeAt(parent().at().parentAddr(), 0, 0, 0, true);
 
     return lNd.freeStat() ? TCntrNode::chldPresent(igr, name) : lNd.at().chldPresent(igr, name);
 }
@@ -1318,7 +1318,7 @@ AutoHD<TCntrNode> SessPage::chldAt( int8_t igr, const string &name, const string
 {
     AutoHD<TCntrNode> lNd;
     if(!parent().freeStat() && (parent().at().prjFlags()&Page::Link) && igr == mPage)
-	lNd = ownerSess()->nodeAt(parent().at().parentNm(), 0, 0, 0, true);
+	lNd = ownerSess()->nodeAt(parent().at().parentAddr(), 0, 0, 0, true);
 
     return lNd.freeStat() ? TCntrNode::chldAt(igr, name, user) : lNd.at().chldAt(igr, name, user);
 }
@@ -1389,11 +1389,11 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 	if(cfg.id() == "pgOpen") {
 	    if(cfg.getB()) {
 		mClosePgCom = false;
-		ownerSess()->openReg(path());	//Moved up for allow access and pages including from "f_start"
+		ownerSess()->openReg(addr());	//Moved up for allow access and pages including from "f_start"
 		if(!process()) setProcess(true);
 	    }
 	    else {
-		ownerSess()->openUnreg(pathToClose.size()?pathToClose:path());
+		ownerSess()->openUnreg(pathToClose.size()?pathToClose:addr());
 		if(!pathToClose.size()) {
 		    if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
 		    if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
@@ -1513,7 +1513,7 @@ void SessPage::alarmSet( bool isSet )
     attrAt("alarmSt").at().setI((alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0);
 
     if(ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
-    if(isSet) ownerSess()->alarmSet(path(), aCur);
+    if(isSet) ownerSess()->alarmSet(addr(), aCur);
 }
 
 void SessPage::alarmQuietance( uint8_t quit_tmpl, bool isSet, bool ret )
@@ -1682,7 +1682,7 @@ SessPage *SessWdg::ownerPage( ) const
     return NULL;
 }
 
-string SessWdg::path( ) const	{ return ownerFullId(true)+"/wdg_"+id(); }
+string SessWdg::addr( ) const	{ return ownerFullId(true)+"/wdg_"+id(); }
 
 string SessWdg::ownerFullId( bool contr ) const
 {
@@ -1774,7 +1774,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	} catch(TError &err) {
 	    // Second compile try
 	    try {
-		fio.setId(TSYS::path2sepstr(path(),'_'));
+		fio.setId(TSYS::path2sepstr(addr(),'_'));
 		mWorkProg = SYS->daq().at().at(TSYS::strSepParse(calcLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(calcLang(),1,'.'),fio,calcProg(),mod->nodePath('.',true)+";");
 	    } catch(TError &err) {
@@ -1961,15 +1961,15 @@ void SessWdg::pgClose( )
 string SessWdg::sessAttr( const string &id, bool onlyAllow )
 {
     int off = 0;
-    TSYS::pathLev(path(), 0, true, &off);
-    return ownerSess()->sessAttr(path().substr(off), id, onlyAllow);
+    TSYS::pathLev(addr(), 0, true, &off);
+    return ownerSess()->sessAttr(addr().substr(off), id, onlyAllow);
 }
 
 void SessWdg::sessAttrSet( const string &id, const string &val )
 {
     int off = 0;
-    TSYS::pathLev(path(), 0, true, &off);
-    ownerSess()->sessAttrSet(path().substr(off), id, val);
+    TSYS::pathLev(addr(), 0, true, &off);
+    ownerSess()->sessAttrSet(addr().substr(off), id, val);
 }
 
 void SessWdg::eventAdd( const string &ev )
@@ -2017,7 +2017,7 @@ void SessWdg::alarmSet( bool isSet )
     attrAt("alarmSt").at().setI((alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0);
 
     if(ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
-    if(isSet) ownerSess()->alarmSet(path(), aCur);
+    if(isSet) ownerSess()->alarmSet(addr(), aCur);
 }
 
 void SessWdg::alarmQuietance( uint8_t quit_tmpl, bool isSet, bool ret )
@@ -2255,7 +2255,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 		    }
 		    if(!evProc) {
 			if(!isPg) sevup += sev_ev + ":/" + id() + sev_path + "\n";
-			else sevup += sev_ev + ":" + (TSYS::pathLev(sev_path,0).compare(0,4,"ses_")?path():"") + sev_path + "\n";
+			else sevup += sev_ev + ":" + (TSYS::pathLev(sev_path,0).compare(0,4,"ses_")?addr():"") + sev_path + "\n";
 		    }
 		}
 		// Put left events to parent widget
@@ -2267,7 +2267,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 			vector<string> lst = ownerSess()->openList();
 			string prev;
 			for(unsigned iF = 0; iF < lst.size(); iF++)
-			    if(lst[iF] == path()) {
+			    if(lst[iF] == addr()) {
 				if(prev.size()) ((AutoHD<SessPage>)mod->nodeAt(prev)).at().eventAdd(sevup);
 				break;
 			    }
@@ -2303,7 +2303,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
     else if(cfg.id() == "alarmSt" && cfg.getI()&0x1000000) {
 	int tmpl = ~(cfg.getI()&0xFF);
 	cfg.setI(prev.getI(), false, true);
-	ownerSess()->alarmQuietance(path(), tmpl, cfg.getI()&0x2000000);
+	ownerSess()->alarmQuietance(addr(), tmpl, cfg.getI()&0x2000000);
     }
 
     //External link process

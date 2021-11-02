@@ -1585,7 +1585,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		int err = cntrIfCmd(req);
 		if(err) {
 		    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
-		    copy_els.push_back(d_elp+"/"+d_el);	//!!!! Update the item anytime at errors due to the possible restoring of it
+		    copy_els.push_back(d_elp+"/"+d_el);	//!!!! Update the item in any case at errors due to the possible restoring of it
 		}
 		if(!err || err == 1) {	//Not errors or warnings
 		    if(it_nm.size()) {

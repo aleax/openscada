@@ -30,7 +30,7 @@
 <td> <a href="../Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Шлюз джерел даних
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
@@ -90,7 +90,7 @@
 <li> Максимальна глибина даних архіву значень та повідомлень для їх відновлення при запуску, в годинах. Нуль для вимкнення доступу до віддаленого архіву.</li>
 <li> Асинхронний запис. Вмикає запис у загальному циклі опитування щодо буферу накопичених значень, одним запитом.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Корисне для повільних та ненадійних мереж-підключень оскільки зберігає дані до відновлення підключення та реального запису.</dd></dl>
-<ul><li> Рівень запитуваних повідомлень джерел даних.</li>
+<ul><li> Рівень запитуваних повідомлень джерел даних. Також вмикає передавання DAQ-повідомлень <a href="../User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">функції API Користувача messSet()</a> до нижчих станцій.</li>
 <li> Період синхронізації з віддаленою станцією у секундах. Нуль для виключення періодичної синхронізації та -1 також для виключення синхронізації при запуску.</li>
 <li> Віддалена станція віддзеркалених даних. Декілька станцій у переліку включають механізм вертикального резервування.</li>
 <li> Перелік віддалених об'єктів контролеру та параметрів, що віддзеркалюються. У переліку можна вказувати як тільки об'єкти контролерів, для відображення всіх їх параметрів, так і окремо взяті параметри.</li>
@@ -122,5 +122,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DAQGate/uk">Modules/DAQGate/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2777</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/DAQGate/uk">Modules/DAQGate/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2782</td></tr></table></body>
 </html>

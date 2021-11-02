@@ -1,3 +1,31 @@
+2021-11-02 Roman (stable)
+- !!!:LibsDB.vcaBase: wlb_Main.{TextLab,ImgLab,cntrRegul},mnEls.{El_Kran_Sh,Compressor}:
+	Adapted for the user action messages forming by the new DAQ-function messSet()
+	    with the unified category structure for transferring between OpenSCADA stations of different levels.
+    !!:wlb_doc.{docUsersSet,docAlarmsRep}: Appended in the DAQGate source complete scanning for whole transferring hierarchy.
+    !:wlb_Main.{alarmsSt,alarmsAct},wlb_doc.docMessRep:
+	Improved in the DAQGate source complete scanning for whole transferring hierarchy, also for user actions (OP).
+    !:wlb_Main.alarmsSt,wlb_doc.{docMessRep,docAlarmsRep}: Adapted to the transferred messages by DAQGate.
+- !!:SYS: The "Return" type IO of the TFunction object was set to RO in the manual execution tab.
+- !!!!:DAQ,{*,DAQGate}: The function TController::messSet() appended of the messages transferring from the top to the down,
+	so sinking down, making the function virtual one and redefine that in DAQGate,
+	and defining also the new OpenSCADA control service request of the TController object "set:/serv/mess".
+    The OpenSCADA control service requests "TController::get:/serv/mess", "TDAQS::list:/serv/PrmAttr"
+	set to the early exiting by return.
+- !!:FIX:UI.{QTCfg,Vision}: Prevented from hangs at stopping from a termination signal, from the console mostly,
+    since locking the main Qt thread in modStop() without qApp->processEvents().
+- UI.{Vision,WebVision}: The empty page group is meant now the "main" one to force the root page replace
+	at starting from non empty page groups.
+    The shape type changing appended of clearing all child objects after the shape destroy(),
+	due to warnings of reusing-doubling like to QLayout.
+- !!:UI.VCAEngine: Manual enabling the visual items causes now for their reloading,
+	due to the previosly loaded values loss at the inheriting, for: Widget Library and items, Project and items.
+    !: The inheritance restoring operation, or the changes clearing, for the included visual items
+	appended of the container inheritance restoring.
+    Widget::{path,parentNm,setParentNm}(), Widget::mParentNmPrev renamed to Widget::{addr,parentAddr,setParentAddr}(). Widget::mParentAddrPrev.
+- UI.WebVision: Some improved in the frontend status.
+
+
 2021-10-26 Roman (stable)
 - FIX:LibsDB.OscadaLibs: tmplib_base.anUnif fixed in processing the default alarm levels
     after the last expanding by the DESCR option "CustomAlarms".

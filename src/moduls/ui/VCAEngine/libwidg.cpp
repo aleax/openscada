@@ -387,7 +387,10 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     if(a_path == "/obj/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
     else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    setEnable(s2i(opt->text()));
+	    if(s2i(opt->text())) load();
+	}
     }
     else if(a_path == "/obj/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(isStdStorAddr()?DB():fullDB());
@@ -497,7 +500,7 @@ LWidget::LWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TCon
     cfg("ID").setS(id());
     cfg("PROC").setExtVal(true);
 
-    setParentNm(isrcwdg);
+    setParentAddr(isrcwdg);
     setNodeFlg(TCntrNode::SelfSaveForceOnChild);
 }
 
@@ -550,7 +553,7 @@ void LWidget::postDisable( int flag )
     }
 }
 
-string LWidget::path( ) const	{ return "/wlb_"+ownerLib().id()+"/wdg_"+id(); }
+string LWidget::addr( ) const	{ return "/wlb_"+ownerLib().id()+"/wdg_"+id(); }
 
 string LWidget::ico( ) const
 {
@@ -618,7 +621,7 @@ void LWidget::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() 
 
 void LWidget::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+iprg); }
 
-void LWidget::setParentNm( const string &isw )
+void LWidget::setParentAddr( const string &isw )
 {
     if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
     cfg("PARENT").setS(isw);
@@ -634,19 +637,19 @@ void LWidget::setEnable( bool val, bool force )
 
     //Include widgets link update on the parrent change
     if(val) {
-	if(mParentNmPrev.size() && parentNm() != mParentNmPrev) {
+	if(mParentAddrPrev.size() && parentAddr() != mParentAddrPrev) {
 	    vector<string> lst;
 	    wdgList(lst, true);
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		try {
 		    AutoHD<Widget> iw = wdgAt(lst[i_l]);
-		    if(iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0) {
-			iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
+		    if(iw.at().parentAddr().compare(0,mParentAddrPrev.size()+1,mParentAddrPrev+"/") == 0) {
+			iw.at().setParentAddr(parentAddr()+iw.at().parentAddr().substr(mParentAddrPrev.size()));
 			iw.at().setEnable(true);
 		    }
 		} catch(TError &err) { }
 	}
-	mParentNmPrev = parentNm();
+	mParentAddrPrev = parentAddr();
     }
 }
 
@@ -880,8 +883,15 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id(),RWRWR_,"root",SUI_ID,1,"doc", "User_API|Documents/User_API");
 	return;
     }
-    if(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) ;
-    else if(opt->attr("path") == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
+
+    //Processing for the page commands
+    string a_path = opt->attr("path");
+    if(a_path == "/wdg/st/en" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && s2i(opt->text())) {
+	setEnable(s2i(opt->text()));
+	loadIO();	//Reloading the widget IOs only
+    }
+    else if(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) ;
+    else if(a_path == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else TCntrNode::cntrCmdProc(opt);
 }
 
@@ -903,7 +913,7 @@ CWidget::CWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TCon
 {
     cfg("ID").setS(id());
     mLnk = true;
-    setParentNm(isrcwdg);
+    setParentAddr(isrcwdg);
 }
 
 CWidget::~CWidget( )
@@ -927,7 +937,7 @@ TCntrNode &CWidget::operator=( const TCntrNode &node )
     return *this;
 }
 
-string CWidget::path( ) const	{ return "/wlb_"+ownerLWdg().ownerLib().id()+"/wdg_"+ownerLWdg().id()+"/wdg_"+id(); }
+string CWidget::addr( ) const	{ return "/wlb_"+ownerLWdg().ownerLib().id()+"/wdg_"+ownerLWdg().id()+"/wdg_"+id(); }
 
 LWidget &CWidget::ownerLWdg( ) const	{ return *(LWidget*)nodePrev(); }
 
@@ -972,7 +982,7 @@ void CWidget::postDisable( int flag )
 
 string CWidget::ico( ) const	{ return parent().freeStat() ? "" : parent().at().ico(); }
 
-void CWidget::setParentNm( const string &isw )
+void CWidget::setParentAddr( const string &isw )
 {
     if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
     cfg("PARENT").setS(isw);
@@ -1073,6 +1083,12 @@ void CWidget::saveIO( )
 
 void CWidget::wClear( )
 {
+    //Checking and restoring the container common inheritance
+    if(enable() && ownerLWdg().parent().at().wdgPresent(id()) && parentAddr() != ownerLWdg().parent().at().wdgAt(id()).at().addr()) {
+	setParentAddr(ownerLWdg().parent().at().wdgAt(id()).at().addr());
+	setEnable(true);
+    }
+
     Widget::wClear();
     cfg("ATTRS").setS("");
 }
@@ -1121,6 +1137,12 @@ void CWidget::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr", opt, -1, "/", TSYS::strMess(_("Link to the widget '%s'."), id().c_str()).c_str(), RWRWR_, "root", SUI_ID);
 	return;
     }
-    if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)))
-	TCntrNode::cntrCmdProc(opt);
+
+    //Processing for the page commands
+    string a_path = opt->attr("path");
+    if(a_path == "/wdg/st/en" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && s2i(opt->text())) {
+	setEnable(s2i(opt->text()));
+	loadIO();	//Reloading the widget IOs only
+    }
+    else if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt))) TCntrNode::cntrCmdProc(opt);
 }

@@ -40,7 +40,7 @@ class PrWidget : public LWidget
 	string rootId( ) const		{ return id(); }
 	string ico( ) const;
 	string type( )			{ return "Terminator"; }
-	string parentNm( ) const	{ return "root"; }
+	string parentAddr( ) const	{ return "root"; }
 	string name( ) const		{ return _("Root primitive"); }
 	string descr( ) const		{ return _("Abstract root primitive"); }
 

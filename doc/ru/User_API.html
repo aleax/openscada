@@ -566,7 +566,7 @@ SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
 <li> <i>string name( )</i> — имя объекта контроллера.</li>
 <li> <i>string descr( )</i> — описание объекта и контроллера.</li>
 <li> <i>string status( )</i> — статус контроллера.</li>
-<li> <i>bool messSet( string mess, int lev, string type2Code = "OP", string prm = "", string cat = "")</i> — устанавливает сообщение источника данных <i>mess</i> с уровнем <i>lev</i>, для параметра <i>prm</i> (<b>{PrmId}</b>), дополнительной информацией категории <i>cat</i> и кодом типа <i>type2Code</i>. Эта функция формирует сообщение с унифицированной категорией транспортирования через источник данных <b>{type2Code}{ModId}:{CntrId}[.{PrmId}][:{cat}]</b>, где: 
+<li> <i>bool messSet( string mess, int lev, string type2Code = "OP", string prm = "", string cat = "")</i> — устанавливает сообщение источника данных <i>mess</i> с уровнем <i>lev</i>, для параметра <i>prm</i> (<b>{PrmId}</b>), дополнительной информацией категории <i>cat</i> и кодом типа <i>type2Code</i>. Эта функция <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">формирует сообщения</a> с унифицированной категорией транспортирования через источник данных <b>{type2Code}{ModId}:{CntrId}[.{PrmId}][:{cat}]</b>, где: 
 <ul><li> <i>type2Code</i> — двухсимвольный код типа сообщения, по умолчанию означает действие оператора "OP";</li>
 <li> <i>CntrId</i> — идентификатор объекта контроллера;</li>
 <li> <i>PrmId</i> — идентификатор параметра, из аргумента <i>prm</i>;</li>
@@ -974,5 +974,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2777</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/ru">Documents/User_API/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2782</td></tr></table></body>
 </html>

@@ -213,16 +213,9 @@ ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl"), forceStl(NULL)
 
 }
 
-void ShapeFormEl::init( WdgView *w )
-{
-    w->shpData = new ShpDt();
-    new QVBoxLayout(w);
-}
+void ShapeFormEl::init( WdgView *w )	{ w->shpData = new ShpDt(); new QVBoxLayout(w); }
 
-void ShapeFormEl::destroy( WdgView *w )
-{
-    delete (ShpDt*)w->shpData;
-}
+void ShapeFormEl::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
 bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
@@ -1660,6 +1653,7 @@ ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 void ShapeMedia::init( WdgView *w )
 {
     w->shpData = new ShpDt();
+
     new QVBoxLayout(w);
 }
 
@@ -4702,10 +4696,7 @@ void ShapeDocument::init( WdgView *w )
     lay->addWidget(shD->web);
 }
 
-void ShapeDocument::destroy( WdgView *w )
-{
-    delete (ShpDt*)w->shpData;
-}
+void ShapeDocument::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
 bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {

@@ -1442,7 +1442,7 @@ void VisRun::fullUpdatePgs( )
     }
 }
 
-string	VisRun::lang( )
+string VisRun::lang( )
 {
     try { return SYS->security().at().usrAt(user()).at().lang(); } catch(...) { }
     return "";
@@ -1600,7 +1600,7 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     string pgSrc = (chN=req.getElementBy("path","/%2fattr%2fpgOpenSrc")) ? chN->text() : "";	//wAttrGet(pg_it, "pgOpenSrc");
 
     //Check for master page replace
-    if(!master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp) {
+    if(!master_pg || pgGrp == "main" || pgGrp.empty() || master_pg->pgGrp() == pgGrp) {
 	// Send close command
 	if(master_pg) {
 	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());

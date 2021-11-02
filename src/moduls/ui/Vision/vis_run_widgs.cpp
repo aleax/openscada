@@ -612,7 +612,7 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
     //Self check
     if(id() == ipg) return this;
 
-    //Check to included widgets
+    //Checking for included widgets
     for(int iCh = 0; iCh < children().size(); iCh++) {
 	if(qobject_cast<RunPageView*>(children().at(iCh))) {
 	    pg = ((RunPageView*)children().at(iCh))->findOpenPage(ipg);

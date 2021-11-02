@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.0
+Version: 2.1.4
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.0
+Версія: 2.1.4
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.0
+Версия: 2.1.4
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -85,7 +85,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2008-2012), Ksenia Yashina (2007)
 Founded: September 2007
-Version: 1.0.1
+Version: 1.0.3
 License: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','wlb_mnEls','','Елементи мнемосхеми','Надає бібліотеку елементів мнемосхем користувацького інтерфейсу промислової автоматизації.
 
@@ -95,7 +95,7 @@ DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','wlb_mnEls','','Елементи �
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2008-2012), Ксенія Яшина (2007)
 Засновано: Вересень 2007
-Версія: 1.0.1
+Версія: 1.0.3
 Ліцензія: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','Элементы мнемосхемы','Предоставляет библиотеку элементов мнемосхем пользовательского интерфейса промышленной автоматизации.
 
@@ -105,7 +105,7 @@ DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','Элементы мнемосхе
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2008-2012), Ксения Яшина (2007)
 Основано: Сентябрь 2007
-Версия: 1.0.1
+Версия: 1.0.3
 Лицензия: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements');
 INSERT INTO VCALibs VALUES('doc','Documents','Provides the combined library of the reports, documents and related functions of common and the industrial automation.
@@ -118,7 +118,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: January 2008
-Version: 2.1.1
+Version: 2.1.3
 License: GPLv2
 DOC: Libs_Documents|Libs/Documents','wlb_doc','','Документи','Надає комбіновану бібліотеку звітів, документів та пов''язаних функцій загальної та промислової автоматизації.
 
@@ -130,7 +130,7 @@ DOC: Libs_Documents|Libs/Documents','wlb_doc','','Документи','Нада�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Січень 2008
-Версія: 2.1.1
+Версія: 2.1.3
 Ліцензія: GPLv2
 DOC: Libs_Documents|Libs/Documents','Документы','Предоставляет комбинированную библиотеку отчётов, документов и связанных функций общей и промышленной автоматизации.
 
@@ -142,7 +142,7 @@ DOC: Libs_Documents|Libs/Documents','Документы','Предоставля
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Январь 2008
-Версия: 2.1.1
+Версия: 2.1.3
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents');
 INSERT INTO VCALibs VALUES('prescr','Prescriptions','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
@@ -9523,8 +9523,8 @@ R49WVlYe3L79U6IlDMOrV6+HYRgEQaVSGQ6HruvEcVytTnuezzCgFJk27fv+pUvfXLjw9evX2wll
 fX2tVitcabnmed7ok/d6GiEgAExTM01tPNV1XUqpKIqO41QqlaJjQ3KzKTJN03RdF0XRNM12uz03
 V3i3mESRJIllWUmSqtXq1FTu5ecdRZblogPOhG0pbSzL/Q2YovM7l7aYfgAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 function setActMess(mess) {
-	if(prmErr.isEVal())	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr, "''"+prmShifr+"''. "+mess);
-	else SYS.nodeAt(prmErr).nodePrev().messSet("''"+prmShifr+"''. "+mess, 2, "OP", this.ownerSess().user());
+	if(prmErr.isEVal())	SYS.messNote("OP:"+this.ownerSess().user()+":"+prmShifr, "''"+prmShifr+"''."+mess);
+	else SYS.nodeAt(prmErr).nodePrev().messSet("''"+prmShifr+"''."+mess, 2, "OP", this.ownerSess().user());
 }
 
 ev_wrk = ev_rez = "";
@@ -9821,7 +9821,7 @@ else if(!prmComText.isEVal() || !prmStText.isEVal()) {
 		st_text_en = st_text_text.length;
 		if(st_text_en && com_text_items.indexOf(st_text_text) != -1) com_text_value = st_text_text;
 	}
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1635146642);
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1635753385);
 INSERT INTO wlb_Main VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
@@ -10716,28 +10716,33 @@ H6/+zXofterfLMZA0zGIRCq9tLSkKGw0GqVS6R3N2mw2m83mR9pSp3l+Thlj3GIEpNr5cx3V3fb5
 +PKrtz9dwzBYW1tTFDqOo2mYAMDu7m65XP4s7j41hUJhbm7uamhZCQIAjuPU6/XoXN2BTqdzo6K9
 877/EYMAUTMIEDWDAFEzCBA1gwBRMwgQNYMAUTMIEDWDAFEzCBA1gwBRQwAAY6z4x2DkUEpvVNDT
 p9/2er1I3Hw8lNJ/AdK3tNlT+3/SAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+function setActMess(mess) {
+	if(var_addr.isEVal())	SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME, "''"+NAME+"''."+mess);
+	else SYS.nodeAt(var_addr).nodePrev().messSet("''"+NAME+"''."+mess, 2, "OP", this.ownerSess().user());
+}
+
 txt_pnlTitle_arg0val = NAME;
 
 if(f_start) clc = 0;
 clc++;
 if(clc == 3) event += "usr_ElCadr";
 for(off = 0, ev_rez = ""; (ev_wrk=event.parse(0,"\n",off)).length; ) {
-	if(ev_wrk == "ws_LnAccept:/kp") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.Kp : "+DESCR+" : "+Kp+" : " +kp_value); Kp = kp_value; }
-	else if(ev_wrk == "ws_LnAccept:/ki") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.Ki : "+DESCR+" : "+Ki+" : " +ki_value); Ki = ki_value; }
-	else if(ev_wrk == "ws_LnAccept:/ti") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.Ti : "+DESCR+" : "+Ti/1000+" : " +ti_value); Ti = 1000*ti_value; }
-	else if(ev_wrk == "ws_LnAccept:/kd") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.Kd : "+DESCR+" : "+Kd+" : " +kd_value); Kd = kd_value; }
-	else if(ev_wrk == "ws_LnAccept:/td") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.Td : "+DESCR+" : "+Td/1000+" : " +td_value); Td = 1000*td_value; }
-	else if(ev_wrk == "ws_LnAccept:/tzd") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.Tzd : "+DESCR+" : "+Tzd+" : " +tzd_value); Tzd = 1000*tzd_value; }
-	else if(ev_wrk == "ws_LnAccept:/zn") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.Zn : "+DESCR+" : "+Zi+" : " +zn_value); Zi = zn_value; }
-	else if(ev_wrk == "ws_LnAccept:/h1") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.H1 : "+DESCR+" : "+Hdwn+" : " +h1_value); Hdwn = h1_value; }
-	else if(ev_wrk == "ws_LnAccept:/h2") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.H2 : "+DESCR+" : "+Hup+" : " +h2_value); Hup = h2_value; }
-	else if(ev_wrk == "ws_LnAccept:/k1") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.K1 : "+DESCR+" : "+K1+" : " +k1_value); K1 = k1_value; }
-	else if(ev_wrk == "ws_LnAccept:/k2") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.K2 : "+DESCR+" : "+K2+" : " +k2_value); K2 = k2_value; }
-	else if(ev_wrk == "ws_LnAccept:/k3") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.K3 : "+DESCR+" : "+K3+" : " +k3_value); K3 = k3_value; }
-	else if(ev_wrk == "ws_LnAccept:/k4") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.K4 : "+DESCR+" : "+K4+" : " +k4_value); K4 = k4_value; }
-	else if(ev_wrk == "ws_LnAccept:/tiPer") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.TImpPer : "+DESCR+" : "+TImpPer/1000+" : " +tiPer_value); TImpPer = 1000*tiPer_value; }
-	else if(ev_wrk == "ws_LnAccept:/tiMin") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.TImpMin : "+DESCR+" : "+TImpMin/1000+" : " +tiMin_value); TImpMin = 1000*tiMin_value; }    
-	else if(ev_wrk == "ws_LnAccept:/rfct") { SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''.KImpRfact : "+DESCR+" : "+KImpRfact+" : " +rfct_value); KImpRfact = rfct_value; }
+	if(ev_wrk == "ws_LnAccept:/kp") { setActMess("Kp : "+DESCR+" : "+Kp+" : " +kp_value); Kp = kp_value; }
+	else if(ev_wrk == "ws_LnAccept:/ki") { setActMess("Ki : "+DESCR+" : "+Ki+" : " +ki_value); Ki = ki_value; }
+	else if(ev_wrk == "ws_LnAccept:/ti") { setActMess("Ti : "+DESCR+" : "+Ti/1000+" : " +ti_value); Ti = 1000*ti_value; }
+	else if(ev_wrk == "ws_LnAccept:/kd") { setActMess("Kd : "+DESCR+" : "+Kd+" : " +kd_value); Kd = kd_value; }
+	else if(ev_wrk == "ws_LnAccept:/td") { setActMess("Td : "+DESCR+" : "+Td/1000+" : " +td_value); Td = 1000*td_value; }
+	else if(ev_wrk == "ws_LnAccept:/tzd") { setActMess("Tzd : "+DESCR+" : "+Tzd+" : " +tzd_value); Tzd = 1000*tzd_value; }
+	else if(ev_wrk == "ws_LnAccept:/zn") { setActMess("Zn : "+DESCR+" : "+Zi+" : " +zn_value); Zi = zn_value; }
+	else if(ev_wrk == "ws_LnAccept:/h1") { setActMess("H1 : "+DESCR+" : "+Hdwn+" : " +h1_value); Hdwn = h1_value; }
+	else if(ev_wrk == "ws_LnAccept:/h2") { setActMess("H2 : "+DESCR+" : "+Hup+" : " +h2_value); Hup = h2_value; }
+	else if(ev_wrk == "ws_LnAccept:/k1") { setActMess("K1 : "+DESCR+" : "+K1+" : " +k1_value); K1 = k1_value; }
+	else if(ev_wrk == "ws_LnAccept:/k2") { setActMess("K2 : "+DESCR+" : "+K2+" : " +k2_value); K2 = k2_value; }
+	else if(ev_wrk == "ws_LnAccept:/k3") { setActMess("K3 : "+DESCR+" : "+K3+" : " +k3_value); K3 = k3_value; }
+	else if(ev_wrk == "ws_LnAccept:/k4") { setActMess("K4 : "+DESCR+" : "+K4+" : " +k4_value); K4 = k4_value; }
+	else if(ev_wrk == "ws_LnAccept:/tiPer") { setActMess("TImpPer : "+DESCR+" : "+TImpPer/1000+" : " +tiPer_value); TImpPer = 1000*tiPer_value; }
+	else if(ev_wrk == "ws_LnAccept:/tiMin") { setActMess("TImpMin : "+DESCR+" : "+TImpMin/1000+" : " +tiMin_value); TImpMin = 1000*tiMin_value; }    
+	else if(ev_wrk == "ws_LnAccept:/rfct") { setActMess("KImpRfact : "+DESCR+" : "+KImpRfact+" : " +rfct_value); KImpRfact = rfct_value; }
 	else ev_rez += ev_wrk+"\n";
 }
 event = ev_rez;
@@ -10783,7 +10788,7 @@ trnd_prm2bordL = min;
 trnd_prm2bordU = max;
 trnd_prm3addr = auto_addr;
 trnd_prm4addr = impQup_addr;
-trnd_prm5addr = impQdwn_addr;','','',1000,'id;path;name;dscr;active;geomW;geomH;evProc;pgGrp;backColor;bordWidth;',1578246829);
+trnd_prm5addr = impQdwn_addr;','','',1000,'id;path;name;dscr;active;geomW;geomH;evProc;pgGrp;backColor;bordWidth;',1635755905);
 INSERT INTO wlb_Main VALUES('ResultGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 OElEQVRYhc2YTW8TRxiA33fmnZnd9VcSO4EgQW+tVPVSCUGLAAHiQ6I3JISEOHLtpRfE36A/CSEq
 hdKEQogqVNoCdkJI7NiO7f2YeXtwQD2UHXMYtXsb6ZlnPZJ3n53BH+/dc84NBgPHnOd5nueRMXlR
@@ -11928,6 +11933,11 @@ OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
 KJVmkTB4ff7snYcvviIEeeU0TUTUKPLACE9CTFziCipabII/EEJs/CISwny8qvr6IihKBcX4hDlV
 1NgExJHSG4ewlDgXZWFImQdYhDXM7TSwySgFqmERlVKiyDpsYMgnoVEPDDQY9cBAAxYGBoYfP36w
 sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text',0,'JavaLikeCalc.JavaScript
+function setActMess(mess) {
+	if(err.isEVal())	SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME, "''"+NAME+"''."+mess);
+	else SYS.nodeAt(err).nodePrev().messSet("''"+NAME+"''."+mess, 2, "OP", this.ownerSess().user());
+}
+
 if(f_start)	isErr = false, alBlnk = false, cnt = 0, fixText = (text != "---");
 if(f_stop && !fixText)	{ text = "---"; return; }
 
@@ -12005,28 +12015,28 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	//SYS.messInfo("TextLab","Event: "+sval);
 	if(!com_text.isEVal() && sval.indexOf("usr_") == 0) {
 		com_text = comVal = sval.slice(4);
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_open") {
 		if(!com.isEVal())	com = true;
 		else close = false;
 		comVal = (comVal=digComs.parse(0,";")).length ? comVal.parse(0,"-") : tr("ENABLE");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_close") {
 		if(!close.isEVal())	close = true;
 		else com = false;
 		comVal = (comVal=digComs.parse(1,";")).length ? comVal.parse(0,"-") : tr("DISABLE");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_stop") {
 		if(!stop.isEVal())	stop = true;
 		comVal = (comVal=digComs.parse(2,";")).length ? comVal.parse(0,"-") : tr("STOP");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1629035441);
+event = ev_rez;','','',500,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1635753802);
 INSERT INTO wlb_Main VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -12677,18 +12687,23 @@ if(((cnt++)%(f_frq*1) == 0 || f_start || toUpdate) && !f_stop) {
 			else if(vC == "cat")	items += "<s>"+SYS.strEncode(iM.categ,"HTML")+"</s>";
 			else if(vC == "mess")	items += "<s>"+SYS.strEncode(iM.mess,"HTML")+"</s>";
 			else if(vC == "prm") {
-				srcO = iM.categ.match("^al(.+):([^\\.]+)|^([^:]+).*:al");
+				srcO = iM.categ.match("^al(.+):([^\\.]+)|^(.*):al");
 				tVl = "";
 				//From remote station
-				if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-					req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
-					SYS.cntrReq(req);
-					for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-						if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-							sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-							break;
+				if(srcO.length == 4)
+					for(off2 = 0, isFirst = true; (tVl2=srcO[3].parse(0,":",off2)).length; tVl += (tVl.length?".":"")+tVl2, isFirst = false) {
+						if(!isFirst)	continue;
+						if(!sourceCache[tVl2].isEVal())	tVl2 = sourceCache[tVl2];
+						else {
+							req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
+							SYS.cntrReq(req);
+							for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+								if(req.childGet(0).childGet(iTr).text() == tVl2) {
+									tVl2 = sourceCache[tVl2] = req.childGet(1).childGet(iTr).text();
+									break;
+								}
 						}
-				}
+					}
 
 				items += "<s>"+SYS.strEncode((tVl.length?tVl+" > ":"")+iM.mess.parse(0,messItSep),"HTML")+"</s>";
 			}
@@ -12764,7 +12779,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.Archive.messPut(iM.tm, iM.utm, iM.categ, iM.level, iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 										iM.mess.parse(3,messItSep)+messItSep+iM.mess.parse(4,messItSep)+messItSep+set);
 	}
-}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1635141623);
+}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1635771953);
 INSERT INTO wlb_Main VALUES('alarmsSt','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE60lEQVRYhe2YTW8kRwGGn/qumpn2jJ1db+z1JpsEwgJCCkJw4PeQPwEX
 Llw5w50rd05RDhyQkDgmkdkQstpo7bXX3vXMdFd31wcHx4CEcjASGSLNc6y3q/p9qrtVUov33/9Z
@@ -12797,18 +12812,24 @@ function testLev( v1, v2 ) {
 }
 
 function getSrc( categ, sourceCache ) {
-	srcO = categ.match("^al(.+):([^\\.]+)|^([^:]+).*:al");
+	srcO = categ.match("^al(.+):([^\\.]+)|^(.*):al");
 	tVl = "";
+
 	//From remote station
-	if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-		req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
-		SYS.cntrReq(req);
-		for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-			if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-				sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-				break;
+	if(srcO.length == 4)
+		for(off2 = 0, isFirst = true; (tVl2=srcO[3].parse(0,":",off2)).length; tVl += (tVl.length?".":"")+tVl2, isFirst = false) {
+			if(!isFirst)	continue;
+			if(!sourceCache[tVl2].isEVal())	tVl2 = sourceCache[tVl2];
+			else {
+				req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
+				SYS.cntrReq(req);
+				for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+					if(req.childGet(0).childGet(iTr).text() == tVl2) {
+						tVl2 = sourceCache[tVl2] = req.childGet(1).childGet(iTr).text();
+						break;
+					}
 			}
-	}
+		}
 
 	return tVl;
 }
@@ -13209,7 +13230,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1635141623);
+//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1635771973);
 INSERT INTO wlb_Main VALUES('ImgLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAN
 EklEQVR4nOWb6W5dyXWFv7XPcCfegRRHiZJIiZRavE31QLtjuQ1ET+GH8O88gB8gT2IgzxD/cAAD
 toLYgdyA3XHakhrd7pZkURTHe0+t/LiUqO5I1MBBRrKAQxI8VXVWrbNr195VdQSY/8fI93//M/Dr
@@ -13271,6 +13292,11 @@ m+3fmOyBsmzOsC/Au/+46Y1hLLDBMhuu0ldQ/Tnf2vjz3Vu/e3AfduEgFDYwfHD3wcPWQvv3pMEX
 WT01FVnp0QkNquwYosFTRFbJZhQPOVV71U61RcTjP/7l27+tjRZIDM/lAgJz79429+7defq/o56+
 +HvBYSvDh871p/Xl1rvEu/5w8p3jqQX86J2yeDf4EYzG+P95Mz8M/wM578xqU+m3UAAAAABJRU5E
 rkJggg==','/wlb_originals/wdg_Media',0,'JavaLikeCalc.JavaScript
+function setActMess(mess) {
+	if(err.isEVal())	SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME, "''"+NAME+"''."+mess);
+	else SYS.nodeAt(err).nodePrev().messSet("''"+NAME+"''."+mess, 2, "OP", this.ownerSess().user());
+}
+
 if(f_start)	isErr = false, alBlnk = false, cnt = 0;
 
 //Prepare/update the context menu
@@ -13346,28 +13372,28 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	//SYS.messInfo("TextLab","Event: "+sval);
 	if(!com_text.isEVal() && sval.indexOf("usr_") == 0) {
 		com_text = comVal = sval.slice(4);
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_open") {
 		if(!com.isEVal())	com = true;
 		else close = false;
 		comVal = (comVal=digComs.parse(0,";")).length ? comVal.parse(0,"-") : tr("ENABLE");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_close") {
 		if(!close.isEVal())	close = true;
 		else com = false;
 		comVal = (comVal=digComs.parse(1,";")).length ? comVal.parse(0,"-") : tr("DISABLE");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_stop") {
 		if(!stop.isEVal())	stop = true;
 		comVal = (comVal=digComs.parse(2,";")).length ? comVal.parse(0,"-") : tr("STOP");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+NAME,"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1567951438);
+event = ev_rez;','','',500,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1635754596);
 INSERT INTO wlb_Main VALUES('userManager','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 /klEQVRYhe2Zy07bQBiFx+OxnYydC04h0K5ggRJub8ArAEuegrdgy2OwZcGGHS/AgghEKhEJobYh
 JUIE4kkm8Xj+LqwiBC5N0z9EkfhWo7kczxlf5tg2dnZ2UqkUQaLb7abTaSy1vyKlZKlUinOOpXh9
@@ -14540,6 +14566,11 @@ P6yvr/+H67pfnCutvxCu656r1+sP1uv1h7PZ7Luvu+66B7LZrKSqiUkpPfOVWCCAA8d2MBxaaLV2
 u41G47ec83e5rrs6VzZ/G9rtdvuzhJA/djqd95eKpRfqyaSmaQn4s34XcF0X/X4f9Vrd7nQ6393c
 3PxvAD/F/1E0m83/aTab3261WqdLpdLdpmnemkgkrnxDuVL5Rbla/mEqlXoJ/vF+Ijdzudy/ViqV
 7wJ45ZUWvWaOBi0KGQDHFm3EAf5e8CeIyH5z7O/CwwAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+function setActMess(mess) {
+	if(err.isEVal())	SYS.messNote("OP:"+this.ownerSess().user()+":"+shifr, "''"+shifr+"''."+mess);
+	else SYS.nodeAt(err).nodePrev().messSet("''"+shifr+"''."+mess, 2, "OP", this.ownerSess().user());
+}
+
 if(f_start) {
 	c1Sv = c1;
 	contextMenu = "";
@@ -14571,24 +14602,21 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	if(sval == "usr_open") {
 		com = true, close = false;
 		if((comVal=digComs.parse(0,";")).length) comVal = tr("OPEN");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+shifr,"''"+shifr+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
-		//SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("OPEN"):digComs.parse(0,";").parse(0,"-")));
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_close") {
 		com = false, close = true;
 		if((comVal=digComs.parse(0,";")).length) comVal = tr("CLOSE");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+shifr,"''"+shifr+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
-		//SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("CLOSE"):digComs.parse(1,";").parse(0,"-")));
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_stop") {
 		stop = true;
 		if((comVal=digComs.parse(0,";")).length) comVal = tr("STOP");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+shifr,"''"+shifr+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
-		//SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("STOP"):digComs.parse(2,";").parse(0,"-")));
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1579024297);
+event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1635754955);
 INSERT INTO wlb_mnEls VALUES('El_Pipe_simple_vert_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAS9JREFUeJztm0FOwlAYBoe+iqRAPAI7DiE38QJ4JvZyB+9VmhALuigG
 0Z1dTIzfJH/en/eSZjL7ThjJasX7ZgNNM8y8gfli2JfL633TwGJxu89mUFXQ93A4QNfdnod22NvL
@@ -14745,6 +14773,11 @@ T8l7+mBFWIECjv2yeKvSOGMMlmVBUZT7tm3fvHfvXseMB473bPByNpv91/DwiK5pzTWC4NFYq9K4
 PGEuLi4+KJfLvwHw304reayHo729vYMA/jw9PX1T1/WsYRhN+3oB+XBEkLGzs4Pd3d2FtbW1byuV
 yj10KOaDOKnj8fFsNnudEPJdMpls/HCLU1/OOcrlMra2tn7knH9dLBZ/QMg83w4n+f8AGb8DcK3F
 8y8Qcm0fIUKECBEiRIgQIUKECBEiRGiL/wHlH6BTZhaA5gAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
+function setActMess(mess) {
+	if(err.isEVal())	SYS.messNote("OP:"+this.ownerSess().user()+":"+shifr, "''"+shifr+"''."+mess);
+	else SYS.nodeAt(err).nodePrev().messSet("''"+shifr+"''."+mess, 2, "OP", this.ownerSess().user());
+}
+
 if(f_start) {
 	c1Sv = c1;
 	contextMenu = "";
@@ -14772,18 +14805,16 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	if(sval == "usr_open") {
 		com = true; close = false;
 		if((comVal=digComs.parse(0,";")).length) comVal = tr("START");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+shifr,"''"+shifr+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
-		//SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("START"):digComs.parse(0,";").parse(0,"-")));
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else if(sval == "usr_close") {
 		com = false; close = true;
 		if((comVal=digComs.parse(0,";")).length) comVal = tr("STOP");
-		SYS.messNote("OP:"+this.ownerSess().user()+":"+shifr,"''"+shifr+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
-		//SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("STOP"):digComs.parse(1,";").parse(0,"-")));
+		setActMess(tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1579024297);
+event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1635755818);
 INSERT INTO wlb_mnEls VALUES('cooler2','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAB9ZJREFUeJztWntQVNcZ/7EPFgSU50oRsqxKQUREalGsVKlJg5CUgmJi
 dWw7jszUcaa2Q20lM21o2ulMZ5qmFnUsPsc4lIiSqIk4IgQStMlGHstL2GV5rMDy2Df7Fr/+kYYU
@@ -15608,7 +15639,7 @@ Ewghs9nM8zzf98uyfH9/b7Va/X6fMUYIQcQmADDGWq2WEIJSCgBbW1uMsV6vh4hCCMaYXuGcr4dY
 r3S73bIspZT6eF1najqdjlJKCAEAUkpEzPN8HdWZjuOEYcg514eHEKLZbH5O0HUAoCzLsiwJIZ+L
 AMCvH+Lvfky/AitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGphO
 p6vVynQb/8hsNvsDB/ItKMoqpeIAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1635149442);
+if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1635772940);
 INSERT INTO wlb_doc VALUES('doc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 d0lEQVRYhe1Y227TSheeGY9jJ3bsOHUTWkJpSlpOUspJQgJxwQUSb8AL8DI8D9wScYVEhHpBaRCI
 klBRUsd2nTSODxN75r8YKX9ouyvYu9rRlvJdRWtmrVnfrNM48NWrV2tra+C/iZ2dHVytVq9fvw4A
@@ -15747,7 +15778,7 @@ if(f_start) {
 	doc_time = SYS.time();
 	doc_bTime = doc_time-24*3600;
 	doc_tmpl = doc_tmpl.replace("@@messCat@@", messCat);
-}','','',-1,'name;dscr;backColor;bordWidth;',1580750144);
+}','','',-1,'name;dscr;backColor;bordWidth;',1635772038);
 INSERT INTO wlb_doc VALUES('docMessRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 IUlEQVRYhe2VzcriMBhGkzRpYxOpWF0UBPEHBFG8C+/C+/KaXIggggpuxIWKINZGRZtkFh2k8y1m
 BmcgM5Cza/K85TmUNHA0GpVKJUopYyyKok6nwzmP45gxxjn3fR/8iBBiu932ej3wDzCfzzEhBEKI
@@ -15776,7 +15807,7 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
 	else if(sval == "ws_LnAccept:/fltr")		{ doc_doc = ""; doc_time = 0; }
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1580750144);
+event = ev_rez;','','',-1,'owner;name;dscr;geomH;backColor;',1635772940);
 INSERT INTO wlb_doc VALUES('docRepYear','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
 f0lEQVRYhe2WzUvrShiHZ95M2qZprGkTbYsUUatiwYULu3QhFMStKxfn/HEuxYXuBN2Ii1IUddGC
 VRGs2tbW2ERT8jm5i0ApnHvPveqFcCDPbvL+3mGezDAJ/vnjRzweNy0LAKjr8jyvahoAMACe571/
@@ -19643,7 +19674,7 @@ INSERT INTO wlb_Main_io VALUES('cntrRegul','sclMarkFont','Arial 14',32,'','','tr
 INSERT INTO wlb_Main_io VALUES('cntrRegul','prm0val',NULL,40,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','prm1val',NULL,8,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','prm2val',NULL,8,'','','trnd','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('cntrRegul','curSek','1555251374',0,'','','trnd','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('cntrRegul','curSek','1635755887',0,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','prm3addr','',8,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','prm3bordU','16',0,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','prm3color','magenta-127',64,'labColorGrph7','','trnd','','','','','','','');
@@ -23232,7 +23263,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.3.0
+Version: 1.3.1
 License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує для динамічного відображення активних порушень у табличному вигляді та із виділенням їх за кольором та текстом. Порушення отримуються із буферу поточних-активних порушень OpenSCADA. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Для детального вивчення актуальних порушень елементом передбачено функцію збільшення висоти угору або униз за отриманням фокусу.
@@ -23258,7 +23289,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.2.0
+Версія: 1.3.1
 Ліцензія: GPLv2','','Элемент на рисунке 1.5 служит для динамического отображения активных нарушений в табличном виде и с выделением их цветом и текстом. Нарушения получаются из буфера текущих-активных нарушений OpenSCADA. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 Для детального изучения актуальных нарушений элементом предусмотрено функцию увеличения высоты вверх или вниз при получении фокуса.
@@ -23284,7 +23315,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.2.0
+Версия: 1.3.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','dscr','The element-frame serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from the buffer of current-active violations of OpenSCADA and archive(s), specified in the configuration field <alArch>. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 
@@ -23324,7 +23355,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.4.0
+Version: 1.4.1
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення історії порушень та динамічного їх оновлення на поточний час у повноформатному табличному вигляді, із виділенням їх за кольором та текстом та можливістю багаторівневого фільтрування. Порушення отримуються із буферу поточних-активних порушень OpenSCADA та архіву(ів), визначеного конфігураційним полем <alArch>. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Загалом кадр містить елементи:
@@ -23363,7 +23394,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.3.0
+Версія: 1.4.1
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения истории нарушений и динамического их обновление для текущего времени в полноформатном табличном виде, с выделением их цветом и текстом и возможностью многоуровневого фильтрования. Нарушения получаются из буфера текущих-активных сообщений OpenSCADA и архива(ов), определённого конфигурационным полем <alArch>. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 В целом кадр содержит элементы:
@@ -23402,7 +23433,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.3.0
+Версия: 1.4.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','view','7',32,'','','pass','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','','');
@@ -23547,17 +23578,17 @@ INSERT INTO wlb_Main_io VALUES('cntrRegul','dscr','Element-frame is used for adj
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: DIYA LTD
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2',32,'','','','Елемент-кадр слугує для налаштування ПІД-регулятору, включає в себе інформацію про параметр-регулятор, поля налаштувань регулятору та примітив "Діаграма", для спостереження за трендами регулятору та перегляду історії.
 
 Автор: Роман Савоченко <roman@oscada,org>
 Спонсоровано: ТОВ "ДІЯ"
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элемент-кадр служит для настройки ПИД-регулятора, включает в себя информацию о параметре-регуляторе, поля настроек регулятора и примитив "Диаграмма", для наблюдения за трендами регулятора и просмотра истории.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: ООО "ДІЯ"
-Версия: 1.1.0
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Document". So, the panel allows you to manage documents and navigate through their histories; supported dynamic and archival documents.
 
@@ -23771,33 +23802,33 @@ INSERT INTO wlb_Main_io VALUES('TextLab','dscr','The element is used to display 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.0.0
+Версія: 1.1.0
 Ліцензія: GPLv2','','Элемент служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.0.0
+Версия: 1.1.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ImgLab','dscr','The element is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vinnica Poultry Farm
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних міток зображень, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Вінницька Птахофабрика
-Версія: 1.0.0
+Версія: 1.1.0
 Ліцензія: GPLv2','','Элемент служит для отображения динамических меток изображений, которые формируются на основе дискретных сигналов. Также этот элемент генерирует уведомления про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Винницкая Птицефабрика
-Версия: 1.0.0
+Версия: 1.1.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('accept','dscr','The element implements a simple operations'' acception dialog. The dialog contains a message with a question and two buttons "Apply" and "Cancel". The dialogue, for example, is used in the frame Users manager to accept the deleting operation.
 
@@ -24332,7 +24363,7 @@ INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p8_val','Parameter 8: value',196
 INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p9_val','Parameter 9: value',196613,'',2,'Parameter9|var','','doc','Параметр 9: значення','','','Параметр 9: значение','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRep2WorkSh','p10_val','Parameter 10: value',196613,'',2,'Parameter10|var','','doc','Параметр 10: значення','','','Параметр 10: значение','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','archLs','Archivers list, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"',131077,'FSArch.arch;FSArch.arch1',8,'','','','Перелік архіваторів, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"','','','Перечень архиваторов, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"','','','','','Списак архивара, "{ArhMod}.{Arh}[;{ArhModN}.{ArhN}]"');
-INSERT INTO wlb_doc_uio VALUES('docMessRep','messCat','Message category',131077,'1:/^(al|OP|/sub_UI/mod_VCAEngine)/',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','Категорије порука');
+INSERT INTO wlb_doc_uio VALUES('docMessRep','messCat','Message category',131077,'1:/^(.*al|.*OP|/sub_UI/mod_VCAEngine)/',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','Категорије порука');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','fltr','Filter: value',131077,NULL,2,'','wdg:../wdg_fltr/a_value','doc','Фільтр: значення','','','Фільтр: значение','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','fltrCol','Filter: by column',131077,NULL,8,'','','doc','Фільтр: за стовпчиками','','','Фильтр: по колонкам','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','repHour','Report hour',131073,'9|',9,'','','','Звітний час','','','Отчётный час','','','','','');
@@ -24353,7 +24384,7 @@ INSERT INTO wlb_doc_uio VALUES('docRepMonth','time','Time: current',139265,'0|',
 INSERT INTO wlb_doc_uio VALUES('docRepMonth','bTime','Time: begin',139265,'0|',8,'','','','','','','','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepMonth','aSize','Archive: size',131073,'0|',2,'','wdg:wdg_doc/a_aSize','','Архів: розмір','','','Архив: размер','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepMonth','aCur','Archive: cursor: current',131073,'0|',2,'','wdg:wdg_doc/a_aCur','','Архів: курсор: поточний','','','Архив: курсор: текущий','','','','','');
-INSERT INTO wlb_doc_uio VALUES('docAlarmsRep','messCat','Message category',131077,'1:al*:*',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','Категорије порука');
+INSERT INTO wlb_doc_uio VALUES('docAlarmsRep','messCat','Message category',131077,'1:*al*:*',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','Категорије порука');
 INSERT INTO wlb_doc_uio VALUES('docMessRep','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','','Кеш меморија');
@@ -24660,6 +24691,12 @@ INSERT INTO wlb_doc_uio VALUES('docRepYear','p9isMan','Parameter 9: is manual',1
 INSERT INTO wlb_doc_uio VALUES('docRepYear','p10isMan','Parameter 10: is manual',131072,'0',1,'Parameter10|isMan','','doc','Параметр 10: ручний','','','Параметр 10: ручной','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','showOrigCntr','Show original counter',131072,'0',1,'','','doc','Показати оригінальний лічильник','','','Показать оригинальный счётчик','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepYear','depth','Depth to select, years',131073,'10|',9,'','','doc','Глибина для обрання, років','','','Глубина для выбора, лет','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docAlarmsRep','sourceCache','Source cache',131078,'<TVarObj>
+</TVarObj>
+',0,'','','doc','','','','','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docUsersSet','sourceCache','Source cache',131078,'<TVarObj>
+</TVarObj>
+',0,'','','doc','','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_mnEls_uio VALUES('Level','var','Value',131076,'<EVAL>|',10,'Parameter|var','','','Значення','','','Значение','','','','','Вредност');
 INSERT INTO wlb_mnEls_uio VALUES('Level','min','Minimum',131076,'0|',10,'Parameter|min','','','Мінімум','','','Минимум','','','','','Минимум');
@@ -24711,6 +24748,8 @@ INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','ntf','Notification "{st}:{modes}:{S
 INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','','Статуси');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','','Опис');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','','Опис');
+INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','err','Parameter: error',196613,'',10,'Parameter|err','','','','','','','','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('Compressor','err','Parameter: error',196613,'',10,'Parameter|err','','','','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_prescr_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','','root:UI','','',32,'','','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','','Prescription — edit','Рецепт — редагування','Рецепт — редактирование',32,'','','','','');
@@ -26882,15 +26921,15 @@ INSERT INTO wlb_mnEls_io VALUES('El_Armatura','geomXsc','1',32,'','','','','',''
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','dscr','The elements is used to display the discrete apparatus'' status on basis of the discrete signals, for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the discrete block in different visual variants.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2',32,'','','','Елементи використовуються для відображення статусу дискретних апаратів на основі дискретних сигналів, для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону дискретного блоку у різних візуальних варіантах.
 
 Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
+Версія: 1.1.0
 Ліцензія: GPLv2','','Элементы используются для отображения статуса дискретных аппаратов на основе дискретных сигналов, для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона дискретного блока в различных визуальных вариантах.
 
 Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0
+Версия: 1.1.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','contextMenu','Open:open
 Close:close',40,'','','','Відкрити:open
@@ -27321,15 +27360,15 @@ INSERT INTO wlb_mnEls_io VALUES('El_Alarm','fillImg','led',32,'','','','','','',
 INSERT INTO wlb_mnEls_io VALUES('Compressor','dscr','The elements is used to display the discrete apparatus'' status on basis of the discrete signals, for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the discrete block in different visual variants.
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2',32,'','','','Елементи використовуються для відображення статусу дискретних апаратів на основі дискретних сигналів, для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону дискретного блоку у різних візуальних варіантах.
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко
-Версія: 1.0.0
+Версія: 1.1.0
 Ліцензія: GPLv2','','Элементы используются для отображения статуса дискретных аппаратов на основе дискретных сигналов, для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона дискретного блока в различных визуальных вариантах.
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко
-Версия: 1.0.0
+Версия: 1.1.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Alarm','dscr','The element is used to display the discrete status by color. Also this element generates notifications of violations on the locally defined condition, the attribute "ntf". The element commonly uses and represents the representative structure of the DAQ-template of the discrete block.
 
@@ -28312,7 +28351,7 @@ INSERT INTO wlb_Main_uio VALUES('alarmsSt','digComs','Quittance: commands',13107
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','alarms','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','st_open','Quittance: state',131072,'0',8,'','','alarms','Підтвердження: стан','','','Подтверждение: состояние','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','report','Report',131205,'',8,'','','go_report','Звіт','','','Отчёт','','','','','Извештај','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','messCat','Message category',131077,'al*:*',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','Категорије порука','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','messCat','Message category',131077,'*al*:*',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','Категорије порука','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','DESCR','Parameter: description',131077,'',10,'Parameter|DESCR','','','Параметр: опис','','','Параметр: описание','','','','','Параметар: опис','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','NAME','Parameter: name',131077,'',10,'Parameter|NAME','','','Параметр: ім''я','','','Параметр: имя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','close','Parameter: close',131072,'0',14,'Parameter|close','','','Параметр: закрити','','','Параметр: закрыть','','','','','Параметар: затвори','');
@@ -28405,6 +28444,8 @@ INSERT INTO wlb_Main_uio VALUES('alarmsAct','types','Types list at the level fro
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','types','Types list at the level from 0, separated by '';''',131333,'Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency',8,'','','','Перелік типів за рівнем від 0, поділені '';''','Налагодж.;Інформ.;Зауваж.;Попередж.;Помилка;Критично;Тривога;Аварія','','Перечень типов по уровню от 0, разделены '';''','Отладка;Информ.;Отметка;Предупр.;Ошибка;Критически;Тревога;Авария','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','messCat','Message category',131077,'',8,'','','','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmErr','Parameter: error',196613,'',10,'<page>|err','','','','','','','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('TextLab','err','Parameter: error',196613,'',10,'Parameter|err','','','','','','','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('ImgLab','err','Parameter: error',196613,'',10,'Parameter|err','','','','','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_io VALUES('docRepDay','name','Day report of the hour-averaged values',32,'','','','Добовий звіт середніх за годину значень','','Суточный отчёт среднечасовых значений','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','geomZ','1',32,'','','doc','','','','','','','');
@@ -28552,12 +28593,30 @@ INSERT INTO wlb_doc_io VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeC
   <TR docAMess="2:/(^|.*:)OP*/" docRevers="1">
 	<?dp
 		user = "";
-		if((tVl=mCat.match("^OP:([^:]*):")).length || (tVl=mCat.match("^OP[^:]+:[^:]+:(.*)")).length || (tVl=mCat.match(".*:OP[^:]+:[^:]+:(.*)")).length )
-			user = tVl[1];
+		if((tVl=mCat.match("^OP:([^:]*):")).length || (tVl=mCat.match("^OP[^:]+:[^:]+:(.*)")).length || (tVl=mCat.match("(.*):OP[^:]+:[^:]+:(.*)")).length)
+			user = tVl[(tVl.length>=3)?2:1];
+
+		srcO = tVl; tVl = "";
+		//From remote station
+		if(srcO.length >= 3)
+			for(off2 = 0, isFirst = true; (tVl2=srcO[1].parse(0,":",off2)).length; tVl += (tVl.length?".":"")+tVl2, isFirst = false) {
+			if(!isFirst)	continue;
+			if(!sourceCache[tVl2].isEVal())	tVl2 = sourceCache[tVl2];
+			else {
+				req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
+				SYS.cntrReq(req);
+				for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+					if(req.childGet(0).childGet(iTr).text() == tVl2) {
+						tVl2 = sourceCache[tVl2] = req.childGet(1).childGet(iTr).text();
+						break;
+					}
+			}
+		}
+
 		return "<TD>"+SYS.strftime(mTime,"%d %m")+"</TD>"+
 			"<TD>"+SYS.strftime(mTime,"%H:%M:%S")+"</TD>"+
 			"<TD>"+Special.FLibSYS.strEnc2HTML(user)+"</TD>"+
-			"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</TD>"+
+			"<TD>"+Special.FLibSYS.strEnc2HTML((tVl.length?tVl+" > ":"")+mVal.parse(0, ":"))+"</TD>"+
 			"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
 			"<TD>"+mVal.parse(2,":")+"</TD>"+
 			"<TD>"+mVal.parse(3,":")+"</TD>";
@@ -28580,11 +28639,32 @@ INSERT INTO wlb_doc_io VALUES('docAlarmsRep','tmpl','<body docProcLang="JavaLike
    <?dp return "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH><TH>"+tr("Source")+"</TH><TH>"+tr("Violation")+"</TH><TH>"+tr("Value")+"</TH>"; ?>
   </TR>
   <TR docAMess="@@messCat@@" docRevers="1">
-	<?dp return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
+<?dp
+	srcO = mCat.match("^al(.+):([^\\.]+)|^(.*):al");
+	tVl = "";
+
+	//From remote station
+	if(srcO.length == 4)
+		for(off2 = 0, isFirst = true; (tVl2=srcO[3].parse(0,":",off2)).length; tVl += (tVl.length?".":"")+tVl2, isFirst = false) {
+			if(!isFirst)	continue;
+			if(!sourceCache[tVl2].isEVal())	tVl2 = sourceCache[tVl2];
+			else {
+				req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
+				SYS.cntrReq(req);
+				for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+					if(req.childGet(0).childGet(iTr).text() == tVl2) {
+						tVl2 = sourceCache[tVl2] = req.childGet(1).childGet(iTr).text();
+						break;
+					}
+			}
+		}
+
+	return "<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%d %m")+"</center></TD>"+
 		"<TD><center style=''white-space: nowrap;''>"+SYS.strftime(mTime,"%H:%M:%S")+"</center></TD>"+
-		"<TD><center>"+Special.FLibSYS.strEnc2HTML(mVal.parse(0,":"))+"</center></TD>"+
+		"<TD><center>"+Special.FLibSYS.strEnc2HTML((tVl.length?tVl+" > ":"") + mVal.parse(0,":"))+"</center></TD>"+
 		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(1,":"))+"</TD>"+
-		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";?>
+		"<TD>"+Special.FLibSYS.strEnc2HTML(mVal.parse(2,":"))+"</TD>";
+?>
   </TR>
 </TABLE>
 </body>',40,'','','doc','','','','','','','');
@@ -28852,18 +28932,24 @@ INSERT INTO wlb_doc_io VALUES('docMessRep','tmpl','<body docProcLang="JavaLikeCa
 <?dp
 mValPrm = mVal.parse(0, ": "); mValDscr = mVal.parse(1, ": "); mValVal = mVal.parse(2, ": ");
 
-srcO = mCat.match("^al(.+):([^\\.]+)|^([^:]+).*:al");
+srcO = mCat.match("^al(.+):([^\\.]+)|^(.*):(al|OP)");
 tVl = "";
 //From remote station
-if(srcO.length == 4 && (tVl=sourceCache[srcO[3]]).isEVal()) {
-	req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
-	SYS.cntrReq(req);
-	for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
-		if(req.childGet(0).childGet(iTr).text() == srcO[3]) {
-			sourceCache[srcO[3]] = tVl = req.childGet(1).childGet(iTr).text();
-			break;
+if(srcO.length >= 4)
+	for(off2 = 0, isFirst = true; (tVl2=srcO[3].parse(0,":",off2)).length; tVl += (tVl.length?".":"")+tVl2, isFirst = false) {
+		if(!isFirst)	continue;
+		if(!sourceCache[tVl2].isEVal())	tVl2 = sourceCache[tVl2];
+		else {
+			req = SYS.XMLNode("get").setAttr("path","/Transport/%2fsub%2fehost").setAttr("upRiseSYS",1);
+			SYS.cntrReq(req);
+			for(iTr = 0; req.childSize() && iTr < req.childGet(0).childSize(); iTr++)
+				if(req.childGet(0).childGet(iTr).text() == tVl2) {
+					tVl2 = sourceCache[tVl2] = req.childGet(1).childGet(iTr).text();
+					break;
+				}
 		}
-}
+	}
+
 if(tVl.length)	mValPrm = tVl + " > " + mValPrm;
 
 if(mCat.slice(0,2) == "OP") mValVal += " -> "+mVal.parse(3,":");
@@ -28944,11 +29030,11 @@ INSERT INTO wlb_doc_io VALUES('docMessRep','text','Filter:',32,'','','lab_fltr',
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','dscr','The document is provided for generating a report of the violations. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "Violations". As a data source of this document is the message archive.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.0
+Version: 1.6.0
 License: GPLv2',32,'','','','Документ слугує для генерації звіту з порушень. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Порушення". У якості джерела даних документу виступає архів повідомлень.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.0
+Версія: 1.6.0
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','dscr','The document is provided for generating a day report of the hour-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -28995,14 +29081,14 @@ The document also provides a simple filtering for selected criteria: "Disabled",
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.5.1
+Version: 1.5.3
 License: GPLv2',32,'','','','Документ слугує для генерації звіту різного сорту повідомлень разом, включаючи: "Порушення", "Дії користувача-оператора" та "Системні". Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структури повідомлень: "Порушення", "Дії користувача-оператора" та "Системні". У якості джерела даних документу виступає архів повідомлень.
 
 Документ також надає просту фільтрацію за обраним критерієм: "Вимкнено", "Дата та час (dttm)", "Рівень (lev)", "Параметр (prm)", "Опис (dscr)", "Значення (alrm)".
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.5.1
+Версія: 1.5.3
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRep2WorkSh','dscr','The document is provided for generating a report of the hour values of up to 10 parameters for two working shift of day with the result sum for flows and related parameters. The document is the dynamic type, so you can specify the data time and depth (fixed). The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -29018,11 +29104,11 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 INSERT INTO wlb_doc_io VALUES('docUsersSet','dscr','The document is provided for generating a report of the user interruptions. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "User-operator actions". As a data source of this document is the message archive.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.6.0
+Version: 1.7.0
 License: GPLv2',32,'','','','Документ слугує для генерації звіту з втручань користувача. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Дії користувача-оператора". У якості джерела даних документу виступає архів повідомлень.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.6.0
+Версія: 1.7.0
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','doc','',40,'','','doc','','','','','','','');

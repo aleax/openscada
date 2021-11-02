@@ -82,7 +82,7 @@ bool PrWidget::cntrCmdGeneric( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/wdg/st/parent" && ctrChkNode(opt,"get",R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
-	opt->setText(parentNm());
+	opt->setText(parentAddr());
     else return Widget::cntrCmdGeneric(opt);
 
     return true;
@@ -1538,7 +1538,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     string iLang;				//Process instruction language
     string wProgO;				//Object of work program
     time_t lstTime = 0;				//Last time
-    TFunction funcIO(TSYS::path2sepstr(wdg->path(),'_'));
+    TFunction funcIO(TSYS::path2sepstr(wdg->addr(),'_'));
     funcIO.setStor(wdg->calcProgStors("doc"));
     TValFunc funcV(wdg->id()+"_doc", NULL, false);
     funcV.setUser(u); funcV.setLang(l);

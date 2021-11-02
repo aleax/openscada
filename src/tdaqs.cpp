@@ -587,7 +587,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //Service commands process
-    if(a_path == "/serv/redundant") {	//Redundant service requests
+    // Redundant service requests
+    if(a_path == "/serv/redundant") {
 	if(ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD)) {	//State
 	    opt->setAttr("inProc", "1");
 	    opt->setAttr("StLevel",i2s(SYS->rdStLevel()));
@@ -602,8 +603,11 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    return;
 	}
     }
-    else if(a_path == "/serv/PrmAttr" && ctrChkNode(opt,"list",RWRWR_,"root",SDAQ_ID,SEC_RD))	//Parameter and/or attributes list-browse
+    // Parameter and/or attributes list-browse
+    else if(a_path == "/serv/PrmAttr" && ctrChkNode(opt,"list",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	ctrListPrmAttr(opt, opt->attr("base"), s2i(opt->attr("toPrm")), opt->attr("sep")[0], opt->attr("pref"));
+	return;
+    }
 
     //Get page info
     if(opt->name() == "info") {

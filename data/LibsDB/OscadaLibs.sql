@@ -300,7 +300,7 @@ INSERT INTO flb_servProc_io VALUES('archPackFStests','archiver','Archiver addres
 INSERT INTO flb_servProc_io VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',0,0,'','','','');
 INSERT INTO flb_servProc_io VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
 INSERT INTO flb_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'Результат','','Результат','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,3,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/work/Projects/OpenSCADA/doc/',0,2,'','','','');
 INSERT INTO flb_servProc_io VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
 Works/Technical_Support/Agreement:en,uk,ru:Technical_Support_Agreement.html
@@ -378,12 +378,12 @@ Libs/Main_graphical_elements:en,uk,ru:Libs_Main_graphical_elements.html
 Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html
 Libs/Electrical_elements:en,uk,ru:Libs_Electrical_elements.html
 Libs/Documents:en,uk,ru:Libs_Documents.html
-Libs/Prescriptions:en,uk,ru:Libs_Prescriptions.html',0,4,'','','','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,5,'','','','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','res','Result',0,1,'',0,0,'Результат','','Результат','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','reqTr','Tries of the requests',1,1,'3',0,2,'','','','');
+Libs/Prescriptions:en,uk,ru:Libs_Prescriptions.html',0,3,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,4,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','res','Result',0,2,'',0,5,'Результат','','Результат','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','reqTr','Tries of the requests',1,1,'3',0,1,'','','','');
 INSERT INTO flb_servProc_io VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','prgVer','Program version',0,0,'',0,1,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','prgVer','Program version',0,0,'',0,0,'','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO tmplib_PrescrTempl_io VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -8969,7 +8969,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1579619800);
+if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1635852598);
 CREATE TABLE IF NOT EXISTS 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_regEl VALUES('pidUnif','PID unified','ПІД уніфікований','ПИД унифицированный','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
 

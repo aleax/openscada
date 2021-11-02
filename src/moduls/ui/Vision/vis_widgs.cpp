@@ -1181,7 +1181,11 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
 	//case A_NO_ID:	return false;
 	case A_ROOT:
 	    if(shape && shape->id() == val)	break;
-	    if(shape) shape->destroy(this);
+	    if(shape) {
+		shape->destroy(this);
+		// Cleaning up all child objects after
+		while(children().size()) delete children()[0];
+	    }
 	    shape = mod->getWdgShape(val);
 	    if(shape) shape->init(this);
 	    break;
@@ -1281,8 +1285,8 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
 	setAllAttrLoad(true);
 	if(item.empty() || item == id())
-	    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++) {
-		XMLNode *cN = aBr->childGet(i_el);
+	    for(unsigned iEl = 0; iEl < aBr->childSize(); iEl++) {
+		XMLNode *cN = aBr->childGet(iEl);
 		if(cN->name() == "el") attrSet(cN->attr("id"), cN->text(), s2i(cN->attr("p")));
 	    }
 	setAllAttrLoad(false);

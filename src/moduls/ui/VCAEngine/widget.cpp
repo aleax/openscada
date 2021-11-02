@@ -32,7 +32,7 @@ using namespace VCA;
 //* Widget                                       *
 //************************************************
 Widget::Widget( const string &id, const string &isrcwdg ) :
-    mId(id), mEnable(false), mLnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg), mtxAttrM(true)
+    mId(id), mEnable(false), mLnk(false), mStlLock(false), BACrtHoldOvr(false), mParentAddr(isrcwdg), mtxAttrM(true)
 {
     inclWdg = grpAdd("wdg_");
 }
@@ -59,9 +59,9 @@ TCntrNode &Widget::operator=( const TCntrNode &node )
     if(!srcN->enable()) return *this;
 
     //Parent link copy
-    if(srcN->parentNm() != path() && parentNm().empty()) {
-	if(parentNm() != srcN->parentNm() && enable()) setEnable(false);
-	setParentNm(srcN->parentNm());
+    if(srcN->parentAddr() != addr() && parentAddr().empty()) {
+	if(parentAddr() != srcN->parentAddr() && enable()) setEnable(false);
+	setParentAddr(srcN->parentAddr());
     }
     if(!enable()) setEnable(true);
 
@@ -152,7 +152,7 @@ void Widget::postEnable( int flag )
 void Widget::preDisable( int flag )
 {
     //Delete heritors widgets
-    while(herit().size()) mod->nodeDel(herit()[0].at().path(), 0, 0x10);
+    while(herit().size()) mod->nodeDel(herit()[0].at().addr(), 0, 0x10);
 
     //Disable widget
     if(enable()) setEnable(false);
@@ -245,10 +245,10 @@ string Widget::getStatus( )
 
 bool Widget::isContainer( ) const	{ return parent().freeStat() ? false : parent().at().isContainer(); }
 
-string Widget::path( ) const
+string Widget::addr( ) const
 {
     Widget *ownW = dynamic_cast<Widget*>(nodePrev());
-    if(ownW) return ownW->path()+"/wdg_"+mId;
+    if(ownW) return ownW->addr()+"/wdg_"+mId;
 
     return mId;
 }
@@ -268,7 +268,7 @@ void Widget::setEnable( bool val, bool force )
     if(enable() == val) return;
 
     if(val) {
-	if(parentNm() != "root") {
+	if(parentAddr() != "root") {
 	    try {
 		linkToParent();
 
@@ -338,13 +338,13 @@ void Widget::setEnable( bool val, bool force )
 
 void Widget::linkToParent( )
 {
-    if(sTrm(parentNm()).empty() || parentNm() == path())
+    if(sTrm(parentAddr()).empty() || parentAddr() == addr())
 	throw TError(nodePath().c_str(),_("Parent item is empty or equal to itself!"));
     if(!mParent.freeStat()) ;	//connected early due to the parent name/address specific
-    else if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
-    else mParent = mod->nodeAt(parentNm());
+    else if(parentAddr() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
+    else mParent = mod->nodeAt(parentAddr());
 
-    if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path()) {
+    if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().addr() == ((Widget*)nodePrev())->addr()) {
 	mParent.free();
 	throw TError(nodePath().c_str(),_("Parent is identical to the owner for the link!"));
     }
@@ -353,10 +353,10 @@ void Widget::linkToParent( )
     mParent.at().heritReg(this);
 }
 
-void Widget::setParentNm( const string &isw )
+void Widget::setParentAddr( const string &isw )
 {
-    if(enable() && mParentNm != isw) setEnable(false);
-    mParentNm = isw;
+    if(enable() && mParentAddr != isw) setEnable(false);
+    mParentAddr = isw;
 }
 
 AutoHD<Widget> Widget::parent( ) const	{ return mParent; }
@@ -471,7 +471,7 @@ void Widget::inheritIncl( const string &iwdg )
     else parw.at().wdgList(ls);
     for(unsigned iW = 0; iW < ls.size(); iW++)
 	if(!wdgPresent(ls[iW]))
-	    try { wdgAdd(ls[iW],"",parw.at().wdgAt(ls[iW]).at().path(),true); }
+	    try { wdgAdd(ls[iW],"",parw.at().wdgAt(ls[iW]).at().addr(),true); }
 	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 }
 
@@ -508,7 +508,7 @@ void Widget::wClear( )
 	    for(unsigned iW = 0; iW < ls.size(); iW++)
 		if(!wdgPresent(ls[iW]))
 		    try {
-			wdgAdd(ls[iW], "", parw.at().wdgAt(ls[iW]).at().path(), true);
+			wdgAdd(ls[iW], "", parw.at().wdgAt(ls[iW]).at().addr(), true);
 			wdgAt(ls[iW]).at().setEnable(true);
 		    }
 		    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
@@ -529,21 +529,21 @@ string Widget::wChDown( const string &ia )
 
 	// Check for the recurrence inheritance prevent
 	for(AutoHD<Widget> iParw = this; !iParw.freeStat(); iParw = iParw.at().parent())
-	    if(iParw.at().path() == parw.at().path())
+	    if(iParw.at().addr() == parw.at().addr())
 		throw TError(nodePath().c_str(), _("Impossible to lower down the changes of the widget '%s' to '%s' but it has the cyclic inheritance!"),
-			path().c_str(), parw.at().path().c_str());
+			addr().c_str(), parw.at().addr().c_str());
 
 	// Add and copy it from the source
 	if(!parw.at().wdgPresent(id()))
 	    try {
-		string pName = parentNm();
-		if(pName.find(parw.at().path()+"/") == 0) pName = parent().at().parentNm();
+		string pName = parentAddr();
+		if(pName.find(parw.at().addr()+"/") == 0) pName = parent().at().parentAddr();
 		parw.at().wdgAdd(id(), "", pName);
 		(TCntrNode&)parw.at().wdgAt(id()).at() = (TCntrNode&)*this;
 	    } catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
 	parw = parw.at().wdgAt(id());
 	// Relink original to source
-	if(parentNm() != parw.at().path()) { setParentNm(parw.at().path()); setEnable(true); }
+	if(parentAddr() != parw.at().addr()) { setParentAddr(parw.at().addr()); setEnable(true); }
     }
     if(parw.freeStat()) return "";
 
@@ -585,7 +585,7 @@ string Widget::wChDown( const string &ia )
 
     modif();
 
-    return parw.at().path();
+    return parw.at().addr();
 }
 
 void Widget::attrList( vector<string> &list ) const
@@ -819,9 +819,9 @@ TVariant Widget::vlGet( Attr &a )
 {
     if(a.owner() == this) {
 	if(a.id() == "id")		return TVariant(id());
-	else if(a.id() == "path")	return TVariant(path());
+	else if(a.id() == "path")	return TVariant(addr());
 	else if(a.id() == "root")	return TVariant(rootId());
-	else if(a.id() == "parent")	return TVariant(parentNm());
+	else if(a.id() == "parent")	return TVariant(parentAddr());
 	else if(a.id() == "owner") {
 	    short perm = attrAt("perm").at().getI(true);
 	    if(!(perm&01000)) return a.getS(true);
@@ -902,7 +902,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	    vector<string>	lst;
 	    if(isLink()) {
 		parentNoLink().at().wdgList(lst);
-		opt->setAttr("lnkPath",parentNoLink().at().path());
+		opt->setAttr("lnkPath",parentNoLink().at().addr());
 	    }
 	    else wdgList(lst);
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
@@ -971,8 +971,8 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if(a_path == "/wdg/st/use" && ctrChkNode(opt))		opt->setText(i2s(herit().size()));
     else if(a_path == "/wdg/st/parent") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(parentNm());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setParentNm(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(parentAddr());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setParentAddr(opt->text());
     }
     else if(a_path == "/wdg/st/goparent" && ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && !parent().freeStat())
 	opt->setText(parent().at().nodePath(0,true));
@@ -984,7 +984,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if(a_path == "/wdg/cfg/type" && ctrChkNode(opt))	opt->setText(type());
     else if(a_path == "/wdg/cfg/root" && ctrChkNode(opt))	opt->setText(rootId());
     else if(a_path == "/wdg/cfg/path" && ctrChkNode(opt))
-	opt->setText((isLink()&&s2i(opt->attr("resLink"))) ? parentNoLink().at().path() : path());
+	opt->setText((isLink()&&s2i(opt->attr("resLink"))) ? parentNoLink().at().addr() : addr());
     else if(a_path == "/wdg/cfg/name") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(name(),l,u));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trSetLU(name(),l,u,opt->text()));
@@ -1018,7 +1018,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if(a_path == "/wdg/w_lst" && ctrChkNode(opt)) {
 	int c_lv = 0;
 	string c_path = "", c_el;
-	string lnk = parentNm();
+	string lnk = parentAddr();
 
 	opt->childAdd("el")->setText(c_path);
 	for(int c_off = 0; (c_el=TSYS::pathLev(lnk,0,true,&c_off)).size(); c_lv++) {

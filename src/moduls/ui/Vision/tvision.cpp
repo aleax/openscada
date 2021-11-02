@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"7.17.2"
+#define MOD_VER		"7.17.4"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -293,6 +293,7 @@ void TVision::modStop( )
     for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	while(mnWinds[iW]) {
 	    res.unlock();
+	    if(!SYS->mainThr.freeStat()) qApp->processEvents();	//!!!! Else can lock here the main thread, especially at child windows open
 	    TSYS::sysSleep(prmWait_DL);
 	    res.lock();
 	}

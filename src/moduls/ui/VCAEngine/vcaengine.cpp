@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.4.6"
+#define MOD_VER		"7.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -741,7 +741,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_w = 0; i_w < wls.size(); i_w++) {
 		if(!upd_wdg.empty() && upd_wdg != wls[i_w])	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
-		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentNm())->setText(trLU(w.at().name(),l,u));
+		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentAddr())->setText(trLU(w.at().name(),l,u));
 		wN->childAdd("ico")->setText(disIconsW?"":w.at().ico());
 
 		//  Child widgets

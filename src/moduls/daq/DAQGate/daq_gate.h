@@ -130,6 +130,7 @@ class TMdContr: public TController
 	double	restDtTm( )	{ return mRestDtTm; }
 
 	string	catsPat( );
+	void messSet( const string &mess, int lev, const string &type2Code = "OP", const string &prm = "", const string &cat = "" );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

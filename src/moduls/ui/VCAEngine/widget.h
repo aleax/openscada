@@ -168,7 +168,7 @@ class Widget : public TCntrNode
 	TCntrNode &operator=( const TCntrNode &node );
 
 	string id( ) const		{ return mId.c_str(); }	//Identifier
-	virtual string path( ) const;				//Curent widget path
+	virtual string addr( ) const;				//Curent widget address
 	virtual string name( ) const;				//Name
 	virtual string descr( ) const;				//Description
 	virtual string ico( ) const	{ return ""; }		//Icon
@@ -213,14 +213,14 @@ class Widget : public TCntrNode
 	void linkToParent( );
 
 	// Inheritance methods
-	virtual string parentNm( ) const { return mParentNm; }	//Parent widget name
+	virtual string parentAddr( ) const { return mParentAddr; }//Parent widget address
 	virtual string rootId( ) const;				//Root widget id
 	AutoHD<Widget> parent( ) const;				//Parent widget
 	AutoHD<Widget> parentNoLink( );				//Parent no link widget
 	void heritReg( Widget *wdg );				//Register heritator
 	void heritUnreg( Widget *wdg );				//Unregister heritator
 	vector< AutoHD<Widget> > &herit( ) { return mHerit; }
-	virtual void setParentNm( const string &isw );
+	virtual void setParentAddr( const string &isw );
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
@@ -286,7 +286,7 @@ class Widget : public TCntrNode
 	unsigned char	BACrtHoldOvr	:1;	//Base attrs creation hold over to enable and inherit stage
 	unsigned char	ChldResrv	:1;	//Childs reserve attribute
 
-	string		mParentNm;		//Parent widget name
+	string		mParentAddr;		//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget
 	ResRW		mHeritRes;		//Heritators lock
 	vector< AutoHD<Widget> > mHerit;	//Heritators

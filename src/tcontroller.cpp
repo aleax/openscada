@@ -510,21 +510,28 @@ void TController::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //Service commands process
-    if(a_path == "/serv/mess" && ctrChkNode(opt,"get")) {
-	vector<TMess::SRec> rez;
-	time_t	tm	= strtoul(opt->attr("tm").c_str(), 0, 10);
-	//-1 for waranty all curent date get without doubles and losses
-	if(!tm)	{ tm = redntUse(TController::Any) ? SYS->archive().at().rdTm() : (time_t)(TSYS::curTime()/1000000) - 1; opt->setAttr("tm", i2s(tm)); }
-	time_t	tm_grnd	= strtoul(opt->attr("tm_grnd").c_str(), 0, 10);
-	int	lev	= s2i(opt->attr("lev"));
-	SYS->archive().at().messGet(tm_grnd, tm, rez, "/("+catsPat()+")/", lev, "");
-	for(unsigned iR = 0; iR < rez.size(); iR++)
-	    opt->childAdd("el")->
-		setAttr("time", u2s(rez[iR].time))->
-		setAttr("utime", u2s(rez[iR].utime))->
-		setAttr("cat", rez[iR].categ)->
-		setAttr("lev", i2s(rez[iR].level))->
-		setText(rez[iR].mess);
+    if(a_path == "/serv/mess") {
+	if(ctrChkNode(opt,"get")) {
+	    vector<TMess::SRec> rez;
+	    time_t	tm	= strtoul(opt->attr("tm").c_str(), 0, 10);
+	    //-1 for waranty all curent date get without doubles and losses
+	    if(!tm)	{ tm = redntUse(TController::Any) ? SYS->archive().at().rdTm() : (time_t)(TSYS::curTime()/1000000) - 1; opt->setAttr("tm", i2s(tm)); }
+	    time_t	tm_grnd	= strtoul(opt->attr("tm_grnd").c_str(), 0, 10);
+	    int	lev	= s2i(opt->attr("lev"));
+	    SYS->archive().at().messGet(tm_grnd, tm, rez, "/("+catsPat()+")/", lev, "");
+	    for(unsigned iR = 0; iR < rez.size(); iR++)
+		opt->childAdd("el")->
+		    setAttr("time", u2s(rez[iR].time))->
+		    setAttr("utime", u2s(rez[iR].utime))->
+		    setAttr("cat", rez[iR].categ)->
+		    setAttr("lev", i2s(rez[iR].level))->
+		    setText(rez[iR].mess);
+	    return;
+	}
+	if(ctrChkNode(opt,"set")) {
+	    messSet(opt->text(), s2i(opt->attr("lev")), opt->attr("type2Code"), opt->attr("prm"), opt->attr("cat"));
+	    return;
+	}
     }
 
     //Get page info
@@ -595,7 +602,7 @@ void TController::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/t_prm" && owner().tpPrmSize()) {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
 	    opt->setText(TBDS::genPrmGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR) )
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
 	    TBDS::genPrmSet(owner().nodePath()+"addType",opt->text(),opt->attr("user"));
     }
     else if((a_path == "/br/prm_" || a_path == "/prm/prm") && owner().tpPrmSize()) {

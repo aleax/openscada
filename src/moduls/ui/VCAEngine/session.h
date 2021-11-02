@@ -142,15 +142,15 @@ class Session : public TCntrNode
 		class QueueIt {
 		    public:
 			//Methods
-			QueueIt( const string &ipath, uint8_t ilev, const string &icat, const string &imess,
+			QueueIt( const string &iaddr, uint8_t ilev, const string &icat, const string &imess,
 				const string &itpArg = "", uint16_t iclc = 0 ) :
-			    lev(ilev), quietance(false), path(ipath), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
+			    lev(ilev), quietance(false), addr(iaddr), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
 			QueueIt( ) : lev(0), quietance(false)	{ }
 
 			//Attributes
 			uint8_t	lev;		//Level
 			bool	quietance;	//Quitance
-			string	path,		//Widget path
+			string	addr,		//Widget address
 				cat,		//Category
 				mess,		//Message
 				tpArg;		//Type argument
@@ -254,7 +254,7 @@ class SessWdg : public Widget, public TValFunc
 	~SessWdg( );
 
 	// Main parameters
-	string	path( ) const;
+	string	addr( ) const;
 	string	ownerFullId( bool contr = false ) const;
 	string	type( )		{ return "SessWidget"; }
 	string	ico( ) const;
@@ -353,8 +353,8 @@ class SessPage : public SessWdg
 	SessPage( const string &id, const string &page, Session *sess );
 	~SessPage( );
 
-	string	path( ) const;
-	string	path( bool orig ) const;
+	string	addr( ) const;
+	string	addr( bool orig ) const;
 	string	type( )		{ return "SessPage"; }
 	string	getStatus( );
 

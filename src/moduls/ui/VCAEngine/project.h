@@ -184,7 +184,7 @@ class Page : public Widget, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string	path( ) const;
+	string	addr( ) const;
 	string	ico( ) const;
 	string	type( )			{ return "ProjPage"; }
 	string	getStatus( );
@@ -196,7 +196,7 @@ class Page : public Widget, public TConfig
 	int	calcPer( ) const;
 	string	ownerFullId( bool contr = false ) const;
 	int	prjFlags( ) const	{ return mFlgs; }
-	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
+	string	parentAddr( ) const	{ return cfg("PARENT").getS(); }
 	string	proc( ) const		{ return cfg("PROC").getS(); }
 	int	timeStamp( );
 
@@ -205,7 +205,7 @@ class Page : public Widget, public TConfig
 	void setCalcProgTr( bool vl )		{ cfg("PR_TR") = vl; }
 	void setCalcProg( const string &prg );
 	void setCalcPer( int vl )		{ mProcPer = vl; modif(); }
-	void setParentNm( const string &nm );
+	void setParentAddr( const string &nm );
 	void setPrjFlags( int val );
 
 	// Storing
@@ -267,7 +267,7 @@ class Page : public Widget, public TConfig
 	int64_t	&mFlgs,		//Project's flags
 		&mProcPer,	//Process period
 		&mTimeStamp;
-	string	mParentNmPrev;	//Previous parent name after successful enable
+	string	mParentAddrPrev;//Previous parent name after successful enable
 };
 
 //************************************************
@@ -283,7 +283,7 @@ class PageWdg : public Widget, public TConfig
 	TCntrNode &operator=( const TCntrNode &node );
 
 	// Main parameters
-	string	path( ) const;
+	string	addr( ) const;
 	string	ico( ) const;
 	string	type( )		{ return "ProjLink"; }
 	string	calcId( );
@@ -291,10 +291,10 @@ class PageWdg : public Widget, public TConfig
 	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
 	int	calcPer( ) const;
-	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
+	string	parentAddr( ) const	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val, bool force = false );
-	void setParentNm( const string &isw );
+	void setParentAddr( const string &isw );
 
 	// Storing
 	void loadIO( );

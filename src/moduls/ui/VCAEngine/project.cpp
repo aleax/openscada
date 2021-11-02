@@ -607,7 +607,10 @@ void Project::cntrCmdProc( XMLNode *opt )
     if(a_path == "/obj/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
     else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    setEnable(s2i(opt->text()));
+	    if(s2i(opt->text())) load();
+	}
     }
     else if(a_path == "/obj/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(isStdStorAddr()?DB():fullDB());
@@ -869,7 +872,7 @@ Page::Page( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&m
 
     mPage = grpAdd("pg_");
 
-    setParentNm(isrcwdg);
+    setParentAddr(isrcwdg);
     setNodeFlg(TCntrNode::SelfSaveForceOnChild);
 }
 
@@ -896,7 +899,7 @@ TCntrNode &Page::operator=( const TCntrNode &node )
 	vector<string> els;
 	src_n->pageList(els);
 	// Call recursive only for separated branches copy and for prevent to included copy
-	if(path().find(src_n->path()+"/") != 0)
+	if(addr().find(src_n->addr()+"/") != 0)
 	    for(unsigned iP = 0; iP < els.size(); iP++) {
 		if(!pagePresent(els[iP])) pageAdd(els[iP], "");
 		(TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
@@ -926,7 +929,7 @@ Project *Page::ownerProj( ) const
     return NULL;
 }
 
-string Page::path( ) const	{ return ownerFullId(true)+"/pg_"+id(); }
+string Page::addr( ) const	{ return ownerFullId(true)+"/pg_"+id(); }
 
 string Page::ownerFullId( bool contr ) const
 {
@@ -963,7 +966,7 @@ void Page::postEnable( int flag )
     cfg("OWNER").setS(ownerFullId());
 
     //Set default parent for parent template page
-    if(ownerPage() && (ownerPage()->prjFlags()&Page::Template)) setParentNm("..");
+    if(ownerPage() && (ownerPage()->prjFlags()&Page::Template)) setParentAddr("..");
 }
 
 void Page::postDisable( int flag )
@@ -977,17 +980,17 @@ void Page::postDisable( int flag )
 
 	//Remove widget's IO from library IO table
 	TConfig cEl(&mod->elWdgIO());
-	cEl.cfg("IDW").setS(path(),true);
+	cEl.cfg("IDW").setS(addr(),true);
 	TBDS::dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", cEl);
 
 	//Remove widget's user IO from library IO table
 	cEl.setElem(&mod->elWdgUIO());
-	cEl.cfg("IDW").setS(path(),true);
+	cEl.cfg("IDW").setS(addr(),true);
 	TBDS::dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", cEl);
 
 	//Remove widget's included widgets from library include table
 	cEl.setElem(&mod->elInclWdg());
-	cEl.cfg("IDW").setS(path(),true);
+	cEl.cfg("IDW").setS(addr(),true);
 	TBDS::dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", cEl);
     }
 }
@@ -1009,7 +1012,7 @@ string Page::ico( ) const
     return "";
 }
 
-void Page::setParentNm( const string &isw )
+void Page::setParentAddr( const string &isw )
 {
     if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
     cfg("PARENT").setS(isw);
@@ -1082,7 +1085,7 @@ void Page::setPrjFlags( int val )
     int dif = mFlgs^val;
     if(dif&Page::Empty) {
 	//Clear page
-	setParentNm("");
+	setParentAddr("");
 	if(enable()) {
 	    setEnable(false);
 	    setEnable(true);
@@ -1104,7 +1107,7 @@ void Page::load_( TConfig *icfg )
     string tbl_io = tbl+"_io";
     if(icfg) *(TConfig*)this = *icfg;
     else TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
-    setParentNm(cfg("PARENT").getS());
+    setParentAddr(cfg("PARENT").getS());
 
     //Inheriting the modified attributes
     vector<string> als;
@@ -1120,7 +1123,7 @@ void Page::load_( TConfig *icfg )
     }
 
     //Loading for the generic attributes
-    mod->attrsLoad(*this, db+"."+tbl, path(), "", tAttrs, true);
+    mod->attrsLoad(*this, db+"."+tbl, addr(), "", tAttrs, true);
 
     //Creating for new pages
     map<string, bool>	itReg;
@@ -1162,7 +1165,7 @@ void Page::loadIO( )
     if(!enable()) return;
 
     //Load widget's work attributes
-    mod->attrsLoad(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), path(), "", cfg("ATTRS").getS());
+    mod->attrsLoad(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), addr(), "", cfg("ATTRS").getS());
 
     //Load cotainer widgets
     if(!isContainer()) return;
@@ -1170,7 +1173,7 @@ void Page::loadIO( )
     TConfig cEl(&mod->elInclWdg());
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_incl";
-    cEl.cfg("IDW").setS(path(), true);
+    cEl.cfg("IDW").setS(addr(), true);
     for(int fldCnt = 0; TBDS::dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl); ) {
 	string sid  = cEl.cfg("ID").getS();
 	string spar = cEl.cfg("PARENT").getS();
@@ -1216,7 +1219,7 @@ void Page::save_( )
     string tbl = ownerProj()->tbl();
 
     //Save generic attributes
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, path(), "", true));
+    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, addr(), "", true));
 
     //Save generic widget's data
     mTimeStamp = SYS->sysTm();
@@ -1231,7 +1234,7 @@ void Page::saveIO( )
     if(!enable()) return;
 
     //Save widget's attributes
-    mod->attrsSave(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), path(), "");
+    mod->attrsSave(*this, ownerProj()->DB()+"."+ownerProj()->tbl(), addr(), "");
 }
 
 void Page::wClear( )
@@ -1248,10 +1251,10 @@ void Page::setEnable( bool val, bool force )
     if(prjFlags()&Page::Empty) cfg("PARENT").setS("root");
     else if(prjFlags()&Page::Link) {
 	//Checking for the recursion
-	if(parentNm().empty() || path() == ("/"+TSYS::pathLev(path(),0)+parentNm()))
-	    throw err_sys(_("The target page '%s' of the link is empty or recursive!"), parentNm().c_str());
+	if(parentAddr().empty() || addr() == ("/"+TSYS::pathLev(addr(),0)+parentAddr()))
+	    throw err_sys(_("The target page '%s' of the link is empty or recursive!"), parentAddr().c_str());
 
-	mParent = ownerProj()->nodeAt(parentNm());
+	mParent = ownerProj()->nodeAt(parentAddr());
     }
  
     Widget::setEnable(val);
@@ -1274,22 +1277,22 @@ void Page::setEnable( bool val, bool force )
 
     //Include widgets link update on the parrent change
     if(val) {
-	bool lnkUpdt = (mParentNmPrev.size() && parentNm() != mParentNmPrev);
+	bool lnkUpdt = (mParentAddrPrev.size() && parentAddr() != mParentAddrPrev);
 	vector<string> lst;
 	wdgList(lst, true);
 	for(unsigned iL = 0; iL < lst.size(); iL++)
 	    try {
 		AutoHD<Widget> iw = wdgAt(lst[iL]);
-		if(lnkUpdt && iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0) {
-		    iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
+		if(lnkUpdt && iw.at().parentAddr().compare(0,mParentAddrPrev.size()+1,mParentAddrPrev+"/") == 0) {
+		    iw.at().setParentAddr(parentAddr()+iw.at().parentAddr().substr(mParentAddrPrev.size()));
 		    iw.at().setEnable(true);
 		}
 		else if(manCrt) iw.at().modifClr();
 	    } catch(TError &err) { }
-	mParentNmPrev = parentNm();
+	mParentAddrPrev = parentAddr();
     }
 
-    ownerProj()->pageEnable(path(), val);
+    ownerProj()->pageEnable(addr(), val);
 }
 
 void Page::wdgAdd( const string &wid, const string &name, const string &ipath, bool force )
@@ -1304,7 +1307,7 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	string db = ownerProj()->DB();
 	string tbl = ownerProj()->tbl() + "_incl";
 	TConfig cEl(&mod->elInclWdg());
-	cEl.cfg("IDW").setS(path());
+	cEl.cfg("IDW").setS(addr());
 	cEl.cfg("ID").setS(wid);
 	if(TBDS::dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,TBDS::NoException) && cEl.cfg("PARENT").getS() == "<deleted>") {
 	    TBDS::dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys|TBDS::NoException);
@@ -1456,7 +1459,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	Widget::cntrCmdGeneric(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path(),RWRWR_,"root",SUI_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+addr(),RWRWR_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
 	    ctrMkNode("fld",opt,2,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
 	    if((prjFlags()&Page::Empty) || (ownerPage() && (ownerPage()->prjFlags()&Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
@@ -1474,14 +1477,14 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	return true;
     }
 
-    //Process command to page
+    //Processing for the page commands
     string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
     if(a_path == "/wdg/w_lst" && ctrChkNode(opt)) {
 	if(ownerPage() && (ownerPage()->prjFlags()&Page::Template)) opt->childIns(0,"el")->setText("..");
 	else if(prjFlags()&Page::Link) {
 	    int c_lv = 0;
 	    string c_path = "", c_el;
-	    string lnk = parentNm();
+	    string lnk = parentAddr();
 
 	    opt->childAdd("el")->setText(c_path);
 	    for(int c_off = 0; (c_el=TSYS::pathLev(lnk,0,true,&c_off)).size(); c_lv++) {
@@ -1514,6 +1517,15 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	}
     }
     else if(a_path == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
+    else if(a_path == "/wdg/st/en" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && s2i(opt->text())) {
+	setEnable(s2i(opt->text()));
+
+	loadIO();	//Reloading the IOs only
+	vector<string> lst;
+	pageList(lst);
+	for(unsigned iF = 0; iF < lst.size(); iF++)
+	    pageAt(lst[iF]).at().load();
+    }
     else if(a_path == "/br/pg_" || a_path == "/page/page") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    bool getChPgN = s2i(opt->attr("getChPgN"));
@@ -1674,7 +1686,7 @@ PageWdg::PageWdg( const string &iid, const string &isrcwdg ) : Widget(iid), TCon
 {
     cfg("ID").setS(id());
     mLnk = true;
-    setParentNm(isrcwdg);
+    setParentAddr(isrcwdg);
 }
 
 PageWdg::~PageWdg( )
@@ -1684,8 +1696,8 @@ PageWdg::~PageWdg( )
 
 TCntrNode &PageWdg::operator=( const TCntrNode &node )
 {
-    if(ownerPage().parentNm() == ".." && ownerPage().parent().at().wdgPresent(id())) {
-	setParentNm(ownerPage().parent().at().path()+"/wdg_"+id());
+    if(ownerPage().parentAddr() == ".." && ownerPage().parent().at().wdgPresent(id())) {
+	setParentAddr(ownerPage().parent().at().addr()+"/wdg_"+id());
 	setEnable(true);
     }
 
@@ -1710,7 +1722,7 @@ void PageWdg::postEnable( int flag )
     //Call parent method
     Widget::postEnable(flag);
     //Set parent page for this widget
-    cfg("IDW").setS(ownerPage().path());
+    cfg("IDW").setS(ownerPage().addr());
 }
 
 void PageWdg::preDisable( int flag )
@@ -1736,10 +1748,10 @@ void PageWdg::postDisable( int flag )
 	string tAttrs = cfg("ATTRS").getS();
 
 	TConfig cEl(&mod->elWdgIO());
-	cEl.cfg("IDW").setS(ownerPage().path(), true); cEl.cfg("IDC").setS(id(), true);
+	cEl.cfg("IDW").setS(ownerPage().addr(), true); cEl.cfg("IDC").setS(id(), true);
 	TBDS::dataDel(db+"."+tbl+"_io", mod->nodePath()+tbl+"_io", cEl);
 	cEl.setElem(&mod->elWdgUIO());
-	cEl.cfg("IDW").setS(ownerPage().path(), true); cEl.cfg("IDC").setS(id(), true);
+	cEl.cfg("IDW").setS(ownerPage().addr(), true); cEl.cfg("IDC").setS(id(), true);
 	TBDS::dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", cEl);
     }
 }
@@ -1754,11 +1766,11 @@ AutoHD<Widget> PageWdg::wdgAt( const string &wdg, int lev, int off ) const
     return Widget::wdgAt(wdg, lev, off);
 }
 
-string PageWdg::path( ) const	{ return ownerPage().path()+"/wdg_"+id(); }
+string PageWdg::addr( ) const	{ return ownerPage().addr()+"/wdg_"+id(); }
 
 string PageWdg::ico( ) const	{ return parent().freeStat() ? "" : parent().at().ico(); }
 
-void PageWdg::setParentNm( const string &isw )
+void PageWdg::setParentAddr( const string &isw )
 {
     if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
     cfg("PARENT").setS(isw);
@@ -1821,7 +1833,7 @@ void PageWdg::load_( TConfig *icfg )
     }
 
     //Load generic attributes
-    mod->attrsLoad(*this, db+"."+ownerPage().ownerProj()->tbl(), ownerPage().path(), id(), tAttrs, true);
+    mod->attrsLoad(*this, db+"."+ownerPage().ownerProj()->tbl(), ownerPage().addr(), id(), tAttrs, true);
 
     //Load all other attributes
     loadIO();
@@ -1834,7 +1846,7 @@ void PageWdg::loadIO( )
     if(!enable()) return;
 
     //Load widget's work attributes
-    mod->attrsLoad(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().path(), id(), cfg("ATTRS").getS());
+    mod->attrsLoad(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().addr(), id(), cfg("ATTRS").getS());
 }
 
 void PageWdg::save_( )
@@ -1843,7 +1855,7 @@ void PageWdg::save_( )
     string tbl = ownerPage().ownerProj()->tbl();
 
     //Save generic attributes
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, ownerPage().path(), id(), true));
+    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, ownerPage().addr(), id(), true));
 
     //Save generic widget's data
     TBDS::dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
@@ -1856,12 +1868,18 @@ void PageWdg::saveIO( )
 {
     if(!enable()) return;
 
-    //> Save widget's attributes
-    mod->attrsSave(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().path(), id());
+    //Save widget's attributes
+    mod->attrsSave(*this, ownerPage().ownerProj()->DB()+"."+ownerPage().ownerProj()->tbl(), ownerPage().addr(), id());
 }
 
 void PageWdg::wClear( )
 {
+    //Checking and restoring the container common inheritance
+    if(enable() && ownerPage().parent().at().wdgPresent(id()) && parentAddr() != ownerPage().parent().at().wdgAt(id()).at().addr()) {
+	setParentAddr(ownerPage().parent().at().wdgAt(id()).at().addr());
+	setEnable(true);
+    }
+
     Widget::wClear();
     cfg("ATTRS").setS("");
 }
@@ -1910,7 +1928,13 @@ void PageWdg::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget link: ")+id(),RWRWR_,"root",SUI_ID);
 	return;
     }
-    if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt)))
-	TCntrNode::cntrCmdProc(opt);
+
+    //Processing for the page commands
+    string a_path = opt->attr("path");
+    if(a_path == "/wdg/st/en" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && s2i(opt->text())) {
+	setEnable(s2i(opt->text()));
+	loadIO();	//Reloading the widget IOs only
+    }
+    else if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt))) TCntrNode::cntrCmdProc(opt);
 }
 

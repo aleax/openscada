@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.8.3"
+#define MOD_VER		"2.9.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -754,6 +754,34 @@ string TMdContr::catsPat( )
 	curPat += "|^"+statV+":";
 
     return curPat;
+}
+
+void TMdContr::messSet( const string &mess, int lev, const string &type2Code, const string &prm, const string &cat )
+{
+    TController::messSet(mess, lev, type2Code, prm, cat);
+
+    if(mMessLev.getI() < 0 || prm.empty() || type2Code.size() < 2) return;
+
+    AutoHD<TMdPrm> sprm;
+    if((sprm=SYS->daq().at().prmAt(DAQPath()+"."+prm,'.',true)).freeStat() && (sprm=nodeAt(prm,0,'.',0,true)).freeStat())
+	return;
+
+    //Sending the message to the remote stations
+    //???? Append the sending through the writing buffer
+    string scntr;
+    for(int c_off = 0; (scntr=TSYS::strSepParse(sprm.at().stats(),0,';',&c_off)).size(); )
+	try {
+	    int tOff = 0; TSYS::pathLev(sprm.at().prmAddr(), 1, true, NULL, &tOff);
+	    string  dModCntr = sprm.at().prmAddr().substr(0, tOff),
+		    dPrm = sprm.at().prmAddr().substr(tOff);
+	    XMLNode req("set");
+	    req.setAttr("path", "/"+scntr+"/DAQ/"+dModCntr+"%2fserv%2fmess")->
+		setAttr("type2Code", type2Code.substr(0,type2Code.size()-2)+(SYS->prjNm().size()?SYS->prjNm():SYS->id())+"("+id()+"):"+type2Code.substr(type2Code.size()-2))->
+		setAttr("lev", i2s(lev))->setAttr("cat", cat)->setAttr("prm", TSYS::path2sepstr(dPrm))->
+		setText(mess);
+
+	    if(!cntrIfCmd(req,true)) break;
+	} catch(TError &err) { continue; }
 }
 
 int TMdContr::cntrIfCmd( XMLNode &node, bool noConnect )
