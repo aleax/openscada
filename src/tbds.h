@@ -247,7 +247,7 @@ class TBDS : public TSubSYS
 	enum ReqGenFlg {
 	    NoFlg	= 0,
 	    NoException	= 0x01,		//Do not generate the exceptions
-	    OnlyCfg	= 0x02,		//Force request to the configuration file, in genPrmGet(), genPrmSet() and dataSet() only
+	    OnlyCfg	= 0x02,		//Force request to the configuration file, in genPrmSet() and dataSet() only
 	    CfgPrm	= 0x04,		//Use Parameters of the Configuration File, in dataGet() and dataSet() only
 	    // Specific ones
 	    UseTranslation = 0x08,	//Use translation for request, in genPrmGet() and genPrmSet() only

@@ -1208,7 +1208,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 		err = cntrIfCmd(req);
 	    }
 	    //   Set geometry for include widget
-	    if(!err && !pnt.isNull()) {
+	    if(!err && pnt.x() != A_GEOM_MIN && pnt.y() != A_GEOM_MIN  /*!pnt.isNull()*/) {
 		req.setAttr("path", new_wdg+"/%2fattr%2fgeomX")->setText(r2s(pnt.x()));
 		err = cntrIfCmd(req);
 		req.setAttr("path", new_wdg+"/%2fattr%2fgeomY")->setText(r2s(pnt.y()));
@@ -1285,7 +1285,7 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	    if(!lst_wdg.empty() && lst_wdg != it_own)	emit modifiedItem(lst_wdg);
 	    lst_wdg = it_own;
 
-	    //Send change request to opened for editing widget
+	    //Sending the change request for the opened for editing widget
 	    if(dw) dw->chRecord(chCtx);
 	}
     }

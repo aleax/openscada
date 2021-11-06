@@ -2290,13 +2290,13 @@ void TVArchivator::postDisable( int flag )
 bool TVArchivator::cfgChange( TCfg &co, const TVariant &pc )
 {
     if(co.name() == "V_PER") {
-	if(!co.getR()) mVPer = 1;
-	else {
-	    //Call sort for all archives
-	    ResAlloc res(archRes, false);
-	    for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
-		iel->second->archive().archivatorSort();
-	}
+	if(!co.getR()) co.setR(1);
+	co.setR(vmax(1e-6,co.getR()));	//Up to microseconds now
+
+	//Call sort for all archives
+	ResAlloc res(archRes, false);
+	for(map<string,TVArchEl*>::iterator iel = archEl.begin(); iel != archEl.end(); ++iel)
+	    iel->second->archive().archivatorSort();
     }
     else if(co.name() == "A_PER" && co.getB() != pc.getB() && startStat()) stop();
 

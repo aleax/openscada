@@ -674,7 +674,7 @@ INSERT INTO wlb_Main_incl VALUES('accept','mess','/wlb_originals/wdg_Text','name
 INSERT INTO wlb_Main_incl VALUES('prescrRun','btPass','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;',0);
 INSERT INTO wlb_Main_incl VALUES('graphSelPrm','apply','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;',0);
 INSERT INTO wlb_Main_incl VALUES('graphSelPrm','cancel','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','color','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;view;cfg;confirm;font;',0);
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','color','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;view;cfg;confirm;font;',0);
 INSERT INTO wlb_Main_incl VALUES('graphSelPrm','colorBox','/wlb_originals/wdg_Box','geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;',0);
 INSERT INTO wlb_Main_incl VALUES('graphSelPrm','dim','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;',0);
 INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_color','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',0);
@@ -10116,7 +10116,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else evRez += evCur+"\n";
 }
-event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1574861180);
+event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1636182373);
 INSERT INTO wlb_Main VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADVklEQVRYhe2XS28jRRRGbz366U77ETu2Q6QomwCDDBIsZsFi/gISINbJ
 L4QtC1giQLCZSKMZMa9A7JkYP9vVXd1VdYtF24AEEoFN05LPrj7p072nVepWk4uLC6WU7GSA1F96
@@ -11159,7 +11159,7 @@ if(f_start)	{
 	allowSel = this.ownerWdg(true).attr("allowSelLst").length;
 	perUserSel = this.ownerWdg(true).attr("perUserSel");
 }
-if(colorDef_ != colorDef)	color = colorDef_ = colorDef;
+if(colorDef_ != colorDef || !color.length)	color = colorDef_ = colorDef;
 user = (perUserSel == true) ? this.ownerSess().user() : "";
 if(f_start || user != user_) { loadFromSess = false; user_ = user; }
 en = enForce || !name.isEVal();
@@ -11238,7 +11238,7 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1629034662);
+}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1636182428);
 INSERT INTO wlb_Main VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -16160,16 +16160,16 @@ INSERT INTO prj_tmplSO_stl VALUES('labColorGood','#00FF00','#008600','','','',''
 INSERT INTO prj_tmplSO_stl VALUES('labColorWarning','#ffff00','#B4B400','','','','','','','','');
 INSERT INTO prj_tmplSO_stl VALUES('labColor','white','black','','','','','','','','');
 INSERT INTO prj_tmplSO_stl VALUES('backColorVal','black','white','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph1','#ae77c3-200','#ae77c3-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph2','orange-200','orange-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph3','blue-200','blue-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph4','lightgreen-200','#199696-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph5','cyan-200','#3264C8-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph6','tomato-200','tomato-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph7','magenta-200','magenta-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph8','yellow-200','#B6B600-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph10','darkcyan-200','darkcyan-200','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph9','lightyellow-200','#69695C-200','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph1','#ae77c3-150','#ae77c3-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph2','orange-150','orange-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph3','blue-150','blue-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph4','lightgreen-150','#199696-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph5','cyan-150','#3264C8-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph6','tomato-150','tomato-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph7','magenta-150','magenta-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph8','yellow-150','#B6B600-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph10','darkcyan-150','darkcyan-150','','','','','','','','');
+INSERT INTO prj_tmplSO_stl VALUES('labColorGrph9','lightyellow-150','#69695C-150','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO prj_archBrowser_stl VALUES('backColor','gray','ivory','','','','','','','','');
 INSERT INTO prj_archBrowser_stl VALUES('backColorButton','#555555','#D8D8CB','','','','','','','','');
@@ -19862,15 +19862,15 @@ INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','',32,'','','btPass','',
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','dscr','Element is provided to create graphics groups. Element contains information about a parameter, the regulator mode, if the parameter is such, the units of analog parameter, as well as the color corresponding to the parameter''s trend. The element commonly uses and represents the representative structure of the DAQ-templates "Analog signal" and "Discrete block".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.2
+Version: 1.3.3
 License: GPLv2',42,'Parameter|DESCR','','','Елемент слугує для створення груп графіків. Елемент містить інформацію про параметр, режим регулятору, якщо параметр є таким, одиницю виміру аналогового параметру, а також колір, що відповідає параметру тренда. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "Аналоговий сигнал" та "Дискретний блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.2
+Версія: 1.3.3
 Ліцензія: GPLv2','','Элемент служит для создания групп графиков. Элемент содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов "Аналоговый сигнал" и "Дискретный блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.2
+Версия: 1.3.3
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','','');
@@ -20846,7 +20846,8 @@ INSERT INTO wlb_Main_io VALUES('graphSelPrm','confirm','0',32,'','','val_min',''
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','font','Arial 15',32,'','','val_min','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','active','1',32,'','','color','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','view','1',32,'','','color','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('graphSelPrm','cfg','#ae77c3
+INSERT INTO wlb_Main_io VALUES('graphSelPrm','cfg','
+#ae77c3
 orange
 blue
 lightgreen
@@ -22317,7 +22318,7 @@ In the "Select: parameters accessible to select (allowSelLst)" attribute the dat
 - <varhs> — template of the group selection, if you specify it all available archives in the system will be included into the selection list.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0
+Version: 1.4.1
 License: GPLv2',32,'','','','Елемент реалізує діалог користувацького вибору джерел даних, часто архівних, для формування графіку у кадрі "Група графіків". Вибір надається з переліку вказаного у атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)", кадру-ініціатору. Для обраного джерела можна вказати ім''я, шкалу, логарифмічність, одиницю вимірювання та колір графіку.
 
 У атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)" мають розташовуватися джерела даних у вигляді:
@@ -22333,7 +22334,7 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 - <varhs> — шаблон групового обрання, при визначені якого до переліку обрання потраплять усе доступні у системі архіви.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.0
+Версія: 1.4.1
 Ліцензія: GPLv2','','Элемент реализует диалог пользовательского выбора источников данных, часто архивных, для формирования графика в кадре "Группа графиков". Выбор предоставляется из перечня указанного в атрибуте "Выбор: параметры доступные для выбора (allowSelLst)", кадра-инициатора. Для выбранного источника можно указать имя, шкалу, логарифмичность, единицу измерения и цвет графика.
 
 В атрибуте "Выбор: параметры доступные для выбора (allowSelLst)" должны помещаться источники данных в виде:
@@ -22348,7 +22349,7 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 - <varhs> — шаблон группового выбора, при указании которого в список выбора попадут все доступные в системе архивы.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.0
+Версия: 1.4.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
@@ -24290,6 +24291,7 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','it0color','gray',0,'','','alarms','',
 INSERT INTO wlb_Main_io VALUES('RootPgSo','it1lev','4',0,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','it1color','red',0,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','it2color','yellow',0,'','','alarms','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('graphSelPrm','tipTool','Select empty color to reset that to the default style.',32,'','','color','Оберіть порожній колір для скидання до типового стилю','','Выберите пустой цвет для сброса к типичному стилю','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','','');

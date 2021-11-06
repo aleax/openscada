@@ -2763,7 +2763,7 @@ void DevelWdgView::chUnDo( )
     else if(rule->name() == "chldDel") {
 	QAction addAct(NULL);
 	addAct.setObjectName(rule->attr("parent").c_str());
-	mainWin()->visualItAdd(&addAct, QPointF(1,1), TSYS::pathLev(rule->attr("wdg"),2).substr(4), "", id(), true);
+	mainWin()->visualItAdd(&addAct, QPointF(A_GEOM_MIN,A_GEOM_MIN), TSYS::pathLevEnd(rule->attr("wdg"),0).substr(4), "", id(), true);
 	chRestoreCtx(*rule);
     }
     else if(rlW && rule->name() == "chldPaste")	mainWin()->visualItDel(rule->attr("dst"),true);

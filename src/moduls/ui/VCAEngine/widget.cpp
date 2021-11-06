@@ -102,7 +102,7 @@ TCntrNode &Widget::operator=( const TCntrNode &node )
 	attr.at().setCfgVal(pattr.at().cfgVal());
     }
 
-    //Include widgets copy
+    //Copying the included widgets
     if(!isLink() && srcN->isContainer()) {
 	srcN->wdgList(els);
 	for(unsigned iW = 0; iW < els.size(); iW++) {
@@ -110,6 +110,17 @@ TCntrNode &Widget::operator=( const TCntrNode &node )
 	    (TCntrNode&)wdgAt(els[iW]).at() = (TCntrNode&)srcN->wdgAt(els[iW]).at();
 	}
     }
+
+    //Copying the attribute resources
+    attrList(els);
+    for(unsigned iA = 0; iA < els.size(); iA++)
+	if((attr=attrAt(els[iA])).at().flgGlob()&Attr::Image) {
+	    string rId = attr.at().getS(), mime, data;
+	    if(rId.find("file:") == 0)	continue;
+	    if(rId.find("res:") == 0)	rId = rId.substr(4);
+	    data = srcN->resourceGet(rId, &mime, -1, NULL, true);
+	    if(data.size()) resourceSet(rId, mime, data);
+	}
 
     return *this;
 }
@@ -134,10 +145,10 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic));
 	attrAdd(new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
 	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
-	attrAdd(new TFld("geomX",_("Geometry: x"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_X).c_str()));
-	attrAdd(new TFld("geomY",_("Geometry: y"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_Y).c_str()));
-	attrAdd(new TFld("geomW",_("Geometry: width"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_W).c_str()));
-	attrAdd(new TFld("geomH",_("Geometry: height"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_H).c_str()));
+	attrAdd(new TFld("geomX",_("Geometry: x"),TFld::Real,Attr::Generic,"","0",(i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_X).c_str()));
+	attrAdd(new TFld("geomY",_("Geometry: y"),TFld::Real,Attr::Generic,"","0",(i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_Y).c_str()));
+	attrAdd(new TFld("geomW",_("Geometry: width"),TFld::Real,Attr::Generic,"","100",(i2s(0)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_W).c_str()));
+	attrAdd(new TFld("geomH",_("Geometry: height"),TFld::Real,Attr::Generic,"","100",(i2s(0)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_H).c_str()));
 	attrAdd(new TFld("geomXsc",_("Geometry: x scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_X_SC).c_str()));
 	attrAdd(new TFld("geomYsc",_("Geometry: y scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_Y_SC).c_str()));
 	attrAdd(new TFld("geomZ",_("Geometry: z"),TFld::Integer,Attr::Generic,"","0","-1000000;1000000","",i2s(A_GEOM_Z).c_str()));
@@ -152,7 +163,8 @@ void Widget::postEnable( int flag )
 void Widget::preDisable( int flag )
 {
     //Delete heritors widgets
-    while(herit().size()) mod->nodeDel(herit()[0].at().addr(), 0, 0x10);
+    while(herit().size())
+	mod->nodeDel(herit()[0].at().addr(), 0, flag|NodeRemove_NoDelMark);
 
     //Disable widget
     if(enable()) setEnable(false);

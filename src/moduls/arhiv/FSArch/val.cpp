@@ -104,10 +104,13 @@ void ModVArch::save_( )
 
 bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.name() == "V_PER") setFileTimeSize(1e3*valPeriod());
-    else if(co.name() == "ADDR" && startStat())	return false;
+    if(co.name() == "ADDR" && startStat())	return false;
 
-    return TVArchivator::cfgChange(co, pc);
+    bool rez = TVArchivator::cfgChange(co, pc);
+
+    if(co.name() == "V_PER") setFileTimeSize(1e3*valPeriod());
+
+    return rez;
 }
 
 void ModVArch::start( )

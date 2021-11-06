@@ -191,11 +191,11 @@ void WidgetLib::save_( )
     if(mDB_MimeSrc.size() || DB(true).size()) {
 	if(mDB_MimeSrc.empty()) mDB_MimeSrc = DB(true);
 	vector<string> pls;
-	mimeDataList(pls, mDB_MimeSrc);
+	resourceDataList(pls, mDB_MimeSrc);
 	string mimeType, mimeData;
 	for(unsigned iM = 0; iM < pls.size(); iM++) {
-	    mimeDataGet(pls[iM], mimeType, &mimeData, mDB_MimeSrc);
-	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
+	    resourceDataGet(pls[iM], mimeType, &mimeData, mDB_MimeSrc);
+	    resourceDataSet(pls[iM], mimeType, mimeData, DB());
 	}
 	mDB_MimeSrc = "";
     }
@@ -224,7 +224,7 @@ void WidgetLib::setEnable( bool val, bool force )
     mEnable = val;
 }
 
-void WidgetLib::mimeDataList( vector<string> &list, const string &idb ) const
+void WidgetLib::resourceDataList( vector<string> &list, const string &idb ) const
 {
     string wdb = DB(), wtbl;
     if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
@@ -239,10 +239,10 @@ void WidgetLib::mimeDataList( vector<string> &list, const string &idb ) const
 	    list.push_back(cEl.cfg("ID").getS());
 }
 
-bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
+bool WidgetLib::resourceDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
 {
-    bool is_file = (iid.compare(0,5,"file:")==0);
-    bool is_res  = (iid.compare(0,4,"res:")==0);
+    bool is_file = (iid.find("file:")==0);
+    bool is_res  = (iid.find("res:")==0);
 
     if(!is_file) {
 	//Get resource file from DB
@@ -296,8 +296,10 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
     return false;
 }
 
-void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData, const string &idb )
+void WidgetLib::resourceDataSet( const string &iid, const string &mimeType, const string &mimeData, const string &idb )
 {
+    if(mDB_MimeSrc.size()) return;	//Do not set the resource for just copied and not saved still Library
+
     string wdb = DB(), wtbl;
     if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
     wtbl = (wtbl.empty()?tbl():wtbl) + "_mime";
@@ -310,7 +312,7 @@ void WidgetLib::mimeDataSet( const string &iid, const string &mimeType, const st
     TBDS::dataSet(wdb+"."+wtbl, mod->nodePath()+wtbl, cEl, TBDS::NoException);
 }
 
-void WidgetLib::mimeDataDel( const string &iid, const string &idb )
+void WidgetLib::resourceDataDel( const string &iid, const string &idb )
 {
     string wtbl = tbl()+"_mime";
     string wdb  = idb.empty() ? DB() : idb;
@@ -445,7 +447,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    if(!idmime.empty() && idcol == "dt" && s2i(opt->attr("data"))) {
 		string mimeType, mimeData;
-		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) opt->setText(mimeData);
+		if(resourceDataGet("res:"+idmime, mimeType, &mimeData)) opt->setText(mimeData);
 	    }
 	    else {
 		XMLNode *n_id = ctrMkNode("list",opt,-1,"/mime/mime/id","");
@@ -454,37 +456,37 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 
 		vector<string> lst;
 		string mimeType;
-		mimeDataList(lst);
+		resourceDataList(lst);
 		for(unsigned iEl = 0; iEl < lst.size(); iEl++)
-		    if(mimeDataGet("res:"+lst[iEl],mimeType)) {
+		    if(resourceDataGet("res:"+lst[iEl],mimeType)) {
 			if(n_id) n_id->childAdd("el")->setText(lst[iEl]);
 			if(n_tp) n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
 			if(n_dt) n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
 		    }
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataSet("newMime", "file/unknown;0", "");
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataDel(opt->attr("key_id"));
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataSet("newMime", "file/unknown;0", "");
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataDel(opt->attr("key_id"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    // Request data
 	    if(idcol == "id") {
 		string mimeType, mimeData;
 		// Copy resources to new record
-		if(mimeDataGet("res:"+idmime,mimeType,&mimeData)) {
-		    mimeDataSet(opt->text(), TUIS::mimeGet(idmime,mimeData,mimeType), mimeData);
-		    mimeDataDel(idmime);
+		if(resourceDataGet("res:"+idmime,mimeType,&mimeData)) {
+		    resourceDataSet(opt->text(), TUIS::mimeGet(idmime,mimeData,mimeType), mimeData);
+		    resourceDataDel(idmime);
 		}
 	    }
 	    else if(idcol == "tp") {
 		string mimeType;
 		// Copy resources to new record
-		if(mimeDataGet("res:"+idmime,mimeType))
-		    mimeDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
+		if(resourceDataGet("res:"+idmime,mimeType))
+		    resourceDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
 	    else if(idcol == "dt") {
 		string mimeType;
-		if(!mimeDataGet("res:"+idmime,mimeType)) mimeType = TUIS::mimeGet(idmime, TSYS::strDecode(opt->text(),TSYS::base64));
-		mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024,6),opt->text());
+		if(!resourceDataGet("res:"+idmime,mimeType)) mimeType = TUIS::mimeGet(idmime, TSYS::strDecode(opt->text(),TSYS::base64));
+		resourceDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024,6),opt->text());
 	    }
 	}
     }
@@ -755,6 +757,23 @@ void LWidget::save_( )
 
     //Save widget's attributes
     saveIO();
+
+    //Updation/saving here the removing mark "<deleted>" of the included widgets since the storage can be changed
+    if(!parent().freeStat()) {
+	TConfig cEl(&mod->elInclWdg());
+	string db  = ownerLib().DB();
+	string tbl = ownerLib().tbl()+"_incl";
+	cEl.cfg("IDW").setS(id(), TCfg::ForceUse);
+
+	vector<string> els;
+	parent().at().wdgList(els);
+	for(unsigned iW = 0; iW < els.size(); iW++) {
+	    if(wdgPresent(els[iW]))	continue;
+	    cEl.cfg("ID").setS(els[iW], TCfg::ForceUse);
+	    cEl.cfg("PARENT").setS("<deleted>", TCfg::ForceUse);
+	    TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl);
+	}
+    }
 }
 
 void LWidget::saveIO( )
@@ -822,7 +841,7 @@ void LWidget::resourceList( vector<string> &ls )
     //Append to the map for doublets remove
     map<string,bool> sortLs;
     for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
-    ownerLib().mimeDataList(ls);
+    ownerLib().resourceDataList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
     ls.clear();
     for(map<string,bool>::iterator i_l = sortLs.begin(); i_l != sortLs.end(); ++i_l) ls.push_back(i_l->first);
@@ -830,15 +849,20 @@ void LWidget::resourceList( vector<string> &ls )
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
 
-string LWidget::resourceGet( const string &id, string *mime, int off, int *size )
+string LWidget::resourceGet( const string &id, string *mime, int off, int *size, bool noParent ) const
 {
     string mimeType, mimeData;
 
-    if(!ownerLib().mimeDataGet(id,mimeType,&mimeData,"",off,size) && !parent().freeStat())
+    if(!ownerLib().resourceDataGet(id,mimeType,&mimeData,"",off,size) && !parent().freeStat() && !noParent)
 	mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void LWidget::resourceSet( const string &id, const string &data, const string &mime )
+{
+    ownerLib().resourceDataSet(id, mime, data);
 }
 
 void LWidget::procChange( bool src )
@@ -951,7 +975,8 @@ void CWidget::postEnable( int flag )
 
 void CWidget::preDisable( int flag )
 {
-    if(flag)	ChldResrv = !((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink();
+    if(flag&NodeRemove)
+	ChldResrv = !(flag&NodeRemove_NoDelMark) && !parent().freeStat() && parent().at().isLink();
 
     Widget::preDisable(flag);
 }
@@ -963,10 +988,8 @@ void CWidget::postDisable( int flag )
 	string tbl = ownerLWdg().ownerLib().tbl();
 
 	//Remove from library table
-	if(ChldResrv) {
-	    cfg("PARENT").setS("<deleted>");
-	    TBDS::dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
-	} else TBDS::dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, TBDS::UseAllKeys);
+	if(ChldResrv)	ownerLWdg().modif();	//To set the mark "<deleted>" in the parent
+	else TBDS::dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, TBDS::UseAllKeys);
 
 	//Remove widget's work and users IO from library IO table
 	string tAttrs = cfg("ATTRS").getS();
@@ -1099,15 +1122,20 @@ void CWidget::resourceList( vector<string> &ls )
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
 
-string CWidget::resourceGet( const string &id, string *mime, int off, int *size )
+string CWidget::resourceGet( const string &id, string *mime, int off, int *size, bool noParent ) const
 {
     string mimeType, mimeData;
 
-    if((mimeData=ownerLWdg().resourceGet(id,&mimeType,off,size)).empty() && !parent().freeStat())
+    if((mimeData=ownerLWdg().resourceGet(id,&mimeType,off,size)).empty() && !parent().freeStat() && !noParent)
 	mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void CWidget::resourceSet( const string &id, const string &data, const string &mime )
+{
+    ownerLWdg().resourceSet(id, mime, data);
 }
 
 void CWidget::procChange( bool src )

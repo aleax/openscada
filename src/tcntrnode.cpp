@@ -674,7 +674,8 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     MtxAlloc res(const_cast<ResMtx&>(mChM), true);
     if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Error group of childs %d!"), igr);
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
-    if(p == (*chGrp)[igr].elem.end()) throw err_sys(_("Element '%s' is not present!"), name.c_str());
+    if(p == (*chGrp)[igr].elem.end())
+	throw err_sys(TError::Core_NoNode, _("Element '%s' is not present!"), name.c_str());
     AutoHD<TCntrNode> chN(p->second, user);
     if(chN.at().nodeMode() == Disabled) throw err_sys(_("Element '%s' is disabled!"), name.c_str());
     res.unlock();

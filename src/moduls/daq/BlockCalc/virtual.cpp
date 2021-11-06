@@ -130,7 +130,7 @@ void TpContr::postEnable( int flag )
     blkioEl.fldAdd(new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"10000"));
 }
 
-void TpContr::preDisable(int flag)
+void TpContr::preDisable( int flag )
 {
     vector<string> lst;
     list(lst);

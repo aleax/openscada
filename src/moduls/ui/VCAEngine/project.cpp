@@ -68,12 +68,22 @@ TCntrNode &Project::operator=( const TCntrNode &node )
     const_cast<Project*>(this)->mStRes.unlock();
     const_cast<Project*>(src_n)->mStRes.unlock();
 
-    //Copy included pages
-    vector<string> pls;
+    //Copy included pages with tracing the page link errors and repeat the error pages copy after all other
+    vector<string> pls, lnkErrEls;
     src_n->list(pls);
-    for(unsigned iP = 0; iP < pls.size(); iP++) {
-	if(!present(pls[iP])) add(pls[iP],"");
-	(TCntrNode&)at(pls[iP]).at() = (TCntrNode&)src_n->at(pls[iP]).at();
+    for(unsigned iTr = 1; true; ++iTr) {
+	for(unsigned iP = 0; iP < pls.size(); ++iP)
+	    try {
+		if(!present(pls[iP])) add(pls[iP], "");
+		(TCntrNode&)at(pls[iP]).at() = (TCntrNode&)src_n->at(pls[iP]).at();
+	    }
+	    catch(TError &err) {
+		if(err.cod == TError::EXT || (err.cod == TError::Core_NoNode && src_n->at(pls[iP]).at().prjFlags()&Page::Link))
+		    lnkErrEls.push_back(pls[iP]);
+		else throw;
+	    }
+	if(lnkErrEls.empty() || iTr >= 2) break;
+	pls = lnkErrEls; lnkErrEls.clear();
     }
 
     return *this;
@@ -86,7 +96,8 @@ void Project::postEnable( int flag )
 
 void Project::preDisable( int flag )
 {
-    if(mHerit.size())	throw TError(nodePath().c_str(), _("The project '%s' is used now by %d sessions!"), id().c_str(), mHerit.size());
+    if(mHerit.size())
+	throw TError(nodePath().c_str(), _("The project '%s' is used now by %d sessions!"), id().c_str(), mHerit.size());
     if(enable()) setEnable(false);
 }
 
@@ -210,11 +221,11 @@ void Project::save_( )
 	if(mDB_MimeSrc.empty()) mDB_MimeSrc = DB(true);
 
 	vector<string> pls;
-	mimeDataList(pls, mDB_MimeSrc);
+	resourceDataList(pls, mDB_MimeSrc);
 	string mimeType, mimeData;
 	for(unsigned iM = 0; iM < pls.size(); iM++) {
-	    mimeDataGet(pls[iM], mimeType, &mimeData, mDB_MimeSrc);
-	    mimeDataSet(pls[iM], mimeType, mimeData, DB());
+	    resourceDataGet(pls[iM], mimeType, &mimeData, mDB_MimeSrc);
+	    resourceDataSet(pls[iM], mimeType, mimeData, DB());
 	}
 	mDB_MimeSrc = "";
     }
@@ -288,7 +299,7 @@ void Project::add( Page *iwdg )
 
 AutoHD<Page> Project::at( const string &id ) const	{ return chldAt(mPage,id); }
 
-void Project::mimeDataList( vector<string> &list, const string &idb ) const
+void Project::resourceDataList( vector<string> &list, const string &idb ) const
 {
     string wdb = DB(), wtbl;
     if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
@@ -303,7 +314,7 @@ void Project::mimeDataList( vector<string> &list, const string &idb ) const
 	    list.push_back(cEl.cfg("ID").getS());
 }
 
-bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
+bool Project::resourceDataGet( const string &iid, string &mimeType, string *mimeData, const string &idb, int off, int *size ) const
 {
     bool is_file = (iid.compare(0,5,"file:")==0);
     bool is_res  = (iid.compare(0,4,"res:")==0);
@@ -360,8 +371,10 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
     return false;
 }
 
-void Project::mimeDataSet( const string &iid, const string &mimeType, const string &mimeData, const string &idb )
+void Project::resourceDataSet( const string &iid, const string &mimeType, const string &mimeData, const string &idb )
 {
+    if(mDB_MimeSrc.size()) return;	//Do not set the resource for just copied and not saved still Library
+
     string wdb = DB(), wtbl;
     if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
     wtbl = (wtbl.empty()?tbl():wtbl) + "_mime";
@@ -374,7 +387,7 @@ void Project::mimeDataSet( const string &iid, const string &mimeType, const stri
     TBDS::dataSet(wdb+"."+wtbl ,mod->nodePath()+wtbl, cEl, TBDS::NoException);
 }
 
-void Project::mimeDataDel( const string &iid, const string &idb )
+void Project::resourceDataDel( const string &iid, const string &idb )
 {
     string wtbl = tbl()+"_mime";
     string wdb  = idb.empty() ? DB() : idb;
@@ -712,7 +725,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    if(!idmime.empty() && idcol == "dt" && s2i(opt->attr("data"))) {
 		string mimeType, mimeData;
-		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) opt->setText(mimeData);
+		if(resourceDataGet("res:"+idmime, mimeType, &mimeData)) opt->setText(mimeData);
 	    }
 	    else {
 		XMLNode *n_id = ctrMkNode("list",opt,-1,"/mime/mime/id","");
@@ -721,37 +734,37 @@ void Project::cntrCmdProc( XMLNode *opt )
 
 		vector<string> lst;
 		string mimeType;
-		mimeDataList(lst);
+		resourceDataList(lst);
 		for(unsigned i_el = 0; i_el < lst.size(); i_el++)
-		    if(mimeDataGet("res:"+lst[i_el],mimeType)) {
+		    if(resourceDataGet("res:"+lst[i_el],mimeType)) {
 			if(n_id) n_id->childAdd("el")->setText(lst[i_el]);
 			if(n_tp) n_tp->childAdd("el")->setText(TSYS::strSepParse(mimeType,0,';'));
 			if(n_dt) n_dt->childAdd("el")->setText(TSYS::strSepParse(mimeType,1,';'));
 		    }
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataSet("newMime", "file/unknown;0", "");
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataDel(opt->attr("key_id"));
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataSet("newMime", "file/unknown;0", "");
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataDel(opt->attr("key_id"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    // Request data
 	    if(idcol == "id") {
 		string mimeType, mimeData;
 		// Copy resources to new record
-		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) {
-		    mimeDataSet(opt->text(), TUIS::mimeGet(idmime,mimeData,mimeType), mimeData);
-		    mimeDataDel(idmime);
+		if(resourceDataGet("res:"+idmime, mimeType, &mimeData)) {
+		    resourceDataSet(opt->text(), TUIS::mimeGet(idmime,mimeData,mimeType), mimeData);
+		    resourceDataDel(idmime);
 		}
 	    }
 	    else if(idcol == "tp") {
 		string mimeType;
 		// Copy resources to new record
-		if(mimeDataGet("res:"+idmime, mimeType))
-		    mimeDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
+		if(resourceDataGet("res:"+idmime, mimeType))
+		    resourceDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
 	    else if(idcol == "dt") {
 		string mimeType;
-		if(!mimeDataGet("res:"+idmime, mimeType)) mimeType = TUIS::mimeGet(idmime, TSYS::strDecode(opt->text(),TSYS::base64));
-		mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024,6),opt->text());
+		if(!resourceDataGet("res:"+idmime, mimeType)) mimeType = TUIS::mimeGet(idmime, TSYS::strDecode(opt->text(),TSYS::base64));
+		resourceDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024,6),opt->text());
 	    }
 	}
     }
@@ -892,28 +905,35 @@ TCntrNode &Page::operator=( const TCntrNode &node )
     setPrjFlags(src_n->prjFlags());
 
     //Widget copy
-    try {
-	Widget::operator=(node);
+    Widget::operator=(node);
 
-	//Copying included pages
-	vector<string> els;
-	src_n->pageList(els);
-	// Call recursive only for separated branches copy and for prevent to included copy
-	if(addr().find(src_n->addr()+"/") != 0)
-	    for(unsigned iP = 0; iP < els.size(); iP++) {
-		if(!pagePresent(els[iP])) pageAdd(els[iP], "");
-		(TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
-	    }
-
-	//Removing the inherited but missed widgets on the source
-	wdgList(els);
-	for(unsigned iW = 0; iW < els.size(); iW++)
+    //Removing the inherited but missed widgets on the source
+    vector<string> els, lnkErrEls;
+    wdgList(els);
+    for(unsigned iW = 0; iW < els.size(); iW++)
 	if(!src_n->wdgPresent(els[iW])) wdgDel(els[iW], true);
-    }
-    catch(TError &err) {
-	if(prjFlags()&Page::Link)
-	    mess_err(err.cat.c_str(),"%s The copying operation is ommited then you must repeat that or just enable the page.",err.mess.c_str());
-	else throw;
+
+    //Copying included pages with tracing the page link errors and repeat the error pages copy after all other
+    if(addr().find(src_n->addr()+"/") != 0) {	//Call recursively only for separated branches copy and to prevent for copy the included ones
+	vector<string> lnkErrEls;
+	src_n->pageList(els);
+	for(unsigned iTr = 1; true; ++iTr) {
+	    for(unsigned iP = 0; iP < els.size(); ++iP)
+		try {
+		    if(!pagePresent(els[iP])) pageAdd(els[iP], "");
+		    (TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
+		}
+		catch(TError &err) {
+		    if(err.cod == TError::EXT || (err.cod == TError::Core_NoNode && src_n->pageAt(els[iP]).at().prjFlags()&Page::Link))
+			lnkErrEls.push_back(els[iP]);
+		    else throw;
+		}
+	    if(lnkErrEls.empty() || iTr >= 2) break;
+	    els = lnkErrEls; lnkErrEls.clear();
+	}
+
+	if(lnkErrEls.size())
+	    throw TError(TError::EXT, nodePath().c_str(), "The copying operation is terminated by the not resolved links.");
     }
 
     return *this;
@@ -1227,6 +1247,23 @@ void Page::save_( )
 
     //Save widget's attributes
     saveIO();
+
+    //Updation/saving here the removing mark "<deleted>" of the included widgets since the storage can be changed
+    if(!parent().freeStat()) {
+	TConfig cEl(&mod->elInclWdg());
+	string db  = ownerProj()->DB();
+	string tbl = ownerProj()->tbl()+"_incl";
+	cEl.cfg("IDW").setS(addr(), TCfg::ForceUse);
+
+	vector<string> els;
+	parent().at().wdgList(els);
+	for(unsigned iW = 0; iW < els.size(); iW++) {
+	    if(wdgPresent(els[iW]))	continue;
+	    cEl.cfg("ID").setS(els[iW], TCfg::ForceUse);
+	    cEl.cfg("PARENT").setS("<deleted>", TCfg::ForceUse);
+	    TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl);
+	}
+    }
 }
 
 void Page::saveIO( )
@@ -1302,7 +1339,7 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 
     bool toRestoreInher = false;
 
-    //Check for label <deleted>
+    //Checking for the label "<deleted>"
     if(!force) {
 	string db = ownerProj()->DB();
 	string tbl = ownerProj()->tbl() + "_incl";
@@ -1388,7 +1425,7 @@ void Page::resourceList( vector<string> &ls )
     //Append to the map for doublets remove
     map<string,bool> sortLs;
     for(unsigned iL = 0; iL < ls.size(); iL++) sortLs[ls[iL]] = true;
-    ownerProj()->mimeDataList(ls);
+    ownerProj()->resourceDataList(ls);
     for(unsigned iL = 0; iL < ls.size(); iL++) sortLs[ls[iL]] = true;
     ls.clear();
     for(map<string,bool>::iterator iL = sortLs.begin(); iL != sortLs.end(); ++iL) ls.push_back(iL->first);
@@ -1396,15 +1433,20 @@ void Page::resourceList( vector<string> &ls )
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
 
-string Page::resourceGet( const string &id, string *mime, int off, int *size )
+string Page::resourceGet( const string &id, string *mime, int off, int *size, bool noParent ) const
 {
     string mimeType, mimeData;
 
-    if(!ownerProj()->mimeDataGet(id,mimeType,&mimeData,"",off,size) && !parent().freeStat())
+    if(!ownerProj()->resourceDataGet(id,mimeType,&mimeData,"",off,size) && !parent().freeStat() && !noParent)
 	mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void Page::resourceSet( const string &id, const string &data, const string &mime )
+{
+    ownerProj()->resourceDataSet(id, mime, data);
 }
 
 void Page::procChange( bool src )
@@ -1727,7 +1769,8 @@ void PageWdg::postEnable( int flag )
 
 void PageWdg::preDisable( int flag )
 {
-    if(flag)	ChldResrv = !((flag>>8)&0x10) && !parent().freeStat() && parent().at().isLink();
+    if(flag&NodeRemove)
+	ChldResrv = !(flag&NodeRemove_NoDelMark) && !parent().freeStat() && parent().at().isLink();
 
     Widget::preDisable(flag);
 }
@@ -1739,10 +1782,8 @@ void PageWdg::postDisable( int flag )
 	string tbl = ownerPage().ownerProj()->tbl();
 
 	//Remove from library table
-	if(ChldResrv) {
-	    cfg("PARENT").setS("<deleted>");
-	    TBDS::dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
-	} else TBDS::dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, TBDS::UseAllKeys);
+	if(ChldResrv)	ownerPage().modif();	//To set the mark "<deleted>" in the parent
+	else TBDS::dataDel(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this, TBDS::UseAllKeys);
 
 	//Remove widget's work and users IO from library IO table
 	string tAttrs = cfg("ATTRS").getS();
@@ -1897,15 +1938,20 @@ void PageWdg::resourceList( vector<string> &ls )
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }
 
-string PageWdg::resourceGet( const string &id, string *mime, int off, int *size )
+string PageWdg::resourceGet( const string &id, string *mime, int off, int *size, bool noParent ) const
 {
     string mimeType, mimeData;
 
-    if((mimeData=ownerPage().resourceGet(id,&mimeType,off,size)).empty() && !parent().freeStat())
+    if((mimeData=ownerPage().resourceGet(id,&mimeType,off,size)).empty() && !parent().freeStat() && !noParent)
 	mimeData = parent().at().resourceGet(id, &mimeType, off, size);
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void PageWdg::resourceSet( const string &id, const string &data, const string &mime )
+{
+    ownerPage().resourceSet(id, mime, data);
 }
 
 void PageWdg::procChange( bool src )

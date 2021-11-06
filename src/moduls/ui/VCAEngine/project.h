@@ -98,11 +98,11 @@ class Project : public TCntrNode, public TConfig
 	void add( Page *iwdg );
 	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full?NodeRemove:NodeNoFlg ); }
 
-	// Mime data access
-	void mimeDataList( vector<string> &list, const string &idb = "" ) const;
-	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "", int off = -1, int *size = NULL ) const;
-	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
-	void mimeDataDel( const string &id, const string &idb = "" );
+	// Resource data access
+	void resourceDataList( vector<string> &list, const string &idb = "" ) const;
+	bool resourceDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "", int off = -1, int *size = NULL ) const;
+	void resourceDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
+	void resourceDataDel( const string &id, const string &idb = "" );
 
 	// Styles
 	void stlList( vector<string> &ls );
@@ -228,7 +228,8 @@ class Page : public Widget, public TConfig
 
 	// Data access
 	void resourceList( vector<string> &ls );
-	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const;
+	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	void procChange( bool src = true );
 
@@ -302,7 +303,8 @@ class PageWdg : public Widget, public TConfig
 
 	// Data access
 	void resourceList( vector<string> &ls );
-	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const;
+	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	void procChange( bool src = true );
 

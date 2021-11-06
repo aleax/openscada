@@ -21,6 +21,9 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define A_GEOM_MIN	-10000
+#define A_GEOM_MAX	10000
+
 namespace VCA
 {
     //Attributes preset indexes

@@ -1,3 +1,36 @@
+2021-11-06 Roman (stable)
+- !!:LibsDB.vcaBase: wlb_Main.{ElViewGraph,graphSelPrm}: Adapted to reset the trend item color to the default styled at setting that to empty.
+    !: prj_tmplSO: The styled colors' transparency of trend items set to 150.
+- SYS: The error codes appended of the TError::Core_NoNode (5).
+- BD: Returned back in the user DB objects storring priority into the configuration file.
+- FIX:Archives.*: Improved the archiver periodicity limiting in the archiver module before to correct apply the final value.
+- !!:FIX:DAQ.DAQGate: Fixed in reusing parameters with empty address for included ones
+	and appended for clearing the address at the parameters copy,
+	so you can now copy all controller objects with the parameter archives store.
+    FIX: Completely prevented of the missing parameters naming also after those copy.
+- DAQ.System: The Disk SMART attribute's name appended of the code, for unknown parameters mostly.
+- UI.QTStarter: Prevented of the project list updating for the inactive window.
+- !!!:UI.VCAEngine: The module finished in missed adaption to the new behaviour of the TCntrNode removing flags
+	with declaration and using the specific flag Widget::NodeRemove_NoDelMark.
+    !!!: The Widget copy operation appended of copying the used widget resources (the Image type now only), and in that way there performed:
+	- the Widget objects' function resourceGet() appended an argument <noParent> and set for the "constant" qualifier;
+	- the Widget objects appended of the function resourceSet() declaration and implementation;
+	- the container function resourceDataSet() prevented in operating for just copied but not yet stored containers.
+    !!:FIX: The "<deleted>" mark setting for the removed inherited included widgets moved to the save function of the container widget,
+	since that is lost at the copy operations and now you can easy undo/redo such widgets removing.
+    !!: The project copying operation appended of true treating the broken page links before copying the target link page.
+    !: The global definitions in the common VCA file types.h appended for A_GEOM_MIN (-10000) and A_GEOM_MAX(10000)
+	to use in the attributes A_GEOM_* and the UI.Vision module.
+    The container object's functions mimeDataList(), mimeDataGet(), mimeDataSet(), mimeDataDel()
+	renamed to resourceDataList(), resourceDataGet(), resourceDataSet(), resourceDataDel() respectively.
+- !!:FIX:UI.Vision: Fixed, or finished the implementation, for UNDO/REDO the removing operation
+    of the inherited included Widgets of the Project Pages.
+- !!:FIX:UI.WebVision: The view "Combo" of the type "Line" and the types "List" and "Combo"
+	appended of creation value items missed in the selection list.
+    !: The focusing appended of force the focus to widget set in focus from the VCA-Engine,
+	for what there appended a link "focusElem" to active-focusing HTML-Element.
+
+
 2021-11-02 Roman (stable)
 - !!!:LibsDB.vcaBase: wlb_Main.{TextLab,ImgLab,cntrRegul},mnEls.{El_Kran_Sh,Compressor}:
 	Adapted for the user action messages forming by the new DAQ-function messSet()

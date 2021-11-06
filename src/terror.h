@@ -41,6 +41,7 @@ class TError
 	    Core_CntrError = 2,
 	    Core_RWLock_EDEADLK = 3,
 	    Core_TaskCrt = 4,
+	    Core_NoNode = 5,
 	    Tr_Connect = 10,
 	    Tr_UnknownHost = 11,
 	    Tr_ErrTransport = 12,

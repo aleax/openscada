@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (2% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Documents/API&amp;oldid=68778&amp;diff=68855" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (2% translated)">українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -2378,7 +2378,7 @@ Error values for the different data types (definition):
 </p><p>The container can also gather into the single request several information structures and dynamic parts, thereby optimizing the time of the request especially on the high latency network interfaces.
 </p><p>Overall control interface is built from individual components of the dynamic tree. Hierarchical inheritance from the TCntrNode object allows to realize multi-level addition of the configuration of the control interface. General view of the dynamic node tree is shown in Fig. 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Enlarge" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:802px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM.png"><img class="thumbimage" height="360" src="files/800px-Oscada_UserOM.png" srcset="/wiki/images/6/67/Oscada_UserOM.png 1.5x, /wiki/images/6/67/Oscada_UserOM.png 2x" width="800" /></a>  <div class="thumbcaption"><div class="magnify"><a class="internal" href="http://oscada.org/wiki/File:Oscada_UserOM.png" title="Збільшити" /></div>Fig. 8. Example of a dynamic tree of the nodes in OpenSCADA.</div></div></div></div>
 <p>System's nodes, containing data for the control interface of the system must also be connected to the dynamic tree of objects. 
 </p><p>Connection of the node to the dynamic tree is done as follows:
 </p>
@@ -3194,6 +3194,7 @@ Error codes (enum — TError::Codes):
 <li> <i>TError::Core_CntrError (2)</i> — core level, error of the control interface;</li>
 <li> <i>TError::Core_RWLock_EDEADLK (3)</i> — core level, deadlock of the RWLock;</li>
 <li> <i>TError::Core_TaskCrt (4)</i> — core level, error the task-thread creation;</li>
+<li> <i>TError::Core_NoNode (5)</i> — no node, error at accessing some missing node;</li>
 <li> <i>TError::Tr_Connect (10)</i> — transport level, error connection;</li>
 <li> <i>TError::Tr_UnknownHost (11)</i> — transport level, unknown host;</li>
 <li> <i>TError::Tr_ErrTransport (12)</i> — transport level, transport error; </li>

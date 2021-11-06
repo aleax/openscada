@@ -921,7 +921,7 @@ void TBD::load_( TConfig *icfg )
 
 void TBD::save_( )
 {
-    TBDS::dataSet(TBDS::fullDB(), owner().owner().nodePath()+"DB/", *this);
+    TBDS::dataSet(TBDS::fullDB(), owner().owner().nodePath()+"DB/", *this, TBDS::OnlyCfg);
 }
 
 TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

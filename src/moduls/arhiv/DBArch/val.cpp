@@ -475,7 +475,9 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 
 bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.name() == "V_PER" && co.getR() && co.getR() != pc.getR()) co.setR(floor(vmax(1,co.getR())));
+    if(co.name() == "V_PER" && co.getR() && co.getR() != pc.getR())
+	co.setR(floor(vmax(1,co.getR())));	//Up to seconds now for DB
+
     return TVArchivator::cfgChange(co, pc);
 }
 

@@ -46,7 +46,7 @@ class TCfg : public TVariant
     public:
 	//Data
 	enum AttrFlg {
-	    NoVal	= 0x100,	//Do not mirrore to value
+	    NoVal	= 0x100,	//Do not mirrore to value - the TVal object
 	    Key		= 0x200,	//Primary key
 	    Hide	= 0x400		//Hide attribute
 	};

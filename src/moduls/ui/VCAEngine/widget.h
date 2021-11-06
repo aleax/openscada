@@ -49,7 +49,7 @@ class Attr
 	enum GlobalAttrFlgs {
 	    Active	= 0x00100,	//Active attribute for primitives process
 
-	    Image	= 0x00200,	//Store image link to a DB's mime or a file, expand generic type "String"
+	    Image	= 0x00200,	//Store image link to a DB's resource or a file, expand generic type "String"
 	    DateTime	= 0x00200,	//Store data and time, expand generic type "Integer"
 	    Color	= 0x00400,	//Store color
 	    Font	= 0x00800,	//Store font
@@ -161,6 +161,11 @@ class Widget : public TCntrNode
     friend class Attr;
 
     public:
+	//Public data
+	enum EnDisFlag {
+	    NodeRemove_NoDelMark = 0x100
+	};
+
 	//Methods
 	Widget( const string &id, const string &isrcwdg = "" );
 	~Widget( );
@@ -243,7 +248,10 @@ class Widget : public TCntrNode
 
 	// Data access
 	virtual void resourceList( vector<string> &ls )	{ }
-	virtual string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL )	{ return ""; }
+	virtual string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const
+	{ return ""; }
+	virtual void resourceSet( const string &id, const string &data, const string &mime = "" )
+	{ }
 
 	// Context helps
 	static string helpImg( );
@@ -284,7 +292,7 @@ class Widget : public TCntrNode
 	unsigned char	mLnk		:1;	//Widget as link
 	unsigned char	mStlLock	:1;	//Style lock
 	unsigned char	BACrtHoldOvr	:1;	//Base attrs creation hold over to enable and inherit stage
-	unsigned char	ChldResrv	:1;	//Childs reserve attribute
+	unsigned char	ChldResrv	:1;	//Childs reserve attribute, to specify whether the mark "<deleted>" set or remove
 
 	string		mParentAddr;		//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget

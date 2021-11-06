@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_smart.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,8 +55,8 @@ void HddSmart::init( TMdPrm *prm )
     vector<string> list;
     dList(list);
     string dls;
-    for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	dls += list[i_l]+";";
+    for(unsigned iL = 0; iL < list.size(); iL++)
+	dls += list[iL]+";";
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
 
@@ -116,9 +116,10 @@ void HddSmart::getVal( TMdPrm *prm )
     FILE *fp = popen(cmd.c_str(),"r");
     while(fp && fgets(buf,sizeof(buf),fp) != NULL) {
 	if(sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3) continue;
-	string s_id = i2s(id);
-	if(!prm->vlPresent(s_id)) ((tval*)prm->daData)->els.fldAdd(new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite));
-	prm->vlAt(s_id).at().setI(val,0,true);
+	string sId = i2s(id);
+	if(!prm->vlPresent(sId))
+	    ((tval*)prm->daData)->els.fldAdd(new TFld(sId.c_str(),(string(name)+" ("+sId+")").c_str(),TFld::Integer,TFld::NoWrite));
+	prm->vlAt(sId).at().setI(val,0,true);
 	devOK = true;
     }
     if(fp) fclose(fp);

@@ -1846,11 +1846,11 @@ int SessWdg::calcPer( ) const
     return vRez;
 }
 
-string SessWdg::resourceGet( const string &iid, string *mime, int off, int *size )
+string SessWdg::resourceGet( const string &iid, string *mime, int off, int *size, bool /*noParent = false*/ ) const
 {
     string  id = TSYS::strParse(iid, 0, "?"),
 	    mimeType,
-	    mimeData = sessAttr("media://"+id);	//Try load from the session attribute
+	    mimeData = const_cast<SessWdg*>(this)->sessAttr("media://"+id);	//Try load from the session attribute
     if(mimeData.size()) {
 	int off = 0;
 	mimeType = TSYS::strLine(mimeData, 0, &off);

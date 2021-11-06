@@ -391,8 +391,9 @@ function getTabIndex( wdgO, origPos )
 /***************************************************
  * setFocus - Command for set focus                *
  ***************************************************/
-function setFocus( wdg, ack )
+function setFocus( wdg, ack, focusElem )
 {
+    if(focusElem) focusElem.focus();
     if(masterPage.focusWdf == wdg) return;
 
     var attrs = new Object();
@@ -730,7 +731,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.window.resizeTo(geomW+20,geomH+40);
 	}
 
-	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr, true);
+	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr, true, this.place.focusElem);
 
 	this.place.className = "Primitive " + this.attrs['root'];
 	if(!this.place.getAttribute("id"))
@@ -1075,6 +1076,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 				    while(combList.childNodes[0].childNodes.length)
 					combList.childNodes[0].removeChild(combList.childNodes[0].childNodes[0]);
+				    // Creation for items of the list
 				    var elLst = formObj.parentNode.cfg.split('\n');
 				    for(var i = 0; i < elLst.length; i++) {
 					var optEl = this.ownerDocument.createElement('option');
@@ -1082,6 +1084,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					if(formObj.valGet() == elLst[i]) optEl.defaultSelected = optEl.selected = true;
 					combList.childNodes[0].appendChild(optEl);
 				    }
+				    //  Appending for missed value to the list
+				    if(elLst.indexOf(formObj.valGet()) < 0) {
+					var optEl = this.ownerDocument.createElement('option');
+					optEl.appendChild(this.ownerDocument.createTextNode(formObj.valGet()));
+					optEl.defaultSelected = optEl.selected = true;
+					combList.childNodes[0].appendChild(optEl);
+				    }
+
 				    if(combList.childNodes[0].childNodes.length) {
 					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
 								 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; ';
@@ -1714,7 +1724,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    }
 			    formObj.appendChild(optEl);
 			}
-			for(i = 0; i < selVal.length && elTp == 4; i++) {
+			for(i = 0; i < selVal.length /*&& elTp == 4*/; i++) {
+			    if(elLst.indexOf(selVal[1]) >= 0) continue;
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.textContent = selVal[i];
 			    optEl.selected = optEl.defaultSelected = true;
@@ -2169,8 +2180,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    break;
 	    }
 	    this.place.isSpecFocus = true;
-	    if(elWr != this.place.elWr || this.attrsMdf['geomZ'])
-		if(elWr) formObj.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ']))); else formObj.removeAttribute('tabIndex');
+	    if(elWr != this.place.elWr || this.attrsMdf['geomZ']) {
+		if(elWr) formObj.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ'])));
+		else formObj.removeAttribute('tabIndex');
+		this.place.focusElem = elWr ? formObj : null;
+	    }
 	    if(elWr != this.place.elWr) formObj.onfocus = !elWr ? null : function(e) { setFocus(this.parentNode.wdgLnk.addr); }
 	}
 	else if(this.attrs['root'] == 'Diagram') {
@@ -2492,8 +2506,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	if(!this.place.isSpecFocus) {
-	    if(elWr != this.place.elWr || this.attrsMdf['geomZ'])
-		if(elWr) this.place.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ']))); else this.place.removeAttribute('tabIndex');
+	    if(elWr != this.place.elWr || this.attrsMdf['geomZ']) {
+		if(elWr) this.place.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ'])));
+		else this.place.removeAttribute('tabIndex');
+		this.place.focusElem = elWr ? this.place : null;
+	    }
 	    if(elWr != this.place.elWr) this.place.onfocus = !elWr ? null : function(e) { setFocus(this.wdgLnk.addr); }
 	}
 	if(elWr != this.place.elWr) {

@@ -105,7 +105,7 @@ unsigned TElem::fldId( const string &name, bool noex )
     res.unlock();
 
     if(noex) return fldSize();
-    throw TError("Elem", _("Element '%s' is not present!"), name.c_str());
+    throw TError(TError::Core_NoNode, "Elem", _("Element '%s' is not present!"), name.c_str());
 }
 
 bool TElem::fldPresent( const string &name )

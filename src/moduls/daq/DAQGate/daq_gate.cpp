@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.0"
+#define MOD_VER		"2.9.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -335,7 +335,7 @@ void TMdContr::sync( bool onlyPrmLs )
 			unsigned iP1 = 0;
 			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmPathW_) iP1++;
 			if(iP1 >= prmLs1.size()) {
-			    while(curP.at().present(prmId)) prmId = TSYS::strLabEnum(prmId);
+			    while(curP.at().present(prmId) && curP.at().at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
 			    curP.at().add(prmId, owner().tpPrmToId("std"));
 			    curW = curP.at().at(prmId);
 			    curW.at().setName(prmW->text());
@@ -907,6 +907,15 @@ TMdPrm::~TMdPrm( )
     nodeDelAll();
 }
 
+TCntrNode &TMdPrm::operator=( const TCntrNode &node )
+{
+    TParamContr::operator=(node);
+
+    mPrmAddr = "";
+
+    return *this;
+}
+
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
@@ -1017,6 +1026,7 @@ void TMdPrm::sync( )
 	    req.childAdd("get")->setAttr("path","%2fprm%2fcfg%2fDESCR");
 	    req.childAdd("list")->setAttr("path","%2fserv%2fattr");
 	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat").c_str(),req.text().c_str());
+	    if(s2i(req.attr("rez")) || s2i(req.childGet(0)->attr("rez"))) continue;
 
 	    setName(req.childGet(0)->text());
 	    setDescr(req.childGet(1)->text());

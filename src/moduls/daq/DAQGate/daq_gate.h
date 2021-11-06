@@ -68,6 +68,8 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
 
+	TCntrNode &operator=( const TCntrNode &node );
+
 	string stats( )		{ return mStats; }
 	string prmAddr( )	{ return mPrmAddr; }
 

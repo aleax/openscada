@@ -35,7 +35,8 @@ PrWidget::PrWidget( const string &iid ) : LWidget(iid)
 
 void PrWidget::preDisable( int flag )
 {
-    if(flag) throw TError(mod->nodePath().c_str(),_("Impossible deleting the base primitive-widget."));
+    if(flag&NodeRemove)
+	throw TError(mod->nodePath().c_str(),_("Impossible deleting the base primitive-widget."));
 
     Widget::preDisable(flag);
 }
