@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_hddtemp.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2017,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,22 +44,25 @@ Hddtemp::~Hddtemp( )
     } catch(TError &err) { }
 }
 
-void Hddtemp::init( TMdPrm *prm )
+void Hddtemp::init( TMdPrm *prm, bool update )
 {
     TCfg &c_subt = prm->cfg("SUBT");
 
     //Create Configuration
-    c_subt.fld().setDescr(_("Disk"));
+    if(!update) c_subt.fld().setDescr(_("Disk"));
 
     vector<string> list;
     dList(list);
     string dls;
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
 	dls += list[i_l]+";";
+    MtxAlloc res(prm->dataRes(), true);
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
+    res.unlock();
 
-    if(list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls)) c_subt.setS(list[0]);
+    if(!update && list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls))
+	c_subt.setS(list[0]);
 }
 
 void Hddtemp::dList( vector<string> &list )

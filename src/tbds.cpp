@@ -748,6 +748,21 @@ TTypeBD::~TTypeBD( )
     nodeDelAll();
 }
 
+void TTypeBD::modInfo( vector<string> &list )
+{
+    TModule::modInfo(list);
+    list.push_back("Features");
+}
+
+string TTypeBD::modInfo( const string &iname )
+{
+    string name = TSYS::strParse(iname, 0, ":");
+
+    if(name == "Features")	return features();
+
+    return TModule::modInfo(iname);
+}
+
 string TTypeBD::open( const string &iid )
 {
     if(openStat(iid)) return iid;

@@ -133,6 +133,7 @@ class BDMod: public TTypeBD
 	~BDMod( );
 
 	int lsPr( )	{ return 4; }
+	string features( );
 
 	static string sqlReqCode( const string &req, char symb = '\'' );
 

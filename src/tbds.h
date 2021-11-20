@@ -206,9 +206,13 @@ class TTypeBD : public TModule
 	TTypeBD( const string &id );
 	virtual ~TTypeBD( );
 
-	virtual int lsPr( )	{ return 0; }
+	void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
 
-	bool fullDeleteDB( )	{ return fullDBDel; }
+	virtual string features( )	{ return ""; }
+	virtual int lsPr( )		{ return 0; }
+
+	bool fullDeleteDB( )		{ return fullDBDel; }
 
 	// Opened DB
 	void list( vector<string> &list ) const		{ chldList(mDB, list); }

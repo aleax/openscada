@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-21 18:18+0300\n"
+"POT-Creation-Date: 2021-11-14 19:00+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1151,6 +1151,9 @@ msgstr ""
 msgid "License"
 msgstr ""
 
+msgid "Features"
+msgstr ""
+
 msgid "Module enabling."
 msgstr ""
 
@@ -1985,7 +1988,16 @@ msgstr ""
 msgid "Error installing processors for the thread."
 msgstr ""
 
+msgid "SINGLELANGUAGE"
+msgstr ""
+
 msgid "only use the already multilanguage DBs with their modification"
+msgstr ""
+
+msgid "MULTILANGUAGE-DYNAMIC"
+msgstr ""
+
+msgid "MULTILANGUAGE"
 msgstr ""
 
 #, c-format

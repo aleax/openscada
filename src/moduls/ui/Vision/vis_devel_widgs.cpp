@@ -1234,7 +1234,7 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     //Create Tree Widget
     treeW = new QTreeWidget(this);
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
-    // Set collumn headers
+    // Set column headers
     QStringList headerLabels;
     headerLabels << _("Name") << _("Type") << _("Identifier");
     treeW->setHeaderLabels(headerLabels);
@@ -1671,7 +1671,7 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     treeW = new QTreeWidget(this);
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    //Set collumn headers
+    //Set column headers
     QStringList headerLabels;
     headerLabels << _("Name") << _("Type") << _("Identifier");
     treeW->setHeaderLabels(headerLabels);

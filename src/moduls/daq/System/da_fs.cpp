@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_fs.cpp
 /***************************************************************************
- *   Copyright (C) 2016 by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2016-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,21 +46,24 @@ FS::~FS( )
 
 }
 
-void FS::init( TMdPrm *prm )
+void FS::init( TMdPrm *prm, bool update )
 {
     TCfg &cSubt = prm->cfg("SUBT");
 
     //Create Configuration
-    cSubt.fld().setDescr(_("Mount point"));
+    if(!update) cSubt.fld().setDescr(_("Mount point"));
 
     vector<string> list;
     mpList(list);
     string mpls;
     for(unsigned iL = 0; iL < list.size(); iL++) mpls += list[iL]+";";
+    MtxAlloc res(prm->dataRes(), true);
     cSubt.fld().setValues(mpls);
     cSubt.fld().setSelNames(mpls);
+    res.unlock();
 
-    //if(list.size() && !TRegExp("(^|;)"+cSubt.getS()+";").test(mpls)) cSubt.setS(list[0]);
+    //if(!update && list.size() && !TRegExp("(^|;)"+cSubt.getS()+";").test(mpls))
+    //	cSubt.setS(list[0]);
 }
 
 void FS::mpList( vector<string> &list )

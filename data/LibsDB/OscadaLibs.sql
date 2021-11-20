@@ -5778,7 +5778,11 @@ Functions:
   - min, max [IN] — the main border IOs;
   - plcMin, plcMax [IN] — the hardware border IOs;
   - plcImit, plcImitIn [IN] — IOs of the simple imitation;
-  - levErr, tErr [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format).
+  - levErr, tErr [IN|OUT] — alarm level [-79...0] and text of the error (the attribute "err" format);
+  - f_frq [IN] — frequency of calculation, the template IO;
+  - this [IN] — reference to the parameter object, what executing the template;
+  - ctx [IN] — object of the user context, what saved between the execution cycles;
+  - toSave [OUT] — to force save the parameter object at exit.
 - Simple substitution for the variable subVar at the error (not valid) input variable (EVAL) in the modes: "no", "last" and "substitute".
 - Processing the result variable var for violation some borders and criteria, generating the alarms and proper setting the attribute err. The alarm borders can have some hysteresis HystBnd, can be delayed for the time alDelay and can be worked in the modes alSup: "init NORM", "suppress", "save on change". Next borders and criteria are provided:
   - missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;
@@ -5794,7 +5798,7 @@ Functions:
   - the field "CustomAlarms" — redefinition of the standard alarm levels of the alarm messages in the form "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.1
+Version: 2.3.0
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Функції:
@@ -5813,7 +5817,12 @@ License: GPLv2','Загальний, представницький та уні�
   - min, max [IN] — ВВ головної шкали;
   - plcMin, plcMax [IN] — ВВ апаратної шкали;
   - plcImit, plcImitIn [IN] — ВВ простої імітації;
-  - levErr, tErr [IN|OUT] — рівень аварії [-7...0] та текст помилки (формат атрибуту "err").
+  - levErr, tErr [IN|OUT] — рівень аварії [-79...0] та текст помилки (формат атрибуту "err");
+  - f_frq [IN] — частота обчислення, шаблонний ВВ;
+  - this [IN] — посилання на об''єкт параметру, що виконує шаблон;
+  - ctx [IN] — об''єкт користувацького контексту, що зберігається між циклами виклику;
+  - toSave [OUT] — примусово зберігати об''єкт параметру при виході.
+levErr, tErr [IN|OUT] — рівень аварії [-7...0] та текст помилки (формат атрибуту "err").
 - Проста підстановка значення subVar за помилкою (недостовірністю) вхідної змінної (EVAL) у режимах: "немає", "останнє" та "підстановка".
 - Опрацювання кінцевої змінної var на предмет порушення деяких границь та критеріїв, генеруючи аварії та відповідно встановлюючи атрибут err. Границі аварії можуть мати деякий гістерезис HystBnd, можуть бути затримані на час alDelay та можуть працювати у режимах alSup: "ініціювати НОРМА", "придушувати", "зберігати при зміні". Надаються наступні границі та критерії:
   - відсутність даних або підключення до джерела за вхідним значенням EVAL — код помилки 1 та рівень аварії 5;
@@ -5829,7 +5838,7 @@ License: GPLv2','Загальний, представницький та уні�
   - поле "CustomAlarms" — перевизначення стандартних рівнів порушень для повідомлень порушень у формі "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.2.1
+Версія: 2.3.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function custAlarm(lev) {
 	rez = 0;
@@ -5852,9 +5861,14 @@ if(f_start) {
 	inPrcArgs = new Object();
 	inPrcArgs.this = this;
 	inPrcArgs.ctx = new Object();
+	inPrcArgs.toSave = false;
 	return;
 }
-if(f_stop) return;
+if(f_stop) {
+	if(inProc.length && inPrcArgs.toSave)
+		SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force","1"));
+	return;
+}
 
 pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
 if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
@@ -5944,7 +5958,7 @@ else {
 	else	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("NORM"), 1, firstNorm);
 	f_err = tErr;
 	alDelay_ = 0; firstNorm = false;
-}','','',1634973902);
+}','','',1636274565);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:

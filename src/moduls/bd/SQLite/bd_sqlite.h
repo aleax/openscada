@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.SQLite file: bd_sqlite.h
 /***************************************************************************
- *   Copyright (C) 2003-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,7 +59,7 @@ class MTable : public TTable
     private:
 	//Private methods
 	void postDisable( int flag );
-	void fieldFix( TConfig &cfg, bool trPresent = false );
+	void fieldFix( TConfig &cfg );
 
 	string	getVal( TCfg &cf, uint8_t RqFlg = 0 );
 	void	setVal( TCfg &cf, const string &vl, bool tr = false );
@@ -119,6 +119,7 @@ class BDMod: public TTypeBD
 	~BDMod( );
 
 	int lsPr( )	{ return 9; }
+	string features( );
 
 	AutoHD<MBD> at( const string &name )	{ return TTypeBD::at(name); }
 

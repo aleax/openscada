@@ -31,7 +31,7 @@
 #define MOD_NAME	_("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.3"
+#define MOD_VER		"2.9.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -158,7 +158,7 @@ string TMdContr::getStatus( )
 
 		val += TSYS::strMess(_("Requests to '%s': %.6g; "), st->first.c_str(), -st->second.cntr);
 		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "), st->second.numR, st->second.numRA, st->second.numRM);
-		val += TSYS::strMess(_("wrote %g values, in the buffer %d. "), st->second.numW, inWrBuf);
+		val += TSYS::strMess(_("wrote %g values, %g messages, in the buffer %d. "), st->second.numW, st->second.numWM, inWrBuf);
 		isWork = true;
 	    }
 	if(!isWork) val.replace(0, 1, "10");
@@ -406,7 +406,7 @@ void TMdContr::start_( )
     //Clearing station parameters
     for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st) {
 	st->second.cntr = -1;
-	st->second.numR = st->second.numRA = st->second.numW = st->second.numRM = 0;
+	st->second.numR = st->second.numRA = st->second.numW = st->second.numRM = st->second.numWM = 0;
  
 	// Asynchronous writings buffer clean up
 	st->second.aWrRes.lock();
@@ -533,18 +533,24 @@ void *TMdContr::Task( void *icntr )
 			resAsWr.unlock();
 
 			//  Processing
-			int vlToWr = 0;
+			int vlToWr = 0, mToWr = 0;
 			for(map<string, map<string,string> >::iterator iPrm = aWrs.begin(); iPrm != aWrs.end(); ++iPrm) {
+			    //   Ready requests processing
+			    if(iPrm->first == "<ReadyReqs>") {
+				for(map<string,string>::iterator iReq = iPrm->second.begin(); iReq != iPrm->second.end(); ++iReq, ++mToWr)
+				    req.childAdd(iReq->second)->load(iReq->first);
+				continue;
+			    }
+
+			    //   Same parameters
 			    int pOff = 0;
 			    req.childAdd("set")->setAttr("path", iPrm->first+"/%2fserv%2fattr");
-			    for(map<string,string>::iterator iAttr = iPrm->second.begin(); iAttr != iPrm->second.end(); ++iAttr) {
+			    for(map<string,string>::iterator iAttr = iPrm->second.begin(); iAttr != iPrm->second.end(); ++iAttr, ++vlToWr)
 				req.childGet(-1)->childAdd("el")->setAttr("id",iAttr->first)->setText(iAttr->second);
-				vlToWr++;
-			    }
 			}
 
 			// Same request
-			if(!cntr.cntrIfCmd(req)) { aWrs.clear(); stO.numW += vlToWr; }
+			if(!cntr.cntrIfCmd(req)) { aWrs.clear(); stO.numW += vlToWr; stO.numWM += mToWr; }
 			else if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), "%s", req.text().c_str());
 
 			req.childClear();
@@ -767,10 +773,12 @@ void TMdContr::messSet( const string &mess, int lev, const string &type2Code, co
 	return;
 
     //Sending the message to the remote stations
-    //???? Append the sending through the writing buffer
     string scntr;
     for(int c_off = 0; (scntr=TSYS::strSepParse(sprm.at().stats(),0,';',&c_off)).size(); )
 	try {
+	    map<string,TMdContr::StHd>::iterator st = mStatWork.find(scntr);
+	    if(st == mStatWork.end())	continue;
+
 	    int tOff = 0; TSYS::pathLev(sprm.at().prmAddr(), 1, true, NULL, &tOff);
 	    string  dModCntr = sprm.at().prmAddr().substr(0, tOff),
 		    dPrm = sprm.at().prmAddr().substr(tOff);
@@ -780,7 +788,16 @@ void TMdContr::messSet( const string &mess, int lev, const string &type2Code, co
 		setAttr("lev", i2s(lev))->setAttr("cat", cat)->setAttr("prm", TSYS::path2sepstr(dPrm))->
 		setText(mess);
 
-	    if(!cntrIfCmd(req,true)) break;
+	    if(mAsynchWr) {
+		st->second.aWrRes.lock();
+		req.setAttr("path", dModCntr+"%2fserv%2fmess");
+		st->second.asynchWrs["<ReadyReqs>"][req.save()] = "set";
+		st->second.aWrRes.unlock();
+	    }
+	    else {
+		if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),req.text().c_str());
+		st->second.numWM++;
+	    }
 	} catch(TError &err) { continue; }
 }
 

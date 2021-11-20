@@ -34,10 +34,11 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.11"
+#define MOD_VER		"0.2.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
+#define FEATURES	"SQL, LIST"
 //************************************************
 
 BD_ODBC::BDMod *BD_ODBC::mod; //Pointer for direct access to the module
@@ -80,6 +81,8 @@ BDMod::~BDMod( )
 {
 
 }
+
+string BDMod::features( )	{ return FEATURES; }
 
 TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_E()); }
 

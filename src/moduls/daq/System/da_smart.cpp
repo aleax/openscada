@@ -42,25 +42,30 @@ HddSmart::HddSmart( )	{ }
 
 HddSmart::~HddSmart( )	{ }
 
-void HddSmart::init( TMdPrm *prm )
+void HddSmart::init( TMdPrm *prm, bool update )
 {
-    prm->daData = new tval();
-    prm->vlElemAtt(&((tval*)prm->daData)->els);
+    if(!update) {
+	prm->daData = new tval();
+	prm->vlElemAtt(&((tval*)prm->daData)->els);
+    }
 
     TCfg &c_subt = prm->cfg("SUBT");
 
     //Create Configuration
-    c_subt.fld().setDescr(_("Disk"));
+    if(!update) c_subt.fld().setDescr(_("Disk"));
 
     vector<string> list;
     dList(list);
     string dls;
     for(unsigned iL = 0; iL < list.size(); iL++)
 	dls += list[iL]+";";
+    MtxAlloc res(prm->dataRes(), true);
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
+    res.unlock();
 
-    if(list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls)) c_subt.setS(list[0]);
+    if(!update && list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls))
+	c_subt.setS(list[0]);
 }
 
 void HddSmart::deInit( TMdPrm *prm )

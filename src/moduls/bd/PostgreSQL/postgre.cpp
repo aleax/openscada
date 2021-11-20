@@ -33,10 +33,11 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.6"
+#define MOD_VER		"2.5.7"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
+#define FEATURES	"SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR"
 //************************************************
 
 #define SEEK_PRELOAD_LIM	100
@@ -79,6 +80,8 @@ BDMod::BDMod( string name ) : TTypeBD(MOD_ID)
 }
 
 BDMod::~BDMod( )	{ }
+
+string BDMod::features( )	{ return FEATURES; }
 
 TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_E()); }
 

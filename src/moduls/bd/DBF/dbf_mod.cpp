@@ -39,10 +39,11 @@
 #define MOD_NAME	_("DB DBF")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.4.4"
+#define MOD_VER		"2.4.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBF files version 3.0.")
 #define LICENSE		"GPL2"
+#define FEATURES	"LIST, GET, SEEK, SET, DEL, FIX"
 //************************************************
 
 BDDBF::BDMod *BDDBF::mod;
@@ -86,6 +87,8 @@ BDMod::~BDMod( )
 {
 
 }
+
+string BDMod::features( )	{ return FEATURES; }
 
 TBD *BDMod::openBD( const string &iid )	{ return new MBD(iid, &owner().openDB_E()); }
 
@@ -238,7 +241,7 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg, const string &cacheKey )
     for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	// Find collumn
+	// Find column
 	db_str_rec *fld_rec;
 	for(i_clm = 0; (fld_rec=basa->getField(i_clm)) != NULL; i_clm++)
 	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
@@ -273,7 +276,7 @@ void MTable::fieldGet( TConfig &cfg )
     for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	// Find collumn
+	// Find column
 	db_str_rec *fld_rec;
 	for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
 	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
@@ -309,19 +312,19 @@ void MTable::fieldSet( TConfig &cfg )
     for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	// Find collumn
+	// Find column
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
 	if(fld_rec == NULL) {
-	    // Create new collumn
+	    // Create new column
 	    db_str_rec n_rec;
 
 	    fieldPrmSet(e_cfg, n_rec);
 	    if(basa->addField(i_cf,&n_rec) < 0) throw err_sys(_("Error the column."));
 	}
 	else if(!appMode) {
-	    // Check collumn parameters
+	    // Check column parameters
 	    switch(e_cfg.fld().type()) {
 		case TFld::String:
 		    if(fld_rec->tip_fild == 'C' && e_cfg.fld().len() == fld_rec->len_fild)	continue;
@@ -345,7 +348,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    if(basa->setField(i_clm,&n_rec) < 0) throw err_sys(_("Error the column."));
 	}
     }
-    //Del no used collumn
+    //Del no used column
     db_str_rec *fld_rec;
     for(i_clm = 0; !appMode && (fld_rec=basa->getField(i_clm)) != NULL; i_clm++) {
 	unsigned i_cf;
@@ -368,7 +371,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 	    if(!e_cfg.view()) continue;
 
-	    // Find collumn
+	    // Find column
 	    db_str_rec *fld_rec;
 	    for(i_clm = 0; (fld_rec=basa->getField(i_clm)) != NULL; i_clm++)
 		if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
@@ -423,7 +426,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey, int off )
 	    if(useKey && !cfg.cfg(cf_el[i_cf]).keyUse()) { cnt_key++; continue; }
 
 	    //Check key
-	    // Find collumn
+	    // Find column
 	    db_str_rec *fld_rec;
 	    for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
 		if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;

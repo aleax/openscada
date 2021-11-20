@@ -1,3 +1,21 @@
+2021-11-20 Roman (stable)
+- !:LibsDB.OscadaLibs: tmplib_base.anUnif: Appended of the user procedure option "toSave" of force saving the object at the exit.
+- !:LibsDB.vcaBase: wlb_Main.{graphSelPrm,ElViewGraph}: Appended of the empty color processing as the default one also taken from the style.
+- !!!!:BD: The DB type-module objects were appended by the specific information field "Features" of specifying the supported by DB features.
+- !!!!:SYS,BD.SQLite: Significant improvement of the translation support for:
+    - completed in suppport the translation change mark as "<!>" in the text end;
+    - the translation statuses appended of the short labels: "SINGLELANGUAGE", "MULTILANGUAGE", "MULTILANGUAGE-DYNAMIC";
+    - BD.SQLite: the SET command unified in the translation states specifying, what tested on most modes.
+- !!:BD.SQLite: Refactored in the request lists form in the separate list variables.
+    The argument "trPresent" of the function fieldFix() was removed as a spare one.
+    The binary mode detection appended for the symbols range [\x0-\x8\xB-\xC\x0E-\x1F].
+- !!:DAQ.DAQGate: The messages writing (sinking) is adapted to the asynchronous mode - using the writing buffer and in one-common request,
+    what expanded to the ready requests processing.
+- !!:DAQ.System: The init() function of the DA-sources appended of the updation mode, to update the subtype field "SUBT" mostly.
+- UI.{QTCfg,Vision}: "Collumns" renamed to "Columns".
+- UI.QTCfg: "Copy text" renamed back to "Copy".
+
+
 2021-11-06 Roman (stable)
 - !!:LibsDB.vcaBase: wlb_Main.{ElViewGraph,graphSelPrm}: Adapted to reset the trend item color to the default styled at setting that to empty.
     !: prj_tmplSO: The styled colors' transparency of trend items set to 150.

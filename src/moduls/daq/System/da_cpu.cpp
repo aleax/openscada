@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_cpu.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,8 +44,10 @@ CPU::~CPU( )
 
 }
 
-void CPU::init( TMdPrm *prm )
+void CPU::init( TMdPrm *prm, bool update )
 {
+    if(update)	return;
+
     char buf[256];
     prm->daData = new tval;
 

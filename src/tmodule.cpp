@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -51,7 +51,7 @@ TModule::TModule( const string &id ) : mModId(id)
 
     //Dynamic string translation hook
 #if 0
-    char mess[][100] = { _("Author"), _("License") };
+    char mess[][100] = { _("Author"), _("License"), _("Features") };
 #endif
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);

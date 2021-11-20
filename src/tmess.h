@@ -41,6 +41,7 @@
 #define trSetLU(base,lng,usr,mess) Mess->translSetLU(base, lng, usr, mess)
 #define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
 #define FTM2(tm, utm) ((int64_t)tm*1000000 + utm)
+#define mess_TrModifMark "<!>"
 #define mess_TrUApiTbl	"Trs"
 
 #define mess_lev( )			Mess->messLevel()

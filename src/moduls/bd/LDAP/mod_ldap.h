@@ -1,7 +1,7 @@
 
 //OpenSCADA module DB.ODBC file: mod_ldap.h
 /***************************************************************************
- *   Copyright (C) 2017,2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2017,2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -114,6 +114,8 @@ class BDMod: public TTypeBD
 	//Public methods
 	BDMod( string name );
 	~BDMod( );
+
+	string features( );
 
     private:
 	//Private methods

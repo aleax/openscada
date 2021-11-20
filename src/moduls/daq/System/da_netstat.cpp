@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_netstat.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,22 +47,26 @@ NetStat::~NetStat( )
 
 }
 
-void NetStat::init( TMdPrm *prm )
+void NetStat::init( TMdPrm *prm, bool update )
 {
     TCfg &c_subt = prm->cfg("SUBT");
 
-    //> Create Configuration
-    c_subt.fld().setDescr(_("Interface"));
+    //Create Configuration
+    if(!update) c_subt.fld().setDescr(_("Interface"));
 
     vector<string> list;
-    dList(list,true);
+    dList(list, true);
     string ifls;
-    for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	ifls += list[i_l]+";";
+    for(unsigned iL = 0; iL < list.size(); iL++)
+	ifls += list[iL]+";";
+
+    MtxAlloc res(prm->dataRes(), true);
     c_subt.fld().setValues(ifls);
     c_subt.fld().setSelNames(ifls);
+    res.unlock();
 
-    if(list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(ifls)) c_subt.setS(list[0]);
+    if(!update && list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(ifls))
+	c_subt.setS(list[0]);
 }
 
 void NetStat::dList( vector<string> &list, bool part )
@@ -72,9 +76,8 @@ void NetStat::dList( vector<string> &list, bool part )
 	 buf[256] = "";
 
     FILE *f = fopen("/proc/net/dev","r");
-    while(f && fgets(buf,sizeof(buf),f) != NULL)
-    {
-	for(unsigned i=0; i < sizeof(buf); i++)
+    while(f && fgets(buf,sizeof(buf),f) != NULL) {
+	for(unsigned i = 0; i < sizeof(buf); i++)
 	    if(buf[i] == ':') buf[i] = ' ';
 	if(sscanf(buf,"%10s %lu %*d %*d %*d %*d %*d %*d %*d %lu",name,&rcv,&trns) != 3) continue;
 	list.push_back(name);
@@ -92,11 +95,9 @@ void NetStat::getVal( TMdPrm *prm )
 
     string dev = prm->cfg("SUBT").getS();
     FILE *f = fopen("/proc/net/dev","r");
-    if(f)
-    {
+    if(f) {
 	snprintf(sc_pat,sizeof(sc_pat)," %s %%lu %%*d %%*d %%*d %%*d %%*d %%*d %%*d %%lu",dev.c_str());
-	while(fgets(buf,sizeof(buf),f) != NULL)
-	{
+	while(fgets(buf,sizeof(buf),f) != NULL) {
 	    for(unsigned i = 0; i < sizeof(buf); i++)
 		if(buf[i] == ':') buf[i] = ' ';
 	    if(!sscanf(buf,sc_pat,&rcv,&trns)) continue;
@@ -108,8 +109,7 @@ void NetStat::getVal( TMdPrm *prm )
 	fclose(f);
     }
 
-    if(devOK)
-    {
+    if(devOK) {
 	prm->daErr = "";
 	double lstVl = prm->vlAt("rcv").at().getR(0, true);
 	prm->vlAt("rcvSp").at().setR((lstVl != EVAL_REAL && rcvVl > lstVl) ?
@@ -121,8 +121,7 @@ void NetStat::getVal( TMdPrm *prm )
 	prm->vlAt("rcv").at().setR(rcvVl,0,true);
 	prm->vlAt("trns").at().setR(trnsVl,0,true);
     }
-    else if(!prm->daErr.getVal().size())
-    {
+    else if(!prm->daErr.getVal().size()) {
 	prm->setEval();
 	prm->daErr = _("10:Device is not available.");
     }
@@ -134,19 +133,17 @@ void NetStat::makeActiveDA( TMdContr *aCntr )
 
     vector<string> list;
     dList(list);
-    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
-    {
+    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
 	vector<string> pLs;
 	// Find propper parameter's object
 	aCntr->list(pLs);
 
-	unsigned i_p;
-	for(i_p = 0; i_p < pLs.size(); i_p++)
-	{
-	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+	unsigned iP;
+	for(iP = 0; iP < pLs.size(); iP++) {
+	    AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
 	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
 	}
-	if(i_p < pLs.size()) continue;
+	if(iP < pLs.size()) continue;
 
 	string intprm = ap_nm+list[i_hd];
 	while(aCntr->present(intprm)) intprm = TSYS::strLabEnum(intprm);

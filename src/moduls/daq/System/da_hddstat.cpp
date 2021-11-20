@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_hddstat.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,22 +50,25 @@ HddStat::~HddStat( )
 
 }
 
-void HddStat::init( TMdPrm *prm )
+void HddStat::init( TMdPrm *prm, bool update )
 {
     TCfg &c_subt = prm->cfg("SUBT");
 
     //Create Configuration
-    c_subt.fld().setDescr(_("Disk(part)"));
+    if(!update) c_subt.fld().setDescr(_("Disk(part)"));
 
     vector<string> list;
-    dList(list,true);
+    dList(list, true);
     string dls;
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
 	dls += list[i_l]+";";
+    MtxAlloc res(prm->dataRes(), true);
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
+    res.unlock();
 
-    if(list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls)) c_subt.setS(list[0]);
+    if(!update && list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls))
+	c_subt.setS(list[0]);
 }
 
 void HddStat::dList( vector<string> &list, bool part )

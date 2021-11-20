@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_netstat.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@ class NetStat: public DA
 	string id( )	{ return "netstat"; }
 	string name( )	{ return _("Network statistic"); }
 
-	void init( TMdPrm *prm );
+	void init( TMdPrm *prm, bool update = false );
 	void getVal( TMdPrm *prm );
 
 	void makeActiveDA( TMdContr *a_cntr );

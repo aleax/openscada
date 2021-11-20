@@ -88,7 +88,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> <span id="anUnif" title="#anUnif"><h3><span class="mw-headline" id="Analog_signal.2C_unified_.28anUnif.29"><span class="mw-headline-number">1.1</span> Analog signal, unified (<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">anUnif</a>)</span></h3></span>
 </td>
-<td> 2.2 </td>
+<td> 2.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -148,7 +148,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-79...0] and text of the error (the attribute "err" format);</li>
 <li> <i>f_frq</i> [IN] — frequency of calculation, the template IO;</li>
 <li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
-<li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
+<li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles;</li>
+<li> <i>toSave</i> [OUT] — to force save the parameter object at exit.</li></ul></dd></dl>
 <ul><li> Simple substitution for the variable <b>subVar</b> at the error (not valid) input variable (EVAL) in the modes: "no", "last" and "substitute".</li>
 <li> Processing the result variable <b>var</b> for violation some borders and criteria, generating the alarms and proper setting the attribute <b>err</b>. The alarm borders can have some hysteresis <b>HystBnd</b>, can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>. Next borders and criteria are provided:</li></ul>
 <dl><dd><ul><li> missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;</li>

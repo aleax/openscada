@@ -157,15 +157,16 @@ class TMdContr: public TController
 	class StHd
 	{
 	    public:
-	    StHd( ) : cntr(0), numR(0), numRA(0), numW(0), numRM(0) { lstMess.clear(); }
+	    StHd( ) : cntr(0), numR(0), numRA(0), numW(0), numRM(0), numWM(0) { lstMess.clear(); }
 
 	    float cntr;
-	    map<string, map<string,string> > asynchWrs;	//Asynchronous writers list
+	    map<string, map<string,string> > asynchWrs;	//Asynchronous writings list: [prm][attr][vl]
+							//   for the ready requests that is: ["<ReadyReqs>"][req][cmd]
 	    map<string, TMess::SRec>	lstMess;
 
 	    ResMtx reqM, aWrRes;
 
-	    float numR, numRA, numW, numRM;
+	    float numR, numRA, numW, numRM, numWM;
 	};
 	class SPrmsStack
 	{

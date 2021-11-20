@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-21 18:26+0300\n"
+"POT-Creation-Date: 2021-11-20 11:00+0200\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -118,9 +118,8 @@ msgstr "Anfragen an '%s': %.6g; "
 msgid "read %g values, %g archive's, %g messages; "
 msgstr "lesen %g Werte, %g Archivs, %g Nachrichten; "
 
-#, c-format
-msgid "wrote %g values, in the buffer %d. "
-msgstr "schrieb %g Werte, in den Puffer %d. "
+msgid "wrote %g values, %g messages, in the buffer %d. "
+msgstr "schrieb %g Werte, %g Nachrichten, in den Puffer %d. "
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."

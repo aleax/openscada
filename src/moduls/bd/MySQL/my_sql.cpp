@@ -34,10 +34,11 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.5.7"
+#define MOD_VER		"3.5.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
+#define FEATURES	"SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR"
 //************************************************
 
 #define MYSQL_RECONNECT		0		//!!!! The MySQL/MariaDB reconnect some time crashable due to a need of releasing some locks
@@ -81,6 +82,8 @@ BDMod::BDMod( string name ) : TTypeBD(MOD_ID)
 }
 
 BDMod::~BDMod( )	{ }
+
+string BDMod::features( )	{ return FEATURES; }
 
 TBD *BDMod::openBD( const string &name )	{ return new MBD(name,&owner().openDB_E()); }
 

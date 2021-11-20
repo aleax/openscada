@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-21 18:18+0300\n"
+"POT-Creation-Date: 2021-11-14 19:00+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1333,6 +1333,9 @@ msgstr "Автор"
 msgid "License"
 msgstr "Лицензия"
 
+msgid "Features"
+msgstr "Свойства"
+
 msgid "Module enabling."
 msgstr "Включение модуля."
 
@@ -2401,8 +2404,17 @@ msgstr "Попытка установки отсутствующего проц�
 msgid "Error installing processors for the thread."
 msgstr "Ошибка установки процессоров для потока."
 
+msgid "SINGLELANGUAGE"
+msgstr "ОДНОЯЗЫЧНЫЙ"
+
 msgid "only use the already multilanguage DBs with their modification"
 msgstr "только использовать уже многоязычные БД с их модификацией"
+
+msgid "MULTILANGUAGE-DYNAMIC"
+msgstr "МНОГОЯЗЫЧНЫЙ-ДИНАМИЧЕСКИЙ"
+
+msgid "MULTILANGUAGE"
+msgstr "МНОГОЯЗЫЧНЫЙ"
 
 #, c-format
 msgid ""

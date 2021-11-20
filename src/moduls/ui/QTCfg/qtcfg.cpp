@@ -1329,7 +1329,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    XMLNode req("get"); req.setAttr("path",br_path);
 	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    else if(rez <= 0) {
-		//   Collumns adjusting flag
+		//   Columns adjusting flag
 		bool adjCol = widget || !tbl->rowCount();
 		bool adjRow = false;
 
@@ -2788,7 +2788,7 @@ void ConfApp::listBoxPopup( )
 	}
 	if(!lbox->selectedItems().isEmpty()) {
 	    popup.addSeparator();
-	    actCopy = last_it = new QAction(_("Copy text"),this);
+	    actCopy = last_it = new QAction(_("Copy"),this);
 	    popup.addAction(actCopy);
 	}
 
@@ -2935,7 +2935,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 	}
 	if(!tbl->selectedItems().isEmpty()) {
 	    popup.addSeparator();
-	    actCopy = last_it = new QAction(_("Copy text"),this);
+	    actCopy = last_it = new QAction(_("Copy"),this);
 	    popup.addAction(actCopy);
 	}
 

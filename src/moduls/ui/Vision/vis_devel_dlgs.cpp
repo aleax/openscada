@@ -1781,7 +1781,7 @@ void VisItProp::changeAttr(QTreeWidgetItem *it, int col)
 	return;
     }
 
-    //Get collumn id
+    //Get column id
     QString scol, sval;
     switch(col)
     {

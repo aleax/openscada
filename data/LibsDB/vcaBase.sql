@@ -10034,6 +10034,7 @@ if(f_start) {
 
 		//Load current properties
 		color_value = lWdg.attr("color");
+		if(color_value == lWdg.attr("colorDef"))	color_value = "";
 
 		//Load the colors list
 		color_cfg = "";
@@ -10044,7 +10045,7 @@ if(f_start) {
 	}
 }
 
-colorBox_backColor = color_value;
+colorBox_backColor = (color_value.length?color_value:lWdg.attr("colorDef")).parse(0,"-");
 
 //Events for commands process
 for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
@@ -10116,7 +10117,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else evRez += evCur+"\n";
 }
-event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1636182373);
+event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1636215921);
 INSERT INTO wlb_Main VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADVklEQVRYhe2XS28jRRRGbz366U77ETu2Q6QomwCDDBIsZsFi/gISINbJ
 L4QtC1giQLCZSKMZMa9A7JkYP9vVXd1VdYtF24AEEoFN05LPrj7p072nVepWk4uLC6WU7GSA1F96
@@ -11221,7 +11222,7 @@ event = evRez;
 
 if(toSave || (f_start && allowSel && !loadOK)) {
 	for(off = 0; (lnA="addr;name;dscr;min;max;log;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
-		if(lnA == "color")	this.attrSet(user+lnA, color, true);
+		if(lnA == "color")	this.attrSet(user+lnA, ((color==colorDef)?"":color), true);
 		else this.attrSet(user+lnA, this.link(lnA), true);
 }
 
@@ -11238,7 +11239,7 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1636182428);
+}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1636215921);
 INSERT INTO wlb_Main VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -19862,15 +19863,15 @@ INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','',32,'','','btPass','',
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','dscr','Element is provided to create graphics groups. Element contains information about a parameter, the regulator mode, if the parameter is such, the units of analog parameter, as well as the color corresponding to the parameter''s trend. The element commonly uses and represents the representative structure of the DAQ-templates "Analog signal" and "Discrete block".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.3
+Version: 1.3.4
 License: GPLv2',42,'Parameter|DESCR','','','Елемент слугує для створення груп графіків. Елемент містить інформацію про параметр, режим регулятору, якщо параметр є таким, одиницю виміру аналогового параметру, а також колір, що відповідає параметру тренда. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "Аналоговий сигнал" та "Дискретний блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.3
+Версія: 1.3.4
 Ліцензія: GPLv2','','Элемент служит для создания групп графиков. Элемент содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов "Аналоговый сигнал" и "Дискретный блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.3
+Версия: 1.3.4
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','','');
@@ -22308,7 +22309,7 @@ INSERT INTO wlb_Main_io VALUES('graphSelPrm','dscr','The element implements a di
 
 In the "Select: parameters accessible to select (allowSelLst)" attribute the data sources should be placed in the following way:
 - {DAQ_Arh_addr}[:Name[:min:max[:dim]], where:
-  - "DAQ_Arh_addr" — address of the parameter, for the group linking, or address of the attribute with data from the "Data acquisition (DAQ)" subsystem, as well as the address of the values'' archive, for example:
+  - "DAQ_Arh_Main_io addr" — address of the parameter, for the group linking, or address of the attribute with data from the "Data acquisition (DAQ)" subsystem, as well as the address of the values'' archive, for example:
     - /LogicLev/experiment/prm_F3 — address of the "F3" parameter ;
     - /DAQ/System/AutoDA/prm_CPULoad/load — address of the "load" attribute of the "CPULoad" parameter;
     - /Archive/va_LC21_1_var — address of the "LC21_1_var" archive.
@@ -22318,7 +22319,7 @@ In the "Select: parameters accessible to select (allowSelLst)" attribute the dat
 - <varhs> — template of the group selection, if you specify it all available archives in the system will be included into the selection list.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.1
+Version: 1.5.0
 License: GPLv2',32,'','','','Елемент реалізує діалог користувацького вибору джерел даних, часто архівних, для формування графіку у кадрі "Група графіків". Вибір надається з переліку вказаного у атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)", кадру-ініціатору. Для обраного джерела можна вказати ім''я, шкалу, логарифмічність, одиницю вимірювання та колір графіку.
 
 У атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)" мають розташовуватися джерела даних у вигляді:
@@ -22334,7 +22335,7 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 - <varhs> — шаблон групового обрання, при визначені якого до переліку обрання потраплять усе доступні у системі архіви.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.1
+Версія: 1.5.0
 Ліцензія: GPLv2','','Элемент реализует диалог пользовательского выбора источников данных, часто архивных, для формирования графика в кадре "Группа графиков". Выбор предоставляется из перечня указанного в атрибуте "Выбор: параметры доступные для выбора (allowSelLst)", кадра-инициатора. Для выбранного источника можно указать имя, шкалу, логарифмичность, единицу измерения и цвет графика.
 
 В атрибуте "Выбор: параметры доступные для выбора (allowSelLst)" должны помещаться источники данных в виде:
@@ -22349,7 +22350,7 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 - <varhs> — шаблон группового выбора, при указании которого в список выбора попадут все доступные в системе архивы.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.1
+Версия: 1.5.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
@@ -24291,7 +24292,7 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','it0color','gray',0,'','','alarms','',
 INSERT INTO wlb_Main_io VALUES('RootPgSo','it1lev','4',0,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','it1color','red',0,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','it2color','yellow',0,'','','alarms','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('graphSelPrm','tipTool','Select empty color to reset that to the default style.',32,'','','color','Оберіть порожній колір для скидання до типового стилю','','Выберите пустой цвет для сброса к типичному стилю','','','','');
+INSERT INTO wlb_Main_io VALUES('graphSelPrm','tipTool','Select/leave empty color for the typical/styled one.',32,'','','color','Оберіть/залиште порожній колір для типового/стильового.','','Выберите/оставьте пустой цвет для типичного/стилевого.','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','','');

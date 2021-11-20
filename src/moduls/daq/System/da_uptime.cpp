@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_uptime.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,9 +47,11 @@ UpTime::~UpTime( )
 
 }
 
-void UpTime::init( TMdPrm *prm )
+void UpTime::init( TMdPrm *prm, bool update )
 {
-    //> Create config
+    if(update)	return;
+
+    //Create config
     TCfg &c_subt = prm->cfg("SUBT");
     c_subt.fld().setDescr("");
 

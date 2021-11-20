@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_qsensor.cpp
 /***************************************************************************
- *   Copyright (C) 2018 by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2018-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,22 +41,28 @@ QSensor::~QSensor( )
 
 }
 
-void QSensor::init( TMdPrm *prm )
+void QSensor::init( TMdPrm *prm, bool update )
 {
-    prm->daData = new TElem();
-    prm->vlElemAtt((TElem*)prm->daData);
+    if(!update) {
+	prm->daData = new TElem();
+	prm->vlElemAtt((TElem*)prm->daData);
+    }
 
     //Create config
     TCfg &c_subt = prm->cfg("SUBT");
-    c_subt.fld().setDescr("");
+    if(!update) c_subt.fld().setDescr("");
 
     TVariant sens = getSensors(prm->owner());
     string ifls;
     for(int iP = 0; iP < sens.getO().at().propGet("length").getI(); ++iP)
 	ifls += sens.getO().at().propGet(i2s(iP)).getO().at().propGet("type").getS()+";";
+    MtxAlloc res(prm->dataRes(), true);
     c_subt.fld().setValues(ifls);
     c_subt.fld().setSelNames(ifls);
-    if(ifls.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(ifls)) c_subt.setS(TSYS::strParse(ifls,0,";"));
+    res.unlock();
+
+    if(!update && ifls.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(ifls))
+	c_subt.setS(TSYS::strParse(ifls,0,";"));
 }
 
 void QSensor::deInit( TMdPrm *prm )

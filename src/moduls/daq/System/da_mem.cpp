@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_mem.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -48,8 +48,10 @@ Mem::~Mem( )
 
 }
 
-void Mem::init( TMdPrm *prm )
+void Mem::init( TMdPrm *prm, bool update )
 {
+    if(update)	return;
+
     prm->cfg("SUBT").setView(false);
 }
 

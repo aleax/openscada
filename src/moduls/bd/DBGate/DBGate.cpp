@@ -29,10 +29,11 @@
 #define MOD_NAME	_("DB gate")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.1.2"
+#define MOD_VER		"1.1.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
 #define MOD_LICENSE	"GPL2"
+#define FEATURES	"SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR"
 //************************************************
 
 BD_DBGate::BDMod *BD_DBGate::mod;	//Pointer for direct access to the module
@@ -75,6 +76,8 @@ BDMod::~BDMod( )
 {
 
 }
+
+string BDMod::features( )	{ return FEATURES; }
 
 TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_E()); }
 

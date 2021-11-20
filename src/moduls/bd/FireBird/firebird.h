@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.FireBird file: firebird.h
 /***************************************************************************
- *   Copyright (C) 2007-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -125,6 +125,7 @@ class BDMod: public TTypeBD
 	~BDMod( );
 
 	int lsPr( )	{ return 3; }
+	string features( );
 
 	static string sqlReqCode( const string &req, char symb = '\'' );
 
