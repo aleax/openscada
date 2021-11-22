@@ -1983,4 +1983,3 @@ void PageWdg::cntrCmdProc( XMLNode *opt )
     }
     else if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt))) TCntrNode::cntrCmdProc(opt);
 }
-

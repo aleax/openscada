@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.3.3"
+#define MOD_VER		"3.3.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -511,7 +511,7 @@ void MTable::fieldSet( TConfig &cfg )
     }
 
     //Query for presence detect or the current data
-    string req, ls, ls2;
+    string req, ls, ls2, tVl;
     if(trPresent)
 	req = "SELECT * FROM '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' WHERE " + req_where + ";";
     else if(!isForceUpdt)
@@ -531,6 +531,9 @@ void MTable::fieldSet( TConfig &cfg )
 		ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\" " +
 		    (isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iEl],TSYS::SQL,"\"")+"\" ") : "");
 		ls2 += (ls2.size()?",":"") + sval + " " + (isTransl?(","+sval+" "):"");
+
+		// Filling the translation fields also in the DYNAMIC tanslation mode
+		//????
 	    }
 	    if(ls.size())
 		req = "INSERT INTO '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' (" + ls + ") VALUES (" + ls2 + ");";
@@ -539,6 +542,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Update present record
     bool toWarnReload = false;
+    vector<pair<string,string> > trCacheUpd;
     if(isForceUpdt) {
 	for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
 	    TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
@@ -548,7 +552,7 @@ void MTable::fieldSet( TConfig &cfg )
 
 	    // ???? Propagate the last changes to DB.{MySQL,PostgreSQL,FireBird}
 	    // No translation
-	    if(!trPresent || u_cfg.fld().type() != TFld::String)
+	    if(!trPresent || u_cfg.fld().type() != TFld::String || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
 		ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " ";
 	    else {
 		// Translation
@@ -583,7 +587,7 @@ void MTable::fieldSet( TConfig &cfg )
 			ls += (ls.size()?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + sval + " ";
 
 			// Setting for marks and the base message
-			for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++)
+			for(unsigned iFld = 0; !u_cfg.noTransl() && iFld < tbl[0].size(); iFld++)
 			    //  clearing the translation at not empty base message
 			    if(isTransl && tbl[0][iFld] == cf_el[iEl] && sval.size() <= 2 && tbl[1][iFld].size())
 				toWarnReload = true;
@@ -591,18 +595,35 @@ void MTable::fieldSet( TConfig &cfg )
 			    else if(isTransl && tbl[0][iFld] == cf_el[iEl] && sval.size() > 2) {
 				if(tbl[1][iFld].empty())
 				    ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " ";
-				else if((fPos < 0 || tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
-					(tbl[1][iFld].size() <= mess_TrModifMarkLen || tbl[1][iFld].rfind(mess_TrModifMark) != (tbl[1][iFld].size()-mess_TrModifMarkLen)))
-				    ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"='" +
-					TSYS::strEncode(tbl[1][iFld],TSYS::SQL,"'") + " " + mess_TrModifMark + "' ";
+				else {
+				    if(Mess->translDyn())
+					trCacheUpd.push_back(pair<string,string>(tbl[1][iFld],Mess->lang2Code()+":"+sval.substr(1,sval.size()-2)+((fPos<0)?"":string(1,0)+tbl[1][fPos])));
+
+				    if(fPos >= 0 && tbl[1][fPos].size() > 2 &&
+					    (tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
+					    (tbl[1][iFld].size() <= mess_TrModifMarkLen || tbl[1][iFld].rfind(mess_TrModifMark) != (tbl[1][iFld].size()-mess_TrModifMarkLen)))
+				    {
+					tVl = tbl[1][iFld] + " " + mess_TrModifMark;
+					ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"='" + TSYS::strEncode(tVl,TSYS::SQL,"'") + "' ";
+					if(Mess->translDyn()) trCacheUpd.push_back(pair<string,string>(tbl[1][iFld]+string(1,0)+tVl,""));
+				    }
+				}
 			    }
 			    //  the base message for mark the translation ones
-			    else if(!isTransl && tbl[0][iFld].size() > 3 && tbl[0][iFld].compare(3,string::npos,sid) == 0 && tbl[0][iFld].compare(0,3,Mess->lang2CodeBase()+"#") != 0 &&
-				    (fPos < 0 || tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
-				    tbl[1][iFld].size() &&
-				    (tbl[1][iFld].size() <= mess_TrModifMarkLen || tbl[1][iFld].rfind(mess_TrModifMark) != (tbl[1][iFld].size()-mess_TrModifMarkLen)))
-				ls += (ls.size()?",\"":"\"") + TSYS::strEncode(tbl[0][iFld],TSYS::SQL,"\"") + "\"='" +
-					    ((sval.size()>2)?TSYS::strEncode(tbl[1][iFld],TSYS::SQL,"'")+" "+mess_TrModifMark:"") + "' ";
+			    else if(!isTransl && tbl[0][iFld].size() > 3 && tbl[0][iFld].compare(3,string::npos,sid) == 0 && tbl[0][iFld].compare(0,3,Mess->lang2CodeBase()+"#") != 0) {
+				if(Mess->translDyn())
+				    trCacheUpd.push_back(pair<string,string>(((fPos<0)?"":tbl[1][fPos])+string(1,0)+sval.substr(1,sval.size()-2),""));
+
+				if((fPos < 0 || tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
+					tbl[1][iFld].size() &&
+					(tbl[1][iFld].size() <= mess_TrModifMarkLen || tbl[1][iFld].rfind(mess_TrModifMark) != (tbl[1][iFld].size()-mess_TrModifMarkLen)))
+				{
+				    tVl = (sval.size() > 2) ? tbl[1][iFld] + " " + mess_TrModifMark : "";
+				    ls += (ls.size()?",\"":"\"") + TSYS::strEncode(tbl[0][iFld],TSYS::SQL,"\"") + "\"='" + TSYS::strEncode(tVl,TSYS::SQL,"'") + "' ";
+				    if(Mess->translDyn())
+					trCacheUpd.push_back(pair<string,string>(sval.substr(1,sval.size()-2),tbl[1][iFld]+string(1,0)+tVl));
+				}
+			    }
 		    }
 		}
 	    }
@@ -628,6 +649,12 @@ void MTable::fieldSet( TConfig &cfg )
 	fieldFix(cfg);
 	owner().sqlReq(req, NULL, true);
     }
+
+    //???? Updating the translation cache of the dynamic mode
+    for(unsigned iTr = 0; iTr < trCacheUpd.size(); ++iTr)
+	printf("TEST 00: Update the translation '%s'.'%s' for the base '%s'.'%s'\n",
+	    TSYS::strParse(trCacheUpd[iTr].second,0,string(1,0)).c_str(), TSYS::strParse(trCacheUpd[iTr].second,1,string(1,0)).c_str(),
+	    TSYS::strParse(trCacheUpd[iTr].first,0,string(1,0)).c_str(), TSYS::strParse(trCacheUpd[iTr].first,1,string(1,0)).c_str());
 
     if(toWarnReload)
 	throw err_sys(TError::DB_TrRemoved, _("The translation removed! Reload the base values."));

@@ -1343,6 +1343,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 		}
 	    // Same set
 	    req.cfgViewAll(false);
+	    req.cfg(col).setNoTransl(true);
 	    req.cfg(col).setS(opt->text(), TCfg::ForceUse);
 	    fieldSet(req);
 	    opt->setAttr("noReload","1");	//Pass for reload

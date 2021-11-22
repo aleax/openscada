@@ -380,6 +380,7 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 		setFld = translFld(trLang, setFld, isCfg);
 		req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
 	    }
+	    req.cfg(setFld).setNoTransl(true);
 	    req.cfg(setFld).setS(mess, TCfg::ForceUse);
 	    setRes = isCfg ? TBDS::dataSet("", trSrc.substr(4), req, TBDS::NoException)
 			   : TBDS::dataSet(trSrc.substr(3), "", req, TBDS::NoException);

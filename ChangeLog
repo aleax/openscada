@@ -1,3 +1,13 @@
+2021-11-22 Roman (stable)
+- !:FIX:Mess,BD.{*,SQLite}: The translation process improvements:
+    - FIX:SQLite: appended of treating direct (not translation) SET commands,
+	fixed in processing some variants of the changes,
+	prepaired for implementing the translation cache update and the cache translation INSERT in the DYNAMIC mode.
+    - Mess,DB: direct DB set fields marked as noTransl() to prevent of collisions at extended processing the translation.
+- FIX:UI.VCAEngine: Fixed in loading the CONSTANT attributes from the not empty configuration value due to the main value is not saved in such case.
+    Enabled for show the single not parameter configuration attributes in the "Links" tab and for the not show attributes mode.
+
+
 2021-11-20 Roman (stable)
 - !:LibsDB.OscadaLibs: tmplib_base.anUnif: Appended of the user procedure option "toSave" of force saving the object at the exit.
 - !:LibsDB.vcaBase: wlb_Main.{graphSelPrm,ElViewGraph}: Appended of the empty color processing as the default one also taken from the style.

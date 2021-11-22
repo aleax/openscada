@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.6.1"
+#define MOD_VER		"7.6.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -500,9 +500,10 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	attr.at().setCfgVal((!cEl.cfg("CFG_VAL").noTransl() && (selfFlg&Attr::CfgConst ||
 				(selfFlg&Attr::CfgLnkIn && tCfgVal.compare(0,4,"val:") == 0))) ? cEl.cfg("CFG_VAL").getS() : tCfgVal);
 
-	if(!(attr.at().flgGlob()&Attr::NotStored))
-	    attr.at().setS((selfFlg&(Attr::CfgLnkIn|Attr::FromStyle) || (selfFlg&Attr::CfgConst && tCfgVal.size())) ?
-					cEl.cfg("IO_VAL").getS(TCfg::ExtValOne) : cEl.cfg("IO_VAL").getS(), true);
+	if(!(attr.at().flgGlob()&Attr::NotStored)) {
+	    if(selfFlg&Attr::CfgConst && tCfgVal.size()) attr.at().setS(attr.at().cfgVal());
+	    else attr.at().setS((selfFlg&(Attr::CfgLnkIn|Attr::FromStyle)) ? cEl.cfg("IO_VAL").getS(TCfg::ExtValOne) : cEl.cfg("IO_VAL").getS(), true);
+	}
 
 	attr.at().setCfgTempl((selfFlg&Attr::FromStyle)?cEl.cfg("CFG_TMPL").getS(TCfg::ExtValOne):cEl.cfg("CFG_TMPL").getS());
     }
