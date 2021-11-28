@@ -25,12 +25,12 @@ using namespace OSCADA;
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false), mTrcSet(false)
+TConfig::TConfig( TElem *Elements ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false), mTrcSet(false), mNoTransl(false)
 {
     setElem(Elements, true);
 }
 
-TConfig::TConfig( const TConfig &src ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false), mTrcSet(false)
+TConfig::TConfig( const TConfig &src ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false), mTrcSet(false), mNoTransl(false)
 {
     setElem(NULL, true);
     operator=(src);
@@ -221,6 +221,14 @@ void TConfig::setTrcSet( bool vl )
 	    p->second->setIsSet(false);
 }
 
+void TConfig::setNoTransl( bool vl )
+{
+    mNoTransl = vl;
+
+    for(TCfgMap::iterator p = value.begin(); p != value.end(); ++p)
+	p->second->setNoTransl(vl);
+}
+
 TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
     const string &user, int perm, const string &owner )
 {
@@ -249,8 +257,8 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) :
-    mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mInCfgCh(false), mIsSet(false), mOwner(owner)
+TCfg::TCfg( TFld &fld, TConfig &iowner ) :
+    mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mInCfgCh(false), mIsSet(false), mOwner(iowner)
 {
     //Chek for self field for dinamic elements
     if(fld.flg()&TFld::SelfFld) {
@@ -261,6 +269,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) :
     toDefault();
 
     if(fld.flg()&TCfg::Hide)	mView = false;
+    mNoTransl = owner().noTransl();
 }
 
 TCfg::TCfg( const TCfg &src ) :
@@ -276,6 +285,7 @@ TCfg::TCfg( const TCfg &src ) :
     toDefault();
 
     if(src.mFld->flg()&TCfg::Hide)	mView = false;
+    mNoTransl = owner().noTransl();
 
     operator=(src);
 }

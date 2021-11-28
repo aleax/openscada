@@ -354,7 +354,7 @@ string TMess::translGetLU( const string &base, const string &lang, const string 
 
 string TMess::translSet( const string &base, const string &lang, const string &mess, bool *needReload, const string &srcFltr )
 {
-    if(!translDyn() || !needReload) return mess;
+    if(/*!translDyn() ||*/ !needReload) return mess;	//!!!! Not dynamic must be allowed for the translation manager fixes
 
     string trLang = lang2Code();
     if(lang.size() >= 2)	trLang = lang.substr(0,2);
@@ -370,6 +370,7 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 	string trSrc = TSYS::strParse(is->first,0,"#"), setFld = TSYS::strParse(is->first,1,"#");
 
 	TConfig req;
+	req.setNoTransl(true);
 	bool setRes = false, isCfg = false;
 	//  Source is config file or included DB
 	if((isCfg=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,3,"db:") == 0) {	//Source is config file
@@ -380,7 +381,6 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 		setFld = translFld(trLang, setFld, isCfg);
 		req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
 	    }
-	    req.cfg(setFld).setNoTransl(true);
 	    req.cfg(setFld).setS(mess, TCfg::ForceUse);
 	    setRes = isCfg ? TBDS::dataSet("", trSrc.substr(4), req, TBDS::NoException)
 			   : TBDS::dataSet(trSrc.substr(3), "", req, TBDS::NoException);
@@ -436,6 +436,46 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 	if(sTrm(mess).empty() || !isMessTranslable(mess)) return;
 	MtxAlloc res(mRes, true);
 	trMessIdx[mess][src] = prms;
+    }
+}
+
+void TMess::translIdxCacheUpd( const string &base, const string &lang, const string &mess, const string &src )
+{
+    //printf("Updating the field '%s' translation '%s':'%s' for the base '%s'\n", src.c_str(), lang.c_str(), mess.c_str(), base.c_str());
+
+    //Base message modification
+    if(lang.empty() || lang == Mess->lang2CodeBase()) {
+	//  1. Registering new one, the previous is empty
+	if(base.empty() && mess.size())	Mess->translReg(mess, src);
+	//  2. Changing available one
+	//  3. Removing of available message
+	else {
+	    MtxAlloc res(mRes, true);
+	    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
+	    if(im != trMessIdx.end()) {
+		im->second.erase(src);			//Remove the message source from the base
+		if(im->second.empty()) {
+		    trMessIdx.erase(im);		//Remove the base for empty sources
+		    //   Clear the cache
+		    for(map<string,CacheEl>::iterator iCach = trMessCache.begin(); iCach != trMessCache.end(); )
+			if(TSYS::strParse(iCach->first,1,"#") == base) trMessCache.erase(iCach++);
+			else ++iCach;
+		}
+	    }
+	    res.unlock();
+	    if(mess.size()) Mess->translReg(mess, src);	//Register new 
+	}
+    }
+    // Modification the translation
+    else {
+	MtxAlloc res(mRes, true);
+	map<string,CacheEl>::iterator iCach = trMessCache.find(lang+"#"+base);
+	if(iCach != trMessCache.end()) {
+	    //  1. Changing available one
+	    if(!mess.empty()) iCach->second = mess;
+	    //  2. Removing of available message
+	    else trMessCache.erase(iCach);
+	}
     }
 }
 

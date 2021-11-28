@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.3.4"
+#define MOD_VER		"3.3.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -518,22 +518,30 @@ void MTable::fieldSet( TConfig &cfg )
 	req = "SELECT 1 FROM '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' WHERE " + req_where + ";";
     if(req.size()) owner().sqlReq(req, &tbl, true);
 
+    vector<string> trCacheUpd;
     req = "";
     if(!isForceUpdt) {
 	if(tbl.size() < 2) {
 	    //Add new record
 	    for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
 		TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
-		if(!u_cfg.isKey() && !u_cfg.view()) continue;
-
 		sval = getVal(u_cfg);
-		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && Mess->translCfg() && !u_cfg.noTransl() && Mess->isMessTranslable(sval));
-		ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\" " +
-		    (isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iEl],TSYS::SQL,"\"")+"\" ") : "");
-		ls2 += (ls2.size()?",":"") + sval + " " + (isTransl?(","+sval+" "):"");
+		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl() && Mess->isMessTranslable(sval));
+		if(u_cfg.isKey() || u_cfg.view()) {
+		    ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\" " +
+			((isTransl && Mess->translCfg()) ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iEl],TSYS::SQL,"\"")+"\" ") : "");
+		    ls2 += (ls2.size()?",":"") + sval + " " + ((isTransl && Mess->translCfg())?(","+sval+" "):"");
+		}
 
-		// Filling the translation fields also in the DYNAMIC tanslation mode
-		//????
+		// Filling the translation fields in the DYNAMIC tanslation mode and for the language in base
+		if(Mess->translDyn() && !u_cfg.isKey() && u_cfg.view() && isTransl) {
+		    trCacheUpd.push_back(u_cfg.name()+string(1,0)+""+string(1,0)+u_cfg.getS()+(isTransl?string(1,0)+Mess->lang2Code():""));
+		    for(unsigned iFld = 1; Mess->lang2Code() == Mess->lang2CodeBase() && iFld < tblStrct.size(); iFld++)
+			if(tblStrct[iFld][1].size() > 3 && tblStrct[iFld][1].compare(3,string::npos,cf_el[iEl]) == 0) {
+			    ls += (ls.size()?",\"":"\"") + TSYS::strEncode(tblStrct[iFld][1],TSYS::SQL,"\"") + "\" ";
+			    ls2 += (ls2.size()?",'":"'") + TSYS::strEncode(Mess->translGet(u_cfg.getS(),tblStrct[iFld][1].substr(0,2)),TSYS::SQL,"'") + "' ";
+			}
+		}
 	    }
 	    if(ls.size())
 		req = "INSERT INTO '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' (" + ls + ") VALUES (" + ls2 + ");";
@@ -542,7 +550,6 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Update present record
     bool toWarnReload = false;
-    vector<pair<string,string> > trCacheUpd;
     if(isForceUpdt) {
 	for(unsigned iEl = 0; iEl < cf_el.size(); iEl++) {
 	    TCfg &u_cfg = cfg.cfg(cf_el[iEl]);
@@ -559,7 +566,7 @@ void MTable::fieldSet( TConfig &cfg )
 		bool isTransl = Mess->translCfg() && u_cfg.fld().flg()&TFld::TransltText;
 
 		//  Clearing all the translation at setting no translable message
-		if(isTransl && (u_cfg.noTransl() || (sval.size() > 2 && !Mess->isMessTranslable(sval)))) {
+		if(isTransl && (u_cfg.noTransl() || (u_cfg.getS().size() && !Mess->isMessTranslable(u_cfg.getS())))) {
 		    if(u_cfg.noTransl())
 			ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " ";
 		    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
@@ -577,7 +584,7 @@ void MTable::fieldSet( TConfig &cfg )
 		    int fPos = -1;
 		    for(unsigned iFld = 0; iFld < tbl[0].size() && !isPresent; iFld++)
 			if(tbl[0][iFld] == sid) {
-			    isChanged = (sval != ("'"+tbl[1][iFld]+"'"));
+			    isChanged = (u_cfg.getS() != tbl[1][iFld]);
 			    isPresent = true; fPos = iFld;
 			}
 		    if(isChanged || !isPresent) {
@@ -587,17 +594,24 @@ void MTable::fieldSet( TConfig &cfg )
 			ls += (ls.size()?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + sval + " ";
 
 			// Setting for marks and the base message
-			for(unsigned iFld = 0; !u_cfg.noTransl() && iFld < tbl[0].size(); iFld++)
+			for(unsigned iFld = 0; !u_cfg.noTransl() && iFld < tbl[0].size(); iFld++) {
+			    //  the setting message updating
+			    if(Mess->translDyn() && u_cfg.fld().flg()&TFld::TransltText && tbl[0][iFld] == cf_el[iEl])
+				trCacheUpd.push_back(u_cfg.name()+string(1,0)+tbl[1][iFld]+string(1,0)+u_cfg.getS()+(isTransl?string(1,0)+Mess->lang2Code():""));
+
 			    //  clearing the translation at not empty base message
-			    if(isTransl && tbl[0][iFld] == cf_el[iEl] && sval.size() <= 2 && tbl[1][iFld].size())
+			    if(isTransl && tbl[0][iFld] == cf_el[iEl] && u_cfg.getS().empty() && tbl[1][iFld].size())
 				toWarnReload = true;
 			    //  the translation message for mark the base one
-			    else if(isTransl && tbl[0][iFld] == cf_el[iEl] && sval.size() > 2) {
-				if(tbl[1][iFld].empty())
+			    else if(isTransl && tbl[0][iFld] == cf_el[iEl] && u_cfg.getS().size()) {
+				if(tbl[1][iFld].empty()) {	//double the empty base for the setting translation
 				    ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval + " ";
+
+				    if(Mess->translDyn()) trCacheUpd.push_back(u_cfg.name()+string(1,0)+""+string(1,0)+u_cfg.getS());
+				}
 				else {
 				    if(Mess->translDyn())
-					trCacheUpd.push_back(pair<string,string>(tbl[1][iFld],Mess->lang2Code()+":"+sval.substr(1,sval.size()-2)+((fPos<0)?"":string(1,0)+tbl[1][fPos])));
+					trCacheUpd.push_back(u_cfg.name()+string(1,0)+tbl[1][iFld]+string(1,0)+u_cfg.getS()+string(1,0)+Mess->lang2Code());
 
 				    if(fPos >= 0 && tbl[1][fPos].size() > 2 &&
 					    (tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
@@ -605,25 +619,24 @@ void MTable::fieldSet( TConfig &cfg )
 				    {
 					tVl = tbl[1][iFld] + " " + mess_TrModifMark;
 					ls += (ls.size()?",\"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"='" + TSYS::strEncode(tVl,TSYS::SQL,"'") + "' ";
-					if(Mess->translDyn()) trCacheUpd.push_back(pair<string,string>(tbl[1][iFld]+string(1,0)+tVl,""));
+
+					if(Mess->translDyn()) trCacheUpd.push_back(u_cfg.name()+string(1,0)+tbl[1][iFld]+string(1,0)+tVl);
 				    }
 				}
 			    }
 			    //  the base message for mark the translation ones
-			    else if(!isTransl && tbl[0][iFld].size() > 3 && tbl[0][iFld].compare(3,string::npos,sid) == 0 && tbl[0][iFld].compare(0,3,Mess->lang2CodeBase()+"#") != 0) {
-				if(Mess->translDyn())
-				    trCacheUpd.push_back(pair<string,string>(((fPos<0)?"":tbl[1][fPos])+string(1,0)+sval.substr(1,sval.size()-2),""));
+			    else if(!isTransl && tbl[0][iFld].size() > 3 && tbl[0][iFld].compare(3,string::npos,sid) == 0 && tbl[0][iFld].compare(0,3,Mess->lang2CodeBase()+"#") != 0 &&
+				    (u_cfg.getS().empty() || fPos < 0 || tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
+				    tbl[1][iFld].size() &&
+				    (u_cfg.getS().empty() || tbl[1][iFld].size() <= mess_TrModifMarkLen || tbl[1][iFld].rfind(mess_TrModifMark) != (tbl[1][iFld].size()-mess_TrModifMarkLen)))
+			    {
+				tVl = u_cfg.getS().size() ? tbl[1][iFld] + " " + mess_TrModifMark : "";
+				ls += (ls.size()?",\"":"\"") + TSYS::strEncode(tbl[0][iFld],TSYS::SQL,"\"") + "\"='" + TSYS::strEncode(tVl,TSYS::SQL,"'") + "' ";
 
-				if((fPos < 0 || tbl[1][fPos].size() <= mess_TrModifMarkLen || tbl[1][fPos].rfind(mess_TrModifMark) != (tbl[1][fPos].size()-mess_TrModifMarkLen)) &&
-					tbl[1][iFld].size() &&
-					(tbl[1][iFld].size() <= mess_TrModifMarkLen || tbl[1][iFld].rfind(mess_TrModifMark) != (tbl[1][iFld].size()-mess_TrModifMarkLen)))
-				{
-				    tVl = (sval.size() > 2) ? tbl[1][iFld] + " " + mess_TrModifMark : "";
-				    ls += (ls.size()?",\"":"\"") + TSYS::strEncode(tbl[0][iFld],TSYS::SQL,"\"") + "\"='" + TSYS::strEncode(tVl,TSYS::SQL,"'") + "' ";
-				    if(Mess->translDyn())
-					trCacheUpd.push_back(pair<string,string>(sval.substr(1,sval.size()-2),tbl[1][iFld]+string(1,0)+tVl));
-				}
+				if(Mess->translDyn() && u_cfg.getS().size())
+				    trCacheUpd.push_back(u_cfg.name()+string(1,0)+u_cfg.getS()+string(1,0)+tVl+string(1,0)+tbl[0][iFld].substr(0,2));
 			    }
+			}
 		    }
 		}
 	    }
@@ -650,11 +663,12 @@ void MTable::fieldSet( TConfig &cfg )
 	owner().sqlReq(req, NULL, true);
     }
 
-    //???? Updating the translation cache of the dynamic mode
+    //Updating the translation cache of the dynamic mode
     for(unsigned iTr = 0; iTr < trCacheUpd.size(); ++iTr)
-	printf("TEST 00: Update the translation '%s'.'%s' for the base '%s'.'%s'\n",
-	    TSYS::strParse(trCacheUpd[iTr].second,0,string(1,0)).c_str(), TSYS::strParse(trCacheUpd[iTr].second,1,string(1,0)).c_str(),
-	    TSYS::strParse(trCacheUpd[iTr].first,0,string(1,0)).c_str(), TSYS::strParse(trCacheUpd[iTr].first,1,string(1,0)).c_str());
+	Mess->translIdxCacheUpd(TSYS::strParse(trCacheUpd[iTr],1,string(1,0)),
+			TSYS::strParse(trCacheUpd[iTr],3,string(1,0)),
+			TSYS::strParse(trCacheUpd[iTr],2,string(1,0)),
+			"db:"+fullDBName()+"#"+TSYS::strParse(trCacheUpd[iTr],0,string(1,0)));
 
     if(toWarnReload)
 	throw err_sys(TError::DB_TrRemoved, _("The translation removed! Reload the base values."));

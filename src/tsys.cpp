@@ -426,7 +426,7 @@ string TSYS::addr2str( void *addr )
     return buf;
 }
 
-void *TSYS::str2addr( const string &str )	{ return (void *)strtoul(str.c_str(),NULL,16); }
+void *TSYS::str2addr( const string &str )	{ return (void *)strtoull(str.c_str(),NULL,16); }
 
 string TSYS::strTrim( const string &val, const string &cfg )
 {

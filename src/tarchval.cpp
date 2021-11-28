@@ -1328,7 +1328,7 @@ void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify )
     //Find the archiver
     for(unsigned iL = 0; iL < archEl.size(); )
 	if(&archEl[iL]->archivator() == &archivat.at()) {
-	    archivat.at().archiveRemove(id(),full);
+	    archivat.at().archiveRemove(id(), full);
 	    archEl.erase(archEl.begin()+iL);
 	} else iL++;
 

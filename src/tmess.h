@@ -162,6 +162,7 @@ class TMess
 	//    for <cfg>: "cfg:{ObjPath}/{TBL}#{TrFld}"
 	//    for UserAPI table: "uapi:{DB}"
 	void translReg( const string &mess, const string &src, const string &prms = "" );
+	void translIdxCacheUpd( const string &base, const string &lang, const string &mess, const string &src );
 
 	// Often used, generic text messages
 	static const char *labStor( );

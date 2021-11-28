@@ -1,3 +1,16 @@
+2021-11-28 Roman (stable)
+- TSYS: The TConfig object appended of the common "NoTransl" flag.
+    TSYS::str2addr() expanded for reading the string address as uint64_t.
+- !!:FIX:Mess,BD.SQLite: The translation process improvements:
+    - !!: Appended and used for a new function translIdxCacheUpd() of updating the operative translation messages' index and cache
+	in the MULTILANGUAGE-DYNAMIC mode for the SET command BD.SQLite.
+    - FIX: The translation manager allowed also for non dynamic messages translation.
+- !:FIX:BD.SQLite: Appended of the translation copy in the SQL INSERT command and for the MULTILANGUAGE-DYNAMIC mode.
+    FIX: Fixed in direct using the setting value, not encoded after getVal(), at the translation processing.
+    FIX: Fixed in clearing the translations at clearing the base message.
+    Unified in the setting message common processing.
+
+
 2021-11-22 Roman (stable)
 - !:FIX:Mess,BD.{*,SQLite}: The translation process improvements:
     - FIX:SQLite: appended of treating direct (not translation) SET commands,

@@ -1174,6 +1174,7 @@ TCntrNode &TTable::operator=( const TCntrNode &node )
 
     //Table content copy
     TConfig req;
+    req.setNoTransl(true);
     const_cast<TTable*>(src_n)->fieldStruct(req);
 
     // Scan source table and write to destination table
@@ -1303,6 +1304,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/tbl") {
 	TConfig req;
+	req.setNoTransl(true);
 	string eid;
 	fieldStruct(req);
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD)) {
@@ -1343,7 +1345,6 @@ void TTable::cntrCmdProc( XMLNode *opt )
 		}
 	    // Same set
 	    req.cfgViewAll(false);
-	    req.cfg(col).setNoTransl(true);
 	    req.cfg(col).setS(opt->text(), TCfg::ForceUse);
 	    fieldSet(req);
 	    opt->setAttr("noReload","1");	//Pass for reload

@@ -173,6 +173,9 @@ class TConfig: public TValElem
 	bool trcSet( ) const		{ return mTrcSet; }
 	void setTrcSet( bool vl );
 
+	bool	noTransl( ) const	{ return mNoTransl; }
+	void	setNoTransl( bool vl );
+
 	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user, int perm, const string &owner );
 
     protected:
@@ -196,6 +199,7 @@ class TConfig: public TValElem
 	uint8_t		mIncmplTblStrct	: 1;
 	uint8_t		mReqKeys	: 1;
 	uint8_t		mTrcSet		: 1;
+	uint8_t		mNoTransl	: 1;
 };
 
 }
