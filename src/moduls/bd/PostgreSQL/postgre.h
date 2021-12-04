@@ -44,15 +44,18 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable( string name, MBD *iown, vector< vector<string> > *tblStrct = NULL );
+	MTable( string name, MBD *iown, vector<TStrIt> *tblStrct = NULL );
 	~MTable( );
 
-	// Field's functions
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
-	void fieldGet( TConfig &cfg );
-	void fieldSet( TConfig &cfg );
-	void fieldDel( TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" )
+	{ return fieldSQLSeek(row, cfg, cacheKey, TTable::SQLOrderForSeek); }
+	void fieldGet( TConfig &cfg )	{ fieldSQLGet(cfg); }
+	void fieldSet( TConfig &cfg )	{ fieldSQLSet(cfg); }
+	void fieldDel( TConfig &cfg )	{ fieldSQLDel(cfg); }
+
+	void fieldFix( TConfig &cfg )	{ fieldFix_(cfg); }
+	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 
 	MBD &owner( ) const;
 
@@ -60,18 +63,14 @@ class MTable : public TTable
 	//Private methods
 	bool isEmpty( );
 	void postDisable( int flag );
-	void fieldFix( TConfig &cfg, bool trPresent = false, bool recurse = false );
-	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 
-	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
-	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
+	void fieldFix_( TConfig &cfg, bool recurse = false );
+
+	string getSQLVal( TCfg &cfg, uint8_t RqFlg = 0 );
+	void   setSQLVal( TCfg &cfg, const string &vl, bool tr = false );
 
 	string UTCtoSQL( time_t val );
 	time_t SQLtoUTC( const string &val );
-
-	//Private attributes
-	vector< vector<string> > tblStrct;
-	map<string, vector< vector<string> > >	seekSess;
 };
 
 //************************************************
@@ -93,12 +92,12 @@ class MBD : public TBD
 	void allowList( vector<string> &list ) const;
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
-	void create( const string &nm, bool toCreate = false );
-	void getStructDB( const string &nm, vector< vector<string> > &tblStrct );
-
 	void transOpen( );
 	void transCommit( );
 	void transCloseCheck( );
+
+	void create( const string &nm, bool toCreate = false );
+	void getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct );
 
     protected:
 	//Protected methods
@@ -114,7 +113,6 @@ class MBD : public TBD
 	PGconn	*connection;
 	int	reqCnt;
 	int64_t	reqCntTm, trOpenTm;
-	ResMtx	connRes;
 
 	// Statistic
 	float	nReq, rqTm, rqTmMin, rqTmMax, rqTmAll;

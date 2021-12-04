@@ -535,6 +535,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>string translGet( const string &amp;base, const string &amp;lang, const string &amp;src = "" ); string translGetU( const string &amp;base, const string &amp;user, const string &amp;src = "" ); string translGetLU( const string &amp;base, const string &amp;lang, const string &amp;user, const string &amp;src = "" );</i> — Getting translation for <i>base</i> text variable for language <i>lang</i> or <i>user</i> and optional source <i>src</i>.</li>
 <li> <i>string translSet( const string &amp;base, const string &amp;lang, const string &amp;mess, bool *needReload = NULL ); string translSetU( const string &amp;base, const string &amp;user, const string &amp;mess, bool *needReload = NULL ); string translSetLU( const string &amp;base, const string &amp;lang, const string &amp;user, const string &amp;mess, bool *needReload = NULL );</i> — Setting translation for <i>base</i> text variable for language <i>lang</i> or <i>user</i> and optional source <i>src</i> to value <i>mess</i>.</li>
 <li> <i>void translReg( const string &amp;mess, const string &amp;src, const string &amp;prms = "" );</i> — Registering the translated message <i>mess</i> with source <i>src</i> and appended parameters <i>prms</i> into the translations index.</li>
+<li> <i>void translIdxCacheUpd( const string &amp;base, const string &amp;lang, const string &amp;mess, const string &amp;src );</i> — Updating the operative translation messages' index and cache in the MULTILANGUAGE-DYNAMIC mode.</li>
 <li> <i>static const char *labDB( ); static const char *labSecCRON( ); static const char *labSecCRONsel( ); static const char *labTaskPrior( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
 <li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
@@ -742,6 +743,9 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 <li> <i>virtual void sqlReq( const string &amp;req, vector&lt; vector&lt;string&gt; &gt; *tbl = NULL, char intoTrans = EVAL_BOOL );</i> — Sending the SQL-request <i>req</i> to the DB and receiving the result in tabular form <i>tbl</i>. If set <i>intoTrans</i> to true then will open transaction for the request, else if set to false then transaction will close.</li>
 <li> <i>virtual void transCloseCheck( )</i> — The function call periodic for opened transaction check to close for old transaction or overloaded.</li>
 <li> <i>TTypeBD &amp;owner( ) const;</i> — DB type – the owner of the DB.</li></ul>
+<p><b>Protected attributes:</b>
+</p>
+<ul><li> <i>ResMtx resTbls, connRes;</i> — locks of the table and connection resources.</li></ul>
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual TTable *openTable( const string &amp;table, bool create );</i> — The modular method for opening the table.</li></ul>
@@ -756,6 +760,18 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 <td><b>Inherited:</b></td>
 <td>By tables objects of the modules of subsystem "DB".
 </td></tr></table>
+<p><b>Data:</b><br />
+Flags of the SQL requests (enum – TTable::SQLFeqFlag):
+</p>
+<ul><li> <i>SQLNoFlg</i> (0) — no list flag;</li>
+<li> <i>SQLOrderForSeek</i> (0x01) — sort-order the records at all requested fields, needed for PostgreSQL in the limiting SEEK requests;</li>
+<li> <i>SQLFirstSkipForSeek</i> (0x02) — use the FIRST and SKIP SELECT operators, needed for FireBird in the limiting SEEK requests.</li></ul>
+<p>Item of the table structure (class — TTable::TStrIt):
+</p>
+<ul><li> <i>string nm, tp, def;</i> — field name, type and the default value;</li>
+<li> <i>int key;</i> — field key;</li>
+<li> <i>TStrIt( )</i> — constructor by default;</li>
+<li> <i>TStrIt( const string &amp;inm, const string itp, int ikey, const string &amp;idef = "" )</i> — the main parametric constructor.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TTable( const string &amp;name );</i> — Initializing constructor.</li>
@@ -766,7 +782,19 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 <li> <i>virtual void fieldGet( TConfig &amp;cfg );</i> — Request the specified record. The requested record is determined by the values of key cells of the original record <i>cfg</i>.</li>
 <li> <i>virtual void fieldSet( TConfig &amp;cfg );</i> — Setting the values of the specified record. In the case of absence the record will be removed.</li>
 <li> <i>virtual void fieldDel( TConfig &amp;cfg );</i> — Deleting of the specified record.</li>
-<li> <i>TBD &amp;owner( ) const;</i> — DB – the owner of the table.</li></ul>
+<li> <i>virtual void fieldFix( TConfig &amp;cfg );</i> — Fixing fields internal request declaration, for the SQL request mostly.</li>
+<li> <i>TBD &amp;owner( ) const;</i> — DB – the owner of the table.</li>
+<li> <i>virtual string getSQLVal( TCfg &amp;cf, uint8_t RqFlg = 0 );</i> — Get the SQL encoded value from <i>cf</i> for placing to the SQL request.</li>
+<li> <i>virtual void setSQLVal( TCfg &amp;cf, const string &amp;vl, bool tr = false );</i> — Set the SQL encoded value to <i>cf</i> from the SQL response table.</li>
+<li> <i>bool fieldSQLSeek( int row, TConfig &amp;cfg, const string &amp;cacheKey, int flags = SQLNoFlg );</i> — Unified-ANSI SQL variant of the fieldSeek() request with the TTable::SQLFeqFlag <i>flags</i>, which implements also the OpenSCADA multilaguage translation (the "TR" feature).</li>
+<li> <i>void fieldSQLGet( TConfig &amp;cfg );</i> — Unified-ANSI SQL variant of the fieldGet() request, which implements also the OpenSCADA multilaguage translation (the "TR" feature).</li>
+<li> <i>void fieldSQLSet( TConfig &amp;cfg );</i> — Unified-ANSI SQL variant of the fieldSet() request, which implements also the OpenSCADA multilaguage translation (the "TR" feature).</li>
+<li> <i>void fieldSQLDel( TConfig &amp;cfg );</i> — Unified-ANSI SQL variant of the fieldDel() request.</li></ul>
+<p><b>Protected attributes:</b>
+</p>
+<ul><li> <i>time_t mLstUse;</i> — time of the last usage;</li>
+<li> <i>vector&lt;TStrIt&gt; tblStrct;</i> — table structure, list of the table items;</li>
+<li> <i>map&lt;string, vector&lt; vector&lt;string&gt; &gt; &gt;</i> — container of the SEEK sessions in the PRELOAD mode;</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Data_acquisition.22"><span class="mw-headline-number">4</span> Subsystem "Data acquisition"</span></h2>
 <p>The subsystem "Data acquisition" is represented by the <i>TDAQS</i> object which contains modular objects of the data sources' types <i>TTypeDAQ</i> and the objects of the libraries of parameters' templates of subsystem "Data acquisition" <i>TPrmTmplLib</i>. Object of the data sources types contains objects of the controllers TController and objects of the  parameters' types <i>TTypeParam</i>. Parameters' types objects are provided by the controller module and contain the DB structure of the separate parameters' types (analog, digital ...). Controllers' objects contain parameters' objects <i>TParamContr</i>. Each parameter is associated with only one type of the parameter. For the attribute storage parameter is inherited from the values object <i>TValue</i>, which contains the attributes' values <i>TVal</i>. The library of the parameters' templates of this subsystem contains templates' objects <i>TPrmTmpl</i>. An example of the described hierarchical structure is shown in Fig. 4.
 </p>
@@ -2125,6 +2153,8 @@ Parameter's type (enum — IO::Type):
 <li> <i>bool reqKeys( );</i> — The sign "Requests key", mark for using the request keys by the group items.</li>
 <li> <i>bool trcSet( ) const;</i> — The setting elements tracing.</li>
 <li> <i>void setTrcSet( bool vl );</i> — Setting the setting elements tracing, at setting TRUE all marks of the items setting are cleared.</li>
+<li> <i>bool noTransl( ) const;</i> — The sign "No translation" is provided to disable the translation of all text variables of the record by default.</li>
+<li> <i>void setNoTransl( bool vl );</i> — Setting of the sign "No translation".</li>
 <li> <i>TVariant objFunc( const string &amp;id, vector&lt;TVariant&gt; &amp;prms, const string &amp;user, int perm, const string &amp;owner );</i> — User API object functions of accessing to the configuration with the permition control.</li></ul>
 <p><b>Protected methods:</b>
 </p>
@@ -3005,7 +3035,7 @@ Named rights of access to control elements (definition):
 <li> <i>string nodePath( char sep = 0, bool from_root = true ) const;</i> — Getting the full path to the node, beginning from the root <i>from_root</i>, and using the separator <i>sep</i> or standard path recording.</li>
 <li> <i>void nodeList( vector&lt;string&gt; &amp;list, const string&amp; gid = "" );</i> — Child nodes list <i>list</i> in the specified group <i>gid</i>.</li>
 <li> <i>AutoHD&lt;TCntrNode&gt; nodeAt( const string &amp;path, int lev = 0, char sep = 0, int off = 0, bool noex = false );</i> — Attachment to the child node.</li>
-<li> <i>void nodeDel( const string &amp;path, char sep = 0, int flag = 0 );</i> — Deleting the node using its path.</li>
+<li> <i>void nodeDel( const string &amp;path, char sep = 0, int flag = NodeNoFlg );</i> — Deleting the node using its path.</li>
 <li> <i>static void nodeCopy( const string &amp;src, const string &amp;dst, const string &amp;user = "root" );</i> — Copying the nodes of the dynamic tree.</li>
 <li> <i>TCntrNode *nodePrev( bool noex = false ) const;</i> — Address of the parent node.</li>
 <li> <i>char nodeFlg( );</i> — Node's flag.</li>
@@ -3035,8 +3065,8 @@ Named rights of access to control elements (definition):
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual void cntrCmdProc( XMLNode *req );</i> — Function of requests' processing of the control interface. It must be redefined by the child.</li>
-<li> <i>void nodeEn( int flag = 0 );</i> — Node's enabling.</li>
-<li> <i>void nodeDis( long tm = 0, int flag = 0 );</i> — Disabling of the node with the flag transfer.</li>
+<li> <i>void nodeEn( int flag = NodeNoFlg );</i> — Node's enabling.</li>
+<li> <i>void nodeDis( long tm = 0, int flag = NodeNoFlg );</i> — Disabling of the node with the flag transfer.</li>
 <li> <i>void nodeDelAll( );</i> — Clear all containers with child nodes.</li>
 <li> <i>void setNodePrev( TCntrNode *node );</i> — Setting the parent node to <i>node</i>.</li>
 <li> <i>void setNodeMode( char mode );</i> — Setting the node's status.</li>
@@ -3202,6 +3232,7 @@ Error codes (enum — TError::Codes):
 <li> <i>TError::DB_SQL_Connect (20)</i> — DB level, error the SQL-connection;</li>
 <li> <i>TError::DB_SQL_Query (21)</i> — DB level, error the SQL-query;</li>
 <li> <i>TError::DB_TrRemoved (22)</i> — DB level, translation removed;</li>
+<li> <i>TError::DB_ReadOnly (23)</i> — DB in the Read Only mode;</li>
 <li> <i>TError::Arch_Val_OldBufVl (30)</i> — archives level, old value placing to the value buffer;</li>
 <li> <i>TError::Arch_Val_DblVSrc (31)</i> — double value source setting try;</li>
 <li> <i>TError::EXT (100)</i> — extended errors of OpenSCADA modules to use as TError::EXT+{N}.</li></ul>
@@ -4221,5 +4252,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2782</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2788</td></tr></table></body>
 </html>

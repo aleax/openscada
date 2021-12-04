@@ -44,15 +44,17 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable( string name, MBD *bd, vector< vector<string> > *tblStrct = NULL );
+	MTable( string name, MBD *bd, vector<TStrIt> *tblStrct = NULL );
 	~MTable( );
 
-	// Field's operations
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
-	void fieldGet( TConfig &cfg );
-	void fieldSet( TConfig &cfg );
-	void fieldDel( TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" )
+	{ return fieldSQLSeek(row, cfg, cacheKey, TTable::SQLFirstSkipForSeek); }
+	void fieldGet( TConfig &cfg )	{ fieldSQLGet(cfg); }
+	void fieldSet( TConfig &cfg )	{ fieldSQLSet(cfg); }
+	void fieldDel( TConfig &cfg )	{ fieldSQLDel(cfg); }
+
+	void fieldFix( TConfig &cfg );
 
 	MBD &owner( ) const;
 
@@ -60,14 +62,9 @@ class MTable : public TTable
 	//Private methods
 	bool isEmpty( );
 	void postDisable( int flag );
-	void fieldFix( TConfig &cfg, bool trPresent = false );
 
-	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
-	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
-
-	//Private attributes
-	vector< vector<string> > tblStrct;
-	map<string, vector< vector<string> > >	seekSess;
+	string getSQLVal( TCfg &cfg, uint8_t RqFlg = 0 );
+	void   setSQLVal( TCfg &cfg, const string &vl, bool tr = false );
 };
 
 //************************************************
@@ -88,7 +85,7 @@ class MBD : public TBD
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 	string clrEndSpace( const string &vl );
 
-	void getStructDB( const string &nm, vector< vector<string> > &tblStrct );
+	void getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct );
 
 	void transOpen( );
 	void transCommit( );
@@ -111,7 +108,6 @@ class MBD : public TBD
 	isc_tr_handle	htrans;
 	int		reqCnt;
 	int64_t		reqCntTm, trOpenTm;
-	ResMtx		connRes;
 };
 
 //*************************************************

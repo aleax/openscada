@@ -47,26 +47,23 @@ class MTable : public TTable
 	MTable( string name, MBD *bd );
 	~MTable( );
 
-	// Field's operations
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
-	void fieldGet( TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" )
+	{ return fieldSQLSeek(row, cfg, cacheKey); }
+	void fieldGet( TConfig &cfg )	{ fieldSQLGet(cfg); }
 	void fieldSet( TConfig &cfg );
-	void fieldDel( TConfig &cfg );
+	void fieldDel( TConfig &cfg )	{ fieldSQLDel(cfg); }
+
+	void fieldFix( TConfig &cfg );
 
 	MBD &owner( ) const;
 
     private:
 	//Private methods
 	void postDisable( int flag );
-	void fieldFix( TConfig &cfg );
 
-	string	getVal( TCfg &cf, uint8_t RqFlg = 0 );
-	void	setVal( TCfg &cf, const string &vl, bool tr = false );
-
-	//Private attributes
-	vector< vector<string> > tblStrct;
-	map<string, vector< vector<string> > >	seekSess;
+	string	getSQLVal( TCfg &cf, uint8_t RqFlg = 0 );
+	void	setSQLVal( TCfg &cf, const string &vl, bool tr = false );
 };
 
 //************************************************
@@ -90,6 +87,8 @@ class MBD : public TBD
 	void transCommit( );
 	void transCloseCheck( );
 
+	void getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct );
+
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -104,7 +103,6 @@ class MBD : public TBD
 	sqlite3	*m_db;
 	int	reqCnt;
 	int64_t	reqCntTm, trOpenTm;
-	ResMtx	connRes;
 	int	trans_reqs;
 };
 

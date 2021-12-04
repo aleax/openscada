@@ -48,6 +48,7 @@ class TError
 	    DB_SQL_Connect = 20,
 	    DB_SQL_Query = 21,
 	    DB_TrRemoved = 22,
+	    DB_ReadOnly = 23,
 	    Arch_Val_OldBufVl = 30,
 	    Arch_Val_DblVSrc = 31,
 	    EXT = 100

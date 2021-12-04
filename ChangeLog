@@ -1,3 +1,19 @@
+2021-12-04 Roman (stable)
+- !!!!:SYS,DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}: Significantly unified in moving the common SQL-code to the OpenSCADA core:
+    - unification the table structure control by the structure item object TTable::TStrIt;
+    - common SQL-code moving to the functions: fieldSQLSeek(), fieldSQLGet(), fieldSQLSet(), fieldSQLDel();
+    - service definitions, methods and functions to the common SQL-code declaration in the core:
+	SEEK_PRELOAD_LIM, tblStrct, seekSess, connRes, fieldFix(), getSQLVal(), setSQLVal();
+    - propagating in such way of the last MULTILANGUAGE support code in DB.SQLite;
+    - SYS: appending the new error code TError::DB_ReadOnly, introduced by SQLite at the unification process;
+    - DB.MySQL: Switched to the "ANSI_QUOTES" SQL mode in the unification way.
+- !!:FIX:SYS: Building: configure.ac: Core library version rose to 4:6:0.
+    !!: The module version of the subsystem "BD" rose to 24.
+    FIX: Prevented in complete removing the base messages at the last source removing, due to the source can contain not one the base message.
+- !:FIX:Protocol.SelfSystem: In the input part switched to load the whole input message before checking the auth information,
+    then preventing for strange error messages "Error the command format." for the message tail.
+
+
 2021-11-28 Roman (stable)
 - TSYS: The TConfig object appended of the common "NoTransl" flag.
     TSYS::str2addr() expanded for reading the string address as uint64_t.

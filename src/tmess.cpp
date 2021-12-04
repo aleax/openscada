@@ -450,7 +450,9 @@ void TMess::translIdxCacheUpd( const string &base, const string &lang, const str
 	//  2. Changing available one
 	//  3. Removing of available message
 	else {
-	    MtxAlloc res(mRes, true);
+	    //!!!! Do not remove the previous message's source due to the source can be one for several messages-records,
+	    //     or after appendig they counting
+	    /*MtxAlloc res(mRes, true);
 	    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
 	    if(im != trMessIdx.end()) {
 		im->second.erase(src);			//Remove the message source from the base
@@ -462,7 +464,7 @@ void TMess::translIdxCacheUpd( const string &base, const string &lang, const str
 			else ++iCach;
 		}
 	    }
-	    res.unlock();
+	    res.unlock();*/
 	    if(mess.size()) Mess->translReg(mess, src);	//Register new 
 	}
     }

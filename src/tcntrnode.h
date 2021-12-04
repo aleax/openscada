@@ -159,7 +159,7 @@ class TCntrNode
 
 	void nodeList( vector<string> &list, const string& gid = "" );	//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0, bool noex = false );	//Get node for full path
-	void nodeDel( const string &path, char sep = 0, int flag = 0 );	//Delete node at full path
+	void nodeDel( const string &path, char sep = 0, int flag = NodeNoFlg );	//Delete node at full path
 	static void nodeCopy( const string &src, const string &dst, const string &user = "root" );
 
 	TCntrNode *nodePrev( bool noex = false ) const;
@@ -208,8 +208,8 @@ class TCntrNode
 
 	//Methods
 	// Commands
-	void nodeEn( int flag = 0 );
-	void nodeDis( long tm = 0, int flag = 0 );
+	void nodeEn( int flag = NodeNoFlg );
+	void nodeDis( long tm = 0, int flag = NodeNoFlg );
 
 	void nodeDelAll( );	//For hard link objects call from destructor
 

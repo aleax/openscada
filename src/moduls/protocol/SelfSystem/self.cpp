@@ -32,7 +32,7 @@
 #define MOD_NAME	_("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.2"
+#define MOD_VER		"1.9.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -368,7 +368,7 @@ bool TProtIn::mess( const string &request, string &answer )
     string req = TSYS::strLine(reqBuf, 0);
     if(req.size() >= reqBuf.size() || reqBuf[req.size()] != '\x0A') return true;
 
-    if(req.compare(0,8,"SES_OPEN") == 0) {
+    if(req.find("SES_OPEN") == 0) {
 	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
 	user_ = TSYS::strDecode(user, TSYS::Custom);
 	pass_ = TSYS::strDecode(pass, TSYS::Custom);
@@ -377,38 +377,42 @@ bool TProtIn::mess( const string &request, string &answer )
 	    answer = "REZ " ERR_AUTH " Error authentication: wrong the user or password.\x0A";
 	else answer = "REZ " ERR_NO " " + i2s(ses_id) + "\x0A";
     }
-    else if(req.compare(0,9,"SES_CLOSE") == 0) {
+    else if(req.find("SES_CLOSE") == 0) {
 	sscanf(req.c_str(), "SES_CLOSE %d", &ses_id);
 	mod->sesClose(ses_id);
 	answer = "REZ 0\x0A";
     }
-    else if(req.compare(0,3,"REQ") == 0) {
+    else if(req.find("REQ") == 0) {
 	if(mess_lev() == TMess::Debug) {
 	    mess_debug(nodePath().c_str(), _("Request received: '%s': %d, time: %g ms."),
 		req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
 	}
 
+	int rez = 0;
+	if((rez=sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz)) != 2 && (rez=sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz)) != 3)
+	{ answer = "REZ " ERR_CMD " Command format error.\x0A"; reqBuf.clear(); return false; }
+
+	// Waiting the tail before any other checkings
+	if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
+
+	// Checking the authentication
 	TProt::SAuth auth;
-	if(sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2) auth = mod->sesGet(ses_id);
-	else if(sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3) {
+	if(rez == 2) auth = mod->sesGet(ses_id);
+	else if(rez == 3) {
 	    user_ = TSYS::strDecode(user, TSYS::Custom);
 	    pass_ = TSYS::strDecode(pass, TSYS::Custom);
 	    if(pass_ == EMPTY_PASS) pass_ = "";
 	    if(SYS->security().at().usrPresent(user_) && SYS->security().at().usrAt(user_).at().auth(pass_,&auth.pHash))
 	    { auth.tAuth = 1; auth.name = user_; }
 	}
-	else { answer = "REZ " ERR_CMD " Command format error.\x0A"; reqBuf.clear(); return false; }
-
 	if(!auth.tAuth) { answer = "REZ " ERR_AUTH " Error authentication: session not valid.\x0A"; reqBuf.clear(); return false; }
 
 	try {
-	    if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
-
-	    //Decompress request
+	    //Decompressing the request
 	    if(req_sz < 0) reqBuf.replace(req.size()+1, abs(req_sz), TSYS::strUncompr(reqBuf.substr(req.size()+1)));
 
-	    //Process request
+	    //Processing the request
 	    XMLNode req_node;
 	    req_node.load(reqBuf.substr(req.size()+1), XMLNode::LD_NoTxtSpcRemEnBeg);
 
@@ -461,8 +465,7 @@ bool TProtIn::mess( const string &request, string &answer )
 
 	    answer = "REZ " ERR_NO " " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
 	} catch(TError &err) { answer = "REZ " ERR_PRC " " + err.cat + ":" + err.mess + "\x0A"; }
-    }
-    else answer = "REZ " ERR_CMD " Error the command format.\x0A";
+    } else answer = "REZ " ERR_CMD " Error the command format.\x0A";
 
     reqBuf.clear();
 

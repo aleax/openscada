@@ -21,8 +21,10 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		23		//BDS type modules version
+#define SDB_VER		24		//BDS type modules version
 #define SDB_ID		"BD"
+
+#define SEEK_PRELOAD_LIM	100
 
 #include <stdio.h>
 
@@ -50,6 +52,25 @@ class TBD;
 class TTable : public TCntrNode
 {
     public:
+	//Data
+	// Flags of the SQL requests
+	enum SQLFeqFlag {
+	    SQLNoFlg 		= 0,
+	    SQLOrderForSeek	= 0x01,
+	    SQLFirstSkipForSeek	= 0x02
+	};
+
+	// Item of the table structure
+	class TStrIt {
+	    public:
+	    TStrIt( ) : key(0)	{ }
+	    TStrIt( const string &inm, const string itp, int ikey, const string &idef = "" ) :
+		nm(inm), tp(itp), key(ikey), def(idef) { }
+
+	    string nm, tp, def;
+	    int key;
+	};
+
 	//Public methods
 	TTable( const string &name );
 	virtual ~TTable( );
@@ -60,6 +81,7 @@ class TTable : public TCntrNode
 	string	fullDBName( );
 	time_t	lstUse( )	{ return mLstUse; }
 
+	// Common requests
 	virtual void fieldStruct( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldStruct"); }
 	virtual bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" )
@@ -71,15 +93,30 @@ class TTable : public TCntrNode
 	virtual void fieldDel( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldDel"); }
 
+	// Internal requests
+	virtual void fieldFix( TConfig &cfg )	{ }
+
 	TBD &owner( ) const;
 
     protected:
 	//Protected methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
+	// SQL specific common operations
+	virtual string getSQLVal( TCfg &cf, uint8_t RqFlg = 0 ) { return ""; }
+	virtual void setSQLVal( TCfg &cf, const string &vl, bool tr = false ) { }
+
+	bool fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int flags = SQLNoFlg );
+	void fieldSQLGet( TConfig &cfg );
+	void fieldSQLSet( TConfig &cfg );
+	void fieldSQLDel( TConfig &cfg );
 
 	//Protected attributes
 	time_t	mLstUse;
+
+	vector<TStrIt> tblStrct;
+	map<string, vector< vector<string> > >	seekSess;
 
     private:
 	//Private methods
@@ -148,7 +185,7 @@ class TBD : public TCntrNode, public TConfig
 	TTypeBD &owner( ) const;
 
 	//Public attributes
-	ResMtx	resTbls;
+	ResMtx	resTbls, connRes;
 
     protected:
 	//Protected methods

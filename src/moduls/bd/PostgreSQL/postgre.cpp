@@ -33,14 +33,12 @@
 #define MOD_NAME	_("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"2.5.7"
+#define MOD_VER		"3.0.0"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
 #define FEATURES	"SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR"
 //************************************************
-
-#define SEEK_PRELOAD_LIM	100
 
 BDPostgreSQL::BDMod *BDPostgreSQL::mod;
 
@@ -88,7 +86,7 @@ TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_
 //************************************************
 //* BDPostgreSQL::MBD				 *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0), connRes(true),
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0),
     nReq(0), rqTm(0), rqTmMin(3600), rqTmMax(0), rqTmAll(0), rqTmMaxVl(dataRes()), conTm(0)
 {
     setAddr(";127.0.0.1;postgres;123456;NewDB");
@@ -236,7 +234,7 @@ TTable *MBD::openTable( const string &inm, bool icreate )
     if(!enableStat()) throw err_sys(_("Error opening the table '%s': the DB is disabled."), inm.c_str());
 
     create(inm, icreate);
-    vector< vector<string> > tblStrct;
+    vector<TTable::TStrIt> tblStrct;
     getStructDB(inm, tblStrct);
 
     return new MTable(inm, this, &tblStrct);
@@ -258,9 +256,11 @@ void MBD::create( const string &nm, bool toCreate )
 	sqlReq("CREATE TABLE \"" + TSYS::strEncode(nm,TSYS::SQL,"\"")+ "\"(\"<<empty>>\" character(20) NOT NULL DEFAULT '' PRIMARY KEY)");
 }
 
-void MBD::getStructDB( const string &nm, vector< vector<string> > &tblStrct )
+void MBD::getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct )
 {
-    //Get generic data structure
+    vector< vector<string> > origTblStrct, keyLst;
+
+    //Getting the generic data structure
     sqlReq("SELECT a.attname as \"Field\", pg_catalog.format_type(a.atttypid, a.atttypmod) as \"Type\" "
 	"FROM pg_catalog.pg_attribute a "
 	"WHERE a.attnum > 0 "
@@ -272,24 +272,27 @@ void MBD::getStructDB( const string &nm, vector< vector<string> > &tblStrct )
 	    "LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace "
 	    "WHERE c.relname ~ '^(" + TSYS::strEncode(nm,TSYS::SQL,"'") + ")$' "
 	    "AND pg_catalog.pg_table_is_visible(c.oid) "
-	")", &tblStrct, false);
-    if(tblStrct.size() > 1) {
-	//Get keys
-	vector< vector<string> > keyLst;
+	")", &origTblStrct, false);
+
+    tblStrct.clear();
+    if(origTblStrct.size()) {
+	//Getting the keys
 	sqlReq("SELECT a.attname "
 	    "FROM pg_class c, pg_class c2, pg_index i, pg_attribute a "
 	    "WHERE c.relname = '" + TSYS::strEncode(nm,TSYS::SQL,"'") + "' AND c.oid = i.indrelid AND i.indexrelid = c2.oid "
 	    "AND i.indisprimary AND i.indisunique "
 	    "AND a.attrelid=c2.oid "
 	    "AND a.attnum>0;", &keyLst, false);
-	tblStrct[0].push_back("Key");
-	for(unsigned i_f = 1, i_k; i_f < tblStrct.size(); i_f++) {
-	    for(i_k = 1; i_k < keyLst.size(); i_k++)
-	        if(tblStrct[i_f][0] == keyLst[i_k][0]) break;
-	    tblStrct[i_f].push_back((i_k<keyLst.size())?"PRI":"");
+
+	//Filling the structure
+	for(unsigned iReq = 1; iReq < origTblStrct.size(); ++iReq) {
+	    bool isKey = false;
+	    for(unsigned iKey = 0; iKey < keyLst.size() && !isKey; ++iKey)
+		isKey = (origTblStrct[iReq][0] == keyLst[iKey][0]);
+
+	    tblStrct.push_back(TTable::TStrIt(origTblStrct[iReq][0],origTblStrct[iReq][1],isKey));
 	}
-    }
-    else throw err_sys(_("The table '%s' is not present!"), nm.c_str());
+    } else throw err_sys(_("The table '%s' is not present!"), nm.c_str());
 }
 
 void MBD::transOpen( )
@@ -485,21 +488,19 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* BDPostgreSQL::Table                          *
 //************************************************
-MTable::MTable( string iname, MBD *iown, vector< vector<string> > *itblStrct ) : TTable(iname)
+MTable::MTable( string name, MBD *iown, vector<TStrIt> *itblStrct ) : TTable(name)
 {
     setNodePrev(iown);
 
     try {
 	if(itblStrct) tblStrct = *itblStrct;
-	else owner().getStructDB(name(), tblStrct);
+	else owner().getStructDB(name, tblStrct);
     } catch(...) { }
 }
 
 MTable::~MTable( )	{ }
 
-
-
-bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[1][0] == "<<empty>>"; }
+bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[0].nm == "<<empty>>"; }
 
 void MTable::postDisable( int flag )
 {
@@ -516,11 +517,11 @@ void MTable::fieldStruct( TConfig &cfg )
 {
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
-    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
+    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
 	int pr1;
-	string	sid = tblStrct[iFld][0], rowTp = tblStrct[iFld][1];
+	string	sid = tblStrct[iFld].nm, rowTp = tblStrct[iFld].tp;
 	if(cfg.cfgPresent(sid)) continue;
-	int flg = (tblStrct[iFld][2]=="PRI") ? (int)TCfg::Key : (int)TFld::NoFlag;
+	int flg = tblStrct[iFld].key ? (int)TCfg::Key : (int)TFld::NoFlag;
 	if(rowTp == "text" || rowTp == "character varying")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215"));
 	else if(sscanf(rowTp.c_str(),"character(%d)",&pr1) || sscanf(rowTp.c_str(),"character varying(%d)",&pr1))
@@ -534,287 +535,29 @@ void MTable::fieldStruct( TConfig &cfg )
     }
 }
 
-bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
+void MTable::fieldFix_( TConfig &cfg, bool recurse )
 {
-    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
-    mLstUse = SYS->sysTm();
-
-    //cfg.cfgToDefault();	//reset the not key and viewed fields
-    cfg.setTrcSet(true);
-
-    //Check for no present and no empty keys allow
-    if(row == 0) {
-	vector<string> cf_el;
-	cfg.cfgList(cf_el);
-	for(unsigned iC = 0; iC < cf_el.size(); iC++) {
-	    TCfg &cf = cfg.cfg(cf_el[iC]);
-	    if(!cf.isKey() || !cf.getS().size()) continue;
-	    unsigned iFld = 1;
-	    for( ; iFld < tblStrct.size(); iFld++)
-		if(cf.name() == tblStrct[iFld][0]) break;
-	    if(iFld >= tblStrct.size()) return false;
-	}
-    }
-
-    string sid;
-    //Make SELECT and WHERE
-    string req_sel = "", req_where = "WHERE ";
-    //Add use keys to list
-    bool first_sel = true, next = false, trPresent = false;
-    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	sid = tblStrct[iFld][0];
-	TCfg *u_cfg = cfg.at(sid, true);
-	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
-	    u_cfg = cfg.at(sid.substr(3), true);
-	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
-	    trPresent = true;
-	}
-	if(!u_cfg) continue;
-
-	if(u_cfg->isKey() && u_cfg->keyUse()) {
-	    req_where += (next?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + getVal(*u_cfg) + " ";
-	    next = true;
-	}
-	else if(u_cfg->isKey() || u_cfg->view()) {
-	    req_sel += (first_sel?"\"":",\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"";
-	    first_sel = false;
-	}
-    }
-
-    vector< vector<string> >	inTbl, *tbl = &inTbl;
-    MtxAlloc res(owner().connRes);
-    if(cacheKey.size()) { res.lock(); tbl = &seekSess[cacheKey]; }
-
-    //Request
-    if(!cacheKey.size() || !tbl->size() || (row%SEEK_PRELOAD_LIM) == 0) {
-	if(first_sel) return false;
-	string req = "SELECT "+req_sel+" FROM \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\" "+(next?req_where:"")+" ORDER BY "+req_sel;
-	if(!cacheKey.size()) req += " LIMIT 1 OFFSET " + i2s(row);
-	else req += " LIMIT " + i2s(SEEK_PRELOAD_LIM) +" OFFSET "+i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM);
-
-	tbl->clear();
-	owner().sqlReq(req, tbl, false);
-    }
-
-    row = cacheKey.size() ? (row%SEEK_PRELOAD_LIM)+1 : 1;
-    if(tbl->size() < 2 || (cacheKey.size() && row >= (int)tbl->size())) {
-	if(cacheKey.size()) seekSess.erase(cacheKey);
-	return false;
-    }
-
-    //Processing of the query
-    for(unsigned iFld = 0; iFld < (*tbl)[0].size(); iFld++) {
-	sid = (*tbl)[0][iFld];
-	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg) setVal(*u_cfg, (*tbl)[row][iFld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && (*tbl)[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
-	    setVal(*u_cfg, (*tbl)[row][iFld], true);
-    }
-
-    return true;
-}
-
-void MTable::fieldGet( TConfig &cfg )
-{
-    vector< vector<string> > tbl;
-
-    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
-    mLstUse = SYS->sysTm();
-
-    string sid;
-    //Prepare request
-    string req = "SELECT ";
-    string req_where, first_key;
-    // Add fields list to queue
-    bool first_sel = true, next_wr = false, trPresent = false;
-    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	sid = tblStrct[iFld][0];
-	TCfg *u_cfg = cfg.at(sid, true);
-	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
-	    u_cfg = cfg.at(sid.substr(3), true);
-	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
-	    trPresent = true;
-	}
-	if(!u_cfg) continue;
-
-	if(u_cfg->isKey()) {
-	    req_where += (next_wr?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" +getVal(*u_cfg) + " ";
-	    if(first_key.empty()) first_key = TSYS::strEncode(sid,TSYS::SQL,"\"");
-	    next_wr = true;
-	}
-	else if(u_cfg->view()) {
-	    req += (first_sel?"\"":",\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"";
-	    first_sel = false;
-	}
-    }
-    if(first_sel) req += "\""+first_key+"\"";
-    req += " FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" WHERE " + req_where;
-
-    //Query
-    owner().sqlReq(req, &tbl, false);
-    if(tbl.size() < 2) throw err_sys(_("The row \"%s\" is not present. Are you saved the object?"), req_where.c_str());
-
-    //Processing of query
-    for(unsigned iFld = 0; iFld < tbl[0].size(); iFld++) {
-	sid = tbl[0][iFld];
-	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg) setVal(*u_cfg, tbl[1][iFld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
-	    setVal(*u_cfg, tbl[1][iFld], true);
-    }
-}
-
-void MTable::fieldSet( TConfig &cfg )
-{
-    vector< vector<string> > tbl;
-
-    if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
-    mLstUse = SYS->sysTm();
-    string sid, sval;
-    //Get config fields list
-    vector<string> cf_el;
-    cfg.cfgList(cf_el);
-
-    //Check for translation present
-    bool trPresent = Mess->translCfg(), trDblDef = false;
-    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
-	sid = tblStrct[iFld][0];
-	if(sid.size() > 3) {
-	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
-	    if(Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.compare(0,3,Mess->lang2CodeBase()+"#") == 0)
-		trDblDef = true;
-	}
-    }
-    if(trDblDef && !cfg.reqKeys()) fieldFix(cfg, trPresent);
-
-    //Get present fields list
-    string req_where = "WHERE ";
-    // Add key list to query
-    bool next = false, noKeyFld = false,
-	 isForceUpdt = cfg.reqKeys();		//Force update by ReqKeys or reqKey() present
-    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	if(!u_cfg.isKey()) continue;
-	req_where += (next?"AND \"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\"=" + getVal(u_cfg,TCfg::ExtValTwo) + " ";
-	next = true;
-
-	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
-
-	// Check for no key fields
-	if(noKeyFld) continue;
-	unsigned iFld = 1;
-	for( ; iFld < tblStrct.size(); iFld++)
-	    if(u_cfg.name() == tblStrct[iFld][0]) break;
-	if(iFld >= tblStrct.size()) noKeyFld = true;
-    }
-    if(noKeyFld) {
-	if(cfg.reqKeys()) return;
-	fieldFix(cfg, trPresent);
-    }
-
-    //Prepare query
-    // Try for get already present field
-    string req;
-    if(!isForceUpdt) {
-	req = "SELECT 1 FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" " + req_where;
-	try { owner().sqlReq(req, &tbl, true); }
-	catch(TError &err) { fieldFix(cfg, trPresent); owner().sqlReq(req, &tbl, true); }
-	if(tbl.size() < 2) {
-	    // Add new record
-	    req = "INSERT INTO \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" ";
-	    string ins_name, ins_value;
-	    next = false;
-	    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-		TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-		if(!u_cfg.isKey() && !u_cfg.view()) continue;
-
-		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
-		ins_name = ins_name + (next?",\"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL,"\"") + "\" " +
-			(isTransl ? (",\""+TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_el],TSYS::SQL,"\"")+"\" ") : "");
-		sval = getVal(u_cfg);
-		ins_value = ins_value + (next?",":"") + sval + " " + (isTransl?(","+sval+" "):"");
-		next = true;
-	    }
-	    req += "(" + ins_name + ") VALUES (" + ins_value + ")";
-	}
-	else isForceUpdt = true;
-    }
-    if(isForceUpdt) {
-	// Update present record
-	req = "UPDATE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" SET ";
-	next = false;
-	for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
-	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	    if((u_cfg.isKey() && !u_cfg.extVal()) || !u_cfg.view()) continue;
-	    bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && trPresent && !u_cfg.noTransl());
-	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
-	    sval = getVal(u_cfg);
-	    req += (next?",\"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + sval + " ";
-	    next = true;
-	}
-	req += req_where;
-    }
-
-    //Query
-    try{ owner().sqlReq(req, NULL, true); }
-    catch(TError &err) { fieldFix(cfg, trPresent); owner().sqlReq(req, NULL, true); }
-}
-
-void MTable::fieldDel( TConfig &cfg )
-{
-    if(tblStrct.empty()) return;
-    mLstUse = SYS->sysTm();
-
-    //Where prepare
-    string req_where = "WHERE ";
-    bool next = false;
-    for(unsigned iFld = 1; iFld < tblStrct.size(); iFld++) {
-	string sid = tblStrct[iFld][0];
-	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg && u_cfg->isKey() && u_cfg->keyUse()) {
-	    req_where += (next?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + getVal(*u_cfg) + " ";
-	    next = true;
-	}
-    }
-
-    //Main request
-    try { owner().sqlReq("DELETE FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" "+req_where, NULL, true); }
-    catch(TError &err) {
-	//Check for present
-	vector< vector<string> > tbl;
-	owner().sqlReq("SELECT 1 FROM \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"\" "+req_where, &tbl, false);
-	if(tbl.size() < 2) return;
-	throw;
-    }
-}
-
-void MTable::fieldFix( TConfig &cfg, bool trPresent, bool recurse )
-{
-    bool next = false, next_key = false;
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
 
     bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
-	 isVarTextTransl = trPresent || Mess->translCfg();
+	 isVarTextTransl = Mess->translCfg();
 
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //Prepare request for fix structure
-    string req = "ALTER TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" ";
-    if(!appMode) req += "DROP CONSTRAINT \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "_pkey\", ";
+    string pr_keys, ls;
 
     //DROP fields
-    for(unsigned iFld = 1, iCf; iFld < tblStrct.size() && !appMode; iFld++) {
+    for(unsigned iFld = 0, iCf; iFld < tblStrct.size() && !appMode; iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
-	    if(cf_el[iCf] == tblStrct[iFld][0] ||
+	    if(cf_el[iCf] == tblStrct[iFld].nm ||
 		((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) && !cfg.cfg(cf_el[iCf]).noTransl() &&
-		tblStrct[iFld][0].size() > 3 && tblStrct[iFld][0].substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld][0].compare(0,2,Mess->lang2CodeBase()) != 0))
+		tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld].nm.compare(0,2,Mess->lang2CodeBase()) != 0))
 	    {
 		TCfg &cf = cfg.cfg(cf_el[iCf]);
 		bool isEqual = false;
-		string rwTp = tblStrct[iFld][1];
+		string rwTp = tblStrct[iFld].tp;
 		switch(cf.fld().type()) {
 		    case TFld::String: {
 			int pr1 = -1;
@@ -836,25 +579,21 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent, bool recurse )
 		continue;
 	    }
 	if(iCf >= cf_el.size()) {
-	    req += (next?",DROP \"":"DROP \"") + TSYS::strEncode(tblStrct[iFld][0],TSYS::SQL,"\"") + "\" ";
+	    ls += (ls.size()?", DROP \"":" DROP \"") + TSYS::strEncode(tblStrct[iFld].nm,TSYS::SQL,"\"") + "\" ";
 	    tblStrct.erase(tblStrct.begin()+iFld);
 	    iFld--;
-	    next = true;
 	}
     }
 
-    string pr_keys;
     //Add fields
     for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
 	TCfg &cf = cfg.cfg(cf_el[iCf]);
 	// Check primary key
-	if(cf.fld().flg()&TCfg::Key && !appMode) {
-	    pr_keys += (next_key?",\"":"\"") + TSYS::strEncode(cf.name(),TSYS::SQL,"\"") + "\"";
-	    next_key = true;
-	}
+	if(cf.fld().flg()&TCfg::Key && !appMode)
+	    pr_keys += (pr_keys.size()?",\"":"\"") + TSYS::strEncode(cf.name(),TSYS::SQL,"\"") + "\"";
 
-	for(iFld = 1; iFld < tblStrct.size(); iFld++)
-	    if(cf_el[iCf] == tblStrct[iFld][0]) break;
+	for(iFld = 0; iFld < tblStrct.size(); iFld++)
+	    if(cf_el[iCf] == tblStrct[iFld].nm) break;
 
 	string f_tp;
 	switch(cf.fld().type()) {
@@ -879,27 +618,27 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent, bool recurse )
 	}
 
 	// Add field
-	if(iFld >= tblStrct.size()) {
-	    req += (next?",ADD \"":"ADD \"") + TSYS::strEncode(cf_el[iCf],TSYS::SQL,"\"") + "\" " + f_tp;
-	    next = true;
-	}
+	if(iFld >= tblStrct.size())
+	    ls += (ls.size()?", ADD \"":" ADD \"") + TSYS::strEncode(cf_el[iCf],TSYS::SQL,"\"") + "\" " + f_tp;
 	//Check other languages
 	if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
 	    unsigned iC;
 	    for(iC = iFld; iC < tblStrct.size(); iC++)
-		if(tblStrct[iC][0].size() > 3 && tblStrct[iC][0].substr(2) == ("#"+cf_el[iCf]) &&
-		   tblStrct[iC][0].compare(0,2,Mess->lang2CodeBase()) != 0 &&
-		   tblStrct[iC][0].compare(0,2,Mess->lang2Code()) == 0) break;
-	    if(iC >= tblStrct.size() && isVarTextTransl) {
-		req += (next?",ADD \"":"ADD \"") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iCf],TSYS::SQL,"\"") + "\" " + f_tp;
-		next = true;
-	    }
+		if(tblStrct[iC].nm.size() > 3 && tblStrct[iC].nm.substr(2) == ("#"+cf_el[iCf]) &&
+		   tblStrct[iC].nm.compare(0,2,Mess->lang2CodeBase()) != 0 &&
+		   tblStrct[iC].nm.compare(0,2,Mess->lang2Code()) == 0) break;
+	    if(iC >= tblStrct.size() && isVarTextTransl)
+		ls += (ls.size()?", ADD \"":" ADD \"") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iCf],TSYS::SQL,"\"") + "\" " + f_tp;
 	}
     }
-    if(pr_keys.size()) req += ",ADD PRIMARY KEY (" + pr_keys + ") ";
 
-    if(next) {
+    if(ls.size()) {
 	try {
+	    //Prepare request for fix structure
+	    string req = "ALTER TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" " +
+		(appMode?"":"DROP CONSTRAINT \""+TSYS::strEncode(name(),TSYS::SQL,"\"")+"_pkey\", ") + ls +
+		(pr_keys.size()?", ADD PRIMARY KEY ("+pr_keys+")":"");
+
 	    owner().sqlReq(req, NULL, false);
 	    owner().getStructDB(name(), tblStrct);	//Update the table structure information
 	}
@@ -908,13 +647,13 @@ void MTable::fieldFix( TConfig &cfg, bool trPresent, bool recurse )
 	    if(err.cod == TError::DB_SQL_Connect || recurse) throw;
 	    owner().sqlReq("DROP TABLE \"" + TSYS::strEncode(name(),TSYS::SQL,"\"")+ "\"");
 	    owner().create(name(), true);
-	    owner().getStructDB(name(), tblStrct);
-	    fieldFix(cfg, trPresent, true);
+	    owner().getStructDB(name(), tblStrct);	//Update the table structure information
+	    fieldFix_(cfg, true);
 	}
     }
 }
 
-string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
+string MTable::getSQLVal( TCfg &cfg, uint8_t RqFlg )
 {
     string rez = cfg.getS(RqFlg);
     if(rez == EVAL_STR)	return "NULL";
@@ -927,7 +666,7 @@ string MTable::getVal( TCfg &cfg, uint8_t RqFlg )
     return rez;
 }
 
-void MTable::setVal( TCfg &cf, const string &ival, bool tr )
+void MTable::setSQLVal( TCfg &cf, const string &ival, bool tr )
 {
     string val = (ival==DB_NULL) ? EVAL_STR : ival;
     switch(cf.fld().type()) {
