@@ -669,13 +669,13 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 const char *TMess::I18N( const char *mess, const char *d_name, const char *mLang )
 {
 #ifdef HAVE_LIBINTL_H
-    getMessRes.lock();
     if(translDyn()) {
 	string toLang;
 	if(mLang) toLang = mLang;
 	else {
 	    string ctx = trCtx();
 	    if((toLang=TSYS::strLine(ctx,1)).empty()) {
+		//???? Append an user locale accessing cache
 		if((toLang=TSYS::strLine(ctx,0)).size() && SYS->security().at().usrPresent(toLang) &&
 			(toLang=SYS->security().at().usrAt(toLang).at().lang()).size() >= 2)
 		    toLang = toLang.substr(0, 2);
@@ -683,6 +683,7 @@ const char *TMess::I18N( const char *mess, const char *d_name, const char *mLang
 	    }
 	}
 
+	getMessRes.lock();
 	if(toLang.empty()) {
 	    setenv("LANGUAGE", "", 1);
 	    //setenv("LC_MESSAGES", "", 1);
@@ -695,23 +696,13 @@ const char *TMess::I18N( const char *mess, const char *d_name, const char *mLang
 	    ++_nl_msg_cat_cntr;	//Make change known.
 	    getMessLng = toLang;
 	}
-    }
-    const char *rez = dgettext(d_name, mess);
 
-    /*bool chLng = (mLang && strlen(mLang) && translDyn());
-    if(chLng) {
-	setenv("LANGUAGE", mLang, 1);
-	//setenv("LC_MESSAGES", mLang, 1);
-	++_nl_msg_cat_cntr;	//Make change known.
+	const char *rez = dgettext(d_name, mess);
+	getMessRes.unlock();
+
+	return rez;
     }
-    const char *rez = dgettext(d_name, mess);
-    if(chLng) {
-	setenv("LANGUAGE", "", 1);
-	//setenv("LC_MESSAGES", "", 1);
-	++_nl_msg_cat_cntr;	//Make change known.
-    }*/
-    getMessRes.unlock();
-    return rez;
+    else return dgettext(d_name, mess);
 #else
     return mess;
 #endif

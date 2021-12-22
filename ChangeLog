@@ -1,3 +1,7 @@
+2021-12-22 Roman (stable)
+- FIX:The function TMess::I18N() prevented in the dead lock due to of the user language access embracing by the lock getMessRes.
+
+
 2021-12-21 Roman (stable)
 - DOC: Document of the How to "Create multi language project" appended for downloading to offline.
 - !!!!:SYS,*,DAQ.JavaLikeCalc: Expanding the execution environment of the OpenSCADA object functions by the language,
