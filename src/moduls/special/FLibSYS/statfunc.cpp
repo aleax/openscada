@@ -36,7 +36,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.7.3"
+#define MOD_VER		"1.7.4"
 #define MOD_AUTOR	_("Roman Savochenko")
 #define MOD_DESCR	_("Provides a library of the system functions of the user programming area of OpenSCADA.")
 #define MOD_LICENSE	"GPL2"
@@ -173,13 +173,13 @@ void Lib::modStop( )
     runSt = false;
 }
 
-TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant Lib::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
 {
     // ElTp {funcID}(ElTp prm1, ...) - the function {funcID} call
     //  prm{N} - {N} parameter to the function.
-    if(present(iid))	return at(iid).at().objFuncCall("call", prms, user);
+    if(present(id))	return at(id).at().objFuncCall("call", prms, user_lang);
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(id, prms, user_lang);
 }
 
 void Lib::cntrCmdProc( XMLNode *opt )

@@ -56,7 +56,7 @@ class Lib : public TSpecial
 	void reg( TFunction *fnc )			{ chldAdd(mFnc, fnc); }
 	void unreg( const char *id )			{ chldDel(mFnc, id); }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods

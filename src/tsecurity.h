@@ -79,7 +79,7 @@ class TUser : public TCntrNode, public TConfig
 
 	TSecurity &owner( ) const;
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods
@@ -134,7 +134,7 @@ class TGroup : public TCntrNode, public TConfig
 
 	TSecurity &owner( ) const;
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods
@@ -184,7 +184,7 @@ class TSecurity : public TSubSYS
 	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	void postEnable( int flag );
 

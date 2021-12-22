@@ -956,7 +956,7 @@ void TMdPrm::loadDATA( bool incl )
 		loadIO(true);
 
 		// Init links
-		lCtx->chkLnkNeed = lCtx->initLnks(true);
+		lCtx->chkLnkNeed = lCtx->initLnks(/*true*/);	//!!!! Do not reconnect but that can be done in loadIO() early
 
 		// Init system attributes identifiers
 		lCtx->idFreq  = lCtx->ioId("f_frq");
@@ -1143,7 +1143,7 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
     acqErr.setVal("");	//But it is not used for the type
 }
 
-TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
     //  id, name - new attribute id and name;
@@ -1196,7 +1196,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return true;
     }
 
-    return TParamContr::objFuncCall(iid, prms, user);
+    return TParamContr::objFuncCall(iid, prms, user_lang);
 }
 
 void TMdPrm::vlGet( TVal &val )

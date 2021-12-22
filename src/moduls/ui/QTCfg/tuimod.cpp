@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.6.8"
+#define MOD_VER		"5.6.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -99,10 +99,8 @@ void TUIMod::modInfo( vector<string> &list )
     list.push_back("SubType");
 }
 
-string TUIMod::modInfo( const string &iname )
+string TUIMod::modInfo( const string &name )
 {
-    string name = TSYS::strParse(iname, 0, ":");
-
     if(name == "SubType") return SUB_TYPE;
 
     return TModule::modInfo(name);

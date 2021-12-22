@@ -279,7 +279,7 @@ class Widget : public TCntrNode
 
 	virtual void disable( Widget *base );
 	virtual void calc( Widget *base );
-	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
+	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user_lang, Widget *src = NULL );
 
 	ResMtx	&mtxAttr( )	{ return mtxAttrM; }
 

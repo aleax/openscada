@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.6"
+#define MOD_VER		"5.4.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -93,10 +93,8 @@ void TpContr::modInfo( vector<string> &list )
     list.push_back("HighPriority");
 }
 
-string TpContr::modInfo( const string &iname )
+string TpContr::modInfo( const string &name )
 {
-    string name = TSYS::strParse(iname, 0, ":");
-
     if(name == "HighPriority")	return "1";
 
     return TModule::modInfo(name);
@@ -375,7 +373,7 @@ void TpContr::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    lbList(lst);
 	    for(unsigned iA = 0; iA < lst.size(); iA++)
-		opt->childAdd("el")->setAttr("id",lst[iA])->setText(lbAt(lst[iA]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trD(lbAt(lst[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbUnreg(opt->attr("id"),1);
@@ -385,15 +383,15 @@ void TpContr::cntrCmdProc( XMLNode *opt )
 
 NConst *TpContr::constGet( const char *nm )
 {
-    for(unsigned i_cst = 0; i_cst < mConst.size(); i_cst++)
-	if(mConst[i_cst].name == nm) return &mConst[i_cst];
+    for(unsigned iCst = 0; iCst < mConst.size(); iCst++)
+	if(mConst[iCst].name == nm) return &mConst[iCst];
 	    return NULL;
 }
 
 BFunc *TpContr::bFuncGet( const char *nm )
 {
-    for(unsigned i_bf = 0; i_bf < mBFunc.size(); i_bf++)
-	if(mBFunc[i_bf].name == nm) return &mBFunc[i_bf];
+    for(unsigned iBf = 0; iBf < mBFunc.size(); iBf++)
+	if(mBFunc[iBf].name == nm) return &mBFunc[iBf];
 	    return NULL;
 }
 
@@ -760,7 +758,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 
 	    for(int id = 0; id < func()->ioSize(); id++) {
 		if(n_id)	n_id->childAdd("el")->setText(func()->io(id)->id());
-		if(n_nm)	n_nm->childAdd("el")->setText(func()->io(id)->name());
+		if(n_nm)	n_nm->childAdd("el")->setText(trD(func()->io(id)->name()));
 		if(n_type)	n_type->childAdd("el")->setText(i2s(func()->io(id)->type()|((func()->io(id)->flg()&IO::FullText)<<8)));
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(func()->io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
@@ -872,16 +870,16 @@ void Prm::enable( )
     if(enableStat())  return;
 
     //Check and delete no used fields
-    for(unsigned i_fld = 0; i_fld < v_el.fldSize(); ) {
+    for(unsigned iFld = 0; iFld < v_el.fldSize(); ) {
 	string fel;
 	for(int io_off = 0; (fel=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); )
-	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve()) break;
+	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(iFld).reserve()) break;
 	if(fel.empty())
 	    try {
-		v_el.fldDel(i_fld);
+		v_el.fldDel(iFld);
 		continue;
 	    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	i_fld++;
+	iFld++;
     }
 
     //Init elements
@@ -919,15 +917,15 @@ void Prm::enable( )
     }
 
     //Check and delete no used attrs
-    for(unsigned i_fld = 0, i_p; i_fld < v_el.fldSize(); ) {
-	for(i_p = 0; i_p < pls.size(); i_p++)
-	    if(pls[i_p] == v_el.fldAt(i_fld).name()) break;
-	if(i_p >= pls.size())
+    for(unsigned iFld = 0, iP; iFld < v_el.fldSize(); ) {
+	for(iP = 0; iP < pls.size(); iP++)
+	    if(pls[iP] == v_el.fldAt(iFld).name()) break;
+	if(iP >= pls.size())
 	    try {
-		v_el.fldDel(i_fld);
+		v_el.fldDel(iFld);
 		continue;
 	    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	i_fld++;
+	iFld++;
     }
 
     TParamContr::enable();

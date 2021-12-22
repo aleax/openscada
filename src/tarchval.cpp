@@ -1700,7 +1700,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     return rez;
 }
 
-TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // bool status( ) - get the archive start status.
     if(iid == "status")	return startStat();
@@ -1735,7 +1735,8 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  vl - the value;
     //  arch - the archiver for the request, set to empty for buffer and all archivers try, set to "<buffer>" for the buffer only process.
     if(iid == "setVal" && prms.size() >= 2) {
-	if(!SYS->security().at().access(user,SEC_WR,"root",SARH_ID,RWRWR_))	return false;
+	if(!SYS->security().at().access(TSYS::strLine(user_lang,0),SEC_WR,"root",SARH_ID,RWRWR_))
+	    return false;
 
 	int64_t tm = prms[0].getI();
 	string arch = (prms.size() >= 3) ? prms[2].getS() : string("");
@@ -1781,7 +1782,8 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     if(iid == "setVals" && prms.size() >= 3) {
 	AutoHD<TArrayObj> aBuf;
 	if(prms[0].type() != TVariant::Object || (aBuf=prms[0].getO()).freeStat() ||
-	    !SYS->security().at().access(user,SEC_WR,"root",SARH_ID,RWRWR_))	return false;
+		!SYS->security().at().access(TSYS::strLine(user_lang,0),SEC_WR,"root",SARH_ID,RWRWR_))
+	    return false;
 	int64_t btm = prms[1].getI(),
 		per = vmax(TValBuf::period(), prms[2].getI());
 	TValBuf buf(TValBuf::valType(), 0, per, true, true);
@@ -1794,10 +1796,10 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TVArchive::cntrCmdProc( XMLNode *opt )
@@ -2426,16 +2428,16 @@ void *TVArchivator::Task( void *param )
     return NULL;
 }
 
-TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // bool status( ) - get the archiver start status.
     if(iid == "status")	return startStat();
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TVArchivator::cntrCmdProc( XMLNode *opt )

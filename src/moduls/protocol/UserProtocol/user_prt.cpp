@@ -33,7 +33,7 @@
 #define MOD_NAME	_("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.3"
+#define MOD_VER		"1.5.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -199,8 +199,8 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    vector<string> lst;
 	    uPrtList(lst);
-	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPrtAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(uPrtAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", uPrtAdd(opt->attr("id"))); uPrtAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mPrtU,opt->attr("id"), -1, NodeRemove);

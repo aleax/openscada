@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"7.17.6"
+#define MOD_VER		"7.17.8"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -502,27 +502,18 @@ QWidget *TVision::getFocusedWdg( QWidget *wcntr )
     return wcntr;
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TVision::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
 }
 
-string TVision::modInfo( const string &iname )
+string TVision::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
+    if(name == "Name")		return MOD_NAME;
+    if(name == "Author")	return AUTHORS;
+    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

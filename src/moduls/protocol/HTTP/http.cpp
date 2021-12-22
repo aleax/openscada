@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.8"
+#define MOD_VER		"3.6.9"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -149,7 +149,7 @@ void TProt::save_( )
     TBDS::genPrmSet(nodePath()+"AutoLogin", aLogNd.save());
 }
 
-TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //bool setUser( string user ) - Changing the user linked to the authentication session ID.
     //  user      - user to change.
@@ -301,7 +301,7 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	   httpattrs + "\x0D\x0A\x0D\x0A" + answer;
     }
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
@@ -950,6 +950,8 @@ string TProtIn::lang( )
 
 string TProtIn::getIndex( const string &user, const string &sender )
 {
+    if(Mess->translDyn()) Mess->trCtx(user+"\n"+lang());
+
     string answer = string("<table class='work' width='50%'>\n")+
 	"<tr><th>"+_("Login")+"</th></tr>"
 	"<tr><td class='content'>";
@@ -979,9 +981,11 @@ string TProtIn::getIndex( const string &user, const string &sender )
 	    string mIcoTp;
 	    TUIS::icoGet("UI."+list[iL], &mIcoTp, true);
 	    answer = answer+"<li>"+(mIcoTp.size()?"<img src='/UI."+list[iL]+"."+mIcoTp+"' height='32' width='32'/> ":"")+
-		"<a href='/"+list[iL]+"/"+prms+"'><span title='"+mod.at().modInfo("Description:"+lang())+"'>"+mod.at().modInfo("Name:"+lang())+"</span></a></li>\n";
+		"<a href='/"+list[iL]+"/"+prms+"'><span title='"+mod.at().modInfo("Description")+"'>"+mod.at().modInfo("Name")+"</span></a></li>\n";
 	}
     }
+
+    if(Mess->translDyn()) Mess->trCtx("");
 
     return pgCreator(answer+"</ul></td></tr></table>\n", "200 OK", "", "", mod->tmplMainPage());
 }

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.8.3"
+#define MOD_VER		"1.8.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -155,6 +155,9 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 {
     map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),sender,user,vars,"");
+
+    if(Mess->translDyn()) Mess->trCtx(ses.user);
+
     ses.page = pgHead();
 
     try {
@@ -207,6 +210,8 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 
     colontDown( ses );
     ses.page += pgTail();
+
+    if(Mess->translDyn()) Mess->trCtx("");
 
     page = httpHead("200 OK",ses.page.size())+ses.page;
 }
@@ -648,6 +653,8 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     map<string, string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
+    if(Mess->translDyn()) Mess->trCtx(ses.user);
+
     //Commands process
     ses.page = pgHead();
     try {
@@ -681,6 +688,8 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 
     colontDown(ses);
     ses.page += pgTail();
+
+    if(Mess->translDyn()) Mess->trCtx("");
 
     page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
 }
@@ -1159,9 +1168,6 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
@@ -1169,19 +1175,13 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-string TWEB::modInfo( const string &iname )
+string TWEB::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
+    if(name == "Name")		return MOD_NAME;
+    if(name == "Author")	return AUTHORS;
+    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

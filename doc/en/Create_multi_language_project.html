@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html class="client-nojs" dir="ltr" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Documents/How to/Create multi language project - OpenSCADAWiki</title>
+<meta content="MediaWiki 1.26.4" name="generator" />
+<link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
+<link href="files/doc.css" rel="stylesheet" /></head>
+<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+			<div class="mw-indicators">
+</div>
+			<h1 id="firstHeading" lang="en">Documents/How to/Create multi language project</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Create_multi_language_project.html" title="Документи/Як зробити/Створити багатомовний проєкт (100% translated)">українська</a></div></div>
+<div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
+<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a></li>
+<li> <b>Sponsored on 9 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li></ul>
+</div>
+<p><br />
+Creating a multilingual project is a non-trivial task that affects almost all aspects of OpenSCADA, if the goal is comprehensive multilingualism. But in general, this process involves steps:
+</p>
+<ol><li> definition of the list of project languages and the BASIC language from this list;</li>
+<li> checking the availability of translation of system-wide program messages in selected languages and planning or ignoring the translation of these messages in missing languages;</li>
+<li> determining the desired multilingual mode of the user project;</li>
+<li> general implementation of a user project in the BASIC language, or in one other, in a monolingual mode;</li>
+<li> switching the project to a multilingual mode and translation into the languages listed in paragraph 1, together with the transfer of the language of the monolingual mode and the translation of the BASIC, if it was not the language of the previous mode;</li>
+<li> current support of changes in project messages when changing them in BASIC and nonBASIC languages.</li></ol>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The list of steps shows that a multilingual project is not easy as the OpenSCADA development environment itself does not try to simplify this task, so if you really want to create a multilingual project, you must be psychologically prepared for these difficulties and a lot of work!
+</p><p><br />
+</p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Definition_of_the_list_of_project_languages_and_the_BASIC_language_from_this_list"><span class="tocnumber">1</span> <span class="toctext">Definition of the list of project languages and the BASIC language from this list</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Translation_of_system-general_program_messages"><span class="tocnumber">2</span> <span class="toctext">Translation of system-general program messages</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Specifying_the_need_multilingual_mode_of_the_user_project"><span class="tocnumber">3</span> <span class="toctext">Specifying the need multilingual mode of the user project</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#General_implementation_of_a_user_project_in_the_BASIC_language.2C_or_in_one_other.2C_in_a_monolingual_mode"><span class="tocnumber">4</span> <span class="toctext">General implementation of a user project in the BASIC language, or in one other, in a monolingual mode</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Switching_the_project_to_a_multilingual_mode_and_translation_into_the_selected_languages"><span class="tocnumber">5</span> <span class="toctext">Switching the project to a multilingual mode and translation into the selected languages</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Current_support_of_changes_in_project_messages"><span class="tocnumber">6</span> <span class="toctext">Current support of changes in project messages</span></a>
+<ul>
+<li class="toclevel-2 tocsection-7"><a href="#Primary_project_objects"><span class="tocnumber">6.1</span> <span class="toctext">Primary project objects</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Individual_messages_.28the_container-table_.22Tr.22.29"><span class="tocnumber">6.2</span> <span class="toctext">Individual messages (the container-table "Tr")</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Tasks_to_improve_the_translation_control_and_increase_coverage"><span class="tocnumber">7</span> <span class="toctext">Tasks to improve the translation control and increase coverage</span></a></li>
+</ul>
+</div>
+
+<h3><span class="mw-headline" id="Definition_of_the_list_of_project_languages_and_the_BASIC_language_from_this_list"><span class="mw-headline-number">1</span> Definition of the list of project languages and the BASIC language from this list</span></h3>
+<p>This step depends purely on the author of the project and its task, but for the BASIC language it is strongly recommended to choose international — English (en), and this short guide does not consider other options. Although OpenSCADA generally allows you to set-choose another language in BASIC with blocking library DB-files in read-only mode, or exclude changes there something, because the BASIC language of these DBs is English (en)!
+</p><p>In addition to the BASIC language, the concept of the MAIN language is introduced for dynamic multilingualism, ie the language of the locale in which the program is run and in which the messages will be provided by default and for languages for which there is no translation.
+</p>
+<h3><span class="mw-headline" id="Translation_of_system-general_program_messages"><span class="mw-headline-number">2</span> Translation of system-general program messages</span></h3>
+<p>You can get familiar with the procedure of translation of system messages in <a href="FAQ.html#UsingCore" title="Special:MyLanguage/Documents/FAQ">the short "How to ..."</a>, which can be supplemented here only by the fact that for the translation of the messages of the runtime interface there can be translated only the messages of the modules for building these interfaces, that is <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a> and <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a>.
+</p>
+<h3><span class="mw-headline" id="Specifying_the_need_multilingual_mode_of_the_user_project"><span class="mw-headline-number">3</span> Specifying the need multilingual mode of <a href="Program_manual.html#Projects" title="Special:MyLanguage/Documents/Program manual">the user project</a></span></h3>
+<p>OpenSCADA provides three modes:
+</p>
+<ol><li> SINGLELANGUAGE (typical), but with the ability to use and correction messages on the language of the application launch locale for already multilingual configuration storage, ie containing message fields for this language — everything that the user creates a new one in this mode will be singlelingual;</li>
+<li> MULTILANGUAGE about the configuration, in the storage of which separate fields on the language of the program startup are created during saving — it is in this mode that multilingual storage (library databases and user projects) are created for the storage types with <a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">support of the translation (TR) feature</a>;</li>
+<li> MULTILANGUAGE-DYNAMIC about the ability of obtaining in the program context of multiple languages and mostly in the end-user interface execution, which is especially actual for WEB-interfaces with individual sessions for individual users and different languages, or for the visualization server that has to transmit the interface in the language of the local station, of which there may be many.</li></ol>
+<p>Accordingly, the task at this stage is to determine whether you need dynamic multilingualism (mode 3), or whether a multilingual configuration of the project is enough, which you will run on different stations in different language locales.
+</p>
+<h3><span class="mw-headline" id="General_implementation_of_a_user_project_in_the_BASIC_language.2C_or_in_one_other.2C_in_a_monolingual_mode"><span class="mw-headline-number">4</span> General implementation of a user project in the BASIC language, or in one other, in a monolingual mode</span></h3>
+<p>At this stage, it is possible not to worry about multilingualism at all, but to implement the project in one and preferably selected as BASIC.
+</p><p>You can also just take a previously developed singlelingual project that you want to make multilingual.
+</p>
+<h3><span class="mw-headline" id="Switching_the_project_to_a_multilingual_mode_and_translation_into_the_selected_languages"><span class="mw-headline-number">5</span> Switching the project to a multilingual mode and translation into the selected languages</span></h3>
+<p>All basic translation actions are performed in the "Translations" tab of the station configuration root page, which is shown in Figure 1 and where we will consider all the actions in this step.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1152px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="953" src="files/QTCfg_sys_transl.png" width="1150" /></a>  <div class="thumbcaption">Fig.1. The tab "Translations" of the main page of the station configuration.</div></div></div></div>
+<p>First of all, we have to switch the project of the previous stage to multilingual mode, for which in the specified tab we select or enter the code of the previously selected BASIC language, which is English (en) in the image. If you also need dynamic multilingualism, check the box after the language field, which is a plan to enable multilingualism the next time you run it. That is, save these changes to the project storage and restart it.
+</p><p>If everything happened correctly, then after restarting in the translation status we should get "MULTILANGUAGE" or "MULTILANGUAGE-DYNAMIC" and go directly to the translation on the same tab, ie in the table "Messages". If you do not have the table itself, then you have chosen non-dynamic mode, where initially there is no translation messages index to build a translation table manager, but there is a field "Enable manager", which forms that index.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Before enabling the translation manager, or starting to work with it in dynamic mode, you must fully download all messages that do not happen automatically for <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the VCA projects and libraries</a> and can be done simply by opening <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">the development environment</a>.
+</p><p>After enabling the translation manager, and then its appearance, in the field "Languages of managing" and through the delimiter symbol ";" specify the list of selected languages except BASIC. You can now translate the messages in the table into the specified languages and together with the BASIC, if the original language of the project was not it.
+</p><p>The translation manager, or rather the procedure for its formation, also performs a series of checks with appropriate markings and direct corrections of inconsistencies to simplify this process as much as possible.
+</p><p>You can learn more about the interface elements of this page on <a href="Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">the description page</a>.
+</p>
+<h3><span class="mw-headline" id="Current_support_of_changes_in_project_messages"><span class="mw-headline-number">6</span> Current support of changes in project messages</span></h3>
+<p>When conducting a general translation, you can not go deep into the details of the origin of these messages and the reasons for the lack of translation of some of them, as well as not worry about transferring the work of this project with preservation of translations and key issues of what will happen to translation in the process of its maintenance and expansion, that is, when changing messages in different translation modes and in different languages of the project execution locale.
+</p><p>But if the level of translation is important, as well as the issues listed above, then we begin to go deeper...
+</p><p>The source of messages, as well as their translation, can be either the storage container-table with text-type fields from the primary PROJECT OBJECTS, the name of which is preceded by the language code (db:SQLite.LibDB.flb_Controller#DESCR), or the container-table "Tr" with INDIVIDUAL MESSAGES (db:SQLite.vcaBase.Trs#base).
+</p>
+<h4><span class="mw-headline" id="Primary_project_objects"><span class="mw-headline-number">6.1</span> Primary project objects</span></h4>
+<p>Storage support for <a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">the translation properties (TR)</a> actually involves processing the translation of primary program objects, so it is advisable to consider the behaviour of their algorithm in different multilingual modes at different locales-languages (BASIC or nonBASIC) and for the text field:
+</p>
+<dl><dd>1. SINGLELANGUAGE storage:
+<dl><dd><ul><li> READING =&gt; direct reading the single field</li>
+<li> CHANGING, CLEARING =&gt; direct changing the single field</li></ul></dd>
+<dd>1.1. + SINGLELANGUAGE mode:
+<ul><li> SETTING =&gt; direct changing the single field</li></ul></dd>
+<dd>1.2. + MULTILANGUAGE mode:
+<ul><li> SETTING =&gt; BASIC — direct, nonBASIC — direct translation and base (in fact converting the storage to MULTILANGUAGE)</li></ul></dd></dl></dd>
+<dd>2. MULTILANGUAGE storage:
+<dl><dd>2.1. + MULTILANGUAGE mode:
+<ul><li> READING =&gt; reading the translation and BASE filed, of which the selection is BASIC in the absence-emptiness of translation</li>
+<li> SETTING =&gt; BASIC — direct, nonBASIC — direct translation and base</li>
+<li> CHANGING =&gt; just changing the early marked as "&lt;!&gt;" or: changing, BASIC — marking as "&lt;!&gt;" for actual translations, nonBASIC — marking as "&lt;!&gt;" for the base language</li>
+<li> CLEARING =&gt; clearing, BASIC — clearing the translations, nonBASIC — generating an exception for notification and saving the modification flag for repeating of reading the not translated one</li></ul></dd>
+<dd>2.2. + MULTILANGUAGE-DYNAMIC mode, the changed values transferred in the form "{base}\000{lang}\000{mess}":
+<ul><li> READING =&gt; reading only BASIC and it registering in the message index</li>
+<li> SETTING =&gt; direct for the MAIN and copying the translation and BASIC; updating for the message index and translation cache</li>
+<li> CHANGING =&gt; just changing the early marked as "&lt;!&gt;" or: changing, BASIC — marking as "&lt;!&gt;" for actual translations; updating for the message index and translation cache</li>
+<li> CLEARING =&gt; clearing, BASIC — clearing the translations, nonBASIC — generating an exception for notification and saving the modification flag for repeating of reading the not translated one; updating for the message index and translation cache</li></ul></dd></dl></dd></dl>
+<p>Copying objects, as well as renaming, is generally done without translation, ie the target object will not have it, moreover, the MAIN message will be BASIC, from the language of the project execution, which is useful if you copy the object for further singlelingual use in the MAIN language. If this object also requires multilingualism, then immediately after copying you can use the translation manager (Fig.1), which will automatically replace the BASIC language and install the specified translations.<br />
+<a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In the MULTILANGUAGE-DYNAMIC mode all translations are copied automatically!
+</p>
+<h4><span class="mw-headline" id="Individual_messages_.28the_container-table_.22Tr.22.29"><span class="mw-headline-number">6.2</span> Individual messages (the container-table "Tr")</span></h4>
+<p>But not all messages in OpenSCADA are related to its objects, for example — procedures on the internal language may contain text messages that should be translated separately, and not the whole procedure, which leads to its logical differences in different languages. Therefore, <a href="User_API.html" title="Special:MyLanguage/Documents/User API">the function <i>tr()</i></a> has been implemented in the internal procedure language, which returns the translation of the message covered by it according to the MAIN language, or the language of the dynamic context in the MULTILANGUAGE-DYNAMIC mode and if the procedure is related to this context.
+</p><p>Dynamic context relation in the MULTILINGUAL-DYNAMIC mode involves the actual execution of this procedure by the user with a separate language or by language, ie only for procedures of <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the VCA graphical interface</a>, so execution of the data source procedures cannot be performed by a single user or language, so they are always translated as MAIN.
+</p><p>To store the translation of such messages, a separate container-table "Tr" is specially provided, which is located in the database-storage associated with the OpenSCADA object with such procedure. Messages wrapped with the "tr()" function are included in the "Tr" table at the time of this procedure execution or compilation, for string literals, and these messages in the procedure themselves must be the BASIC language. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> At this time, it is not possible to track changes of messages wrapped in the <i>tr()</i> function, so they will all accumulate there and delete they you can only <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_tbl_tbl.png" title="File:QTCfg subsys db mod db tbl tbl.png">by manually editing this table</a>.
+</p><p>Copying of OpenSCADA objects with procedures from one storage-database to another does not copy also the translations between individual "Tr" containers-tables, but you can execute this procedure on the new object, than adding it to "Tr" and then copy the translations also with help of the translation manager (Fig.1).
+</p>
+<h3><span class="mw-headline" id="Tasks_to_improve_the_translation_control_and_increase_coverage"><span class="mw-headline-number">7</span> Tasks to improve the translation control and increase coverage</span></h3>
+<dl><dd> - develop the transitive dynamic translation mechanism for data sources, ie final registration and translation of messages on the side of the dynamic context of VCA execution
+<dl><dd>&nbsp;!&gt; required for dynamic values such as the status "ON", "CLOSE", ...</dd>
+<dd>&nbsp;!&gt; required to dynamize the translation of messages such as violations, actions of the operator; that is, such messages are generated separately from the dynamic values of the BASIC language, which is then parsed — the text of the message is separated without dynamics and which is then registered and translated on the station-server of the visualization</dd></dl></dd>
+<dd> - to supplement the translation manager with the function of dividing the selected message by sources and deleting messages in the table "Tr"</dd>
+<dd> - develop a mechanism for tracking the irrelevance of messages in the table "Tr"
+<dl><dd>&nbsp;?&gt; it is possible to add to the table "Tr" a field of options where to specify time of update-registration and at compilation or execution, accordingly to clear too old and updated-registered at compilation</dd></dl></dd></dl>
+
+
+
+
+
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_multi_language_project/en">Documents/How_to/Create_multi_language_project/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2788</td></tr></table></body>
+</html>

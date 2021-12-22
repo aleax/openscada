@@ -627,38 +627,38 @@ bool Session::stlPropSet( const string &pid, const string &vl )
     return true;
 }
 
-TVariant Session::objFuncCall( const string &iid, vector<TVariant> &prms, const string &cuser )
+TVariant Session::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
 {
     // string user( ) - the session user or last command user
-    if(iid == "user")	return user();
+    if(id == "user")	return user();
     // int {alrmQuietance,alrmQuittance}( int quit_tmpl, string wpath = "", bool ret = false ) -
     //        alarm quietance, or return for <ret>, <wpath> with template <quit_tmpl>. If <wpath> is empty string then make global quietance.
     //  quit_tmpl - quietance template
     //  wpath - path to widget
     //  ret - return the quietance
-    else if((iid == "alrmQuietance" || iid == "alrmQuittance") && prms.size() >= 1) {
+    else if((id == "alrmQuietance" || id == "alrmQuittance") && prms.size() >= 1) {
 	alarmQuietance((prms.size()>=2) ? prms[1].getS() : "", ~prms[0].getI(), (prms.size()>=3) ? prms[2].getB() : false);
 	return 0;
     }
     // int reqTm( ) - Last request time
-    if(iid == "reqTm")		return (int64_t)reqTm();
+    if(id == "reqTm")		return (int64_t)reqTm();
     // string reqUser( ) - Last request user
-    if(iid == "reqUser")	return reqUser();
+    if(id == "reqUser")	return reqUser();
     // string reqLang( ) - Last request language
-    if(iid == "reqLang")	return reqLang();
+    if(id == "reqLang")	return reqLang();
     // int userActTm( ) - Last user action time
-    if(iid == "userActTm")	return (int64_t)userActTm();
+    if(id == "userActTm")	return (int64_t)userActTm();
     // bool uiCmd( string cmd, string prm, string src ) - sends a UI command of the pages managing, that is: "open", "next", "prev".
     //  cmd - page command "open", "next" or "prev";
     //  prm - parameter of the command that is whether just the opened page path or its searching mask;
     //  src - source page/widget what cause to open a new page.
-    if(iid == "uiCmd" && prms.size() >= 2) {
+    if(id == "uiCmd" && prms.size() >= 2) {
 	AutoHD<SessWdg> swdg = (prms.size() >= 3) ? nodeAt(prms[2].getS(), 1, 0, 0, true) : NULL;
 	uiCmd(prms[0].getS(), prms[1].getS(), swdg.freeStat() ? NULL :  &swdg.at());
 	return true;
     }
 
-    return TCntrNode::objFuncCall(iid, prms, cuser);
+    return TCntrNode::objFuncCall(id, prms, user_lang);
 }
 
 void Session::cntrCmdProc( XMLNode *opt )
@@ -756,7 +756,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    "tp","str","idm","1","dest","select","select","/obj/prj_ls");
 		ctrMkNode("fld",opt,-1,"/obj/st/backgrnd",_("Background execution mode"),R_R_R_,"root",SUI_ID,1,"tp","bool");
 		if(start()) {
-		    ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Time of the session calculating"),R_R_R_,"root",SUI_ID,1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Counter, time of calculating"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("fld",opt,-1,"/obj/st/connect",_("Connections counter"),R_R_R_,"root",SUI_ID,1,"tp","int");
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqTime",_("Last request time, user, language"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		    ctrMkNode("fld",opt,-1,"/obj/st/reqUser","",R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -802,7 +802,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/st/backgrnd" && ctrChkNode(opt))	opt->setText(i2s(backgrnd()));
     else if(a_path == "/obj/st/calc_tm" && ctrChkNode(opt))
-	opt->setText(tm2s(SYS->taskUtilizTm(nodePath('.',true)))+"["+tm2s(SYS->taskUtilizTm(nodePath('.',true),true))+"]");
+	opt->setText(i2s(calcClk())+", "+tm2s(SYS->taskUtilizTm(nodePath('.',true)))+"["+tm2s(SYS->taskUtilizTm(nodePath('.',true),true))+"]");
     else if(a_path == "/obj/st/connect" && ctrChkNode(opt))	opt->setText(i2s(connects()));
     else if(a_path == "/obj/st/reqTime" && ctrChkNode(opt))	opt->setText(i2s(reqTm()));
     else if(a_path == "/obj/st/reqUser" && ctrChkNode(opt))	opt->setText(reqUser());
@@ -839,7 +839,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	vector<string> lst;
 	list(lst);
 	for(unsigned iF = 0; iF < lst.size(); iF++)
-	    opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
+	    opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(at(lst[iF]).at().name()));
     }
     else TCntrNode::cntrCmdProc(opt);
 }
@@ -1619,7 +1619,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	vector<string> lst;
 	pageList(lst);
 	for(unsigned iF = 0; iF < lst.size(); iF++)
-	    opt->childAdd("el")->setAttr("id", lst[iF])->setText(pageAt(lst[iF]).at().name());
+	    opt->childAdd("el")->setAttr("id", lst[iF])->setText(trD(pageAt(lst[iF]).at().name()));
     }
     else return SessWdg::cntrCmdGeneric(opt);
 
@@ -1824,6 +1824,7 @@ string SessWdg::ico( ) const		{ return parent().freeStat() ? "" : parent().at().
 string SessWdg::getStatus( )
 {
     string rez = Widget::getStatus();
+    rez += TSYS::strMess(_("Modification form %d, fix %d. "), (int)((mMdfClc>>16)&0xFFFF), (int)(mMdfClc&0xFFFF));
     if(process())
 	rez += TSYS::strMess(_("Processing at %s. "), TSYS::time2str(1e-3*((calcPer()>0)?calcPer():ownerSess()->period())).c_str());
     if(mess_lev() == TMess::Debug)
@@ -2328,28 +2329,28 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
     return true;
 }
 
-TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant SessWdg::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
 {
     // TCntrNodeObj ownerSess( ) - Get session object
-    if(iid == "ownerSess")	return new TCntrNodeObj(ownerSess(),user);
+    if(id == "ownerSess")	return new TCntrNodeObj(ownerSess(),user_lang);
     // TCntrNodeObj ownerPage( ) - Get page-owner object
-    if(iid == "ownerPage") {
+    if(id == "ownerPage") {
 	SessPage *opg = ownerPage();
 	if(!opg) return 0;
-	return new TCntrNodeObj(opg,user);
+	return new TCntrNodeObj(opg, user_lang);
     }
     // TCntrNodeObj ownerWdg(bool base) - Get widget-owner object
     //  base - include widgets and pages for true
-    if(iid == "ownerWdg") {
+    if(id == "ownerWdg") {
 	SessWdg *wdg = ownerSessWdg(prms.size() ? prms[0].getB() : 0);
 	if(!wdg) return 0;
-	return new TCntrNodeObj(wdg, user);
+	return new TCntrNodeObj(wdg, user_lang);
     }
     // TCntrNodeObj wdgAdd(string wid, string wname, string parent) - add new widget
     //  wid - widget identifier
     //  wname - widget name
     //  parent - parent widget
-    if(iid == "wdgAdd" && prms.size() >= 3) {
+    if(id == "wdgAdd" && prms.size() >= 3) {
 	try {
 	    //Create widget
 	    wdgAdd(prms[0].getS(), prms[1].getS(), prms[2].getS());
@@ -2358,12 +2359,12 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    nw.at().setEnable(true);
 	    nw.at().setName(prms[1].getS());
 
-	    return new TCntrNodeObj(&nw.at(), user);
+	    return new TCntrNodeObj(&nw.at(), user_lang);
 	} catch(TError &err) { return false; }
     }
     // bool wdgDel(string wid) - delete the widget, return true for success
     //  wid - widget identifier
-    if(iid == "wdgDel" && prms.size()) {
+    if(id == "wdgDel" && prms.size()) {
 	try { wdgDel(prms[0].getS()); }
 	catch(TError &err){ return false; }
 	return true;
@@ -2371,15 +2372,15 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // TCntrNodeObj wdgAt(string wid, bool byPath = false) - attach to the child widget or global by <path>
     //  wid - widget identifier
     //  byPath - attach by absolute or relative path. First item of absolute path (session or project id) is passed.
-    if(iid == "wdgAt" && prms.size()) {
+    if(id == "wdgAt" && prms.size()) {
 	try {
 	    AutoHD<Widget> wO = wdgAt(prms[0].getS(), (prms.size()>1&&prms[1].getB())?0:-1);
-	    if(!wO.freeStat())	return new TCntrNodeObj(wO, user);
+	    if(!wO.freeStat())	return new TCntrNodeObj(wO, user_lang);
 	} catch(TError &err) { }
 	return false;
     }
     // Array attrList() - list attributes of the widget.
-    if(iid == "attrList") {
+    if(id == "attrList") {
 	TArrayObj *rez = new TArrayObj();
 	try {
 	    vector<string> ls;
@@ -2392,11 +2393,11 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     }
     // bool attrPresent(string attr) - check for attribute <attr> present.
     //  attr - checked attribute
-    if(iid == "attrPresent" && prms.size())	return attrPresent(prms[0].getS());
+    if(id == "attrPresent" && prms.size())	return attrPresent(prms[0].getS());
     // ElTp attr(string attr, bool fromSess = false) - get attribute <attr> value or from the session table <fromSess>.
     //  attr - readed attribute;
     //  fromSess - read attribute from session table.
-    if(iid == "attr" && prms.size()) {
+    if(id == "attr" && prms.size()) {
 	if(prms.size() > 1 && prms[1].getB())	return sessAttr(prms[0].getS());
 	else if(attrPresent(prms[0].getS())){
 	    TVariant rez = attrAt(prms[0].getS()).at().get();
@@ -2410,16 +2411,16 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  attr - writed attribute;
     //  vl - value;
     //  toSess - write to session table.
-    if(iid == "attrSet" && prms.size() >= 2) {
+    if(id == "attrSet" && prms.size() >= 2) {
 	if(prms.size() > 2 && prms[2].getB()) sessAttrSet(prms[0].getS(), prms[1].getS());
 	else if(attrPresent(prms[0].getS())) attrAt(prms[0].getS()).at().set(prms[1]);
 
-	return new TCntrNodeObj(this, user);
+	return new TCntrNodeObj(this, user_lang);
     }
     // string link(string attr, bool prm = false) - get link for attribute or attribute block (prm)
     //  attr - attribute identifier
     //  prm  - attribute block for true
-    if(iid == "link" && prms.size()) {
+    if(id == "link" && prms.size()) {
 	XMLNode req("get");
 	req.setAttr("user", "root");
 	if(prms.size() >= 2 && prms[1].getB()) req.setAttr("path", TSYS::strMess("/links/lnk/pr_%s",prms[0].getS().c_str()));
@@ -2431,7 +2432,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  attr - attribute identifier
     //  vl   - link value
     //  prm  - attribute block for true
-    if(iid == "linkSet" && prms.size() >= 2) {
+    if(id == "linkSet" && prms.size() >= 2) {
 	XMLNode req("set");
 	req.setAttr("user", "root")->setText(prms[1].getS());
 	if(prms.size() >= 3 && prms[2].getB()) req.setAttr("path", TSYS::strMess("/links/lnk/pr_%s",prms[0].getS().c_str()));
@@ -2441,7 +2442,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // string {resource,mime}(string addr, string MIME = "") - read resources from the session table or primal source
     //  addr - address to mime by link attribute to mime or direct mime address
     //  type - return stored data MIME
-    if((iid == "resource" || iid == "mime") && prms.size()) {
+    if((id == "resource" || id == "mime") && prms.size()) {
 	string addr = prms[0], rez, tp;
 	//Check for likely attribute
 	if(attrPresent(addr)) {
@@ -2457,7 +2458,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  addr - address to mime by link attribute to mime or direct mime address
     //  data - set to the resources, empty for clear into
     //  type - stored data MIME
-    if((iid == "resourceSet" || iid == "mimeSet") && prms.size() >= 2) {
+    if((id == "resourceSet" || id == "mimeSet") && prms.size() >= 2) {
 	string addr = prms[0];
 	//Check for likely attribute
 	AutoHD<Attr> a;
@@ -2474,31 +2475,31 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // int mess{Debug,Info,Note,Warning,Err,Crit,Alert,Emerg} -
     //		formation of the program message <mess> with the category by the widget path and the appropriate level
     //  mess - message text
-    if(iid == "messDebug" && prms.size())	{ mess_debug(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
-    if(iid == "messInfo" && prms.size())	{ mess_info(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
-    if(iid == "messNote" && prms.size())	{ mess_note(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
-    if(iid == "messWarning" && prms.size())	{ mess_warning(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
-    if(iid == "messErr" && prms.size())		{ mess_err(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
-    if(iid == "messCrit" && prms.size())	{ mess_crit(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
-    if(iid == "messAlert" && prms.size())	{ mess_alert(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
-    if(iid == "messEmerg" && prms.size())	{ mess_emerg(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(id == "messDebug" && prms.size()){ mess_debug(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(id == "messInfo" && prms.size())	{ mess_info(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(id == "messNote" && prms.size())	{ mess_note(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(id == "messWarning" && prms.size()) { mess_warning(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(id == "messErr" && prms.size())	{ mess_err(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(id == "messCrit" && prms.size())	{ mess_crit(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(id == "messAlert" && prms.size()){ mess_alert(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    if(id == "messEmerg" && prms.size()){ mess_emerg(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
 
     //Request to primitive
-    TVariant rez = objFuncCall_w(iid, prms, user, this);
+    TVariant rez = objFuncCall_w(id, prms, user_lang, this);
     if(!rez.isNull())	return rez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(id, prms, user_lang);
 }
 
 bool SessWdg::cntrCmdServ( XMLNode *opt )
 {
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     if(a_path == "/serv/attr") {	//Attribute's value operations
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get values
 	    uint16_t tm = s2u(opt->attr("tm"));
 	    if(!tm) {
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->
-		    setText(i2s(ownerSess()->sec.at().access(u,SEC_RD|SEC_WR,owner(),grp(),permit())));
+		    setText(i2s(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())));
 		if(dynamic_cast<SessPage*>(this))
 		    opt->childAdd("el")->setAttr("id", "name")->setAttr("p", i2s(A_PG_NAME))->setText(name());
 	    }
@@ -2511,13 +2512,14 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		    if(attr.at().isVisual() && ownerSess()->clkChkModif(tm,attr.at().aModif()))
 			opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
-					     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
+					     setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
 		}
 	    }
 	}
 	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR)) {	//Set values
 	    if(!s2i(opt->attr("noUser"))) {
-		if(ownerSess()->user() != u) ownerSess()->setUser(u);
+		if(ownerSess()->user() != opt->attr("user"))
+		    ownerSess()->setUser(opt->attr("user"));
 		ownerSess()->setUserActTm();
 	    }
 	    string events;
@@ -2533,7 +2535,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get attributes all updated elements' of the branch
 	uint16_t tm = s2u(opt->attr("tm"));
 	bool     fullTree = s2i(opt->attr("FullTree"));
-	int perm = ownerSess()->sec.at().access(u,(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
+	int perm = ownerSess()->sec.at().access(opt->attr("user"), (tm?SEC_RD:SEC_RD|SEC_WR), owner(), grp(), permit());
 
 	//Self attributes put
 	if(!tm || ownerSess()->clkChkModif(tm,wModif())) {
@@ -2550,7 +2552,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		if(attr.at().isVisual() && ownerSess()->clkChkModif(tm, attr.at().aModif()))
 		    opt->childAdd("el")->setAttr("id", als[iL].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
-				     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
+				     setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
 	    }
 	}
 
@@ -2562,7 +2564,11 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    for(unsigned iF = 0; iF < lst.size(); iF++) {
 		AutoHD<SessWdg> iwdg = wdgAt(lst[iF]);
 		XMLNode *wn = new XMLNode("get");
-		wn->setAttr("path", a_path)->setAttr("user", u)->setAttr("lang", l)->setAttr("tm", opt->attr("tm"))->setAttr("FullTree", opt->attr("FullTree"));
+		wn->setAttr("path", a_path)->
+		    setAttr("user", opt->attr("user"))->
+		    setAttr("lang", opt->attr("lang"))->
+		    setAttr("tm", opt->attr("tm"))->
+		    setAttr("FullTree", opt->attr("FullTree"));
 		iwdg.at().cntrCmdServ(wn);
 		if(wn->childSize() || fullTree) {
 		    wn->setName("w")->attrDel("path")->attrDel("user")->
@@ -2644,7 +2650,7 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(a_path.compare(0,6,"/attr/") == 0) {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
-	    opt->setText(attr.at().isTransl()?trLU(attr.at().getS(),opt->attr("lang"),opt->attr("user")):attr.at().getS());
+	    opt->setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
 	else if(ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR))
 	{
 	    if(attr.at().id() == "event")	eventAdd(opt->text()+"\n");

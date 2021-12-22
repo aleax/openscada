@@ -2031,7 +2031,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: Load system object %s(%d) to reg %d.", cprg, string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(), ptr->len, ptr->reg);
 #endif
-		reg[ptr->reg] = AutoHD<TVarObj>(new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),val->user()));
+		reg[ptr->reg] = AutoHD<TVarObj>(new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),
+							val->user()+(val->lang().size()?"\n"+val->lang():"")));
 		cprg += sizeof(SCode)+ptr->len; continue;
 	    }
 	    case Reg::MviFuncArg: {
@@ -2999,8 +3000,14 @@ void Func::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/func/st/compileSt" && ctrChkNode(opt))
 	opt->setText(TSYS::strMess(_("Size source=%s, bytecode=%s; Registers totally=%d, constants=%d, internal functions'=%d; Functions external=%d, internal=%d."),
 	    TSYS::cpct2str(prog().size()).c_str(),TSYS::cpct2str(prg.size()).c_str(),mRegs.size(),cntrCnst,cntrInFRegs,mFncs.size(),cntrInF));
-    else if(a_path == "/func/cfg/NAME" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
-    else if(a_path == "/func/cfg/DESCR" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+    else if(a_path == "/func/cfg/NAME") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
+    }
+    else if(a_path == "/func/cfg/DESCR") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
+    }
     else if(a_path == "/func/cfg/START") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(toStart()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setToStart(s2i(opt->text()));
@@ -3019,7 +3026,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    XMLNode *nDef	= ctrMkNode("list",opt,-1,"/io/io/5","",RWRWR_);
 	    for(int id = 0; id < ioSize(); id++) {
 		if(nId)   nId->childAdd("el")->setText(io(id)->id());
-		if(nNm)   nNm->childAdd("el")->setText(io(id)->name());
+		if(nNm)   nNm->childAdd("el")->setText(trD(io(id)->name()));
 		if(nType) nType->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&(IO::FullText|IO::TransltText))<<8)));
 		if(nMode) nMode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
 		if(nHide) nHide->childAdd("el")->setText(io(id)->hide()?"1":"0");
@@ -3046,7 +3053,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 		throw TError(nodePath().c_str(),_("Empty value is not allowed."));
 	    switch(col) {
 		case 0:	io(row)->setId(opt->text());	break;
-		case 1:	io(row)->setName(opt->text());	break;
+		case 1:	io(row)->setName(trDSet(io(row)->name(),opt->text()));	break;
 		case 2:
 		    io(row)->setType((IO::Type)(s2i(opt->text())&0xFF));
 		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::TransltText)));

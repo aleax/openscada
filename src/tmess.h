@@ -33,9 +33,11 @@
 #include "resalloc.h"
 
 #define _(mess) Mess->I18N(mess)
+#define trD(base) Mess->translGet(base)
 #define trL(base,lng) Mess->translGet(base, lng)
 #define trU(base,usr) Mess->translGetU(base, usr)
 #define trLU(base,lng,usr) Mess->translGetLU(base, lng, usr)
+#define trDSet(base,mess) Mess->translSet(base, mess)
 #define trSetL(base,lng,mess) Mess->translSet(base, lng, mess)
 #define trSetU(base,usr,mess) Mess->translSetU(base, usr, mess)
 #define trSetLU(base,lng,usr,mess) Mess->translSetLU(base, lng, usr, mess)
@@ -137,23 +139,27 @@ class TMess
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 
 	// Internal messages translations
-	string lang2CodeBase( )			{ return mLang2CodeBase; }
+	string lang2CodeBase( );
+	string langBase( )			{ return mLangBase; }
+	string langToLocale( const string &lang );
 	bool translCfg( )			{ return lang2CodeBase().size() && lang2Code() != lang2CodeBase(); }
 	bool translDyn( bool plan = false )	{ return plan ? mTranslDynPlan : mTranslDyn; }
 	bool translEnMan( )			{ return mTranslEnMan; }
 	string translLangs( )			{ return mTranslLangs; }
 	string translFld( const string &lng, const string &fld, bool isCfg = false );
 	bool isMessTranslable( const string &vl );
-	void setLang2CodeBase( const string &vl );
+	void setLangBase( const string &vl );
 	void setTranslDyn( bool val, bool plan = true );
 	void setTranslEnMan( bool vl, bool passive = false );
 	void setTranslLangs( const string &vl )	{ mTranslLangs = vl; }
 
 	//  Translation request for <base>, <lang> | <user> and <src> (direct source mostly for "uapi:").
+	string translGet( const string &base );				//Getting user and language from the translation context
 	string translGet( const string &base, const string &lang, const string &src = "" );
 	string translGetU( const string &base, const string &user, const string &src = "" );
 	string translGetLU( const string &base, const string &lang, const string &user, const string &src = "" );
 	//  Translation set for <base>, <lang> | <user> and <mess>. Return base or the changed.
+	string translSet( const string &base, const string &mess );	//Getting user and language from the translation context
 	string translSet( const string &base, const string &lang, const string &mess, bool *needReload = NULL, const string &srcFltr = "" );
 	string translSetU( const string &base, const string &user, const string &mess, bool *needReload = NULL );
 	string translSetLU( const string &base, const string &lang, const string &user, const string &mess, bool *needReload = NULL );
@@ -163,6 +169,9 @@ class TMess
 	//    for UserAPI table: "uapi:{DB}"
 	void translReg( const string &mess, const string &src, const string &prms = "" );
 	void translIdxCacheUpd( const string &base, const string &lang, const string &mess, const string &src );
+
+	// Getting and registering/clearing the translation context bound to the call pthread
+	string trCtx( const string &user_lang = mess_TrModifMark, bool *hold = NULL );
 
 	// Often used, generic text messages
 	static const char *labStor( );
@@ -198,17 +207,18 @@ class TMess
 
 	ResMtx	dtRes, mRes;
 
-	MtxString	mLang2CodeBase, mLang2Code;
+	MtxString	mLangBase, mLang2Code, mTranslLangs;
 
 	map<string, bool>	debugCats;
 	vector<string>		selectDebugCats;
 
-	string	mTranslLangs;
 	map<string, map<string,string> > trMessIdx;
 	map<string, CacheEl>	trMessCache;
 
 	ResMtx	getMessRes;
 	string	getMessLng;
+
+	map<pthread_t, string>	trCtxs;
 };
 
 extern TMess *Mess;

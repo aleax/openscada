@@ -451,8 +451,8 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    vector<string> lst;
 	    nList(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(nAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", nAdd(opt->attr("id"))); nAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mNode, opt->attr("id"), -1, NodeRemove);

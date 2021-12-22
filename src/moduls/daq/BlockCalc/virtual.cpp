@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.3"
+#define MOD_VER		"1.12.4"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -461,8 +461,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    blkList(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(blkAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"), -1, NodeRemove);
@@ -472,8 +472,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    if(!startStat()) {
 		vector<string> lst;
 		blkList(lst);
-		for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
+		for(unsigned iF = 0; iF < lst.size(); iF++)
+		    opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(blkAt(lst[iF]).at().name()));
 	    }
 	    else {
 		ResAlloc sres(hdRes, false);
@@ -526,15 +526,15 @@ void Prm::enable( )
     string ioLs = cfg("IO").getS();
 
     //Check and delete no used fields
-    /*for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++)
+    /*for(int iFld = 0; iFld < (int)v_el.fldSize(); iFld++)
     {
-	if(v_el.fldAt(i_fld).reserve().empty()) continue;
+	if(v_el.fldAt(iFld).reserve().empty()) continue;
 	string fel;
 	for(int io_off = 0; (fel=TSYS::strSepParse(ioLs,0,'\n',&io_off)).size(); )
-	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve()) break;
+	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(iFld).reserve()) break;
 	if(fel.empty())
 	{
-	    try{ v_el.fldDel(i_fld); i_fld--; }
+	    try{ v_el.fldDel(iFld); iFld--; }
 	    catch(TError &err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	}
@@ -600,12 +600,12 @@ void Prm::enable( )
     }
 
     //Check and delete no used attrs
-    for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++) {
-	int i_p;
-	for(i_p = 0; i_p < (int)pls.size(); i_p++)
-	    if(pls[i_p] == v_el.fldAt(i_fld).name())	break;
-	if(i_p < (int)pls.size()) continue;
-	try{ v_el.fldDel(i_fld); i_fld--; }
+    for(int iFld = 0; iFld < (int)v_el.fldSize(); iFld++) {
+	int iP;
+	for(iP = 0; iP < (int)pls.size(); iP++)
+	    if(pls[iP] == v_el.fldAt(iFld).name())	break;
+	if(iP < (int)pls.size()) continue;
+	try{ v_el.fldDel(iFld); iFld--; }
 	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 
@@ -650,10 +650,10 @@ void Prm::vlGet( TVal &val )
     if(owner().redntUse()) return;
 
     try {
-	//if( !enableStat() ) return;
+	//if(!enableStat()) return;
 	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
 	int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
-	if( io_id < 0 )	disable();
+	if(io_id < 0)	disable();
 	else val.set((enableStat()&&owner().startStat()) ? blk.at().get(io_id) : EVAL_STR, 0, true);
     } catch(TError &err) { disable(); }
 }

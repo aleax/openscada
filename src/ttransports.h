@@ -102,7 +102,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	void load_( )			{ }
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	//Attributes
 	bool	runSt;
@@ -193,7 +193,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	void load_( TConfig *cfg );
 	void load_( )			{ }

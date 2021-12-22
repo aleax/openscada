@@ -41,7 +41,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.1.5"
+#define MOD_VER		"2.1.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -201,6 +201,8 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
     map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, "");
 
+    if(Mess->translDyn()) Mess->trCtx(ses.user);
+
     try {
 	string zero_lev = TSYS::pathLev(ses.url, 0);
 
@@ -349,12 +351,16 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found");
     }
+
+    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page);
+
+    if(Mess->translDyn()) Mess->trCtx(ses.user);
 
     //Commands process
     cntEl = ses.prm.find("com");
@@ -413,6 +419,8 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
     }
+
+    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 string TWEB::trMessReplace( const string &tsrc )
@@ -531,9 +539,6 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
@@ -541,19 +546,13 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-string TWEB::modInfo( const string &iname )
+string TWEB::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
+    if(name == "Name")		return MOD_NAME;
+    if(name == "Author")	return AUTHORS;
+    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

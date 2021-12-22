@@ -1509,11 +1509,11 @@ void OrigDocument::sizeUpdate( SessWdg *sw )
     } catch(TError &err) { }
 }
 
-TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms, const string &user, Widget *src )
+TVariant OrigDocument::objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user_lang, Widget *src )
 {
     // string getArhDoc(integer nDoc) - get archive document text to 'nDoc' depth.
     //  nDoc - archive document at depth (0-{aSize-1})
-    if(iid == "getArhDoc" && prms.size() >= 1) {
+    if(id == "getArhDoc" && prms.size() >= 1) {
 	int nDoc = prms[0].getI();
         int aCur = src->attrAt("aCur").at().getI();
 	int aSize = src->attrAt("aSize").at().getI();

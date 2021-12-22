@@ -149,11 +149,11 @@ void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc, new Func(i
 
 void Lib::del( const string &id )			{ chldDel(mFnc, id); }
 
-TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
-    if(present(iid))	return at(iid).at().objFuncCall("call", prms, user);
+    if(present(iid))	return at(iid).at().objFuncCall("call", prms, user_lang);
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void Lib::cntrCmdProc( XMLNode *opt )
@@ -214,19 +214,19 @@ void Lib::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/lib/cfg/ID" && ctrChkNode(opt))		opt->setText(id());
     else if(a_path == "/lib/cfg/NAME") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/lib/cfg/DESCR") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/br/fnc_" || a_path == "/func/func") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(at(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mFnc,opt->attr("id"), -1, NodeRemove);

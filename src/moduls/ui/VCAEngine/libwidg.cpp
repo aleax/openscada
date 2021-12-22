@@ -385,7 +385,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     if(a_path == "/obj/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
     else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
@@ -422,19 +422,19 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID)) opt->setText(id());
     else if(a_path == "/obj/cfg/name") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(name(),l,u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trSetLU(name(),l,u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/obj/cfg/descr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(descr(),l,u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trSetLU(descr(),l,u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/br/wdg_" || a_path == "/wdg/wdg") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(at(lst[iF]).at().name(),l,u));
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(at(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) { opt->setAttr("id", add(opt->attr("id"),opt->text())); at(opt->attr("id")).at().setOwner(opt->attr("user")); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) del(opt->attr("id"),true);

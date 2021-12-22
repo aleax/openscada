@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define DAQ_NAME	"ModBus"
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"3.4.0"
+#define DAQ_MVER	"3.4.2"
 #define DAQ_AUTHORS	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -79,7 +79,7 @@ class TMdPrm: public TParamContr
 	TElem *dynElCntr( )	{ return &pEl; }
 	TElem &elem( )		{ return pEl; }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 
@@ -184,7 +184,7 @@ class TMdContr: public TController
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	bool inWr( const string &addr );
 

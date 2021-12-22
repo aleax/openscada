@@ -44,7 +44,7 @@ using namespace OPC;
 #define DAQ_NAME	_("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.6.0"
+#define DAQ_MVER	"2.6.2"
 #define DAQ_AUTOR	_("Roman Savochenko")
 #define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -82,7 +82,7 @@ class TMdPrm : public TParamContr
 	TElem *dynElCntr( )	{ return &pEl; }
 	TElem &elem( )		{ return pEl; }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 

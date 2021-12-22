@@ -810,7 +810,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    servSet(this.inclOpen, 'com=pgClose&cacheCntr&cachePg', '');
 		    this.pages[this.inclOpen].pwClean();
 
-		    this.pages[this.inclOpen].reqTm = tmCnt;
+		    //this.pages[this.inclOpen].reqTm = tmCnt;
 		    pgCacheProc(this.pages[this.inclOpen]);
 		    //this.place.removeChild(this.pages[this.inclOpen].place);
 		    while(this.place.children.length) this.place.removeChild(this.place.children[0]);
@@ -824,7 +824,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.pages[this.inclOpen] = pgO;
 			this.place.appendChild(this.pages[this.inclOpen].place);
 			this.pages[this.inclOpen].perUpdtEn(true);
-			this.pages[this.inclOpen].makeEl(servGet(this.inclOpen, 'com=attrsBr&tm='+pgO.reqTm));
+			//!!!! In any case complete reload the page due to the possibility of the last changes loss at the closing
+			this.pages[this.inclOpen].makeEl(servGet(this.inclOpen, 'com=attrsBr')); //&tm='+pgO.reqTm));
 		    }
 		    else {
 			var iPg = new pwDescr(this.inclOpen, true, this);

@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.0"
+#define MOD_VER		"4.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -479,7 +479,7 @@ string MTable::getSQLVal( TCfg &cfg, uint8_t RqFlg )
     string rez = cfg.getS(RqFlg);
     if(rez == EVAL_STR)	return "NULL";
     if(cfg.fld().type() == TFld::String) {
-	if(Mess->translDyn() && (cfg.fld().flg()&TFld::TransltText)) rez = trL(rez, Mess->lang2Code());
+	//if(Mess->translDyn() && (cfg.fld().flg()&TFld::TransltText)) rez = trL(rez, Mess->lang2Code());
 	string prntRes = rez;
 	bool isBin = false;
 	for(unsigned iCh = 0; !isBin && iCh < prntRes.size(); ++iCh)

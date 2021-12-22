@@ -321,6 +321,7 @@ Documents/How_to/Transferring_project_configuration:en,uk,ru:How_to_Transferring
 Documents/How_to/Build_from_source:en,uk,ru:How_to_Build_from_source.html
 Documents/How_to/Crash_report:en,uk,ru:How_to_Crash_report.html
 Documents/How_to/Create_module:en,uk,ru:How_to_Create_module.html
+Documents/How_to/Create_multi_language_project:en,uk:Create_multi_language_project.html
 Documents/DAQ:en,uk,ru:DAQ.html
 Documents/User_API:en,uk,ru:User_API.html
 Documents/API:en:API.html

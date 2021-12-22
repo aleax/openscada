@@ -463,7 +463,7 @@ void TController::alarmSet( const string &mess, int lev, const string &prm, bool
     }
 }
 
-TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // string name( ) - get controller name.
     if(iid == "name")	return name();
@@ -500,10 +500,10 @@ TVariant TController::objFuncCall( const string &iid, vector<TVariant> &prms, co
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TController::cntrCmdProc( XMLNode *opt )
@@ -594,10 +594,10 @@ void TController::cntrCmdProc( XMLNode *opt )
     if(a_path == "/cntr/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
     else if(a_path == "/prm/nmb" && ctrChkNode(opt)) {
 	list(c_list);
-	unsigned e_c = 0;
+	unsigned eC = 0;
 	for(unsigned iA = 0; iA < c_list.size(); iA++)
-	    if(at(c_list[iA]).at().enableStat()) e_c++;
-	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
+	    if(at(c_list[iA]).at().enableStat()) eC++;
+	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),eC));
     }
     else if(a_path == "/prm/t_prm" && owner().tpPrmSize()) {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
@@ -609,7 +609,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    list(c_list);
 	    for(unsigned iA = 0; iA < c_list.size(); iA++) {
-		XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(at(c_list[iA]).at().name());
+		XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(trD(at(c_list[iA]).at().name()));
 		if(!s2i(opt->attr("recurs"))) continue;
 		cN->setName(opt->name())->setAttr("path",TSYS::strEncode(opt->attr("path"),TSYS::PathEl))->setAttr("recurs","1");
 		at(c_list[iA]).at().cntrCmd(cN);

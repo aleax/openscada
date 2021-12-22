@@ -131,10 +131,9 @@ void TModule::modInfo( vector<string> &list )
 	list.push_back(lInfo[iOpt]);
 }
 
-string TModule::modInfo( const string &iname )
+string TModule::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    info;
+    string info;
 
     if(name == lInfo[0])	info = mModId;
     else if(name == lInfo[1])	info = mModName;
@@ -161,8 +160,8 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/module/m_inf",_("Module information"))) {
 		vector<string> list;
 		modInfo(list);
-		for(unsigned i_l = 0; i_l < list.size(); i_l++)
-		    ctrMkNode("fld",opt,-1,(string("/module/m_inf/")+list[i_l]).c_str(),_(list[i_l].c_str()),R_R_R_,"root","root",1,"tp","str");
+		for(unsigned iL = 0; iL < list.size(); iL++)
+		    ctrMkNode("fld",opt,-1,(string("/module/m_inf/")+list[iL]).c_str(),_(list[iL].c_str()),R_R_R_,"root","root",1,"tp","str");
 	    }
 	return;
     }
@@ -174,7 +173,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if(a_path.compare(0,13,"/module/m_inf") == 0 && ctrChkNode(opt)) opt->setText(modInfo(TSYS::pathLev(a_path,2)));
+    else if(a_path.find("/module/m_inf") == 0 && ctrChkNode(opt)) opt->setText(modInfo(TSYS::pathLev(a_path,2)));
     else TCntrNode::cntrCmdProc(opt);
 }
 

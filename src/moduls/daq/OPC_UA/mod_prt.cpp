@@ -228,7 +228,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    epList(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id", lst[iF])->setText(epAt(lst[iF]).at().name());
+		opt->childAdd("el")->setAttr("id", lst[iF])->setText(trD(epAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", epAdd(opt->attr("id"))); epAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mEndPnt,opt->attr("id"), -1, NodeRemove);

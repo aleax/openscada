@@ -616,7 +616,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     if(a_path == "/obj/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
     else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
@@ -665,12 +665,12 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID))	opt->setText(id());
     else if(a_path == "/obj/cfg/name") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(name(),l,u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trSetLU(name(),l,u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/obj/cfg/descr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(descr(),l,u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trSetLU(descr(),l,u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/obj/cfg/per") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(period()));
@@ -686,7 +686,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst, lst1;
 	    list(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++) {
-		XMLNode *no = opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(at(lst[iF]).at().name(),l,u));
+		XMLNode *no = opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(at(lst[iF]).at().name()));
 		if(getChPgN) { at(lst[iF]).at().pageList(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
 	    }
 	}
@@ -1520,7 +1520,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     }
 
     //Processing for the page commands
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     if(a_path == "/wdg/w_lst" && ctrChkNode(opt)) {
 	if(ownerPage() && (ownerPage()->prjFlags()&Page::Template)) opt->childIns(0,"el")->setText("..");
 	else if(prjFlags()&Page::Link) {
@@ -1574,7 +1574,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    vector<string> lst, lst1;
 	    pageList(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++) {
-		XMLNode *no = opt->childAdd("el")->setAttr("id",lst[iF])->setText(trLU(pageAt(lst[iF]).at().name(),l,u));
+		XMLNode *no = opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(pageAt(lst[iF]).at().name()));
 		if(getChPgN) { pageAt(lst[iF]).at().pageList(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
 	    }
 	}

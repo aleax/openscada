@@ -57,7 +57,7 @@
 #define MOD_NAME	_("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.11.7"
+#define MOD_VER		"5.11.8"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -586,7 +586,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
-TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // Array sensors()
     //  Get all available sensors of the Qt mobility.
@@ -598,7 +598,7 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return false;
     }
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 //*************************************************

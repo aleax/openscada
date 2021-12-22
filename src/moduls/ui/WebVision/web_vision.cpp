@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.4.2"
+#define MOD_VER		"6.4.5"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -340,13 +340,12 @@ bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
     return iprt->objFuncCall("pgAccess", prms, "root").getB();
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, ses.lang.c_str())
-
 void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     string sender = TSYS::strLine(iprt->srcAddr(), 0);
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, "", iprt);
+
+    if(Mess->translDyn()) Mess->trCtx(ses.user+"\n"+ses.lang);
 
     try {
 	string zero_lev = TSYS::pathLev(ses.url, 0);
@@ -554,12 +553,16 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
+
+    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page, iprt);
+
+    if(Mess->translDyn()) Mess->trCtx(ses.user+"\n"+ses.lang);
 
     try {
 	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
@@ -584,6 +587,8 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),url.c_str(),err.mess.c_str())+"</div>\n",
 	    "404 Not Found", "", "", "", ses.lang);
     }
+
+    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 string TWEB::messPost( const string &cat, const string &mess, MessLev type )
@@ -603,9 +608,6 @@ string TWEB::messPost( const string &cat, const string &mess, MessLev type )
 
     return page;
 }
-
-#undef _
-#define _(mess) mod->I18N(mess)
 
 int TWEB::cntrIfCmd( XMLNode &node, const SSess &ses, bool VCA )
 {
@@ -900,9 +902,6 @@ bool SSess::isRoot( )
     return mRoot;
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
@@ -910,19 +909,13 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-string TWEB::modInfo( const string &iname )
+string TWEB::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
+    if(name == "Name")		return MOD_NAME;
+    if(name == "Author")	return AUTHORS;
+    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

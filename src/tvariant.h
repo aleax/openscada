@@ -327,14 +327,15 @@ class TCntrNodeObj: public TVarObj
 {
     public:
 	//Methods
-	TCntrNodeObj( AutoHD<TCntrNode> nd, const string &user );
+	TCntrNodeObj( AutoHD<TCntrNode> nd, const string &user_lang );
 	~TCntrNodeObj( );
 
 	string objName( );
 
-	string user( )		{ return mUser; }
+	string user( );
+	string lang( );
 
-	void setUser( const string &user )	{ mUser = user; }
+	void setUserLang( const string &user_lang )	{ mUserLang = user_lang; }
 
 	TVariant propGet( const string &id );
 	void propSet( const string &id, TVariant val );
@@ -345,7 +346,7 @@ class TCntrNodeObj: public TVarObj
 
     private:
 	//Attributes
-	string	mUser;
+	string	mUserLang;	// "{user}\n{lang}
 	AutoHD<TCntrNode> cnd;
 };
 

@@ -125,7 +125,7 @@ class Session : public TCntrNode
 	const char *nodeNameSYSM( ) const	{ return mId.c_str(); }
 	void cntrCmdProc( XMLNode *opt );				//Control interface command process
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	void postEnable( int flag );
 	void preDisable( int flag );
@@ -319,7 +319,7 @@ class SessWdg : public Widget, public TValFunc
 	void cntrCmdProc( XMLNode *opt );			//Control interface command process
 	bool attrChange( Attr &cfg, TVariant prev );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	uint32_t wModif( Attr *a = NULL );
 	void setWModif( Attr *a = NULL );

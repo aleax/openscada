@@ -258,7 +258,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void load_( TConfig *cfg );
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Private methods
@@ -333,7 +333,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	virtual void start( );
 	virtual void stop( bool full_del = false );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	// Place archive functions
 	void archiveList( vector<string> &ls );

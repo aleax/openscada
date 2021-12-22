@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.6.3"
+#define MOD_VER		"7.6.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -94,10 +94,8 @@ void Engine::modInfo( vector<string> &list )
     list.push_back("SubType");
 }
 
-string Engine::modInfo( const string &iname )
+string Engine::modInfo( const string &name )
 {
-    string name = TSYS::strParse(iname, 0, ":");
-
     if(name == "SubType")	return MOD_SUBTYPE;
 
     return TModule::modInfo(name);
@@ -653,7 +651,7 @@ void Engine::perSYSCall( unsigned int cnt )
 
 void Engine::cntrCmdProc( XMLNode *opt )
 {
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
 
     //Service commands process
     if(a_path == "/serv/sess") {	//Session operation
@@ -732,7 +730,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_wlb = 0; i_wlb < ls.size(); i_wlb++) {
 	    if(!upd_lb.empty() && upd_lb != ls[i_wlb]) continue;
 	    AutoHD<WidgetLib> wlb = wlbAt(ls[i_wlb]);
-	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[i_wlb])->setText(trLU(wlb.at().name(),l,u));
+	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[i_wlb])->setText(trD(wlb.at().name()));
 	    wlbN->setAttr("doc", TUIS::docKeyGet(wlb.at().descr()));
 	    wlbN->childAdd("ico")->setText(wlb.at().ico());
 
@@ -742,7 +740,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_w = 0; i_w < wls.size(); i_w++) {
 		if(!upd_wdg.empty() && upd_wdg != wls[i_w])	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
-		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentAddr())->setText(trLU(w.at().name(),l,u));
+		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentAddr())->setText(trD(w.at().name()));
 		wN->childAdd("ico")->setText(disIconsW?"":w.at().ico());
 
 		//  Child widgets
@@ -752,7 +750,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		    for(unsigned i_c = 0; i_c < cwls.size(); i_c++) {
 			if(!upd_wdgi.empty() && upd_wdgi != cwls[i_c])	continue;
 			AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
-			wN->childAdd("cw")->setAttr("id",cwls[i_c])->setText(trLU(cw.at().name(),l,u))->
+			wN->childAdd("cw")->setAttr("id",cwls[i_c])->setText(trD(cw.at().name()))->
 			    childAdd("ico")->setText(disIconsCW?"":cw.at().ico());//   (cwls.size()>=100)?"":cw.at().ico());
 		    }
 	    }
@@ -798,7 +796,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
 			continue;
 		}
-		XMLNode *no = opt->childAdd("el")->setAttr("id", lst[iA])->setText(trLU(prjAt(lst[iA]).at().name(),l,u));
+		XMLNode *no = opt->childAdd("el")->setAttr("id", lst[iA])->setText(trD(prjAt(lst[iA]).at().name()));
 		if(getChPgN) { prjAt(lst[iA]).at().list(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
 	    }
 	}
@@ -813,7 +811,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    wlbList(lst);
 	    for(unsigned iA = 0; iA < lst.size(); iA++)
-		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trLU(wlbAt(lst[iA]).at().name(),l,u));
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trD(wlbAt(lst[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	opt->setAttr("id", wlbAdd(opt->attr("id"),opt->text()));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wlbDel(opt->attr("id"),true);

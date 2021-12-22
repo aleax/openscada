@@ -55,7 +55,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.1"
+#define MOD_VER		"2.6.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	_("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -1333,11 +1333,11 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
     return vmax(0, blen);
 }
 
-TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TTrOut::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
 {
     // bool TS(bool rts = EVAL) - To Send control by set request <rts> and return Clear CTS state
     //  rts - Request value RTS
-    if(iid == "TS") {
+    if(id == "TS") {
 	MtxAlloc res(reqRes(), true);
 	if(!runSt) return EVAL_BOOL;
 	int tiocm;
@@ -1356,7 +1356,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     }
     // bool DR(bool dtr = EVAL) - Device ready to communicate control by set Terminal Ready <dtr> and return Set Ready DSR state
     //  dtr - Terminal ready value DTR
-    if(iid == "DR") {
+    if(id == "DR") {
 	MtxAlloc res(reqRes(), true);
 	if(!runSt) return EVAL_BOOL;
 	int tiocm;
@@ -1374,7 +1374,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return (bool)(tiocm&TIOCM_DSR);
     }
     // bool DCD() - Data Carrier Detect control
-    if(iid == "DCD") {
+    if(id == "DCD") {
 	MtxAlloc res(reqRes(), true);
 	if(!runSt) return EVAL_BOOL;
 	int tiocm;
@@ -1383,7 +1383,7 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return (bool)(tiocm&TIOCM_CD);
     }
     // bool RI() - Ring Indicator control
-    if(iid == "RI") {
+    if(id == "RI") {
 	MtxAlloc res(reqRes(), true);
 	if(!runSt) return EVAL_BOOL;
 	int tiocm;
@@ -1392,13 +1392,13 @@ TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return (bool)(tiocm&TIOCM_RI);
     }
     // int sendbreak(int duration = 0)
-    if(iid == "sendbreak") {
+    if(id == "sendbreak") {
 	MtxAlloc res(reqRes(), true);
 	if(!runSt) return (int64_t)EVAL_INT;
 	return tcsendbreak(fd, prms.size() ? prms[0].getI() : 0);
     }
 
-    return TTransportOut::objFuncCall(iid, prms, user);
+    return TTransportOut::objFuncCall(id, prms, user_lang);
 }
 
 void TTrOut::cntrCmdProc( XMLNode *opt )

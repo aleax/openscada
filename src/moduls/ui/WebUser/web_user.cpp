@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.3"
+#define MOD_VER		"1.5.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -201,16 +201,14 @@ bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
     return iprt->objFuncCall("pgAccess", prms, "root").getB();
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, ses.lang.c_str())
-
 void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     string rez, sender = TSYS::strLine(iprt->srcAddr(), 0);
     AutoHD<UserPg> up, tup;
 
-
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), sender, user, vars, page);
+
+    if(Mess->translDyn()) Mess->trCtx(ses.user+"\n"+ses.lang);
 
     try {
 	//Find user protocol for using
@@ -249,6 +247,8 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),urli.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
+
+    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
@@ -257,6 +257,8 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     AutoHD<UserPg> up, tup;
     map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
+
+    if(Mess->translDyn()) Mess->trCtx(ses.user+"\n"+ses.lang);
 
     try {
 	//Find user protocol for using
@@ -282,10 +284,9 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
-}
 
-#undef _
-#define _(mess) mod->I18N(mess)
+    if(Mess->translDyn()) Mess->trCtx("");
+}
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
@@ -314,7 +315,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    uPgList(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(uPgAt(lst[iF]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(uPgAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	{ opt->setAttr("id", uPgAdd(opt->attr("id"))); uPgAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	chldDel(mPgU,opt->attr("id"), -1, NodeRemove);
@@ -816,9 +817,6 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
@@ -826,19 +824,13 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-string TWEB::modInfo( const string &iname )
+string TWEB::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "0";
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
+    if(name == "Name")		return MOD_NAME;
+    if(name == "Author")	return AUTHORS;
+    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

@@ -112,7 +112,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	void load_( TConfig *cfg );
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	// Check messages criteries
 	bool chkMessOK( const string &icateg, int8_t ilvl );
@@ -272,7 +272,7 @@ class TArchiveS : public TSubSYS
 	static void *ArhValTask( void *param );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	unsigned messBufLen( )	{ return mBuf.size(); }
 	void setMessBufLen( unsigned len );

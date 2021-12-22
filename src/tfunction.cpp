@@ -214,7 +214,7 @@ void TFunction::valDet( TValFunc *vfnc )
     dataRes().unlock();
 }
 
-TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // ElTp call(ElTp prm1, ...) - the function call
     //  prm{N} - {N} parameter to the function.
@@ -235,7 +235,7 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    vfnc.set(pP,prms[iP]);
 	}
 	//  Make calc
-	vfnc.calc(user);
+	vfnc.calc(TSYS::strLine(user_lang,0));
 	//  Process outputs
 	for(iP = 0; iP < (int)prms.size(); iP++) {
 	    pP = (iP>=rPos) ? iP+1 : iP;
@@ -249,7 +249,7 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	return TVariant();
     }
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TFunction::cntrCmdProc( XMLNode *opt )
@@ -285,7 +285,10 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		if(ctrMkNode("area",opt,-1,"/exec/io",_("IO")))
 		    for(int iIO = 0; iIO < ioSize(); iIO++) {
 			if(mIO[iIO]->hide()) continue;
-			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),io(iIO)->name(),((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
+			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),
+					//???? Review after the mixed translation implementation,
+					//     but the name can be already translated for static functions
+					trD(io(iIO)->name()),((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
 			if(nd) {
 			    switch(io(iIO)->type()) {
 				case IO::String:

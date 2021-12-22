@@ -89,7 +89,7 @@ class TDAQS : public TSubSYS
 	void load__( );
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Private methods

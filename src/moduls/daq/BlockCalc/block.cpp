@@ -624,14 +624,14 @@ void Block::cntrCmdProc( XMLNode *opt )
     else TCntrNode::cntrCmdProc(opt);
 }
 
-TVariant Block::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant Block::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //TCntrNodeObj cntr() - get the controller node
-    if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
+    if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user_lang);
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }

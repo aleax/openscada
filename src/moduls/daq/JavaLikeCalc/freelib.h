@@ -71,7 +71,7 @@ class Lib : public TCntrNode, public TConfig
 
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     protected:
 	const char *nodeName( ) const	{ return mId.getSd(); }

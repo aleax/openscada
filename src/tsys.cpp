@@ -2713,7 +2713,7 @@ reload:
     return mktime(&ttm);
 }
 
-TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     bool alt1 = false;
     // int message(string cat, int level, string mess) - formation of the program message <mess> with the category <cat>, level <level>
@@ -2806,7 +2806,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
 	if(prms.size() < 2 || prms[1].getS().empty()) {
-	    req.setAttr("user",user);
+	    req.setAttr("user", TSYS::strLine(user_lang,0));
 	    cntrCmd(&req);
 	}
 	else try {
@@ -2921,8 +2921,20 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	if(alt1) gmtime_r(&tm_t, &tm_tm);
 	else localtime_r(&tm_t, &tm_tm);
 	char buf[1000];
-	int rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
-	return (rez>0) ? string(buf,rez) : "";
+	int rez = 0;
+	string lang = TSYS::strLine(user_lang, 1);
+	if(lang.size()) {
+	    lang = Mess->langToLocale(lang);
+	    //!?!? Prepare the locales cache to speed up. Use in new locale string functions of conversion real numbers
+	    locale_t dLoc = newlocale(LC_TIME_MASK, lang.c_str(), 0);
+	    if(dLoc != 0) {
+		rez = strftime_l(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm, dLoc);
+		freelocale(dLoc);
+		return (rez > 0) ? string(buf,rez) : "";
+	    }
+	}
+	rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
+	return (rez > 0) ? string(buf,rez) : "";
     }
     // int {strptime|strptimegm}(string str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
     //      based on the string record of time <str>, in accordance with the specified template <form>
@@ -3026,7 +3038,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return strDecode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
     }
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt )
@@ -3087,7 +3099,6 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
     char buf[prmStrBuf_SZ];
-    string u = opt->attr("user"), l = opt->attr("lang");
     string a_path = opt->attr("path");
 
     //Service commands process
@@ -3101,7 +3112,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,trLU(name(),l,u).c_str());
+	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,trD(name()).c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_)->setAttr("doc","Program_manual|Documents/Program_manual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
@@ -3138,7 +3149,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/modifCalc",_("Set modification for the calculated objects"),RWRWR_,"root","root",2,"tp","bool",
 		"help",_("Most suitable for the production systems together with the previous configuration properties, for the calculation context saving.\n"
 			 "But it is inconvinient in the development mode, all time reminding for the saving need."));
-	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",3,
+		"tp","str", "dest","sel_ed", "sel_list",Mess->langBase().c_str());
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7",
@@ -3169,11 +3181,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
-	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language of the text variables"),RWRWR_,"root","root",5,
-		"tp","str","len","2","dest","sel_ed","select","/tr/baseLangLs",
-		"help",_("Enables the multilingual support for text variables in the configuration DBs by selecting the base language.\n"
-		    "You can select or type here other language besides English(en), but take in your mind that "
-		    "all standard OpenSCADA libraries's formed for the base language English(en), so other base languages "
+	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language; locales list"),RWRWR_,"root","root",2,
+		"tp","str", "help",_("Enables the multilingual support for text variables in the configuration DBs "
+		    "by entry the base language and the project whole locales (like to \"en_US.UTF-8\") list (optional) separated by ';'.\n"
+		    "You can entry here other language besides English(en) as the base, but take in your mind that "
+		    "all standard OpenSCADA libraries formed for the base language English(en), so other base languages "
 		    "will break these DBs at change!"));
 	    if(Mess->lang2CodeBase().size()) {
 		blNd->setAttr("dscr", blNd->attr("dscr") + ", " + _("dynamic translation"));
@@ -3252,8 +3264,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/ver" && ctrChkNode(opt))	opt->setText(VERSION);
     else if(a_path == "/gen/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/gen/stat") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trLU(name(),l,u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trSetLU(name(),l,u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/gen/CPU" && ctrChkNode(opt))	opt->setText(strMess(_("%dx%0.3gGHz"),nCPU(),(float)sysClk()/1e9));
     else if(a_path == "/gen/mainCPUs") {
@@ -3519,14 +3531,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	opt->setText(stM+", "+stV);
     }
     else if(a_path == "/tr/baseLang") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang2CodeBase());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang2CodeBase(opt->text());
-    }
-    else if(a_path == "/tr/baseLangLs" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setText(Mess->lang2Code());
-	if(!Mess->lang2CodeBase().empty() && Mess->lang2CodeBase() != Mess->lang2Code())
-	    opt->childAdd("el")->setText(Mess->lang2CodeBase());
-	opt->childAdd("el")->setText("");
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->langBase());
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLangBase(opt->text());
     }
     else if(a_path == "/tr/dynPlan") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(i2s(Mess->translDyn(true)));
@@ -3562,6 +3568,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    unsigned passN = vmax(0, s2i(TBDS::genPrmGet(nodePath()+"TrPassN","0",opt->attr("user")))),
 		    mess_TrModifMarkLen = strlen(mess_TrModifMark);
 	    TConfig req;
+	    req.setNoTransl(true);
 	    vector<XMLNode*> ns;
 
 	    // Columns list preparing
@@ -3611,7 +3618,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    string tMath, trSrc = TSYS::strParse(is->first, 0, "#"), trFld = TSYS::strParse(is->first, 1, "#");
 		    bool isCfg = false;
 		    //  Source is the config file or the included DB
-		    if((isCfg=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
+		    if((isCfg=trSrc.find("cfg:")==0) || trSrc.find("db:") == 0) {
 			//  Need for the DB structure preparing
 			req.elem().fldClear();
 			req.elem().fldAdd(new TFld(trFld.c_str(),trFld.c_str(),TFld::String,0));

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-14 19:00+0200\n"
+"POT-Creation-Date: 2021-12-19 18:49+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -187,8 +187,7 @@ msgid "Redundancy"
 msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
+msgstr "Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
 
 msgid "Message archivers"
 msgstr "Архиваторы сообщений"
@@ -353,8 +352,7 @@ msgid "Requested %d records for time %s."
 msgstr "Запрошено %d записей в течении %s."
 
 #, c-format
-msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
 "(%lld-%lld)."
@@ -616,8 +614,7 @@ msgstr "Таблицы которые в БД, но не открыты на д�
 msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
-msgid ""
-"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -667,6 +664,19 @@ msgstr "Таблица - смещение, размер"
 
 msgid "Data"
 msgstr "Данные"
+
+msgid "Table is empty."
+msgstr "Таблица пуста."
+
+#, c-format
+msgid "Row \"%s\" is not present. Are you saved the object?"
+msgstr "Запись \"%s\" отсутствует. Вы сохраняли этот объект?"
+
+msgid "The DB is in the Read only mode."
+msgstr "БД в режиме Только для Чтения."
+
+msgid "Translation removed! Reload the base message."
+msgstr "Перевод удалён! Перегрузите базовое сообщение."
 
 #, c-format
 msgid "Field id = %s(%s) is missing!"
@@ -1374,8 +1384,7 @@ msgstr "2:Сбор остановлен."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
 msgid "Inclusion"
@@ -1943,10 +1952,8 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
-msgstr ""
-"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
+msgstr "Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
@@ -2232,22 +2239,24 @@ msgstr "Переход к конфигурации перечня удалённ
 msgid "Translations"
 msgstr "Переводы"
 
-msgid "Base language of the text variables"
-msgstr "Базовый язык текстовых переменных"
+msgid "Base language; locales list"
+msgstr "Базовый язык; перечень локалей"
 
 msgid ""
 "Enables the multilingual support for text variables in the configuration DBs "
-"by selecting the base language.\n"
-"You can select or type here other language besides English(en), but take in "
-"your mind that all standard OpenSCADA libraries's formed for the base "
+"by entry the base language and the project whole locales (like to \"en_US."
+"UTF-8\") list (optional) separated by ';'.\n"
+"You can entry here other language besides English(en) as the base, but take "
+"in your mind that all standard OpenSCADA libraries formed for the base "
 "language English(en), so other base languages will break these DBs at change!"
 msgstr ""
-"Включает поддержку многоязычности текстовых переменных в конфигурационных БД "
-"через выбор базового языка.\n"
-"Вы можете выбрать или ввести другой язык кроме Английский(en), но имейте "
-"ввиду, что все стандартные библиотеки OpenSCADA сформированы для базового "
-"языка Английский(en), т.е другой базовый язык будет портить эти БД при "
-"изменении!"
+"Включает поддержку многоязычности текстовых переменных в "
+"конфигурационных БД через ввод базового языка и перечня всех локалей "
+"(вроде \"ru_RU.UTF-8\") проекта (опционально) разделённых ';'.\n"
+"Вы можете ввести тут другой язык кроме Английский(en), но имейте "
+"ввиду, что все стандартные библиотеки OpenSCADA сформированы для "
+"базового языка Английский(en), т.е другой базовый язык будет портить эти "
+"БД при изменении!"
 
 msgid "dynamic translation"
 msgstr "динамический перевод"
@@ -2427,6 +2436,9 @@ msgstr ""
 msgid "<<<Unmatched sources>>>\n"
 msgstr "<<<Несовпадение источников!!!>>>\n"
 
+msgid "<<<Translation changed>>>\n"
+msgstr "<<<Перевод изменён>>>\n"
+
 #, c-format
 msgid "Clearing the equel to base translation '%s' for '%s'."
 msgstr "Очистка переводов, которые одинаковы с базой '%s' для '%s'."
@@ -2438,6 +2450,9 @@ msgstr "Распространение перевода '%s' на все пус�
 #, c-format
 msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
 msgstr "Объединение базового сообщения с переводом '%s' для '%s' > '%s'."
+
+msgid "<<<Base changed>>>\n"
+msgstr "<<<База изменена>>>\n"
 
 msgid "Transports"
 msgstr "Транспорты"
@@ -2867,3 +2882,4 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+

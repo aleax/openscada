@@ -229,7 +229,7 @@ string TSecurity::optDescr( )
 	)) + TSubSYS::optDescr();
 }
 
-TVariant TSecurity::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TSecurity::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // int access(string user, int mode, string owner, string group, int access)
     //      - Check for <user> access to resource what owned by <owner> and <group> and <access> for <mode>.
@@ -241,7 +241,7 @@ TVariant TSecurity::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     if(iid == "access" && prms.size() >= 5)
 	return (int)access(prms[0].getS(), prms[1].getI(), prms[2].getS(), prms[3].getS(), prms[4].getI());
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TSecurity::cntrCmdProc( XMLNode *opt )
@@ -447,7 +447,7 @@ void TUser::save_( )
 	owner().grpAt(ls[iG]).at().save();
 }
 
-TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // bool auth( string pass ) - authenticate the user for <pass>
     if(iid == "auth" && prms.size()) { return auth(prms[0].getS()); }
@@ -466,10 +466,10 @@ TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, name()+":"+SSEC_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, name()+":"+SSEC_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TUser::cntrCmdProc( XMLNode *opt )
@@ -482,6 +482,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/prm",_("User"))) {
 	    TConfig::cntrCmdMake(opt,"/prm",0,name().c_str(),SSEC_ID,RWRWR_);
 	    //if(!Mess->translDyn()) ctrRemoveNode(opt,"/prm/LANG");
+	    ctrMkNode("fld",opt,-1,"/prm/LANG",EVAL_STR,RWRWR_,name().c_str(),SSEC_ID,2,
+		"dest","sel_ed", "sel_list",Mess->langBase().c_str());
 	    ctrMkNode("img",opt,-1,"/prm/PICTURE",EVAL_STR,RWRWR_,name().c_str(),SSEC_ID,1,"v_sz","100");
 	    ctrMkNode("fld",opt,-1,"/prm/PASS",EVAL_STR,RWRW__,name().c_str(),SSEC_ID);
 	    if(ctrMkNode("table",opt,-1,"/prm/grps",_("Groups"),RWRWR_,"root",SSEC_ID,1,"key","grp")) {
@@ -611,16 +613,16 @@ void TGroup::userDel( const string &name )
 	cfg("USERS").setS(tUsrs.erase(pos, name.size()+1));
 }
 
-TVariant TGroup::objFuncCall( const string &iid, vector<TVariant> &prms, const string &iuser )
+TVariant TGroup::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
 {
     // bool user( string nm ) - check for the user including to the group.
-    if(iid == "user" && prms.size())	return user(prms[0].getS());
+    if(id == "user" && prms.size())	return user(prms[0].getS());
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, iuser, RWRWR_, "root:" SSEC_ID);
+    TVariant cfRez = objFunc(id, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SSEC_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, iuser);
+    return TCntrNode::objFuncCall(id, prms, user_lang);
 }
 
 void TGroup::cntrCmdProc( XMLNode *opt )

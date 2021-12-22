@@ -189,7 +189,7 @@ class TCntrNode
 	// User object access
 	virtual TVariant objPropGet( const string &id );
 	virtual void objPropSet( const string &id, TVariant val );
-	virtual TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	virtual TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	// Childs
 	int8_t	grpSize( );

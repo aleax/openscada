@@ -137,7 +137,7 @@ class TFunction : public TCntrNode
 	virtual void preIOCfgChange( );
 	virtual void postIOCfgChange( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     protected:
 	//Methods

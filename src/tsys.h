@@ -419,7 +419,7 @@ class TSYS : public TCntrNode
 	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	//Public attributes
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread

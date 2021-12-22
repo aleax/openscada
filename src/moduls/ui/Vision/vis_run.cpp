@@ -1133,11 +1133,15 @@ void VisRun::exportTable( const string &itbl )
 
 void VisRun::about( )
 {
+    if(Mess->translDyn()) Mess->trCtx(user()+"\n"+lang());
+
     QMessageBox::about(this, windowTitle(),
 	QString(_("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11")).
-	arg(mod->modInfo("Name:"+lang()).c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description:"+lang()).c_str()).
-	arg(mod->modInfo("Author:"+lang()).c_str()).arg(mod->modInfo("License").c_str()).
+	arg(mod->modInfo("Name").c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description").c_str()).
+	arg(mod->modInfo("Author").c_str()).arg(mod->modInfo("License").c_str()).
 	arg(PACKAGE_NAME).arg(VERSION).arg(Mess->I18N(PACKAGE_DESCR,NULL,lang().c_str())).arg(PACKAGE_LICENSE).arg(Mess->I18N(PACKAGE_AUTHOR,NULL,lang().c_str())).arg(PACKAGE_SITE));
+
+    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void VisRun::userChanged( const QString &oldUser, const QString &oldPass )

@@ -172,7 +172,7 @@ class TTrOut: public TTransportOut
 	void save_( );
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods

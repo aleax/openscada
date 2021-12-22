@@ -5066,8 +5066,12 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 			shD->inclScrl->setWidget(shD->inclPg);
 			shD->inclPg->setEnabled(true);
 			shD->inclPg->setVisible(true);
+
+			//!!!! In any case complete reload the page due to the possibility of the last changes loss at the closing
+			shD->inclPg->load("");
+
 			//shD->inclPg->setMinimumSize(w->size());
-			if(shD->inclPg->wx_scale != shD->inclPg->mainWin()->xScale() ||
+			/*if(shD->inclPg->wx_scale != shD->inclPg->mainWin()->xScale() ||
 				shD->inclPg->wy_scale != shD->inclPg->mainWin()->yScale())
 			    shD->inclPg->load("");
 			else {
@@ -5075,7 +5079,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 			    shD->inclPg->mainWin()->setReqTm(shD->inclPg->reqTm());
 			    shD->inclPg->update(false);
 			    shD->inclPg->mainWin()->setReqTm(trt);
-			}
+			}*/
 		    }
 		    else {
 			shD->inclPg = new RunPageView(val, (VisRun*)w->mainWin(), shD->inclScrl, Qt::SubWindow);

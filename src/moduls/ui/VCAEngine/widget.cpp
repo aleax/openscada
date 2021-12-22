@@ -726,9 +726,9 @@ void Widget::calc( Widget *base )
     if(!parent().freeStat()) parent().at().calc(base);
 }
 
-TVariant Widget::objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src )
+TVariant Widget::objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user_lang, Widget *src )
 {
-    if(!parent().freeStat()) return parent().at().objFuncCall_w(id, prms, user, src);
+    if(!parent().freeStat()) return parent().at().objFuncCall_w(id, prms, user_lang, src);
 
     return TVariant();
 }
@@ -866,7 +866,7 @@ bool Widget::eventProc( const string &ev, Widget *src )
 bool Widget::cntrCmdServ( XMLNode *opt )
 {
     string tNm;
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     //Service commands process
     if(a_path == "/serv/attr") {	//Attribute's access
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {		//Get values
@@ -879,7 +879,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 		    if(attr.at().flgGlob()&Attr::IsUser && !(attr.at().flgSelf()&Attr::VizerSpec)) continue;
 		    opt->childAdd("el")->setAttr("id",ls[iL].c_str())->
 					 setAttr("p",attr.at().fld().reserve())->
-					 setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
+					 setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
 		}
 	    }
 	    else
@@ -888,7 +888,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 			attr = attrAt(tNm);
 			opt->childGet(iL)->setAttr("p",attr.at().fld().reserve())->
 					    setAttr("act",(attr.at().flgGlob()&Attr::Active)?"1":"0")->
-					    setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
+					    setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
 		    }
 	}
 	else if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	//Set values
@@ -906,7 +906,7 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	    if(attr.at().flgGlob()&Attr::IsUser && !(attr.at().flgSelf()&Attr::VizerSpec)) continue;
 	    opt->childAdd("el")->setAttr("id",ls[iL].c_str())->
 			     setAttr("p",attr.at().fld().reserve())->
-			     setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
+			     setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
 	}
 	// Child widgets process
 	if(enable()) {
@@ -969,7 +969,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     if(a_path == "/wdg/res" && ctrChkNode(opt)) {	//Service command for resources request
 	string mime;
 	int size = s2i(opt->attr("size"));
@@ -998,12 +998,12 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if(a_path == "/wdg/cfg/path" && ctrChkNode(opt))
 	opt->setText((isLink()&&s2i(opt->attr("resLink"))) ? parentNoLink().at().addr() : addr());
     else if(a_path == "/wdg/cfg/name") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(name(),l,u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trSetLU(name(),l,u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/wdg/cfg/descr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trLU(descr(),l,u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trSetLU(descr(),l,u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID)) {
 	if(opt->attr("attr").empty()) wClear();
@@ -1072,7 +1072,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		    AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
 		    if(chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEC_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()))
 			continue;
-		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trLU(iwdg.at().name(),l,u));
+		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trD(iwdg.at().name()));
 		}
 	    }
 	}
@@ -1168,14 +1168,14 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
     }
 
     //Process command to page
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     if(a_path.compare(0,6,"/attr/") == 0) {
 	AutoHD<Attr> attr = src->attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_RD))
-	    opt->setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
+	    opt->setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
 	else if(ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    attr.at().setS(attr.at().isTransl()?trSetLU(attr.at().getS(),l,u,opt->text()):opt->text());
-	    opt->setText(attr.at().isTransl()?trLU(attr.at().getS(),l,u):attr.at().getS());
+	    attr.at().setS(attr.at().isTransl()?trDSet(attr.at().getS(),opt->text()):opt->text());
+	    opt->setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
 	}
 	else if(attr.at().id() == "contextMenu" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    opt->childAdd("rule")->setAttr("expr", ":.*$")->setAttr("color", "darkorange");
@@ -1550,7 +1550,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    wdg.at().attrList(lst);
 	    for(unsigned i_el = 0; i_el < lst.size(); i_el++) {
 		if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
-		if(n_name)	n_name->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().name());
+		if(n_name)	n_name->childAdd("el")->setText(trD(wdg.at().attrAt(lst[i_el]).at().name()));
 		if(n_type) {
 		    if(wdg.at().attrAt(lst[i_el]).at().fld().flg()&TFld::Selectable)
 			n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
@@ -1563,7 +1563,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 							    wdg.at().attrAt(lst[i_el]).at().fld().selNames());
 		if(n_proc)	n_proc->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().flgSelf()&Attr::ProcAttr));
 		if(n_cfg)	n_cfg->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle)));
-		if(n_cfgtmpl)	n_cfgtmpl->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().cfgTempl());
+		if(n_cfgtmpl)	n_cfgtmpl->childAdd("el")->setText(trD(wdg.at().attrAt(lst[i_el]).at().cfgTempl()));
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
@@ -1631,7 +1631,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		if(idcol == "name") {
 		    if(!(!(wdg.at().attrAt(idattr).at().flgSelf()&Attr::IsInher) && wdg.at().attrAt(idattr).at().fld().flg()&Attr::IsUser))
 			throw TError(nodePath().c_str(), _("Unable to change non-user attribute '%s'."), idattr.c_str());
-		    wdg.at().attrAt(idattr).at().fld().setDescr(opt->text());
+		    wdg.at().attrAt(idattr).at().fld().setDescr(trDSet(wdg.at().attrAt(idattr).at().fld().descr(),opt->text()));
 		}
 		else if(idcol == "wa") {
 		    wdg.at().attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
@@ -1648,7 +1648,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		    if((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle))
 			wdg.at().attrAt(idattr).at().setFlgSelf((Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle))));
 		}
-		else if(idcol == "cfgtmpl")	wdg.at().attrAt(idattr).at().setCfgTempl(opt->text());
+		else if(idcol == "cfgtmpl")
+		    wdg.at().attrAt(idattr).at().setCfgTempl(trDSet(wdg.at().attrAt(idattr).at().cfgTempl(),opt->text()));
 	    }
 	    wdg.at().modif();
 	}

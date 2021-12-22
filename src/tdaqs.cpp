@@ -218,7 +218,7 @@ void TDAQS::save_( )
     TBDS::genPrmSet(nodePath()+"RdRestDtTm", r2s(rdRestDtTm()));
 }
 
-TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // TCntrNodeObj daqAt(string path, string sep = "", waitForAttr = true) - attaches to a DAQ node (controller object, parameter, attribute) in the ''path''
     //		or the separated string by the separator ''sep'', from the DAQ-subsystem. Check for an attribute in the path last element, at ''waitForAttr''.
@@ -227,7 +227,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     //  waitForAttr - wait for an attribute or other
     if(iid == "daqAt" && prms.size() >= 1) {
 	AutoHD<TCntrNode> nd = daqAt(prms[0].getS(), (prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0, true, (prms.size()>=3)?prms[2].getB():true);
-	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user));
+	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user_lang));
     }
     // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "", string err = "") -
     //    Call function text <prog> whith arguments <args> for program language <progLang>
@@ -279,7 +279,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		}
 	    }
 	    //Prepare and execute
-	    TValFunc wCtx("UserFunc", &wFnc.at(), true, user);
+	    TValFunc wCtx("UserFunc", &wFnc.at(), true, TSYS::strLine(user_lang,0));
 
 	    // Load values
 	    for(unsigned iA = 0; iA < als.size(); iA++)
@@ -324,7 +324,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	return false;
     }
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TDAQS::unload( )
@@ -640,7 +640,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    tmplLibList(lst);
 	    for(unsigned iA = 0; iA < lst.size(); iA++)
-		opt->childAdd("el")->setAttr("id",lst[iA])->setText(tmplLibAt(lst[iA]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trD(tmplLibAt(lst[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    tmplLibReg(new TPrmTmplLib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));

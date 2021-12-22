@@ -72,8 +72,8 @@ void TSubSYS::modAdd( TModule *modul )
     if(mess_lev() == TMess::Debug) {
 	vector<string> list;
 	modul->modInfo(list);
-	for(unsigned i_opt = 0; i_opt < list.size(); i_opt++)
-	    mess_sys(TMess::Debug, "-> %s: %s", _(list[i_opt].c_str()), modul->modInfo(list[i_opt]).c_str());
+	for(unsigned iOpt = 0; iOpt < list.size(); iOpt++)
+	    mess_sys(TMess::Debug, "-> %s: %s", _(list[iOpt].c_str()), modul->modInfo(list[iOpt]).c_str());
     }
 }
 

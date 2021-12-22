@@ -898,7 +898,7 @@ void *TArchiveS::ArhValTask( void *param )
     return NULL;
 }
 
-TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // Array messGet(int btm, int etm, string cat = "", int lev = 0, string arch = "", int upTm = 0);
     //     - request of the program messages for the time from <btm>
@@ -942,7 +942,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	return true;
     }
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TArchiveS::cntrCmdProc( XMLNode *opt )
@@ -1282,7 +1282,7 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 	    vector<string> list;
 	    messList(list);
 	    for(unsigned iA = 0; iA < list.size(); iA++)
-		opt->childAdd("el")->setAttr("id",list[iA])->setText(messAt(list[iA]).at().name());
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(trD(messAt(list[iA]).at().name()));
 	}
 	else if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR))	{ opt->setAttr("id", messAdd(opt->attr("id"))); messAt(opt->attr("id")).at().setName(opt->text()); }
 	else if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	messDel(opt->attr("id"),true);
@@ -1292,7 +1292,7 @@ void TTypeArchivator::cntrCmdProc( XMLNode *opt )
 	    vector<string> list;
 	    valList(list);
 	    for(unsigned iA = 0; iA < list.size(); iA++)
-		opt->childAdd("el")->setAttr("id",list[iA])->setText(valAt(list[iA]).at().name());
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(trD(valAt(list[iA]).at().name()));
 	}
 	else if(ctrChkNode(opt,"add",RWRWR_,"root",SARH_ID,SEC_WR))	{ opt->setAttr("id", valAdd(opt->attr("id"))); valAt(opt->attr("id")).at().setName(opt->text()); }
 	else if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	valDel(opt->attr("id"),true);
@@ -1501,7 +1501,7 @@ bool TMArchivator::chkMessOK( const string &icateg, int8_t ilvl )
    return false;
 }
 
-TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // bool status( ) - get the archiver start status.
     if(iid == "status")	return startStat();
@@ -1511,10 +1511,10 @@ TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
     if(iid == "begin")	return (int64_t)begin();
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SARH_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TMArchivator::cntrCmdProc( XMLNode *opt )

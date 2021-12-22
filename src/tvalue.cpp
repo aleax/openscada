@@ -149,7 +149,7 @@ string TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 void TValue::cntrCmdProc( XMLNode *opt )
 {
     vector<string> vLs;
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     //Service commands process
     if(a_path == "/serv/attr") {	//Attributes access
 	vlList(vLs);
@@ -319,10 +319,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText((vl.at().fld().type()==TFld::Real) ?
 		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : r2s(vl.at().getR(),6)) :
-		    ((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ? trLU(vl.at().getS(),l,u) :
+		    ((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ? trD(vl.at().getS()) :
 		    vl.at().getS()));
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String) ? trSetLU(vl.at().getS(),l,u,opt->text()) : opt->text());
+	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String) ? trDSet(vl.at().getS(),opt->text()) : opt->text());
 	    modif();
 	}
     }
@@ -839,7 +839,7 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
     //Set to archive. Set object to archive did not support
 }
 
-TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // ElTp get(int tm = 0, int utm = 0, bool sys = false) - get attribute value at time <tm:utm> and system access flag <sys>.
     //  tm, utm - the time for requested value
@@ -881,7 +881,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "arch") {
 	AutoHD<TVArchive> aobj = arch();
 	if(aobj.freeStat()) return false;
-	return new TCntrNodeObj(aobj, user);
+	return new TCntrNodeObj(aobj, user_lang);
     }
     // string descr() - get attribute description
     if(iid == "descr")	return fld().descr();
@@ -907,7 +907,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // bool isCfg() - check to a configuration field
     if(iid == "isCfg")	return isCfg();
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TVal::preDisable( int flag )

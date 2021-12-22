@@ -94,6 +94,7 @@ class TTable : public TCntrNode
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldDel"); }
 
 	// Internal requests
+	// ???? Append an option of the list of the translation languages
 	virtual void fieldFix( TConfig &cfg )	{ }
 
 	TBD &owner( ) const;
@@ -101,7 +102,7 @@ class TTable : public TCntrNode
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	// SQL specific common operations
 	virtual string getSQLVal( TCfg &cf, uint8_t RqFlg = 0 ) { return ""; }
@@ -201,7 +202,7 @@ class TBD : public TCntrNode, public TConfig
 	void save_( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
 

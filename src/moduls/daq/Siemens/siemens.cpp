@@ -42,7 +42,7 @@
 #define MOD_NAME	_("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.0"
+#define MOD_VER		"4.4.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -584,6 +584,8 @@ void TMdContr::prmEn( TMdPrm *prm, bool val )
 
 void TMdContr::regVal( const string &iaddr, bool wr )
 {
+    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Registering the value '%s'", iaddr.c_str());
+
     int db = -1, off = -1;
     char tp[11];
     if(sscanf(iaddr.c_str(),"DB%d.%i.%10s",&db,&off,tp) != 3 || db == -1 || off < 0)	return;
@@ -602,18 +604,29 @@ void TMdContr::regVal( const string &iaddr, bool wr )
 		if((acqBlks[iB].val.size()+acqBlks[iB].off-off) < blkMaxSz) {
 		    acqBlks[iB].val.insert(0, acqBlks[iB].off-off, 0);
 		    acqBlks[iB].off = off;
+
+		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Insertion the value '%s'(%d) to the block %d.%d(%d)",
+			iaddr.c_str(), ivSz, acqBlks[iB].db, acqBlks[iB].off, acqBlks[iB].val.size());
 		}
 		else acqBlks.insert(acqBlks.begin()+iB,SDataRec(db,off,ivSz));
 	    }
 	    else if((off+ivSz) > (acqBlks[iB].off+(int)acqBlks[iB].val.size())) {
-		if((off+ivSz-acqBlks[iB].off) < blkMaxSz)
+		if((off+ivSz-acqBlks[iB].off) < blkMaxSz) {
 		    acqBlks[iB].val.append((off+ivSz)-(acqBlks[iB].off+acqBlks[iB].val.size()), 0);
-		else continue;
+
+		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Appending the value '%s'(%d) to the block %d.%d(%d)",
+			iaddr.c_str(), ivSz, acqBlks[iB].db, acqBlks[iB].off, acqBlks[iB].val.size());
+		} else continue;
 	    }
 	    plcOK = true;
 	    break;
 	}
-    if(!plcOK)	acqBlks.insert(acqBlks.begin()+iB, SDataRec(db,off,ivSz));
+    if(!plcOK) {
+	acqBlks.insert(acqBlks.begin()+iB, SDataRec(db,off,ivSz));
+
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Insertion the value '%s'(%d) as the new block %d.%d(%d)",
+	    iaddr.c_str(), ivSz, acqBlks[iB].db, acqBlks[iB].off, acqBlks[iB].val.size());
+    }
     res.release();
 
     //Register to asynchronous write block
@@ -803,7 +816,7 @@ void TMdContr::getDB( int n_db, long offset, string &buffer )
 		ResAlloc res2(mod->resAPI, false);
 		if((rez=daveReadBytes(dc,((n_db>=0)?daveDB:-n_db),((n_db>=0)?n_db:0),offset,buffer.size(),NULL))) {
 		    if(rez == daveResTimeout) throw TError("ReadDB", _("Error connecting."));
-		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Error reading the block %d: %s."), n_db, daveStrerror(rez));
+		    if(messLev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error reading the block %d: %s."), n_db, daveStrerror(rez));
 		    throw TError(TError::EXT+1, "ReadDB", _("Error the DB %d: %s."), n_db, daveStrerror(rez));
 		}
 		buffer.replace(0, buffer.size(), (char*)dc->resultPointer, buffer.size());	//!!!! But assign() temporary the block size changes
@@ -883,7 +896,7 @@ void TMdContr::getDB( int n_db, long offset, string &buffer )
 	if(!er.cod) er.cod = TError::Tr_Connect;
 	//if(er.cod == TError::Tr_Connect) setCntrDelay(er.mess);
 	er.mess = i2s(er.cod) + ":" + er.mess;
-	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", er.mess.c_str());
+	if(messLev() == TMess::Debug) mess_debug(nodePath().c_str(), "%s", er.mess.c_str());
 	throw er;
     }
 }
@@ -954,7 +967,7 @@ void TMdContr::putDB( int n_db, long offset, const string &buffer )
 		ResAlloc res2(mod->resAPI, false);
 		if((rez=daveWriteBytes(dc,((n_db>=0)?daveDB:-n_db),((n_db>=0)?n_db:0),offset,buffer.size(),(char*)buffer.c_str()))) {
 		    if(rez == daveResTimeout) throw TError("WriteDB", _("Error connecting."));
-		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("Error writing the block %d: %s."), n_db, daveStrerror(rez));
+		    if(messLev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Error writing the block %d: %s."), n_db, daveStrerror(rez));
 		    throw TError(TError::EXT+1, "WriteDB", _("Error the DB %d: %s."), n_db, daveStrerror(rez));
 		}
 		break;
@@ -1028,7 +1041,7 @@ void TMdContr::putDB( int n_db, long offset, const string &buffer )
 	if(!er.cod) er.cod = TError::Tr_Connect;
 	//if(er.cod == TError::Tr_Connect) setCntrDelay(er.mess);
 	er.mess = i2s(er.cod) + ":" + er.mess;
-	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", er.mess.c_str());
+	if(messLev() == TMess::Debug) mess_debug(nodePath().c_str(), "%s", er.mess.c_str());
 	throw er;
     }
 }
@@ -1829,7 +1842,7 @@ void TMdPrm::loadDATA( bool incl )
 		loadIO(true);
 
 		// Init links
-		lCtx->chkLnkNeed = lCtx->initLnks(true);
+		lCtx->chkLnkNeed = lCtx->initLnks(/*true*/);	//!!!! Do not reconnect but that can be done in loadIO() early
 
 		// Init system attributes identifiers
 		lCtx->idFreq  = lCtx->ioId("f_frq");
@@ -2011,7 +2024,7 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
     }
 }
 
-TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
     //  id, name - new attribute id and name;
@@ -2064,7 +2077,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return true;
     }
 
-    return TParamContr::objFuncCall(iid, prms, user);
+    return TParamContr::objFuncCall(iid, prms, user_lang);
 }
 
 void TMdPrm::vlGet( TVal &val )
@@ -2206,6 +2219,8 @@ bool TMdPrm::TLogCtx::lnkInit( int num, bool toRecnt )
     map<int,SLnk>::iterator it = lnks.find(num);
     if(it == lnks.end() || it->second.addrSpec.size())	return false;
 
+    if(mess_lev() == TMess::Debug) mess_debug(((TMdPrm*)obj)->owner().nodePath().c_str(), "Requesting the link %d for value '%s'", num, it->second.addr.c_str());
+
     it->second.addrSpec = "";
     int rez = 0, db = -1, off = -1;
     char tp[11];
@@ -2215,6 +2230,8 @@ bool TMdPrm::TLogCtx::lnkInit( int num, bool toRecnt )
     { db = -daveFlags; rez += 1; }
     else return false;
     if(off < 0)	return false;
+
+    if(mess_lev() == TMess::Debug) mess_debug(((TMdPrm*)obj)->owner().nodePath().c_str(), "Initiation the link %d value '%s'", num, it->second.addr.c_str());
 
     string stp = isShort ? TSYS::strParse(TSYS::strLine(func()->io(num)->def(),0),2,"|") : tp;
     if(stp.empty() || isdigit(stp[0]))

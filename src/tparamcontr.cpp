@@ -424,10 +424,10 @@ void TParamContr::setType( const string &tpId )
     modif();
 }
 
-TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // TCntrNodeObj cntr() - get the controller node
-    if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
+    if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user_lang);
     // bool messSet( string mess, int lev, string type2Code = "OP", string cat = "") -
     //		sets of the DAQ-sourced message <mess> with the level <lev>, for the parameter.
     if(iid == "messSet" && prms.size() >= 2) {
@@ -444,10 +444,10 @@ TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, co
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TValue::objFuncCall(iid, prms, user);
+    return TValue::objFuncCall(iid, prms, user_lang);
 }
 
 void TParamContr::cntrCmdProc( XMLNode *opt )
@@ -521,7 +521,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    vector<string> c_list;
 	    list(c_list);
 	    for(unsigned iA = 0; iA < c_list.size(); iA++) {
-	        XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(at(c_list[iA]).at().name());
+	        XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(trD(at(c_list[iA]).at().name()));
 		if(!s2i(opt->attr("recurs"))) continue;
 		cN->setName(opt->name())->setAttr("path",TSYS::strEncode(opt->attr("path"),TSYS::PathEl))->setAttr("recurs","1");
 		at(c_list[iA]).at().cntrCmd(cN);

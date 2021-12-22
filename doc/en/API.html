@@ -471,7 +471,9 @@ Types (levels) of messages (enum — TMess::Type):
 <p><b>Templates:</b>
 </p>
 <ul><li> <i>_( mess )</i> — Wrapper over the translation of the messages function for the provision of the accepted by the most of the programs translation of the messages.</li>
+<li> <i>trD(base)</i> — Wrapper over the text variables dynamic translation using the translation context to the function <i>translGet()</i>.</li>
 <li> <i>trL(base,lng); trU(base,usr); trLU(base,lng,usr)</i> — Wrappers over the text variables dynamic translation functions by language and user.</li>
+<li> <i>trDSet(base,mess)</i> — Wrapper over the text variables dynamic translation set using the translation context to the function <i>translSet()</i>.</li>
 <li> <i>trSetL(base,lng,mess); trSetU(base,usr,mess); trSetLU(base,lng,usr,mess)</i> — Wrapper over the text variables dynamic translation set functions by language and user.</li>
 <li> <i>FTM(rec); FTM2(tm, utm)</i> — Get a full time of the message, in microseconds, using the two fields of time of the message structure. </li>
 <li> <i>mess_lev()</i> — The system's messages level. Often used for debug mode check (=Debug).</li>
@@ -521,21 +523,26 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>void put( const char *categ, int8_t level, const char *fmt,  ... );</i> — The message forming for the current time with the category <i>categ</i>, the <i>level</i>, the formatted message <i>fmt</i> and the followed arguments.</li>
 <li> <i>void put_( const char *categ, int8_t level, const char *fmt, ... ); void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );</i> — The message forming for the current time (selected level and debug categories are ignored) with the category <i>categ</i>, the <i>level</i>, the formatted message <i>fmt</i> and the followed arguments.</li>
 <li> <i>void get( time_t b_tm, time_t e_tm, vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;category = "", int8_t level = Debug );</i> — Get the message from the archive for the period of time <i>b_tm</i> — <i>e_tm</i> under the category template <i>category</i> and minimum level <i>level</i>. </li>
-<li> <i>string lang2CodeBase( );</i> — The language of basic variables of the  text messages in bi-symbolic  codepage(en). </li>
+<li> <i>string lang2CodeBase( );</i> — The language of basic variables of the text messages in bi-symbolic code (en).</li>
+<li> <i>string langBase( );</i> — The language-locale of basic variables and the locales list used in the project translation, separated by ';'.</li>
+<li> <i>string langToLocale( const string &amp;lang );</i> — Getting the complete locale from <i>langBase()</i> at the language <i>lang</i>.</li>
 <li> <i>bool translCfg( );</i> — The configuration translation sign, combined as "<b>lang2CodeBase().size() &amp;&amp; lang2Code()&nbsp;!= lang2CodeBase()</b>".</li>
 <li> <i>bool translDyn( bool plan = false );</i> — Mode "Dynamic translation" or the <i>plan</i> to next start.</li>
 <li> <i>bool translEnMan( );</i> — The sign "Enabled translations manager", for activation of the built translation messages index and the translation manager.</li>
 <li> <i>string translLangs( );</i> — List of translation languages, into the manager.</li>
 <li> <i>string translFld( const string &amp;lng, const string &amp;fld, bool isCfg = false );</i> — Representing the translated field name by the field name <i>fld</i> and language <i>lng</i> for configuration <i>isCfg</i> or DB.</li>
 <li> <i>bool isMessTranslable( const string &amp;vl );</i> — Checking the message <i>vl</i> for availability of it translation, has no only space, digit and punctuation symbols.</li>
-<li> <i>void setLang2CodeBase( const string &amp;vl );</i> — Setting the language of the basic message of text variables in the bi-symbolic codepage (en). </li>
+<li> <i>void setLangBase( const string &amp;vl );</i> — Setting the language-locale of basic variables and the locales list used in the project translation.</li>
 <li> <i>void setTranslDyn( bool val, bool plan = true );</i> — Setting the mode "Dynamic translation" or the <i>plan</i> to value <i>val</i> for next start.</li>
 <li> <i>void setTranslEnMan( bool vl, bool passive = false );</i> — Setting "Enabled translation manager" to value <i>vl</i> and passive mode <i>passive</i>.</li>
 <li> <i>void setTranslLangs( const string &amp;vl );</i> — Setting a list of translation languages.</li>
+<li> <i>string translGet( const string &amp;base );</i> — Getting translation for <i>base</i> text variable using the translation context.</li>
 <li> <i>string translGet( const string &amp;base, const string &amp;lang, const string &amp;src = "" ); string translGetU( const string &amp;base, const string &amp;user, const string &amp;src = "" ); string translGetLU( const string &amp;base, const string &amp;lang, const string &amp;user, const string &amp;src = "" );</i> — Getting translation for <i>base</i> text variable for language <i>lang</i> or <i>user</i> and optional source <i>src</i>.</li>
+<li> <i>string translSet( const string &amp;base, const string &amp;mess );</i> — Setting translation for <i>base</i> text variable to value <i>mess</i> using the translation context.</li>
 <li> <i>string translSet( const string &amp;base, const string &amp;lang, const string &amp;mess, bool *needReload = NULL ); string translSetU( const string &amp;base, const string &amp;user, const string &amp;mess, bool *needReload = NULL ); string translSetLU( const string &amp;base, const string &amp;lang, const string &amp;user, const string &amp;mess, bool *needReload = NULL );</i> — Setting translation for <i>base</i> text variable for language <i>lang</i> or <i>user</i> and optional source <i>src</i> to value <i>mess</i>.</li>
 <li> <i>void translReg( const string &amp;mess, const string &amp;src, const string &amp;prms = "" );</i> — Registering the translated message <i>mess</i> with source <i>src</i> and appended parameters <i>prms</i> into the translations index.</li>
 <li> <i>void translIdxCacheUpd( const string &amp;base, const string &amp;lang, const string &amp;mess, const string &amp;src );</i> — Updating the operative translation messages' index and cache in the MULTILANGUAGE-DYNAMIC mode.</li>
+<li> <i>string trCtx( const string &amp;user_lang = mess_TrModifMark, bool *hold = NULL );</i> — Getting (by default) and registering(no empty)/clearing(empty) the translation context <i>user_lang</i> bound to the call pthread. <i>hold</i> can be pointed to detect the context already registered and do not clear that.</li>
 <li> <i>static const char *labDB( ); static const char *labSecCRON( ); static const char *labSecCRONsel( ); static const char *labTaskPrior( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
 <li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
@@ -3056,9 +3063,9 @@ Named rights of access to control elements (definition):
 <li> <i>TError err_sys( const char *fmt,  ... ) const; TError err_sys( int cod, const char *fmt,  ... ) const;</i> — The error object forms for the node path as the category, the code <i>cod</i>, the formatted message <i>fmt</i> appended by the node location and followed arguments.</li>
 <li> <i>virtual TVariant objPropGet( const string &amp;id );</i> — Request of the node's property as the user's object.</li>
 <li> <i>virtual void objPropSet( const string &amp;id, TVariant val );</i> — Setting the node's property as the user's object.</li>
-<li> <i>virtual TVariant objFuncCall( const string &amp;id, vector&lt;TVariant&gt; &amp;prms );</i> — Node's function calling as the user's object.</li>
-<li> <i>int8_t	grpSize( );</i> — Number of the containers with the child nodes.</li>
-<li> <i>int8_t	grpId( const string &amp;sid );</i> — Getting the index of the group by its ID.</li>
+<li> <i>virtual TVariant objFuncCall( const string &amp;id, vector&lt;TVariant&gt; &amp;prms, const string &amp;user_lang );</i> — Node function <i>id</i> call with the parameters <i>prms</i> and for user/language <i>user_lang</i> ("{user}\n{lang}").</li>
+<li> <i>int8_t grpSize( );</i> — Number of the containers with the child nodes.</li>
+<li> <i>int8_t grpId( const string &amp;sid );</i> — Getting the index of the group by its ID.</li>
 <li> <i>virtual AutoHD&lt;TCntrNode&gt; chldAt( int8_t igr, const string &amp;name, const string &amp;user = "" ) const;</i> — Attachment to the child node <i>name</i> of the container <i>gr</i> of the user <i>user</i>.</li>
 <li> <i>virtual void chldList( int8_t igr, vector&lt;string&gt; &amp;list, bool noex = false ) const;</i> — The list of the child nodes <i>list</i> in the specified container <i>gr</i>.</li>
 <li> <i>virtual bool chldPresent( int8_t igr, const string &amp;name ) const;</i> — Check for the presence of the specified child node <i>name</i> in the container <i>gr</i>.</li></ul>

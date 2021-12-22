@@ -138,7 +138,7 @@ class TPrmTempl: public TFunction, public TConfig
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods
@@ -199,7 +199,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	void load_( TConfig *cfg );
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods

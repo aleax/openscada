@@ -228,13 +228,13 @@ void TPrmTempl::save_( )
     }
 }
 
-TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TPrmTempl::cntrCmdProc( XMLNode *opt )
@@ -293,12 +293,12 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/tmpl/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/tmpl/cfg/ID" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/tmpl/cfg/NAME") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/tmpl/cfg/DESCR") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/tmpl/cfg/MAXCALCTM") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(maxCalcTm()));
@@ -316,7 +316,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 
 	    for(int id = 0; id < ioSize(); id++) {
 		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
-		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
+		if(n_nm)	n_nm->childAdd("el")->setText(trD(io(id)->name()));
 		if(n_type)	n_type->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&(IO::FullText|IO::TransltText|IO::Selectable))<<8)));
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_attr)	n_attr->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
@@ -362,7 +362,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		    opt->setText(TSYS::strEncode(sTrm(opt->text()),TSYS::Limit,i2s(owner().owner().elTmplIO().fldAt(owner().owner().elTmplIO().fldId("ID")).len())));
 		    io(row)->setId(opt->text());
 		    break;
-		case 1:	io(row)->setName(sTrm(opt->text()));	break;
+		case 1:	io(row)->setName(trDSet(io(row)->name(),sTrm(opt->text())));	break;
 		case 2:
 		    io(row)->setType((IO::Type)(s2i(opt->text())&0xFF));
 		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::TransltText|IO::Selectable)));
@@ -917,13 +917,13 @@ void TPrmTmplLib::add( const string &id, const string &name )
     chldAdd(m_ptmpl, new TPrmTempl(id,name));
 }
 
-TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
@@ -982,19 +982,19 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/lib/cfg/ID" && ctrChkNode(opt))		opt->setText(id());
     else if(a_path == "/lib/cfg/NAME") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/lib/cfg/DESCR") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/br/tmpl_" || a_path == "/tmpl/tmpl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(at(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id").c_str(),true);

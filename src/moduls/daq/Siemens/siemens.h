@@ -95,7 +95,7 @@ class TMdPrm: public TParamContr
 	TElem *dynElCntr( )	{ return &pEl; }
 	TElem &elem( )		{ return pEl; }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 

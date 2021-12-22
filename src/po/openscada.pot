@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-14 19:00+0200\n"
+"POT-Creation-Date: 2021-12-19 18:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -583,6 +583,19 @@ msgid "Table offset, size"
 msgstr ""
 
 msgid "Data"
+msgstr ""
+
+msgid "Table is empty."
+msgstr ""
+
+#, c-format
+msgid "Row \"%s\" is not present. Are you saved the object?"
+msgstr ""
+
+msgid "The DB is in the Read only mode."
+msgstr ""
+
+msgid "Translation removed! Reload the base message."
 msgstr ""
 
 #, c-format
@@ -1858,12 +1871,12 @@ msgstr ""
 msgid "Translations"
 msgstr ""
 
-msgid "Base language of the text variables"
+msgid "Base language; locales list"
 msgstr ""
 
 msgid ""
-"Enables the multilingual support for text variables in the configuration DBs by selecting the base language.\n"
-"You can select or type here other language besides English(en), but take in your mind that all standard OpenSCADA libraries's formed for the base language English(en), so other base languages will break these DBs at change!"
+"Enables the multilingual support for text variables in the configuration DBs by entry the base language and the project whole locales (like to \"en_US.UTF-8\") list (optional) separated by ';'.\n"
+"You can entry here other language besides English(en) as the base, but take in your mind that all standard OpenSCADA libraries formed for the base language English(en), so other base languages will break these DBs at change!"
 msgstr ""
 
 msgid "dynamic translation"
@@ -2007,6 +2020,9 @@ msgstr ""
 msgid "<<<Unmatched sources>>>\n"
 msgstr ""
 
+msgid "<<<Translation changed>>>\n"
+msgstr ""
+
 #, c-format
 msgid "Clearing the equel to base translation '%s' for '%s'."
 msgstr ""
@@ -2017,6 +2033,9 @@ msgstr ""
 
 #, c-format
 msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
+msgstr ""
+
+msgid "<<<Base changed>>>\n"
 msgstr ""
 
 msgid "Transports"

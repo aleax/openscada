@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.5"
+#define MOD_VER		"2.6.6"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -588,7 +588,7 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm(true);
 }
 
-TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
     //  id, name - new attribute id and name;
@@ -641,7 +641,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return true;
     }
 
-    return TParamContr::objFuncCall(iid, prms, user);
+    return TParamContr::objFuncCall(iid, prms, user_lang);
 }
 
 void TMdPrm::calc( bool first, bool last, double frq )

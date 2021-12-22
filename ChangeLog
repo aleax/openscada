@@ -1,3 +1,45 @@
+2021-12-21 Roman (stable)
+- DOC: Document of the How to "Create multi language project" appended for downloading to offline.
+- !!!!:SYS,*,DAQ.JavaLikeCalc: Expanding the execution environment of the OpenSCADA object functions by the language,
+	for functions like to strftime():
+    - the object TCntrNodeObj and the function TCntrNode::objFuncCall() expanded in the argument "user" renaming to "user_lang"
+	with pointing language in the second line;
+    - DAQ.JavaLikeCalc: the TCntrNodeObj execution appended of the language;
+    - the base language configuration field of the MULTILANGUAGE modes expanded by list the project locales separated by ";";
+    - the lang2CodeBase() function separated to the common one langBase() and appended the function langToLocale() of obtaining
+	the complete locale at language from langBase();
+    - field of the translation manager languages moved under the data lock and is preset to langBase() languages;
+    - TSYS,TUser: the language field of the objects appended of the selection list from langBase();
+    - SYS.strftime() appended of execution from the pointed language-locale.
+- !!!!:SYS,*: Significant expanding of the MULTILANGUAGE-DYNAMIC mode:
+    - appended for the translation context at the new function TMess::trCtx() as user and language bound to the call thread;
+    - TCntrNode::cntrCmd(), Protocol.HTTP, UI.{Vision,WebVision,WebUser,WebCfg,WebCfgD} attached to use the translation context;
+    - accessing the dynamic translation moved under the new functions trD()->TMess::translGet() and trDSet()->TMess::translSet();
+    - TArchives,TDAQ,TTypeDAQ,TController,TParamContr,TFunction,TPrmTmpl,TTransports,DAQ.{BlockCalc,JavaLikeCalc},
+	Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}: appended to the dynamic translation by trD();
+    - _()->TMess::I18N() adapted in use the translation context at empty language field;
+    - the translation obtaining for the modules information switched to use the translation context;
+    - UI.{WebCfg,WebCfgD}: Adapted to the dynamic translation.
+- !!!!:SYS,BD: The MULTILANGUAGE-DYNAMIC mode and nonBASIC locales:
+    - appended of that setting after switching to different locales by the value specific dividing to "{base}\000{lang}\000{mess}"
+	and support in TMess::translGet() and TMess::translSet();
+    - prevented in mark BASIC for changes and the spare marks in whole by the additional checks;
+    - removed for the space before the change mark;
+    - BD,BD.{FireBird,MySQL,PostgreSQL,SQLite}: Removed-commented for that operation processing specific code in DB with the feature "TR";
+    - adapted commonly to the new changing conception through "{base}\000{lang}\000{mess}"
+	for which the INSERT command also adapted in copy the translation and/or BASE independently the start locale;
+    - widely tested and fixed for the translation modes: SINGLELANGUAGE, MULTILANGUAGE, MULTILANGUAGE-DYNAMIC
+- !!:FIX:SYS: Building: configure.ac: Core library version rose to 4:8:0.
+    AUTOMAKE appended of the options "1.0 subdir-objects" to prevent the subdir object warnings.
+- BD,BD.{FireBird,MySQL,PostgreSQL}: SQL SEEK,GET,SET commands some cleaned. Updated for translation the SQL common commands.
+- !:DAQ.{ModBus,OPC_UA,Siemens}: Disabled for the links reconnection after the loadIO(true) call.
+- DAQ.Siemens: Appended for the additional debugs.
+- UI.VCAEngine: The project session calculation status appended of the counter value
+    and the widget objects appended the modification counter status.
+- !!:FIX:UI.{Vision,WebVision}: Switched to the complete reloading the pages got from the page cache
+    due to the modification counter can be lost at the closing and the counter is reloading in whole.
+
+
 2021-12-04 Roman (stable)
 - !!!!:SYS,DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}: Significantly unified in moving the common SQL-code to the OpenSCADA core:
     - unification the table structure control by the structure item object TTable::TStrIt;
@@ -9,7 +51,8 @@
     - DB.MySQL: Switched to the "ANSI_QUOTES" SQL mode in the unification way.
 - !!:FIX:SYS: Building: configure.ac: Core library version rose to 4:6:0.
     !!: The module version of the subsystem "BD" rose to 24.
-    FIX: Prevented in complete removing the base messages at the last source removing, due to the source can contain not one the base message.
+    FIX: Prevented in complete removing the base messages at the last source removing, due to the source can contain not one
+	the base message.
 - !:FIX:Protocol.SelfSystem: In the input part switched to load the whole input message before checking the auth information,
     then preventing for strange error messages "Error the command format." for the message tail.
 

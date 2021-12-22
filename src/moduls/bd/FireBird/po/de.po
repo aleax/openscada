@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2019.
+# Roman Savochenko <roman@oscada.org>, 2011-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-08 19:53+0200\n"
+"POT-Creation-Date: 2021-12-08 09:56+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -69,6 +69,7 @@ msgstr "DSQL: Fehlervorbereitung: (%d)%s"
 msgid "DSQL: error describing: (%d)%s"
 msgstr "DSQL: Fehlerbeschreibung: (%d)%s"
 
+#, c-format
 msgid "Repeated errors of requesting the DB: %s."
 msgstr "Wiederholte Fehler beim Anfordern der DB: %s."
 
@@ -112,7 +113,3 @@ msgstr ""
 
 msgid "The table is empty."
 msgstr "Der Tisch ist leer."
-
-#, c-format
-msgid "The row \"%s\" is not present. Are you saved the object?"
-msgstr "Die Zeile \"%s\" ist nicht vorhanden. Sind Sie das Objekt gerettet?"

@@ -180,6 +180,9 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
     string path = ipath.empty() ? opt->attr("path") : ipath;
     string s_br = TSYS::pathLev(path, lev, true, &off);
 
+    bool trCtxHold = false;
+    if(ipath.empty() && Mess->translDyn()) Mess->trCtx(opt->attr("user")+"\n"+opt->attr("lang"), &trCtxHold);
+
     try {
 	if(!s_br.empty() && s_br[0] != '/') {
 	    AutoHD<TCntrNode> chNd;
@@ -197,14 +200,15 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	}
 	//Post the command to the node
 	if(opt->name() == "CntrReqs")
-	    for(unsigned i_n = 0; i_n < opt->childSize(); i_n++) {
-		XMLNode *nChld = opt->childGet(i_n);
+	    for(unsigned iN = 0; iN < opt->childSize(); iN++) {
+		XMLNode *nChld = opt->childGet(iN);
 		nChld->setAttr("user", opt->attr("user"))->setAttr("lang", opt->attr("lang"));
 		cntrCmd(nChld);
 		nChld->attrDel("user"); nChld->attrDel("lang");
 	    }
 	else {
 	    opt->setAttr("path", s_br);
+
 	    cntrCmdProc(opt);
 	    if(opt->attr("rez") != "0")
 		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
@@ -229,7 +233,10 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	opt->setAttr("mcat", err.cat);
 	opt->setText(err.mess);
     }
+
     opt->setAttr("path", path);
+
+    if(ipath.empty() && Mess->translDyn() && trCtxHold) Mess->trCtx("");
 }
 
 //*************************************************
@@ -855,7 +862,7 @@ TVariant TCntrNode::objPropGet( const string &id )			{ return TVariant(); }
 
 void TCntrNode::objPropSet( const string &id, TVariant val )		{ }
 
-TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // TArrayObj nodeList(string grp = "", string path = "") - child nodes list
     //  grp - nodes group
@@ -876,12 +883,12 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  sep - the symbol separator for separated string path
     if(iid == "nodeAt" && prms.size() >= 1) {
 	AutoHD<TCntrNode> nd = nodeAt(prms[0].getS(), 0, (prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0, 0, true);
-	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user));
+	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user_lang));
     }
     // TCntrNodeObj nodePrev() - get previous node
     if(iid == "nodePrev") {
 	TCntrNode *tprv = nodePrev(true);
-	if(tprv) return new TCntrNodeObj(AutoHD<TCntrNode>(tprv), user);
+	if(tprv) return new TCntrNodeObj(AutoHD<TCntrNode>(tprv), user_lang);
 	return false;
     }
     // string nodePath(string sep = "", bool from_root = true) - get the node path into OpenSCADA objects tree
@@ -1073,9 +1080,9 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    cntrCmdProc(&req);
 	    int chGrpId = grpId(tchGrp);
 	    if(chGrpId >= 0)
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
+		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    XMLNode *chN = opt->childAdd();
-		    *chN = *req.childGet(i_ch);
+		    *chN = *req.childGet(iCh);
 		    //  Connect to child and get info from it
 		    AutoHD<TCntrNode> ch = chldAt(chGrpId,chN->attr("id").empty()?chN->text():chN->attr("id"));
 		    //   Check icon

@@ -96,9 +96,13 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Program.2FSystem_generic"><span class="mw-headline-number">5</span> Program/System generic</span></h3>
-<ul><li> Revise the translation mechanism and describe it as a "How to...":</li></ul>
-<dl><dd>- append the translation matching option for automatic applying of the translation to empty items of the key message;</dd>
-<dd>- develop the possibility of copy OpenSCADA configuration parts together their translation on all available languages, useful for copy the multilanguage parts in own multilanguage libraries or projects.</dd></dl>
+<ul><li> <a href="Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">Translation and creation multi language projects</a></li></ul>
+<dl><dd> - develop the transitive dynamic translation mechanism for data sources, ie final registration and translation of messages on the side of the dynamic context of VCA execution
+<dl><dd>&nbsp;!&gt; required for dynamic values such as the status "ON", "CLOSE", ...</dd>
+<dd>&nbsp;!&gt; required to dynamize the translation of messages such as violations, actions of the operator; that is, such messages are generated separately from the dynamic values of the BASIC language, which is then parsed — the text of the message is separated without dynamics and which is then registered and translated on the station-server of the visualization</dd></dl></dd>
+<dd> - to supplement the translation manager with the function of dividing the selected message by sources and deleting messages in the table "Tr"</dd>
+<dd> - develop a mechanism for tracking the irrelevance of messages in the table "Tr"
+<dl><dd>&nbsp;?&gt; it is possible to add to the table "Tr" a field of options where to specify time of update-registration and at compilation or execution, accordingly to clear too old and updated-registered at compilation</dd></dl></dd></dl>
 <ul><li> Develop the text highlighting rules building in the comments of the custom text rules.</li>
 <li> Develop the pure demo and the TP-mode on the certificates base in the keys of the subscription on a TP-package: prevent writing and form the notification dialogues.</li>
 <li> Work out for developing, using, integration to solutions, concept of the support of the OpenSCADA project. Expand the community targeting for implementation control of:

@@ -216,7 +216,7 @@ protected:
     void load_( );
     void save_( );
     void cntrCmdProc( XMLNode *opt );		//Control interface command process
-    TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+    TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
     void postEnable( int flag );
     void preDisable( int flag );
     void postDisable( int flag );

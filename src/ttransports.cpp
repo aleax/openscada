@@ -493,7 +493,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //Process command to page
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path"), u = opt->attr("user");
     if(a_path == "/sub/transps" && ctrChkNode(opt)) {
 	vector<string>  list;
 	modList(list);
@@ -519,7 +519,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    for(unsigned iH = 0; iH < list.size(); iH++) {
 		ExtHost &host = list[iH];
 		if(nId)		nId->childAdd("el")->setText(host.id);
-		if(nNm)		nNm->childAdd("el")->setText(trLU(host.name,l,u));
+		if(nNm)		nNm->childAdd("el")->setText(trD(host.name));
 		if(nTr)		nTr->childAdd("el")->setText(host.transp);
 		if(nAddr)
 		    nAddr->childAdd("el")->setAttr("help",modPresent(host.transp)?at(host.transp).at().outAddrHelp():"")->
@@ -545,7 +545,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		host.id = opt->text();
 		extHostDel(u, opt->attr("key_id"), sysHostAcs);
 	    }
-	    else if(col == "name")	host.name = trSetLU(host.name,l,u,opt->text());
+	    else if(col == "name")	host.name = trDSet(host.name, opt->text());
 	    else if(col == "transp")	host.transp = opt->text();
 	    else if(col == "addr")	host.addr = opt->text();
 	    else if(col == "user")	host.user = opt->text();
@@ -624,7 +624,7 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD)) {
 	    inList(list);
 	    for(unsigned iA = 0; iA < list.size(); iA++)
-		opt->childAdd("el")->setAttr("id",list[iA])->setText(inAt(list[iA]).at().name());
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(trD(inAt(list[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR))	{ opt->setAttr("id", inAdd(opt->attr("id"))); inAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	inDel(opt->attr("id"),true);
@@ -633,7 +633,7 @@ void TTypeTransport::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD)) {
 	    outList(list);
 	    for(unsigned iA = 0; iA < list.size(); iA++)
-		opt->childAdd("el")->setAttr("id",list[iA])->setText(outAt(list[iA]).at().name());
+		opt->childAdd("el")->setAttr("id",list[iA])->setText(trD(outAt(list[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",STR_ID,SEC_WR))	{ opt->setAttr("id", outAdd(opt->attr("id"))); outAt(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",STR_ID,SEC_WR))	outDel(opt->attr("id"),true);
@@ -860,7 +860,7 @@ string TTransportIn::assTrO( const string &addr )
     return mAssTrO.back().at().id();
 }
 
-TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // string writeTo(string sender, string mess) - send the message <mess> to sender <sender>
     //  sender - sender address
@@ -886,10 +886,10 @@ TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, c
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" STR_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" STR_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TTransportIn::cntrCmdProc( XMLNode *opt )
@@ -1131,7 +1131,7 @@ void TTransportOut::pushLogMess( const string &vl, const string &data, int dataD
     mLogLstDt = dataDir;
 }
 
-TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // string messIO( string mess, real timeOut = 0, int inBufLen = -1 ) -
     //    sending the message <mess> through the transport with the waiting timeout <timeOut> and reading for <inBufLen> bytes.
@@ -1201,10 +1201,10 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" STR_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" STR_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TTransportOut::cntrCmdProc( XMLNode *opt )

@@ -31,7 +31,7 @@
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"0.7.1"
+#define MOD_VER		"0.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides a library of the standard mathematical functions.")
 #define LICENSE		"GPL2"
@@ -134,13 +134,13 @@ void Lib::modStop( )
     runSt = false;
 }
 
-TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant Lib::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
 {
     // ElTp {funcID}(ElTp prm1, ...) - the function {funcID} call
     //  prm{N} - {N} parameter to the function.
-    if(present(iid))    return at(iid).at().objFuncCall("call", prms, user);
+    if(present(id))    return at(id).at().objFuncCall("call", prms, user_lang);
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(id, prms, user_lang);
 }
 
 void Lib::cntrCmdProc( XMLNode *opt )

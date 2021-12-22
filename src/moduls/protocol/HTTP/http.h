@@ -55,7 +55,7 @@ class TProtIn: public TProtocolIn
 
     protected:
 	//Methods
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods

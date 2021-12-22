@@ -166,8 +166,8 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> c_list;
 	    list(c_list);
-	    for(unsigned i_a=0; i_a < c_list.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < c_list.size(); iA++)
+		opt->childAdd("el")->setAttr("id",c_list[iA])->setText(trD(at(c_list[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, NodeRemove);
