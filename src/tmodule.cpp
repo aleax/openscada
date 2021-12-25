@@ -189,12 +189,10 @@ void TModule::modInfoMainSet( const string &name, const string &type, const stri
     mModSource	= source;
 }
 
-const char *TModule::I18N( const char *mess, const char *mLang )
+string TModule::I18N( const char *mess, const char *mLang )
 {
 #ifdef HAVE_LIBINTL_H
-    const char *rez = Mess->I18N(mess, lcId.c_str(), mLang);
-    //if(!strcmp(mess,rez)) rez = Mess->I18N(mess, NULL, mLang);	//_(mess);
-    return rez;
+    return Mess->I18N(mess, lcId.c_str(), mLang);
 #else
     return mess;
 #endif

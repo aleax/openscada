@@ -98,6 +98,7 @@ extern int	limUserFile_SZ;	//[1MB...*10MB...1000MB] The files size limit at load
 				//	and the part size of the big files transferring.
 extern int	limUserIts_N;	//[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
 extern unsigned	limCacheIts_N;	//[*100...100000] The limit on count of the caching items.
+extern unsigned	limCacheIts_TM;	//[10...*60...1000] The limit on the caching items time, seconds.
 
 //Global configurable parameters
 extern int	prmStrBuf_SZ;	//[1000...*10000...1000000] Length of string buffers, no string class

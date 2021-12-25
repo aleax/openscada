@@ -57,6 +57,7 @@ uint8_t	OSCADA::limArchID_SZ = 50;
 int	OSCADA::limUserFile_SZ = 10048576;
 int	OSCADA::limUserIts_N = 1000000;
 unsigned OSCADA::limCacheIts_N = 100;
+unsigned OSCADA::limCacheIts_TM = 60;
 
 int	OSCADA::prmStrBuf_SZ = 10000;
 float	OSCADA::prmWait_DL = 0.1;
@@ -546,6 +547,7 @@ string TSYS::optDescr( )
 	"		and the part size of the big files transferring.\n"
 	"limUserIts_N	[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.\n"
 	"limCacheIts_N	[*100...100000] The limit on count of the caching items.\n"
+	"limCacheIts_TM	[10...*60...1000] The limit on the caching items time, seconds.\n"
 	"    Global configurable parameters:\n"
 	"prmStrBuf_SZ	[1000...*10000...1000000] Length of string buffers, no string class.\n"
 	"prmWait_DL	[0.001...*0.1...1] Quantum of the waiting time cycles, seconds.\n"
@@ -707,28 +709,29 @@ void TSYS::cfgFileSave( )
 void TSYS::cfgPrmLoad( )
 {
     //Global limits
-    limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genPrmGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ),"root",TBDS::OnlyCfg))));
-    limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genPrmGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ),"root",TBDS::OnlyCfg))));
-    limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genPrmGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ),"root",TBDS::OnlyCfg))));
-    limUserFile_SZ = vmax(1048576, vmin(100048576,s2i(TBDS::genPrmGet(nodePath()+"limUserFile_SZ",i2s(limUserFile_SZ),"root",TBDS::OnlyCfg))));
-    limUserIts_N = vmax(1000, vmin(1000000000,s2i(TBDS::genPrmGet(nodePath()+"limUserIts_N",i2s(limUserIts_N),"root",TBDS::OnlyCfg))));
-    limCacheIts_N = vmax(100, vmin(100000,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_N",i2s(limCacheIts_N),"root",TBDS::OnlyCfg))));
+    limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genPrmGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ)))));
+    limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genPrmGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ)))));
+    limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genPrmGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ)))));
+    limUserFile_SZ = vmax(1048576, vmin(100048576,s2i(TBDS::genPrmGet(nodePath()+"limUserFile_SZ",i2s(limUserFile_SZ)))));
+    limUserIts_N = vmax(1000, vmin(1000000000,s2i(TBDS::genPrmGet(nodePath()+"limUserIts_N",i2s(limUserIts_N)))));
+    limCacheIts_N = vmax(100, vmin(100000,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_N",i2s(limCacheIts_N)))));
+    limCacheIts_TM = vmax(10, vmin(1000,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_TM",i2s(limCacheIts_TM)))));
 
     //Global parameters
-    prmStrBuf_SZ = vmax(1000, vmin(1000000,s2i(TBDS::genPrmGet(nodePath()+"prmStrBuf_SZ",i2s(prmStrBuf_SZ),"root",TBDS::OnlyCfg))));
-    prmWait_DL = vmax(0.001, vmin(1,s2r(TBDS::genPrmGet(nodePath()+"prmWait_DL",r2s(prmWait_DL),"root",TBDS::OnlyCfg))));
-    prmWait_TM = vmax(5, vmin(10,s2i(TBDS::genPrmGet(nodePath()+"prmWait_TM",i2s(prmWait_TM),"root",TBDS::OnlyCfg))));
-    prmInterf_TM = vmax(7, vmin(15,s2i(TBDS::genPrmGet(nodePath()+"prmInterf_TM",i2s(prmInterf_TM),"root",TBDS::OnlyCfg))));
-    prmServTask_PER = vmax(1, vmin(120,s2i(TBDS::genPrmGet(nodePath()+"prmServTask_PER",i2s(prmServTask_PER),"root",TBDS::OnlyCfg))));
+    prmStrBuf_SZ = vmax(1000, vmin(1000000,s2i(TBDS::genPrmGet(nodePath()+"prmStrBuf_SZ",i2s(prmStrBuf_SZ)))));
+    prmWait_DL = vmax(0.001, vmin(1,s2r(TBDS::genPrmGet(nodePath()+"prmWait_DL",r2s(prmWait_DL)))));
+    prmWait_TM = vmax(5, vmin(10,s2i(TBDS::genPrmGet(nodePath()+"prmWait_TM",i2s(prmWait_TM)))));
+    prmInterf_TM = vmax(7, vmin(15,s2i(TBDS::genPrmGet(nodePath()+"prmInterf_TM",i2s(prmInterf_TM)))));
+    prmServTask_PER = vmax(1, vmin(120,s2i(TBDS::genPrmGet(nodePath()+"prmServTask_PER",i2s(prmServTask_PER)))));
 
     //System parameters
-    setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
+    setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()))));
     mName = TBDS::genPrmGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation);
-    mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
-    setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
-    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
-    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
+    mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB());
+    setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","").c_str(), true);
+    setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir()), true);
+    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir()), true);
+    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir()), true);
     setMainCPUs(TBDS::genPrmGet(nodePath()+"MainCPUs",mainCPUs()));
     setTaskInvPhs(s2i(TBDS::genPrmGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
     setSaveAtExit(s2i(TBDS::genPrmGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
@@ -2410,6 +2413,9 @@ void *TSYS::ServTask( void * )
 		//Config-file checking for changes (per ten seconds)
 		if(!(iCnt%10))	SYS->cfgFileScan();
 
+		//Translation cache limit per time, limCacheIts_TM(60) seconds
+		if(!(iCnt%limCacheIts_TM)) Mess->translCacheLimits(limCacheIts_TM);
+
 		//Checking for shared libraries
 		if(SYS->modSchedul().at().chkPer() && !(iCnt%SYS->modSchedul().at().chkPer()))
 		    SYS->modSchedul().at().libLoad(SYS->modDir(), true);
@@ -2420,7 +2426,7 @@ void *TSYS::ServTask( void * )
 		//Config-file checking for need to save
 		if(!(iCnt%10))	SYS->cfgFileSave();
 
-		//Subsystems calling (per 10s)
+		//Subsystems calling, per prmServTask_PER(10) seconds
 		if(!(iCnt%prmServTask_PER)) {
 		    vector<string> lst;
 		    SYS->list(lst);
@@ -3181,7 +3187,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
-	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language; locales list"),RWRWR_,"root","root",2,
+	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language - locales list"),RWRWR_,"root","root",2,
 		"tp","str", "help",_("Enables the multilingual support for text variables in the configuration DBs "
 		    "by entry the base language and the project whole locales (like to \"en_US.UTF-8\") list (optional) separated by ';'.\n"
 		    "You can entry here other language besides English(en) as the base, but take in your mind that "
@@ -3528,6 +3534,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    TSYS::strMess(_("creating or modification the configuration DBs as multilanguage ones with the pointed base language '%s'"),
 			Mess->lang2CodeBase().c_str());
 	}
+	if(stV.size() && (Mess->trMessIdx.size() || Mess->trMessCache.size()))
+	    stV += ". " + TSYS::strMess(_("Messages indexed=%d, cached=%d."), Mess->trMessIdx.size(), Mess->trMessCache.size());
 	opt->setText(stM+", "+stV);
     }
     else if(a_path == "/tr/baseLang") {
@@ -3736,14 +3744,14 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_cat = ctrMkNode("list",opt,-1,"/debug/dbgCats/cat","",RWRWR_,"root","root");
 	    XMLNode *n_prc = ctrMkNode("list",opt,-1,"/debug/dbgCats/prc","",RWRWR_,"root","root");
 
-	    MtxAlloc res(Mess->mRes, true);
+	    MtxAlloc res(Mess->dbgRes, true);
 	    for(map<string,bool>::iterator idc = Mess->debugCats.begin(); idc != Mess->debugCats.end(); idc++) {
 		if(n_cat) n_cat->childAdd("el")->setText(idc->first);
 		if(n_prc) n_prc->childAdd("el")->setText(r2s(idc->second));
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR)) {
-	    MtxAlloc res(Mess->mRes, true);
+	    MtxAlloc res(Mess->dbgRes, true);
 	    //Check for set category
 	    if((Mess->debugCats[opt->attr("key_cat")]=s2i(opt->text()))) {
 		for(vector<string>::iterator iDC = Mess->selectDebugCats.begin(); iDC != Mess->selectDebugCats.end(); ) {

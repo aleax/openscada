@@ -683,13 +683,15 @@ void Session::cntrCmdProc( XMLNode *opt )
 		XMLNode *pel = opt->childAdd("pg");
 		pel->setText(lst[iF]);
 
+		AutoHD<SessWdg> swdg = nodeAt(lst[iF], 1, 0, 0, true);
+		if(!swdg.freeStat()) pel->setAttr("pgGrp", swdg.at().attrAt("pgGrp").at().getS());
+
 		if(tm) {
-		    // Permission to view page check
-		    AutoHD<SessWdg> swdg = nodeAt(lst[iF], 1, 0, 0, true);
+		    // Checking for permission to view the page
 		    if(swdg.freeStat() ||
 			    !SYS->security().at().access(opt->attr("user"),SEC_RD,swdg.at().owner(),swdg.at().grp(),swdg.at().permit()))
 			continue;
-		    // Changed widgets list add
+		    // Adding the changed widgets list
 		    vector<string> updEl;
 		    swdg.at().getUpdtWdg("", tm, updEl);
 		    pel->setAttr("updWdg", i2s(updEl.size()));
@@ -1395,7 +1397,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 	    else {
 		ownerSess()->openUnreg(pathToClose.size()?pathToClose:addr());
 		if(!pathToClose.size()) {
-		    if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
+		    if(process() && !attrAt("pgNoOpenProc").at().getB()) mClosePgCom = true;
 		    if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
 		    pgClose();
 		    pathAsOpen = "";

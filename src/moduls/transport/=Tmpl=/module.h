@@ -31,7 +31,7 @@
 
 //!!! Individual module's translation function define. Not change it!
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 using namespace OSCADA;
 

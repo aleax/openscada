@@ -110,7 +110,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 
     //messLevel() = TMess::Debug process for selected category and categories list combining
     if(messLevel() == TMess::Debug && level == TMess::Debug) {
-	MtxAlloc res(mRes, true);
+	MtxAlloc res(dbgRes, true);
 	// Check for present into debugCats and put new
 	if(debugCats.find(categ) == debugCats.end()) {
 	    string curCatLev, tCat;
@@ -293,14 +293,11 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 	cKey = trLang+"#"+cKey;
     } else if(src.compare(0,5,"uapi:") != 0) return base;
 
-    MtxAlloc res(mRes, true);
-
-    //Request from the cache at first
-    map<string,CacheEl>::iterator itr = trMessCache.find(cKey);
-    if(itr != trMessCache.end()) { itr->second.tm = SYS->sysTm(); rez = itr->second.val; }
+    //Request from the cache at the first
+    if((rez=translCacheGet(cKey)).size()) ;
     else {
 	//Request to data source direct
-	if(src.compare(0,5,"uapi:") == 0) {	// Check/Get/Place from user API translations table
+	if(src.find("uapi:") == 0) {	// Check/Get/Place from user API translations table
 	    string srcAddrs = src.substr(5), tStrVl;
 	    if(srcAddrs.empty()) srcAddrs = SYS->workDB();
 
@@ -325,14 +322,16 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		}
 		// Create new record into the translation table of the data source
 		else if((iA+1) == addrs.rend() /*&& lang2CodeBase().size()*/) {
-		    if(lang2CodeBase().size() && lang2CodeBase() == trLang)	req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
+		    if(lang2CodeBase().size() && lang2CodeBase() == trLang)
+			req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
 		    TBDS::dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, TBDS::NoException);
 		}
 	    }
-	    trMessCache[cKey] = CacheEl(rez, SYS->sysTm());
+	    translCacheSet(cKey, rez);
 	}
 	//Check included sources from index
 	else {
+	    MtxAlloc res(mRes, true);
 	    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
 	    if(im != trMessIdx.end()) {
 		TConfig req;
@@ -360,16 +359,9 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		    }
 		}
 	    }
-	    trMessCache[cKey] = CacheEl(rez, SYS->sysTm());
-	}
+	    res.unlock();
 
-	//Cache data and limit update
-	if(trMessCache.size() > 10*(limCacheIts_N+limCacheIts_N/10)) {
-	    vector< pair<time_t,string> > sortQueue;
-	    for(map<string,CacheEl>::iterator itr = trMessCache.begin(); itr != trMessCache.end(); ++itr)
-		sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
-	    sort(sortQueue.begin(), sortQueue.end());
-	    for(unsigned iDel = 0; iDel < 10*(limCacheIts_N/10); ++iDel) trMessCache.erase(sortQueue[iDel].second);
+	    translCacheSet(cKey, rez);
 	}
     }
 
@@ -379,7 +371,20 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 string TMess::translGetU( const string &base, const string &user, const string &src )
 {
     if(!translDyn() && src.empty()) return base;
-    return translGet(base, (SYS->security().at().usrPresent(user)?SYS->security().at().usrAt(user).at().lang():lang2Code()), src);
+
+    //Requesting the cache before
+    bool ok = false;
+    string toLang = translCacheGet(user+string(1,0)+"user", &ok);
+    if(!ok && !SYS->stopSignal() && SYS->security().at().usrPresent(user) &&
+	(toLang=SYS->security().at().usrAt(user).at().lang()).size() >= 2)
+    {
+	toLang = toLang.substr(0, 2);
+	translCacheSet(user+string(1,0)+"user", toLang);
+    } else toLang = lang2Code();
+
+    return translGet(base, toLang, src);
+
+    //return translGet(base, (SYS->security().at().usrPresent(user)?SYS->security().at().usrAt(user).at().lang():lang2Code()), src);
 }
 
 string TMess::translGetLU( const string &base, const string &lang, const string &user, const string &src )
@@ -403,13 +408,13 @@ string TMess::translSet( const string &base, const string &lang, const string &m
     else if(trLang.empty())	trLang = lang2Code();
 
     if(!needReload) {
-	if(!translDyn() || lang == lang2CodeBase()) return mess;	//????
+	if(!translDyn() || lang == lang2CodeBase()) return mess;
 
 	//Implementing the combained storing in "{base}\000{lang}\000{mess}"
 	return TSYS::strParse(base,0,string(1,0)) + string(1,0) + trLang + string(1,0) + mess;
     }
 
-    if(base.empty() && mess.size())	trLang = lang2CodeBase();
+    if(base.empty() && mess.size()) trLang = lang2CodeBase();
     bool chBase = (trLang == lang2CodeBase());
 
     MtxAlloc res(mRes, true);
@@ -442,7 +447,7 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 	}
     }
     if(chBase) trMessIdx.erase(base);
-    trMessCache.clear();
+    translCacheLimits(0, "");
 
     return chBase ? mess : base;
 }
@@ -450,7 +455,20 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 string TMess::translSetU( const string &base, const string &user, const string &mess, bool *needReload )
 {
     if(!translDyn() && !needReload) return mess;
-    return translSet(base, (SYS->security().at().usrPresent(user)?SYS->security().at().usrAt(user).at().lang():lang2Code()), mess, needReload);
+
+    //Requesting the cache before
+    bool ok = false;
+    string toLang = translCacheGet(user+string(1,0)+"user", &ok);
+    if(!ok && !SYS->stopSignal() && SYS->security().at().usrPresent(user) &&
+	(toLang=SYS->security().at().usrAt(user).at().lang()).size() >= 2)
+    {
+	toLang = toLang.substr(0, 2);
+	translCacheSet(user+string(1,0)+"user", toLang);
+    } else toLang = lang2Code();
+
+    return translSet(base, toLang, mess, needReload);
+
+    //return translSet(base, (SYS->security().at().usrPresent(user)?SYS->security().at().usrAt(user).at().lang():lang2Code()), mess, needReload);
 }
 
 string TMess::translSetLU( const string &base, const string &lang, const string &user, const string &mess, bool *needReload )
@@ -489,6 +507,58 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
     }
 }
 
+string TMess::translCacheGet( const string &key, bool *ok )
+{
+    trMessCacheRes.lock();
+    string rez;
+    map<string,CacheEl>::iterator itr = trMessCache.find(key);
+    if(itr != trMessCache.end()) {
+	itr->second.tm = SYS->sysTm();
+	rez = itr->second.val;
+	if(ok) *ok = true;
+    }
+    trMessCacheRes.unlock();
+
+    return rez;
+}
+
+void TMess::translCacheSet( const string &key, const string &val )
+{
+    trMessCacheRes.lock();
+    trMessCache[key] = CacheEl(val, SYS->sysTm());
+    trMessCacheRes.unlock();
+
+    translCacheLimits();
+}
+
+void TMess::translCacheLimits( time_t tmLim, const char *clrCat )
+{
+    if(trMessCache.empty()) return;
+
+    trMessCacheRes.lock();
+
+    //Time limit and clearings
+    if(tmLim || clrCat) {
+	time_t curTm = SYS->sysTm();
+	for(map<string,CacheEl>::iterator cEl = trMessCache.begin(); cEl != trMessCache.end(); )
+	    if((tmLim && (curTm-cEl->second.tm) > tmLim) || (clrCat && TSYS::strParse(cEl->first,1,string(1,0)) == clrCat))
+		trMessCache.erase(cEl++);
+	    else ++cEl;
+    }
+
+    //Size limit
+    if(trMessCache.size() > 10*(limCacheIts_N+limCacheIts_N/10)) {
+	vector< pair<time_t,string> > sortQueue;
+	for(map<string,CacheEl>::iterator itr = trMessCache.begin(); itr != trMessCache.end(); ++itr)
+	    sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
+	sort(sortQueue.begin(), sortQueue.end());
+	for(unsigned iDel = 0; iDel < 10*(limCacheIts_N/10); ++iDel)
+	    trMessCache.erase(sortQueue[iDel].second);
+    }
+
+    trMessCacheRes.unlock();
+}
+
 void TMess::translIdxCacheUpd( const string &base, const string &lang, const string &mess, const string &src )
 {
     //printf("Updating the field '%s' translation '%s':'%s' for the base '%s'\n", src.c_str(), lang.c_str(), mess.c_str(), base.c_str());
@@ -520,7 +590,7 @@ void TMess::translIdxCacheUpd( const string &base, const string &lang, const str
     }
     // Modification the translation
     else {
-	MtxAlloc res(mRes, true);
+	MtxAlloc res(trMessCacheRes, true);
 	map<string,CacheEl>::iterator iCach = trMessCache.find(lang+"#"+base);
 	if(iCach != trMessCache.end()) {
 	    //  1. Changing available one
@@ -568,16 +638,17 @@ string TMess::selDebCats( )
 {
     string rez;
 
-    MtxAlloc res(mRes, true);
-    for(unsigned i_sdc = 0; i_sdc < selectDebugCats.size(); i_sdc++)
-	rez += selectDebugCats[i_sdc]+";";
+    MtxAlloc res(dbgRes, true);
+    for(unsigned iSdc = 0; iSdc < selectDebugCats.size(); iSdc++)
+	rez += selectDebugCats[iSdc]+";";
+    res.unlock();
 
     return rez;
 }
 
 void TMess::setSelDebCats( const string &vl )
 {
-    MtxAlloc res(mRes, true);
+    MtxAlloc res(dbgRes, true);
     debugCats.clear();
     selectDebugCats.clear();
 
@@ -666,23 +737,31 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 #endif
 }
 
-const char *TMess::I18N( const char *mess, const char *d_name, const char *mLang )
+string TMess::I18N( const char *mess, const char *d_name, const char *mLang )
 {
 #ifdef HAVE_LIBINTL_H
     if(translDyn()) {
-	string toLang;
+	//Obtaining the message language whether directly or from the user, and from the cache before
+	string rez, toLang;
 	if(mLang) toLang = mLang;
 	else {
-	    string ctx = trCtx();
-	    if((toLang=TSYS::strLine(ctx,1)).empty()) {
-		//???? Append an user locale accessing cache
-		if((toLang=TSYS::strLine(ctx,0)).size() && SYS->security().at().usrPresent(toLang) &&
-			(toLang=SYS->security().at().usrAt(toLang).at().lang()).size() >= 2)
+	    string ctx = trCtx(), toUser;
+	    if((toLang=TSYS::strLine(ctx,1)).empty() && (toUser=TSYS::strLine(ctx,0)).size()) {
+		bool ok = false;
+		toLang = translCacheGet(toUser+string(1,0)+"user", &ok);
+		if(!ok && !SYS->stopSignal() && SYS->security().at().usrPresent(toUser) &&
+		    (toLang=SYS->security().at().usrAt(toUser).at().lang()).size() >= 2)
+		{
 		    toLang = toLang.substr(0, 2);
-		else toLang = "";
+		    translCacheSet(toUser+string(1,0)+"user", toLang);
+		}
 	    }
 	}
 
+	//Obtaining the message translation from the cache
+	if((rez=translCacheGet(toLang+"#"+mess+string(1,0)+"sys")).size()) return rez;
+
+	//Obtaining the message translation from the translation DB
 	getMessRes.lock();
 	if(toLang.empty()) {
 	    setenv("LANGUAGE", "", 1);
@@ -697,8 +776,10 @@ const char *TMess::I18N( const char *mess, const char *d_name, const char *mLang
 	    getMessLng = toLang;
 	}
 
-	const char *rez = dgettext(d_name, mess);
+	rez = dgettext(d_name, mess);
 	getMessRes.unlock();
+
+	translCacheSet(toLang+"#"+mess+string(1,0)+"sys", rez);
 
 	return rez;
     }
@@ -720,25 +801,22 @@ void TMess::load( )
     if((argVl=SYS->cmdOpt("log")).size()) setLogDirect(s2i(argVl));
 
     //Load params config-file
-    setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg)));
-    setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg));
-    setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg)));
+    setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(messLevel()))));
+    setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats",selDebCats()));
+    setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(logDirect()))));
     setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
-    setLangBase(TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase",langBase(),"root",TBDS::OnlyCfg));
-    setTranslDyn(s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()),"root",TBDS::OnlyCfg)), false);
-    setTranslEnMan(translDyn() || s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg)), true);
+    setLangBase(TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase",langBase()));
+    setTranslDyn(s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()))), false);
+    setTranslEnMan(translDyn() || s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()))), true);
 }
 
 void TMess::unload( )
 {
-    mRes.lock();
-    debugCats.clear();
-    selectDebugCats.clear();
+    dbgRes.lock(); debugCats.clear(); selectDebugCats.clear(); dbgRes.unlock();
 
-    mTranslLangs = "";
-    trMessIdx.clear();
-    trMessCache.clear();
-    mRes.unlock();
+    mRes.lock(); mTranslLangs = ""; trMessIdx.clear(); mRes.unlock();
+
+    trMessCacheRes.lock(); trMessCache.clear(); trMessCacheRes.unlock();
 
     IOCharSet = "UTF-8", mMessLevel = Info, mLogDir = DIR_STDOUT|DIR_ARCHIVE;
     mConvCode = mIsUTF8 = true, mTranslDyn = mTranslDynPlan = mTranslEnMan = mTranslSet = false;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-19 18:49+0200\n"
+"POT-Creation-Date: 2021-12-25 14:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1580,6 +1580,7 @@ msgid ""
 "\t\tand the part size of the big files transferring.\n"
 "limUserIts_N\t[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.\n"
 "limCacheIts_N\t[*100...100000] The limit on count of the caching items.\n"
+"limCacheIts_TM\t[10...*60...1000] The limit on the caching items time, seconds.\n"
 "    Global configurable parameters:\n"
 "prmStrBuf_SZ\t[1000...*10000...1000000] Length of string buffers, no string class.\n"
 "prmWait_DL\t[0.001...*0.1...1] Quantum of the waiting time cycles, seconds.\n"
@@ -1871,7 +1872,7 @@ msgstr ""
 msgid "Translations"
 msgstr ""
 
-msgid "Base language; locales list"
+msgid "Base language - locales list"
 msgstr ""
 
 msgid ""
@@ -2015,6 +2016,10 @@ msgstr ""
 
 #, c-format
 msgid "creating or modification the configuration DBs as multilanguage ones with the pointed base language '%s'"
+msgstr ""
+
+#, c-format
+msgid "Messages indexed=%d, cached=%d."
 msgstr ""
 
 msgid "<<<Unmatched sources>>>\n"

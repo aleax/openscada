@@ -30,7 +30,7 @@
 #include "vca_sess.h"
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 #define rgb(r,g,b) (((r)<<16)+((g)<<8)+(b))
 

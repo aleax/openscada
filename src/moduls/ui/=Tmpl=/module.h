@@ -36,7 +36,7 @@ using namespace OSCADA;
 
 //!!! Individual module's translation function define. Not change it!
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 //!!! All module's object's include into self (individual) namespace. Change namespace for your module.
 namespace ModTmpl

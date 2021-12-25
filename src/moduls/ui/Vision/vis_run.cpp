@@ -67,7 +67,7 @@ using namespace Phonon;
 #endif
 
 #undef _
-#define _(mess) mod->I18N(mess, lang().c_str())
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 
 using namespace OSCADA_QT;
 using namespace VISION;
@@ -1139,7 +1139,8 @@ void VisRun::about( )
 	QString(_("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11")).
 	arg(mod->modInfo("Name").c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description").c_str()).
 	arg(mod->modInfo("Author").c_str()).arg(mod->modInfo("License").c_str()).
-	arg(PACKAGE_NAME).arg(VERSION).arg(Mess->I18N(PACKAGE_DESCR,NULL,lang().c_str())).arg(PACKAGE_LICENSE).arg(Mess->I18N(PACKAGE_AUTHOR,NULL,lang().c_str())).arg(PACKAGE_SITE));
+	arg(PACKAGE_NAME).arg(VERSION).arg(Mess->I18N(PACKAGE_DESCR,NULL,lang().c_str()).c_str()).
+	arg(PACKAGE_LICENSE).arg(Mess->I18N(PACKAGE_AUTHOR,NULL,lang().c_str()).c_str()).arg(PACKAGE_SITE));
 
     if(Mess->translDyn()) Mess->trCtx("");
 }
@@ -1312,7 +1313,8 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 {
     bool isSess = false;
-    src_prj = work_sess = openPgs = "";
+    string openPgs;
+    src_prj = work_sess = "";
 
     //Connect/create session
     int off = 0;
@@ -1380,7 +1382,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
     //req.childAdd("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
-    req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("tm","0")->setAttr("conId", i2s(mConId));
+    //req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("tm","0")->setAttr("conId", i2s(mConId));
     if(!cntrIfCmd(req)) {
 	// Title
 	XMLNode *pN = req.childGet(0);
@@ -1420,20 +1422,29 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	}
 
 	// Open pages list
-	pN = req.childGet(5);
+	//pN = req.childGet(5);
 	pgList.clear();
-	for(unsigned iCh = 0; iCh < pN->childSize(); iCh++) {
+	/*for(unsigned iCh = 0; iCh < pN->childSize(); iCh++) {
 	    pgList.push_back(pN->childGet(iCh)->text());
 	    callPage(pN->childGet(iCh)->text());
+	}*/
+	reqtm = 0;	//strtoul(pN->attr("tm").c_str(), NULL, 10);
+
+	//Open direct-selected page or openned before ones
+	if(openPgs.size()) {
+	    req.clear()->setName("CntrReqs")->setAttr("path", "/ses_"+work_sess);
+	    string pIt;
+	    for(int off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
+		req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
+	    if(!cntrIfCmd(req)) openPgs = "";
 	}
-	reqtm = strtoul(pN->attr("tm").c_str(), NULL, 10);
     }
 
-    QCoreApplication::processEvents();
+    //QCoreApplication::processEvents();
 
     //Start timer
     updTmMax = planePer = 0;
-    updateTimer->start(period());
+    updateTimer->start(/*period()*/);
 }
 
 void VisRun::fullUpdatePgs( )
@@ -1893,9 +1904,25 @@ void VisRun::updatePage( )
 
 	// Process the opened pages
 	pgList.clear();
-	for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
-	    pgList.push_back(req.childGet(iCh)->text());
-	    callPage(req.childGet(iCh)->text(), s2i(req.childGet(iCh)->attr("updWdg")));
+	for(unsigned iCh = 0, iCh2 = 0; iCh < req.childSize(); ++iCh) {
+	    XMLNode *chN = req.childGet(iCh);
+	    pgList.push_back(chN->text());
+
+	    // Detection the double container pages and opening the last one
+	    if(chN->attr("pgGrp").size() && chN->attr("pgGrp") != "main" && chN->attr("pgGrp") != "fl") {
+		for(iCh2 = iCh+1; iCh2 < req.childSize(); ++iCh2)
+		    if(req.childGet(iCh2)->attr("pgGrp") == chN->attr("pgGrp"))
+			break;
+		if(iCh2 < req.childSize()) {
+		    //  Force closing lost opened and included pages
+		    XMLNode reqClose("close"); reqClose.setAttr("path","/ses_"+workSess()+"/%2fserv%2fpg")->setAttr("pg", chN->text());
+		    cntrIfCmd(reqClose);
+		    continue;
+		}
+	    }
+
+	    // Opening
+	    callPage(chN->text(), s2i(chN->attr("updWdg")));
 	}
     }
     // Restore closed session of used project.
@@ -1964,21 +1991,12 @@ void VisRun::updatePage( )
 	}
     }
 
-    //Open direct-selected page or openned before ones
-    if(/*wPrcCnt == 0 &&*/ openPgs.size()) {
-	req.clear()->setName("CntrReqs")->setAttr("path", "/ses_"+work_sess);
-	string pIt;
-	for(int off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
-	    req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
-	if(!cntrIfCmd(req)) openPgs = "";
-    }
-
     wPrcCnt++;
     updPage = isResizeManual = false;
 }
 
 #undef _
-#define _(mess) mod->I18N(mess, owner()->lang().c_str())
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
 
 //* Notify: Generic notifying object.		 *
 //************************************************

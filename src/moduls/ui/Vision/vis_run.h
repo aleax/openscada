@@ -329,8 +329,7 @@ class VisRun : public QMainWindow
 	bool		mWinPosCntrSave;	//Windows position control and save
 	string 		prjSes_it,		//Project session item
 			work_sess,		//Work session
-			src_prj,		//Source project
-			openPgs;		//Pages for open after the start or at the complete connection restoring
+			src_prj;		//Source project
 	string		focusWdf;
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period

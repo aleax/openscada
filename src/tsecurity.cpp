@@ -416,9 +416,10 @@ string TUser::tbl( ) const		{ return string(owner().subId())+"_user"; }
 
 bool TUser::cfgChange( TCfg &co, const TVariant &pc )
 {
+    if(co.name() == "LANG" && co.getS() != pc.getS())	Mess->translCacheLimits(0, "user");
 #if defined(HAVE_CRYPT_H)
     //Check password at it loading and changing for plain one to generate its hash
-    if(co.name() == "PASS" && co.getS() != pc.getS() &&
+    else if(co.name() == "PASS" && co.getS() != pc.getS() &&
 	    co.getS().compare(0,3+vmin(8,name().size()),"$1$"+name().substr(0,vmin(8,name().size()))) != 0)
 	setPass(co.getS());
 #endif

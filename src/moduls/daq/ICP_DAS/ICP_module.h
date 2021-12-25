@@ -28,7 +28,7 @@
 #include <map>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 #define MaxLenReq 200
 #define TrIcpDasNm "<ICP DAS>"

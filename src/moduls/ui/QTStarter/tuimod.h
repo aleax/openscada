@@ -39,7 +39,7 @@ using namespace QtMobility;
 #endif
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 class QTimer;
 class QSplashScreen;

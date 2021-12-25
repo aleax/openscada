@@ -54,7 +54,7 @@ using namespace OSCADA_QT;
 using namespace VISION;
 
 #undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
+#define _(mess) mod->I18N(mess, lang.c_str()).c_str()
 
 //*************************************************
 //* Id and name input dialog                      *
@@ -360,7 +360,7 @@ bool UserStBar::userSel( const string &ihint )
 }
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 //*********************************************
 //* Font select dialog                        *
@@ -886,7 +886,7 @@ void SyntxHighl::highlightBlock( const QString &text )
 }
 
 #undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
+#define _(mess) mod->I18N(mess, lang.c_str()).c_str()
 
 //*************************************************
 //* Text edit widget                              *
@@ -1113,7 +1113,7 @@ void TreeComboDelegate::paint( QPainter *painter, const QStyleOptionViewItem &op
 }*/
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 //****************************************
 //* Shape widget view                    *

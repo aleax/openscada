@@ -549,10 +549,10 @@ msgid "Add a new element."
 msgstr "Добавить новый элемент."
 
 msgid "Insert a new element."
-msgstr "Вставить новый елемент."
+msgstr "Вставить новый элемент."
 
 msgid "Rename the element."
-msgstr "Переименовать елемент."
+msgstr "Переименовать элемент."
 
 #, c-format
 msgid "%s| '%s' added by the element <%s:%s>!"

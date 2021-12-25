@@ -10138,7 +10138,6 @@ rzW9GU+cIKAEVKHCOP4NrQkgmJreob8AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'Ja
 calcCnt++;
 
 if(f_start) {
-	lastInfo = lastInfo_ = "";
 	play_en = demoPlayProc.length;
 	if(!play_en)	this.infoW.attrSet("geomH",this.play.attr("geomY")+this.play.attr("geomH")-this.infoW.attr("geomY"));
 	//Checking the signal object''s presenting and creating needed
@@ -10253,11 +10252,7 @@ if(f_start) {
 }
 
 if(pgCont_pgOpenSrc != lastView) {
-	//Call the termination page in the info container only if it no change here with the view change
-	if(this.infoW.attr("pgOpenSrc").length && this.infoW.attr("pgOpenSrc") == lastInfo && lastInfo.indexOf("/pg_control/pg_terminator") < 0 &&
-			this.wdgAt(this.infoW.attr("pgOpenSrc"),true).attr("pgOpenSrc") == lastInfo_)
-		this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));
-
+	this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));
 	//Checking for SO selection change
 	curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
 	lastSO = lastView.parsePath(2).slice(3);
@@ -10311,9 +10306,6 @@ if(pgCont_pgOpenSrc != lastView) {
 
 	lastView = pgCont_pgOpenSrc;
 }
-
-lastInfo = this.infoW.attr("pgOpenSrc");
-lastInfo_ = lastInfo.length ? this.wdgAt(lastInfo,true).attr("pgOpenSrc") : "";
 
 //Cvitation button''s
 cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;

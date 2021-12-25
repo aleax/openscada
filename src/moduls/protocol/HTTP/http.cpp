@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.9"
+#define MOD_VER		"3.6.10"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -682,7 +682,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //* TProtIn                                       *
 //*************************************************
 #undef _
-#define _(mess) mod->I18N(mess, lang().c_str())
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 
 TProtIn::TProtIn( string name ) : TProtocolIn(name), mNotFull(false), KeepAlive(false), sesId(0)
 {

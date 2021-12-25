@@ -33,7 +33,7 @@
 #include "vis_shapes.h"
 
 #undef _
-#define _(mess) mod->I18N(mess, mainWin()->lang().c_str())
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
 
 using namespace VISION;
 

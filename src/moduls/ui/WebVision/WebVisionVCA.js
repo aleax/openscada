@@ -2832,21 +2832,35 @@ function makeUI( callBackRez )
 	}
 	// Processing the opened pages
 	pgList = new Array();
-	for(var i = 0; i < pgNode.childNodes.length; i++)
-	    if(pgNode.childNodes[i].nodeName == 'pg') {
-	        var prPath = pgNode.childNodes[i].textContent;
-		//  Checking for closed windows
-		var opPg = masterPage.findOpenPage(prPath);
-		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
-		    servSet(prPath, 'com=pgClose&cacheCntr', '');
-		    opPg.pwClean(true);
-		    delete opPg.parent.pages[prPath];
+	for(var iCh = 0, iCh2 = 0; iCh < pgNode.childNodes.length; ++iCh) {
+	    var chN = pgNode.childNodes[iCh];
+	    if(chN.nodeName != 'pg') continue;
+	    //  Checking for closed windows
+	    var opPg = masterPage.findOpenPage(chN.textContent);
+	    if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
+		servSet(chN.textContent, 'com=pgClose&cacheCntr', '');
+		opPg.pwClean(true);
+		delete opPg.parent.pages[chN.textContent];
+		continue;
+	    }
+
+	    //  Register the page
+	    pgList.push(chN.textContent);
+
+	    //  Detection the double container pages and opening the last one
+	    if(chN.getAttribute('pgGrp') && chN.getAttribute('pgGrp') != 'main' && chN.getAttribute('pgGrp') != 'fl') {
+		for(iCh2 = iCh+1; iCh2 < pgNode.childNodes.length; ++iCh2)
+		    if(pgNode.childNodes[iCh2].getAttribute('pgGrp') == chN.getAttribute('pgGrp'))
+			break;
+		if(iCh2 < pgNode.childNodes.length) {
+		    servSet(chN.textContent, 'com=pgClose', '');//Force closing lost opened and included pages
 		    continue;
 		}
-		//  Call page
-		pgList.push(prPath);
-		masterPage.callPage(prPath, parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
 	    }
+
+	    //  Opening
+	    masterPage.callPage(chN.textContent, parseInt(chN.getAttribute('updWdg')));
+	}
 	tmCnt_ = parseInt(pgNode.getAttribute('tm'));
 	if((tmCnt_-tmCnt) < -10) window.location.reload();	//The server or the counter restarted - reload the session
 	tmCnt = tmCnt_;

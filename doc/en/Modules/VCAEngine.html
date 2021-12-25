@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Modules/VCAEngine&amp;oldid=68856&amp;diff=69570" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.6 </td>
+<td> 7.7 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -201,7 +201,7 @@
 <ul><li> <i>pgOpen</i> — sign "The page is opened";</li>
 <li> <i>pgNoOpenProc</i> — sign "Execute the page, even if it is not opened";</li>
 <li> <i>pgOpenSrc</i> — contains the widget address or the page that opened the current page; in the case of an included container widget, here is the address of the included page; to open a page from an internal procedure it is enough to specify the address of the widget-source of opening, but for the pages type "Link" you must prefer of <a href="#UserAPI">the user API</a> function uiCmd() using to the pages managing;</li>
-<li> <i>pgGrp</i> — group of pages used to link container pages to pages, according to a common group.</li></ul>
+<li> <i>pgGrp</i> — group of pages used to link container pages to pages, according to a common group. EMPTY and the "main" group is meant of using this page as the Root-main page, so such ones will replace other Root-main pages; the "fl" group is meant of using in the "fly" windows which are suitable for multiple open and must not be traced for doubles; all other are meant for including to the containers-boxes or single opening, so they forced in checking for doubles when the last one will be opened and the previous ones be closed.</li></ul>
 <p>The logic of determining how to open pages works like this:
 </p>
 <ul><li> if the page has the group "main" or coincides with the page group in the main window or there is no page on the main window, then open the page in the main window;</li>
@@ -1239,7 +1239,7 @@ Where:
 <td> pgGrp </td>
 <td> Page: group </td>
 <td> 4 </td>
-<td> Group of the pages. Empty and the "main" group is meant of using this page as the Root-main page, so such ones will replace other Root-main pages.
+<td> Group of the pages. EMPTY and the "main" group is meant of using this page as the Root-main page, so such ones will replace other Root-main pages; the "fl" group is meant of using in the "fly" windows which are suitable for multiple open and must not be traced for doubles; all other are meant for including to the containers-boxes or single opening, so they forced in checking for doubles when the last one will be opened and the previous ones be closed.
 </td></tr>
 <tr>
 <td colspan="4"> <i>Additional attributes of the execution mode — by the session.</i><br />(Virtual attributes are not available in the widget procedure)

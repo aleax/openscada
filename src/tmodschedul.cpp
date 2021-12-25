@@ -91,8 +91,8 @@ void TModSchedul::load_( )
     //Load parameters from command line
     setChkPer(s2i(TBDS::genPrmGet(nodePath()+"ChkPer",i2s(chkPer()))));
     SYS->setModDir(TBDS::genPrmGet(nodePath()+"ModPath",SYS->modDir()), true);
-    setAllowList(TBDS::genPrmGet(nodePath()+"ModAllow",allowList(),"root",TBDS::OnlyCfg));
-    setDenyList(TBDS::genPrmGet(nodePath()+"ModDeny",denyList(),"root",TBDS::OnlyCfg));
+    setAllowList(TBDS::genPrmGet(nodePath()+"ModAllow",allowList()));
+    setDenyList(TBDS::genPrmGet(nodePath()+"ModDeny",denyList()));
 }
 
 void TModSchedul::unload( )

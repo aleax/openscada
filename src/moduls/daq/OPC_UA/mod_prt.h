@@ -31,7 +31,7 @@
 #include "libOPC_UA/libOPC_UA.h"
 
 #undef _
-#define _(mess) modPrt->I18N(mess)
+#define _(mess) modPrt->I18N(mess).c_str()
 
 using std::string;
 using std::map;
@@ -44,7 +44,7 @@ using namespace OPC;
 #define PRT_NAME	_("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.2.5"
+#define PRT_MVER	"2.2.6"
 #define PRT_AUTOR	_("Roman Savochenko")
 #define PRT_DESCR	_("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"

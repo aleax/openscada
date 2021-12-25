@@ -105,7 +105,7 @@ msgstr "Исчерпано время вычисления функции %d > %
 
 #, c-format
 msgid "Exception of creating %d items of the array."
-msgstr "Исключение создания %d елементов массива."
+msgstr "Исключение создания %d элементов массива."
 
 #, c-format
 msgid "Type %d, which is not supported by the 'Add' operation."

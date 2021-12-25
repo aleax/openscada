@@ -29,7 +29,7 @@
 #include "mess.h"
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 #define CHECK_ARH_PER 60
 
@@ -39,7 +39,7 @@
 #define MOD_NAME	_("Archiver on the file system")
 #define MOD_TYPE	SARH_ID
 #define VER_TYPE	SARH_VER
-#define MOD_VER		"3.7.4"
+#define MOD_VER		"3.7.5"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The archiver module. Provides functions for messages and values archiving to the file system.")
 #define LICENSE		"GPL2"

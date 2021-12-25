@@ -24,7 +24,7 @@
 #include <tprotocols.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 #define ERR_NO		"0"
 #define ERR_AUTH	"1"

@@ -96,7 +96,7 @@ void PrWidget::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	cntrCmdGeneric(opt);
-	cntrCmdAttributes(opt );
+	cntrCmdAttributes(opt);
 	return;
     }
 
@@ -1889,9 +1889,14 @@ bool OrigBox::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		el = root->childGet(iCh);
 		int p = s2i(el->attr("p"));
 		switch(p) {
+		    case A_PG_GRP: el->setAttr("help",
+			_("EMPTY and the \"main\" group is meant of using this page as the Root-main page, so such ones will replace other Root-main pages.\n"
+			  "The \"fl\" group is meant of using in the \"fly\" windows which are suitable for multiple open and must not be traced for doubles.\n"
+			  "All other are meant for including to the containers-boxes or single opening, so they forced in checking for doubles when the last one will be opened and the previous ones be closed."));
+			break;
 		    case A_BackColor:
-		    case A_BordColor: el->setAttr("help",Widget::helpColor());	break;
-		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
+		    case A_BordColor: el->setAttr("help", Widget::helpColor());	break;
+		    case A_BackImg: el->setAttr("help", Widget::helpImg());	break;
 		}
 	    }
 	return true;

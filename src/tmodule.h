@@ -98,7 +98,7 @@ class TModule : public TCntrNode
 	bool modFunc( const string &prot, void (TModule::**offptr)(), bool noex = false );
 
 	// Translate functions
-	const char *I18N( const char *mess, const char *mLang = NULL );
+	string I18N( const char *mess, const char *mLang = NULL );
 
 	virtual string optDescr( )	{ return ""; }
 

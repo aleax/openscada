@@ -32,7 +32,7 @@
 
 #include "resalloc.h"
 
-#define _(mess) Mess->I18N(mess)
+#define _(mess) Mess->I18N(mess).c_str()
 #define trD(base) Mess->translGet(base)
 #define trL(base,lng) Mess->translGet(base, lng)
 #define trU(base,usr) Mess->translGetU(base, usr)
@@ -115,9 +115,7 @@ class TMess
 	string codeConvIn( const string &fromCH, const string &mess )	{ return codeConv(fromCH, IOCharSet, mess); }
 	string codeConvOut( const string &toCH, const string &mess )	{ return codeConv(IOCharSet, toCH, mess); }
 
-	const char *I18N( const char *mess, const char *d_name = NULL, const char *mLang = NULL );
-	string I18Ns( const string &mess, const char *d_name = NULL, const char *mLang =NULL )
-	{ return I18N((char*)mess.c_str(), d_name, mLang); }
+	string I18N( const char *mess, const char *d_name = NULL, const char *mLang = NULL );
 
 	string lang( );
 	string lang2Code( )	{ return mLang2Code; }
@@ -158,16 +156,21 @@ class TMess
 	string translGet( const string &base, const string &lang, const string &src = "" );
 	string translGetU( const string &base, const string &user, const string &src = "" );
 	string translGetLU( const string &base, const string &lang, const string &user, const string &src = "" );
+
 	//  Translation set for <base>, <lang> | <user> and <mess>. Return base or the changed.
 	string translSet( const string &base, const string &mess );	//Getting user and language from the translation context
 	string translSet( const string &base, const string &lang, const string &mess, bool *needReload = NULL, const string &srcFltr = "" );
 	string translSetU( const string &base, const string &user, const string &mess, bool *needReload = NULL );
 	string translSetLU( const string &base, const string &lang, const string &user, const string &mess, bool *needReload = NULL );
+
 	//  Register translations. Source format:
 	//    for DB: "db:{MDB}.{DB}.{TBL}#{TrFld}"
 	//    for <cfg>: "cfg:{ObjPath}/{TBL}#{TrFld}"
 	//    for UserAPI table: "uapi:{DB}"
 	void translReg( const string &mess, const string &src, const string &prms = "" );
+	string translCacheGet( const string &key, bool *ok = NULL );
+	void translCacheSet( const string &key, const string &val );
+	void translCacheLimits( time_t tmLim = 0, const char *clrCat = NULL );
 	void translIdxCacheUpd( const string &base, const string &lang, const string &mess, const string &src );
 
 	// Getting and registering/clearing the translation context bound to the call pthread
@@ -205,7 +208,7 @@ class TMess
 	unsigned mTranslEnMan	:1;
 	unsigned mTranslSet	:1;
 
-	ResMtx	dtRes, mRes;
+	ResMtx	dtRes, mRes, dbgRes, trMessCacheRes;
 
 	MtxString	mLangBase, mLang2Code, mTranslLangs;
 

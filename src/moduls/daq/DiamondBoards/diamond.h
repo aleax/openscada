@@ -32,7 +32,7 @@
 #include "dscud.h"
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 using std::string;
 using std::vector;

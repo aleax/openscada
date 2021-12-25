@@ -1,3 +1,24 @@
+2021-12-25 Roman (stable)
+- !!!!:SYS,*: Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode:
+    - the translation cache significant extending and unification:
+	- unified in the new TMess object's functions translCacheGet(), translCacheSet(), translCacheLimits()
+	    and the own lock trMessCacheRes;
+	- extended by the message category for caching the system translations and users,
+	    used in obtaining the translation language;
+	- the cache limiting also appended by the time for what it checked in the service procedure
+	    at the new limit variable "limCacheIts_TM" period;
+	- the TUser::lang() changing appended by the user language cache clearance;
+	- the translation status appended of the message index and cache numbers.
+    - the system translation function TMess::I18N() was attached to the messages cache,
+	then they result changed to "string", also for TModule::I18N(), and updated all definitions _().
+- !!!!:FIX:SYS: The debug categories processing moved under own lock "dbgRes" instead "mRes", where the hungs are observed.
+    The genPrmGet() cleaned from the nonsense option TBDS::OnlyCfg.
+- !!!!:UI.{VCAEngine,Vision,WebVision}: The "openlist:/serv/pg" control request appended in the attribute "pgGrp" of the opened page
+	for detection several pages open in one container then open last one and close previous ones,
+	to prevent mostly the included pages all close and allow of specifying-override the need pages open.
+    !!!:UI.Vision: Refactored also for early opening the restored and specified pages in the init procedure.
+
+
 2021-12-22 Roman (stable)
 - FIX:The function TMess::I18N() prevented in the dead lock due to of the user language access embracing by the lock getMessRes.
 

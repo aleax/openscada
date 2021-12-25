@@ -27,7 +27,7 @@
 #include <tprotocols.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 #define cntBnd "----OpenSCADAFormBoundary4q2fsdFWEra345tf"
 #define CtxTmplMark	"#####CONTEXT#####"

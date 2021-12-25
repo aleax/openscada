@@ -29,7 +29,7 @@
 #include "../VCAEngine/types.h"
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 #define vrng(val,min,max) ((val) >= (min) && (val) <= (max))
 

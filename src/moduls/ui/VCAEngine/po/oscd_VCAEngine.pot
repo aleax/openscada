@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-20 09:50+0200\n"
+"POT-Creation-Date: 2021-12-25 16:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -941,6 +941,12 @@ msgid "Page: source of the opening"
 msgstr ""
 
 msgid "Page: group"
+msgstr ""
+
+msgid ""
+"EMPTY and the \"main\" group is meant of using this page as the Root-main page, so such ones will replace other Root-main pages.\n"
+"The \"fl\" group is meant of using in the \"fly\" windows which are suitable for multiple open and must not be traced for doubles.\n"
+"All other are meant for including to the containers-boxes or single opening, so they forced in checking for doubles when the last one will be opened and the previous ones be closed."
 msgstr ""
 
 #, c-format
