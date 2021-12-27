@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.2"
+#define MOD_VER		"4.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -430,19 +430,18 @@ void MTable::fieldStruct( TConfig &cfg )
     }
 }
 
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 {
     bool next = false;
 
     if(tblStrct.empty()) throw err_sys(_("Table is empty."));
 
-    bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
-	 isVarTextTransl = Mess->translCfg();
+    bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty());	//Only for append no present fields
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    string pr_keys, ls;
+    string pr_keys, ls, langLs = ilangLs;
     for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
 	TCfg &u_cfg = cfg.cfg(cf_el[iCf]);
 
@@ -486,18 +485,24 @@ void MTable::fieldFix( TConfig &cfg )
 	    fieldPrmSet(u_cfg, (iCf>0)?cf_el[iCf-1]:"", ls);
 	}
 	//Check other languages
-	if((u_cfg.fld().flg()&TFld::TransltText) && !u_cfg.noTransl()) {
-	    bool col_cur = false;
+	if(u_cfg.fld().flg()&TFld::TransltText) {
+	    size_t pos = 0;
+	    //  Change for present translations
 	    for(unsigned iC = iFld; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC].nm.size() > 3 && tblStrct[iC].nm.substr(2) == ("#"+cf_el[iCf])) {
 		    if(tblStrct[iC].tp != f_tp && !appMode) {
 			ls += (ls.size()?", CHANGE `":" CHANGE `") + TSYS::strEncode(tblStrct[iC].nm,TSYS::SQL) + "` `" + TSYS::strEncode(tblStrct[iC].nm,TSYS::SQL) + "`";
 			fieldPrmSet(u_cfg, (iCf>0)?cf_el[iCf-1]:"", ls);
 		    }
-		    if(tblStrct[iC].nm.compare(0,2,Mess->lang2Code()) == 0) col_cur = true;
+
+		    if((pos=langLs.find(tblStrct[iC].nm.substr(0,2)+";")) != string::npos)
+			langLs.replace(pos, 3, "");
 		}
-	    if(!col_cur && isVarTextTransl) {
-		ls += (ls.size()?", ADD `":" ADD `") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iCf],TSYS::SQL) + "`";
+
+	    //  Append translation for new languages
+	    string toLang;
+	    for(int off = 0; (toLang=TSYS::strParse(langLs,0,";",&off)).size(); ) {
+		ls += (ls.size()?", ADD `":" ADD `") + TSYS::strEncode(toLang+"#"+cf_el[iCf],TSYS::SQL) + "`";
 		fieldPrmSet(u_cfg, (iCf>0)?cf_el[iCf-1]:"", ls);
 	    }
 	}
@@ -506,8 +511,9 @@ void MTable::fieldFix( TConfig &cfg )
     for(unsigned iFld = 0, iCf; iFld < tblStrct.size() && !appMode; iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld].nm ||
-		    ((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) && !cfg.cfg(cf_el[iCf]).noTransl() &&
-		    tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld].nm.compare(0,2,Mess->lang2CodeBase()) != 0))
+		    // Pass all the column translation
+		    ((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) &&
+			tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.substr(2) == ("#"+cf_el[iCf])))
 		break;
 	if(iCf >= cf_el.size())
 	    ls += (ls.size()?", DROP `":" DROP `") + TSYS::strEncode(tblStrct[iFld].nm,TSYS::SQL) + "`";

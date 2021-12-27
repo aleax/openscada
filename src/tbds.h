@@ -94,8 +94,7 @@ class TTable : public TCntrNode
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldDel"); }
 
 	// Internal requests
-	// ???? Append an option of the list of the translation languages
-	virtual void fieldFix( TConfig &cfg )	{ }
+	virtual void fieldFix( TConfig &cfg, const string &langLs = "" )	{ }
 
 	TBD &owner( ) const;
 

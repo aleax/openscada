@@ -72,7 +72,7 @@ class MTable : public TTable
 	//!!! Post disable processing function
 	void postDisable( int flag );
 	//!!! The table structure fixing function to the field
-	void fieldFix( TConfig &cfg );
+	void fieldFix( TConfig &cfg, const string &langLs = "" );
 	//!!! The table structure obtain
 	void getStructDB( string name, vector< vector<string> > &tblStrct );
 

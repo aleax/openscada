@@ -10175,7 +10175,7 @@ if(f_start) {
 		soNmSz = soLstS[iSO].nmSz*soSymbSz + soInterSpecX;
 		if(!row2 && (row1w+soNmSz) < soWdth)		row1w += soNmSz, row1++;
 		else if((row2w+soNmSz) < soWdth)			row2w += soNmSz, row2++;
-		else continue;	//Too more and long SO
+		else continue;	//Too many and long SO
 		if(curSO != 1)	this.wdgAdd("so"+curSO, soLstS[iSO].nm, this.attr("parent")+"/wdg_so1");
 
 		soW = this["wdg_so"+curSO];
@@ -10251,8 +10251,8 @@ if(f_start) {
 	}
 }
 
+toClearCntrPnl = false;
 if(pgCont_pgOpenSrc != lastView) {
-	this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));
 	//Checking for SO selection change
 	curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
 	lastSO = lastView.parsePath(2).slice(3);
@@ -10334,16 +10334,20 @@ if((calcCnt%f_frq) == 0) {
 }
 
 //Events process
-for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; ) {
-	if(sval == "ws_CombChange:/pgSel" && (tPg=pgSel_value.match("\\((.+)\\)$")).length)
+for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; )
+	if(sval == "ws_CombChange:/pgSel" && (tPg=pgSel_value.match("\\((.+)\\)$")).length) {
 		this.ownerSess().uiCmd("open", "/pg_so/"+pgCont_pgOpenSrc.parsePath(2)+"/"+pgCont_pgOpenSrc.parsePath(3)+"/pg_"+tPg[1], this.attr("path"));
 		//this[pgCont_pgOpenSrc.parsePath(2)][pgCont_pgOpenSrc.parsePath(3)]["pg_"+tPg[1]].attrSet("pgOpen",true);
+		toClearCntrPnl = true;
+	}
 	else if(sval == "ws_BtPress:/cvt_light")	alarmSt = 0x1000001;
 	else if(sval == "ws_BtPress:/cvt_alarm")	alarmSt = 0x1000002;
 	else if(sval == "ws_BtPress:/cvt_sound")	alarmSt = 0x1000004;
-	else ev_rez += sval+"\n";
-}
-event = ev_rez;
+	else if(sval.parse(0,":") == "ws_BtRelease" && ((tVl=sval.parse(1,":")) == "/prev" || tVl == "/next" || tVl.indexOf("/so") == 0 || tVl.indexOf("/go_view") == 0))
+		toClearCntrPnl = true;
+
+if(toClearCntrPnl)
+	this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));
 
 //Demo play process
 if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
@@ -10364,7 +10368,7 @@ if(play_value) {
 if((tVl=defUser.toInt()) && (tVl2=defUser.parse(1,"-")).length) {
 	if((SYS.time()-this.ownerSess().userActTm()) < tVl*60)	userSetVis = "";
 	else if(this.ownerSess().reqUser() != tVl2.parse(0,":"))	userSetVis = tVl2;
-}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1630247900);
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1640525375);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -17667,7 +17671,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.4.0
+Version: 2.4.1
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17695,8 +17699,8 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.4.0
-Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
+Версія: 2.4.1
+Ліцензія: GPLv2<!>','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
 - область кнопок-индикаторов объектов сигнализации (вверху);
@@ -17725,8 +17729,8 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.4.0
-Лицензия: GPLv2','','','','');
+Версия: 2.4.1
+Лицензия: GPLv2<!>','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','backColor','gray',96,'','','','','','','','','','');
@@ -28399,7 +28403,7 @@ INSERT INTO wlb_Main_uio VALUES('anShow','pDscr','Parameter: description',131333
 INSERT INTO wlb_Main_uio VALUES('anShow1','pDscr','Parameter: description',131333,'',10,'Parameter|DESCR','','','Параметр: опис','','','Параметр: описание','','','','','Параметар: опис','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify0','Notification: type 0 (Light)',131205,'//name=Light
 //ico=aLight',0,'','','','Повідомлення: тип 0 (Світло)','','','Уведомление: тип 0 (Свет)','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify1','Notification: type 1 (Buzzer)',131205,'//flags=notify|resource
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','notify1','Notification: type 1 (Buzzer)',131205,'//flags=notify0|resource
 //name=Buzzer
 //ico=aAlarm
 //resStatic=ntf1

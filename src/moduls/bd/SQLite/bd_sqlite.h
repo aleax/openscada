@@ -54,7 +54,7 @@ class MTable : public TTable
 	void fieldSet( TConfig &cfg );
 	void fieldDel( TConfig &cfg )	{ fieldSQLDel(cfg); }
 
-	void fieldFix( TConfig &cfg );
+	void fieldFix( TConfig &cfg, const string &langLs = "" );
 
 	MBD &owner( ) const;
 

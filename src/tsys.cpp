@@ -726,7 +726,7 @@ void TSYS::cfgPrmLoad( )
 
     //System parameters
     setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()))));
-    mName = TBDS::genPrmGet(nodePath()+"StName",name(),"root",TBDS::UseTranslation);
+    mName = TBDS::genPrmGet(nodePath()+"StName", name(), "root", TBDS::UseTranslation);
     mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB());
     setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","").c_str(), true);
     setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir()), true);

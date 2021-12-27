@@ -33,7 +33,7 @@
 #define MOD_NAME	_("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.2"
+#define MOD_VER		"4.0.3"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -355,18 +355,17 @@ void MTable::fieldSet( TConfig &cfg )
     fieldSQLSet(cfg);
 }
 
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 {
     bool toUpdate = false,
-	 appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !tblStrct.empty()),	//Only for append no present fields
-	 isVarTextTransl = Mess->translCfg();
+	 appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !tblStrct.empty());	//Only for append no present fields
 
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
     //Create request variables
-    string all_flds, pr_keys, tpCfg, ls;
+    string all_flds, pr_keys, tpCfg, ls, langLs = ilangLs;
 
     //Curent context copy list
     if(appMode) {
@@ -380,7 +379,7 @@ void MTable::fieldFix( TConfig &cfg )
 	}
     }
 
-    //Check for need append or modify
+    //Check for need to append or modify
     for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
 	TCfg &cf = cfg.cfg(cf_el[iCf]);
 	// Check for update needs
@@ -422,29 +421,35 @@ void MTable::fieldFix( TConfig &cfg )
 	}
 
 	// Other languages for translation process
-	if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
-	    bool col_cur = false;
+	if(cf.fld().flg()&TFld::TransltText) {
+	    size_t pos = 0;
+	    //  Copy for present translations
 	    for(unsigned iC = 0; iC < tblStrct.size(); iC++)
 		if(tblStrct[iC].nm.size() > 3 && tblStrct[iC].nm.substr(2) == ("#"+cf_el[iCf])) {
 		    all_flds += ",\"" + TSYS::strEncode(tblStrct[iC].nm,TSYS::SQL,"\"") + "\"";
 		    ls += ",\"" + TSYS::strEncode(tblStrct[iC].nm,TSYS::SQL,"\"") + "\" " + tpCfg;
-		    if(tblStrct[iC].nm.compare(0,2,Mess->lang2Code()) == 0) col_cur = true;
+
+		    if((pos=langLs.find(tblStrct[iC].nm.substr(0,2)+";")) != string::npos)
+			langLs.replace(pos, 3, "");
 		}
-	    if(!col_cur && isVarTextTransl) {
-		toUpdate = true;
-		ls += ",\"" + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[iCf],TSYS::SQL,"\"") + "\" " + tpCfg;
-	    }
+
+	    //  Append translation for new languages
+	    if(langLs.size()) toUpdate = true;
+	    string toLang;
+	    for(int off = 0; (toLang=TSYS::strParse(langLs,0,";",&off)).size(); )
+		ls += ",\"" + TSYS::strEncode(toLang+"#"+cf_el[iCf],TSYS::SQL,"\"") + "\" " + tpCfg;
 	}
 	// Primary key
 	else if(cf.fld().flg()&TCfg::Key && !appMode)
 	    pr_keys += (pr_keys.size()?",\"":"\"") + TSYS::strEncode(cf_el[iCf],TSYS::SQL,"\"") + "\"";
     }
-    //Check deleted fields
+    //Checking for deleted fields
     for(unsigned iFld = 0, iCf; iFld < tblStrct.size() && !toUpdate && !appMode; iFld++) {
 	for(iCf = 0; iCf < cf_el.size(); iCf++)
 	    if(cf_el[iCf] == tblStrct[iFld].nm ||
-		    ((cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText) && !cfg.cfg(cf_el[iCf]).noTransl() &&
-		    tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.substr(2) == ("#"+cf_el[iCf]) && tblStrct[iFld].nm.compare(0,2,Mess->lang2Code()) != 0))
+		    // Pass all the column translation
+		    (cfg.cfg(cf_el[iCf]).fld().flg()&TFld::TransltText &&
+			tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.substr(2) == ("#"+cf_el[iCf])))
 		break;
 	if(iCf >= cf_el.size()) toUpdate = true;
     }
@@ -454,8 +459,9 @@ void MTable::fieldFix( TConfig &cfg )
     //The copy is needed in save to the temporary table
     if(all_flds.size()) {
 	string req = "CREATE TEMPORARY TABLE 'temp_" + TSYS::strEncode(name(),TSYS::SQL,"'") + "'(" + all_flds + ");"
-	      "INSERT INTO 'temp_" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' SELECT " + all_flds + " FROM '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "';"
-	      "DROP TABLE '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "';";
+	    "INSERT INTO 'temp_" + TSYS::strEncode(name(),TSYS::SQL,"'") + "' "
+	    "SELECT " + all_flds + " FROM '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "';"
+	    "DROP TABLE '" + TSYS::strEncode(name(),TSYS::SQL,"'") + "';";
 	owner().sqlReq(req, NULL, true);
     }
 

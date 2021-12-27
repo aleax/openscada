@@ -267,15 +267,16 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 			// Checking for the field's tag, to store big values
 			if(!isPresent && (fnd=el->childGet(cf_el[iEl],0,true))) { vl = fnd->text(true); isPresent = true; }
 			// Checking for the translation
-			if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
+			if(cf.fld().flg()&TFld::TransltText && !cf.noTransl()) {
 			    vl_tr = "";
-			    if(Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) {
+			    if(!Mess->translDyn()) {
 				vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
 				// Checking for the field's tag, to store big values
-				if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
+				if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true)))
+				    vl_tr = fnd->text(true);
 			    }
 			    if(!cf.extVal()) {
-				cf.setS((vl_tr.size() && !Mess->translDyn()) ? vl_tr : vl);
+				cf.setS(vl_tr.size() ? vl_tr : vl);
 				Mess->translReg(vl, "cfg:"+path+"#"+cf_el[iEl]);
 			    }
 			    else {
@@ -284,10 +285,11 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 				cf.setS("cfg:"+path+"#"+cf_el[iEl], TCfg::ExtValThree);
 			    }
 			}
-			else if(isPresent)	cf.setS(vl);
+			else if(isPresent) cf.setS(vl);
 			else cf.toDefault(true);
 			// Extended context
-			if(localCfgCtx && cf.isKey() && cf.extVal())	cf.setS(el->attr(cf_el[iEl]+"_ext"), TCfg::ExtValTwo);
+			if(localCfgCtx && cf.isKey() && cf.extVal())
+			    cf.setS(el->attr(cf_el[iEl]+"_ext"), TCfg::ExtValTwo);
 		    }
 		    return true;
 		}
@@ -338,11 +340,22 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
 	}
 
 	// Configuration File generic parameters
+	// ???? Implement in the common context or implement the "cfgPrm:" source
 	if(flags&CfgPrm && nd) {
-	    XMLNode *ndTr = NULL;
-	    if(flags&UseTranslation && Mess->lang2Code().size())
-		ndTr = SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code());
-	    cfg.cfg("val").setS((ndTr&&ndTr->text().size()) ? ndTr->text(true) : nd->text(true));
+	    TCfg &cf = cfg.cfg("val");
+	    vl = nd->text(true), vl_tr = "";
+	    if(flags&UseTranslation) {
+		if(!Mess->translDyn() && (nd=SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code())))
+		    vl_tr = nd->text(true);
+		if(!cf.extVal()) Mess->translReg(vl, "cfgPrm:"+path);
+		else {
+		    cf.setS(vl, TCfg::ExtValOne);
+		    cf.setS(vl_tr, TCfg::ExtValTwo);
+		    cf.setS("cfgPrm:"+path, TCfg::ExtValThree);
+		}
+	    }
+	    cf.setS(vl_tr.size() ? vl_tr : vl);
+
 	    return true;
 	}
 	// Tables representing - scan fields and fill Configuration
@@ -361,15 +374,16 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
 			//  Checking for the field's tag, to store big values
 			if(!isPresent && (fnd=el->childGet(cf_el[iEl],0,true))) { vl = fnd->text(true); isPresent = true; }
 			//  Checking for the translation
-			if((cf.fld().flg()&TFld::TransltText) && !cf.noTransl()) {
+			if(cf.fld().flg()&TFld::TransltText && !cf.noTransl()) {
 			    vl_tr = "";
-			    if(Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) {
+			    if(!Mess->translDyn()) {
 				vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
 				//  Checking for the field's tag, to store big values
-				if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
+				if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true)))
+				    vl_tr = fnd->text(true);
 			    }
 			    if(!cf.extVal()) {
-				cf.setS((vl_tr.size() && !Mess->translDyn()) ? vl_tr : vl);
+				cf.setS(vl_tr.size() ? vl_tr : vl);
 				Mess->translReg(vl, "cfg:"+path+"#"+cf_el[iEl]);
 			    }
 			    else {
@@ -378,10 +392,11 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
 				cf.setS("cfg:"+path+"#"+cf_el[iEl], TCfg::ExtValThree);
 			    }
 			}
-			else if(isPresent)	cf.setS(vl);
+			else if(isPresent) cf.setS(vl);
 			else cf.toDefault(true);
 			//  Extended context
-			if(localCfgCtx && cf.isKey() && cf.extVal())	cf.setS(el->attr(cf_el[iEl]+"_ext"), TCfg::ExtValTwo);
+			if(localCfgCtx && cf.isKey() && cf.extVal())
+			    cf.setS(el->attr(cf_el[iEl]+"_ext"), TCfg::ExtValTwo);
 		    }
 		    return true;
 		}
@@ -440,16 +455,24 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 
 	// Configuration File generic parameters
 	if(flags&CfgPrm && nd) {
+	    string sval = cfg.cfg("val").getS(), toLang = Mess->lang2Code(), tVl;
+
+	    // Translation
+	    bool isTransl = flags&UseTranslation;
+	    if(Mess->translDyn() && (tVl=TSYS::strParse(sval,1,string(1,0))).size()) {
+		toLang = tVl;
+		sval = TSYS::strParse(sval, 2, string(1,0));
+		isTransl = (isTransl && toLang != Mess->lang2CodeBase());
+	    } else isTransl = (isTransl && Mess->translCfg() && toLang != Mess->lang2CodeBase());
+
 	    XMLNode *ndTr = NULL;
-	    if(flags&UseTranslation && Mess->lang2Code().size())
-		ndTr = SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code(), true);
-	    if(ndTr) ndTr->setText(cfg.cfg("val").getS(), true);
-	    if(nd && (!ndTr || nd->text().empty())) nd->setText(cfg.cfg("val").getS(), true);
+	    if(isTransl) ndTr = SYS->cfgNode(SYS->id()+"/"+path+"_"+toLang, true);
+	    if(ndTr) ndTr->setText(sval, true);
+	    if(nd && (!ndTr || nd->text(true).empty())) nd->setText(sval, true);
 	    SYS->modifCfg();
 	    return true;
 	}
 	// Tables representing
-	// ???? Append the MULTILANGUAGE support code from fieldSQLSet()
 	else if(nd) {
 	    cfg.cfgList(cf_el);
 	    if(nd->name() != "tbl" && !(isCfgCtx && !path.size())) nd->setName("tbl");
@@ -477,29 +500,39 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			continue;
 		    }
 
-		    bool isTransl = (cf.fld().flg()&TFld::TransltText && !cf.noTransl() && Mess->translCfg());
-		    if(isCreate || !isTransl) {
-			if(localCfgCtx && cf.isKey() && cf.extVal())	wel->setAttr(vnm+"_ext", cf.getS(TCfg::ExtValTwo));
-			if(cf.getS().size() < 100) {
-			    wel->setAttr(vnm, cf.getS());
+		    // Translation
+		    string sval = cf.getS(), toLang = Mess->lang2Code(), tVl;
+		    bool isTransl = cf.fld().flg()&TFld::TransltText;
+		    if(Mess->translDyn() && (tVl=TSYS::strParse(sval,1,string(1,0))).size()) {
+			toLang = tVl;
+			sval = TSYS::strParse(sval, 2, string(1,0));
+			isTransl = (isTransl && toLang != Mess->lang2CodeBase());
+		    } else isTransl = (isTransl && Mess->translCfg() && toLang != Mess->lang2CodeBase());
+
+		    //bool isTransl = (cf.fld().flg()&TFld::TransltText && !cf.noTransl() && Mess->translCfg());
+		    if(isCreate || !isTransl || cf.noTransl()) {
+			if(localCfgCtx && cf.isKey() && cf.extVal())
+			    wel->setAttr(vnm+"_ext", cf.getS(TCfg::ExtValTwo));
+			if(sval.size() < 100) {
+			    wel->setAttr(vnm, sval);
 			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 			}
 			else {
 			    if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			    fnd->setText(cf.getS(), true);
+			    fnd->setText(sval, true);
 			    wel->setAttr(vnm, "");
 			}
 		    }
-		    if(isTransl) {
-			vnm = cf_el[iEl]+"_"+Mess->lang2Code();
-			if(cf.getS().size() < 100) {
-			    wel->setAttr(vnm, cf.getS());
+		    if(isTransl && !cf.noTransl()) {
+			vnm = cf_el[iEl]+"_"+toLang;
+			if(sval.size() < 100) {
+			    wel->setAttr(vnm, sval);
 			    //wel->setAttr(vnm, (Mess->translDyn()?trL(cf.getS(),Mess->lang2Code()):cf.getS()));
 			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 			}
 			else {
 			    if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			    fnd->setText(cf.getS(), true);
+			    fnd->setText(sval, true);
 			    wel->setAttr(vnm, "");
 			}
 		    }
@@ -1381,7 +1414,7 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
     for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
 	sid = tblStrct[iFld].nm;
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
+	if(!u_cfg && !Mess->translDyn() && sid.find(Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
@@ -1429,7 +1462,7 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
 	sid = (*tbl)[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg) setSQLVal(*u_cfg, (*tbl)[row][iFld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && (*tbl)[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	else if(trPresent && sid.find(Mess->lang2Code()+"#") == 0 && (*tbl)[row][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
 	    setSQLVal(*u_cfg, (*tbl)[row][iFld], true);
     }
 
@@ -1450,7 +1483,7 @@ void TTable::fieldSQLGet( TConfig &cfg )
     for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
 	sid = tblStrct[iFld].nm;
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
+	if(!u_cfg && !Mess->translDyn() && sid.find(Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TFld::TransltText)) continue;
 	    trPresent = true;
@@ -1475,7 +1508,7 @@ void TTable::fieldSQLGet( TConfig &cfg )
 	sid = tbl[0][iFld];
 	TCfg *u_cfg = cfg.at(sid, true);
 	if(u_cfg) setSQLVal(*u_cfg, tbl[1][iFld]);
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	else if(trPresent && sid.find(Mess->lang2Code()+"#") == 0 && tbl[1][iFld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
 	    setSQLVal(*u_cfg, tbl[1][iFld], true);
     }
 }
@@ -1499,16 +1532,12 @@ void TTable::fieldSQLSet( TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //Check for translation present
-    bool trPresent = Mess->translCfg(), trDblDef = false;
+    bool trPresent = Mess->translCfg();
     for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
-	if(trPresent && (!Mess->translCfg() || trDblDef)) break;
+	if(trPresent && !Mess->translCfg()) break;
 	sid = tblStrct[iFld].nm;
-	if(sid.size() > 3) {
-	    if(!trPresent && sid.size() > 3 && sid[2] == '#' /*!Mess->translDyn() && sid.find(Mess->lang2Code()+"#") == 0*/) trPresent = true;
-	    if(Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.find(Mess->lang2CodeBase()+"#") == 0) trDblDef = true;
-	}
+	if(sid.size() > 3 && !trPresent && sid.size() > 3 && sid[2] == '#' /*!Mess->translDyn() && sid.find(Mess->lang2Code()+"#") == 0*/) trPresent = true;
     }
-    if(trDblDef && !cfg.reqKeys()) fieldFix(cfg);
 
     //Get the available fields list
     // Add key list to queue
@@ -1534,7 +1563,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
     }
 
     //Query for presence detect or the current data
-    string req, ls, ls2, sval, tVl;
+    string req, ls, ls2, sval, tVl, langLs;
     if(trPresent)
 	req = "SELECT * FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" WHERE " + req_where + ";";
     else if(!isForceUpdt)
@@ -1567,6 +1596,8 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    }
 		    isTransl = (isTransl && toLang != Mess->lang2CodeBase());
 		} else isTransl = (isTransl && trPresent && toLang != Mess->lang2CodeBase());
+
+		if(isTransl && langLs.find(toLang+";") == string::npos) langLs += toLang+";";
 
 		// Main values setting
 		if(u_cfg.isKey() || u_cfg.view()) {
@@ -1607,14 +1638,14 @@ void TTable::fieldSQLSet( TConfig &cfg )
 
 		// Translation
 		bool isTransl = u_cfg.fld().flg()&TFld::TransltText;
-		if(Mess->translDyn()) {
-		    if((tVl=TSYS::strParse(svalRAW,1,string(1,0))).size()) {
-			toLang = tVl; tVl = svalRAW;
-			u_cfg.setS((svalRAW=TSYS::strParse(svalRAW,2,string(1,0)))); sval = getSQLVal(u_cfg);
-			u_cfg.setS(tVl);
-			isTransl = (isTransl && toLang != Mess->lang2CodeBase());
-		    } else continue;	//No changed translated fields
+		if(Mess->translDyn() && (tVl=TSYS::strParse(svalRAW,1,string(1,0))).size()) {
+		    toLang = tVl; tVl = svalRAW;
+		    u_cfg.setS((svalRAW=TSYS::strParse(svalRAW,2,string(1,0)))); sval = getSQLVal(u_cfg);
+		    u_cfg.setS(tVl);
+		    isTransl = (isTransl && toLang != Mess->lang2CodeBase());
 		} else isTransl = (isTransl && trPresent && toLang != Mess->lang2CodeBase());
+
+		if(isTransl && langLs.find(toLang+";") == string::npos) langLs += toLang+";";
 
 		//  Clearing all the translation at setting no translable message
 		if(isTransl && (u_cfg.noTransl() || (svalRAW.size() && !Mess->isMessTranslable(svalRAW)))) {
@@ -1709,7 +1740,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 	    err.mess = err.mess + " " + _("The DB is in the Read only mode.");
 	    throw;
 	}
-	fieldFix(cfg);
+	fieldFix(cfg, langLs);
 	owner().sqlReq(req, NULL, true);
     }
 

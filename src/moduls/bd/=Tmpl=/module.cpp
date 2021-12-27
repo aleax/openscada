@@ -520,7 +520,7 @@ void MTable::fieldDel( TConfig &cfg )
 }
 
 //!!! The table structure fixing function to the field
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, const string &langLs )
 {
     owner().transCommit();
 

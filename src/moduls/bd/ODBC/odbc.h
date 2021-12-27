@@ -55,7 +55,7 @@ class MTable : public TTable
     private:
 	//Private methods
 	void postDisable( int flag );
-	//void fieldFix( TConfig &cfg );
+	//void fieldFix( TConfig &cfg, const string &langLs = "" );
 	//void getStructDB( string name, vector< vector<string> > &tblStrct );
 
 	//string getVal( TCfg &cfg, uint8_t RqFlg = 0 );

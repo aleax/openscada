@@ -339,7 +339,7 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		    string trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#"), reqFld;
 		    bool isCfg = false;
 		    //  Source is config file or included DB
-		    if((isCfg=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
+		    if((isCfg=trSrc.find("cfg:") == 0) || trSrc.find("db:") == 0) {
 			reqFld = translFld(trLang, trFld, isCfg);
 			//  Need DB structure prepare
 			req.elem().fldClear();
@@ -516,7 +516,7 @@ string TMess::translCacheGet( const string &key, bool *ok )
 	itr->second.tm = SYS->sysTm();
 	rez = itr->second.val;
 	if(ok) *ok = true;
-    }
+    } else if(ok) *ok = false;
     trMessCacheRes.unlock();
 
     return rez;
@@ -612,7 +612,7 @@ string TMess::trCtx( const string &user_lang, bool *hold )
     else if(!hold || trCtxs[pthr].empty()) {
 	trCtxs[pthr] = rez = user_lang;
 	if(hold) *hold = true;
-    }
+    } else if(hold) *hold = false;
     dtRes.unlock();
 
     return rez;

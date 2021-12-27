@@ -34,7 +34,7 @@
 #define MOD_NAME	_("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.13"
+#define MOD_VER		"0.2.14"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
@@ -507,7 +507,7 @@ void MTable::fieldDel( TConfig &cfg )
 
 }
 
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, const string &langLs )
 {
     owner().transCommit();
     //!!! Process the code here for the fields' fixing(change its type if it doesn't match to the necessary one)

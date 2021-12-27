@@ -54,7 +54,7 @@ class MTable : public TTable
 	void fieldSet( TConfig &cfg )	{ fieldSQLSet(cfg); }
 	void fieldDel( TConfig &cfg )	{ fieldSQLDel(cfg); }
 
-	void fieldFix( TConfig &cfg )	{ fieldFix_(cfg); }
+	void fieldFix( TConfig &cfg, const string &langLs = "" )	{ fieldFix_(cfg, langLs); }
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 
 	MBD &owner( ) const;
@@ -64,7 +64,7 @@ class MTable : public TTable
 	bool isEmpty( );
 	void postDisable( int flag );
 
-	void fieldFix_( TConfig &cfg, bool recurse = false );
+	void fieldFix_( TConfig &cfg, const string &langLs = "", bool recurse = false );
 
 	string getSQLVal( TCfg &cfg, uint8_t RqFlg = 0 );
 	void   setSQLVal( TCfg &cfg, const string &vl, bool tr = false );

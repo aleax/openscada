@@ -1,3 +1,16 @@
+2021-12-27 Roman (stable)
+- !:LibsDB.vcaBase: wlb_Main.RootPgSo: The Termination Control Panel call returned back to the unconditional call
+	and directly at the events for open before any other control panels.
+    The Buzzer(1) notifier switched to the repeating mode.
+- !!!!:FIX:SYS,BD,*: Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode:
+    - FIX: Fixed in writing at the MAIN language as BASE and for the not translatable text fields in the MULTILANGUAGE-DYNAMIC mode;
+    - the TTable::fieldFix() appended an argument "langLs" of specifiyng need languages;
+    - detection of the double translation collumns to the default language was removed due to of there is no the default language now.
+    - BD: The configuration file appended of the MULTILANGUAGE-DYNAMIC mode support
+	also as the configuration parameters who but also scheduled for implementing in the common context
+	of the TBDS::data{Seek,Get,Set}() functions or implementing the "cfgPrm:" source.
+
+
 2021-12-25 Roman (stable)
 - !!!!:SYS,*: Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode:
     - the translation cache significant extending and unification:

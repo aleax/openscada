@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.7.1"
+#define MOD_VER		"7.7.2"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -659,11 +659,11 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    string prj = opt->attr("prj");
 	    vector<string> ls;
 	    sesList(ls);
-	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-		if(prj.empty() || sesAt(ls[i_l]).at().projNm() == prj) {
-		    AutoHD<Project> prj = sesAt(ls[i_l]).at().parent();
+	    for(unsigned iL = 0; iL < ls.size(); iL++)
+		if(prj.empty() || sesAt(ls[iL]).at().projNm() == prj) {
+		    AutoHD<Project> prj = sesAt(ls[iL]).at().parent();
 		    if(SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
-			opt->childAdd("el")->setText(ls[i_l]);
+			opt->childAdd("el")->setText(ls[iL]);
 		}
 	}
 	else if(ctrChkNode(opt,"connect",RWRWRW,"root",SUI_ID,SEC_WR)) {
@@ -727,30 +727,30 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	// Widgets libraries
 	vector<string> ls;
 	wlbList(ls);
-	for(unsigned i_wlb = 0; i_wlb < ls.size(); i_wlb++) {
-	    if(!upd_lb.empty() && upd_lb != ls[i_wlb]) continue;
-	    AutoHD<WidgetLib> wlb = wlbAt(ls[i_wlb]);
-	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[i_wlb])->setText(trD(wlb.at().name()));
+	for(unsigned iWlb = 0; iWlb < ls.size(); iWlb++) {
+	    if(!upd_lb.empty() && upd_lb != ls[iWlb]) continue;
+	    AutoHD<WidgetLib> wlb = wlbAt(ls[iWlb]);
+	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[iWlb])->setText(trD(wlb.at().name()));
 	    wlbN->setAttr("doc", TUIS::docKeyGet(wlb.at().descr()));
 	    wlbN->childAdd("ico")->setText(wlb.at().ico());
 
 	    //  Widgets
 	    vector<string> wls;
 	    wlb.at().list(wls);
-	    for(unsigned i_w = 0; i_w < wls.size(); i_w++) {
-		if(!upd_wdg.empty() && upd_wdg != wls[i_w])	continue;
-		AutoHD<LWidget> w = wlb.at().at(wls[i_w]);
-		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[i_w])->setAttr("parent",w.at().parentAddr())->setText(trD(w.at().name()));
+	    for(unsigned iW = 0; iW < wls.size(); iW++) {
+		if(!upd_wdg.empty() && upd_wdg != wls[iW])	continue;
+		AutoHD<LWidget> w = wlb.at().at(wls[iW]);
+		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[iW])->setAttr("parent",w.at().parentAddr())->setText(trD(w.at().name()));
 		wN->childAdd("ico")->setText(disIconsW?"":w.at().ico());
 
 		//  Child widgets
 		vector<string> cwls;
 		w.at().wdgList(cwls);
 		if(cwls.size() < 1000)
-		    for(unsigned i_c = 0; i_c < cwls.size(); i_c++) {
-			if(!upd_wdgi.empty() && upd_wdgi != cwls[i_c])	continue;
-			AutoHD<CWidget> cw = w.at().wdgAt(cwls[i_c]);
-			wN->childAdd("cw")->setAttr("id",cwls[i_c])->setText(trD(cw.at().name()))->
+		    for(unsigned iC = 0; iC < cwls.size(); iC++) {
+			if(!upd_wdgi.empty() && upd_wdgi != cwls[iC])	continue;
+			AutoHD<CWidget> cw = w.at().wdgAt(cwls[iC]);
+			wN->childAdd("cw")->setAttr("id",cwls[iC])->setText(trD(cw.at().name()))->
 			    childAdd("ico")->setText(disIconsCW?"":cw.at().ico());//   (cwls.size()>=100)?"":cw.at().ico());
 		    }
 	    }
@@ -872,17 +872,17 @@ void Engine::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/ses/usr_ls" && ctrChkNode(opt)) {
 	vector<string> ls; SYS->security().at().usrList(ls);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
+	for(unsigned iL = 0; iL < ls.size(); iL++) opt->childAdd("el")->setText(ls[iL]);
     }
     else if(a_path == "/ses/prj_ls" && ctrChkNode(opt)) {
 	vector<string> ls; prjList(ls);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(ls[i_l]);
+	for(unsigned iL = 0; iL < ls.size(); iL++) opt->childAdd("el")->setText(ls[iL]);
     }
     else if(a_path == "/br/vca" && ctrChkNode(opt)) {
 	vector<string> lst;
 	fList(lst);
-	for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(fAt(lst[i_f]).at().name());
+	for(unsigned iF = 0; iF < lst.size(); iF++)
+	    opt->childAdd("el")->setAttr("id",lst[iF])->setText(fAt(lst[iF]).at().name());
     }
     else TUI::cntrCmdProc(opt);
 }
