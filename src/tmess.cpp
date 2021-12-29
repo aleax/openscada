@@ -375,12 +375,13 @@ string TMess::translGetU( const string &base, const string &user, const string &
     //Requesting the cache before
     bool ok = false;
     string toLang = translCacheGet(user+string(1,0)+"user", &ok);
+
     if(!ok && !SYS->stopSignal() && SYS->security().at().usrPresent(user) &&
 	(toLang=SYS->security().at().usrAt(user).at().lang()).size() >= 2)
     {
 	toLang = toLang.substr(0, 2);
 	translCacheSet(user+string(1,0)+"user", toLang);
-    } else toLang = lang2Code();
+    } else if(!ok) toLang = lang2Code();
 
     return translGet(base, toLang, src);
 
@@ -464,7 +465,7 @@ string TMess::translSetU( const string &base, const string &user, const string &
     {
 	toLang = toLang.substr(0, 2);
 	translCacheSet(user+string(1,0)+"user", toLang);
-    } else toLang = lang2Code();
+    } else if(!ok) toLang = lang2Code();
 
     return translSet(base, toLang, mess, needReload);
 

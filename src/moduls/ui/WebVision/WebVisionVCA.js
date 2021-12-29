@@ -731,7 +731,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.window.resizeTo(geomW+20,geomH+40);
 	}
 
-	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr, true, this.place.focusElem);
+	if(this.attrs['focus'] && parseInt(this.attrs['focus']) && this.attrsMdf['focus'])
+	    setFocus(this.addr, true, this.place.focusElem);
 
 	this.place.className = "Primitive " + this.attrs['root'];
 	if(!this.place.getAttribute("id"))
@@ -1052,6 +1053,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				combImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
 				this.place.appendChild(combImg);
 				formObj.style.width = (geomWint-16)+'px';
+				formObj.onclick = function( ) {
+				    if((combList=this.ownerDocument.getElementById('combomenu')))
+					combList.style.visibility = 'hidden';
+				}
 				combImg.onclick = function( ) {
 				    var formObj = this.parentNode.children[0];
 				    var combList = this.ownerDocument.getElementById('combomenu');
@@ -1068,11 +1073,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    this.parentNode.style.visibility = 'hidden';
 					    this.parentNode.style.top = "-100px";
 					}
-					combList.childNodes[0].onblur = function( ) {
+					/*combList.childNodes[0].onblur = function( ) {
 					    this.parentNode.style.visibility = 'hidden';
 					    this.parentNode.style.top = "-100px";
 					}
-					combList.onmouseleave = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }
+					combList.onmouseleave = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }*/
 					this.ownerDocument.body.appendChild(combList);
 				    }
 				    while(combList.childNodes[0].childNodes.length)
@@ -1094,8 +1099,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 
 				    if(combList.childNodes[0].childNodes.length) {
-					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
-								 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; ';
+					var combHeight = Math.min(elLst.length,10)*parseInt(this.style.height);
+					var combTop = posGetY(formObj,true) + formObj.offsetHeight;
+					if((combTop+combHeight) > this.ownerDocument.body.scrollHeight)
+					    combTop = posGetY(formObj,true) - combHeight;
+					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+combTop+'px; '+
+								 'width: '+formObj.offsetWidth+'px; height: '+combHeight+'px; ';
 					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; '+
 									       'font: '+formObj.parentNode.fontCfg+'; ';
 					combList.childNodes[0].formObj = formObj;
@@ -1228,7 +1237,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    formObj.cldrDlg = cldrDlg;
 				    cldrDlg.formObj = formObj;
 				    cldrDlg.tmSet(formObj.valGet());
-				    cldrDlg.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
+				    cldrDlg.style.cssText = 'left: '+Math.min(posGetX(formObj,true),this.ownerDocument.body.scrollWidth-cldrDlg.offsetWidth)+'px; '+
+					'top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
 					'font: '+formObj.parentNode.fontCfg+'; ';
 				    return false;
 				}

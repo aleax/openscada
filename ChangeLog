@@ -1,3 +1,15 @@
+2021-12-29 Roman (stable)
+- !!!!:FIX:SYS,BD,*: Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode:
+    - BD: The configuration parameters implementing in the common context of the TBDS::data{Seek,Get,Set}() functions.
+    - FIX: TMess::{translGetU,translSetU}() fixed in the cache value acceptance.
+- !!:FIX:Protocol.HTTP: Fixed in reading the "accept-language" HTTP variable only as the two symbol language code,
+    then the common interface is translated also now on FireFox who sends there the country code also.
+- !!:FIX:UI.WebVision: The popup windows of the calendar and editable combo appended of the geometry check
+	than preventing the main window overflow.
+    FIX: Prevented mostly in the focus forcing what prevents the common style combo unroll at the focused field periodic update.
+    Popup window closing of the editable combo switched to close only at the field click.
+
+
 2021-12-27 Roman (stable)
 - !:LibsDB.vcaBase: wlb_Main.RootPgSo: The Termination Control Panel call returned back to the unconditional call
 	and directly at the events for open before any other control panels.

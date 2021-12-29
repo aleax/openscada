@@ -289,11 +289,10 @@ class TBDS : public TSubSYS
 	    NoFlg	= 0,
 	    NoException	= 0x01,		//Do not generate the exceptions
 	    OnlyCfg	= 0x02,		//Force request to the configuration file, in genPrmSet() and dataSet() only
-	    CfgPrm	= 0x04,		//Use Parameters of the Configuration File, in dataGet() and dataSet() only
 	    // Specific ones
-	    UseTranslation = 0x08,	//Use translation for request, in genPrmGet() and genPrmSet() only
-	    UseCache	= 0x08,		//Use the cache, in dataSeek() only
-	    UseAllKeys	= 0x08		//Use all keys, in dataDel() only
+	    UseTranslation = 0x04,	//Use translation for request, in genPrmGet() and genPrmSet() only
+	    UseCache	= 0x04,		//Use the cache, in dataSeek() only
+	    UseAllKeys	= 0x04		//Use all keys, in dataDel() only
 	};
 
 	//Generic static block

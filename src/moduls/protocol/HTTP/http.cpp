@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.10"
+#define MOD_VER		"3.6.11"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -765,8 +765,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		size_t vpos = val.find(mod->cookieLab.getVal()+"=", 0);
 		if(vpos != string::npos) user = mod->sesCheck((sesId=s2i(val.substr(vpos+mod->cookieLab.size()+1))));
 	    }
-	    else if(strcasecmp(var.c_str(),"accept-language") == 0)
-		brLang = TSYS::strTrim(TSYS::strParse(val,0,","));
+	    else if(strcasecmp(var.c_str(),"accept-language") == 0 && (brLang=TSYS::strTrim(TSYS::strParse(val,0,","))).size() > 2)
+		brLang = brLang.substr(0, 2);
 	    else if(strcasecmp(var.c_str(),"oscd_lang") == 0)	vars.pop_back();
 	}
 
@@ -1017,10 +1017,10 @@ void TProtIn::getCnt( const vector<string> &vars, const string &content, map<str
     const char *c_fd = "Content-Disposition";
     const char *c_name = "name=\"";
 
-    for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos) {
+    for(size_t iVr = 0, pos = 0; iVr < vars.size() && boundary.empty(); iVr++)
+	if(vars[iVr].compare(0,vars[iVr].find(":",0),"Content-Type") == 0 && (pos=vars[iVr].find(c_bound,0)) != string::npos) {
 	    pos += strlen(c_bound);
-	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
+	    boundary = vars[iVr].substr(pos,vars[iVr].size()-pos);
 	}
     if(boundary.empty()) return;
 
