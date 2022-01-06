@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1469,7 +1469,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		owner()->lb_toolbar[iT]->setIconSize(QSize(icoSize(1.6),icoSize(1.6)));
 		owner()->addToolBar(owner()->lb_toolbar[iT]);
 		owner()->lb_toolbar[iT]->setMovable(true);
-		owner()->mn_view->addAction(owner()->lb_toolbar[iT]->toggleViewAction());
+		owner()->menuView->addAction(owner()->lb_toolbar[iT]->toggleViewAction());
 		is_create = true;
 	    }
 	    for(i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
@@ -1478,7 +1478,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	    if(i_m >= (int)owner()->lb_menu.size()) {
 		owner()->lb_menu.push_back(new QMenu(QString(_("Library: %1")).arg(wlbId.c_str())));
 		owner()->lb_menu[i_m]->setObjectName(wlbId.c_str());
-		owner()->mn_widg->addMenu(owner()->lb_menu[i_m]);
+		owner()->menuWidget->addMenu(owner()->lb_menu[i_m]);
 	    }
 	    //  Update menu icon
 	    if(!img.isNull()) owner()->lb_menu[i_m]->setIcon(QPixmap::fromImage(img));
@@ -2388,7 +2388,7 @@ void DevelWdgView::wdgPopup( )
 	    popup.addSeparator();
 
 	    //   Insert item actions
-	    popup.addMenu(mainWin()->mn_widg_fnc);
+	    popup.addMenu(mainWin()->menuWidgetFunc);
 	}
 	else {
 	    popup.addAction(mainWin()->actVisItClear);

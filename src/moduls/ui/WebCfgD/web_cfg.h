@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfgD file: web_cfg.h
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,11 +41,12 @@ struct SSess
 		vector<string> &ivars, const string &icontent );
 
     //Attributes
-    string	url;		//request URL
-    string	page;
-    string	sender;		//request sender
-    string	user;		//sesion user
-    string	content;	//Contain
+    string	url,		//request URL
+		page,
+		sender,		//request sender
+		user,		//sesion user
+		content,	//Contain
+		lang;		//Language
 
     vector<string>	vars;	//request vars
     map<string,string>	cnt;	//Parsed contain

@@ -7,13 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-14 08:29+0200\n"
+"POT-Creation-Date: 2022-01-05 21:10+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Ready"
+msgstr "Готов"
+
+#, c-format
+msgid "The configurator is using the remote host %d times."
+msgstr "Конфигуратор использует удалённые хосты %d раз."
 
 msgid "Name"
 msgstr "Имя"
@@ -346,13 +353,6 @@ msgstr "Эта кнопка для вызова истории строки ст
 
 msgid "Button for calling the status bar history."
 msgstr "Кнопка вызова истории строки статуса."
-
-msgid "Ready"
-msgstr "Готов"
-
-#, c-format
-msgid "The configurator is using the remote host %d times."
-msgstr "Конфигуратор использует удалённые хосты %d раз."
 
 msgid "Saving the changes"
 msgstr "Сохранение изменений."

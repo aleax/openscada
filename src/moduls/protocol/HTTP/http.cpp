@@ -35,7 +35,7 @@
 #define MOD_NAME	_("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.11"
+#define MOD_VER		"3.6.12"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -950,7 +950,8 @@ string TProtIn::lang( )
 
 string TProtIn::getIndex( const string &user, const string &sender )
 {
-    if(Mess->translDyn()) Mess->trCtx(user+"\n"+lang());
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(user+"\n"+lang());
 
     string answer = string("<table class='work' width='50%'>\n")+
 	"<tr><th>"+_("Login")+"</th></tr>"
@@ -984,8 +985,6 @@ string TProtIn::getIndex( const string &user, const string &sender )
 		"<a href='/"+list[iL]+"/"+prms+"'><span title='"+mod.at().modInfo("Description")+"'>"+mod.at().modInfo("Name")+"</span></a></li>\n";
 	}
     }
-
-    if(Mess->translDyn()) Mess->trCtx("");
 
     return pgCreator(answer+"</ul></td></tr></table>\n", "200 OK", "", "", mod->tmplMainPage());
 }

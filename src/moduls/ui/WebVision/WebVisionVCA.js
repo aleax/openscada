@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1053,10 +1053,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				combImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
 				this.place.appendChild(combImg);
 				formObj.style.width = (geomWint-16)+'px';
-				formObj.onclick = function( ) {
-				    if((combList=this.ownerDocument.getElementById('combomenu')))
-					combList.style.visibility = 'hidden';
-				}
 				combImg.onclick = function( ) {
 				    var formObj = this.parentNode.children[0];
 				    var combList = this.ownerDocument.getElementById('combomenu');
@@ -1073,11 +1069,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    this.parentNode.style.visibility = 'hidden';
 					    this.parentNode.style.top = "-100px";
 					}
-					/*combList.childNodes[0].onblur = function( ) {
-					    this.parentNode.style.visibility = 'hidden';
-					    this.parentNode.style.top = "-100px";
-					}
-					combList.onmouseleave = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }*/
 					this.ownerDocument.body.appendChild(combList);
 				    }
 				    while(combList.childNodes[0].childNodes.length)
@@ -1135,9 +1126,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 4:	break;	//Time
 			    case 5:	//Date
 			    case 6:	//Date and time
-				formObj.onclick = function( ) {
-				    if((cldrDlg=this.ownerDocument.getElementById('clndrdlg'))) cldrDlg.style.visibility = 'hidden';
-				}
 				var cldrImg = this.place.ownerDocument.createElement('img');
 				cldrImg.className = "cntr"; cldrImg.src = '/'+MOD_ID+'/img_combar';
 				cldrImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
@@ -1158,6 +1146,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
 					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
 					    "</table>";
+					cldrDlg.onmouseup = function(e) { e.stopImmediatePropagation(); }
 					cldrDlg.children[0].onclick = function( ) {
 					    this.parentElement.formObj.valSet((new Date()).getTime()/1000);
 					    this.parentElement.formObj.chApply();
@@ -1233,7 +1222,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					}
 					this.ownerDocument.body.appendChild(cldrDlg);
 				    }
-				    //cldrDlg.onmouseleave = formObj.onclick;
 				    formObj.cldrDlg = cldrDlg;
 				    cldrDlg.formObj = formObj;
 				    cldrDlg.tmSet(formObj.valGet());
@@ -1277,7 +1265,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+applySz)+'px';
 				okImg.style.visibility = 'hidden';
 				this.wdgLnk.perUpdtEn(false); this.tmClearEdit = 0;
-				if(this.cldrDlg) this.onclick();
+				if(this.cldrDlg) this.cldrDlg.style.visibility = 'hidden';
 			    }
 			    this.parentNode.isModify = on;
 			}
@@ -3195,8 +3183,11 @@ document.body.onmouseup = function(e)
 {
     if(!e) e = window.event;
     if(evMouseGet(e) != 'Left') return true;
-    var popUpMenu = document.getElementById('popupmenu');
-    if(popUpMenu) popUpMenu.style.visibility = 'hidden';
+
+    if((popIt=document.getElementById('popupmenu')))	popIt.style.visibility = 'hidden';
+    if((popIt=document.getElementById('combomenu')))	popIt.style.visibility = 'hidden';
+    if((popIt=document.getElementById('clndrdlg')))	popIt.style.visibility = 'hidden';
+
     //return false;	//!!!! It's buggy on <input type=range> for Chrome
 }
 

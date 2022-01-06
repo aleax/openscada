@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.6"
+#define MOD_VER		"1.5.7"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -208,7 +208,8 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), sender, user, vars, page);
 
-    if(Mess->translDyn()) Mess->trCtx(ses.user+"\n"+ses.lang);
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
 	//Find user protocol for using
@@ -247,8 +248,6 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),urli.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
-
-    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
@@ -258,7 +257,8 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
-    if(Mess->translDyn()) Mess->trCtx(ses.user+"\n"+ses.lang);
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
 	//Find user protocol for using
@@ -284,8 +284,6 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
-
-    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void TWEB::cntrCmdProc( XMLNode *opt )

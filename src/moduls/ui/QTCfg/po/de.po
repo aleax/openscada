@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-14 08:29+0200\n"
+"POT-Creation-Date: 2022-01-05 21:10+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -19,6 +19,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Ready"
+msgstr "Fertig"
+
+#, c-format
+msgid "The configurator is using the remote host %d times."
+msgstr "Der Konfigurator verwendet %d-Zeiten eines Remote-Hosts."
 
 msgid "Name"
 msgstr "Name"
@@ -354,13 +361,6 @@ msgstr "Diese Schaltfläche ruft den Verlauf der Statusleiste auf."
 
 msgid "Button for calling the status bar history."
 msgstr "Schaltfläche zum Aufrufen des Statusleistenverlaufs."
-
-msgid "Ready"
-msgstr "Fertig"
-
-#, c-format
-msgid "The configurator is using the remote host %d times."
-msgstr "Der Konfigurator verwendet %d-Zeiten eines Remote-Hosts."
 
 msgid "Saving the changes"
 msgstr "Speichern der Änderungen"

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1133,7 +1133,8 @@ void VisRun::exportTable( const string &itbl )
 
 void VisRun::about( )
 {
-    if(Mess->translDyn()) Mess->trCtx(user()+"\n"+lang());
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(user()+"\n"+lang());
 
     QMessageBox::about(this, windowTitle(),
 	QString(_("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11")).
@@ -1141,8 +1142,6 @@ void VisRun::about( )
 	arg(mod->modInfo("Author").c_str()).arg(mod->modInfo("License").c_str()).
 	arg(PACKAGE_NAME).arg(VERSION).arg(Mess->I18N(PACKAGE_DESCR,NULL,lang().c_str()).c_str()).
 	arg(PACKAGE_LICENSE).arg(Mess->I18N(PACKAGE_AUTHOR,NULL,lang().c_str()).c_str()).arg(PACKAGE_SITE));
-
-    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
@@ -1459,8 +1458,10 @@ void VisRun::fullUpdatePgs( )
 
 string VisRun::lang( )
 {
-    try { return SYS->security().at().usrAt(user()).at().lang(); } catch(...) { }
-    return "";
+    return Mess->lang2Code(user(), true);
+
+    //try { return SYS->security().at().usrAt(user()).at().lang(); } catch(...) { }
+    //return "";
 }
 
 void VisRun::messUpd( )

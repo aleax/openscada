@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,7 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QProgressDialog>
+#include <QMenu>
 
 #include <string>
 #include <vector>
@@ -52,6 +53,7 @@ class QHBoxLayout;
 class QLabel;
 class QTabWidget;
 class QSplitter;
+class QFrame;
 
 using namespace OSCADA;
 
@@ -119,23 +121,28 @@ class ConfApp: public QMainWindow
 
     Q_OBJECT
 
-public:
+    public:
     //Methods
     ConfApp( string open_user );
     ~ConfApp( );
 
+    string user( );
+    string lang( );
+
+    void messUpd( );
+
     //Atributes
     bool	winClose;			//Closing window flag
 
-signals:
+    signals:
     void makeStarterMenu( QWidget *mn );
 
-protected:
+    protected:
     //Methods
     void closeEvent( QCloseEvent* );		//Close window event
     void resizeEvent( QResizeEvent * );		//Resize window event
 
-private slots:
+    private slots:
     //Slots
     void quitSt( );
     bool exitModifChk( );
@@ -225,20 +232,30 @@ private:
     QTimer	*endRunTimer, *autoUpdTimer, *reqPrgrsTimer;
 
     QTreeWidget	*CtrTree;
+    QFrame	*gFrame;
     QSplitter	*splitter;
     QLabel	*titleIco,
 		*titleLab,
 		*mStModify;
     QTabWidget	*tabs;
     UserStBar	*wUser;
+    QPushButton	*stBt;
     QProgressDialog *reqPrgrs;
 
-    QAction	*actUp, *actPrev, *actNext,
+    QAction	*actClose, *actQuit,
+		*actUp, *actPrev, *actNext,
 		*actUpdate, *actStartUpd, *actStopUpd,
 		*actDBLoad, *actDBLoadF, *actDBSave, *actDBSaveF,
 		*actItAdd, *actItDel,
 		*actItCut, *actItCopy, *actItPaste,
-		*actManualPage;
+		*actAbout, *actQtAbout, *actManual, *actManualSYS, *actManualPage, *actWhatIs;
+
+    QMenu	*menuFile,	//Menu "File"
+		*menuEdit,	//Menu "Edit"
+		*menuView,	//Menu "View"
+		*menuHelp;	//Menu "Help"
+
+    QToolBar	*toolBar;
 
     XMLNode	pgInfo, genReqs;
     XMLNode	*root;

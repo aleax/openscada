@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.5.4"
+#define MOD_VER		"6.5.6"
 #define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	_("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -345,7 +345,8 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
     string sender = TSYS::strLine(iprt->srcAddr(), 0);
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, "", iprt);
 
-    if(Mess->translDyn()) Mess->trCtx(ses.user+"\n"+ses.lang);
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
 	string zero_lev = TSYS::pathLev(ses.url, 0);
@@ -553,8 +554,6 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found", "", "", "", ses.lang);
     }
-
-    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
@@ -562,7 +561,8 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     map<string,string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page, iprt);
 
-    if(Mess->translDyn()) Mess->trCtx(ses.user+"\n"+ses.lang);
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
 	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
@@ -587,8 +587,6 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),url.c_str(),err.mess.c_str())+"</div>\n",
 	    "404 Not Found", "", "", "", ses.lang);
     }
-
-    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 string TWEB::messPost( const string &cat, const string &mess, MessLev type )
@@ -848,7 +846,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	    if((prmSep=sprm.find("=")) == string::npos) prm[sprm] = "true";
 	    else {
 		prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
-		if(sprm.substr(0,prmSep) == "lang")	gPrms += (gPrms.size()?"&":"") + sprm;
+		if(sprm.substr(0,prmSep) == "lang") gPrms += (gPrms.size()?"&":"") + sprm;
 	    }
     }
     if(gPrms.size()) gPrms = "?" + gPrms;

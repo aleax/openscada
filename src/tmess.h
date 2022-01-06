@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -118,7 +118,7 @@ class TMess
 	string I18N( const char *mess, const char *d_name = NULL, const char *mLang = NULL );
 
 	string lang( );
-	string lang2Code( )	{ return mLang2Code; }
+	string lang2Code( const string &user = "", bool onlyUser = false );
 	string &charset( )	{ return IOCharSet; }
 	int logDirect( )	{ return mLogDir; }
 	int messLevel( )	{ return mMessLevel; }
@@ -225,6 +225,24 @@ class TMess
 };
 
 extern TMess *Mess;
+
+//***********************************************************
+//* Automatic translation context unlock object		    *
+//***********************************************************
+class TrCtxAlloc
+{
+    public:
+	//Methods
+	TrCtxAlloc( ) : mHold(false) { }
+	TrCtxAlloc( const string &user_lang, bool force = true ) : mHold(false) { hold(user_lang, force); }
+	~TrCtxAlloc( ) { if(mHold) Mess->trCtx(""); }
+
+	void hold( const string &user_lang, bool force = true ) { mHold = force; Mess->trCtx(user_lang, force?NULL:&mHold); }
+
+    private:
+	//Attributes
+	bool mHold;
+};
 
 }
 

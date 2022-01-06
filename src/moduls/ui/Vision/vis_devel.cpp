@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,6 +44,9 @@
 #include "vis_devel.h"
 #include "vis_shape_elfig.h"
 
+#undef _
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
+
 using namespace OSCADA_QT;
 using namespace VISION;
 
@@ -56,8 +59,6 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
     mod->regWin(this);
 
-    setWindowTitle(TSYS::strMess(_("%s %s-developing: %s"),
-	PACKAGE_NAME,mod->modId().c_str(),(trU(SYS->name(),open_user)+(VCAstat.size()&&VCAstat!="."?" > "+VCAstat:"")).c_str()).c_str());
     setWindowIcon(mod->icon());
 
     //Init workspace
@@ -69,227 +70,147 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //Create actions
     // Generic actions
     //  Fullscreen
-    actFullScr = new QAction(_("Full screen"),this);
+    actFullScr = new QAction("", this);
     actFullScr->setCheckable(true);
-    actFullScr->setToolTip(_("Full screen mode toggling"));
-    actFullScr->setWhatsThis(_("The button for full screen mode toggling"));
-    actFullScr->setStatusTip(_("Press for toggling the full screen mode."));
     connect(actFullScr, SIGNAL(toggled(bool)), this, SLOT(fullScreen(bool)));
     //  Close
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
-    QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
+    actClose = new QAction(QPixmap::fromImage(ico_t), "", this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
-    actClose->setToolTip(_("Close the Vision window"));
-    actClose->setWhatsThis(_("The button for closing the Vision developing window"));
-    actClose->setStatusTip(_("Press to close of the current Vision developing window."));
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     //  Quit
     if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
-    QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
+    actQuit = new QAction(QPixmap::fromImage(ico_t), "", this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
-    actQuit->setToolTip(_("Quit the program"));
-    actQuit->setWhatsThis(_("The button for complete quit the program"));
-    actQuit->setStatusTip(_("Press for complete quit the program."));
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     //  About "Program info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
-    QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
-    actAbout->setToolTip(_("Program and OpenSCADA information"));
-    actAbout->setWhatsThis(_("The button of the information of the program and OpenSCADA"));
-    actAbout->setStatusTip(_("Press for information of the program and OpenSCADA."));
+    actAbout = new QAction(QPixmap::fromImage(ico_t), "", this);
     connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     //  About Qt
-    QAction *actQtAbout = new QAction(_("About &Qt"),this);
-    actQtAbout->setToolTip(_("Qt information"));
-    actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
-    actQtAbout->setStatusTip(_("Press for getting the using Qt information."));
+    actQtAbout = new QAction("", this);
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     //  Manuals
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
     //  Selected project manual
-    actManualLib = new QAction(QPixmap::fromImage(ico_t), _("Manual on ..."), this);
-    actManualLib->setWhatsThis(_("The button for getting the library manual"));
-    actManualLib->setStatusTip(_("Press for getting the library manual."));
+    actManualLib = new QAction(QPixmap::fromImage(ico_t), "", this);
     actManualLib->setEnabled(false);
     connect(actManualLib, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  Vision manual
-    QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("Manual on '%1'")).arg(mod->modId().c_str()),this);
+    actManual = new QAction(QPixmap::fromImage(ico_t), "", this);
     actManual->setProperty("doc", "Modules/Vision|Modules/Vision");
     actManual->setShortcut(Qt::Key_F1);
-    actManual->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(mod->modId().c_str()));
-    actManual->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  VCAEngine manual
-    QAction *actManualVCA = new QAction(QPixmap::fromImage(ico_t),QString(_("Manual on '%1'")).arg("VCAEngine"),this);
+    actManualVCA = new QAction(QPixmap::fromImage(ico_t), "", this);
     actManualVCA->setProperty("doc", "Modules/VCAEngine|Modules/VCAEngine");
-    actManualVCA->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg("VCAEngine"));
-    actManualVCA->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg("VCAEngine"));
     connect(actManualVCA, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  OpenSCADA manual index
-    QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("Manual on '%1'")).arg(PACKAGE_STRING),this);
+    actManualSYS = new QAction(QPixmap::fromImage(ico_t), "", this);
     actManualSYS->setProperty("doc", "index|Documents");
-    actManualSYS->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(PACKAGE_STRING));
-    actManualSYS->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
-    QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    actWhatIs = new QAction(QPixmap::fromImage(ico_t), "", this);
     actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
-    actWhatIs->setToolTip(_("Requesting about GUI elements"));
-    actWhatIs->setWhatsThis(_("The button for requesting information about the user interface elements"));
-    actWhatIs->setStatusTip(_("Press for requesting information about the user interface elements."));
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Page, project, widget and this library actions
     //  Load item from db
     if(!ico_t.load(TUIS::icoGet("load",NULL,true).c_str())) ico_t.load(":/images/load.png");
-    actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from DB"),this);
-    actDBLoad->setToolTip(_("Load the item data from DB"));
-    actDBLoad->setWhatsThis(_("The button for loading the item data from the DB"));
-    actDBLoad->setStatusTip(_("Press for loading the item data from the DB."));
+    actDBLoad = new QAction(QPixmap::fromImage(ico_t), "", this);
     actDBLoad->setEnabled(false);
     connect(actDBLoad, SIGNAL(triggered()), this, SLOT(itDBLoad()));
-    actDBLoadF = new QAction(QPixmap::fromImage(ico_t),_("Load from DB forcibly"),this);
-    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
-    actDBLoadF->setWhatsThis(_("The button for loading the item data from the DB forcibly, not only when it changed"));
-    actDBLoadF->setStatusTip(_("Press for loading the item data from the DB forcibly, not only when it changed."));
+    actDBLoadF = new QAction(QPixmap::fromImage(ico_t), "", this);
     actDBLoadF->setEnabled(false);
     connect(actDBLoadF, SIGNAL(triggered()), this, SLOT(itDBLoad()));
     //  Save item to db
     if(!ico_t.load(TUIS::icoGet("save",NULL,true).c_str())) ico_t.load(":/images/save.png");
-    actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
-    actDBSave->setToolTip(_("Save the item data to DB"));
-    actDBSave->setWhatsThis(_("The button for saving the item data to the DB"));
-    actDBSave->setStatusTip(_("Press for saving the item data to the DB."));
+    actDBSave = new QAction(QPixmap::fromImage(ico_t), "", this);
     actDBSave->setShortcut(QKeySequence("Ctrl+S"));
     actDBSave->setEnabled(false);
     connect(actDBSave, SIGNAL(triggered()), this, SLOT(itDBSave()));
-    actDBSaveF = new QAction(QPixmap::fromImage(ico_t),_("Save to DB forcibly"),this);
-    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
-    actDBSaveF->setWhatsThis(_("The button for saving the item data to the DB forcibly, not only when it changed"));
-    actDBSaveF->setStatusTip(_("Press for saving the item data to the DB forcibly, not only when it changed."));
+    actDBSaveF = new QAction(QPixmap::fromImage(ico_t), "", this);
     actDBSaveF->setEnabled(false);
     connect(actDBSaveF, SIGNAL(triggered()), this, SLOT(itDBSave()));
     //  Start up the project execution
     if(!ico_t.load(TUIS::icoGet("vision_prj_run",NULL,true).c_str())) ico_t.load(":/images/prj_run.png");
-    actPrjRun = new QAction(QPixmap::fromImage(ico_t),_("Run project"),this);
-    actPrjRun->setToolTip(_("Run the project execution for the selected item"));
-    actPrjRun->setWhatsThis(_("The button for running the project execution for the selected item"));
-    actPrjRun->setStatusTip(_("Press for running the project execution for the selected item."));
+    actPrjRun = new QAction(QPixmap::fromImage(ico_t), "", this);
     actPrjRun->setEnabled(false);
     connect(actPrjRun, SIGNAL(triggered()), this, SLOT(prjRun()));
     //  Project create
     if(!ico_t.load(TUIS::icoGet("vision_prj_new",NULL,true).c_str())) ico_t.load(":/images/prj_new.png");
-    actPrjNew = new QAction(QPixmap::fromImage(ico_t),_("New project"),this);
-    actPrjNew->setToolTip(_("New project"));
-    actPrjNew->setWhatsThis(_("The button for creation a new project"));
-    actPrjNew->setStatusTip(_("Press for creation a new project."));
+    actPrjNew = new QAction(QPixmap::fromImage(ico_t), "", this);
     connect(actPrjNew, SIGNAL(triggered()), this, SLOT(prjNew()));
     //  Widgets library new create
     if(!ico_t.load(TUIS::icoGet("vision_lib_new",NULL,true).c_str())) ico_t.load(":/images/lib_new.png");
-    actLibNew = new QAction(QPixmap::fromImage(ico_t),_("New library"),this);
-    actLibNew->setToolTip(_("New widgets library"));
-    actLibNew->setWhatsThis(_("The button for creation a new widgets library"));
-    actLibNew->setStatusTip(_("Press for creation a new widgets library."));
+    actLibNew = new QAction(QPixmap::fromImage(ico_t), "", this);
     connect(actLibNew, SIGNAL(triggered()), this, SLOT(libNew()));
     //  Visual item add (widget or page)
     if(!ico_t.load(TUIS::icoGet("vision_it_add",NULL,true).c_str())) ico_t.load(":/images/v_it_add.png");
-    actVisItAdd = new QAction(QPixmap::fromImage(ico_t),_("Add visual item"),this);
-    actVisItAdd->setToolTip(_("Adding a visual item to the library, container widget, project or page"));
-    actVisItAdd->setWhatsThis(_("The button for adding a visual item to the library, container widget, project or page"));
-    actVisItAdd->setStatusTip(_("Press for adding a visual item to the library, container widget, project or page."));
+    actVisItAdd = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItAdd->setShortcut(QKeySequence("Ctrl+I"));
     actVisItAdd->setEnabled(false);
     actVisItAdd->setCheckable(true);
     //  Visual item delete
     if(!ico_t.load(TUIS::icoGet("vision_it_del",NULL,true).c_str())) ico_t.load(":/images/v_it_del.png");
-    actVisItDel = new QAction(QPixmap::fromImage(ico_t),_("Delete visual item"),this);
-    actVisItDel->setToolTip(_("Deleting the visual item from the library, container widget, project or page"));
-    actVisItDel->setWhatsThis(_("The button for deleting the visual item from the library, container widget, project or page"));
-    actVisItDel->setStatusTip(_("Press for deleting the visual item from the library, container widget, project or page."));
+    actVisItDel = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItDel->setShortcut(QKeySequence("Ctrl+D"));
     actVisItDel->setEnabled(false);
     connect(actVisItDel, SIGNAL(triggered()), this, SLOT(visualItDel()));
     //  Visual item properties
     if(!ico_t.load(TUIS::icoGet("vision_it_prop",NULL,true).c_str())) ico_t.load(":/images/v_it_prop.png");
-    actVisItProp = new QAction(QPixmap::fromImage(ico_t),_("Properties of the visual item"),this);
-    actVisItProp->setToolTip(_("Getting the properties of the visual item"));
-    actVisItProp->setWhatsThis(_("The button for getting the properties of the visual item"));
-    actVisItProp->setStatusTip(_("Press for getting the properties of the visual item."));
+    actVisItProp = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItProp->setShortcut(QKeySequence("Ctrl+P"));
     actVisItProp->setEnabled(false);
     connect(actVisItProp, SIGNAL(triggered()), this, SLOT(visualItProp()));
     //  Visual item graphical edit
     if(!ico_t.load(TUIS::icoGet("vision_it_edit",NULL,true).c_str())) ico_t.load(":/images/v_it_edit.png");
-    actVisItEdit = new QAction(QPixmap::fromImage(ico_t),_("Edit visual item"),this);
-    actVisItEdit->setToolTip(_("Going to editing the visual item"));
-    actVisItEdit->setWhatsThis(_("The button for going to editing the visual item"));
-    actVisItEdit->setStatusTip(_("Press for going to editing the visual item."));
+    actVisItEdit = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItEdit->setShortcut(QKeySequence("Ctrl+E"));
     actVisItEdit->setEnabled(false);
     connect(actVisItEdit, SIGNAL(triggered()), this, SLOT(visualItEdit()));
     //  Visual item changes clear
     if(!ico_t.load(TUIS::icoGet("vision_it_clear",NULL,true).c_str())) ico_t.load(":/images/v_it_clear.png");
-    actVisItClear = new QAction(QPixmap::fromImage(ico_t),_("Clear visual item changes"),this);
-    actVisItClear->setToolTip(_("Clearing the visual items changes"));
-    actVisItClear->setWhatsThis(_("The button for clearing the visual items changes"));
-    actVisItClear->setStatusTip(_("Press for clearing the visual items changes."));
+    actVisItClear = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItClear->setEnabled(false);
     connect(actVisItClear, SIGNAL(triggered()), this, SLOT(visualItClear()));
     //  Visual item changes put down
     if(!ico_t.load(TUIS::icoGet("vision_it_ChDown",NULL,true).c_str())) ico_t.load(":/images/v_it_ChDown.png");
-    actVisItChDown = new QAction(QPixmap::fromImage(ico_t),_("Lower down visual item changes"),this);
-    actVisItChDown->setToolTip(_("Lowering down the visual item changes to the parent"));
-    actVisItChDown->setWhatsThis(_("The button for lowering down the visual item changes to the parent"));
-    actVisItChDown->setStatusTip(_("Press for lowering down the visual item changes to the parent."));
+    actVisItChDown = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItChDown->setEnabled(false);
     connect(actVisItChDown, SIGNAL(triggered()), this, SLOT(visualItDownParent()));
     //  UnDo visual item changes
     if(!ico_t.load(TUIS::icoGet("undo",NULL,true).c_str())) ico_t.load(":/images/undo.png");
-    actVisItUnDo = new QAction(QPixmap::fromImage(ico_t),_("Undo visual item changes"),this);
+    actVisItUnDo = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItUnDo->setObjectName("undo");
-    actVisItUnDo->setToolTip(_("Undoing the visual item changes:"));
-    actVisItUnDo->setWhatsThis(_("The button for undoing the visual item changes"));
-    actVisItUnDo->setStatusTip(_("Press for undoing the visual item changes."));
     actVisItUnDo->setShortcut(QKeySequence("Ctrl+Z"));
     actVisItUnDo->setEnabled(false);
     //  ReDo visual item changes
     if(!ico_t.load(TUIS::icoGet("redo",NULL,true).c_str())) ico_t.load(":/images/redo.png");
-    actVisItReDo = new QAction(QPixmap::fromImage(ico_t),_("Redo visual item changes"),this);
+    actVisItReDo = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItReDo->setObjectName("redo");
-    actVisItReDo->setToolTip(_("Redoing the visual item changes:"));
-    actVisItReDo->setWhatsThis(_("The button for redoing the visual item changes"));
-    actVisItReDo->setStatusTip(_("Press for redoing the visual item changes."));
     actVisItReDo->setShortcut(QKeySequence("Ctrl+Y"));
     actVisItReDo->setEnabled(false);
     //  Copy visual item
     if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
-    actVisItCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy visual item"),this);
+    actVisItCopy = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItCopy->setObjectName("editcopy");
-    actVisItCopy->setToolTip(_("Copying the visual item"));
-    actVisItCopy->setWhatsThis(_("The button for copying the visual item"));
-    actVisItCopy->setStatusTip(_("Press for copying the visual item."));
     actVisItCopy->setShortcut(QKeySequence("Ctrl+C"));
     actVisItCopy->setEnabled(false);
     connect(actVisItCopy, SIGNAL(triggered()), this, SLOT(visualItCopy()));
     //  Cut visual item
     if(!ico_t.load(TUIS::icoGet("editcut",NULL,true).c_str())) ico_t.load(":/images/editcut.png");
-    actVisItCut = new QAction(QPixmap::fromImage(ico_t),_("Cut visual item"),this);
+    actVisItCut = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItCut->setObjectName("editcut");
-    actVisItCut->setToolTip(_("Cutting the visual item"));
-    actVisItCut->setWhatsThis(_("The button for cutting the visual item"));
-    actVisItCut->setStatusTip(_("Press for cutting the visual item."));
     actVisItCut->setShortcut(QKeySequence("Ctrl+X"));
     actVisItCut->setEnabled(false);
     connect(actVisItCut, SIGNAL(triggered()), this, SLOT(visualItCut()));
     //  Paste visual item
     if(!ico_t.load(TUIS::icoGet("editpaste",NULL,true).c_str())) ico_t.load(":/images/editpaste.png");
-    actVisItPaste = new QAction(QPixmap::fromImage(ico_t),_("Paste visual item"),this);
+    actVisItPaste = new QAction(QPixmap::fromImage(ico_t), "", this);
     actVisItPaste->setObjectName("editpaste");
-    actVisItPaste->setToolTip(_("Pasting the visual item"));
-    actVisItPaste->setWhatsThis(_("The button for pasting the visual item"));
-    actVisItPaste->setStatusTip(_("Press for pasting the visual item."));
     actVisItPaste->setShortcut(QKeySequence("Ctrl+V"));
     actVisItPaste->setEnabled(false);
     connect(actVisItPaste, SIGNAL(triggered()), this, SLOT(visualItPaste()));
@@ -297,172 +218,109 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     // Widgets level actions
     //  Level up for widget
     if(!ico_t.load(TUIS::icoGet("vision_level_up",NULL,true).c_str())) ico_t.load(":/images/level_up.png");
-    actLevUp = new QAction(QPixmap::fromImage(ico_t),_("Raise up to the top"),this);
+    actLevUp = new QAction(QPixmap::fromImage(ico_t), "", this);
     actLevUp->setObjectName("level_up");
-    actLevUp->setToolTip(_("Raising up the selected widgets to the top"));
-    actLevUp->setWhatsThis(_("The button for raising up the selected widgets to the top"));
-    actLevUp->setStatusTip(_("Press for raising up the selected widgets to the top."));
     actLevUp->setEnabled(false);
     //  Level down for widget
     if(!ico_t.load(TUIS::icoGet("vision_level_down",NULL,true).c_str())) ico_t.load(":/images/level_down.png");
-    actLevDown = new QAction(QPixmap::fromImage(ico_t),_("Lower down to the bottom"),this);
+    actLevDown = new QAction(QPixmap::fromImage(ico_t), "", this);
     actLevDown->setObjectName("level_down");
-    actLevDown->setToolTip(_("Lowering down the selected widgets to the bottom"));
-    actLevDown->setWhatsThis(_("The button for lowering down the selected widgets to the bottom"));
-    actLevDown->setStatusTip(_("Press for lowering down the selected widgets to the bottom."));
     actLevDown->setEnabled(false);
     //  Rise widget
     if(!ico_t.load(TUIS::icoGet("vision_level_rise",NULL,true).c_str())) ico_t.load(":/images/level_rise.png");
-    actLevRise = new QAction(QPixmap::fromImage(ico_t),_("Rise up"),this);
+    actLevRise = new QAction(QPixmap::fromImage(ico_t), "", this);
     actLevRise->setObjectName("level_rise");
-    actLevRise->setToolTip(_("Raising up the selected widgets"));
-    actLevRise->setWhatsThis(_("The button for raising up the selected widgets"));
-    actLevRise->setStatusTip(_("Press for raising up the selected widgets."));
     actLevRise->setEnabled(false);
     //  Lower widget
     if(!ico_t.load(TUIS::icoGet("vision_level_lower",NULL,true).c_str())) ico_t.load(":/images/level_lower.png");
-    actLevLower = new QAction(QPixmap::fromImage(ico_t),_("Lower down"),this);
+    actLevLower = new QAction(QPixmap::fromImage(ico_t), "", this);
     actLevLower->setObjectName("level_lower");
-    actLevLower->setToolTip(_("Lowering down the selected widgets"));
-    actLevLower->setWhatsThis(_("The button for lowering down the selected widgets"));
-    actLevLower->setStatusTip(_("Press for lowering down the selected widgets."));
     actLevLower->setEnabled(false);
 
     // Widgets alignment actions
     //  Align widgets left
     if(!ico_t.load(TUIS::icoGet("vision_align_left",NULL,true).c_str())) ico_t.load(":/images/align_left.png");
-    actAlignLeft = new QAction(QPixmap::fromImage(ico_t),_("Align to the left"),this);
+    actAlignLeft = new QAction(QPixmap::fromImage(ico_t), "", this);
     actAlignLeft->setObjectName("align_left");
-    actAlignLeft->setToolTip(_("Aligning the selected widgets to the left"));
-    actAlignLeft->setWhatsThis(_("The button for aligning the selected widgets to the left"));
-    actAlignLeft->setStatusTip(_("Press for aligning the selected widgets to the left."));
     actAlignLeft->setEnabled(false);
     //  Align widgets to vertical center
     if(!ico_t.load(TUIS::icoGet("vision_align_vcenter",NULL,true).c_str())) ico_t.load(":/images/align_vcenter.png");
-    actAlignVCenter = new QAction(QPixmap::fromImage(ico_t),_("Align vertically to the center"),this);
+    actAlignVCenter = new QAction(QPixmap::fromImage(ico_t), "", this);
     actAlignVCenter->setObjectName("align_vcenter");
-    actAlignVCenter->setToolTip(_("Aligning the selected widgets vertically to the center"));
-    actAlignVCenter->setWhatsThis(_("The button for aligning the selected widgets vertically to the center"));
-    actAlignVCenter->setStatusTip(_("Press for aligning the selected widgets vertically to the center."));
     actAlignVCenter->setEnabled(false);
     //  Align widgets to right
     if(!ico_t.load(TUIS::icoGet("vision_align_right",NULL,true).c_str())) ico_t.load(":/images/align_right.png");
-    actAlignRight = new QAction(QPixmap::fromImage(ico_t),_("Align to the right"),this);
+    actAlignRight = new QAction(QPixmap::fromImage(ico_t), "", this);
     actAlignRight->setObjectName("align_right");
-    actAlignRight->setToolTip(_("Aligning the selected widgets to the right"));
-    actAlignRight->setWhatsThis(_("The button for aligning the selected widgets to the right"));
-    actAlignRight->setStatusTip(_("Press for aligning the selected widgets to the right."));
     actAlignRight->setEnabled(false);
     //  Align widgets to top
     if(!ico_t.load(TUIS::icoGet("vision_align_top",NULL,true).c_str())) ico_t.load(":/images/align_top.png");
-    actAlignTop = new QAction(QPixmap::fromImage(ico_t),_("Align to the top"),this);
+    actAlignTop = new QAction(QPixmap::fromImage(ico_t), "", this);
     actAlignTop->setObjectName("align_top");
-    actAlignTop->setToolTip(_("Aligning the selected widgets to the top"));
-    actAlignTop->setWhatsThis(_("The button for aligning the selected widgets to the top"));
-    actAlignTop->setStatusTip(_("Press for aligning the selected widgets to the top."));
     actAlignTop->setEnabled(false);
     //  Align widgets to horizontal center
     if(!ico_t.load(TUIS::icoGet("vision_align_hcenter",NULL,true).c_str())) ico_t.load(":/images/align_hcenter.png");
-    actAlignHCenter = new QAction(QPixmap::fromImage(ico_t),_("Align horizontally to the center"),this);
+    actAlignHCenter = new QAction(QPixmap::fromImage(ico_t), "", this);
     actAlignHCenter->setObjectName("align_hcenter");
-    actAlignHCenter->setToolTip(_("Aligning the selected widgets horizontally to the center"));
-    actAlignHCenter->setWhatsThis(_("The button for aligning the selected widgets horizontally to the center"));
-    actAlignHCenter->setStatusTip(_("Press for aligning the selected widgets horizontally to the center."));
     actAlignHCenter->setEnabled(false);
     //  Align widgets to bottom
     if(!ico_t.load(TUIS::icoGet("vision_align_bottom",NULL,true).c_str())) ico_t.load(":/images/align_bottom.png");
-    actAlignBottom = new QAction(QPixmap::fromImage(ico_t),_("Align to the bottom"),this);
+    actAlignBottom = new QAction(QPixmap::fromImage(ico_t), "", this);
     actAlignBottom->setObjectName("align_bottom");
-    actAlignBottom->setToolTip(_("Aligning the selected widgets to the bottom"));
-    actAlignBottom->setWhatsThis(_("The button for aligning the selected widgets to the bottom"));
-    actAlignBottom->setStatusTip(_("Press for aligning the selected widgets to the bottom."));
     actAlignBottom->setEnabled(false);
 
     // Elementar figure actions
     //  Unset cursor
     if(!ico_t.load(TUIS::icoGet("vision_elfig_cursor",NULL,true).c_str())) ico_t.load(":/images/elfig_cursor.png");
-    actElFigCursorAct = new QAction(QPixmap::fromImage(ico_t),_("Return the cursor"),this);
+    actElFigCursorAct = new QAction(QPixmap::fromImage(ico_t), "", this);
     actElFigCursorAct->setCheckable(true);
     actElFigCursorAct->setChecked(true);
     actElFigCursorAct->setObjectName("cursor");
-    actElFigCursorAct->setToolTip(_("Returning the cursor"));
-    actElFigCursorAct->setWhatsThis(_("The button for returning the cursor"));
-    actElFigCursorAct->setStatusTip(_("Press for returning the cursor."));
     actElFigCursorAct->setEnabled(false);
     //  Line creation
     if(!ico_t.load(TUIS::icoGet("vision_elfig_line",NULL,true).c_str())) ico_t.load(":/images/elfig_line.png");
-    actElFigLine = new QAction(QPixmap::fromImage(ico_t),_("Add line"),this);
+    actElFigLine = new QAction(QPixmap::fromImage(ico_t), "", this);
     actElFigLine->setCheckable(true);
     actElFigLine->setObjectName("line");
-    actElFigLine->setToolTip(_("Adding a line to the elementary figure"));
-    actElFigLine->setWhatsThis(_("The button for adding a line to the elementary figure"));
-    actElFigLine->setStatusTip(_("Press for adding a line to the elementary figure."));
     actElFigLine->setEnabled(false);
     //  Arc creation
     if(!ico_t.load(TUIS::icoGet("vision_elfig_arc",NULL,true).c_str())) ico_t.load(":/images/elfig_arc.png");
-    actElFigArc = new QAction(QPixmap::fromImage(ico_t),_("Add arc"),this);
+    actElFigArc = new QAction(QPixmap::fromImage(ico_t), "", this);
     actElFigArc->setCheckable(true);
     actElFigArc->setObjectName("arc");
-    actElFigArc->setToolTip(_("Adding an arc to the elementary figure"));
-    actElFigArc->setWhatsThis(_("The button for adding an arc to the elementary figure"));
-    actElFigArc->setStatusTip(_("Press for adding an arc to the elementary figure."));
     actElFigArc->setEnabled(false);
     //  Add Besie curve
     if(!ico_t.load(TUIS::icoGet("vision_elfig_besie",NULL,true).c_str())) ico_t.load(":/images/elfig_besie.png");
-    actElFigBesie = new QAction(QPixmap::fromImage(ico_t),_("Add Besier curve"),this);
+    actElFigBesie = new QAction(QPixmap::fromImage(ico_t), "", this);
     actElFigBesie->setCheckable(true);
     actElFigBesie->setObjectName("besier");
-    actElFigBesie->setToolTip(_("Adding a Besier curve to the elementary figure"));
-    actElFigBesie->setWhatsThis(_("The button for adding a Besier curve to the elementary figure"));
-    actElFigBesie->setStatusTip(_("Press for adding a Besier curve to the elementary figure."));
     actElFigBesie->setEnabled(false);
     //  Add Hold points check
     if(!ico_t.load(TUIS::icoGet("vision_elfig_lock",NULL,true).c_str())) ico_t.load(":/images/elfig_lock.png");
-    actElFigCheckAct=new QAction(QPixmap::fromImage(ico_t),_("Connections"),this);
+    actElFigCheckAct = new QAction(QPixmap::fromImage(ico_t), "", this);
     actElFigCheckAct->setCheckable(true);
     actElFigCheckAct->setChecked(true);
     actElFigCheckAct->setObjectName("hold");
-    actElFigCheckAct->setToolTip(_("Enabling the connections"));
-    actElFigCheckAct->setWhatsThis(_("The button for enabling the connections"));
-    actElFigCheckAct->setStatusTip(_("Press for enabling the connections."));
     actElFigCheckAct->setEnabled(false);
 
     // MDI windows actions
     //  Close active window
-    actWinClose = new QAction(_("Cl&ose"), this);
-    actWinClose->setToolTip(_("Close the active window"));
-    actWinClose->setWhatsThis(_("The button for closing the active window"));
-    actWinClose->setStatusTip(_("Press for closing the active window."));
+    actWinClose = new QAction("", this);
     connect(actWinClose, SIGNAL(triggered()), work_space, SLOT(closeActiveSubWindow()));
     //  Close all windows
-    actWinCloseAll = new QAction(_("Close &All"), this);
-    actWinCloseAll->setToolTip(_("Close all windows"));
-    actWinCloseAll->setWhatsThis(_("The button for closing all windows"));
-    actWinCloseAll->setStatusTip(_("Press for closing all windows."));
+    actWinCloseAll = new QAction("", this);
     connect(actWinCloseAll, SIGNAL(triggered()), work_space, SLOT(closeAllSubWindows()));
     //  Tile windows
-    actWinTile = new QAction(_("&Tile"), this);
-    actWinTile->setToolTip(_("Tile all windows"));
-    actWinTile->setWhatsThis(_("The button for tiling all windows"));
-    actWinTile->setStatusTip(_("Press for tiling all windows."));
+    actWinTile = new QAction("", this);
     connect(actWinTile, SIGNAL(triggered()), work_space, SLOT(tileSubWindows()));
     //  Cascade windows
-    actWinCascade = new QAction(_("&Cascade"), this);
-    actWinCascade->setToolTip(_("Cascade all windows"));
-    actWinCascade->setWhatsThis(_("The button for cascading all windows"));
-    actWinCascade->setStatusTip(_("Press for cascading all windows."));
+    actWinCascade = new QAction("", this);
     connect(actWinCascade, SIGNAL(triggered()), work_space, SLOT(cascadeSubWindows()));
     //  Activate next window
-    actWinNext = new QAction(_("Ne&xt"), this);
-    actWinNext->setToolTip(_("Activate the next window"));
-    actWinNext->setWhatsThis(_("The button for activating the next window"));
-    actWinNext->setStatusTip(_("Press for activating the next window."));
+    actWinNext = new QAction("", this);
     connect(actWinNext, SIGNAL(triggered()), work_space, SLOT(activateNextSubWindow()));
     //  Activate previous window
-    actWinPrevious = new QAction(_("Pre&vious"), this);
-    actWinPrevious->setToolTip(_("Activate the previous window"));
-    actWinPrevious->setWhatsThis(_("The button for activating the previous window"));
-    actWinPrevious->setStatusTip(_("Press for activating the previous window."));
+    actWinPrevious = new QAction("", this);
     connect(actWinPrevious, SIGNAL(triggered()), work_space, SLOT(activatePreviousSubWindow()));
 
     //Action groups
@@ -473,78 +331,84 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actGrpWdgAdd->addAction(actVisItAdd);
 
     //Create menu
-    mn_file = menuBar()->addMenu(_("&File"));
-    mn_file->addAction(actDBLoad);
-    mn_file->addAction(actDBLoadF);
-    mn_file->addAction(actDBSave);
-    mn_file->addAction(actDBSaveF);
-    mn_file->addSeparator();
-    mn_file->addAction(actClose);
-    mn_file->addAction(actQuit);
-    mn_edit = menuBar()->addMenu(_("&Edit"));
-    mn_edit->addAction(actVisItUnDo);
-    mn_edit->addAction(actVisItReDo);
-    mn_edit->addSeparator();
-    mn_edit->addAction(actVisItCopy);
-    mn_edit->addAction(actVisItCut);
-    mn_edit->addAction(actVisItPaste);
-    mn_proj = menuBar()->addMenu(_("&Project"));
-    mn_proj->addAction(actPrjRun);
-    mn_proj->addSeparator();
-    mn_proj->addAction(actPrjNew);
-    mn_proj->addAction(actVisItAdd);
-    mn_proj->addAction(actVisItDel);
-    mn_proj->addAction(actVisItClear);
-    mn_proj->addAction(actVisItChDown);
-    mn_proj->addAction(actVisItProp);
-    mn_proj->addAction(actVisItEdit);
-    mn_widg = menuBar()->addMenu(_("&Widget"));
-    mn_widg->addAction(actLibNew);
-    mn_widg->addAction(actVisItAdd);
-    mn_widg->addAction(actVisItDel);
-    mn_widg->addAction(actVisItClear);
-    mn_widg->addAction(actVisItChDown);
-    mn_widg->addAction(actVisItProp);
-    mn_widg->addAction(actVisItEdit);
-    mn_widg->addSeparator();
-    mn_widg_fnc = new QMenu(_("&View"));
-    mn_widg_fnc->addAction(actLevRise);
-    mn_widg_fnc->addAction(actLevLower);
-    mn_widg_fnc->addAction(actLevUp);
-    mn_widg_fnc->addAction(actLevDown);
-    mn_widg_fnc->addSeparator();
-    mn_widg_fnc->addAction(actAlignLeft);
-    mn_widg_fnc->addAction(actAlignVCenter);
-    mn_widg_fnc->addAction(actAlignRight);
-    mn_widg_fnc->addAction(actAlignTop);
-    mn_widg_fnc->addAction(actAlignHCenter);
-    mn_widg_fnc->addAction(actAlignBottom);
-    mn_widg->addMenu(mn_widg_fnc);
-    mn_widg->addSeparator();
-    mn_window = menuBar()->addMenu(_("&Window"));
-    connect(mn_window, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
+    menuBar()->addMenu((menuFile=new QMenu(this)));
+    menuFile->addAction(actDBLoad);
+    menuFile->addAction(actDBLoadF);
+    menuFile->addAction(actDBSave);
+    menuFile->addAction(actDBSaveF);
+    menuFile->addSeparator();
+    menuFile->addAction(actClose);
+    menuFile->addAction(actQuit);
+
+    menuBar()->addMenu((menuEdit=new QMenu(this)));
+    menuEdit->addAction(actVisItUnDo);
+    menuEdit->addAction(actVisItReDo);
+    menuEdit->addSeparator();
+    menuEdit->addAction(actVisItCopy);
+    menuEdit->addAction(actVisItCut);
+    menuEdit->addAction(actVisItPaste);
+
+    menuBar()->addMenu((menuProject=new QMenu(this)));
+    menuProject->addAction(actPrjRun);
+    menuProject->addSeparator();
+    menuProject->addAction(actPrjNew);
+    menuProject->addAction(actVisItAdd);
+    menuProject->addAction(actVisItDel);
+    menuProject->addAction(actVisItClear);
+    menuProject->addAction(actVisItChDown);
+    menuProject->addAction(actVisItProp);
+    menuProject->addAction(actVisItEdit);
+
+    menuBar()->addMenu((menuWidget=new QMenu(this)));
+    menuWidget->addAction(actLibNew);
+    menuWidget->addAction(actVisItAdd);
+    menuWidget->addAction(actVisItDel);
+    menuWidget->addAction(actVisItClear);
+    menuWidget->addAction(actVisItChDown);
+    menuWidget->addAction(actVisItProp);
+    menuWidget->addAction(actVisItEdit);
+    menuWidget->addSeparator();
+
+    menuWidget->addMenu((menuWidgetFunc=new QMenu(this)));
+    menuWidgetFunc->addAction(actLevRise);
+    menuWidgetFunc->addAction(actLevLower);
+    menuWidgetFunc->addAction(actLevUp);
+    menuWidgetFunc->addAction(actLevDown);
+    menuWidgetFunc->addSeparator();
+    menuWidgetFunc->addAction(actAlignLeft);
+    menuWidgetFunc->addAction(actAlignVCenter);
+    menuWidgetFunc->addAction(actAlignRight);
+    menuWidgetFunc->addAction(actAlignTop);
+    menuWidgetFunc->addAction(actAlignHCenter);
+    menuWidgetFunc->addAction(actAlignBottom);
+    menuWidget->addSeparator();
+
+    menuBar()->addMenu((menuWindow=new QMenu(this)));
+    connect(menuWindow, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
     wMapper = new QSignalMapper(this);
     connect(wMapper, SIGNAL(mapped(QWidget *)), this, SLOT(setActiveSubWindow(QWidget *)));
-    mn_view = menuBar()->addMenu(_("&View"));
+
+    menuBar()->addMenu((menuView=new QMenu(this)));
     if(s2i(SYS->cmdOpt("showWin")) != 2) {
-	mn_view->addAction(actFullScr);
-	mn_view->addSeparator();
+	menuView->addAction(actFullScr);
+	menuView->addSeparator();
     }
-    mn_help = menuBar()->addMenu(_("&Help"));
-    mn_help->addAction(actAbout);
-    mn_help->addAction(actQtAbout);
-    mn_help->addAction(actManual);
-    mn_help->addAction(actManualVCA);
-    mn_help->addAction(actManualSYS);
-    mn_help->addSeparator();
-    mn_help->addAction(actManualLib);
-    mn_help->addAction(actWhatIs);
+
+    menuBar()->addMenu((menuHelp=new QMenu(this)));
+    menuHelp->addAction(actAbout);
+    menuHelp->addAction(actQtAbout);
+    menuHelp->addAction(actManual);
+    menuHelp->addAction(actManualVCA);
+    menuHelp->addAction(actManualSYS);
+    menuHelp->addSeparator();
+    menuHelp->addAction(actManualLib);
+    menuHelp->addAction(actWhatIs);
     // QTStarter
     emit makeStarterMenu();
 
     //Init tool bars
     // Visual items tools bar
-    visItToolBar = new QToolBar(_("Visual items toolbar"),this);
+    visItToolBar = new QToolBar(this);
     visItToolBar->setObjectName("visItToolBar");
     visItToolBar->setIconSize(QSize(icoSize(1.6),icoSize(1.6)));
     addToolBar(visItToolBar);
@@ -567,10 +431,10 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     visItToolBar->addAction(actVisItCopy);
     visItToolBar->addAction(actVisItCut);
     visItToolBar->addAction(actVisItPaste);
-    mn_view->addAction(visItToolBar->toggleViewAction());
-    mn_view->addSeparator();
+    menuView->addAction(visItToolBar->toggleViewAction());
+    menuView->addSeparator();
     // Widget view functions toolbar
-    wdgToolView = new QToolBar(_("Functions of the widgets location"),this);
+    wdgToolView = new QToolBar(this);
     wdgToolView->setObjectName("wdgToolView");
     wdgToolView->setIconSize(QSize(icoSize(1.6),icoSize(1.6)));
     addToolBar(wdgToolView);
@@ -586,9 +450,9 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     wdgToolView->addAction(actAlignTop);
     wdgToolView->addAction(actAlignHCenter);
     wdgToolView->addAction(actAlignBottom);
-    mn_view->addAction(wdgToolView->toggleViewAction());
+    menuView->addAction(wdgToolView->toggleViewAction());
     // Elementar figure base widget tools
-    elFigTool = new QToolBar(_("Elementary figure tools"),this);
+    elFigTool = new QToolBar(this);
     elFigTool->setObjectName("elFigTool");
     elFigTool->setIconSize(QSize(icoSize(1.6),icoSize(1.6)));
     addToolBar(elFigTool);
@@ -598,63 +462,53 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     elFigTool->addAction(actElFigArc);
     elFigTool->addAction(actElFigBesie);
     elFigTool->addAction(actElFigCheckAct);
-    mn_view->addAction(elFigTool->toggleViewAction());
-    mn_view->addSeparator();
+    menuView->addAction(elFigTool->toggleViewAction());
+    menuView->addSeparator();
     //Init status bar
     mWUser = new UserStBar(open_user.c_str(), user_pass.c_str(), VCAstat.c_str(), this);
-    mWUser->setWhatsThis(_("This label displays the current user."));
-    mWUser->setToolTip(_("Field for displaying the current user."));
-    mWUser->setStatusTip(_("Double click to change the user."));
+    connect(mWUser, SIGNAL(userChanged(const QString&,const QString&)), this, SLOT(userChanged(const QString&,const QString&)));
     statusBar()->insertPermanentWidget(0, mWUser);
     mWStat = new QLabel(VCAStation().c_str(), this);
-    mWStat->setWhatsThis(_("This label displays the used VCA engine station."));
-    mWStat->setToolTip(_("Field for displaying the used VCA engine station."));
     statusBar()->insertPermanentWidget(0, mWStat);
     w_scale = new WScaleStBar(this);
-    w_scale->setWhatsThis(_("This label displays the widgets scaling mode."));
-    w_scale->setToolTip(_("Field for displaying the widgets scaling mode."));
-    w_scale->setStatusTip(_("Click to change the widgets scaling mode."));
     statusBar()->insertPermanentWidget(0, w_scale);
     mStModify = new WMdfStBar(this);
     connect(mStModify, SIGNAL(press()), this, SLOT(itDBSave()));
-    mStModify->setWhatsThis(_("This label indicates the fact of making changes."));
-    mStModify->setToolTip(_("Field for indicating the fact of making changes."));
-    mStModify->setStatusTip(_("Click to save all the made changes."));
     statusBar()->insertPermanentWidget(0, mStModify);
     mWVisScale = new QLabel("100%", this);
-    mWVisScale->setWhatsThis(_("This label displays the current widget scale."));
-    mWVisScale->setToolTip(_("Field for displaying the current widget scale."));
     statusBar()->insertPermanentWidget(0, mWVisScale);
 
     //Init dock windows
     prjTree = new ProjTree(this);
     connect(this, SIGNAL(modifiedItem(const string&)), prjTree, SLOT(updateTree(const string&)));
     connect(prjTree, SIGNAL(selectItem(const string&,bool)), this, SLOT(selectItem(const string&,bool)));
-    prjTree->setWhatsThis(_("Dock window of the projects manager."));
+
     wdgTree = new WdgTree(this);
     connect(this, SIGNAL(modifiedItem(const string&)), wdgTree, SLOT(updateTree(const string&)));
     connect(wdgTree, SIGNAL(selectItem(const string&,bool)), this, SLOT(selectItem(const string&,bool)));
-    wdgTree->setWhatsThis(_("Dock window of the manager of the widgets libraries."));
+
     addDockWidget(Qt::LeftDockWidgetArea, prjTree);
     addDockWidget(Qt::LeftDockWidgetArea, wdgTree);
     tabifyDockWidget(prjTree, wdgTree);
-    mn_view->addAction(prjTree->toggleViewAction());
-    mn_view->addAction(wdgTree->toggleViewAction());
-    //mn_view->addSeparator();
+    menuView->addAction(prjTree->toggleViewAction());
+    menuView->addAction(wdgTree->toggleViewAction());
+    //menuView->addSeparator();
 
     attrInsp = new InspAttrDock(this);
     connect(attrInsp, SIGNAL(modified(const string &)), this, SIGNAL(modifiedItem(const string &)));
-    attrInsp->setWhatsThis(_("Dock window of the inspector ot the widget attributes."));
+
     lnkInsp  = new InspLnkDock(this);
-    lnkInsp->setWhatsThis(_("Dock window of the inspector ot the widget links."));
+
     addDockWidget(Qt::LeftDockWidgetArea, attrInsp);
     addDockWidget(Qt::LeftDockWidgetArea, lnkInsp);
     tabifyDockWidget(attrInsp, lnkInsp);
-    mn_view->addAction(attrInsp->toggleViewAction());
-    mn_view->addAction(lnkInsp->toggleViewAction());
-    mn_view->addSeparator();
+    menuView->addAction(attrInsp->toggleViewAction());
+    menuView->addAction(lnkInsp->toggleViewAction());
+    menuView->addSeparator();
 
     connect(this, SIGNAL(modifiedItem(const string&)), this, SLOT(modifyGlbStUpdate(const string&)));
+
+    messUpd();
 
     //Create timers
     // Main widget's work timer
@@ -722,10 +576,299 @@ VisDevelop::~VisDevelop( )
     waitCursorSet(-1);
 }
 
+void VisDevelop::messUpd( )
+{
+    setWindowTitle(TSYS::strMess(_("%s %s-developing: %s"),
+	PACKAGE_NAME,mod->modId().c_str(),(trU(SYS->name(),
+	user())+(VCAStation().size()&&VCAStation()!="."?" > "+VCAStation():"")).c_str()).c_str());
+
+    //Generic actions
+    // Fullscreen
+    actFullScr->setText(_("Full screen"));
+    actFullScr->setToolTip(_("Full screen mode toggling"));
+    actFullScr->setWhatsThis(_("The button for full screen mode toggling"));
+    actFullScr->setStatusTip(_("Press for toggling the full screen mode."));
+    // Close
+    actClose->setText(_("&Close"));
+    actClose->setToolTip(_("Close the Vision window"));
+    actClose->setWhatsThis(_("The button for closing the Vision developing window"));
+    actClose->setStatusTip(_("Press to close of the current Vision developing window."));
+    // Quit
+    actQuit->setText(_("&Quit"));
+    actQuit->setToolTip(_("Quit the program"));
+    actQuit->setWhatsThis(_("The button for complete quit the program"));
+    actQuit->setStatusTip(_("Press for complete quit the program."));
+    // About "Program info"
+    actAbout->setText(_("&About"));
+    actAbout->setToolTip(_("Program and OpenSCADA information"));
+    actAbout->setWhatsThis(_("The button of the information of the program and OpenSCADA"));
+    actAbout->setStatusTip(_("Press for information of the program and OpenSCADA."));
+    // About Qt
+    actQtAbout->setText(_("About &Qt"));
+    actQtAbout->setToolTip(_("Qt information"));
+    actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
+    actQtAbout->setStatusTip(_("Press for getting the using Qt information."));
+    // Selected project manual
+    actManualLib->setText(_("Manual on ..."));
+    actManualLib->setWhatsThis(_("The button for getting the library manual"));
+    actManualLib->setStatusTip(_("Press for getting the library manual."));
+    // Vision manual
+    actManual->setText(QString(_("Manual on '%1'")).arg(mod->modId().c_str()));
+    actManual->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(mod->modId().c_str()));
+    actManual->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg(mod->modId().c_str()));
+    // VCAEngine manual
+    actManualVCA->setText(QString(_("Manual on '%1'")).arg("VCAEngine"));
+    actManualVCA->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg("VCAEngine"));
+    actManualVCA->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg("VCAEngine"));
+    // OpenSCADA manual index
+    actManualSYS->setText(QString(_("Manual on '%1'")).arg(PACKAGE_STRING));
+    actManualSYS->setWhatsThis(QString(_("The button for getting the using '%1' manual")).arg(PACKAGE_STRING));
+    actManualSYS->setStatusTip(QString(_("Press for getting the using '%1' manual.")).arg(PACKAGE_STRING));
+    // What is
+    actWhatIs->setText(_("What's &This"));
+    actWhatIs->setToolTip(_("Requesting about GUI elements"));
+    actWhatIs->setWhatsThis(_("The button for requesting information about the user interface elements"));
+    actWhatIs->setStatusTip(_("Press for requesting information about the user interface elements."));
+    //Page, project, widget and this library actions
+    // Load item from db
+    actDBLoad->setText(_("Load from DB"));
+    actDBLoad->setToolTip(_("Load the item data from DB"));
+    actDBLoad->setWhatsThis(_("The button for loading the item data from the DB"));
+    actDBLoad->setStatusTip(_("Press for loading the item data from the DB."));
+    actDBLoadF->setText(_("Load from DB forcibly"));
+    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
+    actDBLoadF->setWhatsThis(_("The button for loading the item data from the DB forcibly, not only when it changed"));
+    actDBLoadF->setStatusTip(_("Press for loading the item data from the DB forcibly, not only when it changed."));
+    // Save item to db
+    actDBSave->setText(_("Save to DB"));
+    actDBSave->setToolTip(_("Save the item data to DB"));
+    actDBSave->setWhatsThis(_("The button for saving the item data to the DB"));
+    actDBSave->setStatusTip(_("Press for saving the item data to the DB."));
+    actDBSaveF->setText(_("Save to DB forcibly"));
+    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
+    actDBSaveF->setWhatsThis(_("The button for saving the item data to the DB forcibly, not only when it changed"));
+    actDBSaveF->setStatusTip(_("Press for saving the item data to the DB forcibly, not only when it changed."));
+    // Start up the project execution
+    actPrjRun->setText(_("Run project"));
+    actPrjRun->setToolTip(_("Run the project execution for the selected item"));
+    actPrjRun->setWhatsThis(_("The button for running the project execution for the selected item"));
+    actPrjRun->setStatusTip(_("Press for running the project execution for the selected item."));
+    // Project create
+    actPrjNew->setText(_("New project"));
+    actPrjNew->setToolTip(_("New project"));
+    actPrjNew->setWhatsThis(_("The button for creation a new project"));
+    actPrjNew->setStatusTip(_("Press for creation a new project."));
+    // Widgets library new create
+    actLibNew->setText(_("New library"));
+    actLibNew->setToolTip(_("New widgets library"));
+    actLibNew->setWhatsThis(_("The button for creation a new widgets library"));
+    actLibNew->setStatusTip(_("Press for creation a new widgets library."));
+    // Visual item add (widget or page)
+    actVisItAdd->setText(_("Add visual item"));
+    actVisItAdd->setToolTip(_("Adding a visual item to the library, container widget, project or page"));
+    actVisItAdd->setWhatsThis(_("The button for adding a visual item to the library, container widget, project or page"));
+    actVisItAdd->setStatusTip(_("Press for adding a visual item to the library, container widget, project or page."));
+    // Visual item delete
+    actVisItDel->setText(_("Delete visual item"));
+    actVisItDel->setToolTip(_("Deleting the visual item from the library, container widget, project or page"));
+    actVisItDel->setWhatsThis(_("The button for deleting the visual item from the library, container widget, project or page"));
+    actVisItDel->setStatusTip(_("Press for deleting the visual item from the library, container widget, project or page."));
+    // Visual item properties
+    actVisItProp->setText(_("Properties of the visual item"));
+    actVisItProp->setToolTip(_("Getting the properties of the visual item"));
+    actVisItProp->setWhatsThis(_("The button for getting the properties of the visual item"));
+    actVisItProp->setStatusTip(_("Press for getting the properties of the visual item."));
+    // Visual item graphical edit
+    actVisItEdit->setText(_("Edit visual item"));
+    actVisItEdit->setToolTip(_("Going to editing the visual item"));
+    actVisItEdit->setWhatsThis(_("The button for going to editing the visual item"));
+    actVisItEdit->setStatusTip(_("Press for going to editing the visual item."));
+    // Visual item changes clear
+    actVisItClear->setText(_("Clear visual item changes"));
+    actVisItClear->setToolTip(_("Clearing the visual items changes"));
+    actVisItClear->setWhatsThis(_("The button for clearing the visual items changes"));
+    actVisItClear->setStatusTip(_("Press for clearing the visual items changes."));
+    // Visual item changes put down
+    actVisItChDown->setText(_("Lower down visual item changes"));
+    actVisItChDown->setToolTip(_("Lowering down the visual item changes to the parent"));
+    actVisItChDown->setWhatsThis(_("The button for lowering down the visual item changes to the parent"));
+    actVisItChDown->setStatusTip(_("Press for lowering down the visual item changes to the parent."));
+    // UnDo visual item changes
+    actVisItUnDo->setText(_("Undo visual item changes"));
+    actVisItUnDo->setToolTip(_("Undoing the visual item changes:"));
+    actVisItUnDo->setWhatsThis(_("The button for undoing the visual item changes"));
+    actVisItUnDo->setStatusTip(_("Press for undoing the visual item changes."));
+    // ReDo visual item changes
+    actVisItReDo->setText(_("Redo visual item changes"));
+    actVisItReDo->setToolTip(_("Redoing the visual item changes:"));
+    actVisItReDo->setWhatsThis(_("The button for redoing the visual item changes"));
+    actVisItReDo->setStatusTip(_("Press for redoing the visual item changes."));
+    // Copy visual item
+    actVisItCopy->setText(_("Copy visual item"));
+    actVisItCopy->setToolTip(_("Copying the visual item"));
+    actVisItCopy->setWhatsThis(_("The button for copying the visual item"));
+    actVisItCopy->setStatusTip(_("Press for copying the visual item."));
+    // Cut visual item
+    actVisItCut->setText(_("Cut visual item"));
+    actVisItCut->setToolTip(_("Cutting the visual item"));
+    actVisItCut->setWhatsThis(_("The button for cutting the visual item"));
+    actVisItCut->setStatusTip(_("Press for cutting the visual item."));
+    // Paste visual item
+    actVisItPaste->setText(_("Paste visual item"));
+    actVisItPaste->setToolTip(_("Pasting the visual item"));
+    actVisItPaste->setWhatsThis(_("The button for pasting the visual item"));
+    actVisItPaste->setStatusTip(_("Press for pasting the visual item."));
+    //Widgets level actions
+    // Level up for widget
+    actLevUp->setText(_("Raise up to the top"));
+    actLevUp->setToolTip(_("Raising up the selected widgets to the top"));
+    actLevUp->setWhatsThis(_("The button for raising up the selected widgets to the top"));
+    actLevUp->setStatusTip(_("Press for raising up the selected widgets to the top."));
+    // Level down for widget
+    actLevDown->setText(_("Lower down to the bottom"));
+    actLevDown->setToolTip(_("Lowering down the selected widgets to the bottom"));
+    actLevDown->setWhatsThis(_("The button for lowering down the selected widgets to the bottom"));
+    actLevDown->setStatusTip(_("Press for lowering down the selected widgets to the bottom."));
+    // Rise widget
+    actLevRise->setText(_("Rise up"));
+    actLevRise->setToolTip(_("Raising up the selected widgets"));
+    actLevRise->setWhatsThis(_("The button for raising up the selected widgets"));
+    actLevRise->setStatusTip(_("Press for raising up the selected widgets."));
+    // Lower widget
+    actLevLower->setText(_("Lower down"));
+    actLevLower->setToolTip(_("Lowering down the selected widgets"));
+    actLevLower->setWhatsThis(_("The button for lowering down the selected widgets"));
+    actLevLower->setStatusTip(_("Press for lowering down the selected widgets."));
+    //Widgets alignment actions
+    // Align widgets left
+    actAlignLeft->setText(_("Align to the left"));
+    actAlignLeft->setToolTip(_("Aligning the selected widgets to the left"));
+    actAlignLeft->setWhatsThis(_("The button for aligning the selected widgets to the left"));
+    actAlignLeft->setStatusTip(_("Press for aligning the selected widgets to the left."));
+    // Align widgets to vertical center
+    actAlignVCenter->setText(_("Align vertically to the center"));
+    actAlignVCenter->setToolTip(_("Aligning the selected widgets vertically to the center"));
+    actAlignVCenter->setWhatsThis(_("The button for aligning the selected widgets vertically to the center"));
+    actAlignVCenter->setStatusTip(_("Press for aligning the selected widgets vertically to the center."));
+    // Align widgets to right
+    actAlignRight->setText(_("Align to the right"));
+    actAlignRight->setToolTip(_("Aligning the selected widgets to the right"));
+    actAlignRight->setWhatsThis(_("The button for aligning the selected widgets to the right"));
+    actAlignRight->setStatusTip(_("Press for aligning the selected widgets to the right."));
+    // Align widgets to top
+    actAlignTop->setText(_("Align to the top"));
+    actAlignTop->setToolTip(_("Aligning the selected widgets to the top"));
+    actAlignTop->setWhatsThis(_("The button for aligning the selected widgets to the top"));
+    actAlignTop->setStatusTip(_("Press for aligning the selected widgets to the top."));
+    // Align widgets to horizontal center
+    actAlignHCenter->setText(_("Align horizontally to the center"));
+    actAlignHCenter->setToolTip(_("Aligning the selected widgets horizontally to the center"));
+    actAlignHCenter->setWhatsThis(_("The button for aligning the selected widgets horizontally to the center"));
+    actAlignHCenter->setStatusTip(_("Press for aligning the selected widgets horizontally to the center."));
+    // Align widgets to bottom
+    actAlignBottom->setText(_("Align to the bottom"));
+    actAlignBottom->setToolTip(_("Aligning the selected widgets to the bottom"));
+    actAlignBottom->setWhatsThis(_("The button for aligning the selected widgets to the bottom"));
+    actAlignBottom->setStatusTip(_("Press for aligning the selected widgets to the bottom."));
+    //Elementar figure actions
+    // Unset cursor
+    actElFigCursorAct->setText(_("Return the cursor"));
+    actElFigCursorAct->setToolTip(_("Returning the cursor"));
+    actElFigCursorAct->setWhatsThis(_("The button for returning the cursor"));
+    actElFigCursorAct->setStatusTip(_("Press for returning the cursor."));
+    // Line creation
+    actElFigLine->setText(_("Add line"));
+    actElFigLine->setToolTip(_("Adding a line to the elementary figure"));
+    actElFigLine->setWhatsThis(_("The button for adding a line to the elementary figure"));
+    actElFigLine->setStatusTip(_("Press for adding a line to the elementary figure."));
+    // Arc creation
+    actElFigArc->setText(_("Add arc"));
+    actElFigArc->setToolTip(_("Adding an arc to the elementary figure"));
+    actElFigArc->setWhatsThis(_("The button for adding an arc to the elementary figure"));
+    actElFigArc->setStatusTip(_("Press for adding an arc to the elementary figure."));
+    // Add Besie curve
+    actElFigBesie->setText(_("Add Besier curve"));
+    actElFigBesie->setToolTip(_("Adding a Besier curve to the elementary figure"));
+    actElFigBesie->setWhatsThis(_("The button for adding a Besier curve to the elementary figure"));
+    actElFigBesie->setStatusTip(_("Press for adding a Besier curve to the elementary figure."));
+    // Add Hold points check
+    actElFigCheckAct->setText(_("Connections"));
+    actElFigCheckAct->setToolTip(_("Enabling the connections"));
+    actElFigCheckAct->setWhatsThis(_("The button for enabling the connections"));
+    actElFigCheckAct->setStatusTip(_("Press for enabling the connections."));
+    //MDI windows actions
+    // Close active window
+    actWinClose->setText(_("Cl&ose"));
+    actWinClose->setToolTip(_("Close the active window"));
+    actWinClose->setWhatsThis(_("The button for closing the active window"));
+    actWinClose->setStatusTip(_("Press for closing the active window."));
+    // Close all windows
+    actWinCloseAll->setText(_("Close &All"));
+    actWinCloseAll->setToolTip(_("Close all windows"));
+    actWinCloseAll->setWhatsThis(_("The button for closing all windows"));
+    actWinCloseAll->setStatusTip(_("Press for closing all windows."));
+    // Tile windows
+    actWinTile->setText(_("&Tile"));
+    actWinTile->setToolTip(_("Tile all windows"));
+    actWinTile->setWhatsThis(_("The button for tiling all windows"));
+    actWinTile->setStatusTip(_("Press for tiling all windows."));
+    // Cascade windows
+    actWinCascade->setText(_("&Cascade"));
+    actWinCascade->setToolTip(_("Cascade all windows"));
+    actWinCascade->setWhatsThis(_("The button for cascading all windows"));
+    actWinCascade->setStatusTip(_("Press for cascading all windows."));
+    // Activate next window
+    actWinNext->setText(_("Ne&xt"));
+    actWinNext->setToolTip(_("Activate the next window"));
+    actWinNext->setWhatsThis(_("The button for activating the next window"));
+    actWinNext->setStatusTip(_("Press for activating the next window."));
+    // Activate previous window
+    actWinPrevious->setText(_("Pre&vious"));
+    actWinPrevious->setToolTip(_("Activate the previous window"));
+    actWinPrevious->setWhatsThis(_("The button for activating the previous window"));
+    actWinPrevious->setStatusTip(_("Press for activating the previous window."));
+
+    //Menus
+    menuFile->setTitle(_("&File"));
+    menuEdit->setTitle(_("&Edit"));
+    menuProject->setTitle(_("&Project"));
+    menuWidget->setTitle(_("&Widget"));
+    menuWidgetFunc->setTitle(_("&View"));
+    menuWindow->setTitle(_("&Window"));
+    menuView->setTitle(_("&View"));
+    menuHelp->setTitle(_("&Help"));
+
+    //Tool bars
+    visItToolBar->setWindowTitle(_("Visual items toolbar"));
+    wdgToolView->setWindowTitle(_("Functions of the widgets location"));
+    elFigTool->setWindowTitle(_("Elementary figure tools"));
+
+    //Status bars
+    mWUser->setWhatsThis(_("This label displays the current user."));
+    mWUser->setToolTip(_("Field for displaying the current user."));
+    mWUser->setStatusTip(_("Double click to change the user."));
+    mWStat->setWhatsThis(_("This label displays the used VCA engine station."));
+    mWStat->setToolTip(_("Field for displaying the used VCA engine station."));
+    w_scale->setWhatsThis(_("This label displays the widgets scaling mode."));
+    w_scale->setToolTip(_("Field for displaying the widgets scaling mode."));
+    w_scale->setStatusTip(_("Click to change the widgets scaling mode."));
+    mStModify->setWhatsThis(_("This label indicates the fact of making changes."));
+    mStModify->setToolTip(_("Field for indicating the fact of making changes."));
+    mStModify->setStatusTip(_("Click to save all the made changes."));
+    mWVisScale->setWhatsThis(_("This label displays the current widget scale."));
+    mWVisScale->setToolTip(_("Field for displaying the current widget scale."));
+
+    //Dock windows
+    prjTree->setWhatsThis(_("Dock window of the projects manager."));
+    wdgTree->setWhatsThis(_("Dock window of the manager of the widgets libraries."));
+    attrInsp->setWhatsThis(_("Dock window of the inspector ot the widget attributes."));
+    lnkInsp->setWhatsThis(_("Dock window of the inspector ot the widget links."));
+}
+
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 {
     waitCursorSet(1);	//QApplication::setOverrideCursor(Qt::WaitCursor);
-    int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+    int rez = mod->cntrIfCmd(node, user(), password(), VCAStation(), glob);
     waitCursorSet(0);	//QApplication::restoreOverrideCursor();
 
     return rez;
@@ -745,6 +888,8 @@ QString VisDevelop::getFileName( const QString &caption, const QString &dir, con
 }
 
 string VisDevelop::user( )	{ return mWUser->user(); }
+
+string VisDevelop::lang( )	{ return Mess->lang2Code(user(), true); }
 
 string VisDevelop::password( )	{ return mWUser->pass(); }
 
@@ -839,6 +984,13 @@ void VisDevelop::fullScreen( bool vl )
     setWindowState(vl?Qt::WindowFullScreen:Qt::WindowNoState);
     //!!!! But switching to the WindowMaximized performs only through the WindowNoState
     if(!vl && s2i(SYS->cmdOpt("showWin"))) setWindowState(Qt::WindowMaximized);
+}
+
+void VisDevelop::userChanged( const QString &oldUser, const QString &oldPass )
+{
+    messUpd();
+    wdgTree->updateTree();
+    prjTree->updateTree();
 }
 
 bool VisDevelop::exitModifChk( )
@@ -997,16 +1149,16 @@ void VisDevelop::modifyGlbStUpdate( const string &it, bool check )
 
 void VisDevelop::updateMenuWindow( )
 {
-    mn_window->clear();
+    menuWindow->clear();
     //Add actions to menu
-    mn_window->addAction(actWinClose);
-    mn_window->addAction(actWinCloseAll);
-    mn_window->addSeparator();
-    mn_window->addAction(actWinTile);
-    mn_window->addAction(actWinCascade);
-    mn_window->addSeparator();
-    mn_window->addAction(actWinNext);
-    mn_window->addAction(actWinPrevious);
+    menuWindow->addAction(actWinClose);
+    menuWindow->addAction(actWinCloseAll);
+    menuWindow->addSeparator();
+    menuWindow->addAction(actWinTile);
+    menuWindow->addAction(actWinCascade);
+    menuWindow->addSeparator();
+    menuWindow->addAction(actWinNext);
+    menuWindow->addAction(actWinPrevious);
 
     QList<QMdiSubWindow *> windows = work_space->subWindowList();
     //Enable action state
@@ -1019,10 +1171,10 @@ void VisDevelop::updateMenuWindow( )
     actWinPrevious->setEnabled(act_win&&windows.size()>1);
 
     //Add windows list
-    if(!windows.isEmpty()) mn_window->addSeparator();
+    if(!windows.isEmpty()) menuWindow->addSeparator();
     for(int iW = 0; iW < windows.size(); ++iW) {
 	QMdiSubWindow *child = windows.at(iW);
-	QAction *act = mn_window->addAction(QString((iW<9)?"&%1 %2":"%1 %2").arg(iW+1).arg(child->windowTitle()));
+	QAction *act = menuWindow->addAction(QString((iW<9)?"&%1 %2":"%1 %2").arg(iW+1).arg(child->windowTitle()));
 	act->setCheckable(true);
 	act->setChecked(child == act_win);
 	connect(act, SIGNAL(triggered()), wMapper, SLOT(map()));

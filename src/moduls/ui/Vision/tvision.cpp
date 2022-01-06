@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: tvision.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko (roman@oscada.org)
+ *   Copyright (C) 2006-2022 by Roman Savochenko (roman@oscada.org)
  *                 2005-2006 by Evgen Zaichuk
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"7.18.1"
+#define MOD_VER		"8.0.2"
 #define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -478,6 +478,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
     if(!glob) node.setAttr("path", "/UI/VCAEngine"+node.attr("path"));
     bool isLoc = (VCAStat.empty() || VCAStat == ".");
     node.setAttr("path", "/"+(isLoc?SYS->id():VCAStat)+node.attr("path"));
+    if(!isLoc) node.setAttr("lang", Mess->lang2Code(user));
 
     try {
 	int rez = SYS->transport().at().cntrIfCmd(node, "UIVision", (isLoc?user:("\n"+user+"\n"+password)));

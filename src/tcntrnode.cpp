@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -180,8 +180,8 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
     string path = ipath.empty() ? opt->attr("path") : ipath;
     string s_br = TSYS::pathLev(path, lev, true, &off);
 
-    bool trCtxHold = false;
-    if(ipath.empty() && Mess->translDyn()) Mess->trCtx(opt->attr("user")+"\n"+opt->attr("lang"), &trCtxHold);
+    TrCtxAlloc trCtx;
+    if(ipath.empty() && Mess->translDyn()) trCtx.hold(opt->attr("user")+"\n"+opt->attr("lang"), false);
 
     try {
 	if(!s_br.empty() && s_br[0] != '/') {
@@ -235,8 +235,6 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
     }
 
     opt->setAttr("path", path);
-
-    if(ipath.empty() && Mess->translDyn() && trCtxHold) Mess->trCtx("");
 }
 
 //*************************************************

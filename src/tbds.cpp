@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -264,30 +264,24 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 		    for(iEl = 0; iEl < cf_el.size(); iEl++) {
 			if(isPrm && cf_el[iEl].find("val") != 0) continue;
 			TCfg &cf = cfg.cfg(cf_el[iEl]);
-			if(isPrm) {
-			    if(cf_el[iEl] == "val" || (nd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+TSYS::strParse(cf_el[iEl],1,"_"))))
-				vl = nd->text(true);
-			    else vl = "";
-			}
-			else {
-			    vl = el->attr(cf_el[iEl], true, &isPresent);
-			    // Checking for the field's tag, to store big values
-			    if(!isPresent && (fnd=el->childGet(cf_el[iEl],0,true))) { vl = fnd->text(true); isPresent = true; }
-			}
+
+			// From attribute
+			if(!isPrm) vl = el->attr(cf_el[iEl], true, &isPresent);
+			// From text
+			if((isPrm && (cf_el[iEl] == "val" || (fnd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+TSYS::strParse(cf_el[iEl],1,"_"))))) ||
+				(!isPrm && !isPresent && (fnd=el->childGet(cf_el[iEl],0,true))))
+			    vl = (fnd?fnd:nd)->text(true), isPresent = true;
+
 			// Checking for the translation
 			if(cf.fld().flg()&TFld::TransltText && !cf.noTransl() && (!isPrm || cf_el[iEl] == "val")) {
 			    vl_tr = "";
 			    if(!Mess->translDyn()) {
-				if(isPrm) {
-				    if((nd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+Mess->lang2Code())))
-					vl_tr = nd->text(true);
-				}
-				else {
-				    vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
-				    // Checking for the field's tag, to store big values
-				    if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true)))
-					vl_tr = fnd->text(true);
-				}
+				// From attribute
+				if(!isPrm) vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
+				// From text
+				if((isPrm && (fnd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+Mess->lang2Code()))) ||
+					(!isPrm && vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true))))
+				    vl_tr = fnd->text(true);
 			    }
 			    if(!cf.extVal()) {
 				cf.setS(vl_tr.size() ? vl_tr : vl);
@@ -299,7 +293,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 				cf.setS("cfg:"+path+"#"+cf_el[iEl], TCfg::ExtValThree);
 			    }
 			}
-			else if(isPrm || isPresent) cf.setS(vl);
+			else if(isPresent) cf.setS(vl);
 			else cf.toDefault(true);
 			// Extended context
 			if(localCfgCtx && cf.isKey() && cf.extVal())
@@ -366,30 +360,24 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
 		    for(iEl = 0; iEl < cf_el.size(); iEl++) {
 			if(isPrm && cf_el[iEl].find("val") != 0) continue;
 			TCfg &cf = cfg.cfg(cf_el[iEl]);
-			if(isPrm) {
-			    if(cf_el[iEl] == "val" || (nd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+TSYS::strParse(cf_el[iEl],1,"_"))))
-				vl = nd->text(true);
-			    else vl = "";
-			}
-			else {
-			    vl = el->attr(cf_el[iEl], true, &isPresent);
-			    //  Checking for the field's tag, to store big values
-			    if(!isPresent && (fnd=el->childGet(cf_el[iEl],0,true))) { vl = fnd->text(true); isPresent = true; }
-			}
+
+			//  From attribute
+			if(!isPrm) vl = el->attr(cf_el[iEl], true, &isPresent);
+			//  From text
+			if((isPrm && (cf_el[iEl] == "val" || (fnd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+TSYS::strParse(cf_el[iEl],1,"_"))))) ||
+				(!isPrm && !isPresent && (fnd=el->childGet(cf_el[iEl],0,true))))
+			    vl = (fnd?fnd:nd)->text(true), isPresent = true;
+
 			//  Checking for the translation
 			if(cf.fld().flg()&TFld::TransltText && !cf.noTransl() && (!isPrm || cf_el[iEl] == "val")) {
 			    vl_tr = "";
 			    if(!Mess->translDyn()) {
-				if(isPrm) {
-				    if((nd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+Mess->lang2Code())))
-					vl_tr = nd->text(true);
-				}
-				else {
-				    vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
-				    //  Checking for the field's tag, to store big values
-				    if(vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true)))
-					vl_tr = fnd->text(true);
-				}
+				//  From attribute
+				if(!isPrm) vl_tr = el->attr(cf_el[iEl]+"_"+Mess->lang2Code());
+				//  From text
+				if((isPrm && (fnd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+Mess->lang2Code()))) ||
+					(!isPrm && vl_tr.empty() && (fnd=el->childGet(cf_el[iEl]+"_"+Mess->lang2Code(),0,true))))
+				    vl_tr = fnd->text(true);
 			    }
 			    if(!cf.extVal()) {
 				cf.setS(vl_tr.size() ? vl_tr : vl);
@@ -401,7 +389,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, char f
 				cf.setS("cfg:"+path+"#"+cf_el[iEl], TCfg::ExtValThree);
 			    }
 			}
-			else if(isPrm || isPresent) cf.setS(vl);
+			else if(isPresent) cf.setS(vl);
 			else cf.toDefault(true);
 			//  Extended context
 			if(localCfgCtx && cf.isKey() && cf.extVal())
@@ -505,41 +493,47 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			toLang = tVl;
 			sval = TSYS::strParse(sval, 2, string(1,0));
 			isTransl = (isTransl && toLang != Mess->lang2CodeBase());
-		    } else isTransl = (isTransl && Mess->translCfg() && toLang != Mess->lang2CodeBase());
+		    }
+		    else isTransl = (isTransl && ((Mess->translCfg() && toLang != Mess->lang2CodeBase()) ||
+					(isPrm && SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+toLang)) ||
+					(!isPrm && (wel->attr(vnm+"_"+toLang).size() || wel->childGet(vnm+"_"+toLang,0,true)))));
 
 		    // Setting for default or not translated
 		    if(isCreate || !isTransl || cf.noTransl()) {
-			if(isPrm) {
-			    if(vnm == "val" || (nd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+TSYS::strParse(vnm,1,"_"),true)))
-				nd->setText(sval, true);
+			if(localCfgCtx && cf.isKey() && cf.extVal())
+			    wel->setAttr(vnm+"_ext", cf.getS(TCfg::ExtValTwo));
+
+			// Updating the translation cache of the dynamic mode
+			if(Mess->translDyn() && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) {
+			    tVl = isPrm ? wel->text(true) :
+					  ((tVl=wel->text(true)).size() ? tVl : wel->attr(vnm));
+			    Mess->translIdxCacheUpd(tVl, "", sval, "cfg:"+path+"#"+vnm);
 			}
+
+			// To attribute
+			if(!isPrm && sval.size() < NSTR_BUF_LEN) {
+			    wel->setAttr(vnm, sval);
+			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
+			}
+			// To text
 			else {
-			    if(localCfgCtx && cf.isKey() && cf.extVal())
-				wel->setAttr(vnm+"_ext", cf.getS(TCfg::ExtValTwo));
-			    if(sval.size() < 100) {
-				wel->setAttr(vnm, sval);
-				if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
-			    }
-			    else {
-				if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-				fnd->setText(sval, true);
-				wel->setAttr(vnm, "");
-			    }
+			    if(isPrm && (vnm == "val" || (nd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+TSYS::strParse(vnm,1,"_"),true))))
+				fnd = nd;
+			    else if(!isPrm && !(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
+			    fnd->setText(sval, true);
+			    if(!isPrm) wel->setAttr(vnm, "");
 			}
 		    }
 		    // ... for translated
 		    if(isTransl && !cf.noTransl() && (!isPrm || vnm == "val")) {
 			vnm = cf_el[iEl]+"_"+toLang;
-			if(isPrm) {
-			    if((nd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+toLang,true)))
-				nd->setText(sval, true);
-			}
-			else if(sval.size() < 100) {
+			if(!isPrm && sval.size() < NSTR_BUF_LEN) {
 			    wel->setAttr(vnm, sval);
 			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 			}
 			else {
-			    if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
+			    if(isPrm && (fnd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+toLang,true))) ;
+			    else if(!isPrm && !(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
 			    fnd->setText(sval, true);
 			    wel->setAttr(vnm, "");
 			}

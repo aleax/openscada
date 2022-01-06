@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -372,20 +372,7 @@ string TMess::translGetU( const string &base, const string &user, const string &
 {
     if(!translDyn() && src.empty()) return base;
 
-    //Requesting the cache before
-    bool ok = false;
-    string toLang = translCacheGet(user+string(1,0)+"user", &ok);
-
-    if(!ok && !SYS->stopSignal() && SYS->security().at().usrPresent(user) &&
-	(toLang=SYS->security().at().usrAt(user).at().lang()).size() >= 2)
-    {
-	toLang = toLang.substr(0, 2);
-	translCacheSet(user+string(1,0)+"user", toLang);
-    } else if(!ok) toLang = lang2Code();
-
-    return translGet(base, toLang, src);
-
-    //return translGet(base, (SYS->security().at().usrPresent(user)?SYS->security().at().usrAt(user).at().lang():lang2Code()), src);
+    return translGet(base, lang2Code(user), src);
 }
 
 string TMess::translGetLU( const string &base, const string &lang, const string &user, const string &src )
@@ -457,19 +444,7 @@ string TMess::translSetU( const string &base, const string &user, const string &
 {
     if(!translDyn() && !needReload) return mess;
 
-    //Requesting the cache before
-    bool ok = false;
-    string toLang = translCacheGet(user+string(1,0)+"user", &ok);
-    if(!ok && !SYS->stopSignal() && SYS->security().at().usrPresent(user) &&
-	(toLang=SYS->security().at().usrAt(user).at().lang()).size() >= 2)
-    {
-	toLang = toLang.substr(0, 2);
-	translCacheSet(user+string(1,0)+"user", toLang);
-    } else if(!ok) toLang = lang2Code();
-
-    return translSet(base, toLang, mess, needReload);
-
-    //return translSet(base, (SYS->security().at().usrPresent(user)?SYS->security().at().usrAt(user).at().lang():lang2Code()), mess, needReload);
+    return translSet(base, lang2Code(user), mess, needReload);
 }
 
 string TMess::translSetLU( const string &base, const string &lang, const string &user, const string &mess, bool *needReload )
@@ -622,9 +597,26 @@ string TMess::trCtx( const string &user_lang, bool *hold )
 string TMess::lang( )
 {
     char *lng = NULL;
-    if(((lng=getenv("LANGUAGE")) && strlen(lng)) || ((lng=getenv("LC_MESSAGES")) && strlen(lng)) || ((lng=getenv("LANG")) && strlen(lng)))
+    if(((lng=getenv("LANGUAGE")) && strlen(lng)) ||
+	    ((lng=getenv("LC_MESSAGES")) && strlen(lng)) ||
+	    ((lng=getenv("LANG")) && strlen(lng)))
 	return lng;
     else return "C";
+}
+
+string TMess::lang2Code( const string &user, bool onlyUser )
+{
+    if(user.size()) {
+	bool ok = false;
+	string toLang = translCacheGet(user+string(1,0)+"user", &ok);
+	if(!ok && !SYS->stopSignal() && SYS->security().at().usrPresent(user) &&
+		    (toLang=SYS->security().at().usrAt(user).at().lang()).size())
+	    translCacheSet(user+string(1,0)+"user", toLang);
+	if(onlyUser || toLang.size())
+	    return (toLang.size() > 2) ? toLang.substr(0,2) : toLang;
+    }
+
+    return mLang2Code;
 }
 
 bool TMess::messLevelTest( int8_t condLev, int8_t messLev )
@@ -747,16 +739,8 @@ string TMess::I18N( const char *mess, const char *d_name, const char *mLang )
 	if(mLang) toLang = mLang;
 	else {
 	    string ctx = trCtx(), toUser;
-	    if((toLang=TSYS::strLine(ctx,1)).empty() && (toUser=TSYS::strLine(ctx,0)).size()) {
-		bool ok = false;
-		toLang = translCacheGet(toUser+string(1,0)+"user", &ok);
-		if(!ok && !SYS->stopSignal() && SYS->security().at().usrPresent(toUser) &&
-		    (toLang=SYS->security().at().usrAt(toUser).at().lang()).size() >= 2)
-		{
-		    toLang = toLang.substr(0, 2);
-		    translCacheSet(toUser+string(1,0)+"user", toLang);
-		}
-	    }
+	    if((toLang=TSYS::strLine(ctx,1)).empty() && (toUser=TSYS::strLine(ctx,0)).size())
+		toLang = lang2Code(toUser, true);
 	}
 
 	//Obtaining the message translation from the cache

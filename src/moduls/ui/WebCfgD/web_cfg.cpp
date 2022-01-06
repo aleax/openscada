@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfgD file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.1.8"
+#define MOD_VER		"2.2.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -201,7 +201,8 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
     map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, "");
 
-    if(Mess->translDyn()) Mess->trCtx(ses.user);
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
 	string zero_lev = TSYS::pathLev(ses.url, 0);
@@ -351,8 +352,6 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	page = pgCreator(iprt, "<div class='error'>"+TSYS::strMess(_("Error the page '%s': %s"),ses.url.c_str(),err.mess.c_str())+"</div>\n",
 			       "404 Not Found");
     }
-
-    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
@@ -360,7 +359,8 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     map<string,string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page);
 
-    if(Mess->translDyn()) Mess->trCtx(ses.user);
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     //Commands process
     cntEl = ses.prm.find("com");
@@ -419,8 +419,6 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
     }
-
-    if(Mess->translDyn()) Mess->trCtx("");
 }
 
 string TWEB::trMessReplace( const string &tsrc )
@@ -488,6 +486,13 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
     }
 
+    //Get language
+    for(size_t iVr = 0; iVr < vars.size(); iVr++)
+	if(TSYS::strParse(vars[iVr],0,":") == "oscd_lang") {
+	    lang = sTrm(TSYS::strParse(vars[iVr],1,":"));
+	    break;
+	}
+
     //Content parse
     string boundary;
     const char *c_bound = "boundary=";
@@ -497,11 +502,11 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_name = "name=\"";
     const char *c_file = "filename=\"";
 
-    for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 &&
-		(pos=vars[i_vr].find(c_bound,0)) != string::npos) {
+    for(size_t iVr = 0, pos = 0; iVr < vars.size() && boundary.empty(); iVr++)
+	if(vars[iVr].compare(0,vars[iVr].find(":",0),"Content-Type") == 0 &&
+		(pos=vars[iVr].find(c_bound,0)) != string::npos) {
 	    pos += strlen(c_bound);
-	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
+	    boundary = vars[iVr].substr(pos,vars[iVr].size()-pos);
 	}
     if(boundary.empty()) return;
 

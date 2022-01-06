@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -3095,11 +3095,11 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 	free(sDir);
     }
     sort(its.begin(), its.end());
-    for(unsigned i_it = 0; i_it < its.size(); i_it++)
-	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
+    for(unsigned iIt = 0; iIt < its.size(); iIt++)
+	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[iIt]);
     sort(fits.begin(), fits.end());
-    for(unsigned i_it = 0; i_it < fits.size(); i_it++)
-	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
+    for(unsigned iIt = 0; iIt < fits.size(); iIt++)
+	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[iIt]);
 }
 
 void TSYS::cntrCmdProc( XMLNode *opt )
@@ -3536,6 +3536,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 	if(stV.size() && (Mess->trMessIdx.size() || Mess->trMessCache.size()))
 	    stV += ". " + TSYS::strMess(_("Messages indexed=%d, cached=%d."), Mess->trMessIdx.size(), Mess->trMessCache.size());
+	if(stV.size() && Mess->trCtxs.size())
+	    stV += (stV[stV.size()-1]!='.'?". ":" ") + TSYS::strMess(_("Translation contexts=%d."), Mess->trCtxs.size());
 	opt->setText(stM+", "+stV);
     }
     else if(a_path == "/tr/baseLang") {

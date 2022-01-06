@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel.h
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,6 +58,7 @@ class VisDevelop : public QMainWindow
 	~VisDevelop( );
 
 	string user( );
+	string lang( );
 	string password( );
 	string VCAStation( );
 	bool   wdgScale( );
@@ -67,6 +68,8 @@ class VisDevelop : public QMainWindow
 	void setVCAStation( const string& st );
 	void setWdgScale( bool val );
 	void setWdgVisScale( double val );
+
+	void messUpd( );
 
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
@@ -114,8 +117,14 @@ class VisDevelop : public QMainWindow
     public:
 	//Public attributes
 	// Actions
+	//  Generic actions
+	QAction *actFullScr,		//Full screen action
+		*actClose,		//Close
+		*actQuit,		//Quit
+		*actAbout,		//About "Program info"
+		*actQtAbout,		//About Qt
 	//  VCA actions of items
-	QAction *actDBLoad, *actDBLoadF,//Load item from DB
+		*actDBLoad, *actDBLoadF,//Load item from DB
 		*actDBSave, *actDBSaveF,//Save item to DB
 		*actPrjRun,		//Run project execution from selected project item
 		*actPrjNew,		//New project create
@@ -132,7 +141,6 @@ class VisDevelop : public QMainWindow
 		*actVisItUnDo,		//UnDo visual item changes
 		*actVisItReDo,		//ReDo visual item changes
 	//  Widget's ordering actions
-		*actFullScr,		//Full screen action
 		*actLevUp,		//Up widget level
 		*actLevDown,		//Down widget level
 		*actLevRise,		//Rise widget level
@@ -157,7 +165,11 @@ class VisDevelop : public QMainWindow
 		*actWinNext,		//Select next window
 		*actWinPrevious,	//Select previous window
 	//  Manuals
-		*actManualLib;		//Selected library manual
+		*actManualLib,		//Selected library manual
+		*actManual,		//Vision manual
+		*actManualVCA,		//VCAEngine manual
+		*actManualSYS,		//OpenSCADA manual index
+		*actWhatIs;		//What is
 	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
 
 	// Toolbars
@@ -176,14 +188,14 @@ class VisDevelop : public QMainWindow
 	QMdiArea	*work_space;	//MDI widgets workspace
 
 	// Menu root items
-	QMenu	*mn_file,		//Menu "File"
-		*mn_edit,		//Menu "Edit"
-		*mn_proj,		//Menu "Project"
-		*mn_widg,		//Menu "Widget"
-		*mn_widg_fnc,		//Submenu "View functions"
-		*mn_window,		//Menu "Window"
-		*mn_view,		//Menu "View"
-		*mn_help;		//Menu "Help"
+	QMenu	*menuFile,		//Menu "File"
+		*menuEdit,		//Menu "Edit"
+		*menuProject,		//Menu "Project"
+		*menuWidget,		//Menu "Widget"
+		*menuWidgetFunc,	//Submenu "View functions"
+		*menuWindow,		//Menu "Window"
+		*menuView,		//Menu "View"
+		*menuHelp;		//Menu "Help"
 	vector<QMenu*>	lb_menu;	//Library menus
 
 	QFileDialog	*fileDlg;
@@ -202,6 +214,8 @@ class VisDevelop : public QMainWindow
 	void setActiveSubWindow(QWidget *);
 
 	void fullScreen( bool vl );	//Full screen toggle
+
+	void userChanged( const QString &oldUser, const QString &oldPass );	//User changed
 
     private:
 	//Private attributes

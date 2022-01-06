@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2543,7 +2543,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	if(!tm || ownerSess()->clkChkModif(tm,wModif())) {
 	    if(!tm) {
 		if(dynamic_cast<SessPage*>(this))
-		    opt->childAdd("el")->setAttr("id","name")->setAttr("p",i2s(A_PG_NAME))->setText(name());
+		    opt->childAdd("el")->setAttr("id","name")->setAttr("p",i2s(A_PG_NAME))->setText(trD(name()));
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->setText(i2s(perm));
 	    }
 	    AutoHD<Attr> attr;

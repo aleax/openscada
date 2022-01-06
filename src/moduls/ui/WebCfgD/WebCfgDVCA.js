@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebCfgD file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,22 +19,22 @@
  ***************************************************************************/
 
 //Global parameters init
-MOD_ID = 'WebCfgD';	//Module identifier
-stTmID = null;		//Status line timer identifier
-pgRefrTmID = null;	//Periodic current page update timer identifier
-dlgWin = null;		//Opened window dialog
-selPath = '';		//Selected node path
-queSZ = 20;		//Previous and next arrays queue size
-ndPrev = new Array();	//Previous nodes array
-ndNext = new Array();	//Next nodes array
-pgInfo = document.createElement('info');	//Curent page XML tree.
-root = document.createElement('oscada_cntr');	//Root page's node.
-SEC_XT = 0x01;		//Extended
-SEC_WR = 0x02;		//Write access
-SEC_RD = 0x04;		//Read access
-copyBuf = '0';		//Copy node address buffer
-genReqs = null;		//Generic request object
-limTblItmCnt = 300;	//Limit of the table item content
+var MOD_ID = 'WebCfgD';	//Module identifier
+var stTmID = null;	//Status line timer identifier
+var pgRefrTmID = null;	//Periodic current page update timer identifier
+var dlgWin = null;	//Opened window dialog
+var selPath = '';	//Selected node path
+var queSZ = 20;		//Previous and next arrays queue size
+var ndPrev = new Array();//Previous nodes array
+var ndNext = new Array();//Next nodes array
+var pgInfo = document.createElement('info');	//Curent page XML tree
+var root = document.createElement('oscada_cntr');//Root page's node
+var SEC_XT = 0x01;	//Extended
+var SEC_WR = 0x02;	//Write access
+var SEC_RD = 0x04;	//Read access
+var copyBuf = '0';	//Copy node address buffer
+var genReqs = null;	//Generic request object
+var limTblItmCnt = 300;	//Limit of the table item content
 
 //Browser type detect
 var isNN = navigator.appName.indexOf('Netscape') != -1;
@@ -42,6 +42,7 @@ var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
 var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
 var isChrome = navigator.userAgent.indexOf('Chrome') != -1;
+var gPrms = window.location.search || '';
 
 /***************************************************
  * strEncode - String encoding.                    *
@@ -216,7 +217,7 @@ function servGet( adr, prm )
     }
 
     var req = getXmlHttp();
-    req.open('GET', encodeURI('/'+MOD_ID+adr+'?'+prm),false);
+    req.open('GET', encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm),false);
     //console.log("TEST 10: "+encodeURI('/'+MOD_ID+adr+'?'+prm));
 //    req.setRequestHeader('Content-Type','text/xml; charset=utf-8');
     try {
@@ -234,7 +235,7 @@ function servGet( adr, prm )
 function servSet( adr, prm, body, waitRez )
 {
     var req = getXmlHttp();
-    req.open('POST',encodeURI('/'+MOD_ID+adr+'?'+prm),!waitRez);
+    req.open('POST',encodeURI('/'+MOD_ID+adr+(gPrms.length?gPrms+'&':'?')+prm),!waitRez);
     try {
 	req.send(body);
 	if(waitRez && req.status == 200 && req.responseXML.childNodes.length)
@@ -251,7 +252,7 @@ function servSet( adr, prm, body, waitRez )
 function servReq( body )
 {
     var req = getXmlHttp();
-    req.open('POST',encodeURI('/'+MOD_ID+'/?com=req'),false);
+    req.open('POST',encodeURI('/'+MOD_ID+'/'+(gPrms.length?gPrms+'&':'?')+'com=req'),false);
     req.setRequestHeader("Content-Type", "application/xml;charset=UTF-8");
     try {
 	req.send(body);
@@ -2246,6 +2247,9 @@ var actCut = document.getElementById('actCut');
 if(actCut) actCut.onclick = function()		{ if(this.className=='active') itCut(); return false; }
 var actPaste = document.getElementById('actPaste');
 if(actPaste) actPaste.onclick = function()	{ if(this.className=='active') itPaste(); return false; }
+//  About
+var actAbout = document.getElementById('actAbout');
+if(actAbout && gPrms.length) actAbout.href += gPrms;
 
 pageDisplay(hostsUpdate());
 

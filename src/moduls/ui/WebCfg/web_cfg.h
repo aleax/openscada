@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfg file: web_cfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2016 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,24 +37,26 @@ namespace WebCfg
 class SSess
 {
     public:
-	//Methods
-	SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent );
+    //Methods
+    SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent );
 
-	//Attributes
-	string	url;			//request URL
-	string	page;
-	string	sender;			//request sender
-	string	user;			//sesion user
-	string	content;		//Contain
+    //Attributes
+    string	url,		//request URL
+		page,
+		sender,		//request sender
+		user,		//sesion user
+		content,	//Contain
+		gPrms,		//Global parameters
+		lang;		//Language
 
-	vector<string>		vars;	//request vars
-	map<string,string>	cnt;	//Parsed contain
-	map<string,string>	prm;	//URL parameters
+    vector<string>	vars;	//request vars
+    map<string,string>	cnt;	//Parsed contain
+    map<string,string>	prm;	//URL parameters
 
-	vector<string>		mess;	//no interrupt messages
+    vector<string>	mess;	//no interrupt messages
 
-	XMLNode	pg_info;	//page node
-	XMLNode	*root;
+    XMLNode	pg_info;	//page node
+    XMLNode	*root;
 };
 
 //*************************************************

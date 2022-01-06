@@ -504,7 +504,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>string codeConvOut ( const string &amp;toCH, const string &amp;mess);</i> — Conversion of the message from the internal system codepage. </li>
 <li> <i>string I18N( const char *mess, const char *d_name = NULL, const char *mLang = NULL );</i> — Getting the message <i>mess</i> in the language <i>mLang</i> for the system translation from the directory <i>d_name</i>, NULL for the OpenSCADA core.</li>
 <li> <i>string lang( );</i> — Language of the system, as en_US.UTF-8. </li>
-<li> <i>string lang2Code( );</i> — Language of the system in bi-symbolic codepage (en). </li>
+<li> <i>string lang2Code( const string &amp;user = "", bool onlyUser = false );</i> — Language of the system in bi-symbolic codepage (en). Specify <i>user</i> for obtaining its language and <i>onlyUser</i> for only that.</li>
 <li> <i>string &amp;charset( );</i> — The system codepage. </li>
 <li> <i>int logDirect( );</i> — Receivers to whom the system messages (stdout, stderr, syslog, archive) are sent.</li>
 <li> <i>int messLevel( );</i> — The level below which the messages are ignored.</li>
@@ -657,12 +657,11 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 </p>
 <ul><li> <i>NoFlg</i> (0) — no query flag;</li>
 <li> <i>NoException</i> (0x01) — do not generate the exceptions, return error result;</li>
-<li> <i>OnlyCfg</i> (0x02) — force request to the configuration file, in genPrmGet(), genPrmSet() and dataSet() only;</li>
-<li> <i>CfgPrm</i> (0x04) — use Parameters of the Configuration File;</li></ul>
+<li> <i>OnlyCfg</i> (0x02) — force request to the configuration file, in genPrmGet(), genPrmSet() and dataSet() only;</li></ul>
 <dl><dd> <i>Specific flags</i></dd></dl>
-<ul><li> <i>UseTranslation</i> (0x08) — use the translation of the text variable, in genPrmGet() and genPrmSet() only;</li>
-<li> <i>UseCache</i> (0x08) — use the cache, in dataSeek() only, defines the seek cache using — preloading the result in whole and significant acceleration, as the unique cacheKey this function uses the <i>cfg</i> address.</li>
-<li> <i>UseAllKeys</i> (0x08) — use all keys, in dataDel() only, is used to indicate the necessity of the all keys set fro their using while deleting with the restoration of the original state of the keys selection when the function is finished. If this flag is not set, the early selected keys are used to perform the operation.</li></ul>
+<ul><li> <i>UseTranslation</i> (0x04) — use the translation of the text variable, in genPrmGet() and genPrmSet() only;</li>
+<li> <i>UseCache</i> (0x04) — use the cache, in dataSeek() only, defines the seek cache using — preloading the result in whole and significant acceleration, as the unique cacheKey this function uses the <i>cfg</i> address.</li>
+<li> <i>UseAllKeys</i> (0x04) — use all keys, in dataDel() only, is used to indicate the necessity of the all keys set fro their using while deleting with the restoration of the original state of the keys selection when the function is finished. If this flag is not set, the early selected keys are used to perform the operation.</li></ul>
 <p><b>Public generic static methods:</b>
 </p>
 <ul><li> <i>static string fullDBSYS( );</i> — The full name of the system table.</li>
@@ -4261,5 +4260,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2021</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2788</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2794</td></tr></table></body>
 </html>

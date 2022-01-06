@@ -1,3 +1,26 @@
+2022-02-06 Roman (stable)
+- !!!!:FIX:SYS,BD,Protocol.HTTP,UI.{Vision,WebCfg,WebCfgD,WebUser,WebVision}:
+    Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode:
+    - FIX:SYS,Protocol.HTTP,UI.{Vision,WebCfg,WebCfgD,WebUser,WebVision}:
+	The translation context appened of the object TrCtxAlloc for handling the context registration
+	and automatic that free, then fixing non freeing the context sometime.
+    - The user language obtaining unified in the function lang2Code(), expanded by the arguments "user" and "onlyUser".
+    - BD: The configuration file processing some unified in processing the parameters and tables in common code.
+    - FIX:BD: Writing for the configuration file fixed for already present translation and in the SINGLELANGUAGE mode.
+    - BD: BASE change in the configuration file appended by the message index and cache update.
+    - BD: The constant NSTR_BUF_LEN used in detection whether write to attribute or text of the table field
+	at writing to the configuration file.
+    - The messages status appended of the translation contexts number.
+- UI.VCAEngine: Appended for translation the subwindow title in the MULTILANGUAGE-DYNAMIC mode.
+- !:UI.{QTCfg,Vision}: Adapted to the control items obtain in language of the user.
+- !!!!:UI.{QTCfg,Vision}: Adapted in the development mode to the main window interface language update at the user change.
+    Scheduled to deepening the change to dialogs and other.
+- !!!!:UI.{WebCfg,WebCfgD}: Adapted to the MULTILANGUAGE-DYNAMIC mode, using the HTTP-variable "lang",
+    the user language and browser language.
+- !:UI.WebVision: The popup windows closing of the calendar and the editable combo moved completely
+    at a mouse button press outward the window, together other popup menus.
+
+
 2021-12-29 Roman (stable)
 - !!!!:FIX:SYS,BD,*: Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode:
     - BD: The configuration parameters implementing in the common context of the TBDS::data{Seek,Get,Set}() functions.
