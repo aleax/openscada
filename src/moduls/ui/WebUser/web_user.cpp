@@ -31,13 +31,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebUser"
-#define MOD_NAME	_("User WWW-page")
+#define MOD_NAME	trS("User WWW-page")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.7"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
+#define MOD_VER		"1.5.8"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -86,17 +86,17 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mPgU = grpAdd("up_");
 
     //User page DB structure
-    mUPgEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    mUPgEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPgEl.fldAdd(new TFld("PROG",_("Procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
-    mUPgEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    mUPgEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mUPgEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mUPgEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mUPgEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0") );
+    mUPgEl.fldAdd(new TFld("PROG",trS("Procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPgEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //User page data IO DB structure
-    mUPgIOEl.fldAdd(new TFld("PG_ID",_("User page ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mUPgIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mUPgIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
+    mUPgIOEl.fldAdd(new TFld("PG_ID",trS("User page ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPgIOEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPgIOEl.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"100"));
 }
 
 TWEB::~TWEB( )
@@ -596,17 +596,17 @@ void UserPg::setEnable( bool vl )
 	}
 	else {
 	    TFunction funcIO("upg_"+id());
-	    ioRez	= funcIO.ioAdd(new IO("rez",_("Result"),IO::String,IO::Return,"200 OK"));
-	    ioHTTPreq	= funcIO.ioAdd(new IO("HTTPreq",_("HTTP request"),IO::String,IO::Default,"GET"));
-	    ioUrl	= funcIO.ioAdd(new IO("url",_("URL"),IO::String,IO::Default));
-	    ioPage	= funcIO.ioAdd(new IO("page",_("WWW-page"),IO::String,IO::Output));
-	    ioSender	= funcIO.ioAdd(new IO("sender",_("Sender"),IO::String,IO::Default));
-	    ioUser	= funcIO.ioAdd(new IO("user",_("User"),IO::String,IO::Default));
-	    ioHTTPvars	= funcIO.ioAdd(new IO("HTTPvars",_("HTTP variables"),IO::Object,IO::Default));
-	    ioURLprms	= funcIO.ioAdd(new IO("URLprms",_("URL's parameters"),IO::Object,IO::Default));
-	    ioCnts	= funcIO.ioAdd(new IO("cnts",_("Content items"),IO::Object,IO::Default));
-	    ioThis	= funcIO.ioAdd(new IO("this",_("This object"),IO::Object,IO::Default));
-	    ioPrt	= funcIO.ioAdd(new IO("prt",_("Protocol's object"),IO::Object,IO::Default));
+	    ioRez	= funcIO.ioAdd(new IO("rez",trS("Result"),IO::String,IO::Return,"200 OK"));
+	    ioHTTPreq	= funcIO.ioAdd(new IO("HTTPreq",trS("HTTP request"),IO::String,IO::Default,"GET"));
+	    ioUrl	= funcIO.ioAdd(new IO("url",trS("URL"),IO::String,IO::Default));
+	    ioPage	= funcIO.ioAdd(new IO("page",trS("WWW-page"),IO::String,IO::Output));
+	    ioSender	= funcIO.ioAdd(new IO("sender",trS("Sender"),IO::String,IO::Default));
+	    ioUser	= funcIO.ioAdd(new IO("user",trS("User"),IO::String,IO::Default));
+	    ioHTTPvars	= funcIO.ioAdd(new IO("HTTPvars",trS("HTTP variables"),IO::Object,IO::Default));
+	    ioURLprms	= funcIO.ioAdd(new IO("URLprms",trS("URL's parameters"),IO::Object,IO::Default));
+	    ioCnts	= funcIO.ioAdd(new IO("cnts",trS("Content items"),IO::Object,IO::Default));
+	    ioThis	= funcIO.ioAdd(new IO("this",trS("This object"),IO::Object,IO::Default));
+	    ioPrt	= funcIO.ioAdd(new IO("prt",trS("Protocol's object"),IO::Object,IO::Default));
 
 	    string workProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
@@ -826,9 +826,6 @@ string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "0";
-    if(name == "Name")		return MOD_NAME;
-    if(name == "Author")	return AUTHORS;
-    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

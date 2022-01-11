@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,24 +34,24 @@ using namespace OSCADA;
 //*************************************************
 //* TSecurity					  *
 //*************************************************
-TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"), false)
+TSecurity::TSecurity( ) : TSubSYS(SSEC_ID, false)
 {
     mUsr = TCntrNode::grpAdd("usr_");
     mGrp = TCntrNode::grpAdd("grp_");
 
     //User BD structure
-    userEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    userEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    userEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    userEl.fldAdd(new TFld("PASS",_("Password"),TFld::String,0,"100"));
-    userEl.fldAdd(new TFld("LANG",_("Language"),TFld::String,0,"50"));
-    userEl.fldAdd(new TFld("PICTURE",_("User picture"),TFld::String,0,"100000"));
+    userEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    userEl.fldAdd(new TFld("DESCR",trS("Full name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    userEl.fldAdd(new TFld("LONGDESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    userEl.fldAdd(new TFld("PASS",trS("Password"),TFld::String,0,"100"));
+    userEl.fldAdd(new TFld("LANG",trS("Language"),TFld::String,0,"50"));
+    userEl.fldAdd(new TFld("PICTURE",trS("User picture"),TFld::String,0,"100000"));
 
     //Group BD structure
-    grpEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    grpEl.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    grpEl.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    grpEl.fldAdd(new TFld("USERS",_("Users"),TFld::String,0,"1000000"));
+    grpEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    grpEl.fldAdd(new TFld("DESCR",trS("Full name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    grpEl.fldAdd(new TFld("LONGDESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    grpEl.fldAdd(new TFld("USERS",trS("Users"),TFld::String,0,"1000000"));
 }
 
 void TSecurity::postEnable( int flag )

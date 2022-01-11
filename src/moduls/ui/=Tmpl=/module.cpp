@@ -2,7 +2,7 @@
 //!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module UI.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,13 +33,13 @@
 //************************************************
 //* Module info!                                 *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	_("UI template")
+#define MOD_NAME	trS("UI template")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VER		"0.0.1"
-#define AUTHORS		_("MyName MyFamily")
-#define DESCRIPTION	_("UI subsystem template module.")
+#define AUTHORS		trS("MyName MyFamily")
+#define DESCRIPTION	trS("UI subsystem template module.")
 #define LICENSE		"MyLicense"
 //************************************************
 

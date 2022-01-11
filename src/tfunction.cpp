@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -280,15 +280,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    }
 	if(ctrMkNode("area",opt,-1,"/exec",_("Execute"),RWRW__,"root",grp)) {
 	    ctrMkNode("fld",opt,-1,"/exec/en",_("Enabled"),RWRW__,"root",grp,1,"tp","bool");
-	    // Add test form
+	    // Adding the test form
 	    if(mTVal) {
 		if(ctrMkNode("area",opt,-1,"/exec/io",_("IO")))
 		    for(int iIO = 0; iIO < ioSize(); iIO++) {
 			if(mIO[iIO]->hide()) continue;
 			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),
-					//???? Review after the mixed translation implementation,
-					//     but the name can be already translated for static functions
-					trD(io(iIO)->name()),((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
+					_(io(iIO)->name()),((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
 			if(nd) {
 			    switch(io(iIO)->type()) {
 				case IO::String:
@@ -302,7 +300,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 			    }
 			}
 		    }
-		// Add Calc button and Calc time
+		// Adding the calc button and the calc time field
 		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Number of calculations"),RWRW__,"root",grp,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/exec/tm",_("Spent time"),R_R___,"root",grp,1,"tp","str");
 		ctrMkNode("comm",opt,-1,"/exec/calc",_("Execute"),RWRW__,"root",grp);
@@ -332,7 +330,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	for(int iIO = 0; iIO < ioSize(); iIO++) {
 	    string tmp_str;
 	    if(n_id)	n_id->childAdd("el")->setText(io(iIO)->id());
-	    if(n_nm)	n_nm->childAdd("el")->setText(io(iIO)->name());
+	    if(n_nm)	n_nm->childAdd("el")->setText(_(io(iIO)->name()));
 	    if(n_type) {
 		switch(io(iIO)->type()) {
 		    case IO::String:
@@ -399,7 +397,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* IO                                            *
 //*************************************************
-IO::IO( const char *iid, const char *iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez ) :
+IO::IO( const char *iid, const string &iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez ) :
     mId(iid), mName(iname), mType(itype), mFlg(iflgs), mDef(idef), mHide(ihide), mRez(irez), owner(NULL)
 {
 

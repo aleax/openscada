@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,8 @@
 
 #undef _
 #define _(mess) modPrt->I18N(mess).c_str()
+#undef trS
+#define trS(mess) modPrt->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::map;
@@ -41,12 +43,12 @@ using namespace OPC;
 //*************************************************
 //* Protocol modul info!                          *
 #define PRT_ID		"OPC_UA"
-#define PRT_NAME	_("Server OPC-UA")
+#define PRT_NAME	trS("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.2.6"
-#define PRT_AUTOR	_("Roman Savochenko")
-#define PRT_DESCR	_("Provides OPC-UA server service implementation.")
+#define PRT_MVER	"2.2.7"
+#define PRT_AUTOR	trS("Roman Savochenko")
+#define PRT_DESCR	trS("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 

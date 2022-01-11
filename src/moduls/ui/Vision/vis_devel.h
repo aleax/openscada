@@ -77,7 +77,7 @@ class VisDevelop : public QMainWindow
 
     signals:
 	//Public signals
-	void makeStarterMenu( );
+	void makeStarterMenu( QWidget *mn = NULL, QString lang = "" );
 	void modifiedItem( const string& );
 
     public slots:

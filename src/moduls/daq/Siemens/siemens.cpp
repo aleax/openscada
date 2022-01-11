@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,12 +39,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Siemens"
-#define MOD_NAME	_("Siemens DAQ and Beckhoff")
+#define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.4"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
+#define MOD_VER		"4.4.5"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
  protocol TwinCAT ADS/AMS due it working with data blocks also.")
 #define LICENSE		"GPL2"
@@ -89,37 +89,37 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's DB structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PRM_BD_S",_("Simple parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
-    fldAdd(new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selectable,"1","0",
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD_S",trS("Simple parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("TM_REST",trS("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
+    fldAdd(new TFld("ASINC_WR",trS("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("TYPE",trS("Connection type"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d;%d;%d",TMdContr::CIF_PB,TMdContr::ISO_TCP,TMdContr::ISO_TCP243,TMdContr::ADS,TMdContr::SELF_ISO_TCP).c_str(),
 	"CIF_PB;ISO_TCP (LibnoDave);ISO_TCP243 (LibnoDave);ADS;ISO_TCP"));
-    fldAdd(new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"100","10"));
-    fldAdd(new TFld("ADDR_TR",_("Output transport"),TFld::String,TFld::NoFlag,"40"));
-    fldAdd(new TFld("SLOT",_("CPU slot of the PLC"),TFld::Integer,TFld::NoFlag,"2","2","0;30"));
-    fldAdd(new TFld("CIF_DEV",_("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3"));
-    fldAdd(new TFld("MAX_BLKSZ",_("Maximum size of the request block, bytes"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
+    fldAdd(new TFld("ADDR",trS("Remote controller address"),TFld::String,TFld::NoFlag,"100","10"));
+    fldAdd(new TFld("ADDR_TR",trS("Output transport"),TFld::String,TFld::NoFlag,"40"));
+    fldAdd(new TFld("SLOT",trS("CPU slot of the PLC"),TFld::Integer,TFld::NoFlag,"2","2","0;30"));
+    fldAdd(new TFld("CIF_DEV",trS("CIF board"),TFld::Integer,TFld::NoFlag,"1","0","0;3"));
+    fldAdd(new TFld("MAX_BLKSZ",trS("Maximum size of the request block, bytes"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
     //Parameter type DB structure
     // Logical parameter type by the DAQ parameter template
     int t_prm = tpParmAdd("logic", "PRM_BD", _("Logical"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("TMPL",trS("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     // Parameter template IO DB structure
-    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
-    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200"));
+    elPrmIO.fldAdd(new TFld("PRM_ID",trS("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elPrmIO.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
+    elPrmIO.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::NoFlag,"200"));
     // Simple parameter type by the attributes list
     t_prm = tpParmAdd("simple", "PRM_BD_S", _("Simple"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",trS("Attributes list"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"100000",""));
 
     //CIF devices DB structure
-    elCifDev.fldAdd(new TFld("ID",_("Identifier"),TFld::Integer,TCfg::Key,"1"));
-    elCifDev.fldAdd(new TFld("ADDR",_("Address"),TFld::Integer,TFld::NoFlag,"3","5"));
-    elCifDev.fldAdd(new TFld("SPEED",_("Speed"),TFld::Integer,TFld::NoFlag,"1","7"));
+    elCifDev.fldAdd(new TFld("ID",trS("Identifier"),TFld::Integer,TCfg::Key,"1"));
+    elCifDev.fldAdd(new TFld("ADDR",trS("Address"),TFld::Integer,TFld::NoFlag,"3","5"));
+    elCifDev.fldAdd(new TFld("SPEED",trS("Speed"),TFld::Integer,TFld::NoFlag,"1","7"));
 
     //Clear CIF devices info
     for(int iB = 0; iB < MAX_DEV_BOARDS; iB++) {

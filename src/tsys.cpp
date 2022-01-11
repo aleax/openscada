@@ -164,7 +164,7 @@ TSYS::~TSYS( )
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	    cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
 	dataRes().unlock();
-	printf(_("Program counters at the exit time: %s"), cntrsStr.c_str());
+	printf("Program counters at the exit time: %s", cntrsStr.c_str());
     }
 
     delete Mess;
@@ -3104,7 +3104,6 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
-    char buf[prmStrBuf_SZ];
     string a_path = opt->attr("path");
 
     //Service commands process
@@ -3118,8 +3117,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,trD(name()).c_str());
-	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_)->setAttr("doc","Program_manual|Documents/Program_manual");
+	ctrMkNode("oscada_cntr",opt,-1,"/",TSYS::strMess(_("%s station: \"%s\""),PACKAGE_NAME,trD(name()).c_str()),R_R_R_)->
+	    setAttr("doc","Program_manual|Documents/Program_manual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
 	if(TUIS::icoGet(name(),NULL,true).size() || TUIS::icoGet(id(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Comedi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2019 by Roman Savochenko                           *
+ *   Copyright (C) 2012-2022 by Roman Savochenko                           *
  *   roman@oscada.org                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -34,12 +34,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"Comedi"
-#define MOD_NAME	_("DAQ boards by Comedi")
+#define MOD_NAME	trS("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.16"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
+#define MOD_VER		"1.0.17"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -83,15 +83,15 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("ADDR",_("Board's device address"),TFld::String,TCfg::NoVal,"100",""));
-    tpPrmAt(t_prm).fldAdd(new TFld("ASYNCH_RD",_("Asynchronous read"),TFld::Boolean,TCfg::NoVal,"1","0"));
-    tpPrmAt(t_prm).fldAdd(new TFld("PRMS",_("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
+    tpPrmAt(t_prm).fldAdd(new TFld("ADDR",trS("Board's device address"),TFld::String,TCfg::NoVal,"100",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ASYNCH_RD",trS("Asynchronous read"),TFld::Boolean,TCfg::NoVal,"1","0"));
+    tpPrmAt(t_prm).fldAdd(new TFld("PRMS",trS("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name,daq_db,this); }
@@ -284,7 +284,7 @@ void TMdPrm::enable()
 
     string chnId, chnNm;
     vector<string> als;
-    p_el.fldAdd(new TFld("info",_("Information"),TFld::String,TFld::NoWrite|TVal::DirRead));
+    p_el.fldAdd(new TFld("info",trS("Information"),TFld::String,TFld::NoWrite|TVal::DirRead));
     als.push_back("info");
     int nSubDev = comedi_get_n_subdevices(devH);
 

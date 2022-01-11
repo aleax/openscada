@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"DiamondBoards"
-#define MOD_NAME	_("Diamond DAQ boards")
+#define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.16"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
+#define MOD_VER		"2.1.17"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -166,20 +166,20 @@ void TTpContr::postEnable( int flag )
     else mInit = true;
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     TTypeParam &tPrm = tpPrmAt(tpParmAdd("std", "PRM_BD", _("Standard")));
-    tPrm.fldAdd(new TFld("TP",_("Board: type"),TFld::Integer,TCfg::NoVal,"3","25"));
-    tPrm.fldAdd(new TFld("ADDR",_("Board: address"),TFld::Integer,TCfg::NoVal|TFld::HexDec,"3","640"));
-    tPrm.fldAdd(new TFld("INT",_("Board: interrupt"),TFld::Integer,TCfg::NoVal,"2","5"));
-    tPrm.fldAdd(new TFld("S_RATE",_("Sample rate (single channel)"),TFld::Integer,TCfg::NoVal,"7","0"));
-    tPrm.fldAdd(new TFld("ASYNCH_RD",_("Asynchronous read"),TFld::Boolean,TCfg::NoVal,"1","0"));
-    tPrm.fldAdd(new TFld("AI_VAL",_("AI value mode"),TFld::Integer,TCfg::NoVal|TFld::Selectable,"1","0",
+    tPrm.fldAdd(new TFld("TP",trS("Board: type"),TFld::Integer,TCfg::NoVal,"3","25"));
+    tPrm.fldAdd(new TFld("ADDR",trS("Board: address"),TFld::Integer,TCfg::NoVal|TFld::HexDec,"3","640"));
+    tPrm.fldAdd(new TFld("INT",trS("Board: interrupt"),TFld::Integer,TCfg::NoVal,"2","5"));
+    tPrm.fldAdd(new TFld("S_RATE",trS("Sample rate (single channel)"),TFld::Integer,TCfg::NoVal,"7","0"));
+    tPrm.fldAdd(new TFld("ASYNCH_RD",trS("Asynchronous read"),TFld::Boolean,TCfg::NoVal,"1","0"));
+    tPrm.fldAdd(new TFld("AI_VAL",trS("AI value mode"),TFld::Integer,TCfg::NoVal|TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",TMdPrm::AIM_CODE,TMdPrm::AIM_PERC,TMdPrm::AIM_VOLT).c_str(),_("Code;%;Voltage")));
-    tPrm.fldAdd(new TFld("PRMS",_("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
+    tPrm.fldAdd(new TFld("PRMS",trS("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }

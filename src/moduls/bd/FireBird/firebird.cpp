@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.FireBird file: firebird.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,12 +28,12 @@
 //******************************************************************************
 //* Modul info!                                                                *
 #define MOD_ID		"FireBird"
-#define MOD_NAME	_("DB FireBird")
+#define MOD_NAME	trS("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.3"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("DB module. Provides support of the DBMS FireBird.")
+#define MOD_VER		"3.0.4"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
 #define FEATURES	"SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR"
 //******************************************************************************

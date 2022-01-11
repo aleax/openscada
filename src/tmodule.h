@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodule.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -98,7 +98,7 @@ class TModule : public TCntrNode
 	bool modFunc( const string &prot, void (TModule::**offptr)(), bool noex = false );
 
 	// Translate functions
-	string I18N( const char *mess, const char *mLang = NULL );
+	string I18N( const string &mess, const char *mLang = NULL );
 
 	virtual string optDescr( )	{ return ""; }
 
@@ -127,8 +127,8 @@ class TModule : public TCntrNode
 
     private:
 	//Methods
-	const char *nodeName( ) const		{ return mModId.c_str(); }
-	const char *nodeNameSYSM( ) const	{ return mModId.c_str(); }
+	const char *nodeName( ) const	{ return mModId.c_str(); }
+	string nodeNameSYSM( ) const	{ return mModId; }
 
 	//Attributes
 	const string	mModId;		// Identificator

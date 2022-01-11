@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -40,57 +40,57 @@ using namespace OSCADA;
 //* TArchiveS                                    *
 //************************************************
 TArchiveS::TArchiveS( ) :
-    TSubSYS(SARH_ID,_("Archives-History"),true), elMess(""), elVal(""), elAval(""), mMessPer(10), prcStMess(false), mRes(true),
+    TSubSYS(SARH_ID, true), elMess(""), elVal(""), elAval(""), mMessPer(10), prcStMess(false), mRes(true),
     headBuf(0), vRes(true), mValPer(1000), mValPrior(10), mAutoIdMode(BothPrmAttrId),
     mValForceCurTm(false), prcStVal(false), endrunReqVal(false), toUpdate(false), mRdRestDtOverTm(0), mRdAlarms(0)
 {
     mAval = grpAdd("va_");
 
     //Message archiver DB structure
-    elMess.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elMess.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elMess.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elMess.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
-    elMess.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1"));
-    elMess.fldAdd(new TFld("CATEG",_("Messages categories"),TFld::String,0,"100"));
-    elMess.fldAdd(new TFld("LEVEL",_("Messages level"),TFld::Integer,TFld::Selectable,"1","0",
+    elMess.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elMess.fldAdd(new TFld("MODUL",trS("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elMess.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elMess.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elMess.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1"));
+    elMess.fldAdd(new TFld("CATEG",trS("Messages categories"),TFld::String,0,"100"));
+    elMess.fldAdd(new TFld("LEVEL",trS("Messages level"),TFld::Integer,TFld::Selectable,"1","0",
 	"0;1;2;3;4;5;6;7",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])")));
-    elMess.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
-    elMess.fldAdd(new TFld("REDNT",_("Redundant"),TFld::Boolean,0,"1","0"));
-    elMess.fldAdd(new TFld("REDNT_RUN",_("Preferable run"),TFld::String,0,"20","<high>"));
+    elMess.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,0,"100"));
+    elMess.fldAdd(new TFld("REDNT",trS("Redundant"),TFld::Boolean,0,"1","0"));
+    elMess.fldAdd(new TFld("REDNT_RUN",trS("Preferable run"),TFld::String,0,"20","<high>"));
 
     //Value archiver DB structure
-    elVal.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elVal.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elVal.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elVal.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
-    elVal.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
-    elVal.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
-    elVal.fldAdd(new TFld("V_PER",_("Period of the values, seconds"),TFld::Real,0,"12.6","1","0;100000"));
-    elVal.fldAdd(new TFld("A_PER",_("Period of the archiving, seconds"),TFld::Integer,0,"4","60","0;1000"));
-    elVal.fldAdd(new TFld("SEL_PR",_("Selection priority"),TFld::Integer,0,"4","10","0;1000"));
+    elVal.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elVal.fldAdd(new TFld("MODUL",trS("Module(plugin) name"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elVal.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elVal.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elVal.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
+    elVal.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,0,"100"));
+    elVal.fldAdd(new TFld("V_PER",trS("Period of the values, seconds"),TFld::Real,0,"12.6","1","0;100000"));
+    elVal.fldAdd(new TFld("A_PER",trS("Period of the archiving, seconds"),TFld::Integer,0,"4","60","0;1000"));
+    elVal.fldAdd(new TFld("SEL_PR",trS("Selection priority"),TFld::Integer,0,"4","10","0;1000"));
 
     //Value archive DB structure
-    elAval.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limArchID_SZ).c_str()));
-    elAval.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elAval.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
-    elAval.fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
-    elAval.fldAdd(new TFld("SrcMode",_("Source"),TFld::Integer,TFld::Selectable,"1","0",
+    elAval.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limArchID_SZ).c_str()));
+    elAval.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elAval.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    elAval.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
+    elAval.fldAdd(new TFld("SrcMode",trS("Source"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::PassiveAttr,TVArchive::ActiveAttr).c_str(),
 	_("Passive;Passive param. attribute;Active param. attribute")));
-    elAval.fldAdd(new TFld("Source",_("Source"),TFld::String,0,"100"));
-    elAval.fldAdd(new TFld("CombMode",_("Data combining mode"),TFld::Integer,TFld::Selectable,"1","0",
+    elAval.fldAdd(new TFld("Source",trS("Source"),TFld::String,0,"100"));
+    elAval.fldAdd(new TFld("CombMode",trS("Data combining mode"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d;%d",TVArchive::MovAver,TVArchive::LastVal,TVArchive::MinVal,TVArchive::MaxVal).c_str(),
 	_("Moving average;Single;Minimum;Maximum")));
-    elAval.fldAdd(new TFld("VTYPE",_("Value type"),TFld::Integer,TFld::Selectable,"1","0",
+    elAval.fldAdd(new TFld("VTYPE",trS("Value type"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",TFld::Boolean,TFld::Integer,TFld::Real,TFld::String,TFld::Int16,TFld::Int32,TFld::Int64,TFld::Float,TFld::Double).c_str(),
 	_("Boolean;Integer;Real;String;Int16;Int32;Int64;Real(Float);Real(Double)")));
-    elAval.fldAdd(new TFld("BPER",_("Buffer period, seconds"),TFld::Real,0,"9.6","1","0;10000"));
-    elAval.fldAdd(new TFld("BSIZE",_("Buffer size, items"),TFld::Integer,0,"8","100","10;10000000"));
-    elAval.fldAdd(new TFld("BHGRD",_("Buffer in the hard time grid"),TFld::Boolean,0,"1","1"));
-    elAval.fldAdd(new TFld("BHRES",_("Buffer in the high time resolution"),TFld::Boolean,0,"1","0"));
-    elAval.fldAdd(new TFld("FillLast",_("Filling the passage points with the last value"),TFld::Boolean,0,"1","0"));
-    elAval.fldAdd(new TFld("ArchS",_("Process into archivers"),TFld::String,0,"1000"));
+    elAval.fldAdd(new TFld("BPER",trS("Buffer period, seconds"),TFld::Real,0,"9.6","1","0;10000"));
+    elAval.fldAdd(new TFld("BSIZE",trS("Buffer size, items"),TFld::Integer,0,"8","100","10;10000000"));
+    elAval.fldAdd(new TFld("BHGRD",trS("Buffer in the hard time grid"),TFld::Boolean,0,"1","1"));
+    elAval.fldAdd(new TFld("BHRES",trS("Buffer in the high time resolution"),TFld::Boolean,0,"1","0"));
+    elAval.fldAdd(new TFld("FillLast",trS("Filling the passage points with the last value"),TFld::Boolean,0,"1","0"));
+    elAval.fldAdd(new TFld("ArchS",trS("Process into archivers"),TFld::String,0,"1000"));
 
     setMessBufLen(BUF_SIZE_DEF);
 }

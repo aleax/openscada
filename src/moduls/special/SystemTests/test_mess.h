@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_mess.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,10 +34,10 @@ class TestMess : public TFunction
     public:
 	TestMess( ) : TFunction("Mess",SSPC_ID)
 	{
-	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("arhtor",_("Archiver"),IO::String,IO::Default,"FSArch.StatErrors") );
-	    ioAdd( new IO("categ",_("Template of the messages category"),IO::String,IO::Default) );
-	    ioAdd( new IO("depth",_("Messages depth, seconds"),IO::Integer,IO::Default,"10") );
+	    ioAdd( new IO("rez",trS("Result"),IO::String,IO::Return) );
+	    ioAdd( new IO("arhtor",trS("Archiver"),IO::String,IO::Default,"FSArch.StatErrors") );
+	    ioAdd( new IO("categ",trS("Template of the messages category"),IO::String,IO::Default) );
+	    ioAdd( new IO("depth",trS("Messages depth, seconds"),IO::Integer,IO::Default,"10") );
 	}
 
 	string name( )	{ return _("Messages"); }

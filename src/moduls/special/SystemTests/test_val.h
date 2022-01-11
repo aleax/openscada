@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_val.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,10 +34,10 @@ class TestVal : public TFunction
     public:
 	TestVal( ) : TFunction("Val",SSPC_ID)
 	{
-	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("name",_("Path to the parameter attribute"),IO::String,IO::Default,"System.AutoDA.CPULoad.load") );
-	    ioAdd( new IO("arch_len",_("Depth of getting of archive values, seconds"),IO::Integer,IO::Default,"10") );
-	    ioAdd( new IO("arch_per",_("Period of getting of archive values, microseconds"),IO::Integer,IO::Default,"1000000") );
+	    ioAdd( new IO("rez",trS("Result"),IO::String,IO::Return) );
+	    ioAdd( new IO("name",trS("Path to the parameter attribute"),IO::String,IO::Default,"System.AutoDA.CPULoad.load") );
+	    ioAdd( new IO("arch_len",trS("Depth of getting of archive values, seconds"),IO::Integer,IO::Default,"10") );
+	    ioAdd( new IO("arch_per",trS("Period of getting of archive values, microseconds"),IO::Integer,IO::Default,"1000000") );
 	}
 
 	string name( )	{ return _("Parameter attribute"); }

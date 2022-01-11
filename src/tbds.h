@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,7 +65,7 @@ class TTable : public TCntrNode
 	    public:
 	    TStrIt( ) : key(0)	{ }
 	    TStrIt( const string &inm, const string itp, int ikey, const string &idef = "" ) :
-		nm(inm), tp(itp), key(ikey), def(idef) { }
+		nm(inm), tp(itp), def(idef), key(ikey) { }
 
 	    string nm, tp, def;
 	    int key;
@@ -323,7 +323,8 @@ class TBDS : public TSubSYS
 	TBDS( );
 	~TBDS( );
 
-	int subVer( )		{ return SDB_VER; }
+	string subName( ) const	{ return _("Data Bases"); }
+	int subVer( ) const	{ return SDB_VER; }
 
 	int tblLifeTime( )	{ return mTblLifeTime; }
 	void setTblLifeTime( int vl )	{ mTblLifeTime = vmax(10, vmin(1000,vl)); modif(); }

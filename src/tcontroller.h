@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcontroller.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -146,8 +146,8 @@ class TController : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const char *nodeName( ) const		{ return mId.getSd(); }
-	const char *nodeNameSYSM( ) const	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
+	string nodeNameSYSM( ) const	{ return mId.getSd(); }
 
 	void LoadParmCfg( );
 

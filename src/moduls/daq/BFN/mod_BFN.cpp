@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"BFN"
-#define MOD_NAME	_("BFN module")
+#define MOD_NAME	trS("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.22"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
+#define MOD_VER		"0.6.23"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -81,18 +81,18 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    //fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("SYNCPER",_("Period of sync with the remote station, seconds"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
-    fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"50",""));
-    fldAdd(new TFld("PASS",_("Password"),TFld::String,TFld::NoFlag,"30",""));
-    //fldAdd(new TFld("HOUSE",_("House"),TFld::String,TFld::NoFlag,"50",""));
+    //fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("SYNCPER",trS("Period of sync with the remote station, seconds"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
+    fldAdd(new TFld("ADDR",trS("Transport address"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("USER",trS("User"),TFld::String,TFld::NoFlag,"50",""));
+    fldAdd(new TFld("PASS",trS("Password"),TFld::String,TFld::NoFlag,"30",""));
+    //fldAdd(new TFld("HOUSE",trS("House"),TFld::String,TFld::NoFlag,"50",""));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std","",_("Standard"));
-    //tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
+    //tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",trS("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
     // Set to read only
     for(unsigned i_sz = 0; i_sz < tpPrmAt(t_prm).fldSize(); i_sz++)
 	tpPrmAt(t_prm).fldAt(i_sz).setFlg(tpPrmAt(t_prm).fldAt(i_sz).flg()|TFld::NoWrite);

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -436,8 +436,8 @@ class TSYS : public TCntrNode
 	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08, MDF_DocDir = 0x10 };
 
 	//Private methods
-	const char *nodeName( ) const		{ return mId.c_str(); }
-	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
+	string nodeNameSYSM( ) const	{ return mName; }
 	void	cfgFileLoad( );
 	void	cfgFileSave( );
 	void	cfgPrmLoad( );

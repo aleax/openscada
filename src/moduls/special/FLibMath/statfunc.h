@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibMath file: statfunc.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,6 +23,8 @@
 
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 #include <string>
 #include <vector>

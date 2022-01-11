@@ -470,11 +470,11 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>string mess;</i> — message.</li></ul>
 <p><b>Templates:</b>
 </p>
-<ul><li> <i>_( mess )</i> — Wrapper over the translation of the messages function for the provision of the accepted by the most of the programs translation of the messages.</li>
+<ul><li> <i>_(mess); trS(mess)</i> — Wrappers over the translation of the messages function for the provision of the accepted by the most of the programs translation of the messages. trS() also provides the prestoring, when the base message stored together the catalogue, that is "{base}\000{cat}" and what is translated really in second call inward the translation context or _().</li>
 <li> <i>trD(base)</i> — Wrapper over the text variables dynamic translation using the translation context to the function <i>translGet()</i>.</li>
-<li> <i>trL(base,lng); trU(base,usr); trLU(base,lng,usr)</i> — Wrappers over the text variables dynamic translation functions by language and user.</li>
+<li> <i>trD_L(base,lng); trD_U(base,usr); trD_LU(base,lng,usr)</i> — Wrappers over the text variables dynamic translation functions by language and user.</li>
 <li> <i>trDSet(base,mess)</i> — Wrapper over the text variables dynamic translation set using the translation context to the function <i>translSet()</i>.</li>
-<li> <i>trSetL(base,lng,mess); trSetU(base,usr,mess); trSetLU(base,lng,usr,mess)</i> — Wrapper over the text variables dynamic translation set functions by language and user.</li>
+<li> <i>trDSet_L(base,lng,mess); trDSet_U(base,usr,mess); trDSet_LU(base,lng,usr,mess)</i> — Wrapper over the text variables dynamic translation set functions by language and user.</li>
 <li> <i>FTM(rec); FTM2(tm, utm)</i> — Get a full time of the message, in microseconds, using the two fields of time of the message structure. </li>
 <li> <i>mess_lev()</i> — The system's messages level. Often used for debug mode check (=Debug).</li>
 <li> <i>message( cat, lev, fmt, args ... )</i> — Formation of the the full message. </li>
@@ -502,7 +502,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>string codeConv( const string &amp;fromCH, const string &amp;toCH, const string &amp;mess);</i> — Conversion of the codepage of the messages. </li>
 <li> <i>string codeConvIn( const string &amp;fromCH, const string &amp;mess);</i> — Conversion the codepage of the messages into the internal system codepage. </li>
 <li> <i>string codeConvOut ( const string &amp;toCH, const string &amp;mess);</i> — Conversion of the message from the internal system codepage. </li>
-<li> <i>string I18N( const char *mess, const char *d_name = NULL, const char *mLang = NULL );</i> — Getting the message <i>mess</i> in the language <i>mLang</i> for the system translation from the directory <i>d_name</i>, NULL for the OpenSCADA core.</li>
+<li> <i>string I18N( const string &amp;mess, const char *mLang = NULL, const char *d_name = NULL );</i> — Getting the message <i>mess</i> in the language <i>mLang</i> for the system translation from the directory <i>d_name</i>, NULL for the OpenSCADA core.</li>
 <li> <i>string lang( );</i> — Language of the system, as en_US.UTF-8. </li>
 <li> <i>string lang2Code( const string &amp;user = "", bool onlyUser = false );</i> — Language of the system in bi-symbolic codepage (en). Specify <i>user</i> for obtaining its language and <i>onlyUser</i> for only that.</li>
 <li> <i>string &amp;charset( );</i> — The system codepage. </li>
@@ -561,12 +561,12 @@ Types (levels) of messages (enum — TMess::Type):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>TSubSYS( const char *id, const char *name, bool mod = false );</i> — Initialize the constructor. Sign <i>mod</i> indicates that subsystem is module one. </li>
-<li> <i>string subId( );</i> — ID of the subsystem. </li>
-<li> <i>string subName( );</i> — Localized name of the subsystem. </li>
+<ul><li> <i>TSubSYS( const string &amp;id, bool mod = false );</i> — Initialize the constructor. Sign <i>mod</i> indicates that subsystem is module one. </li>
+<li> <i>string subId( ) const;</i> — ID of the subsystem. </li>
+<li> <i>virtual string subName( );</i> — Localized name of the subsystem.</li>
 <li> <i>bool subStartStat( );</i> — Sign of the subsystem execution. </li>
 <li> <i>bool subModule( ) const;</i> — Sign of the modularity of the subsystem.</li>
-<li> <i>virtual int subVer( );</i> — Version of the subsystems. </li>
+<li> <i>virtual int subVer( ) const;</i> — Version of the subsystems. </li>
 <li> <i>virtual void subStart( );</i> — Start of the the subsystem. </li>
 <li> <i>virtual void subStop( );</i> — Stop of the subsystem. </li>
 <li> <i>void modList( vector &lt;string&gt; &amp;list );</i> — List <i>list</i> of the modules of the modular subsystem. </li>
@@ -616,7 +616,7 @@ The data structure which identifies the module (class — TModule::SAt):
 <li> <i>bool modFuncPresent( const string &amp;prot );</i> — Check the availability of the specified function by its prototype <i>prot</i>.</li>
 <li> <i>ExpFunc &amp;modFunc (const string &amp; prot);</i> — Get the information about exported function of the module <i>prot</i>.</li>
 <li> <i>bool modFunc( const string &amp;prot, void (TModule::**offptr)(), bool noex = false );</i> — Getting the relative address <i>offptr</i> of the exported function <i>prot</i>. Returns "true" for successful and the non-exceptional mode <i>noex</i>.</li>
-<li> <i>string I18N( const char *mess );</i> — Localization of modular message <i>mess</i> in accordance with the current locale and user language in the MULTILANGUAGE modes.</li>
+<li> <i>string I18N( const string &amp;mess, const char *mLang = NULL );</i> — Localisation of modular message <i>mess</i> in accordance with the current locale and user language <i>mLang</i> in the MULTILANGUAGE modes.</li>
 <li> <i>virtual string optDescr( );</i> — Localized help on the options of the command line and parameters of the configuration file for the module.</li>
 <li> <i>TSubSYS &amp;owner( ) const;</i> — Subsystem - the owner of the module.</li></ul>
 <p><b>Protected Attributes:</b>
@@ -2274,7 +2274,7 @@ Cell's type (enum – TFld::Type):
 </p>
 <ul><li> <i>TFld( );</i> — Initialization by default.</li>
 <li> <i>TFld( const TFld &amp;ifld, const char *name = NULL );</i> — Copying constructor, with possibility for individual <i>name</i> set.</li>
-<li> <i>TFld( const char *name, const char *descr, Type type, unsigned char flg, const char *valLen = "", const char *valDef = "", const char *vals = "", const char *nSel = "", const char *res = "" );</i> —  Initialization with the specified configuration.</li>
+<li> <i>TFld( const char *name, const string &amp;descr, Type type, unsigned char flg, const char *valLen = "", const char *valDef = "", const char *vals = "", const char *nSel = "", const char *res = "" );</i> —  Initialization with the specified configuration.</li>
 <li> <i>TFld &amp;operator=( const TFld &amp;fld );</i> — Copy of the cell from <i>fld</i>.</li>
 <li> <i>const string &amp;name( ) const;</i> — Cell's name.</li>
 <li> <i>const string &amp;descr( ) const;</i> — Cell's description.</li>

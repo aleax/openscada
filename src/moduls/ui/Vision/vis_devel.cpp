@@ -54,7 +54,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     fileDlg(NULL), winClose(false), mWaitCursorSet(false), copy_buf("0"), prjLibPropDlg(NULL), visItPropDlg(NULL)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
-    connect(this, SIGNAL(makeStarterMenu()), qApp, SLOT(makeStarterMenu()));
+    connect(this, SIGNAL(makeStarterMenu(QWidget*,const QString&)), qApp, SLOT(makeStarterMenu(QWidget*,const QString&)));
 
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
     mod->regWin(this);
@@ -403,8 +403,6 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     menuHelp->addSeparator();
     menuHelp->addAction(actManualLib);
     menuHelp->addAction(actWhatIs);
-    // QTStarter
-    emit makeStarterMenu();
 
     //Init tool bars
     // Visual items tools bar
@@ -579,7 +577,7 @@ VisDevelop::~VisDevelop( )
 void VisDevelop::messUpd( )
 {
     setWindowTitle(TSYS::strMess(_("%s %s-developing: %s"),
-	PACKAGE_NAME,mod->modId().c_str(),(trU(SYS->name(),
+	PACKAGE_NAME,mod->modId().c_str(),(trD_U(SYS->name(),
 	user())+(VCAStation().size()&&VCAStation()!="."?" > "+VCAStation():"")).c_str()).c_str());
 
     //Generic actions
@@ -837,6 +835,7 @@ void VisDevelop::messUpd( )
     menuWindow->setTitle(_("&Window"));
     menuView->setTitle(_("&View"));
     menuHelp->setTitle(_("&Help"));
+    emit makeStarterMenu(NULL, lang().c_str());
 
     //Tool bars
     visItToolBar->setWindowTitle(_("Visual items toolbar"));
@@ -991,6 +990,9 @@ void VisDevelop::userChanged( const QString &oldUser, const QString &oldPass )
     messUpd();
     wdgTree->updateTree();
     prjTree->updateTree();
+    attrInsp->messUpd();
+    lnkInsp->messUpd();
+    setWdgScale(wdgScale());
 }
 
 bool VisDevelop::exitModifChk( )
@@ -1046,11 +1048,19 @@ void VisDevelop::quitSt( )
 
 void VisDevelop::about( )
 {
-    QMessageBox::about(this,windowTitle(),
-	QString(_("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11")).
-	    arg(mod->modInfo("Name").c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description").c_str()).
-	    arg(mod->modInfo("Author").c_str()).arg(mod->modInfo("License").c_str()).
+    QString mess = _("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n"
+		     "%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11");
+
+#undef _
+#define _(mess) Mess->I18N(mess, lang().c_str()).c_str()
+
+    QMessageBox::about(this, windowTitle(), mess.
+	    arg(_(mod->modInfo("Name"))).arg(mod->modInfo("Version").c_str()).arg(_(mod->modInfo("Description"))).
+	    arg(_(mod->modInfo("Author"))).arg(mod->modInfo("License").c_str()).
 	    arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
+
+#undef _
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 }
 
 void VisDevelop::aboutQt( )		{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
@@ -1110,7 +1120,7 @@ void VisDevelop::applyWorkWdg( )
 
 void VisDevelop::enterManual( )
 {
-    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString()+"\n"+lang());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
 	QString(_("The manual '%1' was not found offline or online!")).arg(sender()->property("doc").toString()));

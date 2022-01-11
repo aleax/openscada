@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_hddtemp.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,9 +31,9 @@ using namespace SystemCntr;
 Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 {
     //HDD value structure
-    fldAdd(new TFld("disk",_("Name"),TFld::String,TFld::NoWrite));
-    fldAdd(new TFld("ed",_("Measure unit"),TFld::String,TFld::NoWrite));
-    fldAdd(new TFld("t",_("Temperature"),TFld::Integer,TFld::NoWrite,"0"));
+    fldAdd(new TFld("disk",trS("Name"),TFld::String,TFld::NoWrite));
+    fldAdd(new TFld("ed",trS("Measure unit"),TFld::String,TFld::NoWrite));
+    fldAdd(new TFld("t",trS("Temperature"),TFld::Integer,TFld::NoWrite,"0"));
 }
 
 Hddtemp::~Hddtemp( )
@@ -49,7 +49,7 @@ void Hddtemp::init( TMdPrm *prm, bool update )
     TCfg &c_subt = prm->cfg("SUBT");
 
     //Create Configuration
-    if(!update) c_subt.fld().setDescr(_("Disk"));
+    if(!update) c_subt.fld().setDescr(trS("Disk"));
 
     vector<string> list;
     dList(list);

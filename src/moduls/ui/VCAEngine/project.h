@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -128,8 +128,8 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const char *nodeName( ) const		{ return mId.getSd(); }
-	const char *nodeNameSYSM( ) const	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
+	string nodeNameSYSM( ) const	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( TConfig *cfg );

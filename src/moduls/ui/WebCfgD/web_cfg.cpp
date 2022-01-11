@@ -37,13 +37,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfgD"
-#define MOD_NAME	_("Program configurator (Dynamic WEB)")
+#define MOD_NAME	trS("Program configurator (Dynamic WEB)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.2.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
+#define MOD_VER		"2.2.3"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -209,14 +209,14 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 
 	//Get about module page
 	if(zero_lev == "about")	{	//getAbout(ses);
-	    page = pgCreator(iprt, "<table class='work'>\n"
-		" <tr><th><a href='"+TUIS::docGet("|" MOD_ID,NULL,TUIS::GetPathURL)+"'>" MOD_ID " v" MOD_VER "</a></th></tr>\n"
+	    string mess = "<table class='work'>\n"
+		" <tr><th><a href='"+TUIS::docGet("|Modules/" MOD_ID,NULL,TUIS::GetPathURL)+"'>" MOD_ID " v" MOD_VER "</a></th></tr>\n"
 		" <tr><td class='content'>\n"
 		"  <table border='0px' cellspacing='3px'>\n"
-		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(MOD_NAME) + "</TD></TR>\n"
-		"   <tr><td style='color: blue;'>" + _("Description: ") + "</td><td>" + _(DESCRIPTION) + "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" + _(LICENSE) + "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + _(AUTHORS) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + MOD_NAME + "</TD></TR>\n"
+		"   <tr><td style='color: blue;'>" + _("Description: ") + "</td><td>" + DESCRIPTION + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" + LICENSE + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + AUTHORS +"</td></tr>\n"
 		"  </table>\n"
 		" </td></tr>\n"
 		"</table><br/>\n"
@@ -224,13 +224,21 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		" <tr><th>" PACKAGE " v" VERSION "</th></tr>\n"
 		" <tr><td class='content'>\n"
 		"  <table border='0' cellspacing='3px'>\n"
-		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(PACKAGE_DESCR) + "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" PACKAGE_LICENSE "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + _(PACKAGE_AUTHOR) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>%s</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>%s</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>%s</td></tr>\n"
 		"   <tr><td style='color: blue;'>" + _("Web site: ") + "</td><td><a href='" PACKAGE_SITE "'>" PACKAGE_SITE "</a></td></tr>\n"
 		"  </table>\n"
 		" </td></tr>\n"
-		"</table><br/>\n", "200 OK");
+		"</table><br/>\n";
+
+#undef _
+#define _(mess) Mess->I18N(mess).c_str()
+
+	    page = pgCreator(iprt, TSYS::strMess(mess.c_str(),_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR)), "200 OK");
+
+#undef _
+#define _(mess) mod->I18N(mess).c_str()
 	}
 	//Get module icon and global image
 	else if(zero_lev == "ico" || zero_lev.substr(0,4) == "img_") {
@@ -555,9 +563,6 @@ string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-    if(name == "Name")		return MOD_NAME;
-    if(name == "Author")	return AUTHORS;
-    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

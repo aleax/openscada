@@ -25,6 +25,8 @@
 
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using namespace OSCADA;
 

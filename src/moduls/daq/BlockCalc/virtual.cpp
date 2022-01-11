@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,12 +39,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"BlockCalc"
-#define MOD_NAME	_("Block based calculator")
+#define MOD_NAME	trS("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.5"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides a block based calculator.")
+#define MOD_VER		"1.12.6"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides a block based calculator.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -102,32 +102,32 @@ void TpContr::postEnable( int flag )
     TTypeDAQ::postEnable( flag );
 
     //Controllers BD structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));
-    fldAdd(new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block"));
-    fldAdd(new TFld("SCHEDULE",_("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("ITER",_("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));
+    fldAdd(new TFld("BLOCK_SH",trS("Block's table"),TFld::String,TFld::NoFlag,"30","block"));
+    fldAdd(new TFld("SCHEDULE",trS("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("ITER",trS("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"1000"));
+    tpPrmAt(t_prm).fldAdd(new TFld("IO",trS("Blocks' IOs"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"1000"));
 
     //Blok's db structure
-    blkEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    blkEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    blkEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    blkEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    blkEl.fldAdd(new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    blkEl.fldAdd(new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200"));
-    blkEl.fldAdd(new TFld("LNK_OUT_WR_CH",_("Write to output links only at changes"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    blkEl.fldAdd(new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75"));
+    blkEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    blkEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    blkEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    blkEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    blkEl.fldAdd(new TFld("PROC",trS("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    blkEl.fldAdd(new TFld("PRIOR",trS("Prior block"),TFld::String,TFld::NoFlag,"200"));
+    blkEl.fldAdd(new TFld("LNK_OUT_WR_CH",trS("Write to output links only at changes"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    blkEl.fldAdd(new TFld("FUNC",trS("Function"),TFld::String,TFld::NoFlag,"75"));
 
     //IO blok's db structure
-    blkioEl.fldAdd(new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    blkioEl.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    blkioEl.fldAdd(new TFld("TLNK",_("Link's type"),TFld::Integer,TFld::NoFlag,"2"));
-    blkioEl.fldAdd(new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"100"));
-    blkioEl.fldAdd(new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"10000"));
+    blkioEl.fldAdd(new TFld("BLK_ID",trS("Block's ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    blkioEl.fldAdd(new TFld("ID",trS("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    blkioEl.fldAdd(new TFld("TLNK",trS("Link's type"),TFld::Integer,TFld::NoFlag,"2"));
+    blkioEl.fldAdd(new TFld("LNK",trS("Link"),TFld::String,TFld::NoFlag,"100"));
+    blkioEl.fldAdd(new TFld("VAL",trS("Link's value"),TFld::String,TFld::NoFlag,"10000"));
 }
 
 void TpContr::preDisable( int flag )

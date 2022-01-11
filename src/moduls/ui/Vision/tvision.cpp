@@ -35,18 +35,18 @@
 #include "vis_widgs.h"
 #include "vis_devel.h"
 
-#include <tmess.h>
+//#include <tmess.h>
 
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"Vision"
-#define MOD_NAME	_("Operation user interface (Qt)")
+#define MOD_NAME	trS("Operation user interface (Qt)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"8.0.2"
-#define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
-#define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
+#define MOD_VER		"8.0.10"
+#define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
+#define DESCRIPTION	trS("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -465,10 +465,10 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 
     //QT message
     switch(type) {
-	case TVision::Info:	QMessageBox::information(parent, _(MOD_NAME), mess);	break;
-	case TVision::Warning:	QMessageBox::warning(parent, _(MOD_NAME), mess);	break;
-	case TVision::Error:	QMessageBox::critical(parent, _(MOD_NAME), mess);	break;
-	case TVision::Crit:	QErrorMessage::qtHandler()->showMessage(mess);		break;
+	case TVision::Info:	QMessageBox::information(parent, MOD_NAME.c_str(), mess);break;
+	case TVision::Warning:	QMessageBox::warning(parent, MOD_NAME.c_str(), mess);	break;
+	case TVision::Error:	QMessageBox::critical(parent, MOD_NAME.c_str(), mess);	break;
+	case TVision::Crit:	QErrorMessage::qtHandler()->showMessage(mess);	break;
     }
 }
 
@@ -512,9 +512,6 @@ void TVision::modInfo( vector<string> &list )
 string TVision::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
-    if(name == "Name")		return MOD_NAME;
-    if(name == "Author")	return AUTHORS;
-    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

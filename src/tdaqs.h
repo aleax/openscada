@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -50,7 +50,8 @@ class TDAQS : public TSubSYS
 
 	string objName( );
 
-	int subVer( )	{ return SDAQ_VER; }
+	string subName( ) const	{ return _("Data Acquisition"); }
+	int subVer( ) const	{ return SDAQ_VER; }
 
 	void unload( );
 

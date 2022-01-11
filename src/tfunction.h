@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@ class IO
 	};
 
 	//Methods
-	IO( const char *id, const char *name, IO::Type type, unsigned flgs, const char *def = "",
+	IO( const char *id, const string &name, IO::Type type, unsigned flgs, const char *def = "",
 		bool hide = false, const char *rez = "" );
 	IO( const IO &src );
 
@@ -153,11 +153,11 @@ class TFunction : public TCntrNode
 	TValFunc	*mTVal;
 	vector<TValFunc*> used;
 	const char	*grp;
+	vector<IO*>	mIO;
 
     private:
 	//Attributes
 	ResRW		mFRes;
-	vector<IO*>	mIO;
 };
 
 //*************************************************

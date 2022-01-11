@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.GPIO file: da_SUNXI.cpp
 /***************************************************************************
- *   Copyright (C) 2018 by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2018-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@ using namespace ModGPIO;
 //*************************************************
 SUNXI::SUNXI( ) : TTypeParam("SUNXI", _("SUNXI (ALLWINNER H2 and newer)")), use(false)
 {
-    fldAdd(new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
+    fldAdd(new TFld("MOD_PRMS",trS("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
 
 void SUNXI::create( TParamContr *ip )

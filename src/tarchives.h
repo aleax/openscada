@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchives.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -200,7 +200,8 @@ class TArchiveS : public TSubSYS
 	TArchiveS( );
 	~TArchiveS( );
 
-	int subVer( )		{ return SARH_VER; }
+	string subName( ) const	{ return _("Archives-History"); }
+	int subVer( ) const	{ return SARH_VER; }
 
 	int messPeriod( )	{ return mMessPer; }
 	int valPeriod( )	{ return vmax(1, mValPer); }

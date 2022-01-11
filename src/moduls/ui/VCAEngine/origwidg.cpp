@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: origwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -124,17 +124,17 @@ void OrigElFigure::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("lineWdth",_("Line: width"),TFld::Integer,TFld::NoFlag,"","1","0;99","",i2s(A_ElFigLineW).c_str()));
-	attrAdd(new TFld("lineClr",_("Line: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_ElFigLineClr).c_str()));
-	attrAdd(new TFld("lineStyle",_("Line: style"),TFld::Integer,TFld::Selectable,"","0",
+	attrAdd(new TFld("lineWdth",trS("Line: width"),TFld::Integer,TFld::NoFlag,"","1","0;99","",i2s(A_ElFigLineW).c_str()));
+	attrAdd(new TFld("lineClr",trS("Line: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_ElFigLineClr).c_str()));
+	attrAdd(new TFld("lineStyle",trS("Line: style"),TFld::Integer,TFld::Selectable,"","0",
 	    TSYS::strMess("%d;%d;%d",EF_SOLID,EF_DASH,EF_DOT).c_str(),_("Solid;Dashed;Dotted"),i2s(A_ElFigLineStl).c_str()));
-	attrAdd(new TFld("bordWdth",_("Border: width"),TFld::Integer,TFld::NoFlag,"","0","0;99","",i2s(A_ElFigBordW).c_str()));
-	attrAdd(new TFld("bordClr",_("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_ElFigBordClr).c_str()));
-	attrAdd(new TFld("fillColor",_("Fill: color"),TFld::String,Attr::Color,"","","","",i2s(A_ElFigFillClr).c_str()));
-	attrAdd(new TFld("fillImg",_("Fill: image"),TFld::String,Attr::Image,"","","","",i2s(A_ElFigFillImg).c_str()));
-	attrAdd(new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-360;360","",i2s(A_ElFigOrient).c_str()));
-	attrAdd(new TFld("mirror",_("Mirroring"),TFld::Boolean,TFld::NoFlag,"","0","","",i2s(A_ElFigMirror).c_str()));
-	attrAdd(new TFld("elLst",_("Elements list"),TFld::String,TFld::FullText|Attr::Active,"","","","",i2s(A_ElFigElLst).c_str()));
+	attrAdd(new TFld("bordWdth",trS("Border: width"),TFld::Integer,TFld::NoFlag,"","0","0;99","",i2s(A_ElFigBordW).c_str()));
+	attrAdd(new TFld("bordClr",trS("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_ElFigBordClr).c_str()));
+	attrAdd(new TFld("fillColor",trS("Fill: color"),TFld::String,Attr::Color,"","","","",i2s(A_ElFigFillClr).c_str()));
+	attrAdd(new TFld("fillImg",trS("Fill: image"),TFld::String,Attr::Image,"","","","",i2s(A_ElFigFillImg).c_str()));
+	attrAdd(new TFld("orient",trS("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-360;360","",i2s(A_ElFigOrient).c_str()));
+	attrAdd(new TFld("mirror",trS("Mirroring"),TFld::Boolean,TFld::NoFlag,"","0","","",i2s(A_ElFigMirror).c_str()));
+	attrAdd(new TFld("elLst",trS("Elements list"),TFld::String,TFld::FullText|Attr::Active,"","","","",i2s(A_ElFigElLst).c_str()));
     }
 }
 
@@ -319,7 +319,7 @@ void OrigFormEl::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("elType",_("Element type"),TFld::Integer,TFld::Selectable|Attr::Active,"2","0",
+	attrAdd(new TFld("elType",trS("Element type"),TFld::Integer,TFld::Selectable|Attr::Active,"2","0",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",F_LINE_ED,F_TEXT_ED,F_CHECK_BOX,F_BUTTON,F_COMBO,F_LIST,F_TREE,F_TABLE,F_SLIDER,F_SCROLL_BAR).c_str(),
 	    _("Line edit;Text edit;Check box;Button;Combo box;List;Tree;Table;Slider;Scroll Bar"),i2s(A_FormElType).c_str()));
 	attrAt("name").at().fld().setReserve(i2s(A_FormElName));
@@ -373,54 +373,54 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	//Create specific attributes
 	switch(cfg.getI()) {
 	    case F_LINE_ED:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::TransltText|Attr::Mutable,"200","","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("view",_("View"),TFld::Integer,TFld::Selectable|Attr::Mutable|Attr::Active,"1","0",
+		cfg.owner()->attrAdd(new TFld("value",trS("Value"),TFld::String,TFld::TransltText|Attr::Mutable,"200","","","",i2s(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("view",trS("View"),TFld::Integer,TFld::Selectable|Attr::Mutable|Attr::Active,"1","0",
 		    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",FL_TEXT,FL_COMBO,FL_INTEGER,FL_REAL,FL_TIME,FL_DATE,FL_DATE_TM,FL_PASS).c_str(),
 		    _("Text;Combo;Integer;Real;Time;Date;Date and time;Password"),i2s(A_FormElMixP1).c_str()));
-		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElMixP2).c_str()));
-		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","",i2s(A_FormElMixP3).c_str()));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
+		cfg.owner()->attrAdd(new TFld("cfg",trS("Configuration"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElMixP2).c_str()));
+		cfg.owner()->attrAdd(new TFld("confirm",trS("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","",i2s(A_FormElMixP3).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
 	    case F_TEXT_ED:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("wordWrap",_("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1","","",i2s(A_FormElMixP1).c_str()));
-		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","",i2s(A_FormElMixP3).c_str()));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
+		cfg.owner()->attrAdd(new TFld("value",trS("Value"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("wordWrap",trS("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1","","",i2s(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("confirm",trS("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","",i2s(A_FormElMixP3).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
 	    case F_CHECK_BOX:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
+		cfg.owner()->attrAdd(new TFld("value",trS("Value"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
 	    case F_BUTTON:
-		cfg.owner()->attrAdd(new TFld("value",_("Repeat"),TFld::String,TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("img",_("Image"),TFld::String,Attr::Image|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
-		cfg.owner()->attrAdd(new TFld("color",_("Color: button"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",i2s(A_FormElMixP2).c_str()));
-		cfg.owner()->attrAdd(new TFld("colorText",_("Color: text"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",i2s(A_FormElMixP4).c_str()));
-		cfg.owner()->attrAdd(new TFld("mode",_("Mode"),TFld::Integer,TFld::Selectable|Attr::Mutable|Attr::Active,"1","0",
+		cfg.owner()->attrAdd(new TFld("value",trS("Repeat"),TFld::String,TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("img",trS("Image"),TFld::String,Attr::Image|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("color",trS("Color: button"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",i2s(A_FormElMixP2).c_str()));
+		cfg.owner()->attrAdd(new TFld("colorText",trS("Color: text"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",i2s(A_FormElMixP4).c_str()));
+		cfg.owner()->attrAdd(new TFld("mode",trS("Mode"),TFld::Integer,TFld::Selectable|Attr::Mutable|Attr::Active,"1","0",
 		    TSYS::strMess("%d;%d;%d;%d;%d",FBT_STD,FBT_CHECK,FBT_MENU,FBT_LOAD,FBT_SAVE).c_str(),
 		    _("Standard;Checkable;Menu;Load;Save"),i2s(A_FormElMixP3).c_str()));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
 	    case F_TABLE:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::TransltText|Attr::Mutable,"255","","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
-		cfg.owner()->attrAdd(new TFld("set",_("Set value"),TFld::String,Attr::Mutable,"255","","","",i2s(A_FormElMixP2).c_str()));
+		cfg.owner()->attrAdd(new TFld("value",trS("Value"),TFld::String,TFld::TransltText|Attr::Mutable,"255","","","",i2s(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("items",trS("Items"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
+		cfg.owner()->attrAdd(new TFld("set",trS("Set value"),TFld::String,Attr::Mutable,"255","","","",i2s(A_FormElMixP2).c_str()));
 		break;
 	    case F_LIST:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"255","","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
-		cfg.owner()->attrAdd(new TFld("mult",_("Multiple selection"),TFld::Boolean,Attr::Mutable,"1","0","","",i2s(A_FormElMixP2).c_str()));
+		cfg.owner()->attrAdd(new TFld("value",trS("Value"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"255","","","",i2s(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("items",trS("Items"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
+		cfg.owner()->attrAdd(new TFld("mult",trS("Multiple selection"),TFld::Boolean,Attr::Mutable,"1","0","","",i2s(A_FormElMixP2).c_str()));
 		break;
 	    case F_COMBO: case F_TREE:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::TransltText|Attr::Mutable,"255","","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::TransltText|TFld::FullText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
+		cfg.owner()->attrAdd(new TFld("value",trS("Value"),TFld::String,TFld::TransltText|Attr::Mutable,"255","","","",i2s(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("items",trS("Items"),TFld::String,TFld::TransltText|TFld::FullText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
 	    case F_SLIDER: case F_SCROLL_BAR:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Integer,Attr::Mutable,"20","0","","",i2s(A_FormElValue).c_str()));
-		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","",i2s(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("value",trS("Value"),TFld::Integer,Attr::Mutable,"20","0","","",i2s(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("cfg",trS("Configuration"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","",i2s(A_FormElMixP1).c_str()));
 		break;
 	}
     }
@@ -686,26 +686,26 @@ void OrigText::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("backColor",_("Background: color"),TFld::String,Attr::Color,"","","","",i2s(A_BackColor).c_str()));
-	attrAdd(new TFld("backImg",_("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
-	attrAdd(new TFld("bordWidth",_("Border: width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
-	attrAdd(new TFld("bordColor",_("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
-	attrAdd(new TFld("bordStyle",_("Border: style"),TFld::Integer,TFld::Selectable,"","3",
+	attrAdd(new TFld("backColor",trS("Background: color"),TFld::String,Attr::Color,"","","","",i2s(A_BackColor).c_str()));
+	attrAdd(new TFld("backImg",trS("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
+	attrAdd(new TFld("bordWidth",trS("Border: width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
+	attrAdd(new TFld("bordColor",trS("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
+	attrAdd(new TFld("bordStyle",trS("Border: style"),TFld::Integer,TFld::Selectable,"","3",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
-	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_TextFont).c_str()));
-	attrAdd(new TFld("color",_("Color"),TFld::String,Attr::Color,"20","#000000","","",i2s(A_TextColor).c_str()));
-	attrAdd(new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-360;360","",i2s(A_TextOrient).c_str()));
-	attrAdd(new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1","","",i2s(A_TextWordWrap).c_str()));
-	attrAdd(new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selectable,"1","0",
+	attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_TextFont).c_str()));
+	attrAdd(new TFld("color",trS("Color"),TFld::String,Attr::Color,"20","#000000","","",i2s(A_TextColor).c_str()));
+	attrAdd(new TFld("orient",trS("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-360;360","",i2s(A_TextOrient).c_str()));
+	attrAdd(new TFld("wordWrap",trS("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1","","",i2s(A_TextWordWrap).c_str()));
+	attrAdd(new TFld("alignment",trS("Alignment"),TFld::Integer,TFld::Selectable,"1","0",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",FT_TOP_LEFT,FT_TOP_RIGHT,FT_TOP_CENTER,FT_TOP_JUST,
 		FT_BT_LEFT,FT_BT_RIGHT,FT_BT_CENTER,FT_BT_JUST,FT_CNTR_LEFT,FT_CNTR_RIGHT,FT_CNTR,FT_CNTR_JUST).c_str(),
 			    _("Top left;Top right;Top center;Top justify;"
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
 			    "V center left;V center right;Center;V center justify"),i2s(A_TextAlignment).c_str()));
-	attrAdd(new TFld("inHtml",_("In HTML"),TFld::Boolean,Attr::Active,"1","0","","",i2s(A_TextHTML).c_str()));
-	attrAdd(new TFld("text",_("Text"),TFld::String,TFld::TransltText|TFld::FullText,"","Text","","",i2s(A_TextText).c_str()));
-	attrAdd(new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","",i2s(A_TextNumbArg).c_str()));
+	attrAdd(new TFld("inHtml",trS("In HTML"),TFld::Boolean,Attr::Active,"1","0","","",i2s(A_TextHTML).c_str()));
+	attrAdd(new TFld("text",trS("Text"),TFld::String,TFld::TransltText|TFld::FullText,"","Text","","",i2s(A_TextText).c_str()));
+	attrAdd(new TFld("numbArg",trS("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","",i2s(A_TextNumbArg).c_str()));
     }
 }
 
@@ -828,17 +828,17 @@ void OrigMedia::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("backColor",_("Background: color"),TFld::String,Attr::Color,"","#FFFFFF","","",i2s(A_BackColor).c_str()));
-	attrAdd(new TFld("backImg",_("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
-	attrAdd(new TFld("bordWidth",_("Border: width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
-	attrAdd(new TFld("bordColor",_("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
-	attrAdd(new TFld("bordStyle",_("Border: style"),TFld::Integer,TFld::Selectable,"","3",
+	attrAdd(new TFld("backColor",trS("Background: color"),TFld::String,Attr::Color,"","#FFFFFF","","",i2s(A_BackColor).c_str()));
+	attrAdd(new TFld("backImg",trS("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
+	attrAdd(new TFld("bordWidth",trS("Border: width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
+	attrAdd(new TFld("bordColor",trS("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
+	attrAdd(new TFld("bordStyle",trS("Border: style"),TFld::Integer,TFld::Selectable,"","3",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
-	attrAdd(new TFld("src",_("Source"),TFld::String,0,"50","","","",i2s(A_MediaSrc).c_str()));
-	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selectable|Attr::Active,"1","0",
+	attrAdd(new TFld("src",trS("Source"),TFld::String,0,"50","","","",i2s(A_MediaSrc).c_str()));
+	attrAdd(new TFld("type",trS("Type"),TFld::Integer,TFld::Selectable|Attr::Active,"1","0",
 	    TSYS::strMess("%d;%d;%d;%d",FM_IMG,FM_ANIM,FM_VIDEO,FM_AUDIO).c_str(),_("Image;Animation;Video;Audio"),i2s(A_MediaType).c_str()));
-	attrAdd(new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;100","",i2s(A_MediaAreas).c_str()));
+	attrAdd(new TFld("areas",trS("Map areas"),TFld::Integer,Attr::Active,"2","0","0;100","",i2s(A_MediaAreas).c_str()));
     }
 }
 
@@ -868,19 +868,19 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	    //Create specific attributes
 	    switch(cfg.getI()) {
 		case FM_IMG:
-		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
+		    cfg.owner()->attrAdd(new TFld("fit",trS("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
 		    break;
 		case FM_ANIM:
-		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
-		    cfg.owner()->attrAdd(new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"","100","1;900","",i2s(A_MediaSpeedPlay).c_str()));
+		    cfg.owner()->attrAdd(new TFld("fit",trS("Fit to the widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
+		    cfg.owner()->attrAdd(new TFld("speed",trS("Play speed"),TFld::Integer,Attr::Mutable,"","100","1;900","",i2s(A_MediaSpeedPlay).c_str()));
 		    break;
 		case FM_VIDEO: case FM_AUDIO:
-		    cfg.owner()->attrAdd(new TFld("play",_("Play"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaSpeedPlay).c_str()));
-		    cfg.owner()->attrAdd(new TFld("roll",_("Roll play"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaRoll).c_str()));
-		    cfg.owner()->attrAdd(new TFld("pause",_("Pause"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaPause).c_str()));
-		    cfg.owner()->attrAdd(new TFld("size",_("Size"),TFld::Real,Attr::Mutable,"","0","0;1e300","",i2s(A_MediaSize).c_str()));
-		    cfg.owner()->attrAdd(new TFld("seek",_("Seek"),TFld::Real,Attr::Mutable,"","0","0;1e300","",i2s(A_MediaSeek).c_str()));
-		    cfg.owner()->attrAdd(new TFld("volume",_("Volume"),TFld::Real,Attr::Mutable,"","50","0;100","",i2s(A_MediaVolume).c_str()));
+		    cfg.owner()->attrAdd(new TFld("play",trS("Play"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaSpeedPlay).c_str()));
+		    cfg.owner()->attrAdd(new TFld("roll",trS("Roll play"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaRoll).c_str()));
+		    cfg.owner()->attrAdd(new TFld("pause",trS("Pause"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaPause).c_str()));
+		    cfg.owner()->attrAdd(new TFld("size",trS("Size"),TFld::Real,Attr::Mutable,"","0","0;1e300","",i2s(A_MediaSize).c_str()));
+		    cfg.owner()->attrAdd(new TFld("seek",trS("Seek"),TFld::Real,Attr::Mutable,"","0","0;1e300","",i2s(A_MediaSeek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("volume",trS("Volume"),TFld::Real,Attr::Mutable,"","50","0;100","",i2s(A_MediaVolume).c_str()));
 		    break;
 	    }
 	}
@@ -981,15 +981,15 @@ void OrigDiagram::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("backColor",_("Background: color"),TFld::String,Attr::Color,"","black","","",i2s(A_BackColor).c_str()));
-	attrAdd(new TFld("backImg",_("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
-	attrAdd(new TFld("bordWidth",_("Border: width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
-	attrAdd(new TFld("bordColor",_("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
-	attrAdd(new TFld("bordStyle",_("Border: style"),TFld::Integer,TFld::Selectable,"","3",
+	attrAdd(new TFld("backColor",trS("Background: color"),TFld::String,Attr::Color,"","black","","",i2s(A_BackColor).c_str()));
+	attrAdd(new TFld("backImg",trS("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
+	attrAdd(new TFld("bordWidth",trS("Border: width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
+	attrAdd(new TFld("bordColor",trS("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
+	attrAdd(new TFld("bordStyle",trS("Border: style"),TFld::Integer,TFld::Selectable,"","3",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
-	attrAdd(new TFld("trcPer",_("Tracing period, seconds"),TFld::Real,TFld::NoFlag,"","0","0;360","",i2s(A_DiagramTrcPer).c_str()));
-	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selectable|Attr::Active,"1","0",
+	attrAdd(new TFld("trcPer",trS("Tracing period, seconds"),TFld::Real,TFld::NoFlag,"","0","0;360","",i2s(A_DiagramTrcPer).c_str()));
+	attrAdd(new TFld("type",trS("Type"),TFld::Integer,TFld::Selectable|Attr::Active,"1","0",
 	    TSYS::strMess("%d;%d;%d",FD_TRND,FD_SPECTR,FD_XY).c_str(),_("Trend;Spectrum;XY"),i2s(A_DiagramType).c_str()));
     }
 }
@@ -1005,9 +1005,9 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrDel("curColor");
 	}
 	else {
-	    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
-	    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
-	    cfg.owner()->attrAdd(new TFld("curColor",_("Cursor: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curSek",trS("Cursor: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curUSek",trS("Cursor: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curColor",trS("Cursor: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 	}
     }
     else if(cfg.id() == "type") {
@@ -1020,33 +1020,33 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	// Create specific attributes
 	switch(cfg.getI()) {
 	    case FD_TRND:
-		cfg.owner()->attrAdd(new TFld("sclHorPer",_("Scale: horizontal grid size, seconds"),TFld::Real,Attr::Mutable,
+		cfg.owner()->attrAdd(new TFld("sclHorPer",trS("Scale: horizontal grid size, seconds"),TFld::Real,Attr::Mutable,
 		    "","0","0;3e6","",i2s(A_DiagramSclHorPer).c_str()));
 	    case FD_SPECTR: case FD_XY:
-		cfg.owner()->attrAdd(new TFld("tSek",_("Time: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
-		cfg.owner()->attrAdd(new TFld("tUSek",_("Time: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
-		cfg.owner()->attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Real,Attr::Mutable,"","60","0;32e6","",i2s(A_DiagramTSize).c_str()));
+		cfg.owner()->attrAdd(new TFld("tSek",trS("Time: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramTSek).c_str()));
+		cfg.owner()->attrAdd(new TFld("tUSek",trS("Time: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
+		cfg.owner()->attrAdd(new TFld("tSize",trS("Size, seconds"),TFld::Real,Attr::Mutable,"","60","0;32e6","",i2s(A_DiagramTSize).c_str()));
 		if(cfg.owner()->attrAt("active").at().getB()) {
-		    cfg.owner()->attrAdd(new TFld("curSek",_("Cursor: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
-		    cfg.owner()->attrAdd(new TFld("curUSek",_("Cursor: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
-		    cfg.owner()->attrAdd(new TFld("curColor",_("Cursor: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curSek",trS("Cursor: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curUSek",trS("Cursor: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curColor",trS("Cursor: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 		}
-		cfg.owner()->attrAdd(new TFld("sclColor",_("Scale: color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","",i2s(A_DiagramSclColor).c_str()));
-		cfg.owner()->attrAdd(new TFld("sclHor",_("Scale: horizontal"),TFld::Integer,Attr::Mutable|TFld::Selectable,"1",i2s(FD_NO).c_str(),
+		cfg.owner()->attrAdd(new TFld("sclColor",trS("Scale: color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","",i2s(A_DiagramSclColor).c_str()));
+		cfg.owner()->attrAdd(new TFld("sclHor",trS("Scale: horizontal"),TFld::Integer,Attr::Mutable|TFld::Selectable,"1",i2s(FD_NO).c_str(),
 		    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d",FD_NO,FD_GRD,FD_MARKS,FD_GRD_MARKS,FD_GRD_LOG,FD_MARKS_LOG,FD_GRD_MARKS_LOG).c_str(),
 		    _("No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"),i2s(A_DiagramSclHor).c_str()));
-		cfg.owner()->attrAdd(new TFld("sclHorScl",_("Scale: horizontal scale (%)"),TFld::Real,Attr::Mutable,"","100","10;1000","",i2s(A_DiagramSclHorScl).c_str()));
-		cfg.owner()->attrAdd(new TFld("sclHorSclOff",_("Scale: horizontal scale offset (%)"),TFld::Real,Attr::Mutable,"","0","-100;100","",i2s(A_DiagramSclHorSclOff).c_str()));
-		cfg.owner()->attrAdd(new TFld("sclVer",_("Scale: vertical"),TFld::Integer,Attr::Mutable|TFld::Selectable,"1",i2s(FD_NO).c_str(),
+		cfg.owner()->attrAdd(new TFld("sclHorScl",trS("Scale: horizontal scale (%)"),TFld::Real,Attr::Mutable,"","100","10;1000","",i2s(A_DiagramSclHorScl).c_str()));
+		cfg.owner()->attrAdd(new TFld("sclHorSclOff",trS("Scale: horizontal scale offset (%)"),TFld::Real,Attr::Mutable,"","0","-100;100","",i2s(A_DiagramSclHorSclOff).c_str()));
+		cfg.owner()->attrAdd(new TFld("sclVer",trS("Scale: vertical"),TFld::Integer,Attr::Mutable|TFld::Selectable,"1",i2s(FD_NO).c_str(),
 		    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d",FD_NO,FD_GRD,FD_MARKS,FD_GRD_MARKS,FD_GRD_LOG,FD_MARKS_LOG,FD_GRD_MARKS_LOG).c_str(),
 		    _("No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"),i2s(A_DiagramSclVer).c_str()));
-		cfg.owner()->attrAdd(new TFld("sclVerScl",_("Scale: vertical scale (%)"),TFld::Real,Attr::Mutable,"","100","10;1000","",i2s(A_DiagramSclVerScl).c_str()));
-		cfg.owner()->attrAdd(new TFld("sclVerSclOff",_("Scale: vertical scale offset (%)"),TFld::Real,Attr::Mutable,"","0","-100;100","",i2s(A_DiagramSclVerSclOff).c_str()));
-		cfg.owner()->attrAdd(new TFld("sclMarkColor",_("Scale: Markers: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramSclMarkColor).c_str()));
-		cfg.owner()->attrAdd(new TFld("sclMarkFont",_("Scale: Markers: font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","",i2s(A_DiagramSclMarkFont).c_str()));
-		cfg.owner()->attrAdd(new TFld("valArch",_("Value archiver"),TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramValArch).c_str()));
-		cfg.owner()->attrAdd(new TFld("valsForPix",_("Values per pixel"),TFld::Integer,Attr::Mutable,"","1","1;100","",i2s(A_DiagramValsForPix).c_str()));
-		cfg.owner()->attrAdd(new TFld("parNum",_("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"","1","0;100","",i2s(A_DiagramParNum).c_str()));
+		cfg.owner()->attrAdd(new TFld("sclVerScl",trS("Scale: vertical scale (%)"),TFld::Real,Attr::Mutable,"","100","10;1000","",i2s(A_DiagramSclVerScl).c_str()));
+		cfg.owner()->attrAdd(new TFld("sclVerSclOff",trS("Scale: vertical scale offset (%)"),TFld::Real,Attr::Mutable,"","0","-100;100","",i2s(A_DiagramSclVerSclOff).c_str()));
+		cfg.owner()->attrAdd(new TFld("sclMarkColor",trS("Scale: Markers: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramSclMarkColor).c_str()));
+		cfg.owner()->attrAdd(new TFld("sclMarkFont",trS("Scale: Markers: font"),TFld::String,Attr::Font|Attr::Mutable,"","Arial 10","","",i2s(A_DiagramSclMarkFont).c_str()));
+		cfg.owner()->attrAdd(new TFld("valArch",trS("Value archiver"),TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramValArch).c_str()));
+		cfg.owner()->attrAdd(new TFld("valsForPix",trS("Values per pixel"),TFld::Integer,Attr::Mutable,"","1","1;100","",i2s(A_DiagramValsForPix).c_str()));
+		cfg.owner()->attrAdd(new TFld("parNum",trS("Parameters number"),TFld::Integer,Attr::Mutable|Attr::Active,"","1","0;100","",i2s(A_DiagramParNum).c_str()));
 		break;
 	}
     }
@@ -1165,21 +1165,21 @@ void OrigProtocol::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("backColor",_("Background: color"),TFld::String,Attr::Color,"","","","",i2s(A_BackColor).c_str()));
-	attrAdd(new TFld("backImg",_("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
-	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_ProtFont).c_str()));
-	attrAdd(new TFld("headVis",_("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","",i2s(A_ProtHeadVis).c_str()));
-	attrAdd(new TFld("time",_("Time, seconds"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
-	attrAdd(new TFld("tSize",_("Size, seconds"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
-	attrAdd(new TFld("trcPer",_("Tracing period, seconds"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
-	attrAdd(new TFld("arch",_("Archiver"),TFld::String,0,"","","","",i2s(A_ProtArch).c_str()));
-	attrAdd(new TFld("tmpl",_("Template"),TFld::String,0,"","","","",i2s(A_ProtTmpl).c_str()));
-	attrAdd(new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","-7;7","",i2s(A_ProtLev).c_str()));
-	attrAdd(new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selectable,"","0",
+	attrAdd(new TFld("backColor",trS("Background: color"),TFld::String,Attr::Color,"","","","",i2s(A_BackColor).c_str()));
+	attrAdd(new TFld("backImg",trS("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
+	attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_ProtFont).c_str()));
+	attrAdd(new TFld("headVis",trS("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","",i2s(A_ProtHeadVis).c_str()));
+	attrAdd(new TFld("time",trS("Time, seconds"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
+	attrAdd(new TFld("tSize",trS("Size, seconds"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
+	attrAdd(new TFld("trcPer",trS("Tracing period, seconds"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
+	attrAdd(new TFld("arch",trS("Archiver"),TFld::String,0,"","","","",i2s(A_ProtArch).c_str()));
+	attrAdd(new TFld("tmpl",trS("Template"),TFld::String,0,"","","","",i2s(A_ProtTmpl).c_str()));
+	attrAdd(new TFld("lev",trS("Level"),TFld::Integer,TFld::NoFlag,"","0","-7;7","",i2s(A_ProtLev).c_str()));
+	attrAdd(new TFld("viewOrd",trS("View order"),TFld::Integer,TFld::Selectable,"","0",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",FP_ON_TM,FP_ON_LEV,FP_ON_CAT,FP_ON_MESS,FP_ON_TM_REV,FP_ON_LEV_REV,FP_ON_CAT_REV,FP_ON_MESS_REV).c_str(),
 	    _("On time;On level;On category;On messages;On time (reverse);On level (reverse);On category (reverse);On messages (reverse)"),i2s(A_ProtViewOrd).c_str()));
-	attrAdd(new TFld("col",_("Show columns"),TFld::String,0,"","pos;tm;utm;lev;cat;mess","","",i2s(A_ProtCol).c_str()));
-	attrAdd(new TFld("itProp",_("Item properties"),TFld::Integer,Attr::Active,"","","","",i2s(A_ProtItProp).c_str()));
+	attrAdd(new TFld("col",trS("Show columns"),TFld::String,0,"","pos;tm;utm;lev;cat;mess","","",i2s(A_ProtCol).c_str()));
+	attrAdd(new TFld("itProp",trS("Item properties"),TFld::Integer,Attr::Active,"","","","",i2s(A_ProtItProp).c_str()));
     }
 }
 
@@ -1294,13 +1294,13 @@ void OrigDocument::postEnable( int flag )
 
     if(flag&TCntrNode::NodeConnect) {
 	attrAdd(new TFld("style","CSS",TFld::String,TFld::FullText,"","","","",i2s(A_DocStyle).c_str()));
-	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::TransltText|TFld::FullText,"","","","",i2s(A_DocTmpl).c_str()));
-	attrAdd(new TFld("doc",_("Document"),TFld::String,TFld::TransltText|TFld::FullText,"","","","",i2s(A_DocDoc).c_str()));
-	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_DocFont).c_str()));
-	attrAdd(new TFld("bTime",_("Time: begin"),TFld::Integer,Attr::DateTime,"","0","","",i2s(A_DocBTime).c_str()));
-	attrAdd(new TFld("time",_("Time: current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","",i2s(A_DocTime).c_str()));
-	attrAdd(new TFld("process",_("In the process"),TFld::Boolean,TFld::NoWrite,"","0","","",i2s(A_DocProcess).c_str()));
-	attrAdd(new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0",TSYS::strMess("0;%d",DocArhSize).c_str(),"",i2s(A_DocN).c_str()));
+	attrAdd(new TFld("tmpl",trS("Template"),TFld::String,TFld::TransltText|TFld::FullText,"","","","",i2s(A_DocTmpl).c_str()));
+	attrAdd(new TFld("doc",trS("Document"),TFld::String,TFld::TransltText|TFld::FullText,"","","","",i2s(A_DocDoc).c_str()));
+	attrAdd(new TFld("font",trS("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_DocFont).c_str()));
+	attrAdd(new TFld("bTime",trS("Time: begin"),TFld::Integer,Attr::DateTime,"","0","","",i2s(A_DocBTime).c_str()));
+	attrAdd(new TFld("time",trS("Time: current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","",i2s(A_DocTime).c_str()));
+	attrAdd(new TFld("process",trS("In the process"),TFld::Boolean,TFld::NoWrite,"","0","","",i2s(A_DocProcess).c_str()));
+	attrAdd(new TFld("n",trS("Archive size"),TFld::Integer,Attr::Active,"","0",TSYS::strMess("0;%d",DocArhSize).c_str(),"",i2s(A_DocN).c_str()));
     }
 }
 
@@ -1322,15 +1322,15 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	}
 	else {
 	    if(!cfg.owner()->attrPresent("vCur"))
-		cfg.owner()->attrAdd(new TFld("vCur",_("Archive: cursor: view"),TFld::Integer,Attr::NotStored|Attr::Mutable|Attr::Active,"","0",
+		cfg.owner()->attrAdd(new TFld("vCur",trS("Archive: cursor: view"),TFld::Integer,Attr::NotStored|Attr::Mutable|Attr::Active,"","0",
 		    TSYS::strMess("-2;%d",DocArhSize-1).c_str()));
 	    if(!cfg.owner()->attrPresent("aCur"))
-		cfg.owner()->attrAdd(new TFld("aCur",_("Archive: cursor: current"),TFld::Integer,Attr::NotStored|Attr::Mutable|Attr::Active,"","0",
+		cfg.owner()->attrAdd(new TFld("aCur",trS("Archive: cursor: current"),TFld::Integer,Attr::NotStored|Attr::Mutable|Attr::Active,"","0",
 		    TSYS::strMess("-1;%d",DocArhSize-1).c_str()));
 	    if(!cfg.owner()->attrPresent("aDoc"))
-		cfg.owner()->attrAdd(new TFld("aDoc",_("Archive: current document"),TFld::String,Attr::NotStored|TFld::FullText|Attr::Mutable|Attr::Active));
+		cfg.owner()->attrAdd(new TFld("aDoc",trS("Archive: current document"),TFld::String,Attr::NotStored|TFld::FullText|Attr::Mutable|Attr::Active));
 	    if(!cfg.owner()->attrPresent("aSize"))
-		cfg.owner()->attrAdd(new TFld("aSize",_("Archive: size"),TFld::Integer,Attr::NotStored|Attr::Mutable));
+		cfg.owner()->attrAdd(new TFld("aSize",trS("Archive: size"),TFld::Integer,Attr::NotStored|Attr::Mutable));
 	}
     }
 
@@ -1385,7 +1385,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	if(cfg.getI() < 0) cfg.setI(((prev.getI()+1) >= n) ? 0 : (prev.getI()+1), false, true);
 	else if(cfg.getI() >= n) cfg.setI(n-1, false, true);
 	if(cfg.getI() != prev.getI()) {
-	    cfg.owner()->attrAt("aDoc").at().setS(trLU(cfg.owner()->attrAt("tmpl").at().getS(),l,u));
+	    cfg.owner()->attrAt("aDoc").at().setS(trD_LU(cfg.owner()->attrAt("tmpl").at().getS(),l,u));
 	    if(prev.getI() == cfg.owner()->attrAt("vCur").at().getI())
 		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
 
@@ -1563,18 +1563,18 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     if(!lstTime) lstTime = wdg->attrAt("bTime").at().getI();
 
     // Add generic io
-    funcIO.ioIns(new IO("rez",_("Result"),IO::String,IO::Return), A_DocCalcPrmRez);
-    funcIO.ioIns(new IO("time",_("Document time"),IO::Integer,IO::Default), A_DocCalcPrmTime);
-    funcIO.ioIns(new IO("bTime",_("Document begin time"),IO::Integer,IO::Default), A_DocCalcPrmBTime);
-    funcIO.ioIns(new IO("lTime",_("Last time"),IO::Integer,IO::Default), A_DocCalcPrmLTime);
-    funcIO.ioIns(new IO("rTime",_("Repeat time, seconds"),IO::Integer,IO::Default), A_DocCalcPrmRTime);
-    funcIO.ioIns(new IO("rTimeU",_("Repeat time, microseconds"),IO::Integer,IO::Default), A_DocCalcPrmRTimeU);
-    funcIO.ioIns(new IO("rPer",_("Repeat period"),IO::Real,IO::Default), A_DocCalcPrmRPer);
-    funcIO.ioIns(new IO("mTime",_("Message time, seconds"),IO::Integer,IO::Default), A_DocCalcPrmMTime);
-    funcIO.ioIns(new IO("mTimeU",_("Message time, microseconds"),IO::Integer,IO::Default), A_DocCalcPrmMTimeU);
-    funcIO.ioIns(new IO("mLev",_("Message level"),IO::Integer,IO::Default), A_DocCalcPrmMLev);
-    funcIO.ioIns(new IO("mCat",_("Message category"),IO::String,IO::Default), A_DocCalcPrmMCat);
-    funcIO.ioIns(new IO("mVal",_("Message value"),IO::String,IO::Default), A_DocCalcPrmMVal);
+    funcIO.ioIns(new IO("rez",trS("Result"),IO::String,IO::Return), A_DocCalcPrmRez);
+    funcIO.ioIns(new IO("time",trS("Document time"),IO::Integer,IO::Default), A_DocCalcPrmTime);
+    funcIO.ioIns(new IO("bTime",trS("Document begin time"),IO::Integer,IO::Default), A_DocCalcPrmBTime);
+    funcIO.ioIns(new IO("lTime",trS("Last time"),IO::Integer,IO::Default), A_DocCalcPrmLTime);
+    funcIO.ioIns(new IO("rTime",trS("Repeat time, seconds"),IO::Integer,IO::Default), A_DocCalcPrmRTime);
+    funcIO.ioIns(new IO("rTimeU",trS("Repeat time, microseconds"),IO::Integer,IO::Default), A_DocCalcPrmRTimeU);
+    funcIO.ioIns(new IO("rPer",trS("Repeat period"),IO::Real,IO::Default), A_DocCalcPrmRPer);
+    funcIO.ioIns(new IO("mTime",trS("Message time, seconds"),IO::Integer,IO::Default), A_DocCalcPrmMTime);
+    funcIO.ioIns(new IO("mTimeU",trS("Message time, microseconds"),IO::Integer,IO::Default), A_DocCalcPrmMTimeU);
+    funcIO.ioIns(new IO("mLev",trS("Message level"),IO::Integer,IO::Default), A_DocCalcPrmMLev);
+    funcIO.ioIns(new IO("mCat",trS("Message category"),IO::String,IO::Default), A_DocCalcPrmMCat);
+    funcIO.ioIns(new IO("mVal",trS("Message value"),IO::String,IO::Default), A_DocCalcPrmMVal);
 
     // Add user io
     wdg->attrList(als);
@@ -1809,7 +1809,7 @@ void *OrigDocument::DocTask( void *param )
 	string mkDk;
 	if(!sw->attrAt("n").at().getI()) {
 	    mkDk = sw->attrAt("doc").at().getS();
-	    if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
+	    if(mkDk.empty()) mkDk = trD_LU(sw->attrAt("tmpl").at().getS(), l, u);
 	    mkDk = OrigDocument::makeDoc(mkDk,sw);
 	    sw->attrAt("doc").at().setS(mkDk);
 	}
@@ -1824,7 +1824,7 @@ void *OrigDocument::DocTask( void *param )
 	    if(!(aCur.freeStat() || aDoc.freeStat() || vCur.freeStat())) {
 		//int aCur = aCur.at().getI();
 		mkDk = aDoc.at().getS();
-		if(mkDk.empty()) mkDk = trLU(sw->attrAt("tmpl").at().getS(), l, u);
+		if(mkDk.empty()) mkDk = trD_LU(sw->attrAt("tmpl").at().getS(), l, u);
 
 		mkDk = makeDoc(mkDk, sw);
 		aDoc.at().setS(mkDk);
@@ -1864,13 +1864,13 @@ void OrigBox::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("pgOpenSrc",_("Page: source of the opening"),TFld::String,0,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
-	attrAdd(new TFld("pgGrp",_("Page: group"),TFld::String,0,"","","","",i2s(A_PG_GRP).c_str()));
-	attrAdd(new TFld("backColor",_("Background: color"),TFld::String,Attr::Color,"","#FFFFFF","","",i2s(A_BackColor).c_str()));
-	attrAdd(new TFld("backImg",_("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
-	attrAdd(new TFld("bordWidth",_("Border: width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
-	attrAdd(new TFld("bordColor",_("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
-	attrAdd(new TFld("bordStyle",_("Border: style"),TFld::Integer,TFld::Selectable,"",i2s(FBRD_SOL).c_str(),
+	attrAdd(new TFld("pgOpenSrc",trS("Page: source of the opening"),TFld::String,0,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
+	attrAdd(new TFld("pgGrp",trS("Page: group"),TFld::String,0,"","","","",i2s(A_PG_GRP).c_str()));
+	attrAdd(new TFld("backColor",trS("Background: color"),TFld::String,Attr::Color,"","#FFFFFF","","",i2s(A_BackColor).c_str()));
+	attrAdd(new TFld("backImg",trS("Background: image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
+	attrAdd(new TFld("bordWidth",trS("Border: width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
+	attrAdd(new TFld("bordColor",trS("Border: color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
+	attrAdd(new TFld("bordStyle",trS("Border: style"),TFld::Integer,TFld::Selectable,"",i2s(FBRD_SOL).c_str(),
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
 	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
     }

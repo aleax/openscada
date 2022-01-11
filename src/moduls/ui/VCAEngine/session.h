@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -121,8 +121,8 @@ class Session : public TCntrNode
 
     protected:
 	//Methods
-	const char *nodeName( ) const		{ return mId.c_str(); }
-	const char *nodeNameSYSM( ) const	{ return mId.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
+	string nodeNameSYSM( ) const	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );				//Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );

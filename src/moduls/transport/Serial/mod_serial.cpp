@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,12 +52,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Serial"
-#define MOD_NAME	_("Serial interfaces")
+#define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.3"
-#define AUTHORS		_("Roman Savochenko, Maxim Kochetkov (2016)")
-#define DESCRIPTION	_("Provides transport based on the serial interfaces.\
+#define MOD_VER		"2.6.4"
+#define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
+#define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -109,8 +109,8 @@ void TTr::postEnable( int flag )
     TModule::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	owner().inEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-	owner().outEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().inEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().outEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
     }
 }
 

@@ -296,7 +296,7 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
     //Request from the cache at the first
     if((rez=translCacheGet(cKey)).size()) ;
     else {
-	//Request to data source direct
+	//Request to data source directly
 	if(src.find("uapi:") == 0) {	// Check/Get/Place from user API translations table
 	    string srcAddrs = src.substr(5), tStrVl;
 	    if(srcAddrs.empty()) srcAddrs = SYS->workDB();
@@ -339,7 +339,7 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		    string trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#"), reqFld;
 		    bool isCfg = false;
 		    //  Source is config file or included DB
-		    if((isCfg=trSrc.find("cfg:") == 0) || trSrc.find("db:") == 0) {
+		    if((isCfg=(trSrc.find("cfg:")==0)) || trSrc.find("db:") == 0) {
 			reqFld = translFld(trLang, trFld, isCfg);
 			//  Need DB structure prepare
 			req.elem().fldClear();
@@ -416,7 +416,7 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 	req.setNoTransl(true);
 	bool setRes = false, isCfg = false;
 	//  Source is config file or included DB
-	if((isCfg=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,3,"db:") == 0) {	//Source is config file
+	if((isCfg=(trSrc.find("cfg:")==0)) || trSrc.find("db:") == 0) {
 	    req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
 	    req.cfg(setFld).setReqKey(true);
 	    req.cfg(setFld).setS(base, chBase?TCfg::ExtValTwo|TCfg::ForceUse:0);
@@ -458,7 +458,7 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
     if(!translEnMan()) return;
 
     //Service request of loading the translation index
-    if(src.compare(0,5,"uapi:") == 0) {
+    if(src.find("uapi:") == 0) {
 	vector<string> ls;
 	if(src.size() > 5) ls.push_back(src.substr(5));
 	else { TBDS::dbList(ls); ls.push_back("<cfg>"); }
@@ -730,15 +730,26 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 #endif
 }
 
-string TMess::I18N( const char *mess, const char *d_name, const char *mLang )
+string TMess::I18N( const string &imess, const char *mLang, const char *d_name )
 {
 #ifdef HAVE_LIBINTL_H
+    int doff = 0;
+    string  ctx,
+	    mess = TSYS::strParse(imess, 0, string(1,0), &doff),
+	    dir = d_name ? d_name : TSYS::strParse(imess,0,string(1,0),&doff).c_str();
+
+    //Presaving the base message with the directory name "{base}\000{cat}" for real translation at reading the saved one
+    if(mLang && strcmp(mLang,mess_PreSave) == 0 &&
+	    ((!translDyn() && mess.size() == imess.size()) || (translDyn() && (ctx=trCtx()).empty())))
+	return mess + string(1,0) + dir;
+
     if(translDyn()) {
 	//Obtaining the message language whether directly or from the user, and from the cache before
 	string rez, toLang;
-	if(mLang) toLang = mLang;
+	if(mLang && strlen(mLang) && strcmp(mLang,mess_PreSave) != 0) toLang = mLang;
 	else {
-	    string ctx = trCtx(), toUser;
+	    string toUser;
+	    if(ctx.empty()) ctx = trCtx();
 	    if((toLang=TSYS::strLine(ctx,1)).empty() && (toUser=TSYS::strLine(ctx,0)).size())
 		toLang = lang2Code(toUser, true);
 	}
@@ -761,16 +772,16 @@ string TMess::I18N( const char *mess, const char *d_name, const char *mLang )
 	    getMessLng = toLang;
 	}
 
-	rez = dgettext(d_name, mess);
+	rez = dgettext((dir.size()?dir.c_str():NULL), mess.c_str());
 	getMessRes.unlock();
 
 	translCacheSet(toLang+"#"+mess+string(1,0)+"sys", rez);
 
 	return rez;
     }
-    else return dgettext(d_name, mess);
+    else return dgettext((dir.size()?dir.c_str():NULL), mess.c_str());
 #else
-    return mess;
+    return imess;
 #endif
 }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DB.ODBC file: mod_ldap.cpp
 /***************************************************************************
- *   Copyright (C) 2017-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2017-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,12 +30,12 @@
 //************************************************
 //* Module info!                                 *
 #define MOD_ID		"LDAP"
-#define MOD_NAME	_("Directory by LDAP")
+#define MOD_NAME	trS("Directory by LDAP")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.6.6"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BD module. Provides support of directories by LDAP.")
+#define MOD_VER		"0.6.7"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("BD module. Provides support of directories by LDAP.")
 #define MOD_LICENSE	"GPL2"
 #define FEATURES	"LIST, GET, SEEK, SET"
 //************************************************

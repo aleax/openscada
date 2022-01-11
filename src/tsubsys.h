@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsubsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,18 +42,18 @@ class TSubSYS : public TCntrNode
 {
     public:
 	//Public methods
-	TSubSYS( const char *id, const char *name, bool mod = false );
+	TSubSYS( const string &id, bool mod = false );
 	virtual ~TSubSYS( );
 
 	string objName( );
 
-	string	subId( )	{ return mId.c_str(); }
-	string	subName( );
+	string subId( ) const	{ return mId.c_str(); }
+	virtual string subName( ) const { return subId(); }
 	bool subStartStat( )	{ return mStart; }
 
 	bool subModule( ) const	{ return mModSys; }	//Module subsystem
 
-	virtual int subVer( )	{ return 0; }		//Type/grp module version
+	virtual int subVer( ) const { return 0; }	//Type/grp module version
 
 	virtual void unload( );
 
@@ -83,15 +83,14 @@ class TSubSYS : public TCntrNode
 
     private:
 	//Private methods
-	const char *nodeName( ) const		{ return mId.c_str(); }
-	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
+	string nodeNameSYSM( ) const	{ return subName(); }
 
 	//Private attributes
 	bool	mModSys;
 	int	mMod;
 
 	string	mId;		//Id
-	string	mName;		//Name
 };
 
 }

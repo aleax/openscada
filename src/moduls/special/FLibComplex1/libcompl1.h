@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibComplex1 file: libcompl1.h
 /***************************************************************************
- *   Copyright (C) 2005-2015 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,15 +47,15 @@ class DigitBlock : public TFunction
 {
     public:
 	DigitBlock( ) : TFunction("digitBlock", SSPC_ID) {
-	    ioAdd(new IO("cmdOpen",_("Command \"Open\""),IO::Boolean,IO::Output,"0"));
-	    ioAdd(new IO("cmdClose",_("Command \"Close\""),IO::Boolean,IO::Output,"0"));
-	    ioAdd(new IO("cmdStop",_("Command \"Stop\""),IO::Boolean,IO::Output,"0"));
-	    ioAdd(new IO("stOpen",_("State \"Opened\""),IO::Boolean,IO::Default,"0"));
-	    ioAdd(new IO("stClose",_("State \"Closed\""),IO::Boolean,IO::Default,"0"));
-	    ioAdd(new IO("tCmd",_("Time of commands holding, seconds"),IO::Integer,IO::Default,"5"));
-	    ioAdd(new IO("frq",_("Frequency of the calculating, Hz"),IO::Integer,IO::Default,"1"));
-	    ioAdd(new IO("w_tm",_("Counter of the commands processing"),IO::Real,IO::Output,"0",true));
-	    ioAdd(new IO("last_cmd",_("Last command"),IO::Integer,IO::Output,"0",true));
+	    ioAdd(new IO("cmdOpen",trS("Command \"Open\""),IO::Boolean,IO::Output,"0"));
+	    ioAdd(new IO("cmdClose",trS("Command \"Close\""),IO::Boolean,IO::Output,"0"));
+	    ioAdd(new IO("cmdStop",trS("Command \"Stop\""),IO::Boolean,IO::Output,"0"));
+	    ioAdd(new IO("stOpen",trS("State \"Opened\""),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("stClose",trS("State \"Closed\""),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("tCmd",trS("Time of commands holding, seconds"),IO::Integer,IO::Default,"5"));
+	    ioAdd(new IO("frq",trS("Frequency of the calculating, Hz"),IO::Integer,IO::Default,"1"));
+	    ioAdd(new IO("w_tm",trS("Counter of the commands processing"),IO::Real,IO::Output,"0",true));
+	    ioAdd(new IO("last_cmd",trS("Last command"),IO::Integer,IO::Output,"0",true));
 	}
 
 	string name( )	{ return _("Discrete block"); }
@@ -92,16 +92,10 @@ class Sum : public TFunction
 {
     public:
 	Sum( ) : TFunction("sum", SSPC_ID) {
-	    char id_buf[10], nm_buf[20];
-
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"1"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"1"));
 	    for(int i_in = 1; i_in <= 8; i_in++) {
-		snprintf(id_buf, sizeof(id_buf), "in%d_1", i_in);
-		snprintf(nm_buf, sizeof(nm_buf), _("Input %d.1"), i_in);
-		ioAdd(new IO(id_buf,nm_buf,IO::Real,IO::Default,"0"));
-		snprintf(id_buf, sizeof(id_buf), "in%d_2", i_in);
-		snprintf(nm_buf, sizeof(nm_buf), _("Input %d.2"), i_in);
-		ioAdd(new IO(id_buf,nm_buf,IO::Real,IO::Default,"0"));
+		ioAdd(new IO(TSYS::strMess("in%d_1",i_in).c_str(),TSYS::strMess(_("Input %d.1"),i_in),IO::Real,IO::Default,"0"));
+		ioAdd(new IO(TSYS::strMess("in%d_2",i_in).c_str(),TSYS::strMess(_("Input %d.2"),i_in),IO::Real,IO::Default,"0"));
 	    }
 	}
 
@@ -134,7 +128,7 @@ class Mult : public TFunction
 {
     public:
 	Mult( ) : TFunction("mult", SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"1"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"1"));
 	    for(int iC = 1; iC <= 6; iC++)
 		ioAdd(new IO(("in1_"+i2s(iC)).c_str(),(_("Input 1.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
@@ -163,7 +157,7 @@ class MultDiv : public TFunction
 {
     public:
 	MultDiv( ) : TFunction("multDiv", SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
 	    for(int iC = 1; iC <= 5; iC++)
 		ioAdd(new IO(("in1_"+i2s(iC)).c_str(),(_("Input 1.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 5; iC++)
@@ -200,15 +194,15 @@ class Exp : public TFunction
 {
     public:
 	Exp( ) : TFunction("exp", SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
 	    for(int iC = 1; iC <= 5; iC++)
 		ioAdd(new IO(("in1_"+i2s(iC)).c_str(),(_("Input 1.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 5; iC++)
 		ioAdd(new IO(("in2_"+i2s(iC)).c_str(),(_("Input 2.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("in3",_("Input 3"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("in3",trS("Input 3"),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 5; iC++)
 		ioAdd(new IO(("in4_"+i2s(iC)).c_str(),(_("Input 4.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("in5",_("Input 5"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("in5",trS("Input 5"),IO::Real,IO::Default,"1"));
 	}
 
 	string name( )	{ return _("Exponent"); }
@@ -237,7 +231,7 @@ class Pow : public TFunction
 {
     public:
 	Pow( ) : TFunction("pow",SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
 	    for(int iC = 1; iC <= 5; iC++)
 		ioAdd(new IO(("in1_"+i2s(iC)).c_str(),(_("Input 1.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 5; iC++)
@@ -276,8 +270,8 @@ class Cond1 : public TFunction
     public:
 	Cond1( ) : TFunction("cond_lt", SSPC_ID)
 	{
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("in1",_("Input 1"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("in1",trS("Input 1"),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
 		ioAdd(new IO(("in2_"+i2s(iC)).c_str(),(_("Input 2.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
@@ -310,8 +304,8 @@ class Cond2 : public TFunction
 {
     public:
 	Cond2( ) : TFunction("cond_gt",SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("in1",_("Input 1"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("in1",trS("Input 1"),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
 		ioAdd(new IO(("in2_"+i2s(iC)).c_str(),(_("Input 2.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
@@ -346,8 +340,8 @@ class Cond3 : public TFunction
 {
     public:
 	Cond3( ) : TFunction("cond_full", SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("in1",_("Input 1"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("in1",trS("Input 1"),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
 		ioAdd(new IO(("in2_"+i2s(iC)).c_str(),(_("Input 2.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
@@ -391,8 +385,8 @@ class Select : public TFunction
 {
     public:
 	Select( ) : TFunction("select",SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("sel",_("Select"),IO::Integer,IO::Default,"1"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("sel",trS("Select"),IO::Integer,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
 		ioAdd(new IO(("in1_"+i2s(iC)).c_str(),(_("Input 1.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
 	    for(int iC = 1; iC <= 4; iC++)
@@ -433,11 +427,11 @@ class Increm : public TFunction
 {
     public:
 	Increm( ) : TFunction("increment",SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("in",_("Input"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("prev",_("Previous"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("k+",_("Positive coefficient"),IO::Real,IO::Default,"0.1"));
-	    ioAdd(new IO("k-",_("Negative coefficient"),IO::Real,IO::Default,"0.1"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("in",trS("Input"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("prev",trS("Previous"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("k+",trS("Positive coefficient"),IO::Real,IO::Default,"0.1"));
+	    ioAdd(new IO("k-",trS("Negative coefficient"),IO::Real,IO::Default,"0.1"));
 	}
 
 	string name( )	{ return _("Iterator"); }
@@ -461,7 +455,7 @@ class Divider : public TFunction
 {
     public:
 	Divider( ) : TFunction("div", SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
 
 	    for(int iC = 1; iC <= 5; iC++)
 		ioAdd(new IO(("in1_"+i2s(iC)).c_str(),(_("Input 1.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
@@ -530,39 +524,39 @@ class PID : public TFunction
     public:
 	PID( ) : TFunction("pid",SSPC_ID) {
 	    //Inputs
-	    ioAdd(new IO("var",_("Variable"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("sp",_("Setpoint"),IO::Real,IO::Output,"0"));
-	    ioAdd(new IO("max",_("Maximum of the scale"),IO::Real,IO::Default,"100"));
-	    ioAdd(new IO("min",_("Minimum of the scale"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("manIn",_("Manual input, %"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("out",_("Output, %"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("auto",_("Auto mode"),IO::Boolean,IO::Default,"0"));
-	    ioAdd(new IO("casc",_("Cascade mode"),IO::Boolean,IO::Default,"0"));
-	    ioAdd(new IO("Kp",_("Kp"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("Ti",_("Ti, milliseconds"),IO::Integer,IO::Default,"1000"));
-	    ioAdd(new IO("Kd",_("Kd"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("Td",_("Td, milliseconds"),IO::Integer,IO::Default,"0"));
-	    ioAdd(new IO("Tzd",_("Td lag, milliseconds"),IO::Integer,IO::Default,"0"));
-	    ioAdd(new IO("Hup",_("Upper limit of the out, %"),IO::Real,IO::Default,"100"));
-	    ioAdd(new IO("Hdwn",_("Lower limit of the out, %"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("Zi",_("Insensibility, %"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("followSp",_("Follow setpoint from variable on the manual mode"),IO::Boolean,IO::Default,"1"));
+	    ioAdd(new IO("var",trS("Variable"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("sp",trS("Setpoint"),IO::Real,IO::Output,"0"));
+	    ioAdd(new IO("max",trS("Maximum of the scale"),IO::Real,IO::Default,"100"));
+	    ioAdd(new IO("min",trS("Minimum of the scale"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("manIn",trS("Manual input, %"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("out",trS("Output, %"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("auto",trS("Auto mode"),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("casc",trS("Cascade mode"),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("Kp",trS("Kp"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("Ti",trS("Ti, milliseconds"),IO::Integer,IO::Default,"1000"));
+	    ioAdd(new IO("Kd",trS("Kd"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("Td",trS("Td, milliseconds"),IO::Integer,IO::Default,"0"));
+	    ioAdd(new IO("Tzd",trS("Td lag, milliseconds"),IO::Integer,IO::Default,"0"));
+	    ioAdd(new IO("Hup",trS("Upper limit of the out, %"),IO::Real,IO::Default,"100"));
+	    ioAdd(new IO("Hdwn",trS("Lower limit of the out, %"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("Zi",trS("Insensibility, %"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("followSp",trS("Follow setpoint from variable on the manual mode"),IO::Boolean,IO::Default,"1"));
 
-	    ioAdd(new IO("K1",_("K input 1"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("in1",_("Input 1"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("K2",_("K input 2"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("in2",_("Input 2"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("K3",_("K input 3"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("in3",_("Input 3"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("K4",_("K input 4"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("in4",_("Input 4"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("K1",trS("K input 1"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("in1",trS("Input 1"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("K2",trS("K input 2"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("in2",trS("Input 2"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("K3",trS("K input 3"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("in3",trS("Input 3"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("K4",trS("K input 4"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("in4",trS("Input 4"),IO::Real,IO::Default,"0"));
 
-	    ioAdd(new IO("f_frq",_("Frequency of the calculating, Hz"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("f_frq",trS("Frequency of the calculating, Hz"),IO::Real,IO::Default,"1"));
 
 	    //Internal data:
-	    ioAdd(new IO("int",_("Integral value"),IO::Real,IO::Output,"0",true));
-	    ioAdd(new IO("dif",_("Differential value"),IO::Real,IO::Output,"0",true));
-	    ioAdd(new IO("lag",_("Differential lag"),IO::Real,IO::Output,"0",true));
+	    ioAdd(new IO("int",trS("Integral value"),IO::Real,IO::Output,"0",true));
+	    ioAdd(new IO("dif",trS("Differential value"),IO::Real,IO::Output,"0",true));
+	    ioAdd(new IO("lag",trS("Differential lag"),IO::Real,IO::Output,"0",true));
 	}
 
 	string name( )	{ return _("PID regulator"); }
@@ -652,10 +646,10 @@ class Alarm : public TFunction
 {
     public:
 	Alarm( ) : TFunction("alarm",SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Boolean,IO::Return,"0"));
-	    ioAdd(new IO("val",_("Value"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("max",_("Maximum"),IO::Real,IO::Default,"100"));
-	    ioAdd(new IO("min",_("Minimum"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("out",trS("Output"),IO::Boolean,IO::Return,"0"));
+	    ioAdd(new IO("val",trS("Value"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("max",trS("Maximum"),IO::Real,IO::Default,"100"));
+	    ioAdd(new IO("min",trS("Minimum"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Alarm"); }
@@ -682,12 +676,12 @@ class Flow : public TFunction
 {
     public:
 	Flow( ) : TFunction("flow",SSPC_ID) {
-	    ioAdd(new IO("f",_("Flow"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X position"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("K1",_("K1"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("K2",_("K2"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("K3",_("K3"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("K4",_("K4"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("f",trS("Flow"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X position"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("K1",trS("K1"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("K2",trS("K2"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("K3",trS("K3"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("K4",trS("K4"),IO::Real,IO::Default,"1"));
 	}
 
 	string name( )	{ return _("Flow"); }
@@ -710,7 +704,7 @@ class SumMult : public TFunction
 {
     public:
 	SumMult( ) : TFunction("sum_mult",SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
 
 	    for(int iC = 1; iC <= 5; iC++)
 		ioAdd(new IO(("in1_"+i2s(iC)).c_str(),(_("Input 1.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
@@ -750,7 +744,7 @@ class SumDiv : public TFunction
 {
     public:
 	SumDiv( ) : TFunction("sum_div",SSPC_ID) {
-	    ioAdd(new IO("out",_("Output"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("out",trS("Output"),IO::Real,IO::Return,"0"));
 
 	    for(int iC = 1; iC <= 5; iC++)
 		ioAdd(new IO(("in1_"+i2s(iC)).c_str(),(_("Input 1.")+i2s(iC)).c_str(),IO::Real,IO::Default,"1"));
@@ -787,9 +781,9 @@ class Lag : public TFunction
 {
     public:
 	Lag( ) : TFunction("lag",SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("Klag",_("Klag"),IO::Real,IO::Default,"0.1"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("Klag",trS("Klag"),IO::Real,IO::Default,"0.1"));
 	}
 
 	string name( )	{ return _("Lag"); }

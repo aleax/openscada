@@ -1,7 +1,7 @@
 
 //OpenSCADA file: telem.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -162,7 +162,7 @@ TFld::TFld( const TFld &ifld, const char *name ) : mLen(0), mDec(0), mType(TFld:
     setSelNames(ifld.selNames());
 }
 
-TFld::TFld( const char *name, const char *descr, TFld::Type itype, unsigned iflg,
+TFld::TFld( const char *name, const string &descr, TFld::Type itype, unsigned iflg,
             const char *valLen, const char *valDef, const char *val_s, const char *n_Sel, const char *ires ) :
     mType(TFld::Integer), mFlg(0)
 {
@@ -238,22 +238,22 @@ string TFld::values( ) const
     string rez;
     switch(type()) {
 	case TFld::String:
-	    for(unsigned i_el = 0; i_el < mVal.s->size(); i_el++)
-		rez = rez + (*mVal.s)[i_el] + ";";
+	    for(unsigned iEl = 0; iEl < mVal.s->size(); iEl++)
+		rez = rez + (*mVal.s)[iEl] + ";";
 	    break;
 	case TFld::Integer:
 	    if(flg()&TFld::Selectable || (mVal.i->size() == 2 && (*mVal.i)[0] < (*mVal.i)[1]))
-		for(unsigned i_el = 0; i_el < mVal.i->size(); i_el++)
-		    rez = rez + i2s((*mVal.i)[i_el]) + ";";
+		for(unsigned iEl = 0; iEl < mVal.i->size(); iEl++)
+		    rez = rez + i2s((*mVal.i)[iEl]) + ";";
 	    break;
 	case TFld::Real:
 	    if(flg()&TFld::Selectable || (mVal.i->size() == 2 && (*mVal.i)[0] < (*mVal.i)[1]))
-		for(unsigned i_el = 0; i_el < mVal.r->size(); i_el++)
-		    rez = rez + r2s((*mVal.r)[i_el],6) + ";";
+		for(unsigned iEl = 0; iEl < mVal.r->size(); iEl++)
+		    rez = rez + r2s((*mVal.r)[iEl],6) + ";";
 	    break;
 	case TFld::Boolean:
-	    for(unsigned i_el = 0; i_el < mVal.b->size(); i_el++)
-		rez = rez + i2s((*mVal.b)[i_el]) + ";";
+	    for(unsigned iEl = 0; iEl < mVal.b->size(); iEl++)
+		rez = rez + i2s((*mVal.b)[iEl]) + ";";
 	    break;
 	default: break;
     }
@@ -265,8 +265,8 @@ string TFld::selNames( ) const
     if(mSel == NULL) return "";
 
     string rez;
-    for(unsigned i_el = 0; i_el < mSel->size(); i_el++)
-	rez = rez+(*mSel)[i_el]+";";
+    for(unsigned iEl = 0; iEl < mSel->size(); iEl++)
+	rez = rez+(*mSel)[iEl]+";";
 
     return rez.size()?rez.substr(0,rez.size()-1):"";
 }
@@ -276,31 +276,31 @@ void TFld::setValues( const string &vls )
     //Set value list
     if(flg()&TFld::Selectable) {
 	//Count alements amount
-	int i_lvl = 0, i_off = 0;
-	while(TSYS::strSepParse(vls,0,';',&i_off).size()) i_lvl++;
+	int iLvl = 0, iOff = 0;
+	while(TSYS::strSepParse(vls,0,';',&iOff).size()) iLvl++;
 
 	switch(type()) {
 	    case TFld::String:
 		if(!mVal.s)	mVal.s = new vector<string>;
-		mVal.s->resize(i_lvl,"");
+		mVal.s->resize(iLvl,"");
 		break;
 	    case TFld::Integer:
 		if(!mVal.i)	mVal.i = new vector<int>;
-		mVal.i->resize(i_lvl,0);
+		mVal.i->resize(iLvl,0);
 		break;
 	    case TFld::Real:
 		if(!mVal.r)	mVal.r = new vector<double>;
-		mVal.r->resize(i_lvl,0);
+		mVal.r->resize(iLvl,0);
 		break;
 	    case TFld::Boolean:
 		if(!mVal.b)	mVal.b = new vector<bool>;
-		mVal.b->resize(i_lvl,false);
+		mVal.b->resize(iLvl,false);
 		break;
 	    default: break;
 	}
 	//Get elements
-	for(int i = 0, i_off=0; i < i_lvl; i++) {
-	    string s_el = TSYS::strSepParse(vls,0,';',&i_off);
+	for(int i = 0, iOff=0; i < iLvl; i++) {
+	    string s_el = TSYS::strSepParse(vls,0,';',&iOff);
 	    switch(type()) {
 		case TFld::String:  (*mVal.s)[i] = s_el;		break;
 		case TFld::Integer: (*mVal.i)[i] = strtol(s_el.c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));	break;
@@ -333,14 +333,14 @@ void TFld::setSelNames( const string &slnms )
     //Set value list
     if(!(flg()&TFld::Selectable)) return;
 
-    int i_lvl = 0;
-    for(int i_off = 0; TSYS::strSepParse(slnms,0,';',&i_off).size(); i_lvl++);
+    int iLvl = 0;
+    for(int iOff = 0; TSYS::strSepParse(slnms,0,';',&iOff).size(); iLvl++);
 
-    if(!mSel)  mSel = new vector<string>;
-    mSel->resize(i_lvl,"");
+    if(!mSel) mSel = new vector<string>;
+    mSel->resize(iLvl, "");
 
-    for(int i = 0, i_off = 0; i < i_lvl; i++)
-	(*mSel)[i] = TSYS::strSepParse(slnms,0,';',&i_off);
+    for(int i = 0, iOff = 0; i < iLvl; i++)
+	(*mSel)[i] = TSYS::strSepParse(slnms,0,';',&iOff);
 }
 
 const vector<string> &TFld::selValS( ) const
@@ -511,7 +511,7 @@ bool TFld::selNm2VlB( const string &name )
 
 XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
 {
-    XMLNode *n_e = TCntrNode::ctrMkNode("fld",opt,pos,(path+"/"+name()).c_str(),descr(),
+    XMLNode *n_e = TCntrNode::ctrMkNode("fld",opt,pos,(path+"/"+name()).c_str(),_(descr()),
 	    (flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),1,"len",i2s(len()).c_str());
     if(n_e) {
 	if(flg()&TFld::Selectable)

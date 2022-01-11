@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -130,33 +130,33 @@ void Widget::postEnable( int flag )
     if(flag&TCntrNode::NodeRestore) setEnable(true);
     if(flag&TCntrNode::NodeConnect && !BACrtHoldOvr) {
 	//Add main attributes
-	attrAdd(new TFld("id",_("Identifier"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
-	attrAdd(new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
-	attrAdd(new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
-	attrAdd(new TFld("owner",_("Owner"),TFld::String,Attr::Generic|Attr::PreRead,"","root:UI"));
-	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selectable|Attr::Generic|Attr::PreRead,"","01000",
+	attrAdd(new TFld("id",trS("Identifier"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
+	attrAdd(new TFld("path",trS("Path"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
+	attrAdd(new TFld("parent",trS("Parent"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
+	attrAdd(new TFld("owner",trS("Owner"),TFld::String,Attr::Generic|Attr::PreRead,"","root:UI"));
+	attrAdd(new TFld("perm",trS("Access"),TFld::Integer,TFld::OctDec|TFld::Selectable|Attr::Generic|Attr::PreRead,"","01000",
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666;"
 	    "01000;01400;01440;01444;01600;01640;01644;01660;01664;01666",
 	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW;"
 	      "Inheritance;Inherit.(R_____);Inherit.(R_R___);Inherit.(R_R_R_);Inherit.(RW____);"
 	      "Inherit.(RWR___);Inherit.(RWR_R_);Inherit.(RWRW__);Inherit.(RWRWR_);Inherit.(RWRWRW)")));
-	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
-	attrAdd(new TFld("name",_("Name"),TFld::String,TFld::TransltText|Attr::Generic));
-	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic));
-	attrAdd(new TFld("en",_("Enabled"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
-	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
-	attrAdd(new TFld("geomX",_("Geometry: x"),TFld::Real,Attr::Generic,"","0",(i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_X).c_str()));
-	attrAdd(new TFld("geomY",_("Geometry: y"),TFld::Real,Attr::Generic,"","0",(i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_Y).c_str()));
-	attrAdd(new TFld("geomW",_("Geometry: width"),TFld::Real,Attr::Generic,"","100",(i2s(0)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_W).c_str()));
-	attrAdd(new TFld("geomH",_("Geometry: height"),TFld::Real,Attr::Generic,"","100",(i2s(0)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_H).c_str()));
-	attrAdd(new TFld("geomXsc",_("Geometry: x scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_X_SC).c_str()));
-	attrAdd(new TFld("geomYsc",_("Geometry: y scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_Y_SC).c_str()));
-	attrAdd(new TFld("geomZ",_("Geometry: z"),TFld::Integer,Attr::Generic,"","0","-1000000;1000000","",i2s(A_GEOM_Z).c_str()));
-	attrAdd(new TFld("geomMargin",_("Geometry: margin"),TFld::Integer,Attr::Generic,"","0","0;1000","",i2s(A_GEOM_MARGIN).c_str()));
-	attrAdd(new TFld("tipTool",_("Tip: tool"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
-	attrAdd(new TFld("tipStatus",_("Tip: status"),TFld::String,TFld::TransltText|Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
-	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic,"","","","",i2s(A_CTX_MENU).c_str()));
-	attrAdd(new TFld("evProc",_("Events processing"),TFld::String,TFld::FullText,"200"));
+	attrAdd(new TFld("root",trS("Root"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
+	attrAdd(new TFld("name",trS("Name"),TFld::String,TFld::TransltText|Attr::Generic));
+	attrAdd(new TFld("dscr",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic));
+	attrAdd(new TFld("en",trS("Enabled"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
+	attrAdd(new TFld("active",trS("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
+	attrAdd(new TFld("geomX",trS("Geometry: x"),TFld::Real,Attr::Generic,"","0",(i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_X).c_str()));
+	attrAdd(new TFld("geomY",trS("Geometry: y"),TFld::Real,Attr::Generic,"","0",(i2s(A_GEOM_MIN)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_Y).c_str()));
+	attrAdd(new TFld("geomW",trS("Geometry: width"),TFld::Real,Attr::Generic,"","100",(i2s(0)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_W).c_str()));
+	attrAdd(new TFld("geomH",trS("Geometry: height"),TFld::Real,Attr::Generic,"","100",(i2s(0)+";"+i2s(A_GEOM_MAX)).c_str(),"",i2s(A_GEOM_H).c_str()));
+	attrAdd(new TFld("geomXsc",trS("Geometry: x scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_X_SC).c_str()));
+	attrAdd(new TFld("geomYsc",trS("Geometry: y scale"),TFld::Real,Attr::Generic,"","1","0.01;100","",i2s(A_GEOM_Y_SC).c_str()));
+	attrAdd(new TFld("geomZ",trS("Geometry: z"),TFld::Integer,Attr::Generic,"","0","-1000000;1000000","",i2s(A_GEOM_Z).c_str()));
+	attrAdd(new TFld("geomMargin",trS("Geometry: margin"),TFld::Integer,Attr::Generic,"","0","0;1000","",i2s(A_GEOM_MARGIN).c_str()));
+	attrAdd(new TFld("tipTool",trS("Tip: tool"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
+	attrAdd(new TFld("tipStatus",trS("Tip: status"),TFld::String,TFld::TransltText|Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
+	attrAdd(new TFld("contextMenu",trS("Context menu"),TFld::String,TFld::FullText|TFld::TransltText|Attr::Generic,"","","","",i2s(A_CTX_MENU).c_str()));
+	attrAdd(new TFld("evProc",trS("Events processing"),TFld::String,TFld::FullText,"200"));
     }
 }
 
@@ -1503,7 +1503,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		    "help",_("Use -1 (< 0) if you want to use the parent widget/page/project calculating period."));
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Procedure language"),RWRWR_,"root",SUI_ID,4,"tp","str", "dest","sel_ed", "select","/plang/list",
 		    "help",_("Select the blank language to reset the widget procedure and language to the parent widget."));
-		if(calcProg().size() && !(!parent().freeStat() && calcProg() == parent().at().calcProg()))
+		if(calcProg().size() && !(!parent().freeStat() && calcProg() == parent().at().calcProg()) && calcProgTr())
 		    ctrMkNode("fld",opt,-1,"/proc/calc/prog_tr",_("Completely translate the procedure"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		if(calcLang().size())
 		    ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Procedure"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");

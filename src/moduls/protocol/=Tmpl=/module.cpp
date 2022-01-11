@@ -2,7 +2,7 @@
 //!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Protocol.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2017 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,12 +35,12 @@
 //*************************************************
 //* Module info!                                  *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	_("Protocol template")
+#define MOD_NAME	trS("Protocol template")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"0.0.1"
-#define AUTHORS		_("MyName MyFamily")
-#define DESCRIPTION	_("Protocol's subsystem template module.")
+#define AUTHORS		trS("MyName MyFamily")
+#define DESCRIPTION	trS("Protocol's subsystem template module.")
 #define LICENSE		"MyLicense"
 //*************************************************
 

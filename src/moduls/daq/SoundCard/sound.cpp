@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,12 +32,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SoundCard"
-#define MOD_NAME	_("Sound card")
+#define MOD_NAME	trS("Sound card")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.8.6"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides an access to the sound card.")
+#define MOD_VER		"0.8.7"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides an access to the sound card.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -84,16 +84,16 @@ void TTpContr::postEnable( int flag )
     if(err != paNoError) mess_err(nodePath().c_str(),"Pa_Initialize: %s",Pa_GetErrorText(err));
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Table of parameters"),TFld::String,0,"30"));
-    fldAdd(new TFld("CARD",_("Card device"),TFld::String,0,"100","<default>"));
-    fldAdd(new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;200000"));
-    fldAdd(new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selectable,"5",i2s(paFloat32).c_str(),
+    fldAdd(new TFld("PRM_BD",trS("Table of parameters"),TFld::String,0,"30"));
+    fldAdd(new TFld("CARD",trS("Card device"),TFld::String,0,"100","<default>"));
+    fldAdd(new TFld("SMPL_RATE",trS("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;200000"));
+    fldAdd(new TFld("SMPL_TYPE",trS("Card sample type"),TFld::Integer,TFld::Selectable,"5",i2s(paFloat32).c_str(),
 	TSYS::strMess("%d;%d;%d",paFloat32,paInt32,paInt16).c_str(),_("Float 32;Int 32;Int 16")));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("CHANNEL",_("Channel"),TFld::Integer,TCfg::NoVal,"2","0","0;100"));
+    tpPrmAt(t_prm).fldAdd(new TFld("CHANNEL",trS("Channel"),TFld::Integer,TCfg::NoVal,"2","0","0;100"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) { return new TMdContr(name,daq_db,this); }
@@ -110,7 +110,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 
     cfg("PRM_BD").setS("SoundCard_"+name_c);
 
-    pEl.fldAdd(new TFld("val",_("Value"),((mSmplType==paFloat32)?TFld::Real:TFld::Integer),TFld::NoWrite,"",
+    pEl.fldAdd(new TFld("val",trS("Value"),((mSmplType==paFloat32)?TFld::Real:TFld::Integer),TFld::NoWrite,"",
 					 ((mSmplType==paFloat32)?r2s(EVAL_REAL).c_str():ll2s(EVAL_INT).c_str())));
 }
 

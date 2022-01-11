@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,33 +45,33 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNode = grpAdd("n_");
 
     //Node DB structure
-    mNodeEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    mNodeEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
-    mNodeEl.fldAdd(new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247"));
-    mNodeEl.fldAdd(new TFld("InTR",_("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));
-    mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
-    mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selectable,"1","0",
+    mNodeEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mNodeEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mNodeEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mNodeEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
+    mNodeEl.fldAdd(new TFld("ADDR",trS("Address"),TFld::Integer,0,"3","1","1;247"));
+    mNodeEl.fldAdd(new TFld("InTR",trS("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));
+    mNodeEl.fldAdd(new TFld("PRT",trS("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
+    mNodeEl.fldAdd(new TFld("MODE",trS("Mode"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
-    mNodeEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    mNodeEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
     // For "Data" mode
-    mNodeEl.fldAdd(new TFld("DT_PER",_("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
-    mNodeEl.fldAdd(new TFld("DT_PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    mNodeEl.fldAdd(new TFld("DT_PROG",_("Procedure"),TFld::String,TFld::TransltText,"1000000"));
+    mNodeEl.fldAdd(new TFld("DT_PER",trS("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
+    mNodeEl.fldAdd(new TFld("DT_PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mNodeEl.fldAdd(new TFld("DT_PROG",trS("Procedure"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
-    mNodeEl.fldAdd(new TFld("TO_TR",_("To output transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
-    mNodeEl.fldAdd(new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247"));
+    mNodeEl.fldAdd(new TFld("TO_TR",trS("To output transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
+    mNodeEl.fldAdd(new TFld("TO_PRT",trS("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
+    mNodeEl.fldAdd(new TFld("TO_ADDR",trS("To address"),TFld::Integer,0,"3","1","1;247"));
 
     //Node data IO DB structure
-    mNodeIOEl.fldAdd(new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mNodeIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mNodeIOEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mNodeIOEl.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
-    mNodeIOEl.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
-    mNodeIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
-    mNodeIOEl.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
+    mNodeIOEl.fldAdd(new TFld("NODE_ID",trS("Node ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mNodeIOEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mNodeIOEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mNodeIOEl.fldAdd(new TFld("TYPE",trS("Value type"),TFld::Integer,TFld::NoFlag,"1"));
+    mNodeIOEl.fldAdd(new TFld("FLAGS",trS("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    mNodeIOEl.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"100"));
+    mNodeIOEl.fldAdd(new TFld("POS",trS("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 }
 
 TProt::~TProt( )
@@ -634,9 +634,9 @@ void Node::postEnable( int flag )
 {
     //Create default IOs
     if(flag&TCntrNode::NodeConnect) {
-	ioIns(new IO("f_frq",_("Frequency of calculation of the function, Hz"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
-	ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 1);
-	ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 2);
+	ioIns(new IO("f_frq",trS("Frequency of calculation of the function, Hz"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
+	ioIns(new IO("f_start",trS("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 1);
+	ioIns(new IO("f_stop",trS("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 2);
     }
 }
 
@@ -1495,7 +1495,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
 		IO *ioPrev = f->ioSize() ? f->io(f->ioSize()-1) : NULL;
 		if(ioPrev) f->ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)));
-		else f->ioAdd(new IO("new",_("New IO"),IO::Integer,IO::Output));
+		else f->ioAdd(new IO("new",trS("New IO"),IO::Integer,IO::Output));
 		modif();
 	    }
 	    if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR)) {
@@ -1503,7 +1503,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		int row = s2i(opt->attr("row"));
 		IO *ioPrev = row ? f->io(row-1) : NULL;
 		if(ioPrev) f->ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)), row);
-		else f->ioIns(new IO("new",_("New IO"),IO::Integer,IO::Output), row);
+		else f->ioIns(new IO("new",trS("New IO"),IO::Integer,IO::Output), row);
 		modif();
 	    }
 	    if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR)) {

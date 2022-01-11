@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -234,7 +234,7 @@ class VisRun : public QMainWindow
 	float	updTmMax, planePer;
 
     signals:
-	void makeStarterMenu( );
+	void makeStarterMenu( QWidget *mn = NULL, QString lang = "" );
 
     protected:
 	//Protected methods

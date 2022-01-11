@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.PostgreSQL file: postgre.h
 /***************************************************************************
- *   Copyright (C) 2013-2021 by Roman Savochenko, roman@oscada.org         *
+ *   Copyright (C) 2013-2022 by Roman Savochenko, roman@oscada.org         *
  *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,6 +29,8 @@
 
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using namespace OSCADA;

@@ -30,13 +30,13 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"WebVision"
-#define MOD_NAME	_("Operation user interface (WEB)")
+#define MOD_NAME	trS("Operation user interface (WEB)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.5.6"
-#define AUTHORS		_("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
-#define DESCRIPTION	_("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
+#define MOD_VER		"6.5.7"
+#define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
+#define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -911,9 +911,6 @@ string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-    if(name == "Name")		return MOD_NAME;
-    if(name == "Author")	return AUTHORS;
-    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

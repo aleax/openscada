@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: da_LP_8x.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2012-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -95,15 +95,15 @@ void da_LP_8x::enable( TMdPrm *p, vector<string> &als )
     ePrm->dev = devs[p->modTp.getS()];
 
     if(p->modTp.getS() == "LP-8xxx") {		//Individual LP-8xxx processing
-	p->pEl.fldAdd(new TFld("serial",_("Serial number"),TFld::String,TFld::NoWrite)); als.push_back("serial");
-	p->pEl.fldAdd(new TFld("SDK",_("SDK version"),TFld::Real,TFld::NoWrite)); als.push_back("SDK");
-	p->pEl.fldAdd(new TFld("DIP",_("DIP switch"),TFld::Integer,TFld::NoWrite)); als.push_back("DIP");
-	p->pEl.fldAdd(new TFld("RS",_("Rotary switch"),TFld::Integer,TFld::NoWrite)); als.push_back("RS");
+	p->pEl.fldAdd(new TFld("serial",trS("Serial number"),TFld::String,TFld::NoWrite)); als.push_back("serial");
+	p->pEl.fldAdd(new TFld("SDK",trS("SDK version"),TFld::Real,TFld::NoWrite)); als.push_back("SDK");
+	p->pEl.fldAdd(new TFld("DIP",trS("DIP switch"),TFld::Integer,TFld::NoWrite)); als.push_back("DIP");
+	p->pEl.fldAdd(new TFld("RS",trS("Rotary switch"),TFld::Integer,TFld::NoWrite)); als.push_back("RS");
     }
     else if(p->modTp.getS() == "I-8014") {	//Individual I-8014 processing
 	ePrm->prmNum = vmin(16, vmax(0,s2i(p->modPrm("cnls","8"))));
 	ePrm->fastPer = s2r(p->modPrm("fastPer"));
-	chnId = "dev"; p->pEl.fldAdd(new TFld(chnId.c_str(),_("Device"),TFld::String,TFld::NoWrite)); als.push_back(chnId);
+	chnId = "dev"; p->pEl.fldAdd(new TFld(chnId.c_str(),trS("Device"),TFld::String,TFld::NoWrite)); als.push_back(chnId);
 	for(int iI = 0; iI < 16; iI++) {
 	    ePrm->cnlMode[iI] = s2i(p->modPrm(TSYS::strMess("cnl:%d",iI)));
 	    chnId = TSYS::strMess("ai%d", iI); chnNm = TSYS::strMess(_("Input %d"), iI);

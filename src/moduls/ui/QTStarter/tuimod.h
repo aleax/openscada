@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,8 @@
 #include <QSessionManager>
 #include <QSystemTrayIcon>
 
-#include <tsys.h>
+//  #include <tsys.h>
+#include <telem.h>
 #include <tuis.h>
 
 #ifdef HAVE_QTSENSORS
@@ -40,6 +41,8 @@ using namespace QtMobility;
 
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 class QTimer;
 class QSplashScreen;
@@ -152,7 +155,7 @@ private slots:
     void saveSessState( QSessionManager &manager );
     void startDialog( );
     void callQtModule( );
-    void makeStarterMenu( QWidget *mn = NULL );
+    void makeStarterMenu( QWidget *mn = NULL, const QString &lang = "" );
     void lastWinClose( );
     void trayAct( QSystemTrayIcon::ActivationReason reason );
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_cpu.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,10 +33,10 @@ using namespace SystemCntr;
 CPU::CPU( )
 {
     //CPU value structure
-    fldAdd(new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("user",_("User (%)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("idle",_("Idle (%)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("load",trS("Load (%)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("sys",trS("System (%)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("user",trS("User (%)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("idle",trS("Idle (%)"),TFld::Real,TFld::NoWrite));
 }
 
 CPU::~CPU( )

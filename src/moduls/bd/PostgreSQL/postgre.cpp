@@ -1,7 +1,7 @@
 // 
 //OpenSCADA module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2021 by Roman Savochenko, roman@oscada.org         *
+ *   Copyright (C) 2013-2022 by Roman Savochenko, roman@oscada.org         *
  *                 2010-2011 by Maxim Lysenko, mlisenko@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,12 +30,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"PostgreSQL"
-#define MOD_NAME	_("DB PostgreSQL")
+#define MOD_NAME	trS("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.3"
-#define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2010-2011)")
-#define DESCRIPTION	_("DB module. Provides support of the DBMS PostgreSQL.")
+#define MOD_VER		"3.0.4"
+#define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2010-2011)")
+#define DESCRIPTION	trS("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
 #define FEATURES	"SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR"
 //************************************************

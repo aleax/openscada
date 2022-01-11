@@ -33,20 +33,20 @@ using namespace OSCADA;
 //************************************************
 TElem TBDS::elSYS;
 
-TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mTblLifeTime(600)
+TBDS::TBDS( ) : TSubSYS(SDB_ID, true), mTblLifeTime(600)
 {
     //Open data bases DB structure
-    elDB.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elDB.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elDB.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elDB.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"2000"));
-    elDB.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"1000"));
-    elDB.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
-    elDB.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
-    elDB.fldAdd(new TFld("LS_PR",_("Priority in list"),TFld::Integer,0,"2","0","0;99"));
-    elDB.fldAdd(new TFld("TRTM_CLS_ON_OPEN",_("Transaction closing: after opening, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(3*prmServTask_PER).c_str()));
-    elDB.fldAdd(new TFld("TRTM_CLS_ON_REQ",_("Transaction closing: after request, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(prmServTask_PER).c_str()));
-    elDB.fldAdd(new TFld("TRPR_CLS_TASK",_("Transaction closing: separate task priority"),TFld::Integer,TFld::NoFlag,"3","0"));
+    elDB.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elDB.fldAdd(new TFld("TYPE",trS("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elDB.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elDB.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"2000"));
+    elDB.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,TFld::NoFlag,"1000"));
+    elDB.fldAdd(new TFld("CODEPAGE",trS("Code page"),TFld::String,TFld::NoFlag,"20"));
+    elDB.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    elDB.fldAdd(new TFld("LS_PR",trS("Priority in list"),TFld::Integer,0,"2","0","0;99"));
+    elDB.fldAdd(new TFld("TRTM_CLS_ON_OPEN",trS("Transaction closing: after opening, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(3*prmServTask_PER).c_str()));
+    elDB.fldAdd(new TFld("TRTM_CLS_ON_REQ",trS("Transaction closing: after request, seconds"),TFld::Real,TFld::NoFlag,"4.1",i2s(prmServTask_PER).c_str()));
+    elDB.fldAdd(new TFld("TRPR_CLS_TASK",trS("Transaction closing: separate task priority"),TFld::Integer,TFld::NoFlag,"3","0"));
 }
 
 TBDS::~TBDS( )	{ }
@@ -666,7 +666,7 @@ string TBDS::genPrmGet( const string &path, const string &oval, const string &us
     //Generic system DB first init
     if(!elSYS.fldSize()) {
 	elSYS.fldAdd(new TFld("user","User",TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-	elSYS.fldAdd(new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100"));
+	elSYS.fldAdd(new TFld("id",trS("Value ID"),TFld::String,TCfg::Key,"100"));
 	elSYS.fldAdd(new TFld("val","Value"  ,TFld::String,TFld::TransltText,"1000"));
     }
 
@@ -1593,7 +1593,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    }
 		    else if(toLang != Mess->lang2CodeBase()) {
 			tVl = svalRAW;
-			u_cfg.setS((svalRAW=trL(svalBASE_RAW,toLang))); sval = getSQLVal(u_cfg);
+			u_cfg.setS((svalRAW=trD_L(svalBASE_RAW,toLang))); sval = getSQLVal(u_cfg);
 			u_cfg.setS(tVl);
 		    }
 		    isTransl = (isTransl && toLang != Mess->lang2CodeBase());
@@ -1614,7 +1614,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++)
 			if(tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.compare(3,string::npos,cf_el[iEl]) == 0 && tblStrct[iFld].nm.find(toLang) != 0) {
 			    ls += (ls.size()?", \"":"\"") + TSYS::strEncode(tblStrct[iFld].nm,TSYS::SQL,"\"") + "\"";
-			    ls2 += (ls2.size()?", '":"'") + TSYS::strEncode(trL(svalBASE_RAW,tblStrct[iFld].nm.substr(0,2)),TSYS::SQL,"'") + "'";
+			    ls2 += (ls2.size()?", '":"'") + TSYS::strEncode(trD_L(svalBASE_RAW,tblStrct[iFld].nm.substr(0,2)),TSYS::SQL,"'") + "'";
 			}
 		}
 	    }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Comedi file: module.h
 /***************************************************************************
- *   Copyright (C) 2012-2014,2019 by Roman Savochenko                      *
+ *   Copyright (C) 2012-2022 by Roman Savochenko                           *
  *   roman@oscada.org                                                      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,6 +33,8 @@
 
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::vector;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_qsensor.cpp
 /***************************************************************************
- *   Copyright (C) 2018-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2018-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -84,7 +84,7 @@ void QSensor::getVal( TMdPrm *prm )
     if(!findOK || s.type() != TVariant::Object)	return;
 
     if(!prm->vlPresent("st"))
-	((TElem*)prm->daData)->fldAdd(new TFld("st",_("State"),TFld::String,TFld::NoWrite));
+	((TElem*)prm->daData)->fldAdd(new TFld("st",trS("State"),TFld::String,TFld::NoWrite));
     prm->vlAt("st").at().setS(TSYS::strMess(_("Connected=%d; Active=%d; Busy=%d; Error=%d"),
 			    (int)s.getO().at().propGet("connected").getI(),
 			    (int)s.getO().at().propGet("active").getI(),

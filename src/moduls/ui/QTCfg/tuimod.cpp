@@ -28,18 +28,18 @@
 #include "selfwidg.h"
 #include "tuimod.h"
 
-#include <tmess.h>
+// #include <tmess.h>
 
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTCfg"
-#define MOD_NAME	_("Program configurator (Qt)")
+#define MOD_NAME	trS("Program configurator (Qt)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.7.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
+#define MOD_VER		"5.7.5"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -272,7 +272,7 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
 	(type==TUIMod::Warning)?TMess::Warning:TMess::Info, "%s", mess.c_str());
 
     QMessageBox msgBox(parent);
-    msgBox.setWindowTitle(_(MOD_NAME));
+    msgBox.setWindowTitle(MOD_NAME.c_str());
     msgBox.setTextFormat(Qt::PlainText);
     msgBox.setText(mess.c_str());
     switch(type) {

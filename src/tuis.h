@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tuis.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,7 +64,8 @@ class TUIS : public TSubSYS
 	//Methods
 	TUIS( );
 
-	int subVer( )		{ return SUI_VER; }
+	string subName( ) const	{ return _("User Interfaces"); }
+	int subVer( ) const	{ return SUI_VER; }
 
 	AutoHD<TUI> at( const string &name ) const	{ return modAt(name); }
 

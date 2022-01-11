@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2987,10 +2987,15 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Hidden"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    if(!owner().DB().empty())
+	    if(!owner().DB().empty() && progTr())
 		ctrMkNode("fld",opt,-1,"/io/prog_tr",cfg("PR_TR").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/io/prog",cfg("FORMULA").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
+	if(opt->childSize() && ctrId(opt->childGet(0),"/exec/io",true))
+	    for(int iIO = 0; iIO < ioSize(); iIO++)
+		if(!mIO[iIO]->hide())
+		    ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),trD(io(iIO)->name()),
+						((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
 	return;
     }
 
@@ -3036,13 +3041,13 @@ void Func::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
 	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)));
-	    else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
+	    else ioAdd(new IO("new",trS("New IO"),IO::Real,IO::Default));
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    IO *ioPrev = row ? io(row-1) : NULL;
 	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)), row);
-	    else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
+	    else ioIns(new IO("new",trS("New IO"),IO::Real,IO::Default), row);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioDel(s2i(opt->attr("row")));
 	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioMove(s2i(opt->attr("row")), s2i(opt->attr("to")));

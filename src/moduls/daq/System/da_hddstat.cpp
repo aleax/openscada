@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_hddstat.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,10 +39,10 @@ using namespace SystemCntr;
 //*************************************************
 HddStat::HddStat( )
 {
-    fldAdd(new TFld("rd",_("Read (B)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("rdSp",_("Read speed (B/s)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("wr",_("Write (B)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("wrSp",_("Write speed (B/s)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("rd",trS("Read (B)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("rdSp",trS("Read speed (B/s)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("wr",trS("Write (B)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("wrSp",trS("Write speed (B/s)"),TFld::Real,TFld::NoWrite));
 }
 
 HddStat::~HddStat( )
@@ -55,7 +55,7 @@ void HddStat::init( TMdPrm *prm, bool update )
     TCfg &c_subt = prm->cfg("SUBT");
 
     //Create Configuration
-    if(!update) c_subt.fld().setDescr(_("Disk(part)"));
+    if(!update) c_subt.fld().setDescr(trS("Disk(part)"));
 
     vector<string> list;
     dList(list, true);

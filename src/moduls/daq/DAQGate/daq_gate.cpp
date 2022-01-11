@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,12 +28,12 @@
 //******************************************************
 //* Modul info!                                        *
 #define MOD_ID		"DAQGate"
-#define MOD_NAME	_("Data sources gate")
+#define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.6"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
+#define MOD_VER		"2.9.7"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
 //******************************************************
 
@@ -87,25 +87,25 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's DB structure
-    fldAdd(new TFld("PRM_BD",_("Table of parameters cache"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("TM_REST",_("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;1000"));
-    fldAdd(new TFld("TM_REST_DT",_("Depth time of restore data, hours"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
-    fldAdd(new TFld("WR_ASYNCH",_("Asynchronous writing"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("GATH_MESS_LEV",_("Level of requested messages"),TFld::Integer,TFld::Selectable,"1","1",
+    fldAdd(new TFld("PRM_BD",trS("Table of parameters cache"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("TM_REST",trS("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;1000"));
+    fldAdd(new TFld("TM_REST_DT",trS("Depth time of restore data, hours"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
+    fldAdd(new TFld("WR_ASYNCH",trS("Asynchronous writing"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("GATH_MESS_LEV",trS("Level of requested messages"),TFld::Integer,TFld::Selectable,"1","1",
 	"-1;0;1;2;3;4;5;6;7",_("==Disable==;Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])")));
-    fldAdd(new TFld("SYNCPER",_("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","-1;1000"));
-    fldAdd(new TFld("STATIONS",_("Remote station"),TFld::String,TFld::NoFlag,"100"));
-    fldAdd(new TFld("CNTRPRM",_("List of the remote controller objects and parameters"),TFld::String,TFld::FullText,"200"));
-    fldAdd(new TFld("ALLOW_DEL_PA",_("Allow the automatic removal of parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("CNTR_TO_VPRM",_("Placing different controllers to the separate virtual parameters"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("SYNCPER",trS("Synchronization time with the remote station, seconds"),TFld::Integer,TFld::NoFlag,"4","0","-1;1000"));
+    fldAdd(new TFld("STATIONS",trS("Remote station"),TFld::String,TFld::NoFlag,"100"));
+    fldAdd(new TFld("CNTRPRM",trS("List of the remote controller objects and parameters"),TFld::String,TFld::FullText,"200"));
+    fldAdd(new TFld("ALLOW_DEL_PA",trS("Allow the automatic removal of parameters and attributes"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("CNTR_TO_VPRM",trS("Placing different controllers to the separate virtual parameters"),TFld::Boolean,TFld::NoFlag,"1","0"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("PRM_ADDR",_("Remote parameter address"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
-    tpPrmAt(t_prm).fldAdd(new TFld("ATTRS",_("Attributes configuration cache"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
-    tpPrmAt(t_prm).fldAdd(new TFld("STATS",_("Presence at the stations"),TFld::String,TCfg::NoVal,"10000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("PRM_ADDR",trS("Remote parameter address"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ATTRS",trS("Attributes configuration cache"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("STATS",trS("Presence at the stations"),TFld::String,TCfg::NoVal,"10000",""));
     //Set to read only
     //for(unsigned iSz = 0; iSz < tpPrmAt(t_prm).fldSize(); iSz++)
     //	tpPrmAt(t_prm).fldAt(iSz).setFlg(tpPrmAt(t_prm).fldAt(iSz).flg()|TFld::NoWrite);

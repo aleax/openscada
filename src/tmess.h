@@ -32,19 +32,26 @@
 
 #include "resalloc.h"
 
-#define _(mess) Mess->I18N(mess).c_str()
-#define trD(base) Mess->translGet(base)
-#define trL(base,lng) Mess->translGet(base, lng)
-#define trU(base,usr) Mess->translGetU(base, usr)
-#define trLU(base,lng,usr) Mess->translGetLU(base, lng, usr)
-#define trDSet(base,mess) Mess->translSet(base, mess)
-#define trSetL(base,lng,mess) Mess->translSet(base, lng, mess)
-#define trSetU(base,usr,mess) Mess->translSetU(base, usr, mess)
-#define trSetLU(base,lng,usr,mess) Mess->translSetLU(base, lng, usr, mess)
-#define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
-#define FTM2(tm, utm) ((int64_t)tm*1000000 + utm)
+#define mess_PreSave	"<PSV>"
 #define mess_TrModifMark "<!>"
 #define mess_TrUApiTbl	"Trs"
+
+//System translation
+#define _(mess) Mess->I18N(mess).c_str()
+//... with the BASE value presaving for next retranslation
+#define trS(mess) Mess->I18N(mess, mess_PreSave)
+
+//Data translation
+#define trD(base) Mess->translGet(base)
+#define trD_L(base,lng) Mess->translGet(base, lng)
+#define trD_U(base,usr) Mess->translGetU(base, usr)
+#define trD_LU(base,lng,usr) Mess->translGetLU(base, lng, usr)
+#define trDSet(base,mess) Mess->translSet(base, mess)
+#define trDSet_L(base,lng,mess) Mess->translSet(base, lng, mess)
+#define trDSet_U(base,usr,mess) Mess->translSetU(base, usr, mess)
+#define trDSet_LU(base,lng,usr,mess) Mess->translSetLU(base, lng, usr, mess)
+#define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
+#define FTM2(tm, utm) ((int64_t)tm*1000000 + utm)
 
 #define mess_lev( )			Mess->messLevel()
 //Limited to mess_lev() messages
@@ -115,7 +122,7 @@ class TMess
 	string codeConvIn( const string &fromCH, const string &mess )	{ return codeConv(fromCH, IOCharSet, mess); }
 	string codeConvOut( const string &toCH, const string &mess )	{ return codeConv(IOCharSet, toCH, mess); }
 
-	string I18N( const char *mess, const char *d_name = NULL, const char *mLang = NULL );
+	string I18N( const string &mess, const char *mLang = NULL, const char *d_name = NULL );
 
 	string lang( );
 	string lang2Code( const string &user = "", bool onlyUser = false );

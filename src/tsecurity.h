@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsecurity.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -157,6 +157,8 @@ class TSecurity : public TSubSYS
 	//Methods
 	TSecurity( );
 	~TSecurity( );
+
+	string subName( ) const	{ return _("Security"); }
 
 	char access( const string &user, char mode, const string &owner, const string &group, int access );
 

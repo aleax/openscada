@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_uptime.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,11 +35,11 @@ UpTime::UpTime( )
     st_tm = time(NULL);
 
     //> Uptime value structure
-    fldAdd(new TFld("full",_("Full seconds"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("sec",_("Seconds"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("min",_("Minutes"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("hour",_("Hours"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("day",_("Days"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("full",trS("Full seconds"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sec",trS("Seconds"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("min",trS("Minutes"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("hour",trS("Hours"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("day",trS("Days"),TFld::Integer,TFld::NoWrite));
 }
 
 UpTime::~UpTime( )

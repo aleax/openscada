@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: tvision.h
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko (roman@oscada.org)
+ *   Copyright (C) 2006-2022 by Roman Savochenko (roman@oscada.org)
  *                 2005-2006 by Evgen Zaichuk
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -30,6 +30,8 @@
 
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 #define vrng(val,min,max) ((val) >= (min) && (val) <= (max))
 

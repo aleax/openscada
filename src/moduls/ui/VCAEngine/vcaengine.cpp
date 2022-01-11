@@ -31,13 +31,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"VCAEngine"
-#define MOD_NAME	_("Engine of the visual control area")
+#define MOD_NAME	trS("Engine of the visual control area")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.7.3"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("The main engine of the visual control area.")
+#define MOD_VER		"7.7.5"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -108,85 +108,85 @@ void Engine::postEnable( int flag )
     if(!(flag&TCntrNode::NodeConnect)) return;
 
     //Make lib's DB structure: Libs(__ID__, NAME, DSCR, DB_TBL, ICO)
-    lbwdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
-    lbwdg_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    lbwdg_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    lbwdg_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
-    lbwdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
+    lbwdg_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
+    lbwdg_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    lbwdg_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    lbwdg_el.fldAdd(new TFld("DB_TBL",trS("DB table"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
+    lbwdg_el.fldAdd(new TFld("ICO",trS("Icon"),TFld::String,TFld::NoFlag,"100000"));
 
     //Make library widgets' data container: {LibWidgetMime,ProjMime}(__ID__, MIME, DATA)
-    wdgdata_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"40"));
-    wdgdata_el.fldAdd(new TFld("MIME",_("MIME"),TFld::String,TFld::NoFlag,"30"));
-    wdgdata_el.fldAdd(new TFld("DATA",_("Resource data"),TFld::String,TFld::NoFlag,"500000"));
+    wdgdata_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"40"));
+    wdgdata_el.fldAdd(new TFld("MIME",trS("MIME"),TFld::String,TFld::NoFlag,"30"));
+    wdgdata_el.fldAdd(new TFld("DATA",trS("Resource data"),TFld::String,TFld::NoFlag,"500000"));
 
     //Make widgets' DB structure: LibWigets(__ID__, ICO, PARENT, PROC, PROC_PER, ATTRS, TIMESTAMP)
-    wdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
-    wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
-    wdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
-    wdg_el.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    wdg_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
-    wdg_el.fldAdd(new TFld("PROC_PER",_("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
-    wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
-    wdg_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    wdg_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
+    wdg_el.fldAdd(new TFld("ICO",trS("Icon"),TFld::String,TFld::NoFlag,"100000"));
+    wdg_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    wdg_el.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    wdg_el.fldAdd(new TFld("PROC",trS("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
+    wdg_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    wdg_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
+    wdg_el.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Make include widgets' DB structure: {LibWidgetIncl,ProjPageWIncl}(__IDW__, __ID__, PARENT, ATTRS)
-    inclwdg_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"100"));
-    inclwdg_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
-    inclwdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
-    inclwdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
+    inclwdg_el.fldAdd(new TFld("IDW",trS("Widget identifier"),TFld::String,TCfg::Key,"100"));
+    inclwdg_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
+    inclwdg_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    inclwdg_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
 
     //Make widget's IO DB structure: {LibWidgetIO,ProjPageIO}(__IDW__, __ID__, __IDC__, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
-    wdgio_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"100"));
-    wdgio_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"61"));
-    wdgio_el.fldAdd(new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30"));
-    wdgio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::TransltText,"100000"));
-    wdgio_el.fldAdd(new TFld("SELF_FLG",_("Attribute flags"),TFld::Integer,TFld::NoFlag,"5"));
-    wdgio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::TransltText,"30"));
-    wdgio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::TransltText,"1000"));
+    wdgio_el.fldAdd(new TFld("IDW",trS("Widget identifier"),TFld::String,TCfg::Key,"100"));
+    wdgio_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"61"));
+    wdgio_el.fldAdd(new TFld("IDC",trS("Child ID"),TFld::String,TCfg::Key,"30"));
+    wdgio_el.fldAdd(new TFld("IO_VAL",trS("Attribute value"),TFld::String,TFld::TransltText,"100000"));
+    wdgio_el.fldAdd(new TFld("SELF_FLG",trS("Attribute flags"),TFld::Integer,TFld::NoFlag,"5"));
+    wdgio_el.fldAdd(new TFld("CFG_TMPL",trS("Configuration template"),TFld::String,TFld::TransltText,"30"));
+    wdgio_el.fldAdd(new TFld("CFG_VAL",trS("Configuration value"),TFld::String,TFld::TransltText,"1000"));
 
     //Make widget's user IO DB structure: {ProjPageUserIO,LibWidgetUserIO}(__IDW__, __ID__, __IDC__, NAME, IO_TP, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
-    wdguio_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"100"));
-    wdguio_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"61"));
-    wdguio_el.fldAdd(new TFld("IDC",_("Child identifier"),TFld::String,TCfg::Key,"30"));
-    wdguio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,"100"));
-    wdguio_el.fldAdd(new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10"));
-    wdguio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::TransltText,"100000"));
-    wdguio_el.fldAdd(new TFld("SELF_FLG",_("Attribute flags"),TFld::Integer,TFld::NoFlag,"5"));
-    wdguio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TFld::TransltText,"30"));
-    wdguio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TFld::TransltText,"1000"));
+    wdguio_el.fldAdd(new TFld("IDW",trS("Widget identifier"),TFld::String,TCfg::Key,"100"));
+    wdguio_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"61"));
+    wdguio_el.fldAdd(new TFld("IDC",trS("Child identifier"),TFld::String,TCfg::Key,"30"));
+    wdguio_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,"100"));
+    wdguio_el.fldAdd(new TFld("IO_TYPE",trS("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10"));
+    wdguio_el.fldAdd(new TFld("IO_VAL",trS("Attribute value"),TFld::String,TFld::TransltText,"100000"));
+    wdguio_el.fldAdd(new TFld("SELF_FLG",trS("Attribute flags"),TFld::Integer,TFld::NoFlag,"5"));
+    wdguio_el.fldAdd(new TFld("CFG_TMPL",trS("Configuration template"),TFld::String,TFld::TransltText,"30"));
+    wdguio_el.fldAdd(new TFld("CFG_VAL",trS("Configuration value"),TFld::String,TFld::TransltText,"1000"));
 
     //Make project's DB structure: Projs(__ID__, NAME, DSCR, DB_TBL, ICO, USER, GRP, PERMIT, PER, FLGS, STYLE)
-    prj_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
-    prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    prj_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    prj_el.fldAdd(new TFld("DB_TBL",_("DB table"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
-    prj_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
-    prj_el.fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"root"));
-    prj_el.fldAdd(new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"UI"));
-    prj_el.fldAdd(new TFld("PERMIT",_("Permission"),TFld::Integer,TFld::OctDec,"3","436"));
-    prj_el.fldAdd(new TFld("PER",_("Period of calculating, milliseconds"),TFld::Integer,TFld::NoFlag,"4","100"));
-    prj_el.fldAdd(new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));
-    prj_el.fldAdd(new TFld("EN_BY_NEED",_("Enable as needed"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    prj_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,"30"));
+    prj_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    prj_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    prj_el.fldAdd(new TFld("DB_TBL",trS("DB table"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
+    prj_el.fldAdd(new TFld("ICO",trS("Icon"),TFld::String,TFld::NoFlag,"100000"));
+    prj_el.fldAdd(new TFld("USER",trS("User"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"root"));
+    prj_el.fldAdd(new TFld("GRP",trS("Group"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ).c_str(),"UI"));
+    prj_el.fldAdd(new TFld("PERMIT",trS("Permission"),TFld::Integer,TFld::OctDec,"3","436"));
+    prj_el.fldAdd(new TFld("PER",trS("Period of calculating, milliseconds"),TFld::Integer,TFld::NoFlag,"4","100"));
+    prj_el.fldAdd(new TFld("STYLE",trS("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));
+    prj_el.fldAdd(new TFld("EN_BY_NEED",trS("Enable as needed"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Make page's DB structure: ProjPages(__OWNER__, __ID__, ICO, PARENT, PROC, PROC_PER, FLGS, ATTRS, TIMESTAMP)
-    page_el.fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100"));
-    page_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
-    page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"100000"));
-    page_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
-    page_el.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    page_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
-    page_el.fldAdd(new TFld("PROC_PER",_("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
-    page_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
-    page_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
-    page_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    page_el.fldAdd(new TFld("OWNER",trS("Owner"),TFld::String,TCfg::Key,"100"));
+    page_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
+    page_el.fldAdd(new TFld("ICO",trS("Icon"),TFld::String,TFld::NoFlag,"100000"));
+    page_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    page_el.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    page_el.fldAdd(new TFld("PROC",trS("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
+    page_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    page_el.fldAdd(new TFld("FLGS",trS("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
+    page_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
+    page_el.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Make sessions' IO values of projects DB structure: ProjSess(__IDW__, __ID__, IO_VAL)
-    prj_ses_el.fldAdd(new TFld("IDW",_("Widget identifier"),TFld::String,TCfg::Key,"200"));
-    prj_ses_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
-    prj_ses_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000"));
+    prj_ses_el.fldAdd(new TFld("IDW",trS("Widget identifier"),TFld::String,TCfg::Key,"200"));
+    prj_ses_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
+    prj_ses_el.fldAdd(new TFld("IO_VAL",trS("Attribute value"),TFld::String,TFld::NoFlag,"100000"));
 
     //Make styles' IO DB structure: PrjStl(__ID__, V_0, ... V_{Project::StlMaximum})
-    prjStl_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,"30"));
+    prjStl_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
     for(unsigned iStl = 0; iStl < Project::StlMaximum; ++iStl)
 	prjStl_el.fldAdd(new TFld(("V_"+i2s(iStl)).c_str(),TSYS::strMess(_("Value %d"),iStl).c_str(),TFld::String,TFld::NoFlag,"100"));
 
@@ -693,6 +693,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		for(int p_cnt = 0; sesPresent(sess); p_cnt++) sess = prj + i2s(p_cnt);
 		sesAdd(sess, prj);
 		sesAt(sess).at().setUser(opt->attr("user"));
+		sesAt(sess).at().setReqUser(opt->attr("user"));
+		sesAt(sess).at().setReqLang(opt->attr("lang"));
 		sesAt(sess).at().setStart(true);
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("sess", sess);

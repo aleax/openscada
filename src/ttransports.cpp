@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,33 +31,33 @@ using namespace OSCADA;
 //************************************************
 //* TTransportS					 *
 //************************************************
-TTransportS::TTransportS( ) : TSubSYS(STR_ID, _("Transports"), true), extHostLoad(0)
+TTransportS::TTransportS( ) : TSubSYS(STR_ID, true), extHostLoad(0)
 {
     //Input transport BD structure
-    elIn.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elIn.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elIn.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elIn.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
-    elIn.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
-    elIn.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ*10).c_str()));
-    elIn.fldAdd(new TFld("START",_("To connect"),TFld::Boolean,TFld::NoFlag,"1"));
+    elIn.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elIn.fldAdd(new TFld("MODULE",trS("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elIn.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elIn.fldAdd(new TFld("DESCRIPT",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
+    elIn.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,TFld::NoFlag,"100"));
+    elIn.fldAdd(new TFld("PROT",trS("Transport protocol"),TFld::String,TFld::NoFlag,i2s(limObjID_SZ*10).c_str()));
+    elIn.fldAdd(new TFld("START",trS("To connect"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //Output transport BD structure
-    elOut.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ*2).c_str()));
-    elOut.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    elOut.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elOut.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
-    elOut.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
+    elOut.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ*2).c_str()));
+    elOut.fldAdd(new TFld("MODULE",trS("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    elOut.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elOut.fldAdd(new TFld("DESCRIPT",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"500"));
+    elOut.fldAdd(new TFld("ADDR",trS("Address"),TFld::String,TFld::NoFlag,"100"));
 
     //External hosts' connection DB struct
-    elExt.fldAdd(new TFld("OP_USER",_("User that opens"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    elExt.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    elExt.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    elExt.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
-    elExt.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
-    elExt.fldAdd(new TFld("USER",_("User of the requests"),TFld::String,0,i2s(limObjID_SZ).c_str()));
-    elExt.fldAdd(new TFld("PASS",_("Password of the requests"),TFld::String,0,"100"));
-    elExt.fldAdd(new TFld("UpRiseLev",_("Level of lifting"),TFld::Integer,0,"1"));
+    elExt.fldAdd(new TFld("OP_USER",trS("User that opens"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    elExt.fldAdd(new TFld("TRANSP",trS("Transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("ADDR",trS("Transport address"),TFld::String,0,"50"));
+    elExt.fldAdd(new TFld("USER",trS("User of the requests"),TFld::String,0,i2s(limObjID_SZ).c_str()));
+    elExt.fldAdd(new TFld("PASS",trS("Password of the requests"),TFld::String,0,"100"));
+    elExt.fldAdd(new TFld("UpRiseLev",trS("Level of lifting"),TFld::Integer,0,"1"));
 }
 
 TTransportS::~TTransportS( )

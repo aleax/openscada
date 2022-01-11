@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -264,9 +264,9 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
     if(prefGrpPos < 0) prefGrpPos = accm.size();
     while((int)accm.size() <= prefGrpPos) {
 	accm.push_back(SGrp(accm.size()));
-	accm.back().tblEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
-	accm.back().tblEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
-	//accm.back().tblEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
+	accm.back().tblEl.fldAdd(new TFld("MARK",trS("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
+	accm.back().tblEl.fldAdd(new TFld("TM",trS("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
+	//accm.back().tblEl.fldAdd(new TFld("TMU",trS("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
     }
 
     //Place the parameter to the selected group
@@ -488,14 +488,14 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive, iarchivator), mBeg(0), mEnd(0), mPer(0), needMeta(false)
 {
     if(!archivator().groupPrms()) {
-	reqEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
-	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
-	//reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
+	reqEl.fldAdd(new TFld("MARK",trS("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
+	reqEl.fldAdd(new TFld("TM",trS("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
+	//reqEl.fldAdd(new TFld("TMU",trS("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
 	switch(archive().valType()) {
-	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
-	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));break;
-	    case TFld::Real:    reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag,"",r2s(EVAL_REAL).c_str()));	break;
-	    case TFld::String:  reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000",EVAL_STR));		break;
+	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
+	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));break;
+	    case TFld::Real:    reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Real,TFld::NoFlag,"",r2s(EVAL_REAL).c_str()));	break;
+	    case TFld::String:  reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::String,TFld::NoFlag,"1000",EVAL_STR));		break;
 	    default: break;
 	}
     }

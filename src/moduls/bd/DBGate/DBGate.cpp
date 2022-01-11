@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.DBGate file: DBGate.cpp
 /***************************************************************************
- *   Copyright (C) 2020-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2020-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,12 +26,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"DBGate"
-#define MOD_NAME	_("DB gate")
+#define MOD_NAME	trS("DB gate")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.1.4"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
+#define MOD_VER		"1.1.5"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
 #define MOD_LICENSE	"GPL2"
 #define FEATURES	"SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR"
 //************************************************

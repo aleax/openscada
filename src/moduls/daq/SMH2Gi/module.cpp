@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SMH2Gi file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,12 +38,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SMH2Gi"
-#define MOD_NAME	_("Segnetics SMH2Gi and SMH4")
+#define MOD_NAME	trS("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.9"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
+#define MOD_VER		"1.1.10"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -94,15 +94,15 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD_SHM",_("Shared memory parameters"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PRM_BD_MRC",_("MR and MC bus parameters"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("SHM_VARS",_("Shared memory variables file"),TFld::String,TFld::NoFlag,"255","/projects/load_files.srv"));
-    fldAdd(new TFld("MR_DEV",_("MR bus device"),TFld::String,TFld::NoFlag,"50","/dev/mrext"));
-    fldAdd(new TFld("MC_DEV",_("MC bus device"),TFld::String,TFld::NoFlag,"50","/dev/mrint"));
-    fldAdd(new TFld("MC_DEV_RGPIO",_("MC device reset GPIO"),TFld::Integer,TFld::NoFlag,"3","94"));
-    fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
+    fldAdd(new TFld("PRM_BD_SHM",trS("Shared memory parameters"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD_MRC",trS("MR and MC bus parameters"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("SHM_VARS",trS("Shared memory variables file"),TFld::String,TFld::NoFlag,"255","/projects/load_files.srv"));
+    fldAdd(new TFld("MR_DEV",trS("MR bus device"),TFld::String,TFld::NoFlag,"50","/dev/mrext"));
+    fldAdd(new TFld("MC_DEV",trS("MC bus device"),TFld::String,TFld::NoFlag,"50","/dev/mrint"));
+    fldAdd(new TFld("MC_DEV_RGPIO",trS("MC device reset GPIO"),TFld::Integer,TFld::NoFlag,"3","94"));
+    fldAdd(new TFld("REQ_TRY",trS("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
 
     //Parameters' types add
     tpParmAdd(new SHMParam());
@@ -639,7 +639,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 //****************************************************
 SHMParam::SHMParam( ) : TTypeParam("SHM", _("Shared memory parameters"), "PRM_BD_SHM")
 {
-    fldAdd(new TFld("VAR_LS",_("Variables list"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
+    fldAdd(new TFld("VAR_LS",trS("Variables list"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
 
 void SHMParam::enable( TParamContr *ip )
@@ -755,9 +755,9 @@ struct Inquired_t
 
 MRCParam::MRCParam( ) : TTypeParam("MRC", _("MR and MC bus parameters"), "PRM_BD_MRC")
 {
-    fldAdd(new TFld("MOD_TP",_("Module type"),TFld::Integer,TCfg::NoVal,"10","0"));
-    fldAdd(new TFld("MOD_SLOT",_("Module slot/address"),TFld::Integer,TCfg::NoVal,"2","-1","-1;7"));
-    fldAdd(new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
+    fldAdd(new TFld("MOD_TP",trS("Module type"),TFld::Integer,TCfg::NoVal,"10","0"));
+    fldAdd(new TFld("MOD_SLOT",trS("Module slot/address"),TFld::Integer,TCfg::NoVal,"2","-1","-1;7"));
+    fldAdd(new TFld("MOD_PRMS",trS("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
 
 void MRCParam::enable( TParamContr *ip )

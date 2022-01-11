@@ -60,6 +60,9 @@
 using namespace OSCADA_QT;
 using namespace VISION;
 
+#undef _
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
+
 //****************************************
 //* Inspector of attributes model        *
 //****************************************
@@ -625,6 +628,9 @@ bool ModInspAttr::Item::setWdgs( const string &w, bool del )
     return !wdgsItem.empty();
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, modelData.mainWin()->lang().c_str()).c_str()
+
 //****************************************
 //* Inspector of attributes widget       *
 //****************************************
@@ -924,10 +930,13 @@ bool InspAttr::ItemDelegate::eventFilter( QObject *object, QEvent *event )
     return QItemDelegate::eventFilter(object, event);
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
+
 //****************************************
 //* Inspector of attributes dock widget  *
 //****************************************
-InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(QWidget*)parent)
+InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget((QWidget*)parent)
 {
     setObjectName("InspAttrDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -935,9 +944,16 @@ InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(
     ainsp_w = new InspAttr(this, owner());
     setWidget(ainsp_w);
     connect(ainsp_w, SIGNAL(modified(const string &)), this, SIGNAL(modified(const string &)));
+
+    messUpd();
 }
 
 InspAttrDock::~InspAttrDock( )		{ }
+
+void InspAttrDock::messUpd( )
+{
+    setWindowTitle(_("Attributes"));
+}
 
 VisDevelop *InspAttrDock::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
@@ -947,6 +963,9 @@ void InspAttrDock::setWdg( const string &iwdg )
 {
     if(!hasFocus()) ainsp_w->setWdg(iwdg);
 }
+
+#undef _
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
 
 //****************************************
 //* Inspector of links widget            *
@@ -1193,10 +1212,13 @@ void LinkItemDelegate::setModelData( QWidget *editor, QAbstractItemModel *model,
     else QItemDelegate::setModelData(editor, model, index);
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
+
 //****************************************
 //* Inspector of links dock widget       *
 //****************************************
-InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidget*)parent), is_visible(false)
+InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget((QWidget*)parent), is_visible(false)
 {
     setObjectName("InspLnkDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -1205,9 +1227,16 @@ InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidge
     setWidget(ainsp_w);
 
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setVis(bool)));
+
+    messUpd();
 }
 
 InspLnkDock::~InspLnkDock( )		{ }
+
+void InspLnkDock::messUpd( )
+{
+    setWindowTitle(_("Links"));
+}
 
 VisDevelop *InspLnkDock::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
@@ -1223,10 +1252,13 @@ void InspLnkDock::setVis( bool visible )
     if(is_visible) setWdg(ainsp_w->mainWin()->workWdg());
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
+
 //****************************************
 //* Widget's libraries tree              *
 //****************************************
-WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)parent), disIconsW(false), disIconsCW(false)
+WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget((QWidget*)parent), disIconsW(false), disIconsCW(false)
 {
     setObjectName("WdgTree");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -1235,9 +1267,6 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     treeW = new QTreeWidget(this);
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
     // Set column headers
-    QStringList headerLabels;
-    headerLabels << _("Name") << _("Type") << _("Identifier");
-    treeW->setHeaderLabels(headerLabels);
     treeW->header()->setStretchLastSection(false);
     treeW->setColumnWidth(0, icoSize(14));
     treeW->setColumnWidth(1, icoSize(4));
@@ -1258,6 +1287,12 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
 }
 
 WdgTree::~WdgTree( )		{ }
+
+void WdgTree::messUpd( )
+{
+    setWindowTitle(_("Widgets"));
+    treeW->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Identifier"));
+}
 
 VisDevelop *WdgTree::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
@@ -1348,6 +1383,8 @@ void WdgTree::selectItem( bool force )
 
 void WdgTree::updateTree( const string &vca_it, bool initial )
 {
+    messUpd();
+
     //Make for the images loading depending from the connetion productivity, seems:
     // - First time:
     //   - enable all the icons loading in the local connection
@@ -1663,7 +1700,7 @@ void WdgTree::ctrTreePopup( )
 //****************************************
 //* Project's tree                       *
 //****************************************
-ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)parent)
+ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget((QWidget*)parent)
 {
     setObjectName("ProjTree");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -1672,9 +1709,6 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
 
     //Set column headers
-    QStringList headerLabels;
-    headerLabels << _("Name") << _("Type") << _("Identifier");
-    treeW->setHeaderLabels(headerLabels);
     treeW->header()->setStretchLastSection(false);
     treeW->setColumnWidth(0, icoSize(14));
     treeW->setColumnWidth(1, icoSize(4));
@@ -1689,9 +1723,17 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     setWidget(treeW);
 
     treeW->installEventFilter(this);
+
+    messUpd();
 }
 
 ProjTree::~ProjTree( )	{ }
+
+void ProjTree::messUpd( )
+{
+    setWindowTitle(_("Projects"));
+    treeW->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Identifier"));
+}
 
 VisDevelop *ProjTree::owner( ) const	{ return (VISION::VisDevelop*)parentWidget(); }
 
@@ -1731,6 +1773,8 @@ void ProjTree::selectItem( bool force )
 
 void ProjTree::updateTree( QTreeWidgetItem *it )
 {
+    messUpd();
+
     vector<string> list_pr, list_pg;
     QTreeWidgetItem *nit, *nit_pg;
     string t_el, simg;
@@ -1965,12 +2009,20 @@ void LineEditProp::callDlg( )
     if(toClose) QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
+
 //*********************************************
 //* Status bar scale indicator                *
 //*********************************************
-WScaleStBar::WScaleStBar( QWidget *parent ) : QLabel(parent)	{ setScale(false); }
+WScaleStBar::WScaleStBar( VisDevelop *mainWind ) : QLabel(mainWind), main_win(mainWind)
+{
+    setScale(false);
+}
 
-void WScaleStBar::setScale( bool val )				{ setText((isScale=val)?_("Scale"):_("Resize")); }
+VisDevelop *WScaleStBar::mainWin( ) const	{ return main_win; }
+
+void WScaleStBar::setScale( bool val )		{ setText((isScale=val)?_("Scale"):_("Resize")); }
 
 void WScaleStBar::mousePressEvent( QMouseEvent * event )	{ setScale(!scale()); }
 
@@ -2701,7 +2753,7 @@ string DevelWdgView::cacheResGet( const string &res )
 
 void DevelWdgView::cacheResSet( const string &res, const string &val )
 {
-    if(val.size() > limUserFile_SZ) return;
+    if(val.size() > (unsigned)limUserFile_SZ) return;
     mCacheRes[res] = val;
 }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -44,12 +44,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SNMP"
-#define MOD_NAME	_("SNMP client")
+#define MOD_NAME	trS("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.8"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides an implementation of the client of SNMP-service.")
+#define MOD_VER		"0.9.9"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -98,20 +98,20 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Table of parameters"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("ADDR",_("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
-    fldAdd(new TFld("RETR",_("Number of retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
-    fldAdd(new TFld("TM",_("Responds timeout, seconds"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
-    fldAdd(new TFld("VER",_("SNMP version"),TFld::String,TFld::Selectable,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
-    fldAdd(new TFld("COMM",_("Server community/user"),TFld::String,TFld::NoFlag,"20","public"));
-    fldAdd(new TFld("V3",_("V3 parameters"),TFld::String,TFld::NoFlag,"50","authNoPriv:MD5::DES:"));
-    fldAdd(new TFld("PATTR_LIM",_("Limit of the attributes number"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
+    fldAdd(new TFld("PRM_BD",trS("Table of parameters"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("ADDR",trS("Remote host address"),TFld::String,TFld::NoFlag,"30","localhost"));
+    fldAdd(new TFld("RETR",trS("Number of retries"),TFld::Integer,TFld::NoFlag,"1","1","0;10"));
+    fldAdd(new TFld("TM",trS("Responds timeout, seconds"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
+    fldAdd(new TFld("VER",trS("SNMP version"),TFld::String,TFld::Selectable,"2","1","1;2c;2u;3","SNMPv1;SNMPv2c;SNMPv2u;SNMPv3"));
+    fldAdd(new TFld("COMM",trS("Server community/user"),TFld::String,TFld::NoFlag,"20","public"));
+    fldAdd(new TFld("V3",trS("V3 parameters"),TFld::String,TFld::NoFlag,"50","authNoPriv:MD5::DES:"));
+    fldAdd(new TFld("PATTR_LIM",trS("Limit of the attributes number"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("OID_LS",trS("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }

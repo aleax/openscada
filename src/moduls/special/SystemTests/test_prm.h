@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_prm.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,8 +34,8 @@ class TestPrm : public TFunction
     public:
 	TestPrm( ) : TFunction("Param",SSPC_ID)
 	{
-	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("name",_("Address of the DAQ parameter"),IO::String,IO::Default,"System.AutoDA.CPULoad") );
+	    ioAdd( new IO("rez",trS("Result"),IO::String,IO::Return) );
+	    ioAdd( new IO("name",trS("Address of the DAQ parameter"),IO::String,IO::Default,"System.AutoDA.CPULoad") );
 	}
 
 	string name( )	{ return _("Parameter"); }

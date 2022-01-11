@@ -78,14 +78,14 @@ int ConfApp::winCntr = 0;
 ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false)
 {
-    connect(this, SIGNAL(makeStarterMenu(QWidget*)), qApp, SLOT(makeStarterMenu(QWidget*)));
+    connect(this, SIGNAL(makeStarterMenu(QWidget*,const QString&)), qApp, SLOT(makeStarterMenu(QWidget*,const QString&)));
 
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
     QImage ico_t;
     mod->regWin(this);
 
-    setWindowTitle((PACKAGE_NAME " "+mod->modId()+": "+trU(SYS->name(),open_user)).c_str());
+    setWindowTitle((PACKAGE_NAME " "+mod->modId()+": "+trD_U(SYS->name(),open_user)).c_str());
     setWindowIcon(mod->icon());
 
     //Init centrall widget
@@ -314,8 +314,6 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     menuHelp->addAction(actManualPage);
     menuHelp->addSeparator();
     menuHelp->addAction(actWhatIs);
-    // QTStarter
-    emit makeStarterMenu(NULL);
 
     //Create tool bars
     // Main tool bar
@@ -344,12 +342,11 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     toolBar->addSeparator();
     toolBar->addAction(actManualPage);
     // QTStarter
-    QToolBar *tB = new QToolBar("QTStarter", this);
-    tB->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
-    tB->setObjectName("QTStarterTool");
-    addToolBar(Qt::TopToolBarArea, tB);
-    tB->setMovable(true);
-    emit makeStarterMenu(tB);
+    QTStarter = new QToolBar("QTStarter", this);
+    QTStarter->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
+    QTStarter->setObjectName("QTStarterTool");
+    addToolBar(Qt::TopToolBarArea, QTStarter);
+    QTStarter->setMovable(true);
 
     //Init status bar
     connect(statusBar(), SIGNAL(messageChanged(const QString&)), this, SLOT(stMessChanged(const QString&)));
@@ -560,9 +557,11 @@ void ConfApp::messUpd( )
     menuEdit->setTitle(_("&Edit"));
     menuView->setTitle(_("&View"));
     menuHelp->setTitle(_("&Help"));
+    emit makeStarterMenu(NULL, lang().c_str());
 
     //Main tool bar
     toolBar->setWindowTitle(_("Main toolbar"));
+    emit makeStarterMenu(QTStarter, lang().c_str());
 
     //Status bars
     wUser->setWhatsThis(_("This label displays the current user."));
@@ -618,9 +617,8 @@ void ConfApp::hostStSet( const QString &hid, int lnkOK, const QImage &img, const
 	    //? Used for rechange status for fix indicator hide after all childs remove on bad connection
 	    nit->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 	    nit->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
-
-	    nit->setData(2, Qt::UserRole, brs);
 	}
+	nit->setData(2, Qt::UserRole, brs);
 	if(lnkOK == 0) nit->setExpanded(false);
 	if(lnkOK >= 0) {
 	    nit->setToolTip(0, toolTip);
@@ -1006,12 +1004,14 @@ void ConfApp::userSel( )
 {
     messUpd();
 
-    initHosts();
+    initHosts(true);
 
     pgInfo.setAttr("path", "");
 
     try { pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
+
+    treeUpdate();
 }
 
 void ConfApp::pageRefresh( int tm )
@@ -1080,16 +1080,20 @@ void ConfApp::stHistCall( )
 
 void ConfApp::about( )
 {
-    char buf[prmStrBuf_SZ];
+    string mess = _("%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
+		    "%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s");
 
-    snprintf(buf, sizeof(buf), _(
-	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
-	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
-	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(),
-	mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
-	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE);
+#undef _
+#define _(mess) Mess->I18N(mess, lang().c_str()).c_str()
 
-    QMessageBox::about(this, windowTitle(), buf);
+    QMessageBox::about(this, windowTitle(),
+	TSYS::strMess(mess.c_str(),
+	    _(mod->modInfo("Name")),mod->modInfo("Version").c_str(),_(mod->modInfo("Description")),
+	    _(mod->modInfo("Author")),mod->modInfo("License").c_str(),
+	    PACKAGE_NAME, VERSION,_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR),PACKAGE_SITE).c_str());
+
+#undef _
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 }
 
 void ConfApp::aboutQt( )	{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
@@ -1098,7 +1102,7 @@ void ConfApp::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void ConfApp::enterManual( )
 {
-    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString()+"\n"+lang());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
 	QString(_("The manual '%1' was not found offline or online!")).arg(sender()->property("doc").toString()));
@@ -2350,11 +2354,11 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
     QStringList grps = i->data(2,Qt::UserRole).toStringList();
     if(grps.empty()) return;
     else if(grps.size() > 1) {
-	//Add and update present ones
+	//Add and update the present ones
 	for(int iG = 0; iG < grps.size(); iG++) {
-	    bool grpChCnt = s2i(TSYS::strSepParse(grps[iG].toStdString(),0,'\n'));
-	    string grpId = TSYS::strSepParse(grps[iG].toStdString(),1,'\n');
-	    string grpDscr = TSYS::strSepParse(grps[iG].toStdString(),2,'\n');
+	    bool grpChCnt = s2i(TSYS::strLine(grps[iG].toStdString(),0));
+	    string grpId = TSYS::strLine(grps[iG].toStdString(), 1);
+	    string grpDscr = TSYS::strLine(grps[iG].toStdString(), 2);
 	    QTreeWidgetItem *it = NULL;
 	    //Search present item
 	    if(upTree)
@@ -2366,7 +2370,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    it->setText(1, grpDscr.c_str());
 	    it->setText(2, ("*"+grpId).c_str());
 	    QStringList it_grp; it_grp.push_back(grps[iG]);
-	    it->setData(2, Qt::UserRole,it_grp);
+	    it->setData(2, Qt::UserRole, it_grp);
 	    it->setFlags(Qt::ItemIsEnabled);
 	    it->setChildIndicatorPolicy(grpChCnt?QTreeWidgetItem::ShowIndicator:QTreeWidgetItem::DontShowIndicator);
 	    QFont fnt = it->font(0);
@@ -2378,24 +2382,25 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	//Deleting not presented
 	for(int iIt = 0, iG = 0; upTree && iIt < i->childCount(); iIt++) {
 	    for(iG = 0; iG < grps.size(); iG++)
-		if(i->child(iIt)->text(2) == ("*"+TSYS::strSepParse(grps[iG].toStdString(),1,'\n')).c_str())
+		if(i->child(iIt)->text(2) == ("*"+TSYS::strLine(grps[iG].toStdString(),1)).c_str())
 		    break;
 	    if(iG >= grps.size()) { delete i->takeChild(iIt); iIt--; }
 	}
     }
     else {
 	string path = i->text(2).toStdString();
-	if(path[0]=='*') path = i->parent()->text(2).toStdString();
-	string grpId = TSYS::strSepParse(grps[0].toStdString(),1,'\n');
-	string grpDscr = TSYS::strSepParse(grps[0].toStdString(),2,'\n');
+	if(path[0] == '*') path = i->parent()->text(2).toStdString();
+	string grpId = TSYS::strLine(grps[0].toStdString(), 1);
+	string grpDscr = TSYS::strLine(grps[0].toStdString(), 2);
+
 	XMLNode req("chlds");
-	req.setAttr("path",path+"/%2fobj")->setAttr("grp",grpId);
+	req.setAttr("path",path+"/%2fobj")->setAttr("grp", grpId);
 	if(cntrIfCmd(req)) {
 	    //if(s2i(req.attr("rez")) == TError::Tr_Connect) initHosts();
 	    mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    return;
 	}
-	//Add and update present
+	//Add and update presented ones
 	for(unsigned iE = 0; iE < req.childSize(); iE++) {
 	    XMLNode *chEl = req.childGet(iE);
 	    // Prepare branch patch
@@ -2426,11 +2431,11 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		if(chEl->childGet(iG)->name() == "grp")
 		    it_grp.push_back((chEl->childGet(iG)->attr("chPresent")+"\n"+chEl->childGet(iG)->attr("id")+"\n"+chEl->childGet(iG)->attr("dscr")).c_str());
 	    it->setData(2,Qt::UserRole,it_grp);
-	    // Check for childs present
-	    bool grpChCnt = it_grp.size() && (it_grp.size()>1 || s2i(TSYS::strSepParse(it_grp[0].toStdString(),0,'\n')));
+	    // Check for childs presence
+	    bool grpChCnt = it_grp.size() && (it_grp.size()>1 || s2i(TSYS::strLine(it_grp[0].toStdString(),0)));
 	    it->setChildIndicatorPolicy(grpChCnt?QTreeWidgetItem::ShowIndicator:QTreeWidgetItem::DontShowIndicator);
 	    // Next node for update
-	    if(upTree && it->isExpanded()) viewChildRecArea(it,upTree);
+	    if(upTree && it->isExpanded()) viewChildRecArea(it, upTree);
 	}
 	//Delete no present
 	if(upTree) {
@@ -2636,7 +2641,7 @@ void ConfApp::reqPrgrsSet( int cur, const QString &lab, int max )
 
 bool ConfApp::compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 )	{ return v1.name < v2.name; }
 
-void ConfApp::initHosts( )
+void ConfApp::initHosts( bool toReconnect )
 {
     vector<TTransportS::ExtHost> stls;
     SYS->transport().at().extHostList(user(), stls);
@@ -2669,28 +2674,38 @@ void ConfApp::initHosts( )
 	    for(int iTop = 0; iTop < CtrTree->topLevelItemCount(); iTop++)
 		if(stls[iSt].id == TSYS::pathLev(CtrTree->topLevelItem(iTop)->text(2).toStdString(),0))
 		{ nit = CtrTree->topLevelItem(iTop); break; }
+	map<string, SCADAHost*>::iterator iHost = hosts.find(stls[iSt].id);
+
 	if(!nit) {
 	    nit = new QTreeWidgetItem(CtrTree);
 
 	    // Append the host thread
-	    if(hosts.find(stls[iSt].id) == hosts.end()) {
+	    if(iHost == hosts.end()) {
 		hosts[stls[iSt].id] = new SCADAHost(stls[iSt].id.c_str(), user().c_str(), (stls[iSt].id!=SYS->id()), this);
 		connect(hosts[stls[iSt].id], SIGNAL(setSt(const QString&,int,const QImage&,const QStringList&,const QString&)),
 			this, SLOT(hostStSet(const QString&,int,const QImage&,const QStringList&,const QString&)), Qt::QueuedConnection);
 		hosts[stls[iSt].id]->start();
+	    } else iHost->second->userSet(user().c_str());
+	}
+	else if(iHost != hosts.end()) {
+	    iHost->second->userSet(user().c_str());
+	    if(toReconnect) {
+		iHost->second->terminate();
+		iHost->second->start();
 	    }
 	}
+
 	if(stls[iSt].id == SYS->id()) {
-	    nit->setText(0, trU(SYS->name(),user()).c_str());
+	    nit->setText(0, trD_U(SYS->name(),user()).c_str());
 	    nit->setText(1, _("Local station"));
 	    nit->setText(2, ("/"+SYS->id()).c_str());
 	}
 	else {
-	    nit->setText(0, trU(stls[iSt].name,user()).c_str());
+	    nit->setText(0, trD_U(stls[iSt].name,user()).c_str());
 	    nit->setText(1, _("Remote station"));
 	    nit->setText(2, ("/"+stls[iSt].id).c_str());
 	}
-	if(hosts[stls[iSt].id]) hosts[stls[iSt].id]->userSet(user().c_str());
+	//if(hosts[stls[iSt].id]) hosts[stls[iSt].id]->userSet(user().c_str());
     }
 }
 
@@ -3419,7 +3434,8 @@ void SCADAHost::run( )
 	    QString toolTip;
 	    QStringList brs;
 	    XMLNode req("CntrReqs"), *reqN;
-	    req.setAttr("path", "/"+id.toStdString());
+	    req.setAttr("path", "/"+id.toStdString())->
+		setAttr("lang", Mess->lang2Code(user.toStdString(),true));
 	    req.childAdd("get")->setAttr("path", "%2fgen%2fstat");
 	    req.childAdd("get")->setAttr("path", "%2fico");
 	    req.childAdd("info")->setAttr("path","%2fbr");
@@ -3455,7 +3471,7 @@ void SCADAHost::run( )
 	if(req && !reqDone) {
 	    wuser = user;
 	    mtx.unlock();
-	    if(lnkOK) lnkOK = (rez=cntrIfCmd(*req,wuser)) != 10;
+	    if(lnkOK) lnkOK = (rez=cntrIfCmd(*req,wuser)) != TError::Tr_Connect;
 	    else {
 		req->childClear();
 		req->setAttr("mcat",mod->nodePath()+"/"+id.toStdString())->setAttr("rez",i2s(TError::Tr_Connect))->setText(_("No connection is established"));

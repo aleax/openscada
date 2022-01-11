@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprotocols.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -121,7 +121,8 @@ class TProtocolS : public TSubSYS
 	TProtocolS( );
 	~TProtocolS( );
 
-	int subVer( )		{ return SPRT_VER; }
+	string subName( ) const	{ return _("Transport Protocols"); }
+	int subVer( ) const	{ return SPRT_VER; }
 
 	AutoHD<TProtocol> at( const string &iid ) const	{ return modAt(iid); }
 

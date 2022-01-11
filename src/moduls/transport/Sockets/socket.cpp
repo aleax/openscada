@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,12 +58,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Sockets"
-#define MOD_NAME	_("Sockets")
+#define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.6"
-#define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
-#define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
+#define MOD_VER		"4.3.7"
+#define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov")
+#define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -111,8 +111,8 @@ void TTransSock::postEnable( int flag )
     TModule::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	owner().inEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-	owner().outEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().inEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().outEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
     }
 }
 

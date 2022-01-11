@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodule.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -67,7 +67,7 @@ TModule::~TModule( )
 
 string TModule::objName( )	{ return TCntrNode::objName()+":TModule"; }
 
-string TModule::modName( )	{ return mModName; }
+string TModule::modName( )	{ return trS(mModName); }
 
 void TModule::postEnable( int flag )
 {
@@ -136,12 +136,12 @@ string TModule::modInfo( const string &name )
     string info;
 
     if(name == lInfo[0])	info = mModId;
-    else if(name == lInfo[1])	info = mModName;
+    else if(name == lInfo[1])	info = _(mModName);
     else if(name == lInfo[2])	info = mModType;
     else if(name == lInfo[3])	info = mModSource;
     else if(name == lInfo[4])	info = mModVers;
-    else if(name == lInfo[5])	info = mModAuthor;
-    else if(name == lInfo[6])	info = mModDescr;
+    else if(name == lInfo[5])	info = _(mModAuthor);
+    else if(name == lInfo[6])	info = _(mModDescr);
     else if(name == lInfo[7])	info = mModLicense;
 
     return info;
@@ -173,7 +173,8 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if(a_path.find("/module/m_inf") == 0 && ctrChkNode(opt)) opt->setText(modInfo(TSYS::pathLev(a_path,2)));
+    else if(a_path.find("/module/m_inf") == 0 && ctrChkNode(opt))
+	opt->setText(modInfo(TSYS::pathLev(a_path,2)));
     else TCntrNode::cntrCmdProc(opt);
 }
 
@@ -189,10 +190,10 @@ void TModule::modInfoMainSet( const string &name, const string &type, const stri
     mModSource	= source;
 }
 
-string TModule::I18N( const char *mess, const char *mLang )
+string TModule::I18N( const string &mess, const char *mLang )
 {
 #ifdef HAVE_LIBINTL_H
-    return Mess->I18N(mess, lcId.c_str(), mLang);
+    return Mess->I18N(mess, mLang, lcId.c_str());
 #else
     return mess;
 #endif

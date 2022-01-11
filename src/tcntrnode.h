@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -153,8 +153,8 @@ class TCntrNode
 	ResMtx &dataRes( ) { return mDataM; }	//Generic node's data mutex
 						//Allowed for using by heirs into the data resources allocation
 						//  not for long-term functions-tasks resources allocation!
-	virtual const char *nodeName( ) const		{ return ""; }
-	virtual const char *nodeNameSYSM( ) const	{ return ""; }
+	virtual const char *nodeName( ) const	{ return ""; }
+	virtual string nodeNameSYSM( ) const	{ return ""; }
 	string nodePath( char sep = 0, bool from_root = true ) const;
 
 	void nodeList( vector<string> &list, const string& gid = "" );	//Full node list

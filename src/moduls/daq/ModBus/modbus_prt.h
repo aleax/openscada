@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.h
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,6 +30,8 @@
 
 #undef _
 #define _(mess) modPrt->I18N(mess).c_str()
+#undef trS
+#define trS(mess) modPrt->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::map;
@@ -41,9 +43,9 @@ using namespace OSCADA;
 #define PRT_NAME	"ModBus"
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.9.5"
-#define PRT_AUTHORS	_("Roman Savochenko")
-#define PRT_DESCR	_("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
+#define PRT_MVER	"2.9.6"
+#define PRT_AUTHORS	trS("Roman Savochenko")
+#define PRT_DESCR	trS("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 

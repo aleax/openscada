@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,12 +32,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"HTTP"
-#define MOD_NAME	_("HTTP-realization")
+#define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.12"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides support for the HTTP protocol for WWW-based user interfaces.")
+#define MOD_VER		"3.6.13"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
 //*************************************************
 

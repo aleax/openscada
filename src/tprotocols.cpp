@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprotocols.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +27,7 @@ using namespace OSCADA;
 //************************************************
 //* TProtocolS                                   *
 //************************************************
-TProtocolS::TProtocolS( ) : TSubSYS("Protocol", _("Transport Protocols"), true)
+TProtocolS::TProtocolS( ) : TSubSYS(SPRT_ID, true)
 {
 
 }

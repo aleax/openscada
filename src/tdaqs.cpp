@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,36 +32,36 @@ using namespace OSCADA;
 //*************************************************
 //* TDAQS                                         *
 //*************************************************
-TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data Acquisition"),true), mElErr("Error"), mRdRestDtTm(1)
+TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID, true), mElErr("Error"), mRdRestDtTm(1)
 {
     mTmpLib = grpAdd("tmplb_");
 
     //Templates lib db structure
-    mElLib.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mElLib.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mElLib.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    mElLib.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
+    mElLib.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mElLib.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mElLib.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    mElLib.fldAdd(new TFld("DB",trS("Data base"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
 
     //Template DB structure
-    mElTmpl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mElTmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mElTmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    mElTmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    mElTmpl.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    mElTmpl.fldAdd(new TFld("PROGRAM",_("Procedure"),TFld::String,TFld::TransltText,"1000000"));
-    mElTmpl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    mElTmpl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mElTmpl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mElTmpl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    mElTmpl.fldAdd(new TFld("MAXCALCTM",trS("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
+    mElTmpl.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mElTmpl.fldAdd(new TFld("PROGRAM",trS("Procedure"),TFld::String,TFld::TransltText,"1000000"));
+    mElTmpl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Parameter template IO DB structure
-    mElTmplIO.fldAdd(new TFld("TMPL_ID",_("Template identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mElTmplIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
-    mElTmplIO.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mElTmplIO.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
-    mElTmplIO.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
-    mElTmplIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"50"));
-    mElTmplIO.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
+    mElTmplIO.fldAdd(new TFld("TMPL_ID",trS("Template identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mElTmplIO.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
+    mElTmplIO.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mElTmplIO.fldAdd(new TFld("TYPE",trS("Value type"),TFld::Integer,TFld::NoFlag,"1"));
+    mElTmplIO.fldAdd(new TFld("FLAGS",trS("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    mElTmplIO.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"50"));
+    mElTmplIO.fldAdd(new TFld("POS",trS("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 
     //Error attributes
-    mElErr.fldAdd(new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead));
+    mElErr.fldAdd(new TFld("err",trS("Error"),TFld::String,TFld::NoWrite|TVal::DirRead));
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }

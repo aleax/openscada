@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: varchfnc.h
 /***************************************************************************
- *   Copyright (C) 2009-2014,2019 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -69,8 +69,8 @@ class vArh : public TFunction
 {
     public:
 	vArh( ) : TFunction("vArh",SSPC_ID) {
-	    ioAdd(new IO("res",_("Result"),IO::Object,IO::Return));
-	    ioAdd(new IO("name",_("Name"),IO::String,IO::Default));
+	    ioAdd(new IO("res",trS("Result"),IO::Object,IO::Return));
+	    ioAdd(new IO("name",trS("Name"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("Val: Archive"); }
@@ -90,12 +90,12 @@ class vArhBuf : public TFunction
 {
     public:
 	vArhBuf( ) : TFunction("vArhBuf", SSPC_ID) {
-	    ioAdd(new IO("res",_("Result"),IO::Object,IO::Return));
-	    ioAdd(new IO("tp",_("Values type (0-Boolean, 1-Integer, 4-Real, 5-String)"),IO::Integer,IO::Default,"1"));
-	    ioAdd(new IO("sz",_("Maximum buffer size"),IO::Integer,IO::Default,"100"));
-	    ioAdd(new IO("per",_("Values period, microseconds"),IO::Integer,IO::Default,"1000000"));
-	    ioAdd(new IO("hgrd",_("Hard grid"),IO::Boolean,IO::Default,"0"));
-	    ioAdd(new IO("hres",_("High time resolution (microseconds)"),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("res",trS("Result"),IO::Object,IO::Return));
+	    ioAdd(new IO("tp",trS("Values type (0-Boolean, 1-Integer, 4-Real, 5-String)"),IO::Integer,IO::Default,"1"));
+	    ioAdd(new IO("sz",trS("Maximum buffer size"),IO::Integer,IO::Default,"100"));
+	    ioAdd(new IO("per",trS("Values period, microseconds"),IO::Integer,IO::Default,"1000000"));
+	    ioAdd(new IO("hgrd",trS("Hard grid"),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("hres",trS("High time resolution (microseconds)"),IO::Boolean,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Val: Archive buffer"); }

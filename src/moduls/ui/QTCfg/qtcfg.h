@@ -135,7 +135,7 @@ class ConfApp: public QMainWindow
     bool	winClose;			//Closing window flag
 
     signals:
-    void makeStarterMenu( QWidget *mn );
+    void makeStarterMenu( QWidget *mn = NULL, QString lang = "" );
 
     protected:
     //Methods
@@ -222,7 +222,7 @@ private:
 
     // Control requests
     static bool compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 );
-    void initHosts( );
+    void initHosts( bool toReconnect = false );
     int cntrIfCmd( XMLNode &node );
     int cntrIfCmdHosts( XMLNode &node );
 
@@ -255,7 +255,7 @@ private:
 		*menuView,	//Menu "View"
 		*menuHelp;	//Menu "Help"
 
-    QToolBar	*toolBar;
+    QToolBar	*toolBar, *QTStarter;
 
     XMLNode	pgInfo, genReqs;
     XMLNode	*root;

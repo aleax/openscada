@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,13 +32,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"JavaLikeCalc"
-#define MOD_NAME	_("Calculator on the Java-like language")
+#define MOD_NAME	trS("Calculator on the Java-like language")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.10"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
+#define MOD_VER		"5.4.13"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -105,45 +105,45 @@ void TpContr::postEnable( int flag )
     TTypeDAQ::postEnable( flag );
 
     //Controller db structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
-    fldAdd(new TFld("FUNC",_("Controller function or DAQ-template"),TFld::String,TFld::NoFlag,"40"));
-    fldAdd(new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the calculation task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("ITER",_("Number of iterations in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
+    fldAdd(new TFld("FUNC",trS("Controller function or DAQ-template"),TFld::String,TFld::NoFlag,"40"));
+    fldAdd(new TFld("SCHEDULE",trS("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the calculation task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("ITER",trS("Number of iterations in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
 
     //Controller value db structure
-    val_el.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    val_el.fldAdd(new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"10000"));
+    val_el.fldAdd(new TFld("ID",trS("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    val_el.fldAdd(new TFld("VAL",trS("IO value"),TFld::String,TFld::NoFlag,"10000"));
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("FLD",_("Data fields"),TFld::String,TFld::FullText|TCfg::NoVal,"300"));
+    tpPrmAt(t_prm).fldAdd(new TFld("FLD",trS("Data fields"),TFld::String,TFld::FullText|TCfg::NoVal,"300"));
 
     //Lib's db structure
-    lb_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
-    lb_el.fldAdd(new TFld("DB",_("Database"),TFld::String,TFld::NoFlag,"30"));			//????[v1.0] Remove
+    lb_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    lb_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    lb_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::TransltText,"300"));
+    lb_el.fldAdd(new TFld("DB",trS("Database"),TFld::String,TFld::NoFlag,"30"));			//????[v1.0] Remove
 
     //Function's structure
-    fnc_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    fnc_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fnc_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
-    fnc_el.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
-    fnc_el.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    fnc_el.fldAdd(new TFld("PR_TR",_("Completely translate the program"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fnc_el.fldAdd(new TFld("FORMULA",_("Program"),TFld::String,TFld::TransltText,"1000000"));
-    fnc_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    fnc_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fnc_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    fnc_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::TransltText,"300"));
+    fnc_el.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    fnc_el.fldAdd(new TFld("MAXCALCTM",trS("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
+    fnc_el.fldAdd(new TFld("PR_TR",trS("Completely translate the program"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fnc_el.fldAdd(new TFld("FORMULA",trS("Program"),TFld::String,TFld::TransltText,"1000000"));
+    fnc_el.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Function's IO structure
-    fncio_el.fldAdd(new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    fncio_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    fncio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fncio_el.fldAdd(new TFld("TYPE",_("Type"),TFld::Integer,TFld::NoFlag,"1"));
-    fncio_el.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::NoFlag,"1"));
-    fncio_el.fldAdd(new TFld("DEF",_("Default value"),TFld::String,TFld::TransltText,"20"));
-    fncio_el.fldAdd(new TFld("HIDE",_("Hide"),TFld::Boolean,TFld::NoFlag,"1"));
-    fncio_el.fldAdd(new TFld("POS",_("Position"),TFld::Integer,TFld::NoFlag,"3"));
+    fncio_el.fldAdd(new TFld("F_ID",trS("Function ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fncio_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fncio_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    fncio_el.fldAdd(new TFld("TYPE",trS("Type"),TFld::Integer,TFld::NoFlag,"1"));
+    fncio_el.fldAdd(new TFld("MODE",trS("Mode"),TFld::Integer,TFld::NoFlag,"1"));
+    fncio_el.fldAdd(new TFld("DEF",trS("Default value"),TFld::String,TFld::TransltText,"20"));
+    fncio_el.fldAdd(new TFld("HIDE",trS("Hide"),TFld::Boolean,TFld::NoFlag,"1"));
+    fncio_el.fldAdd(new TFld("POS",trS("Position"),TFld::Integer,TFld::NoFlag,"3"));
 
     //Init named constant table
     double rvl;
@@ -513,10 +513,10 @@ void Contr::loadFunc( bool onlyVl )
 
 	//Creating special IO
 	if(!isDAQTmpl) {
-	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function, Hz"),IO::Real,0,"1000",false),0);
-	    if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,0,"0",false),1);
-	    if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,0,"0",false),2);
-	    if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("Link to the object of this controller"),IO::Object,0,"0",false),3);
+	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",trS("Frequency of calculation of the function, Hz"),IO::Real,0,"1000",false),0);
+	    if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",trS("Function start flag"),IO::Boolean,0,"0",false),1);
+	    if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",trS("Function stop flag"),IO::Boolean,0,"0",false),2);
+	    if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",trS("Link to the object of this controller"),IO::Object,0,"0",false),3);
 	}
 
 	//Load values

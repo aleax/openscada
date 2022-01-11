@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,6 +43,9 @@
 #include "vis_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_dlgs.h"
+
+#undef _
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
 
 using namespace OSCADA_QT;
 using namespace VISION;
@@ -1205,9 +1208,9 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang, 1, 3);
 
-    lab = new QLabel(_("Translate:"),wdg_proc_fr);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
-    glay->addWidget(lab, 1, 4);
+    lab_proc_text_tr = new QLabel(_("Translate:"),wdg_proc_fr);
+    lab_proc_text_tr->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab_proc_text_tr, 1, 4);
     proc_text_tr = new QCheckBox(wdg_proc_fr);
     proc_text_tr->setObjectName("/proc/calc/prog_tr");// "/wdg/st/en");
     connect(proc_text_tr, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
@@ -1563,6 +1566,7 @@ void VisItProp::tabChanged( int itb )
 	    }
 	    //  Calc procedure translation
 	    gnd = TCntrNode::ctrId(root, proc_text_tr->objectName().toStdString(), true);
+	    lab_proc_text_tr->setVisible(gnd); proc_text_tr->setVisible(gnd);
 	    proc_text_tr->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	    if(gnd) {
 		req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(proc_text_tr->objectName().toStdString(),TSYS::PathEl));

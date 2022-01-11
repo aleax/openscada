@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibComplex1 file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,13 +27,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"FLibComplex1"
-#define MOD_NAME	_("Complex1 functions")
+#define MOD_NAME	trS("Complex1 functions")
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.2.3"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides a library of the functions of compatibility with SCADA Complex 1 of the firm SIC \"DIYA\".")
+#define MOD_VER		"1.2.4"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides a library of the functions of compatibility with SCADA Complex 1 of the firm SIC \"DIYA\".")
 #define LICENSE		"GPL2"
 //*************************************************
 

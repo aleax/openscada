@@ -31,13 +31,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfg"
-#define MOD_NAME	_("Program configurator (WEB)")
+#define MOD_NAME	trS("Program configurator (WEB)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.9.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
+#define MOD_VER		"1.9.3"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -138,11 +138,11 @@ string TWEB::pgHead( string head_els )
 	head_els+
 	"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
 	// "  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
-	"  <title>" PACKAGE_NAME ". " + _(MOD_NAME) + "</title>\n"
+	"  <title>" PACKAGE_NAME ". " + MOD_NAME + "</title>\n"
 	"  <style type='text/css'>\n" + mCSStables + "</style>\n"
 	"</head>\n"
 	"<body>\n"
-	"<h1 class='head'>" PACKAGE_NAME ". " + _(MOD_NAME) + "</h1>\n"
+	"<h1 class='head'>" PACKAGE_NAME ". " + MOD_NAME + "</h1>\n"
 	"<hr size='3'/><br/>\n";
 }
 
@@ -217,28 +217,36 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 
 void TWEB::getAbout( SSess &ses )
 {
-    ses.page = ses.page+"<center>\n"
+    string mess = string("<center>\n")+
 	"<table class='work'>\n"
 	"<tr><th>"+MOD_ID+" v"+MOD_VER+"</th></tr>\n"
 	"<tr><td class='content'>\n"
 	"<table border='0px' cellspacing='3px'>\n"
-	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(MOD_NAME)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Description: ")+"</TD><TD>"+_(DESCRIPTION)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+_(LICENSE)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(AUTHORS)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+MOD_NAME+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Description: ")+"</TD><TD>"+DESCRIPTION+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+LICENSE+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+AUTHORS+"</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR>\n</table><br/>\n"
 	"<table class='work'>\n"
 	"<TR><th>"+PACKAGE+" v"+VERSION+"</th></TR>\n"
 	"<TR><TD class='content'>\n"
 	"<table border='0px' cellspacing='3px'>\n"
-	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(PACKAGE_DESCR)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+PACKAGE_LICENSE+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(PACKAGE_AUTHOR)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Web site: ")+"</TD><TD>"+PACKAGE_SITE+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>%s</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>%s</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>%s</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Web site: ")+"</TD><TD>%s</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR></table><br/>\n"
 	"</center>\n";
+
+#undef _
+#define _(mess) Mess->I18N(mess).c_str()
+
+    ses.page += TSYS::strMess(mess.c_str(),_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR),PACKAGE_SITE);
+
+#undef _
+#define _(mess) mod->I18N(mess).c_str()
 }
 
 void TWEB::getHead( SSess &ses )
@@ -1189,9 +1197,6 @@ string TWEB::modInfo( const string &name )
 {
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-    if(name == "Name")		return MOD_NAME;
-    if(name == "Author")	return AUTHORS;
-    if(name == "Description")	return DESCRIPTION;
 
     return TModule::modInfo(name);
 }

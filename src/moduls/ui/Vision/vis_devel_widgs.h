@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.h
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -136,7 +136,7 @@ class ModInspAttr: public QAbstractItemModel //QAbstractTableModel
 	QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
 	bool setData ( const QModelIndex &index, const QVariant &value, int role = Qt::EditRole );
 
-	VisDevelop *mainWin( )		{ return main_win; }
+	VisDevelop *mainWin( ) const	{ return main_win; }
 
     signals:
 	void modified( const string &idwdg );
@@ -212,6 +212,8 @@ class InspAttrDock: public QDockWidget
 	InspAttrDock( VisDevelop * parent );
 	~InspAttrDock( );
 
+	void messUpd( );
+
 	VisDevelop *owner( ) const;
 
 	bool hasFocus( );
@@ -243,7 +245,7 @@ class InspLnk: public QTreeWidget
 
 	void setWdg( const string &iwdg );
 
-	VisDevelop *mainWin( )     { return main_win; }
+	VisDevelop *mainWin( )	{ return main_win; }
 
     public slots:
 	void changeLnk( QTreeWidgetItem*, int );
@@ -292,6 +294,8 @@ class InspLnkDock: public QDockWidget
 	InspLnkDock( VisDevelop * parent );
 	~InspLnkDock( );
 
+	void messUpd( );
+
 	VisDevelop *owner( ) const;
 
     public slots:
@@ -315,6 +319,8 @@ class WdgTree: public QDockWidget
 	//Public methods
 	WdgTree( VisDevelop *parent = 0 );
 	~WdgTree( );
+
+	void messUpd( );
 
 	VisDevelop *owner( ) const;
 
@@ -355,6 +361,8 @@ class ProjTree: public QDockWidget
 	//Public methods
 	ProjTree( VisDevelop * parent = 0 );
 	~ProjTree( );
+
+	void messUpd( );
 
 	bool hasFocus( );
 
@@ -420,16 +428,19 @@ class WScaleStBar : public QLabel
     Q_OBJECT
 
     public:
-	WScaleStBar( QWidget *parent = 0 );
+	WScaleStBar( VisDevelop *mainWind );
 
 	bool scale( )			{ return isScale; }
 	void setScale( bool val );
+
+	VisDevelop *mainWin( ) const;
 
     protected:
 	void mousePressEvent( QMouseEvent * event );
 
     private:
 	bool isScale;
+	VisDevelop *main_win;
 };
 
 //*********************************************

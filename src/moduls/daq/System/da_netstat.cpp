@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_netstat.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,10 +36,10 @@ using namespace SystemCntr;
 //*************************************************
 NetStat::NetStat( )
 {
-    fldAdd(new TFld("rcv",_("Received (B)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("rcvSp",_("Receive speed (B/s)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("trns",_("Transmitted (B)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("trnsSp",_("Transmit speed (B/s)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("rcv",trS("Received (B)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("rcvSp",trS("Receive speed (B/s)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("trns",trS("Transmitted (B)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("trnsSp",trS("Transmit speed (B/s)"),TFld::Real,TFld::NoWrite));
 }
 
 NetStat::~NetStat( )
@@ -52,7 +52,7 @@ void NetStat::init( TMdPrm *prm, bool update )
     TCfg &c_subt = prm->cfg("SUBT");
 
     //Create Configuration
-    if(!update) c_subt.fld().setDescr(_("Interface"));
+    if(!update) c_subt.fld().setDescr(trS("Interface"));
 
     vector<string> list;
     dList(list, true);

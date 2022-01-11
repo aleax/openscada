@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,12 +34,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"MMS"
-#define MOD_NAME	_("MMS(IEC-9506)")
+#define MOD_NAME	trS("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.6"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
+#define MOD_VER		"1.4.7"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -79,18 +79,18 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
-    fldAdd(new TFld("ADDR",_("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
-    fldAdd(new TFld("VARS_RD_REQ",_("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","1;9999"));
-    fldAdd(new TFld("COTP_DestTSAP",_("Destination TSAP"),TFld::Integer,TFld::NoFlag,"3","512","0;65535"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("TM_REST",trS("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
+    fldAdd(new TFld("SYNCPER",trS("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
+    fldAdd(new TFld("ADDR",trS("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
+    fldAdd(new TFld("VARS_RD_REQ",trS("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","1;9999"));
+    fldAdd(new TFld("COTP_DestTSAP",trS("Destination TSAP"),TFld::Integer,TFld::NoFlag,"3","512","0;65535"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("VAR_LS",_("Variables list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("VAR_LS",trS("Variables list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,12 +29,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SelfSystem"
-#define MOD_NAME	_("Own protocol of OpenSCADA")
+#define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.4"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
+#define MOD_VER		"1.9.5"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 

@@ -2,7 +2,7 @@
 //OpenSCADA module DAQ.DCON file: DCON_client.h
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
- *		   2008-2018 by Roman Savochenko, roman@oscada.org         *
+ *		   2008-2022 by Roman Savochenko, roman@oscada.org         *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,6 +32,8 @@
 
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 #define MaxLenReq 200
 

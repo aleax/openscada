@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsubsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,7 +30,7 @@ using namespace OSCADA;
 //*************************************************
 //* TSubSYS                                       *
 //*************************************************
-TSubSYS::TSubSYS( const char *id, const char *name, bool modi ) : mStart(false), mModSys(modi), mMod(-1), mId(id), mName(name)
+TSubSYS::TSubSYS( const string &id, bool modi ) : mStart(false), mModSys(modi), mMod(-1), mId(id)
 {
     if(subModule()) mMod = grpAdd("mod_", true);
 
@@ -47,8 +47,6 @@ TSubSYS::~TSubSYS( )
 string TSubSYS::objName( )	{ return TCntrNode::objName()+":TSubSYS"; }
 
 TSYS &TSubSYS::owner( ) const	{ return *(TSYS*)nodePrev(); }
-
-string TSubSYS::subName( )	{ return mName.size()?_(mName.c_str()):mId; }
 
 void TSubSYS::modList( vector<string> &list )
 {

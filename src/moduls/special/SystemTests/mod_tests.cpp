@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_kernel.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,13 +45,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SystemTests"
-#define MOD_NAME	_("OpenSCADA and its modules' tests")
+#define MOD_NAME	trS("OpenSCADA and its modules' tests")
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.8.7"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the group of tests to OpenSCADA and its modules.")
+#define MOD_VER		"1.8.8"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the group of tests to OpenSCADA and its modules.")
 #define LICENSE		"GPL2"
 //*************************************************
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_mem.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,14 +33,14 @@ using namespace SystemCntr;
 Mem::Mem( )
 {
     //> Memory value structure
-    fldAdd(new TFld("free",_("Free (KiB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("total",_("Total (KiB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("use",_("Used (KiB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("buff",_("Buffers (KiB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("cache",_("Cached (KiB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("sw_free",_("Swap free (KiB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("sw_total",_("Swap total (KiB)"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("sw_use",_("Swap used (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("free",trS("Free (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("total",trS("Total (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("use",trS("Used (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("buff",trS("Buffers (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("cache",trS("Cached (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_free",trS("Swap free (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_total",trS("Swap total (KiB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_use",trS("Swap used (KiB)"),TFld::Integer,TFld::NoWrite));
 }
 
 Mem::~Mem( )

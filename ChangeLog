@@ -1,4 +1,26 @@
-2022-02-06 Roman (stable)
+2022-01-11 Roman (stable)
+- !!!!:SYS,*: Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode but for the system messages:
+    - Implemented for a function of prestoring system messages translation trS(), where the base message just return
+	with the catalogue information, that is "{base}\000{cat}" and what is translated really in second call
+	inward the translation context or _(). In the background there is used Mess->I18N() but for the specific
+	language code mess_PreSave="<PSV>".
+    - TMess::I18N() changed in the arguments for "const string &mess" the first and mLang moved to the second.
+    - The data translation functions - short definitions renamed to trD_L(), trD_U(), trD_LU(), trDSet_L(), trDSet_U(), trDSet_LU().
+    - The subsystem name moved to the function subName() call from the method.
+    - *: The TFld() and IO() objects expanded in work with the prestoring system messages.
+    - Module info fields adapted to the MULTILANGUAGE-DYNAMIC mode.
+- !!:SYS: Building: configure.ac: Core library version rose to 4:9:0.
+- DAQ,DAQ.JavaLikeCalc,UI.{VCAEngine,Vision}: The whole translation flag is hidden for unset values.
+- DAQ.JavaLikeCalc: Names setting part of the execution form moved to itself for using the dynamic translation.
+- TUIS,UI.{QTCfg,Vision}: docGet() expanded by the language in the second line.
+- UI.{QTStarter,QTCfg,Vision}: The Starter Menu set for dynamic translation and updating.
+- FIX:UI.{QTStarter,QTCfg,Vision,WebCfg,WebCfgD}: FIX: Fixed in the "About" page translation.
+- !!:UI.QTCfg: The tree update enabled for the root page updation through the reconnection and the tree update at the user chage.
+- !!:UI.Vision: Appended in updation the toolbars at the user change, what also adapted for the dynamic translation.
+    All development dialogs adapted for the dynamic translation.
+
+
+2022-01-06 Roman (stable)
 - !!!!:FIX:SYS,BD,Protocol.HTTP,UI.{Vision,WebCfg,WebCfgD,WebUser,WebVision}:
     Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode:
     - FIX:SYS,Protocol.HTTP,UI.{Vision,WebCfg,WebCfgD,WebUser,WebVision}:

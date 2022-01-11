@@ -86,7 +86,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 {
     QImage ico_t;
 
-    connect(this, SIGNAL(makeStarterMenu()), qApp, SLOT(makeStarterMenu()));
+    connect(this, SIGNAL(makeStarterMenu(QWidget*,const QString&)), qApp, SLOT(makeStarterMenu(QWidget*,const QString&)));
     setAttribute(Qt::WA_DeleteOnClose, true);
     mod->regWin(this);
 
@@ -345,7 +345,7 @@ void VisRun::setWinMenu( bool act )
 	menuBar()->addMenu(&menuAlarm);
 	if(s2i(SYS->cmdOpt("showWin")) != 2) menuBar()->addMenu(&menuView);
 	menuBar()->addMenu(&menuHelp);
-	emit makeStarterMenu();
+	emit makeStarterMenu(NULL, lang().c_str());
     }
 }
 
@@ -376,7 +376,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
     if(masterPg() && conErr && (!main || (time(NULL)-conErr->property("tm").toLongLong()) < conErr->property("tmRest").toInt())) {
 	if(main && conErr->property("labTmpl").toString().size())
 	    conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()-(time(NULL)-conErr->property("tm").toLongLong())));
-	return 10;
+	return TError::Tr_Connect;
     }
 
     int rez = 0;
@@ -1136,12 +1136,19 @@ void VisRun::about( )
     TrCtxAlloc trCtx;
     if(Mess->translDyn()) trCtx.hold(user()+"\n"+lang());
 
-    QMessageBox::about(this, windowTitle(),
-	QString(_("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11")).
-	arg(mod->modInfo("Name").c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description").c_str()).
-	arg(mod->modInfo("Author").c_str()).arg(mod->modInfo("License").c_str()).
-	arg(PACKAGE_NAME).arg(VERSION).arg(Mess->I18N(PACKAGE_DESCR,NULL,lang().c_str()).c_str()).
-	arg(PACKAGE_LICENSE).arg(Mess->I18N(PACKAGE_AUTHOR,NULL,lang().c_str()).c_str()).arg(PACKAGE_SITE));
+    QString mess = _("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n"
+		     "%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11");
+
+#undef _
+#define _(mess) Mess->I18N(mess, lang().c_str()).c_str()
+
+    QMessageBox::about(this, windowTitle(), mess.
+	arg(_(mod->modInfo("Name"))).arg(mod->modInfo("Version").c_str()).arg(_(mod->modInfo("Description"))).
+	arg(_(mod->modInfo("Author"))).arg(mod->modInfo("License").c_str()).
+	arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
+
+#undef _
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 }
 
 void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
@@ -1212,7 +1219,7 @@ void VisRun::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void VisRun::enterManual( )
 {
-    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString()+"\n"+lang());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
 	QString(_("The manual '%1' was not found offline or online!")).arg(sender()->property("doc").toString()));
@@ -2048,14 +2055,14 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	// Prepare an internal procedure
 	TFunction funcIO("sesRun_"+owner()->workSess()+"_ntf"+i2s(tp));
 	//funcIO.setStor(DB());
-	funcIO.ioIns(new IO("en",_("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
-	funcIO.ioIns(new IO("doNtf",_("Performing the notification, always 1"),IO::Boolean,IO::Default), IFA_doNtf);
-	funcIO.ioIns(new IO("doRes",_("Making the resource, always 0"),IO::Boolean,IO::Default), IFA_doRes);
-	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
-	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
-	funcIO.ioIns(new IO("lang",_("Language of the notification message"),IO::String,IO::Default), IFA_lang);
-	funcIO.ioIns(new IO("resTp",_("Resource stream type"),IO::String,IO::Return), IFA_resTp);
-	funcIO.ioIns(new IO("prcID",_("Procedure ID"),IO::String,IO::Default), IFA_prcID);
+	funcIO.ioIns(new IO("en",trS("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
+	funcIO.ioIns(new IO("doNtf",trS("Performing the notification, always 1"),IO::Boolean,IO::Default), IFA_doNtf);
+	funcIO.ioIns(new IO("doRes",trS("Making the resource, always 0"),IO::Boolean,IO::Default), IFA_doRes);
+	funcIO.ioIns(new IO("res",trS("Resource stream"),IO::String,IO::Output), IFA_res);
+	funcIO.ioIns(new IO("mess",trS("Notification message"),IO::String,IO::Default), IFA_mess);
+	funcIO.ioIns(new IO("lang",trS("Language of the notification message"),IO::String,IO::Default), IFA_lang);
+	funcIO.ioIns(new IO("resTp",trS("Resource stream type"),IO::String,IO::Return), IFA_resTp);
+	funcIO.ioIns(new IO("prcID",trS("Procedure ID"),IO::String,IO::Default), IFA_prcID);
 	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
 	catch(TError &er) {
 	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Error function of the notificator '%s': %s"),

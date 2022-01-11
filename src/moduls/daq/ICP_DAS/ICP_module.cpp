@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,12 +36,12 @@ extern "C"
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"ICP_DAS"
-#define MOD_NAME	_("ICP DAS hardware")
+#define MOD_NAME	trS("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.9.2"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides implementation for 'ICP DAS' hardware support.\
+#define MOD_VER		"1.9.3"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -92,24 +92,24 @@ void TTpContr::postEnable( int flag )
     daReg(new da_ISA());
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("BUS",_("Bus"),TFld::Integer,TFld::Selectable,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("BUS",trS("Bus"),TFld::Integer,TFld::Selectable,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
 	    _("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10")));
-    fldAdd(new TFld("TR_OSCD",_("Transport"),TFld::String,TFld::NoFlag,i2s(2*limObjID_SZ+5).c_str(),TrIcpDasNm));
-    fldAdd(new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::Selectable,"6","115200",
+    fldAdd(new TFld("TR_OSCD",trS("Transport"),TFld::String,TFld::NoFlag,i2s(2*limObjID_SZ+5).c_str(),TrIcpDasNm));
+    fldAdd(new TFld("BAUD",trS("Baudrate"),TFld::Integer,TFld::Selectable,"6","115200",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600"));
-    fldAdd(new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000"));
-    fldAdd(new TFld("REQ_TRY",_("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
+    fldAdd(new TFld("LP_PRMS",trS("LinPAC parameters"),TFld::String,TFld::FullText,"1000"));
+    fldAdd(new TFld("REQ_TRY",trS("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("MOD_TP",_("Module type"),TFld::String,TFld::HexDec|TCfg::NoVal,"20","-"));
-    tpPrmAt(t_prm).fldAdd(new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255"));
-    tpPrmAt(t_prm).fldAdd(new TFld("MOD_SLOT",_("Module slot"),TFld::Integer,TCfg::NoVal,"2","1","1;11"));
-    tpPrmAt(t_prm).fldAdd(new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
+    tpPrmAt(t_prm).fldAdd(new TFld("MOD_TP",trS("Module type"),TFld::String,TFld::HexDec|TCfg::NoVal,"20","-"));
+    tpPrmAt(t_prm).fldAdd(new TFld("MOD_ADDR",trS("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255"));
+    tpPrmAt(t_prm).fldAdd(new TFld("MOD_SLOT",trS("Module slot"),TFld::Integer,TCfg::NoVal,"2","1","1;11"));
+    tpPrmAt(t_prm).fldAdd(new TFld("MOD_PRMS",trS("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
 
 void TTpContr::load_( )

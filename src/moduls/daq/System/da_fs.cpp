@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_fs.cpp
 /***************************************************************************
- *   Copyright (C) 2016-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2016-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,12 @@ using namespace SystemCntr;
 //*************************************************
 FS::FS( )
 {
-    fldAdd(new TFld("total",_("Total (GB)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("used",_("Used (GB)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("free",_("Free (GB)"),TFld::Real,TFld::NoWrite));
-    fldAdd(new TFld("totalN",_("Total file nodes"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("usedN",_("Used file nodes"),TFld::Integer,TFld::NoWrite));
-    fldAdd(new TFld("freeN",_("Free file nodes"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("total",trS("Total (GB)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("used",trS("Used (GB)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("free",trS("Free (GB)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("totalN",trS("Total file nodes"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("usedN",trS("Used file nodes"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("freeN",trS("Free file nodes"),TFld::Integer,TFld::NoWrite));
 }
 
 FS::~FS( )
@@ -51,7 +51,7 @@ void FS::init( TMdPrm *prm, bool update )
     TCfg &cSubt = prm->cfg("SUBT");
 
     //Create Configuration
-    if(!update) cSubt.fld().setDescr(_("Mount point"));
+    if(!update) cSubt.fld().setDescr(trS("Mount point"));
 
     vector<string> list;
     mpList(list);

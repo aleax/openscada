@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -108,12 +108,12 @@ void ModMArch::start( )
 {
     if(!runSt) {
 	reqEl.fldClear();
-	reqEl.fldAdd(new TFld("MIN",_("In minutes"),TFld::Integer,TCfg::Key,"8"));	//Mostly for fast reading next, by minutes
-	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),(tmAsStr()?"20":"10")));
-	reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"6","0"));
-	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"200"));
-	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,(keyTmCat()?(int)TFld::NoFlag:(int)TCfg::Key),(keyTmCat()?"100000":"255")));
-	reqEl.fldAdd(new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"2"));
+	reqEl.fldAdd(new TFld("MIN",trS("In minutes"),TFld::Integer,TCfg::Key,"8"));	//Mostly for fast reading next, by minutes
+	reqEl.fldAdd(new TFld("TM",trS("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),(tmAsStr()?"20":"10")));
+	reqEl.fldAdd(new TFld("TMU",trS("Time, microseconds"),TFld::Integer,TCfg::Key,"6","0"));
+	reqEl.fldAdd(new TFld("CATEG",trS("Category"),TFld::String,TCfg::Key,"200"));
+	reqEl.fldAdd(new TFld("MESS",trS("Message"),TFld::String,(keyTmCat()?(int)TFld::NoFlag:(int)TCfg::Key),(keyTmCat()?"100000":"255")));
+	reqEl.fldAdd(new TFld("LEV",trS("Level"),TFld::Integer,TFld::NoFlag,"2"));
     }
 
     //Connection to DB and enable status check

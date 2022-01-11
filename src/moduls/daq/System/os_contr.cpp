@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,12 +47,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"System"
-#define MOD_NAME	_("System DA")
+#define MOD_NAME	trS("System DA")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.4.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
+#define MOD_VER		"2.4.2"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides data acquisition from the OS. Supported OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU, UPS etc.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -124,10 +124,10 @@ void TTpContr::postEnable( int flag )
     daReg(new QSensor());
 
     //Controler's bd structure
-    fldAdd(new TFld("AUTO_FILL",_("Auto create active data sources"),TFld::Integer,TFld::Selectable,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
-    fldAdd(new TFld("PRM_BD",_("Table of system parameters"),TFld::String,TFld::NoFlag,"30","system"));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("AUTO_FILL",trS("Auto create active data sources"),TFld::Integer,TFld::Selectable,"1","0","0;1;2;3",_("Manual;Fast sources;Slow sources;All sources")));
+    fldAdd(new TFld("PRM_BD",trS("Table of system parameters"),TFld::String,TFld::NoFlag,"30","system"));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     // Make enumerated
@@ -140,9 +140,9 @@ void TTpContr::postEnable( int flag )
 	el_name = el_name+_(daGet(list[iLs])->name().c_str())+";";
     }
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",_("System part"),TFld::String,TFld::Selectable|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()));
+    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",trS("System part"),TFld::String,TFld::Selectable|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()));
     tpPrmAt(t_prm).fldAdd(new TFld("SUBT" ,"",TFld::String,TFld::Selectable|TCfg::NoVal|TFld::SelfFld,"255"));
-    tpPrmAt(t_prm).fldAdd(new TFld("ADD_PRMS",_("Additional parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
+    tpPrmAt(t_prm).fldAdd(new TFld("ADD_PRMS",trS("Additional parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }

@@ -641,13 +641,13 @@ TVariant Session::objFuncCall( const string &id, vector<TVariant> &prms, const s
 	return 0;
     }
     // int reqTm( ) - Last request time
-    if(id == "reqTm")		return (int64_t)reqTm();
+    if(id == "reqTm")	return (int64_t)reqTm();
     // string reqUser( ) - Last request user
     if(id == "reqUser")	return reqUser();
     // string reqLang( ) - Last request language
     if(id == "reqLang")	return reqLang();
     // int userActTm( ) - Last user action time
-    if(id == "userActTm")	return (int64_t)userActTm();
+    if(id == "userActTm") return (int64_t)userActTm();
     // bool uiCmd( string cmd, string prm, string src ) - sends a UI command of the pages managing, that is: "open", "next", "prev".
     //  cmd - page command "open", "next" or "prev";
     //  prm - parameter of the command that is whether just the opened page path or its searching mask;
@@ -890,14 +890,14 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	// Prepare internal procedure
 	TFunction funcIO("ses_"+owner()->id()+"_ntf"+i2s(tp));
 	//funcIO.setStor(DB());
-	funcIO.ioIns(new IO("en",_("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
-	funcIO.ioIns(new IO("doNtf",_("Performing the notification"),IO::Boolean,IO::Default), IFA_doNtf);
-	funcIO.ioIns(new IO("doRes",_("Making the resource"),IO::Boolean,IO::Default), IFA_doRes);
-	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
-	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
-	funcIO.ioIns(new IO("lang",_("Language of the notification message"),IO::String,IO::Default), IFA_lang);
-	funcIO.ioIns(new IO("resTp",_("Resource stream type"),IO::String,IO::Return), IFA_resTp);
-	funcIO.ioIns(new IO("prcID",_("Procedure ID"),IO::String,IO::Default), IFA_prcID);
+	funcIO.ioIns(new IO("en",trS("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
+	funcIO.ioIns(new IO("doNtf",trS("Performing the notification"),IO::Boolean,IO::Default), IFA_doNtf);
+	funcIO.ioIns(new IO("doRes",trS("Making the resource"),IO::Boolean,IO::Default), IFA_doRes);
+	funcIO.ioIns(new IO("res",trS("Resource stream"),IO::String,IO::Output), IFA_res);
+	funcIO.ioIns(new IO("mess",trS("Notification message"),IO::String,IO::Default), IFA_mess);
+	funcIO.ioIns(new IO("lang",trS("Language of the notification message"),IO::String,IO::Default), IFA_lang);
+	funcIO.ioIns(new IO("resTp",trS("Resource stream type"),IO::String,IO::Return), IFA_resTp);
+	funcIO.ioIns(new IO("prcID",trS("Procedure ID"),IO::String,IO::Default), IFA_prcID);
 	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
 	catch(TError &er) {
 	    mess_err(owner()->nodePath().c_str(), _("Error function '%s' of the notificator: %s"), funcIO.id().c_str(), er.mess.c_str());
@@ -2140,7 +2140,7 @@ void SessWdg::calc( bool first, bool last, int pos )
 		try { attr = attrAt(mAttrLnkLs[iA]); } catch(TError &err) { continue; }
 		string	cfgVal = attr.at().cfgVal(), cfgValTr = cfgVal;
 		if(attr.at().type() == TFld::String)
-		    cfgValTr = trLU(cfgVal, ownerSess()->reqLang(), ownerSess()->reqUser());
+		    cfgValTr = trD_LU(cfgVal, ownerSess()->reqLang(), ownerSess()->reqUser());
 		if(attr.at().flgSelf()&Attr::CfgConst && !cfgValTr.empty()) attr.at().setS(cfgValTr);
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !cfgValTr.empty() && TSYS::strParse(cfgValTr,0,":") == "val")
 		    attr.at().setS(cfgValTr.substr(4));
@@ -2299,7 +2299,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
     //Special session attributes process
     // Focus attribute process for active active
     if(cfg.id() == "active" && cfg.getB() && !cfg.owner()->attrPresent("focus"))
-	cfg.owner()->attrAdd(new TFld("focus",_("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","",i2s(A_COM_FOCUS).c_str()));
+	cfg.owner()->attrAdd(new TFld("focus",trS("Focus"),TFld::Boolean,TFld::NoFlag,"1","false","","",i2s(A_COM_FOCUS).c_str()));
     //Alarm event for widget process
     else if(cfg.id() == "alarm" && enable() && !prev.isNull()) alarmSet(true);
     //Alarm status process
@@ -2403,7 +2403,7 @@ TVariant SessWdg::objFuncCall( const string &id, vector<TVariant> &prms, const s
 	if(prms.size() > 1 && prms[1].getB())	return sessAttr(prms[0].getS());
 	else if(attrPresent(prms[0].getS())){
 	    TVariant rez = attrAt(prms[0].getS()).at().get();
-	    if(rez.type() == TVariant::String)	return trLU(rez.getS(),ownerSess()->reqLang(),ownerSess()->reqUser());
+	    if(rez.type() == TVariant::String)	return trD_LU(rez.getS(),ownerSess()->reqLang(),ownerSess()->reqUser());
 	    return rez;
 	    //return attrAt(prms[0].getS()).at().get();
 	}

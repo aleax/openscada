@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -185,7 +185,8 @@ class VisItProp : public QDialog
 	QLabel		*obj_id,	//Id
 			*obj_root,	//Root
 			*obj_path,	//Path
-			*obj_st;	//Status
+			*obj_st,	//Status
+			*lab_proc_text_tr; //Label of the widget's procedure program text translation
 //			*obj_used,	//Used
 //			*obj_tmstmp;	//TimeStamp
 	QPushButton	*obj_ico;	//Icon

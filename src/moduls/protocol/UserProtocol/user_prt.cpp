@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,12 +30,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"UserProtocol"
-#define MOD_NAME	_("User protocol")
+#define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.5"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
+#define MOD_VER		"1.5.6"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -78,21 +78,21 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mPrtU = grpAdd("up_");
 
     // User protocol DB structure
-    mUPrtEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
-    mUPrtEl.fldAdd(new TFld("DAQTmpl",_("Representative DAQ template"),TFld::String,TFld::NoFlag,"50"));
-    mUPrtEl.fldAdd(new TFld("WaitReqTm",_("Timeout of a request waiting, milliseconds"),TFld::Integer,TFld::NoFlag,"6","0"));
-    mUPrtEl.fldAdd(new TFld("InPROG",_("Input procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
-    mUPrtEl.fldAdd(new TFld("OutPROG",_("Output procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
-    mUPrtEl.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    mUPrtEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    mUPrtEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mUPrtEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mUPrtEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mUPrtEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
+    mUPrtEl.fldAdd(new TFld("DAQTmpl",trS("Representative DAQ template"),TFld::String,TFld::NoFlag,"50"));
+    mUPrtEl.fldAdd(new TFld("WaitReqTm",trS("Timeout of a request waiting, milliseconds"),TFld::Integer,TFld::NoFlag,"6","0"));
+    mUPrtEl.fldAdd(new TFld("InPROG",trS("Input procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPrtEl.fldAdd(new TFld("OutPROG",trS("Output procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPrtEl.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mUPrtEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //User protocol data IO DB structure
-    mUPrtIOEl.fldAdd(new TFld("UPRT_ID",_("User protocol ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mUPrtIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mUPrtIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
+    mUPrtIOEl.fldAdd(new TFld("UPRT_ID",trS("User protocol ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPrtIOEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPrtIOEl.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"100"));
 }
 
 TProt::~TProt( )
@@ -572,11 +572,11 @@ void UserPrt::setEnable( bool vl )
 	    if(inProg().size()) {
 		TFunction funcIO("uprt_"+id()+"_in");
 		funcIO.setStor(DB());
-		ioRez  = funcIO.ioAdd(new IO("rez",_("Input result"),IO::Boolean,IO::Return));
-		ioReq  = funcIO.ioAdd(new IO("request",_("Input request"),IO::String,IO::Default));
-		ioAnsw = funcIO.ioAdd(new IO("answer",_("Input answer"),IO::String,IO::Output));
-		ioSend = funcIO.ioAdd(new IO("sender",_("Input sender"),IO::String,IO::Default));
-		ioTrIn = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
+		ioRez  = funcIO.ioAdd(new IO("rez",trS("Input result"),IO::Boolean,IO::Return));
+		ioReq  = funcIO.ioAdd(new IO("request",trS("Input request"),IO::String,IO::Default));
+		ioAnsw = funcIO.ioAdd(new IO("answer",trS("Input answer"),IO::String,IO::Output));
+		ioSend = funcIO.ioAdd(new IO("sender",trS("Input sender"),IO::String,IO::Default));
+		ioTrIn = funcIO.ioAdd(new IO("tr",trS("Transport"),IO::Object,IO::Default));
 
 		string workInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
@@ -587,8 +587,8 @@ void UserPrt::setEnable( bool vl )
 	    if(outProg().size()) {
 		TFunction funcIO("uprt_"+id()+"_out");
 		funcIO.setStor(DB());
-		ioIO = funcIO.ioAdd(new IO("io",_("Output IO"),IO::Object,IO::Default));
-		ioTrOut = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
+		ioIO = funcIO.ioAdd(new IO("io",trS("Output IO"),IO::Object,IO::Default));
+		ioTrOut = funcIO.ioAdd(new IO("tr",trS("Transport"),IO::Object,IO::Default));
 
 		mWorkOutProg = SYS->daq().at().at(TSYS::strSepParse(outProgLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(outProgLang(),1,'.'),funcIO,outProg());

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -976,10 +976,10 @@ void Page::postEnable( int flag )
 
     //Add main attributes
     if(flag&TCntrNode::NodeConnect) {
-	attrAdd(new TFld("pgOpen",_("Page: opened"),TFld::Boolean,TFld::NoFlag));
-	attrAdd(new TFld("pgNoOpenProc",_("Page: process not opened"),TFld::Boolean,TFld::NoFlag));
-	attrAdd(new TFld("pgGrp",_("Page: group"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_GRP).c_str()));
-	attrAdd(new TFld("pgOpenSrc",_("Page: source of the opening"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
+	attrAdd(new TFld("pgOpen",trS("Page: opened"),TFld::Boolean,TFld::NoFlag));
+	attrAdd(new TFld("pgNoOpenProc",trS("Page: process not opened"),TFld::Boolean,TFld::NoFlag));
+	attrAdd(new TFld("pgGrp",trS("Page: group"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_GRP).c_str()));
+	attrAdd(new TFld("pgOpenSrc",trS("Page: source of the opening"),TFld::String,TFld::NoFlag,"","","","",i2s(A_PG_OPEN_SRC).c_str()));
     }
 
     //Set owner key for this page

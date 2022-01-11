@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: da_Kontar.cpp
 /***************************************************************************
- *   Copyright (C) 2014,2017,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2014-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,13 +34,13 @@ using namespace AMRDevs;
 //*************************************************
 Kontar::Kontar( ) : TTypeParam("kontar", _("Kontar"))
 {
-    fldAdd(new TFld("ADDR",_("Input transport"),TFld::String,TCfg::NoVal,"30"));
-    fldAdd(new TFld("PASS",_("Master password"),TFld::String,TCfg::NoVal,"30","00 00 00 00 00 00 00 00"));
-    fldAdd(new TFld("M_PLC",_("Master PLC serial number"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","0"));
-    fldAdd(new TFld("CNTR_NET_CFG",_("Controllers network config-file"),TFld::String,TCfg::NoVal,"100"));
-    fldAdd(new TFld("PLC",_("PLC serial number"),TFld::Integer,TCfg::NoVal,"10","0"));
-    fldAdd(new TFld("SET_CLC",_("Set PLC clock on different for more, seconds"),TFld::Integer,TCfg::NoVal,"3","0","0;999"));
-    fldAdd(new TFld("ZONE_CLC",_("PLC clock's zone"),TFld::Integer,TCfg::NoVal,"2","2","-12;12"));
+    fldAdd(new TFld("ADDR",trS("Input transport"),TFld::String,TCfg::NoVal,"30"));
+    fldAdd(new TFld("PASS",trS("Master password"),TFld::String,TCfg::NoVal,"30","00 00 00 00 00 00 00 00"));
+    fldAdd(new TFld("M_PLC",trS("Master PLC serial number"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","0"));
+    fldAdd(new TFld("CNTR_NET_CFG",trS("Controllers network config-file"),TFld::String,TCfg::NoVal,"100"));
+    fldAdd(new TFld("PLC",trS("PLC serial number"),TFld::Integer,TCfg::NoVal,"10","0"));
+    fldAdd(new TFld("SET_CLC",trS("Set PLC clock on different for more, seconds"),TFld::Integer,TCfg::NoVal,"3","0","0;999"));
+    fldAdd(new TFld("ZONE_CLC",trS("PLC clock's zone"),TFld::Integer,TCfg::NoVal,"2","2","-12;12"));
 }
 
 Kontar::~Kontar( )	{ }
