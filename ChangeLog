@@ -1,4 +1,8 @@
 2022-01-11 Roman (stable)
+- FIX:SYS: TFld::descr() and IO::name() translation-evince moved directly to those functions.
+
+
+2022-01-11 Roman (stable)
 - !!!!:SYS,*: Continuing the significant expanding of the MULTILANGUAGE-DYNAMIC mode but for the system messages:
     - Implemented for a function of prestoring system messages translation trS(), where the base message just return
 	with the catalogue information, that is "{base}\000{cat}" and what is translated really in second call

@@ -62,7 +62,7 @@ class IO
 	IO &operator=( const IO &iio );
 
 	const string &id( ) const	{ return mId; }
-	const string &name( ) const	{ return mName; }
+	string name( ) const		{ return _(mName); }
 	const Type &type( ) const	{ return mType; }
 	unsigned flg( ) const		{ return mFlg; }
 	const string &def( ) const	{ return mDef; }
