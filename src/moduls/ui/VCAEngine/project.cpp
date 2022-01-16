@@ -199,14 +199,34 @@ void Project::load_( TConfig *icfg )
 
     //Load styles
     ResAlloc res(mStRes, true);
-    TConfig cStl(&mod->elPrjStl());
-    string svl;
-    vector<string> vlst;
-    for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,TBDS::UseCache); ) {
-	vlst.clear();
-	for(int iS = 0; iS < Project::StlMaximum; iS++)
-	    vlst.push_back(cStl.cfg("V_"+i2s(iS)).getS());
-	mStProp[cStl.cfg("ID").getS()] = vlst;
+    // Try to load the new style table
+    int propLd = 0;
+    TConfig cStls(&mod->elPrjStls());
+    cStls.cfg("VAL").setNoTransl(false);
+    cStls.cfg("VAL").setExtVal(true);
+    for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_stls",nodePath()+tbl()+"_stls",fldCnt++,cStls,TBDS::UseCache); ++propLd) {
+	int IDS = cStls.cfg("IDS").getI();
+	string ID = cStls.cfg("ID").getS();
+	vector<string> &prop = mStProp[ID];
+	while(prop.size() <= IDS) prop.push_back("");
+	prop[IDS] = (ID==STL_PRM_NM) ? cStls.cfg("VAL").getS() : cStls.cfg("VAL").getS(TCfg::ExtValOne);
+    }
+    // Load old style table at missing the new one
+    if(!propLd) {
+	TConfig cStl(&mod->elPrjStl());
+	string svl;
+	vector<string> vlst;
+	for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl,TBDS::UseCache); ) {
+	    vlst.clear();
+	    bool notEmpty = false;
+	    for(int iS = Project::StlMaximum-1; iS >= 0; --iS) {
+		if((svl=cStl.cfg("V_"+i2s(iS)).getS()).empty() && !notEmpty) continue;
+		vlst.push_back(svl);
+		if(!svl.empty()) notEmpty = true;
+	    }
+	    reverse(vlst.begin(), vlst.end());
+	    mStProp[cStl.cfg("ID").getS()] = vlst;
+	}
     }
 }
 
@@ -240,23 +260,43 @@ void Project::save_( )
 
     //Saving the styles
     ResAlloc res(mStRes, false);
-    TConfig cStl(&mod->elPrjStl());
+    TConfig cStl(&mod->elPrjStls());
+    vector<string> stls = mStProp[STL_PRM_NM];
+    for(unsigned iS = 0; iS < stls.size(); iS++) {
+	if(stls[iS].empty()) continue;
+	cStl.cfg("IDS").setI(iS);
+	for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
+	    cStl.cfg("ID").setS(iStPrp->first);
+	    cStl.cfg("VAL").setNoTransl((iStPrp->first!=STL_PRM_NM));	//!!!! Only name translate now
+	    cStl.cfg("VAL").setS(iStPrp->second[iS]);
+	    TBDS::dataSet(fullDB()+"_stls", nodePath()+tbl()+"_stls", cStl);
+	}
+    }
+    // Checking for the removed properties
+    cStl.cfgViewAll(false);
+    for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_stls",nodePath()+tbl()+"_stls",fldCnt++,cStl); )
+	if(cStl.cfg("IDS").getI() >= stls.size() || stls[cStl.cfg("IDS").getI()].empty() ||
+		mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
+	    if(!TBDS::dataDel(fullDB()+"_stls",nodePath()+tbl()+"_stls",cStl,TBDS::UseAllKeys|TBDS::NoException)) break;
+	    fldCnt--;
+	}
+
+    // Old variant
+    /*TConfig cStl(&mod->elPrjStl());
     for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
 	cStl.cfg("ID").setS(iStPrp->first);
 	for(unsigned iS = 0; iS < iStPrp->second.size() && iS < Project::StlMaximum; iS++)
 	    cStl.cfg(TSYS::strMess("V_%d",iS)).setS(iStPrp->second[iS]);
 	TBDS::dataSet(fullDB()+"_stl", nodePath()+tbl()+"_stl", cStl);
     }
-
     // Checking for the removed properties
     res.request(true);
     cStl.cfgViewAll(false);
-    for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_stl",nodePath()+tbl()+"_stl",fldCnt++,cStl); )
 	if(mStProp.find(cStl.cfg("ID").getS()) == mStProp.end()) {
 	    if(!TBDS::dataDel(fullDB()+"_stl",nodePath()+tbl()+"_stl",cStl,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fldCnt--;
-	}
-    }
+	}*/
 
     setDB(DB(), true);
 }
@@ -401,16 +441,16 @@ void Project::stlList( vector<string> &ls )
     ls.clear();
 
     ResAlloc res(mStRes, false);
-    map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
+    map< string, vector<string> >::iterator iStPrp = mStProp.find(STL_PRM_NM);
     if(iStPrp == mStProp.end()) return;
     for(unsigned ist = 0; ist < iStPrp->second.size(); ist++)
-	ls.push_back(TSYS::strSepParse(iStPrp->second[ist],0,';'));
+	ls.push_back(iStPrp->second[ist]);
 }
 
 int Project::stlSize( )
 {
     ResAlloc res(mStRes, false);
-    map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
+    map< string, vector<string> >::iterator iStPrp = mStProp.find(STL_PRM_NM);
     if(iStPrp != mStProp.end()) return iStPrp->second.size();
 
     return 0;
@@ -425,7 +465,7 @@ void Project::stlCurentSet( int sid )
 string Project::stlGet( int sid )
 {
     ResAlloc res(mStRes, false);
-    map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
+    map< string, vector<string> >::iterator iStPrp = mStProp.find(STL_PRM_NM);
     if(iStPrp == mStProp.end() || sid < 0 || sid >= (int)iStPrp->second.size()) return "";
 
     return iStPrp->second[sid];
@@ -434,8 +474,9 @@ string Project::stlGet( int sid )
 void Project::stlSet( int sid, const string &stl )
 {
     ResAlloc res(mStRes, true);
-    map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
-    if(iStPrp == mStProp.end() || sid < 0 || sid >= (int)iStPrp->second.size()) return;
+    map< string, vector<string> >::iterator iStPrp = mStProp.find(STL_PRM_NM);
+    if(iStPrp == mStProp.end() || sid < 0 || sid > StlMaximum) return;
+    while(sid >= (int)iStPrp->second.size()) iStPrp->second.push_back("");
     iStPrp->second[sid] = stl;
     modif();
 }
@@ -445,13 +486,13 @@ void Project::stlPropList( vector<string> &ls )
     ls.clear();
     ResAlloc res(mStRes, false);
     for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-	if(iStPrp->first != "<Styles>")
+	if(iStPrp->first != STL_PRM_NM)
 	    ls.push_back(iStPrp->first);
 }
 
 string Project::stlPropGet( const string &pid, const string &def, int sid )
 {
-    if(pid.empty() || pid == "<Styles>")	return def;
+    if(pid.empty() || pid == STL_PRM_NM)	return def;
 
     ResAlloc res(mStRes, false);
     if(sid < 0) sid = stlCurent();
@@ -464,7 +505,7 @@ string Project::stlPropGet( const string &pid, const string &def, int sid )
 	modif();
 	return def;
     }
-    if(iStPrp != mStProp.end() && sid >= 0 && sid < stlSize()) return iStPrp->second[sid];
+    if(iStPrp != mStProp.end() && sid >= 0 && sid < iStPrp->second.size()) return iStPrp->second[sid];
 
     return def;
 }
@@ -473,9 +514,10 @@ bool Project::stlPropSet( const string &pid, const string &vl, int sid )
 {
     ResAlloc res(mStRes, true);
     if(sid < 0) sid = stlCurent();
-    if(pid.empty() || sid < 0 || sid >= stlSize() || pid == "<Styles>") return false;
+    if(pid.empty() || sid < 0 || sid >= stlSize() || pid == STL_PRM_NM) return false;
     map<string, vector<string> >::iterator iStPrp = mStProp.find(pid);
     if(iStPrp == mStProp.end()) return false;
+    while(sid >= (int)iStPrp->second.size()) iStPrp->second.push_back("");
     iStPrp->second[sid] = vl;
     modif();
 
@@ -776,33 +818,29 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ResAlloc res(mStRes, true);
 
 		// Appending for the style name
-		map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
-		if(iStPrp == mStProp.end()) mStProp["<Styles>"] = vector<string>(1,_("New style"));
+		map< string, vector<string> >::iterator iStPrp = mStProp.find(STL_PRM_NM);
+		if(iStPrp == mStProp.end()) mStProp[STL_PRM_NM] = vector<string>(1,_("New style"));
 		else iStPrp->second.push_back(_("New style"));
 
 		// Appending for the properties
 		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-		    if(iStPrp->first != "<Styles>" && stlSize() > (int)iStPrp->second.size())
+		    if(iStPrp->first != STL_PRM_NM && stlSize() > (int)iStPrp->second.size())
 			iStPrp->second.push_back(iStPrp->second[(mStyleIdW>=0)?mStyleIdW:iStPrp->second.size()-1]);
 
-		mStyleIdW = mStProp["<Styles>"].size()-1;
+		mStyleIdW = mStProp[STL_PRM_NM].size()-1;
 		modif();
 	    }
 	}
     }
     else if(a_path == "/style/stLst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id",i2s(Project::StlDisabled))->setText(_("<Disabled>"));
-	if(stlSize() < Project::StlMaximum)
-	    opt->childAdd("el")->setAttr("id",i2s(Project::StlCreate))->setText(_("<Create a new style>"));
+	opt->childAdd("el")->setAttr("id",i2s(Project::StlCreate))->setText(_("<Create a new style>"));
 	for(int iSt = 0; iSt < stlSize(); iSt++)
-	    opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(stlGet(iSt),0,';'));
+	    opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(trD(stlGet(iSt)));
     }
     else if(a_path == "/style/name") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::strSepParse(stlGet(stlCurent()),0,';'));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    string sprv = stlGet(stlCurent());
-	    stlSet(stlCurent(), opt->text());
-	}
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trD(stlGet(stlCurent())));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	stlSet(stlCurent(), trDSet(stlGet(stlCurent()),opt->text()));
     }
     else if(a_path == "/style/props") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && stlCurent() >= 0 && stlCurent() < stlSize()) {
@@ -811,28 +849,28 @@ void Project::cntrCmdProc( XMLNode *opt )
 
 	    ResAlloc res(mStRes, false);
 	    for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++) {
-		if(iStPrp->first == "<Styles>") continue;
-		if(n_id)	n_id->childAdd("el")->setText(iStPrp->first);
-		if(n_vl)	n_vl->childAdd("el")->setText(iStPrp->second[stlCurent()]);
+		if(iStPrp->first == STL_PRM_NM) continue;
+		if(n_id) n_id->childAdd("el")->setText(iStPrp->first);
+		if(n_vl) n_vl->childAdd("el")->setText(iStPrp->second[stlCurent()]);
 	    }
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    ResAlloc res(mStRes, true);
 	    if(mStProp.find(opt->attr("key_id")) != mStProp.end()) { mStProp.erase(opt->attr("key_id")); modif(); }
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && opt->attr("col") == "vl" && stlCurent() >=0 && stlCurent() < stlSize())
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && opt->attr("col") == "vl" && stlCurent() >= 0 && stlCurent() < stlSize())
 	{
 	    ResAlloc res(mStRes, true);
 	    map< string, vector<string> >::iterator iStPrp = mStProp.find(opt->attr("key_id"));
 	    if(iStPrp != mStProp.end()) { iStPrp->second[stlCurent()] = opt->text(); modif(); }
 	}
     }
-    else if(a_path == "/style/erase" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && stlCurent() >=0 && stlCurent() < stlSize())
+    else if(a_path == "/style/erase" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR) && stlCurent() >= 0 && stlCurent() < stlSize())
     {
 	ResAlloc res(mStRes, true);
 	map< string, vector<string> >::iterator iStPrp;
 	for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
-	    if(iStPrp->second.size() > 1 || iStPrp->first == "<Styles>")
+	    if(iStPrp->second.size() > 1 || iStPrp->first == STL_PRM_NM)
 		iStPrp->second.erase(iStPrp->second.begin()+stlCurent());
 	stlCurentSet(Project::StlDisabled);
     }

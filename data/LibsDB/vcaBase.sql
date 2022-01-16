@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.4
+Version: 2.1.5
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.4
+Версія: 2.1.5
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.4
+Версия: 2.1.5
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -10135,9 +10135,12 @@ hRARw+Drbz7vnb3ZG5xt8OUMnnFo1kYAAPqDo48/+lTMHhtTTATI183QXdXmCjHGWJY6pLXJE3Dp
 47Fj09sVvVXJPF/P1dV1fP5ObQS01vPnLwAA4FEKAAC+w2+eXNVGwFrr+/5fwzp9if+WvUDV7AWq
 Zi9QNXuBqtkLVM1eoGr2AlWzF6iavUDV1F6gNj/13PWY62WFZo5LyPa5M+JwAJBSVrrbneB+OBge
 rzW9GU+cIKAEVKHCOP4NrQkgmJreob8AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+var reqUser_; var toCompleteUpd = false;
+if(this.ownerSess().reqUser() != reqUser_) toCompleteUpd = true, reqUser_ = this.ownerSess().reqUser();
+
 calcCnt++;
 
-if(f_start) {
+if(f_start || toCompleteUpd) {
 	play_en = demoPlayProc.length;
 	if(!play_en)	this.infoW.attrSet("geomH",this.play.attr("geomY")+this.play.attr("geomH")-this.infoW.attr("geomY"));
 	//Checking the signal object''s presenting and creating needed
@@ -10252,7 +10255,7 @@ if(f_start) {
 }
 
 toClearCntrPnl = false;
-if(pgCont_pgOpenSrc != lastView) {
+if(pgCont_pgOpenSrc != lastView || toCompleteUpd) {
 	//Checking for SO selection change
 	curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
 	lastSO = lastView.parsePath(2).slice(3);
@@ -10368,7 +10371,7 @@ if(play_value) {
 if((tVl=defUser.toInt()) && (tVl2=defUser.parse(1,"-")).length) {
 	if((SYS.time()-this.ownerSess().userActTm()) < tVl*60)	userSetVis = "";
 	else if(this.ownerSess().reqUser() != tVl2.parse(0,":"))	userSetVis = tVl2;
-}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1640525375);
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1642271665);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -15945,11 +15948,11 @@ if(toBuild) {
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1','Шаблон проекту візуалізації, який базовано на групах сигналізації.
+Version: 1.3.0','Шаблон проекту візуалізації, який базовано на групах сигналізації.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.1','Шаблон проекта визуализации основанного на группах сигнализации.
+Версія: 1.3.0','Шаблон проекта визуализации основанного на группах сигнализации.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.1','prj_tmplSO','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
+Версия: 1.3.0','prj_tmplSO','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
 HXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBUaGUgR0lNUO9kJW4AABcpSURBVHicxXtbjCTXed73
 /+fUrav6Ot093bNLcsndnRUjUdbFlCkFDhEEhiMoUOxADwnyFgQwlABEXiw4fslD4AfnUYjNXBHH
 eggCJ5FtJVbiOIiCQCZFipQtMRa5612Su8vpue1c+1KXc86fh+ru6Zmd2Qt3aR2gpqeqq/rU9/2X
@@ -16059,7 +16062,7 @@ TkSuQmCC','root','op',432,100,0,1);
 INSERT INTO VCAPrjs VALUES('archBrowser','Archives browser','Огляд архівів','Обзор архивов','Project of value archives browsing.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0','','','prj_archBrowser','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+Version: 1.4.0','','','prj_archBrowser','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAABKtSURB
 VHic5ZtZbFzXecd/59x7Z+FwuImLSGuxJVkSJWrxIkWb18iOjSRN0hSx46YpkJcWaFEUaZ8KBC3Q
 9rV5aQqkAQK0TdOkblwnRpvYjpvYshxrl0yJEiNqp0RS3MnZ73L6cO6duXNnhqQcI3nIAS5m5q7n
@@ -16146,48 +16149,6 @@ Fw8+1E//oc+hmpq5fPI/GHr3l0zfGMe1XXIeizdmix8M3l48dmUydy5fcu+gZe34QINRQkd3Hh3t
 cwOdt8HTlxVLe6Xj10VAMEz0/xBagdV9bYldA33Nz9zXFt9weTJ/5tJY5uhUpjSCBhd0DR9K2isd
 v24CgiHRJLT7SxMaGFQas7Br37O0Vzp+UwSUL4VWRBflVvKjkfZKR10CftvG/wPpx5VpdEvbYgAA
 AABJRU5ErkJggg==','root','op',432,100,0,1);
-CREATE TABLE IF NOT EXISTS 'prj_tmplSO_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO prj_tmplSO_stl VALUES('<Styles>','Default','Light','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('backColor','gray','ivory','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('backColorFrame','#5A5A5A','#E1E1D4','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('backColorButton','#555555','#D8D8CB','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('backColorButtonSel','#777799','#AEAEE0','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorAlarm','#ff0000','#ff0000','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGood','#00FF00','#008600','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorWarning','#ffff00','#B4B400','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColor','white','black','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('backColorVal','black','white','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph1','#ae77c3-150','#ae77c3-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph2','orange-150','orange-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph3','blue-150','blue-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph4','lightgreen-150','#199696-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph5','cyan-150','#3264C8-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph6','tomato-150','tomato-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph7','magenta-150','magenta-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph8','yellow-150','#B6B600-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph10','darkcyan-150','darkcyan-150','','','','','','','','');
-INSERT INTO prj_tmplSO_stl VALUES('labColorGrph9','lightyellow-150','#69695C-150','','','','','','','','');
-CREATE TABLE IF NOT EXISTS 'prj_archBrowser_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO prj_archBrowser_stl VALUES('backColor','gray','ivory','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('backColorButton','#555555','#D8D8CB','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('backColorButtonSel','#777799','#AEAEE0','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorAlarm','#ff0000','#ff0000','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGood','#00FF00','#008600','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorWarning','#ffff00','#AEAEE0','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColor','white','black','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('backColorVal','black','white','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('backColorFrame','#5A5A5A','#E1E1D4','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('<Styles>','Default','Light','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph1','#ae77c3-200','#ae77c3-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph10','darkcyan-200','darkcyan-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph2','orange-200','orange-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph3','blue-200','blue-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph4','lightgreen-200','#199696-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph5','cyan-200','#3264C8-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph6','tomato-200','tomato-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph7','magenta-200','magenta-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph8','yellow-200','#B6B600-200','','','','','','','','');
-INSERT INTO prj_archBrowser_stl VALUES('labColorGrph9','lightyellow-200','#69695C-200','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_ses' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','addr','arh:CPULoad_load (+)');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','name','val:CPULoad');
@@ -17671,7 +17632,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.4.1
+Version: 2.5.0
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17699,8 +17660,8 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.4.1
-Ліцензія: GPLv2<!>','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
+Версія: 2.5.0
+Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
 - область кнопок-индикаторов объектов сигнализации (вверху);
@@ -17729,8 +17690,8 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.4.1
-Лицензия: GPLv2<!>','','','','');
+Версия: 2.5.0
+Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','backColor','gray',96,'','','','','','','','','','');
@@ -24692,10 +24653,10 @@ INSERT INTO wlb_doc_uio VALUES('docRepYear','showOrigCntr','Show original counte
 INSERT INTO wlb_doc_uio VALUES('docRepYear','depth','Depth to select, years',131073,'10|',9,'','','doc','Глибина для обрання, років','','','Глубина для выбора, лет','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docAlarmsRep','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
-',0,'','','doc','','','','','','','','','');
+',0,'','','doc','Кеш джерел','','','Кеш источников','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docUsersSet','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
-',0,'','','doc','','','','','','','','','');
+',0,'','','doc','Кеш джерел','','','Кеш источников','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_mnEls_uio VALUES('Level','var','Value',131076,'<EVAL>|',10,'Parameter|var','','','Значення','','','Значение','','','','','Вредност');
 INSERT INTO wlb_mnEls_uio VALUES('Level','min','Minimum',131076,'0|',10,'Parameter|min','','','Мінімум','','','Минимум','','','','','Минимум');
@@ -24747,8 +24708,8 @@ INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','ntf','Notification "{st}:{modes}:{S
 INSERT INTO wlb_mnEls_uio VALUES('El_Alarm','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','','Статуси');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','','Опис');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','DESCR','Description',131077,'',10,'Parameter|DESCR','','','Опис','','','Описание','','','','','Опис');
-INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','err','Parameter: error',196613,'',10,'Parameter|err','','','','','','','','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('Compressor','err','Parameter: error',196613,'',10,'Parameter|err','','','','','','','','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('Compressor','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_prescr_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '0' ,"CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','owner','','root:UI','','',32,'','','','','');
 INSERT INTO wlb_prescr_io VALUES('prescrEdit','name','','Prescription — edit','Рецепт — редагування','Рецепт — редактирование',32,'','','','','');
@@ -28437,14 +28398,14 @@ INSERT INTO wlb_Main_uio VALUES('storeHouse','class','Class: initial',131077,'',
 INSERT INTO wlb_Main_uio VALUES('storeHouse','classFix','Class: fixed',131077,'',9,'Class','','','Клас: фіксований','','Клас','Класс: фиксированный','','Класс','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','classEditable','Class: editable',131072,'0',9,'Class','','','Клас: редагований','','Клас','Класс: редактированный','','Класс','','','','');
 INSERT INTO wlb_Main_uio VALUES('storeHouse','dataEditable','Data: editable',131072,'0',9,'','','','Дані: редаговане','','','Данные: редактированный','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('RootPgSo','defUser','Default to return, {minutes)-{user}',131077,'',9,'','','','Типово для повернення, {хвилини)-{користувач}','','','Типичное для возврата, {минут)-{пользователь}','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('RootPgSo','defUser','Default to return, {minutes)-{user}',131077,'',9,'','','','Типово для повернення, {хвилини)-{користувач}','','','Типовое для возврата, {минут)-{пользователь}','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('RootPgSo','userSetVis','User setting',131077,'',8,'','','','Встановлення користувача','','','Установка пользователя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','types','Types list at the level from 0, separated by '';''',131333,'Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency',8,'','','','Перелік типів за рівнем від 0, поділені '';''','Налагодж.;Інформ.;Зауваж.;Попередж.;Помилка;Критично;Тривога;Аварія','','Перечень типов по уровню от 0, разделены '';''','Отладка;Информ.;Отметка;Предупр.;Ошибка;Критически;Тревога;Авария','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','types','Types list at the level from 0, separated by '';''',131333,'Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency',8,'','','','Перелік типів за рівнем від 0, поділені '';''','Налагодж.;Інформ.;Зауваж.;Попередж.;Помилка;Критично;Тривога;Аварія','','Перечень типов по уровню от 0, разделены '';''','Отладка;Информ.;Отметка;Предупр.;Ошибка;Критически;Тревога;Авария','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','messCat','Message category',131077,'',8,'','','','','','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElCadr','prmErr','Parameter: error',196613,'',10,'<page>|err','','','','','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('TextLab','err','Parameter: error',196613,'',10,'Parameter|err','','','','','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('ImgLab','err','Parameter: error',196613,'',10,'Parameter|err','','','','','','','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','messCat','Message category',131077,'',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElCadr','prmErr','Parameter: error',196613,'',10,'<page>|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('TextLab','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('ImgLab','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_io VALUES('docRepDay','name','Day report of the hour-averaged values',32,'','','','Добовий звіт середніх за годину значень','','Суточный отчёт среднечасовых значений','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','geomZ','1',32,'','','doc','','','','','','','');
@@ -29353,4 +29314,86 @@ INSERT INTO wlb_doc_io VALUES('docRepYear','perm','432',32,'','','set_item','','
 INSERT INTO wlb_doc_io VALUES('docRepYear','perm','432',32,'','','set_month','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:ITW',32,'','','set_val','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','perm','432',32,'','','set_val','','','','','','','');
+CREATE TABLE IF NOT EXISTS 'prj_archBrowser_stls' ("IDS" INTEGER DEFAULT '0' ,"ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' ,"uk#VAL" TEXT DEFAULT '' ,"ru#VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDS","ID"));
+INSERT INTO prj_archBrowser_stls VALUES(0,'<Styles>','Default','Типове','Типовое');
+INSERT INTO prj_archBrowser_stls VALUES(0,'backColor','gray','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'backColorButton','#555555','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'backColorButtonSel','#777799','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'backColorFrame','#5A5A5A','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'backColorVal','black','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColor','white','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorAlarm','#ff0000','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGood','#00FF00','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph1','#ae77c3-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph10','darkcyan-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph2','orange-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph3','blue-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph4','lightgreen-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph5','cyan-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph6','tomato-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph7','magenta-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph8','yellow-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorGrph9','lightyellow-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(0,'labColorWarning','#ffff00','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'<Styles>','Light','Світле','Светлое');
+INSERT INTO prj_archBrowser_stls VALUES(1,'backColor','ivory','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'backColorButton','#D8D8CB','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'backColorButtonSel','#AEAEE0','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'backColorFrame','#E1E1D4','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'backColorVal','white','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColor','black','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorAlarm','#ff0000','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGood','#008600','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph1','#ae77c3-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph10','darkcyan-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph2','orange-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph3','blue-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph4','#199696-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph5','#3264C8-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph6','tomato-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph7','magenta-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph8','#B6B600-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorGrph9','#69695C-200','','');
+INSERT INTO prj_archBrowser_stls VALUES(1,'labColorWarning','#AEAEE0','','');
+CREATE TABLE IF NOT EXISTS 'prj_tmplSO_stls' ("IDS" INTEGER DEFAULT '0' ,"ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' ,"uk#VAL" TEXT DEFAULT '' ,"ru#VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDS","ID"));
+INSERT INTO prj_tmplSO_stls VALUES(0,'<Styles>','Default','Типове','Типовое');
+INSERT INTO prj_tmplSO_stls VALUES(0,'backColor','gray','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'backColorButton','#555555','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'backColorButtonSel','#777799','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'backColorFrame','#5A5A5A','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'backColorVal','black','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColor','white','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorAlarm','#ff0000','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGood','#00FF00','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph1','#b000b0','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph10','darkcyan-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph2','orange-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph3','blue-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph4','lightgreen-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph5','cyan-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph6','tomato-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph7','magenta-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph8','yellow-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorGrph9','lightyellow-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(0,'labColorWarning','#ffff00','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'<Styles>','Light','Світле','Светлое');
+INSERT INTO prj_tmplSO_stls VALUES(1,'backColor','ivory','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'backColorButton','#D8D8CB','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'backColorButtonSel','#AEAEE0','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'backColorFrame','#E1E1D4','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'backColorVal','white','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColor','black','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorAlarm','#ff0000','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGood','#008600','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph1','#ae77c3-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph10','darkcyan-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph2','orange-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph3','blue-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph4','#199696-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph5','#3264C8-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph6','tomato-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph7','magenta-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph8','#B6B600-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph9','#69695C-150','','');
+INSERT INTO prj_tmplSO_stls VALUES(1,'labColorWarning','#B4B400','','');
 COMMIT;

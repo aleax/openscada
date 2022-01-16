@@ -226,7 +226,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
     //Create timers
     // End run timer
-    endRunTimer   = new QTimer(this);
+    endRunTimer = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(1e3*prmWait_DL);
@@ -351,7 +351,7 @@ void VisRun::setWinMenu( bool act )
 
 string VisRun::user( )		{ return mWUser->user(); }
 
-bool VisRun::userSel( const string &hint )	{ return mWUser->userSel(hint); }
+bool VisRun::userSel( const string &hint ) { return mWUser->userSel(hint); }
 
 string VisRun::password( )	{ return mWUser->pass(); }
 
@@ -359,7 +359,7 @@ string VisRun::VCAStation( )	{ return mWUser->VCAStation(); }
 
 int VisRun::style( )		{ return mStlBar->style(); }
 
-void VisRun::setStyle( int istl )		{ mStlBar->setStyle(istl); }
+void VisRun::setStyle( int istl ) { mStlBar->setStyle(istl); }
 
 void VisRun::initHost( )
 {
@@ -1166,10 +1166,13 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     else setWinMenu(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     int oldConId = mConId;
     mConId = s2i(req.attr("conId"));
-    req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
-    cntrIfCmd(req);
 
-    //Update pages after an user change
+    req.clear()->setName("CntrReqs")->setAttr("path","");
+    req.childAdd("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
+    req.childAdd("get")->setAttr("path","/ses_"+workSess()+"/%2fobj%2fcfg%2fstyle");
+    if(!cntrIfCmd(req)) setStyle(s2i(req.childGet(1)->text()));
+
+    //Update pages after the user change
     pgCacheClear();
     bool oldMenuVis = winMenu();
     QApplication::processEvents();
@@ -1473,6 +1476,8 @@ string VisRun::lang( )
 
 void VisRun::messUpd( )
 {
+    qApp->setProperty("lang", lang().c_str());	//For the Qt internal messages translation
+
     //setWindowTitle(_("Vision runtime"));
 
     //Close

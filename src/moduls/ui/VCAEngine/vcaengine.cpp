@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.7.5"
+#define MOD_VER		"7.8.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -185,10 +185,15 @@ void Engine::postEnable( int flag )
     prj_ses_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
     prj_ses_el.fldAdd(new TFld("IO_VAL",trS("Attribute value"),TFld::String,TFld::NoFlag,"100000"));
 
+    //Make styles' IO DB structure: PrjStls(__IDS__, __ID__, VAL)
+    prjStls_el.fldAdd(new TFld("IDS","",TFld::Integer,TCfg::Key,"2"));
+    prjStls_el.fldAdd(new TFld("ID","",TFld::String,TCfg::Key,"30"));
+    prjStls_el.fldAdd(new TFld("VAL","",TFld::String,TFld::TransltText,"1000000"));
+
     //Make styles' IO DB structure: PrjStl(__ID__, V_0, ... V_{Project::StlMaximum})
-    prjStl_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
+    prjStl_el.fldAdd(new TFld("ID","",TFld::String,TCfg::Key,"30"));
     for(unsigned iStl = 0; iStl < Project::StlMaximum; ++iStl)
-	prjStl_el.fldAdd(new TFld(("V_"+i2s(iStl)).c_str(),TSYS::strMess(_("Value %d"),iStl).c_str(),TFld::String,TFld::NoFlag,"100"));
+	prjStl_el.fldAdd(new TFld(("V_"+i2s(iStl)).c_str(),"",TFld::String,TFld::NoFlag,"100"));
 
     //Init original widgets library
     wlbAdd("originals", _("Original widgets"), "");

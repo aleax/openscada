@@ -608,7 +608,7 @@ string Session::stlPropGet( const string &pid, const string &def )
 {
     MtxAlloc res(dataResSes(), true);
 
-    if(stlCurent() < 0 || pid.empty() || pid == "<Styles>") return def;
+    if(stlCurent() < 0 || pid.empty() || pid == STL_PRM_NM) return def;
 
     map<string,string>::iterator iStPrp = mStProp.find(pid);
     if(iStPrp != mStProp.end()) return iStPrp->second;
@@ -619,7 +619,7 @@ string Session::stlPropGet( const string &pid, const string &def )
 bool Session::stlPropSet( const string &pid, const string &vl )
 {
     MtxAlloc res(dataResSes(), true);
-    if(stlCurent() < 0 || pid.empty() || pid == "<Styles>") return false;
+    if(stlCurent() < 0 || pid.empty() || pid == STL_PRM_NM) return false;
     map<string,string>::iterator iStPrp = mStProp.find(pid);
     if(iStPrp == mStProp.end()) return false;
     iStPrp->second = vl;
@@ -830,7 +830,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",i2s(Project::StlDisabled))->setText(_("<Disabled>"));
 	if(enable())
 	    for(int iSt = 0; iSt < parent().at().stlSize(); iSt++)
-		opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(parent().at().stlGet(iSt),0,';'));
+		opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(trD(parent().at().stlGet(iSt)));
     }
     else if(a_path == "/obj/cfg/openPg" && ctrChkNode(opt)) {
 	vector<string> lst = openList();

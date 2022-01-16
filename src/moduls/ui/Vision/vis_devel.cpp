@@ -576,6 +576,8 @@ VisDevelop::~VisDevelop( )
 
 void VisDevelop::messUpd( )
 {
+    qApp->setProperty("lang", lang().c_str());	//For the Qt internal messages translation
+
     setWindowTitle(TSYS::strMess(_("%s %s-developing: %s"),
 	PACKAGE_NAME,mod->modId().c_str(),(trD_U(SYS->name(),
 	user())+(VCAStation().size()&&VCAStation()!="."?" > "+VCAStation():"")).c_str()).c_str());

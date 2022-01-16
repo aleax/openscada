@@ -97,6 +97,7 @@ class Engine : public TUI
 	TElem &elProject( )	{ return prj_el; }
 	TElem &elPage( )	{ return page_el; }
 	TElem &elPrjSes( )	{ return prj_ses_el; }
+	TElem &elPrjStls( )	{ return prjStls_el; }
 	TElem &elPrjStl( )	{ return prjStl_el; }
 
 	void perSYSCall( unsigned int cnt );
@@ -124,7 +125,7 @@ class Engine : public TUI
 		prj_el,		//The generic table structure of project
 		page_el,	//The table structure of project's pages
 		prj_ses_el,	//The table structure of session's IO of project
-		prjStl_el;	//The table structure of styles of project
+		prjStls_el, prjStl_el;	//The table structure of styles of project, new and old
 
 	ResRW	mSesRes;	//Sessions resource
 

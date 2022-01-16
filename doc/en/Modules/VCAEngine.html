@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Modules/VCAEngine&amp;oldid=68856&amp;diff=69570" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.7 </td>
+<td> 7.8 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -832,7 +832,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> <b>r</b> — the right to review the widget;</li>
 <li> <b>w</b> — the right to control over the widget.</li></ul>
-<p>In the development mode a simple scheme of accessing "root.UI:RWRWR_" is used, which means — all users can open and view the libraries, their components and projects, and all users of the group "UI" (user interfaces) can edit.
+<p>In the development mode a simple scheme of accessing "root:UI|RWRWR_" is used, which means — all users can open and view the libraries, their components and projects, and all users of the group "UI" (user interfaces) can edit.
 </p><p>In the runtime mode the rights work, described in the interface components, which include the ability to inherit the owner and rights from the top to the bottom. Wherein, by default, the inheritance enabled for each widget, then they get the owner and the rights of the project. At the same time, the direct setting of the rights of the complex widget will propagate them to all components of this widget.
 </p><p><br />
 </p>
@@ -2835,7 +2835,8 @@ Where:
 <li> "<b>{DB_TBL}_uio</b>" — table of user properties of widgets and nested widgets of the library (structure "LibWidgetUserIO") or user properties of project pages (structure "ProjPageUserIO");</li>
 <li> "<b>{DB_TBL}_incl</b>" — table of widgets, included in widgets-containers, of the library (structure "LibWidgetIncl") or the project (structure "ProjPageWIncl");</li>
 <li> "<b>{DB_TBL}_mime</b>" — table of library resources and its widgets (structure "LibWidgetMime"), or the project and its pages (structure "ProjMime");</li>
-<li> "<b>{DB_TBL}_stl</b>" — table of values of styled parameters of the project (structure "PrjStlIO");</li>
+<li> "<b>{DB_TBL}_stls</b>" — table of values of styled parameters of the project (structure "PrjStlsIO");</li>
+<li> "<b>{DB_TBL}_stl</b>" — old-deprecated table of values of styled parameters of the project (structure "PrjStlIO");</li>
 <li> "<b>{DB_TBL}_ses</b>" — table of data for the project execution mode, that is, sessions (the structure of "PrjSesIO").</li></ul>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> <b>{DB_TBL}</b> is currently formed in the way "<b>wlb_{ID}</b>" for libraries and "<b>prj_{ID}</b>" for the projects, and the separate field <i>DB_TBL</i> of the tables "Libs", "Projs" is deprecated and will be removed in the OpenSCADA 1.0 release!
 </p><p>Projections (structures) of basic tables are as follows:
@@ -2907,7 +2908,11 @@ Where:
 <li> <b>ProjPageUserIO(<u>IDW</u>, <u>ID</u>, <u>IDC</u>, NAME, IO_TP, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)</b> — user attributes of the pages. The structure actually corresponds to the table "LibWidgetUserIO".</li>
 <li> <b>ProjPageWIncl(<u>IDW</u>, <u>ID</u>, PARENT, ATTRS)</b> — widgets, included on the page. The structure actually corresponds to the table "LibWidgetIncl".</li>
 <li> <b>ProjMime(<u>ID</u>, MIME, DATA)</b> — audio, video, media and other resources of the project pages. The structure actually corresponds to the table "LibWidgetMime".</li>
-<li> <b>PrjStl(<u>ID</u>, V_0, V_1, V_2, V_3, V_4, V_5, V_6, V_7, V_8, V_9)</b> — value of the style's field <i>ID</i> of the project.</li></ul>
+<li> <b>PrjStls(<u>SID</u>, <u>ID</u>, VAL)</b> — the value <i>VAL</i> of the field <i>ID</i> of the style <i>IDS</i> of the project.</li></ul>
+<dl><dd><dl><dd><i>IDS</i> — identifier of the style;</dd>
+<dd><i>ID</i> — identifier of the style's field;</dd>
+<dd><i>VAL</i> — value of the style field.</dd></dl></dd></dl>
+<ul><li> <b>PrjStl(<u>ID</u>, V_0, V_1, V_2, V_3, V_4, V_5, V_6, V_7, V_8, V_9)</b> — value of the style's field <i>ID</i> of the project.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — identifier of the style's field;</dd>
 <dd><i>V_{N}</i> — value of the style's field for the style <i>N</i>.</dd></dl></dd></dl>
 <ul><li> <b>ProjSess(<u>IDW</u>, <u>ID</u>, IO_VAL)</b> — project table <i>IDW</i> for data storage of the sessions, performing the project.</li></ul>

@@ -3847,27 +3847,6 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_prescrEdit','geo
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_prescrRun','geomYsc','0.96',32,'','','','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','defUser','',41,'','5-user','','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so','en','',41,'','1','alarms','','','','','','');
-CREATE TABLE IF NOT EXISTS 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO prj_AGLKS_stl VALUES('<Styles>','Default','Light','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('backColor','gray','ivory','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('backColorFrame','#5A5A5A','#E1E1D4','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('backColorButton','#555555','#D8D8CB','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('backColorButtonSel','#777799','#AEAEE0','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorAlarm','#ff0000','#FF0000','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGood','#00FF00','#008600','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorWarning','#ffff00','#B4B400','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColor','white','black','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('backColorVal','black','white','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph1','#ae77c3-200','#ae77c3-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph2','orange-200','orange-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph3','blue-200','blue-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph4','lightgreen-200','#199696-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph5','cyan-200','#3264C8-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph6','tomato-200','tomato-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph7','magenta-200','magenta-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph8','yellow-200','#B6B600-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph10','darkcyan-200','darkcyan-200','','','','','','','','');
-INSERT INTO prj_AGLKS_stl VALUES('labColorGrph9','lightyellow-200','#69695C-200','','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','El_Pipe_simple_gr1','/wlb_mnEls/wdg_El_Pipe_simple_gr','geomX;geomY;geomXsc;geomYsc;geomZ;',2);
 INSERT INTO wlb_AGLKS_incl VALUES('KCH_MN1','El_StrelaVB_gr1','/wlb_mnEls/wdg_El_StrelaVB_gr','geomX;geomY;geomXsc;geomYsc;geomZ;fillColor;',2);
@@ -6451,11 +6430,11 @@ CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT 
 INSERT INTO VCAPrjs VALUES('AGLKS','AGLKS','АГЛКС','АГЛКС','The project of visualisation AGLKS.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.3','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
+Version: 2.2.0','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.2','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
+Версія: 2.2.0','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.1.2','prj_AGLKS','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
+Версия: 2.2.0','prj_AGLKS','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
 HXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBUaGUgR0lNUO9kJW4AABEsSURBVHic7Vp7cFzVef+d
 c+/duw/tQ6u1bEn2rh8YSwbHYIuHecQmgkBVCG1pnKYUA8Mr00JppqUkHdq0mUzaNPxFOulMO4Fm
 ilsIhRYbsBvigmXAtWWZyLIl6+WHXqtdvXb12L177z3n9I9777KSJXltWTiZ+pvZ0eicc8893+/8
@@ -6647,4 +6626,45 @@ INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','runWin','','Run window',131
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','keepAspectRatio','','Keep aspect ratio on scale',131072,'1',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','stBarNoShow','','Not show status bar',131072,'0',128,'','');
 INSERT INTO prj_AGLKS_uio VALUES('/prj_AGLKS/pg_so','winPosCntrSave','','Windows position control and save',131072,'1',128,'','');
+CREATE TABLE IF NOT EXISTS 'prj_AGLKS_stls' ("IDS" INTEGER DEFAULT '0' ,"ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' ,"uk#VAL" TEXT DEFAULT '' ,"ru#VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDS","ID"));
+INSERT INTO prj_AGLKS_stls VALUES(0,'<Styles>','Default','Типове','Типовое');
+INSERT INTO prj_AGLKS_stls VALUES(0,'backColor','gray','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'backColorButton','#555555','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'backColorButtonSel','#777799','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'backColorFrame','#5A5A5A','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'backColorVal','black','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColor','white','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorAlarm','#ff0000','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGood','#00FF00','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph1','#b000b0','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph10','darkcyan-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph2','orange-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph3','blue-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph4','lightgreen-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph5','cyan-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph6','tomato-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph7','magenta-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph8','yellow-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph9','lightyellow-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorWarning','#ffff00','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'<Styles>','Light','Світле','Светлое');
+INSERT INTO prj_AGLKS_stls VALUES(1,'backColor','ivory','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'backColorButton','#D8D8CB','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'backColorButtonSel','#AEAEE0','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'backColorFrame','#E1E1D4','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'backColorVal','white','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColor','black','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorAlarm','#FF0000','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGood','#008600','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph1','#ae77c3-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph10','darkcyan-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph2','orange-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph3','blue-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph4','#199696-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph5','#3264C8-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph6','tomato-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph7','magenta-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph8','#B6B600-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorGrph9','#69695C-200','','');
+INSERT INTO prj_AGLKS_stls VALUES(1,'labColorWarning','#B4B400','','');
 COMMIT;

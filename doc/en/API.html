@@ -2033,7 +2033,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>IO( const IO &amp;src );</i> — Copying constructor.</li>
 <li> <i>IO &amp;operator=( const IO &amp;iio );</i> — Copying of the function parameters.</li>
 <li> <i>const string &amp;id( ) const;</i> — ID of the function's parameter.</li>
-<li> <i>const string &amp;name( ) const;</i> — The localized name of the function's parameter.</li>
+<li> <i>string name( ) const;</i> — The localized name of the function's parameter.</li>
 <li> <i>const Type &amp;type( ) const;</i> — The type of the function's parameter.</li>
 <li> <i>unsigned flg( ) const;</i> — The flags of the function's parameter.</li>
 <li> <i>const string &amp;def( ) const;</i> — Default value.</li>
@@ -2277,7 +2277,7 @@ Cell's type (enum – TFld::Type):
 <li> <i>TFld( const char *name, const string &amp;descr, Type type, unsigned char flg, const char *valLen = "", const char *valDef = "", const char *vals = "", const char *nSel = "", const char *res = "" );</i> —  Initialization with the specified configuration.</li>
 <li> <i>TFld &amp;operator=( const TFld &amp;fld );</i> — Copy of the cell from <i>fld</i>.</li>
 <li> <i>const string &amp;name( ) const;</i> — Cell's name.</li>
-<li> <i>const string &amp;descr( ) const;</i> — Cell's description.</li>
+<li> <i>string descr( ) const;</i> — Cell's description.</li>
 <li> <i>string lenS( ) const;</i> — Combined string variant of the length field in the form "{len}.{dec}".</li>
 <li> <i>int len( ) const;</i> — Size of the cell's value (symbols in symbolic representation).</li>
 <li> <i>int dec( ) const;</i> — Size of the fractional part of a real (symbols in symbolic representation).</li>

@@ -57,7 +57,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.11.15"
+#define MOD_VER		"5.12.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1438,7 +1438,7 @@ QString I18NTranslator::translate( const char *context, const char *sourceText, 
 #endif
 {
     if(!sourceText) return "";
-    QString trRes = _(sourceText);
+    QString trRes = mod->I18N(sourceText, qApp->property("lang").toString().toStdString().c_str()).c_str();
 
     if(mess_lev() == TMess::Debug && trRes == sourceText)
 	mess_debug(mod->nodePath().c_str(),_("Untranslated Qt message: '%s'"),sourceText);

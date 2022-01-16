@@ -735,8 +735,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    setFocus(this.addr, true, this.place.focusElem);
 
 	this.place.className = "Primitive " + this.attrs['root'];
-	if(!this.place.getAttribute("id"))
-	    this.place.setAttribute("id", this.addr.slice(this.addr.lastIndexOf("/")+1));	// this.addr.replace("/"+sessId,"").replace(/\//g, "_"));
+	if(!this.place.getAttribute('id'))
+	    this.place.setAttribute('id', this.addr.slice(this.addr.lastIndexOf("/")+1));	// this.addr.replace("/"+sessId,"").replace(/\//g, "_"));
 
 	var isPrim = true;
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
@@ -1588,7 +1588,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.cursor = elWr ? 'pointer' : '';
 			formObj.disabled = !elWr;
 			formObj.wdgLnk = this;
-			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
 			formObj.style.padding = "0";
 			this.place.appendChild(formObj);
 			this.place.btDown = function( ) {

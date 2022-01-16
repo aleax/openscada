@@ -26,6 +26,8 @@
 
 #include "widget.h"
 
+#define STL_PRM_NM	"<Styles>"
+
 namespace VCA
 {
 

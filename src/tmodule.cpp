@@ -136,12 +136,12 @@ string TModule::modInfo( const string &name )
     string info;
 
     if(name == lInfo[0])	info = mModId;
-    else if(name == lInfo[1])	info = _(mModName);
+    else if(name == lInfo[1])	info = trS(mModName);
     else if(name == lInfo[2])	info = mModType;
     else if(name == lInfo[3])	info = mModSource;
     else if(name == lInfo[4])	info = mModVers;
-    else if(name == lInfo[5])	info = _(mModAuthor);
-    else if(name == lInfo[6])	info = _(mModDescr);
+    else if(name == lInfo[5])	info = trS(mModAuthor);
+    else if(name == lInfo[6])	info = trS(mModDescr);
     else if(name == lInfo[7])	info = mModLicense;
 
     return info;

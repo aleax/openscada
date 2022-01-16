@@ -488,8 +488,9 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 
 		    // Translation
 		    string sval = cf.getS(), toLang = Mess->lang2Code(), tVl;
-		    bool isTransl = cf.fld().flg()&TFld::TransltText;
+		    bool isTransl = cf.fld().flg()&TFld::TransltText, isDynSet = false;
 		    if(Mess->translDyn() && (tVl=TSYS::strParse(sval,1,string(1,0))).size()) {
+			isDynSet = true;
 			toLang = tVl;
 			sval = TSYS::strParse(sval, 2, string(1,0));
 			isTransl = (isTransl && toLang != Mess->lang2CodeBase());
@@ -498,8 +499,16 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 					(isPrm && SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+toLang)) ||
 					(!isPrm && (wel->attr(vnm+"_"+toLang).size() || wel->childGet(vnm+"_"+toLang,0,true)))));
 
+		    // Getting the previous value for some translation cases
+		    if(isTransl) {
+			tVl = "";
+			if(isPrm && (fnd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)))) tVl = fnd->text(true);
+			else if(!isPrm && (tVl=wel->attr(vnm)).size()) ;
+			else if(!isPrm && (fnd=wel->childGet(vnm,0,true))) tVl = fnd->text(true);
+		    }
+
 		    // Setting for default or not translated
-		    if(isCreate || !isTransl || cf.noTransl()) {
+		    if(isCreate || !isTransl || cf.noTransl() || (isTransl && tVl.empty())) {
 			if(localCfgCtx && cf.isKey() && cf.extVal())
 			    wel->setAttr(vnm+"_ext", cf.getS(TCfg::ExtValTwo));
 
@@ -525,7 +534,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			}
 		    }
 		    // ... for translated
-		    if(isTransl && !cf.noTransl() && (!isPrm || vnm == "val")) {
+		    if(isTransl && !cf.noTransl() && (!isPrm || vnm == "val") && (!Mess->translDyn() || isDynSet)) {
 			vnm = cf_el[iEl]+"_"+toLang;
 			if(!isPrm && sval.size() < NSTR_BUF_LEN) {
 			    wel->setAttr(vnm, sval);
@@ -1639,8 +1648,9 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		string svalRAW = u_cfg.getS(), toLang = Mess->lang2Code();
 
 		// Translation
-		bool isTransl = u_cfg.fld().flg()&TFld::TransltText;
+		bool isTransl = u_cfg.fld().flg()&TFld::TransltText, isDynSet = false;
 		if(Mess->translDyn() && (tVl=TSYS::strParse(svalRAW,1,string(1,0))).size()) {
+		    isDynSet = true;
 		    toLang = tVl; tVl = svalRAW;
 		    u_cfg.setS((svalRAW=TSYS::strParse(svalRAW,2,string(1,0)))); sval = getSQLVal(u_cfg);
 		    u_cfg.setS(tVl);
@@ -1675,7 +1685,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 			else if(isTransl && tbl[0][iFld] == cf_el[iEl])
 			    isTrAsBase  = (tbl[1][iFld] == svalRAW);
 
-		    if((isChanged || !isPresent) && !(isEmpty && isTrAsBase)) {
+		    if((isChanged || !isPresent) && (isEmpty || !isTrAsBase || isDynSet)) {
 			unsigned mess_TrModifMarkLen = strlen(mess_TrModifMark);
 
 			// The same field

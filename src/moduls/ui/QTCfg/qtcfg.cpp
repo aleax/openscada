@@ -429,6 +429,8 @@ string ConfApp::lang( )	{ return Mess->lang2Code(user(), true); }
 
 void ConfApp::messUpd( )
 {
+    qApp->setProperty("lang", lang().c_str());	//For the Qt internal messages translation
+
     //Navigator tree
     CtrTree->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Path"));
     CtrTree->setWhatsThis(_("Main navigation tree of the configurator."));

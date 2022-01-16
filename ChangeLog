@@ -1,3 +1,23 @@
+2022-01-16 Roman (stable)
+- !!:LibsDB.vcaBase: wlb_Main.RootPgSo: Appended of complete updating at the user change but language also can be changed.
+    Automaticly fixed and updated for some translation.
+- !!:LibsDB.vcaBase,AGLKS.vca,Boiler.St: All project styles moved under new storing table and its structure with translation.
+- !!:FIX:BD: Config and DB storages prevented on the translation loss for not changed fields of the object save
+    and for the MULTILANGUAGE-DYNAMIC mode. The changing is also controlled now at the changing value structure receiving.
+    FIX: The Config storage also appended of filling empty BASE at setting the translation.
+- FIX:SYS: The module information fixed in the chain translation, using trS().
+- !!!!:UI.{QTStarter,QTCfg,Vision}: Appended for the system Qt-messages translation relating to the selected user language,
+    through the common application property "lang" for the Qt-translation reimplemented function QTranslator::translate(),
+    and then the language commonly switched by the last interface and for all opened.
+- !!!!:FIX:UI.VCAEngine: The project styles moved under new storing table "{DB_TBL}_stls" and its structure with translation,
+	then the table "{DB_TBL}_stls" readed firstly and next "{DB_TBL}_stl" for the compatibility.
+    FIX: Fixed in the new styles creation and loading only allowed ones
+	with control of the property values presence before reading and filling for missing at setting.
+- UI.Vision: Appended of updating the style name at the user change.
+- FIX:UI.WebVision: Fixed in the button visible size update at it change in VCA, just setting its style to "width: inherit; height: inherit",
+    detected on changing user with different languages and with the interface complete updating in wlb_Main.RootPgSo.
+
+
 2022-01-11 Roman (stable)
 - FIX:SYS: TFld::descr() and IO::name() translation-evince moved directly to those functions.
 
