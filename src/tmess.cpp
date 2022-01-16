@@ -733,6 +733,8 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 string TMess::I18N( const string &imess, const char *mLang, const char *d_name )
 {
 #ifdef HAVE_LIBINTL_H
+    if(imess.empty()) return "";
+
     int doff = 0;
     string  ctx,
 	    mess = TSYS::strParse(imess, 0, string(1,0), &doff),

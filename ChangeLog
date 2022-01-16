@@ -1,4 +1,9 @@
 2022-01-16 Roman (stable)
+- FIX:SYS: The common translation of system messages in TMess::I18N() completely prevented from translate empty ones.
+- FIX:DAQ.DAQGate: Prevented in constantly sync of the missed on remote host parameters.
+
+
+2022-01-16 Roman (stable)
 - !!:LibsDB.vcaBase: wlb_Main.RootPgSo: Appended of complete updating at the user change but language also can be changed.
     Automaticly fixed and updated for some translation.
 - !!:LibsDB.vcaBase,AGLKS.vca,Boiler.St: All project styles moved under new storing table and its structure with translation.
