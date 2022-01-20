@@ -425,7 +425,7 @@ ConfApp::~ConfApp( )
 
 string ConfApp::user( )	{ return wUser->user().toStdString(); }
 
-string ConfApp::lang( )	{ return Mess->lang2Code(user(), true); }
+string ConfApp::lang( bool withSystem )	{ return Mess->lang2Code(user(), !withSystem); }
 
 void ConfApp::messUpd( )
 {
@@ -2518,7 +2518,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 
     //Direct request
     try {
-	node.setAttr("lang", lang());
+	node.setAttr("lang", lang(true));
 	int rez = cntrIfCmdHosts(node);
 	//int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",user());
 

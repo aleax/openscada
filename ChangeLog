@@ -1,3 +1,14 @@
+2022-01-20 Roman (stable)
+- !:LibsDB.vcaBase: wlb_Main.RootPgSo: The complete updating conditions appended of the direct language change.
+- !:FIX:DB: Fixed in the function TTable::fieldSQLSeek() for anyway processing at empty requesting list.
+- SYS: Appended for the dynamic translation for:
+    - DAQ-attributes name-description postranslation after the system translation and translation in the context help;
+    - DAQ-attributes translation in the UserAPI functions: get(), set(), descr();
+- FIX:DAQ.DAQGate: The parameters is set to disabled at they missing on the remote host.
+- UI.QTCfg: Enabled for using the system language in the SINGLETRANSLATION mode for remote connections.
+- UI.VCAEngine: Reverted in setting "DB_TBL" for new libraries and projects, for opening they on old OpenSCADA versions.
+
+
 2022-01-16 Roman (stable)
 - FIX:SYS: The common translation of system messages in TMess::I18N() completely prevented from translate empty ones.
 - FIX:DAQ.DAQGate: Prevented in constantly sync of the missed on remote host parameters.

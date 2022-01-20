@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.8"
+#define MOD_VER		"2.9.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -1032,6 +1032,7 @@ void TMdPrm::save_( )
 
 void TMdPrm::sync( )
 {
+    bool toDisable = false;
     int rez = 0;
     //Request and update attributes list
     string scntr;
@@ -1044,10 +1045,7 @@ void TMdPrm::sync( )
 	    req.childAdd("get")->setAttr("path","%2fprm%2fcfg%2fDESCR");
 	    req.childAdd("list")->setAttr("path","%2fserv%2fattr");
 	    if((rez=owner().cntrIfCmd(req)) == TError::Tr_Connect) throw TError(req.attr("mcat").c_str(), req.text().c_str());
-	    else if(rez || s2i(req.attr("rez")) || s2i(req.childGet(0)->attr("rez"))) {
-		isSynced = true;	//!!!! Means synced of wrong sources but try next hosts
-		continue;
-	    }
+	    else if(rez || s2i(req.attr("rez")) || s2i(req.childGet(0)->attr("rez"))) { toDisable = true; continue; }
 
 	    setName(req.childGet(0)->text());
 	    setDescr(req.childGet(1)->text());
@@ -1078,6 +1076,8 @@ void TMdPrm::sync( )
 	    isSynced = true;
 	    return;
 	} catch(TError &err) { continue; }
+
+    if(toDisable && !isSynced) disable();	//!!!! Disable the missed parameters on the remote hosts
 }
 
 void TMdPrm::vlGet( TVal &vl )

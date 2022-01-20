@@ -3630,10 +3630,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    if((isCfg=trSrc.find("cfg:")==0) || trSrc.find("db:") == 0) {
 			//  Need for the DB structure preparing
 			req.elem().fldClear();
-			req.elem().fldAdd(new TFld(trFld.c_str(),trFld.c_str(),TFld::String,0));
+			req.elem().fldAdd(new TFld(trFld.c_str(),"",TFld::String,0));
 			for(unsigned iN = 1; iN < ns.size(); iN++)
-			    req.elem().fldAdd(new TFld(Mess->translFld(ns[iN]->attr("id"),trFld,isCfg).c_str(),
-				ns[iN]->attr("descr").c_str(),TFld::String,0));
+			    req.elem().fldAdd(new TFld(Mess->translFld(ns[iN]->attr("id"),trFld,isCfg).c_str(),"",TFld::String,0));
 			req.cfg(trFld).setReqKey(true);
 			req.cfg(trFld).setS(im->first);
 

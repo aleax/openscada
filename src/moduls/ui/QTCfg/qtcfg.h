@@ -127,7 +127,7 @@ class ConfApp: public QMainWindow
     ~ConfApp( );
 
     string user( );
-    string lang( );
+    string lang( bool withSystem = false );
 
     void messUpd( );
 

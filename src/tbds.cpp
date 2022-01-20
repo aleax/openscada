@@ -1444,15 +1444,15 @@ bool TTable::fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int fl
 
     //Request
     if(!cacheKey.size() || !tbl->size() || (row%SEEK_PRELOAD_LIM) == 0) {
-	if(ls.empty()) return false;
+	//if(ls.empty()) return false;	//!!!! But must to return TRUE at empty "ls" and presented keys
 	string req = "SELECT";
 	if(flags&SQLFirstSkipForSeek) {
 	    if(!cacheKey.size()) req += " FIRST 1 SKIP " + i2s(row);
 	    else req += " FIRST " + i2s(SEEK_PRELOAD_LIM) + " SKIP " + i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM);
 	}
-	req += " " + ls + " FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\"" +
-		    (req_where.size()?" WHERE "+req_where:"") + 
-		    ((flags&SQLOrderForSeek)?" ORDER BY "+ls:"");
+	req += " " + (ls.size()?ls:"*") + " FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\"" +
+		    (req_where.size()?" WHERE "+req_where:"") +
+		    ((flags&SQLOrderForSeek && ls.size())?" ORDER BY "+ls:"");
 	if(!(flags&SQLFirstSkipForSeek)) {
 	    if(!cacheKey.size()) req += " LIMIT 1 OFFSET "+ i2s(row);
 	    else req += " LIMIT " + i2s(SEEK_PRELOAD_LIM) + " OFFSET " + i2s((row/SEEK_PRELOAD_LIM)*SEEK_PRELOAD_LIM);

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -281,7 +281,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			    "  Name: '%s'\n"
 			    "  Type: '%s'\n"
 			    "  Read only: %d"),
-			    vl.at().fld().name().c_str(),vl.at().fld().descr().c_str(),sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0));
+			    vl.at().fld().name().c_str(),trD(vl.at().fld().descr()).c_str(),
+			    sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0));
 		    if(vl.at().fld().values().size())
 			n_e->setAttr("help",n_e->attr("help")+_("\n  Values: ")+vl.at().fld().values());
 		    if(vl.at().fld().selNames().size())
@@ -853,6 +854,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    bool isSys = false;
 	    if(prms.size() >= 3) isSys = prms[2].getB();
 	    rez = get(&tm, isSys);
+	    if(fld().type() == TFld::String && fld().flg()&TFld::TransltText)
+		rez = trD_LU(rez, TSYS::strLine(user_lang,1), TSYS::strLine(user_lang,0));
 	    if(prms.size() >= 1) { prms[0].setI(tm/1000000); prms[0].setModify(); }
 	    if(prms.size() >= 2) { prms[1].setI(tm%1000000); prms[1].setModify(); }
 
@@ -872,7 +875,9 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    bool isSys = false;
 	    if(prms.size() >= 4) isSys = prms[3].getB();
 	    if(isSys && isCfg() && fld().flg()&TFld::NoWrite) return false;
-	    set(prms[0], tm, isSys);
+	    if(fld().type() == TFld::String && fld().flg()&TFld::TransltText)
+		set(trDSet_LU(getS(),TSYS::strLine(user_lang,1),TSYS::strLine(user_lang,0),prms[0].getS()), tm, isSys);
+	    else set(prms[0], tm, isSys);
 	    return false;
 	} catch(...){ }
 	return true;
@@ -884,7 +889,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return new TCntrNodeObj(aobj, user_lang);
     }
     // string descr() - get attribute description
-    if(iid == "descr")	return fld().descr();
+    if(iid == "descr")	return trD_LU(fld().descr(), TSYS::strLine(user_lang,1), TSYS::strLine(user_lang,0));
     // int time(int utm) - get last attribute's value time
     if(iid == "time") {
 	if(prms.size() >= 1)	{ prms[0].setI((int)(time()%1000000)); prms[0].setModify(); }

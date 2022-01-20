@@ -10135,8 +10135,9 @@ hRARw+Drbz7vnb3ZG5xt8OUMnnFo1kYAAPqDo48/+lTMHhtTTATI183QXdXmCjHGWJY6pLXJE3Dp
 47Fj09sVvVXJPF/P1dV1fP5ObQS01vPnLwAA4FEKAAC+w2+eXNVGwFrr+/5fwzp9if+WvUDV7AWq
 Zi9QNXuBqtkLVM1eoGr2AlWzF6iavUDV1F6gNj/13PWY62WFZo5LyPa5M+JwAJBSVrrbneB+OBge
 rzW9GU+cIKAEVKHCOP4NrQkgmJreob8AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-var reqUser_; var toCompleteUpd = false;
-if(this.ownerSess().reqUser() != reqUser_) toCompleteUpd = true, reqUser_ = this.ownerSess().reqUser();
+var reqUser_; var reqLang_; var toCompleteUpd = false;
+if(this.ownerSess().reqUser() != reqUser_ || this.ownerSess().reqLang() != reqLang_)
+	toCompleteUpd = true, reqUser_ = this.ownerSess().reqUser(), reqLang_ = this.ownerSess().reqLang();
 
 calcCnt++;
 
@@ -17632,7 +17633,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.5.0
+Version: 2.5.1
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17660,7 +17661,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.5.0
+Версія: 2.5.1
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -17690,7 +17691,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.5.0
+Версия: 2.5.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');

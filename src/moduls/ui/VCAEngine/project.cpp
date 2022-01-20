@@ -40,6 +40,7 @@ Project::Project( const string &id, const string &name, const string &lib_db ) :
 {
     mId = id;
     cfg("NAME").setS(name);
+    cfg("DB_TBL").setS(string("prj_")+id);	//????[v1.0] Remove, saved for the new projects work on old OpenSCADA versions
     mPage= grpAdd("pg_");
 }
 

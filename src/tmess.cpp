@@ -720,7 +720,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     }
     iconv_close(hd);
 
-    //> Deadlock possible on the error message print
+    //Deadlock possible on the error message print
     //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for the message part: '%s'(%d)"),
     //		    chwrcnt, fromCH.c_str(), toCH.c_str(), mess.substr(0,20).c_str(), mess.size());
 
