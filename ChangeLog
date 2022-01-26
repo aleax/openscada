@@ -1,3 +1,17 @@
+2022-01-26 Roman (stable)
+- data/oscada_start.xml: The FSArch archive renamed from "1second" to "1second (instantaneous)"
+- !:LibsDB.vcaBase: wlb_Main.objProps: First one enabled for the transitive dynamic translation.
+- FIX:SYS: Significant improving and fixing the UserAPI messages translation:
+    - fixed for the new UserAPI messages registering in the MULTILANGUAGE-DYNAMIC mode;
+    - appended for filtering the messages for they translatability before registering;
+    - appended for the new messages early registering in the translation messages index just after appending to the storage table "Tr".
+- Security: The system users and groups some renamed and enabled for the storaged system translation.
+- Protocol.HTTP: Appended of detection and notification of login tries the unallowed users.
+- !!:FIX:UI.VCAEngine: Appended of changing the storage just after the widget procedure compile
+	for placing of the dynamic messages translation to the project storage.
+    FIX: Prevented of the connected vizualizers count at the reconnection, from different user mostly.
+
+
 2022-01-20 Roman (stable)
 - !:LibsDB.vcaBase: wlb_Main.RootPgSo: The complete updating conditions appended of the direct language change.
 - !:FIX:DB: Fixed in the function TTable::fieldSQLSeek() for anyway processing at empty requesting list.

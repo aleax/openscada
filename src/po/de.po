@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2010-2021.
+# Roman Savochenko <roman@oscada.org>, 2010-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-05 20:08+0200\n"
+"POT-Creation-Date: 2022-01-25 17:17+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -28,9 +28,6 @@ msgstr "Die Ressource versucht den Thread fest zu blockieren!"
 
 msgid "Resource is timeouted!"
 msgstr "Wartezeit der Ressource ist aus"
-
-msgid "Archives-History"
-msgstr "Archiv-Geschichte"
 
 msgid "Identifier"
 msgstr "Identifikator"
@@ -239,7 +236,8 @@ msgstr ""
 "(5[X]), ALARM;Wach (6[X]), ALARM;Notfall (7[X]), ALARM"
 
 msgid "Receiving messages with a level greater or equal to the specified."
-msgstr "Empfangen von Nachrichten mit einem Level größer oder gleich dem angegebenen."
+msgstr ""
+"Empfangen von Nachrichten mit einem Level größer oder gleich dem angegebenen."
 
 msgid "Category pattern"
 msgstr "Kategoriemuster"
@@ -356,8 +354,10 @@ msgid "Requested %d records for time %s."
 msgstr "Fordert %d Datensätze für Zeit %s."
 
 #, c-format
-msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
-msgstr "Gittermodus unterstützt nicht das Einfügen sehr alter Werte %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgstr ""
+"Gittermodus unterstützt nicht das Einfügen sehr alter Werte %lld (%lld-%lld)."
 
 msgid "The grid mode doesn't support inserting too old values."
 msgstr "Gittermodus unterstützt nicht das Einfügen alter Werte."
@@ -429,7 +429,8 @@ msgid "Default for fast processing of archiving values."
 msgstr "Standard für die schnelle Verarbeitung von Archivierungswerten."
 
 msgid "Set in case of periodicity of values in less than a second."
-msgstr "Im Falle der Periodizität der Werte in weniger als einer Sekunde eingestellt."
+msgstr ""
+"Im Falle der Periodizität der Werte in weniger als einer Sekunde eingestellt."
 
 msgid ""
 "The passage values mostly fill by EVAL but sometime data periodicity of the "
@@ -518,9 +519,6 @@ msgstr "Aufzeichnungen"
 
 msgid "Last read buffer"
 msgstr "Letzte Lesepuffer"
-
-msgid "Data Bases"
-msgstr "Datenbank"
 
 msgid "DB type (module)"
 msgstr "Typ der Datenbank (Modul)"
@@ -616,7 +614,8 @@ msgstr "Tabellen sind in der Datenbank aber nicht geöffnet."
 msgid "Load the program from this DB"
 msgstr "Programm aus der Datenbank laden"
 
-msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr ""
 "Unicode Zeichensatz in der Datenbank, zum Beispiel: UTF-8, KOI8-R, KOI8-"
 "U ... ."
@@ -914,9 +913,6 @@ msgstr ""
 "Zeigen Sie Nachrichten für größere oder gerade Ebenen an.\n"
 "Dies wirkt sich auch auf die Generierung spezifischer Diagnoseinformationen "
 "durch die Datenquellen aus."
-
-msgid "Data Acquisition"
-msgstr "Datenerfassung"
 
 msgid "Maximum calculate time, seconds"
 msgstr "Maximale Zeit der Berechnung, Sekunden"
@@ -1229,9 +1225,6 @@ msgstr ""
 "  '?' - ein beliebiges Symbol.\n"
 "Regulärer Ausdruck in Symbolen umschlossen '/' (/mod_(System|LogicLev)/)."
 
-msgid "Modules scheduler"
-msgstr "Module Scheduler"
-
 #, c-format
 msgid ""
 "=================== Subsystem \"Modules scheduler\" options "
@@ -1387,7 +1380,8 @@ msgstr "2:Akquisition wurde gestoppt."
 msgid "Parameter: "
 msgstr "Parameter: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr ""
 "Die Typänderung führt dazu, dass einige Daten der spezifischen "
 "Konfigurationen verloren gehen."
@@ -1526,9 +1520,6 @@ msgstr "Parametervorlagen"
 msgid "Templates"
 msgstr "Vorlagen"
 
-msgid "Transport Protocols"
-msgstr "TransportProtokolle"
-
 msgid ""
 "=============== Subsystem \"Transport Protocols\" options =================\n"
 "\n"
@@ -1536,9 +1527,6 @@ msgstr ""
 "============== Optionen des Subsystems \"TransportProtokolle\" "
 "================\n"
 "\n"
-
-msgid "Security"
-msgstr "Sicherheit"
 
 msgid "Full name"
 msgstr "Voller Name"
@@ -1567,17 +1555,17 @@ msgstr "Fehler beim Suchen und Erstellen neuer Benutzer."
 msgid "Error finding and creating new user groups."
 msgstr "Fehler beim Suchen und Erstellen neuer Benutzergruppen."
 
-msgid "Administrator (superuser)!!!"
-msgstr "Administrator (Supernutzer)!!!"
+msgid "Administrator"
+msgstr "Administrator"
 
-msgid "Simple user."
-msgstr "Normaler Benutzer."
+msgid "Simple user"
+msgstr "Normaler Benutzer"
 
-msgid "Administrators group."
-msgstr "Gruppe von Administratoren."
+msgid "Administrators group"
+msgstr "Gruppe von Administratoren"
 
-msgid "Users group."
-msgstr "Gruppe von Benutzern."
+msgid "Users group"
+msgstr "Gruppe von Benutzern"
 
 msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
@@ -1621,9 +1609,6 @@ msgstr "Gruppe "
 msgid "User group DB"
 msgstr "Datenbank der Benutzergruppe"
 
-msgid "Specials"
-msgstr "Zusätze"
-
 msgid ""
 "======================= Subsystem \"Specials\" options "
 "=====================\n"
@@ -1666,10 +1651,6 @@ msgstr "Subsystem: "
 
 msgid "Initial Station"
 msgstr "Anfangsstation"
-
-#, c-format
-msgid "Program counters at the exit time: %s"
-msgstr "Programmzähler zur Ausgangszeit: %s"
 
 #, c-format
 msgid ""
@@ -1969,7 +1950,8 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Fehler beim Schreiben der Konfigurationsdatei '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr ""
 "Unmöglich, die Projektsperre zu halten! Scheint, dass das Projekt '%s' "
 "bereits läuft."
@@ -2477,13 +2459,11 @@ msgstr "Propagiere die Übersetzung '%s' an alle leeren Quellen für '%s'.'%s'."
 
 #, c-format
 msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
-msgstr "Zusammenführen der Basisnachricht mit der Übersetzung '%s' für '%s' > '%s'."
+msgstr ""
+"Zusammenführen der Basisnachricht mit der Übersetzung '%s' für '%s' > '%s'."
 
 msgid "<<<Base changed>>>\n"
 msgstr "<<<Basis geändert>>>\n"
-
-msgid "Transports"
-msgstr "Übertragungen"
 
 msgid "Transport type"
 msgstr "Übertragungstypen"
@@ -2577,6 +2557,9 @@ msgstr "Eingangsübertragung"
 
 msgid "Output transport"
 msgstr "Ausgangsübertragung"
+
+msgid "Transports"
+msgstr "Übertragungen"
 
 msgid "List"
 msgstr "Aufführen"
@@ -2708,9 +2691,6 @@ msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
 msgid "Owner"
 msgstr "Eigentümer"
 
-msgid "User Interfaces"
-msgstr "Benutzerschnittstellen"
-
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
 "\n"
@@ -2810,7 +2790,8 @@ msgid "3:Error loading the file '%s'."
 msgstr "3:Fehler beim Laden der Datei '%s'."
 
 msgid "Object is not connected to a node of the OpenSCADA tree."
-msgstr "Objekt ist nicht mit einem Knoten der OpenSCADA-Baumstruktur verbunden."
+msgstr ""
+"Objekt ist nicht mit einem Knoten der OpenSCADA-Baumstruktur verbunden."
 
 #, c-format
 msgid "Child %d is not present."
@@ -2862,9 +2843,18 @@ msgstr "Nachrichtarchiv wird nicht unterstützt!"
 msgid "Value archiver is not supported!"
 msgstr "Wertearchiv wird nicht unterstützt!"
 
+msgid "Archives-History"
+msgstr "Archiv-Geschichte"
+
 #, c-format
 msgid "Function '%s' is not supported!"
 msgstr "Funktion '%s' wird nicht unterstützt!"
+
+msgid "Data Bases"
+msgstr "Datenbank"
+
+msgid "Data Acquisition"
+msgstr "Datenerfassung"
 
 #, c-format
 msgid "%s: No function set!"
@@ -2873,6 +2863,18 @@ msgstr "%s: Keine Funktion gesetzt!"
 #, c-format
 msgid "%s: Error with ID or IO %d for the function '%s'!"
 msgstr "%s: Fehler des Bezeichners oder IO %d für die Funktion %s'!"
+
+msgid "Modules scheduler"
+msgstr "Module Scheduler"
+
+msgid "Transport Protocols"
+msgstr "TransportProtokolle"
+
+msgid "Security"
+msgstr "Sicherheit"
+
+msgid "Specials"
+msgstr "Zusätze"
 
 msgid "Open Supervisory Control And Data Acquisition"
 msgstr "Offenes System der Datenüberwachung und Datenerfassung"
@@ -2885,6 +2887,9 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport is not supported!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
+
+msgid "User Interfaces"
+msgstr "Benutzerschnittstellen"
 
 msgid "New project"
 msgstr "Neues Projekt"
@@ -2912,4 +2917,3 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
-

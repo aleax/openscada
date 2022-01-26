@@ -82,7 +82,7 @@
 	    </tbl>
 
 	    <tbl id="Archive_val_proc">
-		<fld ID="1s" MODUL="FSArch" NAME="1second" NAME_uk="1секунда" NAME_ru="1секунда" START="0" ADDR="ARCHIVES/VAL/1s" V_PER="1" A_PER="60">
+		<fld ID="1s" MODUL="FSArch" NAME="1second (instantaneous)" NAME_uk="1секунда (миттєвий)" NAME_ru="1секунда (мгновенный)" START="0" ADDR="ARCHIVES/VAL/1s" V_PER="1" A_PER="60">
 		    <A_PRMS>&lt;prms TmSize="720" NFiles="100" MaxCapacity="5000" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" /&gt;</A_PRMS>
 		</fld>
 		<fld ID="1m" MODUL="FSArch" NAME="1minute" NAME_uk="1хвилина" NAME_ru="1минута" START="0" ADDR="ARCHIVES/VAL/1m" V_PER="60" A_PER="60">

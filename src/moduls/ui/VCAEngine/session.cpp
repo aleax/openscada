@@ -214,10 +214,10 @@ void Session::setStart( bool val )
     }
 }
 
-int Session::connect( )
+int Session::connect( bool recon )
 {
     dataResSes().lock();
-    mConnects++;
+    if(!recon) mConnects++;
 
     int rez;
     do { rez = (SYS->sysTm()%10000000)*10 + (int)(10*(float)rand()/(float)RAND_MAX); }
@@ -233,7 +233,7 @@ int Session::connect( )
 void Session::disconnect( int conId )
 {
     dataResSes().lock();
-    if(mConnects>0) mConnects--;
+    if(mConnects > 0) mConnects--;
 
     map<int, bool>::iterator mC = mCons.find(conId);
     if(mC != mCons.end()) mCons.erase(mC);
@@ -1790,6 +1790,8 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
 	    TValFunc::setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    TValFunc::setUser(ownerSess()->user());
 	    setO(3, new TCntrNodeObj(AutoHD<TCntrNode>(this),ownerSess()->user()));
+	    //  Changing the storage for placing of the dynamic messages translation to the project storage
+	    TValFunc::func()->setStor(ownerSess()->parent().at().DB());
 	}
     }
     if(!val) {

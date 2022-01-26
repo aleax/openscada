@@ -12282,13 +12282,15 @@ else title_backColor = "gray";*/
 if(!objItems.isEVal()) {
 	//Load table with variables
 	tbl = "<tbl sel=''row'' colsWdthFit=''1''>\n"
-		"<h><s width=''0px''>"+tr("Property")+"</s><s width=''55%''>"+tr("Description")+"</s><s width=''30%''>"+tr("Value")+"</s></h>";
+		"<h><s width=''0px''>"+tr("Property")+"</s><s width=''55%''>"+tr("Description")+"</s><s width=''30%'' align=''center''>"+tr("Value")+"</s></h>";
 	for(var aIt in objItems) {
 		it = objItems[aIt];
 		if(it.alarm == 1)	tbl += "<r color=''yellow''>";
 		else if(it.alarm == 2)	tbl += "<r color=''red''>";
 		else tbl += "<r>";
-		tbl += "<s>"+aIt+"</s><s>"+strEnc2HTML(it.descr)+"</s><s>"+strEnc2HTML(it.val)+"</s></r>\n";
+		if(typeof(tVl=it.val) != "string") tVl = it.val.toString();
+		tbl +=	"<s>"+aIt+"</s><s>"+strEnc2HTML(tr(it.descr.trim()))+"</s>"
+			"<s>"+strEnc2HTML(tr(tVl.trim()))+"</s></r>\n";
 	}
 	tbl += "</tbl>";
 	props_items = tbl;
@@ -22327,17 +22329,17 @@ INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: PAC HARTRON
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2',32,'','','','Елемент слугує для відображення властивостей джерела даних у табличному вигляді та із виділенням їх кольором, як об''єкт, та надання можливості зміни значення властивостей із правом запису. Також цей елемент генерує повідомлення про порушення згідно до особливостей об''єкту. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "Комплексний об''єкт".
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ПАТ ХАРТРОН
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элемент служит для отображения свойств источника данных в табличном виде и с выделением их цветом, как объект, и предоставления возможности изменения значения свойств с правом записи. Также этот элемент генерирует сообщения про нарушения согласно особенностям объекта. Элемент в целом использует и предоставляет представительскую структуру DAQ-шаблонов "Комплексный объект".
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: ПАТ ХАРТРОН
-Версия: 1.1.0
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','78.1',32,'','','h_line','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','perm','438',32,'','','pgSel','','','','','','','');

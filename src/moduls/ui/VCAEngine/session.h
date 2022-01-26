@@ -79,7 +79,7 @@ class Session : public TCntrNode
 	void setEnable( bool val );
 	void setStart( bool val );
 	void setBackgrnd( bool val )		{ mBackgrnd = val; }
-	int connect( );
+	int connect( bool recon = false );
 	void disconnect( int conId = 0 );
 	void stlCurentSet( int sid = Project::StlMaximum );
 

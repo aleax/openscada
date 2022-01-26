@@ -35,7 +35,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.6.13"
+#define MOD_VER		"3.7.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -808,12 +808,13 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		map<string,string>	cnt;
 		map<string,string>::iterator cntEl;
 		getCnt(vars, request.substr(pos), cnt);
+		bool allowUser = true;
 		if(cnt.find("auth_enter") != cnt.end()) {
 		    string pass;
 		    if((cntEl=cnt.find("user")) != cnt.end())	user = cntEl->second;
 		    if((cntEl=cnt.find("pass")) != cnt.end())	pass = cntEl->second;
 		    if(mod->autoLogGet(sender) == user ||
-			((!mod->allowUsersAuth().size() || TRegExp("(^|;)"+user+"(;|$)").test(mod->allowUsersAuth())) &&
+			((!mod->allowUsersAuth().size() || (allowUser=TRegExp("(^|;)"+user+"(;|$)").test(mod->allowUsersAuth()))) &&
 			    SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
 			mess_info(owner().nodePath().c_str(), _("Successful authentication for the user '%s'. Host: %s. User agent: %s."),
@@ -824,8 +825,11 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			return mNotFull || KeepAlive;
 		    }
 		}
-		mess_warning(owner().nodePath().c_str(), _("Wrong authentication of the user '%s'. Host: %s. User agent: %s."),
+		mess_warning(owner().nodePath().c_str(),
+		    (allowUser?_("Wrong authentication of the user '%s'. Host: %s. User agent: %s."):
+			       _("The try to auth from the not allowed user '%s'. Host: %s. User agent: %s.")),
 		    user.c_str(), sender.c_str(), userAgent.c_str());
+		
 		answer = getAuth(uri, _("<p style='color: #CF8122;'>Wrong authentication! Retry please.</p>"));
 
 		return mNotFull || KeepAlive;

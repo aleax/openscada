@@ -287,17 +287,18 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
     if(base.empty()) return base;
 
     string rez, tStr, cKey = base, trLang = lang2Code();
+    bool isUAPI = (src.find("uapi:") == 0);
     if(translDyn()) {
 	if(lang.size() >= 2) trLang = lang.substr(0,2);
-	if(trLang == lang2CodeBase()) return base;
+	if(trLang == lang2CodeBase() && !isUAPI) return base;
 	cKey = trLang+"#"+cKey;
-    } else if(src.compare(0,5,"uapi:") != 0) return base;
+    } else if(!isUAPI) return base;
 
     //Request from the cache at the first
     if((rez=translCacheGet(cKey)).size()) ;
-    else {
+    else if(Mess->isMessTranslable(base)) {
 	//Request to data source directly
-	if(src.find("uapi:") == 0) {	// Check/Get/Place from user API translations table
+	if(isUAPI) {	// Check/Get/Place from user API translations table
 	    string srcAddrs = src.substr(5), tStrVl;
 	    if(srcAddrs.empty()) srcAddrs = SYS->workDB();
 
@@ -312,8 +313,8 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		if(isCfg != (*iA==DB_CFG)) {
 		    isCfg = (*iA==DB_CFG) ? 1 : 0;
 		    req.elem().fldClear();
-		    req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
-		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"Tr",TFld::String,0));
+		    req.elem().fldAdd(new TFld("base","",TFld::String,TCfg::Key,"1000"));
+		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"",TFld::String,0));
 		    req.cfg("base").setS(base);
 		}
 		if(TBDS::dataGet(*iA+"." mess_TrUApiTbl,"/" mess_TrUApiTbl,req,TBDS::NoException)) {
@@ -325,6 +326,8 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		    if(lang2CodeBase().size() && lang2CodeBase() == trLang)
 			req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
 		    TBDS::dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, TBDS::NoException);
+		    //  Early register the new message in the translation index after the real appending
+		    if(translDyn()) Mess->translReg(base, (isCfg?"cfg:/":"db:"+*iA+".")+mess_TrUApiTbl+"#base");
 		}
 	    }
 	    translCacheSet(cKey, rez);

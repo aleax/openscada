@@ -195,28 +195,28 @@ void TSecurity::load_( )
     // Administrator
     if(!usrPresent("root")) {
 	usrAdd("root");
-	usrAt("root").at().setDescr(_("Administrator (superuser)!!!"));
+	usrAt("root").at().setDescr(trS("Administrator"));
 	usrAt("root").at().setPass("openscada");
     }
     usrAt("root").at().setSysItem(true);
     // Simple user
     if(!usrPresent("user")) {
 	usrAdd("user");
-	usrAt("user").at().setDescr(_("Simple user."));
+	usrAt("user").at().setDescr(trS("Simple user"));
 	usrAt("user").at().setPass("user");
     }
     usrAt("user").at().setSysItem(true);
     // Administrators group
     if(!grpPresent("root")) {
 	grpAdd("root");
-	grpAt("root").at().setDescr(_("Administrators group."));
+	grpAt("root").at().setDescr(trS("Administrators group"));
 	grpAt("root").at().userAdd("root");
     }
     grpAt("root").at().setSysItem(true);
     // Simple users group
     if(!grpPresent("users")) {
 	grpAdd("users");
-	grpAt("users").at().setDescr(_("Users group."));
+	grpAt("users").at().setDescr(trS("Users group"));
 	grpAt("users").at().userAdd("user");
     }
     grpAt("users").at().setSysItem(true);

@@ -1,13 +1,13 @@
 # OpenSCADA core translate to Russian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <roman@oscada.org>, 2003-2021.
+# Roman Savochenko <roman@oscada.org>, 2003-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-05 20:08+0200\n"
+"POT-Creation-Date: 2022-01-25 17:17+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -23,9 +23,6 @@ msgstr "Ресурс пытается намертво заблокироват�
 
 msgid "Resource is timeouted!"
 msgstr "Время ожидания ресурса исчерпано!"
-
-msgid "Archives-History"
-msgstr "Архивы-История"
 
 msgid "Identifier"
 msgstr "Идентификатор"
@@ -187,7 +184,8 @@ msgid "Redundancy"
 msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr "Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
+msgstr ""
+"Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
 
 msgid "Message archivers"
 msgstr "Архиваторы сообщений"
@@ -352,7 +350,8 @@ msgid "Requested %d records for time %s."
 msgstr "Запрошено %d записей в течении %s."
 
 #, c-format
-msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
 "(%lld-%lld)."
@@ -518,9 +517,6 @@ msgstr "Архивы"
 msgid "Last read buffer"
 msgstr "Последнее чтение буфера"
 
-msgid "Data Bases"
-msgstr "Базы Данных"
-
 msgid "DB type (module)"
 msgstr "Тип БД (модуль)"
 
@@ -614,7 +610,8 @@ msgstr "Таблицы которые в БД, но не открыты на д�
 msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
-msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -909,9 +906,6 @@ msgstr ""
 "Отображать сообщения с уровнем больше или равно указанному.\n"
 "Также сказывается на генерации источником данных специфических-"
 "диагностических сообщений."
-
-msgid "Data Acquisition"
-msgstr "Сбор Данных"
 
 msgid "Maximum calculate time, seconds"
 msgstr "Максимальное время вычисления, секунд"
@@ -1224,9 +1218,6 @@ msgstr ""
 "Регулярное выражение заключается между символами '/' (/mod_(System|"
 "LogicLev)/)."
 
-msgid "Modules scheduler"
-msgstr "Диспетчер модулей"
-
 #, c-format
 msgid ""
 "=================== Subsystem \"Modules scheduler\" options "
@@ -1384,7 +1375,8 @@ msgstr "2:Сбор остановлен."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
 msgid "Inclusion"
@@ -1520,18 +1512,12 @@ msgstr "Шаблоны параметров"
 msgid "Templates"
 msgstr "Шаблоны"
 
-msgid "Transport Protocols"
-msgstr "Транспортные Протоколы"
-
 msgid ""
 "=============== Subsystem \"Transport Protocols\" options =================\n"
 "\n"
 msgstr ""
 "============== Опции подсистемы \"Транспортные Протоколы\" ================\n"
 "\n"
-
-msgid "Security"
-msgstr "Безопасность"
 
 msgid "Full name"
 msgstr "Полное имя"
@@ -1560,17 +1546,17 @@ msgstr "Ошибка поиска и создания новых пользов�
 msgid "Error finding and creating new user groups."
 msgstr "Ошибка поиска и создания новых групп пользователей."
 
-msgid "Administrator (superuser)!!!"
-msgstr "Администратор (суперпользователь)!!!"
+msgid "Administrator"
+msgstr "Администратор"
 
-msgid "Simple user."
-msgstr "Простой пользователь."
+msgid "Simple user"
+msgstr "Простой пользователь"
 
-msgid "Administrators group."
-msgstr "Группа администраторов."
+msgid "Administrators group"
+msgstr "Группа администраторов"
 
-msgid "Users group."
-msgstr "Группа пользователей."
+msgid "Users group"
+msgstr "Группа пользователей"
 
 msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
@@ -1614,9 +1600,6 @@ msgstr "Группа "
 msgid "User group DB"
 msgstr "БД группы пользователей"
 
-msgid "Specials"
-msgstr "Специальные"
-
 msgid ""
 "======================= Subsystem \"Specials\" options "
 "=====================\n"
@@ -1658,10 +1641,6 @@ msgstr "Подсистема: "
 
 msgid "Initial Station"
 msgstr "Первичная станция"
-
-#, c-format
-msgid "Program counters at the exit time: %s"
-msgstr "Счётчики программы при выходе: %s"
 
 #, c-format
 msgid ""
@@ -1956,8 +1935,10 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
-msgstr "Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
+msgstr ""
+"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
@@ -2465,9 +2446,6 @@ msgstr "Объединение базового сообщения с перев
 msgid "<<<Base changed>>>\n"
 msgstr "<<<База изменена>>>\n"
 
-msgid "Transports"
-msgstr "Транспорты"
-
 msgid "Transport type"
 msgstr "Тип транспорта"
 
@@ -2559,6 +2537,9 @@ msgstr "Входной транспорт"
 
 msgid "Output transport"
 msgstr "Выходной транспорт"
+
+msgid "Transports"
+msgstr "Транспорты"
 
 msgid "List"
 msgstr "Список"
@@ -2689,9 +2670,6 @@ msgstr "Модуль не поддерживает функцию компиля
 
 msgid "Owner"
 msgstr "Владелец"
-
-msgid "User Interfaces"
-msgstr "Интерфейсы Пользователя"
 
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
@@ -2843,9 +2821,18 @@ msgstr "Архив сообщений не поддерживается!"
 msgid "Value archiver is not supported!"
 msgstr "Архив значений не поддерживается!"
 
+msgid "Archives-History"
+msgstr "Архивы-История"
+
 #, c-format
 msgid "Function '%s' is not supported!"
 msgstr "Функция '%s' не поддерживается!"
+
+msgid "Data Bases"
+msgstr "Базы Данных"
+
+msgid "Data Acquisition"
+msgstr "Сбор Данных"
 
 #, c-format
 msgid "%s: No function set!"
@@ -2854,6 +2841,18 @@ msgstr "%s: Функция не установлена!"
 #, c-format
 msgid "%s: Error with ID or IO %d for the function '%s'!"
 msgstr "%s: Ошибка идентификатора или IO %d для функции '%s'!"
+
+msgid "Modules scheduler"
+msgstr "Диспетчер модулей"
+
+msgid "Transport Protocols"
+msgstr "Транспортные Протоколы"
+
+msgid "Security"
+msgstr "Безопасность"
+
+msgid "Specials"
+msgstr "Специальные"
 
 msgid "Open Supervisory Control And Data Acquisition"
 msgstr "Открытая система диспетчерского контроля и сбора данных"
@@ -2866,6 +2865,9 @@ msgstr "Входной транспорт не поддерживается!"
 
 msgid "Output transport is not supported!"
 msgstr "Выходных транспорт не поддерживается!"
+
+msgid "User Interfaces"
+msgstr "Интерфейсы Пользователя"
 
 msgid "New project"
 msgstr "Новый проект"
@@ -2893,4 +2895,3 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
-

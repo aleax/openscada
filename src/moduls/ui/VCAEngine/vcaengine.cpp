@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.8.1"
+#define MOD_VER		"7.8.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -681,7 +681,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		throw TError(nodePath().c_str(),_("Connecting to the session is not permitted for '%s'."),opt->attr("user").c_str());
 	    // Connect to present session
 	    if(!sess.empty()) {
-		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
+		opt->setAttr("conId", i2s(sesAt(sess).at().connect(s2i(opt->attr("userChange")))));
 		opt->setAttr("prj", sesAt(sess).at().projNm());
 		if(s2i(opt->attr("userChange"))) {
 		    sesAt(sess).at().setUser(opt->attr("user"));
