@@ -1,3 +1,8 @@
+2022-01-31 Roman (stable)
+- SYS,DAQ.DAQGate: The messages redundancy and messages transferring in DAQ.DAQGate limited for depth of the requesting messages
+    up to the restoring time or one hour.
+
+
 2022-01-26 Roman (stable)
 - data/oscada_start.xml: The FSArch archive renamed from "1second" to "1second (instantaneous)"
 - !:LibsDB.vcaBase: wlb_Main.objProps: First one enabled for the transitive dynamic translation.

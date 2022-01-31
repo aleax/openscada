@@ -1392,7 +1392,8 @@ void TMArchivator::redntDataUpdate( )
     // end()+1 used for decrease traffic by request end() messages in each cycle. The messages in <= end() will transfer direct.
     XMLNode req("get");
     req.setAttr("path", nodePath()+"/%2fserv%2fmess")->
-	setAttr("bTm", ll2s(lstRdMess.time /*vmax(0,end()+1-(mRdFirst?owner().owner().rdRestDtOverTm()*86400:0))*/));
+	// Limiting for depth of the requesting messages up to the restoring time or one hour
+	setAttr("bTm", i2s(vmax(SYS->sysTm()-vmax(3600,owner().owner().rdRestDtOverTm()*86400),lstRdMess.time)));
     if(isInitial && owner().owner().rdRestDtOverTm())
 	req.setAttr("eTm", ll2s(owner().owner().mRdAlarms));
 

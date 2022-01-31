@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.9"
+#define MOD_VER		"2.9.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -623,7 +623,10 @@ void *TMdContr::Task( void *icntr )
 		    if(cntr.mMessLev.getI() >= 0)	//Else disabled
 			for(map<string,bool>::iterator iC = cntrLstMA.begin(); iC != cntrLstMA.end(); ++iC) {
 			    int tm_grnd = stO.lstMess[iC->first].time;
-			    XMLNode *reqCh = req.childAdd("get")->setAttr("path", "/"+iC->first+"/%2fserv%2fmess")->setAttr("tm_grnd", i2s(tm_grnd));
+			    XMLNode *reqCh = req.childAdd("get")->
+						setAttr("path", "/"+iC->first+"/%2fserv%2fmess")->
+						// Limiting for depth of the requesting messages up to the restoring time or one hour
+						setAttr("tm_grnd", i2s(vmax(SYS->sysTm()-3600*vmax(1,cntr.restDtTm()),tm_grnd)));
 
 			    //Alarms force request
 			    if(!tm_grnd && cntr.mMessLev.getI() >= 0)	reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
@@ -672,7 +675,7 @@ void *TMdContr::Task( void *icntr )
 				lstRdMess = TMess::SRec(SYS->sysTm()-3600*cntr.restDtTm(), 0, "", 0, cntr.restDtTm()?prmNd->attr("tm"):"");
 			    else {
 				//  First initial request for not active alarms
-				if(isHistReq=(lstRdMess.categ.empty() && !lstRdMess.mess.empty()))	lstRdMess.mess = "";
+				if(isHistReq=(lstRdMess.categ.empty() && !lstRdMess.mess.empty())) lstRdMess.mess = "";
 
 				if(lstRdMess_.time > lstRdMess.time) lstRdMess = lstRdMess_;
 				else if(lstRdMess_.time) lstRdMess = TMess::SRec(lstRdMess_.time+1);
