@@ -1168,9 +1168,9 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     mConId = s2i(req.attr("conId"));
 
     req.clear()->setName("CntrReqs")->setAttr("path","");
-    req.childAdd("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
+    //req.childAdd("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
     req.childAdd("get")->setAttr("path","/ses_"+workSess()+"/%2fobj%2fcfg%2fstyle");
-    if(!cntrIfCmd(req)) setStyle(s2i(req.childGet(1)->text()));
+    if(!cntrIfCmd(req)) setStyle(s2i(req.childGet(0)->text()));
 
     //Update pages after the user change
     pgCacheClear();

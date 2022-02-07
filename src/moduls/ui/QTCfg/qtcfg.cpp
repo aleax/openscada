@@ -1092,7 +1092,7 @@ void ConfApp::about( )
 	TSYS::strMess(mess.c_str(),
 	    _(mod->modInfo("Name")),mod->modInfo("Version").c_str(),_(mod->modInfo("Description")),
 	    _(mod->modInfo("Author")),mod->modInfo("License").c_str(),
-	    PACKAGE_NAME, VERSION,_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR),PACKAGE_SITE).c_str());
+	    PACKAGE_NAME,VERSION,_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR),PACKAGE_SITE).c_str());
 
 #undef _
 #define _(mess) mod->I18N(mess, lang().c_str()).c_str()

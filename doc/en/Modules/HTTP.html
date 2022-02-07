@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/HTTP</h1>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-realization
 </td>
-<td> 3.7 </td>
+<td> 3.8 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -103,7 +103,7 @@
 <dd><i>page</i> — page with the answer;</dd>
 <dd><i>sender</i> — address of the sender;</dd>
 <dd><i>vars</i> — variables of the request;</dd>
-<dd><i>user</i> — user;</dd>
+<dd><i>user</i> — user, can contain previous user in the second line;</dd>
 <dd><i>iprt</i> — pointer to an input part object of the protocol.</dd></dl></dd></dl>
 <ul><li> <b>void HTTP_POST(const string &amp;url, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> OR</li></ul>
 <dl><dd><b>void HttpPost( const string &amp;url, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — POST method with the parameters:
@@ -111,7 +111,7 @@
 <dd><i>page</i> — page with the answer and with the content of the body of the POST request;</dd>
 <dd><i>sender</i> — address of the sender;</dd>
 <dd><i>vars</i> — variables of the request;</dd>
-<dd><i>user</i> — user;</dd>
+<dd><i>user</i> — user, can contain previous user in the second line;</dd>
 <dd><i>iprt</i> — pointer to an input part object of the protocol.</dd></dl></dd></dl>
 <p>Then, in the case of the HTTP "GET" request, the function "HTTP_GET" or "HttpGet" will be called, and in the case of the "POST" request, the function "HTTP_POST" or "HttpPost" will be called in the appropriate UI module.
 </p>
@@ -220,5 +220,5 @@ SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/en">Modules/HTTP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2794</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/en">Modules/HTTP/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2802</td></tr></table></body>
 </html>

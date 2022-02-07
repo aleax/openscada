@@ -62,7 +62,7 @@ struct SSess
     string	url,		//request URL
 		page,
 		sender,		//request sender
-		user,		//sesion user
+		user, userPrev,	//sesion user and previous user
 		content,	//Contains
 		gPrms,		//Global parameters
 		lang;		//Language

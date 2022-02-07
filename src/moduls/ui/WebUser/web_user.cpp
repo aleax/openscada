@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.8"
+#define MOD_VER		"1.5.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -760,7 +760,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 //* SSess                                         *
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), content(icontent)
+    url(iurl), sender(isender), user(TSYS::strLine(iuser,0)), content(icontent)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");

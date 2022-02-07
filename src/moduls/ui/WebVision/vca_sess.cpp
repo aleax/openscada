@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -42,7 +42,8 @@ using namespace VCA;
 //*************************************************
 //* VCASess					  *
 //*************************************************
-VCASess::VCASess( const string &iid ) : toRemoveSelf(false), fStatusOrder(false), fStatusText(dataRes()), mId(iid)
+VCASess::VCASess( const string &iid ) :
+    toRemoveSelf(false), fStatusOrder(false), fStatusText(dataRes()), mId(iid), mUser(dataRes()), mUserOrig(dataRes())
 {
     open_ses = lst_ses_req	= time(NULL);
     id_objs	= grpAdd("obj_");
@@ -281,16 +282,16 @@ void VCASess::postReq( SSess &ses )
 	    pgCacheProc(oAddr, ses.prm.find("cachePg") == ses.prm.end());
     }
     else if(wp_com == "setUser") {
-	if((cntEl=ses.prm.find("user")) != ses.prm.end() && TSYS::strDecode(TSYS::strParse(cntEl->second,0,":"),TSYS::Custom) != mUser) {
-	    if(cntEl->second == "$" && mUserOrig.size()) cntEl->second = mUserOrig;
+	if((cntEl=ses.prm.find("user")) != ses.prm.end() && TSYS::strDecode(TSYS::strParse(cntEl->second,0,":"),TSYS::Custom) != user()) {
+	    if(cntEl->second == "$" && userOrig().size()) cntEl->second = userOrig();
 	    else {
 		size_t	pasSep = cntEl->second.find(":");
 		string	h_user = (pasSep == string::npos) ? cntEl->second : TSYS::strDecode(cntEl->second.substr(0,pasSep),TSYS::Custom),
 			h_pass = (pasSep == string::npos) ? "" : TSYS::strDecode(cntEl->second.substr(pasSep+1),TSYS::Custom);
 		cntEl->second = h_user;
 		// Checking the user permition to the session project
-		if( (pasSep == string::npos && SYS->security().at().usrAt(mUserOrig.size()?mUserOrig:mUser).at().permitCmpr(cntEl->second) > 0) ||
-			(pasSep != string::npos && !SYS->security().at().usrAt(h_user).at().auth(h_pass)) )
+		if((pasSep == string::npos && SYS->security().at().usrAt(userOrig().size()?userOrig():user()).at().permitCmpr(cntEl->second) > 0) ||
+			(pasSep != string::npos && !SYS->security().at().usrAt(h_user).at().auth(h_pass)))
 		    cntEl->second = "";
 	    }
 
@@ -300,11 +301,11 @@ void VCASess::postReq( SSess &ses )
 		if(!mod->cntrIfCmd(req,SSess(cntEl->second))) {
 		    // Changing the session user
 		    userSet(cntEl->second, true);
-		    vector<TVariant> prms; prms.push_back(mUser);
+		    vector<TVariant> prms; prms.push_back(user());
 		    ses.prt->objFuncCall("setUser", prms, "root");
 
-		    req.clear()->setName("disconnect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("remoteSrcAddr", ses.sender);
-		    mod->cntrIfCmd(req, SSess(mUser));
+		    //req.clear()->setName("disconnect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("remoteSrcAddr", ses.sender);
+		    //mod->cntrIfCmd(req, SSess(user()));
 		}
 	    }
 	}

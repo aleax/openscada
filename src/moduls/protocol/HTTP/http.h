@@ -73,7 +73,7 @@ class TProtIn: public TProtocolIn
 	bool	mNotFull, KeepAlive;
 	int	sesId;
 	string	mBuf,
-		prms, user, prmLang, brLang;
+		prms, user, userPrev, prmLang, brLang;
 };
 
 //*************************************************

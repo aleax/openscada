@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/FLibSYS</h1>
@@ -230,7 +230,7 @@ messPut("Example",0,"Example: "+test);</pre>
 <ul><li> <i>bool open(string name = "", string accs = "", string mFormat = "n", string enc = "");</i> — opens a new stream for string or the file <i>name</i>.</li>
 <li> <i>bool close();</i> — closes the stream.</li>
 <li> <i>{string|int|real|Array[int|real]} read(string valType = "char", int cnt = -1, string mFormatEnc = "n|NoEnc");</i> — reads a value of the <i>valType</i> in the <i>cnt</i> for the machine format or the input string encoding <i>mFormatEnc</i>.</li>
-<li> <i>{int|IO} {write|wr}({string|int|double|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1);</i> — writes the value(s) <i>vals</i> for the type <i>valType</i> for the machine format or the input string encoding <i>mFormatEnc</i>, and a repeat of scalar values in the amount <i>cnt</i>.</li></ul>
+<li> <i>{int|IO} {write|wr}({string|int|real|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1);</i> — writes the value(s) <i>vals</i> for the type <i>valType</i> for the machine format or the input string encoding <i>mFormatEnc</i>, and a repeat of scalar values in the amount <i>cnt</i>.</li></ul>
 <h3><span class="mw-headline" id="DB:_SQL_request_.28dbReqSQL.29"><span class="mw-headline-number">1.3</span> DB: SQL request (dbReqSQL)</span></h3>
 <p><i>Description:</i> Formation of the SQL-request <i>req</i> to the DB <i>addr</i>, inside (<i>trans</i>=true), outside (<i>trans</i>=false) or no matter (<i>trans</i>=EVAL) to a transaction. At an error the result's property "err" sets to the error value.<br />
 <i>Parameters:</i>
@@ -1548,5 +1548,5 @@ return val.isEval()&nbsp;? "Empty"&nbsp;: real2str(val,prec);</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/FLibSYS/en">Modules/FLibSYS/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2794</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/FLibSYS/en">Modules/FLibSYS/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2802</td></tr></table></body>
 </html>

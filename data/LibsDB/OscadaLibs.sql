@@ -8783,10 +8783,11 @@ return obuf;','','',1560098890);
 INSERT INTO flb_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0','','',1,360,0,'trNm = "offLine";
+Version: 1.3.0','','',1,360,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0,":");
 defLang = "en";
+indexPg = "index.html";
 
 SYS.cntrReq((req=SYS.XMLNode("get").setAttr("path","/%2fgen%2fprog")));
 prgNm = req.text();
@@ -8973,7 +8974,9 @@ for(var ip in pgsOprc) {
 	}
 
 	// Appending the custom header and footer
-	body.childIns(0, "div").load("<div class=''floatright''><a href=''"+docHost_+"''><img alt=''"+prgNm+"'' src=''"+topDir+"../en/files/Logo-big.png'' /></a></div>");
+	if(pOffLn == indexPg)
+		body.childIns(0, "div").load("<div class=''floatright''><a href=''"+docHost_+"''><img alt=''"+prgNm+"'' src=''"+topDir+"../en/files/Logo-big.png'' /></a></div>");
+	else body.childIns(0, "div").load("<div class=''floatright''><a href=''"+topDir+indexPg+"''><img alt=''"+prgNm+"'' src=''"+topDir+"../en/files/index.png'' /></a></div>");
 	body.childAdd("table").load("<table style=''border-top: dotted 2px #999999; margin-top: 20pt; color: gray;'' width=''100%''><tr>"
 		"<td style=''text-align: left;'' width=''40%''><a href=''"+docHost_+"/wiki/"+pWiki+"/"+pLang+"''>"+pWiki+"/"+pLang+"</a> - <a href=''"+docHost_+"/en/main/about-the-project/licenses/''>GFDL</a></td>"
 		"<td style=''text-align: center;''>"+docData+"</td>"
@@ -8984,7 +8987,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1635852598);
+if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1643902880);
 CREATE TABLE IF NOT EXISTS 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_regEl VALUES('pidUnif','PID unified','ПІД уніфікований','ПИД унифицированный','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
 

@@ -80,8 +80,8 @@ class TWEB: public TUI
     private:
 	//Methods
 	//!!! Registered your module's export functions.
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
+	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
+	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
 	//!!! Module's comandline options for print help function.
 	string optDescr( );

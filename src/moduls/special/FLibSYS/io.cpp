@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: io.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -294,7 +294,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 
 	return false;
     }
-    // {int|IO} {write|wr}({string|int|double|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1) -
+    // {int|IO} {write|wr}({string|int|real|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1) -
     //		Write value[s] <vals> for type <valType> for machine format or string encodeIn <mFormatEnc>,
     //		and scalar values repeat for <cnt>.
     //	vals - single value or values array for write;

@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Конфигуратор на Web</h1>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a> </td>
 <td> Конфигуратор программы (WEB)
 </td>
-<td> 1.9 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> ui_WebCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -44,16 +44,6 @@
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> В основном застарелый и заменён модулем <a href="../Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a>
 </p>
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">1</span> <span class="toctext">Базовые элементы</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Команды</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.BF.D0.B8.D1.81.D0.BA.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Списки</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="tocnumber">4</span> <span class="toctext">Таблицы</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#.D0.98.D0.B7.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Изображения</span></a></li>
-</ul>
-</div>
-
 <p>Этот модуль предоставляет конфигуратор OpenSCADA. Конфигуратор реализован на основе Web-технологий. Для работы конфигуратора достаточно обычного WEB-браузера. Работоспособность модуля тестировалась вместе с модулями <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a> и <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> на следующих Web-браузерах:
 </p>
 <ul><li> Mozilla;</li>
@@ -80,6 +70,16 @@
 <p>Адресация страниц начинается с элемента второго уровня URL. Это связанно с тем, что элемент первого уровня используется для идентификации модуля пользовательского Web-интерфейса. Например, URL: "http://localhost.localdomain:10002/WebCfg/Functions" можно расшифровать как вызов страницы первого уровня "Functions" Web-модуля WebCfg на хосте "localhost.localdomain" и через порт 10002.
 </p><p>Элементы управления делятся на: базовые, команды, списки, таблицы и изображения. Все четыре типа отображаются отдельными блоками, независимо от их расположения в описании.
 </p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#.D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">1</span> <span class="toctext">Базовые элементы</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Команды</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.BF.D0.B8.D1.81.D0.BA.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Списки</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#.D0.A2.D0.B0.D0.B1.D0.BB.D0.B8.D1.86.D1.8B"><span class="tocnumber">4</span> <span class="toctext">Таблицы</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#.D0.98.D0.B7.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.B8.D1.8F"><span class="tocnumber">5</span> <span class="toctext">Изображения</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id=".D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="mw-headline-number">1</span> Базовые элементы</span></h2>
 <p>В число базовых элементов входят: информационные элементы, поля ввода значений, элементы выбора из списка, флаги. Для установки новых значений базовых элементов используется групповой метод, для чего на форме существует кнопка "Принять". В случае отсутствия имени элемента базовый элемент стыкуется к предыдущему базовому. Пример группы базовых элементов со стыковкой приведён на рисунке 3.
 </p>
@@ -106,5 +106,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebCfg/ru">Modules/WebCfg/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2794</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebCfg/ru">Modules/WebCfg/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2802</td></tr></table></body>
 </html>

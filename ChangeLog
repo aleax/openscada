@@ -1,3 +1,19 @@
+2022-02-07 Roman (stable)
+- !:LibsDB.OscadaLibs: flb_servProc.docOffLine: Expanded for the index page accessing from any other pages.
+- !!!!:Protocol.HTTP,UI.{WebCfg,WebCfgD,WebUser,WebVision}: Appended of the previous user detection to mark that actions for HTTP-modules
+	with moving the previous user authentification session closing after successful the new one.
+    All the HTTP-modules adapted to the user field in the HTTP-functions with the previous user in the second line.
+    The HTTP-functions HttpGet() and HttpPost() marked as deprecated and scheduled for removing after version 1.0.
+- UI.{=Tmpl=,WebCg}: Moved to use the actual HTTP-functions HTTP_GET() and HTTP_POST().
+- FIX:{WebCgD,WebCg}: Fixed in using the module information, for the About information page mostly, in the non MULTILANGUAGE-DYNAMIC modes.
+- FIX:UI.{Vision,WebVision}: Prevented in disconnection the previous user at it change,
+    since now the user changing doesn't perform it twice registering for using and the disconnection causes the session closing in whole.
+- !!FIX:UI.WebVision: The session methods mUser and mUserOrig moved under the data mutex lock, due to there can be crashes
+	at active user manipulations.
+    !!: The previous user is used now for detection of the user change between the ordinal users and for single session,
+	than prevent to create new sessions.
+
+
 2022-01-31 Roman (stable)
 - SYS,DAQ.DAQGate: The messages redundancy and messages transferring in DAQ.DAQGate limited for depth of the requesting messages
     up to the restoring time or one hour.
@@ -73,7 +89,7 @@
 - DAQ.JavaLikeCalc: Names setting part of the execution form moved to itself for using the dynamic translation.
 - TUIS,UI.{QTCfg,Vision}: docGet() expanded by the language in the second line.
 - UI.{QTStarter,QTCfg,Vision}: The Starter Menu set for dynamic translation and updating.
-- FIX:UI.{QTStarter,QTCfg,Vision,WebCfg,WebCfgD}: FIX: Fixed in the "About" page translation.
+- FIX:UI.{QTStarter,QTCfg,Vision,WebCfg,WebCfgD}: Fixed in the "About" page translation.
 - !!:UI.QTCfg: The tree update enabled for the root page updation through the reconnection and the tree update at the user chage.
 - !!:UI.Vision: Appended in updation the toolbars at the user change, what also adapted for the dynamic translation.
     All development dialogs adapted for the dynamic translation.

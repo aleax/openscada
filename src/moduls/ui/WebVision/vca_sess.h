@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -519,7 +519,8 @@ class VCASess : public TCntrNode
 	const string		mId;
 	int			id_objs;	//Primitive object's container identifier
 	time_t			open_ses, lst_ses_req;
-	string			mUser, mUserOrig, mProj, mSender;
+	MtxString		mUser, mUserOrig;
+	string			mProj, mSender;
 
 	deque<pair<time_t,string> > mCachePg;	//Pages cache
 	map<string,CacheEl>	mCacheRes;	//Resources cache

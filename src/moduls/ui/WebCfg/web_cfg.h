@@ -89,7 +89,7 @@ class TWEB: public TUI
 	string pgHead( string head_els = "" );
 	string pgTail( );
 
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
+	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 	void getAbout( SSess &ses );
 	void getHead( SSess &ses );
 	void getArea( SSess &ses, XMLNode &node, string a_path );
@@ -97,7 +97,7 @@ class TWEB: public TUI
 	bool getVal( SSess &ses, XMLNode &node, string a_path, bool rd = true );
 	string getCookie( string name, vector<string> &vars );
 
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
+	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 	int  postArea( SSess &ses, XMLNode &node, const string &prs_comm, int level = 0 );
 	int  postVal( SSess &ses, XMLNode &node, string prs_path);
 	bool valPrepare( SSess &ses, XMLNode &node, string prs_path, bool compare );

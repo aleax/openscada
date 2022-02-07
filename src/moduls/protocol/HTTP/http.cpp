@@ -35,7 +35,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.7.0"
+#define MOD_VER		"3.8.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -763,7 +763,11 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	    }
 	    else if(strcasecmp(var.c_str(),"cookie") == 0) {
 		size_t vpos = val.find(mod->cookieLab.getVal()+"=", 0);
-		if(vpos != string::npos) user = mod->sesCheck((sesId=s2i(val.substr(vpos+mod->cookieLab.size()+1))));
+		if(vpos != string::npos) {
+		    val = val.substr(vpos+mod->cookieLab.size()+1);
+		    user = mod->sesCheck((sesId=s2i(val)));
+		    if(user.size()) userPrev = TSYS::strParse(val, 1, "-");
+		}
 	    }
 	    else if(strcasecmp(var.c_str(),"accept-language") == 0 && (brLang=TSYS::strTrim(TSYS::strParse(val,0,","))).size() > 2)
 		brLang = brLang.substr(0, 2);
@@ -799,11 +803,7 @@ bool TProtIn::mess( const string &reqst, string &answer )
 	//Process the internal commands
 	// Login
 	if(name_mod == "login") {
-	    if(method == "GET") {
-		if(sesId) mod->sesClose(sesId);
-		answer = getAuth(uri);
-		return mNotFull || KeepAlive;
-	    }
+	    if(method == "GET") { answer = getAuth(uri); return mNotFull || KeepAlive; }
 	    else if(method == "POST") {
 		map<string,string>	cnt;
 		map<string,string>::iterator cntEl;
@@ -817,10 +817,16 @@ bool TProtIn::mess( const string &reqst, string &answer )
 			((!mod->allowUsersAuth().size() || (allowUser=TRegExp("(^|;)"+user+"(;|$)").test(mod->allowUsersAuth()))) &&
 			    SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass)))
 		    {
-			mess_info(owner().nodePath().c_str(), _("Successful authentication for the user '%s'. Host: %s. User agent: %s."),
-			    user.c_str(), sender.c_str(), userAgent.c_str());
+			string prevUser;
+			if(sesId) { prevUser = mod->sesCheck(sesId); mod->sesClose(sesId); }
+			if(prevUser.size() && prevUser != user) {
+			    mess_info(owner().nodePath().c_str(),_("Successful user change from '%s' to '%s'. Host: %s. User agent: %s."),
+				prevUser.c_str(), user.c_str(), sender.c_str(), userAgent.c_str());
+			}
+			else mess_info(owner().nodePath().c_str(),_("Successful authentication for the user '%s'. Host: %s. User agent: %s."),
+				user.c_str(), sender.c_str(), userAgent.c_str());
 			answer = pgCreator("<h2 class='title'>"+TSYS::strMess(_("Going to the page: <b>%s</b>"),(uri+prms).c_str())+"</h2>\n", "200 OK",
-				"Set-Cookie: "+mod->cookieLab.getVal()+"="+i2s(mod->sesOpen(user,sender,userAgent))+"; path=/;",
+				"Set-Cookie: "+mod->cookieLab.getVal()+"="+i2s(mod->sesOpen(user,sender,userAgent))+(prevUser.size()?"-"+prevUser:"")+"; path=/;",
 				"<META HTTP-EQUIV='Refresh' CONTENT='0; URL="+uri+prms+"'/>");
 			return mNotFull || KeepAlive;
 		    }
@@ -871,29 +877,29 @@ bool TProtIn::mess( const string &reqst, string &answer )
 
 	    // Check metods
 	    if(method == "GET") {
-		void(TModule::*HttpGet)(const string &uri, string &page, const string &sender, vector<string> &vars, const string &user);
+		void(TModule::*HttpGet)(const string &uri, string &page, const string &sender, vector<string> &vars, const string &user);	//????[v1.0] Remove
 		void(TModule::*HTTP_GET)(const string &uri, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt);
 
 		if(wwwmod.at().modFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
 			(void (TModule::**)()) &HTTP_GET,true))
-		    ((&wwwmod.at())->*HTTP_GET)(uri+prms, answer, vars, user, this);
-		else if(wwwmod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
+		    ((&wwwmod.at())->*HTTP_GET)(uri+prms, answer, vars, user+(userPrev.size()?"\n"+userPrev:""), this);
+		else if(wwwmod.at().modFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",			//????[v1.0] Remove
 			(void (TModule::**)()) &HttpGet,true))
-		    ((&wwwmod.at())->*HttpGet)(uri+prms, answer, sender, vars, user);
+		    ((&wwwmod.at())->*HttpGet)(uri+prms, answer, sender, vars, user+(userPrev.size()?"\n"+userPrev:""));
 		else throw TError(nodePath().c_str(), _("No HTTP GET function in the module '%s'!"), name_mod.c_str());
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Get content:\n%s", request.c_str());
 	    }
 	    else if(method == "POST") {
-		void(TModule::*HttpPost)(const string &uri, string &page, const string &sender, vector<string> &vars, const string &user);
+		void(TModule::*HttpPost)(const string &uri, string &page, const string &sender, vector<string> &vars, const string &user);	//????[v1.0] Remove
 		void(TModule::*HTTP_POST)(const string &uri, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt);
 
 		answer = request.substr(pos);
 		if(wwwmod.at().modFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
 			(void (TModule::**)()) &HTTP_POST,true))
-		    ((&wwwmod.at())->*HTTP_POST)(uri+prms, answer, vars, user, this);
-		else if(wwwmod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
+		    ((&wwwmod.at())->*HTTP_POST)(uri+prms, answer, vars, user+(userPrev.size()?"\n"+userPrev:""), this);
+		else if(wwwmod.at().modFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",		//????[v1.0] Remove
 			(void (TModule::**)()) &HttpPost,true))
-		    ((&wwwmod.at())->*HttpPost)(uri+prms, answer, sender, vars, user);
+		    ((&wwwmod.at())->*HttpPost)(uri+prms, answer, sender, vars, user+(userPrev.size()?"\n"+userPrev:""));
 		else throw TError(nodePath().c_str(), _("No HTTP POST function in the module '%s'!"), name_mod.c_str());
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Post Content:\n%s", request.c_str());
 	    }

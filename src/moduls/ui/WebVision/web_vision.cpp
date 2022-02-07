@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.5.8"
+#define MOD_VER		"6.6.0"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -381,9 +381,9 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    if(zero_lev.empty()) {
 		bool sesPrjOk = false;
 		page = "<table class='work'>\n";
-		if(SYS->security().at().usrPresent(user))
+		if(SYS->security().at().usrPresent(ses.user))
 		    page += "<tr><th style='border-bottom: 1px dotted black; padding-bottom: 10px;'>"+
-			TSYS::strMess(_("Welcome \"%s (%s)\"!"),SYS->security().at().usrAt(user).at().descr().c_str(),("<a href='/login/" MOD_ID "'>"+user+"</a>").c_str())+
+			TSYS::strMess(_("Welcome \"%s (%s)\"!"),SYS->security().at().usrAt(ses.user).at().descr().c_str(),("<a href='/login/" MOD_ID "'>"+ses.user+"</a>").c_str())+
 			"</th></tr>\n";
 
 		// Get present sessions list
@@ -395,13 +395,13 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    if(!pgAccess(iprt,sender+"/" MOD_ID "/ses_"+req.childGet(iCh)->text()+"/"))	continue;
 		    if(!ses.isRoot() &&
-			    (req.childGet(iCh)->attr("user") != user ||
+			    (req.childGet(iCh)->attr("user") != ses.user ||
 			    (vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)))
 			continue;
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/ses_" + req.childGet(iCh)->text() + "' height='32' width='32'/> "
 			"<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text()+"</a>";
 		    if(ses.isRoot() && vcaSesPresent(req.childGet(iCh)->text())) prjSesEls += " (<a href='/" MOD_ID "/ses_" + req.childGet(iCh)->text() + "?com=close'>"+_("close")+"</a>)";
-		    if(req.childGet(iCh)->attr("user") != user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
+		    if(req.childGet(iCh)->attr("user") != ses.user) prjSesEls += " - "+req.childGet(iCh)->attr("user");
 		    if(vcaSesPresent(req.childGet(iCh)->text()) && vcaSesAt(req.childGet(iCh)->text()).at().sender() != sender)
 			prjSesEls += " - "+vcaSesAt(req.childGet(iCh)->text()).at().sender();
 		    prjSesEls += "</td></tr>";
@@ -441,7 +441,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
 	    }
 	    //New session create
-	    else if(zero_lev.compare(0,4,"prj_") == 0) {
+	    else if(zero_lev.find("prj_") == 0) {
 		string sName;
 		// Find for early created session for the user and the sender
 		XMLNode req("get");
@@ -451,10 +451,10 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		//if(!ses.isRoot())
 		AutoHD<VCASess> vs;
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++)
-		    if(req.childGet(iCh)->attr("user") == user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
+		    if(req.childGet(iCh)->attr("user") == ses.user && req.childGet(iCh)->attr("proj") == zero_lev.substr(4) &&
 			vcaSesPresent(req.childGet(iCh)->text()) &&
 			(vs=vcaSesAt(req.childGet(iCh)->text())).at().sender() == sender &&
-			(vs.at().user() == user || vs.at().userOrig() == user))
+			(vs.at().user() == ses.user || vs.at().userOrig() == ses.user))
 		    { sName = req.childGet(iCh)->text(); break; }
 		vs.free();
 		if(sName.empty()) {
@@ -472,7 +472,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    vcaSesAdd(sName);
 			    AutoHD<VCASess> vs = vcaSesAt(sName);
 			    vs.at().projSet(req.attr("prj"));
-			    vs.at().userSet(user);
+			    vs.at().userSet(ses.user);
 			    vs.at().senderSet(sender);
 			}
 		    }
@@ -483,7 +483,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		else page = pgCreator(iprt, page, "200 OK", "", "", "", ses.lang);
 	    }
 	    //Main session page data prepare
-	    else if(zero_lev.compare(0,4,"ses_") == 0) {
+	    else if(zero_lev.find("ses_") == 0) {
 		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
 		string sesnm = zero_lev.substr(4);
 
@@ -501,18 +501,19 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    "200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "'/>", "", ses.lang);
 			mess_info(nodePath().c_str(), _("The session '%s' is closed."), sesnm.c_str());
 		    }
-		    else page = pgCreator(iprt, string("<div class='error'>")+TSYS::strMess(_("You '%s' have no access to close sessions!"),user.c_str())+"</div>\n",
+		    else page = pgCreator(iprt, string("<div class='error'>")+TSYS::strMess(_("You '%s' have no access to close sessions!"),ses.user.c_str())+"</div>\n",
 			    "401 Unauthorized", "", "", "", ses.lang);
 		}
 		// Checking for the internal session presence
-		else if(!vs.freeStat() && (!(user == vs.at().user() || user == vs.at().userOrig()) ||
-			sender != vs.at().sender()) && !SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_))
+		else if(!vs.freeStat() && (!(ses.user == vs.at().user() || ses.user == vs.at().userOrig() || ses.userPrev == vs.at().user()) ||
+			    sender != vs.at().sender()) &&
+			!SYS->security().at().access(ses.user,SEC_WR,"root","root",RWRWR_))
 		    page = pgCreator(iprt, _("Going to the different session ..."),
 			"200 OK", "", "<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/" MOD_ID "/prj_"+vs.at().proj()+"'/>", "", ses.lang);
 		// The main requesting code
 		else {
 		    // Reconnection to change the user in the VCA session
-		    if(!vs.freeStat() && user != vs.at().user()) {
+		    if(!vs.freeStat() && ses.user != vs.at().user()) {
 			XMLNode req("connect");
 			req.setAttr("path", "/%2fserv%2fsess")->setAttr("sess", sesnm)->setAttr("remoteSrcAddr", sender)->setAttr("userChange", "1");
 			cntrIfCmd(req, ses);
@@ -531,7 +532,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			    ResAlloc sesRes(mSesRes, true);
 			    vcaSesAdd(sesnm); vs = vcaSesAt(sesnm);
 			    vs.at().projSet(req.attr("prj"));
-			    vs.at().userSet(user);
+			    vs.at().userSet(ses.user);
 			    vs.at().senderSet(sender);
 			}
 		    }
@@ -539,7 +540,7 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 		    // Same request
 		    if(!vs.freeStat()) {
 			ResAlloc sesRes(mSesRes, false);
-			vs.at().userSet(user, true);
+			vs.at().userSet(ses.user, true);
 			vs.at().getReq(ses);
 			page = ses.page;
 		    } else HTTP_GET("", page, vars, user, iprt);
@@ -658,7 +659,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	    string stVal = TSYS::strMess(_("%s %s(%s):%s(%s): the last %s; cached pages %d and resources %d, %s; session objects %d."),
 		atm2s(ses.at().openTm(),"%Y-%m-%dT%H:%M:%S").c_str(),
 		ses.at().id().c_str(), ses.at().proj().c_str(),
-		ses.at().user().c_str(),  ses.at().sender().c_str(),
+		ses.at().user().c_str(), ses.at().sender().c_str(),
 		atm2s(ses.at().lstReq(),"%Y-%m-%dT%H:%M:%S").c_str(),
 		ses.at().pgCacheSize(), ses.at().cacheResSize(), TSYS::cpct2str(ses.at().cacheResLen()).c_str(), vSesObjs.size());
 	    if(ses.at().fStatusText.getVal().size())
@@ -834,7 +835,8 @@ string TWEB::trMessReplace( const string &tsrc )
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
 	const string &icontent, TProtocolIn *iprt ) :
-    prt(iprt), url(iurl), sender(isender), user(iuser), content(icontent), mRoot(-1), vars(ivars)
+    prt(iprt), url(iurl), sender(isender), user(TSYS::strLine(iuser,0)), userPrev(TSYS::strLine(iuser,1)),
+    content(icontent), mRoot(-1), vars(ivars)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");

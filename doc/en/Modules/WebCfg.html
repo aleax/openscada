@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/WebCfg</h1>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a> </td>
 <td> Program configurator (WEB)
 </td>
-<td> 1.9 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> ui_WebCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -44,16 +44,6 @@
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Deprecated mostly and replaced by <a href="../Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a>
 </p>
 </td></tr></table>
-<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
-<ul>
-<li class="toclevel-1 tocsection-1"><a href="#Basic_elements"><span class="tocnumber">1</span> <span class="toctext">Basic elements</span></a></li>
-<li class="toclevel-1 tocsection-2"><a href="#Commands"><span class="tocnumber">2</span> <span class="toctext">Commands</span></a></li>
-<li class="toclevel-1 tocsection-3"><a href="#Lists"><span class="tocnumber">3</span> <span class="toctext">Lists</span></a></li>
-<li class="toclevel-1 tocsection-4"><a href="#Tables"><span class="tocnumber">4</span> <span class="toctext">Tables</span></a></li>
-<li class="toclevel-1 tocsection-5"><a href="#Images"><span class="tocnumber">5</span> <span class="toctext">Images</span></a></li>
-</ul>
-</div>
-
 <p>This module provides the configurator of OpenSCADA. The configurator is implemented on the basis of Web-technologies. For the configurator working it is enough for usual WEB-Browser. The module operability was tested in conjunction with modules <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a> and <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> on the following Web-browsers:
 </p>
 <ul><li> Mozilla;</li>
@@ -80,6 +70,16 @@
 <p>Addressing of the pages begins with an element of the second-level URL. This is due to the fact that the first-level element is used to identify the module of user Web-interface. For example, URL: "http://localhost.localdomain:10002/WebCfg//Functions" can be deciphered as call of the first-level page "Functions" of the Web-module WebCfg on the host "localhost.localdomain" through the port 10002.
 </p><p>The control tools are divided into: basic, commands, lists, tables and images. All four types are displayed by individual blocks not depending on their location in the description.
 </p>
+<div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Basic_elements"><span class="tocnumber">1</span> <span class="toctext">Basic elements</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Commands"><span class="tocnumber">2</span> <span class="toctext">Commands</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Lists"><span class="tocnumber">3</span> <span class="toctext">Lists</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Tables"><span class="tocnumber">4</span> <span class="toctext">Tables</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Images"><span class="tocnumber">5</span> <span class="toctext">Images</span></a></li>
+</ul>
+</div>
+
 <h2><span class="mw-headline" id="Basic_elements"><span class="mw-headline-number">1</span> Basic elements</span></h2>
 <p>The basic elements include: information elements, fields to input of the values, elements of combo box, flags. To set for new values of the basic elements the group method is used, for this there is a button "Accept" on the form. In the case of an element name absence, the basic element connects to the previous one. Examples of the basic elements, with connections, is shown in Figure 3.
 </p>
@@ -106,5 +106,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebCfg/en">Modules/WebCfg/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2794</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/WebCfg/en">Modules/WebCfg/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2802</td></tr></table></body>
 </html>

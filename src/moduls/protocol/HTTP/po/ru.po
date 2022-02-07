@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Protocol.HTTP 1.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-26 17:11+0200\n"
+"POT-Creation-Date: 2022-02-05 15:35+0200\n"
 "PO-Revision-Date: 2007-10-23 18:02+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -136,6 +136,10 @@ msgstr ""
 "%s"
 
 #, c-format
+msgid "Successful user change from '%s' to '%s'. Host: %s. User agent: %s."
+msgstr "Успешная смена пользователя '%s' на '%s'. Узел: %s. Агент пользователя: %s."
+
+#, c-format
 msgid "Successful authentication for the user '%s'. Host: %s. User agent: %s."
 msgstr "Успешная аутентификация пользователя '%s'. Узел: %s. Агент пользователя: %s."
 
@@ -149,7 +153,9 @@ msgstr "Ошибка аутентификации пользователя '%s'.
 
 #, c-format
 msgid "The try to auth from the not allowed user '%s'. Host: %s. User agent: %s."
-msgstr "Попытка аутентификации от неразрешенного пользователя '%s'. Узел: %s. Агент пользователя: %s."
+msgstr ""
+"Попытка аутентификации от неразрешенного пользователя '%s'. Узел: %s. Агент "
+"пользователя: %s."
 
 msgid "<p style='color: #CF8122;'>Wrong authentication! Retry please.</p>"
 msgstr "<p style='color: #CF8122;'>Ошибка аутентификации! Повторите пожалуйста.</p>"

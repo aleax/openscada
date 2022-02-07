@@ -41,7 +41,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.2.3"
+#define MOD_VER		"2.2.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -213,10 +213,10 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		" <tr><th><a href='"+TUIS::docGet("|Modules/" MOD_ID,NULL,TUIS::GetPathURL)+"'>" MOD_ID " v" MOD_VER "</a></th></tr>\n"
 		" <tr><td class='content'>\n"
 		"  <table border='0px' cellspacing='3px'>\n"
-		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + MOD_NAME + "</TD></TR>\n"
-		"   <tr><td style='color: blue;'>" + _("Description: ") + "</td><td>" + DESCRIPTION + "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" + LICENSE + "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + AUTHORS +"</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(mod->modInfo("Name")) + "</TD></TR>\n"
+		"   <tr><td style='color: blue;'>" + _("Description: ") + "</td><td>" + _(mod->modInfo("Description")) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" + mod->modInfo("License") + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + _(mod->modInfo("Author")) +"</td></tr>\n"
 		"  </table>\n"
 		" </td></tr>\n"
 		"</table><br/>\n"
@@ -278,8 +278,8 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		else page = trMessReplace(WebCfgDVCA_html);
 		// User replace
 		size_t varPos = page.find("##USER##");
-		if(varPos != string::npos)
-		    page.replace(varPos, 8, TSYS::strMess("<span style=\"color: %s;\">%s</span>",((user=="root")?"red":"green"),user.c_str()));
+		if(varPos != string::npos) page.replace(varPos, 8,
+			TSYS::strMess("<span style=\"color: %s;\">%s</span>",((ses.user=="root")?"red":"green"),ses.user.c_str()));
 		// Charset replace
 		if((varPos=page.find("##CHARSET##")) != string::npos)
 		    page.replace(varPos, 11, Mess->charset());
@@ -319,7 +319,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 			else chN->setAttr("icoSize",i2s(reqIco.text().size()));
 			//  Process groups
 			XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
-			mod->cntrIfCmd(brReq,ses.user);
+			mod->cntrIfCmd(brReq, ses.user);
 			for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++) {
 			    XMLNode *chB = chN->childAdd();
 			    *chB = *brReq.childGet(0)->childGet(i_br);
@@ -481,7 +481,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //* SSess                                         *
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
+    url(iurl), sender(isender), user(TSYS::strLine(iuser,0)), content(icontent), vars(ivars)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");

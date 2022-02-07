@@ -784,7 +784,7 @@ string TMess::I18N( const string &imess, const char *mLang, const char *d_name )
 
 	return rez;
     }
-    else return dgettext((dir.size()?dir.c_str():NULL), mess.c_str());
+    else return dgettext(dir.size()?dir.c_str():NULL, mess.c_str());
 #else
     return imess;
 #endif

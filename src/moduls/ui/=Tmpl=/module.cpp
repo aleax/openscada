@@ -87,11 +87,11 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     //!!! Register your module's export functions. Used, for example, for call from HTTP module, and use this OpenSCADA module as HTTP user interface module.
-    //> Reg export functions
-    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
-    modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
+    // Reg export functions
+    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
+    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 }
 
 //!!! Destructor for module's root object. Append into for your need.
@@ -226,7 +226,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 }
 
 //!!! Registered export function for process GET requests from OpenSCADA transport's protocol module HTTP.
-void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars )
+void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     string ntrnd = TSYS::pathLev(url, 0);
     if(!ntrnd.size()) {
@@ -272,7 +272,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 }
 
 //!!! Registered export function for process POST requests from OpenSCADA transport's protocol module HTTP.
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein )
+void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
 
 }
