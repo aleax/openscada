@@ -1885,7 +1885,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s" || this.outTp == "t") {
 				    tVl = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
-				    this.innerHTML = (this.outTp == "t") ? "<textarea style='height: "+this.clientHeight+"px;'/>" : "<input/>";
+				    this.innerHTML = (this.outTp == "t") ? "<textarea style='height: "+Math.max(40,this.clientHeight)+"px;'/>" : "<input/>";
 				    this.firstChild.value = tVl;
 				    this.firstChild.onkeydown = function(e) {
 					e.stopImmediatePropagation();
@@ -1894,7 +1894,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    if(this.nodeName == "TEXTAREA" && e.ctrlKey) {	//NewLine insertion
 						var selStart = this.selectionStart;
 						this.value = this.value.slice(0, selStart) + "\n" + this.value.slice(this.selectionEnd);
-						this.selectionStart = this.selectionEnd = selStart + 1;
+						this.setSelectionRange(selStart + 1, selStart + 1);
+						this.blur(); this.focus();
 						return true;
 					    }
 					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
@@ -1907,11 +1908,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    //this.firstChild.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.focus();
+				    this.firstChild.setSelectionRange(this.firstChild.selectionStart, this.firstChild.selectionEnd);
 				} else { this.isEnter = false; elTbl.edIt = null; }
 			    }
 			    //   Prevent for wrong selection
-			    if(window.getSelection) window.getSelection().removeAllRanges();
-			    else if(document.selection) document.selection.empty();
+			    //!!!! But causes the text cursor obtain in the created input tag
+			    //if(window.getSelection) window.getSelection().removeAllRanges();
+			    //else if(document.selection) document.selection.empty();
 			    return false;
 			}
 			formObj.selIt = function(row, col) {

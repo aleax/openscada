@@ -120,7 +120,7 @@ AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const strin
 string WidgetLib::name( ) const
 {
     string tNm = cfg("NAME").getS();
-    return tNm.size() ? tNm : mId;
+    return tNm.size() ? _(tNm) : mId.getS().c_str();
 }
 
 string WidgetLib::getStatus( )

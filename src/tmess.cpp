@@ -287,19 +287,57 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
     if(base.empty()) return base;
 
     string rez, tStr, cKey = base, trLang = lang2Code();
-    bool isUAPI = (src.find("uapi:") == 0);
+    bool isUAPI = (src.find("uapi:") != string::npos),
+	isDUAPI = (src.find("duapi:") == 0);
+
     if(translDyn()) {
 	if(lang.size() >= 2) trLang = lang.substr(0,2);
 	if(trLang == lang2CodeBase() && !isUAPI) return base;
 	cKey = trLang+"#"+cKey;
     } else if(!isUAPI) return base;
 
-    //Request from the cache at the first
+    //Requesting the cache at the first
     if((rez=translCacheGet(cKey)).size()) ;
     else if(Mess->isMessTranslable(base)) {
-	//Request to data source directly
-	if(isUAPI) {	// Check/Get/Place from user API translations table
-	    string srcAddrs = src.substr(5), tStrVl;
+	bool isReqUAPI = false;
+
+	//Checking the included sources from the index
+	if(!isUAPI || isDUAPI) {
+	    MtxAlloc res(mRes, true);
+	    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
+	    if(im != trMessIdx.end()) {
+		TConfig req;
+		for(map<string,string>::iterator is = im->second.begin(); rez.empty() && is != im->second.end(); ++is) {
+		    string trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#"), reqFld;
+		    bool isCfg = false;
+		    //  Source is config file or included DB
+		    if((isCfg=(trSrc.find("cfg:")==0)) || trSrc.find("db:") == 0) {
+			reqFld = translFld(trLang, trFld, isCfg);
+			//  Need DB structure prepare
+			req.elem().fldClear();
+			req.elem().fldAdd(new TFld(trFld.c_str(),"",TFld::String,0));
+			req.elem().fldAdd(new TFld(reqFld.c_str(),"",TFld::String,0));
+			req.cfg(trFld).setReqKey(true);
+			req.cfg(trFld).setS(im->first);
+
+			//  Get from config file or DB source
+			for(int inst = 0; rez.empty(); inst++) {
+			    bool seekRez = isCfg ? TBDS::dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
+					    : TBDS::dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
+			    if(!seekRez) break;
+			    rez = req.cfg(reqFld).getS();
+			    isReqUAPI = true;
+			}
+		    }
+		}
+	    }
+	    res.unlock();
+
+	    translCacheSet(cKey, rez);
+	}
+	//Requesting the data source directly
+	if(isUAPI && !isReqUAPI) {	//Checking/Getting/Placing from user API translations table
+	    string srcAddrs = src.substr(isDUAPI?6:5), tStrVl;
 	    if(srcAddrs.empty()) srcAddrs = SYS->workDB();
 
 	    TConfig req;
@@ -330,40 +368,6 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		    if(translDyn()) Mess->translReg(base, (isCfg?"cfg:/":"db:"+*iA+".")+mess_TrUApiTbl+"#base");
 		}
 	    }
-	    translCacheSet(cKey, rez);
-	}
-	//Check included sources from index
-	else {
-	    MtxAlloc res(mRes, true);
-	    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
-	    if(im != trMessIdx.end()) {
-		TConfig req;
-		for(map<string,string>::iterator is = im->second.begin(); rez.empty() && is != im->second.end(); ++is) {
-		    string trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#"), reqFld;
-		    bool isCfg = false;
-		    //  Source is config file or included DB
-		    if((isCfg=(trSrc.find("cfg:")==0)) || trSrc.find("db:") == 0) {
-			reqFld = translFld(trLang, trFld, isCfg);
-			//  Need DB structure prepare
-			req.elem().fldClear();
-			req.elem().fldAdd(new TFld(trFld.c_str(),"",TFld::String,0));
-			req.elem().fldAdd(new TFld(reqFld.c_str(),"",TFld::String,0));
-			req.cfg(trFld).setReqKey(true);
-			req.cfg(trFld).setS(im->first);
-
-			//  Get from config file or DB source
-			bool seekRez = false;
-			for(int inst = 0; rez.empty(); inst++) {
-			    seekRez = isCfg ? TBDS::dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
-					    : TBDS::dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
-			    if(!seekRez) break;
-			    rez = req.cfg(reqFld).getS();
-			}
-		    }
-		}
-	    }
-	    res.unlock();
-
 	    translCacheSet(cKey, rez);
 	}
     }

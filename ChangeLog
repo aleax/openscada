@@ -1,3 +1,17 @@
+2022-02-15 Roman (stable)
+- FIX:LibsDB.vcaBase: wlb_Main.RootPgSo: Fixed in width setting of the view area buttons at updating after the user change.
+    wlb_Main.ElViewGraph: Enabled for the transitive translation in the tooltip and for the parameter description.
+- SYS: The transitive dynamic translation prevented in appending the table "Trs" for messages available in other sources,
+    so checking the message index before.
+- Transports: External OpenSCADA hosts' table appended of checking the host ID presence at it change.
+- Special.FLibSYS: Some cleaned in the IO code.
+- UI.VCAEngine: Name of the VCA-library object appended for the prestored translation and for the static libraries like to "Original widgets".
+- UI.WebVision: Improved in the table usability and mostly in the text edition:
+    true width fitting,
+    minimum height setting to 40 pixels,
+    text cursor setting and tracing at the entry and Ctrl+Enter using setSelectionRange().
+
+
 2022-02-07 Roman (stable)
 - !:LibsDB.OscadaLibs: flb_servProc.docOffLine: Expanded for the index page accessing from any other pages.
 - !!!!:Protocol.HTTP,UI.{WebCfg,WebCfgD,WebUser,WebVision}: Appended of the previous user detection to mark that actions for HTTP-modules

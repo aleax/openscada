@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.8.3"
+#define MOD_VER		"7.8.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -196,7 +196,7 @@ void Engine::postEnable( int flag )
 	prjStl_el.fldAdd(new TFld(("V_"+i2s(iStl)).c_str(),"",TFld::String,TFld::NoFlag,"100"));
 
     //Init original widgets library
-    wlbAdd("originals", _("Original widgets"), "");
+    wlbAdd("originals", trS("Original widgets"), "");
     // Set default library icon
     if(TUIS::icoGet("VCA.lwdg_root",NULL,true).size())
 	wlbAt("originals").at().setIco(TSYS::strEncode(TUIS::icoGet("VCA.lwdg_root"),TSYS::base64));

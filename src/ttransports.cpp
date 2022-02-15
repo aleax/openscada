@@ -532,16 +532,18 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))	extHostSet(ExtHost(u,"newHost",_("New external host"),"","",u));
 	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR)) {
-	    if(TSYS::strParse(opt->attr("key_id"), 1, ".").size())
+	    if(TSYS::strParse(opt->attr("key_id"),1,".").size())
 		throw err_sys(_("Lifted hosts are not available for control here!"));
 	    extHostDel(u, opt->attr("key_id"), sysHostAcs);
 	}
 	if(ctrChkNode(opt,"set",RWRWRW,"root",STR_ID,SEC_WR)) {
-	    if(TSYS::strParse(opt->attr("key_id"), 1, ".").size())
+	    if(TSYS::strParse(opt->attr("key_id"),1,".").size())
 		throw err_sys(_("Lifted hosts are not available for control here!"));
 	    string col   = opt->attr("col");
 	    ExtHost host = extHostGet(u, opt->attr("key_id"), sysHostAcs);
 	    if(col == "id") {
+		if(extHostGet(u,opt->text(),sysHostAcs).id.size())
+		    throw err_sys(_("The host '%s' is presented already!"), opt->text().c_str());
 		host.id = opt->text();
 		extHostDel(u, opt->attr("key_id"), sysHostAcs);
 	    }
