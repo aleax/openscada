@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 08:43+0300\n"
+"POT-Creation-Date: 2022-02-16 16:20+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -156,7 +156,8 @@ msgid ""
 "of the acquisition blocks.\n"
 "Restart to apply the removed PLC links in run."
 msgstr ""
-"Ручний перезапуск ввімкненого об'єкту контролеру викликає примусове переформування блоків збору.\n"
+"Ручний перезапуск ввімкненого об'єкту контролеру викликає примусове "
+"переформування блоків збору.\n"
 "Перезапустіть для застосування видалених при виконанні посилань ПЛК."
 
 msgid "Default port of the ModuBus/TCP is 502."
@@ -359,7 +360,8 @@ msgid "13:Error of the server response"
 msgstr "13:Помилка відповіді сервера"
 
 #, c-format
-msgid "13:The response Transaction ID %d is not suitable to the request one %d."
+msgid ""
+"13:The response Transaction ID %d is not suitable to the request one %d."
 msgstr "13:ID транзакції відповіді %d не відповідає запиту %d."
 
 msgid "Not full response"
@@ -605,6 +607,9 @@ msgstr "Зміна замкненого атрибуту недозволено.
 msgid "Empty value is not allowed."
 msgstr "Порожнє значення недозволено."
 
+msgid "Client ModBus"
+msgstr "Клієнт ModBus"
+
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
@@ -615,10 +620,12 @@ msgstr ""
 "Надає реалізацію клієнтського ModBus сервісу. Підтримуються Modbus/TCP, "
 "Modbus/RTU та Modbus/ASCII протоколи."
 
+msgid "Server ModBus"
+msgstr "Сервер ModBus"
+
 msgid ""
 "Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and "
 "ModBus/ASCII protocols are supported."
 msgstr ""
 "Надає реалізацію ModBus протоколів. Підтримуються Modbus/TCP, Modbus/RTU та "
 "Modbus/ASCII протоколи."
-

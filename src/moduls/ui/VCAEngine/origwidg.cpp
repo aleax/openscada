@@ -1588,7 +1588,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	wProgO = SYS->daq().at().at(TSYS::strSepParse(iLang,0,'.')).at().compileFunc(TSYS::strSepParse(iLang,1,'.'),funcIO,"");
 	// Connect to compiled function
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(wProgO)).at());
-	//???? Changing the storage for placing of the dynamic messages translation to the project storage
+	//?!?! Changing the storage for placing of the dynamic messages translation to the project storage
 	// funcV.func()->setStor(calcProgStors());
 	// Load values of generic IO
 	funcV.setI(A_DocCalcPrmTime, wdg->attrAt("time").at().getI());

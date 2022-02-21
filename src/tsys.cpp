@@ -363,7 +363,7 @@ string TSYS::cpct2str( double cnt )
     return r2s(cnt,3,'g')+_("B");
 }
 
-double TSYS::str2real( const string &val )
+/*double TSYS::str2real( const string &val )
 {
     const char *chChr = val.c_str();
 
@@ -407,7 +407,7 @@ double TSYS::str2real( const string &val )
 
     //Combine
     return tVl * pow(10, tAftRdx-nAftRdx);
-}
+}*/
 
 time_t TSYS::str2atime( const string &val, const string &format, bool gmt )
 {
@@ -3784,9 +3784,7 @@ int main( int argc, char *argv[] )
 {
     int rez = 0;
 
-#if defined(__ANDROID__)
     setenv("QT_SCALE_FACTOR", "1.5", 1);
-#endif
 
     //Same load and start the core object TSYS
     SYS = new TSYS(argc, argv, NULL);

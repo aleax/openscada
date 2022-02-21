@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 08:43+0300\n"
+"POT-Creation-Date: 2022-02-16 16:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -492,10 +492,16 @@ msgstr ""
 msgid "Empty value is not allowed."
 msgstr ""
 
+msgid "Client ModBus"
+msgstr ""
+
 msgid "Roman Savochenko"
 msgstr ""
 
 msgid "Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported."
+msgstr ""
+
+msgid "Server ModBus"
 msgstr ""
 
 msgid "Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported."

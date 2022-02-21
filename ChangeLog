@@ -1,3 +1,16 @@
+2022-02-21 Roman (stable)
+- FIX:AGLKS.vca: The style rule 'labColorGrph1' fixed in the transparecy level 200 for the Default.
+- FIX:SYS: AUTOMAKE options changed to "1.10 subdir-objects" since 1.9 doesn't support the options.
+    The translation obtaining for the modules information restored in use _() for exhibition instead trS().
+    Removed for the spare definition MESS_LEV_MAX.
+    Complete commented for str2real() before real using.
+    data/{debian,debian_mod}/changelog: Changed in the repository to Work.
+- DAQ.{TemplateLib,JavaLikeCalc.Lib}: Reverted in setting "DB" for new libraries, for opening they on old OpenSCADA versions.
+- {DAQ,Protocol}.ModBus: Appended for the modules' name individual specifying and translation.
+- FIX:DAQ.OPC_UA,libOPC_UA,DAQ.Siemens: Restored in building by old GCC 3 compilers through PROTECTED sections accessing errors.
+- FIX:UI.Vision: Restored in building with Qt lesser 4.6 in accessing QDesktopWidget().screenCount().
+
+
 2022-02-15 Roman (stable)
 - FIX:LibsDB.vcaBase: wlb_Main.RootPgSo: Fixed in width setting of the view area buttons at updating after the user change.
     wlb_Main.ElViewGraph: Enabled for the transitive translation in the tooltip and for the parameter description.
@@ -6,7 +19,7 @@
 - Transports: External OpenSCADA hosts' table appended of checking the host ID presence at it change.
 - Special.FLibSYS: Some cleaned in the IO code.
 - UI.VCAEngine: Name of the VCA-library object appended for the prestored translation and for the static libraries like to "Original widgets".
-- UI.WebVision: Improved in the table usability and mostly in the text edition:
+- !:UI.WebVision: Improved in the table usability and mostly in the text edition:
     true width fitting,
     minimum height setting to 40 pixels,
     text cursor setting and tracing at the entry and Ctrl+Enter using setSelectionRange().
@@ -19,17 +32,17 @@
     All the HTTP-modules adapted to the user field in the HTTP-functions with the previous user in the second line.
     The HTTP-functions HttpGet() and HttpPost() marked as deprecated and scheduled for removing after version 1.0.
 - UI.{=Tmpl=,WebCg}: Moved to use the actual HTTP-functions HTTP_GET() and HTTP_POST().
-- FIX:{WebCgD,WebCg}: Fixed in using the module information, for the About information page mostly, in the non MULTILANGUAGE-DYNAMIC modes.
+- FIX:UI.{WebCgD,WebCg}: Fixed in using the module information, for the About information page mostly, in the non MULTILANGUAGE-DYNAMIC modes.
 - FIX:UI.{Vision,WebVision}: Prevented in disconnection the previous user at it change,
     since now the user changing doesn't perform it twice registering for using and the disconnection causes the session closing in whole.
-- !!FIX:UI.WebVision: The session methods mUser and mUserOrig moved under the data mutex lock, due to there can be crashes
+- !!:FIX:UI.WebVision: The session methods mUser and mUserOrig moved under the data mutex lock, due to there can be crashes
 	at active user manipulations.
     !!: The previous user is used now for detection of the user change between the ordinal users and for single session,
 	than prevent to create new sessions.
 
 
 2022-01-31 Roman (stable)
-- SYS,DAQ.DAQGate: The messages redundancy and messages transferring in DAQ.DAQGate limited for depth of the requesting messages
+- !!!:SYS,DAQ.DAQGate: The messages redundancy and messages transferring in DAQ.DAQGate limited for depth of the requesting messages
     up to the restoring time or one hour.
 
 
@@ -39,8 +52,8 @@
 - FIX:SYS: Significant improving and fixing the UserAPI messages translation:
     - fixed for the new UserAPI messages registering in the MULTILANGUAGE-DYNAMIC mode;
     - appended for filtering the messages for they translatability before registering;
-    - appended for the new messages early registering in the translation messages index just after appending to the storage table "Tr".
-- Security: The system users and groups some renamed and enabled for the storaged system translation.
+    - appended for the new messages early registering in the translation messages index just after appending to the storage table "Trs".
+- Security: The system users and groups some renamed and enabled for the prestoring system translation.
 - Protocol.HTTP: Appended of detection and notification of login tries the unallowed users.
 - !!:FIX:UI.VCAEngine: Appended of changing the storage just after the widget procedure compile
 	for placing of the dynamic messages translation to the project storage.
@@ -50,7 +63,7 @@
 2022-01-20 Roman (stable)
 - !:LibsDB.vcaBase: wlb_Main.RootPgSo: The complete updating conditions appended of the direct language change.
 - !:FIX:DB: Fixed in the function TTable::fieldSQLSeek() for anyway processing at empty requesting list.
-- SYS: Appended for the dynamic translation for:
+- SYS: Appended in the dynamic translation for:
     - DAQ-attributes name-description postranslation after the system translation and translation in the context help;
     - DAQ-attributes translation in the UserAPI functions: get(), set(), descr();
 - FIX:DAQ.DAQGate: The parameters is set to disabled at they missing on the remote host.
@@ -66,7 +79,7 @@
 2022-01-16 Roman (stable)
 - !!:LibsDB.vcaBase: wlb_Main.RootPgSo: Appended of complete updating at the user change but language also can be changed.
     Automaticly fixed and updated for some translation.
-- !!:LibsDB.vcaBase,AGLKS.vca,Boiler.St: All project styles moved under new storing table and its structure with translation.
+- !!:LibsDB.vcaBase,AGLKS.vca,Boiler.St: All project styles moved under a new storing table and its structure with translation.
 - !!:FIX:BD: Config and DB storages prevented on the translation loss for not changed fields of the object save
     and for the MULTILANGUAGE-DYNAMIC mode. The changing is also controlled now at the changing value structure receiving.
     FIX: The Config storage also appended of filling empty BASE at setting the translation.
@@ -74,7 +87,7 @@
 - !!!!:UI.{QTStarter,QTCfg,Vision}: Appended for the system Qt-messages translation relating to the selected user language,
     through the common application property "lang" for the Qt-translation reimplemented function QTranslator::translate(),
     and then the language commonly switched by the last interface and for all opened.
-- !!!!:FIX:UI.VCAEngine: The project styles moved under new storing table "{DB_TBL}_stls" and its structure with translation,
+- !!!!:FIX:UI.VCAEngine: The project styles moved under a new storing table "{DB_TBL}_stls" and its structure with translation,
 	then the table "{DB_TBL}_stls" readed firstly and next "{DB_TBL}_stl" for the compatibility.
     FIX: Fixed in the new styles creation and loading only allowed ones
 	with control of the property values presence before reading and filling for missing at setting.
@@ -94,7 +107,7 @@
 	inward the translation context or _(). In the background there is used Mess->I18N() but for the specific
 	language code mess_PreSave="<PSV>".
     - TMess::I18N() changed in the arguments for "const string &mess" the first and mLang moved to the second.
-    - The data translation functions - short definitions renamed to trD_L(), trD_U(), trD_LU(), trDSet_L(), trDSet_U(), trDSet_LU().
+    - The data translation functions - short definitions, renamed to trD_L(), trD_U(), trD_LU(), trDSet_L(), trDSet_U(), trDSet_LU().
     - The subsystem name moved to the function subName() call from the method.
     - *: The TFld() and IO() objects expanded in work with the prestoring system messages.
     - Module info fields adapted to the MULTILANGUAGE-DYNAMIC mode.
@@ -104,7 +117,7 @@
 - TUIS,UI.{QTCfg,Vision}: docGet() expanded by the language in the second line.
 - UI.{QTStarter,QTCfg,Vision}: The Starter Menu set for dynamic translation and updating.
 - FIX:UI.{QTStarter,QTCfg,Vision,WebCfg,WebCfgD}: Fixed in the "About" page translation.
-- !!:UI.QTCfg: The tree update enabled for the root page updation through the reconnection and the tree update at the user chage.
+- !!:UI.QTCfg: The tree update enabled for the root page updation through the reconnection and the tree update at the user change.
 - !!:UI.Vision: Appended in updation the toolbars at the user change, what also adapted for the dynamic translation.
     All development dialogs adapted for the dynamic translation.
 
@@ -179,7 +192,7 @@
 
 
 2021-12-22 Roman (stable)
-- FIX:The function TMess::I18N() prevented in the dead lock due to of the user language access embracing by the lock getMessRes.
+- FIX: The function TMess::I18N() prevented in the dead lock due to of the user language access embracing by the lock getMessRes.
 
 
 2021-12-21 Roman (stable)
@@ -203,7 +216,7 @@
 	Protocol.{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}: appended to the dynamic translation by trD();
     - _()->TMess::I18N() adapted in use the translation context at empty language field;
     - the translation obtaining for the modules information switched to use the translation context;
-    - UI.{WebCfg,WebCfgD}: Adapted to the dynamic translation.
+    - UI.{WebCfg,WebCfgD}: Generically adapted to the dynamic translation.
 - !!!!:SYS,BD: The MULTILANGUAGE-DYNAMIC mode and nonBASIC locales:
     - appended of that setting after switching to different locales by the value specific dividing to "{base}\000{lang}\000{mess}"
 	and support in TMess::translGet() and TMess::translSet();
@@ -323,7 +336,7 @@
     !:wlb_Main.{alarmsSt,alarmsAct},wlb_doc.docMessRep:
 	Improved in the DAQGate source complete scanning for whole transferring hierarchy, also for user actions (OP).
     !:wlb_Main.alarmsSt,wlb_doc.{docMessRep,docAlarmsRep}: Adapted to the transferred messages by DAQGate.
-- !!:SYS: The "Return" type IO of the TFunction object was set to RO in the manual execution tab.
+- !!:SYS: The "Return" type IO of the TFunction object was set to ReadOnly in the manual execution tab.
 - !!!!:DAQ,{*,DAQGate}: The function TController::messSet() appended of the messages transferring from the top to the down,
 	so sinking down, making the function virtual one and redefine that in DAQGate,
 	and defining also the new OpenSCADA control service request of the TController object "set:/serv/mess".
@@ -333,7 +346,7 @@
     since locking the main Qt thread in modStop() without qApp->processEvents().
 - UI.{Vision,WebVision}: The empty page group is meant now the "main" one to force the root page replace
 	at starting from non empty page groups.
-    The shape type changing appended of clearing all child objects after the shape destroy(),
+- UI.Vision: The shape type changing appended of clearing all child objects after the shape destroy(),
 	due to warnings of reusing-doubling like to QLayout.
 - !!:UI.VCAEngine: Manual enabling the visual items causes now for their reloading,
 	due to the previosly loaded values loss at the inheriting, for: Widget Library and items, Project and items.
@@ -384,9 +397,9 @@
 
 2021-10-13 Roman (stable)
 - FIX:UI.VCAEngine: Restored in reading only not user and visual and the visualisator specific attributes,
-    a problem detected on the attribute "perm" wrong, not prepared, reading.
+    a problem was detected on the attribute "perm" wrong, not prepared, reading.
 - FIX:UI.WebVision: The focus setting algorithm rewrote to acknowledge that setting from the VCA-Engine,
-    a problem detected on switching-focusing back to the previous items.
+    a problem was detected on switching-focusing back to the previous items.
 
 
 2021-10-12 Roman (stable)
@@ -398,7 +411,7 @@
 - SYS: The global short functions appended of s2l() and s2u().
 - BD: The TBD object prevented in reload from it for the project work DB.
 - Transport.Sockets: The source code was some cleaned and the socket closing of the input transport appended for the result checking.
-- !:Transport.SSL: Appended for reloading the certificates file of the input transport at it change by the transport reconnect.
+- !!:Transport.SSL: Appended for reloading the certificates file of the input transport at it change by the transport reconnect.
 - !!:UI.{VCAEngine,Vision}: The "Mime data" renamed to "Resources" and "Mime type" to "MIME".
     The User API functions mime() and mimeSet() appended of the correct equivalents resource() and resourceSet().
 - UI.{Vision,WebVision}: The argument "FullTree" of requesting is removed for 0 value.
@@ -412,7 +425,7 @@
 	- support of reloading the main calculation clock and clearing the old changes clock value;
 	- preventing the empty cycles for the common widgets requesting;
 	- removed for code of the previous slide current mark mechanism of the attributes changing detection with the doubles.
-    !: DB of the original widget library set to empty, to prevent of wrong removing at the work DB reloading.
+    !: DB of the original widget library is set to empty, to prevent of wrong removing at the work DB reloading.
 - FIX:UI.Vision: In the runtime fixed for the actual pages reopening and fitting the window size at the complete reconnection.
 - !:FIX:UI.WebVision: The bordered line and Bezier prevented of drawing at equal first and end points, what causes of all the widget fill.
 
@@ -431,7 +444,7 @@
 	from the new configuration attribute "types".
     !: Expanded in the alarm level show up to 128 and coloring up to 9 levels.
     FIX: The default sorting at the field of the alarm time set back to "1" as not default descending order.
-    FIX: The field "colDscrCustNames" type set to the "String (translated)"
+    FIX: The field "colDscrCustNames" type set to the "String (translate)"
 - !!!!:FIX:SYS: The message level limit expanded up to [-128...127]
 	and all levels more for TMess::Emerg process for external as TMess::Emerg, not TMess::Debug.
     !!:FIX: The lock file processing-updating moved to update always, not only at the running, at the file availability,
@@ -448,7 +461,7 @@
 - FIX:UI.Vision: Fixed in the force pages (from the call arguments) open after the complete initialisation,
     then opening all configured pages before.
 - FIX:UI.WebVision: The view Table of the primitive FormEl fixed in specifying
-	the column sorting value "0" as ascending-default and "1" as descending from the top, like to the UI.Vision bechaviour
+	the column sorting value "0" as ascending-default and "1" as descending from the top, like to the UI.Vision behaviour
     and the numbers (integer,float) sort-comparing was implemented separately.
 
 
@@ -461,13 +474,13 @@
     !: The OpenSCADA control request "list:/db/list" expanded of the optons support
 	and the option "onlydb" for generation only the DB list.
 - !:FIX:DB.SQLite: Fixed in direct processing of the setting no string fields and checking the translated fields for missing - new ones.
-- !!:FIX:DAQ: The controller objects manual start defined for some specific hot doings of the object enabling,
+- !!!:FIX:DAQ: The controller objects manual start defined for some specific hot doings of the object enabling,
 	when the doing was prevented from call twice at the normal start:
     - DAQGate: resync the remote source data at the sync period >= 0;
     - ModBus: force reformation of the acquisition blocks;
     - OPC_UA: force reformation of the monitored items list;
     - Siemens: force reformation of the acquisition blocks.
-- !!:FIX.DAQ.DAQGate: Unified in the sync commonly and fixed in the attributes sync.
+- !!:FIX:DAQ.DAQGate: Unified in the sync commonly and fixed in the attributes sync.
 - Archive.DBArch,Protocol.HTTP: Switched to select only DBs.
 
 
@@ -504,12 +517,12 @@
     !:FIX:Archive.*,Security.{User,Group},Transport.{In,Out},DAQ.{TController,TPrmTmplLib,JavaLikeCalc}, UI.{VCAEngine,Vision}.{WdgLib,Proj}:
 	Storing objects fixed in set DB() at the copy.
     !: The flags TCntrNode::{NodeRemove,NodeRemoveOnlyStor} used everywhere of the function postDisable() checking and chldDel() call.
-    Storage functions {DB,tbl,fullDB}() set to static: Security.{User,Group}, Transport.{In,Out}, DAQ.{TController,TPrmTmplLib,JavaLikeCalc}.
+    Storage functions {DB,tbl,fullDB}() set to constant: Security.{User,Group}, Transport.{In,Out}, DAQ.{TController,TPrmTmplLib,JavaLikeCalc}.
 - !!!:FIX:DB: The functions TBDS::{open,close}() renamed to TBDS::{tblOpen,tblClose}() and set to static ones.
     !!:FIX: The TBDS::dataDel() fixed-appended in removing multiple items and appended of removing the empty table nodes.
-    !!: The static methods of TBDS appended of the new function dbPart() of getting the storage address parts
-	and appended of the new function dataDelTbl() of the common tables removing, also in the Configuration File.
-    !: Root object of the DB subsystem appended of DB priority base [0...9] in the generic storages list.
+    !!: The static methods of TBDS appended of a new function dbPart() of getting the storage address parts
+	and appended of the a function dataDelTbl() of the common tables removing, also in the Configuration File.
+    !!: Root object of the DB subsystem appended of DB priority base [0...9] in the generic storages list.
 - !!:FIX:UI.VCAEngine: Fixed in the mime data copy at the widget libraries and the projects copy, moving the copy to the copy save,
     with expanding the mime operations for work with completely specified DBs.
 
@@ -715,7 +728,7 @@
 	which is used next in true detection the parameter type changing at the following loading.
 - FIX:DAQ,Archives,UI.QTCfg: DAQ-Parameters copy prevented from an error of presence already the binding archive.
     UI.QTCfg: Such errors also prevented on termination the group copying operation by a new acceptation dialogue.
-- !!:Transport.SSL: Both input and output parts appended of the possibility to point the certificates and the key
+- !!!:Transport.SSL: Both input and output parts appended of the possibility to point the certificates and the key
     directly from an external file.
 - DAQ: The function TPrmTempl::Impl::cntrCmdProc() set as the virtual one, to allow of implementing the DAQ-source specific.
     The DAQ-Parameter type switched to show the name always, not only at the selection.

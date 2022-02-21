@@ -1,42 +1,42 @@
-openscada (1+r0000-1) experimental; urgency=low
+openscada (1+r0000-1) Work; urgency=low
 
   * Work version scheme naming 1+rNNNN, sets by the AutoBuilder or manual.
   * LTS version naming 0.9.N.
 
  -- Roman Savochenko <roman@oscada.org>  Sun, 17 Jun 2018 22:00:00 +0200
 
-openscada (0.9-1) experimental; urgency=low
+openscada (0.9-1) Work; urgency=low
 
   * Work version scheme naming 0.9+rNNNN, sets by the AutoBuilder or manual.
   * LTS version naming 0.8.N.
 
  -- Roman Savochenko <roman@oscada.org>  Fri, 22 May 2015 22:00:00 +0200
 
-openscada (0.8.1-0.1) experimental; urgency=low
+openscada (0.8.1-0.1) Work; urgency=low
 
   * Version 0.8.1 work version.
 
  -- Roman Savochenko <roman@oscada.org>  Tue, 19 Jun 2012 10:00:00 +0200
 
-openscada (0.8.0-1) experimental; urgency=low
+openscada (0.8.0-1) Work; urgency=low
 
   * Version 0.8.0 build Debian packages for OpenSCADA.
 
  -- Roman Savochenko <roman@oscada.org>  Fri, 06 Apr 2012 16:00:00 +0200
 
-openscada (0.7.2-1) experimental; urgency=low
+openscada (0.7.2-1) Work; urgency=low
 
   * Version 0.7.2 build Debian packages for OpenSCADA.
 
  -- Roman Savochenko <roman@oscada.org>  Mon, 05 Dec 2011 16:00:00 +0200
 
-openscada (0.7.1-2) experimental; urgency=low
+openscada (0.7.1-2) Work; urgency=low
 
   * Model's AGLKS DB is fixed for start message about QTCfg wrong start page.
 
  -- Roman Savochenko <roman@oscada.org>  Mon, 15 Apr 2011 15:00:00 +0200
 
-openscada (0.7.1-1) experimental; urgency=low
+openscada (0.7.1-1) Work; urgency=low
 
   * New source packages implementation is released.
   * Documentation separated by languages.
@@ -45,25 +45,25 @@ openscada (0.7.1-1) experimental; urgency=low
 
  -- Roman Savochenko <roman@oscada.org>  Mon, 14 Mar 2011 15:00:00 +0200
 
-openscada (0.7.1-1) experimental; urgency=low
+openscada (0.7.1-1) Work; urgency=low
 
   * Version 0.7.1 build Debian packages for OpenSCADA.
 
  -- Roman Savochenko <roman@oscada.org>  Sat, 30 Jan 2011 14:00:00 +0200
 
-openscada (0.7.0-1) experimental; urgency=low
+openscada (0.7.0-1) Work; urgency=low
 
   * Version 0.7.0 build Debian packages for OpenSCADA.
 
  -- Roman Savochenko <roman@oscada.org>  Sat, 23 Oct 2010 19:05:00 +0200
 
-openscada (0.6.4.2-1) experimental; urgency=low
+openscada (0.6.4.2-1) Work; urgency=low
 
   * Version 0.6.4.2 build Debian packages for OpenSCADA.
 
  -- Roman Savochenko <roman@oscada.org>  Sat, 29 May 2010 19:05:00 +0200
 
-openscada (0.6.4.1-1) experimental; urgency=low
+openscada (0.6.4.1-1) Work; urgency=low
 
   * Initial release for build Debian packages for OpenSCADA.
 

@@ -46,7 +46,7 @@ using namespace OPC;
 #define DAQ_NAME	trS("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.6.4"
+#define DAQ_MVER	"2.6.5"
 #define DAQ_AUTOR	trS("Roman Savochenko")
 #define DAQ_DESCR	trS("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
@@ -195,6 +195,10 @@ class TMdContr: public TController, public Client
 
 	TTpContr &owner( ) const;
 
+	// Values processing
+	TVariant getVal( const string &iaddr, MtxString &err );
+	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
+
     protected:
 	//Methods
 	void load_( );
@@ -205,10 +209,6 @@ class TMdContr: public TController, public Client
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
-
-	// Values process
-	TVariant getVal( const string &iaddr, MtxString &err );
-	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
 
 	// Service
 	void postDisable( int flag );		//Delete all DB if flag 1

@@ -6636,7 +6636,7 @@ INSERT INTO prj_AGLKS_stls VALUES(0,'backColorVal','black','','');
 INSERT INTO prj_AGLKS_stls VALUES(0,'labColor','white','','');
 INSERT INTO prj_AGLKS_stls VALUES(0,'labColorAlarm','#ff0000','','');
 INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGood','#00FF00','','');
-INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph1','#b000b0','','');
+INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph1','#b000b0-200','','');
 INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph10','darkcyan-200','','');
 INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph2','orange-200','','');
 INSERT INTO prj_AGLKS_stls VALUES(0,'labColorGrph3','blue-200','','');

@@ -1,9 +1,9 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /********************************************************************************
- *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>		*
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.1.25								*
+ *   Version: 2.1.26								*
  *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
  *	* The function XML_N::childClear() appended by a result of returning	*
@@ -738,10 +738,11 @@ class Client: public UA
     virtual void protIO( XML_N &io );
     virtual void reqService( XML_N &io );
 
-    protected:
     //Attributes
     SClntSess		sess;		//Assigned session
 
+    protected:
+    //Attributes
     pthread_mutex_t	mtxData;
 };
 

@@ -38,7 +38,7 @@ WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db
 {
     mId = id;
     cfg("NAME").setS(name);
-    cfg("DB_TBL").setS(string("wlb_")+id);	//????[v1.0] Remove, saved for the new libraries work on old OpenSCADA versions
+    cfg("DB_TBL").setS("wlb_"+id);	//????[v1.0] Remove, saved for the new libraries work on old OpenSCADA versions
     mWdg = grpAdd("wdg_",(id=="originals")?true:false);
 }
 

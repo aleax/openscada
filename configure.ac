@@ -12,7 +12,7 @@ AC_PREFIX_DEFAULT(/usr)
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE([1.0 subdir-objects])
+AM_INIT_AUTOMAKE([1.10 subdir-objects])
 AM_CONFIG_HEADER(src/config.h)
 
 AC_LANG(C++)

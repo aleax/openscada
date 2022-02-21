@@ -202,6 +202,11 @@ class TMdContr: public TController
 
 	TTpContr &owner( ) const;
 
+	// Values process
+	void regVal( const string &ival, bool wr );	//Register value for acquisition
+	TVariant getVal( const string &iaddr, MtxString &err );
+	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
+
     protected:
 	//Methods
 	void load_( );
@@ -213,11 +218,6 @@ class TMdContr: public TController
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
-	void regVal( const string &ival, bool wr );	//Register value for acquisition
-
-	// Values process
-	TVariant getVal( const string &iaddr, MtxString &err );
-	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
 
 	// Service
 	void postDisable( int flag );				//Delete all DB if flag 1

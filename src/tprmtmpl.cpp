@@ -796,7 +796,8 @@ TPrmTmplLib::TPrmTmplLib( const string &id, const string &name, const string &li
     TConfig(&SYS->daq().at().elLib()), runSt(false), mId(cfg("ID")), mDB(lib_db)
 {
     mId = id;
-    setName( name );
+    setName(name);
+    cfg("DB").setS("tmplib_"+id);	//????[v1.0] Remove, saved for the new libraries work on old OpenSCADA versions
     m_ptmpl = grpAdd("tmpl_");
 }
 

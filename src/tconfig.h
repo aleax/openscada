@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -173,8 +173,8 @@ class TConfig: public TValElem
 	bool trcSet( ) const		{ return mTrcSet; }
 	void setTrcSet( bool vl );
 
-	bool	noTransl( ) const	{ return mNoTransl; }
-	void	setNoTransl( bool vl );
+	bool noTransl( ) const		{ return mNoTransl; }
+	void setNoTransl( bool vl );
 
 	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user, int perm, const string &owner );
 

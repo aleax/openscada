@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,6 +36,7 @@ Lib::Lib( const string &id, const string &name, const string &lib_db ) :
 {
     mId = id;
     cfg("NAME").setS(name);
+    cfg("DB").setS("flb_"+id);	//????[v1.0] Remove, saved for the new libraries work on old OpenSCADA versions
     mFnc = grpAdd("fnc_");
     if(DB().empty()) modifClr();
 }
