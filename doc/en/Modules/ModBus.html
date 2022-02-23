@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/ModBus</h1>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.1 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -50,7 +50,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -177,7 +177,7 @@
 <h4><span class="mw-headline" id="The_mode_.22Data.22"><span class="mw-headline-number">2.2.1</span> The mode "Data"</span></h4>
 <p>The mode is used to reflect the OpenSCADA data on arrays of registers and bits of ModBus. The overall configuration of the node is made in the tab "Node" (Fig.2) by the parameters:
 </p>
-<ul><li> State of the node, as follows: Status, "Enabled" and the name of the database containing the configuration.</li>
+<ul><li> State of the node, as follows: Status, "Enabled" and the name of the database containing the configuration, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
 <li> Identifier, name and description of the node.</li>
 <li> The state "Enabled", in which the node must be translated at boot.</li>
 <li> Address of the node in the ModBus network from 1 to 247.</li>
@@ -274,8 +274,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="837" src="../files/ModBus_cntr.png" width="808" /></a>  <div class="thumbcaption">Fig.8. Configuration tab of a controller object.</div></div></div></div>
 <p>Using this tab you can set:
 </p>
-<ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li>
-<li> Identifier, name and description of the controller.</li>
+<ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.</dd></dl>
+<ul><li> Identifier, name and description of the controller.</li>
 <li> The state "Enabled" and "Running", in which the controller object must be translated at boot.</li>
 <li> Names of tables of storing the configuration of the parameters of the controller object for standard and logical types.</li>
 <li> Policy of scheduling and priority of the data acquisition task.</li>
@@ -290,19 +291,19 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <ul><li> Timeout of connection in milliseconds. Specifies the time interval during which the answer is expected. If there is zero waiting time the transport waiting time by default is used. Allows taking into account individual properties of the controller in the common network.</li>
 <li> Timeout of restore in seconds. Specifies the time interval after which the re-attempt of the request to previously inaccessible device is done.</li>
 <li> Request tries for the protocols RTU and ASCII. Indicates the number of attempts by the repetition of the request in case of incomplete or damaged answer.</li>
-<li> Maximum size of the request block in bytes. Useful for controllers with like limits.</li></ul>
+<li> Maximum size of the request block in bytes, useful for controllers with such limits.</li></ul>
 <h3><span class="mw-headline" id="Parameters"><span class="mw-headline-number">3.2</span> Parameters</span></h3>
-<p>Data acquisition module provides two types of parameter: "Standard (std)" and "Logical (logic)". Additional configuration fields of the parameters of this module are:
+<p>The data acquisition module provides two types of parameter: "Standard (std)" and "Logical (logic)". Additional configuration fields of the parameters of this module are:
 </p>
 <ul><li> <i><b>Standard (std)</b></i>:
-<ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes ModBus.</li></ul></li>
+<ul><li> <i>Attributes list</i> — contains a structured list of configuration for the attributes ModBUS.</li></ul></li>
 <li> <i><b>Logical (logic)</b></i>:
-<ul><li> <i>Parameter template</i> — address of a DAQ parameter template.</li></ul></li></ul>
+<ul><li> <i>Parameter template</i> — address of the DAQ-parameter template.</li></ul></li></ul>
 <h4><span class="mw-headline" id="Standard_.28std.29"><span class="mw-headline-number">3.2.1</span> Standard (std)</span></h4>
 <p>Main page of configuration parameters of the standard type is shown in Figure 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:670px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm.png"><img class="thumbimage" height="656" src="../files/ModBus_prm.png" width="668" /></a>  <div class="thumbcaption">Fig.9. Configuration tab of the standard parameter type.</div></div></div></div>
-<p>Attribute in the attributes list parameter can be written as follows: <b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>.<br />
+<p>One attribute line in the parameter of the attributes list can be written as "<b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>".<br />
 Where:
 </p>
 <ul><li> <i>dt</i> — Modbus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI" — input register[4], "CI"—input coil[2]);</li></ul>
@@ -319,21 +320,21 @@ Where:
 <dd>"R_i4:400,300:r:int32:Int32" — get int32 from registers 400 and 300;</dd>
 <dd>"R_b10:25:r:rBit:Reg bit", "R_b:25.10:r:rBit:Reg bit" — get bit 10 from register 25;</dd>
 <dd>"R_s:15,20:r:str:Reg blk" — get string (registers block) from register 15 and size 20."</dd></dl>
-<p>String starting with the '#' character is considered a comment and is not processed.
-</p><p>In accordance with the specified attributes list, an acquisition and creation of attributes of the parameter are performed (Fig. 10).
+<p>Line starting with the '#' character is considered as a comment and it is not processed.
+</p><p>In accordance with the specified attributes list, the acquisition and creation of attributes of the parameter are performed (Fig. 10).
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:640px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr.png"><img class="thumbimage" height="533" src="../files/ModBus_prm_atr.png" width="638" /></a>  <div class="thumbcaption">Fig.10. Tab of attributes of the standard parameter type.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:640px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr.png"><img class="thumbimage" height="533" src="../files/ModBus_prm_atr.png" width="638" /></a>  <div class="thumbcaption">Fig.10. The attributes tab of the standard parameter type.</div></div></div></div>
 <h4><span class="mw-headline" id="Logical_.28logic.29"><span class="mw-headline-number">3.2.2</span> Logical (logic)</span></h4>
 <p>Main page of configuration parameters of the logical type is shown in Figure 11.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm.png"><img class="thumbimage" height="526" src="../files/ModBusLog_prm.png" width="711" /></a>  <div class="thumbcaption">Рис.11. Configuration tab of the logical parameter type.</div></div></div></div>
-<p>Link value, when configuring the template (Fig.12), is written in the format: <b>{dt}:{numb}[:{flg}]</b>.<br />
+<p>Link value, when configuring the template (Fig.12), is written in the form <b>{dt}:{numb}[:{flg}]</b>.<br />
 Where:
 </p>
 <ul><li> <i>dt</i> — ModBus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI"—input register[4], "CI"—input coil[2]);</li></ul>
 <dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s"—String (size by default is 10 and up to 100 registers);</dd></dl>
 <ul><li> <i>numb</i> — ModBus data address of the device (decimal, hexadecimal or octal) [0...65535];</li>
-<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~';</li></ul>
+<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~'.</li></ul>
 <p>Examples:
 </p>
 <dl><dd>"R:0x300:rw" — register access;</dd>
@@ -380,5 +381,5 @@ Where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

@@ -25,12 +25,12 @@ using namespace OSCADA;
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false)
+TConfig::TConfig( TElem *Elements ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false), mTrcSet(false), mNoTransl(false)
 {
     setElem(Elements, true);
 }
 
-TConfig::TConfig( const TConfig &src ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false)
+TConfig::TConfig( const TConfig &src ) : mRes(true), mElem(NULL), mIncmplTblStrct(false), mReqKeys(false), mTrcSet(false), mNoTransl(false)
 {
     setElem(NULL, true);
     operator=(src);
@@ -57,13 +57,14 @@ TConfig &TConfig::exclCopy( const TConfig &config, const string &passCpLs, bool 
 
     //Copy elements for single/builtin elements structure
     if(cpElsToSingle && single && mElem) {
-	//????
+	//?!?!
     }
 
     cfgList(listEl);
     for(unsigned iEl = 0; iEl < listEl.size(); iEl++) {
 	if(!config.cfgPresent(listEl[iEl]) || passCpLs.find(listEl[iEl]+";") != string::npos) continue;
 	TCfg &s_cfg = const_cast<TConfig*>(&config)->cfg(listEl[iEl]);
+	if(config.trcSet() && !s_cfg.isSet())	continue;
 	TCfg &d_cfg = cfg(listEl[iEl]);
 	switch(d_cfg.fld().type()) {
 	    case TFld::String:
@@ -192,7 +193,7 @@ void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const stri
 
 void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user, const string &grp, int perm )
 {
-    if(elem.compare(0,4,"sel_") == 0 && TCntrNode::ctrChkNode(opt)) {
+    if(elem.find("sel_") == 0 && TCntrNode::ctrChkNode(opt)) {
 	TFld &n_e_fld = cfg(elem.substr(4)).fld();
 	for(unsigned iA = 0; iA < n_e_fld.selNm().size(); iA++)
 	    opt->childAdd("el")->setText(n_e_fld.selNm()[iA]);
@@ -201,14 +202,31 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     TCfg &cel = cfg(elem);
     if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD)) {
 	if(Mess->translDyn() && cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
-	    opt->setText(trLU(cel.getS(),opt->attr("lang"),opt->attr("user")));
+	    opt->setText(trD(cel.getS()));
 	else opt->setText(cel.getS());
     }
     if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR)) {
 	if(Mess->translDyn() && cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
-	    cel.setS(trSetLU(cel.getS(),opt->attr("lang"),opt->attr("user"),opt->text()));
+	    cel.setS(trDSet(cel.getS(),opt->text()));
 	else cel.setS(opt->text());
     }
+}
+
+void TConfig::setTrcSet( bool vl )
+{
+    mTrcSet = vl;
+
+    for(TCfgMap::iterator p = value.begin(); trcSet() && p != value.end(); ++p)
+	if(!(p->second->fld().flg()&TCfg::Key) && !p->second->reqKey() && p->second->view())
+	    p->second->setIsSet(false);
+}
+
+void TConfig::setNoTransl( bool vl )
+{
+    mNoTransl = vl;
+
+    for(TCfgMap::iterator p = value.begin(); p != value.end(); ++p)
+	p->second->setNoTransl(vl);
 }
 
 TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
@@ -239,21 +257,23 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mInCfgCh(false), mOwner(owner)
+TCfg::TCfg( TFld &fld, TConfig &iowner ) :
+    mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mInCfgCh(false), mIsSet(false), mOwner(iowner)
 {
     //Chek for self field for dinamic elements
     if(fld.flg()&TFld::SelfFld) {
 	mFld = new TFld();
 	*mFld = fld;
-    }
-    else mFld = &fld;
+    } else mFld = &fld;
 
     toDefault();
 
     if(fld.flg()&TCfg::Hide)	mView = false;
+    mNoTransl = owner().noTransl();
 }
 
-TCfg::TCfg( const TCfg &src ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mInCfgCh(false), mOwner(src.mOwner)
+TCfg::TCfg( const TCfg &src ) :
+    mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mInCfgCh(false), mIsSet(false), mOwner(src.mOwner)
 {
     //Chek for self field for dinamic elements
     if(src.mFld->flg()&TFld::SelfFld) {
@@ -265,6 +285,7 @@ TCfg::TCfg( const TCfg &src ) : mView(true), mKeyUse(false), mNoTransl(false), m
     toDefault();
 
     if(src.mFld->flg()&TCfg::Hide)	mView = false;
+    mNoTransl = owner().noTransl();
 
     operator=(src);
 }
@@ -355,7 +376,7 @@ string TCfg::getS( ) const
 	if((fld().flg()&TFld::TransltText) && !noTransl()) {
 	    string rezT = TSYS::strSepParse(rez, 1, 0), rezSrc = TSYS::strSepParse(rez, 2, 0);
 	    rez = TSYS::strSepParse(rez, 0, 0);
-	    if(rez.size() && rezSrc.size()) Mess->translReg(rez, rezSrc);	//!!!! May be too busy
+	    if(rez.size() && rezSrc.size()) Mess->translReg(rez, rezSrc);	//!!!! Can be very busy
 	    return rezT.size() ? rezT : rez;
 	}
 	else return TSYS::strSepParse(rez, 0, 0);
@@ -424,6 +445,7 @@ void TCfg::setS( const string &ival )
 		    mOwner.mRes.unlock();
 		}
 		if(!mInCfgCh_)	mInCfgCh = false;
+		if(mOwner.trcSet())	setIsSet(true);
 	    } catch(TError &err) {
 		if(!mInCfgCh_)	mInCfgCh = false;
 		mOwner.mRes.lock();
@@ -452,6 +474,7 @@ void TCfg::setR( double ival )
 	    try {
 		if(!mInCfgCh && (mInCfgCh=true) && !mOwner.cfgChange(*this,tVal)) TVariant::setR(tVal);
 		if(!mInCfgCh_)	mInCfgCh = false;
+		if(mOwner.trcSet())	setIsSet(true);
 	    }
 	    catch(TError &err) {
 		if(!mInCfgCh_)	mInCfgCh = false;
@@ -479,6 +502,7 @@ void TCfg::setI( int64_t ival )
 	    try {
 		if(!mInCfgCh && (mInCfgCh=true) && !mOwner.cfgChange(*this,tVal)) TVariant::setI(tVal);
 		if(!mInCfgCh_)	mInCfgCh = false;
+		if(mOwner.trcSet())	setIsSet(true);
 	    }
 	    catch(TError &err) {
 		if(!mInCfgCh_)	mInCfgCh = false;
@@ -504,6 +528,7 @@ void TCfg::setB( char ival )
 	    try {
 		if(!mInCfgCh && (mInCfgCh=true) && !mOwner.cfgChange(*this,tVal)) TVariant::setB(tVal);
 		if(!mInCfgCh_)	mInCfgCh = false;
+		if(mOwner.trcSet())	setIsSet(true);
 	    }
 	    catch(TError &err) {
 		if(!mInCfgCh_)	mInCfgCh = false;
@@ -532,9 +557,12 @@ void TCfg::setS( const string &ival, uint8_t RqFlg )
 {
     if(!extVal() && (RqFlg&(ExtValTwo|ExtValOne|ExtValThree))) { mExtVal = true; setType(TVariant::String); }
     if(!extVal()) setS(ival);
-    else TVariant::setS(((RqFlg&ExtValOne || !(RqFlg&(ExtValTwo|ExtValThree)))?ival:getS(ExtValOne))+string(1,0)+
+    else {
+	TVariant::setS(((RqFlg&ExtValOne || !(RqFlg&(ExtValTwo|ExtValThree)))?ival:getS(ExtValOne))+string(1,0)+
 		((RqFlg&ExtValTwo)?ival:getS(ExtValTwo))+string(1,0)+
 		((RqFlg&ExtValThree)?ival:getS(ExtValThree)));
+	if(mOwner.trcSet())	setIsSet(true);
+    }
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_DB.h
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,11 +33,11 @@ class TestDB : public TFunction
 {
     public:
 	TestDB( ) : TFunction("DB",SSPC_ID) {
-	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
-	    ioAdd(new IO("type",_("DB type"),IO::String,IO::Default,"SQLite"));
-	    ioAdd(new IO("addr",_("DB address"),IO::String,IO::Default,"./DATA/test.db"));
-	    ioAdd(new IO("table",_("DB table"),IO::String,IO::Default,"test"));
-	    ioAdd(new IO("size",_("Records number"),IO::Integer,IO::Default,"1000"));
+	    ioAdd(new IO("rez",trS("Result"),IO::String,IO::Return));
+	    ioAdd(new IO("type",trS("DB type"),IO::String,IO::Default,"SQLite"));
+	    ioAdd(new IO("addr",trS("DB address"),IO::String,IO::Default,"./DATA/test.db"));
+	    ioAdd(new IO("table",trS("DB table"),IO::String,IO::Default,"test"));
+	    ioAdd(new IO("size",trS("Records number"),IO::Integer,IO::Default,"1000"));
 	}
 
 	string name( )	{ return _("DB test"); }

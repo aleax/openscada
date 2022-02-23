@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 10:30+0300\n"
+"POT-Creation-Date: 2022-01-05 21:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,6 +127,9 @@ msgid "Connected"
 msgstr ""
 
 msgid "Disconnected"
+msgstr ""
+
+msgid "Ready"
 msgstr ""
 
 #, c-format
@@ -769,9 +772,6 @@ msgstr ""
 msgid "Dock window of the inspector ot the widget links."
 msgstr ""
 
-msgid "Ready"
-msgstr ""
-
 msgid "Icons size"
 msgstr ""
 
@@ -949,13 +949,13 @@ msgstr ""
 msgid "Period of the calculating, milliseconds:"
 msgstr ""
 
-msgid "Mime data"
+msgid "Resources"
 msgstr ""
 
 msgid "Identifier"
 msgstr ""
 
-msgid "Mime type"
+msgid "MIME"
 msgstr ""
 
 msgid "Data size"

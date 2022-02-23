@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodschedul.h
 /***************************************************************************
- *   Copyright (C) 2003-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,6 +54,8 @@ class TModSchedul : public TSubSYS
 	//Methods
 	TModSchedul( );
 	~TModSchedul( );
+
+	string subName( ) const		{ return _("Modules scheduler"); }
 
 	string allowList( ) const	{ return mAllow; }
 	string denyList( )		{ return mDeny; }

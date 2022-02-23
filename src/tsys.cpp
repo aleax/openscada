@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,6 +57,7 @@ uint8_t	OSCADA::limArchID_SZ = 50;
 int	OSCADA::limUserFile_SZ = 10048576;
 int	OSCADA::limUserIts_N = 1000000;
 unsigned OSCADA::limCacheIts_N = 100;
+unsigned OSCADA::limCacheIts_TM = 60;
 
 int	OSCADA::prmStrBuf_SZ = 10000;
 float	OSCADA::prmWait_DL = 0.1;
@@ -75,7 +76,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
     mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0),
     mModifCalc(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
-    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL),
+    mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
     srand(TSYS::curTime()%1000000);
@@ -163,7 +164,7 @@ TSYS::~TSYS( )
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	    cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
 	dataRes().unlock();
-	printf(_("Program counters at the exit time: %s"), cntrsStr.c_str());
+	printf("Program counters at the exit time: %s", cntrsStr.c_str());
     }
 
     delete Mess;
@@ -230,21 +231,21 @@ void TSYS::setModDir( const string &mdir, bool init )
 
 XMLNode *TSYS::cfgNode( const string &path, bool create )
 {
-    string s_el, ndNm;
+    string sEl, ndNm;
 
-    XMLNode *t_node = &rootN;
-    if(t_node->name() != "OpenSCADA") {
+    XMLNode *tNode = &rootN;
+    if(tNode->name() != "OpenSCADA") {
 	if(!create) return NULL;
-	t_node->setName("OpenSCADA");
+	tNode->setName("OpenSCADA");
     }
 
-    for(int l_off = 0, nLev = 0; true; nLev++) {
-	s_el = TSYS::pathLev(path, 0, true, &l_off);
-	if(s_el.empty()) return t_node;
+    for(int lOff = 0, nLev = 0; true; nLev++) {
+	sEl = TSYS::pathLev(path, 0, true, &lOff);
+	if(sEl.empty()) return tNode;
 	bool ok = false;
-	for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
-	    if(strcasecmp(t_node->childGet(i_f)->attr("id").c_str(),s_el.c_str()) == 0) {
-		t_node = t_node->childGet(i_f);
+	for(unsigned iF = 0; !ok && iF < tNode->childSize(); iF++)
+	    if(strcasecmp(tNode->childGet(iF)->attr("id").c_str(),sEl.c_str()) == 0) {
+		tNode = tNode->childGet(iF);
 		ok = true;
 	    }
 	if(!ok) {
@@ -252,14 +253,15 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 	    ndNm = "prm";
 	    switch(nLev) {
 		case 0: ndNm = "station";	break;
-		case 1: if(s_el.compare(0,4,"sub_") == 0) ndNm = "node";	break;
-		case 2: if(s_el.compare(0,4,"mod_") == 0) ndNm = "node";	break;
+		case 1: if(sEl.compare(0,4,"sub_") == 0) ndNm = "node";	break;
+		case 2: if(sEl.compare(0,4,"mod_") == 0) ndNm = "node";	break;
 	    }
-	    if(ndNm == "prm") t_node = t_node->childIns(0,ndNm)->setAttr("id",s_el);
-	    else t_node = t_node->childAdd(ndNm)->setAttr("id",s_el);
+	    if(ndNm == "prm") tNode = tNode->childIns(0,ndNm)->setAttr("id", sEl);
+	    else tNode = tNode->childAdd(ndNm)->setAttr("id", sEl);
         }
     }
-    return t_node;
+
+    return tNode;
 }
 
 void TSYS::modifCfg( bool chkPossibleWR )
@@ -361,7 +363,7 @@ string TSYS::cpct2str( double cnt )
     return r2s(cnt,3,'g')+_("B");
 }
 
-double TSYS::str2real( const string &val )
+/*double TSYS::str2real( const string &val )
 {
     const char *chChr = val.c_str();
 
@@ -405,7 +407,7 @@ double TSYS::str2real( const string &val )
 
     //Combine
     return tVl * pow(10, tAftRdx-nAftRdx);
-}
+}*/
 
 time_t TSYS::str2atime( const string &val, const string &format, bool gmt )
 {
@@ -425,7 +427,7 @@ string TSYS::addr2str( void *addr )
     return buf;
 }
 
-void *TSYS::str2addr( const string &str )	{ return (void *)strtoul(str.c_str(),NULL,16); }
+void *TSYS::str2addr( const string &str )	{ return (void *)strtoull(str.c_str(),NULL,16); }
 
 string TSYS::strTrim( const string &val, const string &cfg )
 {
@@ -545,6 +547,7 @@ string TSYS::optDescr( )
 	"		and the part size of the big files transferring.\n"
 	"limUserIts_N	[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.\n"
 	"limCacheIts_N	[*100...100000] The limit on count of the caching items.\n"
+	"limCacheIts_TM	[10...*60...1000] The limit on the caching items time, seconds.\n"
 	"    Global configurable parameters:\n"
 	"prmStrBuf_SZ	[1000...*10000...1000000] Length of string buffers, no string class.\n"
 	"prmWait_DL	[0.001...*0.1...1] Quantum of the waiting time cycles, seconds.\n"
@@ -706,40 +709,41 @@ void TSYS::cfgFileSave( )
 void TSYS::cfgPrmLoad( )
 {
     //Global limits
-    limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genDBGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ),"root",TBDS::OnlyCfg))));
-    limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genDBGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ),"root",TBDS::OnlyCfg))));
-    limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genDBGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ),"root",TBDS::OnlyCfg))));
-    limUserFile_SZ = vmax(1048576, vmin(100048576,s2i(TBDS::genDBGet(nodePath()+"limUserFile_SZ",i2s(limUserFile_SZ),"root",TBDS::OnlyCfg))));
-    limUserIts_N = vmax(1000, vmin(1000000000,s2i(TBDS::genDBGet(nodePath()+"limUserIts_N",i2s(limUserIts_N),"root",TBDS::OnlyCfg))));
-    limCacheIts_N = vmax(100, vmin(100000,s2i(TBDS::genDBGet(nodePath()+"limCacheIts_N",i2s(limCacheIts_N),"root",TBDS::OnlyCfg))));
+    limObjID_SZ = vmax(20, vmin(50,s2i(TBDS::genPrmGet(nodePath()+"limObjID_SZ",i2s(limObjID_SZ)))));
+    limObjNm_SZ = vmax(100, vmin(200,s2i(TBDS::genPrmGet(nodePath()+"limObjNm_SZ",i2s(limObjNm_SZ)))));
+    limArchID_SZ = vmax(50, vmin(90,s2i(TBDS::genPrmGet(nodePath()+"limArchID_SZ",i2s(limArchID_SZ)))));
+    limUserFile_SZ = vmax(1048576, vmin(100048576,s2i(TBDS::genPrmGet(nodePath()+"limUserFile_SZ",i2s(limUserFile_SZ)))));
+    limUserIts_N = vmax(1000, vmin(1000000000,s2i(TBDS::genPrmGet(nodePath()+"limUserIts_N",i2s(limUserIts_N)))));
+    limCacheIts_N = vmax(100, vmin(100000,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_N",i2s(limCacheIts_N)))));
+    limCacheIts_TM = vmax(10, vmin(1000,s2i(TBDS::genPrmGet(nodePath()+"limCacheIts_TM",i2s(limCacheIts_TM)))));
 
     //Global parameters
-    prmStrBuf_SZ = vmax(1000, vmin(1000000,s2i(TBDS::genDBGet(nodePath()+"prmStrBuf_SZ",i2s(prmStrBuf_SZ),"root",TBDS::OnlyCfg))));
-    prmWait_DL = vmax(0.001, vmin(1,s2r(TBDS::genDBGet(nodePath()+"prmWait_DL",r2s(prmWait_DL),"root",TBDS::OnlyCfg))));
-    prmWait_TM = vmax(5, vmin(10,s2i(TBDS::genDBGet(nodePath()+"prmWait_TM",i2s(prmWait_TM),"root",TBDS::OnlyCfg))));
-    prmInterf_TM = vmax(7, vmin(15,s2i(TBDS::genDBGet(nodePath()+"prmInterf_TM",i2s(prmInterf_TM),"root",TBDS::OnlyCfg))));
-    prmServTask_PER = vmax(1, vmin(120,s2i(TBDS::genDBGet(nodePath()+"prmServTask_PER",i2s(prmServTask_PER),"root",TBDS::OnlyCfg))));
+    prmStrBuf_SZ = vmax(1000, vmin(1000000,s2i(TBDS::genPrmGet(nodePath()+"prmStrBuf_SZ",i2s(prmStrBuf_SZ)))));
+    prmWait_DL = vmax(0.001, vmin(1,s2r(TBDS::genPrmGet(nodePath()+"prmWait_DL",r2s(prmWait_DL)))));
+    prmWait_TM = vmax(5, vmin(10,s2i(TBDS::genPrmGet(nodePath()+"prmWait_TM",i2s(prmWait_TM)))));
+    prmInterf_TM = vmax(7, vmin(15,s2i(TBDS::genPrmGet(nodePath()+"prmInterf_TM",i2s(prmInterf_TM)))));
+    prmServTask_PER = vmax(1, vmin(120,s2i(TBDS::genPrmGet(nodePath()+"prmServTask_PER",i2s(prmServTask_PER)))));
 
     //System parameters
-    setClockRT(s2i(TBDS::genDBGet(nodePath()+"ClockRT",i2s(clockRT()),"root",TBDS::OnlyCfg)));
-    mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
-    mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
-    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
-    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
-    setDocDir(TBDS::genDBGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
-    setMainCPUs(TBDS::genDBGet(nodePath()+"MainCPUs",mainCPUs()));
-    setTaskInvPhs(s2i(TBDS::genDBGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
-    setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
-    setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod",i2s(savePeriod()))));
-    setModifCalc(s2i(TBDS::genDBGet(nodePath()+"ModifCalc",i2s(modifCalc()))));
+    setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()))));
+    mName = TBDS::genPrmGet(nodePath()+"StName", name(), "root", TBDS::UseTranslation);
+    mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB());
+    setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","").c_str(), true);
+    setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir()), true);
+    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir()), true);
+    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir()), true);
+    setMainCPUs(TBDS::genPrmGet(nodePath()+"MainCPUs",mainCPUs()));
+    setTaskInvPhs(s2i(TBDS::genPrmGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
+    setSaveAtExit(s2i(TBDS::genPrmGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
+    setSavePeriod(s2i(TBDS::genPrmGet(nodePath()+"SavePeriod",i2s(savePeriod()))));
+    setModifCalc(s2i(TBDS::genPrmGet(nodePath()+"ModifCalc",i2s(modifCalc()))));
 
     //Redundancy parameters
-    setRdStLevel(s2i(TBDS::genDBGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
-    setRdTaskPer(s2r(TBDS::genDBGet(nodePath()+"RdTaskPer",r2s(rdTaskPer()))));
-    setRdRestConnTm(s2i(TBDS::genDBGet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()))));
-    setRdPrimCmdTr(s2i(TBDS::genDBGet(nodePath()+"RdPrimCmdTr",i2s(rdPrimCmdTr()))));
-    string stLs = TBDS::genDBGet(nodePath()+"RdStList"), stId;
+    setRdStLevel(s2i(TBDS::genPrmGet(nodePath()+"RdStLevel",i2s(rdStLevel()))));
+    setRdTaskPer(s2r(TBDS::genPrmGet(nodePath()+"RdTaskPer",r2s(rdTaskPer()))));
+    setRdRestConnTm(s2i(TBDS::genPrmGet(nodePath()+"RdRestConnTm",i2s(rdRestConnTm()))));
+    setRdPrimCmdTr(s2i(TBDS::genPrmGet(nodePath()+"RdPrimCmdTr",i2s(rdPrimCmdTr()))));
+    string stLs = TBDS::genPrmGet(nodePath()+"RdStList"), stId;
     mRdRes.lock(true);
     for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
 	if(mSt.find(stId) == mSt.end()) mSt[stId] = SStat();
@@ -781,7 +785,7 @@ void TSYS::load_( )
     }
 
     bool cmd_help = (SYS->cmdOptPresent("h") || SYS->cmdOptPresent("help"));
-    if(cmd_help) Mess->setMessLevel(7);
+    if(cmd_help) Mess->setMessLevel(TMess::Emerg);
     cfgFileLoad();
     mess_sys(TMess::Info, _("Loading."));
     cfgPrmLoad();
@@ -848,30 +852,30 @@ void TSYS::save_( )
     mess_sys(TMess::Info, _("Saving."));
 
     //System parameters
-    TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslate);
-    TBDS::genDBSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_ModDir)	TBDS::genDBSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_IcoDir)	TBDS::genDBSet(nodePath()+"IcoDir", icoDir(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_DocDir)	TBDS::genDBSet(nodePath()+"DocDir", docDir(), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"MainCPUs", mainCPUs());
-    TBDS::genDBSet(nodePath()+"ClockRT", i2s(clockRT()));
-    TBDS::genDBSet(nodePath()+"TaskInvPhs", i2s(taskInvPhs()));
-    TBDS::genDBSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
-    TBDS::genDBSet(nodePath()+"SavePeriod", i2s(savePeriod()));
-    TBDS::genDBSet(nodePath()+"ModifCalc", i2s(modifCalc()));
+    TBDS::genPrmSet(nodePath()+"StName", mName, "root", TBDS::UseTranslation);
+    TBDS::genPrmSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_WorkDir)TBDS::genPrmSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_ModDir)	TBDS::genPrmSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_IcoDir)	TBDS::genPrmSet(nodePath()+"IcoDir", icoDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_DocDir)	TBDS::genPrmSet(nodePath()+"DocDir", docDir(), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"MainCPUs", mainCPUs());
+    TBDS::genPrmSet(nodePath()+"ClockRT", i2s(clockRT()));
+    TBDS::genPrmSet(nodePath()+"TaskInvPhs", i2s(taskInvPhs()));
+    TBDS::genPrmSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
+    TBDS::genPrmSet(nodePath()+"SavePeriod", i2s(savePeriod()));
+    TBDS::genPrmSet(nodePath()+"ModifCalc", i2s(modifCalc()));
 
     //Redundancy parameters
-    TBDS::genDBSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
     mRdRes.lock(false);
     string stLs;
     for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
 	stLs += sit->first+";";
     mRdRes.unlock();
-    TBDS::genDBSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
 
     Mess->save();	//Messages load
 }
@@ -1177,106 +1181,166 @@ string TSYS::strSepParse( const string &path, int level, char sep, int *off )
 
 string TSYS::strParse( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
 {
-    int an_dir = off ? *off : 0;
-    int t_lev = 0;
-    size_t t_dir;
-
+    int an_dir = vmax(0, off ? *off : 0);
     if(an_dir >= (int)path.size() || sep.empty()) return "";
+
+    int t_lev = 0;
+    string rezTk;
+    bool isFound = false;
     while(true) {
-	t_dir = path.find(sep,an_dir);
+	size_t t_dir = path.find(sep, an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = path.size();
-	    return (t_lev==level) ? path.substr(an_dir) : "";
+	    return (t_lev == level) ? path.substr(an_dir) : "";
 	}
 	else if(t_lev == level) {
-	    if(off) *off = t_dir+sep.size();
-	    return path.substr(an_dir,t_dir-an_dir);
+	    rezTk = path.substr(an_dir, t_dir-an_dir);
+	    isFound = true;
 	}
+	an_dir = t_dir + sep.size();
+
 	if(mergeSepSymb && sep.size() == 1)
-	    for(an_dir = t_dir; an_dir < (int)path.size() && path[an_dir] == sep[0]; ) an_dir++;
-	else an_dir = t_dir+sep.size();
+	    while(an_dir < (int)path.size() && path[an_dir] == sep[0]) an_dir++;
+	if(isFound) {
+	    if(off) *off = an_dir;
+	    break;
+	}
 	t_lev++;
     }
-    return "";
+
+    return rezTk;
+}
+
+string TSYS::strParseEnd( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
+{
+    int an_dir = vmin((int)path.size(), off ? *off : (int)path.size()-1);
+    if(an_dir < 0 || sep.empty() || path.empty()) return "";
+
+    int t_lev = 0;
+    string rezTk;
+    bool isFound = false;
+    while(true) {
+	size_t t_dir = path.rfind(sep, an_dir);
+	if(t_dir == string::npos) {
+	    if(off) *off = -1;
+	    return (t_lev == level) ? path.substr(0,an_dir+1) : "";
+	}
+	else if(t_lev == level) {
+	    rezTk = path.substr(t_dir+sep.size(), an_dir-(t_dir+sep.size()-1));
+	    isFound = true;
+	}
+	an_dir = t_dir - sep.size();
+
+	if(mergeSepSymb && sep.size() == 1)
+	    while(an_dir >= 0 && path[an_dir] == sep[0]) an_dir--;
+	if(isFound) {
+	    if(off) *off = an_dir;
+	    break;
+	}
+	t_lev++;
+    }
+
+    return rezTk;
 }
 
 string TSYS::strLine( const string &str, int level, int *off )
 {
-    int an_dir = off ? *off : 0;
-    int t_lev = 0, edLnSmbSz = 1;
-    size_t t_dir;
-
+    int an_dir = vmax(0, off ? *off : 0);
     if(an_dir >= (int)str.size()) return "";
+
+    int t_lev = 0, edLnSmbSz = 1;
+    string rezTk;
+    bool isFound = false;
+    size_t t_dir;
     while(true) {
 	for(t_dir = an_dir; t_dir < str.size(); t_dir++)
 	    if(str[t_dir] == '\x0D' || str[t_dir] == '\x0A')
-	    { edLnSmbSz = (str[t_dir] == '\x0D' && ((t_dir+1) < str.size()) && str[t_dir+1] == '\x0A') ? 2 : 1; break; }
+	    {
+		edLnSmbSz = (str[t_dir] == '\x0D' && ((t_dir+1) < str.size()) && str[t_dir+1] == '\x0A') ? 2 : 1;
+		break;
+	    }
 	if(t_dir >= str.size()) {
 	    if(off) *off = str.size();
 	    return (t_lev==level) ? str.substr(an_dir) : "";
 	}
-	else if(t_lev == level) {
-	    if(off) *off = t_dir+edLnSmbSz;
-	    return str.substr(an_dir,t_dir-an_dir);
+	else if(t_lev == level) { rezTk = str.substr(an_dir, t_dir-an_dir); isFound = true; }
+	an_dir = t_dir + edLnSmbSz;
+
+	if(isFound) {
+	    if(off) *off = an_dir;
+	    break;
 	}
-	an_dir = t_dir+edLnSmbSz;
 	t_lev++;
     }
-    return "";
+
+    return rezTk;
 }
 
-string TSYS::pathLev( const string &path, int level, bool decode, int *off )
+string TSYS::pathLev( const string &path, int level, bool decode, int *offCmtbl, int *off )
 {
-    int an_dir = off ? *off : 0;
-    int t_lev = 0;
-    size_t t_dir;
-
-    //First separators pass
+    int an_dir = vmax(0, off ? *off : (offCmtbl ? *offCmtbl : 0));
+    //Begin separators pass
     while(an_dir < (int)path.size() && path[an_dir] == '/') an_dir++;
     if(an_dir >= (int)path.size()) return "";
 
     //Path level process
+    int t_lev = 0;
+    string rezTk;
+    bool isFound = false;
     while(true) {
-	t_dir = path.find("/",an_dir);
+	size_t t_dir = path.find("/", an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = path.size();
-	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir)) : "";
+	    else if(offCmtbl) *offCmtbl = path.size();
+	    rezTk = (t_lev == level) ? path.substr(an_dir) : "";
+	    break;
 	}
-	else if(t_lev == level) {
-	    if(off) *off = t_dir;
-	    return decode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
-	}
+	else if(t_lev == level) { rezTk = path.substr(an_dir, t_dir-an_dir); isFound = true; }
 	an_dir = t_dir;
+
+	// Pass equal symbols '/'
+	while((!isFound || off) && an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
+
+	if(isFound) {
+	    if(off) *off = an_dir;
+	    else if(offCmtbl) *offCmtbl = an_dir;
+	    break;
+	}
 	t_lev++;
-	while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
     }
+
+    return (decode && rezTk.size()) ? TSYS::strDecode(rezTk, TSYS::PathEl) : rezTk;
 }
 
 string TSYS::pathLevEnd( const string &path, int level, bool decode, int *off )
 {
-    int an_dir = (off && *off >= 0) ? *off : path.size()-1;
+    int an_dir = vmin((int)path.size(), off ? *off : (int)path.size()-1);
+    if(an_dir < 0 || path.empty()) return "";
+
     int t_lev = 0;
-    size_t t_dir;
-
-    //Last separators pass
-    while(an_dir >= 0 && path[an_dir] == '/') an_dir--;
-    if(an_dir < 0) return "";
-
-    //Path level process
+    string rezTk;
+    bool isFound = false;
     while(true) {
-	t_dir = path.rfind("/", an_dir);
+	size_t t_dir = path.rfind("/", an_dir);
 	if(t_dir == string::npos) {
 	    if(off) *off = -1;
 	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(0,an_dir),TSYS::PathEl) : path.substr(0,an_dir)) : "";
 	}
 	else if(t_lev == level) {
-	    if(off) *off = t_dir;
-	    return decode ? TSYS::strDecode(path.substr(t_dir+1,an_dir-t_dir),TSYS::PathEl) : path.substr(t_dir+1,an_dir-t_dir);
+	    rezTk = decode ? TSYS::strDecode(path.substr(t_dir+1,an_dir-t_dir),TSYS::PathEl) : path.substr(t_dir+1,an_dir-t_dir);
+	    isFound = true;
 	}
-	an_dir = t_dir;
-	t_lev++;
+	an_dir = t_dir - 1;
+
 	while(an_dir >= 0 && path[an_dir] == '/') an_dir--;
+	if(isFound) {
+	    if(off) *off = an_dir;
+	    break;
+	}
+	t_lev++;
     }
+
+    return rezTk;
 }
 
 string TSYS::path2sepstr( const string &path, char sep )
@@ -1464,9 +1528,23 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 			    else sout += in[iSz+1];
 		    }
 		    iSz++;
-		}
-		else sout += in[iSz];
+		} else sout += in[iSz];
 	    break;
+	case TSYS::ShieldBin: {
+	    sout.reserve(in.size());
+	    char buf[10];
+	    for(iSz = 0; iSz < (int)in.size(); iSz++)
+		switch(in[iSz]) {
+		    case 0 ... 8:
+		    case 0xB ... 0xC:
+		    case 0x0E ... 0x1F:
+			sprintf(buf, "\\%03o", in[iSz]);
+			sout += buf;
+			break;
+		    default: sout += in[iSz];
+		}
+	    break;
+	}
 	case TSYS::ToLower:
 	    sout.reserve(in.size());
 	    for(iSz = 0; iSz < (int)in.size(); iSz++)
@@ -2007,8 +2085,8 @@ bool TSYS::prjSwitch( const string &prj, bool toCreate )
 		" " + (toCreate?"create":"proc") +
 		" " + prj).c_str());
 
-    //Check for the project folder presence and main items creation at miss or wrong the projects manager procedure
-    //!!!!
+    //Check for the project folder presence and main items creation at missing or wrong the projects manager procedure
+    //?!?!
 
     //Check for the project folder availability and switch to the project
     string  prjDir = prjUserDir() + "/" + prj,
@@ -2049,7 +2127,10 @@ int TSYS::prjLockUpdPer( )
 
 bool TSYS::prjLock( const char *cmd )
 {
-    if(strcmp(cmd,"free") == 0 && prjLockFile.size())	return (remove(prjLockFile.c_str()) == 0);
+    if(strcmp(cmd,"free") == 0 && prjLockFile.size() && remove(prjLockFile.c_str()) == 0) {
+	prjLockFile = "";
+	return true;
+    }
 
     int hd = -1;
     if(strcmp(cmd,"hold") == 0) {
@@ -2068,9 +2149,12 @@ bool TSYS::prjLock( const char *cmd )
 	}
 
 	//Hold the lock file
-	if((hd=open(prjLockFile.c_str(),O_CREAT|O_EXCL|O_WRONLY,permCrtFiles())) < 0) return false;
+	if((hd=open(prjLockFile.c_str(),O_CREAT|O_EXCL|O_WRONLY,permCrtFiles())) < 0)
+	    return false;
     }
-    else if(strcmp(cmd,"update") == 0 && (hd=open(prjLockFile.c_str(),O_WRONLY)) < 0) return false;
+    else if(strcmp(cmd,"update") == 0 && (prjLockFile.empty() || (hd=open(prjLockFile.c_str(),O_WRONLY)) < 0))
+	return false;
+
     if(hd >= 0) {
 	string lockInfo = TSYS::strMess("%010d %020d", (int)getpid(), (int)sysTm());
 	write(hd, lockInfo.data(), lockInfo.size());
@@ -2108,7 +2192,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.taskArg = arg;
     htsk.flgs = 0;
     htsk.thr = 0;
-    htsk.phase = s2i(TBDS::genDBGet(SYS->nodePath()+"TaskPhase:"+path,i2s(mTasks.size()-1)));
+    htsk.phase = s2i(TBDS::genPrmGet(SYS->nodePath()+"TaskPhase:"+path,i2s(mTasks.size()-1)));
     htsk.prior = priority%100;
     res.release();
 
@@ -2260,12 +2344,12 @@ void *TSYS::taskWrap( void *stas )
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
-    //tsk->prior = param.sched_priority;	//!!!! Commented for nice
+    //tsk->prior = param.sched_priority;	//!!!! Commented for NICE allowing
 
 #if !defined(__ANDROID__) && __GLIBC_PREREQ(2,4)
     //Load and init CPU set
     if(SYS->nCPU() > 1 && !(tsk->flgs&STask::Detached)) {
-	tsk->cpuSet = TBDS::genDBGet(SYS->nodePath()+"CpuSet:"+tsk->path);
+	tsk->cpuSet = TBDS::genPrmGet(SYS->nodePath()+"CpuSet:"+tsk->path);
 	cpu_set_t cpuset;
 	CPU_ZERO(&cpuset);
 	string sval;
@@ -2300,7 +2384,7 @@ void *TSYS::taskWrap( void *stas )
 	mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	SYS->mess_sys(TMess::Error, _("Task %u unexpected terminated by an exception."), tsk->thr);
     }
-    //!!!! The code causes: FATAL: exception not rethrown
+    //!!!! The code causes - FATAL, do not rethrow
     //catch(...)	{ mess_sys(TMess::Error, _("Task %u unexpected terminated by an unknown exception."), tsk->thr); }
 
     //Mark for task finish
@@ -2317,16 +2401,20 @@ void *TSYS::ServTask( void * )
     for(unsigned int iCnt = 1; !TSYS::taskEndRun(); iCnt++) {
 	SYS->isServPrc = true;
 
-	if(SYS->isRunning()) {
-	    try {
-		//Lock file update
-		if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer())) SYS->prjLock("update");
+	//Lock file update
+	if(SYS->prjNm().size() && SYS->prjLockUpdPer() && !(iCnt%SYS->prjLockUpdPer()))
+	    SYS->prjLock("update");
 
+	if(SYS->isRunning())
+	    try {
 		//CPU frequency calculation (per ten seconds)
 		if(!(iCnt%10))	SYS->clkCalc();
 
 		//Config-file checking for changes (per ten seconds)
 		if(!(iCnt%10))	SYS->cfgFileScan();
+
+		//Translation cache limit per time, limCacheIts_TM(60) seconds
+		if(!(iCnt%limCacheIts_TM)) Mess->translCacheLimits(limCacheIts_TM);
 
 		//Checking for shared libraries
 		if(SYS->modSchedul().at().chkPer() && !(iCnt%SYS->modSchedul().at().chkPer()))
@@ -2338,7 +2426,7 @@ void *TSYS::ServTask( void * )
 		//Config-file checking for need to save
 		if(!(iCnt%10))	SYS->cfgFileSave();
 
-		//Subsystems calling (per 10s)
+		//Subsystems calling, per prmServTask_PER(10) seconds
 		if(!(iCnt%prmServTask_PER)) {
 		    vector<string> lst;
 		    SYS->list(lst);
@@ -2347,7 +2435,7 @@ void *TSYS::ServTask( void * )
 			catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 		}
 	    } catch(TError&) { }
-	}
+
 	else if(!SYS->mainThr.freeStat()) SYS->mainThr.at().perSYSCall(0);
 
 	SYS->isServPrc = false;
@@ -2422,7 +2510,7 @@ void *TSYS::RdTask( void * )
 	    if(!SYS->at(subLs[iL]).at().rdProcess())
 		subLs.erase(subLs.begin()+(iL--));
 
-	//Wait to next iteration
+	//Waiting the next iteration
 	TSYS::taskSleep((int64_t)(SYS->rdTaskPer()*1e9));
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
@@ -2631,7 +2719,7 @@ reload:
     return mktime(&ttm);
 }
 
-TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     bool alt1 = false;
     // int message(string cat, int level, string mess) - formation of the program message <mess> with the category <cat>, level <level>
@@ -2724,7 +2812,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
 	if(prms.size() < 2 || prms[1].getS().empty()) {
-	    req.setAttr("user",user);
+	    req.setAttr("user", TSYS::strLine(user_lang,0));
 	    cntrCmd(&req);
 	}
 	else try {
@@ -2839,8 +2927,20 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	if(alt1) gmtime_r(&tm_t, &tm_tm);
 	else localtime_r(&tm_t, &tm_tm);
 	char buf[1000];
-	int rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
-	return (rez>0) ? string(buf,rez) : "";
+	int rez = 0;
+	string lang = TSYS::strLine(user_lang, 1);
+	if(lang.size()) {
+	    lang = Mess->langToLocale(lang);
+	    //!?!? Prepare the locales cache to speed up. Use in new locale string functions of conversion real numbers
+	    locale_t dLoc = newlocale(LC_TIME_MASK, lang.c_str(), 0);
+	    if(dLoc != 0) {
+		rez = strftime_l(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm, dLoc);
+		freelocale(dLoc);
+		return (rez > 0) ? string(buf,rez) : "";
+	    }
+	}
+	rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
+	return (rez > 0) ? string(buf,rez) : "";
     }
     // int {strptime|strptimegm}(string str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
     //      based on the string record of time <str>, in accordance with the specified template <form>
@@ -2905,7 +3005,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // string strEncode( string src, string tp = "Bin", string opt1 = "" ) - String encode from <src> by <tp> and options <opt1>.
     //  src - source;
     //  tp  - encode type: "PathEl", "HttpURL", "HTML", "JavaScript", "SQL", "Custom", "Base64", "FormatPrint",
-    //			   "OscdID", "Bin", "Reverse", "ShieldSimb"
+    //			   "OscdID", "Bin", "Reverse", "ShieldSimb", "ToLower", "Limit", "ShieldBin"
     //  opt1 - option 1, symbols for "Custom"
     if(iid == "strEncode" && prms.size() >= 1) {
 	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
@@ -2924,6 +3024,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	else if(stp == "ShieldSimb")	tp = ShieldSimb;
 	else if(stp == "ToLower")	tp = ToLower;
 	else if(stp == "Limit")		tp = Limit;
+	else if(stp == "ShieldBin")	tp = ShieldBin;
 	else return "";
 	return strEncode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
     }
@@ -2943,7 +3044,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return strDecode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
     }
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt )
@@ -2993,18 +3094,16 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 	closedir(IdDir);
 	free(sDir);
     }
-    sort(its.begin(),its.end());
-    for(unsigned i_it = 0; i_it < its.size(); i_it++)
-	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
-    sort(fits.begin(),fits.end());
-    for(unsigned i_it = 0; i_it < fits.size(); i_it++)
-	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
+    sort(its.begin(), its.end());
+    for(unsigned iIt = 0; iIt < its.size(); iIt++)
+	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[iIt]);
+    sort(fits.begin(), fits.end());
+    for(unsigned iIt = 0; iIt < fits.size(); iIt++)
+	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[iIt]);
 }
 
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
-    char buf[prmStrBuf_SZ];
-    string u = opt->attr("user"), l = opt->attr("lang");
     string a_path = opt->attr("path");
 
     //Service commands process
@@ -3018,8 +3117,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,trLU(name(),l,u).c_str());
-	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_)->setAttr("doc","Program_manual|Documents/Program_manual");
+	ctrMkNode("oscada_cntr",opt,-1,"/",TSYS::strMess(_("%s station: \"%s\""),PACKAGE_NAME,trD(name()).c_str()),R_R_R_)->
+	    setAttr("doc","Program_manual|Documents/Program_manual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
 	if(TUIS::icoGet(name(),NULL,true).size() || TUIS::icoGet(id(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
@@ -3055,11 +3154,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/modifCalc",_("Set modification for the calculated objects"),RWRWR_,"root","root",2,"tp","bool",
 		"help",_("Most suitable for the production systems together with the previous configuration properties, for the calculation context saving.\n"
 			 "But it is inconvinient in the development mode, all time reminding for the saving need."));
-	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",3,
+		"tp","str", "dest","sel_ed", "sel_list",Mess->langBase().c_str());
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7",
-		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+		    "sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
 		    "help",_("Least messages level which is procesed by the program."));
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",_("To syslog"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",_("To stdout"),RWRWR_,"root","root",1,"tp","bool");
@@ -3086,11 +3186,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/status",_("Status"),R_R_R_,"root","root",1,"tp","str");
-	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language of the text variables"),RWRWR_,"root","root",5,
-		"tp","str","len","2","dest","sel_ed","select","/tr/baseLangLs",
-		"help",_("Enables the multilingual support for text variables in the configuration DBs by selecting the base language.\n"
-		    "You can select or type here other language besides English(en), but take in your mind that "
-		    "all standard OpenSCADA libraries's formed for the base language English(en), so other base languages "
+	    XMLNode *blNd = ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Base language - locales list"),RWRWR_,"root","root",2,
+		"tp","str", "help",_("Enables the multilingual support for text variables in the configuration DBs "
+		    "by entry the base language and the project whole locales (like to \"en_US.UTF-8\") list (optional) separated by ';'.\n"
+		    "You can entry here other language besides English(en) as the base, but take in your mind that "
+		    "all standard OpenSCADA libraries formed for the base language English(en), so other base languages "
 		    "will break these DBs at change!"));
 	    if(Mess->lang2CodeBase().size()) {
 		blNd->setAttr("dscr", blNd->attr("dscr") + ", " + _("dynamic translation"));
@@ -3102,10 +3202,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if(Mess->translEnMan()) {
 		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages of managing"),RWRW__,"root","root",2,"tp","str",
 		    "help",_("List of the processing languages, in the two-character representation and separated by the character ';'."));
-		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter, check for mismatch, pass"),RWRW__,"root","root",2,"tp","str",
+		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter, check/fix, pass"),RWRW__,"root","root",2,"tp","str",
 		    "help",_("Source filter of limiting the manager work in some DBs, the source just must contain such substring."));
-		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch","",RWRW__,"root","root",2,"tp","bool",
-		    "help",_("Enable for checking the equal base messages for their translation equality in different sources."));
+		ctrMkNode("fld",opt,-1,"/tr/chkAndFix","",RWRW__,"root","root",2,"tp","bool",
+		    "help",_("Enable for checking the base messages translation equality in different sources\n"
+			    "and fixing by: propagation the translations to empty sources, "
+			    "clearing the double to base translations "
+			    "and merging the base messages as the translations."));
 		ctrMkNode("fld",opt,-1,"/tr/pass","",RWRW__,"root","root",3,"tp","dec","min","0",
 		    "help",_("Pass the specified number of the table items from the top, "
 			    "useful for very big projects which are limited in time of the table complete processing."));
@@ -3166,8 +3269,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/ver" && ctrChkNode(opt))	opt->setText(VERSION);
     else if(a_path == "/gen/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/gen/stat") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trLU(name(),l,u));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trSetLU(name(),l,u,opt->text()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/gen/CPU" && ctrChkNode(opt))	opt->setText(strMess(_("%dx%0.3gGHz"),nCPU(),(float)sysClk()/1e9));
     else if(a_path == "/gen/mainCPUs") {
@@ -3402,7 +3505,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 
 	    int rez = pthread_setaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
 	    res.release();
-	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first, it->second.cpuSet);
+	    TBDS::genPrmSet(nodePath()+"CpuSet:"+it->first, it->second.cpuSet);
 	    if(rez == EINVAL) throw err_sys(_("Attempt to set missing processor."));
 	    if(rez) throw err_sys(_("Error installing processors for the thread."));
 	}
@@ -3416,29 +3519,29 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    int tVl = vmax(0, vmin(100,s2i(opt->text())));
 	    it->second.phase = tVl;
 	    res.release();
-	    TBDS::genDBSet(nodePath()+"TaskPhase:"+it->first, i2s(tVl));
+	    TBDS::genPrmSet(nodePath()+"TaskPhase:"+it->first, i2s(tVl));
 	}
     }
     else if(a_path == "/tr/status" && ctrChkNode(opt)) {
-	string stV;
-	if(Mess->lang2CodeBase().empty())	stV += _("only use the already multilanguage DBs with their modification");
+	string stM, stV;
+	if(Mess->lang2CodeBase().empty())
+	    stM = _("SINGLELANGUAGE"), stV += _("only use the already multilanguage DBs with their modification");
 	else {
-	    if(Mess->translDyn()) stV += _("dynamic translation");
-	    stV += (Mess->translDyn()?"; ":"") +
+	    if(Mess->translDyn()) stM = _("MULTILANGUAGE-DYNAMIC"), stV += _("dynamic translation");
+	    else stM = _("MULTILANGUAGE");
+	    stV += (Mess->translDyn()?", ":"") +
 		    TSYS::strMess(_("creating or modification the configuration DBs as multilanguage ones with the pointed base language '%s'"),
 			Mess->lang2CodeBase().c_str());
 	}
-	opt->setText(stV);
+	if(stV.size() && (Mess->trMessIdx.size() || Mess->trMessCache.size()))
+	    stV += ". " + TSYS::strMess(_("Messages indexed=%d, cached=%d."), Mess->trMessIdx.size(), Mess->trMessCache.size());
+	if(stV.size() && Mess->trCtxs.size())
+	    stV += (stV[stV.size()-1]!='.'?". ":" ") + TSYS::strMess(_("Translation contexts=%d."), Mess->trCtxs.size());
+	opt->setText(stM+", "+stV);
     }
     else if(a_path == "/tr/baseLang") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang2CodeBase());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang2CodeBase(opt->text());
-    }
-    else if(a_path == "/tr/baseLangLs" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setText(Mess->lang2Code());
-	if(!Mess->lang2CodeBase().empty() && Mess->lang2CodeBase() != Mess->lang2Code())
-	    opt->childAdd("el")->setText(Mess->lang2CodeBase());
-	opt->childAdd("el")->setText("");
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->langBase());
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLangBase(opt->text());
     }
     else if(a_path == "/tr/dynPlan") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(i2s(Mess->translDyn(true)));
@@ -3453,26 +3556,28 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	Mess->setTranslLangs(opt->text());
     }
     else if(a_path == "/tr/fltr") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	{
-	    TBDS::genDBSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
-	    TBDS::genDBSet(nodePath()+"TrPassN","0",opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
+	    TBDS::genPrmSet(nodePath()+"TrPassN","0",opt->attr("user"));
 	}
     }
-    else if(a_path == "/tr/chkUnMatch") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrChkUnMatch",opt->text(),opt->attr("user"));
+    else if(a_path == "/tr/chkAndFix") {
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genPrmSet(nodePath()+"TrChkAndFix",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/tr/pass") {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrPassN","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrPassN",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"TrPassN","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	TBDS::genPrmSet(nodePath()+"TrPassN",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/tr/mess") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD)) {
-	    bool chkUnMatch = s2i(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
-	    string tStr, trFltr = TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user"));
-	    unsigned passN = vmax(0, s2i(TBDS::genDBGet(nodePath()+"TrPassN","0",opt->attr("user"))));
+	    bool chkAndFix = s2i(TBDS::genPrmGet(nodePath()+"TrChkAndFix","0",opt->attr("user")));
+	    string tStr, trFltr = TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user"));
+	    unsigned passN = vmax(0, s2i(TBDS::genPrmGet(nodePath()+"TrPassN","0",opt->attr("user")))),
+		    mess_TrModifMarkLen = strlen(mess_TrModifMark);
 	    TConfig req;
+	    req.setNoTransl(true);
 	    vector<XMLNode*> ns;
 
 	    // Columns list preparing
@@ -3499,8 +3604,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 
 		//  Rows appending
 		for(unsigned iN = 0; iN < ns.size(); iN++) {
-		    if(iN == 0) ns[iN]->childAdd("el")->setText(im->first);
-		    else if(iN < (ns.size()-1)) ns[iN]->childAdd("el")->setText("");	//Empty cells at the start
+		    if(iN == 0)
+			ns[iN]->childAdd("el")->setText(im->first);
+		    else if(iN < (ns.size()-1))
+			ns[iN]->childAdd("el")->setText("");	//Empty cells at the start
 		    else {
 			tStr.clear();
 			for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is)
@@ -3518,52 +3625,107 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    if(trFltr.size() && (is->first+"#"+is->second).find(trFltr) == string::npos) continue;
 
 		    string tMath, trSrc = TSYS::strParse(is->first, 0, "#"), trFld = TSYS::strParse(is->first, 1, "#");
-		    bool isCfg = false, haveMatch = false;
+		    bool isCfg = false;
 		    //  Source is the config file or the included DB
-		    if((isCfg=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
-			//  Needed for the DB structure preparing
+		    if((isCfg=trSrc.find("cfg:")==0) || trSrc.find("db:") == 0) {
+			//  Need for the DB structure preparing
 			req.elem().fldClear();
-			req.elem().fldAdd(new TFld(trFld.c_str(),trFld.c_str(),TFld::String,0));
+			req.elem().fldAdd(new TFld(trFld.c_str(),"",TFld::String,0));
 			for(unsigned iN = 1; iN < ns.size(); iN++)
-			    req.elem().fldAdd(new TFld(Mess->translFld(ns[iN]->attr("id"),trFld,isCfg).c_str(),
-				ns[iN]->attr("descr").c_str(),TFld::String,0));
+			    req.elem().fldAdd(new TFld(Mess->translFld(ns[iN]->attr("id"),trFld,isCfg).c_str(),"",TFld::String,0));
 			req.cfg(trFld).setReqKey(true);
 			req.cfg(trFld).setS(im->first);
 
 			//  Getting from the config file or the DB source
 			bool seekRez = false;
 			for(int inst = 0; true; inst++) {
-			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req, false, true)
-					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req, false, true);
+			    seekRez = isCfg ? TBDS::dataSeek("", trSrc.substr(4), inst, req, TBDS::UseCache)
+					    : TBDS::dataSeek(trSrc.substr(3), "", inst, req, TBDS::UseCache);
 			    if(!seekRez) break;
 			    for(unsigned iN = 0; iN < ns.size(); iN++) {
 				if(!(iN && iN < (ns.size()-1))) continue;
 				tMath = req.cfg(Mess->translFld(ns[iN]->attr("id"),trFld,isCfg)).getS();
 				XMLNode *recNd = ns[iN]->childGet(-1);
-				if(firstInst) { recNd->setText(tMath); haveMatch = true; }
-				else {
-				    if(!s2i(recNd->attr("unmatch"))) {
-					if(tMath == recNd->text()) haveMatch = true;
-					else {
-					    if(recNd->text().empty()) recNd->setText(tMath);
-					    recNd->setText(_("<<<Unmatched sources!!!>>>\n")+recNd->text());
-					    recNd->setAttr("unmatch","1");
-					}
+				if(chkAndFix && tMath.empty())	recNd->setAttr("toPropagOnSp", "1");
+				if(firstInst)	recNd->setText(tMath);
+				else if(!s2i(recNd->attr("unmatch"))) {
+				    if(tMath.empty()) ;
+				    else if(recNd->text().empty())	recNd->setText(tMath);
+				    else if(tMath != recNd->text()) {
+					if(recNd->text().empty()) recNd->setText(tMath);
+					recNd->setText(string(_("<<<Unmatched sources>>>\n"))+"1. "+recNd->text()+"\n2. "+tMath);
+					recNd->setAttr("unmatch", "1")->attrDel("toPropagOnSp");
 				    }
 				}
 			    }
 			    firstInst = false;
-			    if(!chkUnMatch || !haveMatch) break;
+			    if(!chkAndFix) break;
 			}
-		    } else haveMatch = true;
-		    if(!chkUnMatch || !haveMatch) break;
+		    }
+		    if(!chkAndFix) break;
 		} catch(TError &err) { continue; }
+
+		//  Postprocessing the translation checking
+		/*for(unsigned iN = 0; chkAndFix && iN < ns.size(); iN++) {
+		    if(!(iN && iN < (ns.size()-1))) continue;*/
+
+		for(int iN = ns.size()-2; iN >= 0; --iN) {
+		    XMLNode *recNd = ns[iN]->childGet(-1);
+		    if(iN == 0) {
+			//   Processing the translation changing mark
+			if(recNd->text().size() > mess_TrModifMarkLen &&
+				recNd->text().rfind(mess_TrModifMark) == (recNd->text().size()-mess_TrModifMarkLen))
+			    recNd->setText(string(_("<<<Translation changed>>>\n"))+
+					    recNd->text().substr(0,recNd->text().size()-mess_TrModifMarkLen));
+			continue;
+		    }
+
+		    XMLNode *recNdBs = ns[0]->childGet(-1);
+		    if(chkAndFix) {
+			string lng = ns[iN]->attr("dscr");
+			bool needReload = false;
+			if(!s2i(recNd->attr("unmatch")) && recNd->text().size()) {
+			    //   Clearing the equel to base translation
+			    if(recNd->text() == recNdBs->text()) {
+				mess_warning((nodePath()+"Tr").c_str(), _("Clearing the equel to base translation '%s' for '%s'."),
+				    lng.c_str(), recNdBs->text().c_str());
+				Mess->translSet(recNdBs->text(), lng, "", &needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
+				recNd->setText("");
+			    }
+			    else if(s2i(recNd->attr("toPropagOnSp"))) {
+				mess_warning((nodePath()+"Tr").c_str(), _("Propagation the translation '%s' to all empty sources for '%s'.'%s'."),
+				    lng.c_str(), recNdBs->text().c_str(), recNd->text().c_str());
+				Mess->translSet(recNdBs->text(), lng, recNd->text(), &needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
+			    }
+			}
+			if(recNd->text().size() && recNd->text() != recNdBs->text() && Mess->trMessIdx.find(recNd->text()) != Mess->trMessIdx.end()) {
+			    mess_warning((nodePath()+"Tr").c_str(), _("Merging the base message to the translation '%s' for '%s' > '%s'."),
+				lng.c_str(), recNd->text().c_str(), recNdBs->text().c_str());
+			    //   Copying the real translations
+			    for(unsigned iN2 = 1; iN2 < ns.size()-1; ++iN2) {
+				XMLNode *recNd2 = ns[iN2]->childGet(-1);
+				string lng2 = ns[iN2]->attr("dscr");
+				Mess->translSet(recNd->text(), lng2, recNd2->text(), &needReload);
+			    }
+
+			    //   Replacing the message base
+			    Mess->translSet(recNd->text(), Mess->lang2CodeBase(), recNdBs->text(), &needReload);
+			}
+			recNd->attrDel("unmatch")->attrDel("toPropagOnSp");
+		    }
+
+		    //   Processing the base changing mark
+		    if(recNd->text().size() > mess_TrModifMarkLen &&
+			    recNd->text().rfind(mess_TrModifMark) == (recNd->text().size()-mess_TrModifMarkLen))
+			recNd->setText(string(_("<<<Base changed>>>\n"))+
+					recNd->text().substr(0,recNd->text().size()-mess_TrModifMarkLen));
+		}
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
 	    bool needReload = false;
 	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->lang2CodeBase():opt->attr("col")), opt->text(),
-				&needReload, TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+				&needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
 	    if(!needReload) opt->setAttr("noReload","1");
 	}
     }
@@ -3582,14 +3744,14 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_cat = ctrMkNode("list",opt,-1,"/debug/dbgCats/cat","",RWRWR_,"root","root");
 	    XMLNode *n_prc = ctrMkNode("list",opt,-1,"/debug/dbgCats/prc","",RWRWR_,"root","root");
 
-	    MtxAlloc res(Mess->mRes, true);
+	    MtxAlloc res(Mess->dbgRes, true);
 	    for(map<string,bool>::iterator idc = Mess->debugCats.begin(); idc != Mess->debugCats.end(); idc++) {
 		if(n_cat) n_cat->childAdd("el")->setText(idc->first);
 		if(n_prc) n_prc->childAdd("el")->setText(r2s(idc->second));
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR)) {
-	    MtxAlloc res(Mess->mRes, true);
+	    MtxAlloc res(Mess->dbgRes, true);
 	    //Check for set category
 	    if((Mess->debugCats[opt->attr("key_cat")]=s2i(opt->text()))) {
 		for(vector<string>::iterator iDC = Mess->selectDebugCats.begin(); iDC != Mess->selectDebugCats.end(); ) {
@@ -3622,9 +3784,7 @@ int main( int argc, char *argv[] )
 {
     int rez = 0;
 
-#if defined(__ANDROID__)
     setenv("QT_SCALE_FACTOR", "1.5", 1);
-#endif
 
     //Same load and start the core object TSYS
     SYS = new TSYS(argc, argv, NULL);

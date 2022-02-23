@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: gd.h
 /***************************************************************************
- *   Copyright (C) 2013-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,9 +59,9 @@ class GD : public TFunction
 {
     public:
 	GD( ) : TFunction("GD", SSPC_ID) {
-	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
-	    ioAdd(new IO("name",_("Name"),IO::String,IO::Default));
-	    ioAdd(new IO("file",_("From file"),IO::Boolean,IO::Default,"0"));
+	    ioAdd(new IO("rez",trS("Result"),IO::Object,IO::Return));
+	    ioAdd(new IO("name",trS("Name"),IO::String,IO::Default));
+	    ioAdd(new IO("file",trS("From file"),IO::Boolean,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("LibGD2"); }

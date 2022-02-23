@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,7 +32,7 @@
 #define DAQ_APER_FRQ	1000000	// Frequency of representing the aperiodic invokes, like to f_start, of the periodic processes in Hz
 #define RECURS_DET_HOPS	20	// Hops/depth number of the recursion detection
 
-// !!!!(to v1.0) Left for the compatibility
+// ????[API,v1.0] Remove - left for the compatibility
 #define OBJ_ID_SZ	"20"
 #define OBJ_NM_SZ	"100"
 #define ARCH_ID_SZ	"70"
@@ -45,9 +45,10 @@
 #define STD_INTERF_TM	7
 #define SERV_TASK_PER	10
 
-#define BUF_ARCH_NM	"<buffer>"
-#define ALRM_ARCH_NM	"<alarms>"
-#define ALRM_ARCH_CH_NM	"<alarmsChange>"
+#define ARCH_BUF	"<buffer>"
+#define ARCH_ALRM	"<alarms>"
+#define ARCH_ALRM_CH	"<alarmsChange>"
+#define ARCH_NOALRM	"<noalarms>"
 #define DB_CFG		"<cfg>"
 #define DB_NULL		"<NULL>"
 
@@ -64,6 +65,10 @@
 
 #define vmin(a,b) ((a) < (b) ? (a) : (b))
 #define vmax(a,b) ((a) > (b) ? (a) : (b))
+
+#ifndef UINT16_MAX
+# define UINT16_MAX (65535)
+#endif
 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
@@ -92,6 +97,7 @@ extern int	limUserFile_SZ;	//[1MB...*10MB...1000MB] The files size limit at load
 				//	and the part size of the big files transferring.
 extern int	limUserIts_N;	//[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
 extern unsigned	limCacheIts_N;	//[*100...100000] The limit on count of the caching items.
+extern unsigned	limCacheIts_TM;	//[10...*60...1000] The limit on the caching items time, seconds.
 
 //Global configurable parameters
 extern int	prmStrBuf_SZ;	//[1000...*10000...1000000] Length of string buffers, no string class
@@ -109,7 +115,7 @@ class TSYS : public TCntrNode
 
     public:
 	//Data
-	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb, ToLower, Limit };
+	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb, ToLower, Limit, ShieldBin };
 	enum IntView	{ Dec, Oct, Hex };
 
 	// Task structure
@@ -219,7 +225,8 @@ class TSYS : public TCntrNode
 	int	savePeriod( )	{ return mSavePeriod; }
 	bool	modifCalc( )	{ return mModifCalc; }
 
-	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
+	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; /*modifG();*/ }	//!!!! Do not mark all objects modification
+											//     and to save/load all them use the force operations
 	void	setMainCPUs( const string &vl );
 	void	setClockRT( bool vl )		{ mClockRT = vl; modif(); }
 	void	setTaskInvPhs( int vl );
@@ -231,8 +238,11 @@ class TSYS : public TCntrNode
 	string	selDB( )	{ return mSelDB; }
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	bool	chkSelDB( const string& wDB, bool isStrong = false );
-	XMLNode *cfgCtx( )	{ return mCfgCtx; }
-	void	setCfgCtx( XMLNode *vl )	{ mCfgCtx = vl; }
+	XMLNode *cfgCtx( bool last = false )	{ return last ? mCfgCtxLast : mCfgCtx; }
+	void	setCfgCtx( XMLNode *vl, bool last = false ) {
+	    if(last) mCfgCtxLast = vl;
+	    else { mCfgCtx = vl; mCfgCtxLast = NULL; }
+	}
 	ResMtx &cfgLoadSaveM( )	{ return mCfgLoadSaveM; }
 
 	static void sighandler( int signal, siginfo_t *siginfo, void *context );
@@ -320,7 +330,7 @@ class TSYS : public TCntrNode
 	static string cpct2str( double cnt );
 
 	// Convert string to value
-	static double str2real( const string &val );
+	//static double str2real( const string &val );
 	static time_t str2atime( const string &val, const string &format = "", bool gmt = false );
 
 	// Adress convertors
@@ -331,8 +341,9 @@ class TSYS : public TCntrNode
 	static string strTrim( const string &val, const string &cfg = " \n\t\r" );
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
+	static string strParseEnd( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 	static string strLine( const string &str, int level, int *off = NULL );
-	static string pathLev( const string &path, int level, bool decode = true, int *off = NULL );
+	static string pathLev( const string &path, int level, bool decode = true, int *offCmtbl = NULL, int *off = NULL );
 	static string pathLevEnd( const string &path, int level, bool decode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );
 	static string sepstr2path( const string &str, char sep = '.' );
@@ -408,7 +419,7 @@ class TSYS : public TCntrNode
 	// Control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	//Public attributes
 	AutoHD<TModule>	mainThr;	//A module to call into the main thread
@@ -424,8 +435,8 @@ class TSYS : public TCntrNode
 	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08, MDF_DocDir = 0x10 };
 
 	//Private methods
-	const char *nodeName( ) const		{ return mId.c_str(); }
-	const char *nodeNameSYSM( ) const	{ return mName.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
+	string nodeNameSYSM( ) const	{ return mName; }
 	void	cfgFileLoad( );
 	void	cfgFileSave( );
 	void	cfgPrmLoad( );
@@ -494,7 +505,7 @@ class TSYS : public TCntrNode
 	map<string, SStat>	mSt;		//Remote stations
 
 	ResMtx	mCfgLoadSaveM;
-	XMLNode	*mCfgCtx;
+	XMLNode	*mCfgCtx, *mCfgCtxLast;
 
 	unsigned char	mRdStLevel,	//Current station level
 			mRdRestConnTm;	//Redundant restore connection to reserve stations timeout in seconds
@@ -520,6 +531,8 @@ inline string atm2s( time_t tm, const string &format = "", bool gmt = false )	{ 
 inline string tm2s( double tm )					{ return TSYS::time2str(tm); }
 
 inline int s2i( const string &val )		{ return atoi(val.c_str()); }
+inline long s2l( const string &val, int base = 10 )		{ return strtol(val.c_str(), NULL, base); }
+inline unsigned long s2u( const string &val, int base = 10 )	{ return strtoul(val.c_str(), NULL, base); }
 inline long long s2ll( const string &val )	{ return atoll(val.c_str()); }
 inline double s2r( const string &val )		{ return /*TSYS::str2real(val); }*/ atof(val.c_str()); }
 

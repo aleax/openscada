@@ -1,8 +1,7 @@
 
 //OpenSCADA module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2017,2019-2021                                     *
- *                      by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2013-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,12 +34,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"MMS"
-#define MOD_NAME	_("MMS(IEC-9506)")
+#define MOD_NAME	trS("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.2"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
+#define MOD_VER		"1.4.7"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -80,18 +79,18 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
-    fldAdd(new TFld("ADDR",_("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
-    fldAdd(new TFld("VARS_RD_REQ",_("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","1;9999"));
-    fldAdd(new TFld("COTP_DestTSAP",_("Destination TSAP"),TFld::Integer,TFld::NoFlag,"3","512","0;65535"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("TM_REST",trS("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
+    fldAdd(new TFld("SYNCPER",trS("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","0","0;1000"));
+    fldAdd(new TFld("ADDR",trS("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
+    fldAdd(new TFld("VARS_RD_REQ",trS("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","1;9999"));
+    fldAdd(new TFld("COTP_DestTSAP",trS("Destination TSAP"),TFld::Integer,TFld::NoFlag,"3","512","0;65535"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("VAR_LS",_("Variables list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("VAR_LS",trS("Variables list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
@@ -379,7 +378,7 @@ void *TMdContr::Task( void *icntr )
 			case MMS::VT_BitString: case MMS::VT_OctString: case MMS::VT_VisString:
 			    cntr.mVars[nId].val = value->text();
 			    break;
-			case MMS::VT_Array: case MMS::VT_Struct: {		//!!!! Need for test
+			case MMS::VT_Array: case MMS::VT_Struct: {		//?!?! Need for test
 			    vector<StackTp> stack;
 			    TArrayObj *curArr = new TArrayObj();
 			    cntr.mVars[nId].val = curArr;
@@ -574,7 +573,7 @@ string TMdPrm::attrPrc( )
 	if(vlPresent(aid)) for(aid += "_1"; vlPresent(aid); ) aid = TSYS::strLabEnum(aid);
 
 	anm = TSYS::strParse(itS,0,":",&offIt);
-	if(anm.empty()) anm = TSYS::pathLev(var,1);
+	if(anm.empty()) anm = TSYS::pathLev(var, 1);
 
 	// Find for already presented attribute
 	unsigned srchPos;
@@ -686,7 +685,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    childAdd("rule")->setAttr("expr","^[^:]+")->setAttr("color","blue");
     }
     else if(a_path == "/prm/cfg/SEL_VAR") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"selVAR","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"selVAR","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    if(TSYS::pathLev(opt->text(),1).size()) {
 		string vLs = varList(), vS;
@@ -695,11 +694,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			break;
 		if(vS.empty()) setVarList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+opt->text());
 	    }
-	    TBDS::genDBSet(owner().nodePath()+"selVAR",TSYS::pathLev(opt->text(),0),opt->attr("user"));
+	    TBDS::genPrmSet(owner().nodePath()+"selVAR",TSYS::pathLev(opt->text(),0),opt->attr("user"));
 	}
     }
     else if(a_path == "/prm/cfg/SEL_VAR_lst" && ctrChkNode(opt)) {
-	string	selVAR = TSYS::pathLev(TBDS::genDBGet(owner().nodePath()+"selVAR","",opt->attr("user")), 0);
+	string	selVAR = TSYS::pathLev(TBDS::genPrmGet(owner().nodePath()+"selVAR","",opt->attr("user")), 0);
 	string	lst = owner().getNameList(selVAR), lstEl;
 	opt->childAdd("el")->setText(selVAR.empty()?"*":"");
 	for(int off = 0; (lstEl=TSYS::strLine(lst,0,&off)).size(); ) opt->childAdd("el")->setText(lstEl);
@@ -773,7 +772,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 		    childAdd("it")->setAttr("itemId", TSYS::pathLev(nId,1))->setAttr("dataType", i2s(vTp));
     if(TSYS::pathLev(nId,0) != "*") value->setAttr("domainId", TSYS::pathLev(nId,0));
     switch(vTp) {
-	case MMS::VT_Array: case MMS::VT_Struct: {	//!!!! Need for test
+	case MMS::VT_Array: case MMS::VT_Struct: {	//?!?! Need for test
 	    TArrayObj *curArr = NULL;
 	    if(vl.type() != TVariant::Object || !(curArr=dynamic_cast<TArrayObj*>(&vl.getO().at()))) break;
 	    vector<TMdContr::StackTp> stack;

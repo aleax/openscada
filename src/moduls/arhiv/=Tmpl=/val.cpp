@@ -114,7 +114,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     {
 	TVArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",SARH_ID,3,
-	    "dest","select","select","/db/list","help",TMess::labDB());
+	    "dest","select","select","/db/list:onlydb","help",TMess::labStor());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	return;
     }
@@ -136,10 +136,10 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive,iarchivator), mBeg(0), mEnd(0), mPer(0)
 {
-    //> Load message archive parameters
+    //Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true))
+    if(TBDS::dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException))
     {
 	mBeg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
 	mEnd = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);

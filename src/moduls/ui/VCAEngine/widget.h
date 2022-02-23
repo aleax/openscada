@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,7 +49,7 @@ class Attr
 	enum GlobalAttrFlgs {
 	    Active	= 0x00100,	//Active attribute for primitives process
 
-	    Image	= 0x00200,	//Store image link to a DB's mime or a file, expand generic type "String"
+	    Image	= 0x00200,	//Store image link to a DB's resource or a file, expand generic type "String"
 	    DateTime	= 0x00200,	//Store data and time, expand generic type "Integer"
 	    Color	= 0x00400,	//Store color
 	    Font	= 0x00800,	//Store font
@@ -72,7 +72,6 @@ class Attr
 	    FromStyle	= 0x40,		//Get value from style
 	    VizerSpec	= 0x80,		//Visualizer specified attribute, for allow it to modification control and transmit to the visualizer.
 					//Sets at and by a session of running project activation.
-
 	    SessAttrInh	= 0x10,		//Inherited attribute into the running session
 	    IsInher	= 0x20		//Inherited attribute
 	};
@@ -85,20 +84,23 @@ class Attr
 	const string &id( ) const;
 	string name( ) const;
 	TFld::Type type( );
+	bool isVisual( )	{ return ((!(flgGlob()&Attr::IsUser) && s2i(fld().reserve())) || flgSelf()&Attr::VizerSpec); }
 	int flgGlob( );		//Global attribite's flags
 	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)mFlgSelf; }
-	unsigned modif( )	{ return mModif; }
+	uint32_t aModif( );
+	uint32_t &aModif_( )	{ return mModif; }
 	string cfgTempl( );
 	string cfgVal( );
 	static bool isTransl( TFld::Type tp, int flgGlb, int flgSelf = -1 ) {
-	    return (tp == TFld::String && (flgGlb&(TFld::TransltText|Attr::IsUser)) &&
+	    return (tp == TFld::String && (flgGlb&(TFld::TransltText/*|Attr::IsUser*/)) &&
 		!(flgGlb&(Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
 		(flgSelf == -1 || (flgSelf&(Attr::CfgConst|Attr::CfgLnkIn))));
 	}
 	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
 
 	void setFlgSelf( SelfAttrFlgs flg, bool sys = false );
-	void setModif( unsigned set )	{ mModif = set; }
+	void setAModif( );
+	void setAModif_( uint32_t set )	{ mModif = set; }
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );
 
@@ -140,7 +142,7 @@ class Attr
 	} mVal;
 	// Attributes
 	TFld		*mFld;		//Base field
-	unsigned	mModif;		//Modify counter
+	uint32_t	mModif;		//Counter of the modifications
 	unsigned short	mFlgSelf;	//Self attributes flags
 	unsigned short	mOi	:ATTR_OI_DEPTH;		//Order index, up to 256 attributes
 	unsigned short	mConn	:ATTR_CON_DEPTH;	//Connections counter
@@ -159,6 +161,11 @@ class Widget : public TCntrNode
     friend class Attr;
 
     public:
+	//Public data
+	enum EnDisFlag {
+	    NodeRemove_NoDelMark = 0x100
+	};
+
 	//Methods
 	Widget( const string &id, const string &isrcwdg = "" );
 	~Widget( );
@@ -166,7 +173,7 @@ class Widget : public TCntrNode
 	TCntrNode &operator=( const TCntrNode &node );
 
 	string id( ) const		{ return mId.c_str(); }	//Identifier
-	virtual string path( ) const;				//Curent widget path
+	virtual string addr( ) const;				//Curent widget address
 	virtual string name( ) const;				//Name
 	virtual string descr( ) const;				//Description
 	virtual string ico( ) const	{ return ""; }		//Icon
@@ -174,6 +181,7 @@ class Widget : public TCntrNode
 	string owner( ) const;					//Widget owner
 	string grp( ) const;					//Widget group
 	short  permit( ) const;					//Permission for access to widget
+	virtual uint32_t wModif( Attr *a = NULL );		//Common processing of the modification
 	virtual string getStatus( );
 	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( ) const { return ""; }		//Calc procedure language
@@ -191,6 +199,7 @@ class Widget : public TCntrNode
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp );
 	void setPermit( short iperm );
+	virtual void setWModif( Attr *a = NULL );
 	virtual void setCalcLang( const string &ilng )	{ };
 	virtual void setCalcProgTr( bool vl )		{ };
 	virtual void setCalcProg( const string &iprg )	{ };
@@ -209,14 +218,14 @@ class Widget : public TCntrNode
 	void linkToParent( );
 
 	// Inheritance methods
-	virtual string parentNm( ) const { return mParentNm; }	//Parent widget name
+	virtual string parentAddr( ) const { return mParentAddr; }//Parent widget address
 	virtual string rootId( ) const;				//Root widget id
 	AutoHD<Widget> parent( ) const;				//Parent widget
 	AutoHD<Widget> parentNoLink( );				//Parent no link widget
 	void heritReg( Widget *wdg );				//Register heritator
 	void heritUnreg( Widget *wdg );				//Unregister heritator
 	vector< AutoHD<Widget> > &herit( ) { return mHerit; }
-	virtual void setParentNm( const string &isw );
+	virtual void setParentAddr( const string &isw );
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
@@ -234,12 +243,15 @@ class Widget : public TCntrNode
 	void wdgList( vector<string> &list, bool fromLnk = false ) const;
 	bool wdgPresent( const string &wdg ) const;
 	virtual void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
-	void wdgDel( const string &wid, bool full = false )	{ chldDel(inclWdg, wid, -1, full); }
+	void wdgDel( const string &wid, bool full = false )	{ chldDel(inclWdg, wid, -1, full?NodeRemove:NodeNoFlg); }
 	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 ) const;
 
 	// Data access
 	virtual void resourceList( vector<string> &ls )	{ }
-	virtual string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL )	{ return ""; }
+	virtual string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const
+	{ return ""; }
+	virtual void resourceSet( const string &id, const string &data, const string &mime = "" )
+	{ }
 
 	// Context helps
 	static string helpImg( );
@@ -262,13 +274,12 @@ class Widget : public TCntrNode
 	virtual bool cntrCmdProcess( XMLNode *opt );
 
 	virtual bool attrChange( Attr &cfg, TVariant prev );	//Process an attribute change local and into the terminator
-	virtual unsigned int modifVal( Attr &cfg )	{ return 0; }
 	virtual TVariant vlGet( Attr &a );
 	virtual bool eventProc( const string &ev, Widget *src = NULL );	//Return "true" for terminate next processing
 
 	virtual void disable( Widget *base );
 	virtual void calc( Widget *base );
-	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
+	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user_lang, Widget *src = NULL );
 
 	ResMtx	&mtxAttr( )	{ return mtxAttrM; }
 
@@ -281,9 +292,9 @@ class Widget : public TCntrNode
 	unsigned char	mLnk		:1;	//Widget as link
 	unsigned char	mStlLock	:1;	//Style lock
 	unsigned char	BACrtHoldOvr	:1;	//Base attrs creation hold over to enable and inherit stage
-	unsigned char	ChldResrv	:1;	//Childs reserve attribute
+	unsigned char	ChldResrv	:1;	//Childs reserve attribute, to specify whether the mark "<deleted>" set or remove
 
-	string		mParentNm;		//Parent widget name
+	string		mParentAddr;		//Parent widget name
 	AutoHD<Widget>	mParent;		//Parent widget
 	ResRW		mHeritRes;		//Heritators lock
 	vector< AutoHD<Widget> > mHerit;	//Heritators

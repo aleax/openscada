@@ -1,7 +1,7 @@
 
 //OpenSCADA MMS(IEC-9506) implementation library file: libMMS.cpp
 /******************************************************************************
- *   Copyright (C) 2014-2017 by Roman Savochenko, <roman@oscada.org>	      *
+ *   Copyright (C) 2014-2021 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -346,7 +346,7 @@ void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 		ASN_iAccessResult(buf, off, szC1, *chN);
 		break;
 	    case VT_Bool: chN->setAttr("tp",int2s(vTp))->setText(int2s(ASN_iN(buf,off,szC1)));	break;
-	    case VT_BitString: {	//!!!! Need for test
+	    case VT_BitString: {	//?!?! Need for test
 		char unUsBits = 0;
 		string vl, value = ASN_iBS(buf, off, szC1, &unUsBits);
 		for(int i_vl = 0; i_vl < std::max(0,int(value.size()*8-std::max(0,int(unUsBits)))); i_vl++)
@@ -354,7 +354,7 @@ void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 		chN->setAttr("tp",int2s(vTp))->setText(vl);
 		break;
 	    }
-	    case VT_OctString: {	//!!!! Need for test
+	    case VT_OctString: {	//?!?! Need for test
 		string vl, value = ASN_iS(buf, off, szC1);
 		for(unsigned i_vl = 0; i_vl < value.size(); i_vl++)
 		    vl += strMess("%0.2x",value[i_vl]);
@@ -774,7 +774,7 @@ void Client::protIO( XML_N &io )
 				    case VT_Int: ASN_oN(rez, dTp, atoi(itN->text().c_str()));		break;
 				    case VT_UInt: ASN_oN(rez, dTp, (unsigned)atoi(itN->text().c_str()));break;
 				    case VT_Float: ASN_oR(rez, dTp, s2r(itN->text()));			break;
-				    case VT_BitString: {	//!!!! Need for test
+				    case VT_BitString: {	//?!?! Need for test
 					string srcS = itN->text(), rezBS;
 					for(unsigned i_s = 0; i_s < srcS.size(); i_s++)
 					    if(srcS[i_s] == '1') setBS(rezBS, i_s);
@@ -782,7 +782,7 @@ void Client::protIO( XML_N &io )
 					ASN_oBS(rez, dTp, rezBS, atoi(itN->attr("unUsBits").c_str()));
 					break;
 				    }
-				    case VT_OctString: {	//!!!! Need for test
+				    case VT_OctString: {	//?!?! Need for test
 					string srcS = itN->text(), rezBS;
 					for(unsigned i_s = 0; i_s < srcS.size(); i_s += 2)
 					    rezBS += (char)strtol(srcS.substr(i_s,2).c_str(),NULL,16);
@@ -790,7 +790,7 @@ void Client::protIO( XML_N &io )
 					break;
 				    }
 				    case VT_VisString: ASN_oS(rez, dTp, itN->text());			break;
-				    case VT_Array: case VT_Struct: {	//!!!! Test implement
+				    case VT_Array: case VT_Struct: {	//?!?! Test implement
 					for(unsigned i_c = 0, dTp1; i_c < itN->childSize(); i_c++) {
 					    XML_N *icN = itN->childGet(i_c);
 					    switch((dTp1=atoi(icN->attr("dataType").c_str()))) {

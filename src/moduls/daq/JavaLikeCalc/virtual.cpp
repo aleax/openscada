@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,13 +32,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"JavaLikeCalc"
-#define MOD_NAME	_("Calculator on the Java-like language")
+#define MOD_NAME	trS("Calculator on the Java-like language")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.1.2"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides a calculator and libraries engine on the Java-like language.\
+#define MOD_VER		"5.4.14"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
 #define LICENSE		"GPL2"
 //*************************************************
@@ -93,10 +93,8 @@ void TpContr::modInfo( vector<string> &list )
     list.push_back("HighPriority");
 }
 
-string TpContr::modInfo( const string &iname )
+string TpContr::modInfo( const string &name )
 {
-    string name = TSYS::strParse(iname, 0, ":");
-
     if(name == "HighPriority")	return "1";
 
     return TModule::modInfo(name);
@@ -107,45 +105,45 @@ void TpContr::postEnable( int flag )
     TTypeDAQ::postEnable( flag );
 
     //Controller db structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
-    fldAdd(new TFld("FUNC",_("Controller function or DAQ-template"),TFld::String,TFld::NoFlag,"40"));
-    fldAdd(new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the calculation task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("ITER",_("Number of iterations in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
+    fldAdd(new TFld("FUNC",trS("Controller function or DAQ-template"),TFld::String,TFld::NoFlag,"40"));
+    fldAdd(new TFld("SCHEDULE",trS("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the calculation task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("ITER",trS("Number of iterations in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
 
     //Controller value db structure
-    val_el.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    val_el.fldAdd(new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"10000"));
+    val_el.fldAdd(new TFld("ID",trS("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    val_el.fldAdd(new TFld("VAL",trS("IO value"),TFld::String,TFld::NoFlag,"10000"));
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("FLD",_("Data fields"),TFld::String,TFld::FullText|TCfg::NoVal,"300"));
+    tpPrmAt(t_prm).fldAdd(new TFld("FLD",trS("Data fields"),TFld::String,TFld::FullText|TCfg::NoVal,"300"));
 
     //Lib's db structure
-    lb_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
-    lb_el.fldAdd(new TFld("DB",_("Database"),TFld::String,TFld::NoFlag,"30"));
+    lb_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    lb_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    lb_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::TransltText,"300"));
+    lb_el.fldAdd(new TFld("DB",trS("Database"),TFld::String,TFld::NoFlag,"30"));			//????[v1.0] Remove
 
     //Function's structure
-    fnc_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    fnc_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fnc_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::TransltText,"300"));
-    fnc_el.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
-    fnc_el.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    fnc_el.fldAdd(new TFld("PR_TR",_("Completely translate the program"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fnc_el.fldAdd(new TFld("FORMULA",_("Program"),TFld::String,TFld::TransltText,"1000000"));
-    fnc_el.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    fnc_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fnc_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    fnc_el.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::TransltText,"300"));
+    fnc_el.fldAdd(new TFld("START",trS("To start"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    fnc_el.fldAdd(new TFld("MAXCALCTM",trS("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
+    fnc_el.fldAdd(new TFld("PR_TR",trS("Completely translate the program"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fnc_el.fldAdd(new TFld("FORMULA",trS("Program"),TFld::String,TFld::TransltText,"1000000"));
+    fnc_el.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Function's IO structure
-    fncio_el.fldAdd(new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    fncio_el.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    fncio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fncio_el.fldAdd(new TFld("TYPE",_("Type"),TFld::Integer,TFld::NoFlag,"1"));
-    fncio_el.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::NoFlag,"1"));
-    fncio_el.fldAdd(new TFld("DEF",_("Default value"),TFld::String,TFld::TransltText,"20"));
-    fncio_el.fldAdd(new TFld("HIDE",_("Hide"),TFld::Boolean,TFld::NoFlag,"1"));
-    fncio_el.fldAdd(new TFld("POS",_("Position"),TFld::Integer,TFld::NoFlag,"3"));
+    fncio_el.fldAdd(new TFld("F_ID",trS("Function ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fncio_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    fncio_el.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    fncio_el.fldAdd(new TFld("TYPE",trS("Type"),TFld::Integer,TFld::NoFlag,"1"));
+    fncio_el.fldAdd(new TFld("MODE",trS("Mode"),TFld::Integer,TFld::NoFlag,"1"));
+    fncio_el.fldAdd(new TFld("DEF",trS("Default value"),TFld::String,TFld::TransltText,"20"));
+    fncio_el.fldAdd(new TFld("HIDE",trS("Hide"),TFld::Boolean,TFld::NoFlag,"1"));
+    fncio_el.fldAdd(new TFld("POS",trS("Position"),TFld::Integer,TFld::NoFlag,"3"));
 
     //Init named constant table
     double rvl;
@@ -280,7 +278,7 @@ void TpContr::load_( )
     //Load parameters from command line
 
     //Load parameters
-    setSafeTm(s2i(TBDS::genDBGet(nodePath()+"SafeTm",i2s(safeTm()))));
+    setSafeTm(s2i(TBDS::genPrmGet(nodePath()+"SafeTm",i2s(safeTm()))));
 
     //Load function's libraries
     try {
@@ -291,19 +289,18 @@ void TpContr::load_( )
 	map<string, bool> itReg;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,false,true); ) {
-		string l_id = cEl.cfg("ID").getS();
-		if(!lbPresent(l_id)) {
-		    lbReg(new Lib(l_id.c_str(),"",(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]));
+	    for(int libCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+libTable(),nodePath()+"lib",libCnt++,cEl,TBDS::UseCache); ) {
+		string lId = cEl.cfg("ID").getS();
+		if(!lbPresent(lId)) lbReg(new Lib(lId.c_str(),"",itLs[iDB]));
+		if(lbAt(lId).at().DB() == itLs[iDB])
 		    try {
-			lbAt(l_id).at().load(&cEl);
-			//lbAt(l_id).at().setStart(true);		//Do not try start into the loading but possible broblems like into openscada --help
+			lbAt(lId).at().load(&cEl);
+			//lbAt(lId).at().setStart(true);	//!!!! Do not try to start into the loading but possible broblems like to "$ openscada --help"
 		    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-		}
-		itReg[l_id] = true;
+		lbAt(lId).at().setDB(itLs[iDB], true);
+		itReg[lId] = true;
 	    }
 
 	//  Check for remove items removed from DB
@@ -322,7 +319,7 @@ void TpContr::load_( )
 void TpContr::save_( )
 {
     //Save parameters
-    TBDS::genDBSet(nodePath()+"SafeTm",i2s(safeTm()));
+    TBDS::genPrmSet(nodePath()+"SafeTm",i2s(safeTm()));
 }
 
 void TpContr::modStart( )
@@ -376,7 +373,7 @@ void TpContr::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    lbList(lst);
 	    for(unsigned iA = 0; iA < lst.size(); iA++)
-		opt->childAdd("el")->setAttr("id",lst[iA])->setText(lbAt(lst[iA]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trD(lbAt(lst[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbReg(new Lib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	lbUnreg(opt->attr("id"),1);
@@ -386,15 +383,15 @@ void TpContr::cntrCmdProc( XMLNode *opt )
 
 NConst *TpContr::constGet( const char *nm )
 {
-    for(unsigned i_cst = 0; i_cst < mConst.size(); i_cst++)
-	if(mConst[i_cst].name == nm) return &mConst[i_cst];
+    for(unsigned iCst = 0; iCst < mConst.size(); iCst++)
+	if(mConst[iCst].name == nm) return &mConst[iCst];
 	    return NULL;
 }
 
 BFunc *TpContr::bFuncGet( const char *nm )
 {
-    for(unsigned i_bf = 0; i_bf < mBFunc.size(); i_bf++)
-	if(mBFunc[i_bf].name == nm) return &mBFunc[i_bf];
+    for(unsigned iBf = 0; iBf < mBFunc.size(); iBf++)
+	if(mBFunc[iBf].name == nm) return &mBFunc[iBf];
 	    return NULL;
 }
 
@@ -435,12 +432,9 @@ TCntrNode &Contr::operator=( const TCntrNode &node )
 void Contr::postDisable( int flag )
 {
     try {
-	if(flag) {
-	    //Delete IO value's table
-	    string db = DB()+"."+TController::id()+"_val";
-	    SYS->db().at().open(db);
-	    SYS->db().at().close(db,true);
-	}
+	if(flag&(NodeRemove|NodeRemoveOnlyStor))
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+TController::id()+"_val",
+				mod->nodePath()+TController::id()+"_val");
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
@@ -519,10 +513,10 @@ void Contr::loadFunc( bool onlyVl )
 
 	//Creating special IO
 	if(!isDAQTmpl) {
-	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Frequency of calculation of the function, Hz"),IO::Real,0,"1000",false),0);
-	    if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,0,"0",false),1);
-	    if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,0,"0",false),2);
-	    if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("Link to the object of this controller"),IO::Object,0,"0",false),3);
+	    if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",trS("Frequency of calculation of the function, Hz"),IO::Real,0,"1000",false),0);
+	    if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",trS("Function start flag"),IO::Boolean,0,"0",false),1);
+	    if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",trS("Function stop flag"),IO::Boolean,0,"0",false),2);
+	    if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",trS("Link to the object of this controller"),IO::Object,0,"0",false),3);
 	}
 
 	//Load values
@@ -530,14 +524,14 @@ void Contr::loadFunc( bool onlyVl )
 	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
 
-	for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,false,true); ) {
+	for(int fldCnt = 0; TBDS::dataSeek(bd,mod->nodePath()+bd_tbl,fldCnt++,cfg,TBDS::UseCache); ) {
 	    int ioId = func()->ioId(cfg.cfg("ID").getS());
 	    if(ioId < 0 || (!isDAQTmpl && (func()->io(ioId)->flg()&Func::SysAttr))) continue;
 	    if(!isDAQTmpl) setS(ioId, cfg.cfg("VAL").getS());
 	    else {
 		if(func()->io(ioId)->flg()&TPrmTempl::CfgLink)
-		    lnkAddrSet(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));	//Force no translated
-		else if(func()->io(ioId)->type() != IO::String) setS(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));		//Force no translated
+		    lnkAddrSet(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));	//Force to no translation
+		else if(func()->io(ioId)->type() != IO::String) setS(ioId, cfg.cfg("VAL").getS(TCfg::ExtValOne));		//Force to no translation
 		else setS(ioId, cfg.cfg("VAL").getS());
 	    }
 	}
@@ -572,14 +566,14 @@ void Contr::save_( )
 		if(func()->io(iio)->flg()&TPrmTempl::CfgLink)	cfg.cfg("VAL").setS(lnkAddr(iio));
 		else cfg.cfg("VAL").setS(getS(iio));
 	    }
-	    SYS->db().at().dataSet(val_bd, mod->nodePath()+bd_tbl, cfg);
+	    TBDS::dataSet(val_bd, mod->nodePath()+bd_tbl, cfg);
 	}
 
 	//Clear VAL
 	cfg.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg); )
+	for(int fldCnt = 0; TBDS::dataSeek(val_bd,mod->nodePath()+bd_tbl,fldCnt++,cfg); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0) {
-		if(!SYS->db().at().dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,true,false,true))	break;
+		if(!TBDS::dataDel(val_bd,mod->nodePath()+bd_tbl,cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
     }
@@ -764,7 +758,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 
 	    for(int id = 0; id < func()->ioSize(); id++) {
 		if(n_id)	n_id->childAdd("el")->setText(func()->io(id)->id());
-		if(n_nm)	n_nm->childAdd("el")->setText(func()->io(id)->name());
+		if(n_nm)	n_nm->childAdd("el")->setText(trD(func()->io(id)->name()));
 		if(n_type)	n_type->childAdd("el")->setText(i2s(func()->io(id)->type()|((func()->io(id)->flg()&IO::FullText)<<8)));
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(func()->io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
@@ -876,16 +870,16 @@ void Prm::enable( )
     if(enableStat())  return;
 
     //Check and delete no used fields
-    for(unsigned i_fld = 0; i_fld < v_el.fldSize(); ) {
+    for(unsigned iFld = 0; iFld < v_el.fldSize(); ) {
 	string fel;
 	for(int io_off = 0; (fel=TSYS::strSepParse(cfg("FLD").getS(),0,'\n',&io_off)).size(); )
-	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve()) break;
+	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(iFld).reserve()) break;
 	if(fel.empty())
 	    try {
-		v_el.fldDel(i_fld);
+		v_el.fldDel(iFld);
 		continue;
 	    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	i_fld++;
+	iFld++;
     }
 
     //Init elements
@@ -923,15 +917,15 @@ void Prm::enable( )
     }
 
     //Check and delete no used attrs
-    for(unsigned i_fld = 0, i_p; i_fld < v_el.fldSize(); ) {
-	for(i_p = 0; i_p < pls.size(); i_p++)
-	    if(pls[i_p] == v_el.fldAt(i_fld).name()) break;
-	if(i_p >= pls.size())
+    for(unsigned iFld = 0, iP; iFld < v_el.fldSize(); ) {
+	for(iP = 0; iP < pls.size(); iP++)
+	    if(pls[iP] == v_el.fldAt(iFld).name()) break;
+	if(iP >= pls.size())
 	    try {
-		v_el.fldDel(i_fld);
+		v_el.fldDel(iFld);
 		continue;
 	    } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	i_fld++;
+	iFld++;
     }
 
     TParamContr::enable();

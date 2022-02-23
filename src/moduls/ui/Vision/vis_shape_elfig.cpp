@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2015,2020 by Roman Savochenko <roman@oscada.org>
+ *   Copyright (C) 2012-2021 by Roman Savochenko <roman@oscada.org>
  *		   2007-2012 by Lysenko Maxim <mlisenko@oscada.org>
  *		   2007-2008 by Yashina Kseniya <ksu@oscada.org>
  *
@@ -539,7 +539,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	elList += "\n";
     }
 
-    //!!!! Rethink for the code roll from here !!!!
+    //?!?! Rethink for the code roll from here
     //For fills
     for(int i = 0; i < inundItems.size(); i++) {
 	if(!inundItems[i].n.size()) continue;
@@ -769,7 +769,7 @@ void ShapeElFigure::initShapeItems( const QPointF &pos, QVector<int> &items_arra
     }
 }
 
-//!!!! Continue for the code cleun up from here !!!!
+//?!?! Continue clean up from this code
 QPointF ShapeElFigure::getArcStartEnd( WdgView *w, QPointF pBeg, QPointF pEnd, QPointF pCntr1, QPointF pCntr2, QPointF pCntr3 )
 {
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
@@ -2443,7 +2443,7 @@ bool ShapeElFigure::event( WdgView *w, QEvent *event )
 			{
 			    if(index_array_copy.size())
 				if(index_array_copy[0] != -1 && status_hold && elFD->idxArr.size() == 0)
-				    elFD->idxArr = index_array_copy;//!!!!
+				    elFD->idxArr = index_array_copy;	//!!!!
 			    for(int i = 0; i < inundItems.size(); i++)
 				for(int j = 0; j < inundItems[i].n.size(); j++)
 				{
@@ -4032,7 +4032,7 @@ QPointF ShapeElFigure::scaleRotate( const QPointF &point, WdgView *w, int8_t toS
     if(toScale > 0 || (toScale < 0 && fTransl))		rpnt = QPointF(rpnt.x()*w->xScale(true), rpnt.y()*w->yScale(true));
 
     //Append remnant
-    //!!!!: Disabled now for mostly prevent flaws between inundations.
+    //!!!! Disabled now to prevent mostly the flaws between inundations.
     //QPointF add((w->posF().x()+0.5)-floor(w->posF().x()+0.5)-0.5, (w->posF().y()+0.5)-floor(w->posF().y()+0.5)-0.5);
 
     return rpnt;// + add;
@@ -4044,7 +4044,7 @@ QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *w, int8_t t
     ElFigDt *elFD = (ElFigDt*)w->shpData;
 
     //Append remnant
-    //!!!!: Disabled now for mostly prevent flaws between inundations.
+    //!!!! Disabled now to prevent mostly the flaws between inundations
     //QPointF sub((w->posF().x()+0.5)-floor(w->posF().x()+0.5)-0.5, (w->posF().y()+0.5)-floor(w->posF().y()+0.5)-0.5);
     QPointF rpnt = point;// - sub;
 
@@ -4069,8 +4069,9 @@ QPointF ShapeElFigure::unScaleRotate( const QPointF &point, WdgView *w, int8_t t
 
 /******************************************************************************
 * paintImage() - Paint the result shape image for follow paint to display     *
-* !!!!: Needs for next observing to flaws between inundations, mostly for     *
-*  widget "Rounded rectangle(valuable)" rotation 45 deg and scaling 1.1       *
+* ?!?! Needed for the next observing about the flaws between inundations,     *
+*      mostly for the widget "Rounded rectangle(valuable)" rotation 45 deg    *
+*      and scaling 1.1                                                        *
 *******************************************************************************/
 void ShapeElFigure::paintImage( WdgView *w )
 {

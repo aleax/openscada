@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -380,9 +380,9 @@ void ModMArch::checkArchivator( bool now )
 	    TConfig cEl(&mod->packFE());
 	    cEl.cfgViewAll(false);
 
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(infoTbl,mod->nodePath()+"Pack",fldCnt++,cEl); )
+	    for(int fldCnt = 0; TBDS::dataSeek(infoTbl,mod->nodePath()+"Pack",fldCnt++,cEl); )
 		if(stat(cEl.cfg("FILE").getS().c_str(),&file_stat) != 0 || (file_stat.st_mode&S_IFMT) != S_IFREG) {
-		    if(!SYS->db().at().dataDel(infoTbl,mod->nodePath()+"Pack",cEl,true,false,true))	break;
+		    if(!TBDS::dataDel(infoTbl,mod->nodePath()+"Pack",cEl,TBDS::UseAllKeys|TBDS::NoException)) break;
 		    fldCnt--;
 	    }
 	}
@@ -636,7 +636,7 @@ void MFileArch::attach( const string &iname, bool full )
 	    if(!infoOK) {
 		TConfig cEl(&mod->packFE());
 		cEl.cfg("FILE").setS(name());
-		if(SYS->db().at().dataGet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()),mod->nodePath()+"Pack/",cEl,false,true)) {
+		if(TBDS::dataGet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()),mod->nodePath()+"Pack/",cEl,TBDS::NoException)) {
 		    mBeg = strtol(cEl.cfg("BEGIN").getS().c_str(),NULL,16);
 		    mEnd = strtol(cEl.cfg("END").getS().c_str(),NULL,16);
 		    mChars = cEl.cfg("PRM1").getS();
@@ -915,7 +915,7 @@ bool MFileArch::put( TMess::SRec mess )
 		fOK = fOK && (fwrite(s_buf.c_str(),s_buf.size(),1,f) == 1);
 		cacheUpdate(FTM(mess), mv_off);
 		//  Put the last value to the cache
-		//cacheSet(FTM(mess), mv_beg, true);	//!!!! This may be wrong for several records with the equal time
+		//cacheSet(FTM(mess), mv_beg, true);	//!!!! That can be wrong for several records with the equal time
 	    }
 	}
 	fseek(f, 0, SEEK_END);
@@ -968,7 +968,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 		result = bRec.time;
 		bRec.level = (TMess::Type)s2i(mNode->childGet(iCh)->attr("lv"));
 		bRec.categ = mNode->childGet(iCh)->attr("cat");
-		if(abs(bRec.level) < level || !re.test(bRec.categ)) continue;
+		if(!TMess::messLevelTest(level,bRec.level) || !re.test(bRec.categ)) continue;
 		bRec.mess  = mNode->childGet(iCh)->text();
 		bool equal = false;
 		int iP = mess.size();
@@ -1015,7 +1015,7 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 	    if(bRec.time > eTm) break;
 	    if(bRec.time >= bTm) {
 		result = bRec.time;
-		if(abs(bRec.level) < level) continue;
+		if(!TMess::messLevelTest(level,bRec.level)) continue;
 		char m_cat[1001], m_mess[100001];
 		if(sscanf(buf,"%*x:%*d %*d %1000s %100000s",m_cat,m_mess) != 2) continue;
 		bRec.categ = TSYS::strDecode(Mess->codeConvIn(mChars,m_cat), TSYS::HttpURL);
@@ -1083,7 +1083,7 @@ void MFileArch::check( bool free )
 	    cEl.cfg("END").setS(ll2s(end(),TSYS::Hex));
 	    cEl.cfg("PRM1").setS(charset());
 	    cEl.cfg("PRM2").setS(i2s(xmlM()));
-	    SYS->db().at().dataSet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, false, true);
+	    TBDS::dataSet((owner().infoTbl.size()?owner().infoTbl:mod->filesDB()), mod->nodePath()+"Pack/", cEl, TBDS::NoException);
 	}
 	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,SYS->permCrtFiles())) > 0) {
 	    // Write info to info file

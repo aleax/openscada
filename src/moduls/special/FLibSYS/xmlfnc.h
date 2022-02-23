@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: xmlfnc.h
 /***************************************************************************
- *   Copyright (C) 2009-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,8 +36,8 @@ class xmlNode : public TFunction
 {
     public:
 	xmlNode( ) : TFunction("xmlNode",SSPC_ID) {
-	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
-	    ioAdd(new IO("name",_("Name"),IO::String,IO::Default));
+	    ioAdd(new IO("rez",trS("Result"),IO::Object,IO::Return));
+	    ioAdd(new IO("name",trS("Name"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("XML: Node"); }
@@ -53,9 +53,9 @@ class xmlCntrReq : public TFunction
 {
     public:
 	xmlCntrReq( ) : TFunction("xmlCntrReq", SSPC_ID) {
-	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
-	    ioAdd(new IO("req",_("Request"),IO::Object,IO::Default));
-	    ioAdd(new IO("stat",_("Station"),IO::String,IO::Default));
+	    ioAdd(new IO("rez",trS("Result"),IO::String,IO::Return));
+	    ioAdd(new IO("req",trS("Request"),IO::Object,IO::Default));
+	    ioAdd(new IO("stat",trS("Station"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("XML: Control request"); }

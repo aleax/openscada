@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.h
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +24,9 @@
 #include <tuis.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using namespace OSCADA;
 
@@ -37,20 +39,20 @@ namespace WebUser
 class SSess
 {
     public:
-	//Methods
-	SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent );
+    //Methods
+    SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent );
 
-	//Attributes
-	string	url;			//request URL
-	string	page;
-	string	sender;			//request sender
-	string	user;			//sesion user
-	string	content;		//Contain
-	string	lang;			//Language
+    //Attributes
+    string	url;		//request URL
+    string	page;
+    string	sender;		//request sender
+    string	user;		//sesion user
+    string	content;	//Contain
+    string	lang;		//Language
 
-	vector<XMLNode>		cnt;	//Parsed contain
-	map<string,string>	vars;	//request vars
-	map<string,string>	prm;	//URL parameters
+    vector<XMLNode>	cnt;	//Parsed contain
+    map<string,string>	vars;	//request vars
+    map<string,string>	prm;	//URL parameters
 };
 
 //*************************************************
@@ -78,9 +80,9 @@ class UserPg : public TCntrNode, public TConfig, public TPrmTempl::Impl
 
 	string	getStatus( );
 
-	string	DB( ) const		{ return mDB; }
+	string	DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string	tbl( ) const;
-	string	fullDB( ) const	{ return DB()+'.'+tbl(); }
+	string	fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &name )	{ cfg("NAME").setS(name); }
 	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
@@ -89,7 +91,7 @@ class UserPg : public TCntrNode, public TConfig, public TPrmTempl::Impl
 	void setProgLang( const string &ilng );
 	void setProg( const string &iprg );
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	void HTTP( const string &req, SSess &s, TProtocolIn *iprt );
 
@@ -151,7 +153,7 @@ class TWEB: public TUI
 	void uPgList( vector<string> &ls ) const	{ chldList(mPgU,ls); }
 	bool uPgPresent( const string &id ) const	{ return chldPresent(mPgU,id); }
 	string uPgAdd( const string &id, const string &db = "*.*" );
-	void uPgDel( const string &id )			{ chldDel(mPgU,id); }
+	void uPgDel( const string &id )			{ chldDel(mPgU, id); }
 	AutoHD<UserPg> uPgAt( const string &id ) const	{ return chldAt(mPgU, id); }
 
 	TElem &uPgEl( )		{ return mUPgEl; }

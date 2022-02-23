@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,12 +39,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"BlockCalc"
-#define MOD_NAME	_("Block based calculator")
+#define MOD_NAME	trS("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.11.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides a block based calculator.")
+#define MOD_VER		"1.12.6"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides a block based calculator.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -102,35 +102,35 @@ void TpContr::postEnable( int flag )
     TTypeDAQ::postEnable( flag );
 
     //Controllers BD structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));
-    fldAdd(new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block"));
-    fldAdd(new TFld("SCHEDULE",_("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("ITER",_("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));
+    fldAdd(new TFld("BLOCK_SH",trS("Block's table"),TFld::String,TFld::NoFlag,"30","block"));
+    fldAdd(new TFld("SCHEDULE",trS("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("ITER",trS("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"1000"));
+    tpPrmAt(t_prm).fldAdd(new TFld("IO",trS("Blocks' IOs"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"1000"));
 
     //Blok's db structure
-    blkEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    blkEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    blkEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    blkEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    blkEl.fldAdd(new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    blkEl.fldAdd(new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200"));
-    blkEl.fldAdd(new TFld("LNK_OUT_WR_CH",_("Write to output links only at changes"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    blkEl.fldAdd(new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75"));
+    blkEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    blkEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    blkEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    blkEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    blkEl.fldAdd(new TFld("PROC",trS("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    blkEl.fldAdd(new TFld("PRIOR",trS("Prior block"),TFld::String,TFld::NoFlag,"200"));
+    blkEl.fldAdd(new TFld("LNK_OUT_WR_CH",trS("Write to output links only at changes"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    blkEl.fldAdd(new TFld("FUNC",trS("Function"),TFld::String,TFld::NoFlag,"75"));
 
     //IO blok's db structure
-    blkioEl.fldAdd(new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    blkioEl.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    blkioEl.fldAdd(new TFld("TLNK",_("Link's type"),TFld::Integer,TFld::NoFlag,"2"));
-    blkioEl.fldAdd(new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"100"));
-    blkioEl.fldAdd(new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"10000"));
+    blkioEl.fldAdd(new TFld("BLK_ID",trS("Block's ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    blkioEl.fldAdd(new TFld("ID",trS("IO ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    blkioEl.fldAdd(new TFld("TLNK",trS("Link's type"),TFld::Integer,TFld::NoFlag,"2"));
+    blkioEl.fldAdd(new TFld("LNK",trS("Link"),TFld::String,TFld::NoFlag,"100"));
+    blkioEl.fldAdd(new TFld("VAL",trS("Link's value"),TFld::String,TFld::NoFlag,"10000"));
 }
 
-void TpContr::preDisable(int flag)
+void TpContr::preDisable( int flag )
 {
     vector<string> lst;
     list(lst);
@@ -206,15 +206,12 @@ void Contr::postDisable( int flag )
 {
     if(startStat()) stop();
     try {
-	if(flag) {
-	    //Delete parameter's tables
-	    string wbd = DB()+"."+cfg("BLOCK_SH").getS();
-	    SYS->db().at().open(wbd);
-	    SYS->db().at().close(wbd,true);
-
-	    wbd = wbd+"_io";
-	    SYS->db().at().open(wbd);
-	    SYS->db().at().close(wbd,true);
+	if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	    //Delete parameter tables
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS(),
+				mod->nodePath()+cfg("BLOCK_SH").getS());
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("BLOCK_SH").getS()+"_io",
+				mod->nodePath()+cfg("BLOCK_SH").getS()+"_io");
 	}
     } catch(TError &err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
@@ -235,7 +232,7 @@ void Contr::load_( )
     string bd = DB()+"."+cfg("BLOCK_SH").getS();
     map<string, bool>	itReg;
 
-    for(int fldCnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(bd,mod->nodePath()+cfg("BLOCK_SH").getS(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string id = cEl.cfg("ID").getS();
 	if(!chldPresent(mBl,id)) {
 	    blkAdd(id);
@@ -464,19 +461,19 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    blkList(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(blkAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"), -1, NodeRemove);
     }
     else if(a_path == "/scheme/sch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    if(!startStat()) {
 		vector<string> lst;
 		blkList(lst);
-		for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(blkAt(lst[i_f]).at().name());
+		for(unsigned iF = 0; iF < lst.size(); iF++)
+		    opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(blkAt(lst[iF]).at().name()));
 	    }
 	    else {
 		ResAlloc sres(hdRes, false);
@@ -485,7 +482,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", blkAdd(opt->attr("id"))); blkAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mBl,opt->attr("id"), -1, NodeRemove);
     }
     else if(a_path == "/scheme/nmb" && ctrChkNode(opt)) {
 	vector<string> lst;
@@ -529,15 +526,15 @@ void Prm::enable( )
     string ioLs = cfg("IO").getS();
 
     //Check and delete no used fields
-    /*for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++)
+    /*for(int iFld = 0; iFld < (int)v_el.fldSize(); iFld++)
     {
-	if(v_el.fldAt(i_fld).reserve().empty()) continue;
+	if(v_el.fldAt(iFld).reserve().empty()) continue;
 	string fel;
 	for(int io_off = 0; (fel=TSYS::strSepParse(ioLs,0,'\n',&io_off)).size(); )
-	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(i_fld).reserve()) break;
+	    if(TSYS::strSepParse(fel,0,':') == v_el.fldAt(iFld).reserve()) break;
 	if(fel.empty())
 	{
-	    try{ v_el.fldDel(i_fld); i_fld--; }
+	    try{ v_el.fldDel(iFld); iFld--; }
 	    catch(TError &err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	}
@@ -603,12 +600,12 @@ void Prm::enable( )
     }
 
     //Check and delete no used attrs
-    for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++) {
-	int i_p;
-	for(i_p = 0; i_p < (int)pls.size(); i_p++)
-	    if(pls[i_p] == v_el.fldAt(i_fld).name())	break;
-	if(i_p < (int)pls.size()) continue;
-	try{ v_el.fldDel(i_fld); i_fld--; }
+    for(int iFld = 0; iFld < (int)v_el.fldSize(); iFld++) {
+	int iP;
+	for(iP = 0; iP < (int)pls.size(); iP++)
+	    if(pls[iP] == v_el.fldAt(iFld).name())	break;
+	if(iP < (int)pls.size()) continue;
+	try{ v_el.fldDel(iFld); iFld--; }
 	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 
@@ -653,10 +650,10 @@ void Prm::vlGet( TVal &val )
     if(owner().redntUse()) return;
 
     try {
-	//if( !enableStat() ) return;
+	//if(!enableStat()) return;
 	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
 	int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
-	if( io_id < 0 )	disable();
+	if(io_id < 0)	disable();
 	else val.set((enableStat()&&owner().startStat()) ? blk.at().get(io_id) : EVAL_STR, 0, true);
     } catch(TError &err) { disable(); }
 }

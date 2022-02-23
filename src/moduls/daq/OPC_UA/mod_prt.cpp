@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,16 +46,16 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
     mEndPnt = grpAdd("ep_");
 
     //Node DB structure
-    mEndPntEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mEndPntEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    mEndPntEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
-    mEndPntEl.fldAdd(new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selectable,"1","0","0",_("Binary")));
-    mEndPntEl.fldAdd(new TFld("URL",_("URL"),TFld::String,0,"50","opc.tcp://localhost:4841"));
-    mEndPntEl.fldAdd(new TFld("SecPolicies",_("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1"));
-    mEndPntEl.fldAdd(new TFld("ServCert",_("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
-    mEndPntEl.fldAdd(new TFld("ServPvKey",_("Server private key (PEM)"),TFld::String,TFld::FullText,"10000"));
-    mEndPntEl.fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+    mEndPntEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mEndPntEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mEndPntEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mEndPntEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
+    mEndPntEl.fldAdd(new TFld("SerialzType",trS("Serializer type"),TFld::Integer,TFld::Selectable,"1","0","0",_("Binary")));
+    mEndPntEl.fldAdd(new TFld("URL",trS("URL"),TFld::String,0,"50","opc.tcp://localhost:4841"));
+    mEndPntEl.fldAdd(new TFld("SecPolicies",trS("Security policies"),TFld::String,TFld::FullText,"100","None:0\nBasic128Rsa15:1"));
+    mEndPntEl.fldAdd(new TFld("ServCert",trS("Server certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
+    mEndPntEl.fldAdd(new TFld("ServPvKey",trS("Server private key (PEM)"),TFld::String,TFld::FullText,"10000"));
+    mEndPntEl.fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
 }
 
 TProt::~TProt( )			{ nodeDelAll(); }
@@ -163,13 +163,13 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	// Search into DB
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDb = 0; iDb < itLs.size(); iDb++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,false,true); ) {
+	    for(int fldCnt = 0; TBDS::dataSeek(itLs[iDb]+"."+modId()+"_ep",nodePath()+modId()+"_ep",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!epPresent(id)) epAdd(id,(itLs[iDb]==SYS->workDB())?"*.*":itLs[iDb]);
-		epAt(id).at().load(&gCfg);
+		if(!epPresent(id)) epAdd(id, itLs[iDb]);
+		if(epAt(id).at().DB() == itLs[iDb]) epAt(id).at().load(&gCfg);
+		epAt(id).at().setDB(itLs[iDb], true);
 		itReg[id] = true;
 	    }
 
@@ -228,10 +228,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    epList(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id", lst[iF])->setText(epAt(lst[iF]).at().name());
+		opt->childAdd("el")->setAttr("id", lst[iF])->setText(trD(epAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", epAdd(opt->attr("id"))); epAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mEndPnt,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mEndPnt,opt->attr("id"), -1, NodeRemove);
     }
     else if(a_path == "/serv/asc" && ctrChkNode(opt)) {
 	vector<uint32_t> chnls;
@@ -303,7 +303,11 @@ TCntrNode &OPCEndPoint::operator=( const TCntrNode &node )
 
 void OPCEndPoint::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 TProt &OPCEndPoint::owner( ) const	{ return *(TProt*)nodePrev(); }
@@ -344,7 +348,7 @@ void OPCEndPoint::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
-	SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+	TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
     }
 
     //Security policies parse
@@ -382,7 +386,9 @@ void OPCEndPoint::save_( )
     prmNd.setAttr("LimRetrQueueTm", i2s(limRetrQueueTm()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
-    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+
+    setDB(DB(), true);
 }
 
 void OPCEndPoint::setEnable( bool vl )
@@ -618,7 +624,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_IntAuto/*OpcUa_Int64*/))->setText(nVal->getS(&tm));	break;
 				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
 				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
-				    case TFld::Object: {	//!!!! With structures support append detect ones
+				    case TFld::Object: {	//?!?! With structures support append the detection ones
 					AutoHD<TArrayObj> arr = nVal->getO(&tm);
 					string rVl;
 					if(arr.freeStat()) { dtOK = false; break; }
@@ -657,7 +663,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::Integer: req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Int32));	return 0;
 				    case TFld::Real:    req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Double));	return 0;
 				    case TFld::String:  req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_String));	return 0;
-				    case TFld::Object: {	//!!!! With structures support append detect ones
+				    case TFld::Object: {	//?!?! With structures support append the detection ones
 					int64_t tm = 0;
 					AutoHD<TArrayObj> arr = nVal->getO(&tm);
 					if(arr.freeStat()) break;
@@ -778,7 +784,10 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/ep/st/asubscr",_("Active subscriptions"),(enableStat()?R_R_R_:0),"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/ep/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/ep/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
-		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		    "tp","str","dest","select","select","/db/list",
+		    "help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/ep/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID);
 	    }
 	    if(ctrMkNode("area",opt,-1,"/ep/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/ep/cfg",0,"root",SPRT_ID,RWRWR_);
@@ -817,6 +826,8 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/ep/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/ep/st/asess" && ctrChkNode(opt)) {
 	OPCAlloc mtx(mtxData, true);
 	for(unsigned iSess = 0; iSess < sessN(); ++iSess) {

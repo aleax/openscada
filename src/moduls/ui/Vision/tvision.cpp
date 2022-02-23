@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VISION file: tvision.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko (roman@oscada.org)
+ *   Copyright (C) 2006-2022 by Roman Savochenko (roman@oscada.org)
  *                 2005-2006 by Evgen Zaichuk
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -35,18 +35,18 @@
 #include "vis_widgs.h"
 #include "vis_devel.h"
 
-#include <tmess.h>
+//#include <tmess.h>
 
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"Vision"
-#define MOD_NAME	_("Operation user interface (Qt)")
+#define MOD_NAME	trS("Operation user interface (Qt)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"7.14.1"
-#define AUTHORS		_("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
-#define DESCRIPTION	_("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
+#define MOD_VER		"8.0.13"
+#define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
+#define DESCRIPTION	trS("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -129,15 +129,15 @@ void TVision::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file and DB
-    setUserStart(TBDS::genDBGet(nodePath()+"StartUser",""));
-    setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
-    setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
-    setExitLstRunPrjCls(s2i(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
-    setDropCommonWdgStls(s2i(TBDS::genDBGet(nodePath()+"DropCommonWdgStls",i2s(dropCommonWdgStls()))));
-    setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
-    setCachePgSz(s2i(TBDS::genDBGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
-    setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
-    setRestoreTime(s2i(TBDS::genDBGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
+    setUserStart(TBDS::genPrmGet(nodePath()+"StartUser",""));
+    setUserPass(TBDS::genPrmGet(nodePath()+"UserPass",""));
+    setRunPrjs(TBDS::genPrmGet(nodePath()+"RunPrjs",""));
+    setExitLstRunPrjCls(s2i(TBDS::genPrmGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
+    setDropCommonWdgStls(s2i(TBDS::genPrmGet(nodePath()+"DropCommonWdgStls",i2s(dropCommonWdgStls()))));
+    setCachePgLife(s2r(TBDS::genPrmGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
+    setCachePgSz(s2i(TBDS::genPrmGet(nodePath()+"CachePgSz",i2s(cachePgSz()))));
+    setVCAStation(TBDS::genPrmGet(nodePath()+"VCAstation","."));
+    setRestoreTime(s2i(TBDS::genPrmGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
 }
 
 void TVision::save_( )
@@ -145,15 +145,15 @@ void TVision::save_( )
     mess_debug(nodePath().c_str(),_("Saving the module."));
 
     //Save parameters to DB
-    TBDS::genDBSet(nodePath()+"StartUser", userStart());
-    TBDS::genDBSet(nodePath()+"UserPass", userPass());
-    TBDS::genDBSet(nodePath()+"RunPrjs", runPrjs());
-    TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
-    TBDS::genDBSet(nodePath()+"DropCommonWdgStls", i2s(dropCommonWdgStls()));
-    TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
-    TBDS::genDBSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
-    TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
-    TBDS::genDBSet(nodePath()+"RestoreTime",i2s(restoreTime()));
+    TBDS::genPrmSet(nodePath()+"StartUser", userStart());
+    TBDS::genPrmSet(nodePath()+"UserPass", userPass());
+    TBDS::genPrmSet(nodePath()+"RunPrjs", runPrjs());
+    TBDS::genPrmSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
+    TBDS::genPrmSet(nodePath()+"DropCommonWdgStls", i2s(dropCommonWdgStls()));
+    TBDS::genPrmSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
+    TBDS::genPrmSet(nodePath()+"CachePgSz", i2s(cachePgSz()));
+    TBDS::genPrmSet(nodePath()+"VCAstation", VCAStation());
+    TBDS::genPrmSet(nodePath()+"RestoreTime",i2s(restoreTime()));
 }
 
 void TVision::postEnable( int flag )
@@ -167,7 +167,7 @@ string TVision::uiPropGet( const string &prop, const string &user )
 
     XMLNode prmNd;
     try {
-	prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user));
+	prmNd.load(TBDS::genPrmGet(nodePath()+"uiProps","",user));
 	return prmNd.attr(prop);
     } catch(TError &err) { }
 
@@ -179,10 +179,10 @@ void TVision::uiPropSet( const string &prop, const string &vl, const string &use
     MtxAlloc res(mnWindsRes, true);
 
     XMLNode prmNd("UI");
-    try { prmNd.load(TBDS::genDBGet(nodePath()+"uiProps","",user)); }
+    try { prmNd.load(TBDS::genPrmGet(nodePath()+"uiProps","",user)); }
     catch(TError &err)	{ }
     prmNd.setAttr(prop,vl);
-    TBDS::genDBSet(nodePath()+"uiProps",prmNd.save(XMLNode::BrAllPast),user);
+    TBDS::genPrmSet(nodePath()+"uiProps",prmNd.save(XMLNode::BrAllPast),user);
 }
 
 QIcon TVision::icon( )
@@ -197,7 +197,7 @@ QMainWindow *TVision::openWindow( )
     //Get allowed screens count
 #if QT_VERSION >= 0x050000
     mScrnCnt = QApplication::screens().size();
-#else
+#elif QT_VERSION >= 0x040600
     mScrnCnt = QDesktopWidget().screenCount();
 #endif
 
@@ -293,6 +293,7 @@ void TVision::modStop( )
     for(unsigned iW = 0; iW < mnWinds.size(); iW++)
 	while(mnWinds[iW]) {
 	    res.unlock();
+	    if(!SYS->mainThr.freeStat()) qApp->processEvents();	//!!!! Else can lock here the main thread, especially at child windows open
 	    TSYS::sysSleep(prmWait_DL);
 	    res.lock();
 	}
@@ -384,8 +385,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/u_pass") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(string(userPass().size(),'*')/* "*******" */);
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
-	    if(opt->text().compare(0,TSecurity::pHashMagic.size(),TSecurity::pHashMagic) == 0)
-		setUserPass(opt->text().substr(TSecurity::pHashMagic.size()));
+	    if(opt->text().find(SEC_HASH_MAGIC) == 0)
+		setUserPass(opt->text().substr(strlen(SEC_HASH_MAGIC)));
 	    else setUserPass(opt->text());
 	}
     }
@@ -464,10 +465,10 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 
     //QT message
     switch(type) {
-	case TVision::Info:	QMessageBox::information(parent, _(MOD_NAME), mess);	break;
-	case TVision::Warning:	QMessageBox::warning(parent, _(MOD_NAME), mess);	break;
-	case TVision::Error:	QMessageBox::critical(parent, _(MOD_NAME), mess);	break;
-	case TVision::Crit:	QErrorMessage::qtHandler()->showMessage(mess);		break;
+	case TVision::Info:	QMessageBox::information(parent, MOD_NAME.c_str(), mess);break;
+	case TVision::Warning:	QMessageBox::warning(parent, MOD_NAME.c_str(), mess);	break;
+	case TVision::Error:	QMessageBox::critical(parent, MOD_NAME.c_str(), mess);	break;
+	case TVision::Crit:	QErrorMessage::qtHandler()->showMessage(mess);	break;
     }
 }
 
@@ -477,12 +478,13 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
     if(!glob) node.setAttr("path", "/UI/VCAEngine"+node.attr("path"));
     bool isLoc = (VCAStat.empty() || VCAStat == ".");
     node.setAttr("path", "/"+(isLoc?SYS->id():VCAStat)+node.attr("path"));
+    if(!isLoc) node.setAttr("lang", Mess->lang2Code(user));
 
     try {
 	int rez = SYS->transport().at().cntrIfCmd(node, "UIVision", (isLoc?user:("\n"+user+"\n"+password)));
 	//Password's hash processing
-	if(node.attr("pHash").size() && userStart() == user && userPass() != (TSecurity::pHashMagic+node.attr("pHash"))) {
-	    setUserPass(TSecurity::pHashMagic + node.attr("pHash"));
+	if(node.attr("pHash").size() && userStart() == user && userPass() != (SEC_HASH_MAGIC+node.attr("pHash"))) {
+	    setUserPass(SEC_HASH_MAGIC + node.attr("pHash"));
 	    node.setAttr("pHash", "");
 	}
 	return rez;
@@ -501,27 +503,15 @@ QWidget *TVision::getFocusedWdg( QWidget *wcntr )
     return wcntr;
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TVision::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
     list.push_back("SubType");
 }
 
-string TVision::modInfo( const string &iname )
+string TVision::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
 
     return TModule::modInfo(name);
 }

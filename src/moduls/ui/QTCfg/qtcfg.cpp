@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>      *
+ *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <algorithm>
 
 #include <QToolTip>
 #include <QTreeWidget>
@@ -37,7 +38,6 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QToolBar>
-#include <QMenu>
 #include <QTimer>
 #include <QMessageBox>
 #include <QGroupBox>
@@ -64,6 +64,9 @@
 #define CH_REFR_TM	100
 #define GRP_SHOW_OP_LIM	10
 
+#undef _
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
+
 using namespace OSCADA_QT;
 using namespace QTCFG;
 
@@ -75,14 +78,14 @@ int ConfApp::winCntr = 0;
 ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     pgInfo("info"), genReqs("CntrReqs"), root(&pgInfo), copyBuf("0"), queSz(20), inHostReq(0), tblInit(false), pgDisplay(false)
 {
-    connect(this, SIGNAL(makeStarterMenu(QWidget*)), qApp, SLOT(makeStarterMenu(QWidget*)));
+    connect(this, SIGNAL(makeStarterMenu(QWidget*,const QString&)), qApp, SLOT(makeStarterMenu(QWidget*,const QString&)));
 
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
     QImage ico_t;
     mod->regWin(this);
 
-    setWindowTitle((PACKAGE_NAME " "+mod->modId()+": "+trU(SYS->name(),open_user)).c_str());
+    setWindowTitle((PACKAGE_NAME " "+mod->modId()+": "+trD_U(SYS->name(),open_user)).c_str());
     setWindowIcon(mod->icon());
 
     //Init centrall widget
@@ -104,7 +107,6 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     CtrTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     CtrTree->setAutoScroll(false);
     //splitter->setSizeConstraint(QSplitter::KeepSize);
-    CtrTree->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Path"));
     CtrTree->header()->setStretchLastSection(false);
     CtrTree->header()->resizeSection(0, icoSize(14));
     //CtrTree->header()->setSectionHidden(1,true);
@@ -112,7 +114,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     //CtrTree->header()->hide();
     //CtrTree->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding, 2, 0, CtrTree->sizePolicy().hasHeightForWidth() ) );
     CtrTree->setMinimumSize(QSize(icoSize(10),0));
-    CtrTree->setWhatsThis(_("Main navigation tree of the configurator."));
+
     connect(CtrTree, SIGNAL(itemSelectionChanged()), this, SLOT(selectItem()));
     connect(CtrTree, SIGNAL(itemExpanded(QTreeWidgetItem*)), this, SLOT(viewChild(QTreeWidgetItem*)));
     connect(CtrTree, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
@@ -125,8 +127,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     frm->setLayout(vlay);
 
     //Right frame add
-    QFrame *gFrame = new QFrame(splitter);
-    gFrame->setWhatsThis(_("Main frame of the configurator."));
+    gFrame = new QFrame(splitter);
     QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
     sp.setHorizontalStretch(3);
     gFrame->setSizePolicy(sp);
@@ -151,7 +152,6 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
 
     //Create the tabulator
     tabs = new QTabWidget(gFrame);
-    tabs->setWhatsThis(_("Tabulated configuration pages."));
     connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(tabSelect(int)));
     gFrameLayout->addWidget(tabs, 1, 0, 1, 2);
 
@@ -166,228 +166,158 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     //Create actions
     // Close
     if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
-    QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
+    actClose = new QAction(QPixmap::fromImage(ico_t), "", this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
-    actClose->setToolTip(_("Close the configurator window"));
-    actClose->setWhatsThis(_("The button for closing the configurator window"));
-    actClose->setStatusTip(_("Press to close the configurator window."));
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     // Quit
     if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
-    QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
+    actQuit = new QAction(QPixmap::fromImage(ico_t), "", this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
-    actQuit->setToolTip(_("Quit the program"));
-    actQuit->setWhatsThis(_("The button for complete quit the program"));
-    actQuit->setStatusTip(_("Press for complete quit the program."));
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     // Up button
     if(!ico_t.load(TUIS::icoGet("up",NULL,true).c_str())) ico_t.load(":/images/up.png");
-    actUp = new QAction(QPixmap::fromImage(ico_t),_("&Up"),this);
+    actUp = new QAction(QPixmap::fromImage(ico_t), "", this);
     actUp->setShortcut(Qt::ALT+Qt::Key_Up);
-    actUp->setToolTip(_("Go to the parent page"));
-    actUp->setWhatsThis(_("The button for going to the parent page"));
-    actUp->setStatusTip(_("Press for going to the parent page."));
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(triggered()), this, SLOT(pageUp()));
     // Previous page
     if(!ico_t.load(TUIS::icoGet("previous",NULL,true).c_str())) ico_t.load(":/images/previous.png");
-    actPrev = new QAction(QPixmap::fromImage(ico_t),_("&Back"),this);
+    actPrev = new QAction(QPixmap::fromImage(ico_t), "", this);
     actPrev->setShortcut(Qt::ALT+Qt::Key_Left);
-    actPrev->setToolTip(_("Go back"));
-    actPrev->setWhatsThis(_("The button for going to the back page"));
-    actPrev->setStatusTip(_("Press for going to the back page."));
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(triggered()), this, SLOT(pagePrev()));
     // Next page
     if(!ico_t.load(TUIS::icoGet("next",NULL,true).c_str())) ico_t.load(":/images/next.png");
-    actNext = new QAction(QPixmap::fromImage(ico_t),_("&Forward"),this);
+    actNext = new QAction(QPixmap::fromImage(ico_t), "", this);
     actNext->setShortcut(Qt::ALT+Qt::Key_Right);
-    actNext->setToolTip(_("Go forward"));
-    actNext->setWhatsThis(_("The button for going to the forward page"));
-    actNext->setStatusTip(_("Press for going to the forward page."));
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(triggered()), this, SLOT(pageNext()));
-    //  Load item from db
+    // Load item from db
     if(!ico_t.load(TUIS::icoGet("load",NULL,true).c_str())) ico_t.load(":/images/load.png");
-    actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from DB"),this);
-    actDBLoad->setToolTip(_("Load the item data from DB"));
-    actDBLoad->setWhatsThis(_("The button for loading the item data from DB"));
-    actDBLoad->setStatusTip(_("Press for loading the item data from DB."));
+    actDBLoad = new QAction(QPixmap::fromImage(ico_t), "", this);
     actDBLoad->setEnabled(false);
     connect(actDBLoad, SIGNAL(triggered()), this, SLOT(itDBLoad()));
-    actDBLoadF = new QAction(QPixmap::fromImage(ico_t),_("Load from DB forcibly"),this);
-    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
-    actDBLoadF->setWhatsThis(_("The button for loading the item data from DB forcibly, not only when it changed"));
-    actDBLoadF->setStatusTip(_("Press for loading the item data from DB forcibly, not only when it changed."));
+    actDBLoadF = new QAction(QPixmap::fromImage(ico_t), "", this);
     connect(actDBLoadF, SIGNAL(triggered()), this, SLOT(itDBLoad()));
-    //  Save item to db
+    // Save item to db
     if(!ico_t.load(TUIS::icoGet("save",NULL,true).c_str())) ico_t.load(":/images/save.png");
-    actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
-    actDBSave->setToolTip(_("Save the item data to DB"));
-    actDBSave->setWhatsThis(_("The button for saving the item data to DB"));
-    actDBSave->setStatusTip(_("Press for saving the item data to DB."));
+    actDBSave = new QAction(QPixmap::fromImage(ico_t), "", this);
     actDBSave->setShortcut(QKeySequence("Ctrl+S"));
     actDBSave->setEnabled(false);
     connect(actDBSave, SIGNAL(triggered()), this, SLOT(itDBSave()));
-    actDBSaveF = new QAction(QPixmap::fromImage(ico_t),_("Save to DB forcibly"),this);
-    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
-    actDBSaveF->setWhatsThis(_("The button for saving the item data to DB forcibly, not only when it changed"));
-    actDBSaveF->setStatusTip(_("Press for saving the item data to DB forcibly, not only when it changed."));
+    actDBSaveF = new QAction(QPixmap::fromImage(ico_t), "", this);
     connect(actDBSaveF, SIGNAL(triggered()), this, SLOT(itDBSave()));
     // Add an item
     if(!ico_t.load(TUIS::icoGet("it_add",NULL,true).c_str())) ico_t.load(":/images/it_add.png");
-    actItAdd = new QAction(QPixmap::fromImage(ico_t),_("&Add"),this);
-    actItAdd->setToolTip(_("Add item"));
-    actItAdd->setWhatsThis(_("The button for adding a new item"));
-    actItAdd->setStatusTip(_("Press for adding a new item."));
+    actItAdd = new QAction(QPixmap::fromImage(ico_t), "", this);
     actItAdd->setEnabled(false);
     connect(actItAdd, SIGNAL(triggered()), this, SLOT(itAdd()));
     // Delete the item
     if(!ico_t.load(TUIS::icoGet("it_del",NULL,true).c_str())) ico_t.load(":/images/it_del.png");
-    actItDel = new QAction(QPixmap::fromImage(ico_t),_("&Delete"),this);
-    actItDel->setToolTip(_("Delete item"));
-    actItDel->setWhatsThis(_("The button for deleting the item"));
-    actItDel->setStatusTip(_("Press for deleting the item."));
+    actItDel = new QAction(QPixmap::fromImage(ico_t), "", this);
     actItDel->setShortcut(QKeySequence("Ctrl+D"));
     actItDel->setEnabled(false);
     connect(actItDel, SIGNAL(triggered()), this, SLOT(itDel()));
-    //  Copy the item
+    // Copy the item
     if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
-    actItCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy item"),this);
-    actItCopy->setToolTip(_("Copying the item"));
-    actItCopy->setWhatsThis(_("The button for copying the item"));
-    actItCopy->setStatusTip(_("Press for copying the item."));
+    actItCopy = new QAction(QPixmap::fromImage(ico_t), "", this);
     actItCopy->setShortcut(QKeySequence("Ctrl+C"));
     actItCopy->setEnabled(false);
     connect(actItCopy, SIGNAL(triggered()), this, SLOT(itCopy()));
-    //  Cut the item
+    // Cut the item
     if(!ico_t.load(TUIS::icoGet("editcut",NULL,true).c_str())) ico_t.load(":/images/editcut.png");
-    actItCut = new QAction(QPixmap::fromImage(ico_t),_("Cut item"),this);
-    actItCut->setToolTip(_("Cutting the item"));
-    actItCut->setWhatsThis(_("The button for cutting the item"));
-    actItCut->setStatusTip(_("Press for cutting the item."));
+    actItCut = new QAction(QPixmap::fromImage(ico_t), "", this);
     actItCut->setShortcut(QKeySequence("Ctrl+X"));
     actItCut->setEnabled(false);
     connect(actItCut, SIGNAL(triggered()), this, SLOT(itCut()));
-    //  Paste item
+    // Paste item
     if(!ico_t.load(TUIS::icoGet("editpaste",NULL,true).c_str())) ico_t.load(":/images/editpaste.png");
-    actItPaste = new QAction(QPixmap::fromImage(ico_t),_("Paste item"),this);
-    actItPaste->setToolTip(_("Pasting the item"));
-    actItPaste->setWhatsThis(_("The button for pasting the item"));
-    actItPaste->setStatusTip(_("Press for pasting the item."));
+    actItPaste = new QAction(QPixmap::fromImage(ico_t), "", this);
     actItPaste->setShortcut(QKeySequence("Ctrl+V"));
     actItPaste->setEnabled(false);
     connect(actItPaste, SIGNAL(triggered()), this, SLOT(itPaste()));
     // Update
     if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
-    actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
+    actUpdate = new QAction(QPixmap::fromImage(ico_t), "", this);
     actUpdate->setShortcut(Qt::Key_F5);
-    actUpdate->setToolTip(_("Refresh the page"));
-    actUpdate->setWhatsThis(_("The button for refreshing the page content"));
-    actUpdate->setStatusTip(_("Press for refreshing the page content."));
     connect(actUpdate, SIGNAL(triggered()), this, SLOT(pageRefresh()));
     // Start of "Auto update"
     if(!ico_t.load(TUIS::icoGet("start",NULL,true).c_str())) ico_t.load(":/images/start.png");
-    actStartUpd = new QAction(QPixmap::fromImage(ico_t),_("&Start"),this);
+    actStartUpd = new QAction(QPixmap::fromImage(ico_t), "", this);
     actStartUpd->setShortcut(Qt::CTRL+Qt::Key_B);
-    actStartUpd->setToolTip(_("Start the cycled refreshing"));
-    actStartUpd->setWhatsThis(_("The button for starting the cycled refreshing of the page content"));
-    actStartUpd->setStatusTip(_("Press for starting the cycled refreshing of the page content."));
     connect(actStartUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStart()));
     // Stop of "Auto update"
     if(!ico_t.load(TUIS::icoGet("stop",NULL,true).c_str())) ico_t.load(":/images/stop.png");
-    actStopUpd = new QAction(QPixmap::fromImage(ico_t),_("&Stop"),this);
+    actStopUpd = new QAction(QPixmap::fromImage(ico_t), "", this);
     actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
-    actStopUpd->setToolTip(_("Stop the cycled refreshing"));
-    actStopUpd->setWhatsThis(_("The button for stopping the cycled refreshing of the page content"));
-    actStopUpd->setStatusTip(_("Press for stopping the cycled refreshing of the page content."));
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStop()));
     // About "System info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
-    QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
-    actAbout->setToolTip(_("Program and OpenSCADA information"));
-    actAbout->setWhatsThis(_("The button of the information of the program and OpenSCADA"));
-    actAbout->setStatusTip(_("Press for information of the program and OpenSCADA."));
+    actAbout = new QAction(QPixmap::fromImage(ico_t), "", this);
     connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
     // About Qt
-    QAction *actQtAbout = new QAction(_("About &Qt"),this);
-    actQtAbout->setToolTip(_("Qt information"));
-    actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
-    actQtAbout->setStatusTip(_("Press for getting the using Qt information."));
+    actQtAbout = new QAction("", this);
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     // QTCfg manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
-    QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("Manual on '%1'")).arg(mod->modId().c_str()),this);
+    actManual = new QAction(QPixmap::fromImage(ico_t), "", this);
     actManual->setProperty("doc", "Modules/QTCfg|Modules/QTCfg");
     actManual->setShortcut(Qt::Key_F1);
-    actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
-    actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     // OpenSCADA manual index
-    QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("Manual on '%1'")).arg(PACKAGE_STRING),this);
+    actManualSYS = new QAction(QPixmap::fromImage(ico_t), "", this);
     actManualSYS->setProperty("doc", "index|Documents");
-    actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
-    actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
     // Page help
-    actManualPage = new QAction(QPixmap::fromImage(ico_t),_("Manual on the page"),this);
-    actManualPage->setToolTip(_("Selected page manual"));
-    actManualPage->setWhatsThis(_("The button for getting the using selected page manual."));
-    actManualPage->setStatusTip(_("Press to get the using selected page manual."));
+    actManualPage = new QAction(QPixmap::fromImage(ico_t), "", this);
     actManualPage->setEnabled(false);
     connect(actManualPage, SIGNAL(triggered()), this, SLOT(enterManual()));
     // What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
-    QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    actWhatIs = new QAction(QPixmap::fromImage(ico_t), "", this);
     actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
-    actWhatIs->setToolTip(_("Requesting about GUI elements"));
-    actWhatIs->setWhatsThis(_("The button for requesting information about the user interface elements"));
-    actWhatIs->setStatusTip(_("Press for requesting information about the user interface elements."));
     connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
-    //Create menu
-    // Create menu "file"
-    QMenu *mn_file = menuBar()->addMenu(_("&File"));
-    mn_file->addAction(actDBLoad);
-    mn_file->addAction(actDBLoadF);
-    mn_file->addAction(actDBSave);
-    mn_file->addAction(actDBSaveF);
-    mn_file->addSeparator();
-    mn_file->addAction(actClose);
-    mn_file->addAction(actQuit);
-    // Create menu "edit"
-    QMenu *mn_edit = menuBar()->addMenu(_("&Edit"));
-    mn_edit->addAction(actItAdd);
-    mn_edit->addAction(actItDel);
-    mn_edit->addSeparator();
-    mn_edit->addAction(actItCopy);
-    mn_edit->addAction(actItCut);
-    mn_edit->addAction(actItPaste);
-    // Create menu "view"
-    QMenu *mn_view = menuBar()->addMenu(_("&View"));
-    mn_view->addAction(actUp);
-    mn_view->addAction(actPrev);
-    mn_view->addAction(actNext);
-    mn_view->addSeparator();
-    mn_view->addAction(actUpdate);
-    mn_view->addAction(actStartUpd);
-    mn_view->addAction(actStopUpd);
-    // Create menu "help"
-    QMenu *help = menuBar()->addMenu(_("&Help"));
-    help->addAction(actAbout);
-    help->addAction(actQtAbout);
-    help->addAction(actManual);
-    help->addAction(actManualSYS);
-    help->addAction(actManualPage);
-    help->addSeparator();
-    help->addAction(actWhatIs);
-    // QTStarter
-    emit makeStarterMenu(NULL);
+    // Menus
+    menuBar()->addMenu((menuFile=new QMenu(this)));
+    menuFile->addAction(actDBLoad);
+    menuFile->addAction(actDBLoadF);
+    menuFile->addAction(actDBSave);
+    menuFile->addAction(actDBSaveF);
+    menuFile->addSeparator();
+    menuFile->addAction(actClose);
+    menuFile->addAction(actQuit);
+
+    menuBar()->addMenu((menuEdit=new QMenu(this)));
+    menuEdit->addAction(actItAdd);
+    menuEdit->addAction(actItDel);
+    menuEdit->addSeparator();
+    menuEdit->addAction(actItCopy);
+    menuEdit->addAction(actItCut);
+    menuEdit->addAction(actItPaste);
+
+    menuBar()->addMenu((menuView=new QMenu(this)));
+    menuView->addAction(actUp);
+    menuView->addAction(actPrev);
+    menuView->addAction(actNext);
+    menuView->addSeparator();
+    menuView->addAction(actUpdate);
+    menuView->addAction(actStartUpd);
+    menuView->addAction(actStopUpd);
+
+    menuBar()->addMenu((menuHelp=new QMenu(this)));
+    menuHelp->addAction(actAbout);
+    menuHelp->addAction(actQtAbout);
+    menuHelp->addAction(actManual);
+    menuHelp->addAction(actManualSYS);
+    menuHelp->addAction(actManualPage);
+    menuHelp->addSeparator();
+    menuHelp->addAction(actWhatIs);
 
     //Create tool bars
     // Main tool bar
-    QToolBar *toolBar = new QToolBar(_("Main toolbar"), this);
+    toolBar = new QToolBar(this);
     toolBar->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
     toolBar->setAllowedAreas(Qt::AllToolBarAreas);
     addToolBar(Qt::TopToolBarArea, toolBar);
@@ -412,40 +342,34 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     toolBar->addSeparator();
     toolBar->addAction(actManualPage);
     // QTStarter
-    QToolBar *tB = new QToolBar("QTStarter", this);
-    tB->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
-    tB->setObjectName("QTStarterTool");
-    addToolBar(Qt::TopToolBarArea, tB);
-    tB->setMovable(true);
-    emit makeStarterMenu(tB);
+    QTStarter = new QToolBar("QTStarter", this);
+    QTStarter->setIconSize(QSize(icoSize(1.7),icoSize(1.7)));
+    QTStarter->setObjectName("QTStarterTool");
+    addToolBar(Qt::TopToolBarArea, QTStarter);
+    QTStarter->setMovable(true);
 
     //Init status bar
     connect(statusBar(), SIGNAL(messageChanged(const QString&)), this, SLOT(stMessChanged(const QString&)));
     wUser = new UserStBar(open_user.c_str(), this);
-    wUser->setWhatsThis(_("This label displays the current user."));
-    wUser->setToolTip(_("Field for displaying the current user."));
-    wUser->setStatusTip(_("Double click to change the user."));
     statusBar()->insertPermanentWidget(0, wUser);
     connect(wUser, SIGNAL(userChanged()), this, SLOT(userSel()));
 
-    mStModify = new QLabel(" ",this);
-    mStModify->setWhatsThis(_("This label indicates the fact of making changes."));
-    mStModify->setToolTip(_("Field for indicating the fact of making changes."));
-    statusBar()->insertPermanentWidget(0,mStModify);
+    mStModify = new QLabel(" ", this);
+    statusBar()->insertPermanentWidget(0, mStModify);
 
     if(!ico_t.load(TUIS::icoGet("combar",NULL,true).c_str())) ico_t.load(":/images/combar.png");
-    QPushButton *stBt = new QPushButton(QPixmap::fromImage(ico_t),"",this);
-    stBt->setWhatsThis(_("This button calls the status bar history."));
-    stBt->setToolTip(_("Button for calling the status bar history."));
+    stBt = new QPushButton(QPixmap::fromImage(ico_t), "", this);
     stBt->setMaximumSize(QSize(16,18));
     stBt->setFlat(true);
     statusBar()->insertPermanentWidget(0,stBt);
     connect(stBt, SIGNAL(released()), this, SLOT(stHistCall()));
 
+    messUpd();
+
     statusBar()->showMessage(_("Ready"), 2000);
 
     //Generic state restore
-    string rst = TBDS::genDBGet(mod->nodePath()+"st", "800:600", wUser->user().toStdString());
+    string rst = TBDS::genPrmGet(mod->nodePath()+"st", "800:600", user());
     int off = 0,
 	wH = s2i(TSYS::strParse(rst,0,":",&off)),
 	wW = s2i(TSYS::strParse(rst,0,":",&off));
@@ -499,6 +423,158 @@ ConfApp::~ConfApp( )
     winCntr--;
 }
 
+string ConfApp::user( )	{ return wUser->user().toStdString(); }
+
+string ConfApp::lang( bool withSystem )	{ return Mess->lang2Code(user(), !withSystem); }
+
+void ConfApp::messUpd( )
+{
+    qApp->setProperty("lang", lang().c_str());	//For the Qt internal messages translation
+
+    //Navigator tree
+    CtrTree->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Path"));
+    CtrTree->setWhatsThis(_("Main navigation tree of the configurator."));
+
+    //Right frame
+    gFrame->setWhatsThis(_("Main frame of the configurator."));
+
+    //The tabulator
+    tabs->setWhatsThis(_("Tabulated configuration pages."));
+
+    //Actions
+    // Close
+    actClose->setText(_("&Close"));
+    actClose->setToolTip(_("Close the configurator window"));
+    actClose->setWhatsThis(_("The button for closing the configurator window"));
+    actClose->setStatusTip(_("Press to close the configurator window."));
+    // Quit
+    actQuit->setText(_("&Quit"));
+    actQuit->setToolTip(_("Quit the program"));
+    actQuit->setWhatsThis(_("The button for complete quit the program"));
+    actQuit->setStatusTip(_("Press for complete quit the program."));
+    // Up button
+    actUp->setText(_("&Up"));
+    actUp->setToolTip(_("Go to the parent page"));
+    actUp->setWhatsThis(_("The button for going to the parent page"));
+    actUp->setStatusTip(_("Press for going to the parent page."));
+    // Previous page
+    actPrev->setText(_("&Back"));
+    actPrev->setToolTip(_("Go back"));
+    actPrev->setWhatsThis(_("The button for going to the back page"));
+    actPrev->setStatusTip(_("Press for going to the back page."));
+    // Next page
+    actNext->setText(_("&Forward"));
+    actNext->setToolTip(_("Go forward"));
+    actNext->setWhatsThis(_("The button for going to the forward page"));
+    actNext->setStatusTip(_("Press for going to the forward page."));
+    // Load item from db
+    actDBLoad->setText(_("Load from DB"));
+    actDBLoad->setToolTip(_("Load the item data from DB"));
+    actDBLoad->setWhatsThis(_("The button for loading the item data from DB"));
+    actDBLoad->setStatusTip(_("Press for loading the item data from DB."));
+    actDBLoadF->setText(_("Load from DB forcibly"));
+    actDBLoadF->setToolTip(_("Load the item data from DB forcibly"));
+    actDBLoadF->setWhatsThis(_("The button for loading the item data from DB forcibly, not only when it changed"));
+    actDBLoadF->setStatusTip(_("Press for loading the item data from DB forcibly, not only when it changed."));
+    // Save item to db
+    actDBSave->setText(_("Save to DB"));
+    actDBSave->setToolTip(_("Save the item data to DB"));
+    actDBSave->setWhatsThis(_("The button for saving the item data to DB"));
+    actDBSave->setStatusTip(_("Press for saving the item data to DB."));
+    actDBSaveF->setText(_("Save to DB forcibly"));
+    actDBSaveF->setToolTip(_("Save the item data to DB forcibly"));
+    actDBSaveF->setWhatsThis(_("The button for saving the item data to DB forcibly, not only when it changed"));
+    actDBSaveF->setStatusTip(_("Press for saving the item data to DB forcibly, not only when it changed."));
+    // Add an item
+    actItAdd->setText(_("&Add"));
+    actItAdd->setToolTip(_("Add item"));
+    actItAdd->setWhatsThis(_("The button for adding a new item"));
+    actItAdd->setStatusTip(_("Press for adding a new item."));
+    // Delete the item
+    actItDel->setText(_("&Delete"));
+    actItDel->setToolTip(_("Delete item"));
+    actItDel->setWhatsThis(_("The button for deleting the item"));
+    actItDel->setStatusTip(_("Press for deleting the item."));
+    // Copy the item
+    actItCopy->setText(_("Copy item"));
+    actItCopy->setToolTip(_("Copying the item"));
+    actItCopy->setWhatsThis(_("The button for copying the item"));
+    actItCopy->setStatusTip(_("Press for copying the item."));
+    // Cut the item
+    actItCut->setText(_("Cut item"));
+    actItCut->setToolTip(_("Cutting the item"));
+    actItCut->setWhatsThis(_("The button for cutting the item"));
+    actItCut->setStatusTip(_("Press for cutting the item."));
+    // Paste item
+    actItPaste->setText(_("Paste item"));
+    actItPaste->setToolTip(_("Pasting the item"));
+    actItPaste->setWhatsThis(_("The button for pasting the item"));
+    actItPaste->setStatusTip(_("Press for pasting the item."));
+    // Update
+    actUpdate->setText(_("&Refresh"));
+    actUpdate->setToolTip(_("Refresh the page"));
+    actUpdate->setWhatsThis(_("The button for refreshing the page content"));
+    actUpdate->setStatusTip(_("Press for refreshing the page content."));
+    // Start of "Auto update"
+    actStartUpd->setText(_("&Start"));
+    actStartUpd->setToolTip(_("Start the cycled refreshing"));
+    actStartUpd->setWhatsThis(_("The button for starting the cycled refreshing of the page content"));
+    actStartUpd->setStatusTip(_("Press for starting the cycled refreshing of the page content."));
+    // Stop of "Auto update"
+    actStopUpd->setText(_("&Stop"));
+    actStopUpd->setToolTip(_("Stop the cycled refreshing"));
+    actStopUpd->setWhatsThis(_("The button for stopping the cycled refreshing of the page content"));
+    actStopUpd->setStatusTip(_("Press for stopping the cycled refreshing of the page content."));
+    // About "System info"
+    actAbout->setText(_("&About"));
+    actAbout->setToolTip(_("Program and OpenSCADA information"));
+    actAbout->setWhatsThis(_("The button of the information of the program and OpenSCADA"));
+    actAbout->setStatusTip(_("Press for information of the program and OpenSCADA."));
+    // About Qt
+    actQtAbout->setText(_("About &Qt"));
+    actQtAbout->setToolTip(_("Qt information"));
+    actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
+    actQtAbout->setStatusTip(_("Press for getting the using Qt information."));
+    // QTCfg manual
+    actManual->setText(QString(_("Manual on '%1'")).arg(mod->modId().c_str()));
+    actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
+    actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
+    // OpenSCADA manual index
+    actManualSYS->setText(QString(_("Manual on '%1'")).arg(PACKAGE_STRING));
+    actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
+    actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
+    // Page help
+    actManualPage->setText(_("Manual on the page"));
+    actManualPage->setToolTip(_("Selected page manual"));
+    actManualPage->setWhatsThis(_("The button for getting the using selected page manual."));
+    actManualPage->setStatusTip(_("Press to get the using selected page manual."));
+    // What is
+    actWhatIs->setText(_("What's &This"));
+    actWhatIs->setToolTip(_("Requesting about GUI elements"));
+    actWhatIs->setWhatsThis(_("The button for requesting information about the user interface elements"));
+    actWhatIs->setStatusTip(_("Press for requesting information about the user interface elements."));
+
+    //Menus
+    menuFile->setTitle(_("&File"));
+    menuEdit->setTitle(_("&Edit"));
+    menuView->setTitle(_("&View"));
+    menuHelp->setTitle(_("&Help"));
+    emit makeStarterMenu(NULL, lang().c_str());
+
+    //Main tool bar
+    toolBar->setWindowTitle(_("Main toolbar"));
+    emit makeStarterMenu(QTStarter, lang().c_str());
+
+    //Status bars
+    wUser->setWhatsThis(_("This label displays the current user."));
+    wUser->setToolTip(_("Field for displaying the current user."));
+    wUser->setStatusTip(_("Double click to change the user."));
+    mStModify->setWhatsThis(_("This label indicates the fact of making changes."));
+    mStModify->setToolTip(_("Field for indicating the fact of making changes."));
+    stBt->setWhatsThis(_("This button calls the status bar history."));
+    stBt->setToolTip(_("Button for calling the status bar history."));
+}
+
 void ConfApp::quitSt( )
 {
     if(exitModifChk()) SYS->stop();
@@ -543,9 +619,8 @@ void ConfApp::hostStSet( const QString &hid, int lnkOK, const QImage &img, const
 	    //? Used for rechange status for fix indicator hide after all childs remove on bad connection
 	    nit->setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
 	    nit->setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
-
-	    nit->setData(2, Qt::UserRole, brs);
 	}
+	nit->setData(2, Qt::UserRole, brs);
 	if(lnkOK == 0) nit->setExpanded(false);
 	if(lnkOK >= 0) {
 	    nit->setToolTip(0, toolTip);
@@ -583,12 +658,7 @@ void ConfApp::treeSearch( )
 	    continue;
 	}
 	if(pi->child(iC)->text(0).contains(wvl,Qt::CaseInsensitive)) break;
-	else {
-	    // Get last item from path
-	    string itpth, tstr;
-	    for(int off = 0; (tstr=TSYS::pathLev(pi->child(iC)->text(2).toStdString(),0,true,&off)).size(); ) itpth = tstr;
-	    if(QString(itpth.c_str()).contains(wvl,Qt::CaseInsensitive)) break;
-	}
+	else if(QString(TSYS::pathLevEnd(pi->child(iC)->text(2).toStdString(),0).c_str()).contains(wvl,Qt::CaseInsensitive)) break;
     }
     if(iC < pi->childCount()) {
 	pi->treeWidget()->setCurrentItem(pi->child(iC), 0, QItemSelectionModel::Clear|QItemSelectionModel::Select);
@@ -934,12 +1004,16 @@ void ConfApp::treeUpdate( )
 
 void ConfApp::userSel( )
 {
-    initHosts();
+    messUpd();
+
+    initHosts(true);
 
     pgInfo.setAttr("path", "");
 
     try { pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
+
+    treeUpdate();
 }
 
 void ConfApp::pageRefresh( int tm )
@@ -955,7 +1029,7 @@ void ConfApp::pageRefresh( int tm )
 
     try {
 	//Tree part update.
-	//!!!! That is bad here for big items number, at last for about 2000 ones, in updating at selecting any item
+	//!!!! That is bad here for big items number, at least for about 2000 ones, in updating at selecting any item
 	if(CtrTree->currentItem() && !pgDisplay && dynamic_cast<QAction*>(sender()))
 	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent() : CtrTree->currentItem(), true);
 
@@ -1008,16 +1082,20 @@ void ConfApp::stHistCall( )
 
 void ConfApp::about( )
 {
-    char buf[prmStrBuf_SZ];
+    string mess = _("%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
+		    "%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s");
 
-    snprintf(buf, sizeof(buf), _(
-	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
-	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
-	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(),
-	mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
-	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE);
+#undef _
+#define _(mess) Mess->I18N(mess, lang().c_str()).c_str()
 
-    QMessageBox::about(this, windowTitle(), buf);
+    QMessageBox::about(this, windowTitle(),
+	TSYS::strMess(mess.c_str(),
+	    _(mod->modInfo("Name")),mod->modInfo("Version").c_str(),_(mod->modInfo("Description")),
+	    _(mod->modInfo("Author")),mod->modInfo("License").c_str(),
+	    PACKAGE_NAME,VERSION,_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR),PACKAGE_SITE).c_str());
+
+#undef _
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 }
 
 void ConfApp::aboutQt( )	{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
@@ -1026,7 +1104,7 @@ void ConfApp::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void ConfApp::enterManual( )
 {
-    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString()+"\n"+lang());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
 	QString(_("The manual '%1' was not found offline or online!")).arg(sender()->property("doc").toString()));
@@ -1047,7 +1125,7 @@ void ConfApp::closeEvent( QCloseEvent* ce )
     if(endRunTimer->isActive()) {
 	//Save the generic state
 	QByteArray st = splitter->saveState();
-	TBDS::genDBSet(mod->nodePath()+"st", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), wUser->user().toStdString());
+	TBDS::genPrmSet(mod->nodePath()+"st", i2s(width())+":"+i2s(height())+":"+TSYS::strEncode(string(st.data(),st.size()),TSYS::base64,""), user());
 
 	// Timers early stop
 	endRunTimer->stop();
@@ -1333,7 +1411,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 	    XMLNode req("get"); req.setAttr("path",br_path);
 	    if((rez=cntrIfCmd(req)) > 0) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    else if(rez <= 0) {
-		//   Collumns adjusting flag
+		//   Columns adjusting flag
 		bool adjCol = widget || !tbl->rowCount();
 		bool adjRow = false;
 
@@ -1432,7 +1510,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    thd_it->setData(Qt::DisplayRole, atm2s(s2i(t_linf->childGet(iEl)->text()),"%d-%m-%Y %H:%M:%S").c_str());
 			    thd_it->setData(Qt::TextAlignmentRole, (int)(Qt::AlignCenter|Qt::TextWordWrap));
 			}
-			else thd_it->setData(Qt::DisplayRole, getPrintVal(t_linf->childGet(iEl)->text()).c_str());
+			else thd_it->setData(Qt::DisplayRole, TSYS::strEncode(t_linf->childGet(iEl)->text(),TSYS::ShieldBin).c_str());
 
 			//   Set access
 			if(!c_wr) thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
@@ -1445,7 +1523,6 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		    int tblWdth = tbl->maximumViewportSize().width() -
 				    ((tbl->verticalScrollBar()&&tbl->verticalScrollBar()->isVisible())?tbl->verticalScrollBar()->size().width():0);
-			//!!!! tbl->verticalScrollBar()->size().width() newer can be used here due it initially has 100 and does not update more
 		    int averWdth = tbl->columnCount() ? (tblWdth/tbl->columnCount()) : 0;
 		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0;
 		    //   Count width params
@@ -1785,7 +1862,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    // Fill Edit
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    string tVl;
-	    if(edit && !edit->isChanged() && rezReq >= 0 && ((tVl=getPrintVal(data_req.text())) != edit->text().toStdString() || !edit->text().size())) {
+	    if(edit && !edit->isChanged() && rezReq >= 0 && ((tVl=TSYS::strEncode(data_req.text(),TSYS::ShieldBin)) != edit->text().toStdString() || !edit->text().size())) {
 		int scrollPos = edit->edit()->verticalScrollBar()->value();
 		//Requesting the syntax higlihgt
 		if(s2i(t_s.attr("SnthHgl"))) {
@@ -1972,7 +2049,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_w = (LineEdit *)TSYS::str2addr(t_s.attr("addr_val_w"));
 	    }
 	    // Fill line
-	    string sval = getPrintVal(data_req.text());
+	    string sval = TSYS::strEncode(data_req.text(), TSYS::ShieldBin);
 	    if(t_s.attr("tpCh") == "hex" || (t_s.attr("tpCh").empty() && t_s.attr("tp") == "hex"))
 		sval = "0x" + QString::number(s2ll(data_req.text()),16).toUpper().toStdString();
 	    else if(t_s.attr("tpCh") == "oct" || (t_s.attr("tpCh").empty() && t_s.attr("tp") == "oct"))
@@ -2036,7 +2113,7 @@ void ConfApp::pageDisplay( const string path )
     actNext->setEnabled(next.size());
 
     if(path != pgInfo.attr("path")) {
-	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure for proper working of the checking for not applied editable widgets
+	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure of proper working of the checking for not applied editable widgets
 
 	// Trace the control tree
 	QTreeWidgetItem *tIt;
@@ -2279,11 +2356,11 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
     QStringList grps = i->data(2,Qt::UserRole).toStringList();
     if(grps.empty()) return;
     else if(grps.size() > 1) {
-	//Add and update present ones
+	//Add and update the present ones
 	for(int iG = 0; iG < grps.size(); iG++) {
-	    bool grpChCnt = s2i(TSYS::strSepParse(grps[iG].toStdString(),0,'\n'));
-	    string grpId = TSYS::strSepParse(grps[iG].toStdString(),1,'\n');
-	    string grpDscr = TSYS::strSepParse(grps[iG].toStdString(),2,'\n');
+	    bool grpChCnt = s2i(TSYS::strLine(grps[iG].toStdString(),0));
+	    string grpId = TSYS::strLine(grps[iG].toStdString(), 1);
+	    string grpDscr = TSYS::strLine(grps[iG].toStdString(), 2);
 	    QTreeWidgetItem *it = NULL;
 	    //Search present item
 	    if(upTree)
@@ -2295,7 +2372,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    it->setText(1, grpDscr.c_str());
 	    it->setText(2, ("*"+grpId).c_str());
 	    QStringList it_grp; it_grp.push_back(grps[iG]);
-	    it->setData(2, Qt::UserRole,it_grp);
+	    it->setData(2, Qt::UserRole, it_grp);
 	    it->setFlags(Qt::ItemIsEnabled);
 	    it->setChildIndicatorPolicy(grpChCnt?QTreeWidgetItem::ShowIndicator:QTreeWidgetItem::DontShowIndicator);
 	    QFont fnt = it->font(0);
@@ -2307,24 +2384,25 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	//Deleting not presented
 	for(int iIt = 0, iG = 0; upTree && iIt < i->childCount(); iIt++) {
 	    for(iG = 0; iG < grps.size(); iG++)
-		if(i->child(iIt)->text(2) == ("*"+TSYS::strSepParse(grps[iG].toStdString(),1,'\n')).c_str())
+		if(i->child(iIt)->text(2) == ("*"+TSYS::strLine(grps[iG].toStdString(),1)).c_str())
 		    break;
 	    if(iG >= grps.size()) { delete i->takeChild(iIt); iIt--; }
 	}
     }
     else {
 	string path = i->text(2).toStdString();
-	if(path[0]=='*') path = i->parent()->text(2).toStdString();
-	string grpId = TSYS::strSepParse(grps[0].toStdString(),1,'\n');
-	string grpDscr = TSYS::strSepParse(grps[0].toStdString(),2,'\n');
+	if(path[0] == '*') path = i->parent()->text(2).toStdString();
+	string grpId = TSYS::strLine(grps[0].toStdString(), 1);
+	string grpDscr = TSYS::strLine(grps[0].toStdString(), 2);
+
 	XMLNode req("chlds");
-	req.setAttr("path",path+"/%2fobj")->setAttr("grp",grpId);
+	req.setAttr("path",path+"/%2fobj")->setAttr("grp", grpId);
 	if(cntrIfCmd(req)) {
 	    //if(s2i(req.attr("rez")) == TError::Tr_Connect) initHosts();
 	    mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	    return;
 	}
-	//Add and update present
+	//Add and update presented ones
 	for(unsigned iE = 0; iE < req.childSize(); iE++) {
 	    XMLNode *chEl = req.childGet(iE);
 	    // Prepare branch patch
@@ -2355,11 +2433,11 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 		if(chEl->childGet(iG)->name() == "grp")
 		    it_grp.push_back((chEl->childGet(iG)->attr("chPresent")+"\n"+chEl->childGet(iG)->attr("id")+"\n"+chEl->childGet(iG)->attr("dscr")).c_str());
 	    it->setData(2,Qt::UserRole,it_grp);
-	    // Check for childs present
-	    bool grpChCnt = it_grp.size() && (it_grp.size()>1 || s2i(TSYS::strSepParse(it_grp[0].toStdString(),0,'\n')));
+	    // Check for childs presence
+	    bool grpChCnt = it_grp.size() && (it_grp.size()>1 || s2i(TSYS::strLine(it_grp[0].toStdString(),0)));
 	    it->setChildIndicatorPolicy(grpChCnt?QTreeWidgetItem::ShowIndicator:QTreeWidgetItem::DontShowIndicator);
 	    // Next node for update
-	    if(upTree && it->isExpanded()) viewChildRecArea(it,upTree);
+	    if(upTree && it->isExpanded()) viewChildRecArea(it, upTree);
 	}
 	//Delete no present
 	if(upTree) {
@@ -2435,13 +2513,14 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	    node = *sNd;
 	    return s2i(node.attr("rez"));
 	}
-	node.setAttr("path",genReqs.attr("path")+"/"+node.attr("path"));
+	node.setAttr("path", genReqs.attr("path")+"/"+node.attr("path"));
     }
 
     //Direct request
     try {
+	node.setAttr("lang", lang(true));
 	int rez = cntrIfCmdHosts(node);
-	//int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",wUser->user().toStdString());
+	//int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",user());
 
 	// Multiple requests to selected nodes into the tree
 	if(rez == TError::NoError && (node.name() == "set" || node.name() == "load" || node.name() == "save") && CtrTree->selectedItems().size() >= 2) {
@@ -2466,7 +2545,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		    for(unsigned iSel = 0; questRes == QMessageBox::Apply && iSel < selNds.size(); ++iSel) {
 			node.setAttr("path", selNds[iSel]+"/"+reqPathEl);
 			cntrIfCmdHosts(node);
-			//SYS->transport().at().cntrIfCmd(node, "UIQtCfg", wUser->user().toStdString());
+			//SYS->transport().at().cntrIfCmd(node, "UIQtCfg", user());
 		    }
 		}
 	    }
@@ -2551,21 +2630,24 @@ void ConfApp::reqPrgrsSet( int cur, const QString &lab, int max )
     }
 }
 
-string ConfApp::getPrintVal( const string &vl )
+/*string ConfApp::getPrintVal( const string &vl )
 {
     bool isBool = false;
     for(unsigned iCh = 0; !isBool && iCh < vl.size(); ++iCh)
 	switch(vl[iCh]) {
-	    case 0: isBool = true; break;
+	    case 0 ... 8: isBool = true; break;
 	}
 
     return isBool ? "B["+TSYS::strDecode(vl,TSYS::Bin)+"]" : vl;
-}
+}*/
 
-void ConfApp::initHosts( )
+bool ConfApp::compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 )	{ return v1.name < v2.name; }
+
+void ConfApp::initHosts( bool toReconnect )
 {
     vector<TTransportS::ExtHost> stls;
-    SYS->transport().at().extHostList(wUser->user().toStdString(), stls);
+    SYS->transport().at().extHostList(user(), stls);
+    sort(stls.begin(), stls.end(), compareHosts);
     stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 
     //Remove for not present hosts
@@ -2594,28 +2676,38 @@ void ConfApp::initHosts( )
 	    for(int iTop = 0; iTop < CtrTree->topLevelItemCount(); iTop++)
 		if(stls[iSt].id == TSYS::pathLev(CtrTree->topLevelItem(iTop)->text(2).toStdString(),0))
 		{ nit = CtrTree->topLevelItem(iTop); break; }
+	map<string, SCADAHost*>::iterator iHost = hosts.find(stls[iSt].id);
+
 	if(!nit) {
 	    nit = new QTreeWidgetItem(CtrTree);
 
 	    // Append the host thread
-	    if(hosts.find(stls[iSt].id) == hosts.end()) {
-		hosts[stls[iSt].id] = new SCADAHost(stls[iSt].id.c_str(), wUser->user(), (stls[iSt].id!=SYS->id()), this);
+	    if(iHost == hosts.end()) {
+		hosts[stls[iSt].id] = new SCADAHost(stls[iSt].id.c_str(), user().c_str(), (stls[iSt].id!=SYS->id()), this);
 		connect(hosts[stls[iSt].id], SIGNAL(setSt(const QString&,int,const QImage&,const QStringList&,const QString&)),
 			this, SLOT(hostStSet(const QString&,int,const QImage&,const QStringList&,const QString&)), Qt::QueuedConnection);
 		hosts[stls[iSt].id]->start();
+	    } else iHost->second->userSet(user().c_str());
+	}
+	else if(iHost != hosts.end()) {
+	    iHost->second->userSet(user().c_str());
+	    if(toReconnect) {
+		iHost->second->terminate();
+		iHost->second->start();
 	    }
 	}
+
 	if(stls[iSt].id == SYS->id()) {
-	    nit->setText(0, trU(SYS->name(),wUser->user().toStdString()).c_str());
+	    nit->setText(0, trD_U(SYS->name(),user()).c_str());
 	    nit->setText(1, _("Local station"));
 	    nit->setText(2, ("/"+SYS->id()).c_str());
 	}
 	else {
-	    nit->setText(0, trU(stls[iSt].name,wUser->user().toStdString()).c_str());
+	    nit->setText(0, trD_U(stls[iSt].name,user()).c_str());
 	    nit->setText(1, _("Remote station"));
 	    nit->setText(2, ("/"+stls[iSt].id).c_str());
 	}
-	if(hosts[stls[iSt].id]) hosts[stls[iSt].id]->userSet(wUser->user());
+	//if(hosts[stls[iSt].id]) hosts[stls[iSt].id]->userSet(user().c_str());
     }
 }
 
@@ -2642,8 +2734,7 @@ void ConfApp::checkBoxStChange( int stat )
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 
 	    if(req.text() == val) return;
-	    mess_info(mod->nodePath().c_str(), _("%s| Set '%s' to '%s'!"),
-		wUser->user().toStdString().c_str(), (selPath+"/"+path).c_str(), val.c_str());
+	    mess_info(mod->nodePath().c_str(), _("%s| Set '%s' to '%s'!"), user().c_str(), (selPath+"/"+path).c_str(), val.c_str());
 
 	    req.setName("set")->setText(val);
 	    if(cntrIfCmd(req))	mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
@@ -2666,7 +2757,7 @@ void ConfApp::buttonClicked( )
 	    XMLNode req("get"); req.setAttr("path",selPath+"/"+button->objectName().toStdString());
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this); return; }
 	    string url = "/" + TSYS::pathLev(selPath,0) + req.text();
-	    mess_info(mod->nodePath().c_str(), _("%s| Went to the link '%s'!"), wUser->user().toStdString().c_str(), url.c_str());
+	    mess_info(mod->nodePath().c_str(), _("%s| Went to the link '%s'!"), user().c_str(), url.c_str());
 	    selectPage(url);
 	    return;
 	}
@@ -2677,7 +2768,7 @@ void ConfApp::buttonClicked( )
 		*(req.childAdd()) = *(n_el->childGet(iCh));
 
 	    mess_info(mod->nodePath().c_str(), _("%s| Pressed down '%s'!"),
-		wUser->user().toStdString().c_str(), (selPath+"/"+button->objectName().toStdString()).c_str());
+		user().c_str(), (selPath+"/"+button->objectName().toStdString()).c_str());
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
 	}
     } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
@@ -2733,7 +2824,7 @@ void ConfApp::combBoxActivate( const QString& ival )
 
 	    if(req.text() == val) return;
 	    mess_info(mod->nodePath().c_str(),_("%s| Changed '%s' from '%s' to '%s'!"),
-		    wUser->user().toStdString().c_str(), (selPath+"/"+path).c_str(), req.text().c_str(), val.c_str());
+		    user().c_str(), (selPath+"/"+path).c_str(), req.text().c_str(), val.c_str());
 
 	    req.setName("set")->setText(val);
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat"), req.text(), TUIMod::Error, this);
@@ -2752,8 +2843,8 @@ void ConfApp::listBoxPopup( )
     string el_path = selPath+"/"+lbox->objectName().toStdString();
     XMLNode *n_el;
 
-    QAction *last_it, *actBr, *actAdd, *actIns, *actEd, *actDel, *actMoveUp, *actMoveDown;
-    last_it = actBr = actAdd = actIns = actEd = actDel = actMoveUp = actMoveDown = NULL;
+    QAction *last_it, *actBr, *actAdd, *actIns, *actEd, *actDel, *actMoveUp, *actMoveDown, *actCopy;
+    last_it = actBr = actAdd = actIns = actEd = actDel = actMoveUp = actMoveDown = actCopy = NULL;
 
     try {
 	n_el = SYS->ctrId(root, TSYS::strDecode(lbox->objectName().toStdString(),TSYS::PathEl));
@@ -2788,6 +2879,11 @@ void ConfApp::listBoxPopup( )
 		popup.addAction(actMoveDown);
 	    }
 	}
+	if(!lbox->selectedItems().isEmpty()) {
+	    popup.addSeparator();
+	    actCopy = last_it = new QAction(_("Copy"),this);
+	    popup.addAction(actCopy);
+	}
 
 	if(last_it) {
 	    string p_text, p_id;
@@ -2815,7 +2911,13 @@ void ConfApp::listBoxPopup( )
 
 	    QAction *rez = popup.exec(QCursor::pos());
 	    if(!rez)	{ popup.clear(); return; }
-	    if(rez == actAdd || rez == actIns || rez == actEd) {
+
+	    if(rez == actCopy) {
+		QApplication::clipboard()->setText(lbox->selectedItems()[0]->text());
+		popup.clear();
+		return;
+	    }
+	    else if(rez == actAdd || rez == actIns || rez == actEd) {
 		ReqIdNameDlg dlg(this, this->windowIcon(), "", _("Setting the item name"));
 		vector<string> ils;
 		ils.push_back(n_el->attr("idSz")+"\n"+i2s(ind_m));
@@ -2842,34 +2944,34 @@ void ConfApp::listBoxPopup( )
 		if(ind_m) n_el1.setAttr("id",id);
 		n_el1.setText(text);
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' added by the element <%s:%s>!"),
-			wUser->user().toStdString().c_str(), el_path.c_str(), id.c_str(), text.c_str());
+			user().c_str(), el_path.c_str(), id.c_str(), text.c_str());
 	    }
 	    else if(rez == actIns) {
 		n_el1.setName("ins")->setAttr("pos", i2s(c_id))->setAttr("p_id",(ind_m)?p_id:p_text);
 		if(ind_m) n_el1.setAttr("id",id);
 		n_el1.setText(text);
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' inserted by the element <%s:%s> to %d!"),
-			wUser->user().toStdString().c_str(), el_path.c_str(), id.c_str(), text.c_str(),c_id);
+			user().c_str(), el_path.c_str(), id.c_str(), text.c_str(),c_id);
 	    }
 	    else if(rez == actEd) {
 		n_el1.setName("edit")->setAttr("pos", i2s(c_id))->setAttr("p_id",(ind_m)?p_id:p_text);
 		if(ind_m) n_el1.setAttr("id",id);
 		n_el1.setText(text);
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' set for the element %d to <%s:%s>!"),
-			wUser->user().toStdString().c_str(), el_path.c_str(), c_id, id.c_str(), text.c_str());
+			user().c_str(), el_path.c_str(), c_id, id.c_str(), text.c_str());
 	    }
 	    else if(rez == actDel) {
 		n_el1.setName("del")->setAttr("pos", i2s(c_id));
 		if(ind_m) n_el1.setAttr("id",p_id);
 		else n_el1.setText(item->text().toStdString());
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' deleted for the element <%s:%s>!"),
-			wUser->user().toStdString().c_str(), el_path.c_str(), n_el1.attr("id").c_str(), n_el1.text().c_str());
+			user().c_str(), el_path.c_str(), n_el1.attr("id").c_str(), n_el1.text().c_str());
 	    }
 	    else if(rez == actMoveUp || rez == actMoveDown) {
 		int c_new = (rez==actMoveDown) ? c_id+1 : c_id-1;
 		n_el1.setName("move")->setAttr("pos", i2s(c_id))->setAttr("to", i2s(c_new));
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' moved for the element %d to %d!"),
-			wUser->user().toStdString().c_str(), el_path.c_str(), c_id, c_new);
+			user().c_str(), el_path.c_str(), c_id, c_new);
 	    }
 	    if(cntrIfCmd(n_el1)) {
 		mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this);
@@ -2960,13 +3062,13 @@ void ConfApp::tablePopup( const QPoint &pos )
 	    if(rez == actAdd) {
 		n_el1.setName("add");
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' add by a record."),
-			wUser->user().toStdString().c_str(), el_path.c_str());
+			user().c_str(), el_path.c_str());
 	    }
 	    else if(rez == actIns) {
 		n_el1.setName("ins");
 		n_el1.setAttr("row", i2s(row));
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' inserted for the record %d."),
-			wUser->user().toStdString().c_str(), el_path.c_str(), row);
+			user().c_str(), el_path.c_str(), row);
 	    }
 	    else if(rez == actDel) {
 		n_el1.setName("del");
@@ -2987,7 +3089,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 			    }
 		}
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' deleted for the record '%s'."),
-			wUser->user().toStdString().c_str(), el_path.c_str(), row_addr.c_str());
+			user().c_str(), el_path.c_str(), row_addr.c_str());
 	    }
 	    else if(rez == actMoveUp || rez == actMoveDown) {
 		int r_new = row-1;
@@ -2995,7 +3097,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 		n_el1.setName("move");
 		n_el1.setAttr("row", i2s(row))->setAttr("to", i2s(r_new));
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' moved for the record %d to %d."),
-			wUser->user().toStdString().c_str(), el_path.c_str(), row, r_new);
+			user().c_str(), el_path.c_str(), row, r_new);
 	    }
 	    if(cntrIfCmd(n_el1)) throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
 
@@ -3056,7 +3158,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 		XMLNode n_el1("set");
 		n_el1.setAttr("path",el_path)->setText(TSYS::strEncode(rez,TSYS::base64));
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' uploaded by the picture '%s'."),
-		    wUser->user().toStdString().c_str(), el_path.c_str(), fileName.toStdString().c_str());
+		    user().c_str(), el_path.c_str(), fileName.toStdString().c_str());
 		if(cntrIfCmd(n_el1)) { mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this); return; }
 	    }
 	}
@@ -3135,7 +3237,7 @@ void ConfApp::tableSet( int row, int col )
 
 	// Put request
 	mess_info(mod->nodePath().c_str(),_("%s| '%s' set for cell ('%s':%s) to: %s."),
-	    wUser->user().toStdString().c_str(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
+	    user().c_str(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());
 	noReload = s2i(n_el1.attr("noReload"));
 	if(noReload) n_el->childGet(col)->childGet(row)->setText(value);
@@ -3212,7 +3314,7 @@ void ConfApp::applyButton( )
 	}
 
 	mess_info(mod->nodePath().c_str(), _("%s| '%s' changed to: '%s'!"),
-		wUser->user().toStdString().c_str(), (selPath+"/"+path).c_str(), sval.c_str());
+		user().c_str(), (selPath+"/"+path).c_str(), sval.c_str());
 
 	XMLNode n_el("set");
 	n_el.setAttr("path", selPath+"/"+path)->setText(sval);
@@ -3232,6 +3334,9 @@ void ConfApp::cancelButton( )
     //Redraw
     pageRefresh(CH_REFR_TM);
 }
+
+#undef _
+#define _(mess) mod->I18N(mess, ((ConfApp*)parent())->lang().c_str()).c_str()
 
 //***********************************************
 // SHost - Host thread's control object         *
@@ -3331,7 +3436,8 @@ void SCADAHost::run( )
 	    QString toolTip;
 	    QStringList brs;
 	    XMLNode req("CntrReqs"), *reqN;
-	    req.setAttr("path", "/"+id.toStdString());
+	    req.setAttr("path", "/"+id.toStdString())->
+		setAttr("lang", Mess->lang2Code(user.toStdString(),true));
 	    req.childAdd("get")->setAttr("path", "%2fgen%2fstat");
 	    req.childAdd("get")->setAttr("path", "%2fico");
 	    req.childAdd("info")->setAttr("path","%2fbr");
@@ -3367,7 +3473,7 @@ void SCADAHost::run( )
 	if(req && !reqDone) {
 	    wuser = user;
 	    mtx.unlock();
-	    if(lnkOK) lnkOK = (rez=cntrIfCmd(*req,wuser)) != 10;
+	    if(lnkOK) lnkOK = (rez=cntrIfCmd(*req,wuser)) != TError::Tr_Connect;
 	    else {
 		req->childClear();
 		req->setAttr("mcat",mod->nodePath()+"/"+id.toStdString())->setAttr("rez",i2s(TError::Tr_Connect))->setText(_("No connection is established"));

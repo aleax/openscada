@@ -2,7 +2,7 @@
 //!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module UI.Tmpl file: module.h
 /***************************************************************************
- *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,9 +34,11 @@ using namespace OSCADA;
 //!!! OpenSCADA module's API includings. Add need for your module includings.
 #include <tuis.h>
 
-//!!! Individual module's translation function define. Not change it!
+//!!! Definition of the individual module translation functions. Do not change these!
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 //!!! All module's object's include into self (individual) namespace. Change namespace for your module.
 namespace ModTmpl
@@ -78,8 +80,8 @@ class TWEB: public TUI
     private:
 	//Methods
 	//!!! Registered your module's export functions.
-	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars );
-	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein );
+	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
+	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 
 	//!!! Module's comandline options for print help function.
 	string optDescr( );

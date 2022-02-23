@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -67,7 +67,7 @@ using namespace Phonon;
 #endif
 
 #undef _
-#define _(mess) mod->I18N(mess, lang().c_str())
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 
 using namespace OSCADA_QT;
 using namespace VISION;
@@ -86,7 +86,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 {
     QImage ico_t;
 
-    connect(this, SIGNAL(makeStarterMenu()), qApp, SLOT(makeStarterMenu()));
+    connect(this, SIGNAL(makeStarterMenu(QWidget*,const QString&)), qApp, SLOT(makeStarterMenu(QWidget*,const QString&)));
     setAttribute(Qt::WA_DeleteOnClose, true);
     mod->regWin(this);
 
@@ -226,7 +226,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
     //Create timers
     // End run timer
-    endRunTimer   = new QTimer(this);
+    endRunTimer = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(1e3*prmWait_DL);
@@ -240,7 +240,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     if(!s2i(SYS->cmdOpt("showWin"))) resize(600, 400);
 
     //Establish connection to the remote station
-    // !!!! Disable by default the requesting into different thread before resolve the mouse release event in the same widget processing the press event.
+    //?!?! Disabled by default for the requesting into different threads before resolving the mouse release event in the same widget processing the press event
     if(SYS->cmdOptPresent("ReqInDifThread")) initHost();
 
     initSess(prjSes_it, crSessForce);	//init session
@@ -308,22 +308,26 @@ VisRun::~VisRun( )
     QObjectList chLst = children();
     for(int iC = 0; iC < chLst.size(); iC++) {
 	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
-	if(cw)	delete cw;//cw->deleteLater();	//!!!! direct deleting due to this step is last one
+	if(cw)	delete cw;//cw->deleteLater();	//!!!! Direct deleting due to this step is the last one
     }
 }
 
-void VisRun::setFocus( const string &addr )
+void VisRun::setFocus( const string &addr, bool ack )
 {
-    if(focusWdf.size() && focusWdf == addr) return;
+    if(focusWdf == addr) return;
+
     XMLNode req("set");
+
     if(focusWdf.size()) {
 	req.setAttr("path", focusWdf+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id","focus")->setText("0");
 	req.childAdd("el")->setAttr("id","event")->setText("ws_FocusOut");
 	cntrIfCmd(req);
     }
-    focusWdf = addr;
-    req.clear()->setAttr("path", focusWdf+"/%2fserv%2fattr");
+
+    if(ack) focusWdf = addr;
+
+    req.clear()->setAttr("path", addr+"/%2fserv%2fattr");
     req.childAdd("el")->setAttr("id","focus")->setText("1");
     req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
     cntrIfCmd(req);
@@ -341,13 +345,13 @@ void VisRun::setWinMenu( bool act )
 	menuBar()->addMenu(&menuAlarm);
 	if(s2i(SYS->cmdOpt("showWin")) != 2) menuBar()->addMenu(&menuView);
 	menuBar()->addMenu(&menuHelp);
-	emit makeStarterMenu();
+	emit makeStarterMenu(NULL, lang().c_str());
     }
 }
 
 string VisRun::user( )		{ return mWUser->user(); }
 
-bool VisRun::userSel( const string &hint )	{ return mWUser->userSel(hint); }
+bool VisRun::userSel( const string &hint ) { return mWUser->userSel(hint); }
 
 string VisRun::password( )	{ return mWUser->pass(); }
 
@@ -355,7 +359,7 @@ string VisRun::VCAStation( )	{ return mWUser->VCAStation(); }
 
 int VisRun::style( )		{ return mStlBar->style(); }
 
-void VisRun::setStyle( int istl )		{ mStlBar->setStyle(istl); }
+void VisRun::setStyle( int istl ) { mStlBar->setStyle(istl); }
 
 void VisRun::initHost( )
 {
@@ -372,7 +376,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
     if(masterPg() && conErr && (!main || (time(NULL)-conErr->property("tm").toLongLong()) < conErr->property("tmRest").toInt())) {
 	if(main && conErr->property("labTmpl").toString().size())
 	    conErr->setText(conErr->property("labTmpl").toString().arg(conErr->property("tmRest").toInt()-(time(NULL)-conErr->property("tm").toLongLong())));
-	return 10;
+	return TError::Tr_Connect;
     }
 
     int rez = 0;
@@ -428,7 +432,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob, bool main )
 	}
     }
     //Remove the error message about the connection error
-    else if(rez != 10 && main && conErr) {
+    else if(rez != TError::Tr_Connect && main && conErr) {
 	if(masterPg()) conErr->deleteLater();
 	conErr = NULL;
 	updTmMax = planePer = 0;
@@ -691,17 +695,17 @@ void VisRun::printDiag( const string &idg )
 
 	// Draw trend's elements
 	XMLNode reqName("name");
-	for(unsigned i_e = 0; i_e < sD->prms.size(); i_e++) {
-	    QPoint pnt((i_e/elLine)*(pagl.width()/2),im.height()+fntSize*(2+i_e%elLine));
-	    if(sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid()) continue;
+	for(unsigned iE = 0; iE < sD->prms.size(); iE++) {
+	    QPoint pnt((iE/elLine)*(pagl.width()/2),im.height()+fntSize*(2+iE%elLine));
+	    if(sD->prms[iE].val().empty() || !sD->prms[iE].color().isValid()) continue;
 	    //  Trend name request
-	    reqName.setAttr("path",sD->prms[i_e].addr()+"/%2fserv%2fval");
-	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
+	    reqName.setAttr("path",sD->prms[iE].addr()+"/%2fserv%2fval");
+	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[iE].addr());
 
-	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[i_e].color()));
+	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[iE].color()));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
 	    painter.drawText(QRect(pnt.x()+fntSize,pnt.y(),pagl.width()/2,fntSize),Qt::AlignLeft,
-		QString("%1 [%2...%3]").arg(reqName.text().c_str()).arg(sD->prms[i_e].bordL()).arg(sD->prms[i_e].bordU()));
+		QString("%1 [%2...%3]").arg(reqName.text().c_str()).arg(sD->prms[iE].bordL()).arg(sD->prms[iE].bordU()));
 	}
 
 	painter.end();
@@ -965,7 +969,7 @@ void VisRun::exportDoc( const string &idoc )
 	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select a document to export."), _("Exporting a document"), false, false, lang().c_str());
 	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
-	    sdlg.edLay()->addWidget( spg, 2, 1 );
+	    sdlg.edLay()->addWidget(spg, 2, 1);
 	    for(unsigned iL = 0; iL < lst.size(); iL++)
 		if((rwdg=findOpenWidget(lst[iL])))
 		    spg->addItem((rwdg->name()+" ("+lst[iL]+")").c_str(),lst[iL].c_str());
@@ -1129,11 +1133,22 @@ void VisRun::exportTable( const string &itbl )
 
 void VisRun::about( )
 {
-    QMessageBox::about(this, windowTitle(),
-	QString(_("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11")).
-	arg(mod->modInfo("Name:"+lang()).c_str()).arg(mod->modInfo("Version").c_str()).arg(mod->modInfo("Description:"+lang()).c_str()).
-	arg(mod->modInfo("Author:"+lang()).c_str()).arg(mod->modInfo("License").c_str()).
-	arg(PACKAGE_NAME).arg(VERSION).arg(Mess->I18N(PACKAGE_DESCR,NULL,lang().c_str())).arg(PACKAGE_LICENSE).arg(Mess->I18N(PACKAGE_AUTHOR,NULL,lang().c_str())).arg(PACKAGE_SITE));
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(user()+"\n"+lang());
+
+    QString mess = _("%1 v%2.\n%3\nAuthor: %4\nLicense: %5\n\n"
+		     "%6 v%7.\n%8\nLicense: %9\nAuthor: %10\nWeb site: %11");
+
+#undef _
+#define _(mess) Mess->I18N(mess, lang().c_str()).c_str()
+
+    QMessageBox::about(this, windowTitle(), mess.
+	arg(_(mod->modInfo("Name"))).arg(mod->modInfo("Version").c_str()).arg(_(mod->modInfo("Description"))).
+	arg(_(mod->modInfo("Author"))).arg(mod->modInfo("License").c_str()).
+	arg(PACKAGE_NAME).arg(VERSION).arg(_(PACKAGE_DESCR)).arg(PACKAGE_LICENSE).arg(_(PACKAGE_AUTHOR)).arg(PACKAGE_SITE));
+
+#undef _
+#define _(mess) mod->I18N(mess, lang().c_str()).c_str()
 }
 
 void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
@@ -1151,10 +1166,13 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     else setWinMenu(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     int oldConId = mConId;
     mConId = s2i(req.attr("conId"));
-    req.clear()->setName("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
-    cntrIfCmd(req);
 
-    //Update pages after an user change
+    req.clear()->setName("CntrReqs")->setAttr("path","");
+    //req.childAdd("disconnect")->setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess())->setAttr("conId", i2s(oldConId));
+    req.childAdd("get")->setAttr("path","/ses_"+workSess()+"/%2fobj%2fcfg%2fstyle");
+    if(!cntrIfCmd(req)) setStyle(s2i(req.childGet(0)->text()));
+
+    //Update pages after the user change
     pgCacheClear();
     bool oldMenuVis = winMenu();
     QApplication::processEvents();
@@ -1193,7 +1211,7 @@ void VisRun::aboutQt( )		{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str
 void VisRun::fullScreen( bool vl )
 {
     setWindowState(vl?Qt::WindowFullScreen:Qt::WindowNoState);
-    //!!!! But switching to the WindowMaximized performs only through the WindowNoState
+    //!!!! But switching to the WindowMaximized is performed only through the WindowNoState
     if(!vl && s2i(SYS->cmdOpt("showWin"))) {
 	QCoreApplication::processEvents();
 	setWindowState(Qt::WindowMaximized);
@@ -1204,7 +1222,7 @@ void VisRun::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void VisRun::enterManual( )
 {
-    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString());
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString()+"\n"+lang());
     if(findDoc.size())	system(findDoc.c_str());
     else QMessageBox::information(this, _("Manual"),
 	QString(_("The manual '%1' was not found offline or online!")).arg(sender()->property("doc").toString()));
@@ -1304,8 +1322,8 @@ void VisRun::usrStatus( const string &val, RunPageView *pg )
 void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 {
     bool isSess = false;
-    src_prj = work_sess = "";
     string openPgs;
+    src_prj = work_sess = "";
 
     //Connect/create session
     int off = 0;
@@ -1373,7 +1391,7 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
     req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
     //req.childAdd("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
-    req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("tm","0")->setAttr("conId", i2s(mConId));
+    //req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("tm","0")->setAttr("conId", i2s(mConId));
     if(!cntrIfCmd(req)) {
 	// Title
 	XMLNode *pN = req.childGet(0);
@@ -1413,32 +1431,29 @@ void VisRun::initSess( const string &iprjSes_it, bool icrSessForce )
 	}
 
 	// Open pages list
-	pN = req.childGet(5);
+	//pN = req.childGet(5);
 	pgList.clear();
-	for(unsigned iCh = 0; iCh < pN->childSize(); iCh++) {
+	/*for(unsigned iCh = 0; iCh < pN->childSize(); iCh++) {
 	    pgList.push_back(pN->childGet(iCh)->text());
-	    callPage(pN->childGet(iCh)->text()/*, toRestore*/);
+	    callPage(pN->childGet(iCh)->text());
+	}*/
+	reqtm = 0;	//strtoul(pN->attr("tm").c_str(), NULL, 10);
+
+	//Open direct-selected page or openned before ones
+	if(openPgs.size()) {
+	    req.clear()->setName("CntrReqs")->setAttr("path", "/ses_"+work_sess);
+	    string pIt;
+	    for(int off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
+		req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
+	    if(!cntrIfCmd(req)) openPgs = "";
 	}
-	reqtm = strtoul(pN->attr("tm").c_str(), NULL, 10);
     }
 
-    //Open direct-selected page or openned before ones
-    if(openPgs.size()) {
-	req.clear()->setName("CntrReqs")->setAttr("path", "/ses_"+work_sess);
-	string pIt;
-	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
-	    req.childAdd("open")->setAttr("path","/%2fserv%2fpg")->setAttr("pg",pIt);
-	cntrIfCmd(req);
-	// Force call to prevent blinking
-	for(off = 0; (pIt=TSYS::strParse(openPgs,0,";",&off)).size(); )
-	    callPage(pIt);
-    }
-
-    QCoreApplication::processEvents();
+    //QCoreApplication::processEvents();
 
     //Start timer
     updTmMax = planePer = 0;
-    updateTimer->start(period());
+    updateTimer->start(/*period()*/);
 }
 
 void VisRun::fullUpdatePgs( )
@@ -1451,14 +1466,18 @@ void VisRun::fullUpdatePgs( )
     }
 }
 
-string	VisRun::lang( )
+string VisRun::lang( )
 {
-    try { return SYS->security().at().usrAt(user()).at().lang(); } catch(...) { }
-    return "";
+    return Mess->lang2Code(user(), true);
+
+    //try { return SYS->security().at().usrAt(user()).at().lang(); } catch(...) { }
+    //return "";
 }
 
 void VisRun::messUpd( )
 {
+    qApp->setProperty("lang", lang().c_str());	//For the Qt internal messages translation
+
     //setWindowTitle(_("Vision runtime"));
 
     //Close
@@ -1609,13 +1628,13 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     string pgSrc = (chN=req.getElementBy("path","/%2fattr%2fpgOpenSrc")) ? chN->text() : "";	//wAttrGet(pg_it, "pgOpenSrc");
 
     //Check for master page replace
-    if(!master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp) {
+    if(!master_pg || pgGrp == "main" || pgGrp.empty() || master_pg->pgGrp() == pgGrp) {
 	// Send close command
 	if(master_pg) {
 	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
 	    cntrIfCmd(req);
-	    //!!!! Without next rows the master page removing performs just into setWidget() of the scroll area
-	    ((QScrollArea *)centralWidget())->takeWidget();
+	    //!!!! Without the next rows the master page removing performs just into setWidget() of the scroll area
+	    ((QScrollArea*)centralWidget())->takeWidget();
 	    master_pg->deleteLater();
 	}
 
@@ -1648,14 +1667,18 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 	//master_pg->load("");
 	master_pg->setFocusPolicy(Qt::StrongFocus);
 	((QScrollArea *)centralWidget())->setWidget(master_pg);
-	if(!(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized))) {
+
+	if(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized))	x_scale = y_scale = 1.0;
+	resizeEvent(NULL);
+
+	/*if(!(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized))) {
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
 	    resize(vmin(master_pg->size().width()+10,ws.width()-10), vmin(master_pg->size().height()+55,ws.height()-10));
 	}
 	else {
 	    x_scale = y_scale = 1.0;
 	    resizeEvent(NULL);
-	}
+	}*/
     }
     //Put to check for include
     else master_pg->callPage(pg_it, pgGrp, pgSrc);
@@ -1894,9 +1917,25 @@ void VisRun::updatePage( )
 
 	// Process the opened pages
 	pgList.clear();
-	for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
-	    pgList.push_back(req.childGet(iCh)->text());
-	    callPage(req.childGet(iCh)->text(), s2i(req.childGet(iCh)->attr("updWdg")));
+	for(unsigned iCh = 0, iCh2 = 0; iCh < req.childSize(); ++iCh) {
+	    XMLNode *chN = req.childGet(iCh);
+	    pgList.push_back(chN->text());
+
+	    // Detection the double container pages and opening the last one
+	    if(chN->attr("pgGrp").size() && chN->attr("pgGrp") != "main" && chN->attr("pgGrp") != "fl") {
+		for(iCh2 = iCh+1; iCh2 < req.childSize(); ++iCh2)
+		    if(req.childGet(iCh2)->attr("pgGrp") == chN->attr("pgGrp"))
+			break;
+		if(iCh2 < req.childSize()) {
+		    //  Force closing lost opened and included pages
+		    XMLNode reqClose("close"); reqClose.setAttr("path","/ses_"+workSess()+"/%2fserv%2fpg")->setAttr("pg", chN->text());
+		    cntrIfCmd(reqClose);
+		    continue;
+		}
+	    }
+
+	    // Opening
+	    callPage(chN->text(), s2i(chN->attr("updWdg")));
 	}
     }
     // Restore closed session of used project.
@@ -1970,7 +2009,7 @@ void VisRun::updatePage( )
 }
 
 #undef _
-#define _(mess) mod->I18N(mess, owner()->lang().c_str())
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
 
 //* Notify: Generic notifying object.		 *
 //************************************************
@@ -2021,14 +2060,14 @@ VisRun::Notify::Notify( uint8_t itp, const string &ipgProps, VisRun *iown ) : pg
 	// Prepare an internal procedure
 	TFunction funcIO("sesRun_"+owner()->workSess()+"_ntf"+i2s(tp));
 	//funcIO.setStor(DB());
-	funcIO.ioIns(new IO("en",_("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
-	funcIO.ioIns(new IO("doNtf",_("Performing the notification, always 1"),IO::Boolean,IO::Default), IFA_doNtf);
-	funcIO.ioIns(new IO("doRes",_("Making the resource, always 0"),IO::Boolean,IO::Default), IFA_doRes);
-	funcIO.ioIns(new IO("res",_("Resource stream"),IO::String,IO::Output), IFA_res);
-	funcIO.ioIns(new IO("mess",_("Notification message"),IO::String,IO::Default), IFA_mess);
-	funcIO.ioIns(new IO("lang",_("Language of the notification message"),IO::String,IO::Default), IFA_lang);
-	funcIO.ioIns(new IO("resTp",_("Resource stream type"),IO::String,IO::Return), IFA_resTp);
-	funcIO.ioIns(new IO("prcID",_("Procedure ID"),IO::String,IO::Default), IFA_prcID);
+	funcIO.ioIns(new IO("en",trS("Enabled notification"),IO::Boolean,IO::Default), IFA_en);
+	funcIO.ioIns(new IO("doNtf",trS("Performing the notification, always 1"),IO::Boolean,IO::Default), IFA_doNtf);
+	funcIO.ioIns(new IO("doRes",trS("Making the resource, always 0"),IO::Boolean,IO::Default), IFA_doRes);
+	funcIO.ioIns(new IO("res",trS("Resource stream"),IO::String,IO::Output), IFA_res);
+	funcIO.ioIns(new IO("mess",trS("Notification message"),IO::String,IO::Default), IFA_mess);
+	funcIO.ioIns(new IO("lang",trS("Language of the notification message"),IO::String,IO::Default), IFA_lang);
+	funcIO.ioIns(new IO("resTp",trS("Resource stream type"),IO::String,IO::Return), IFA_resTp);
+	funcIO.ioIns(new IO("prcID",trS("Procedure ID"),IO::String,IO::Default), IFA_prcID);
 	try { comProc = SYS->daq().at().at("JavaLikeCalc").at().compileFunc("JavaScript", funcIO, props()); }
 	catch(TError &er) {
 	    mess_err((mod->nodePath()+"/sesRun_"+owner()->workSess()).c_str(), _("Error function of the notificator '%s': %s"),

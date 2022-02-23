@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,22 +46,23 @@ class IO
 	//Data
 	enum Type { String, Integer, Real, Boolean, Object };
 	enum IOFlgs {
-	    Default	= 0x00,	//Default mode (Input IO)
+	    Default	= 0x00,		//Default mode (Input IO)
 	    Output	= 0x01,
 	    Return	= 0x02,
 	    FullText	= 0x04,
-	    Selectable	= 0x08
+	    Selectable	= 0x08,
+	    TransltText	= 0x1000	//!!!! But TPrmTempl reserves the flags range [0x10...0x0800]
 	};
 
 	//Methods
-	IO( const char *id, const char *name, IO::Type type, unsigned flgs, const char *def = "",
+	IO( const char *id, const string &name, IO::Type type, unsigned flgs, const char *def = "",
 		bool hide = false, const char *rez = "" );
 	IO( const IO &src );
 
 	IO &operator=( const IO &iio );
 
 	const string &id( ) const	{ return mId; }
-	const string &name( ) const	{ return mName; }
+	string name( ) const		{ return _(mName); }
 	const Type &type( ) const	{ return mType; }
 	unsigned flg( ) const		{ return mFlg; }
 	const string &def( ) const	{ return mDef; }
@@ -136,7 +137,7 @@ class TFunction : public TCntrNode
 	virtual void preIOCfgChange( );
 	virtual void postIOCfgChange( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     protected:
 	//Methods
@@ -152,11 +153,11 @@ class TFunction : public TCntrNode
 	TValFunc	*mTVal;
 	vector<TValFunc*> used;
 	const char	*grp;
+	vector<IO*>	mIO;
 
     private:
 	//Attributes
 	ResRW		mFRes;
-	vector<IO*>	mIO;
 };
 
 //*************************************************

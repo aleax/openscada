@@ -4,7 +4,7 @@ Summary(ru_RU.UTF8): Открытая SCADA система
 Summary(uk_UA.UTF8): Відкрита SCADA система
 Summary(de_DE.UTF8): Open SCADA-System
 Name: openscada
-Version: 0.9.4
+Version: 0.9.5
 Release: 1
 Source: openscada-%version.tar.xz
 Source1: openscada-res-%version.tar.xz
@@ -1610,6 +1610,9 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 
 
 %changelog
+* Tue Feb 22 2022 Roman Savochenko <roman@oscada.org>
+- Update 5 of OpenSCADA 0.9 LTS.
+
 * Mon Jun 14 2021 Roman Savochenko <roman@oscada.org>
 - Update 4 of OpenSCADA 0.9 LTS.
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tuis.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@ using namespace OSCADA;
 //*************************************************
 //* TUIS                                          *
 //*************************************************
-TUIS::TUIS( ) : TSubSYS(SUI_ID,_("User Interfaces"), true)
+TUIS::TUIS( ) : TSubSYS(SUI_ID, true)
 {
 #if HAVE_GD_FORCE
     gdFTUseFontConfig(1);
@@ -78,16 +78,19 @@ string TUIS::icoGet( const string &inm, string *tp, bool retPath )
     return rez;
 }
 
-string TUIS::docGet( const string &inm, string *tp, unsigned opt )
+string TUIS::docGet( const string &iinm, string *tp, unsigned opt )
 {
     unsigned iTr = 0, iT = 0;
-    string rez, pathi, nm = TSYS::strParse(inm, 0, "|");
+    string rez, pathi,
+	inm = TSYS::strLine(iinm, 0),
+	lang = TSYS::strLine(iinm, 1),
+	nm = TSYS::strParse(inm, 0, "|");
     vector<string> transl;
 
     //Find the offline document on the filesystem
     int hd = -1;
     char types[][5] = {"pdf", "html", "odt"};
-    transl.push_back(""); transl.push_back(Mess->lang2Code()); transl.push_back("en");
+    transl.push_back(""); transl.push_back(lang.size()?lang:Mess->lang2Code()); transl.push_back("en");
 
     for(int off = 0; nm.size() && hd == -1 && (pathi=TSYS::strParse(SYS->docDir(),0,";",&off)).size(); )
 	for(iTr = 0; iTr < transl.size(); ++iTr) {

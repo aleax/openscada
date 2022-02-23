@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibComplex1 file: statfunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,13 +27,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"FLibComplex1"
-#define MOD_NAME	_("Complex1 functions")
+#define MOD_NAME	trS("Complex1 functions")
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"1.2.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides a library of the functions of compatibility with SCADA Complex 1 of the firm SIC \"DIYA\".")
+#define MOD_VER		"1.2.4"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides a library of the functions of compatibility with SCADA Complex 1 of the firm SIC \"DIYA\".")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -133,13 +133,13 @@ void Lib::modStop( )
     runSt = false;
 }
 
-TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant Lib::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
 {
     // ElTp {funcID}(ElTp prm1, ...) - the function {funcID} call
     //  prm{N} - {N} parameter to the function.
-    if(present(iid))	return at(iid).at().objFuncCall("call", prms, user);
+    if(present(id))	return at(id).at().objFuncCall("call", prms, user_lang);
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(id, prms, user_lang);
 }
 
 void Lib::cntrCmdProc( XMLNode *opt )

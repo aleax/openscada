@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-16 17:57+0300\n"
+"POT-Creation-Date: 2021-11-20 11:00+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -42,21 +42,25 @@ msgstr "Час відновлення, секунд"
 msgid "Depth time of restore data, hours"
 msgstr "Глибина часу відновлення даних, годин"
 
+msgid "Asynchronous writing"
+msgstr "Асинхронний запис"
+
 msgid "Level of requested messages"
 msgstr "Рівень запитуваних повідомлень"
 
 msgid ""
-"==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);"
-"Critical (5);Alert (6);Emergency (7)"
+"==Disable==;Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error "
+"(4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"
 msgstr ""
-"==Вимкнути==;Налагодження (0);Інформація (1);Зауваження (2);Попередження (3);"
-"Помилка (4);Критично (5);Тривога (6);Аварія (7)"
+"==Вимкнути==;Налагодження (0);Інформація (1[X]);Зауваження (2[X]);"
+"Попередження (3[X]);Помилка (4[X]);Критично (5[X]);Тривога (6[X]);Аварія "
+"(7[X])"
 
 msgid "Synchronization time with the remote station, seconds"
 msgstr "Період синхронізації з віддаленою станцією, секунд"
 
-msgid "Remote stations list"
-msgstr "Перелік віддалених станцій"
+msgid "Remote station"
+msgstr "Віддалена станція"
 
 msgid "List of the remote controller objects and parameters"
 msgstr "Перелік віддалених об'єктів контролерів та параметрів"
@@ -98,12 +102,19 @@ msgid "Spent time: %s[%s]. "
 msgstr "Витрачено часу: %s[%s]. "
 
 #, c-format
-msgid "Error the station '%s', restoring in %.3g s."
-msgstr "Помилка станції '%s', відновлення через %.6g с."
+msgid "Error '%s', restoring in %.3g s."
+msgstr "Помилка '%s', відновлення через %.3g с."
 
 #, c-format
-msgid "Requests to the station '%s': %.6g."
-msgstr "Запитів до станції '%s': %.6g."
+msgid "Requests to '%s': %.6g; "
+msgstr "Запитів до '%s': %.6g; "
+
+#, c-format
+msgid "read %g values, %g archive's, %g messages; "
+msgstr "прочитано %g значень, %g архівних, %g повідомлень; "
+
+msgid "wrote %g values, %g messages, in the buffer %d. "
+msgstr "записано %g значень, %g повідомлень, у буфері %d. "
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."
@@ -139,8 +150,28 @@ msgstr "Підключення до джерела даних '%s': %s."
 msgid "Station missed '%s'."
 msgstr "Станція відсутня '%s'."
 
+msgid ""
+"Manual restart of the enabled controller object causes the force resync at "
+"the sync period >= 0.\n"
+"Restart to refresh the removed source data configuration."
+msgstr ""
+"Ручний перезапуск ввімкненого об'єкту контролеру викликає примусову "
+"пересинхронізацію за періодом синхронізації >= 0.\n"
+"Перезапустіть щоб освіжити конфігурацію даних віддаленого джерела."
+
 msgid "Zero to disable the access to the remote archive."
 msgstr "Нуль для вимкнення доступу до віддаленого архіву."
+
+msgid ""
+"Enables of writing in the common acquisition cycle for the buffer of "
+"accumulated values, by one request.\n"
+"Useful for slow and not reliable networks-connections since the writing "
+"buffer stores data before the connection restore and the real writing."
+msgstr ""
+"Вмикає запис у загальному циклі опитування щодо буферу накопичених значень, "
+"одним запитом.\n"
+"Корисне для повільних та ненадійних мереж-підключень оскільки зберігає дані "
+"до відновлення підключення та реального запису."
 
 msgid ""
 "Zero to disable the periodic sync and -1 for the sync disabling at the start "
@@ -153,9 +184,6 @@ msgid "List of remote OpenSCADA station IDs used in this controller."
 msgstr ""
 "Перелік ідентифікаторів віддалених OpenSCADA станцій використаних у цьому "
 "контролері."
-
-msgid "Append station"
-msgstr "Додання станції"
 
 msgid "Go to configuration of the remote stations list"
 msgstr "Перехід до конфігурації переліку віддалених станцій"

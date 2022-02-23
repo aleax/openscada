@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 10:23+0300\n"
+"POT-Creation-Date: 2021-12-25 16:42+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -71,11 +71,15 @@ msgid "Library DB"
 msgstr "БД библиотеки"
 
 msgid ""
-"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the main working DB, set '*.*'."
+"Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the Generic Storage, set '*.*.{Table name}'."
 msgstr ""
-"Адрес БД в формате \"{Модуль БД}.{Имя БД}.{Имя таблицы}\".\n"
-"Для использования основной рабочей БД установить '*.*'."
+"Адрес хранилища в формате \"{Модуль БД}.{Имя БД}.{Имя Таблицы}\".\n"
+"Установить '*.*.{Имя Таблицы}' для использования Общего Хранилища."
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Удалить из '%s'"
 
 msgid "Date of modification"
 msgstr "Дата модификации"
@@ -101,11 +105,11 @@ msgstr "Иконка"
 msgid "Widgets"
 msgstr "Виджет"
 
-msgid "Mime data"
-msgstr "Mime данные"
+msgid "Resources"
+msgstr "Ресурсы"
 
-msgid "Mime type"
-msgstr "Mime тип"
+msgid "MIME"
+msgstr "MIME"
 
 msgid "Data"
 msgstr "Данные"
@@ -1265,6 +1269,19 @@ msgstr "Стр.: источник открытия"
 msgid "Page: group"
 msgstr "Стр.: группа"
 
+msgid ""
+"EMPTY and the \"main\" group is meant of using this page as the Root-main "
+"page, so such ones will replace other Root-main pages.\n"
+"The \"fl\" group is meant of using in the \"fly\" windows which are suitable "
+"for multiple open and must not be traced for doubles.\n"
+"All other are meant for including to the containers-boxes or single opening, "
+"so they forced in checking for doubles when the last one will be opened and "
+"the previous ones be closed."
+msgstr ""
+"ПУСТАЯ и \"main\" группа предусматривает использование этой страницы как Корневую-основную страницу, т.е. такая будет заменять другие Корневые-главные страницы.\n"
+"Группа \"fl\" предназначена для использования во внешних окнах, которые предусмотрены для многоразового одновременного открытия и которые не должны отслеживаться на дубликаты.\n"
+"Остальные предусмотрено для включения в контейнеры-боксы или одноразового одновременного открытия, т.е. они принудительно проверяются на дубликаты, когда последнее открывается, а предыдущие закрываются."
+
 #, c-format
 msgid "The project '%s' is used now by %d sessions!"
 msgstr "Проект '%s' используется %d сеансами!"
@@ -1492,8 +1509,8 @@ msgstr "Группа"
 msgid "Background execution mode"
 msgstr "Фоновый режим исполнения"
 
-msgid "Time of the session calculating"
-msgstr "Время вычисления сеанса"
+msgid "Counter, time of calculating"
+msgstr "Счётчик, время вычисления"
 
 msgid "Connections counter"
 msgstr "Счётчик подключений"
@@ -1562,6 +1579,10 @@ msgid ""
 msgstr "Ошибка компиляции функции '%s' на языке '%s' для виджета: %s"
 
 #, c-format
+msgid "Modification form %d, fix %d. "
+msgstr "Модификация формирование %d, фиксация %d. "
+
+#, c-format
 msgid "Processing at %s. "
 msgstr "Обработка в %s. "
 
@@ -1571,6 +1592,7 @@ msgstr "Затрачено времени на ветвь: "
 msgid "the item: "
 msgstr "элемент: "
 
+#, c-format
 msgid "It is a try of creating a widget in depth bigger to %d!"
 msgstr "Попытка создания виджета на глубину более %d!"
 
@@ -1580,6 +1602,9 @@ msgstr "События: %s"
 
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Ошибка вычисления виджета. Обработка отключена."
+
+msgid "Focus"
+msgstr "Фокус"
 
 msgid "Processing"
 msgstr "Обработка"
@@ -1595,6 +1620,9 @@ msgstr "Общий движок среды визуализации и упра�
 
 msgid "DB table"
 msgstr "Таблица БД"
+
+msgid "Resource data"
+msgstr "Данные ресурса"
 
 msgid "Parent widget"
 msgstr "Родительский виджет"
@@ -1647,6 +1675,7 @@ msgstr "Рабочий стиль"
 msgid "Flags"
 msgstr "Флаги"
 
+#, c-format
 msgid "Value %d"
 msgstr "Значение %d"
 
@@ -1997,16 +2026,6 @@ msgstr "Рабочая область"
 msgid "Calculation"
 msgstr "Вычисление"
 
-msgid "Procedure language"
-msgstr "Язык процедуры"
-
-msgid ""
-"Select the blank language to reset the widget procedure and language to the "
-"parent widget."
-msgstr ""
-"Выберите пустой язык для сброса процедуры и языка виджета к родительскому "
-"виджету."
-
 msgid "Period of the calculating, milliseconds"
 msgstr "Период вычисления, миллисекунд"
 
@@ -2016,6 +2035,16 @@ msgid ""
 msgstr ""
 "Используйте -1 (< 0) если желаете использования родительской периодичности "
 "вычисления виджета/страницы/проекта."
+
+msgid "Procedure language"
+msgstr "Язык процедуры"
+
+msgid ""
+"Select the blank language to reset the widget procedure and language to the "
+"parent widget."
+msgstr ""
+"Выберите пустой язык для сброса процедуры и языка виджета к родительскому "
+"виджету."
 
 msgid "Procedure"
 msgstr "Процедура"
@@ -2050,6 +2079,9 @@ msgstr "Вещественный"
 msgid "String"
 msgstr "Строка"
 
+msgid "String (translate)"
+msgstr "Строка (перевод)"
+
 msgid "Object"
 msgstr "Объект"
 
@@ -2061,6 +2093,9 @@ msgstr "Выбор вещественных чисел"
 
 msgid "Strings selection"
 msgstr "Выбор строк"
+
+msgid "Text (translate)"
+msgstr "Текст (перевод)"
 
 msgid "DateTime"
 msgstr "ДатаВремя"

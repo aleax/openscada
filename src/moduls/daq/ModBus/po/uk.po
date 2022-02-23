@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 11:45+0300\n"
+"POT-Creation-Date: 2022-02-16 16:20+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -81,9 +81,21 @@ msgstr "Значення"
 msgid "Task terminated! "
 msgstr "Завдання перервано! "
 
+msgid "No transport."
+msgstr "Немає транспорту."
+
+msgid "Empty transport."
+msgstr "Порожній транспорт."
+
+msgid "Error the transport."
+msgstr "Помилка транспорту."
+
+msgid "Error the connection."
+msgstr "Помилка з'єднання."
+
 #, c-format
-msgid "Error of connection. Restoring in %.6g s."
-msgstr "Помилка з'єднання. Відновлення через %.6g c."
+msgid "Restoring in %.6g s."
+msgstr "Відновлення через %.6g c."
 
 msgid "Acquisition. "
 msgstr "Збір. "
@@ -97,12 +109,24 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
-msgid ""
-"Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, "
-"%g coils. Errors of connection %g, of response %g."
-msgstr ""
-"Витрачено часу: %s[%s]. Прочитано %g(%g) регістрів, %g(%g) бітів. Записано "
-"%g регістрів, %g бітів. Помилок з'єднання %g, відповіді %g."
+msgid "Spent time: %s[%s]. "
+msgstr "Витрачено часу: %s[%s]. "
+
+#, c-format
+msgid "Read %g(%g) registers, %g(%g) coils. "
+msgstr "Прочитано %g(%g) регістрів, %g(%g) бітів. "
+
+#, c-format
+msgid "Wrote %g registers, %g coils. "
+msgstr "Записано %g регістрів, %g бітів. "
+
+#, c-format
+msgid "In the buffer %d. "
+msgstr "У буфері %d. "
+
+#, c-format
+msgid "Errors of connection %g, of response %g. "
+msgstr "Помилок з'єднання %g, відповіді %g. "
 
 #, c-format
 msgid "Connection to the data source: %s."
@@ -126,6 +150,15 @@ msgstr "НОРМА"
 #, c-format
 msgid "10:Generic error: %s."
 msgstr "10:Загальна помилка: %s."
+
+msgid ""
+"Manual restart of the enabled controller object causes the force reformation "
+"of the acquisition blocks.\n"
+"Restart to apply the removed PLC links in run."
+msgstr ""
+"Ручний перезапуск ввімкненого об'єкту контролеру викликає примусове "
+"переформування блоків збору.\n"
+"Перезапустіть для застосування видалених при виконанні посилань ПЛК."
 
 msgid "Default port of the ModuBus/TCP is 502."
 msgstr "Типовий порт ModuBus/TCP це 502."
@@ -300,7 +333,7 @@ msgid "Procedure"
 msgstr "Процедура"
 
 msgid "To output transport"
-msgstr "До виходного транспорту"
+msgstr "До вихідного транспорту"
 
 msgid "To protocol"
 msgstr "У протокол"
@@ -483,6 +516,10 @@ msgstr "Ввімкнено"
 msgid "DB"
 msgstr "БД"
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Видалити із '%s'"
+
 msgid "Configuration"
 msgstr "Конфігурація"
 
@@ -559,7 +596,7 @@ msgid "Turn off the node for this operation"
 msgstr "Вимкніть вузол для цієї операції"
 
 msgid "New IO"
-msgstr "Нове IO"
+msgstr "Новий ВВ"
 
 msgid "Deleting a locked attribute is not allowed."
 msgstr "Видалення замкненого атрибуту недозволено."
@@ -570,6 +607,9 @@ msgstr "Зміна замкненого атрибуту недозволено.
 msgid "Empty value is not allowed."
 msgstr "Порожнє значення недозволено."
 
+msgid "Client ModBus"
+msgstr "Клієнт ModBus"
+
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
@@ -579,6 +619,9 @@ msgid ""
 msgstr ""
 "Надає реалізацію клієнтського ModBus сервісу. Підтримуються Modbus/TCP, "
 "Modbus/RTU та Modbus/ASCII протоколи."
+
+msgid "Server ModBus"
+msgstr "Сервер ModBus"
 
 msgid ""
 "Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and "

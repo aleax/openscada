@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfgD file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,6 +22,7 @@
 #include <time.h>
 #include <string.h>
 #include <string>
+#include <algorithm>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -36,13 +37,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfgD"
-#define MOD_NAME	_("Program configurator (Dynamic WEB)")
+#define MOD_NAME	trS("Program configurator (Dynamic WEB)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.1.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
+#define MOD_VER		"2.2.5"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -193,24 +194,29 @@ void TWEB::imgConvert( SSess &ses, string &vl )
 #endif
 }
 
+bool TWEB::compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 )	{ return v1.name < v2.name; }
+
 void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, "");
+
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
 	string zero_lev = TSYS::pathLev(ses.url, 0);
 
 	//Get about module page
 	if(zero_lev == "about")	{	//getAbout(ses);
-	    page = pgCreator(iprt, "<table class='work'>\n"
-		" <tr><th><a href='"+TUIS::docGet("|" MOD_ID,NULL,TUIS::GetPathURL)+"'>" MOD_ID " v" MOD_VER "</a></th></tr>\n"
+	    string mess = "<table class='work'>\n"
+		" <tr><th><a href='"+TUIS::docGet("|Modules/" MOD_ID,NULL,TUIS::GetPathURL)+"'>" MOD_ID " v" MOD_VER "</a></th></tr>\n"
 		" <tr><td class='content'>\n"
 		"  <table border='0px' cellspacing='3px'>\n"
-		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(MOD_NAME) + "</TD></TR>\n"
-		"   <tr><td style='color: blue;'>" + _("Description: ") + "</td><td>" + _(DESCRIPTION) + "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" + _(LICENSE) + "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + _(AUTHORS) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(mod->modInfo("Name")) + "</TD></TR>\n"
+		"   <tr><td style='color: blue;'>" + _("Description: ") + "</td><td>" + _(mod->modInfo("Description")) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" + mod->modInfo("License") + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + _(mod->modInfo("Author")) +"</td></tr>\n"
 		"  </table>\n"
 		" </td></tr>\n"
 		"</table><br/>\n"
@@ -218,13 +224,21 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		" <tr><th>" PACKAGE " v" VERSION "</th></tr>\n"
 		" <tr><td class='content'>\n"
 		"  <table border='0' cellspacing='3px'>\n"
-		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>" + _(PACKAGE_DESCR) + "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>" PACKAGE_LICENSE "</td></tr>\n"
-		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>" + _(PACKAGE_AUTHOR) + "</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Name: ") + "</td><td>%s</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("License: ") + "</td><td>%s</td></tr>\n"
+		"   <tr><td style='color: blue;'>" + _("Author: ") + "</td><td>%s</td></tr>\n"
 		"   <tr><td style='color: blue;'>" + _("Web site: ") + "</td><td><a href='" PACKAGE_SITE "'>" PACKAGE_SITE "</a></td></tr>\n"
 		"  </table>\n"
 		" </td></tr>\n"
-		"</table><br/>\n", "200 OK");
+		"</table><br/>\n";
+
+#undef _
+#define _(mess) Mess->I18N(mess).c_str()
+
+	    page = pgCreator(iprt, TSYS::strMess(mess.c_str(),_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR)), "200 OK");
+
+#undef _
+#define _(mess) mod->I18N(mess).c_str()
 	}
 	//Get module icon and global image
 	else if(zero_lev == "ico" || zero_lev.substr(0,4) == "img_") {
@@ -235,7 +249,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 	}
 	else if(zero_lev == "doc") {
 	    XMLNode req(zero_lev); req.setText(TUIS::docGet("|"+TSYS::pathLev(ses.url,1),NULL,TUIS::GetPathURL));
-	    page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    page = pgCreator(iprt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
 	else {
 	    prmEl = ses.prm.find("com");
@@ -264,8 +278,8 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		else page = trMessReplace(WebCfgDVCA_html);
 		// User replace
 		size_t varPos = page.find("##USER##");
-		if(varPos != string::npos)
-		    page.replace(varPos, 8, TSYS::strMess("<span style=\"color: %s;\">%s</span>",((user=="root")?"red":"green"),user.c_str()));
+		if(varPos != string::npos) page.replace(varPos, 8,
+			TSYS::strMess("<span style=\"color: %s;\">%s</span>",((ses.user=="root")?"red":"green"),ses.user.c_str()));
 		// Charset replace
 		if((varPos=page.find("##CHARSET##")) != string::npos)
 		    page.replace(varPos, 11, Mess->charset());
@@ -290,10 +304,11 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		XMLNode req("chlds");
 		prmEl = ses.prm.find("grp");
 		string gbr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
-		// Get information about allow stations
+		// Getting information about the available stations
 		if(zero_lev.empty()) {
 		    vector<TTransportS::ExtHost> stls;
 		    SYS->transport().at().extHostList(ses.user, stls);
+		    sort(stls.begin(), stls.end(), compareHosts);
 		    stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 		    for(unsigned iSt = 0; iSt < stls.size(); iSt++) {
 			XMLNode *chN = req.childAdd("el")->setAttr("id",stls[iSt].id)->
@@ -304,7 +319,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 			else chN->setAttr("icoSize",i2s(reqIco.text().size()));
 			//  Process groups
 			XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
-			mod->cntrIfCmd(brReq,ses.user);
+			mod->cntrIfCmd(brReq, ses.user);
 			for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++) {
 			    XMLNode *chB = chN->childAdd();
 			    *chB = *brReq.childGet(0)->childGet(i_br);
@@ -316,12 +331,12 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		    req.setAttr("path",ses.url+"/%2fobj")->setAttr("grp",gbr)->setAttr("icoCheck","1");
 		    mod->cntrIfCmd(req, ses.user);
 		}
-		page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+		page = pgCreator(iprt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	    }
 	    else if(wp_com == "info" || wp_com == "get" || wp_com == "modify") {
 		XMLNode req(wp_com); req.setAttr("path", ses.url);
 		mod->cntrIfCmd(req, ses.user);
-		page = pgCreator(iprt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+		page = pgCreator(iprt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	    }
 	    else if(wp_com == "img") {
 		string itp = "png";
@@ -352,6 +367,9 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     map<string,string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page);
 
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
+
     //Commands process
     cntEl = ses.prm.find("com");
     string wp_com = (cntEl!=ses.prm.end()) ? cntEl->second : "";
@@ -359,13 +377,13 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     if(wp_com == "com") {
 	XMLNode req(""); req.load(ses.content); req.setAttr("path", ses.url);
 	mod->cntrIfCmd(req, ses.user);
-	page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Full request to control interface
     else if(wp_com == "req") {
 	XMLNode req(""); req.load(ses.content);
 	mod->cntrIfCmd(req, ses.user);
-	page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     else if(wp_com == "img") {
 	if((cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty()) {
@@ -377,12 +395,12 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     else if(wp_com == "copy") {
 	XMLNode req("");
 	req.load(ses.content); req.setAttr("path", ses.url);
-	string	statNmSrc = TSYS::pathLev(req.attr("statNmSrc"), 0, true),
-		statNm = TSYS::pathLev(req.attr("statNm"), 0, true);
+	string	statNmSrc = TSYS::pathLev(req.attr("statNmSrc"), 0),
+		statNm = TSYS::pathLev(req.attr("statNm"), 0);
 
 	if(req.attr("statNm") == req.attr("statNmSrc")) {
 	    mod->cntrIfCmd(req, ses.user);
-	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
 	else {
 	    req.setAttr("rez", "0");
@@ -406,7 +424,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 		    if(mod->cntrIfCmd(reqExt,ses.user)) req.setAttr("rez", reqExt.attr("rez"))->setText(reqExt.text());
 		}
 	    }
-	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    page = pgCreator(iprt, req.save(XMLNode::XMLHeader|XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
     }
 }
@@ -463,7 +481,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //* SSess                                         *
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
+    url(iurl), sender(isender), user(TSYS::strLine(iuser,0)), content(icontent), vars(ivars)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");
@@ -476,6 +494,13 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
     }
 
+    //Get language
+    for(size_t iVr = 0; iVr < vars.size(); iVr++)
+	if(TSYS::strParse(vars[iVr],0,":") == "oscd_lang") {
+	    lang = sTrm(TSYS::strParse(vars[iVr],1,":"));
+	    break;
+	}
+
     //Content parse
     string boundary;
     const char *c_bound = "boundary=";
@@ -485,11 +510,11 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_name = "name=\"";
     const char *c_file = "filename=\"";
 
-    for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 &&
-		(pos=vars[i_vr].find(c_bound,0)) != string::npos) {
+    for(size_t iVr = 0, pos = 0; iVr < vars.size() && boundary.empty(); iVr++)
+	if(vars[iVr].compare(0,vars[iVr].find(":",0),"Content-Type") == 0 &&
+		(pos=vars[iVr].find(c_bound,0)) != string::npos) {
 	    pos += strlen(c_bound);
-	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
+	    boundary = vars[iVr].substr(pos,vars[iVr].size()-pos);
 	}
     if(boundary.empty()) return;
 
@@ -527,9 +552,6 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
@@ -537,19 +559,10 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-string TWEB::modInfo( const string &iname )
+string TWEB::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
 
     return TModule::modInfo(name);
 }

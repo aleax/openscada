@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 10:30+0300\n"
+"POT-Creation-Date: 2022-01-05 21:11+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -178,6 +178,9 @@ msgstr "Verbunden"
 
 msgid "Disconnected"
 msgstr "Getrennt"
+
+msgid "Ready"
+msgstr "Fertig"
 
 #, c-format
 msgid "%s %s-developing: %s"
@@ -867,9 +870,6 @@ msgstr "Dock-Fenster des Inspektors der Widget-Attribute."
 msgid "Dock window of the inspector ot the widget links."
 msgstr "Dock-Fenster des Inspektors der Widget-Links."
 
-msgid "Ready"
-msgstr "Fertig"
-
 msgid "Icons size"
 msgstr "Icons Größe"
 
@@ -1071,14 +1071,14 @@ msgstr "Zugang:"
 msgid "Period of the calculating, milliseconds:"
 msgstr "Zeitraum der Berechnung, Millisekunden:"
 
-msgid "Mime data"
-msgstr "Mime Angaben"
+msgid "Resources"
+msgstr "Ressourcen"
 
 msgid "Identifier"
 msgstr "Identifikator"
 
-msgid "Mime type"
-msgstr "Mime Typ"
+msgid "MIME"
+msgstr "MIME"
 
 msgid "Data size"
 msgstr "Datengrösse"

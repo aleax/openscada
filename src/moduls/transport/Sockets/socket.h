@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,7 +26,9 @@
 #include <ttransports.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 #define S_NM_SOCK	"SOCK"
 #define S_NM_TCP	"TCP"
@@ -108,7 +110,7 @@ class TSocketIn: public TTransportIn
 
 	void start( );
 	void stop( );
-	void check( );			//Some periodic tests and checkings like initiative connection and assigned to that output transports
+	void check( );			//Some periodic tests and checkings like the initiative connection
 	int writeTo( const string &sender, const string &data );
 	unsigned forksPerHost( const string &sender );
 
@@ -242,14 +244,14 @@ class TTransSock: public TTypeTransport
 	TTransSock( string name );
 	~TTransSock( );
 
+	void perSYSCall( unsigned int cnt );
+
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
 	string outAddrHelp( );
 	string outTimingsHelp( );
 	string outAttemptsHelp( );
-
-	void perSYSCall( unsigned int cnt );
 
     protected:
 	void load_( );

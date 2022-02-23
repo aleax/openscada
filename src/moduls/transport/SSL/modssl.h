@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.h
 /***************************************************************************
- *   Copyright (C) 2008-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,9 @@
 #include <ttransports.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 struct CRYPTO_dynlock_value
 {
@@ -81,6 +83,7 @@ class TSocketIn: public TTransportIn
 	unsigned keepAliveReqs( )  { return mKeepAliveReqs; }
 	unsigned keepAliveTm( )	{ return mKeepAliveTm; }
 	int taskPrior( )	{ return mTaskPrior; }
+	string certKeyFile( )	{ return mCertKeyFile; }
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
 
@@ -90,11 +93,14 @@ class TSocketIn: public TTransportIn
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vl; modif(); }
 	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vl; modif(); }
 	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(199,vl)); modif(); }
+	void setCertKeyFile( const string &val ){ mCertKeyFile = val; modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 
 	void start( );
 	void stop( );
+	void check( unsigned int cnt );	//Some periodic tests and checkings like to the certificate file update
+					//?!?! and the initiative connection
 
 	unsigned forksPerHost( const string &sender );
 
@@ -129,7 +135,7 @@ class TSocketIn: public TTransportIn
 			mKeepAliveReqs,		//KeepAlive connections
 			mKeepAliveTm;		//KeepAlive timeout
 	int		mTaskPrior;		//Requests processing task prioritet
-	string		mCertKey,		//SSL certificate
+	string		mCertKeyFile, mCertKey,	//SSL certificate file and PEM-text
 			mKeyPass;		//SSL private key password
 
 	bool		clFree;			//Clients stopped
@@ -138,7 +144,7 @@ class TSocketIn: public TTransportIn
 	map<string, int> clS;			//Clients (senders) counters
 
 	// Status atributes
-	string		stErr;			//Last error messages
+	string		stErrMD5;		//Last error messages or certificate file MD5
 	uint64_t	trIn, trOut;		//Traffic in and out counter
 	float		prcTm, prcTmMax;
 	int		connNumb, connTm, clsConnByLim;	//Close connections by limit
@@ -155,11 +161,13 @@ class TSocketOut: public TTransportOut
 
 	string getStatus( );
 
+	string certKeyFile( )	{ return mCertKeyFile; }
 	string certKey( )	{ return mCertKey; }
 	string pKeyPass( )	{ return mKeyPass; }
 	string timings( )	{ return mTimings; }
 	unsigned short attempts( )	{ return mAttemts; }
 
+	void setCertKeyFile( const string &val ){ mCertKeyFile = val; modif(); }
 	void setCertKey( const string &val )	{ mCertKey = val; modif(); }
 	void setPKeyPass( const string &val )	{ mKeyPass = val; modif(); }
 	void setTimings( const string &vl, bool isDef = false );
@@ -180,8 +188,8 @@ class TSocketOut: public TTransportOut
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	string		mCertKey,		// SSL certificate
-			mKeyPass;		// SSL private key password
+	string		mCertKeyFile, mCertKey,	//SSL certificate file and PEM-text
+			mKeyPass;		//SSL private key password
 	string		mTimings;
 	unsigned short	mAttemts,
 			mTmCon,
@@ -206,12 +214,16 @@ class TTransSock: public TTypeTransport
 	TTransSock( string name );
 	~TTransSock( );
 
+	void perSYSCall( unsigned int cnt );
+
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
 	string outAddrHelp( );
 	string outTimingsHelp( );
 	string outAttemptsHelp( );
+
+	string MD5( const string &file );
 
     protected:
 	void load_( );

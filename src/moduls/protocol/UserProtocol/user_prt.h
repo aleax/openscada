@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.h
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +27,9 @@
 #include <tprotocols.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::map;
@@ -93,9 +95,9 @@ class UserPrt : public TCntrNode, public TConfig, public TPrmTempl::Impl
 
 	string getStatus( );
 
-	string DB( ) const		{ return mDB; }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const;
-	string fullDB( ) const	{ return DB()+'.'+tbl(); }
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &name )	{ cfg("NAME").setS(name); }
 	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
@@ -109,7 +111,7 @@ class UserPrt : public TCntrNode, public TConfig, public TPrmTempl::Impl
 	void setOutProgLang( const string &ilng );
 	void setOutProg( const string &iprg );
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	bool inMess( const string &reqst, string &answer, TProtIn *prt );
 	void outMess( XMLNode &io, TTransportOut &tro );

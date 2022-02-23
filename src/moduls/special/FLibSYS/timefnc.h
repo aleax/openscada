@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: timefnc.h
 /***************************************************************************
- *   Copyright (C) 2005-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,9 +36,9 @@ class tmFStr : public TFunction
 {
     public:
 	tmFStr( ) : TFunction("tmFStr",SSPC_ID) {
-	    ioAdd(new IO("val",_("Date and time string"),IO::String,IO::Return,""));
-	    ioAdd(new IO("sec",_("Seconds"),IO::Integer,IO::Default,"0"));
-	    ioAdd(new IO("form",_("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S"));
+	    ioAdd(new IO("val",trS("Date and time string"),IO::String,IO::Return,""));
+	    ioAdd(new IO("sec",trS("Seconds"),IO::Integer,IO::Default,"0"));
+	    ioAdd(new IO("form",trS("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S"));
 	}
 
 	string name( )	{ return _("Time: String time"); }
@@ -61,16 +61,16 @@ class tmDate : public TFunction
 {
     public:
 	tmDate( ) : TFunction("tmDate",SSPC_ID) {
-	    ioAdd(new IO("fullsec",_("Full seconds"),IO::Integer,IO::Default,"0"));
-	    ioAdd(new IO("sec",_("Seconds [0...59]"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("min",_("Minutes [0...59]"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("hour",_("Hours [0...23]"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("mday",_("Day of the month [1...31]"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("month",_("Month [0...11]"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("year",_("Year, from 1900"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("wday",_("Day of the week [0...6]"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("yday",_("Day of the year [0...365]"),IO::Integer,IO::Output,"0"));
-	    ioAdd(new IO("isdst",_("Daylight saving time"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("fullsec",trS("Full seconds"),IO::Integer,IO::Default,"0"));
+	    ioAdd(new IO("sec",trS("Seconds [0...59]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("min",trS("Minutes [0...59]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("hour",trS("Hours [0...23]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("mday",trS("Day of the month [1...31]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("month",trS("Month [0...11]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("year",trS("Year, from 1900"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("wday",trS("Day of the week [0...6]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("yday",trS("Day of the year [0...365]"),IO::Integer,IO::Output,"0"));
+	    ioAdd(new IO("isdst",trS("Daylight saving time"),IO::Integer,IO::Output,"0"));
 	}
 
 	string name( )	{ return _("Time: Date and time"); }
@@ -100,8 +100,8 @@ class tmTime : public TFunction
 {
     public:
 	tmTime( ) : TFunction("tmTime",SSPC_ID) {
-	    ioAdd(new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0"));
-	    ioAdd(new IO("usec",_("Microseconds"),IO::Integer,IO::Output,"-1"));
+	    ioAdd(new IO("sec",trS("Seconds"),IO::Integer,IO::Return,"0"));
+	    ioAdd(new IO("usec",trS("Microseconds"),IO::Integer,IO::Output,"-1"));
 	}
 
 	string name( )	{ return _("Time: Time"); }
@@ -124,9 +124,9 @@ class tmStr2Tm : public TFunction
 {
     public:
 	tmStr2Tm( ) : TFunction("tmStrPTime",SSPC_ID) {
-	    ioAdd(new IO("sec",_("Seconds"),IO::Integer,IO::Return,"0"));
-	    ioAdd(new IO("str",_("Date and time string"),IO::String,IO::Default,""));
-	    ioAdd(new IO("form",_("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S"));
+	    ioAdd(new IO("sec",trS("Seconds"),IO::Integer,IO::Return,"0"));
+	    ioAdd(new IO("str",trS("Date and time string"),IO::String,IO::Default,""));
+	    ioAdd(new IO("form",trS("Date and time format"),IO::String,IO::Default,"%Y-%m-%d %H:%M:%S"));
 	}
 
 	string name( )	{ return _("Time: String to time"); }
@@ -147,9 +147,9 @@ class tmCron : public TFunction
 {
     public:
 	tmCron( ) : TFunction("tmCron",SSPC_ID) {
-	    ioAdd(new IO("res",_("Result, seconds"),IO::Integer,IO::Return,"0"));
-	    ioAdd(new IO("str",_("CRON"),IO::String,IO::Default,"* * * * *"));
-	    ioAdd(new IO("base",_("Base time, seconds"),IO::Integer,IO::Default,"0"));
+	    ioAdd(new IO("res",trS("Result, seconds"),IO::Integer,IO::Return,"0"));
+	    ioAdd(new IO("str",trS("CRON"),IO::String,IO::Default,"* * * * *"));
+	    ioAdd(new IO("base",trS("Base time, seconds"),IO::Integer,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Time: Schedule time at CRON"); }
@@ -165,8 +165,8 @@ class tmSleep : public TFunction
 {
     public:
 	tmSleep( ) : TFunction("tmSleep",SSPC_ID) {
-	    ioAdd(new IO("res",_("Result"),IO::Integer,IO::Return,"0"));
-	    ioAdd(new IO("tm",_("Time, seconds"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("res",trS("Result"),IO::Integer,IO::Return,"0"));
+	    ioAdd(new IO("tm",trS("Time, seconds"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Time: sleep"); }

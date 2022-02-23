@@ -2,7 +2,7 @@
 //!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module DAQ.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,12 +38,12 @@
 //*************************************************
 //* Module info!                                  *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	_("DAQ template")
+#define MOD_NAME	trS("DAQ template")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"0.0.1"
-#define AUTHORS		_("MyName MyFamily")
-#define DESCRIPTION	_("DAQ's subsystem template module.")
+#define AUTHORS		trS("MyName MyFamily")
+#define DESCRIPTION	trS("DAQ's subsystem template module.")
 #define LICENSE		"MyLicense"
 //*************************************************
 
@@ -124,14 +124,14 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     //!!! Append here your's PLC specific configuration field stored into DB
 
     //Parameter types and it's bd structure form
-    int tPrm = tpParmAdd("std", "PRM_BD", _("Standard")/*, true*/);	//!!! Set "true" here for hierarchically parameters
-    tpPrmAt(tPrm).fldAdd(new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
+    int tPrm = tpParmAdd("std", "PRM_BD", trS("Standard")/*, true*/);	//!!! Set "true" here for hierarchically parameters
+    tpPrmAt(tPrm).fldAdd(new TFld("OID_LS",trS("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
     //!!! Append here your's source object (parameters) types and it's specific configuration field stored into DB
 }
 

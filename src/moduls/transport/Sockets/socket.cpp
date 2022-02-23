@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,12 +58,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"Sockets"
-#define MOD_NAME	_("Sockets")
+#define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.2"
-#define AUTHORS		_("Roman Savochenko, Maxim Kochetkov")
-#define DESCRIPTION	_("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
+#define MOD_VER		"4.3.7"
+#define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov")
+#define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
 //************************************************
 
@@ -111,8 +111,8 @@ void TTransSock::postEnable( int flag )
     TModule::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	owner().inEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-	owner().outEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().inEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().outEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
     }
 }
 
@@ -433,7 +433,10 @@ void TSocketIn::stop( )
     runSt = false;
 
     shutdown(sockFd, SHUT_RDWR);
-    close(sockFd);
+
+    if(close(sockFd) == 0) sockFd = -1;
+    else mess_err(nodePath().c_str(), _("Closing the socket '%d' error '%s (%d)'!"), sockFd, strerror(errno), errno);
+
     if(type == SOCK_UNIX) remove(path.c_str());
 
     TTransportIn::stop();
@@ -444,7 +447,7 @@ void TSocketIn::stop( )
 void TSocketIn::check( )
 {
     try {
-	//Check for activity for initiative mode
+	//Check for activity the initiative mode
 	if(mode() == 2 && (toStart() || startStat()) && (!startStat() || time(NULL) > (lastConn()+keepAliveTm()))) {
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reconnect due to lack of input activity to '%s'."), addr().c_str());
 	    if(startStat()) stop();
@@ -487,11 +490,11 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 		if(wL == 0) { mess_err(nodePath().c_str(), _("Write: the answer is zero byte.")); break; }
 		else if(wL < 0) {
 		    if(errno == EAGAIN) {
-			tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
+			tv.tv_sec = 1; tv.tv_usec = 0;		//?!?! Where get the time?
 			FD_ZERO(&rw_fd); FD_SET(sId, &rw_fd);
 			int kz = select(sId+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(sId,&rw_fd)) { wL = 0; continue; }
-			//!!!! Maybe some flush !!!!
+			//?!?! Maybe some flush
 		    }
 		    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 		    break;
@@ -803,11 +806,11 @@ void *TSocketIn::ClTask( void *s_inf )
 		    if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: the answer is zero byte.")); break; }
 		    else if(wL < 0) {
 			if(errno == EAGAIN) {
-			    tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
+			    tv.tv_sec = 1; tv.tv_usec = 0;		//?!?! Where get the time?
 			    FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
 			    kz = select(s.sock+1, NULL, &rw_fd, NULL, &tv);
 			    if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
-			    //!!!! May be some flush !!!!
+			    //?!?! Maybe some flush
 			}
 			string err = TSYS::strMess(_("Write: error '%s (%d)'."), strerror(errno), errno);
 			if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("Error transmitting: %s"),err.c_str()));
@@ -1437,7 +1440,7 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), err.c_str());
 		    if(logLen()) pushLogMess(err.c_str());
 		    if(writeReq) {
-			//!!!! For the force socket, the initial input connection, we must keep the connection up to the last
+			//!!!! For the force sockets, the initial input connection, we must keep the connection up to the last
 			if(type == SOCK_FORCE) {
 			    if(reqTry >= wAttempts) stop();
 			    else goto repeate;

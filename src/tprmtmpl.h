@@ -50,6 +50,7 @@ class TPrmTempl: public TFunction, public TConfig
 	    CfgConst	= 0x040,	//Configure as a constant
 	    CfgLink	= 0x080,	//Configure as a link
 	    LockAttr	= 0x100		//Lock attribute
+					//!!!! Reserves up to 0x800 and 0x1000 is already used by TFunction::IO
 	};
 
 	// Object of implementations of the DAQ templates
@@ -137,7 +138,7 @@ class TPrmTempl: public TFunction, public TConfig
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods
@@ -162,26 +163,28 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string	id( )		{ return mId; }
+	string	id( ) const			{ return mId; }
 	string	name( );
 	string	descr( );
 
-	string	DB( )		{ return work_lib_db; }
-	string	tbl( )		{ return cfg("DB").getS(); }
-	string	fullDB( )	{ return DB()+'.'+tbl(); }
+	bool isStdStorAddr( ) const		{ return (tbl() == ("tmplib_"+id())); }	//????[v1.0] Remove
+	string	DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string	tbl( ) const			{ return cfg("DB").getS().empty() ? ("tmplib_"+id()) : cfg("DB").getS(); }
+	string	fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	bool startStat( ) const	{ return runSt; }
 	void start( bool val );
 
 	void setName( const string &vl );
 	void setDescr( const string &vl );
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 	void setFullDB( const string &vl );
 
 	void list( vector<string> &ls ) const		{ chldList(m_ptmpl,ls); }
 	bool present( const string &id ) const		{ return chldPresent(m_ptmpl,id); }
 	AutoHD<TPrmTempl> at( const string &id ) const	{ return chldAt(m_ptmpl,id); }
 	void add( const string &id, const string &name = "" );
-	void del( const string &id, bool full_del = false )	{ chldDel(m_ptmpl,id,-1,full_del); }
+	void del( const string &id, bool full_del = false )	{ chldDel(m_ptmpl,id, -1, full_del?NodeRemove:NodeNoFlg); }
 
 	TDAQS &owner( ) const;
 
@@ -196,7 +199,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	void load_( TConfig *cfg );
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods
@@ -206,7 +209,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	bool	runSt;
 	int	m_ptmpl;
 	TCfg	&mId;
-	string	work_lib_db;
+	string	mDB;
 };
 
 }

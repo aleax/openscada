@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/HTTP</h1>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-реалізація
 </td>
-<td> 3.6 </td>
+<td> 3.8 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -62,13 +62,13 @@
 <ul><li> Правила доступу для заборони та дозволу. Кожний рядок є окремим правилом та Ви можете використовувати шаблони, на кшталт "*/WebVision/*", або регулярні вирази, на кшталт "/[^/]+/WebVision/.+/". Корисні записи для:
 <ul><li> Заборонено:
 <ul><li> "*/WebCfgD/*" — <a href="../Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">модуль WebCfgD</a> цілком;</li>
-<li> "*/WebVision/*tmplSO/*" — проект СВУ "tmplSO" <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a>.</li></ul></li>
+<li> "*/WebVision/*tmplSO/*" — проєкт СВУ "tmplSO" <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a>.</li></ul></li>
 <li> Дозволено:
 <ul><li> "*" — все, виключаючи заборонене;</li>
 <li> "/^[^/]+/[^/]*$/" — сторінки модуля з усіма їх ресурсами;</li>
 <li> "*/login/*" — сторінка авторизації-входу;</li>
-<li> "/^[^/]+/WebVision/[^/]*($|\?)/" — основна сторінка <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a> без доступу до проектів СВУ;</li>
-<li> "/^[^/]+/WebVision/.+_aviariesOril\d*/.*/" — проект СВУ "aviariesOril" <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a>.</li></ul></li></ul></li>
+<li> "/^[^/]+/WebVision/[^/]*($|\?)/" — основна сторінка <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a> без доступу до проєктів СВУ;</li>
+<li> "/^[^/]+/WebVision/.+_aviariesOril\d*/.*/" — проєкт СВУ "aviariesOril" <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">модуля WebVision</a>.</li></ul></li></ul></li>
 <li> HTML-шаблон користувацького інтерфейсу та користувацької головної сторінки. У полях HTML-шаблону має вказуватися адреса до файлу HTML/XHTML, який буде використано у формуванні внутрішніх-сервісних інтерфейсів та головної сторінки. Внутрішні-сервісні інтерфейси, це наприклад: обрання модулів, сторінка авторизації та подібне у WEB-модулів. Від шаблону вимагається коректність XHTML, яка дозволяє розібрати файл XML-парсером, а також наявність мітки "#####CONTEXT#####" у місці розташування динамічного вмісту, що обов'язково для внутрішніх-сервісних інтерфейсів. Ресурсні файли шаблонів представлено зображеннями, CSS та JavaScript файлами, та які шукаються від теки у якій вказано розташування файлу шаблону та від поточної теки. Для іншого, до мови, файлу шаблону, Ви можете додати суфікс мови у кінець цього файлу "{Мій Шаблон}_{мова}.html", але обирати у конфігураційних полях основний-базовий файл шаблону "{Мій Шаблон}.html". У випадку виявлення помилок у шаблоні, буде використано стандартний вбудований інтерфейс. У якості прикладу шаблонів Ви можете подивитися такі найбільш вживані:
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada.html.gz" title="File:HTTP webopenscada.html.gz">Шаблон внутрішнього-сервісного інтерфейсу та головної сторінки, включаючи індекс модулів</a>.</li>
 <li> <a class="external" href="http://oscada.org/wiki/File:HTTP_webopenscada_main.html.gz" title="File:HTTP webopenscada main.html.gz">Шаблон головної сторінки</a> із прямим посиланням на головний інтерфейс <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">АГЛКС</a> за допомогою модуля <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">UI.WebVision</a> та без індексу WEB-модулів.</li>
@@ -103,7 +103,7 @@
 <dd><i>page</i> — сторінка з відповіддю;</dd>
 <dd><i>sender</i> — адреса відправника;</dd>
 <dd><i>vars</i> — змінні запиту;</dd>
-<dd><i>user</i> — користувач;</dd>
+<dd><i>user</i> — користувач, може містити попереднього користувача у другому рядку;</dd>
 <dd><i>iprt</i> — посилання на об'єкт вхідної частини протоколу.</dd></dl></dd></dl>
 <ul><li> <b>void HTTP_POST(const string &amp;url, string &amp;page, vector&lt;string&gt; &amp;vars, const string &amp;user, TProtocolIn *iprt);</b> АБО</li></ul>
 <dl><dd><b>void HttpPost( const string &amp;url, string &amp;page, const string &amp;sender, vector&lt;string&gt; &amp;vars, const string &amp;user );</b> — метод POST з параметрами:
@@ -111,7 +111,7 @@
 <dd><i>page</i> — сторінка з відповіддю та вмістом тіла запиту POST;</dd>
 <dd><i>sender</i> — адреса відправника;</dd>
 <dd><i>vars</i> — змінні запиту;</dd>
-<dd><i>user</i> — користувач;</dd>
+<dd><i>user</i> — користувач, може містити попереднього користувача у другому рядку;</dd>
 <dd><i>iprt</i> — посилання на об'єкт вхідної частини протоколу.</dd></dl></dd></dl>
 <p>Надалі, у випадку надходження HTTP запиту "GET" буде викликатися функція "HTTP_GET" або "HttpGet", а у випадку запиту "POST" буде викликатися функція "HTTP_POST" або "HttpPost", у відповідному модулі UI.
 </p>
@@ -220,5 +220,5 @@ SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/uk">Modules/HTTP/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/HTTP/uk">Modules/HTTP/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,10 @@
 
 #include "widget.h"
 
-#define DIS_SES_TM 30*60
+#define DIS_SES_TM	30*60	//Session disable inactivity timeout
+#define CLK_NO_ALL	0	//Clock of no changes for objects and all selection for requests
+#define CLK_START	10	//Starting numberg of the calculation clock
+#define CLK_OLD		600	//Clock number meant as old and specified to remove
 
 namespace VCA
 {
@@ -62,7 +65,7 @@ class Session : public TCntrNode
 	bool	backgrnd( )	{ return mBackgrnd; }		//Background session execution
 	int	connects( )	{ return mConnects; }		//Connections counter
 	time_t	reqTm( )	{ return mReqTm; }		//Last request time from client
-	unsigned &calcClk( )	{ return mCalcClk; }		//Calc clock
+	uint16_t &calcClk( )	{ return mCalcClk; }		//Calc clock
 	AutoHD<Project> parent( ) const;
 	int	stlCurent( )	{ return mStyleIdW; }
 
@@ -76,18 +79,19 @@ class Session : public TCntrNode
 	void setEnable( bool val );
 	void setStart( bool val );
 	void setBackgrnd( bool val )		{ mBackgrnd = val; }
-	int connect( );
+	int connect( bool recon = false );
 	void disconnect( int conId = 0 );
 	void stlCurentSet( int sid = Project::StlMaximum );
 
-	bool modifChk( unsigned int tm, unsigned int iMdfClc, bool isCnt = false );
+	bool clkChkModif( unsigned clkFrom, unsigned clkCh );
+	uint16_t clkPairPrc( uint32_t &pair, bool set = false );
 
 	// Pages
 	void list( vector<string> &ls ) const		{ chldList(mPage,ls); }
 	bool present( const string &id ) const		{ return chldPresent(mPage,id); }
 	AutoHD<SessPage> at( const string &id ) const;
 	void add( const string &id, const string &parent = "" );
-	void del( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
+	void del( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full?NodeRemove:NodeNoFlg); }
 
 	vector<string> openList( );
 	bool openCheck( const string &id );
@@ -117,11 +121,11 @@ class Session : public TCntrNode
 
     protected:
 	//Methods
-	const char *nodeName( ) const		{ return mId.c_str(); }
-	const char *nodeNameSYSM( ) const	{ return mId.c_str(); }
+	const char *nodeName( ) const	{ return mId.c_str(); }
+	string nodeNameSYSM( ) const	{ return mId; }
 	void cntrCmdProc( XMLNode *opt );				//Control interface command process
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	void postEnable( int flag );
 	void preDisable( int flag );
@@ -138,19 +142,19 @@ class Session : public TCntrNode
 		class QueueIt {
 		    public:
 			//Methods
-			QueueIt( const string &ipath, uint8_t ilev, const string &icat, const string &imess,
-				const string &itpArg = "", unsigned iclc = 0 ) :
-			    lev(ilev), quietance(false), path(ipath), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
+			QueueIt( const string &iaddr, uint8_t ilev, const string &icat, const string &imess,
+				const string &itpArg = "", uint16_t iclc = 0 ) :
+			    lev(ilev), quietance(false), addr(iaddr), cat(icat), mess(imess), tpArg(itpArg), clc(iclc)	{ }
 			QueueIt( ) : lev(0), quietance(false)	{ }
 
 			//Attributes
 			uint8_t	lev;		//Level
 			bool	quietance;	//Quitance
-			string	path,		//Widget path
+			string	addr,		//Widget address
 				cat,		//Category
 				mess,		//Message
 				tpArg;		//Type argument
-			unsigned clc;		//Clock
+			uint16_t clc;		//Clock
 		};
 
 		//Methods
@@ -163,7 +167,7 @@ class Session : public TCntrNode
 		string	props( );
 
 		void ntf( int alrmSt );	//Same notify for the alarm status
-		string ntfRes( unsigned &tm, string &wpath, string &resTp, string &mess, string &lang );	//The notification resource request
+		string ntfRes( uint16_t &tm, string &wpath, string &resTp, string &mess, string &lang );	//The notification resource request
 
 		void queueSet( const string &wpath, const string &alrm );
 		void queueQuietance( const string &wpath, uint8_t quitTmpl, bool ret = false );	//Notification quietance send
@@ -198,7 +202,7 @@ class Session : public TCntrNode
 
 		vector<QueueIt>	mQueue;
 		int	mQueueCurNtf;
-		unsigned mQueueCurTm;
+		uint16_t mQueueCurTm;
 		string	mQueueCurPath;
 
 		ResMtx	dataM;
@@ -223,7 +227,7 @@ class Session : public TCntrNode
 	int	mConnects;			//Connections counter
 	map<int, bool> mCons;			//Identifiers of the connections
 
-	unsigned	mCalcClk;		//Calc clock
+	uint16_t	mCalcClk;		//Calc clock
 	time_t		mReqTm, mUserActTm;	//Time of request and user action
 	AutoHD<Project>	mParent;
 
@@ -250,7 +254,7 @@ class SessWdg : public Widget, public TValFunc
 	~SessWdg( );
 
 	// Main parameters
-	string	path( ) const;
+	string	addr( ) const;
 	string	ownerFullId( bool contr = false ) const;
 	string	type( )		{ return "SessWidget"; }
 	string	ico( ) const;
@@ -266,7 +270,7 @@ class SessWdg : public Widget, public TValFunc
 
 	virtual void prcElListUpdate( );
 	virtual void calc( bool first, bool last, int pos = 0 );
-	void getUpdtWdg( const string &path, unsigned int tm, vector<string> &els );
+	void getUpdtWdg( const string &path, uint16_t tm, vector<string> &els );
 
 	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on the inherit
@@ -285,7 +289,7 @@ class SessWdg : public Widget, public TValFunc
 	virtual void alarmQuietance( uint8_t quit_tmpl, bool isSet = false, bool ret = false );
 
 	// Access to mime resource
-	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const;
 	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	SessWdg  *ownerSessWdg( bool base = false ) const;
@@ -315,21 +319,22 @@ class SessWdg : public Widget, public TValFunc
 	void cntrCmdProc( XMLNode *opt );			//Control interface command process
 	bool attrChange( Attr &cfg, TVariant prev );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
-	unsigned int modifVal( Attr &cfg );
+	uint32_t wModif( Attr *a = NULL );
+	void setWModif( Attr *a = NULL );
 
 	//Attributes
 	unsigned	mProc	: 1;
 	unsigned	inLnkGet: 1;
 	unsigned	mToEn	: 1;
 
-	unsigned int	&mCalcClk;
+	uint16_t	&mCalcClk;
 
     private:
 	//Attributes
 	string		mWorkProg;
-	unsigned int	mMdfClc;
+	uint32_t	mMdfClc;
 	ResMtx		mCalcRes;
 
 	vector<string>	mWdgChldAct,	//Active childs widget's list
@@ -348,8 +353,8 @@ class SessPage : public SessWdg
 	SessPage( const string &id, const string &page, Session *sess );
 	~SessPage( );
 
-	string	path( ) const;
-	string	path( bool orig ) const;
+	string	addr( ) const;
+	string	addr( bool orig ) const;
 	string	type( )		{ return "SessPage"; }
 	string	getStatus( );
 
@@ -366,7 +371,7 @@ class SessPage : public SessWdg
 	bool pagePresent( const string &id ) const		{ return chldPresent(mPage, id); }
 	AutoHD<SessPage> pageAt( const string &id ) const;
 	void pageAdd( const string &id, const string &parent = "" );
-	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
+	void pageDel( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full?NodeRemove:NodeNoFlg); }
 
 	//  The access redirection for the links
 	void chldList( int8_t igr, vector<string> &list, bool noex = false, bool onlyEn = true ) const;
@@ -403,7 +408,7 @@ class SessPage : public SessWdg
 	unsigned mPage		: 4;		//Pages container identifier
 	unsigned mClosePgCom	: 1;
 	unsigned mDisMan	: 1;		//Disable the page enabling at request by it's disabling in manual
-	unsigned int	mCalcClk_;
+	uint16_t	mCalcClk_;
 	ResMtx	mFuncM;
 	MtxString pathAsOpen, pathToClose;
 };

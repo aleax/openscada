@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/ModBus</h1>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.1 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -50,7 +50,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -177,7 +177,7 @@
 <h4><span class="mw-headline" id=".D0.A0.D0.B5.D0.B6.D0.B8.D0.BC_.22.D0.94.D0.B0.D0.BD.D0.BD.D1.8B.D0.B5.22"><span class="mw-headline-number">2.2.1</span> Режим "Данные"</span></h4>
 <p>Режим используется для отражения данных OpenSCADA на массивы регистров и битов ModBus. Общая конфигурация узла осуществляется во вкладке "Узел" (рис.2) параметрами:
 </p>
-<ul><li> Состояние узла, а именно: статус, "Включен" и имя БД, содержащей конфигурацию.</li>
+<ul><li> Состояние узла, а именно: статус, "Включен" и имя БД, содержащей конфигурацию, с отслеживанием наличия данных в различных хранилищах и предоставлением последовательного удаления дубликатов.</li>
 <li> Идентификатор, имя и описание узла.</li>
 <li> Состояние "Включен", в которое переводить узел при загрузке.</li>
 <li> Адрес узла сети ModBus от 1 до 247.</li>
@@ -274,8 +274,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:857px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr_ru.png"><img class="thumbimage" height="837" src="../files/ModBus_cntr_ru.png" width="855" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфигурации объекта контроллера.</div></div></div></div>
 <p>С помощью этой вкладки можно установить:
 </p>
-<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", "Выполняется" и имя БД, содержащей конфигурацию.</li>
-<li> Идентификатор, имя и описание контроллера.</li>
+<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", "Выполняется" и имя БД, содержащей конфигурацию.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Ручной перезапуск включенного объекта контроллера вызывает принудительное переформирование блоков сбора.</dd></dl>
+<ul><li> Идентификатор, имя и описание контроллера.</li>
 <li> Состояние "Включен" и "Выполняется", в которое переводить объект контроллера при загрузке.</li>
 <li> Имя таблиц хранения конфигурации параметров контроллера стандартного и логического типа.</li>
 <li> Политика планирования и приоритет задачи сбора данных.</li>
@@ -290,19 +291,19 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <ul><li> Время ожидания соединения в миллисекундах. Указывает промежуток времени, в течение которого ожидать ответа. В случае указания нулевого значения используется время ожидания по умолчанию в транспорте. Позволяет учитывать индивидуальные свойства контроллера в общей сети.</li>
 <li> Время восстановления соединения в секундах. Указывает промежуток времени, по истечению которого осуществлять повторную попытку запроса к ранее недоступному устройству.</li>
 <li> Попыток запроса для протоколов RTU и ASCII. Указывает на количество попыток повторения запроса в случае получения неполного или повреждённого ответа.</li>
-<li> Максимальный размер блока запроса (байты). Устанавливает максимальный размер блока групповых запросов регистров и битов, в байтах. Полезен для контроллеров с подобным ограничением.</li></ul>
+<li> Максимальный размер блока запроса в байтах, полезен для контроллеров с таким ограничением.</li></ul>
 <h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">3.2</span> Параметры</span></h3>
 <p>Модуль сбора данных предоставляет два типа параметра: "Стандартный (std)" и "Логический (logic)". Дополнительными конфигурационными полями параметров данного модуля являются:
 </p>
 <ul><li> <i><b>Стандартный (std)</b></i>:
-<ul><li> <i>Перечень атрибутов</i> — содержит структурированный список конфигурации атрибутов ModBus.</li></ul></li>
+<ul><li> <i>Перечень атрибутов</i> — содержит структурированный список конфигурации атрибутов ModBUS.</li></ul></li>
 <li> <i><b>Логический (logic)</b></i>:
 <ul><li> <i>Шаблон параметра</i> — адрес шаблона параметра DAQ.</li></ul></li></ul>
 <h4><span class="mw-headline" id=".D0.A1.D1.82.D0.B0.D0.BD.D0.B4.D0.B0.D1.80.D1.82.D0.BD.D1.8B.D0.B9_.28std.29"><span class="mw-headline-number">3.2.1</span> Стандартный (std)</span></h4>
 <p>Главная страница конфигурации параметра стандартного типа представлена на рисунке 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_ru.png"><img class="thumbimage" height="659" src="../files/ModBus_prm_ru.png" width="633" /></a>  <div class="thumbcaption">Рис.9. Вкладка конфигурации параметра стандартного типа.</div></div></div></div>
-<p>Атрибут, в параметре списка атрибутов, записывается следующим образом: <b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>.<br />
+<p>Линия атрибута в параметре списка атрибутов записывается как "<b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>".<br />
 Где:
 </p>
 <ul><li> <i>dt</i> — тип данных ModBus ("R"—регистр[3,6(16)], "C"—бит[1,5(15)], "RI"—регистр входа[4], "CI"—бит входа[2]);</li></ul>
@@ -319,7 +320,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <dd>"R_i4:400,300:r:int32:Int32" — получить int32 из регистров 400 и 300;</dd>
 <dd>"R_b10:25:r:rBit:Reg bit", "R_b:25.10:r:rBit:Reg bit" — получить бит 10 из регистра 25;</dd>
 <dd>"R_s:15,20:r:str:Reg blk" — получить строку (блок регистров) из регистра 15 и размером 20.</dd></dl>
-<p>Строка, которая начинается с символа '#', считается комментарием и не обрабатывается.
+<p>Линия, которая начинается с символа '#', считается комментарием и не обрабатывается.
 </p><p>В соответствии с указанным списком атрибутов выполняется опрос и создание атрибутов параметра (рис.10).
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_atr_ru.png"><img class="thumbimage" height="533" src="../files/ModBus_prm_atr_ru.png" width="633" /></a>  <div class="thumbcaption">Рис.10. Вкладка атрибутов параметра стандартного типа.</div></div></div></div>
@@ -327,8 +328,8 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <p>Главная страница конфигурации параметра логического типа представлена на рисунке 11.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm_ru.png"><img class="thumbimage" height="533" src="../files/ModBusLog_prm_ru.png" width="711" /></a>  <div class="thumbcaption">Рис.11. Вкладка конфигурации параметра логического типа.</div></div></div></div>
-<p>Значение ссылки, при конфигурации шаблона (рис.12), записывается в формате:
-<b>{dt}:{numb}[:{flg}]</b>.<br />
+<p>Значение ссылки при конфигурации шаблона (рис.12) записывается в форме
+"<b>{dt}:{numb}[:{flg}]</b>".<br />
 Где:
 </p>
 <ul><li> <i>dt</i> — тип данных ModBus ("R"—регистр[3,6(16)], "C"—бит[1,5(15)], "RI"—регистр входа[4], "CI"—бит входа[2]);</li></ul>
@@ -381,5 +382,5 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

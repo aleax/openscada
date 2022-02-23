@@ -213,16 +213,9 @@ ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl"), forceStl(NULL)
 
 }
 
-void ShapeFormEl::init( WdgView *w )
-{
-    w->shpData = new ShpDt();
-    new QVBoxLayout(w);
-}
+void ShapeFormEl::init( WdgView *w )	{ w->shpData = new ShpDt(); new QVBoxLayout(w); }
 
-void ShapeFormEl::destroy( WdgView *w )
-{
-    delete (ShpDt*)w->shpData;
-}
+void ShapeFormEl::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
 bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
@@ -581,7 +574,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 			bool isH = false;
 			QTableWidgetItem *hit = NULL, *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
-			if(!isH && (int)iR >= wdg->rowCount()) { wdg->setRowCount(iR+1); if(!wdg->rowCount()) toReFit = true; }
+			if(!isH && (int)iR >= wdg->rowCount()) { wdg->setRowCount(iR+1); toReFit = true; }	//!!!! Column width must be refitted at adding rows also
 			if(!isH && tR) { rClr = tR->attr("color"); rClrTxt = tR->attr("colorText"); rFnt = tR->attr("font"); rPrec = tR->attr("prec"); }
 			for(unsigned iC = 0, iCR = 0, iCh1 = 0; (tR && iCh1 < tR->childSize()) ||
 								    (int)iC < wdg->columnCount(); iCh1++)
@@ -1225,7 +1218,7 @@ void ShapeFormEl::buttonReleased( )
 		    mod->postMess(mod->nodePath().c_str(),
 			QString(_("Error writing the data to the file '%1': %2")).arg(fn).arg(file.errorString()), TVision::Error);
 	    }
-	    //!!!! Clear the attribute "value". But it can be spare for multiple connections to one session.
+	    //!!!! Clearing the attribute "value", but it can be spare for multiple connections to one session.
 	    w->attrSet("value", "", A_NO_ID, true);
 	    break;
 	}
@@ -1416,7 +1409,7 @@ void ShapeFormEl::setFocus( WdgView *w, QWidget *wdg, bool en, bool devel )
     //Process childs
     for(int iC = 0; iC < wdg->children().size(); iC++)
 	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
-	    setFocus(w,(QWidget*)wdg->children().at(iC),en,devel);
+	    setFocus(w, (QWidget*)wdg->children().at(iC), en, devel);
 }
 
 //************************************************
@@ -1660,6 +1653,7 @@ ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 void ShapeMedia::init( WdgView *w )
 {
     w->shpData = new ShpDt();
+
     new QVBoxLayout(w);
 }
 
@@ -4001,7 +3995,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	int trcPer = shD->trcPer*1e6;
 	if(shD->tTimeCurent && trcPer && shD->valArch.empty() &&
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd()) < 2*arh_per
-		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Cause to uneven call for current and archive
+		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Causes to uneven call for current and archive
 	{
 	    XMLNode req("get");
 	    req.setAttr("path", addr()+"/%2fserv%2fval")->
@@ -4524,7 +4518,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    break;
     }
     sort(sortIts.begin(), sortIts.end());
-    if(shD->viewOrd&0x4) reverse(sortIts.begin(),sortIts.end());
+    if(shD->viewOrd&0x4) reverse(sortIts.begin(), sortIts.end());
 
     //Write to the table
     shD->addrWdg->setRowCount(sortIts.size());
@@ -4702,10 +4696,7 @@ void ShapeDocument::init( WdgView *w )
     lay->addWidget(shD->web);
 }
 
-void ShapeDocument::destroy( WdgView *w )
-{
-    delete (ShpDt*)w->shpData;
-}
+void ShapeDocument::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
 bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val, const string &attr )
 {
@@ -4854,7 +4845,7 @@ void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
     //Process childs
     for(int iC = 0; iC < wdg->children().size(); iC++)
 	if(qobject_cast<QWidget*>(wdg->children().at(iC)))
-	    setFocus(view,(QWidget*)wdg->children().at(iC),en,devel);
+	    setFocus(view,(QWidget*)wdg->children().at(iC), en, devel);
 }
 
 //Shape node date
@@ -5075,8 +5066,12 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 			shD->inclScrl->setWidget(shD->inclPg);
 			shD->inclPg->setEnabled(true);
 			shD->inclPg->setVisible(true);
+
+			//!!!! In any case complete reload the page due to the possibility of the last changes loss at the closing
+			shD->inclPg->load("");
+
 			//shD->inclPg->setMinimumSize(w->size());
-			if(shD->inclPg->wx_scale != shD->inclPg->mainWin()->xScale() ||
+			/*if(shD->inclPg->wx_scale != shD->inclPg->mainWin()->xScale() ||
 				shD->inclPg->wy_scale != shD->inclPg->mainWin()->yScale())
 			    shD->inclPg->load("");
 			else {
@@ -5084,7 +5079,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 			    shD->inclPg->mainWin()->setReqTm(shD->inclPg->reqTm());
 			    shD->inclPg->update(false);
 			    shD->inclPg->mainWin()->setReqTm(trt);
-			}
+			}*/
 		    }
 		    else {
 			shD->inclPg = new RunPageView(val, (VisRun*)w->mainWin(), shD->inclScrl, Qt::SubWindow);

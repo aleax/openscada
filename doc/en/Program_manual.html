@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
@@ -86,15 +86,16 @@
 <li class="toclevel-2 tocsection-32"><a href="#Subsystem_.22User_interfaces.22"><span class="tocnumber">4.7</span> <span class="toctext">Subsystem "User interfaces"</span></a></li>
 <li class="toclevel-2 tocsection-33"><a href="#Subsystem_.22Specials.22"><span class="tocnumber">4.8</span> <span class="toctext">Subsystem "Specials"</span></a></li>
 <li class="toclevel-2 tocsection-34"><a href="#Subsystem_.22Modules_scheduler.22"><span class="tocnumber">4.9</span> <span class="toctext"><span>Subsystem "Modules scheduler"</span></span></a></li>
-<li class="toclevel-2 tocsection-35"><a href="#Configuration_file_and_command_line_parameters"><span class="tocnumber">4.10</span> <span class="toctext"><span>Configuration file and command line parameters</span></span></a></li>
+<li class="toclevel-2 tocsection-35"><a href="#Configuration_File_and_command_line_parameters"><span class="tocnumber">4.10</span> <span class="toctext"><span>Configuration File and command line parameters</span></span></a></li>
 </ul>
 </li>
 <li class="toclevel-1 tocsection-36"><a href="#Startup_and_execution"><span class="tocnumber">5</span> <span class="toctext"><span>Startup and execution</span></span></a>
 <ul>
 <li class="toclevel-2 tocsection-37"><a href="#OpenSCADA_projects"><span class="tocnumber">5.1</span> <span class="toctext"><span>OpenSCADA projects</span></span></a></li>
+<li class="toclevel-2 tocsection-38"><a href="#Execution_the_ready_OpenSCADA_project_in_the_service-background_space"><span class="tocnumber">5.2</span> <span class="toctext"><span>Execution the ready OpenSCADA project in the service-background space</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-38"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-39"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -133,7 +134,7 @@
 <p>The subsystem "DAQ" (Data Acquisition) (Fig.1.3) provides to support dynamic data sources whether: PLC, MOD, virtual sources and other. The function of this subsystem is to provide the received data in structured form — <b>the data model</b> and to provide management of these data, for example, these are data modification.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:309px;"><a class="image" href="http://oscada.org/wiki/File:Oscada_subsys_daq_str.png"><img class="thumbimage" height="335" src="files/Oscada_subsys_daq_str.png" width="307" /></a>  <div class="thumbcaption">Fig. 1.3. Hierarchical structure of the subsystem "DAQ".</div></div></div></div>
-<p>The subsystem "DAQ" is a modular one and it contains modular objects of types of sources of dynamic data. For example OpenSCADA provides now more than twenty <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">modules</a> and <a class="new" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Libs/Generic_list" title="Special:MyLanguage/Libs/Libs/Generic list (page does not exist)">library items</a> by <a class="new" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Special:MyLanguage/Documents/DAQ" title="Special:MyLanguage/Libs/Special:MyLanguage/Documents/DAQ (page does not exist)">sources of the logical level</a>. Most significant and developed from them are:
+<p>The subsystem "DAQ" is a modular one and it contains modular objects of types of sources of dynamic data. For example, OpenSCADA provides now more than twenty <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">modules</a> and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs/Generic_list" title="Special:MyLanguage/Libs/Generic list">library items</a> by <a href="DAQ.html#UserPrt" title="Special:MyLanguage/Documents/DAQ">sources of the logical level</a>. Most significant and developed from them are:
 </p>
 <ul><li> <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">Java-like based calculator</a>;</li>
 <li> <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">Logical level</a>;</li>
@@ -143,15 +144,15 @@
 <li> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>;</li>
 <li> <a href="Modules/DCON.html" title="Special:MyLanguage/Modules/DCON">DCON client</a>;</li>
 <li> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">Client OPC-UA</a>;</li>
+<li> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens DAQ</a>;</li>
 <li> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/MMS" title="Special:MyLanguage/Modules/MMS">MMS(IEC-9506)</a>;</li>
 <li> <a href="Modules/SNMP.html" title="Special:MyLanguage/Modules/SNMP">SNMP client</a>;</li>
 <li> <a href="Modules/ICP_DAS.html" title="Special:MyLanguage/Modules/ICP DAS">ICP DAS hardware</a>;</li>
-<li> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens DAQ</a>;</li>
 <li> <a href="Modules/DiamondBoards.html" title="Special:MyLanguage/Modules/DiamondBoards">Diamond DAQ boards</a>.</li></ul>
 <p>Each non-logical source type is implemented into a separate module, which can contain many sources (controller objects), and each source is usually executed in a separate thread-task.
 </p><p>Separately taken object controller may contain parameters specified by module types. For example, the parameters of the analog type, the basic information of which is the value of the integer or the real type. Structurally, the parameter is a list of attributes that contain data. Attributes can have five basic types: logical, integer, real, character string (text) and object. Structures of controller objects, parameters and their types are contained in the subsystem "DAQ" so that the module objects carry out their filling in accordance with their own specifics.
 </p><p>Certain types of data sources themselves can generate data as they generate them entirely, as well as processing physical data, and even <a href="DAQ.html#UserPrt" title="Special:MyLanguage/Documents/DAQ">fully implement the gathering of these data into OpenSCADA environment</a> and its internal language. Such data sources are called logical. Fully logical data sources are represented by modules:
-<a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> and <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>. There are several modules that combine logical data as a result of direct physical ones processing: <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> and <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>.
+<a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> and <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a>. There are several modules that combine logical data as a result of direct physical ones processing: <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> and <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a>.
 </p><p>Dynamic data sources can be remote, that is, they can be generated or received at the remote OpenSCADA station. To communicate with such data sources, the <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> gateway module is used. The function of this type of data sources is to display the data sources of the remote OpenSCADA station to the local one.
 </p><p>You can read in detail the key subsystem "DAQ" and its functions in a separate document "<a href="DAQ.html" title="Special:MyLanguage/Documents/DAQ">Data acquisition in OpenSCADA</a>".
 </p>
@@ -180,34 +181,53 @@
 </p>
 <ul><li> logs, to store debugging information and other working information of servers;</li>
 <li> different protocols (users action protocol, protocol of violations and exceptions, messages protocol ...).</li></ul>
+<p>There are 8 message levels, but each of these levels, from 1 (first), can be extended by sublevels, ie actually be a group of 10 sublevels by simply adding a number after the basic level, for example, 5 is the basic level and 50...59 is an extension of level 5. Which sets the total number of levels at 80. The seven main levels have names, and correspondence to what is desirable to follow:
+</p>
+<ul><li> <b>0</b> — Debug;</li>
+<li> <b>1[X]</b> — Information;</li>
+<li> <b>2[X]</b> — Notice;</li>
+<li> <b>3[X]</b> — Warning;</li>
+<li> <b>4[X]</b> — Error;</li>
+<li> <b>5[X]</b> — Critical;</li>
+<li> <b>6[X]</b> — Alert;</li>
+<li> <b>7[X]</b> — Emergency.</li></ul>
 <p>In accordance with the nature of messages and violations the subsystem "Archives-History" contains a buffer of current violations, which contains these most actual ones with category of the messages as the key-ID. Access to the buffer-list of current violations is done by indicating the negative value of the message level. Thus, formation of a message with a negative level -2 causes the location of this message in the buffer of active violations with level 2, as well as duplicate it directly in the message archive (the general messages buffer). At forming a message in the same category, but at a positive level — say 1, this violation will be removed from the buffer of violations, and the message will also fall into the message archive (the general messages buffer). Such a mechanism allows simultaneous accounting of active violations and logging of their passage in the message archive. When requesting an archive of messages, the definition of the positive level requests the archive of messages (through the general messages buffer), and the negative to the buffer-list of current violations.
 </p><p>The strict structure of the category and the text of the message is not intended, and the user can create them for their own messages arbitrarily, but account should be taken of the structure of system messages and messages defined by <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Libs" title="Special:MyLanguage/Libs">standard OpenSCADA libraries</a> to prevent intersection with them, or targeting expanding:
 </p>
 <ul><li> <b>System</b>, are generates by the OpenSCADA objects-nodes:</li></ul>
 <dl><dd> CATEGORY: defines a typical path to the message node, for example — "/sub_DAQ/mod_LogicLev/cntr_gen/", where:
-<ul><li> "/*/*" — the typical template-sign of a system message based on a delimiter character of a path element that can be directly used in the category filter to determine only the <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">system message archive</a>.</li></ul></dd>
+<ul><li> "/*/*" — the typical template-sign of a system message based on a delimiter character of a path element that can be directly used in the category filter to determine only the <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png" title="File:QTCfg subsys arch mod ma main.png">system message archive</a>.</li></ul></dd>
 <dd> TEXT: contains the path of the name of the message node and the same message in the format "<b>{NodeNmPath}: {message}</b>", for example — "AGLKS &gt; Data Acquisition &gt; LogicLev &gt; gen: Controller starting.".</dd></dl>
-<ul><li> <b>Transferred</b>, messages that was received from the hierarchically lower station of OpenSCADA (like PLC):</li></ul>
-<dl><dd> CATEGORY: the controller object ID of the module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a> is added to the start of the received message category, for example — "loop:alModBus:testTCP", where:
-<ul><li> "loop:*" — the typical template-sign of a remote message based on the controller object identifier of the DAQ.DAQGate module that can be directly used in the category filter to determine only the <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">remote message archive of this source</a>.</li></ul></dd></dl>
-<ul><li> <b>Violations</b>, are generated by the data source or its procedures using the function <i>alarmSet()</i> of <a href="API.html#TController" title="Special:MyLanguage/Documents/API">the OpenSCADA API</a> and <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">the User API</a>:</li></ul>
-<dl><dd> CATEGORY: defines the ID-address of the source in the format "<b>al{ModId}:{CntrId}[.{PrmId}]</b>", for example — "alLogicLev:gen.F_PP1", where:
-<ul><li> "al*" — the typical template-sign of a violation message based on the first two characters of the word "alarm", which can be directly used in the category filter to determine only <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">the archive of violations</a>;</li>
+<ul><li> <b>Transferred</b>, messages that were received from the hierarchically lower stations of OpenSCADA (like PLC) or sent by the higher stations:</li></ul>
+<dl><dd> CATEGORY: the controller object ID of the module <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a> is added to the start of the received message category, for example — "loop:alModBus:testTCP" or "TopStat(DAQCntr):alModBus:testTCP", where:
+<ul><li> "loop:*" — the typical template-sign of the remote lower messages based on the controller object identifier of <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">the DAQ.DAQGate module</a> that can be directly used in the category filter to determine only the <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png" title="File:QTCfg subsys arch mod ma main.png">remote message archive of this source</a>;</li>
+<li> "TopStat(DAQCntr):*" — the typical template-sign of the remote higher messages based on the higher station project name (or ID) <i>TopStat</i> and the controller object identifier <i>DAQCntr</i> of <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">the DAQ.DAQGate module</a> that can be directly used in the category filter to determine only the <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png" title="File:QTCfg subsys arch mod ma main.png">remote message archive of this source</a>.</li></ul></dd></dl>
+<ul><li> Unified structures with the DAQ-source in the category, are generated by the data source or its procedures using the function <i>messSet()</i> of <a href="API.html#TController" title="Special:MyLanguage/Documents/API">the OpenSCADA API</a> and <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">the User API</a>:</li></ul>
+<dl><dd><dl><dd> CATEGORY: defines the ID-address of the source in the format "<b>{ID}{ModId}:{CntrId}[.{PrmId}][:{SpecPrms}]</b>", where:
+<ul><li> <i>ID</i> — two symbol structure identification;</li>
 <li> <i>ModId</i> — identifier of the module;</li>
 <li> <i>CntrId</i> — identifier of the controller object;</li>
-<li> <i>PrmId</i> — identifier of the parameter.</li></ul></dd>
+<li> <i>PrmId</i> — identifier of the parameter;</li>
+<li> <i>SpecPrms</i> — specific parameters of the structure <i>ID</i>.</li></ul></dd></dl>
+<ul><li> <b>Violations</b>, are generated by the data source or its procedures using the function <i>alarmSet()</i> of <a href="API.html#TController" title="Special:MyLanguage/Documents/API">the OpenSCADA API</a> and <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">the User API</a>:</li></ul>
+<dl><dd> CATEGORY: defines the ID-address of the source in the format "<b>al{ModId}:{CntrId}[.{PrmId}]</b>", for example — "alLogicLev:gen.F_PP1", where:
+<ul><li> "al*" — the typical template-sign of a violation message based on the first two characters of the word "alarm", which can be directly used in the category filter to determine only <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png" title="File:QTCfg subsys arch mod ma main.png">the archive of violations</a>.</li></ul></dd>
 <dd> TEXT: "<b>{CntrNm} &gt; {PrmNm}: {MessText}</b>", for example — "Mainstation &gt; F_PP1: Gas flow through the diaphragm PP1: Upper warning border error", where:
 <ul><li> <i>CntrNm</i> — name of the controller object;</li>
 <li> <i>PrmNm</i> — name of the parameter.</li>
 <li> <i>MessText</i> — text of the message, which has the substructure "<b>{Viol}: {Value}[: {QuietTime}[: {NormTime} [: {Comment}]]]</b>", where:</li></ul>
-<dl><dd><ul><li> <i>Viol</i> — description of the violation, which some frames, such as <a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">Main.alarmsAct</a> and <a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">Main.alarmsSt</a>, can expand by custom fields in the form "<b>[[{CustDscr1} =&gt; {CustDscr2} =&gt; ... =&gt; {CustDscrN}]]</b>";</li>
+<dl><dd><ul><li> <i>Viol</i> — description of the violation, which some frames, such as <a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">Main.alarmsAct</a> and <a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">Main.alarmsSt</a>, can expand by custom fields in the form "<b>[[{CustFld0} =&gt; {CustFld1} =&gt; ... =&gt; {CustFldN}]]</b>";</li>
 <li> <i>Value</i> — value of the violation;</li>
 <li> <i>QuietTime</i> — quietance time;</li>
 <li> <i>NormTime</i> — time of return to the NORM-state, set here after quietation-acquiring already NORM message;</li>
 <li> <i>Comment</i> — commentary of the issue.</li></ul></dd></dl></dd></dl>
-<ul><li> <b>User-operator actions</b>, are generated by the widget procedure at the determined actions of the user-operator, which must be recorded in the protocol of user-operator:</li></ul>
+<ul><li> <b>User-operator actions with the DAQ-source</b>, are generated by the widget procedures at the determined actions of the user-operator which must be recorded in the protocol of user-operator, and when the DAQ-parameter object is accessible:</li></ul>
+<dl><dd> CATEGORY: defines the user and the complete characteristic DAQ-source for which actions are made, in the format "<b>OP{ModId}:{CntrId}[.{PrmId}]:{user}</b>", for example — "OPLogicLev:gen.PC_PCV1:roman", where:
+<ul><li> "OP*" — the typical pattern-sign of the user-operator action message based on the first two characters of the word "operator" that can be directly used in the category filter to determine only <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png" title="File:QTCfg subsys arch mod ma main.png">operator's archive of operations</a>.</li></ul></dd>
+<dd> TEXT: the same as the "User-operator actions" structure.</dd></dl></dd></dl>
+<ul><li> <b>User-operator actions</b>, are generated by the widget procedures at the determined actions of the user-operator, which must be recorded in the protocol of user-operator:</li></ul>
 <dl><dd> CATEGORY: defines the user and the characteristic source (usually the DAQ-subsystem parameter) for which actions are made, in the format "<b>OP:{user}:{src}</b>", for example — "OP:roman:PC_PCV1", where:
-<ul><li> "OP:*" — the typical pattern-sign of the user-operator action message based on the first two characters of the word "operator" that can be directly used in the category filter to determine only <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">operator's archive of operations</a>;</li>
+<ul><li> "OP:*" — the typical pattern-sign of the user-operator action message based on the first two characters of the word "operator" that can be directly used in the category filter to determine only <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main.png" title="File:QTCfg subsys arch mod ma main.png">operator's archive of operations</a>;</li>
 <li> <i>user</i> — OpenSCADA user;</li>
 <li> <i>src</i> — characteristic source, usually the parameter of the subsystem "Data acquisition", if necessary, supplemented by a hierarchy of DAQ-parameters up to the controller object.</li></ul></dd>
 <dd> TEXT: description of the action in the format "<b>{src}&nbsp;: {name}&nbsp;: [{oldVal}]&nbsp;: {newVal}</b>", for example — "'PC_PCV1'. Setpoint&nbsp;: Regulator of the input pressure of the CS&nbsp;: 5.8&nbsp;: 6.0", where:
@@ -451,10 +471,17 @@
 <ul><li> Configuration module on <a class="extiw" href="https://en.wikipedia.org/wiki/Qt_(framework)" title="wikipedia:Qt (framework)">the GUI library Qt</a> — <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>. Provides an advanced configuration interface, allowing to operate as local stations and remote ones in local and global networks, including secure connection.</li>
 <li> Configuration module based on the dynamic WEB-technologies (DHTML) — <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">UI.WebCfgD</a>. Provides an advanced configuration interface, allowing to operate as local server's stations, and remote stations in local and global networks, including work on the secure connection. Client connection is provided through the usual Web-browser.</li>
 <li> Configuration module based on the static WEB-technologies (XHTML) — <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">UI.WebCfg</a>. Provides an adequate configuration interface that allows to manage local server's stations via the usual Web-browser.</li></ul>
-<p>Configuration values, changed in the configurators, as well as most of data are stored in databases (DB). Given the modularity of the subsystems "DB", them can be different databases. Moreover, there is a possibility of storing different OpenSCADA parts in different databases of the same type and in databases of different types as well.
-</p><p>In addition to the database configuration, the information may be contained in the OpenSCADA configuration file, and passed through the command line parameter's when you call OpenSCADA. Saving configuration in the configuration file is the same as the database. Standard name of the OpenSCADA configuration file is <b>{sysconfdir}/oscada.xml</b> (where <i>sysconfdir</i> typically is "/etc"), for configurations besides of the OpenSCADA projects, and <b>{Proj}/oscada.xml</b> for the project "Proj". Format of the configuration file and command line parameters we'll examine in <a href="#CfgFilePrm">the separate section</a>.
-</p><p>Changing of some node's configuration will set the modification flag for the node, and also will set to active for buttons "Load from DB", for loading the initial configuration, and "Save to DB" for the changes saving. The modification flag also rises to parent node, which allows to restore-save from the root node, but really into the operations with DB will participate only modified nodes. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> A node removing causes to removing it from the storage-DB and the modification mechanism does not work for this operation.
-</p><p>Many of settings and configurations of the objects OpenSCADA, which are executed or already enabled, are not applied immediately as for changes, because the configuration is read/apply usually only when turn on or start. Therefore to apply the changes, in such cases, it is enough to enable/disable the enabled object or to restart the running one — start/stop. At this time, most settings that do not provide direct application are simply not allowed to be edited.
+<p><span id="Storage" title="#Storage">The configuration can be received</span> in three ways and in the following order: the command line of the program call, the Configuration File and the Data Base. Of which the Configuration File and Data Base are available for change, where the configuration values changed in the configurators are stored.
+</p><p>Typical name of the OpenSCADA configuration file is <b>{sysconfdir}/oscada.xml</b> (where <i>sysconfdir</i> typically is "/etc"), for configurations besides of the OpenSCADA projects, and <b>{Proj}/oscada.xml</b> for the project "Proj". Format of the configuration file and command line parameters we'll examine in <a href="#CfgFilePrm">the separate section</a>.
+</p><p>Given the modularity of the subsystem "DB", the database may be different. Moreover, it is possible to store different parts of OpenSCADA both in different databases of the same type and in databases of different types.
+</p><p>Many OpenSCADA nodes provide the ability to select a storage to store their data and which can be specified as:
+</p>
+<ul><li> <b>&lt;cfg&gt;</b> — the Configuration File;</li>
+<li> <b>{DB Module}.{DB Name}</b> — Data Base;</li>
+<li> <b>*.*</b> — the Generic Storage (combined) consisting of the Configuration File and the work Data Base specified in the "Work DB" configuration field; where the Configuration File is primary for the data already existing there, ie their changes, but everything new is created in the Data Base.</li></ul>
+<p>Nodes that do not provide the ability to select a storage work fixedly with the Generic Storage <b>*.*</b>, and those that do so also track the availability of their data in different storages and offer a mechanism for sequentially removing duplicates or simply detecting them in different libraries, which are formed by separate databases. You can read more about the mechanisms for transferring the configuration and extracting it to the library in the appropriate "<a href="How_to_Transferring_project_configuration.html" title="Special:MyLanguage/Documents/How to/Transferring project configuration">How To</a>".
+</p><p>Changing of some node's configuration will set the modification flag for the node, and also will set to active for buttons "Load from DB", for loading the initial configuration, and "Save to DB" for the changes saving. The modification flag also rises to parent node, which allows to restore-save from the root node, but really into the operations with DB will participate only modified nodes. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> A node removing causes to removing it from the storage and the modification mechanism does not work for this operation.
+</p><p>Many settings and configurations of the OpenSCADA nodes, which are executed or already enabled, are not applied immediately at changes, because the configuration is read/apply usually only when turn on or start. Therefore to apply the changes, in such cases, it is enough to enable/disable the enabled object or to restart the running one — start/stop. At this time most settings those do not provide direct application are not allowed simply to be edited.
 </p><p>Further examining of configuration of OpenSCADA will be based on the interface of the configurator <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">UI.QTCfg</a>, but the principles of work will be fully consistent with the rest of the configurators owing to the generality in the used control interface of OpenSCADA.
 </p><p>Let's start the observing with configuration of the OpenSCADA system parameters that are placed in the six tabs of the root page of the station:
 </p>
@@ -476,13 +503,13 @@
 <li> <i>Modules directory</i> — indicates to directories of modules of OpenSCADA, separated by ';', they can include a files' template into the end (/my/modules/path/lib*.so). If the value of this field is incorrect then when the program is started, the program ends with a message in the console that the configuration is incorrect.</li>
 <li> <i>Icons directory</i> — indicates the directory containing the program icons. If the configuration navigation tree have no icons, then the value of this field is incorrect.</li>
 <li> <i>Documents directory</i> — indicates the directory containing the program documents. If you can not to call local documents then the value of this field is incorrect or the documentation is not installed.</li>
-<li> <i>Work DB</i> — indicates the working database (DB), that is storage used to store main data of the program, which may be the configuration file. Changing of this field notes all objects as modified that allows you to save or to load station's data from the specified main storage.</li>
+<li> <i>Work DB</i> — indicates the working Data Base, that is the Data Base part of the combined storage, used to store main data of the program; which may be the Configuration File (<b>&lt;cfg&gt;</b>) also for excluding the Data Base from the data storage.</li>
 <li> <i>Save the program at exit</i> — points to the need to save the changed data at finishing of the program.</li>
 <li> <i>Period the program saving</i> — indicates the frequency in seconds with which to save the changed station's data.</li>
 <li> <i>Set modification for the calculated objects</i> — most suitable for the production systems together with the previous configuration properties, for the calculation context saving. But it is inconvinient in the development mode, all time reminding for the saving need.</li>
 <li> <i>Language</i> — indicates the language of messages and localisation of the program. Changing of this field is acceptable, but leads to a change of messages' language only for the interface and dynamic messages!</li>
 <li> <i>Messages</i> — section of the parameters' group that are processing by the work of messages of the stations:
-<ul><li> <i>Least level</i> — indicates the level of messages beginning from which they are to be processed. Messages below this level will be ignored. The level "Debug (0)" have special sense, it set will enable debug messages generation by different parts of the program. For the parts debug messages generation control you can use the tab "Debug" (Fig.4d).</li>
+<ul><li> <i>Least level</i> — indicates the level of messages beginning from which they are to be processed. Messages below this level will be ignored. The level "Debug (0)" have special sense, it set will enable debug messages generation by different parts of the program. For the parts debug messages generation control you can use the tab "Debug" (Fig.4d), which will be appeared in this case.</li>
 <li> <i>To syslog</i> — indicates the need of sending the message to the system logger that is the mechanism of operation system for work with messages of the system and software. When this option is enabled the possibility appears to manage and control the OpenSCADA messages by the mechanisms of OS.</li>
 <li> <i>To stdout</i> — indicates the use of the standard output mechanism in the console as a message output. Disabling of this feature will eliminate the entire output in the console, unless you specify the following parameter.</li>
 <li> <i>To stderr</i> — indicates the use of the standard error-taking mechanism for outputting messages, is usually also sent to the console.</li>
@@ -501,26 +528,27 @@
 <li> <i>Level</i> — level of the remote station in the redundancy scheme;</li>
 <li> <i>Counter</i> — requests' counter to the redundant station or waiting time, in the case of the absence of connection.</li></ul></li>
 <li> <i>Go to remote stations list configuration</i> — command to go to the configuration page of the remote OpenSCADA stations in the subsystem "Transports".</li></ul></li>
-<li> The tab "Tasks" contains a table with opened tasks of OpenSCADA components (Fig.4d). From the table you can get several information about the tasks, and also assign CPUs used by the tasks of multiprocessing systems and set the task invoking phase.</li>
-<li> The tab "Debug" contains elements for control to debug (Fig.4e) and activates at select the messages level "Debug (0)" or at the objects counters using.</li>
 <li> <span id="ConfigTr" title="#ConfigTr">The tab "Translations" contains elements of the manager of central translation of text messages</span> of the program (Fig.4f) and activates at the multi-language mode enabling by the base language of text variables set:</li></ul>
-<dl><dd><ul><li> <i>Status</i> — current status of the project messages translation, where can be:</li></ul>
-<dl><dd><ul><li> "only use the already multilanguage DBs with their modification";</li>
-<li> "creating or modification the configuration DBs as multilanguage ones with the pointed base language 'XX';</li>
-<li> "+ dynamic translation".</li></ul></dd></dl>
-<ul><li> <i>Base language of the text variables</i> — enables the multilingual support for text variables in the configuration DBs by selecting the base language. Further for the text variables in the non basic language in the tables of the database it will be created the separate columns. Under the text variables the all text fields of configurator, which can be translated into another language are meant. Numbers and other symbolic values are not in their count and are not translated.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> You can select or type here other language besides English(en), but take in your mind that all standard OpenSCADA libraries's formed for the base language English(en), so other base languages will break these DBs at change!</dd></dl>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> You can learn more about the details and specifics of creating multilingual projects in the appropriate "<a href="Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">How To</a>".
+<ul><li> <i>Status</i> — current status of the project messages translation, where can be:</li></ul>
+<dl><dd><ul><li> "SINGLELANGUAGE, only use the already multilanguage DBs with their modification";</li>
+<li> "MULTILANGUAGE, creating or modification the configuration DBs as multilanguage ones with the pointed base language 'XX';</li>
+<li> "MULTILANGUAGE-DYNAMIC, and dynamic translation".</li></ul></dd></dl>
+<ul><li> <i>Base language - locales list</i> — enables the multilingual support for text variables in the configuration DBs by entry the base language and the project whole locales (like to "en_US.UTF-8") list (optional) separated by ';'. Further for the text variables in the non basic language in the tables of the database it will be created the separate columns. Under the text variables the all text fields of configurator, which can be translated into another language, are meant. Numbers and other special symbols are not in their count and are not translated. The whole locales list is not an obligatory part and used mostly for conversion the language code to whole locale for system functions and in the locale selection lists.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> You can entry here other language besides English(en) as the base, but take in your mind that all standard OpenSCADA libraries formed for the base language English(en), so other base languages will break these DBs at change!</dd></dl>
 <ul><li> <i>, dynamic translation</i> — planed state of the dynamic text messages translation. The dynamic text messages translation causes the text messages translation cache enabling and requests to the translations to the DB depends to the OpenSCADA part's language, mostly for multi-language dynamic user interfaces when user has self-preferred language and users of the program a lot, as a rule, are end-users-operators.</li>
 <li> <i>Enable the manager</i> — enables the generic translation manager which cause full reloading for all built messages obtain, however this does not form the full messages index by deny to reload some objects into their execution. For the full messages index loading you ought to save the manager into the enabled mode and to restart OpenSCADA. Ongoing next start the program will form the full messages index.</li>
 <li> <i>Languages of managing</i> — list of the processing languages, in the two-character representation and separated by the character ';'. If the translations for the specified language in the source are presented then the language column will contain them otherwise it will be empty.</li>
 <li> <i>Source filter</i> — source filter of limiting the manager work in some DBs, the source just must contain such substring.</li>
-<li> <i>, check for mismatch</i> — enable for checking the equal base messages for their translation equality in different sources.</li>
+<li> <i>, check/fix</i> — enable for checking the base messages translation equality in different sources and fixing by: propagation the translations to empty sources, clearing the double to base translations and merging the base messages as the translations.</li>
 <li> <i>, pass</i> — pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing.</li>
 <li> <i>Messages</i> — same the messages table with columns: the base language, managing translation languages, the message sources. To modify there are allowed the languages columns and at result the changes will be set to the message sources.</li></ul></dd></dl>
+<ul><li> The tab "Tasks" contains a table with opened tasks of OpenSCADA components (Fig.4d). From the table you can get several information about the tasks, and also assign CPUs used by the tasks of multiprocessing systems and set the task invoking phase.</li>
+<li> The tab "Debug" contains elements for control to debug (Fig.4e) and activates at select the messages level "Debug (0)" or at the objects counters using.</li></ul>
 <p>To modify the fields of this page it may be required the super user's rights. Get these rights you can by means of including your user into the superuser's group "root", or by entering the station from the superuser "root".
 </p><p>We must mention another one important point: the fields of the identifiers of all OpenSCADA objects are unacceptable for direct editing, because they are keys for storage of objects' data inti the database. However, to change the object's identifier you can by the command of cutting and the further pasting of the object (Cut-&gt; Paste) in the configurator.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:866px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_st.png"><img class="thumbimage" height="809" src="files/QTCfg_sys_st.png" width="864" /></a>  <div class="thumbcaption">Fig. 4a. The tab "Station" of the main page of the station configuration.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:842px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_st.png"><img class="thumbimage" height="821" src="files/QTCfg_sys_st.png" width="840" /></a>  <div class="thumbcaption">Fig. 4a. The tab "Station" of the main page of the station configuration.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:773px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_sub.png"><img class="thumbimage" height="469" src="files/QTCfg_sys_sub.png" width="771" /></a>  <div class="thumbcaption">Fig 4b. The tab "Subsystems" of the main page of the station configuration.</div></div></div></div>
 <p>Service task of the redundancy mechanism is always running and executed at intervals which are prescribed in the appropriate configuration field. Real work on implementing the redundancy is carried out in presence of at least one redundant station in the list of stations, and implies:
 </p>
@@ -537,7 +565,7 @@
 <p>For debug of specific of OpenSCADA different working you may be necessary to enable addition-debugging messages generation, which you can set by select minimal messages level, into the tab "Station", to "Debug (0)". As a result of this there will emerge the tab "Debug" (Fig.4e) where available the objects counters for control to leaks, and also the table with categories list of incoming debug messages. Into the table you can select only needed sources of the debug messages and omit to overload the archiving messages subsystem and to decrease significantly for overall performance of the program. You can also to select higher categories, up to root subsystems categories, that will disable the detailed selection and enable all messages generation by the level or by the overall subsystem. For the debug messages observing you need to go subsystem "Archives" (Fig.4.6c), and for this there provided the button "See to messages". The selected debug mode and list of debug categories can be standard stored to the configuration file and on the next boot the debug mode will be activated, this important primarily for the objects counters.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:807px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_debug.png"><img class="thumbimage" height="698" src="files/QTCfg_sys_debug.png" width="805" /></a>  <div class="thumbcaption">Fig. 4e. The tab "Debug" of the main page of the station configuration.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1065px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="800" src="files/QTCfg_sys_transl.png" width="1063" /></a>  <div class="thumbcaption">Fig. 4f. The tab "Translations" of the main page of the station configuration.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1282px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_sys_transl.png"><img class="thumbimage" height="1024" src="files/QTCfg_sys_transl.png" width="1280" /></a>  <div class="thumbcaption">Fig. 4f. The tab "Translations" of the main page of the station configuration.</div></div></div></div>
 <p>While examining configuration pages of the modular subsystems there will be described general properties of all the modules. However, it should be noted that each module can provide both additional tabs and separate fields for the configuration of its own operation features for pages whose objects are inherited by the modules. Information on the features and additions of the modules can be found in <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">separate documentation</a> for each of them.
 </p>
 <h3><span class="mw-headline" id="Subsystem_.22DB.22"><span class="mw-headline-number">4.1</span> <span id="CfgDB" title="#CfgDB">Subsystem "DB"</span></span></h3>
@@ -546,7 +574,7 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_subsys.png"><img class="thumbimage" height="408" src="files/QTCfg_subsys_db_subsys.png" width="680" /></a>  <div class="thumbcaption">Fig. 4.1a. The tab "Subsystem" of the root page of the subsystem "DB".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:679px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod.png"><img class="thumbimage" height="407" src="files/QTCfg_subsys_db_mod.png" width="677" /></a>  <div class="thumbcaption">Fig. 4.1b. The tab "Modules" of the root page of the subsystem "DB".</div></div></div></div>
-<p>Each module of the subsystem "DB" provides a configuration page with tabs "DB" and "Module". The tab "DB" (Fig.4.1c) contains a list of database objects registered in the module and a sign of complete removal of database in execution of the deletion command. In the context menu of the database list, the user is given the opportunity to add, remove and switch to the desired database. The tab "Module" contains information about the module of the subsystem "DB" (Fig.4.1d):
+<p>Each module of the subsystem "DB" provides a configuration page with tabs "DB" and "Module". The tab "DB" (Fig.4.1c) contains a list of database objects registered in the module and a sign of complete removal of database in execution of the deletion command. In the context menu of the database list, the user is given the opportunity to add, remove and switch to the desired database. The tab "Module" contains information about the module of the "DB" subsystem as the each module information fields (Fig.4.1d):
 </p>
 <ul><li> <i>Module</i> — module identifier.</li>
 <li> <i>Name</i> — module name.</li>
@@ -556,8 +584,20 @@
 <li> <i>Author</i> — module author.</li>
 <li> <i>Description</i> — module short description.</li>
 <li> <i>License</i> — license agreement for distributing the module.</li></ul>
+<p><span id="DBFeat" title="#DBFeat">The "DB" subsystem modules contains also a specific information field "Features"</span> with keyword list of supported features:
+</p>
+<ul><li> <i>LIST</i> — tables-containers list in the DB-storage;</li>
+<li> <i>GET</i>, <i>SEEK</i>, <i>SET</i>, <i>DEL</i> — corresponded requests of OpenSCADA data records;</li>
+<li> <i>STRUCT</i> — obtain the DB fields structure in reflection to OpenSCADA data types;</li>
+<li> <i>PRELOAD</i> — preloading OpenSCADA data records at the SEEK-request, by the group SQL SELECT request;</li>
+<li> <i>SQL</i> — SQL-requests;</li>
+<li> <i>FIX</i> — fixing-changing the storage structure corresponding to the OpenSCADA data record structure;</li>
+<li> <i>TR</i> — processing the translation data of the OpenSCADA record structure;</li>
+<li> <i>ERR</i> — tested processing and logging of the environmental errors like to RO-mode, connection and so one.</li></ul>
+<p>For the OpenSCADA configuration storing, the storage implementation module must provide at least follow features: <b>GET</b>, <b>SEEK</b>, <b>SET</b>, <b>DEL</b>. And for being the multilanguage storage it must provide also the feature <b>TR</b>.
+</p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:622px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db.png"><img class="thumbimage" height="407" src="files/QTCfg_subsys_db_mod_db.png" width="620" /></a>  <div class="thumbcaption">Fig. 4.1c. The tab "DB" of the module of the subsystem "DB".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:711px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_module.png"><img class="thumbimage" height="413" src="files/QTCfg_subsys_db_mod_module.png" width="709" /></a>  <div class="thumbcaption">Fig. 4.1d. The tab "Module" of the module of the subsystem "DB".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:730px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_module.png"><img class="thumbimage" height="545" src="files/QTCfg_subsys_db_mod_module.png" width="728" /></a>  <div class="thumbcaption">Fig. 4.1d. The tab "Module" of the module of the subsystem "DB".</div></div></div></div>
 <p>Each database object contains its own configuration page with the tabs "Data base", "Tables" and "SQL", in case support of SQL-requests. Besides the basic operations you can copy contents of DB by means of the standard function of the objects copying in the configurator. The copying operation of DB contents involves copying of an original database to a destination database, and the contents of the destination database is not cleared before the copy operation. Copying the contents of database is made only when the both databases are enabled, otherwise it will simple copy of the object of the database.
 </p><p>The tab "Data base" (Fig.4.1e) contains the main configuration options of the DB object as follows:
 </p>
@@ -572,13 +612,14 @@
 <li> <i>Address</i> — DB address in specific format of the database type (module). Description of the recording format of the DB address is usually available in tooltip for this field.</li>
 <li> <i>Code page</i> — indicates a code page, in which text values of database are stored and provided. The value of the code page of database in conjunction with the internal code page of the station is used for clear transcoding of the text message while exchange between the station and the database.</li>
 <li> <i>To enable</i> — indicates the state "Enabled", in which to set the DB when start.</li>
+<li> <i>Priority in list</i> — the DB priority [0...99] in the common list of the databases used in the loading, useful for libraries placed in several databases for specifying the priority of the project — used ones.</li>
 <li> <i>Transaction closing: after opening, seconds</i> — time of closing the transaction after it opening.</li>
 <li> <i>Transaction closing: after request, seconds</i> — time of closing the transaction after the last request. If the time lesser than SERV_TASK_PER (10) then to process the DB transactions will be opened an independent thread-task with specified priority in the next option else the process will be performed by the service task.</li>
 <li> <i>Transaction closing: separate task priority</i> — priority of the independent thread-task, opened at the previous time lesser than SERV_TASK_PER (10).</li></ul></li></ul>
 <p>The tab "Tables" (Fig.4.1f) contains a list of opened tables. In normal mode of the program operation this tab is empty, because after completion of working with tables the program closes them. Presence of opened tables tells that the program is now working with the tables or the tables are opened by the user to examine their contents. In context menu of the list of opened tables you can open a table for study (the command "Add"), close an opened table (the command "Delete") and proceed to examination of its contents.
 </p><p>The tab "SQL" (Fig.4.1g) allows only for data bases which support SQL-requests, and contains field to the request enter, button to the request send and table to result. Control of transaction mode of requests provided by a separate configuration field.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:702px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_db.png"><img class="thumbimage" height="676" src="files/QTCfg_subsys_db_mod_db_db.png" width="700" /></a>  <div class="thumbcaption">Fig. 4.1e. The tab "Data base" of the DB object of the module of the subsystem "DB".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:714px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_db.png"><img class="thumbimage" height="688" src="files/QTCfg_subsys_db_mod_db_db.png" width="712" /></a>  <div class="thumbcaption">Fig. 4.1e. The tab "Data base" of the DB object of the module of the subsystem "DB".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_tbl.png"><img class="thumbimage" height="635" src="files/QTCfg_subsys_db_mod_db_tbl.png" width="681" /></a>  <div class="thumbcaption">Fig. 4.1f. The tab "Tables" of the DB object of the module of the subsystem "DB".</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1115px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_db_mod_db_sql.png"><img class="thumbimage" height="814" src="files/QTCfg_subsys_db_mod_db_sql.png" width="1113" /></a>  <div class="thumbcaption">Fig. 4.1g. The tab "SQL" of the DB object of the module of the subsystem "DB".</div></div></div></div>
 <p>Page of examination of contents of tables contains only one the tab "Table". The tab "Table" (Fig.4.1h) contains a field of the name of the table and a table with the contents. The Table of contents provides following functions:  
@@ -600,15 +641,15 @@
 <li> <i>Language</i> — user's language for the dynamic messages context and for text to speech of the user interface. Empty to the system language.</li>
 <li> <i>User picture</i> — specifies the user's picture. Picture can be loaded and saved.</li>
 <li> <i>Groups</i> — the table with a list of user groups and a sign of the user's belonging to the corresponding group.</li>
-<li> <i>User DB</i> — DB address for the user's data storage.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:684px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_user.png"><img class="thumbimage" height="724" src="files/QTCfg_subsys_sec_user.png" width="682" /></a>  <div class="thumbcaption">Fig. 4.2b. The tab "User" of the user's page of the subsystem "Security".</div></div></div></div>
+<li> <i>User DB</i> — DB address for the user's data storage, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_user.png"><img class="thumbimage" height="728" src="files/QTCfg_subsys_sec_user.png" width="680" /></a>  <div class="thumbcaption">Fig. 4.2b. The tab "User" of the user's page of the subsystem "Security".</div></div></div></div>
 <p>To configure a group of users, a page is provided that contains only the "Group" tab (Fig.4.2c). This tab contains configuration data of the user group profile that can only be changed by the privileged user:
 </p>
 <ul><li> <i>Name</i> — information about the name (identifier) of the user's group.</li>
 <li> <i>Full name</i> — specifies the full name of the user's group.</li>
 <li> <i>Description</i> — description and arbitrary information about the users group.</li>
 <li> <i>Users</i> — list of users included into this group. With the context menu of the list you can add or remove the user in the group.</li>
-<li> <i>User group DB</i> — DB address to store user group data.</li></ul>
+<li> <i>User group DB</i> — DB address to store user group data, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:649px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_sec_grp.png"><img class="thumbimage" height="551" src="files/QTCfg_subsys_sec_grp.png" width="647" /></a>  <div class="thumbcaption">Fig. 4.2c. The tab "Group" of the user group page of the subsystem "Security".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22Transports.22"><span class="mw-headline-number">4.3</span> <span id="Transports" title="#Transports">Subsystem "Transports"</span></span></h3>
 <p>This subsystem is the modular one and contains the hierarchy of objects shown in Figure 1.6. To configure the subsystem it is provided the root page of the subsystem "Transports", containing the tabs "Subsystem" and "Modules".
@@ -635,7 +676,7 @@
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
 <ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debugging mode</a>.</li>
 <li> <i>Connect</i> — operative state/command of the transport.</li>
-<li> <i>Transport DB</i> — DB address to store the transport's data.</li>
+<li> <i>Transport DB</i> — DB address to store the transport's data, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
 <li> <i>Active connections</i> — active and actual connections list of the input transport.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
@@ -650,7 +691,7 @@
 <ul><li> Section "State" — contains the settings that characterize the state of the transport:
 <ul><li> <i>Status</i> — information on the current transport's status and statistics of its work. Most modules provide advanced diagnostics in this field when enabled with <a href="#Config">the debuging mode</a>.</li>
 <li> <i>Connect</i> — operative state/command of the transport. Given the network nature of the transports, this state often involves connecting to a remote network node and accordingly reflecting the fact that the connection is present. For output transports, there is no need for the user to be obliged to set this state because it is used by an external entity of the communication protocols, often by the data sources, that try to connect the transport beforehand, so by establishing a connection for further exchange, moreover, the transport may be disconnected by that entity.</li>
-<li> <i>Transport DB</i> — DB address to store the transport's data.</li></ul></li>
+<li> <i>Transport DB</i> — DB address to store the transport's data, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the transport's identifier.</li>
 <li> <i>Name</i> — specifies the transport's name.</li>
@@ -675,7 +716,7 @@
 </p><p>Each module of the subsystem "Transport Protocols" provides the configuration page with the tab "Module". On the tab "Module" there is information on the module of the subsystem "Transport Protocols" (Fig.4.1d), which structure is identical for all modules.
 </p>
 <h3><span class="mw-headline" id="Subsystem_.22Data_acquisition.22"><span class="mw-headline-number">4.5</span> <span id="CfgDAQ" title="#CfgDAQ">Subsystem "Data acquisition"</span></span></h3>
-<p>This subsystem is the modular one and contains the hierarchy of objects shown in Fig.1.3. To configure the subsystem the root page of the subsystem "Data acquisition" is provided, which contains the tabs: "Redundancy", "Template libraries" and "Modules".
+<p>This subsystem is the modular one and contains the hierarchy of objects shown in Figure 1.3. To configure the subsystem the root page of the subsystem "Data acquisition" is provided, which contains the tabs: "Redundancy", "Template libraries" and "Modules".
 </p><p>To obtain access to modify the objects of this subsystem the user of the group "DAQ" or the rights of the privileged user are required.
 </p><p>As a redundancy object of the subsystem "Data Acquisition" there used the controller object for which the redundancy process performs that functions:
 </p>
@@ -706,18 +747,19 @@
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:685px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl.png"><img class="thumbimage" height="405" src="files/QTCfg_subsys_daq_tmpl.png" width="683" /></a>  <div class="thumbcaption">Fig. 4.5b. The tab "Template libraries" of the subsystem "Data acquisition".</div></div></div></div>
 <p>Each template library of the subsystem "Data acquisition" provides a configuration page with the tabs "Library" and "Parameter templates". The tab "Library" (Fig.4.5d) contains the basic settings of the library:
 </p>
-<ul><li> Section "State" — contains properties that characterize the state of the library:
-<ul><li> <i>Accessing</i> — state of library "Accessing".</li>
-<li> <i>Library DB</i> — address of the database for the library and templates data storage.</li>
-<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></li>
-<li> Section "Config" — directly contains the configuration fields:
-<ul><li> <i>Identifier</i> — information on the Id of the library.</li>
+<ul><li> Section "State" — contains properties that characterize the state of the library:</li></ul>
+<dl><dd><ul><li> <i>Accessing</i> — state of library "Accessing".</li>
+<li> <i>Library DB</i> — address of the storage of the library and templates data, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>tmplib_{ObjID}</b>".</dd></dl>
+<ul><li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></dd></dl>
+<ul><li> Section "Config" — directly contains the configuration fields:</li></ul>
+<dl><dd><ul><li> <i>Identifier</i> — information on the Id of the library.</li>
 <li> <i>Name</i> — specifies the name of the library.</li>
-<li> <i>Description</i> — short description of the library and its purpose.</li></ul></li></ul>
+<li> <i>Description</i> — short description of the library and its purpose.</li></ul></dd></dl>
 <p>The tab "Parameter templates" (Fig.4.5d) contains a list of templates in the library. In the context menu of the list the user can add, delete and go to the desired template.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:686px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_lib.png"><img class="thumbimage" height="547" src="files/QTCfg_subsys_daq_tmpl_lib.png" width="684" /></a>  <div class="thumbcaption">Fig. 4.5c. Main tab of the configuration of a template library of the subsystem "Data acquisition".</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:686px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_ls.png"><img class="thumbimage" height="512" src="files/QTCfg_subsys_daq_tmpl_ls.png" width="684" /></a>  <div class="thumbcaption">Fig. 4.5d. Tab of the list of templates of a template library of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:689px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_lib.png"><img class="thumbimage" height="600" src="files/QTCfg_subsys_daq_tmpl_lib.png" width="687" /></a>  <div class="thumbcaption">Fig. 4.5c. Main tab of the configuration of the template library of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:686px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_ls.png"><img class="thumbimage" height="512" src="files/QTCfg_subsys_daq_tmpl_ls.png" width="684" /></a>  <div class="thumbcaption">Fig. 4.5d. Tab of the list of templates of the template library of the subsystem "Data acquisition".</div></div></div></div>
 <p>Each template of the template library provides the configuration page with the tabs "Template" and "IO". The tab "Template" (Fig.4.5e) contains the basic settings of the template:
 </p>
 <ul><li> Section "State" — contains properties that characterize the state of the template:
@@ -734,7 +776,7 @@
 </p>
 <ul><li> <i>Identifier</i> — identifier of the attribute.</li>
 <li> <i>Name</i> — name of the attribute.</li>
-<li> <i>Type</i> — select the value's type of the attribute from the following: "Real", "Integer", "Boolean", "String", "Text", "Object", "Integer numbers selection", "Real numbers selection", "Strings selection".</li>
+<li> <i>Type</i> — select the value's type of the attribute from the following: "Real", "Integer", "Boolean", "String", "String (translate)", "Text", "Text (translate)", "Object", "Integer numbers selection", "Real numbers selection", "Strings selection".</li>
 <li> <i>Mode</i> — select the mode from list: "Input", "Output". Typically used to indicate the direction of data transmission through links. I.e., values for the "Input" data link will only be obtained, and for the "Output" will also be transferred, in the case of modification.</li>
 <li> <i>Attribute</i> — mode of the parameter's attribute, implemented based on a template from the list: "No attribute", "Read Only", "Full access". For the attributes of a template, in which this field is set, it will be created an appropriate attribute in the controller's parameter of this subsystem.</li>
 <li> <i>Configuration</i> — configuration mode of an attribute in the configuration tab of a template of the controller's parameter of this subsystem from the list: "Variable", "Constant", "Link". In the "Constant" and "Link" modes in the configuration tab of a template will be added these attributes to set the constant or specify an external link of the parameter.</li>
@@ -744,28 +786,29 @@
 <li> For selectable types the field may also contains of values list, in the second line, and names list, in the third line, with items separating by the symbol ";".</li></ul></li></ul>
 <p>The syntax of the language of the template program can be found in the documentation of the module which provides the interpreter of the selected language. For example, a typical user programming language of OpenSCADA is <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc.JavaScript</a>.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:899px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_tmpl_io.png"><img class="thumbimage" height="722" src="files/QTCfg_subsys_daq_tmpl_tmpl_io.png" width="897" /></a>  <div class="thumbcaption">Fig. 4.5f. Configuration tab of attributes and a template program of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:963px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_tmpl_io.png"><img class="thumbimage" height="720" src="files/QTCfg_subsys_daq_tmpl_tmpl_io.png" width="961" /></a>  <div class="thumbcaption">Fig. 4.5f. Configuration tab of attributes and a template program of the subsystem "Data acquisition".</div></div></div></div>
 <p>Each module of the subsystem "Data acquisition" provides the configuration page with the tabs "Controllers" and "Module". The tab "Controllers" (Fig.4.5g) contains a list of controller objects, registered in the module. In the context menu of the list user can add, delete and move to the desired controller object. On the tab "Module" there is information on the module of the subsystem "Data acquisition" (Fig.4.1d), which structure is identical for all modules.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:682px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr.png"><img class="thumbimage" height="585" src="files/QTCfg_subsys_daq_mod_cntr.png" width="680" /></a>  <div class="thumbcaption">Fig. 4.5g. The tab "Controllers" of the module of the subsystem "Data acquisition".</div></div></div></div>
 <p>Each controller object contains its own configuration page with the tabs "Controller", "Parameters" and "Diagnostics".
 </p><p>The tab "Controller" (Fig.4.5h) contains the basic settings. Content of these settings may differ slightly from one module of this subsystem to another, as you can find in the own documentation of the modules. As an example, let's examine the settings of a controller object in the module of the logical level controller <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">DAQ.LogicLev</a>:
 </p>
-<ul><li> Section "State" — contains the properties, which characterize the state of the controller object and the controller itself:
-<ul><li> <i>Status</i> — specifies the controller object status. In our case, the controller is running and the current computation time is 460 microseconds and the maximum one is 1.6 milliseconds.</li>
+<ul><li> Section "State" — contains the properties, which characterize the state of the controller object and the controller itself:</li></ul>
+<dl><dd><ul><li> <i>Status</i> — specifies the controller object status. In our case, the controller is running and the current computation time is 1.15 milliseconds and the maximum one is 2.42 milliseconds.</li>
 <li> <i>Enabled</i> — state of the controller object "Enabled". When enabled, the controller object provides the possibility of creating the parameters and their configuration.</li>
-<li> <i>Running</i> — State of the controller object "Running". The running controller object performs the physical data acquisition and/or includes mechanisms for access to these data.</li>
-<li> <i>Controller DB</i> — address of the database for data storage of the controller object and its parameters.</li>
-<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></li>
-<li> Section "Configuration" — directly contains the configuration fields:
-<ul><li> <i>Identifier</i> — information on the controller object identifier.</li>
+<li> <i>Running</i> — State of the controller object "Running". The running controller object performs the physical data acquisition and/or includes mechanisms for access to these data.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Some data source types provides a possibility of performing some part of the function of coming to the <i>Enabled</i> state — hot updating the data configuration at the manual starting and that you can see in the field tooltip.</dd></dl>
+<ul><li> <i>Controller DB</i> — address of the storage of data of the controller object and its parameters, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
+<li> <i>Date of modification</i> — date and time for the object last modification.</li></ul></dd></dl>
+<ul><li> Section "Configuration" — directly contains the configuration fields:</li></ul>
+<dl><dd><ul><li> <i>Identifier</i> — information on the controller object identifier.</li>
 <li> <i>Name</i> — specifies the controller name.</li>
 <li> <i>Description</i> — brief description of the controller and its purpose.</li>
 <li> <i>To enable</i> — indicates the state of "Enabled", in which to transfer the controller object at the program startup.</li>
 <li> <i>To start</i> — indicates the state of "Running", in which to transfer the controller object at the program startup.</li>
 <li> <i>Parameters tables</i> — names of tables that store the parameters of different types (refers to parameter objects of the data acquisition).</li>
 <li> <i>Schedule of the calculation</i> — defines whether periodic or scheduled character of the calculations is. In our example the template calculation is periodic in one second.</li>
-<li> <i>Priority of the acquisition task</i> — sets priority of the data acquisition of this controller. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the controller task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li></ul></li></ul>
+<li> <i>Priority of the acquisition task</i> — sets priority of the data acquisition of this controller. It is used when scheduling the operating system tasks. In the case of proper access availability this field enables the planning of the controller task in real time and with the specified priority otherwise it modifies the parameter "nice" of the task.</li></ul></dd></dl>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:681px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_main.png"><img class="thumbimage" height="678" src="files/QTCfg_subsys_daq_mod_cntr_main.png" width="679" /></a>  <div class="thumbcaption">Fig. 4.5h. The main configuration tab of a controller object of the subsystem "Data acquisition".</div></div></div></div>
 <p>The tab "Parameters" (Fig.4.5i) contains a list of parameters in the controller object, provides selection of the type of parameters that are created by default, as well as information on the total number and the number of enabled parameters. In the context menu user can add, delete and go to the desired parameter.
 </p>
@@ -786,7 +829,7 @@
 <li> <i>Description</i> — brief description of the parameter and its purpose.</li>
 <li> <i>To enable</i> — indicates the state "Enabled" in which to transfer the parameter at the program startup.</li>
 <li> <i>Parameter template</i> — address of the previously discussed template.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_main.png"><img class="thumbimage" height="613" src="files/QTCfg_subsys_daq_mod_cntr_prm_main.png" width="773" /></a>  <div class="thumbcaption">Fig. 4.5k. The main configuration tab of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:769px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_main.png"><img class="thumbimage" height="653" src="files/QTCfg_subsys_daq_mod_cntr_prm_main.png" width="767" /></a>  <div class="thumbcaption">Fig. 4.5k. The main configuration tab of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
 <p>The tab "Attributes" (Fig.4.5l) contains the parameter attributes and their values in accordance with the configuration of the used template and calculation of its program.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:798px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_mod_cntr_prm_attr.png"><img class="thumbimage" height="542" src="files/QTCfg_subsys_daq_mod_cntr_prm_attr.png" width="796" /></a>  <div class="thumbcaption">Fig. 4.5l. The tab "Attributes" of a parameter of a controller object of the subsystem "Data acquisition".</div></div></div></div>
@@ -805,11 +848,14 @@
 </p><p>As a redundancy object of the subsystem "Archives-History" there used the object of messages archiver for which the redundancy process performs followed functions:
 </p>
 <ul><li> <b>Redundancy of the archiving mechanism</b> — means of the messages combination from the redundant stations by the three mechanisms:
-<ul><li> in the main cycle of the redundancy there performs a request for new messages of the archiver on the master station from the last message time of the redundant object, where the last message is the last second of the time what is requested twicely to prevent of lose messages on this time second;</li>
+<ul><li> in the main cycle of the redundancy there performs a request for new messages of the archiver on the master station from the last message time of the redundant object, where the last message is the last second of the time what is requested twice to prevent of lose messages on this time second, but there is a mechanism for controlling duplicates and suppressing them both immediately after the request and by the archiver himself;</li>
 <li> writing and rewriting messages to the redundant archiver causes to redirection of the writing request to to the master station both for new and rewriting messages (also the messages write locally);</li>
 <li> rewriting messages to the master archiver causes to the messages sending for all redundant stations, where is excluded of creation new entries into the current violations table — only modification of presented ones.</li></ul></li>
-<li> <b>Compensation of the data loss on the time of the node stop</b> with the redundant node archive. There provides only initial synchronisation by loading/reloading of parts of the archive from the redundant station, at the station starting in general. The archive's part requested from the moment of the last record into the local archive minus value of the parameter of the depth of the forced reloading and till the current time. Changed messages to more depth from the pointed will be lost on the started station!</li>
-<li> <b>Load distribution of the archiving between the nodes</b>. When creating complex distributed systems there can be an important question of predicting and optimising of the overall system performance, taking this into the account  the redundancy mechanism provides the execution of tasks of archiving of individual archivers only at one station. The other stations' tasks would go to the data synchronisation mode with the executive station. In the case of loss of the connection with the executive station the task of the local archiving is started. It's also provided the possibility of optimal the load distribution of the execution of archiving tasks of the archivers group between the stations.</li>
+<li> <b>Compensation of the data loss on the time of the node stop</b> with the redundant node archive. There provides only initial synchronisation by loading/reloading of parts of the archive from the redundant station, at the station starting in general. The archive's part requested from the moment of the last record into the local archive minus value of the parameter of the depth of the forced reloading and till the current time. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Changed messages to more depth from the pointed will be lost on the started station! The initial synchronisation procedure involves in general:</li></ul>
+<dl><dd><ol><li> requesting for all active alarms;</li>
+<li> requesting for messages of concrete archive and on the depth specified by the parameter "Overtime of the reserve history reload at start" and up to the time of the previous request, so all new alarms won't definitely appear;</li>
+<li> coming to the normal mode of tracing new messages and alarms through the archive.</li></ol></dd></dl>
+<ul><li> <b>Load distribution of the archiving between the nodes</b>. When creating complex distributed systems there can be an important question of predicting and optimising of the overall system performance, taking this into the account  the redundancy mechanism provides the execution of tasks of archiving of individual archivers only at one station. The other stations' tasks would go to the data synchronisation mode with the executive station. In the case of loss of the connection with the executive station the task of the local archiving is started. It's also provided the possibility of optimal the load distribution of the execution of archiving tasks of the archives group between the stations.</li>
 <li> <b>Restoring of the alarms primacy</b>. For the alarming messages, negative level, at their writing are performed an additional processing for the active alarms, that is only old-original ones are allowed for rewriting.</li></ul>
 <p>Redundancy of the values archiving doesn't provided directly but that process does through the data sources and the subsystem of "Data acquisition".
 </p><p>The tab "Redundancy" (Fig.4.6a) presented only if at last one station (Fig.4c) pointed into the redundancy and contains the configuration of redundancy of the messages archiving with the following settings:
@@ -842,7 +888,7 @@
 <li> <i>Category</i> — category o the message.</li>
 <li> <i>Level</i> — level of the message.</li>
 <li> <i>Message</i> — text of the message.</li></ul>
-<p>For alarm messages, after the table appears a button for clean up this table of the active alarms, that is useful for service functions. The table also appended for the "Delete" command to remove single alarm messages.
+<p>For alarm messages, after the table appears a button for clean up this table for the visible alarms, that is useful for service functions. The table also appended for the "Delete" command to remove single alarm.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1043px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mess.png"><img class="thumbimage" height="621" src="files/QTCfg_subsys_arch_mess.png" width="1041" /></a>  <div class="thumbcaption">Fig. 4.6b. The tab "Messages" of the subsystem "Archives-History".</div></div></div></div>
 <p>The tab "Values" (Fig.4.6c) contains the general configuration of the values archiving and the list of archives of values. In the context menu of the list of values the user has the opportunity to add, delete and go to the desired archive. The general configuration of the archiving is represented by the fields:
@@ -859,7 +905,7 @@
 <ul><li> Section "State" — contains the properties, which characterize the state of the archive:
 <ul><li> <i>Running</i> — state of the parameter "Running". Running archive collects data in the buffer and is served by the archivers.</li>
 <li> <i>Begin and end of the buffer</i> — date and time of values begin and end into the buffer.</li>
-<li> <i>Archive DB</i> — DB address for storing the archive data.</li></ul></li>
+<li> <i>Archive DB</i> — storage address of the archive data, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the archive identifier.</li>
 <li> <i>Name</i> — specifies the archive name.</li>
@@ -900,7 +946,7 @@
 </p>
 <ul><li> Section "State" — contains the properties, which characterize the archiver state:
 <ul><li> <i>Running</i> — archiver state "Running". The running archiver processes the buffer of the message archive and puts his data in its repository, but also it processes requests for access to data in the repository.</li>
-<li> <i>Archiver DB</i> — database address for storing the archiver data.</li>
+<li> <i>Archiver DB</i> — storage address of the archiver data, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
 <li> <i>End and Begin of the archiver</i> — date and time of the end and start of data in the archiver repository.</li>
 <li> <i>Overall size of the archiver files</i> — information about the total size of the archiver files with the data.</li>
 <li> <i>Archiving time</i> — current and maximum time spent on the archiving of data of the message archive.</li></ul></li>
@@ -931,7 +977,7 @@
 <ul><li> Section "State" — contains the properties, which characterize the archiver state:
 <ul><li> <i>Running</i> — archiver state "Running". The running archiver processes the buffers of the value archives and puts their data in its repository, but also it processes requests for access to data in the repository.</li>
 <li> <i>Archiving time</i> — current and maximum time spent on the archiving of data of the buffers of the archives. Periodicity of archiving is set in the field "Period of the archiving" in the section "Configuration" of the tab.</li>
-<li> <i>Archiver DB</i> — database address for storing the archiver data.</li>
+<li> <i>Archiver DB</i> — storage address of the archiver data, with tracking the availability of the data in different storages and providing the sequentially removing duplicates.</li>
 <li> <i>Overall size of the archiver files</i> — information about the total size of the archiver files with the data.</li></ul></li>
 <li> Section "Configuration" — directly contains the configuration fields:
 <ul><li> <i>Identifier</i> — information on the archiver identifier.</li>
@@ -980,9 +1026,9 @@
 <li> <i>Modules</i> — information about the list of modules in a shared library.</li>
 <li> <i>Enabled</i> — state "Enabled" of the shared library. Privileged users are provided with an opportunity to manually enable/disable the shared libraries by changing this field.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1097px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_modshed.png"><img class="thumbimage" height="677" src="files/QTCfg_subsys_modshed.png" width="1095" /></a>  <div class="thumbcaption">Fig. 4.9. The main configuration tab of the subsystem "Modules scheduler".</div></div></div></div>
-<h3><span class="mw-headline" id="Configuration_file_and_command_line_parameters"><span class="mw-headline-number">4.10</span> <span id="CfgFilePrm" title="#CfgFilePrm">Configuration file and command line parameters</span></span></h3>
-<p>Configuration file of OpenSCADA is provided to store the generic configuration of OpenSCADA-station. Only in the configuration file and through the command-line options you can specify the part of the key parameters of the station, so familiarity with the structure of the configuration file is necessary for professionals who make peculiar solutions based on OpenSCADA. More information on how to startup and execution OpenSCADA can be found in the section "<a href="#Startup">Startup and execution</a>".
-</p><p>Structure of the configuration file based on the extensible markup language XML. Correspondingly, strict compliance with XML syntax rules is required. An illustrative example of an OpenSCADA configuration file with examples of the configuration of most OpenSCADA components is given below:
+<h3><span class="mw-headline" id="Configuration_File_and_command_line_parameters"><span class="mw-headline-number">4.10</span> <span id="CfgFilePrm" title="#CfgFilePrm">Configuration File and command line parameters</span></span></h3>
+<p>The Configuration File of OpenSCADA is provided to store the generic configuration of OpenSCADA-station. Only in the Configuration File and through the command-line options you can specify a part of the key parameters of the station, so familiarity with the Configuration File structure is necessary for professionals who make peculiar solutions based on OpenSCADA. More information on how to startup and execution OpenSCADA can be found in the section "<a href="#Startup">Startup and execution</a>".
+</p><p>Structure of the Configuration File based on the extensible markup language XML. Correspondingly, strict compliance with XML syntax rules is required. An illustrative example of an OpenSCADA Configuration File with examples of the configuration of most OpenSCADA components is given below:
 </p>
 <pre style="white-space: pre-wrap;">
 &lt;?xml version='1.0' encoding='UTF-8'&nbsp;?&gt;
@@ -998,12 +1044,11 @@
         &lt;prm id="StName"&gt;AGLKS&lt;/prm&gt;
         &lt;prm id="WorkDB"&gt;SQLite.GenDB&lt;/prm&gt;
         &lt;prm id="LogTarget"&gt;10&lt;/prm&gt;
-        &lt;prm id="Lang2CodeBase"&gt;en&lt;/prm&gt;
+        &lt;prm id="Lang2CodeBase"&gt;en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8&lt;/prm&gt;
         &lt;prm id="SaveAtExit"&gt;0&lt;/prm&gt;
         &lt;prm id="SavePeriod"&gt;0&lt;/prm&gt;
 
         &lt;node id="sub_BD"&gt;
-            &lt;prm id="SYSStPref"&gt;0&lt;/prm&gt;
             &lt;tbl id="DB"&gt;
                 &lt;fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_uk="Основна БД" NAME_ru="Основная БД" ADDR="St.db" CODEPAGE="UTF-8" /&gt;
             &lt;/tbl&gt;
@@ -1530,6 +1575,7 @@ limUserFile_SZ  [1MB...*10MB...1000MB] The files size limit at loading and proce
                 and the part size of the big files transferring.
 limUserIts_N    [1000...*1000000...1000000000] The limit on count of creating user items, like to array items.
 limCacheIts_N   [*100...100000] The limit on count of the caching items.
+limCacheIts_TM	[10...*60...1000] The limit on the caching items time, seconds.
     Global configurable parameters:
 prmStrBuf_SZ    [1000...*10000...1000000] Length of string buffers, no string class.
 prmWait_DL      [0.001...*0.1...1] Quantum of the waiting time cycles, seconds.
@@ -1539,7 +1585,6 @@ prmServTask_PER [1...*10...120] Service task period, seconds.
 
 ========================= Subsystem "DB" options ========================
 ------ Parameters of the section '/sub_BD/' of the configuration file ------
-SYSStPref    &lt;0|1&gt;      Use the station ID in the common table (SYS).
 TblLifeTime  &lt;seconds&gt;  Opened tables lifetime (by default 600 seconds).
 
 ======================= Subsystem "Security" options ====================
@@ -1705,11 +1750,11 @@ ModDeny    &lt;list&gt;       List of the shared libraries denied for the automa
 ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(modules), 0 to disable.
 </pre>
 <h2><span class="mw-headline" id="Startup_and_execution"><span class="mw-headline-number">5</span> <span id="Startup" title="#Startup">Startup and execution</span></span></h2>
-<p>OpenSCADA is from the beginning a program that can be started from the console or terminal by typing <b>openscada</b>. In this way, the program will start with its action messages in this console and the console lock on the user actions waiting, which is the default startup mode in the console-terminal and can be used to operative debugging and control the result of actions and errors. In addition to the typical mode, there are also two other modes that are defined by the transmission of <a href="#CfgFilePrm">options to the startup command</a>:
+<p>OpenSCADA is from the beginning a program that can be started from the console or terminal by typing <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">openscada</span>. In this way, the program will start with its action messages in this console and the console lock on the user actions waiting, which is the default startup mode in the console-terminal and can be used to operative debugging and control the result of actions and errors. In addition to the typical mode, there are also three other modes that are defined by the transmission of <a href="#CfgFilePrm">options to the startup command</a>:
 </p>
-<ul><li> Help mode for the command line parameters — <b>openscada --help</b>.</li>
-<li> Demon mode — <b>openscada --demon</b>, of background or service execution. Means disconnection from the launch console and the background execution, that is, visually the program seems to end immediately, the console releases and blocks all local graphical interface modules such as Qt. Used to launch and execute the program in the service mode such as: SCADA server, PLC execution environment, visualization server, WEB-interfaces server. Typically, this command is placed into the file of description-forming operating system service, and a few ready-made are currently supplied with OpenSCADA.</li>
-<li> Mode of service-daemon debugging — <b>openscada --noX11</b>, is essentially the typical mode with reporting for actions in the console, but preventing the launch of the local graphical user interface modules, which execution is not possible in a clean console and the inaccessible X server.</li></ul>
+<ol><li> Help mode for the command line parameters — <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">openscada --help</span>.</li>
+<li> Demon mode — <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">openscada --demon</span>, of background or service execution. Means disconnection from the launch console and the background execution, that is, visually the program seems to end immediately, the console releases and blocks all local graphical interface modules such as Qt. Used to launch and execute the program in the service mode such as: SCADA server, PLC execution environment, visualisation server, WEB-interfaces server. Typically, this command is placed into the file of description-forming operating system service, and a few ready-made are currently supplied with OpenSCADA.</li>
+<li> Mode of service-daemon debugging — <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">openscada --noX11</span>, is essentially the typical mode with reporting for actions in the console, but preventing the launch of the local graphical user interface modules, which execution is not possible in a clean console and the inaccessible X server.</li></ol>
 <p>OpenSCADA is modular one and has modules for local graphical interfaces, and this can be launched in a graphical interface, which occurs simultaneously at the typical launch from the console, in the presence of an accessible X-server. To run exclusively in, and with a graphical interface, the command of the typical mode can, and is used by: the configuration of the shortcut icons-links of the desktop, the launch of programs (also automatic) from the environment of the graphical environment — the desktop (DE). The module of the local graphical environment launching can provide several modes itself, which can be found in the documentation for this module, which is currently <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> and which provides the modes:
 </p>
 <ul><li> main mode of the OpenSCADA project execution with:
@@ -1727,7 +1772,7 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 </p><p>The data of a single project-folder typically includes:
 </p>
 <ul><li> configuration file itself ("oscada.xml");</li>
-<li> DB files of the project and libraries (folder "LibsDB") in full access mode;</li>
+<li> DB files of the project and libraries (folder "LibsDB") in full access mode and/or links to ones only for reading;</li>
 <li> archives of the messages and values on the file system (folder "ARCHIVES");</li>
 <li> images and media-data (folder "icons");</li>
 <li> documentation (folder "docs");</li>
@@ -1750,14 +1795,14 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 <li> creation the folders of the archives to File System, that is "ARCHIVES/MESS" for messages and "ARCHIVES/VAL" for values;</li>
 <li> creation on the desktop an OpenSCADA project startup file, from the graphical environment (shortcut-icon), for "openscada_{ProjectName}.desktop" from the "openscada.desktop" file template.</li></ul></dd></dl>
 <p>In order to unify and expand the functionality, and <b>openscada_start</b> exploitation experience, the essence of the project was later integrated into the OpenSCADA core and the module <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> of the local graphical interfaces execution. Therefore, the OpenSCADA core, namely the primary <b>openscada</b> binary file, involves determining the configuration file, the data folder and the name by the specified project name and switching to that configuration in accordance with paragraphs 1, 2 and 4 above of the listed functions of the project manager. Creating the interface elements for selecting and creating new projects, item 5, implements the <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> local graphical interface module (Fig.5a,5c). Items 3 and 6 are moved to a separate command line script <b>openscada-proj</b> because of the specificity of these operations to the software platform, and therefore the need for a simple adaptation to this specificity.
-</p><p>Therefore, OpenSCADA can now be run in both demon-service and GUI mode, simply by specifying the name of the current project in four ways:
+</p><p>Therefore, OpenSCADA can now be run in both demon-service and GUI mode simply by specifying the name of the current project in four ways:
 </p>
-<ul><li> by the command line parameter — <b>openscada --projName={NameProject}</b>;</li>
-<li> by the environment variable — <b>OSCADA_ProjName={NameProject} openscada</b>;</li>
+<ol><li> by the command line parameter — <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">openscada --projName={NameProject}</span>;</li>
+<li> by the environment variable — <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">OSCADA_ProjName={NameProject} openscada</span>;</li>
 <li> by a symbolic link name — <b>openscada_{NameProject}</b> to <b>openscada</b>.</li>
-<li> by selection of a presented project from the list of the local graphical interface <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a>, which is provided by the simple call of the original binary file <b>openscada</b> — the initiation mode (Fig.5c), and if the graphical Qt modules are not specified for the automatic startup — the mode of execution of the OpenSCADA project (Fig.5a).</li></ul>
+<li> by selection of a presented project from the list of the local graphical interface <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a>, which is provided by the simple call of the original binary file <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">openscada</span> — the initiation mode (Fig.5c), and if the graphical Qt modules are not specified for the automatic startup — the mode of execution of the OpenSCADA project (Fig.5a).</li></ol>
 <p>You can create a new project from the <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter</a> local graphical interface (Fig.5c) and through the command line script for the project manager <b>openscada-proj</b>, which is actually called from local graphical interface.
-</p><p>Result of the command <b>$ openscada-proj --help</b> execution:
+</p><p>Result of the command <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">openscada-proj --help</span> execution:
 </p>
 <pre style="white-space: pre-wrap;">
 Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
@@ -1803,6 +1848,31 @@ openscada-proj backupList {ProjName}
 <li> <i>backupRestore</i> — restore the selected project <i>ProjName</i> from the pointed backup name <i>BackupName</i>, or from the last one at missing;</li>
 <li> <i>backupList</i> — list the project <i>ProjName</i> backups.</li></ul>
 <p>Backup is generally done in the OpenSCADA working folder, along with the folders of the projects themselves, for which packed folder files are created with the name <b>{ProjName}_{BackupName}.backup</b>, for example — "Boiler_2020-06-24_20.09.backup". By default, project folders are compressed with "gzip", which can be changed by setting the environment variable "OSCADA_TAR_ComprPrg". Accordingly, the backup can be done from the outside, for example, according to the established schedule with CRON, in addition to doing it manually from the graphical interface of the project manager (Fig.5a).
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Backup a project folder with large archives on working systems can be inefficient and too expensive, so the archive folder "ARCHIVES" should be taken to a separate large storage and referenced from the project folder, which is also advisable for the distribution of storage to basic - highly reliable - reserved and large archival data storage (DATA) — history.
+</p>
+<h3><span class="mw-headline" id="Execution_the_ready_OpenSCADA_project_in_the_service-background_space"><span class="mw-headline-number">5.2</span> <span id="Service" title="#Service">Execution the ready OpenSCADA project in the service-background space</span></span></h3>
+<p>The OpenSCADA project organisation in a separate folder makes it easy to run ready-made projects in the service space — execution in the background, as well as further update and maintenance of this project without direct remote control. In fact, you can develop a project locally by keeping its folder in the user's work folder (typically "{HOME}/.openscada"), and to run in the service space just copy or package, transfer to a remote work device and unpack into the system work folder (default "/usr/share/openscada").
+</p><p>Service-background execution of programs in Linux is serviced by a suitably generated scripts, which are located in the folder "/etc/ini.d" and must be separate for each OpenSCADA project that runs in the service space. To simplify and eliminate the need to create your own scripts, OpenSCADA provides appropriate ones for standard cases-profiles that are typically supplied with the <b>openscada-server</b> and <b>openscada-plc</b> packages.
+</p><p>Therefore, to launch <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the AGLKS library project</a> in the service space, we:
+</p>
+<ul><li> install the packages <b>openscada-model-aglks</b> and <b>openscada-server</b>, if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
+<li> start the project "AGLKS", for getting its folder in the user's work folder;</li>
+<li> copy the project "AGLKS" folder to the system work folder also renaming to "server", previously stop the background execution of the project "server" and remove its project folder; for example, in that way from the console:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
+# Connect from the superuser
+$ su -
+# ... for the live disk and some other Linux environments
+$ sudo bash
+# Stop down of execution of the previous server configuration and remove its folder
+$ service openscada-server stop; rm -R /usr/share/openscada/server
+# Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"
+$ cp -R {HOME}/.openscada/AGLKS /usr/share/openscada/server 
+# Start the server already in the project "AGLKS"
+$ service openscada-server start
+</pre>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note that locally you can not copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
+</p><p>Difference between the project execution in the service-background environment from the user environment of the desktop is actually one, except for the lack of the local graphical interface of course, it is the absence of a locale in the background, ie the interface language will be English. And what can be fixed simply by changing or adding <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">the configuration parameter</a> <b>&lt;prm id="Lang"&gt;uk_UA.UTF-8&lt;/prm&gt;</b> to the section-tag "station" of the file <b>oscada.xml</b> of the background project.
+</p><p><br />
 </p>
 <h2><span class="mw-headline" id="Links"><span class="mw-headline-number">6</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_struct.odg" title="File:Oscada struct.odg">Diagram: Block scheme of OpenSCADA.</a></li>
@@ -1818,5 +1888,5 @@ openscada-proj backupList {ProjName}
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

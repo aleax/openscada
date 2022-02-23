@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_kernel.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,13 +45,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"SystemTests"
-#define MOD_NAME	_("OpenSCADA and its modules' tests")
+#define MOD_NAME	trS("OpenSCADA and its modules' tests")
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"TEST"
-#define MOD_VER		"1.8.5"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the group of tests to OpenSCADA and its modules.")
+#define MOD_VER		"1.8.8"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the group of tests to OpenSCADA and its modules.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -137,10 +137,8 @@ void TTest::modInfo( vector<string> &list )
     list.push_back("SubType");
 }
 
-string TTest::modInfo( const string &iname )
+string TTest::modInfo( const string &name )
 {
-    string name = TSYS::strParse(iname, 0, ":");
-
     if(name == "SubType") return SUB_TYPE;
 
     return TModule::modInfo(name);
@@ -246,13 +244,13 @@ void TTest::prXMLNode( const string &testNm, XMLNode *node, int level )
     mess(testNm, "%s}%d \"%s\"", string(level,' ').c_str(), level, node->name().c_str());
 }
 
-TVariant TTest::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TTest::objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang )
 {
     // ElTp {funcID}(ElTp prm1, ...) - the test {funcID} call
     //  prm{N} - {N} parameter to the test.
-    if(testPresent(iid)) return testAt(iid).at().objFuncCall("call", prms, user);
+    if(testPresent(id)) return testAt(id).at().objFuncCall("call", prms, user_lang);
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(id, prms, user_lang);
 }
 
 void TTest::cntrCmdProc( XMLNode *opt )

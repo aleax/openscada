@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,12 +54,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTStarter"
-#define MOD_NAME	_("Qt GUI starter")
+#define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.10.0"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
+#define MOD_VER		"5.12.0"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -128,11 +128,11 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hid
 #endif
 
     //Look and feel DB structure
-    elLF.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key,i2s(limObjNm_SZ).c_str()));
-    elLF.fldAdd(new TFld("STYLE",_("Style"),TFld::String,0,"20"));
-    elLF.fldAdd(new TFld("FONT",_("Font"),TFld::String,0,"30"));
-    elLF.fldAdd(new TFld("PALETTE",_("Palette"),TFld::String,0,"1000"));
-    elLF.fldAdd(new TFld("STL_SHTS",_("Style Sheets"),TFld::String,0,"100000"));
+    elLF.fldAdd(new TFld("NAME","",TFld::String,TCfg::Key,i2s(limObjNm_SZ).c_str()));
+    elLF.fldAdd(new TFld("STYLE","",TFld::String,0,"20"));
+    elLF.fldAdd(new TFld("FONT","",TFld::String,0,"30"));
+    elLF.fldAdd(new TFld("PALETTE","",TFld::String,0,"1000"));
+    elLF.fldAdd(new TFld("STL_SHTS","",TFld::String,0,"100000"));
 }
 
 TUIMod::~TUIMod( )
@@ -179,7 +179,7 @@ void TUIMod::postEnable( int flag )
 
 	splashSet(SPLSH_START);
     }
-    //Start main Qt thread if no help and no daemon
+    //Start main Qt thread if not help and not daemon
     else if(!(runSt || hideMode)) {
 	mEndRun = false;
 	SYS->taskCreate(nodePath('.',true), 0, Task, this);
@@ -218,24 +218,24 @@ void TUIMod::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setStartMod(TBDS::genDBGet(nodePath()+"StartMod",startMod()));
-    setCloseToTray(s2i(TBDS::genDBGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
-    setStyle(TBDS::genDBGet(nodePath()+"Style",style()));
-    setFont(TBDS::genDBGet(nodePath()+"Font",font()));
-    setPalette(TBDS::genDBGet(nodePath()+"Palette",palette()));
-    setStyleSheets(TBDS::genDBGet(nodePath()+"StyleSheets",styleSheets()));
+    setStartMod(TBDS::genPrmGet(nodePath()+"StartMod",startMod()));
+    setCloseToTray(s2i(TBDS::genPrmGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
+    setStyle(TBDS::genPrmGet(nodePath()+"Style",style()));
+    setFont(TBDS::genPrmGet(nodePath()+"Font",font()));
+    setPalette(TBDS::genPrmGet(nodePath()+"Palette",palette()));
+    setStyleSheets(TBDS::genPrmGet(nodePath()+"StyleSheets",styleSheets()));
 }
 
 void TUIMod::save_( )
 {
     mess_debug(nodePath().c_str(),_("Saving the module."));
 
-    TBDS::genDBSet(nodePath()+"StartMod", startMod());
-    TBDS::genDBSet(nodePath()+"CloseToTray", i2s(closeToTray()));
-    TBDS::genDBSet(nodePath()+"Style", style());
-    TBDS::genDBSet(nodePath()+"Font", font());
-    TBDS::genDBSet(nodePath()+"Palette", palette());
-    TBDS::genDBSet(nodePath()+"StyleSheets", styleSheets());
+    TBDS::genPrmSet(nodePath()+"StartMod", startMod());
+    TBDS::genPrmSet(nodePath()+"CloseToTray", i2s(closeToTray()));
+    TBDS::genPrmSet(nodePath()+"Style", style());
+    TBDS::genPrmSet(nodePath()+"Font", font());
+    TBDS::genPrmSet(nodePath()+"Palette", palette());
+    TBDS::genPrmSet(nodePath()+"StyleSheets", styleSheets());
 }
 
 void TUIMod::modStart( )
@@ -345,7 +345,7 @@ void TUIMod::splashSet( SplashFlag flg )
 
 	//Updating messages
 	vector<TMess::SRec> recs;
-	SYS->archive().at().messGet(splashTm/*time(NULL)-120*/, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
+	SYS->archive().at().messGet(splashTm/*time(NULL)-120*/, time(NULL), recs, "", TMess::Debug, ARCH_BUF);
 	QString mess;
 	for(int iM = recs.size()-1; iM >= 0 && iM > ((int)recs.size()-10); iM--)
 	    mess += QString("%1\n").arg(recs[iM].mess.c_str());
@@ -353,7 +353,7 @@ void TUIMod::splashSet( SplashFlag flg )
 	splash->showMessage(mess, Qt::AlignBottom|Qt::AlignLeft);
 
 	for(int iTr = 0; iTr < 3; iTr++) {
-	    QtApp->processEvents();	//!!!! To show the message on Qt5
+	    QtApp->processEvents();	//!!!! To show the messages on Qt5
 	    TSYS::sysSleep(0.01);	//!!!! To ensure the splash visibility at the exit on Qt5
 	}
     }
@@ -519,7 +519,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	    else if(opt->text() != _("<Select a profile to combine>")) {
 		TConfig cEl(&elLF);
 		cEl.cfg("NAME").setS(opt->text());
-		if(SYS->db().at().dataGet("",nodePath()+"LookFeel",cEl,true,true)) {
+		if(TBDS::dataGet("",nodePath()+"LookFeel",cEl,TBDS::NoException)) {
 		    string tVl;
 		    if((tVl=cEl.cfg("STYLE").getS()).size())
 			if(style(true).empty()) setStyle(tVl);
@@ -548,7 +548,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText(_("<Clear>"));
 	opt->childAdd("el")->setText(_("<Read back>"));
 	TConfig cEl(&elLF);
-	for(int fld_cnt = 0; SYS->db().at().dataSeek("",nodePath()+"LookFeel",fld_cnt++,cEl,true); )
+	for(int fld_cnt = 0; TBDS::dataSeek("",nodePath()+"LookFeel",fld_cnt++,cEl); )
 	    opt->childAdd("el")->setText(cEl.cfg("NAME").getS());
     }
     else if(a_path == "/prm/LF/stl") {
@@ -586,7 +586,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else TUI::cntrCmdProc(opt);
 }
 
-TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // Array sensors()
     //  Get all available sensors of the Qt mobility.
@@ -598,7 +598,7 @@ TVariant TUIMod::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return false;
     }
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 //*************************************************
@@ -866,13 +866,15 @@ void StApp::updLookFeel( )
     mod->mQtLookMdf = false;
 }
 
-void StApp::makeStarterMenu( QWidget *mn )
+void StApp::makeStarterMenu( QWidget *mn, const QString &lang )
 {
     if(!mn) {
 	QMainWindow *w = dynamic_cast<QMainWindow*>(sender());
 	if(!w) return;
-	mn = new QMenu("QTStarter");
-	w->menuBar()->addMenu((QMenu*)mn);
+	for(unsigned iAct = 0; iAct < w->menuBar()->actions().length() && !mn; ++iAct)
+		if(w->menuBar()->actions()[iAct]->text() == "QTStarter")
+		    mn = w->menuBar()->actions()[iAct]->menu();
+	if(!mn) { mn = new QMenu("QTStarter"); w->menuBar()->addMenu((QMenu*)mn); }
     }
 
     vector<string> list;
@@ -883,19 +885,32 @@ void StApp::makeStarterMenu( QWidget *mn )
 	{
 	    AutoHD<TModule> QtMod = mod->owner().modAt(list[iL]);
 
-	    QIcon icon;
-	    if(mod->owner().modAt(list[iL]).at().modFuncPresent("QIcon icon();")) {
-		QIcon(TModule::*iconGet)();
-		mod->owner().modAt(list[iL]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
-		icon = ((&mod->owner().modAt(list[iL]).at())->*iconGet)( );
-	    } else icon = QIcon(":/images/oscada_qt.png");
-	    QAction *act = new QAction(icon, QtMod.at().modName().c_str(), mn);
-	    act->setObjectName(list[iL].c_str());
-	    //act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
-	    act->setToolTip(QtMod.at().modName().c_str());
-	    act->setWhatsThis(QtMod.at().modInfo("Description").c_str());
-	    QObject::connect(act, SIGNAL(triggered()), this, SLOT(callQtModule()));
-	    mn->addAction(act);
+	    //Search for need action
+	    QAction *act = NULL;
+	    for(unsigned iAct = 0; iAct < mn->actions().length() && !act; ++iAct)
+		if(mn->actions()[iAct]->objectName() == list[iL].c_str())
+		    act = mn->actions()[iAct];
+
+	    //Create new need action
+	    if(!act) {
+		QIcon icon;
+		if(mod->owner().modAt(list[iL]).at().modFuncPresent("QIcon icon();")) {
+		    QIcon(TModule::*iconGet)();
+		    mod->owner().modAt(list[iL]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
+		    icon = ((&mod->owner().modAt(list[iL]).at())->*iconGet)( );
+		} else icon = QIcon(":/images/oscada_qt.png");
+		act = new QAction(icon, "", mn);
+		act->setObjectName(list[iL].c_str());
+		//act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
+		QObject::connect(act, SIGNAL(triggered()), this, SLOT(callQtModule()));
+		mn->addAction(act);
+	    }
+
+	    //Set/update the text information
+	    string tVl = Mess->I18N(QtMod.at().modName(), lang.toStdString().c_str());
+	    act->setText(tVl.c_str()); act->setToolTip(tVl.c_str());
+	    tVl = Mess->I18N(QtMod.at().modInfo("Description"), lang.toStdString().c_str());
+	    act->setWhatsThis(tVl.c_str());
 	}
 }
 
@@ -1261,21 +1276,25 @@ void StartDialog::updatePrjList( const string &stage )
 
 void StartDialog::timerEvent( QTimerEvent *event )
 {
-    updatePrjList();
+    if(isVisible() && isActiveWindow()) updatePrjList();
 }
 
 void StartDialog::about( )
 {
-    char buf[prmStrBuf_SZ];
+    string mess = _("%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
+		    "%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s");
 
-    snprintf(buf, sizeof(buf), _(
-	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
-	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
-	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(),
-	mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
-	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE);
+#undef _
+#define _(mess) Mess->I18N(mess).c_str()
 
-    QMessageBox::about(this, windowTitle(), buf);
+    QMessageBox::about(this, windowTitle(),
+	TSYS::strMess(mess.c_str(),
+	    _(mod->modInfo("Name")), mod->modInfo("Version").c_str(), _(mod->modInfo("Description")),
+	    _(mod->modInfo("Author")), mod->modInfo("License").c_str(),
+	    PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE).c_str());
+
+#undef _
+#define _(mess) mod->I18N(mess).c_str()
 }
 
 void StartDialog::aboutQt( )	{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
@@ -1419,7 +1438,7 @@ QString I18NTranslator::translate( const char *context, const char *sourceText, 
 #endif
 {
     if(!sourceText) return "";
-    QString trRes = _(sourceText);
+    QString trRes = mod->I18N(sourceText, qApp->property("lang").toString().toStdString().c_str()).c_str();
 
     if(mess_lev() == TMess::Debug && trRes == sourceText)
 	mess_debug(mod->nodePath().c_str(),_("Untranslated Qt message: '%s'"),sourceText);

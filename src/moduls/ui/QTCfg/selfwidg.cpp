@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,7 +56,10 @@ using namespace QTCFG;
 //************************************************
 //* ListView: List view widget                   *
 //************************************************
-ListView::ListView( QWidget * parent ) : QListWidget(parent)	{ }
+ListView::ListView( QWidget * parent ) : QListWidget(parent)
+{
+    setWordWrap(true);
+}
 
 QSize ListView::sizeHint( ) const	{ return QSize(QListWidget::sizeHint().width(), QFontMetrics(font()).height()*4); }
 
@@ -535,7 +538,7 @@ bool TextEdit::hasFocus( ) const	{ return edFld->hasFocus(); }
 void TextEdit::setText( const QString &text )
 {
     isInit = true;
-    edFld->blockSignals(true);	//!!!!: Block to prevent the status bar update and crash here sometime
+    edFld->blockSignals(true);	//!!!! The block to prevent the status bar updating and crashes here sometime
     edFld->setPlainText(text);
     edFld->blockSignals(false);
     edFld->document()->setModified(false);
@@ -721,7 +724,7 @@ bool CfgTable::event( QEvent *e )
 		    n_el1.setName("move");
 		    n_el1.setAttr("row", i2s(row))->setAttr("to", i2s(r_new));
 		    mess_info(mod->nodePath().c_str(), _("%s| '%s' moved for the record %d to %d."),
-			mainW->wUser->user().toStdString().c_str(), el_path.c_str(), row, r_new);
+			mainW->user().c_str(), el_path.c_str(), row, r_new);
 		    if(mainW->cntrIfCmd(n_el1)) throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
 		    mainW->tblInit = true;
 		    item(row,currentColumn())->setSelected(false);

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freelib.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,11 +32,11 @@ using namespace JavaLikeCalc;
 //* Lib: Functions library                        *
 //*************************************************
 Lib::Lib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elLib()), runSt(false), workLibDb(lib_db), mId(cfg("ID"))
+    TConfig(&mod->elLib()), runSt(false), mDB(lib_db), mId(cfg("ID"))
 {
     mId = id;
     cfg("NAME").setS(name);
-    cfg("DB").setS(string("flb_")+id);
+    cfg("DB").setS("flb_"+id);	//????[v1.0] Remove, saved for the new libraries work on old OpenSCADA versions
     mFnc = grpAdd("fnc_");
     if(DB().empty()) modifClr();
 }
@@ -52,15 +52,15 @@ TCntrNode &Lib::operator=( const TCntrNode &node )
     if(!src_n) return *this;
 
     //Configuration copy
-    exclCopy(*src_n, "ID;");
-    workLibDb = src_n->workLibDb;
+    exclCopy(*src_n, "ID;DB;");
+    setDB(src_n->DB());
 
     //Functions copy
     vector<string> ls;
     src_n->list(ls);
-    for(unsigned i_p = 0; i_p < ls.size(); i_p++) {
-	if(!present(ls[i_p])) add(ls[i_p].c_str());
-	(TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
+    for(unsigned iP = 0; iP < ls.size(); iP++) {
+	if(!present(ls[iP])) add(ls[iP].c_str());
+	(TCntrNode&)at(ls[iP]).at() = (TCntrNode&)src_n->at(ls[iP]).at();
     }
     if(src_n->startStat() && !startStat()) setStart(true);
 
@@ -74,16 +74,15 @@ void Lib::preDisable( int flag )
 
 void Lib::postDisable( int flag )
 {
-    if(flag && DB().size()) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor) && DB().size()) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this,true);
+	TBDS::dataDel(DB(flag&NodeRemoveOnlyStor)+"."+mod->libTable(), mod->nodePath()+"lib/", *this, TBDS::UseAllKeys);
 
 	//Delete function's files
-	SYS->db().at().open(fullDB());
-	SYS->db().at().close(fullDB(),true);
+	TBDS::dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), mod->nodePath()+tbl());
+	TBDS::dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", mod->nodePath()+tbl()+"_io");
 
-	SYS->db().at().open(fullDB()+"_io");
-	SYS->db().at().close(fullDB()+"_io",true);
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
 
@@ -93,12 +92,11 @@ string Lib::name( )
     return tNm.size() ? tNm : mId;
 }
 
-void Lib::setFullDB( const string &idb )
+void Lib::setFullDB( const string &vl )
 {
-    size_t dpos = idb.rfind(".");
-    workLibDb = (dpos!=string::npos) ? idb.substr(0,dpos) : "";
-    cfg("DB").setS((dpos!=string::npos) ? idb.substr(dpos+1) : "");
-    modifG( );
+    int off = vl.size();
+    cfg("DB").setS(TSYS::strParseEnd(vl,0,".",&off));
+    setDB(vl.substr(0,off+1));
 }
 
 void Lib::load_( TConfig *icfg )
@@ -106,13 +104,13 @@ void Lib::load_( TConfig *icfg )
     if(DB().empty() || (!SYS->chkSelDB(DB())))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
+    else TBDS::dataGet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
 
     //Load functions
     map<string, bool>   itReg;
     TConfig cEl(&mod->elFnc());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId);
 	at(fId).at().load(&cEl);
@@ -133,7 +131,8 @@ void Lib::save_( )
 {
     if(DB().empty())	return;
 
-    SYS->db().at().dataSet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
+    TBDS::dataSet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
+    setDB(DB(), true);
 }
 
 void Lib::setStart( bool val )
@@ -151,11 +150,11 @@ void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc, new Func(i
 
 void Lib::del( const string &id )			{ chldDel(mFnc, id); }
 
-TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
-    if(present(iid))	return at(iid).at().objFuncCall("call", prms, user);
+    if(present(iid))	return at(iid).at().objFuncCall("call", prms, user_lang);
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void Lib::cntrCmdProc( XMLNode *opt )
@@ -171,9 +170,15 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(DB().size()) {
-		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
-			"tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
-			"help",_("DB address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the main working DB, set '*.*'."));
+		    if(isStdStorAddr())
+			ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+			    "tp","str","dest","select","select","/db/list",
+			    "help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		    else ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+			    "tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
+			    "help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+		    if(DB(true).size())
+			ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID);
 		    ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 		}
 	    }
@@ -196,41 +201,43 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(s2i(opt->text()));
     }
     else if(a_path == "/lib/st/db" && DB().size()) {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fullDB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFullDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(isStdStorAddr()?DB():fullDB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	isStdStorAddr() ? setDB(opt->text()) : setFullDB(opt->text());
     }
+    else if(a_path == "/lib/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/lib/st/timestamp" && ctrChkNode(opt)) {
 	vector<string> tls;
 	list(tls);
 	time_t maxTm = 0;
-	for(size_t i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+	for(size_t iT = 0; iT < tls.size(); iT++) maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
 	opt->setText(i2s(maxTm));
     }
     else if(a_path == "/lib/cfg/ID" && ctrChkNode(opt))		opt->setText(id());
     else if(a_path == "/lib/cfg/NAME") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/lib/cfg/DESCR") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/br/fnc_" || a_path == "/func/func") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(at(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mFnc,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mFnc,opt->attr("id"), -1, NodeRemove);
     }
     else if(a_path == "/func/ls_lib" && ctrChkNode(opt)) {
 	vector<string> lst;
 	opt->childAdd("el")->setAttr("id","")->setText("");
 	mod->lbList(lst);
-	for(unsigned i_a=0; i_a < lst.size(); i_a++)
-	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(mod->lbAt(lst[i_a]).at().name());
+	for(unsigned iA = 0; iA < lst.size(); iA++)
+	    opt->childAdd("el")->setAttr("id",lst[iA])->setText(mod->lbAt(lst[iA]).at().name());
     }
     else TCntrNode::cntrCmdProc(opt);
 }

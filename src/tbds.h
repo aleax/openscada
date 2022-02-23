@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,10 @@
 #ifndef TBDS_H
 #define TBDS_H
 
-#define SDB_VER		14		//BDS type modules version
+#define SDB_VER		15		//BDS type modules version
 #define SDB_ID		"BD"
+
+#define SEEK_PRELOAD_LIM	100
 
 #include <stdio.h>
 
@@ -50,6 +52,25 @@ class TBD;
 class TTable : public TCntrNode
 {
     public:
+	//Data
+	// Flags of the SQL requests
+	enum SQLFeqFlag {
+	    SQLNoFlg 		= 0,
+	    SQLOrderForSeek	= 0x01,
+	    SQLFirstSkipForSeek	= 0x02
+	};
+
+	// Item of the table structure
+	class TStrIt {
+	    public:
+	    TStrIt( ) : key(0)	{ }
+	    TStrIt( const string &inm, const string itp, int ikey, const string &idef = "" ) :
+		nm(inm), tp(itp), def(idef), key(ikey) { }
+
+	    string nm, tp, def;
+	    int key;
+	};
+
 	//Public methods
 	TTable( const string &name );
 	virtual ~TTable( );
@@ -60,6 +81,7 @@ class TTable : public TCntrNode
 	string	fullDBName( );
 	time_t	lstUse( )	{ return mLstUse; }
 
+	// Common requests
 	virtual void fieldStruct( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldStruct"); }
 	virtual bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" )
@@ -71,15 +93,30 @@ class TTable : public TCntrNode
 	virtual void fieldDel( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' is not supported!"),"fieldDel"); }
 
+	// Internal requests
+	virtual void fieldFix( TConfig &cfg, const string &langLs = "" )	{ }
+
 	TBD &owner( ) const;
 
     protected:
 	//Protected methods
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
+
+	// SQL specific common operations
+	virtual string getSQLVal( TCfg &cf, uint8_t RqFlg = 0 ) { return ""; }
+	virtual void setSQLVal( TCfg &cf, const string &vl, bool tr = false ) { }
+
+	bool fieldSQLSeek( int row, TConfig &cfg, const string &cacheKey, int flags = SQLNoFlg );
+	void fieldSQLGet( TConfig &cfg );
+	void fieldSQLSet( TConfig &cfg );
+	void fieldSQLDel( TConfig &cfg );
 
 	//Protected attributes
 	time_t	mLstUse;
+
+	vector<TStrIt> tblStrct;
+	map<string, vector< vector<string> > >	seekSess;
 
     private:
 	//Private methods
@@ -111,6 +148,7 @@ class TBD : public TCntrNode, public TConfig
 	string	dscr( )			{ return cfg("DESCR").getS(); }
 	string	addr( ) const		{ return cfg("ADDR").getS(); }
 	string	codePage( )		{ return cfg("CODEPAGE").getS(); }
+	int	lsPr( )			{ return cfg("LS_PR").getI(); }
 	double	trTm_ClsOnOpen( )	{ return mTrTm_ClsOnOpen; }
 	double	trTm_ClsOnReq( )	{ return mTrTm_ClsOnReq; }
 	int	trPr_ClsTask( )		{ return mTrPr_ClsTask; }
@@ -119,11 +157,12 @@ class TBD : public TCntrNode, public TConfig
 	bool toEnable( )		{ return mToEn; }
 	bool disabledByUser( )		{ return mDisByUser; }
 
-	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
-	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
-	void setAddr( const string &iaddr )	{ cfg("ADDR").setS(iaddr); }
-	void setCodePage( const string &icp )	{ cfg("CODEPAGE").setS(icp); }
-	void setToEnable( bool ivl )		{ mToEn = ivl; modif(); }
+	void setName( const string &nm )	{ cfg("NAME").setS(nm); }
+	void setDscr( const string &dscr )	{ cfg("DESCR").setS(dscr); }
+	void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
+	void setCodePage( const string &cp )	{ cfg("CODEPAGE").setS(cp); }
+	void setLsPr( int vl )			{ cfg("LS_PR").setI(vl); }
+	void setToEnable( bool vl )		{ mToEn = vl; }
 
 	virtual void enable( );
 	virtual void disable( );
@@ -134,7 +173,7 @@ class TBD : public TCntrNode, public TConfig
 	void list( vector<string> &list ) const		{ chldList(mTbl, list); }
 	bool openStat( const string &table ) const	{ return chldPresent(mTbl, table); }
 	virtual void open( const string &table, bool create );
-	virtual void close( const string &table, bool del = false, long tm = -1 )	{ chldDel(mTbl, table, tm, del); }
+	virtual void close( const string &table, bool del = false, long tm = -1 )	{ chldDel(mTbl, table, tm, del?NodeRemove:NodeNoFlg); }
 	AutoHD<TTable> at( const string &name ) const	{ return chldAt(mTbl, name); }
 
 	// SQL request interface
@@ -146,7 +185,7 @@ class TBD : public TCntrNode, public TConfig
 	TTypeBD &owner( ) const;
 
 	//Public attributes
-	ResMtx	resTbls;
+	ResMtx	resTbls, connRes;
 
     protected:
 	//Protected methods
@@ -162,7 +201,7 @@ class TBD : public TCntrNode, public TConfig
 	void save_( );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" ) const;
 
@@ -204,13 +243,19 @@ class TTypeBD : public TModule
 	TTypeBD( const string &id );
 	virtual ~TTypeBD( );
 
-	bool fullDeleteDB( )	{ return fullDBDel; }
+	void   modInfo( vector<string> &list );
+	string modInfo( const string &name );
+
+	virtual string features( )	{ return ""; }
+	virtual int lsPr( )		{ return 0; }
+
+	bool fullDeleteDB( )		{ return fullDBDel; }
 
 	// Opened DB
 	void list( vector<string> &list ) const		{ chldList(mDB, list); }
 	bool openStat( const string &idb ) const	{ return chldPresent(mDB, idb); }
 	string open( const string &id );
-	void close( const string &id, bool erase = false ) { chldDel(mDB, id, -1, erase); }
+	void close( const string &id, bool erase = false ) { chldDel(mDB, id, -1, erase?NodeRemove:NodeNoFlg); }
 	AutoHD<TBD> at( const string &id ) const	{ return chldAt(mDB, id); }
 
 	TBDS &owner( ) const;
@@ -231,44 +276,60 @@ class TTypeBD : public TModule
 //************************************************
 class TSYS;
 
-class TBDS : public TSubSYS, public TElem
+class TBDS : public TSubSYS
 {
     public:
 	//Data
-	enum ReqGen {
-	    OnlyCfg	= 0x01,		//Only from cinfig request
-	    UseTranslate= 0x02		//Use translation for request
+	enum DBLsFlg {
+	    LsNoFlg	= 0,
+	    LsCheckSel	= 0x01,
+	    LsInclGenFirst = 0x02
 	};
+	enum ReqGenFlg {
+	    NoFlg	= 0,
+	    NoException	= 0x01,		//Do not generate the exceptions
+	    OnlyCfg	= 0x02,		//Force request to the configuration file, in genPrmSet() and dataSet() only
+	    // Specific ones
+	    UseTranslation = 0x04,	//Use translation for request, in genPrmGet() and genPrmSet() only
+	    UseCache	= 0x04,		//Use the cache, in dataSeek() only
+	    UseAllKeys	= 0x04		//Use all keys, in dataDel() only
+	};
+
+	//Generic static block
+	static string fullDBSYS( )	{ return "*.*.SYS"; }
+	static string fullDB( )		{ return "*.*.DB"; }
+
+	static string realDBName( const string &bdn, bool back = false );
+	static string dbPart( const string &bdn, bool tbl = false );
+
+	static void dbList( vector<string> &ls, char flags = LsNoFlg );
+
+	// Open/close table
+	static AutoHD<TTable> tblOpen( const string &bdn, bool create = false );
+	static void tblClose( const string &bdn, bool del = false );
+
+	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
+	static bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	static bool dataGet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	static bool dataSet( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg, XMLNode *localCfgCtx = NULL );
+	static bool dataDel( const string &bdn, const string &path, TConfig &cfg, char flags = NoFlg );
+	static bool dataDelTbl( const string &bdn, const string &path = "", char flags = NoFlg );
+
+	// Generic Parameters
+	static string genPrmGet( const string &path, const string &oval = "", const string &user = "root", char flags = NoFlg );
+	static void genPrmSet( const string &path, const string &val, const string &user = "root", char flags = NoFlg );
 
 	//Public methods
 	TBDS( );
 	~TBDS( );
 
-	int subVer( )		{ return SDB_VER; }
+	string subName( ) const	{ return _("Data Bases"); }
+	int subVer( ) const	{ return SDB_VER; }
 
-	static string realDBName( const string &bdn );
-	void dbList( vector<string> &ls, bool checkSel = false );
 	int tblLifeTime( )	{ return mTblLifeTime; }
 	void setTblLifeTime( int vl )	{ mTblLifeTime = vmax(10, vmin(1000,vl)); modif(); }
 
 	void perSYSCall( unsigned int cnt );
-
-	// Open/close table.
-	AutoHD<TTable> open( const string &bdn, bool create = false );
-	void close( const string &bdn, bool del = false );
-
-	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
-	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false, bool useCache = false, XMLNode *localCfgCtx = NULL );
-	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );
-	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false, XMLNode *localCfgCtx = NULL );
-	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );	//Next test for noEx=false
-
-	// Generic DB table
-	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", char rFlg = 0 );
-	static void genDBSet( const string &path, const string &val, const string &user = "root", char rFlg = 0 );
-
-	string fullDBSYS( );
-	string fullDB( );
 
 	TElem &openDB_E( )	{ return elDB; }
 
@@ -285,8 +346,8 @@ class TBDS : public TSubSYS, public TElem
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Private attributes
+	static TElem elSYS;
 	TElem	elDB;
-	bool	mSYSStPref;
 	int	mTblLifeTime;			//Tables lifetime
 };
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -72,7 +72,7 @@ TCntrNode &TCntrNode::operator=( const TCntrNode &node )	{ return *this; }
 
 void TCntrNode::mess_sys( int8_t level, const char *fmt,  ... )
 {
-    if(level < TMess::Debug || level > TMess::Emerg || !Mess || level < Mess->messLevel()) return;
+    if(level < TMess::Debug || level > TMess::MaxLev || !Mess || !TMess::messLevelTest(Mess->messLevel(),level)) return;
 
     char str[prmStrBuf_SZ];
     va_list argptr;
@@ -180,6 +180,9 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
     string path = ipath.empty() ? opt->attr("path") : ipath;
     string s_br = TSYS::pathLev(path, lev, true, &off);
 
+    TrCtxAlloc trCtx;
+    if(ipath.empty() && Mess->translDyn()) trCtx.hold(opt->attr("user")+"\n"+opt->attr("lang"), false);
+
     try {
 	if(!s_br.empty() && s_br[0] != '/') {
 	    AutoHD<TCntrNode> chNd;
@@ -197,14 +200,15 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	}
 	//Post the command to the node
 	if(opt->name() == "CntrReqs")
-	    for(unsigned i_n = 0; i_n < opt->childSize(); i_n++) {
-		XMLNode *nChld = opt->childGet(i_n);
+	    for(unsigned iN = 0; iN < opt->childSize(); iN++) {
+		XMLNode *nChld = opt->childGet(iN);
 		nChld->setAttr("user", opt->attr("user"))->setAttr("lang", opt->attr("lang"));
 		cntrCmd(nChld);
 		nChld->attrDel("user"); nChld->attrDel("lang");
 	    }
 	else {
 	    opt->setAttr("path", s_br);
+
 	    cntrCmdProc(opt);
 	    if(opt->attr("rez") != "0")
 		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
@@ -229,6 +233,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	opt->setAttr("mcat", err.cat);
 	opt->setText(err.mess);
     }
+
     opt->setAttr("path", path);
 }
 
@@ -342,7 +347,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 {
     try {
 	string s_br = sep ? TSYS::strDecode(TSYS::strSepParse(path,lev,sep,&off),TSYS::PathEl) :
-			    TSYS::pathLev(path,lev,true,&off);
+			    TSYS::pathLev(path, lev, true, &off);
 	if(s_br.empty()) {
 	    if(nodeMode() == Disabled) throw err_sys(_("Node is disabled!"));
 	    return this;
@@ -384,7 +389,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     string dElp, dEl, tEl;
     int nDel = 0;
     for(int off = 0; !(tEl=TSYS::pathLev(dst,0,true,&off)).empty(); nDel++)
-    { if(nDel) dElp += ("/"+dEl); dEl = tEl; }
+    { if(nDel) dElp += "/" + dEl; dEl = tEl; }
     if(!nDel) throw srcN.at().err_sys(_("Copy from '%s' to '%s' is not possible."), src.c_str(), dst.c_str());
 
     //Connect to destination containers node
@@ -558,7 +563,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
     else if(tm < 0)		tm = 0;	//prmWait_TM;	//Do not wait anything by default
 
     AutoHD<TCntrNode> chN = chldAt(igr, name);
-    if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, (flag<<8));
+    if(chN.at().nodeMode() == Enabled) chN.at().nodeDis(tm, flag);
     chN.free();
 
     MtxAlloc res(mChM, true);
@@ -572,6 +577,51 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag )
     }
     delete p->second;
     (*chGrp)[igr].elem.erase(p);
+}
+
+string TCntrNode::storage( const string &cnt, bool forQueueOfData ) const
+{
+    const_cast<TCntrNode*>(this)->dataRes().lock();
+    string prcS = cnt;
+    const_cast<TCntrNode*>(this)->dataRes().unlock();
+
+    //The work DB
+    if(!forQueueOfData) return TSYS::strLine(prcS, 0);
+
+    //The queue
+    string work = TSYS::strLine(prcS, 0), tLn;
+    for(int pos = 1 /*queue start*/; (tLn=TSYS::strLine(prcS,pos)).size(); ++pos)
+	if(tLn != work) return tLn;
+
+    return "";
+}
+
+void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
+{
+    dataRes().lock();
+    string prcS = cnt, prcS_, tLn;
+    dataRes().unlock();
+
+    //The queue
+    string work = TSYS::strLine(prcS,0);
+    if(forQueueOfData)	prcS_ = work + "\n";
+    //The work DB
+    else if(vl.empty() || vl == work)	return;
+
+    if(vl.size()) prcS_ += vl + "\n";
+
+    bool isFound = false;
+    for(int pos = 1 /*queue start*/; (tLn=TSYS::strLine(prcS,pos)).size(); ++pos) {
+	// Pass for equal items
+	if(forQueueOfData && tLn == vl)	continue;
+	// Pass for removing first not work item
+	if(forQueueOfData && vl.empty() && !isFound && tLn != work) { isFound = true; continue; }
+	prcS_ += tLn + "\n";
+    }
+
+    dataRes().lock();
+    cnt = prcS_;
+    dataRes().unlock();
 }
 
 void TCntrNode::setNodeFlg( char flg )
@@ -629,7 +679,8 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     MtxAlloc res(const_cast<ResMtx&>(mChM), true);
     if(!chGrp || igr >= (int)chGrp->size()) throw err_sys(_("Error group of childs %d!"), igr);
     TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
-    if(p == (*chGrp)[igr].elem.end()) throw err_sys(_("Element '%s' is not present!"), name.c_str());
+    if(p == (*chGrp)[igr].elem.end())
+	throw err_sys(TError::Core_NoNode, _("Element '%s' is not present!"), name.c_str());
     AutoHD<TCntrNode> chN(p->second, user);
     if(chN.at().nodeMode() == Disabled) throw err_sys(_("Element '%s' is disabled!"), name.c_str());
     res.unlock();
@@ -809,7 +860,7 @@ TVariant TCntrNode::objPropGet( const string &id )			{ return TVariant(); }
 
 void TCntrNode::objPropSet( const string &id, TVariant val )		{ }
 
-TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // TArrayObj nodeList(string grp = "", string path = "") - child nodes list
     //  grp - nodes group
@@ -830,12 +881,12 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  sep - the symbol separator for separated string path
     if(iid == "nodeAt" && prms.size() >= 1) {
 	AutoHD<TCntrNode> nd = nodeAt(prms[0].getS(), 0, (prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0, 0, true);
-	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user));
+	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user_lang));
     }
     // TCntrNodeObj nodePrev() - get previous node
     if(iid == "nodePrev") {
 	TCntrNode *tprv = nodePrev(true);
-	if(tprv) return new TCntrNodeObj(AutoHD<TCntrNode>(tprv), user);
+	if(tprv) return new TCntrNodeObj(AutoHD<TCntrNode>(tprv), user_lang);
 	return false;
     }
     // string nodePath(string sep = "", bool from_root = true) - get the node path into OpenSCADA objects tree
@@ -945,7 +996,7 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
     string req = nd->attr("path");
     string reqt, reqt1;
 
-    for(int iOff = 0, iOff1 = 0; (reqt=TSYS::pathLev(req,0,true,&iOff)).size(); woff=iOff)
+    for(int iOff = 0, iOff1 = 0; (reqt=TSYS::pathLev(req,0,true,&iOff)).size(); woff = iOff)
 	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&iOff1)))
 	    return false;
 
@@ -955,7 +1006,7 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
 
     //Find element
     while((reqt=TSYS::pathLev(path,0,true,&woff)).size()) {
-	XMLNode *obj1 = obj->childGet("id",reqt,true);
+	XMLNode *obj1 = obj->childGet("id", reqt, true);
 	if(!obj1) return false;
 	obj = obj1;
     }
@@ -1027,9 +1078,9 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    cntrCmdProc(&req);
 	    int chGrpId = grpId(tchGrp);
 	    if(chGrpId >= 0)
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
+		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
 		    XMLNode *chN = opt->childAdd();
-		    *chN = *req.childGet(i_ch);
+		    *chN = *req.childGet(iCh);
 		    //  Connect to child and get info from it
 		    AutoHD<TCntrNode> ch = chldAt(chGrpId,chN->attr("id").empty()?chN->text():chN->attr("id"));
 		    //   Check icon
@@ -1050,16 +1101,18 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		}
 	}
     }
-    else if((a_path == "/db/list" || a_path.compare(0,11,"/db/tblList") == 0) && ctrChkNode(opt)) {
+    else if((a_path.find("/db/list") == 0 || a_path.find("/db/tblList") == 0) && ctrChkNode(opt)) {
 	string tblList = "";
-	if(a_path.compare(0,11,"/db/tblList") == 0)
+	if(a_path.find("/db/tblList") == 0)
 	    if(!(tblList=TSYS::strParse(a_path,1,":")).size())	tblList = _("[TableName]");
 	vector<string> c_list;
-	SYS->db().at().dbList(c_list);
-	if(nodePath() != "/") opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
-	opt->childAdd("el")->setText(tblList.size() ? (DB_CFG"."+tblList) : DB_CFG);
-	for(unsigned i_db = 0; i_db < c_list.size(); i_db++)
-	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
+	TBDS::dbList(c_list);
+	if(TSYS::strParse(a_path,1,":").find("onlydb") == string::npos) {
+	    if(nodePath() != "/") opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
+	    opt->childAdd("el")->setText(tblList.size() ? (DB_CFG"."+tblList) : DB_CFG);
+	}
+	for(unsigned iDB = 0; iDB < c_list.size(); iDB++)
+	    opt->childAdd("el")->setText(tblList.size() ? c_list[iDB]+"."+tblList : c_list[iDB]);
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");

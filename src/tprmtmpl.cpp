@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,22 +57,22 @@ void TPrmTempl::postEnable( int flag )
 {
     //Create default IOs
     if(flag&TCntrNode::NodeConnect) {
-	ioIns(new IO("f_frq",_("Frequency of calculation of the function, Hz"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
-	ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 1);
-	ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 2);
-	ioIns(new IO("f_err",_("Function error"),IO::String,TPrmTempl::LockAttr,"0",false), 3);
+	ioIns(new IO("f_frq",trS("Frequency of calculation of the function, Hz"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
+	ioIns(new IO("f_start",trS("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 1);
+	ioIns(new IO("f_stop",trS("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 2);
+	ioIns(new IO("f_err",trS("Function error"),IO::String,TPrmTempl::LockAttr,"0",false), 3);
     }
 }
 
-void TPrmTempl::postDisable(int flag)
+void TPrmTempl::postDisable( int flag )
 {
-    if(flag) {
-	SYS->db().at().dataDel(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this, true);
+    if(flag&NodeRemove) {
+	TBDS::dataDel(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
 
 	//Delete template's IO
 	TConfig cfg(&owner().owner().elTmplIO());
 	cfg.cfg("TMPL_ID").setS(id(), true);
-	SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
+	TBDS::dataDel(owner().fullDB()+"_io", owner().owner().nodePath()+owner().tbl()+"_io/", cfg);
     }
 }
 
@@ -156,13 +156,13 @@ void TPrmTempl::load_( TConfig *icfg )
     if(!SYS->chkSelDB(owner().DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this);
+    else TBDS::dataGet(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this);
 
     //Load IO
     vector<string> u_pos;
     TConfig ioCfg(&owner().owner().elTmplIO());
     ioCfg.cfg("TMPL_ID").setS(id(), true);
-    for(int ioCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,false,true); ) {
+    for(int ioCnt = 0; TBDS::dataSeek(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io",ioCnt++,ioCfg,TBDS::UseCache); ) {
 	string sid = ioCfg.cfg("ID").getS();
 
 	// Position storing
@@ -201,7 +201,7 @@ void TPrmTempl::save_( )
 
     //Self save
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(w_db, w_cfgpath, *this);
+    TBDS::dataSet(w_db, w_cfgpath, *this);
 
     //Save IO
     TConfig cfg(&owner().owner().elTmplIO());
@@ -215,26 +215,26 @@ void TPrmTempl::save_( )
 	cfg.cfg("VALUE").setNoTransl(!(io(iIO)->type()==IO::String || io(iIO)->flg()&(TPrmTempl::CfgLink|IO::Selectable)));
 	cfg.cfg("VALUE").setS(io(iIO)->def());
 	cfg.cfg("POS").setI(iIO);
-	SYS->db().at().dataSet(w_db+"_io", w_cfgpath+"_io", cfg);
+	TBDS::dataSet(w_db+"_io", w_cfgpath+"_io", cfg);
     }
     //Clear IO
     cfg.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); ) {
+    for(int fld_cnt = 0; TBDS::dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); ) {
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr) {
-	    if(!SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true,false,true))	break;
+	    if(!TBDS::dataDel(w_db+"_io",w_cfgpath+"_io",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fld_cnt--;
 	}
     }
 }
 
-TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TPrmTempl::cntrCmdProc( XMLNode *opt )
@@ -242,7 +242,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+name(),RWRWR_,"root",SDAQ_ID,1,"doc","User_API|Documents/User_API");
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter template: ")+trD(name()),RWRWR_,"root",SDAQ_ID,1,"doc","User_API|Documents/User_API");
 	if(ctrMkNode("area",opt,-1,"/tmpl",_("Template"))) {
 	    if(ctrMkNode("area",opt,-1,"/tmpl/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -261,10 +261,10 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",
-			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object,
-			IO::Integer|(IO::Selectable<<8),IO::Real|(IO::Selectable<<8),IO::String|(IO::Selectable<<8)).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String;Text;Object;Integer numbers selection;Real numbers selection;Strings selection"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",
+			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::TransltText<<8),IO::String|(IO::FullText<<8),IO::String|((IO::FullText|IO::TransltText)<<8),
+			IO::Object,IO::Integer|(IO::Selectable<<8),IO::Real|(IO::Selectable<<8),IO::String|(IO::Selectable<<8)).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object;Integer numbers selection;Real numbers selection;Strings selection"));
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d",IO::Default,IO::Output).c_str(),"sel_list",_("Input;Output"));
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Attribute"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
@@ -276,7 +276,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Program language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
-	    ctrMkNode("fld",opt,-1,"/io/prog_tr",cfg("PR_TR").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,1,"tp","bool");
+	    if(progTr())
+		ctrMkNode("fld",opt,-1,"/io/prog_tr",cfg("PR_TR").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/io/prog",cfg("PROGRAM").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
@@ -293,12 +294,12 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/tmpl/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/tmpl/cfg/ID" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/tmpl/cfg/NAME") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/tmpl/cfg/DESCR") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/tmpl/cfg/MAXCALCTM") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(maxCalcTm()));
@@ -316,8 +317,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 
 	    for(int id = 0; id < ioSize(); id++) {
 		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
-		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
-		if(n_type)	n_type->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&(IO::FullText|IO::Selectable))<<8)));
+		if(n_nm)	n_nm->childAdd("el")->setText(trD(io(id)->name()));
+		if(n_type)	n_type->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&(IO::FullText|IO::TransltText|IO::Selectable))<<8)));
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_attr)	n_attr->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
 		if(n_accs)	n_accs->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::CfgConst|TPrmTempl::CfgLink)));
@@ -362,10 +363,10 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		    opt->setText(TSYS::strEncode(sTrm(opt->text()),TSYS::Limit,i2s(owner().owner().elTmplIO().fldAt(owner().owner().elTmplIO().fldId("ID")).len())));
 		    io(row)->setId(opt->text());
 		    break;
-		case 1:	io(row)->setName(sTrm(opt->text()));	break;
+		case 1:	io(row)->setName(trDSet(io(row)->name(),sTrm(opt->text())));	break;
 		case 2:
 		    io(row)->setType((IO::Type)(s2i(opt->text())&0xFF));
-		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::Selectable)));
+		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::TransltText|IO::Selectable)));
 		    break;
 		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(IO::Output|IO::Return)));		break;
 		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));		break;
@@ -580,6 +581,7 @@ void TPrmTempl::Impl::addLinksAttrs( TElem *attrsCntr )
 	    unsigned fId = 0;
 	    unsigned flg = TVal::DirWrite|TVal::DirRead;
 	    if(func()->io(iIO)->flg()&IO::FullText)		flg |= TFld::FullText;
+	    if(func()->io(iIO)->flg()&IO::TransltText)		flg |= TFld::TransltText;
 	    string selVals, selNms;
 	    if(func()->io(iIO)->flg()&IO::Selectable) {
 		flg |= TFld::Selectable;
@@ -666,7 +668,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		// Check the selected param
 		bool is_lnk = func()->io(iIO)->flg()&TPrmTempl::CfgLink;
 		if(is_lnk && TSYS::strLine(func()->io(iIO)->def(),0).size() &&
-		    !s2i(TBDS::genDBGet(obj->nodePath()+"onlAttr","0",opt->attr("user"))))
+		    !s2i(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user"))))
 		{
 		    string nprm = TSYS::strSepParse(TSYS::strLine(func()->io(iIO)->def(),0),0,'|');
 		    // Check already to present parameters
@@ -706,8 +708,8 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
     if(a_path.find(pref) != 0)	return false;
     a_path = a_path.substr(pref.size());
     if(a_path == "/attr_only") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(obj->nodePath()+"onlAttr","0",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genDBSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genPrmSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
     }
     else if(a_path.compare(0,8,"/prm/pr_") == 0) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
@@ -791,11 +793,11 @@ string TPrmTempl::Impl::lnkHelp( )
 //* TPrmTmplLib                                   *
 //*************************************************
 TPrmTmplLib::TPrmTmplLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&SYS->daq().at().elLib()), runSt(false), mId(cfg("ID")), work_lib_db(lib_db)
+    TConfig(&SYS->daq().at().elLib()), runSt(false), mId(cfg("ID")), mDB(lib_db)
 {
     mId = id;
-    setName( name );
-    cfg("DB").setS(string("tmplib_")+id);
+    setName(name);
+    cfg("DB").setS("tmplib_"+id);	//????[v1.0] Remove, saved for the new libraries work on old OpenSCADA versions
     m_ptmpl = grpAdd("tmpl_");
 }
 
@@ -811,7 +813,7 @@ TCntrNode &TPrmTmplLib::operator=( const TCntrNode &node )
 
     //Configuration copy
     exclCopy(*src_n, "ID;DB;");
-    work_lib_db = src_n->work_lib_db;
+    setDB(src_n->DB());
 
     //Templates copy
     vector<string> ls;
@@ -825,23 +827,22 @@ TCntrNode &TPrmTmplLib::operator=( const TCntrNode &node )
     return *this;
 }
 
-void TPrmTmplLib::preDisable(int flag)
+void TPrmTmplLib::preDisable( int flag )
 {
     start(false);
 }
 
-void TPrmTmplLib::postDisable(int flag)
+void TPrmTmplLib::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	//Delete libraries record
-	SYS->db().at().dataDel(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
+	TBDS::dataDel(DB(flag&NodeRemoveOnlyStor)+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this, TBDS::UseAllKeys);
 
 	//Delete temlate librarie's DBs
-	SYS->db().at().open(fullDB());
-	SYS->db().at().close(fullDB(), true);
+	TBDS::dataDelTbl(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl());
+	TBDS::dataDelTbl(fullDB(flag&NodeRemoveOnlyStor)+"_io", owner().nodePath()+tbl()+"_io/");
 
-	SYS->db().at().open(fullDB()+"_io");
-	SYS->db().at().close(fullDB()+"_io", true);
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
 
@@ -857,10 +858,9 @@ void TPrmTmplLib::setDescr( const string &vl )	{ cfg("DESCR").setS(vl); }
 
 void TPrmTmplLib::setFullDB( const string &vl )
 {
-    size_t dpos = vl.rfind(".");
-    work_lib_db = (dpos!=string::npos) ? vl.substr(0,dpos) : "";
-    cfg("DB").setS((dpos!=string::npos) ? vl.substr(dpos+1) : "");
-    modifG();
+    int off = vl.size();
+    cfg("DB").setS(TSYS::strParseEnd(vl,0,".",&off));
+    setDB(vl.substr(0,off+1));
 }
 
 void TPrmTmplLib::load_( TConfig *icfg )
@@ -868,13 +868,13 @@ void TPrmTmplLib::load_( TConfig *icfg )
     if(!SYS->chkSelDB(DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
+    else TBDS::dataGet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
 
     //Load templates
     map<string, bool>	itReg;
     TConfig cEl(&owner().elTmpl());
     //cEl.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,false,true); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
 	if(!present(fId)) add(fId);
 	at(fId).at().load(&cEl);
@@ -892,7 +892,8 @@ void TPrmTmplLib::load_( TConfig *icfg )
 
 void TPrmTmplLib::save_( )
 {
-    SYS->db().at().dataSet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
+    TBDS::dataSet(DB()+"."+owner().tmplLibTable(), owner().nodePath()+"tmplib", *this);
+    setDB(DB(), true);
 }
 
 void TPrmTmplLib::start( bool val )
@@ -918,13 +919,13 @@ void TPrmTmplLib::add( const string &id, const string &name )
     chldAdd(m_ptmpl, new TPrmTempl(id,name));
 }
 
-TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
@@ -939,9 +940,15 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessible"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
-		    "tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
-		    "help",_("DB address in format \"{DB module}.{DB name}.{Table name}\".\nSet '*.*.{Table name}' for use the main work DB."));
+		if(isStdStorAddr())
+		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+			"tp","str","dest","select","select","/db/list",
+			"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		else ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+			"tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
+			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/lib/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SDAQ_ID);
 		ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration"))) {
@@ -963,9 +970,11 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	start(s2i(opt->text()));
     }
     else if(a_path == "/lib/st/db") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fullDB());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFullDB(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(isStdStorAddr()?DB():fullDB());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	isStdStorAddr() ? setDB(opt->text()) : setFullDB(opt->text());
     }
+    else if(a_path == "/lib/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/lib/st/timestamp" && ctrChkNode(opt)) {
 	vector<string> tls;
 	list(tls);
@@ -975,19 +984,19 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/lib/cfg/ID" && ctrChkNode(opt))		opt->setText(id());
     else if(a_path == "/lib/cfg/NAME") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
     }
     else if(a_path == "/lib/cfg/DESCR") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
     }
     else if(a_path == "/br/tmpl_" || a_path == "/tmpl/tmpl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(at(lst[iF]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(at(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id").c_str(),true);

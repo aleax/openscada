@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tparamcontr.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -161,10 +161,10 @@ string TParamContr::add( const string &iid, unsigned type )
     return (mPrm < 0) ? "" : chldAdd(mPrm, owner().ParamAttach(TSYS::strEncode(sTrm(iid),TSYS::oscdID),type));
 }
 
-void TParamContr::del( const string &iid, int full )
+void TParamContr::del( const string &iid, int flags )
 {
     if(mPrm < 0) return;
-    chldDel(mPrm, iid, -1, full);
+    chldDel(mPrm, iid, -1, flags);
 }
 
 AutoHD<TParamContr> TParamContr::at( const string &iid, const string &who ) const
@@ -188,8 +188,8 @@ void TParamContr::LoadParmCfg( )
 	    cEl.cfg("OWNER").setS(ownerPath(true), TCfg::ForceUse);
 
 	    // Search new into DB and Config-file
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().DB()+"."+owner().owner().tpPrmAt(iTp).DB(&owner()),
-		    owner().owner().nodePath()+owner().owner().tpPrmAt(iTp).DB(&owner()),fld_cnt++,cEl,false,true); )
+	    for(int fld_cnt = 0; TBDS::dataSeek(owner().DB()+"."+owner().owner().tpPrmAt(iTp).DB(&owner()),
+		    owner().owner().nodePath()+owner().owner().tpPrmAt(iTp).DB(&owner()),fld_cnt++,cEl,TBDS::UseCache); )
 	    {
 		try {
 		    string shfr = cEl.cfg("SHIFR").getS();
@@ -216,7 +216,7 @@ void TParamContr::LoadParmCfg( )
 		del(itLs[iIt]);
     }
 
-    //Force load present parameters
+    //Force loading the available parameters
     vector<string> prmLs;
     list(prmLs);
     for(unsigned iP = 0; iP < prmLs.size(); iP++) {
@@ -246,8 +246,9 @@ void TParamContr::preDisable( int flag )
     for(unsigned iA = 0; iA < aLs.size(); iA++)
 	if(!vlAt(aLs[iA]).at().arch().freeStat()) {
 	    string arh_id = vlAt(aLs[iA]).at().arch().at().id();
-	    if((flag>>8) == RM_Full) SYS->archive().at().valDel(arh_id, true);
-	    else SYS->archive().at().valAt(arh_id).at().stop();
+	    if(flag&NodeRemove_NoArch)
+		SYS->archive().at().valAt(arh_id).at().stop();
+	    else SYS->archive().at().valDel(arh_id, true);
 	}
 
     if(enableStat())	disable();
@@ -255,10 +256,10 @@ void TParamContr::preDisable( int flag )
 
 void TParamContr::postDisable( int flag )
 {
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Delete the parameter from DB
 	cfg("OWNER") = ownerPath();
-	SYS->db().at().dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, true);
+	TBDS::dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, TBDS::UseAllKeys);
     }
 }
 
@@ -269,16 +270,16 @@ void TParamContr::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//Checking for need to change the parameter type at loading from the configuration context
-	if(SYS->cfgCtx() && !SYS->cfgCtx()->childGet("id",owner().owner().nodePath()+owner().cfg(type().mDB).getS(),true))
+	if(SYS->cfgCtx() && !SYS->cfgCtx()->childGet("prmTp",type().name,true))
 	    for(unsigned iTp = 0; iTp < owner().owner().tpPrmSize(); ++iTp)
-		if(SYS->cfgCtx()->childGet("id",owner().owner().nodePath()+owner().cfg(owner().owner().tpPrmAt(iTp).mDB).getS(),true)) {
+		if(SYS->cfgCtx()->childGet("prmTp",owner().owner().tpPrmAt(iTp).name,true)) {
 		    setType(owner().owner().tpPrmAt(iTp).name);
 		    break;
 		}
 
 	//cfgViewAll(true);
 	cfg("OWNER") = ownerPath();
-	SYS->db().at().dataGet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
+	TBDS::dataGet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
     }
 
     LoadParmCfg();
@@ -288,7 +289,8 @@ void TParamContr::save_( )
 {
     cfg("OWNER") = ownerPath();
     cfg("TIMESTAMP") = (int64_t)SYS->sysTm();
-    SYS->db().at().dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
+    TBDS::dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
+    if(SYS->cfgCtx(true)) SYS->cfgCtx(true)->setAttr("prmTp", type().name);
 
     //Save archives
     vector<string> aLs;
@@ -397,7 +399,7 @@ void TParamContr::setType( const string &tpId )
 	//Wait for disconnect other
 	while(nodeUse(true) > 1) TSYS::sysSleep(1e-3);
 	//Remove from DB
-	postDisable(true);
+	postDisable(NodeRemove);
 
 	//Create temporary structure
 	TConfig tCfg(&type());
@@ -422,12 +424,19 @@ void TParamContr::setType( const string &tpId )
     modif();
 }
 
-TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // TCntrNodeObj cntr() - get the controller node
-    if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
+    if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user_lang);
+    // bool messSet( string mess, int lev, string type2Code = "OP", string cat = "") -
+    //		sets of the DAQ-sourced message <mess> with the level <lev>, for the parameter.
+    if(iid == "messSet" && prms.size() >= 2) {
+	owner().messSet(prms[0].getS(), prms[1].getI(), ((prms.size()>=3)?prms[2].getS():"OP"),
+	    ownerPath(true), ((prms.size()>=4)?prms[3].getS():""));
+	return true;
+    }
     // bool alarmSet( string mess, int lev = -5, bool force = false ) -
-    //		set alarm to message <mess> and level <lev> and omit the presence control at <force>.
+    //		sets/removes of the violation <mess> with the level <lev> (negative to set otherwise to remove) for the parameter.
     if(iid == "alarmSet" && prms.size() >= 1) {
 	owner().alarmSet(prms[0].getS(), (prms.size() >= 2) ? prms[1].getI() : -TMess::Crit,
 	    ownerPath(true)+"\n"+name(), (prms.size() >= 3) ? prms[2].getB() : false);
@@ -435,10 +444,10 @@ TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, co
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, user, RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
-    return TValue::objFuncCall(iid, prms, user);
+    return TValue::objFuncCall(iid, prms, user_lang);
 }
 
 void TParamContr::cntrCmdProc( XMLNode *opt )
@@ -502,17 +511,17 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     else if(mPrm >= 0 && a_path == "/iPrms/nmb" && ctrChkNode(opt)) {
 	vector<string> c_list;
 	list(c_list);
-	unsigned e_c = 0;
+	unsigned eC = 0;
 	for(unsigned iA = 0; iA < c_list.size(); iA++)
-	    if(at(c_list[iA]).at().enableStat()) e_c++;
-	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
+	    if(at(c_list[iA]).at().enableStat()) eC++;
+	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),eC));
     }
     else if((a_path == "/br/prm_" || a_path == "/iPrms/prm")) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> c_list;
 	    list(c_list);
 	    for(unsigned iA = 0; iA < c_list.size(); iA++) {
-	        XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(at(c_list[iA]).at().name());
+	        XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[iA])->setText(trD(at(c_list[iA]).at().name()));
 		if(!s2i(opt->attr("recurs"))) continue;
 		cN->setName(opt->name())->setAttr("path",TSYS::strEncode(opt->attr("path"),TSYS::PathEl))->setAttr("recurs","1");
 		at(c_list[iA]).at().cntrCmd(cN);
@@ -523,7 +532,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
     }
     else if(type().cntrCmdProc(this, opt)) /* Process OK */;
-    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
     else if(a_path == "/prm/tmplList" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");
 	vector<string> lls, ls;

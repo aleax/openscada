@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 11:50+0300\n"
+"POT-Creation-Date: 2021-09-27 09:13+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -157,6 +157,14 @@ msgstr "OK"
 #, c-format
 msgid "10:Generic error: %s."
 msgstr "10:Allgemeiner Fehler: %s."
+
+msgid ""
+"Manual restart of the enabled controller object causes the force reformation "
+"of the monitored items list.\n"
+"Restart to apply the removed PLC links in run."
+msgstr ""
+"Ein manueller Neustart des freigegebenen Controller-Objekts bewirkt, dass die Neuformatierung der Liste der überwachten Elemente erzwungen wird.\n"
+"Starten Sie neu, um die entfernten SPS-Links im Lauf zu übernehmen."
 
 msgid "Zero for disable periodic sync."
 msgstr "Zero deaktivieren periodische Synchronisation."
@@ -462,6 +470,10 @@ msgstr "Aktiviert"
 msgid "DB"
 msgstr "DB"
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Entfernen von '%s'"
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -491,8 +503,7 @@ msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 
 #, c-format
 msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
-msgstr ""
-"%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
+msgstr "%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -538,3 +549,4 @@ msgstr "Server OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Bietet OPC-UA Server-Service-Implementierung."
+

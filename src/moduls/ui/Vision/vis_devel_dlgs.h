@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -88,7 +88,8 @@ class LibProjProp: public QDialog
     private:
 	//Private attributes
 	QTabWidget	*wdg_tabs;	//Tabs
-	QPushButton	*obj_ico;	//Icon
+	QPushButton	*obj_ico,	//Icon
+			*obj_remFromDB;	//Remove from DB
 	QCheckBox	*obj_enable;	//Enabled stat
 			//*prj_keepAspRt;	//Keep master page aspect ratio
 	LineEdit	*obj_db;	//DB
@@ -155,7 +156,6 @@ class VisItProp : public QDialog
     private slots:
 	//Private slots
 	void selectIco( );
-	void selectParent( );
 	void isModify( QObject *snd = NULL );
 
 	void addAttr( );
@@ -185,13 +185,14 @@ class VisItProp : public QDialog
 	QLabel		*obj_id,	//Id
 			*obj_root,	//Root
 			*obj_path,	//Path
-			*obj_st;	//Status
+			*obj_st,	//Status
+			*lab_proc_text_tr; //Label of the widget's procedure program text translation
 //			*obj_used,	//Used
 //			*obj_tmstmp;	//TimeStamp
 	QPushButton	*obj_ico;	//Icon
 	QCheckBox	*obj_enable;	//Enabled stat
-	QComboBox	*obj_parent,	//Parent widget
-			*pg_tp;		//Page: Page type
+	LineEdit	*obj_parent;	//Parent widget
+	QComboBox	*pg_tp;		//Page: Page type
 
 	LineEdit	*obj_name;	//Name
 	TextEdit	*obj_descr;	//Description

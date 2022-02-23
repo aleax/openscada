@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfgD file: web_cfg.h
 /***************************************************************************
- *   Copyright (C) 2008-2017 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +24,9 @@
 #include <tuis.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using namespace OSCADA;
 
@@ -41,11 +43,12 @@ struct SSess
 		vector<string> &ivars, const string &icontent );
 
     //Attributes
-    string	url;		//request URL
-    string	page;
-    string	sender;		//request sender
-    string	user;		//sesion user
-    string	content;	//Contain
+    string	url,		//request URL
+		page,
+		sender,		//request sender
+		user,		//sesion user
+		content,	//Contain
+		lang;		//Language
 
     vector<string>	vars;	//request vars
     map<string,string>	cnt;	//Parsed contain
@@ -73,6 +76,8 @@ class TWEB: public TUI
 	//Methods
 	string pgCreator( TProtocolIn *iprt, const string &cnt, const string &rcode = "", const string &httpattrs = "",
 	    const string &htmlHeadEls = "", const string &forceTmplFile = "" );
+
+	static bool compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 );
 
 	void HTTP_GET( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );
 	void HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt );

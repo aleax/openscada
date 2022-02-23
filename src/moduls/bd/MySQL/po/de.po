@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>. 2010-2019.
+# Roman Savochenko <roman@oscada.org>. 2010-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-14 22:13+0200\n"
+"POT-Creation-Date: 2021-12-08 09:53+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -106,9 +106,5 @@ msgstr ""
 msgid "Close opened transaction"
 msgstr "Geöffnete Transaktion schlissen"
 
-msgid "Table is empty!"
-msgstr "Tabelle ist leer!"
-
-#, c-format
-msgid "The row \"%s\" is not present. Are you saved the object?"
-msgstr "Datensatz \"%s\" ist nicht vorhanden! Sind Sie das Objekt gespeichert?"
+msgid "Table is empty."
+msgstr "Tabelle ist leer."

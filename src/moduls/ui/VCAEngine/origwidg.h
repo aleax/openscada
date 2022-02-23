@@ -40,7 +40,7 @@ class PrWidget : public LWidget
 	string rootId( ) const		{ return id(); }
 	string ico( ) const;
 	string type( )			{ return "Terminator"; }
-	string parentNm( ) const	{ return "root"; }
+	string parentAddr( ) const	{ return "root"; }
 	string name( ) const		{ return _("Root primitive"); }
 	string descr( ) const		{ return _("Abstract root primitive"); }
 
@@ -198,7 +198,7 @@ class OrigDocument : public PrWidget
 	bool attrChange( Attr &cfg, TVariant prev );
 	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 	void sizeUpdate( SessWdg *sw );
-	TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
+	TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user_lang, Widget *src = NULL );
 
 	static string makeDoc( const string &tmpl, Widget *wdg );
 	static void nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel = false, time_t upTo = 0 );

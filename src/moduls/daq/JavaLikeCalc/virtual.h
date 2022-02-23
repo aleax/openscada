@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,9 @@
 #include "freefunc.h"
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::vector;
@@ -192,7 +194,7 @@ class TpContr : public TTypeDAQ
 	void lbList( vector<string> &ls ) const		{ chldList(mLib, ls); }
 	bool lbPresent( const string &id ) const	{ return chldPresent(mLib, id); }
 	void lbReg( Lib *lib )				{ chldAdd(mLib, lib); }
-	void lbUnreg( const string &id, int flg = 0 )	{ chldDel(mLib, id, -1, flg); }
+	void lbUnreg( const string &id, int flg = NodeNoFlg )	{ chldDel(mLib, id, -1, flg); }
 	AutoHD<Lib> lbAt( const string &id ) const	{ return chldAt(mLib, id); }
 
 	ResRW &parseRes( )			{ return mParseRes; }

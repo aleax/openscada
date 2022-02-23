@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,12 +36,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"LogicLev"
-#define MOD_NAME	_("Logical level")
+#define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.5.6"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the pure logical level of the DAQ parameters.")
+#define MOD_VER		"2.6.8"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -98,23 +98,23 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable( flag );
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table by template"),TFld::String,TFld::NoFlag,"40",""));
-    fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"50",""));
-    fldAdd(new TFld("SCHEDULE",_("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100", "1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table by template"),TFld::String,TFld::NoFlag,"40",""));
+    fldAdd(new TFld("PRM_BD_REFL",trS("Parameters table for reflection"),TFld::String,TFld::NoFlag,"50",""));
+    fldAdd(new TFld("SCHEDULE",trS("Schedule of the calculation"),TFld::String,TFld::NoFlag,"100", "1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
 
     //Parameter type bd structure
     // Standard parameter type by template
     int t_prm = tpParmAdd("std", "PRM_BD", _("Logical"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("PRM",_("Parameter template"),TFld::String,TCfg::NoVal,"100",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("PRM",trS("Parameter template"),TFld::String,TCfg::NoVal,"100",""));
     //  Logical level parameter IO BD structure
-    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ*6).c_str()));
-    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
-    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"1000000"));
+    elPrmIO.fldAdd(new TFld("PRM_ID",trS("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ*6).c_str()));
+    elPrmIO.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
+    elPrmIO.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"1000000"));
 
     // A parameter direct reflection
     t_prm = tpParmAdd("pRefl", "PRM_BD_REFL", _("Parameter reflection"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("PSRC",_("Source parameter"),TFld::String,TCfg::NoVal,"100",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("PSRC",trS("Source parameter"),TFld::String,TCfg::NoVal,"100",""));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name,daq_db,this); }
@@ -134,17 +134,15 @@ TMdContr::~TMdContr( )
     if(startStat()) stop();
 }
 
-void TMdContr::postDisable(int flag)
+void TMdContr::postDisable( int flag )
 {
-    TController::postDisable(flag);
     try {
-	if(flag) {
-	    //Delete parameter's io table
-	    string tbl = DB()+"."+cfg("PRM_BD").getS()+"_io";
-	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl, true);
-	}
+	if(flag&(NodeRemove|NodeRemoveOnlyStor))
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD").getS()+"_io",
+				owner().nodePath()+cfg("PRM_BD").getS()+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+
+    TController::postDisable(flag);
 }
 
 string TMdContr::getStatus( )
@@ -351,11 +349,11 @@ void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(ownerPath(true), true);
-	SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+	TBDS::dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -488,12 +486,12 @@ void TMdPrm::loadIO( bool force )
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
     //IO values loading and links set, by seek
-    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,false,true); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",fldCnt++,cfg,TBDS::UseCache); ) {
 	int iIO = tmpl->func()->ioId(cfg.cfg("ID").getS());
 	if(iIO < 0) continue;
 	if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    tmpl->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
-	else if(tmpl->func()->io(iIO)->type() != IO::String)
+	else if(tmpl->func()->io(iIO)->type() != IO::String || !(tmpl->func()->io(iIO)->flg()&IO::TransltText))
 	    tmpl->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
 	else tmpl->setS(iIO, cfg.cfg("VALUE").getS());
     }
@@ -518,11 +516,11 @@ void TMdPrm::saveIO( )
     for(int iIO = 0; iIO < tmpl->func()->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(tmpl->func()->io(iIO)->id());
 	cfg.cfg("VALUE").setNoTransl(!(tmpl->func()->io(iIO)->type() == IO::String &&
-		!(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
+		(tmpl->func()->io(iIO)->flg()&IO::TransltText) && !(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
 	if(tmpl->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(tmpl->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(tmpl->getS(iIO));
-	SYS->db().at().dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+	TBDS::dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -590,7 +588,7 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm(true);
 }
 
-TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
     //  id, name - new attribute id and name;
@@ -643,7 +641,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return true;
     }
 
-    return TParamContr::objFuncCall(iid, prms, user);
+    return TParamContr::objFuncCall(iid, prms, user_lang);
 }
 
 void TMdPrm::calc( bool first, bool last, double frq )

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.h
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,9 @@
 #include <tprotocols.h>
 
 #undef _
-#define _(mess) modPrt->I18N(mess)
+#define _(mess) modPrt->I18N(mess).c_str()
+#undef trS
+#define trS(mess) modPrt->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::map;
@@ -38,12 +40,12 @@ using namespace OSCADA;
 //*************************************************
 //* Protocol modul info!                          *
 #define PRT_ID		"ModBus"
-#define PRT_NAME	"ModBus"
+#define PRT_NAME	trS("Server ModBus")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.8.0"
-#define PRT_AUTHORS	_("Roman Savochenko")
-#define PRT_DESCR	_("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
+#define PRT_MVER	"2.9.7"
+#define PRT_AUTHORS	trS("Roman Savochenko")
+#define PRT_DESCR	trS("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
@@ -115,9 +117,9 @@ class Node : public TFunction, public TConfig
 
 	string getStatus( );
 
-	string DB( ) const	{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const;
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &name )	{ mName = name; }
 	void setDescr( const string &idsc )	{ mDscr = idsc; }
@@ -127,7 +129,7 @@ class Node : public TFunction, public TConfig
 	void setProgTr( bool vl )		{ cfg("DT_PR_TR") = vl; }
 	void setProg( const string &iprg );
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	bool req( const string &tr, const string &prt, unsigned char node, string &pdu );
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_sensors.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2015 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,8 +60,10 @@ Sensors::~Sensors( )
 #endif
 }
 
-void Sensors::init( TMdPrm *prm )
+void Sensors::init( TMdPrm *prm, bool update )
 {
+    if(update)	return;
+
     prm->cfg("SUBT").setView(false);
     getSensors(prm, true);
 }

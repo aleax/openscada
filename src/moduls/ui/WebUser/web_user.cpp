@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebUser file: web_user.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,13 +31,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebUser"
-#define MOD_NAME	_("User WWW-page")
+#define MOD_NAME	trS("User WWW-page")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.4.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides for creating your own web-pages on internal OpenSCADA language.")
+#define MOD_VER		"1.5.9"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -86,17 +86,17 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mPgU = grpAdd("up_");
 
     //User page DB structure
-    mUPgEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    mUPgEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPgEl.fldAdd(new TFld("PROG",_("Procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
-    mUPgEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    mUPgEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mUPgEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mUPgEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mUPgEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0") );
+    mUPgEl.fldAdd(new TFld("PROG",trS("Procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPgEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //User page data IO DB structure
-    mUPgIOEl.fldAdd(new TFld("PG_ID",_("User page ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mUPgIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mUPgIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
+    mUPgIOEl.fldAdd(new TFld("PG_ID",trS("User page ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPgIOEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPgIOEl.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"100"));
 }
 
 TWEB::~TWEB( )
@@ -120,13 +120,13 @@ void TWEB::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,false,true); ) {
+	    for(int fldCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!uPgPresent(id)) uPgAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
-		uPgAt(id).at().load(&gCfg);
+		if(!uPgPresent(id)) uPgAdd(id, itLs[iDB]);
+		if(uPgAt(id).at().DB() == itLs[iDB]) uPgAt(id).at().load(&gCfg);
+		uPgAt(id).at().setDB(itLs[iDB], true);
 		itReg[id] = true;
 	    }
 
@@ -142,12 +142,12 @@ void TWEB::load_( )
 	mess_err(nodePath().c_str(),_("Error searching and creating a new user page."));
     }
 
-    setDefPg(TBDS::genDBGet(nodePath()+"DefPg",defPg()));
+    setDefPg(TBDS::genPrmGet(nodePath()+"DefPg",defPg()));
 }
 
 void TWEB::save_( )
 {
-    TBDS::genDBSet(nodePath()+"DefPg", defPg());
+    TBDS::genPrmSet(nodePath()+"DefPg", defPg());
 }
 
 void TWEB::modStart( )
@@ -201,16 +201,15 @@ bool TWEB::pgAccess( TProtocolIn *iprt, const string &URL )
     return iprt->objFuncCall("pgAccess", prms, "root").getB();
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, ses.lang.c_str())
-
 void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     string rez, sender = TSYS::strLine(iprt->srcAddr(), 0);
     AutoHD<UserPg> up, tup;
 
-
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), sender, user, vars, page);
+
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     try {
 	//Find user protocol for using
@@ -258,6 +257,9 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
     map<string,string>::iterator prmEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
 
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
+
     try {
 	//Find user protocol for using
 	vector<string> upLs;
@@ -283,9 +285,6 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 			       "404 Not Found", "", "", "", ses.lang);
     }
 }
-
-#undef _
-#define _(mess) mod->I18N(mess)
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
@@ -314,10 +313,10 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    uPgList(lst);
 	    for(unsigned iF = 0; iF < lst.size(); iF++)
-		opt->childAdd("el")->setAttr("id",lst[iF])->setText(uPgAt(lst[iF]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(uPgAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	{ opt->setAttr("id", uPgAdd(opt->attr("id"))); uPgAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	chldDel(mPgU,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	chldDel(mPgU,opt->attr("id"), -1, NodeRemove);
     }
     else TUI::cntrCmdProc(opt);
 }
@@ -369,7 +368,11 @@ TCntrNode &UserPg::operator=( const TCntrNode &node )
 
 void UserPg::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 TWEB &UserPg::owner( ) const	{ return *(TWEB*)nodePrev(); }
@@ -479,7 +482,7 @@ void UserPg::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
-	SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
+	TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
     }
 
     loadIO();
@@ -494,7 +497,7 @@ void UserPg::loadIO( )
 	TConfig cf(&owner().uPgIOEl());
 	cf.cfg("PG_ID").setS(id(), TCfg::ForceUse);
 	cf.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,true); ) {
+	for(int ioCnt = 0; TBDS::dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,TBDS::UseCache); ) {
 	    string sid = cf.cfg("ID").getS();
 	    int iid = func()->ioId(sid);
 	    if(iid < 0)	continue;
@@ -509,9 +512,11 @@ void UserPg::loadIO( )
 void UserPg::save_( )
 {
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(fullDB(), owner().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 
     saveIO();
+
+    setDB(DB(), true);
 }
 
 void UserPg::saveIO( )
@@ -529,15 +534,15 @@ void UserPg::saveIO( )
 	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) cf.cfg("VALUE").setS(lnkAddr(iIO));  //f->io(iIO)->rez());
 	    else cf.cfg("VALUE").setS(getS(iIO));
-	    SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf);
+	    TBDS::dataSet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cf);
 	}
 
 	//Clear IO
 	cf.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf); ) {
+	for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf); ) {
 	    string sio = cf.cfg("ID").getS();
 	    if(func()->ioId(sio) < 0) {
-		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,true,false,true)) break;
+		if(!TBDS::dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
 	}
@@ -591,17 +596,17 @@ void UserPg::setEnable( bool vl )
 	}
 	else {
 	    TFunction funcIO("upg_"+id());
-	    ioRez	= funcIO.ioAdd(new IO("rez",_("Result"),IO::String,IO::Return,"200 OK"));
-	    ioHTTPreq	= funcIO.ioAdd(new IO("HTTPreq",_("HTTP request"),IO::String,IO::Default,"GET"));
-	    ioUrl	= funcIO.ioAdd(new IO("url",_("URL"),IO::String,IO::Default));
-	    ioPage	= funcIO.ioAdd(new IO("page",_("WWW-page"),IO::String,IO::Output));
-	    ioSender	= funcIO.ioAdd(new IO("sender",_("Sender"),IO::String,IO::Default));
-	    ioUser	= funcIO.ioAdd(new IO("user",_("User"),IO::String,IO::Default));
-	    ioHTTPvars	= funcIO.ioAdd(new IO("HTTPvars",_("HTTP variables"),IO::Object,IO::Default));
-	    ioURLprms	= funcIO.ioAdd(new IO("URLprms",_("URL's parameters"),IO::Object,IO::Default));
-	    ioCnts	= funcIO.ioAdd(new IO("cnts",_("Content items"),IO::Object,IO::Default));
-	    ioThis	= funcIO.ioAdd(new IO("this",_("This object"),IO::Object,IO::Default));
-	    ioPrt	= funcIO.ioAdd(new IO("prt",_("Protocol's object"),IO::Object,IO::Default));
+	    ioRez	= funcIO.ioAdd(new IO("rez",trS("Result"),IO::String,IO::Return,"200 OK"));
+	    ioHTTPreq	= funcIO.ioAdd(new IO("HTTPreq",trS("HTTP request"),IO::String,IO::Default,"GET"));
+	    ioUrl	= funcIO.ioAdd(new IO("url",trS("URL"),IO::String,IO::Default));
+	    ioPage	= funcIO.ioAdd(new IO("page",trS("WWW-page"),IO::String,IO::Output));
+	    ioSender	= funcIO.ioAdd(new IO("sender",trS("Sender"),IO::String,IO::Default));
+	    ioUser	= funcIO.ioAdd(new IO("user",trS("User"),IO::String,IO::Default));
+	    ioHTTPvars	= funcIO.ioAdd(new IO("HTTPvars",trS("HTTP variables"),IO::Object,IO::Default));
+	    ioURLprms	= funcIO.ioAdd(new IO("URLprms",trS("URL's parameters"),IO::Object,IO::Default));
+	    ioCnts	= funcIO.ioAdd(new IO("cnts",trS("Content items"),IO::Object,IO::Default));
+	    ioThis	= funcIO.ioAdd(new IO("this",trS("This object"),IO::Object,IO::Default));
+	    ioPrt	= funcIO.ioAdd(new IO("prt",trS("Protocol's object"),IO::Object,IO::Default));
 
 	    string workProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
@@ -638,7 +643,10 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SUI_ID,4,
-		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		    "tp","str","dest","select","select","/db/list",
+		    "help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/up/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID);
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
@@ -688,6 +696,8 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/up/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SUI_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/up/cfg/PROGLang") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(progLang());
@@ -705,7 +715,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		opt->childAdd("el")->setText(lls[iL]+"."+ls[iT]);
 	}
     }
-    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SUI_ID,RWRWR_);
+    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SUI_ID, RWRWR_);
     else if(a_path.find("/prgm") == 0) {
 	ResAlloc res(cfgRes, false);
 	if(func() && a_path == "/prgm/io") {
@@ -750,7 +760,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 //* SSess                                         *
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), content(icontent)
+    url(iurl), sender(isender), user(TSYS::strLine(iuser,0)), content(icontent)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");
@@ -805,9 +815,6 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
@@ -815,19 +822,10 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-string TWEB::modInfo( const string &iname )
+string TWEB::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "0";
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
 
     return TModule::modInfo(name);
 }

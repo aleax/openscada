@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: io.h
 /***************************************************************************
- *   Copyright (C) 2013-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2013-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -88,11 +88,11 @@ class IOCall : public TFunction
 {
     public:
 	IOCall( ) : TFunction("IO", SSPC_ID) {
-	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
-	    ioAdd(new IO("name",_("File name or data (for string stream)"),IO::String,IO::Default));
-	    ioAdd(new IO("accs",_("File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"),IO::String,IO::Default));
-	    ioAdd(new IO("mFormat",_("Machine data format ('n'-system order;'b'-BigEndian;'l'-LittleEndian)"),IO::String,IO::Default,"n"));
-	    ioAdd(new IO("enc",_("String encoding in the file/stream"),IO::String,IO::Default));
+	    ioAdd(new IO("rez",trS("Result"),IO::Object,IO::Return));
+	    ioAdd(new IO("name",trS("File name or data (for string stream)"),IO::String,IO::Default));
+	    ioAdd(new IO("accs",trS("File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"),IO::String,IO::Default));
+	    ioAdd(new IO("mFormat",trS("Machine data format ('n'-system order;'b'-BigEndian;'l'-LittleEndian)"),IO::String,IO::Default,"n"));
+	    ioAdd(new IO("enc",trS("String encoding in the file/stream"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("SYS: Input/Output"); }

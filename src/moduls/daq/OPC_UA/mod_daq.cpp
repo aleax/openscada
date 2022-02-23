@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -56,32 +56,32 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PRM_BD_L",_("Logical parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("TM_REST",_("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","60","0;1000"));
-    fldAdd(new TFld("EndPoint",_("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost"));
-    fldAdd(new TFld("SecPolicy",_("Security policy"),TFld::String,TFld::Selectable,"20","None","None;Basic128Rsa15;Basic256",_("None;Basic128Rsa15;Basic256")));
-    fldAdd(new TFld("SecMessMode",_("Message security mode"),TFld::Integer,TFld::Selectable,"1","1",
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD_L",trS("Logical parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("TM_REST",trS("Restore timeout, seconds"),TFld::Integer,TFld::NoFlag,"4","10","1;3600"));
+    fldAdd(new TFld("SYNCPER",trS("Sync inter remote station period, seconds"),TFld::Integer,TFld::NoFlag,"4","60","0;1000"));
+    fldAdd(new TFld("EndPoint",trS("End point"),TFld::String,TFld::NoFlag,"50","opc.tcp://localhost"));
+    fldAdd(new TFld("SecPolicy",trS("Security policy"),TFld::String,TFld::Selectable,"20","None","None;Basic128Rsa15;Basic256",_("None;Basic128Rsa15;Basic256")));
+    fldAdd(new TFld("SecMessMode",trS("Message security mode"),TFld::Integer,TFld::Selectable,"1","1",
 	TSYS::strMess("%d;%d;%d",MS_None,MS_Sign,MS_SignAndEncrypt).c_str(),_("None;Sign;Sign&Encrypt")));
-    fldAdd(new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
-    fldAdd(new TFld("PvKey",_("Private key (PEM)"),TFld::String,TFld::FullText,"10000"));
-    fldAdd(new TFld("AuthUser",_("Auth: user"),TFld::String,TFld::NoFlag,"20"));
-    fldAdd(new TFld("AuthPass",_("Auth: password"),TFld::String,TFld::NoFlag,"20"));
-    fldAdd(new TFld("UseRead",_("Use the \"Read\" function"),TFld::Boolean,TFld::NoFlag,"1","1"));
+    fldAdd(new TFld("Cert",trS("Certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
+    fldAdd(new TFld("PvKey",trS("Private key (PEM)"),TFld::String,TFld::FullText,"10000"));
+    fldAdd(new TFld("AuthUser",trS("Auth: user"),TFld::String,TFld::NoFlag,"20"));
+    fldAdd(new TFld("AuthPass",trS("Auth: password"),TFld::String,TFld::NoFlag,"20"));
+    fldAdd(new TFld("UseRead",trS("Use the \"Read\" function"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("ND_LS",_("Nodes list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ND_LS",trS("Nodes list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000",""));
     // Logical parameter type by the DAQ parameter template
     t_prm = tpParmAdd("logic", "PRM_BD_L", _("Logical"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("TMPL",trS("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     // Parameter template IO DB structure
-    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
-    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200"));
+    elPrmIO.fldAdd(new TFld("PRM_ID",trS("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    elPrmIO.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
+    elPrmIO.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::NoFlag,"200"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
@@ -93,7 +93,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TCon
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")),
     mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")), mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")),
     mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")), restTm(cfg("TM_REST").getId()), mUseRead(cfg("UseRead").getBd()),
-    mPer(1e9), prcSt(false), callSt(false), isReload(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
+    mPer(1e9), prcSt(false), callSt(false), alSt(-1), mBrwsVar(TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder)),
     acqErr(dataRes()), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+id());
@@ -107,15 +107,13 @@ TMdContr::~TMdContr( )
 
 void TMdContr::postDisable( int flag )
 {
-    TController::postDisable(flag);
     try {
-	if(flag) {
-	    //Delete parameter's io table
-	    string tbl = DB()+"."+cfg("PRM_BD_L").getS()+"_io";
-	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl, true);
-	}
+	if(flag&(NodeRemove|NodeRemoveOnlyStor))
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD_L").getS()+"_io",
+				owner().nodePath()+cfg("PRM_BD_L").getS()+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
+    TController::postDisable(flag);
 }
 
 string TMdContr::getStatus( )
@@ -179,26 +177,14 @@ void TMdContr::disable_( )
     sess.mSubScr.clear();
 
     tr.free();
+
+    //Clear the processing parameters list
+    enRes.lock(); pHd.clear(); enRes.unlock();
 }
 
 void TMdContr::start_( )
 {
     if(prcSt) return;
-
-    // Deactivate the main session to reset/clear the monitored items
-    if(sess.mSubScr.size() && sess.mSubScr[0].isActivated())
-	sess.mSubScr[0].activate(false);
-
-    // Reenable parameters
-    try {
-	vector<string> pls;
-	list(pls);
-
-	isReload = true;
-	for(unsigned iP = 0; iP < pls.size(); iP++)
-	    if(at(pls[iP]).at().enableStat()) at(pls[iP]).at().enable();
-	isReload = false;
-    } catch(TError&) { isReload = false; throw; }
 
     servSt = 0;
     tmDelay = 0;
@@ -214,9 +200,6 @@ void TMdContr::stop_( )
 
     alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
-
-    //Clear the process parameters list
-    enRes.lock(); pHd.clear(); enRes.unlock();
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -306,7 +289,7 @@ int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int 
 {
     if(!connect()) connect(true);
     try {
-	//!!!! Check for the timeout error or not
+	//?!?! Check for the timeout error or not
 	return tr.at().messIO(obuf, len_ob, ibuf, len_ib, time);
     } catch(TError&) { return 0; }
 }
@@ -570,6 +553,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/st/runSt",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Manual restart of the enabled controller object causes the force reformation of the monitored items list.\n"
+		    "Restart to apply the removed PLC links in run."));
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/EndPoint",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    "dest","sel_ed", "select","/cntr/cfg/elLst", NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
@@ -596,9 +582,26 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
+
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/AuthPass" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
+    if(a_path == "/cntr/st/runSt" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && s2i(opt->text()) && enableStat()) {
+	// Deactivate the main session to reset/clear the monitored items
+	if(sess.mSubScr.size() && sess.mSubScr[0].isActivated())
+	    sess.mSubScr[0].activate(false);
+
+	// Reloading the parameters' data
+	vector<string> pls;
+	list(pls);
+
+	for(unsigned iP = 0; iP < pls.size(); iP++)
+	    if(at(pls[iP]).at().enableStat())
+		at(pls[iP]).at().loadDATA(true);
+
+	// Now same starting
+	start();
+    }
+    else if(a_path == "/cntr/cfg/AuthPass" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
 	opt->setText(string(mAuthPass.getS().size(),'*'));
     else if(a_path == "/cntr/cfg/elLst" && ctrChkNode(opt)) {
 	ResAlloc res(resOPC, false);
@@ -769,11 +772,11 @@ void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
-    if(flag && isLogic()) {
+    if(flag&NodeRemove && isLogic()) {
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id(), true);
-	SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
+	TBDS::dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -813,10 +816,17 @@ TMdContr &TMdPrm::owner( ) const	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat() && !owner().isReload) return;
+    if(enableStat()) return;
 
     TParamContr::enable();
 
+    loadDATA();
+
+    owner().prmEn(this, true);
+}
+
+void TMdPrm::loadDATA( bool incl )
+{
     XML_N req("opc.tcp");
     map<string, bool> als;
 
@@ -856,7 +866,7 @@ void TMdPrm::enable( )
 	    }
 	    // Attribute creating from the server information
 	    else {
-		// Request for node class request
+		// Request the node class
 		req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_NodeClass));
 		req.childAdd("node")->setAttr("nodeId", aNd)->setAttr("attributeId", i2s(AId_BrowseName));
@@ -946,7 +956,7 @@ void TMdPrm::enable( )
 		loadIO(true);
 
 		// Init links
-		lCtx->chkLnkNeed = lCtx->initLnks(true);
+		lCtx->chkLnkNeed = lCtx->initLnks(/*true*/);	//!!!! Do not reconnect but that can be done in loadIO() early
 
 		// Init system attributes identifiers
 		lCtx->idFreq  = lCtx->ioId("f_frq");
@@ -974,7 +984,13 @@ void TMdPrm::enable( )
 		pEl.fldDel(iP); iP--;
 	    } catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 
-    owner().prmEn(this, true);
+    //Call the included paramers' data reload
+    if(incl) {
+	vector<string> prmLs;
+	list(prmLs);
+	for(unsigned iP = 0; iP < prmLs.size(); iP++)
+	    at(prmLs[iP]).at().loadDATA(incl);
+    }
 }
 
 void TMdPrm::disable( )
@@ -1022,10 +1038,10 @@ void TMdPrm::loadIO( bool force )
     //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
+	if(!TBDS::dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
-	else if(lCtx->func()->io(iIO)->type() != IO::String)
+	else if(lCtx->func()->io(iIO)->type() != IO::String || !(lCtx->func()->io(iIO)->flg()&IO::TransltText))
 	    lCtx->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));		//Force to no translation
 	else lCtx->setS(iIO, cfg.cfg("VALUE").getS());
     }
@@ -1049,11 +1065,11 @@ void TMdPrm::saveIO( )
     for(int iIO = 0; iIO < lCtx->func()->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
 	cfg.cfg("VALUE").setNoTransl(!(lCtx->func()->io(iIO)->type() == IO::String &&
-	    !(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
+	    (lCtx->func()->io(iIO)->flg()&IO::TransltText) && !(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
-	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+	TBDS::dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -1127,7 +1143,7 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
     acqErr.setVal("");	//But it is not used for the type
 }
 
-TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
     //  id, name - new attribute id and name;
@@ -1180,7 +1196,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return true;
     }
 
-    return TParamContr::objFuncCall(iid, prms, user);
+    return TParamContr::objFuncCall(iid, prms, user_lang);
 }
 
 void TMdPrm::vlGet( TVal &val )
@@ -1295,7 +1311,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	/*opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");*/
     }
     else if(isStd() && a_path == "/prm/cfg/SEL_NDS") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"selND","",opt->attr("user")));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"selND","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	    //Read for type check
 	    string cNodeId;
@@ -1317,11 +1333,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		}
 	    }
 	    if(!isSet || isStructVar)
-		TBDS::genDBSet(nodePath()+"selND", opt->text(), opt->attr("user"));
+		TBDS::genPrmSet(nodePath()+"selND", opt->text(), opt->attr("user"));
 	}
     }
     else if(isStd() && a_path == "/prm/cfg/SEL_NDS_lst" && ctrChkNode(opt)) {
-	string selNd = TBDS::genDBGet(nodePath()+"selND",TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder), opt->attr("user"));
+	string selNd = TBDS::genPrmGet(nodePath()+"selND",TSYS::strMess(_("Root folder (%d)"),OpcUa_RootFolder), opt->attr("user"));
 	size_t stC = selNd.rfind(")"), stP = selNd.rfind("(", stC);
 	string cNodeId = (stP != string::npos && stC != string::npos) ? TSYS::strDecode(selNd.substr(stP+1,stC-stP-1)) : i2s(OpcUa_RootFolder);
 

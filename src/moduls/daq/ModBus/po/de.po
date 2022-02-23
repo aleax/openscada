@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 11:45+0300\n"
+"POT-Creation-Date: 2022-02-16 16:20+0200\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -86,9 +86,21 @@ msgstr "Wert"
 msgid "Task terminated! "
 msgstr "Task gekündigt! "
 
+msgid "No transport."
+msgstr "Kein Transport."
+
+msgid "Empty transport."
+msgstr "Leertransport."
+
+msgid "Error the transport."
+msgstr "Fehler beim Transport."
+
+msgid "Error the connection."
+msgstr "Fehler beim Verbinden."
+
 #, c-format
-msgid "Error of connection. Restoring in %.6g s."
-msgstr "Fehler beim Verbinden. Wiederherstellung in %.6g sek."
+msgid "Restoring in %.6g s."
+msgstr "Wiederherstellung in %.6g sek."
 
 msgid "Acquisition. "
 msgstr "Erwerb. "
@@ -102,12 +114,24 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
 #, c-format
-msgid ""
-"Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, "
-"%g coils. Errors of connection %g, of response %g."
-msgstr ""
-"Verbrauchte Zeit: %s[%s]. Gelesen %g(%g) Register, %g(%g) Bits. Geschrieben "
-"%g Register, %g Bits. Fehler in der Verbindung %g, in der Antwort %g."
+msgid "Spent time: %s[%s]. "
+msgstr "Verbrauchte Zeit: %s[%s]. "
+
+#, c-format
+msgid "Read %g(%g) registers, %g(%g) coils. "
+msgstr "Gelesen %g(%g) Register, %g(%g) Bits. "
+
+#, c-format
+msgid "Wrote %g registers, %g coils. "
+msgstr "Geschrieben %g Register, %g Bits. "
+
+#, c-format
+msgid "In the buffer %d. "
+msgstr "Im Puffer %d. "
+
+#, c-format
+msgid "Errors of connection %g, of response %g. "
+msgstr "Fehler in der Verbindung %g, in der Antwort %g. "
 
 #, c-format
 msgid "Connection to the data source: %s."
@@ -131,6 +155,15 @@ msgstr "OK"
 #, c-format
 msgid "10:Generic error: %s."
 msgstr "10:Allgemeiner Fehler: %s."
+
+msgid ""
+"Manual restart of the enabled controller object causes the force reformation "
+"of the acquisition blocks.\n"
+"Restart to apply the removed PLC links in run."
+msgstr ""
+"Ein manueller Neustart des freigegebenen Reglerobjekts bewirkt die "
+"Zwangsneubildung der Erfassungsblöcke.\n"
+"Starten Sie neu, um die entfernten SPS-Links im Lauf zu übernehmen."
 
 msgid "Default port of the ModuBus/TCP is 502."
 msgstr "Der Standardport des ModBus/TCP ist 502."
@@ -493,6 +526,10 @@ msgstr "Aktiviert"
 msgid "DB"
 msgstr "DB"
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Entfernen von '%s'"
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -503,7 +540,7 @@ msgid "Data"
 msgstr "Daten"
 
 msgid "IO"
-msgstr ""
+msgstr "IO"
 
 msgid ""
 "For the \"Id\" field, a specific ModBus data record form is provided:\n"
@@ -581,6 +618,9 @@ msgstr "Änderung des verriegelten Attributs ist nicht erlaubt"
 msgid "Empty value is not allowed."
 msgstr "Leerer Wert ist nicht zulässig."
 
+msgid "Client ModBus"
+msgstr "Klient ModBus"
+
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
@@ -590,6 +630,9 @@ msgid ""
 msgstr ""
 "Stellt die Implementierung des Client-ModBus-Dienstes bereit. ModBus/TCP, "
 "ModBus/RTU und ModBus/ASCII-Protokolle werden unterstützt."
+
+msgid "Server ModBus"
+msgstr "Server ModBus"
 
 msgid ""
 "Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and "

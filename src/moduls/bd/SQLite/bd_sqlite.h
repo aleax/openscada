@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.SQLite file: bd_sqlite.h
 /***************************************************************************
- *   Copyright (C) 2003-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -23,11 +23,13 @@
 
 #include <string>
 #include <vector>
-#include <tmodule.h>
+// #include <tmodule.h>
 #include <tbds.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::vector;
@@ -47,26 +49,23 @@ class MTable : public TTable
 	MTable( string name, MBD *bd );
 	~MTable( );
 
-	// Field's operations
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
-	void fieldGet( TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" )
+	{ return fieldSQLSeek(row, cfg, cacheKey); }
+	void fieldGet( TConfig &cfg )	{ fieldSQLGet(cfg); }
 	void fieldSet( TConfig &cfg );
-	void fieldDel( TConfig &cfg );
+	void fieldDel( TConfig &cfg )	{ fieldSQLDel(cfg); }
+
+	void fieldFix( TConfig &cfg, const string &langLs = "" );
 
 	MBD &owner( ) const;
 
     private:
 	//Private methods
 	void postDisable( int flag );
-	void fieldFix( TConfig &cfg, bool trPresent = false );
 
-	string	getVal( TCfg &cf, uint8_t RqFlg = 0 );
-	void	setVal( TCfg &cf, const string &vl, bool tr = false );
-
-	//Private attributes
-	vector< vector<string> > tblStrct;
-	map<string, vector< vector<string> > >	seekSess;
+	string	getSQLVal( TCfg &cf, uint8_t RqFlg = 0 );
+	void	setSQLVal( TCfg &cf, const string &vl, bool tr = false );
 };
 
 //************************************************
@@ -90,6 +89,8 @@ class MBD : public TBD
 	void transCommit( );
 	void transCloseCheck( );
 
+	void getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct );
+
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -104,7 +105,6 @@ class MBD : public TBD
 	sqlite3	*m_db;
 	int	reqCnt;
 	int64_t	reqCntTm, trOpenTm;
-	ResMtx	connRes;
 	int	trans_reqs;
 };
 
@@ -117,6 +117,9 @@ class BDMod: public TTypeBD
 	//Public methods
 	BDMod( string name );
 	~BDMod( );
+
+	int lsPr( )	{ return 9; }
+	string features( );
 
 	AutoHD<MBD> at( const string &name )	{ return TTypeBD::at(name); }
 

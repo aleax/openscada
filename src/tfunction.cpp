@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -214,7 +214,7 @@ void TFunction::valDet( TValFunc *vfnc )
     dataRes().unlock();
 }
 
-TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // ElTp call(ElTp prm1, ...) - the function call
     //  prm{N} - {N} parameter to the function.
@@ -223,33 +223,33 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	TValFunc vfnc("JavaLikeObjFuncCalc",this);
 
 	//  Get return position
-	int r_pos, i_p, p_p;
-	for(r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++)
-	    if(vfnc.ioFlg(r_pos)&IO::Return) break;
+	int rPos, iP, pP;
+	for(rPos = 0; rPos < vfnc.func()->ioSize(); rPos++)
+	    if(vfnc.ioFlg(rPos)&IO::Return) break;
 	//  Process parameters
-	for(i_p = p_p = 0; true; i_p++) {
-	    p_p = (i_p>=r_pos) ? i_p+1 : i_p;
-	    if(p_p >= vfnc.func()->ioSize()) break;
+	for(iP = pP = 0; true; iP++) {
+	    pP = (iP>=rPos) ? iP+1 : iP;
+	    if(pP >= vfnc.func()->ioSize()) break;
 	    //   Set default value
-	    if(i_p >= (int)prms.size()) { vfnc.setS(p_p,vfnc.func()->io(p_p)->def()); continue; }
-	    vfnc.set(p_p,prms[i_p]);
+	    if(iP >= (int)prms.size()) { vfnc.setS(pP,vfnc.func()->io(pP)->def()); continue; }
+	    vfnc.set(pP,prms[iP]);
 	}
 	//  Make calc
-	vfnc.calc(user);
+	vfnc.calc(TSYS::strLine(user_lang,0));
 	//  Process outputs
-	for(i_p = 0; i_p < (int)prms.size(); i_p++) {
-	    p_p = (i_p>=r_pos) ? i_p+1 : i_p;
-	    if(p_p >= vfnc.func()->ioSize()) break;
-	    if(!(vfnc.ioFlg(p_p)&IO::Output))   continue;
-	    prms[i_p] = vfnc.get(p_p);
-	    prms[i_p].setModify();
+	for(iP = 0; iP < (int)prms.size(); iP++) {
+	    pP = (iP>=rPos) ? iP+1 : iP;
+	    if(pP >= vfnc.func()->ioSize()) break;
+	    if(!(vfnc.ioFlg(pP)&IO::Output))   continue;
+	    prms[iP] = vfnc.get(pP);
+	    prms[iP].setModify();
 	}
 	//  Set return
-	if(r_pos < vfnc.func()->ioSize()) return vfnc.get(r_pos);
+	if(rPos < vfnc.func()->ioSize()) return vfnc.get(rPos);
 	return TVariant();
     }
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TFunction::cntrCmdProc( XMLNode *opt )
@@ -280,12 +280,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    }
 	if(ctrMkNode("area",opt,-1,"/exec",_("Execute"),RWRW__,"root",grp)) {
 	    ctrMkNode("fld",opt,-1,"/exec/en",_("Enabled"),RWRW__,"root",grp,1,"tp","bool");
-	    // Add test form
+	    // Adding the test form
 	    if(mTVal) {
 		if(ctrMkNode("area",opt,-1,"/exec/io",_("IO")))
 		    for(int iIO = 0; iIO < ioSize(); iIO++) {
 			if(mIO[iIO]->hide()) continue;
-			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),io(iIO)->name(),RWRW__,"root",grp);
+			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),
+					_(io(iIO)->name()),((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
 			if(nd) {
 			    switch(io(iIO)->type()) {
 				case IO::String:
@@ -299,7 +300,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 			    }
 			}
 		    }
-		// Add Calc button and Calc time
+		// Adding the calc button and the calc time field
 		ctrMkNode("fld",opt,-1,"/exec/n_clc",_("Number of calculations"),RWRW__,"root",grp,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/exec/tm",_("Spent time"),R_R___,"root",grp,1,"tp","str");
 		ctrMkNode("comm",opt,-1,"/exec/calc",_("Execute"),RWRW__,"root",grp);
@@ -329,10 +330,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	for(int iIO = 0; iIO < ioSize(); iIO++) {
 	    string tmp_str;
 	    if(n_id)	n_id->childAdd("el")->setText(io(iIO)->id());
-	    if(n_nm)	n_nm->childAdd("el")->setText(io(iIO)->name());
+	    if(n_nm)	n_nm->childAdd("el")->setText(_(io(iIO)->name()));
 	    if(n_type) {
 		switch(io(iIO)->type()) {
-		    case IO::String:	tmp_str = _("String");	break;
+		    case IO::String:
+			tmp_str = (io(iIO)->flg()&IO::FullText) ? _("Text") : _("String");
+			if(io(iIO)->flg()&IO::TransltText) tmp_str = tmp_str + " "+_("(translate)");
+			break;
 		    case IO::Integer:	tmp_str = _("Integer");	break;
 		    case IO::Real:	tmp_str = _("Real");	break;
 		    case IO::Boolean:	tmp_str = _("Bool");	break;
@@ -362,13 +366,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/exec/n_clc" && mTVal) {
-	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","1",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
+	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(TBDS::genPrmGet(nodePath()+"ntCalc","1",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genPrmSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))
 	opt->setText(tm2s(1e-6*SYS->cntrGet(nodePath('.'))));
     else if(a_path.substr(0,8) == "/exec/io" && mTVal) {
-	string io_id = TSYS::pathLev(a_path,2);
+	string io_id = TSYS::pathLev(a_path, 2);
 	for(unsigned iIO = 0; iIO < mIO.size(); iIO++)
 	    if(io_id == io(iIO)->id()) {
 		if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))
@@ -379,7 +383,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    }
     }
     else if(a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR)) {
-	int n_tcalc = s2i(TBDS::genDBGet(nodePath()+"ntCalc","1",opt->attr("user")));
+	int n_tcalc = s2i(TBDS::genPrmGet(nodePath()+"ntCalc","1",opt->attr("user")));
 	string wuser = opt->attr("user");
 	time_t tm_lim = SYS->sysTm()+prmWait_TM+1;
 	int64_t t_cnt = TSYS::curTime();
@@ -393,7 +397,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* IO                                            *
 //*************************************************
-IO::IO( const char *iid, const char *iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez ) :
+IO::IO( const char *iid, const string &iname, IO::Type itype,  unsigned iflgs, const char *idef, bool ihide, const char *irez ) :
     mId(iid), mName(iname), mType(itype), mFlg(iflgs), mDef(idef), mHide(ihide), mRez(irez), owner(NULL)
 {
 

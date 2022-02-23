@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tspecials.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,7 +57,8 @@ class TSpecialS : public TSubSYS
     public:
 	TSpecialS( );
 
-	int subVer( ) 		{ return SSPC_VER; }
+	string subName( ) const	{ return _("Specials"); }
+	int subVer( ) const	{ return SSPC_VER; }
 
     protected:
 	void load_( );

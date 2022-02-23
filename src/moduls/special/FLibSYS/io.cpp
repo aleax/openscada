@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibSYS file: io.cpp
 /***************************************************************************
- *   Copyright (C) 2013-2014,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2013-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -294,7 +294,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 
 	return false;
     }
-    // {int|IO} {write|wr}({string|int|double|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1) -
+    // {int|IO} {write|wr}({string|int|real|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1) -
     //		Write value[s] <vals> for type <valType> for machine format or string encodeIn <mFormatEnc>,
     //		and scalar values repeat for <cnt>.
     //	vals - single value or values array for write;
@@ -305,7 +305,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	TVariant &vals = prms[0];
 	TpDescr &tpD = getTp((prms.size()>=2) ? prms[1].getS() : "char");
 	int64_t rez = 0;
-	//!!!! Check for real data type
+	//?!?! Check for the real data type
 
 	//Char stream
 	if(tpD.ch && vals.type() == TVariant::String) {
@@ -342,8 +342,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		switch(tpD.szBt) {
 		    case 1: {
 			uint8_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
-			    v = ai->arGet(i_a).getI();
+			for(unsigned iA = 0; iA < ai->arSize(); iA++, pos += sizeof(v)) {
+			    v = ai->arGet(iA).getI();
 			    if(pos >= str.size()) str.append((char*)&v,sizeof(v));
 			    else str.replace(pos, vmax(0,vmin(str.size()-pos,sizeof(v))), (char*)&v,sizeof(v));
 			}
@@ -351,8 +351,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    }
 		    case 2: {
 			uint16_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
-			    v = ai->arGet(i_a).getI();
+			for(unsigned iA = 0; iA < ai->arSize(); iA++, pos += sizeof(v)) {
+			    v = ai->arGet(iA).getI();
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i16_LE(v);	break;
 				case 'b': v = TSYS::i16_BE(v);	break;
@@ -364,8 +364,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    }
 		    case 4: {
 			uint32_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
-			    v = ai->arGet(i_a).getI();
+			for(unsigned iA = 0; iA < ai->arSize(); iA++, pos += sizeof(v)) {
+			    v = ai->arGet(iA).getI();
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i32_LE(v);	break;
 				case 'b': v = TSYS::i32_BE(v);	break;
@@ -377,8 +377,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    }
 		    case 8: {
 			uint64_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
-			    v = ai->arGet(i_a).getI();
+			for(unsigned iA = 0; iA < ai->arSize(); iA++, pos += sizeof(v)) {
+			    v = ai->arGet(iA).getI();
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i64_LE(v);	break;
 				case 'b': v = TSYS::i64_BE(v);	break;
@@ -395,16 +395,16 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		switch(tpD.szBt) {
 		    case 1: {
 			uint8_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
-			    v = ai->arGet(i_a).getI();
+			for(unsigned iA = 0; iA < ai->arSize(); iA++) {
+			    v = ai->arGet(iA).getI();
 			    rez += (int64_t)fwrite((char*)&v, 1, sizeof(v), fhd);
 			}
 			break;
 		    }
 		    case 2: {
 			uint16_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
-			    v = ai->arGet(i_a).getI();
+			for(unsigned iA = 0; iA < ai->arSize(); iA++) {
+			    v = ai->arGet(iA).getI();
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i16_LE(v);	break;
 				case 'b': v = TSYS::i16_BE(v);	break;
@@ -415,8 +415,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    }
 		    case 4: {
 			uint32_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
-			    v = ai->arGet(i_a).getI();
+			for(unsigned iA = 0; iA < ai->arSize(); iA++) {
+			    v = ai->arGet(iA).getI();
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i32_LE(v);	break;
 				case 'b': v = TSYS::i32_BE(v);	break;
@@ -427,8 +427,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    }
 		    case 8: {
 			uint64_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
-			    v = ai->arGet(i_a).getI();
+			for(unsigned iA = 0; iA < ai->arSize(); iA++) {
+			    v = ai->arGet(iA).getI();
 			    switch(mach[0]) {
 				case 'l': v = TSYS::i64_LE(v);	break;
 				case 'b': v = TSYS::i64_BE(v);	break;
@@ -448,8 +448,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    switch(tpD.szBt) {
 		case 4: {
 		    float v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
-			v = ai->arGet(i_a).getR();
+		    for(unsigned iA = 0; iA < ai->arSize(); iA++, pos += sizeof(v)) {
+			v = ai->arGet(iA).getR();
 			switch(mach[0]) {
 			    case 'l': *((int32_t*)&v) = TSYS::i32_LE(*((int32_t*)&v));	break;
 					//v = TSYS::floatLE(v);	break;
@@ -463,8 +463,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		}
 		case 8: {
 		    double v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
-			v = ai->arGet(i_a).getR();
+		    for(unsigned iA = 0; iA < ai->arSize(); iA++, pos += sizeof(v)) {
+			v = ai->arGet(iA).getR();
 			switch(mach[0]) {
 			    case 'l': *((int64_t*)&v) = TSYS::i64_LE(*((int64_t*)&v));	break;
 					//v = TSYS::doubleLE(v);	break;
@@ -483,8 +483,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    switch(tpD.szBt) {
 		case 4: {
 		    float v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
-			v = ai->arGet(i_a).getR();
+		    for(unsigned iA = 0; iA < ai->arSize(); iA++) {
+			v = ai->arGet(iA).getR();
 			switch(mach[0]) {
 			    case 'l': *((int32_t*)&v) = TSYS::i32_LE(*((int32_t*)&v));	break;
 					//v = TSYS::floatLE(v);	break;
@@ -497,8 +497,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		}
 		case 8: {
 		    double v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
-			v = ai->arGet(i_a).getR();
+		    for(unsigned iA = 0; iA < ai->arSize(); iA++) {
+			v = ai->arGet(iA).getR();
 			switch(mach[0]) {
 			    case 'l': *((int64_t*)&v) = TSYS::i64_LE(*((int64_t*)&v));	break;
 					//v = TSYS::doubleLE(v);	break;

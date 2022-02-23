@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -42,7 +42,8 @@ using namespace VCA;
 //*************************************************
 //* VCASess					  *
 //*************************************************
-VCASess::VCASess( const string &iid ) : toRemoveSelf(false), mId(iid)
+VCASess::VCASess( const string &iid ) :
+    toRemoveSelf(false), fStatusOrder(false), fStatusText(dataRes()), mId(iid), mUser(dataRes()), mUserOrig(dataRes())
 {
     open_ses = lst_ses_req	= time(NULL);
     id_objs	= grpAdd("obj_");
@@ -141,7 +142,8 @@ void VCASess::getReq( SSess &ses )
 	    req.childGet(0)->setAttr("per", req.childGet(1)->text())->
 			    setAttr("alarmSt", req.childGet(2)->attr("alarmSt"))->
 			    setAttr("cachePgSz", i2s(mod->cachePgSz()))->
-			    setAttr("cachePgLife", r2s(mod->cachePgLife()));
+			    setAttr("cachePgLife", r2s(mod->cachePgLife()))->
+			    setAttr("fStatusOrder", fStatusOrder?"1":"");
 
 	    // Getting opened pages from the cache
 	    for(unsigned iP = 0; iP < req.childGet(0)->childSize(); iP++)
@@ -180,7 +182,7 @@ void VCASess::getReq( SSess &ses )
 	prmEl1 = ses.prm.find("FullTree");
 	XMLNode req("get");
 	req.setAttr("path", ses.url+"/%2fserv%2fattrBr")->setAttr("tm", (prmEl!=ses.prm.end())?prmEl->second:"0")->
-	    setAttr("FullTree", (prmEl1!=ses.prm.end()) ? prmEl1->second : "0");
+	    setAttr("FullTree", (prmEl1!=ses.prm.end()) ? prmEl1->second : "");
 	mod->cntrIfCmd(req, ses);
 
 	// Backend objects' attributes set
@@ -280,16 +282,16 @@ void VCASess::postReq( SSess &ses )
 	    pgCacheProc(oAddr, ses.prm.find("cachePg") == ses.prm.end());
     }
     else if(wp_com == "setUser") {
-	if((cntEl=ses.prm.find("user")) != ses.prm.end() && TSYS::strDecode(TSYS::strParse(cntEl->second,0,":"),TSYS::Custom) != mUser) {
-	    if(cntEl->second == "$" && mUserOrig.size()) cntEl->second = mUserOrig;
+	if((cntEl=ses.prm.find("user")) != ses.prm.end() && TSYS::strDecode(TSYS::strParse(cntEl->second,0,":"),TSYS::Custom) != user()) {
+	    if(cntEl->second == "$" && userOrig().size()) cntEl->second = userOrig();
 	    else {
 		size_t	pasSep = cntEl->second.find(":");
 		string	h_user = (pasSep == string::npos) ? cntEl->second : TSYS::strDecode(cntEl->second.substr(0,pasSep),TSYS::Custom),
 			h_pass = (pasSep == string::npos) ? "" : TSYS::strDecode(cntEl->second.substr(pasSep+1),TSYS::Custom);
 		cntEl->second = h_user;
 		// Checking the user permition to the session project
-		if( (pasSep == string::npos && SYS->security().at().usrAt(mUserOrig.size()?mUserOrig:mUser).at().permitCmpr(cntEl->second) > 0) ||
-			(pasSep != string::npos && !SYS->security().at().usrAt(h_user).at().auth(h_pass)) )
+		if((pasSep == string::npos && SYS->security().at().usrAt(userOrig().size()?userOrig():user()).at().permitCmpr(cntEl->second) > 0) ||
+			(pasSep != string::npos && !SYS->security().at().usrAt(h_user).at().auth(h_pass)))
 		    cntEl->second = "";
 	    }
 
@@ -299,15 +301,17 @@ void VCASess::postReq( SSess &ses )
 		if(!mod->cntrIfCmd(req,SSess(cntEl->second))) {
 		    // Changing the session user
 		    userSet(cntEl->second, true);
-		    vector<TVariant> prms; prms.push_back(mUser);
+		    vector<TVariant> prms; prms.push_back(user());
 		    ses.prt->objFuncCall("setUser", prms, "root");
 
-		    req.clear()->setName("disconnect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("remoteSrcAddr", ses.sender);
-		    mod->cntrIfCmd(req, SSess(mUser));
+		    //req.clear()->setName("disconnect")->setAttr("path", "/%2fserv%2fsess")->setAttr("sess", mId)->setAttr("remoteSrcAddr", ses.sender);
+		    //mod->cntrIfCmd(req, SSess(user()));
 		}
 	    }
 	}
     }
+    //Frontend status
+    else if(wp_com == "fStatus") fStatusText = ses.content, fStatusOrder = false;
     else if(wp_com == "obj" && objProc(oAddr=TSYS::path2sepstr(ses.url),ses)) objAt(oAddr).at().postReq(ses);
 
     if(ses.page.empty())
@@ -392,7 +396,7 @@ void VCASess::pgCacheProc( const string &addr, bool fClose )
 	    // Removing page's objects - same the cached data
 	    objList(oLs);
 	    for(unsigned iO = 0; iO < oLs.size(); iO++)
-		//!!!! Means removing the page strictly and representative of the included widgets - ".wdg_"
+		//!!!! Means of removing the page strictly and representative of the included widgets - ".wdg_"
 		if(oLs[iO] == tAddr || oLs[iO].find(tAddr+".wdg_") == 0)
 		    objDel(oLs[iO]);
 
@@ -503,7 +507,7 @@ void VCAFormEl::getReq( SSess &ses )
 	ses.page = mod->pgCreator(ses.prt, ses.page, "200 OK", "Content-Type: "+TSYS::strParse(cntr,3,"|"));
 	fCtx = "";
 
-	//!!!! Clear the attribute "value". But it can be spare for multiple connections to one session.
+	//!!!! Clearing the attribute "value", but it can be spare for multiple connections to one session
 	XMLNode req("set");
 	size_t nURLoff = ses.url.rfind("/");
 	req.setAttr("path", ((nURLoff==string::npos)?ses.url:ses.url.substr(0,nURLoff))+"/%2fserv%2fattr");
@@ -1316,7 +1320,7 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 		while( t < t_end );
 		gdImageAlphaBlending(iim,1);
 	    }
-	    //!!!! Spare and brake the coordinats for other figures with share points
+	    //?!?! Spare and brake the coordinats for other figures with share points
 	    /*(pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
 		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n2] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x,
@@ -1774,7 +1778,7 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	    arc_b = length( el_p3, el_p4 );
 	    t_start = item.ctrlPos4.x;
 	    t_end = item.ctrlPos4.y;
-	    //!!!! Spare and brake the coordinats for other figures with share points
+	    //?!?! Spare and brake the coordinats for other figures with share points
 	    /*(pnts)[item.n1] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_start, arc_a, arc_b ), ang ).x,
 		el_p3.y - rotate( arc( t_start, arc_a, arc_b ), ang ).y ), xScale, yScale);
 	    (pnts)[item.n2] = unscaleUnrotate( Point( el_p3.x + rotate( arc( t_end, arc_a, arc_b ), ang ).x,
@@ -1786,8 +1790,7 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	}
     }
     //-- bezier curve --
-    if( item.type == 3)
-    {
+    else if(item.type == ShapeItem::Bezier && pnts[item.n1] != pnts[item.n2]) {
 	if( item.border_width == 0 )//--- Drawing the bezier curve with borders' width == 0 ---
 	{
 	    if( flag_allocate )
@@ -2239,8 +2242,7 @@ void VCAElFigure::paintFigure( gdImagePtr iim, ShapeItem item, double xScale, do
 	}
     }
     //-- Line --
-    if( item.type == 1 )
-    {
+    else if(item.type == ShapeItem::Line && pnts[item.n1] != pnts[item.n2]) {
 	if( item.border_width == 0 )//--- Drawing the line with borders' width == 0 ---
 	{
 	    if( flag_allocate )
@@ -2710,7 +2712,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 	tmp_clr = gdImageColorResolveAlpha(im1, (uint8_t)(inundationItems[i].P_color>>16), (uint8_t)(inundationItems[i].P_color>>8),
 						(uint8_t)inundationItems[i].P_color, 127 - (uint8_t)(inundationItems[i].P_color>>24));
 
-	//!!!! May by that is enough to draw all shapes in one cicle
+	//?!?! Maybe that is enough to draw all shapes in one cicle
 	for(unsigned j = 0; j < shape_temp.size(); j++) {
 	    shapeItems[shape_temp[j]].width = 1;
 	    shapeItems[shape_temp[j]].border_width = 0;
@@ -5631,7 +5633,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
 		    labVal = TSYS::strMess("%0.5g",iV)+(isPerc?" %":"");
 		    gdImageStringFTEx(im, &brect[0], clrMrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
-			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);	//!!!! Check for correct work combining mode
+			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);	//!!!! Checking for correct work of the combining mode
 		    markWdth = vmax(markWdth, brect[2]-brect[6]);
 		}
 	    }
@@ -6616,7 +6618,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	int trcPer = owner().trcPer*1000000;
 	if(owner().tTimeCurent && trcPer && owner().valArch.empty() &&
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd()) < 2*arh_per
-		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Cause to uneven call for current and archive
+		/*(tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2*/)))	//!!!! Causes to uneven call for current and archive
 	{
 	    XMLNode req("get");
 	    req.setAttr("path", addr()+"/%2fserv%2fval")->

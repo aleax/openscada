@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,6 +43,9 @@
 #include "vis_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_dlgs.h"
+
+#undef _
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
 
 using namespace OSCADA_QT;
 using namespace VISION;
@@ -130,6 +133,12 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     obj_db->setObjectName("/obj/st/db");
     connect(obj_db, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_db, 2, 2);
+    obj_remFromDB = new QPushButton(tab_w);
+    obj_remFromDB->setObjectName("/obj/st/removeFromDB");
+    obj_remFromDB->setAutoDefault(false);
+    obj_remFromDB->setVisible(false);
+    connect(obj_remFromDB, SIGNAL(released()), this, SLOT(isModify()));
+    glay->addWidget(obj_remFromDB, 2, 3);
 
     /*lab = new QLabel(_("Used:"), tab_w);
     glay->addWidget(lab, 2, 1);
@@ -215,9 +224,9 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     grp->setLayout(glay);
     dlg_lay->addWidget(grp,1,0);
 
-    //Add tab 'Mime data'
+    //Add tab 'Resources'
     //---------------------
-    wdg_tabs->addTab(new QWidget,_("Mime data"));
+    wdg_tabs->addTab(new QWidget,_("Resources"));
     tab_w = wdg_tabs->widget(1);
 
     dlg_lay = new QGridLayout(tab_w);
@@ -228,7 +237,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     mimeDataTable->setItemDelegate(new TableDelegate);
     mimeDataTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     connect(mimeDataTable, SIGNAL(cellChanged(int,int)), this, SLOT(mimeDataChange(int,int)));
-    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("Mime type") << _("Data size"));
+    mimeDataTable->setHorizontalHeaderLabels(QStringList() << _("Identifier") << _("MIME") << _("Data size"));
     dlg_lay->addWidget(mimeDataTable, 0, 0, 1, 4);
 
     buttDataAdd = new QPushButton(_("Add record"),tab_w);
@@ -392,26 +401,35 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if(!owner()->cntrIfCmd(req)) obj_st->setText(req.text().c_str());
 	}else obj_st->setText("");
 	// Enable stat
-	gnd = TCntrNode::ctrId(root,obj_enable->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_enable->objectName().toStdString(), true);
 	obj_enable->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
 	    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_enable->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_enable->setChecked(s2i(req.text()));
 	}
 	// DB value
-	gnd = TCntrNode::ctrId(root,obj_db->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_db->objectName().toStdString(), true);
 	obj_db->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
-	    if(!owner()->cntrIfCmd(req)) obj_db->setValue(req.text().c_str());
-	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl)+":"+TSYS::pathLev(ed_it,0));
+	    if(dynamic_cast<QComboBox*>(obj_db->workWdg()))
+		((QComboBox*)obj_db->workWdg())->setEditable(gnd->attr("dest")=="sel_ed");
+
+	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) {
 		string els;
 		for(unsigned iL = 0; iL < req.childSize(); iL++)
 		    els += req.childGet(iL)->text() + "\n";
 		obj_db->setCfg(els.c_str());
 	    }
+
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) obj_db->setValue(req.text().c_str());
 	}
+	// Remove from DB
+	gnd = TCntrNode::ctrId(root, obj_remFromDB->objectName().toStdString(), true);
+	obj_remFromDB->setVisible(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+	if(gnd) obj_remFromDB->setText(gnd->attr("dscr").c_str());
+
 	// Used
 	/*gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
 	if(gnd) {
@@ -548,7 +566,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	}*/
     }
 
-    //Mime data page
+    //Resources page
     gnd = TCntrNode::ctrId(root, "/mime", true);
     wdg_tabs->setTabEnabled(1, gnd);
     if(gnd)	wdg_tabs->setTabText(1,gnd->attr("dscr").c_str());
@@ -688,7 +706,7 @@ void LibProjProp::tabChanged( int itb )
     if(itb == 1) {
 	show_init = true;
 
-	//Load mime data
+	//Load resources
 	XMLNode req("get");
 	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));
 	if(!owner()->cntrIfCmd(req)) {
@@ -762,8 +780,11 @@ void LibProjProp::isModify( QObject *snd )
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }
-    else if(oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName())
+    else if(oname == obj_db->objectName() || oname == obj_name->objectName() || oname == prj_ctm->objectName()) {
 	req.setText(((LineEdit*)snd)->value().toStdString());
+	update = (oname==obj_db->objectName());
+    }
+    else if(oname == obj_remFromDB->objectName()) update = true;
     else if(oname == stl_name->objectName()) { req.setText(((LineEdit*)snd)->value().toStdString()); update = true; }
     else if(oname == obj_user->objectName() || oname == obj_grp->objectName() || oname == stl_select->objectName()) {
 	int cPos = ((QComboBox*)snd)->currentIndex();
@@ -1048,10 +1069,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     lab = new QLabel(_("Parent widget:"), tab_w);
     lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
     glay->addWidget(lab, 3, 1);
-    obj_parent = new QComboBox(tab_w);
+    obj_parent = new LineEdit(tab_w, LineEdit::Combo);
     obj_parent->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     obj_parent->setObjectName("/wdg/st/parent");
-    connect(obj_parent, SIGNAL(activated(int)), this, SLOT(isModify()));
+    connect(obj_parent, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_parent, 3, 2, 1, 4);
 
     /*lab = new QLabel(_("Used:"), tab_w);
@@ -1187,9 +1208,9 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(proc_lang, SIGNAL(currentIndexChanged(int)), this, SLOT(isModify()));
     glay->addWidget(proc_lang, 1, 3);
 
-    lab = new QLabel(_("Translate:"),wdg_proc_fr);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
-    glay->addWidget(lab, 1, 4);
+    lab_proc_text_tr = new QLabel(_("Translate:"),wdg_proc_fr);
+    lab_proc_text_tr->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab_proc_text_tr, 1, 4);
     proc_text_tr = new QCheckBox(wdg_proc_fr);
     proc_text_tr->setObjectName("/proc/calc/prog_tr");// "/wdg/st/en");
     connect(proc_text_tr, SIGNAL(stateChanged(int)), this, SLOT(isModify()));
@@ -1294,9 +1315,24 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    if(!owner()->cntrIfCmd(req)) obj_enable->setChecked(s2i(req.text()));
 	}
 	// Parent widget
-	gnd = TCntrNode::ctrId(root,obj_parent->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_parent->objectName().toStdString(), true);
 	obj_parent->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
-	if(gnd) selectParent();
+	if(gnd) {
+	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(obj_parent->objectName().toStdString(), TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) {
+		obj_parent->setValue(req.text().c_str());
+
+		//Get values list
+		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/w_lst",TSYS::PathEl));
+		owner()->cntrIfCmd(req);
+
+		//Load combobox
+		string els;
+		for(unsigned iL = 0; iL < req.childSize(); iL++)
+		    els += req.childGet(iL)->text() + "\n";
+		obj_parent->setCfg(els.c_str());
+	    }
+	}
 	// Used
 	/*gnd = TCntrNode::ctrId(root, obj_used->objectName().toStdString(), true);
 	if(gnd) {
@@ -1530,6 +1566,7 @@ void VisItProp::tabChanged( int itb )
 	    }
 	    //  Calc procedure translation
 	    gnd = TCntrNode::ctrId(root, proc_text_tr->objectName().toStdString(), true);
+	    lab_proc_text_tr->setVisible(gnd); proc_text_tr->setVisible(gnd);
 	    proc_text_tr->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	    if(gnd) {
 		req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(proc_text_tr->objectName().toStdString(),TSYS::PathEl));
@@ -1579,26 +1616,6 @@ void VisItProp::progChanged( )
     }
 }
 
-void VisItProp::selectParent( )
-{
-    XMLNode req("get");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_parent->objectName().toStdString(),TSYS::PathEl));
-    if(!owner()->cntrIfCmd(req)) {
-	QString cur_val = req.text().c_str();
-
-	//Get values list
-	req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/wdg/w_lst",TSYS::PathEl));
-	owner()->cntrIfCmd(req);
-
-	//Load combobox
-	obj_parent->clear();
-	for(unsigned iL = 0; iL < req.childSize(); iL++)
-	    obj_parent->addItem(req.childGet(iL)->text().c_str());
-	if(obj_parent->findText(cur_val) < 0) obj_parent->addItem(cur_val);
-	obj_parent->setCurrentIndex(obj_parent->findText(cur_val));
-    }
-}
-
 void VisItProp::selectIco( )
 {
     QImage ico_t;
@@ -1644,12 +1661,14 @@ void VisItProp::isModify( QObject *snd )
 	req.setText(i2s(((QCheckBox*)snd)->isChecked()));
 	update = true;
     }
-    else if(oname == obj_parent->objectName() || oname == proc_lang->objectName()) {
+    else if(oname == proc_lang->objectName()) {
 	req.setText(((QComboBox*)snd)->currentText().toStdString());
 	update = true;
     }
-    else if(oname == obj_name->objectName() || oname == proc_per->objectName())
+    else if(oname == obj_name->objectName() || oname == proc_per->objectName() || oname == obj_parent->objectName()) {
 	req.setText(((LineEdit*)snd)->value().toStdString());
+	update = (oname == obj_parent->objectName());
+    }
     else if(oname == obj_descr->objectName() || oname == proc_text->objectName()) {
 	req.setText(((TextEdit*)snd)->text().toStdString());
 	update = true;
@@ -1665,11 +1684,8 @@ void VisItProp::isModify( QObject *snd )
 	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	showDlg(ed_it, true);
     }
-    else {
-	//Post command updating
-	if(oname == obj_parent->objectName())	selectParent();
-	if(update) showDlg(ed_it, true);
-    }
+    //Post command updating
+    else if(update) showDlg(ed_it, true);
 
     is_modif = true;
 }
@@ -1769,7 +1785,7 @@ void VisItProp::changeAttr(QTreeWidgetItem *it, int col)
 	return;
     }
 
-    //Get collumn id
+    //Get column id
     QString scol, sval;
     switch(col)
     {

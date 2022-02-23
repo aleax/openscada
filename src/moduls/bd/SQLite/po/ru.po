@@ -1,13 +1,13 @@
 # OpenSCADA.DB.SQLite translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DB.SQLite package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2003-2018.
+# Roman Savochenko <roman@oscada.org>, 2003-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 22:42+0300\n"
+"POT-Creation-Date: 2021-12-08 09:44+0200\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -44,6 +44,10 @@ msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
 #, c-format
+msgid "Repeated errors of requesting the DB: %s(%d)."
+msgstr "Повторяемые ошибки запроса БД: %s(%d)."
+
+#, c-format
 msgid "Error of the request \"%s\": %s(%d)"
 msgstr "Ошибка запроса \"%s\": %s(%d)"
 
@@ -68,10 +72,3 @@ msgstr "Закрыть открытую транзакцию"
 
 msgid "Table is empty."
 msgstr "Таблица пуста."
-
-#, c-format
-msgid "Row \"%s\" is not present. Are you saved the object?"
-msgstr "Запись \"%s\" отсутствует. Вы сохраняли этот объект?"
-
-msgid "The DB is into the Read only mode!"
-msgstr "БД в режиме Только для Чтения!"

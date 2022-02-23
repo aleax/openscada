@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,7 @@ class DA: public TElem
 
 	virtual bool isSlow( )	{ return false; }
 
-	virtual void init( TMdPrm *prm ) 	{ }
+	virtual void init( TMdPrm *prm, bool update = false ) 	{ }
 	virtual void deInit( TMdPrm *prm )	{ }
 
 	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }

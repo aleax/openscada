@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: project.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,8 @@
 #include <tconfig.h>
 
 #include "widget.h"
+
+#define STL_PRM_NM	"<Styles>"
 
 namespace VCA
 {
@@ -67,9 +69,10 @@ class Project : public TCntrNode, public TConfig
 	bool	toEnByNeed( )	{ return cfg("EN_BY_NEED").getB(); } //To enable the project by need
 	string	getStatus( );
 
-	string DB( ) const	{ return workPrjDB; }		//Current library DB
-	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
-	string fullDB( ) const	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
+	bool isStdStorAddr( ) const		{ return (tbl() == ("prj_"+id())); }	//????[v1.0] Remove
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const	{ return cfg("DB_TBL").getS().empty() ? ("prj_"+id()) : cfg("DB_TBL").getS(); }
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &it )	{ cfg("NAME").setS(it); }
 	void setDescr( const string &it )	{ cfg("DESCR").setS(it); }
@@ -80,6 +83,7 @@ class Project : public TCntrNode, public TConfig
 	void setPeriod( int it )		{ mPer = it; modif(); }
 	void setToEnByNeed( bool vl )		{ cfg("EN_BY_NEED").setB(vl); }
 
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 	void setFullDB( const string &it );
 
@@ -94,13 +98,13 @@ class Project : public TCntrNode, public TConfig
 	AutoHD<Page> at( const string &id ) const;
 	string add( const string &id, const string &name, const string &orig = "" );
 	void add( Page *iwdg );
-	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
+	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full?NodeRemove:NodeNoFlg ); }
 
-	// Mime data access
-	void mimeDataList( vector<string> &list, const string &idb = "" ) const;
-	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "", int off = -1, int *size = NULL ) const;
-	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
-	void mimeDataDel( const string &id, const string &idb = "" );
+	// Resource data access
+	void resourceDataList( vector<string> &list, const string &idb = "" ) const;
+	bool resourceDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "", int off = -1, int *size = NULL ) const;
+	void resourceDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
+	void resourceDataDel( const string &id, const string &idb = "" );
 
 	// Styles
 	void stlList( vector<string> &ls );
@@ -126,8 +130,8 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const char *nodeName( ) const		{ return mId.getSd(); }
-	const char *nodeNameSYSM( ) const	{ return mId.getSd(); }
+	const char *nodeName( ) const	{ return mId.getSd(); }
+	string nodeNameSYSM( ) const	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( TConfig *cfg );
@@ -144,8 +148,8 @@ class Project : public TCntrNode, public TConfig
     private:
 	//Attributes
 	TCfg	&mId;		//Identifier
-	string	workPrjDB,	//Work DB
-		mOldDB;
+	string	mDB,		//Work DB
+		mDB_MimeSrc;	//After the copy mostly
 	int64_t	&mPermit,	//Access permission
 		&mPer,		//Calculate period
 		&mStyleIdW;	//Work style
@@ -182,7 +186,7 @@ class Page : public Widget, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string	path( ) const;
+	string	addr( ) const;
 	string	ico( ) const;
 	string	type( )			{ return "ProjPage"; }
 	string	getStatus( );
@@ -194,7 +198,7 @@ class Page : public Widget, public TConfig
 	int	calcPer( ) const;
 	string	ownerFullId( bool contr = false ) const;
 	int	prjFlags( ) const	{ return mFlgs; }
-	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
+	string	parentAddr( ) const	{ return cfg("PARENT").getS(); }
 	string	proc( ) const		{ return cfg("PROC").getS(); }
 	int	timeStamp( );
 
@@ -203,7 +207,7 @@ class Page : public Widget, public TConfig
 	void setCalcProgTr( bool vl )		{ cfg("PR_TR") = vl; }
 	void setCalcProg( const string &prg );
 	void setCalcPer( int vl )		{ mProcPer = vl; modif(); }
-	void setParentNm( const string &nm );
+	void setParentAddr( const string &nm );
 	void setPrjFlags( int val );
 
 	// Storing
@@ -222,11 +226,12 @@ class Page : public Widget, public TConfig
 	AutoHD<Page> pageAt( const string &id ) const;
 	string pageAdd( const string &id, const string &name, const string &orig = "" );
 	void pageAdd( Page *iwdg );
-	void pageDel( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full); }
+	void pageDel( const string &id, bool full = false )	{ chldDel(mPage, id, -1, full?NodeRemove:NodeNoFlg); }
 
 	// Data access
 	void resourceList( vector<string> &ls );
-	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const;
+	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	void procChange( bool src = true );
 
@@ -252,7 +257,7 @@ class Page : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
+	void setWModif( Attr *a = NULL )	{ modif(); Widget::setWModif(a); }
 	TVariant vlGet( Attr &a );
 
 	bool cntrCmdGeneric( XMLNode *opt );
@@ -265,7 +270,7 @@ class Page : public Widget, public TConfig
 	int64_t	&mFlgs,		//Project's flags
 		&mProcPer,	//Process period
 		&mTimeStamp;
-	string	mParentNmPrev;	//Previous parent name after successful enable
+	string	mParentAddrPrev;//Previous parent name after successful enable
 };
 
 //************************************************
@@ -281,7 +286,7 @@ class PageWdg : public Widget, public TConfig
 	TCntrNode &operator=( const TCntrNode &node );
 
 	// Main parameters
-	string	path( ) const;
+	string	addr( ) const;
 	string	ico( ) const;
 	string	type( )		{ return "ProjLink"; }
 	string	calcId( );
@@ -289,10 +294,10 @@ class PageWdg : public Widget, public TConfig
 	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
 	int	calcPer( ) const;
-	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
+	string	parentAddr( ) const	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val, bool force = false );
-	void setParentNm( const string &isw );
+	void setParentAddr( const string &isw );
 
 	// Storing
 	void loadIO( );
@@ -300,7 +305,8 @@ class PageWdg : public Widget, public TConfig
 
 	// Data access
 	void resourceList( vector<string> &ls );
-	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const;
+	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	void procChange( bool src = true );
 
@@ -322,7 +328,7 @@ class PageWdg : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
+	void setWModif( Attr *a = NULL )	{ modif(); Widget::setWModif(a); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };

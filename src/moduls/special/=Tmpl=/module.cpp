@@ -2,7 +2,7 @@
 //!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Special.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,13 +31,13 @@
 //*************************************************
 //* Module info!                                  *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	_("Special template")
+#define MOD_NAME	trS("Special template")
 #define MOD_TYPE	SSPC_ID
 #define VER_TYPE	SSPC_VER
 #define SUB_TYPE	"LIB"
 #define MOD_VER		"0.0.1"
-#define AUTHORS		_("MyName MyFamily")
-#define DESCRIPTION	_("Special subsystem template module.")
+#define AUTHORS		trS("MyName MyFamily")
+#define DESCRIPTION	trS("Special subsystem template module.")
 #define LICENSE		"MyLicense"
 //*************************************************
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypedaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,12 +38,12 @@ TTypeDAQ::TTypeDAQ( const string &id ) : TModule(id)
 {
     mCntr = grpAdd("cntr_");
 
-    fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    fldAdd(new TFld("ENABLE",_("To enable"),TFld::Boolean,0,"1","0"));
-    fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
-    fldAdd(new TFld("MESS_LEV",_("Messages level"),TFld::Integer,0,"1","3"));
+    fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    fldAdd(new TFld("ENABLE",trS("To enable"),TFld::Boolean,0,"1","0"));
+    fldAdd(new TFld("START",trS("To start"),TFld::Boolean,0,"1","0"));
+    fldAdd(new TFld("MESS_LEV",trS("Messages level"),TFld::Integer,0,"1","3"));
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
@@ -71,10 +71,10 @@ void TTypeDAQ::postEnable( int flag )
     TModule::postEnable(flag);
 
     if(redntAllow()) {
-	fldAdd(new TFld("REDNT",_("Redundant"),TFld::Integer,TFld::Selectable,"1","0",
+	fldAdd(new TFld("REDNT",trS("Redundant"),TFld::Integer,TFld::Selectable,"1","0",
 	    (i2s(TController::Off)+";"+i2s(TController::Asymmetric)/*+";"+i2s(TController::Symmetric)*/).c_str(),
 	    _("Off;Asymmetric"/*;Symmetric"*/)));
-	fldAdd(new TFld("REDNT_RUN",_("Preference for running"),TFld::String,0,"20","<high>"));
+	fldAdd(new TFld("REDNT_RUN",trS("Preference for running"),TFld::String,0,"20","<high>"));
     }
 }
 
@@ -166,11 +166,11 @@ void TTypeDAQ::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> c_list;
 	    list(c_list);
-	    for(unsigned i_a=0; i_a < c_list.size(); i_a++)
-		opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
+	    for(unsigned iA = 0; iA < c_list.size(); iA++)
+		opt->childAdd("el")->setAttr("id",c_list[iA])->setText(trD(at(c_list[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, 1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mCntr, opt->attr("id"), -1, NodeRemove);
     }
     else TModule::cntrCmdProc(opt);
 }
@@ -182,12 +182,12 @@ TTypeParam::TTypeParam( const char *iid, const char *iname, const char *idb, boo
     name(iid), descr(iname), mDB(idb), isPrmCntr(i_isPrmCntr)
 {
     //Add typical structure fields
-    fldAdd(new TFld("SHIFR",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key|TCfg::NoVal|TFld::NoWrite,i2s(limObjID_SZ*5).c_str()));
-    fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
-    fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
-    fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec|TCfg::NoVal));
+    fldAdd(new TFld("SHIFR",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    fldAdd(new TFld("OWNER",trS("Owner"),TFld::String,TCfg::Key|TCfg::NoVal|TFld::NoWrite,i2s(limObjID_SZ*5).c_str()));
+    fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"200"));
+    fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
+    fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec|TCfg::NoVal));
 }
 
 string TTypeParam::DB( TController *cntr )	{ return mDB.size() ? cntr->cfg(mDB).getS() : ""; }

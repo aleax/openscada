@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 10:23+0300\n"
+"POT-Creation-Date: 2021-12-25 16:42+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -71,11 +71,15 @@ msgid "Library DB"
 msgstr "БД бібліотеки"
 
 msgid ""
-"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the main working DB, set '*.*'."
+"Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the Generic Storage, set '*.*.{Table name}'."
 msgstr ""
-"Адреса БД у форматі \"{Модуль БД}.{Ім'я БД}.{Ім'я таблиці}\".\n"
-"Для використання основної робочої БД встановити '*.*'."
+"Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}.{Ім'я Таблиці}\".\n"
+"Встановити '*.*.{Ім'я Таблиці}' для використання Загального Сховища."
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Видалити із '%s'"
 
 msgid "Date of modification"
 msgstr "Дата модифікації"
@@ -101,11 +105,11 @@ msgstr "Іконка"
 msgid "Widgets"
 msgstr "Віджет"
 
-msgid "Mime data"
-msgstr "Mime дані"
+msgid "Resources"
+msgstr "Ресурси"
 
-msgid "Mime type"
-msgstr "Mime тип"
+msgid "MIME"
+msgstr "MIME"
 
 msgid "Data"
 msgstr "Дані"
@@ -1266,34 +1270,47 @@ msgstr "Стор.: джерело відриття"
 msgid "Page: group"
 msgstr "Стор.: група"
 
+msgid ""
+"EMPTY and the \"main\" group is meant of using this page as the Root-main "
+"page, so such ones will replace other Root-main pages.\n"
+"The \"fl\" group is meant of using in the \"fly\" windows which are suitable "
+"for multiple open and must not be traced for doubles.\n"
+"All other are meant for including to the containers-boxes or single opening, "
+"so they forced in checking for doubles when the last one will be opened and "
+"the previous ones be closed."
+msgstr ""
+"ПОРОЖНЯ та \"main\" група передбачають використання цієї сторінки як Кореневу-основну сторінку, тож така буде замінювати інші Кореневі-головні сторінки.\n"
+"Група \"fl\" призначена для використання у зовнішніх вікнах, які передбачено для багаторазового одночасного відкриття та які не мають відстежуватися на дублікати.\n"
+"Решта передбачено для включення у контейнери-бокси або одноразового одночасного відкриття, тож вони примусово перевіряються на дублікати, коли останнє відкривається, а попередні закриваються."
+
 #, c-format
 msgid "The project '%s' is used now by %d sessions!"
-msgstr "Проект '%s' використовується %d сеансами!"
+msgstr "Проєкт '%s' використовується %d сеансами!"
 
 msgid "Loading the project."
-msgstr "Завантаження проекту."
+msgstr "Завантаження проєкту."
 
 msgid "Enabling the project."
-msgstr "Увімкнення проекту."
+msgstr "Увімкнення проєкту."
 
 msgid "Disabling the project."
-msgstr "Вимкнення проекту."
+msgstr "Вимкнення проєкту."
 
 #, c-format
 msgid "The page '%s' is already present!"
 msgstr "Сторінка '%s' вже присутня!"
 
 msgid "Project: "
-msgstr "Проект: "
+msgstr "Проєкт: "
 
 msgid "Page"
 msgstr "Сторінка"
 
 msgid "Project"
-msgstr "Проект"
+msgstr "Проєкт"
 
 msgid "Project DB"
-msgstr "БД проекту"
+msgstr "БД проєкту"
 
 msgid "Owner and group"
 msgstr "Власник та група"
@@ -1308,7 +1325,7 @@ msgid "Period of calculation"
 msgstr "Період обчислення"
 
 msgid "Project's session calculate period on milliseconds."
-msgstr "Період обчислення сеансу проекту у мілісекундах."
+msgstr "Період обчислення сеансу проєкту у мілісекундах."
 
 msgid "Enable as needed"
 msgstr "Вмикати за потреби"
@@ -1383,7 +1400,7 @@ msgid "Page is not a container or a template!"
 msgstr "Сторінка не є контейнером або шаблоном!"
 
 msgid "Project page: "
-msgstr "Сторінка проекту: "
+msgstr "Сторінка проєкту: "
 
 msgid "Page type"
 msgstr "Тип сторінки"
@@ -1444,7 +1461,7 @@ msgstr "Запуск сеансу."
 
 #, c-format
 msgid "Time of the styles loading from the project: %f ms."
-msgstr "Час завантаження стилів з проекту: %f мс."
+msgstr "Час завантаження стилів з проєкту: %f мс."
 
 #, c-format
 msgid "Time of the processing all the root pages: %f ms."
@@ -1494,8 +1511,8 @@ msgstr "Група"
 msgid "Background execution mode"
 msgstr "Режим виконання у тлі"
 
-msgid "Time of the session calculating"
-msgstr "Час обчислення сеансу"
+msgid "Counter, time of calculating"
+msgstr "Лічильник, час обчислення"
 
 msgid "Connections counter"
 msgstr "Лічильник підключень"
@@ -1564,6 +1581,10 @@ msgid ""
 msgstr "Помилка компіляції функції '%s' на мові '%s' для віджета: %s"
 
 #, c-format
+msgid "Modification form %d, fix %d. "
+msgstr "Модифікація формування %d, фіксація %d. "
+
+#, c-format
 msgid "Processing at %s. "
 msgstr "Обробка у %s. "
 
@@ -1573,6 +1594,7 @@ msgstr "Витрачено часу на гілку: "
 msgid "the item: "
 msgstr "елемент: "
 
+#, c-format
 msgid "It is a try of creating a widget in depth bigger to %d!"
 msgstr "Спроба створення віджету на глибину більш за %d!"
 
@@ -1582,6 +1604,9 @@ msgstr "Події: %s"
 
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Помилка обчислення віджета. Обробку вимкнено."
+
+msgid "Focus"
+msgstr "Фокус"
 
 msgid "Processing"
 msgstr "Обробка"
@@ -1597,6 +1622,9 @@ msgstr "Загальний рушій середовища візуалізац�
 
 msgid "DB table"
 msgstr "Таблиця БД"
+
+msgid "Resource data"
+msgstr "Дані ресурсу"
 
 msgid "Parent widget"
 msgstr "Батьківський віджет"
@@ -1649,6 +1677,7 @@ msgstr "Робочий стиль"
 msgid "Flags"
 msgstr "Прапорці"
 
+#, c-format
 msgid "Value %d"
 msgstr "Значення %d"
 
@@ -1664,10 +1693,10 @@ msgstr "Помилка завантаження бібліотеки відже�
 
 #, c-format
 msgid "Time of the project '%s' loading: %f ms."
-msgstr "Час завантаження проекту '%s': %f мс."
+msgstr "Час завантаження проєкту '%s': %f мс."
 
 msgid "Error loading the projects."
-msgstr "Помилка завантаження проектів."
+msgstr "Помилка завантаження проєктів."
 
 #, c-format
 msgid "Time of the library '%s' enabling: %f ms."
@@ -1675,7 +1704,7 @@ msgstr "Час включення бібліотеки '%s': %f мс."
 
 #, c-format
 msgid "Time of the project '%s' enabling: %f ms."
-msgstr "Час включення проекту '%s': %f мс."
+msgstr "Час включення проєкту '%s': %f мс."
 
 #, c-format
 msgid "The widget library '%s' is already present!"
@@ -1683,7 +1712,7 @@ msgstr "Бібліотека віджетів '%s' вже присутня!"
 
 #, c-format
 msgid "The project '%s' is already present!"
-msgstr "Проект '%s' вже присутній!"
+msgstr "Проєкт '%s' вже присутній!"
 
 #, c-format
 msgid "Connecting to the session is not permitted for '%s'."
@@ -1998,6 +2027,16 @@ msgstr "Робоче середовище"
 msgid "Calculation"
 msgstr "Обчислення"
 
+msgid "Period of the calculating, milliseconds"
+msgstr "Період обчислення, мілісекунд."
+
+msgid ""
+"Use -1 (< 0) if you want to use the parent widget/page/project calculating "
+"period."
+msgstr ""
+"Використовуйте -1 (< 0) якщо бажаєте використання батьківського періоду "
+"обчислення віджету/сторінки/проєкту."
+
 msgid "Procedure language"
 msgstr "Мова процедури"
 
@@ -2007,16 +2046,6 @@ msgid ""
 msgstr ""
 "Оберіть порожню мову для скидання процедури та мови віджету до батьківського "
 "віджету."
-
-msgid "Period of the calculating, milliseconds"
-msgstr "Період обчислення, мілісекунд."
-
-msgid ""
-"Use -1 (< 0) if you want to use the parent widget/page/project calculating "
-"period."
-msgstr ""
-"Використовуйте -1 (< 0) якщо бажаєте використання батьківського періоду "
-"обчислення віджету/сторінки/проекту."
 
 msgid "Procedure"
 msgstr "Процедура"
@@ -2051,6 +2080,9 @@ msgstr "Реальний"
 msgid "String"
 msgstr "Рядок"
 
+msgid "String (translate)"
+msgstr "Рядок (переклад)"
+
 msgid "Object"
 msgstr "Об'єкт"
 
@@ -2062,6 +2094,9 @@ msgstr "Вибір реальних чисел"
 
 msgid "Strings selection"
 msgstr "Вибір рядків"
+
+msgid "Text (translate)"
+msgstr "Текст (переклад)"
 
 msgid "DateTime"
 msgstr "ДатаЧас"
@@ -2121,7 +2156,7 @@ msgid ""
 "list. If set <pg> then returns the pages list for projects and sessions."
 msgstr ""
 "Повертає перелік віджетів, у контейнері віджетів, або дочірніх віджетів. "
-"Якщо встановлено <pg>, то повертається перелік сторінок проектів та сеансу."
+"Якщо встановлено <pg>, то повертається перелік сторінок проєктів та сеансу."
 
 msgid "Node presence"
 msgstr "Присутність вузлу"

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmodschedul.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,7 +38,7 @@ using namespace OSCADA;
 //*************************************************
 //* TModSchedul                                   *
 //*************************************************
-TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID,_("Modules scheduler"),false), mAllow("*"), mPer(10), schM(true)
+TModSchedul::TModSchedul( ) : TSubSYS(SMSH_ID, false), mAllow("*"), mPer(10), schM(true)
 {
 
 }
@@ -89,10 +89,10 @@ void TModSchedul::load_( )
     if((argVl=SYS->cmdOpt("modPath")).size()) SYS->setModDir(argVl, true);
 
     //Load parameters from command line
-    setChkPer(s2i(TBDS::genDBGet(nodePath()+"ChkPer",i2s(chkPer()))));
-    SYS->setModDir(TBDS::genDBGet(nodePath()+"ModPath",SYS->modDir()), true);
-    setAllowList(TBDS::genDBGet(nodePath()+"ModAllow",allowList(),"root",TBDS::OnlyCfg));
-    setDenyList(TBDS::genDBGet(nodePath()+"ModDeny",denyList(),"root",TBDS::OnlyCfg));
+    setChkPer(s2i(TBDS::genPrmGet(nodePath()+"ChkPer",i2s(chkPer()))));
+    SYS->setModDir(TBDS::genPrmGet(nodePath()+"ModPath",SYS->modDir()), true);
+    setAllowList(TBDS::genPrmGet(nodePath()+"ModAllow",allowList()));
+    setDenyList(TBDS::genPrmGet(nodePath()+"ModDeny",denyList()));
 }
 
 void TModSchedul::unload( )
@@ -120,9 +120,9 @@ void TModSchedul::unload( )
 
 void TModSchedul::save_( )
 {
-    TBDS::genDBSet(nodePath()+"ChkPer", i2s(chkPer()));
-    TBDS::genDBSet(nodePath()+"ModAllow", allowList(), "root", TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"ModDeny", denyList(), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"ChkPer", i2s(chkPer()));
+    TBDS::genPrmSet(nodePath()+"ModAllow", allowList(), "root", TBDS::OnlyCfg);
+    TBDS::genPrmSet(nodePath()+"ModDeny", denyList(), "root", TBDS::OnlyCfg);
 }
 
 void TModSchedul::dirScan( const string &paths, vector<string> &files )
@@ -325,7 +325,7 @@ bool TModSchedul::chkAllowMod( const string &name )
     string sel, nmFile;
     int path_els = 0;
 
-    for(int off = 0; (sel=TSYS::pathLev(name,0,true,&off)).size(); path_els++) nmFile = sel;
+    nmFile = TSYS::pathLevEnd(name, 0);
 
     if(allowList().empty())	return false;
     if(sTrm(allowList()) != "*") {

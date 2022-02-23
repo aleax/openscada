@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,7 +21,7 @@
 #ifndef TDAQS_H
 #define TDAQS_H
 
-#define SDAQ_VER	13	//ControllerS type modules version
+#define SDAQ_VER	14	//ControllerS type modules version
 #define SDAQ_ID		"DAQ"
 
 #include <string>
@@ -50,7 +50,8 @@ class TDAQS : public TSubSYS
 
 	string objName( );
 
-	int subVer( )	{ return SDAQ_VER; }
+	string subName( ) const	{ return _("Data Acquisition"); }
+	int subVer( ) const	{ return SDAQ_VER; }
 
 	void unload( );
 
@@ -68,7 +69,7 @@ class TDAQS : public TSubSYS
 	void tmplLibList( vector<string> &list ) const		{ chldList(mTmpLib,list); }
 	bool tmplLibPresent( const string &id ) const		{ return chldPresent(mTmpLib,id); }
 	void tmplLibReg( TPrmTmplLib *lib )			{ chldAdd(mTmpLib,lib); }
-	void tmplLibUnreg( const string &id, int flg = 0 )	{ chldDel(mTmpLib,id,-1,flg); }
+	void tmplLibUnreg( const string &id, int flags = NodeNoFlg ) { chldDel(mTmpLib, id, -1, flags); }
 	AutoHD<TPrmTmplLib> tmplLibAt( const string &id ) const	{ return chldAt(mTmpLib,id); }
 
 	// Redundancy
@@ -89,7 +90,7 @@ class TDAQS : public TSubSYS
 	void load__( );
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Private methods

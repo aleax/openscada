@@ -107,7 +107,7 @@ class TVal: public TCntrNode
 	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods

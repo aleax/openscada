@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,9 @@
 #include <vector>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::vector;
@@ -67,6 +69,8 @@ class TMdPrm : public TParamContr
 	//Methods
 	TMdPrm( string name, TTypeParam *tp_prm );
 	~TMdPrm( );
+
+	TCntrNode &operator=( const TCntrNode &node );
 
 	string stats( )		{ return mStats; }
 	string prmAddr( )	{ return mPrmAddr; }
@@ -130,6 +134,7 @@ class TMdContr: public TController
 	double	restDtTm( )	{ return mRestDtTm; }
 
 	string	catsPat( );
+	void messSet( const string &mess, int lev, const string &type2Code = "OP", const string &prm = "", const string &cat = "" );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -145,19 +150,25 @@ class TMdContr: public TController
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &co, const TVariant &pc );
+
 	void prmEn( TMdPrm *prm, bool val );
+	void sync( bool onlyPrmLs = false );
 
     private:
 	//Data
 	class StHd
 	{
 	    public:
-	    StHd( ) : cntr(0) { lstMess.clear(); }
+	    StHd( ) : cntr(0), numR(0), numRA(0), numW(0), numRM(0), numWM(0) { lstMess.clear(); }
 
 	    float cntr;
+	    map<string, map<string,string> > asynchWrs;	//Asynchronous writings list: [prm][attr][vl]
+							//   for the ready requests that is: ["<ReadyReqs>"][req][cmd]
 	    map<string, TMess::SRec>	lstMess;
 
-	    ResMtx	reqM;
+	    ResMtx reqM, aWrRes;
+
+	    float numR, numRA, numW, numRM, numWM;
 	};
 	class SPrmsStack
 	{
@@ -177,13 +188,15 @@ class TMdContr: public TController
 	//Attributes
 	ResMtx	enRes;				//Resource for enable params and request to remote OpenSCADA station
 	TCfg	&mSched,			//Calc schedule
+		&mStat,				//Remote station
 		&mMessLev;			//Messages level for gather
 	double	&mRestDtTm;			//Restore data maximum length time (hour)
 	int64_t	&mSync,				//Synchronization inter remote OpenSCADA station:
 						//configuration update, attributes list update, local and remote archives sync.
 		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
-	char	&mAllowToDelPrmAttr,		//Allow automatic remove parameters and attributes
+	char	&mAsynchWr,			//Asynchronous write
+		&mAllowToDelPrmAttr,		//Allow automatic remove parameters and attributes
 		&mPlaceCntrToVirtPrm;		//Placing different controllers to the different virtual parameters
 
 	bool	prcSt,				//Process task active
@@ -191,7 +204,7 @@ class TMdContr: public TController
 		syncSt,				//Sync start
 		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
-	vector< pair<string,StHd> > mStatWork;	//Work stations and it status
+	map<string, StHd> mStatWork;		//Work stations and it status
 
 	vector< AutoHD<TMdPrm> > pHd;
 

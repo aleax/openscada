@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibMath file: stdmath.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,8 +47,8 @@ class MathAcos : public TFunction
 {
     public:
 	MathAcos( ) : TFunction("acos", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y(rad.)"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Arccosine"); }
@@ -65,8 +65,8 @@ class MathAsin : public TFunction
 {
     public:
 	MathAsin( ) : TFunction("asin", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y(rad.)"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Arcsine"); }
@@ -83,8 +83,8 @@ class MathAtan : public TFunction
 {
     public:
 	MathAtan( ) : TFunction("atan", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y(rad.)"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y(rad.)"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Arctangent"); }
@@ -101,8 +101,8 @@ class MathCos : public TFunction
 {
     public:
 	MathCos( ) : TFunction("cos", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X(rad.)"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Cosine"); }
@@ -119,8 +119,8 @@ class MathCosh : public TFunction
 {
     public:
 	MathCosh( ) : TFunction("cosh", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Cosine hyperbolic"); }
@@ -137,8 +137,8 @@ class MathExp : public TFunction
 {
     public:
 	MathExp( ) : TFunction("exp", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Exponent"); }
@@ -155,8 +155,8 @@ class MathLn : public TFunction
 {
     public:
 	MathLn( ) : TFunction("ln", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Natural logarithm"); }
@@ -173,8 +173,8 @@ class MathLg : public TFunction
 {
     public:
 	MathLg( ) : TFunction("lg", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Decimal logarithm"); }
@@ -191,9 +191,9 @@ class MathPow : public TFunction
 {
     public:
 	MathPow( ) : TFunction("pow", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("p",_("Power"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("p",trS("Power"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Power"); }
@@ -210,8 +210,8 @@ class MathSin : public TFunction
 {
     public:
 	MathSin( ) : TFunction("sin", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X(rad.)"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Sine"); }
@@ -228,8 +228,8 @@ class MathSinh : public TFunction
 {
     public:
 	MathSinh( ) : TFunction("sinh", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Sine hyperbolic"); }
@@ -246,8 +246,8 @@ class MathSqrt : public TFunction
 {
     public:
 	MathSqrt( ) : TFunction("sqrt", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Square root"); }
@@ -264,8 +264,8 @@ class MathTan : public TFunction
 {
     public:
 	MathTan( ) : TFunction("tan", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X(rad.)"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X(rad.)"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Tangent"); }
@@ -282,8 +282,8 @@ class MathTanh : public TFunction
 {
     public:
 	MathTanh( ) : TFunction("tanh", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Tangent hyperbolic"); }
@@ -300,8 +300,8 @@ class MathCeil : public TFunction
 {
     public:
 	MathCeil( ) : TFunction("ceil", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Ceil"); }
@@ -318,8 +318,8 @@ class MathAbs : public TFunction
 {
     public:
 	MathAbs( ) : TFunction("abs", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Absolute"); }
@@ -336,8 +336,8 @@ class MathFloor : public TFunction
 {
     public:
 	MathFloor( ) : TFunction("floor", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("x",_("X"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("x",trS("X"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("Floor"); }
@@ -354,7 +354,7 @@ class MathRand : public TFunction
 {
     public:
 	MathRand( ) : TFunction("rand", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
 	}
 
 	string name( )	{ return _("Random number"); }
@@ -371,10 +371,10 @@ class MathIf : public TFunction
 {
     public:
 	MathIf( ) : TFunction("if", SSPC_ID) {
-	    ioAdd(new IO("y",_("Y"),IO::Real,IO::Return,"0"));
-	    ioAdd(new IO("cond",_("Condition"),IO::Real,IO::Default,"1"));
-	    ioAdd(new IO("true",_("True value"),IO::Real,IO::Default,"0"));
-	    ioAdd(new IO("false",_("False value"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("y",trS("Y"),IO::Real,IO::Return,"0"));
+	    ioAdd(new IO("cond",trS("Condition"),IO::Real,IO::Default,"1"));
+	    ioAdd(new IO("true",trS("True value"),IO::Real,IO::Default,"0"));
+	    ioAdd(new IO("false",trS("False value"),IO::Real,IO::Default,"0"));
 	}
 
 	string name( )	{ return _("IF condition"); }

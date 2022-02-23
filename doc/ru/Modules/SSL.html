@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/SSL</h1>
@@ -23,23 +23,28 @@
 <th> Языки </th>
 <th> Платформы </th>
 <th> Тип </th>
-<th> Автор </th>
-<th> Описание
+<th> Автор
 </th></tr>
 
 <tr>
 <td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 3.3 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Транспорт </td>
-<td> Роман Савоченко </td>
-<td> Предоставляет транспорт основанный на слое безопасных сокетов. Используется OpenSSL и поддерживаются: SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2.
+<td> Роман Савоченко
+</td></tr>
+<tr>
+<th colspan="9"> Описание
+</th></tr>
+<tr>
+<td colspan="9"> Предоставляет транспорт основанный на слое безопасных сокетов. Используется OpenSSL и поддерживаются: SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2.
+<ul><li> <b>Спонсировано, внешнего файла сертификатов на 0.3 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span>:</b> Винницкая Птицефабрика</li></ul>
 </td></tr></table>
 <p>Модуль предоставляет в программу поддержку транспортов, основанных на слое безопасных сокетов (SSL). В основе модуля лежит библиотека <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Поддерживаются входные и выходные транспорты протоколов SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2; общий перечень которых зависит от их доступности в библиотеке OpenSSL и при отсутствии прямого указания выбирается наиболее актуальный и безопасный.
 </p><p>Добавить новые входные и выходные безопасные сокеты можно посредством конфигурации <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">транспортной подсистемы</a> в любом конфигураторе OpenSCADA.
@@ -57,7 +62,7 @@
 </p><p>Каждый входной транспорт обязательно связывается с одним из доступных транспортных протоколов, которому передаются входные сообщения. В связке с транспортным протоколом поддерживается механизм объединения кусков разрозненных при передаче запросов.
 </p><p>Диалог конфигурации входного SSL-транспорта изображён на рисунке 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:856px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in_ru.png"><img class="thumbimage" height="995" src="../files/SSL_in_ru.png" width="854" /></a>  <div class="thumbcaption">Рис.1. Диалог конфигурации входного SSL-транспорта.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:869px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in_ru.png"><img class="thumbimage" height="820" src="../files/SSL_in_ru.png" width="867" /></a>  <div class="thumbcaption">Рис.1. Диалог конфигурации входного SSL-транспорта.</div></div></div></div>
 <p>С помощью этого диалога можно установить:
 </p>
 <ul><li> Состояние транспорта, а именно: статус, "Подключение", имя БД (содержащей конфигурацию) и список с информацией о текущих подключениях.</li>
@@ -68,8 +73,10 @@
 <li> <i>mode</i> — SSL-режим и версия (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), по умолчанию и при ошибке используется наиболее безопасный и соответствующий.</li></ul></li>
 <li> Выбор транспортных протоколов.</li>
 <li> Состояние "Подключение", в которое переводить транспорт при загрузке.</li>
-<li> Сертификаты, приватный ключ SSL и пароль приватного ключа SSL.</li>
-<li> Максимальное число клиентов, Максимальное число клиентов по хостам и Размер входного буфера.</li>
+<li> PEM-файл сертификатов и приватного ключа; или сертификаты, приватный ключ SSL и пароль приватного ключа SSL.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Спрятано в подключенном состоянии.</dd>
+<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Отслеживается в 60 секунд на предмет обновления, соответственно переподключение транспорта для актуализации.</dd></dl>
+<ul><li> Максимальное число клиентов, Максимальное число клиентов по хостам и Размер входного буфера.</li>
 <li> Keep alive запросов. Закрытие подключения после указанного количества запросов. Нулевое значение для отключения — не закрывается никогда.</li>
 <li> Keep alive время ожидания, секунд. Закрытие подключения после отсутствия запросов в течении указанного времени. Нулевое значение для отключения — не закрывается никогда.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Отключать данную функцию не рекомендуется поскольку свойство сетей TCP/IP не гарантирует уведомления сервера об отключении соединения, скажем в случае пропадания питания на клиенте. В результате чего могут <span style="color: red">навсегда</span> оставаться открытые клиентские подключения, а при достижении лимита сервер перестанет принимать новые!</dd></dl>
@@ -79,7 +86,7 @@
 </p><p>Транспорт поддерживает прямое определение нескольких адресов сервера и обработку всех IP-адресов в которые резолвится символьный адрес, что позволяет строить <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">вертикальное резервирование</a> непосредственно транспортом, который будет автоматически подключаться к первому доступному серверу.
 </p><p>Главная вкладка страницы конфигурации выходного SSL-транспорта изображёна на рисунке 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out_ru.png"><img class="thumbimage" height="791" src="../files/SSL_out_ru.png" width="782" /></a>  <div class="thumbcaption">Рис.2. Главная вкладка страницы конфигурации выходного SSL-транспорта.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:794px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out_ru.png"><img class="thumbimage" height="604" src="../files/SSL_out_ru.png" width="792" /></a>  <div class="thumbcaption">Рис.2. Главная вкладка страницы конфигурации выходного SSL-транспорта.</div></div></div></div>
 <p>С помощью этого диалога можно установить:
 </p>
 <ul><li> Состояние транспорта, а именно: статус, "Подключение" и имя БД, содержащей конфигурацию.</li>
@@ -88,8 +95,9 @@
 <ul><li> <i>addr</i> — адрес к которому осуществляется подключение. Допускаются как символьное, так и IPv4 "<b>127.0.0.1</b>" или IPv6 "<b>[::1]</b>" представление адреса.</li>
 <li> <i>port</i> — сетевой порт к которому осуществляется подключение. Возможно указание символьного имени порта согласно <i>/etc/services</i>.</li>
 <li> <i>mode</i> — SSL-режим и версия (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), по умолчанию и при ошибке используется наиболее безопасный и соответствующий.</li></ul></li>
-<li> Сертификаты, приватный ключ SSL и пароль приватного ключа SSL.</li>
-<li> Временные интервалы соединения в формате "<b>{conn}:{next}</b>", где:
+<li> PEM-файл сертификатов и приватного ключа; или сертификаты, приватный ключ SSL и пароль приватного ключа SSL.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Спрятано в подключенном состоянии.</dd></dl>
+<ul><li> Временные интервалы соединения в формате "<b>{conn}:{next}</b>", где:
 <ul><li> <i>conn</i> — максимальное время ожидания ответа соединения, в секундах;</li>
 <li> <i>next</i> — максимальное время ожидания продолжения ответа, в секундах.</li></ul></li></ul>
 <dl><dd> Может быть приоритетно определён вторым глобальным аргументом поля адреса, вроде "<b>localhost:123||5:1</b>".</dd></dl>
@@ -112,5 +120,5 @@ $ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/ru">Modules/SSL/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/ru">Modules/SSL/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

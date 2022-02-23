@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_ups.cpp
 /***************************************************************************
- *   Copyright (C) 2014-2017 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2014-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -38,20 +38,27 @@ UPS::~UPS( )
 
 }
 
-void UPS::init( TMdPrm *prm )
+void UPS::init( TMdPrm *prm, bool update )
 {
-    prm->daData = new tval();
-    prm->vlElemAtt(&((tval*)prm->daData)->els);
+    if(!update) {
+	prm->daData = new tval();
+	prm->vlElemAtt(&((tval*)prm->daData)->els);
+    }
 
     TCfg &c_subt = prm->cfg("SUBT");
-    c_subt.fld().setDescr(_("UPS"));
-    c_subt.fld().setFlg(c_subt.fld().flg()|TFld::SelEdit);
-    c_subt.setS("localhost:3493");
+    if(!update) {
+	c_subt.fld().setDescr(_("UPS"));
+	c_subt.fld().setFlg(c_subt.fld().flg()|TFld::SelEdit);
+	c_subt.setS("localhost:3493");
+    }
 
     string dls = upsList(c_subt.getS());
+    MtxAlloc res(prm->dataRes(), true);
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
-    if(dls.size()) c_subt.setS(TSYS::strParse(dls,0,";"));
+    res.unlock();
+
+    if(!update && dls.size()) c_subt.setS(TSYS::strParse(dls,0,";"));
 }
 
 void UPS::deInit( TMdPrm *prm )

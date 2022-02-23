@@ -54,7 +54,7 @@ using namespace OSCADA_QT;
 using namespace VISION;
 
 #undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
+#define _(mess) mod->I18N(mess, lang.c_str()).c_str()
 
 //*************************************************
 //* Id and name input dialog                      *
@@ -360,7 +360,7 @@ bool UserStBar::userSel( const string &ihint )
 }
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 //*********************************************
 //* Font select dialog                        *
@@ -634,7 +634,10 @@ void LineEdit::setValue( const QString &txt )
 	    break;
 	case Combo:
 	    if(((QComboBox*)ed_fld)->findText(txt) < 0) ((QComboBox*)ed_fld)->addItem(txt);
-	    if(txt != value())	((QComboBox*)ed_fld)->setEditText(txt);
+	    if(txt != value()) {
+		((QComboBox*)ed_fld)->setEditText(txt);
+		((QComboBox*)ed_fld)->setCurrentIndex(((QComboBox*)ed_fld)->findText(txt));
+	    }
 	    break;
     }
     if(ed_fld) ed_fld->blockSignals(false);
@@ -883,7 +886,7 @@ void SyntxHighl::highlightBlock( const QString &text )
 }
 
 #undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
+#define _(mess) mod->I18N(mess, lang.c_str()).c_str()
 
 //*************************************************
 //* Text edit widget                              *
@@ -1110,7 +1113,7 @@ void TreeComboDelegate::paint( QPainter *painter, const QStyleOptionViewItem &op
 }*/
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
 
 //****************************************
 //* Shape widget view                    *
@@ -1135,7 +1138,7 @@ void WdgView::childsClear( )
     QObjectList chLst = children();
     for(int iC = 0; iC < chLst.size(); iC++) {
 	WdgView *cw = qobject_cast<WdgView*>(chLst[iC]);
-	if(cw)	delete cw;//cw->deleteLater(); //!!!! direct deleting due to this step is last one mostly
+	if(cw)	delete cw;//cw->deleteLater(); //!!!! Direct deleting due to this step is last one mostly
     }
 }
 
@@ -1178,7 +1181,11 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos, bool
 	//case A_NO_ID:	return false;
 	case A_ROOT:
 	    if(shape && shape->id() == val)	break;
-	    if(shape) shape->destroy(this);
+	    if(shape) {
+		shape->destroy(this);
+		// Cleaning up all child objects after
+		while(children().size()) delete children()[0];
+	    }
 	    shape = mod->getWdgShape(val);
 	    if(shape) shape->init(this);
 	    break;
@@ -1278,8 +1285,8 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
 	setAllAttrLoad(true);
 	if(item.empty() || item == id())
-	    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++) {
-		XMLNode *cN = aBr->childGet(i_el);
+	    for(unsigned iEl = 0; iEl < aBr->childSize(); iEl++) {
+		XMLNode *cN = aBr->childGet(iEl);
 		if(cN->name() == "el") attrSet(cN->attr("id"), cN->text(), s2i(cN->attr("p")));
 	    }
 	setAllAttrLoad(false);

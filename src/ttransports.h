@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -61,9 +61,9 @@ class TTransportIn : public TCntrNode, public TConfig
 	bool toStart( )		{ return mStart; }
 	bool startStat( ) const	{ return runSt; }
 
-	string DB( )		{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const;
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCRIPT").setS(idscr); }
@@ -71,7 +71,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	void setProtocols( const string &prt )	{ cfg("PROT").setS(prt); }
 	void setToStart( bool val )		{ mStart = val; modif(); }
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	virtual void start( )	{ }
 	virtual void stop( );
@@ -102,7 +102,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	void load_( )			{ }
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	//Attributes
 	bool	runSt;
@@ -152,9 +152,9 @@ class TTransportOut : public TCntrNode, public TConfig
 	int64_t	lstReqTm( )		{ return mLstReqTm; }
 	virtual	string getStatus( );
 
-	string DB( )		{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const;
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
@@ -164,7 +164,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setConPrm( const string &nm, const TVariant &vl );
 	void clearConPrm( );
 
-	void setDB( const string &vl )			{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	virtual void start( int time = 0 );
 	virtual void stop( )		{ };
@@ -193,7 +193,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	void load_( TConfig *cfg );
 	void load_( )			{ }
@@ -239,14 +239,14 @@ class TTypeTransport: public TModule
 	void inList( vector<string> &list ) const		{ chldList(mIn, list); }
 	bool inPresent( const string &id ) const		{ return chldPresent(mIn, id); }
 	string inAdd( const string &id, const string &db = "*.*" );
-	void inDel( const string &id, bool complete = false )	{ chldDel(mIn, id, -1, complete); }
+	void inDel( const string &id, bool complete = false )	{ chldDel(mIn, id, -1, complete?NodeRemove:NodeNoFlg); }
 	AutoHD<TTransportIn> inAt( const string &id ) const	{ return chldAt(mIn, id); }
 
 	// Output transports
 	void outList( vector<string> &list ) const		{ chldList(mOut, list); }
 	bool outPresent( const string &id ) const		{ return chldPresent(mOut, id); }
 	string outAdd( const string &id, const string &idb = "*.*" );
-	void outDel( const string &id, bool complete = false )	{ chldDel(mOut, id, -1, complete); }
+	void outDel( const string &id, bool complete = false )	{ chldDel(mOut, id, -1, complete?NodeRemove:NodeNoFlg); }
 	AutoHD<TTransportOut> outAt( const string &id ) const	{ return chldAt(mOut, id); }
 	virtual	string outAddrHelp( )				{ return ""; }
 
@@ -311,7 +311,8 @@ class TTransportS : public TSubSYS
 	TTransportS( );
 	~TTransportS( );
 
-	int subVer( )			{ return STR_VER; }
+	string subName( ) const	{ return _("Transports"); }
+	int subVer( ) const	{ return STR_VER; }
 	void inTrList( vector<string> &ls );
 	void outTrList( vector<string> &ls );
 
@@ -319,6 +320,7 @@ class TTransportS : public TSubSYS
 	string extHostsDB( );
 	void extHostList( const string &user, vector<ExtHost> &list, bool andSYS = false, int upRiseLev = -1 );
 	ExtHost extHostGet( const string &user, const string &id, bool andSYS = false );
+	ExtHost extHostSeek( const string &id, int lev );
 	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
 	void extHostSet( const ExtHost &host, bool andSYS = false, bool load = false );
 	void extHostDel( const string &user, const string &id, bool andSYS = false );

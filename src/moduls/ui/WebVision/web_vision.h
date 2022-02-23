@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,7 +30,9 @@
 #include "vca_sess.h"
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 #define rgb(r,g,b) (((r)<<16)+((g)<<8)+(b))
 
@@ -60,7 +62,7 @@ struct SSess
     string	url,		//request URL
 		page,
 		sender,		//request sender
-		user,		//sesion user
+		user, userPrev,	//sesion user and previous user
 		content,	//Contains
 		gPrms,		//Global parameters
 		lang;		//Language

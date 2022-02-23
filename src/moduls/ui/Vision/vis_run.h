@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -173,7 +173,7 @@ class VisRun : public QMainWindow
 	bool	connOK( )	{ return !conErr; }
 	QAction *aFullScr( )	{ return actFullScr; }
 
-	void	setFocus( const string &addr );
+	void	setFocus( const string &addr, bool ack = false );
 
 	bool	winMenu( );
 	void	setWinMenu( bool act );
@@ -234,7 +234,7 @@ class VisRun : public QMainWindow
 	float	updTmMax, planePer;
 
     signals:
-	void makeStarterMenu( );
+	void makeStarterMenu( QWidget *mn = NULL, QString lang = "" );
 
     protected:
 	//Protected methods
@@ -327,7 +327,9 @@ class VisRun : public QMainWindow
 	bool		crSessForce;		//Force session creation flag
 	bool		mKeepAspectRatio;	//Keep aspect ratio on scale
 	bool		mWinPosCntrSave;	//Windows position control and save
-	string 		prjSes_it, work_sess, src_prj;//Work session and source project
+	string 		prjSes_it,		//Project session item
+			work_sess,		//Work session
+			src_prj;		//Source project
 	string		focusWdf;
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period

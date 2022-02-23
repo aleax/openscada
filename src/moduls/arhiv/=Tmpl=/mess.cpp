@@ -55,11 +55,11 @@ void ModMArch::postDisable( int flag )
 {
     TMArchivator::postDisable( flag );
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Remove info record
 	TConfig cfg(&mod->archEl());
 	cfg.cfg("TBL").setS(archTbl(),true);
-	SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
+	TBDS::dataDel(addr()+"."+mod->mainTbl(), "", cfg);
     }
 }
 
@@ -74,7 +74,7 @@ void ModMArch::load_( )
     //> Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg,false,true)) {
+    if(TBDS::dataGet(addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException)) {
 	mBeg = atoi(cfg.cfg("BEGIN").getS().c_str());
 	mEnd = atoi(cfg.cfg("END").getS().c_str());
     }
@@ -143,7 +143,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	TMArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",SARH_ID,3,
-	    "dest","select","select","/db/list","help",TMess::labDB());
+	    "dest","select","select","/db/list:onlydb","help",TMess::labStor());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	return;
     }

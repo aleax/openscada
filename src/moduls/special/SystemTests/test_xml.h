@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_xml.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,8 +36,8 @@ class TestXML : public TFunction
     public:
 	TestXML( ) : TFunction("XML",SSPC_ID)
 	{
-	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("file",_("XML file"),IO::String,IO::Default) );
+	    ioAdd( new IO("rez",trS("Result"),IO::String,IO::Return) );
+	    ioAdd( new IO("file",trS("XML file"),IO::String,IO::Default) );
 	}
 
 	string name( )	{ return _("XML parsing"); }

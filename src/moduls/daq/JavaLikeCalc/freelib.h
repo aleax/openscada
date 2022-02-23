@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freelib.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,18 +47,20 @@ class Lib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string id( )		{ return mId; }
+	string id( ) const	{ return mId; }
 	string name( );
 	string descr( )		{ return cfg("DESCR").getS(); }
 	bool startStat( ) const	{ return runSt; }
 
-	string DB( )		{ return workLibDb; }
-	string tbl( )		{ return cfg("DB").getS(); }
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	bool isStdStorAddr( ) const		{ return (tbl() == ("flb_"+id())); }	//????[v1.0] Remove
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const			{ return cfg("DB").getS().empty() ? ("flb_"+id()) : cfg("DB").getS(); }
+	string fullDB( bool qTop = false ) const { return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDescr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
 	void setStart( bool val );
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 	void setFullDB( const string &idb );
 
 	void list( vector<string> &ls ) const		{ chldList(mFnc, ls); }
@@ -69,7 +71,7 @@ class Lib : public TCntrNode, public TConfig
 
 	void copyFunc( const string &f_id, const string &l_id, const string &to_id, const string &to_name );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     protected:
 	const char *nodeName( ) const	{ return mId.getSd(); }
@@ -85,7 +87,7 @@ class Lib : public TCntrNode, public TConfig
     private:
 	bool	runSt;
 	int	mFnc;
-	string	workLibDb;
+	string	mDB;
 	TCfg	&mId;
 };
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -391,14 +391,19 @@ function getTabIndex( wdgO, origPos )
 /***************************************************
  * setFocus - Command for set focus                *
  ***************************************************/
-function setFocus( wdg, onlyClr )
+function setFocus( wdg, ack, focusElem )
 {
-    if(masterPage.focusWdf && masterPage.focusWdf == wdg) return;
+    if(focusElem) focusElem.focus();
+    if(masterPage.focusWdf == wdg) return;
 
     var attrs = new Object();
-    if(masterPage.focusWdf) { attrs.focus = '0'; attrs.event = 'ws_FocusOut'; setWAttrs(masterPage.focusWdf,attrs); }
-    masterPage.focusWdf = wdg;
-    if(!onlyClr) { attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage.focusWdf,attrs); }
+    if(masterPage.focusWdf) {
+	attrs.focus = '0'; attrs.event = 'ws_FocusOut';
+	setWAttrs(masterPage.focusWdf, attrs);
+    }
+    if(ack) masterPage.focusWdf = wdg;
+    attrs.focus = '1'; attrs.event = 'ws_FocusIn';
+    setWAttrs(wdg, attrs);
 }
 
 /****************************************************************************
@@ -441,7 +446,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if((opPg=this.findOpenPage(pgId))) {
 	    opPg.fullUpdCnt = opPg.fullUpdCnt ? Math.max(0,opPg.fullUpdCnt-planePer) : tmFullUpd;
 	    if(updWdg || !opPg.fullUpdCnt)
-		servGet(pgId, 'com=attrsBr&FullTree='+(opPg.fullUpdCnt?0:1)+'&tm='+tmCnt, makeEl, opPg);
+		servGet(pgId, 'com=attrsBr&FullTree='+(opPg.fullUpdCnt?'':'1')+'&tm='+tmCnt, makeEl, opPg);
 	    return true;
 	}
 
@@ -461,7 +466,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     }
 
     //Creating/replacing the main page
-    if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
+    if(this == masterPage && (!this.addr.length || pgGrp == 'main' || !pgGrp.length || pgGrp == this.attrs['pgGrp'])) {
 	if(this.addr.length) {
 	    servSet(this.addr, 'com=pgClose&cacheCntr', '');
 	    this.pwClean(true);
@@ -726,15 +731,17 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.window.resizeTo(geomW+20,geomH+40);
 	}
 
-	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr, true);
+	if(this.attrs['focus'] && parseInt(this.attrs['focus']) && this.attrsMdf['focus'])
+	    setFocus(this.addr, true, this.place.focusElem);
 
 	this.place.className = "Primitive " + this.attrs['root'];
-	if(!this.place.getAttribute("id"))
-	    this.place.setAttribute("id", this.addr.slice(this.addr.lastIndexOf("/")+1));	// this.addr.replace("/"+sessId,"").replace(/\//g, "_"));
+	if(!this.place.getAttribute('id'))
+	    this.place.setAttribute('id', this.addr.slice(this.addr.lastIndexOf("/")+1));	// this.addr.replace("/"+sessId,"").replace(/\//g, "_"));
 
 	var isPrim = true;
 	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
 	    if(this.pg) {
+
 		elStyle += 'background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
 		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>###Page###: '"+this.addr+"'.<br/>###View access is not permitted.###</div>";
 	    }
@@ -804,7 +811,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    servSet(this.inclOpen, 'com=pgClose&cacheCntr&cachePg', '');
 		    this.pages[this.inclOpen].pwClean();
 
-		    this.pages[this.inclOpen].reqTm = tmCnt;
+		    //this.pages[this.inclOpen].reqTm = tmCnt;
 		    pgCacheProc(this.pages[this.inclOpen]);
 		    //this.place.removeChild(this.pages[this.inclOpen].place);
 		    while(this.place.children.length) this.place.removeChild(this.place.children[0]);
@@ -818,7 +825,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.pages[this.inclOpen] = pgO;
 			this.place.appendChild(this.pages[this.inclOpen].place);
 			this.pages[this.inclOpen].perUpdtEn(true);
-			this.pages[this.inclOpen].makeEl(servGet(this.inclOpen, 'com=attrsBr&tm='+pgO.reqTm));
+			//!!!! In any case complete reload the page due to the possibility of the last changes loss at the closing
+			this.pages[this.inclOpen].makeEl(servGet(this.inclOpen, 'com=attrsBr')); //&tm='+pgO.reqTm));
 		    }
 		    else {
 			var iPg = new pwDescr(this.inclOpen, true, this);
@@ -1061,15 +1069,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    this.parentNode.style.visibility = 'hidden';
 					    this.parentNode.style.top = "-100px";
 					}
-					combList.childNodes[0].onblur = function( ) {
-					    this.parentNode.style.visibility = 'hidden';
-					    this.parentNode.style.top = "-100px";
-					}
-					combList.onmouseleave = function( ) { this.style.visibility = 'hidden'; this.style.top = "-100px"; }
 					this.ownerDocument.body.appendChild(combList);
 				    }
 				    while(combList.childNodes[0].childNodes.length)
 					combList.childNodes[0].removeChild(combList.childNodes[0].childNodes[0]);
+				    // Creation for items of the list
 				    var elLst = formObj.parentNode.cfg.split('\n');
 				    for(var i = 0; i < elLst.length; i++) {
 					var optEl = this.ownerDocument.createElement('option');
@@ -1077,9 +1081,21 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					if(formObj.valGet() == elLst[i]) optEl.defaultSelected = optEl.selected = true;
 					combList.childNodes[0].appendChild(optEl);
 				    }
+				    //  Appending for missed value to the list
+				    if(elLst.indexOf(formObj.valGet()) < 0) {
+					var optEl = this.ownerDocument.createElement('option');
+					optEl.appendChild(this.ownerDocument.createTextNode(formObj.valGet()));
+					optEl.defaultSelected = optEl.selected = true;
+					combList.childNodes[0].appendChild(optEl);
+				    }
+
 				    if(combList.childNodes[0].childNodes.length) {
-					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
-								 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; ';
+					var combHeight = Math.min(elLst.length,10)*parseInt(this.style.height);
+					var combTop = posGetY(formObj,true) + formObj.offsetHeight;
+					if((combTop+combHeight) > this.ownerDocument.body.scrollHeight)
+					    combTop = posGetY(formObj,true) - combHeight;
+					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+combTop+'px; '+
+								 'width: '+formObj.offsetWidth+'px; height: '+combHeight+'px; ';
 					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; '+
 									       'font: '+formObj.parentNode.fontCfg+'; ';
 					combList.childNodes[0].formObj = formObj;
@@ -1110,9 +1126,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 4:	break;	//Time
 			    case 5:	//Date
 			    case 6:	//Date and time
-				formObj.onclick = function( ) {
-				    if((cldrDlg=this.ownerDocument.getElementById('clndrdlg'))) cldrDlg.style.visibility = 'hidden';
-				}
 				var cldrImg = this.place.ownerDocument.createElement('img');
 				cldrImg.className = "cntr"; cldrImg.src = '/'+MOD_ID+'/img_combar';
 				cldrImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
@@ -1133,6 +1146,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
 					    "<tr><td/><td/><td/><td/><td/><td/><td/></tr>"+
 					    "</table>";
+					cldrDlg.onmouseup = function(e) { e.stopImmediatePropagation(); }
 					cldrDlg.children[0].onclick = function( ) {
 					    this.parentElement.formObj.valSet((new Date()).getTime()/1000);
 					    this.parentElement.formObj.chApply();
@@ -1208,11 +1222,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					}
 					this.ownerDocument.body.appendChild(cldrDlg);
 				    }
-				    //cldrDlg.onmouseleave = formObj.onclick;
 				    formObj.cldrDlg = cldrDlg;
 				    cldrDlg.formObj = formObj;
 				    cldrDlg.tmSet(formObj.valGet());
-				    cldrDlg.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
+				    cldrDlg.style.cssText = 'left: '+Math.min(posGetX(formObj,true),this.ownerDocument.body.scrollWidth-cldrDlg.offsetWidth)+'px; '+
+					'top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; '+
 					'font: '+formObj.parentNode.fontCfg+'; ';
 				    return false;
 				}
@@ -1251,7 +1265,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    this.parentNode.children[1].style.left = (parseInt(this.parentNode.children[1].style.left)+applySz)+'px';
 				okImg.style.visibility = 'hidden';
 				this.wdgLnk.perUpdtEn(false); this.tmClearEdit = 0;
-				if(this.cldrDlg) this.onclick();
+				if(this.cldrDlg) this.cldrDlg.style.visibility = 'hidden';
 			    }
 			    this.parentNode.isModify = on;
 			}
@@ -1574,7 +1588,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.cursor = elWr ? 'pointer' : '';
 			formObj.disabled = !elWr;
 			formObj.wdgLnk = this;
-			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
 			formObj.style.padding = "0";
 			this.place.appendChild(formObj);
 			this.place.btDown = function( ) {
@@ -1709,7 +1722,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    }
 			    formObj.appendChild(optEl);
 			}
-			for(i = 0; i < selVal.length && elTp == 4; i++) {
+			for(i = 0; i < selVal.length /*&& elTp == 4*/; i++) {
+			    if(elLst.indexOf(selVal[1]) >= 0) continue;
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.textContent = selVal[i];
 			    optEl.selected = optEl.defaultSelected = true;
@@ -1871,26 +1885,36 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				else if(this.outTp == "i" || this.outTp == "r" || this.outTp == "s" || this.outTp == "t") {
 				    tVl = elTbl.getVal(this.parentNode.rowIndex-1, this.cellIndex-1);
-				    this.innerHTML = (this.outTp == "t") ? "<textarea style='height: "+this.clientHeight+"px;'/>" : "<input/>";
+				    this.innerHTML = (this.outTp == "t") ? "<textarea style='height: "+Math.max(40,this.clientHeight)+"px;'/>" : "<input/>";
 				    this.firstChild.value = tVl;
-				    this.firstChild.onkeyup = function(e) {
+				    this.firstChild.onkeydown = function(e) {
 					e.stopImmediatePropagation();
-					if(e.keyCode == 13 && (this.nodeName != "TEXTAREA" || e.ctrlKey))
+					if(e.keyCode == 13) {
+					    e.preventDefault();
+					    if(this.nodeName == "TEXTAREA" && e.ctrlKey) {	//NewLine insertion
+						var selStart = this.selectionStart;
+						this.value = this.value.slice(0, selStart) + "\n" + this.value.slice(this.selectionEnd);
+						this.setSelectionRange(selStart + 1, selStart + 1);
+						this.blur(); this.focus();
+						return true;
+					    }
 					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+					}
 					if(e.keyCode == 27) {
 					    this.parentNode.isEnter = false; this.parentNode.offsetParent.edIt = null;
 					    this.parentNode.innerHTML = this.parentNode.svInnerHTML;
 					}
-					return true;
 				    }
-				    this.firstChild.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
+				    //this.firstChild.onkeydown = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.oncontextmenu = function(e) { e.stopImmediatePropagation(); return true; }
 				    this.firstChild.focus();
+				    this.firstChild.setSelectionRange(this.firstChild.selectionStart, this.firstChild.selectionEnd);
 				} else { this.isEnter = false; elTbl.edIt = null; }
 			    }
 			    //   Prevent for wrong selection
-			    if(window.getSelection) window.getSelection().removeAllRanges();
-			    else if(document.selection) document.selection.empty();
+			    //!!!! But causes the text cursor obtain in the created input tag
+			    //if(window.getSelection) window.getSelection().removeAllRanges();
+			    //else if(document.selection) document.selection.empty();
 			    return false;
 			}
 			formObj.selIt = function(row, col) {
@@ -2104,7 +2128,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    col = Math.abs(col);
 				    isDesc = (Math.abs(this.sortCol) == col && this.sortCol && this.sortCol > 0);
 				    prcArr = Array.prototype.slice.call(this.tBodies[0].rows,0).sort(
-					    function(a,b) { return (isDesc?1:-1)*a.cells[col-1].textContent.localeCompare(b.cells[col-1].textContent); }
+					    function(a,b) {
+						if(a.cells[col-1].outTp == "i")	return (isDesc?-1:1)*(parseInt(a.cells[col-1].textContent)<parseInt(b.cells[col-1].textContent)?-1:1);
+						if(a.cells[col-1].outTp == "r")	return (isDesc?-1:1)*(parseFloat(a.cells[col-1].textContent)<parseFloat(b.cells[col-1].textContent)?-1:1);
+						return (isDesc?-1:1)*a.cells[col-1].textContent.localeCompare(b.cells[col-1].textContent);
+					    }
 					);
 				    for(iR = 0; iR < prcArr.length; ++iR) {
 					if(this.svRow && this.svRow == parseInt(prcArr[iR].cells[0].textContent)) {
@@ -2153,8 +2181,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    break;
 	    }
 	    this.place.isSpecFocus = true;
-	    if(elWr != this.place.elWr || this.attrsMdf['geomZ'])
-		if(elWr) formObj.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ']))); else formObj.removeAttribute('tabIndex');
+	    if(elWr != this.place.elWr || this.attrsMdf['geomZ']) {
+		if(elWr) formObj.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ'])));
+		else formObj.removeAttribute('tabIndex');
+		this.place.focusElem = elWr ? formObj : null;
+	    }
 	    if(elWr != this.place.elWr) formObj.onfocus = !elWr ? null : function(e) { setFocus(this.parentNode.wdgLnk.addr); }
 	}
 	else if(this.attrs['root'] == 'Diagram') {
@@ -2476,8 +2507,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	if(!this.place.isSpecFocus) {
-	    if(elWr != this.place.elWr || this.attrsMdf['geomZ'])
-		if(elWr) this.place.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ']))); else this.place.removeAttribute('tabIndex');
+	    if(elWr != this.place.elWr || this.attrsMdf['geomZ']) {
+		if(elWr) this.place.setAttribute('tabIndex', getTabIndex(this,parseInt(this.attrs['geomZ'])));
+		else this.place.removeAttribute('tabIndex');
+		this.place.focusElem = elWr ? this.place : null;
+	    }
 	    if(elWr != this.place.elWr) this.place.onfocus = !elWr ? null : function(e) { setFocus(this.wdgLnk.addr); }
 	}
 	if(elWr != this.place.elWr) {
@@ -2798,21 +2832,35 @@ function makeUI( callBackRez )
 	}
 	// Processing the opened pages
 	pgList = new Array();
-	for(var i = 0; i < pgNode.childNodes.length; i++)
-	    if(pgNode.childNodes[i].nodeName == 'pg') {
-	        var prPath = pgNode.childNodes[i].textContent;
-		//  Checking for closed windows
-		var opPg = masterPage.findOpenPage(prPath);
-		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
-		    servSet(prPath, 'com=pgClose&cacheCntr', '');
-		    opPg.pwClean(true);
-		    delete opPg.parent.pages[prPath];
+	for(var iCh = 0, iCh2 = 0; iCh < pgNode.childNodes.length; ++iCh) {
+	    var chN = pgNode.childNodes[iCh];
+	    if(chN.nodeName != 'pg') continue;
+	    //  Checking for closed windows
+	    var opPg = masterPage.findOpenPage(chN.textContent);
+	    if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
+		servSet(chN.textContent, 'com=pgClose&cacheCntr', '');
+		opPg.pwClean(true);
+		delete opPg.parent.pages[chN.textContent];
+		continue;
+	    }
+
+	    //  Register the page
+	    pgList.push(chN.textContent);
+
+	    //  Detection the double container pages and opening the last one
+	    if(chN.getAttribute('pgGrp') && chN.getAttribute('pgGrp') != 'main' && chN.getAttribute('pgGrp') != 'fl') {
+		for(iCh2 = iCh+1; iCh2 < pgNode.childNodes.length; ++iCh2)
+		    if(pgNode.childNodes[iCh2].getAttribute('pgGrp') == chN.getAttribute('pgGrp'))
+			break;
+		if(iCh2 < pgNode.childNodes.length) {
+		    servSet(chN.textContent, 'com=pgClose', '');//Force closing lost opened and included pages
 		    continue;
 		}
-		//  Call page
-		pgList.push(prPath);
-		masterPage.callPage(prPath, parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
 	    }
+
+	    //  Opening
+	    masterPage.callPage(chN.textContent, parseInt(chN.getAttribute('updWdg')));
+	}
 	tmCnt_ = parseInt(pgNode.getAttribute('tm'));
 	if((tmCnt_-tmCnt) < -10) window.location.reload();	//The server or the counter restarted - reload the session
 	tmCnt = tmCnt_;
@@ -2831,15 +2879,16 @@ function makeUI( callBackRez )
     planePer = Math.min(Math.max(1e-3*modelPer,elTm*10), planePer + (Math.max(1e-3*modelPer,elTm*3)-planePer)/100);
     var sleepTm = Math.max(0, planePer-elTm);
     prcTm = elTm + sleepTm;
-    //console.log("sleepTm: "+sleepTm+"s; prcTm: "+prcTm+"s; elTm: "+elTm+"s; planePer: "+planePer+"s.");
+
+    // The frontend status request
+    if(pgNode && parseInt(pgNode.getAttribute("fStatusOrder")))
+	servSet('/'+sessId, 'com=fStatus', "Counter="+tmCnt_+"; "+
+	    "Period: "+prcTm.toPrecision(3)+"<"+planePer.toPrecision(3)+"("+(1e-3*modelPer).toPrecision(3)+")s, "+
+	    "Time elapsed: "+elTm.toPrecision(3)+"s, sleep: "+sleepTm.toPrecision(3)+"s.", true);
+
     setTimeout(makeUI, sleepTm*1e3);
-    //if(mainTmId) clearTimeout(mainTmId);
-    //mainTmId = setTimeout(makeUI, 1000);
 
-    //prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTmMain.getTime())));
-    //setTimeout(makeUI,prcTm*1e3);
-
-    //Execution performance test
+    //Execution the performance test
     /*var startChkTm = (new Date()).getTime();
     for(var i_cnt = 0; i_cnt < 1000000; i_cnt++)
 	var trez = Math.sin(Math.PI);
@@ -3136,8 +3185,11 @@ document.body.onmouseup = function(e)
 {
     if(!e) e = window.event;
     if(evMouseGet(e) != 'Left') return true;
-    var popUpMenu = document.getElementById('popupmenu');
-    if(popUpMenu) popUpMenu.style.visibility = 'hidden';
+
+    if((popIt=document.getElementById('popupmenu')))	popIt.style.visibility = 'hidden';
+    if((popIt=document.getElementById('combomenu')))	popIt.style.visibility = 'hidden';
+    if((popIt=document.getElementById('clndrdlg')))	popIt.style.visibility = 'hidden';
+
     //return false;	//!!!! It's buggy on <input type=range> for Chrome
 }
 

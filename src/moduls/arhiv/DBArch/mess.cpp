@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -63,15 +63,14 @@ void ModMArch::postDisable( int flag )
 {
     TMArchivator::postDisable(flag);
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Remove info record
 	TConfig cfg(&mod->archEl());
 	cfg.cfg("TBL").setS(archTbl(),true);
-	SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
+	TBDS::dataDel(addr()+"."+mod->mainTbl(), "", cfg);
 
-	//Remove archive's DB table
-	SYS->db().at().open(addr()+"."+archTbl());
-	SYS->db().at().close(addr()+"."+archTbl(), true);
+	//Removing the archive DB table
+	TBDS::dataDelTbl(addr()+"."+archTbl());
     }
 }
 
@@ -109,12 +108,12 @@ void ModMArch::start( )
 {
     if(!runSt) {
 	reqEl.fldClear();
-	reqEl.fldAdd(new TFld("MIN",_("In minutes"),TFld::Integer,TCfg::Key,"8"));	//Mostly for fast reading next, by minutes
-	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),(tmAsStr()?"20":"10")));
-	reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"6","0"));
-	reqEl.fldAdd(new TFld("CATEG",_("Category"),TFld::String,TCfg::Key,"200"));
-	reqEl.fldAdd(new TFld("MESS",_("Message"),TFld::String,(keyTmCat()?(int)TFld::NoFlag:(int)TCfg::Key),(keyTmCat()?"100000":"255")));
-	reqEl.fldAdd(new TFld("LEV",_("Level"),TFld::Integer,TFld::NoFlag,"2"));
+	reqEl.fldAdd(new TFld("MIN",trS("In minutes"),TFld::Integer,TCfg::Key,"8"));	//Mostly for fast reading next, by minutes
+	reqEl.fldAdd(new TFld("TM",trS("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),(tmAsStr()?"20":"10")));
+	reqEl.fldAdd(new TFld("TMU",trS("Time, microseconds"),TFld::Integer,TCfg::Key,"6","0"));
+	reqEl.fldAdd(new TFld("CATEG",trS("Category"),TFld::String,TCfg::Key,"200"));
+	reqEl.fldAdd(new TFld("MESS",trS("Message"),TFld::String,(keyTmCat()?(int)TFld::NoFlag:(int)TCfg::Key),(keyTmCat()?"100000":"255")));
+	reqEl.fldAdd(new TFld("LEV",trS("Level"),TFld::Integer,TFld::NoFlag,"2"));
     }
 
     //Connection to DB and enable status check
@@ -151,7 +150,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
     if(!runSt) throw TError(nodePath().c_str(), _("The archive is not started!"));
 
-    AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(), true);
+    AutoHD<TTable> tbl = TBDS::tblOpen(addr()+"."+archTbl(), true);
     if(tbl.freeStat()) return false;
 
     TConfig cfg(&reqEl);
@@ -191,7 +190,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
     cfg.cfg("TBL").setS(archTbl(),true);
     cfg.cfg("BEGIN").setS(i2s(mBeg),true);
     cfg.cfg("END").setS(i2s(mEnd),true);
-    bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg,false,true);
+    bool rez = TBDS::dataSet(addr()+"."+mod->mainTbl(), "", cfg, TBDS::NoException);
 
     tmProc = TSYS::curTime() - t_cnt; tmProcMax = vmax(tmProcMax, tmProc);
 
@@ -218,10 +217,10 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
 	tC = (tC/60)*60;
 	cfg.cfg("MIN").setI(tC/60, true);
 	int eC = 0;
-	for( ; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",eC++,cfg,false,true) && SYS->sysTm() < upTo; ) {
+	for( ; TBDS::dataSeek(addr()+"."+archTbl(),"",eC++,cfg,TBDS::UseCache) && SYS->sysTm() < upTo; ) {
 	    TMess::SRec rc(cfg.cfg("TM").getI(), cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(),
 			    (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
-	    if(rc.time >= bTm && rc.time <= eTm && abs(rc.level) >= level && re.test(rc.categ)) {
+	    if(rc.time >= bTm && rc.time <= eTm && TMess::messLevelTest(level,rc.level) && re.test(rc.categ)) {
 		bool equal = false;
 		int i_p = mess.size();
 		for(int i_m = mess.size()-1; i_m >= 0; i_m--) {
@@ -250,13 +249,12 @@ bool ModMArch::readMeta( )
     //Load message archive parameters
     TConfig wcfg(&mod->archEl());
     wcfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg,false,true)) {
+    if(TBDS::dataGet(addr()+"."+mod->mainTbl(),"",wcfg,TBDS::NoException)) {
 	mBeg = s2i(wcfg.cfg("BEGIN").getS());
 	mEnd = s2i(wcfg.cfg("END").getS());
 	// Check for delete archivator table
 	if(maxSize() && mEnd <= (time(NULL)-(time_t)(maxSize()*86400))) {
-	    SYS->db().at().open(addr()+"."+archTbl());
-	    SYS->db().at().close(addr()+"."+archTbl(), true);
+	    TBDS::dataDelTbl(addr()+"."+archTbl());
 	    mBeg = mEnd = 0;
 	}
     } else rez = false;
@@ -279,7 +277,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
-	    "dest","select","select","/db/list","help",TMess::labDB());
+	    "dest","select","select","/db/list:onlydb","help",TMess::labStor());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size, days"),RWRWR_,"root",SARH_ID,2,
 		"tp","real", "help",_("Set to 0 to disable this limit and to rise some the performance."));

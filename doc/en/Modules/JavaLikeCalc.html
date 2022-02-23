@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/JavaLikeCalc</h1>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Calculator on the Java-like language
 </td>
-<td> 5.1 </td>
+<td> 5.4 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -329,9 +329,10 @@ rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
 rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
 <dl><dd><ul><li> <i>real toReal();</i> — converts this string to a real number.</li>
 <li> <i>int toInt( int base = 0 );</i> — converts this string to an integer number in accordance with <i>base</i> (from 2 to 36). If the base is 0, then the prefix will be considered a prefix for determining the base (123-decimal; 0123-octal; 0x123-hex).</li>
-<li> <i>string parse( int pos, string sep = ".", int off = 0 );</i> — gets a token with the number <i>pos</i> from the string when separated by <i>sep</i> and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string parseLine( int pos, int off = 0 );</i> — gets a line with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
-<li> <i>string parsePath( int pos, int off = 0 );</i> — gets a path token with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i>.</li>
+<li> <i>string {parse,parseEnd}( int pos, string sep = ".", int off = {0,{length}}, bool mergeSepSymb = false );</i> — gets a token with the number <i>pos</i> from the string when separated by <i>sep</i> and from the offset <i>off</i> (stopping on the next token begin, end for <i>parseEnd</i>). <i>mergeSepSymb</i> specifies of allowing of merging of the group of identical symbols to one separator. Result offset is returned back to <i>off</i>. <i>parseEnd()</i> does the same but from the end.</li>
+<li> <i>string parseLine( int pos, int off = 0 );</i> — gets a line with the number <i>pos</i> from the string and from the offset <i>off</i>. Result offset is returned back to <i>off</i> (stopping on the next token begin).</li>
+<li> <i>string parsePath( int pos, int offCmptbl = 0, int off = 0 );</i> — gets a path token with the number <i>pos</i> from the string and from the offset <i>off</i> (stopping on the next token begin) or <i>offCmtbl</i> (stopping on next symbol of the current token end — for compatibility). Result offset is returned back to <i>off</i> or <i>offCmptbl</i>.</li>
+<li> <i>string parsePathEnd( int pos, int off = {length} );</i> — gets a path token with the number <i>pos</i> from the string end and from the offset <i>off</i> (stopping on the next token end). Result offset is returned back to <i>off</i>.</li>
 <li> <i>string path2sep( string sep = "." );</i> — converts path into this string to separated by <i>sep</i> string.</li>
 <li> <i>string trim( string cfg = " \n\t\r" );</i> — trims the string at the begin and the end for the symbols <i>cfg</i>.</li></ul></dd></dl>
 <p><br />
@@ -385,9 +386,10 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 <p>Parameter of the controller object of the module performs the function of providing the access to the results of computation of the controller to OpenSCADA by attributes if the parameters. From the specific fields, the configuration tab of the parameter of the controller object contains only the field for listing the parameters of the computational function that must be reflected.
 </p>
 <h2><span class="mw-headline" id="Libraries_of_functions_of_the_module"><span class="mw-headline-number">4</span> <span id="FuncsLibs" title="#FuncsLibs">Libraries of functions of the module</span></span></h2>
-<p>The module provides a mechanism to create libraries of user's functions on the Java-like language. Example of the configuration tab of the library is shown in Figure 4. The tab contains the basic fields: accessing, address of the DB table, date and time of modification, identifier, name and description.
+<p>The module provides a mechanism to create libraries of user's functions on the Java-like language. Example of the configuration tab of the library is shown in Figure 4. The tab contains the basic fields: accessing, address of the DB table (with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of modification, identifier, name and description.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:701px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_lib.png"><img class="thumbimage" height="507" src="../files/JavaLikeCalc_lib.png" width="699" /></a>  <div class="thumbcaption">Fig.4. Tab of the configuration of the library.</div></div></div></div>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>flb_{ObjID}</b>".</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:761px;"><a class="image" href="http://oscada.org/wiki/File:JavaLikeCalc_lib.png"><img class="thumbimage" height="509" src="../files/JavaLikeCalc_lib.png" width="759" /></a>  <div class="thumbcaption">Fig.4. Tab of the configuration of the library.</div></div></div></div>
 <h2><span class="mw-headline" id="User_functions_of_the_module"><span class="mw-headline-number">5</span> User functions of the module</span></h2>
 <p>Function, as well as the library, contains the basic configuration tab, the tab of the formation of the program and the parameters of the function (Fig. 1), as well as the performance tab of the created function.
 </p>
@@ -571,5 +573,5 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*fr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

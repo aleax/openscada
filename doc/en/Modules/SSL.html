@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/SSL</h1>
@@ -23,23 +23,28 @@
 <th> Languages </th>
 <th> Platforms </th>
 <th> Type </th>
-<th> Author </th>
-<th> Description
+<th> Author
 </th></tr>
 
 <tr>
 <td> <a href="../Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 3.3 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Transport </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — this page initial translation</i></font> </td>
-<td> Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — this page initial translation</i></font>
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> Provides transport based on the secure sockets' layer. OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.
+<ul><li> <b>Sponsored by, for an external certificates file on 0.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li></ul>
 </td></tr></table>
 <p>The module provides support for secure sockets layer (SSL) based transports to the program. The module is based on the library <a class="external text" href="http://www.openssl.org" rel="nofollow noreferrer noopener" target="_blank">OpenSSL</a>. Input and output transport protocols SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported; the general list of which depends on their availability in the OpenSSL library and, in the absence of a direct specification, it is selected for most relevant and safe.
 </p><p>You can add new input and output safe sockets through the configuration of <a href="../Program_manual.html#Transports" title="Special:MyLanguage/Documents/Program manual">the transport subsystem</a> in any OpenSCADA configurator.
@@ -57,7 +62,7 @@
 </p><p>Each input transport is necessarily associated with one of the available transport protocols, to which input messages are transmitted. In conjunction with the transport protocol is supported by a mechanism of the combining of pieces of requests, disparate while transferring.
 </p><p>Configuration dialog of the input SSL-transport is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:865px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="980" src="../files/SSL_in.png" width="863" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the input SSL-transport.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:893px;"><a class="image" href="http://oscada.org/wiki/File:SSL_in.png"><img class="thumbimage" height="804" src="../files/SSL_in.png" width="891" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of the input SSL-transport.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> State of the transport, that is: status, "Connect", name of the database (containing the configuration) and a list with information about the active connections.</li>
@@ -68,8 +73,10 @@
 <li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used.</li></ul></li>
 <li> Selecting of the transport protocols.</li>
 <li> State "Connect", in which the transport must be switched at start up.</li>
-<li> Certificates, private SSL key and password of the private SSL key.</li>
-<li> Maximum number of clients, Maximum number of clients per host and Size of the input buffer.</li>
+<li> PEM-file of the certificates and private key; or the certificates, private SSL key directly and password of the private SSL key.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the connected state.</dd>
+<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Is traced in 60 seconds for updating, then the transport reconnect for actualisation.</dd></dl>
+<ul><li> Maximum number of clients, Maximum number of clients per host and Size of the input buffer.</li>
 <li> Keep alive requests. Closing the connection after the specified requests. Zero value to disable - not close ever.</li>
 <li> Keep alive timeout, seconds. Closing the connection after no requests at the specified timeout. Zero value to disable - not close ever.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> We do not recommend disable the function by the TCP/IP network's properties does not guarantee notice the server about the connection disable, for example after power supply lost on the client. As result the opened client connections will left <span style="color: red">forever</span> and after their number achieve to the limit, server will drop new connections!</dd></dl>
@@ -79,7 +86,7 @@
 </p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
 </p><p>Main tab of the configuration page of the output SSL-transport is shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:715px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="788" src="../files/SSL_out.png" width="713" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the output SSL-transport.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:898px;"><a class="image" href="http://oscada.org/wiki/File:SSL_out.png"><img class="thumbimage" height="592" src="../files/SSL_out.png" width="896" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of the output SSL-transport.</div></div></div></div>
 <p>Using this dialog you can set:
 </p>
 <ul><li> State of the transport, that is: status, "Connect" and the name of the database, containing the configuration.</li>
@@ -88,8 +95,9 @@
 <ul><li> <i>addr</i> — address with which the connection is made. There may be as the symbolic representation as well as IPv4 "<b>127.0.0.1</b>" or IPv6 "<b>[::1]</b>".</li>
 <li> <i>port</i> — network port with which the connection is made. Indication of the character name of the port according to <i>/etc/services</i> is available.</li>
 <li> <i>mode</i> — SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used.</li></ul></li>
-<li> Certificates, private SSL key and password of the private SSL key.</li>
-<li> Connection timings in the format "<b>{conn}:{next}</b>", where:
+<li> PEM-file of the certificates and private key; or the certificates, private SSL key directly and password of the private SSL key.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Hidden in the connected state.</dd></dl>
+<ul><li> Connection timings in the format "<b>{conn}:{next}</b>", where:
 <ul><li> <i>conn</i> — maximum time of waiting the connection, in seconds;</li>
 <li> <i>next</i> — maximum time of waiting for continue the response, in seconds.</li></ul></li></ul>
 <dl><dd> Can be prioritatile specified into the address field as the second global argument, as such "<b>localhost:123||5:1</b>".</dd></dl>
@@ -112,5 +120,5 @@ $ openssl req -x509 -new -key ./key.pem -out ./selfcert.pem -days 365
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/en">Modules/SSL/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/SSL/en">Modules/SSL/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

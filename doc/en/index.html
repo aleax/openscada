@@ -74,6 +74,7 @@
 <li> <a href="How_to_Cyclic_programming.html" title="Special:MyLanguage/Documents/How to/Cyclic programming">Cyclic programming into OpenSCADA</a></li>
 <li> <a href="How_to_Debug.html" title="Special:MyLanguage/Documents/How to/Debug">Debug OpenSCADA project</a></li>
 <li> <a href="How_to_Transferring_project_configuration.html" title="Special:MyLanguage/Documents/How to/Transferring project configuration">Transferring of the OpenSCADA configurations from one project to another</a></li>
+<li> <a href="Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">Create multi language project</a></li>
 <li> <a class="external text" href="https://www.youtube.com/playlist?list=PLIE6cVnMQoAkVccU9mGMIPNYVVug-LVau" rel="nofollow noreferrer noopener" target="_blank">Video "Howtos" from Sergey Karpesh (RU)</a>, 2018 ...</li></ul></dd></dl>
 <ul><li> <a class="external text" href="http://wiki.oscada.org/Doc/OperatorManual" rel="nofollow noreferrer noopener" target="_blank">Operator manual (based on the model "AGLKS" — DemoDB)</a></li></ul>
 <h3><span class="mw-headline" id="Modules_of_OpenSCADA"><span class="mw-headline-number">2.1</span> Modules of OpenSCADA</span></h3>
@@ -95,8 +96,9 @@
 <tr>
 <td> <a href="Modules/DBGate.html" title="Special:MyLanguage/Modules/DBGate">DBGate</a> </td>
 <td> DB gate
+<ul><li> <b><a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">Features</a>:</b> SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR</li></ul>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPL2 </td>
 <td> bd_DBGate.so </td>
 <td> en,uk </td>
@@ -106,8 +108,9 @@
 <tr>
 <td> <a href="Modules/SQLite.html" title="Special:MyLanguage/Modules/SQLite">SQLite</a> </td>
 <td> DB SQLite
+<ul><li> <b><a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">Features</a>:</b> SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR</li></ul>
 </td>
-<td> 3.0 </td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> bd_SQLite.so </td>
 <td> en,uk,ru,de </td>
@@ -117,8 +120,9 @@
 <tr>
 <td> <a href="Modules/MySQL.html" title="Special:MyLanguage/Modules/MySQL">MySQL</a> </td>
 <td> DB MySQL
+<ul><li> <b><a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">Features</a>:</b> SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR</li></ul>
 </td>
-<td> 3.5 </td>
+<td> 4.0 </td>
 <td> GPL2 </td>
 <td> bd_MySQL.so </td>
 <td> en,uk,ru,de </td>
@@ -128,8 +132,9 @@
 <tr>
 <td> <a href="Modules/PostgreSQL.html" title="Special:MyLanguage/Modules/PostgreSQL">PostgreSQL</a> </td>
 <td> DB PostgreSQL
+<ul><li> <b><a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">Features</a>:</b> SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR</li></ul>
 </td>
-<td> 2.5 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> bd_PostgreSQL.so </td>
 <td> en,uk,ru,de </td>
@@ -139,8 +144,9 @@
 <tr>
 <td> <a href="Modules/FireBird.html" title="Special:MyLanguage/Modules/FireBird">FireBird</a> </td>
 <td> DB FireBird
+<ul><li> <b><a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">Features</a>:</b> SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR</li></ul>
 </td>
-<td> 2.5 </td>
+<td> 3.0 </td>
 <td> GPL2 </td>
 <td> bd_FireBird.so </td>
 <td> en,uk,ru,de </td>
@@ -150,6 +156,7 @@
 <tr>
 <td> <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a> </td>
 <td> DB DBF
+<ul><li> <b><a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">Features</a>:</b> LIST, GET, SEEK, SET, DEL, FIX</li></ul>
 </td>
 <td> 2.4 </td>
 <td> GPL2 </td>
@@ -160,7 +167,9 @@
 
 <tr>
 <td> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/ODBC" title="Special:MyLanguage/Modules/ODBC">ODBC</a> </td>
-<td> DB by ODBC </td>
+<td> DB by ODBC
+<ul><li> <b><a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">Features</a>:</b> SQL, LIST</li></ul>
+</td>
 <td> 0.2 </td>
 <td> GPL2 </td>
 <td> bd_ODBC.so </td>
@@ -171,6 +180,7 @@
 <tr>
 <td> <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a> </td>
 <td> Directory by LDAP
+<ul><li> <b><a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">Features</a>:</b> LIST, GET, SEEK, SET</li></ul>
 </td>
 <td> 0.6 </td>
 <td> GPL2 </td>
@@ -208,7 +218,7 @@
 <td> <a href="Modules/SSL.html" title="Special:MyLanguage/Modules/SSL">SSL</a> </td>
 <td> SSL
 </td>
-<td> 3.3 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> tr_SSL.so </td>
 <td> en,uk,ru,de </td>
@@ -233,7 +243,7 @@
 <td> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.8 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -244,7 +254,7 @@
 <td> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Server OPC-UA
 </td>
-<td> 2.1 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -255,7 +265,7 @@
 <td> <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
 <td> User protocol
 </td>
-<td> 1.4 </td>
+<td> 1.5 </td>
 <td> GPL2 </td>
 <td> prot_UserProtocol.so </td>
 <td> en,uk,ru,de </td>
@@ -266,7 +276,7 @@
 <td> <a href="Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">HTTP</a> </td>
 <td> HTTP-realization
 </td>
-<td> 3.6 </td>
+<td> 3.8 </td>
 <td> GPL2 </td>
 <td> prot_HTTP.so </td>
 <td> en,uk,ru,de </td>
@@ -280,7 +290,7 @@
 <td> <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a> </td>
 <td> Calculator on the Java-like language
 </td>
-<td> 5.1 </td>
+<td> 5.4 </td>
 <td> GPL2 </td>
 <td> daq_JavaLikeCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -291,7 +301,7 @@
 <td> <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
 <td> Logical level
 </td>
-<td> 2.5 </td>
+<td> 2.6 </td>
 <td> GPL2 </td>
 <td> daq_LogicLev.so </td>
 <td> en,uk,ru,de </td>
@@ -302,7 +312,7 @@
 <td> <a href="Modules/BlockCalc.html" title="Special:MyLanguage/Modules/BlockCalc">BlockCalc</a> </td>
 <td> Block calculator
 </td>
-<td> 1.11 </td>
+<td> 1.12 </td>
 <td> GPL2 </td>
 <td> daq_BlockCalc.so </td>
 <td> en,uk,ru,de </td>
@@ -313,7 +323,7 @@
 <td> <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQGate</a> </td>
 <td> Gateway of the data sources
 </td>
-<td> 2.3 </td>
+<td> 2.9 </td>
 <td> GPL2 </td>
 <td> daq_DAQGate.so </td>
 <td> en,uk,ru,de </td>
@@ -322,8 +332,9 @@
 
 <tr>
 <td> <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a> </td>
-<td> System DA </td>
-<td> 2.3 </td>
+<td> System DA
+</td>
+<td> 2.4 </td>
 <td> GPL2 </td>
 <td> daq_System.so </td>
 <td> en,uk,ru,de </td>
@@ -334,7 +345,7 @@
 <td> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.1 </td>
+<td> 3.4 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -355,7 +366,7 @@
 <td> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC_UA</a> </td>
 <td> Client OPC-UA
 </td>
-<td> 2.1 </td>
+<td> 2.6 </td>
 <td> GPL2 </td>
 <td> daq_OPC_UA.so </td>
 <td> en,uk,ru,de </td>
@@ -397,7 +408,7 @@
 <td> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a> </td>
 <td> Siemens DAQ and Beckhoff
 </td>
-<td> 3.6 </td>
+<td> 4.4 </td>
 <td> GPL2 </td>
 <td> daq_Siemens.so </td>
 <td> en,uk,ru,de </td>
@@ -502,7 +513,7 @@
 <td> <a href="Modules/FSArch.html" title="Special:MyLanguage/Modules/FSArch">FSArch</a> </td>
 <td> Archiver on the file system
 </td>
-<td> 3.6 </td>
+<td> 3.7 </td>
 <td> GPL2 </td>
 <td> arh_FSArch.so </td>
 <td> en,uk,ru,de </td>
@@ -513,7 +524,7 @@
 <td> <a href="Modules/DBArch.html" title="Special:MyLanguage/Modules/DBArch">DBArch</a> </td>
 <td> Arhivator on the DB
 </td>
-<td> 3.0 </td>
+<td> 3.1 </td>
 <td> GPL2 </td>
 <td> arh_DBArch.so </td>
 <td> en,uk,ru,de </td>
@@ -527,7 +538,7 @@
 <td> <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.1 </td>
+<td> 7.8 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -538,7 +549,7 @@
 <td> <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
 <td> Qt GUI starter
 </td>
-<td> 5.9 </td>
+<td> 5.12 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
@@ -549,7 +560,7 @@
 <td> <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> </td>
 <td> Program configurator (Qt)
 </td>
-<td> 5.4 </td>
+<td> 5.7 </td>
 <td> GPL2 </td>
 <td> ui_QTCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -560,7 +571,7 @@
 <td> <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Operation user interface (Qt)
 </td>
-<td> 7.13 </td>
+<td> 8.0 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -571,7 +582,7 @@
 <td> <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> </td>
 <td> Program configurator (Dynamic WEB)
 </td>
-<td> 2.0 </td>
+<td> 2.2 </td>
 <td> GPL2 </td>
 <td> ui_WebCfgD.so </td>
 <td> en,uk,ru,de </td>
@@ -582,7 +593,7 @@
 <td> <a href="Modules/WebCfg.html" title="Special:MyLanguage/Modules/WebCfg">WebCfg</a> </td>
 <td> Program configurator (WEB)
 </td>
-<td> 1.8 </td>
+<td> 2.0 </td>
 <td> GPL2 </td>
 <td> ui_WebCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -593,7 +604,7 @@
 <td> <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 6.2 </td>
+<td> 6.6 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -604,7 +615,7 @@
 <td> <a href="Modules/WebUser.html" title="Special:MyLanguage/Modules/WebUser">WebUser</a> </td>
 <td> User WWW-page
 </td>
-<td> 1.4 </td>
+<td> 1.5 </td>
 <td> GPL2 </td>
 <td> ui_WebUser.so </td>
 <td> en,uk,ru,de </td>
@@ -865,7 +876,8 @@ As the result of the Builder work is: <a class="external text" href="http://osca
 <td> Mar 2012
 </td>
 <td> Implemented in these repositories of the Automation Linux distributive and these <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live builds</a> are provided now for the branch <a class="external text" href="http://ftp.oscada.org/OpenSCADA/Work/Debian/Live" rel="nofollow noreferrer noopener" target="_blank">Work</a> and <a class="external text" href="http://ftp.oscada.org/OpenSCADA/LTS/Debian/Live" rel="nofollow noreferrer noopener" target="_blank">LTS</a>:
-<ul><li> <a class="external text" href="http://ftp.oscada.org/Debian/10" rel="nofollow noreferrer noopener" target="_blank">Debian 10</a>: x86_64, x86_32</li>
+<ul><li> <a class="external text" href="http://ftp.oscada.org/Debian/11" rel="nofollow noreferrer noopener" target="_blank">Debian 11</a>: x86_64, x86_32</li>
+<li> <a class="external text" href="http://ftp.oscada.org/Debian/10" rel="nofollow noreferrer noopener" target="_blank">Debian 10</a>: x86_64, x86_32</li>
 <li> <a class="external text" href="http://ftp.oscada.org/Debian/9" rel="nofollow noreferrer noopener" target="_blank">Debian 9</a>: x86_64, x86_32 (without guest Virtual Box)</li>
 <li> <a class="external text" href="http://ftp.oscada.org/Debian/8" rel="nofollow noreferrer noopener" target="_blank">Debian 8</a>: x86_64, x86_32</li>
 <li> <a class="external text" href="http://ftp.oscada.org/Debian/9" rel="nofollow noreferrer noopener" target="_blank">Debian 7</a>: x86_64, x86_32</li>
@@ -938,5 +950,5 @@ As the result of the Builder work is: <a class="external text" href="http://osca
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/en">Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/en">Documents/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

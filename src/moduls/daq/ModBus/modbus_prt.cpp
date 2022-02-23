@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,33 +45,33 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
     mNode = grpAdd("n_");
 
     //Node DB structure
-    mNodeEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    mNodeEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
-    mNodeEl.fldAdd(new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247"));
-    mNodeEl.fldAdd(new TFld("InTR",_("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));
-    mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
-    mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selectable,"1","0",
+    mNodeEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mNodeEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mNodeEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mNodeEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
+    mNodeEl.fldAdd(new TFld("ADDR",trS("Address"),TFld::Integer,0,"3","1","1;247"));
+    mNodeEl.fldAdd(new TFld("InTR",trS("Input transport"),TFld::String,0,i2s(limObjID_SZ).c_str(),"*"));
+    mNodeEl.fldAdd(new TFld("PRT",trS("Protocol"),TFld::String,TFld::Selectable,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
+    mNodeEl.fldAdd(new TFld("MODE",trS("Mode"),TFld::Integer,TFld::Selectable,"1","0",
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
-    mNodeEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    mNodeEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
     // For "Data" mode
-    mNodeEl.fldAdd(new TFld("DT_PER",_("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
-    mNodeEl.fldAdd(new TFld("DT_PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    mNodeEl.fldAdd(new TFld("DT_PROG",_("Procedure"),TFld::String,TFld::TransltText,"1000000"));
+    mNodeEl.fldAdd(new TFld("DT_PER",trS("Period of the data calculation, seconds"),TFld::Real,0,"5.3","1","0.001;99"));
+    mNodeEl.fldAdd(new TFld("DT_PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mNodeEl.fldAdd(new TFld("DT_PROG",trS("Procedure"),TFld::String,TFld::TransltText,"1000000"));
     // For "Gateway" mode
-    mNodeEl.fldAdd(new TFld("TO_TR",_("To output transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
-    mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
-    mNodeEl.fldAdd(new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247"));
+    mNodeEl.fldAdd(new TFld("TO_TR",trS("To output transport"),TFld::String,0,i2s(limObjID_SZ).c_str()));
+    mNodeEl.fldAdd(new TFld("TO_PRT",trS("To protocol"),TFld::String,TFld::Selectable,"5","RTU","RTU;ASCII;TCP","RTU;ASCII;TCP/IP"));
+    mNodeEl.fldAdd(new TFld("TO_ADDR",trS("To address"),TFld::Integer,0,"3","1","1;247"));
 
     //Node data IO DB structure
-    mNodeIOEl.fldAdd(new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mNodeIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mNodeIOEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mNodeIOEl.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
-    mNodeIOEl.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
-    mNodeIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
-    mNodeIOEl.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
+    mNodeIOEl.fldAdd(new TFld("NODE_ID",trS("Node ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mNodeIOEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mNodeIOEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mNodeIOEl.fldAdd(new TFld("TYPE",trS("Value type"),TFld::Integer,TFld::NoFlag,"1"));
+    mNodeIOEl.fldAdd(new TFld("FLAGS",trS("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    mNodeIOEl.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"100"));
+    mNodeIOEl.fldAdd(new TFld("POS",trS("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 }
 
 TProt::~TProt( )
@@ -97,13 +97,13 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(int fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,false,true); ) {
+	    for(int fldCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+modId()+"_node",nodePath()+modId()+"_node",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!nPresent(id)) nAdd(id, (itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
-		nAt(id).at().load(&gCfg);
+		if(!nPresent(id)) nAdd(id, itLs[iDB]);
+		if(nAt(id).at().DB() == itLs[iDB]) nAt(id).at().load(&gCfg);
+		nAt(id).at().setDB(itLs[iDB], true);
 		itReg[id] = true;
 	    }
 
@@ -451,11 +451,11 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    vector<string> lst;
 	    nList(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(nAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", nAdd(opt->attr("id"))); nAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mNode,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mNode, opt->attr("id"), -1, NodeRemove);
     }
     else if(a_path == "/rep/repLen") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(prtLen()));
@@ -634,19 +634,22 @@ void Node::postEnable( int flag )
 {
     //Create default IOs
     if(flag&TCntrNode::NodeConnect) {
-	ioIns(new IO("f_frq",_("Frequency of calculation of the function, Hz"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
-	ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 1);
-	ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 2);
+	ioIns(new IO("f_frq",trS("Frequency of calculation of the function, Hz"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
+	ioIns(new IO("f_start",trS("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 1);
+	ioIns(new IO("f_stop",trS("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 2);
     }
 }
 
 void Node::postDisable( int flag )
 {
-    if(flag) {
-	SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
 	TConfig cfg(&owner().nodeIOEl());
 	cfg.cfg("NODE_ID").setS(id(), true);
-	SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor)+"_io", owner().nodePath()+tbl()+"_io", cfg);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
     }
 }
 
@@ -658,7 +661,7 @@ string Node::name( )
     return tNm.size() ? tNm : id();
 }
 
-string Node::tbl( )		{ return owner().modId()+"_node"; }
+string Node::tbl( ) const	{ return owner().modId()+"_node"; }
 
 int Node::addr( ) const		{ return cfg("ADDR").getI(); }
 
@@ -748,7 +751,7 @@ void Node::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
-	SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(), *this);
+	TBDS::dataGet(fullDB(),owner().nodePath()+tbl(), *this);
 	//cfg("MODE").setI(cfg("MODE").getI());
     }
 
@@ -768,7 +771,7 @@ void Node::loadIO( )
 	TConfig cfg(&owner().nodeIOEl());
 	cfg.cfg("NODE_ID").setS(id(), TCfg::ForceUse);
 	cfg.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,false,true); ) {
+	for(int ioCnt = 0; TBDS::dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cfg,TBDS::UseCache); ) {
 	    string sid = cfg.cfg("ID").getS();
 	    int iid = f->ioId(sid);
 
@@ -816,9 +819,11 @@ void Node::loadIO( )
 void Node::save_( )
 {
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(), *this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 
     saveIO();
+
+    setDB(DB(), true);
 }
 
 void Node::saveIO( )
@@ -842,15 +847,15 @@ void Node::saveIO( )
 	    { data ? cfg.cfg("VALUE").setS(data->lnkAddr(iIO)) : cfg.cfg("VALUE").setView(false); }
 	    else if(data && data->func()) cfg.cfg("VALUE").setS(data->getS(iIO));
 	    else cfg.cfg("VALUE").setS(f->io(iIO)->def());
-	    SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);
+	    TBDS::dataSet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
 	}
 
 	//Clear IO
 	cfg.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg); ) {
+	for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cfg); ) {
 	    string sio = cfg.cfg("ID").getS();
 	    if(f->ioId(sio) < 0) {
-		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,true,false,true)) break;
+		if(!TBDS::dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
 	}
@@ -1363,7 +1368,10 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/nd/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/nd/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/nd/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
-		    "tp","str", "dest","select", "select","/db/list", "help",TMess::labDB());
+		    "tp","str", "dest","select", "select","/db/list",
+		    "help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/nd/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/nd/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration"))) {
@@ -1432,6 +1440,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/nd/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/nd/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt)) {
 	if(mode() != MD_GT_NET) opt->childAdd("el")->setText("*");
@@ -1450,7 +1460,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(progLang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProgLang(opt->text());
     }
-    else if(a_path.substr(0,7) == "/nd/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
+    else if(a_path.substr(0,7) == "/nd/cfg") TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/plang/list") {
 	vector<string> lls, ls;
 	//Templates
@@ -1485,7 +1495,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
 		IO *ioPrev = f->ioSize() ? f->io(f->ioSize()-1) : NULL;
 		if(ioPrev) f->ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)));
-		else f->ioAdd(new IO("new",_("New IO"),IO::Integer,IO::Output));
+		else f->ioAdd(new IO("new",trS("New IO"),IO::Integer,IO::Output));
 		modif();
 	    }
 	    if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR)) {
@@ -1493,7 +1503,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		int row = s2i(opt->attr("row"));
 		IO *ioPrev = row ? f->io(row-1) : NULL;
 		if(ioPrev) f->ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)), row);
-		else f->ioIns(new IO("new",_("New IO"),IO::Integer,IO::Output), row);
+		else f->ioIns(new IO("new",trS("New IO"),IO::Integer,IO::Output), row);
 		modif();
 	    }
 	    if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR)) {

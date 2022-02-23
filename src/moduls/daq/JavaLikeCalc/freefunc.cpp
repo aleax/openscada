@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -64,7 +64,7 @@ void Func::postEnable( int flag )
 void Func::postDisable( int flag )
 {
     setStart(false);
-    if(flag && !owner().DB().empty())
+    if(flag&NodeRemove && !owner().DB().empty())
 	try{ del(); }
 	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -145,7 +145,7 @@ void Func::load_( TConfig *icfg )
     if(owner().DB().empty() || (!SYS->chkSelDB(owner().DB())))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else SYS->db().at().dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
+    else TBDS::dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
     loadIO();
 }
@@ -158,7 +158,7 @@ void Func::loadIO( )
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(), TCfg::ForceUse);
     cfg.cfg("DEF").setExtVal(true);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,false,true); fldCnt++) {
+    for(int fldCnt = 0; TBDS::dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fldCnt,cfg,TBDS::UseCache); fldCnt++) {
 	string sid = cfg.cfg("ID").getS();
 
 	//Position storing
@@ -174,8 +174,9 @@ void Func::loadIO( )
 	io(id)->setName(cfg.cfg("NAME").getS());
 	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	io(id)->setFlg(cfg.cfg("MODE").getI());
-	//cfg.cfg("DEF").setNoTransl(io(id)->type()!=IO::String);
-	io(id)->setDef(cfg.cfg("DEF").getS());
+	if(io(id)->type() != IO::String || !(io(id)->flg()&IO::TransltText))
+	    io(id)->setDef(cfg.cfg("DEF").getS(TCfg::ExtValOne));	//Force to no translation
+	else io(id)->setDef(cfg.cfg("DEF").getS());
 	io(id)->setHide(cfg.cfg("HIDE").getB());
     }
     //Remove holes
@@ -195,7 +196,7 @@ void Func::save_( )
     if(owner().DB().empty()) return;
 
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
+    TBDS::dataSet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
     //Save io config
     saveIO();
@@ -216,18 +217,18 @@ void Func::saveIO( )
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
 	cfg.cfg("MODE").setI(io(i_io)->flg());
-	cfg.cfg("DEF").setNoTransl(io(i_io)->type()!=IO::String);
+	cfg.cfg("DEF").setNoTransl(!(io(i_io)->type()==IO::String && io(i_io)->flg()&IO::TransltText));
 	cfg.cfg("DEF").setS(io(i_io)->def());
 	cfg.cfg("HIDE").setB(io(i_io)->hide());
 	cfg.cfg("POS").setI(i_io);
-	SYS->db().at().dataSet(io_bd,io_cfgpath,cfg);
+	TBDS::dataSet(io_bd, io_cfgpath, cfg);
     }
 
     //Clear IO
     cfg.cfgViewAll(false);
-    for(int fldCnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fldCnt++,cfg); )
+    for(int fldCnt = 0; TBDS::dataSeek(io_bd,io_cfgpath,fldCnt++,cfg); )
 	if(ioId(cfg.cfg("ID").getS()) < 0) {
-	    if(!SYS->db().at().dataDel(io_bd,io_cfgpath,cfg,true,false,true))	break;
+	    if(!TBDS::dataDel(io_bd,io_cfgpath,cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    fldCnt--;
 	}
 }
@@ -236,7 +237,7 @@ void Func::del( )
 {
     if(!owner().DB().size()) return;
 
-    SYS->db().at().dataDel(owner().fullDB(), mod->nodePath()+owner().tbl(), *this, true);
+    TBDS::dataDel(owner().fullDB(), mod->nodePath()+owner().tbl(), *this, TBDS::UseAllKeys);
 
     //Delete io from DB
     delIO();
@@ -246,7 +247,7 @@ void Func::delIO( )
 {
     TConfig cfg(&mod->elFncIO());
     cfg.cfg("F_ID").setS(id(), true);
-    SYS->db().at().dataDel(owner().fullDB()+"_io", mod->nodePath()+owner().tbl()+"_io", cfg);
+    TBDS::dataDel(owner().fullDB()+"_io", mod->nodePath()+owner().tbl()+"_io", cfg);
 }
 
 void Func::valAtt( TValFunc *vfnc )
@@ -896,7 +897,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2, Reg *rez )
 	rez = regAt(regNew(false,op1_pos));	//Set recomend to op1_pos for appending fast, mostly for strings.
 	rez->setType(rez_tp);
     }
-    //!!!! Free operands after alloc rezult for prevent operations from self by some problems with object
+    //!!!! Free operands after the alloc rezult prevents of the operations from self by some problems with the object
     //if(rez != op1) op1->free();
     //if(rez != op2) op2->free();
     // Add code
@@ -1605,16 +1606,25 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// int toInt( int base = 0 ) - convert this string to integer number
 		//  base - radix of subject sequence
 		if(prop == "toInt") return (int64_t)strtoll(vl.getS().c_str(), NULL, (prms.size()>=1?prms[0].getI():10));
-		// string parse( int pos, string sep = ".", int off = 0 ) - get token with number <pos> from the string when separated by <sep>
+		// string parse( int pos, string sep = ".", int off = 0, bool mergeSepSymb = false ) - get token with number <pos> from the string, separated by <sep>
 		//       and from offset <off>
 		//  pos - item position
 		//  sep - items separator
 		//  off - start position
 		if(prop == "parse" && prms.size()) {
 		    int off = (prms.size() >= 3) ? prms[2].getI() : 0;
-		    string rez = TSYS::strParse(vl.getS(), prms[0].getI(),
-						(prms.size()>=2) ? prms[1].getS() : ".", &off,
-						(prms.size()>=4) ? prms[3].getB() : false);
+		    string rez = TSYS::strParse(vl.getS(), prms[0].getI(), (prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4)?prms[3].getB():false);
+		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
+		    return rez;
+		}
+		// string parseEnd( int pos, string sep = ".", int off = {length}, bool mergeSepSymb = false ) - get token with number <pos> from the string end, separated by <sep>
+		//       and from offset <off>
+		//  pos - item position
+		//  sep - items separator
+		//  off - start position
+		if(prop == "parseEnd" && prms.size()) {
+		    int off = (prms.size() >= 3) ? prms[2].getI() : vl.getS().size();
+		    string rez = TSYS::strParseEnd(vl.getS(), prms[0].getI(), (prms.size()>=2) ? prms[1].getS() : ".", &off, (prms.size()>=4)?prms[3].getB():false);
 		    if(prms.size() >= 3) { prms[2].setI(off); prms[2].setModify(); }
 		    return rez;
 		}
@@ -1627,12 +1637,25 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
-		// string parsePath( int pos, int off = 0 ) - get path token with number <pos> from the string and from offset <off>
+		// string parsePath( int pos, int offCmptbl = 0, int off = 0 ) - get path token with number <pos> from the string and from offset <off>
+		//  pos - item position
+		//  offCmptbl - start position, for the compatibility - finish position to '/'
+		//  off - start position - finish position to the next token begin
+		if(prop == "parsePath" && prms.size()) {
+		    bool isOff = (prms.size() >= 3);
+		    bool isOffCmptbl = (!isOff && prms.size() >= 2);
+		    int off = isOff ? prms[2].getI() : (isOffCmptbl ? prms[1].getI() : 0);
+		    string rez = TSYS::pathLev(vl.getS(), prms[0].getI(), true, (isOffCmptbl?&off:NULL), (isOff?&off:NULL));
+		    if(isOff) { prms[2].setI(off); prms[2].setModify(); }
+		    else if(isOffCmptbl) { prms[1].setI(off); prms[1].setModify(); }
+		    return rez;
+		}
+		// string parsePathEnd( int pos, int off = {length} ) - get path token with number <pos> from the string end and from offset <off>
 		//  pos - item position
 		//  off - start position
-		if(prop == "parsePath" && prms.size()) {
-		    int off = (prms.size() >= 2) ? prms[1].getI() : 0;
-		    string rez = TSYS::pathLev(vl.getS(), prms[0].getI(), true, &off);
+		if(prop == "parsePathEnd" && prms.size()) {
+		    int off = (prms.size() >= 2) ? prms[1].getI() : vl.getS().size();
+		    string rez = TSYS::pathLevEnd(vl.getS(), prms[0].getI(), true, &off);
 		    if(prms.size() >= 2) { prms[1].setI(off); prms[1].setModify(); }
 		    return rez;
 		}
@@ -2008,7 +2031,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: Load system object %s(%d) to reg %d.", cprg, string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(), ptr->len, ptr->reg);
 #endif
-		reg[ptr->reg] = AutoHD<TVarObj>(new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),val->user()));
+		reg[ptr->reg] = AutoHD<TVarObj>(new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),
+							val->user()+(val->lang().size()?"\n"+val->lang():"")));
 		cprg += sizeof(SCode)+ptr->len; continue;
 	    }
 	    case Reg::MviFuncArg: {
@@ -2709,7 +2733,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%ph: Function %d=tr(%d).", cprg, ptr->rez, ptr->a);
 #endif
-		reg[ptr->rez] = Mess->translGetLU(getValS(val,reg[ptr->a]),val->lang(),val->user(),"uapi:"+val->func()->stor());
+		reg[ptr->rez] = Mess->translGetLU(getValS(val,reg[ptr->a]), val->lang(), val->user(), "duapi:"+val->func()->stor());
 		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::CProc:
@@ -2954,18 +2978,24 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String;Text;Object"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",
+			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::TransltText<<8),IO::String|(IO::FullText<<8),IO::String|((IO::FullText|IO::TransltText)<<8),IO::Object).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"));
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
 		    "sel_list",_("Input;Output;Return"));
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Hidden"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    if(!owner().DB().empty())
+	    if(!owner().DB().empty() && progTr())
 		ctrMkNode("fld",opt,-1,"/io/prog_tr",cfg("PR_TR").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/io/prog",cfg("FORMULA").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
+	if(opt->childSize() && ctrId(opt->childGet(0),"/exec/io",true))
+	    for(int iIO = 0; iIO < ioSize(); iIO++)
+		if(!mIO[iIO]->hide())
+		    ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),trD(io(iIO)->name()),
+						((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
 	return;
     }
 
@@ -2975,8 +3005,14 @@ void Func::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/func/st/compileSt" && ctrChkNode(opt))
 	opt->setText(TSYS::strMess(_("Size source=%s, bytecode=%s; Registers totally=%d, constants=%d, internal functions'=%d; Functions external=%d, internal=%d."),
 	    TSYS::cpct2str(prog().size()).c_str(),TSYS::cpct2str(prg.size()).c_str(),mRegs.size(),cntrCnst,cntrInFRegs,mFncs.size(),cntrInF));
-    else if(a_path == "/func/cfg/NAME" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
-    else if(a_path == "/func/cfg/DESCR" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
+    else if(a_path == "/func/cfg/NAME") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(trDSet(name(),opt->text()));
+    }
+    else if(a_path == "/func/cfg/DESCR") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(descr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(trDSet(descr(),opt->text()));
+    }
     else if(a_path == "/func/cfg/START") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(toStart()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setToStart(s2i(opt->text()));
@@ -2995,8 +3031,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    XMLNode *nDef	= ctrMkNode("list",opt,-1,"/io/io/5","",RWRWR_);
 	    for(int id = 0; id < ioSize(); id++) {
 		if(nId)   nId->childAdd("el")->setText(io(id)->id());
-		if(nNm)   nNm->childAdd("el")->setText(io(id)->name());
-		if(nType) nType->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
+		if(nNm)   nNm->childAdd("el")->setText(trD(io(id)->name()));
+		if(nType) nType->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&(IO::FullText|IO::TransltText))<<8)));
 		if(nMode) nMode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
 		if(nHide) nHide->childAdd("el")->setText(io(id)->hide()?"1":"0");
 		if(nDef)  nDef->childAdd("el")->setText(io(id)->def());
@@ -3005,13 +3041,13 @@ void Func::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
 	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)));
-	    else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
+	    else ioAdd(new IO("new",trS("New IO"),IO::Real,IO::Default));
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    IO *ioPrev = row ? io(row-1) : NULL;
 	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)), row);
-	    else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
+	    else ioIns(new IO("new",trS("New IO"),IO::Real,IO::Default), row);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioDel(s2i(opt->attr("row")));
 	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioMove(s2i(opt->attr("row")), s2i(opt->attr("to")));
@@ -3022,10 +3058,10 @@ void Func::cntrCmdProc( XMLNode *opt )
 		throw TError(nodePath().c_str(),_("Empty value is not allowed."));
 	    switch(col) {
 		case 0:	io(row)->setId(opt->text());	break;
-		case 1:	io(row)->setName(opt->text());	break;
+		case 1:	io(row)->setName(trDSet(io(row)->name(),opt->text()));	break;
 		case 2:
 		    io(row)->setType((IO::Type)(s2i(opt->text())&0xFF));
-		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&IO::FullText));
+		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&(IO::FullText|IO::TransltText)));
 		    break;
 		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(IO::Output|IO::Return)));	break;
 		case 4:	io(row)->setHide(s2i(opt->text()));	break;

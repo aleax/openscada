@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Works/To do</h1>
@@ -96,9 +96,10 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Program.2FSystem_generic"><span class="mw-headline-number">5</span> Program/System generic</span></h3>
-<ul><li> Revise the translation mechanism and describe it as a "How to...":</li></ul>
-<dl><dd>- append the translation matching option for automatic applying of the translation to empty items of the key message;</dd>
-<dd>- develop the possibility of copy OpenSCADA configuration parts together their translation on all available languages, useful for copy the multilanguage parts in own multilanguage libraries or projects.</dd></dl>
+<ul><li> <a href="Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">Translation and creation multi language projects</a></li></ul>
+<dl><dd> - to supplement the translation manager with the function of dividing the selected message by sources and deleting messages in the table "Trs"</dd>
+<dd> - develop a mechanism for tracking the irrelevance of messages in the table "Trs"
+<dl><dd>&nbsp;?&gt; it is possible to add to the table "Trs" a field of options where to specify time of update-registration and at compilation or execution, accordingly to clear too old and updated-registered at compilation</dd></dl></dd></dl>
 <ul><li> Develop the text highlighting rules building in the comments of the custom text rules.</li>
 <li> Develop the pure demo and the TP-mode on the certificates base in the keys of the subscription on a TP-package: prevent writing and form the notification dialogues.</li>
 <li> Work out for developing, using, integration to solutions, concept of the support of the OpenSCADA project. Expand the community targeting for implementation control of:
@@ -170,7 +171,7 @@
 <ul><li> <a href="Modules/OPC_UA.html" title="Special:MyLanguage/Modules/OPC UA">OPC-UA</a></li></ul>
 <dl><dd> + revise the representing documentation page;</dd>
 <dd> - resolve the controversy in <i>Client::messIO()</i> about mixing the pure requesting mode with the free read/write mode and the time of waiting responses here without passing the connection timeout directly;</dd>
-<dd> - append the builtin Logical Mode of the DAQ-Parameters;</dd>
+<dd> + append the builtin Logical Mode of the DAQ-Parameters;</dd>
 <dd> - append the authentication support for the input-server protocol part;</dd>
 <dd> - append the automatic creation for input transports and their pre-configuration from the EndPoint object properties;</dd>
 <dd> + implement the request-service "Publish" and chunks into the client part;</dd>
@@ -178,7 +179,7 @@
 <dd> - append for support of the history services of the server part, seeing and testing against UAExpert negotiation;</dd>
 <dd> - append for support of the history services of the client part.</dd></dl>
 <ul><li> <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a></li></ul>
-<dl><dd> - append the builtin Standard Mode of the DAQ-Parameters.</dd></dl>
+<dl><dd> + append the builtin Standard Mode of the DAQ-Parameters.</dd></dl>
 <ul><li> <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a></li></ul>
 <dl><dd> - append the option 'L' for the register bytes in little-endian (LE) instead the standard big-endian (BE) order.</dd></dl>
 <ul><li> <a href="Modules/System.html" title="Special:MyLanguage/Modules/System">System</a></li></ul>
@@ -197,7 +198,8 @@
 <tr>
 <td>
 <h3><span class="mw-headline" id="Subsystem_.22User_interfaces.22"><span class="mw-headline-number">12</span> Subsystem "User interfaces"</span></h3>
-<ul><li> <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></li></ul>
+<ul><li> Append on the configurators <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QtCfg</a>, <a href="Modules/WebCfgD.html" title="Special:MyLanguage/Modules/WebCfgD">WebCfgD</a> side of the conditional control and using the shielded symbols "\{symb}" in the text fields, what is enabled only at such encoding presence, for the binary symbols encoding as an example.</li>
+<li> <a href="Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a></li></ul>
 <dl><dd> - implement for a manager of sub-projects of their starting into different processes but with the ones storing and managing into the single configuration file of the project, for high reliable configurations;</dd>
 <dd> - implement for a manager of the background-daemon processes.</dd></dl>
 <ul><li> <a href="Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a></li></ul>
@@ -233,5 +235,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Works/To_do/en">Works/To_do/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

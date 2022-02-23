@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.FLibMath file: statfunc.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,7 +22,9 @@
 #define STATFUNC_H
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 #include <string>
 #include <vector>
@@ -55,7 +57,7 @@ class Lib : public TSpecial
 	void reg( TFunction *fnc )			{ chldAdd(m_fnc, fnc); }
 	void unreg( const char *id )			{ chldDel(m_fnc, id); }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods

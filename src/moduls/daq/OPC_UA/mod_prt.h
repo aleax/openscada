@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_prt.h
 /***************************************************************************
- *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,9 @@
 #include "libOPC_UA/libOPC_UA.h"
 
 #undef _
-#define _(mess) modPrt->I18N(mess)
+#define _(mess) modPrt->I18N(mess).c_str()
+#undef trS
+#define trS(mess) modPrt->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::map;
@@ -41,12 +43,12 @@ using namespace OPC;
 //*************************************************
 //* Protocol modul info!                          *
 #define PRT_ID		"OPC_UA"
-#define PRT_NAME	_("Server OPC-UA")
+#define PRT_NAME	trS("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.1.4"
-#define PRT_AUTOR	_("Roman Savochenko")
-#define PRT_DESCR	_("Provides OPC-UA server service implementation.")
+#define PRT_MVER	"2.2.7"
+#define PRT_AUTOR	trS("Roman Savochenko")
+#define PRT_DESCR	trS("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
@@ -105,9 +107,9 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	string getStatus( );
 
-	string DB( ) const	{ return mDB; }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( ) const;
-	string fullDB( ) const	{ return DB()+'.'+tbl(); }
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &name )	{ mName = name; }
 	void setDescr( const string &idsc )	{ mDescr = idsc; }
@@ -115,7 +117,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	void setEnable( bool vl );
 	void setPublish( const string &inPrtId );
 
-	void setDB( const string &vl )		{ mDB = vl; modifG(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	uint32_t reqData( int reqTp, XML_N &req );
 
@@ -194,8 +196,8 @@ class TProt: public TProtocol, public Server
 	void epList( vector<string> &ls ) const			{ chldList(mEndPnt,ls); }
 	bool epPresent( const string &id ) const		{ return chldPresent(mEndPnt,id); }
 	string epAdd( const string &id, const string &db = "*.*" );
-	void epDel( const string &id )				{ chldDel(mEndPnt,id); }
-	AutoHD<OPCEndPoint> epAt( const string &id ) const	{ return chldAt(mEndPnt,id); }
+	void epDel( const string &id )				{ chldDel(mEndPnt, id); }
+	AutoHD<OPCEndPoint> epAt( const string &id ) const	{ return chldAt(mEndPnt, id); }
 
 	void discoveryUrls( vector<string> &ls );
 	bool inReq( string &request, const string &inPrtId, string *answ = NULL );

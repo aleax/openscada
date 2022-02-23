@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_archive.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,10 +34,10 @@ class TestArchive : public TFunction
     public:
 	TestArchive( ) : TFunction("Archive",SSPC_ID)
 	{
-	    ioAdd(new IO("rez",_("Result"),IO::String,IO::Return));
-	    ioAdd(new IO("arch",_("Value archive"),IO::String,IO::Default));
-	    ioAdd(new IO("period",_("Period of the values, microseconds"),IO::Integer,IO::Default,"1000000"));
-	    ioAdd(new IO("archtor",_("Archiver"),IO::String,IO::Default));
+	    ioAdd(new IO("rez",trS("Result"),IO::String,IO::Return));
+	    ioAdd(new IO("arch",trS("Value archive"),IO::String,IO::Default));
+	    ioAdd(new IO("period",trS("Period of the values, microseconds"),IO::Integer,IO::Default,"1000000"));
+	    ioAdd(new IO("archtor",trS("Archiver"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("Value archive"); }

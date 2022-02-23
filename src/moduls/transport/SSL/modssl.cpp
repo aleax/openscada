@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.SSL file: modssl.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,6 +28,7 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <openssl/rand.h>
+#include <openssl/md5.h>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -38,12 +39,12 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"SSL"
-#define MOD_NAME	_("SSL")
+#define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.3.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides transport based on the secure sockets' layer.\
+#define MOD_VER		"3.4.4"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
 #define LICENSE		"GPL2"
 //************************************************
@@ -115,14 +116,14 @@ void TTransSock::postEnable( int flag )
     TModule::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect) {
-	owner().inEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
-	owner().outEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().inEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().outEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
     }
 }
 
 void TTransSock::preDisable( int flag )
 {
-    //!!!! Due to SSL_library_init() some time crashable at second call, seen on Ubuntu 16.04
+    //!!!! Due to SSL_library_init() is some time crashable at second call, saw on Ubuntu 16.04
     if(SYS->stopSignal() == SIGUSR2) throw err_sys("Hold when overloaded to another project.");
 }
 
@@ -163,6 +164,18 @@ void TTransSock::load_( )
 
 }
 
+void TTransSock::perSYSCall( unsigned int cnt )
+{
+    TTypeTransport::perSYSCall(cnt);
+
+    //Checking the certificate file update
+    //?!?! and iniciative input protocols checking for the reconnect need
+    vector<string> trls;
+    inList(trls);
+    for(unsigned iTr = 0; !SYS->stopSignal() && iTr < trls.size(); iTr++)
+	((AutoHD<TSocketIn>)inAt(trls[iTr])).at().check(cnt);
+}
+
 TTransportIn *TTransSock::In( const string &name, const string &idb )	{ return new TSocketIn(name, idb, &owner().inEl()); }
 
 TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return new TSocketOut(name, idb, &owner().outEl()); }
@@ -190,6 +203,22 @@ string TTransSock::outAttemptsHelp( )
 	"Can be prioritatile specified into the address field as the third global argument, as such \"localhost:123||5:1||3\".");
 }
 
+string TTransSock::MD5( const string &file )
+{
+    int hd = open(file.c_str(), O_RDONLY);
+    if(hd < 0) return "";
+
+    string data;
+    char buf[prmStrBuf_SZ];
+    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) data.append(buf, len);
+    close(hd);
+
+    unsigned char result[MD5_DIGEST_LENGTH];
+    ::MD5((unsigned char*)data.data(), data.size(), result);
+
+    return string((char*)result, MD5_DIGEST_LENGTH);
+}
+
 //************************************************
 //* TSocketIn                                    *
 //************************************************
@@ -208,7 +237,7 @@ string TSocketIn::getStatus( )
 {
     string rez = TTransportIn::getStatus();
 
-    if(!startStat() && !stErr.empty())	rez += _("Error connecting: ") + stErr;
+    if(!startStat() && !stErrMD5.empty())	rez += _("Error connecting: ") + stErrMD5;
     else if(startStat()) {
 	rez += TSYS::strMess(_("Connections %d, opened %d, last %s, closed by the limit %d. Traffic in %s, out %s. "),
 	    connNumb, clId.size(), atm2s(lastConn()).c_str(), clsConnByLim, TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
@@ -233,7 +262,8 @@ void TSocketIn::load_( )
 	vl = prmNd.attr("KeepAliveReqs");	if(!vl.empty()) setKeepAliveReqs(s2i(vl));
 	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
-	if( prmNd.childGet("CertKey",0,true) ) mCertKey = prmNd.childGet("CertKey")->text();
+	vl = prmNd.attr("CertKeyFile");	if(!vl.empty()) setCertKeyFile(vl);
+	if(prmNd.childGet("CertKey",0,true)) mCertKey = prmNd.childGet("CertKey")->text();
 	mKeyPass = prmNd.attr("PKeyPass");
     } catch(...) { }
 }
@@ -247,6 +277,7 @@ void TSocketIn::save_( )
     prmNd.setAttr("KeepAliveReqs", i2s(keepAliveReqs()));
     prmNd.setAttr("KeepAliveTm", i2s(keepAliveTm()));
     prmNd.setAttr("TaskPrior", i2s(taskPrior()));
+    prmNd.setAttr("CertKeyFile", certKeyFile());
     if(prmNd.childGet("CertKey",0,true)) prmNd.childGet("CertKey")->setText(mCertKey);
     else prmNd.childAdd("CertKey")->setText(mCertKey);
     prmNd.setAttr("PKeyPass",mKeyPass);
@@ -260,7 +291,7 @@ void TSocketIn::start( )
     if(runSt) return;
 
     //Status clear
-    stErr = "";
+    stErrMD5 = "";
     trIn = trOut = prcTm = prcTmMax = 0;
     connNumb = clsConnByLim = 0;
 
@@ -277,7 +308,7 @@ void TSocketIn::stop( )
     if(!runSt)	return;
 
     //Status clear
-    stErr = "";
+    stErrMD5 = "";
     trIn = trOut = 0;
     connNumb = connTm = clsConnByLim = 0;
 
@@ -287,6 +318,27 @@ void TSocketIn::stop( )
     TTransportIn::stop();
 
     if(logLen()) pushLogMess(_("Disconnected"));
+}
+
+void TSocketIn::check( unsigned int cnt )
+{
+    try {
+	//Checking the certificate file change
+	string newMD5;
+	if(!(cnt%60) && startStat() && certKeyFile().size() && stErrMD5.size()
+		&& (newMD5=mod->MD5(certKeyFile())).size() && newMD5 != stErrMD5) {
+	    mess_note(nodePath().c_str(), _("The certificate file '%s' was updated, reconnecting the transport..."), certKeyFile().c_str());
+	    stop();
+	    start();
+	}
+
+	//?!?! Check for activity the initiative mode
+	/*if(mode() == 2 && (toStart() || startStat()) && (!startStat() || time(NULL) > (lastConn()+keepAliveTm()))) {
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Reconnect due to lack of input activity to '%s'."), addr().c_str());
+	    if(startStat()) stop();
+	    start();
+	}*/
+    } catch(...) { }
 }
 
 unsigned TSocketIn::forksPerHost( const string &sender )
@@ -366,17 +418,21 @@ void *TSocketIn::Task( void *sock_in )
 	    throw TError(s.nodePath().c_str(), "SSL_CTX_new: %s", err);
 	}
 
+	//Try the external PEM-file of the certificates and the private key
+	if(s.certKeyFile().size()) s.stErrMD5 = mod->MD5(cfile=s.certKeyFile());
 	//Write certificate and private key to temorary file
+	else {
 #if defined(__ANDROID__)
-	cfile = MOD_TYPE "_" MOD_ID "_" + s.id() + "_" + i2s(rand()) + ".tmp";
+	    cfile = MOD_TYPE "_" MOD_ID "_" + s.id() + "_" + i2s(rand()) + ".tmp";
 #else
-	cfile = tmpnam(err);
+	    cfile = tmpnam(err);
 #endif
-	int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
-	if(icfile < 0) throw TError(s.nodePath().c_str(), _("Error opening the temporary file '%s': '%s'"), cfile.c_str(), strerror(errno));
-	bool fOK = (write(icfile,s.certKey().data(),s.certKey().size()) == (int)s.certKey().size());
-	close(icfile);
-	if(!fOK) throw TError(s.nodePath().c_str(), _("Error writing the file '%s'."), cfile.c_str());
+	    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
+	    if(icfile < 0) throw TError(s.nodePath().c_str(), _("Error opening the temporary file '%s': '%s'"), cfile.c_str(), strerror(errno));
+	    bool fOK = (write(icfile,s.certKey().data(),s.certKey().size()) == (int)s.certKey().size());
+	    close(icfile);
+	    if(!fOK) throw TError(s.nodePath().c_str(), _("Error writing the file '%s'."), cfile.c_str());
+	}
 
 	// Set private key password
 	SSL_CTX_set_default_passwd_cb_userdata(s.ctx, (char*)s.pKeyPass().c_str());
@@ -392,7 +448,8 @@ void *TSocketIn::Task( void *sock_in )
 	}
 
 	//Remove temporary certificate file
-	remove(cfile.c_str()); cfile = "";
+	if(s.certKeyFile().empty()) remove(cfile.c_str());
+	cfile = "";
 
 	//Create BIO object
 	if((bio=BIO_new_ssl(s.ctx,0)) == NULL) {
@@ -474,7 +531,7 @@ void *TSocketIn::Task( void *sock_in )
 		}
 	    }
 	}
-    } catch(TError &err) { s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError &err) { s.stErrMD5 = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //Client tasks stop command
     s.endrunCl = true;
@@ -484,7 +541,7 @@ void *TSocketIn::Task( void *sock_in )
     if(abio)	BIO_reset(abio);
     if(bio)	BIO_free_all(bio);
     if(s.ctx)	{ SSL_CTX_free(s.ctx); s.ctx = NULL; }
-    if(!cfile.empty()) remove(cfile.c_str());
+    if(!cfile.empty() && s.certKeyFile().empty()) remove(cfile.c_str());
 
     pthread_attr_destroy(&pthr_attr);
 
@@ -748,9 +805,15 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "    port - network port on which the SSL is opened, indication of the character name of the port, according to /etc/services is available;\n"
 	    "    mode - SSL-mode and version (SSLv3, TLSv1, TLSv1_1, TLSv1_2, DTLSv1, DTLSv1_2), by default and in error, the safest and most appropriate one is used."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
-	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","str");
+	if(!startStat()) {
+	    if(certKey().empty())
+		ctrMkNode("fld",opt,-1,"/prm/cfg/certKeyFile",_("PEM-file of the certificates and private key"),RWRW__,"root",STR_ID,3,
+		    "tp","str","dest","sel_ed","select","/prm/certKeyFileList");
+	    if(certKeyFile().empty())
+		ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,
+		    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");
+	}
 	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Maximum number of clients"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n_pHost",_("Maximum number of clients per host"),RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Set to 0 to disable this limit."));
@@ -777,13 +840,17 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(mess);
 	}
     }
+    else if(a_path == "/prm/cfg/certKeyFile") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKeyFile());
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKeyFile(opt->text());
+    }
     else if(a_path == "/prm/cfg/certKey") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(certKey());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setCertKey(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKey());
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKey(opt->text());
     }
     else if(a_path == "/prm/cfg/pkey_pass") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(string(pKeyPass().size(),'*'));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setPKeyPass(opt->text());
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(string(pKeyPass().size(),'*'));
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setPKeyPass(opt->text());
     }
     else if(a_path == "/prm/cfg/cl_n") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxFork()));
@@ -809,6 +876,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
     }
+    else if(a_path == "/prm/certKeyFileList" && ctrChkNode(opt)) TSYS::ctrListFS(opt, certKeyFile(), "pem;");
     else TTransportIn::cntrCmdProc(opt);
 }
 
@@ -864,6 +932,7 @@ void TSocketOut::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
+	vl = prmNd.attr("CertKeyFile");	if(!vl.empty()) setCertKeyFile(vl);
 	if(prmNd.childGet("CertKey",0,true)) setCertKey(prmNd.childGet("CertKey")->text());
 	vl = prmNd.attr("PKeyPass");	if(!vl.empty()) setPKeyPass(vl);
 	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
@@ -873,6 +942,7 @@ void TSocketOut::load_( )
 void TSocketOut::save_( )
 {
     XMLNode prmNd("prms");
+    prmNd.setAttr("CertKeyFile", certKeyFile());
     if(prmNd.childGet("CertKey",0,true)) prmNd.childGet("CertKey")->setText(certKey());
     else prmNd.childAdd("CertKey")->setText(certKey());
     prmNd.setAttr("PKeyPass", pKeyPass());
@@ -1005,8 +1075,11 @@ void TSocketOut::start( int tmCon )
 		}
 
 		//Certificates, private key and it password loading
-		if(!sTrm(certKey()).empty()) {
-		    // Write certificate and private key to temorary file
+
+		// Try the external PEM-file of the certificates and the private key
+		if(certKeyFile().size()) cfile = certKeyFile();
+		// Write certificate and private key to temorary file
+		else if(!sTrm(certKey()).empty()) {
 #if defined(__ANDROID__)
 		    cfile = MOD_TYPE "_" MOD_ID "_" + id() + "_" + i2s(rand()) + ".tmp";
 #else
@@ -1017,7 +1090,9 @@ void TSocketOut::start( int tmCon )
 		    bool fOK = (write(icfile,certKey().data(),certKey().size()) == (int)certKey().size());
 		    close(icfile);
 		    if(!fOK) throw TError(nodePath().c_str(), _("Error writing the file '%s'."), cfile.c_str());
+		}
 
+		if(cfile.size()) {
 		    // Set private key password
 		    SSL_CTX_set_default_passwd_cb_userdata(ctx, (char*)pKeyPass().c_str());
 		    // Load certificate
@@ -1031,8 +1106,9 @@ void TSocketOut::start( int tmCon )
 			throw TError(nodePath().c_str(), _("SSL_CTX_use_PrivateKey_file: %s"), err);
 		    }
 
-		    // Remove temporary certificate file
-		    remove(cfile.c_str()); cfile = "";
+		    // Remove the temporary certificate file
+		    if(certKeyFile().empty())	remove(cfile.c_str());
+		    cfile = "";
 		}
 
 		if((ssl=SSL_new(ctx)) == NULL) {
@@ -1076,7 +1152,7 @@ void TSocketOut::start( int tmCon )
 		if(conn)	BIO_free_all(conn);	//BIO_free(conn);
 		if(ssl)		SSL_free(ssl);
 		if(ctx)		SSL_CTX_free(ctx);
-		if(!cfile.empty()) remove(cfile.c_str());
+		if(!cfile.empty() && certKeyFile().empty()) remove(cfile.c_str());
 		continue;	//Try next
 	    }
 	    break;	//OK
@@ -1211,7 +1287,7 @@ repeate:
 		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), err.c_str());
 		    if(logLen()) pushLogMess(err.c_str());
 		    if(writeReq) {
-			//!!!! Must reconnect to prevent the possibility of getting response of the previous request.
+			//!!!! Must be reconnected to prevent the possibility of getting response of the previous request.
 			stop();
 			if(reqTry < wAttempts) { start(); goto repeate; }
 		    }
@@ -1264,16 +1340,27 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	TTransportOut::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1, "help",owner().outAddrHelp().c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,"tp","str","cols","90","rows","7",
-	    "help",_("SSL PAM certificates chain and private key."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");
+	if(!startStat()) {
+	    if(certKey().empty())
+		ctrMkNode("fld",opt,-1,"/prm/cfg/certKeyFile",_("PEM-file of the certificates and private key"),RWRW__,"root",STR_ID,3,
+		    "tp","str","dest","sel_ed","select","/prm/certKeyFileList");
+	    if(certKeyFile().empty())
+		ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRW__,"root",STR_ID,4,
+		    "tp","str","cols","90","rows","7",
+		    "help",_("SSL PAM certificates chain and private key."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRW__,"root",STR_ID,1,"tp","str");
+	}
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2, "tp","str", "help",((TTransSock&)owner()).outTimingsHelp().c_str());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/attempts",_("Attempts"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",((TTransSock&)owner()).outAttemptsHelp().c_str());
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/certKey") {
+    if(a_path == "/prm/cfg/certKeyFile") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKeyFile());
+	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKeyFile(opt->text());
+    }
+    else if(a_path == "/prm/cfg/certKey") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(certKey());
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setCertKey(opt->text());
     }
@@ -1289,5 +1376,6 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(attempts()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setAttempts(s2i(opt->text()));
     }
+    else if(a_path == "/prm/certKeyFileList" && ctrChkNode(opt)) TSYS::ctrListFS(opt, certKeyFile(), "pem;");
     else TTransportOut::cntrCmdProc(opt);
 }

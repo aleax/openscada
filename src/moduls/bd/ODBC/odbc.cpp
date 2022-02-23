@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.ODBC file: odbc.cpp
 /***************************************************************************
- *   Copyright (C) 2015-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2015-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,13 +31,14 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"ODBC"
-#define MOD_NAME	_("DB by ODBC")
+#define MOD_NAME	trS("DB by ODBC")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.2.9"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
+#define MOD_VER		"0.2.15"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("BD module. Provides support of different databases by the ODBC connectors and drivers to the databases.")
 #define MOD_LICENSE	"GPL2"
+#define FEATURES	"SQL, LIST"
 //************************************************
 
 BD_ODBC::BDMod *BD_ODBC::mod; //Pointer for direct access to the module
@@ -81,6 +82,8 @@ BDMod::~BDMod( )
 
 }
 
+string BDMod::features( )	{ return FEATURES; }
+
 TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_E()); }
 
 
@@ -102,7 +105,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
+    if(flag&NodeRemove && owner().fullDeleteDB()) {
 	MtxAlloc resource(connRes, true);
     }
 }
@@ -336,7 +339,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
 	    //Prepare & Execute the statement
 	    if(SQLPrepare(hstmt,(SQLTCHAR*)Mess->codeConvOut(codePage().c_str(),req).c_str(),SQL_NTS) != SQL_SUCCESS)
 		throw TError("", "SQLPrepare: %s", errors().c_str());
-	    if((sts=SQLExecute(hstmt)) != SQL_SUCCESS && sts != SQL_SUCCESS_WITH_INFO)	//!!!! Get details for SQL_SUCCESS_WITH_INFO about RO and other
+	    if((sts=SQLExecute(hstmt)) != SQL_SUCCESS && sts != SQL_SUCCESS_WITH_INFO)	//?!?! Get details for SQL_SUCCESS_WITH_INFO about RO and other
 		throw TError("", "SQLExecute: %s", errors().c_str());
 	}
 
@@ -376,7 +379,7 @@ void MBD::sqlReq( const string &req, vector< vector<string> > *tbl, char intoTra
 		tbl->push_back(row);
 	    }
 	}
-	//if(sts == SQL_ERROR) throw err_sys("SQLMoreResults: %s", errors().c_str());	//!!!! Only single result support !!!!
+	//if(sts == SQL_ERROR) throw err_sys("SQLMoreResults: %s", errors().c_str());	//!!!! Only single result is supported
     } catch(TError &ier) { err = ier.mess; }
 
 #if (ODBCVER < 0x0300)
@@ -425,7 +428,7 @@ MTable::~MTable( )	{ }
 void MTable::postDisable( int flag )
 {
     owner().transCommit();
-    /*if(flag)
+    /*if(flag&NodeRemove)
 	try { owner().sqlReq("DROP TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"`"); }
 	catch(TError err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }*/
 }
@@ -504,7 +507,7 @@ void MTable::fieldDel( TConfig &cfg )
 
 }
 
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, const string &langLs )
 {
     owner().transCommit();
     //!!! Process the code here for the fields' fixing(change its type if it doesn't match to the necessary one)

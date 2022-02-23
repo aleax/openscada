@@ -1,7 +1,7 @@
 
 //OpenSCADA module Special.SystemTests file: test_xml.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,8 +35,8 @@ class TestSysContrLang : public TFunction
     public:
 	TestSysContrLang( ) : TFunction("SysContrLang",SSPC_ID)
 	{
-	    ioAdd( new IO("rez",_("Result"),IO::String,IO::Return) );
-	    ioAdd( new IO("path",_("Path to the language element"),IO::String,IO::Default,"/Archive/BaseArh/mess_StatErrors/%2fprm%2fst") );
+	    ioAdd( new IO("rez",trS("Result"),IO::String,IO::Return) );
+	    ioAdd( new IO("path",trS("Path to the language element"),IO::String,IO::Default,"/Archive/BaseArh/mess_StatErrors/%2fprm%2fst") );
 	}
 
 	string name( )	{ return _("Control language of the program"); }

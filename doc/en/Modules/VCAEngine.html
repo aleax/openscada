@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.1 </td>
+<td> 7.8 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -44,7 +44,8 @@
 </th></tr>
 <tr>
 <td colspan="9"> The main engine of the visual control area.
-<ul><li> <b>To Do:</b></li></ul>
+<ul><li> <b>Sponsored by, for finishing the changes obtaining mechanism on the visualisers runtime without spare requests and lost data on 1.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li>
+<li> <b>To Do:</b></li></ul>
 <dl><dd> - append the image files edition user API for raster (PNG, JPEG, GIF), by LibGD2, and vector (SVG):
 <dl><dd>+ append the images loading and saving their changes into the session table from the user procedures, allows to edit SVG (XML);</dd>
 <dd>- implement the main functions of the GD object (into <a href="../Modules/FLibSYS.html" title="Special:MyLanguage/Modules/FLibSYS">Special.FLibSYS</a>).</dd></dl></dd>
@@ -200,7 +201,7 @@
 <ul><li> <i>pgOpen</i> — sign "The page is opened";</li>
 <li> <i>pgNoOpenProc</i> — sign "Execute the page, even if it is not opened";</li>
 <li> <i>pgOpenSrc</i> — contains the widget address or the page that opened the current page; in the case of an included container widget, here is the address of the included page; to open a page from an internal procedure it is enough to specify the address of the widget-source of opening, but for the pages type "Link" you must prefer of <a href="#UserAPI">the user API</a> function uiCmd() using to the pages managing;</li>
-<li> <i>pgGrp</i> — group of pages used to link container pages to pages, according to a common group.</li></ul>
+<li> <i>pgGrp</i> — group of pages used to link container pages to pages, according to a common group. EMPTY and the "main" group is meant of using this page as the Root-main page, so such ones will replace other Root-main pages; the "fl" group is meant of using in the "fly" windows which are suitable for multiple open and must not be traced for doubles; all other are meant for including to the containers-boxes or single opening, so they forced in checking for doubles when the last one will be opened and the previous ones be closed.</li></ul>
 <p>The logic of determining how to open pages works like this:
 </p>
 <ul><li> if the page has the group "main" or coincides with the page group in the main window or there is no page on the main window, then open the page in the main window;</li>
@@ -242,7 +243,7 @@
 </p><p>User can create many themes, each of which will keep the color, font and other properties of the frame elements. Simple changing of the theme will allow you to change the interface of VC, and the possibility of appointing an individual theme in the user's profile allows to take into account his individual features.
 </p><p>To realize this opportunity, when creating a frame, it is necessary for the properties of color, font and others set the "Configuration" (of the table in the "Process" tab) in the value of "From style". And in the parameter "Configuration template" to specify the identifier of the style field. Next, this field will automatically appear in the style manager and can be modified there. The style manager is available on the project configuration page in the tab "Styles". In this tab, you can the styles create, delete and edit, delete their fields.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:643px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="523" src="../files/VCA_prj_stl.png" width="641" /></a>  <div class="thumbcaption">Figure. Tab "Styles" of the configuration page of the project.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:VCA_prj_stl.png"><img class="thumbimage" height="658" src="../files/VCA_prj_stl.png" width="681" /></a>  <div class="thumbcaption">Figure. Tab "Styles" of the configuration page of the project.</div></div></div></div>
 <p>In general, the styles are available from the project level. At the level of the widget libraries you can only define the style fields for the widgets. At the project level, at the choice of style, it is started the work with styles, which includes access to the fields of styles instead of direct attribute values. In fact, this means that when reading or writing a widget attribute these operations will be carried out with the corresponding field of the chosen style.
 </p><p>When starting a project, the project-style will be used. In the future, the user can choose a style from the list of available. The user-selected style will be saved and used the next time the project is launched.
 </p><p><br />
@@ -649,7 +650,7 @@ The first and the typical method of notifications is screen's light notification
 <ul><li> For the visualisation server/engine, by the attribute "notify{N}" into the format:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 15px">
 //flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]]
-//resStatic={MimeFileResource}
+//resStatic={ResourceFile}
 if(doRes) { The command text to form the resource. }
 if(doNtf) { The command text to notify. }
 </pre>
@@ -667,7 +668,7 @@ if(doNtf) { The command text to notify. }
 <li> <i>queue</i> — the notification resources are determined not only by the global sign of alarming and quietance, but also according to the priority sources queue of the notification-resources. The queue is formed on the side of the visualisation server, and for the visualisers it is indicated the need to work with it when requesting resources.</li>
 <li> <i>qMergeMess</i> — merging the notifications into the queue by equality their messages.</li>
 <li> <i>quietanceRet</i> — possibility of the visualiser for the quietance recall-return i.e. in fact — the notification enable back.</li></ul>
-<p>Presence of the field "resStatic" enables the resource obtaining directly from the mime table or a file, pointed in the way like to <a href="#Media">the "Media" primitive</a>.
+<p>Presence of the field "resStatic" enables the resource obtaining directly from the resource table or a file, pointed in the way like to <a href="#Media">the "Media" primitive</a>.
 </p><p>The exchanging variables:
 </p>
 <ul><li> <i>en</i>[0,1] — the notification enable (1) or disable (0);</li>
@@ -831,7 +832,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p>
 <ul><li> <b>r</b> — the right to review the widget;</li>
 <li> <b>w</b> — the right to control over the widget.</li></ul>
-<p>In the development mode a simple scheme of accessing "root.UI:RWRWR_" is used, which means — all users can open and view the libraries, their components and projects, and all users of the group "UI" (user interfaces) can edit.
+<p>In the development mode a simple scheme of accessing "root:UI|RWRWR_" is used, which means — all users can open and view the libraries, their components and projects, and all users of the group "UI" (user interfaces) can edit.
 </p><p>In the runtime mode the rights work, described in the interface components, which include the ability to inherit the owner and rights from the top to the bottom. Wherein, by default, the inheritance enabled for each widget, then they get the owner and the rights of the project. At the same time, the direct setting of the rights of the complex widget will propagate them to all components of this widget.
 </p><p><br />
 </p>
@@ -839,7 +840,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <p>To provide the visualization interface of relevant data, data from the subsystem "Data acquisition (DAQ)" should be used. The nature of these data is as follows:
 </p>
 <ol><li> parameters that contain some number of attributes;</li>
-<li> attributes of the parameter can provide information of five types: Boolean, Integer, Real, String and Object;</li>
+<li> attributes of the parameter can provide information of five base types: "Boolean", "Integer", "Real", "String" and "Object";<br />&nbsp;where appended the VCA modifiers: "Selectable"; String variants: "Text", "Translation", "Color", "Image", "Font", "Address"; Integer variants: "DateTime".</li>
 <li> attributes of the parameter can have their archive (history);</li>
 <li> attributes of the parameter can be set to read, write and with full access.</li></ol>
 <p>Given the first point, it is necessary to provide the possibility of group-based reference. To do this, we use <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the logical level concept</a>.
@@ -847,7 +848,7 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 </p><p>To satisfy the opportunities for accessing to archives, in accordance with the item 3, links make check of the attribute type, and in the case of connection to the "Address", the address of the link is put into the value.
 </p><p>In the VCA terms, the dynamic links and configuration of the dynamics are the one process, to describe a configuration of which the tab "Processing" of the widgets is provided. The tab contains a table of configuration of the attributes properties and the calculation procedure text of the widget.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1048px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_proc.png"><img class="thumbimage" height="774" src="../files/VCA_wdg_proc.png" width="1046" /></a>  <div class="thumbcaption">Figure. Tab "Processing" of the configuration page of the widget.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:963px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_proc.png"><img class="thumbimage" height="749" src="../files/VCA_wdg_proc.png" width="961" /></a>  <div class="thumbcaption">Figure. Tab "Processing" of the configuration page of the widget.</div></div></div></div>
 <p>In addition to configuration fields of the attributes the column "Processing" in the table provides, for selective using of the attributes in the computational procedure of the widget, and the columns "Configuration", "Configuration template", to describe the links configuration.
 </p><p>If the "Processing" column is true, then the variable <i>{widget ID}_{attribute ID}</i> becomes available in the computational procedure, for example <i>cw_value</i>.
 </p><p>The column "Configuration" allows to specify the link type of the widget attribute:
@@ -1238,7 +1239,7 @@ Where:
 <td> pgGrp </td>
 <td> Page: group </td>
 <td> 4 </td>
-<td> group of the pages.
+<td> Group of the pages. EMPTY and the "main" group is meant of using this page as the Root-main page, so such ones will replace other Root-main pages; the "fl" group is meant of using in the "fly" windows which are suitable for multiple open and must not be traced for doubles; all other are meant for including to the containers-boxes or single opening, so they forced in checking for doubles when the last one will be opened and the previous ones be closed.
 </td></tr>
 <tr>
 <td colspan="4"> <i>Additional attributes of the execution mode — by the session.</i><br />(Virtual attributes are not available in the widget procedure)
@@ -1332,11 +1333,11 @@ Where:
 <td> Image name in the view "<b>[{src}:]{name}</b>", where:
 <ul><li> "src" — source of the image:
 <ul><li> <i>file</i> — directly from the local file by the path;</li>
-<li> <i>res</i> — from the mime resources table of DB.</li></ul></li>
-<li> "name" — file path or identifier of the mime resource.<br /></li></ul>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
 </p>
-<ul><li> "res:backLogo" — from the mime resources table of DB for the identifier "backLogo";</li>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
 <li> "backLogo" — like toe the previous;</li>
 <li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -1387,8 +1388,8 @@ Where:
 <dd><i>fill_img</i> — direct fill image in the view "[{src}%3A]{name}", where:
 <dl><dd>"src" — source of the image:
 <dl><dd><i>file</i> — directly from local file by the path;</dd>
-<dd><i>res</i> — from the mime resources table of DB.</dd></dl></dd>
-<dd>"name" — file path or identifier of the resource mime.</dd></dl></dd>
+<dd><i>res</i> — from the resources table of DB.</dd></dl></dd>
+<dd>"name" — file path or identifier of the resource.</dd></dl></dd>
 <dd><i>i{n}</i> — dynamic fill image 'n'.<br /></dd></dl>
 <p>For example:
 </p>
@@ -1630,11 +1631,11 @@ Where:
 <td> Image on the button. Image name in the view <b>[{src}:]{name}</b>, where:
 <ul><li> "src" — source of the image:
 <ul><li> <i>file</i> — directly from the local file by the path;</li>
-<li> <i>res</i> — from the mime resources table of DB.</li></ul></li>
-<li> "name" — file path or identifier of the mime resource.<br /></li></ul>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
 </p>
-<ul><li> "res:backLogo" — from the mime resources table of DB for the identifier "backLogo";</li>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
 <li> "backLogo" — like toe the previous;</li>
 <li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -1767,7 +1768,7 @@ Where:
 <li> "colorText" — color of the column text as a whole into the color name or code;</li>
 <li> "font" — font of the column text in the typical OpenSCADA string;</li>
 <li> "prec" — value precision of the real type cells in the column;</li>
-<li> "sort" — sorting by the column [0 - Descending; 1 - Ascending];</li>
+<li> "sort" — sorting by the column [0 - Ascending-default; 1 - Descending];</li>
 <li> "align" — alignment the column for: "left", "right" and "center".</li></ul></dd>
 <dd>"r" — Row of the values. Possible attributes of the row cell tag for the row as a whole:
 <ul><li> "color" — row color as a whole into the color name or code;</li>
@@ -1843,11 +1844,11 @@ Where:
 <td> Background image. The image name in the view "<b>[{src}:]{name}</b>", where:
 <ul><li> "src" — source of the image:
 <ul><li> <i>file</i> — directly from the local file by the path;</li>
-<li> <i>res</i> — from the mime resources table of DB.</li></ul></li>
-<li> "name" — file path or identifier of the mime resource.<br /></li></ul>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
 </p>
-<ul><li> "res:backLogo" — from the mime resources table of DB for the identifier "backLogo";</li>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
 <li> "backLogo" — like toe the previous;</li>
 <li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -1982,11 +1983,11 @@ Where:
 <td> Background image. The image name in the view "<b>[{src}:]{name}</b>", where:
 <ul><li> "src" — source of the image:
 <ul><li> <i>file</i> — directly from the local file by the path;</li>
-<li> <i>res</i> — from the mime resources table of DB.</li></ul></li>
-<li> "name" — file path or identifier of the mime resource.<br /></li></ul>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
 </p>
-<ul><li> "res:backLogo" — from the mime resources table of DB for the identifier "backLogo";</li>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
 <li> "backLogo" — like toe the previous;</li>
 <li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -2017,12 +2018,12 @@ Where:
 </p>
 <ul><li> "src" — source:
 <ul><li> <i>file</i> — directly from the local file, visualizer and engine, by the path;</li>
-<li> <i>res</i> — from the mime resources table of DB;</li>
+<li> <i>res</i> — from the resources table of DB;</li>
 <li> <i>stream</i> — stream URL for playback video and audio.</li></ul></li>
-<li> "name" — file path or identifier of the mime resource.<br /></li></ul>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
 </p>
-<ul><li> "res:workMedia" — from the mime resources table of DB for the identifier "workMedia";</li>
+<ul><li> "res:workMedia" — from the resources table of DB for the identifier "workMedia";</li>
 <li> "workMedia" — like to previous;</li>
 <li> "file:/var/tmp/workMedia.mng" — from the local file by the path "/var/tmp/workMedia.mng";</li>
 <li> "stream:http://localhost.localhost:5050" — playback for video and audio stream from the URL.</li></ul>
@@ -2172,11 +2173,11 @@ Where:
 <td> Background image. The image name in the view "<b>[{src}:]{name}</b>", where:
 <ul><li> "src" — source of the image:
 <ul><li> <i>file</i> — directly from the local file by the path;</li>
-<li> <i>res</i> — from the mime resources table of DB.</li></ul></li>
-<li> "name" — file path or identifier of the mime resource.<br /></li></ul>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
 </p>
-<ul><li> "res:backLogo" — from the mime resources table of DB for the identifier "backLogo";</li>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
 <li> "backLogo" — like toe the previous;</li>
 <li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -2435,11 +2436,11 @@ Where:
 <td> Background image. The image name in the view "<b>[{src}:]{name}</b>", where:
 <ul><li> "src" — source of the image:
 <ul><li> <i>file</i> — directly from the local file by the path;</li>
-<li> <i>res</i> — from the mime resources table of DB.</li></ul></li>
-<li> "name" — file path or identifier of the mime resource.<br /></li></ul>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
 </p>
-<ul><li> "res:backLogo" — from the mime resources table of DB for the identifier "backLogo";</li>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
 <li> "backLogo" — like toe the previous;</li>
 <li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -2776,7 +2777,7 @@ Where:
 <td> pgGrp </td>
 <td> Page: group </td>
 <td> 4 </td>
-<td> Group of the container of the pages.
+<td> Group of the container of the included pages. Only pages in such group will be included to that box as a container.
 </td></tr>
 <tr>
 <td> backColor </td>
@@ -2798,11 +2799,11 @@ Where:
 <td> Background image. The image name in the view "<b>[{src}:]{name}</b>", where:
 <ul><li> "src" — source of the image:
 <ul><li> <i>file</i> — directly from the local file by the path;</li>
-<li> <i>res</i> — from the mime resources table of DB.</li></ul></li>
-<li> "name" — file path or identifier of the mime resource.<br /></li></ul>
+<li> <i>res</i> — from the resources table of DB.</li></ul></li>
+<li> "name" — file path or identifier of the resource.<br /></li></ul>
 <p>Examples:
 </p>
-<ul><li> "res:backLogo" — from the mime resources table of DB for the identifier "backLogo";</li>
+<ul><li> "res:backLogo" — from the resources table of DB for the identifier "backLogo";</li>
 <li> "backLogo" — like toe the previous;</li>
 <li> "file:/var/tmp/backLogo.png" — from local file by the path "/var/tmp/backLogo.png".</li></ul>
 </td></tr>
@@ -2834,15 +2835,17 @@ Where:
 <li> "<b>{DB_TBL}_uio</b>" — table of user properties of widgets and nested widgets of the library (structure "LibWidgetUserIO") or user properties of project pages (structure "ProjPageUserIO");</li>
 <li> "<b>{DB_TBL}_incl</b>" — table of widgets, included in widgets-containers, of the library (structure "LibWidgetIncl") or the project (structure "ProjPageWIncl");</li>
 <li> "<b>{DB_TBL}_mime</b>" — table of library resources and its widgets (structure "LibWidgetMime"), or the project and its pages (structure "ProjMime");</li>
-<li> "<b>{DB_TBL}_stl</b>" — table of values of styled parameters of the project (structure "PrjStlIO");</li>
+<li> "<b>{DB_TBL}_stls</b>" — table of values of styled parameters of the project (structure "PrjStlsIO");</li>
+<li> "<b>{DB_TBL}_stl</b>" — old-deprecated table of values of styled parameters of the project (structure "PrjStlIO");</li>
 <li> "<b>{DB_TBL}_ses</b>" — table of data for the project execution mode, that is, sessions (the structure of "PrjSesIO").</li></ul>
-<p>Projections (structures) of basic tables are as follows:
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> <b>{DB_TBL}</b> is currently formed in the way "<b>wlb_{ID}</b>" for libraries and "<b>prj_{ID}</b>" for the projects, and the separate field <i>DB_TBL</i> of the tables "Libs", "Projs" is deprecated and will be removed in the OpenSCADA 1.0 release!
+</p><p>Projections (structures) of basic tables are as follows:
 </p>
 <ul><li> <b>Libs(<u>ID</u>, NAME, DSCR, DB_TBL, ICO)</b> — libraries of the widgets <i>ID</i>.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — identifier;</dd>
 <dd><i>NAME</i> — name;</dd>
 <dd><i>DSCR</i> — description;</dd>
-<dd><i>DB_TBL</i> — root of the tables of DB with the widgets;</dd>
+<dd><i>DB_TBL</i> (DEPRECATED) — root of the tables of DB with the widgets;</dd>
 <dd><i>ICO</i> — encoded (Base64) image of the icon of the library.</dd></dl></dd></dl>
 <ul><li> <b>LibWigets(<u>ID</u>, ICO, PARENT, PROC, PROC_PER, ATTRS, TIMESTAMP)</b> — widgets <i>ID</i> of the library.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — identifier;</dd>
@@ -2877,13 +2880,13 @@ Where:
 <dd><i>ATTRS</i> — list of attributes of the widget, modified by the user.</dd></dl></dd></dl>
 <ul><li> <b>LibWidgetMime(<u>ID</u>, MIME, DATA)</b> — audio, video, media and other resources of the widgets <i>ID</i> of the library.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — identifier of the resource.</dd>
-<dd><i>MIME</i> — Mime data type of the resource, in the format — "<b>{mimeType};{Size}</b>".</dd>
+<dd><i>MIME</i> — MIME of the resource, in the format — "<b>{MIME};{Size}</b>".</dd>
 <dd><i>DATA</i> — resource data, encoded with Base64.</dd></dl></dd></dl>
 <ul><li> <b>Projs(<u>ID</u>, NAME, DSCR, DB_TBL, ICO, USER, GRP, PERMIT, PER, FLGS, STYLE)</b> — projects <i>ID</i> of the visualization interface.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — identifier of the project;</dd>
 <dd><i>NAME</i> — name of the project;</dd>
 <dd><i>DSCR</i> — description of the project;</dd>
-<dd><i>DB_TBL</i> — root of the tables of DB with the pages;</dd>
+<dd><i>DB_TBL</i> (DEPRECATED) — root of the tables of DB with the pages;</dd>
 <dd><i>ICO</i> — encoded (Base64) image of the icon of the project;</dd>
 <dd><i>USER</i> — owner of the project;</dd>
 <dd><i>GRP</i> —  users group of the project;</dd>
@@ -2905,7 +2908,11 @@ Where:
 <li> <b>ProjPageUserIO(<u>IDW</u>, <u>ID</u>, <u>IDC</u>, NAME, IO_TP, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)</b> — user attributes of the pages. The structure actually corresponds to the table "LibWidgetUserIO".</li>
 <li> <b>ProjPageWIncl(<u>IDW</u>, <u>ID</u>, PARENT, ATTRS)</b> — widgets, included on the page. The structure actually corresponds to the table "LibWidgetIncl".</li>
 <li> <b>ProjMime(<u>ID</u>, MIME, DATA)</b> — audio, video, media and other resources of the project pages. The structure actually corresponds to the table "LibWidgetMime".</li>
-<li> <b>PrjStl(<u>ID</u>, V_0, V_1, V_2, V_3, V_4, V_5, V_6, V_7, V_8, V_9)</b> — value of the style's field <i>ID</i> of the project.</li></ul>
+<li> <b>PrjStls(<u>SID</u>, <u>ID</u>, VAL)</b> — the value <i>VAL</i> of the field <i>ID</i> of the style <i>IDS</i> of the project.</li></ul>
+<dl><dd><dl><dd><i>IDS</i> — identifier of the style;</dd>
+<dd><i>ID</i> — identifier of the style's field;</dd>
+<dd><i>VAL</i> — value of the style field.</dd></dl></dd></dl>
+<ul><li> <b>PrjStl(<u>ID</u>, V_0, V_1, V_2, V_3, V_4, V_5, V_6, V_7, V_8, V_9)</b> — value of the style's field <i>ID</i> of the project.</li></ul>
 <dl><dd><dl><dd><i>ID</i> — identifier of the style's field;</dd>
 <dd><i>V_{N}</i> — value of the style's field for the style <i>N</i>.</dd></dl></dd></dl>
 <ul><li> <b>ProjSess(<u>IDW</u>, <u>ID</u>, IO_VAL)</b> — project table <i>IDW</i> for data storage of the sessions, performing the project.</li></ul>
@@ -2951,8 +2958,8 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 //Sets the link to the parameter for the eight trend
 this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
 </pre>
-<ul><li> <i>string mime( string addr, string type = "" )</i> — "mime" object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the type in <i>type</i>, from the session table or the source. It is designed for the "mime" objects edition and that substitution to this session's context, for example, images SVG.</li>
-<li> <i>int mimeSet( string addr, string data, string type = "" )</i> — sets the "mime" object to <i>data</i> with <i>type</i> by the address <i>addr</i>.</li>
+<ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — resource object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the <i>MIME</i>, from the session table or the source. It is designed for the resource objects edition and that substitution to this session's context, for example, images SVG.</li>
+<li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — sets the resource object to <i>data</i> with <i>MIME</i> by the address <i>addr</i>.</li>
 <li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li></ul>
 <p><b>Object "Widget" of the primitive "Document" (this)</b>
 </p>
@@ -3293,28 +3300,30 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:702px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_main.png"><img class="thumbimage" height="582" src="../files/VCAeng_main.png" width="700" /></a>  <div class="thumbcaption">Fig.4.1. Main configuration page of the module.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:661px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_sess.png"><img class="thumbimage" height="525" src="../files/VCAeng_sess.png" width="659" /></a>  <div class="thumbcaption">Fig.4.2. Tab "Sessions" of the configuration page of the module.</div></div></div></div>
 <p>In addition to the list of opened sessions, the tab in Figure 4.2 contains a table with a list of sessions that must be created and started up at the boot time of OpenSCADA. Creation of sessions through this tool can be useful for Web-based interface. In this case, when connecting, Web-user data is ready and ensures the continuity of the formation of archival documents.
-</p><p>Configuration of the container widgets in the face of libraries and widget projects is done through pages in Figure 4.3 (for project) and Figure 4.5 (for widgets library). The widgets library contains the widgets, and project — the pages. Both types contain a tab of configuration Mime-data used by widgets (Fig.4.6). The project page also contains the tab "Diagnostics" (Fig.4.4) for debugging and monitoring the execution of pages in sessions.
+</p><p>Configuration of the container widgets in the face of libraries and widget projects is done through pages in Figure 4.3 (for project) and Figure 4.5 (for widgets library). The widgets library contains the widgets, and project — the pages. Both types contain a tab of configuration resources used by widgets (Fig.4.6). The project page also contains the tab "Diagnostics" (Fig.4.4) for debugging and monitoring the execution of pages in sessions.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:756px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg.png"><img class="thumbimage" height="658" src="../files/VCAeng_pg.png" width="754" /></a>  <div class="thumbcaption">Fig.4.3. Configuration page of the projects.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:799px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg.png"><img class="thumbimage" height="686" src="../files/VCAeng_pg.png" width="797" /></a>  <div class="thumbcaption">Fig.4.3. Configuration page of the projects.</div></div></div></div>
 <p>From this page you can set:
 </p>
-<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration), date and time of last modification, counter of the use.</li>
-<li> Identifier, name, description and icon of the container.</li>
+<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>prj_{ObjID}</b>".</dd></dl>
+<ul><li> Identifier, name, description and icon of the container.</li>
 <li> Owner, group and access rights to the container.</li>
 <li> Period for computing of the sessions based on the given project.</li>
 <li> Signal of enabling as needed.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1052px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag.png"><img class="thumbimage" height="513" src="../files/VCAeng_pg_diag.png" width="1050" /></a>  <div class="thumbcaption">Fig.4.4. Tab "Diagnostics" of the projects.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1131px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_diag.png"><img class="thumbimage" height="545" src="../files/VCAeng_pg_diag.png" width="1129" /></a>  <div class="thumbcaption">Fig.4.4. Tab "Diagnostics" of the projects.</div></div></div></div>
 <p>From this tab you can select time (or refresh to current) and size to obtain the diagnostic messages of the sessions of running this project.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:705px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="573" src="../files/VCAeng_wlb.png" width="703" /></a>  <div class="thumbcaption">Fig.4.5. Configuration page of the widgets libraries.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:817px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_wlb.png"><img class="thumbimage" height="589" src="../files/VCAeng_wlb.png" width="815" /></a>  <div class="thumbcaption">Fig.4.5. Configuration page of the widgets libraries.</div></div></div></div>
 <p>From this page you can set:
 </p>
-<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration), date and time of last modification, counter of the use.</li>
-<li> Identifier, name, description and icon of the container.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:705px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime.png"><img class="thumbimage" height="573" src="../files/VCAeng_mime.png" width="703" /></a>  <div class="thumbcaption">Fig.4.6. Configuration tab of Mime-data of the container.</div></div></div></div>
+<ul><li> State of the container, same: "Enabled", name of the database (containing the configuration and with tracking the availability of the data in different storages and providing the sequentially removing duplicates), date and time of last modification, counter of the use.</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The object still supports of specifying the spare storage addresses with tables before you rename the table in the standard form "<b>wlb_{ObjID}</b>".</dd></dl>
+<ul><li> Identifier, name, description and icon of the container.</li></ul>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:691px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_mime.png"><img class="thumbimage" height="589" src="../files/VCAeng_mime.png" width="689" /></a>  <div class="thumbcaption">Fig.4.6. Configuration tab of resources of the container.</div></div></div></div>
 <p>Configuration of the project's session differs significantly from configuration of the project (Fig.4.7), but also contains pages of the project.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:982px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ses.png"><img class="thumbimage" height="649" src="../files/VCAeng_pg_ses.png" width="980" /></a>  <div class="thumbcaption">Fig.4.7. Configuration page of the projects sessions.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:903px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_pg_ses.png"><img class="thumbimage" height="644" src="../files/VCAeng_pg_ses.png" width="901" /></a>  <div class="thumbcaption">Fig.4.7. Configuration page of the projects sessions.</div></div></div></div>
 <p>From this page you can set:
 </p>
 <ul><li> State of the session, the same: "Enabled"; "Running"; user; owner; users group; access; source project; mode of execution in the background; execution time of the session; counter of client connections; last request time, user and language; last user action and remained time to it force closing.</li>
@@ -3332,7 +3341,7 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <li> Command — clear the widget changes.</li>
 <li> Command — lower down the widget changes to its parent.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:737px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_attr.png"><img class="thumbimage" height="729" src="../files/VCAeng_vit_attr.png" width="735" /></a>  <div class="thumbcaption">Fig.4.9. Tab of the attributes of the visual elements.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1010px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_proc.png"><img class="thumbimage" height="763" src="../files/VCAeng_vit_proc.png" width="1008" /></a>  <div class="thumbcaption">Fig.4.10. Tab of processing of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:903px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_proc.png"><img class="thumbimage" height="750" src="../files/VCAeng_vit_proc.png" width="901" /></a>  <div class="thumbcaption">Fig.4.10. Tab of processing of the visual elements.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1015px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_lnk.png"><img class="thumbimage" height="522" src="../files/VCAeng_vit_lnk.png" width="1013" /></a>  <div class="thumbcaption">Fig.4.11. Tab of links of the visual elements.</div></div></div></div>
 
 
@@ -3340,5 +3349,5 @@ Deprecated, but supported, the API is represented by a group of functions direct
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

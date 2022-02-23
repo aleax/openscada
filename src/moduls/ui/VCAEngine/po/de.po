@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 10:23+0300\n"
+"POT-Creation-Date: 2021-12-25 16:42+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -76,11 +76,15 @@ msgid "Library DB"
 msgstr "Datenbank der Bibliothek"
 
 msgid ""
-"DB address in the format \"{DB module}.{DB name}.{Table name}\".\n"
-"To use the main working DB, set '*.*'."
+"Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the Generic Storage, set '*.*.{Table name}'."
 msgstr ""
-"Datenbank Parameter im Format \"{DB-Modul}.{DB-Name}.{Name der Tabelle}\".\n"
-"Für die Hauptdatenbank '*.*' verwenden."
+"Speicheradresse im Format \"{DB-Modul}.{DB-Name}.{Table name}\".\n"
+"Um den generischen Speicher zu verwenden, legen Sie '*.*.{Table name}' fest."
+
+#, c-format
+msgid "Remove from '%s'"
+msgstr "Entfernen von '%s'"
 
 msgid "Date of modification"
 msgstr "Änderungsdatum"
@@ -106,11 +110,11 @@ msgstr "Icon"
 msgid "Widgets"
 msgstr "Widgets"
 
-msgid "Mime data"
-msgstr "Mime Daten"
+msgid "Resources"
+msgstr "Ressourcen"
 
-msgid "Mime type"
-msgstr "Mime Typ"
+msgid "MIME"
+msgstr "MIME"
 
 msgid "Data"
 msgstr "Daten"
@@ -1277,6 +1281,19 @@ msgstr "Seite: Quelle der Eröffnung"
 msgid "Page: group"
 msgstr "Seite: Gruppe"
 
+msgid ""
+"EMPTY and the \"main\" group is meant of using this page as the Root-main "
+"page, so such ones will replace other Root-main pages.\n"
+"The \"fl\" group is meant of using in the \"fly\" windows which are suitable "
+"for multiple open and must not be traced for doubles.\n"
+"All other are meant for including to the containers-boxes or single opening, "
+"so they forced in checking for doubles when the last one will be opened and "
+"the previous ones be closed."
+msgstr ""
+"EMPTY und die Gruppe \"main\" sollen diese Seite als Root-Hauptseite verwenden, sodass diese andere Root-Hauptseiten ersetzen.\n"
+"Die \"fl\" Gruppe ist für die Verwendung in den \"fly\"-Fenstern gedacht, die für mehrfaches Öffnen geeignet sind und nicht für Doppel verfolgt werden dürfen.\n"
+"Alle anderen sind für die Aufnahme in die Container-Boxen oder Einzelöffnungen gedacht, so dass sie gezwungen sind, auf Doppel zu prüfen, wann die letzte geöffnet und die vorherigen geschlossen werden."
+
 #, c-format
 msgid "The project '%s' is used now by %d sessions!"
 msgstr "Das Projekt '%s' wird jetzt von %d Sitzungen verwendet!"
@@ -1504,8 +1521,8 @@ msgstr "Gruppe"
 msgid "Background execution mode"
 msgstr "Hintergrundmodus der Ausführung"
 
-msgid "Time of the session calculating"
-msgstr "Zeitpunkt der Sitzungsberechnung"
+msgid "Counter, time of calculating"
+msgstr "Zähler, Berechnungszeit"
 
 msgid "Connections counter"
 msgstr "Verbindungzähler"
@@ -1575,6 +1592,10 @@ msgstr ""
 "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
 #, c-format
+msgid "Modification form %d, fix %d. "
+msgstr "Änderung bilden %d, fixieren %d. "
+
+#, c-format
 msgid "Processing at %s. "
 msgstr "Verarbeitung bei %s. "
 
@@ -1584,6 +1605,7 @@ msgstr "Verbrachte Zeit in der Branche: "
 msgid "the item: "
 msgstr "der Gegenstand: "
 
+#, c-format
 msgid "It is a try of creating a widget in depth bigger to %d!"
 msgstr ""
 "Es ist ein Versuch, ein Widget mit einer Tiefe von bis zu %d zu erstellen!"
@@ -1594,6 +1616,9 @@ msgstr "Ereignisse: %s"
 
 msgid "Error calculating the widget. Process is disabled."
 msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
+
+msgid "Focus"
+msgstr "Fokus"
 
 msgid "Processing"
 msgstr "Bearbeitung"
@@ -1609,6 +1634,9 @@ msgstr "Die Hauptmaschine des visuellen Kontrollbereichs."
 
 msgid "DB table"
 msgstr "DB-Tabelle"
+
+msgid "Resource data"
+msgstr "Ressourcendate"
 
 msgid "Parent widget"
 msgstr "Elternwidget"
@@ -1661,6 +1689,7 @@ msgstr "Arbeitsstil"
 msgid "Flags"
 msgstr "Schalter"
 
+#, c-format
 msgid "Value %d"
 msgstr "Wert %d"
 
@@ -2012,16 +2041,6 @@ msgstr "Arbeitsbereich"
 msgid "Calculation"
 msgstr "Berechnung"
 
-msgid "Procedure language"
-msgstr "Verfahrenssprache"
-
-msgid ""
-"Select the blank language to reset the widget procedure and language to the "
-"parent widget."
-msgstr ""
-"Wählen Sie die leere Sprache das Widget Verfahren und Sprache auf das "
-"übergeordnete Widget zurückgesetzt werden."
-
 msgid "Period of the calculating, milliseconds"
 msgstr "Zeitraum der Berechnung, Millisekunden"
 
@@ -2031,6 +2050,16 @@ msgid ""
 msgstr ""
 "Verwenden Sie -1 (<0), wenn Sie den Berechnungszeitraum für das "
 "übergeordnete Widget/Seite/Projekt verwenden möchten."
+
+msgid "Procedure language"
+msgstr "Verfahrenssprache"
+
+msgid ""
+"Select the blank language to reset the widget procedure and language to the "
+"parent widget."
+msgstr ""
+"Wählen Sie die leere Sprache das Widget Verfahren und Sprache auf das "
+"übergeordnete Widget zurückgesetzt werden."
 
 msgid "Procedure"
 msgstr "Verfahren"
@@ -2065,6 +2094,9 @@ msgstr "Reelle Zahl"
 msgid "String"
 msgstr "Text"
 
+msgid "String (translate)"
+msgstr "Zeichenfolge (übersetzen)"
+
 msgid "Object"
 msgstr "Objekt"
 
@@ -2076,6 +2108,9 @@ msgstr "Reelle Zahlen Auswahl"
 
 msgid "Strings selection"
 msgstr "Strings Auswahl"
+
+msgid "Text (translate)"
+msgstr "Text (übersetzen)"
 
 msgid "DateTime"
 msgstr "DatumZeit"

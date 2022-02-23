@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.DBArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -65,18 +65,17 @@ void ModVArch::postDisable( int flag )
 {
     TVArchivator::postDisable(flag);
 
-    if(flag) {
+    if(flag&NodeRemove) {
 	//Removing the grouping mode tables and records
 	TConfig cfg(&mod->archEl());
-	for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg); ) {
+	for(int aCnt = 0; TBDS::dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg); ) {
 	    string vTbl = cfg.cfg("TBL").getS(), aNm;
 	    if(vTbl.find(archTbl()+"_") == string::npos) continue;
 
-	    //Removing for groups table of the grouping mode
-	    SYS->db().at().open(addr()+"."+vTbl);
-	    SYS->db().at().close(addr()+"."+vTbl, true);
+	    //Removing the groups table of the grouping mode
+	    TBDS::dataDelTbl(addr()+"."+vTbl);
 
-	    if(!SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg,true,false,true)) break;
+	    if(!TBDS::dataDel(addr()+"."+mod->mainTbl(),"",cfg,TBDS::UseAllKeys|TBDS::NoException)) break;
 	    aCnt--;
 	}
     }
@@ -151,7 +150,7 @@ void ModVArch::checkArchivator( unsigned int cnt )
 
     //Loading and processing the main table with the meta-information.
     TConfig cfg(&mod->archEl());
-    for(int aCnt = 0; SYS->db().at().dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,false,true); ) {
+    for(int aCnt = 0; TBDS::dataSeek(addr()+"."+mod->mainTbl(),"",aCnt++,cfg,TBDS::UseCache); ) {
 	string vTbl = cfg.cfg("TBL").getS(), aNm;
 	if(vTbl.find(archTbl()+"_") == string::npos) continue;
 	//Table per parameter mode
@@ -195,10 +194,9 @@ void ModVArch::checkArchivator( unsigned int cnt )
 		    gO->beg = s2ll(cfg.cfg("BEGIN").getS());
 		    gO->end = s2ll(cfg.cfg("END").getS());
 		    gO->per = s2ll(cfg.cfg("PRM1").getS());
-		    //  Check for delete the archives group table
+		    //  Checking for deleting the archives group table
 		    if(maxSize() && gO->end <= (TSYS::curTime()-(int64_t)(maxSize()*86400e6))) {
-			SYS->db().at().open(addr()+"."+vTbl);
-			SYS->db().at().close(addr()+"."+vTbl, true);
+			TBDS::dataDelTbl(addr()+"."+vTbl);
 			gO->beg = gO->end = gO->per = 0;
 		    }
 		}
@@ -266,9 +264,9 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
     if(prefGrpPos < 0) prefGrpPos = accm.size();
     while((int)accm.size() <= prefGrpPos) {
 	accm.push_back(SGrp(accm.size()));
-	accm.back().tblEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
-	accm.back().tblEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
-	//accm.back().tblEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
+	accm.back().tblEl.fldAdd(new TFld("MARK",trS("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
+	accm.back().tblEl.fldAdd(new TFld("TM",trS("Time, seconds"),TFld::Integer,TCfg::Key|(tmAsStr()?TFld::DateTimeDec:0),"20"));
+	//accm.back().tblEl.fldAdd(new TFld("TMU",trS("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
     }
 
     //Place the parameter to the selected group
@@ -319,7 +317,7 @@ bool ModVArch::grpLimits( SGrp &oG, int64_t *ibeg, int64_t *iend )
     if(ibeg && iend && wEnd <= oG.end && wBeg >= oG.beg) return false;
 
     try {
-	AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(oG.pos), true);
+	AutoHD<TTable> tbl = TBDS::tblOpen(addr()+"."+archTbl(oG.pos), true);
 
 	MtxAlloc res(reqRes, true);
 
@@ -354,7 +352,7 @@ void ModVArch::grpMetaUpd( SGrp &oG, const string *aLs )
     cfg.cfg("PRM1").setS(ll2s(oG.per), true);
     if(aLs) cfg.cfg("PRM2").setS(*aLs, true);
     try {
-	SYS->db().at().dataSet(addr()+"."+mod->mainTbl(), "", cfg);
+	TBDS::dataSet(addr()+"."+mod->mainTbl(), "", cfg);
 	oG.dbOK = true;
     } catch(TError&) { oG.dbOK = false; throw; }
 }
@@ -370,7 +368,7 @@ void ModVArch::pushAccumVals( )
 	if(!oG.accmBeg || !oG.accmEnd) continue;
 
 	try {
-	    AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(iG), true);
+	    AutoHD<TTable> tbl = TBDS::tblOpen(addr()+"."+archTbl(iG), true);
 	    if(tbl.freeStat()) continue;
 
 	    TConfig	cfg(&oG.tblEl);
@@ -445,7 +443,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	TVArchivator::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
-	    "dest","select","select","/db/list","help",TMess::labDB());
+	    "dest","select","select","/db/list:onlydb","help",TMess::labStor());
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Archive size, days"),RWRWR_,"root",SARH_ID,2,
 		"tp","real", "help",_("Set to 0 to disable this limit and to rise some the performance."));
@@ -477,7 +475,9 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 
 bool ModVArch::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.name() == "V_PER" && co.getR() && co.getR() != pc.getR()) co.setR(floor(vmax(1,co.getR())));
+    if(co.name() == "V_PER" && co.getR() && co.getR() != pc.getR())
+	co.setR(floor(vmax(1,co.getR())));	//Up to seconds now for DB
+
     return TVArchivator::cfgChange(co, pc);
 }
 
@@ -488,14 +488,14 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive, iarchivator), mBeg(0), mEnd(0), mPer(0), needMeta(false)
 {
     if(!archivator().groupPrms()) {
-	reqEl.fldAdd(new TFld("MARK",_("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
-	reqEl.fldAdd(new TFld("TM",_("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
-	//reqEl.fldAdd(new TFld("TMU",_("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
+	reqEl.fldAdd(new TFld("MARK",trS("Mark, time/(10*per)"),TFld::Integer,TCfg::Key,"20"));
+	reqEl.fldAdd(new TFld("TM",trS("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
+	//reqEl.fldAdd(new TFld("TMU",trS("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
 	switch(archive().valType()) {
-	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
-	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));break;
-	    case TFld::Real:    reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::Real,TFld::NoFlag,"",r2s(EVAL_REAL).c_str()));	break;
-	    case TFld::String:  reqEl.fldAdd(new TFld("VAL",_("Value"),TFld::String,TFld::NoFlag,"1000",EVAL_STR));		break;
+	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
+	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));break;
+	    case TFld::Real:    reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Real,TFld::NoFlag,"",r2s(EVAL_REAL).c_str()));	break;
+	    case TFld::String:  reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::String,TFld::NoFlag,"1000",EVAL_STR));		break;
 	    default: break;
 	}
     }
@@ -514,11 +514,10 @@ void ModVArchEl::fullErase( )
 	//Remove info record
 	TConfig cfg(&mod->archEl());
 	cfg.cfg("TBL").setS(archTbl(), true);
-	SYS->db().at().dataDel(archivator().addr()+"."+mod->mainTbl(), "", cfg);
+	TBDS::dataDel(archivator().addr()+"."+mod->mainTbl(), "", cfg);
 
-	//Remove archive's DB table
-	SYS->db().at().open(archivator().addr()+"."+archTbl());
-	SYS->db().at().close(archivator().addr()+"."+archTbl(), true);
+	//Removing the archive DB table
+	TBDS::dataDelTbl(archivator().addr()+"."+archTbl());
     }
 }
 
@@ -579,7 +578,7 @@ void ModVArchEl::getValsProc( TValBuf &ibuf, int64_t ibegIn, int64_t iendIn )
 	tC = (tC/(10*period()))*(10*period());
 	cfg.cfg("MARK").setI(tC/(10*period()), true);
 	int eC = 0;
-	for( ; SYS->db().at().dataSeek(tblAddr,"",eC++,cfg,false,true); ) {
+	for( ; TBDS::dataSeek(tblAddr,"",eC++,cfg,TBDS::UseCache); ) {
 	    cTm = 1000000ll * cfg.cfg("TM").getI();
 	    if(cTm < ibeg || cTm > iend) continue;
 	    switch(archive().valType()) {
@@ -631,7 +630,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     cf.cfg("MARK").setI(itm/(10*period()));
     cf.cfg("TM").setI(itm/1000000);
     //cf.cfg("TMU").setI(itm%1000000);
-    if(SYS->db().at().dataGet(tblAddr,"",cf,false,true)) {
+    if(TBDS::dataGet(tblAddr,"",cf,TBDS::NoException)) {
 	if(tm) *tm = itm;
 	switch(archive().valType()) {
 	    case TFld::Boolean:	return cf.cfg(vlFld).getB();
@@ -662,7 +661,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
     TConfig cfg(&reqEl);
     if(!archivator().groupPrms()) {
 	//Table struct init
-	AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archTbl(), true);
+	AutoHD<TTable> tbl = TBDS::tblOpen(archivator().addr()+"."+archTbl(), true);
 	if(tbl.freeStat()) return 0;
 
 	//Write data to the table
@@ -706,7 +705,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	cfg.cfg("PRM1").setS(ll2s(mPer), true);
 	cfg.cfg("PRM2").setS(i2s(archive().valType(true)), true);
 
-	return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true) ? iend : 0;
+	return TBDS::dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException) ? iend : 0;
     }
 
     //The group table processing
@@ -718,14 +717,14 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t ibeg, int64_t iend, bool 
 	if(!gO->dbOK && pDt.realSize()) return 0;	//Prevent the accumulated data loss at DB errors
 	pDt = buf;
 	//Checking for freezing some first sources, at stopping the controller objects
-	if((!gO->accmBeg || !gO->accmEnd) && (TSYS::curTime()-iend) < (2*period()))	//!!!! Get 2 from Vision, WebVision trends
+	if((!gO->accmBeg || !gO->accmEnd) && (TSYS::curTime()-iend) < (2*period()))	//?!?! Get 2 from Vision, WebVision trends
 	{ gO->accmBeg = ibeg; gO->accmEnd = iend; }
 	return vmin(gO->accmEnd, iend);
     }
 
     //Direct writing to the group table
     // Table struct init
-    AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archivator().archTbl(gO->pos), true);
+    AutoHD<TTable> tbl = TBDS::tblOpen(archivator().addr()+"."+archivator().archTbl(gO->pos), true);
     if(tbl.freeStat()) return 0;
 
     cfg.setElem(&gO->tblEl);
@@ -788,14 +787,13 @@ bool ModVArchEl::readMeta( )
     //Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true)) {
+    if(TBDS::dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,TBDS::NoException)) {
 	mBeg = s2ll(cfg.cfg("BEGIN").getS());
 	mEnd = s2ll(cfg.cfg("END").getS());
 	mPer = s2ll(cfg.cfg("PRM1").getS());
-	// Check for delete archivator table
+	// Checking for deleting the archiver table
 	if(archivator().maxSize() && mEnd <= (TSYS::curTime()-(int64_t)(archivator().maxSize()*86400e6))) {
-	    SYS->db().at().open(archivator().addr()+"."+archTbl());
-	    SYS->db().at().close(archivator().addr()+"."+archTbl(), true);
+	    TBDS::dataDelTbl(archivator().addr()+"."+archTbl());
 	    mBeg = mEnd = mPer = 0;
 	}
     } else rez = false;

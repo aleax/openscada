@@ -2,7 +2,7 @@
 //!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module UI.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,13 +33,13 @@
 //************************************************
 //* Module info!                                 *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	_("UI template")
+#define MOD_NAME	trS("UI template")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
 #define MOD_VER		"0.0.1"
-#define AUTHORS		_("MyName MyFamily")
-#define DESCRIPTION	_("UI subsystem template module.")
+#define AUTHORS		trS("MyName MyFamily")
+#define DESCRIPTION	trS("UI subsystem template module.")
 #define LICENSE		"MyLicense"
 //************************************************
 
@@ -87,11 +87,11 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     //!!! Register your module's export functions. Used, for example, for call from HTTP module, and use this OpenSCADA module as HTTP user interface module.
-    //> Reg export functions
-    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
-    modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
+    // Reg export functions
+    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
+    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 }
 
 //!!! Destructor for module's root object. Append into for your need.
@@ -108,10 +108,8 @@ void TWEB::modInfo( vector<string> &list )
 }
 
 //!!! Get an append module's info attribute. In this example get attribute "SubType" for HTTP module allow bind inform.
-string TWEB::modInfo( const string &iname )
+string TWEB::modInfo( const string &name )
 {
-    string name = TSYS::strParse(iname, 0, ":");
-
     if(name == "SubType") return SUB_TYPE;
 
     return TModule::modInfo(name);
@@ -134,15 +132,15 @@ void TWEB::load_( )
 
     //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA DB or from main config-file.
     //> Load parameters from config-file
-    string trnds = TBDS::genDBGet(nodePath()+"Trends"), trnd_el;
+    string trnds = TBDS::genPrmGet(nodePath()+"Trends"), trnd_el;
     trnd_lst.clear();
     for( int el_off = 0; (trnd_el=TSYS::strSepParse(trnds,0,';',&el_off)).size(); )
 	trnd_lst.push_back(trnd_el);
-    n_col = atoi(TBDS::genDBGet(nodePath()+"n_col",TSYS::int2str(n_col)).c_str());
-    h_sz = atoi(TBDS::genDBGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());
-    v_sz = atoi(TBDS::genDBGet(nodePath()+"v_sz",TSYS::int2str(v_sz)).c_str());
-    trnd_len = atoi(TBDS::genDBGet(nodePath()+"trnd_len",TSYS::int2str(trnd_len)).c_str());
-    trnd_tm  = atoi(TBDS::genDBGet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm)).c_str());
+    n_col = atoi(TBDS::genPrmGet(nodePath()+"n_col",TSYS::int2str(n_col)).c_str());
+    h_sz = atoi(TBDS::genPrmGet(nodePath()+"h_sz",TSYS::int2str(h_sz)).c_str());
+    v_sz = atoi(TBDS::genPrmGet(nodePath()+"v_sz",TSYS::int2str(v_sz)).c_str());
+    trnd_len = atoi(TBDS::genPrmGet(nodePath()+"trnd_len",TSYS::int2str(trnd_len)).c_str());
+    trnd_tm  = atoi(TBDS::genPrmGet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm)).c_str());
 }
 
 //!!! Inherited (virtual) save object's node method. Call from OpenSCADA kernel. Append your module need data savings
@@ -153,12 +151,12 @@ void TWEB::save_( )
     string trnds;
     for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
 	trnds+=trnd_lst[i_el]+";";
-    TBDS::genDBSet(nodePath()+"Trends",trnds);
-    TBDS::genDBSet(nodePath()+"n_col",TSYS::int2str(n_col));
-    TBDS::genDBSet(nodePath()+"h_sz",TSYS::int2str(h_sz));
-    TBDS::genDBSet(nodePath()+"v_sz",TSYS::int2str(v_sz));
-    TBDS::genDBSet(nodePath()+"trnd_len",TSYS::int2str(trnd_len));
-    TBDS::genDBSet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm));
+    TBDS::genPrmSet(nodePath()+"Trends",trnds);
+    TBDS::genPrmSet(nodePath()+"n_col",TSYS::int2str(n_col));
+    TBDS::genPrmSet(nodePath()+"h_sz",TSYS::int2str(h_sz));
+    TBDS::genPrmSet(nodePath()+"v_sz",TSYS::int2str(v_sz));
+    TBDS::genPrmSet(nodePath()+"trnd_len",TSYS::int2str(trnd_len));
+    TBDS::genPrmSet(nodePath()+"trnd_tm",TSYS::int2str(trnd_tm));
 }
 
 //!!! OpenSCADA control interface comands process virtual function.
@@ -228,19 +226,16 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 }
 
 //!!! Registered export function for process GET requests from OpenSCADA transport's protocol module HTTP.
-void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars )
+void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
-    string ntrnd = TSYS::pathLev(url,0);
-    if( !ntrnd.size() )
-    {
+    string ntrnd = TSYS::pathLev(url, 0);
+    if(!ntrnd.size()) {
 	//> Make main page
 	page = w_head();
 	int i_col = 0;
 	page = page+"<table>\n";
-	for(int i_el = 0; i_el < trnd_lst.size(); i_el++ )
-	{
-	    try
-	    {
+	for(int i_el = 0; i_el < trnd_lst.size(); i_el++) {
+	    try {
 		if( (dynamic_cast<TVal*>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) &&
 		    !dynamic_cast<TVal&>(SYS->nodeAt(trnd_lst[i_el],0,'.').at()).arch().freeStat()) ||
 		    dynamic_cast<TVArchive *>(&SYS->nodeAt(trnd_lst[i_el],0,'.').at()) )
@@ -277,7 +272,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 }
 
 //!!! Registered export function for process POST requests from OpenSCADA transport's protocol module HTTP.
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &contein )
+void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
 
 }

@@ -3,7 +3,7 @@ I18N: messages
 messages:
 	@catalogs=`find ./po -name \*.po` ; \
 	name=po/$(I18N_mod).pot ; \
-	xgettext -o $$name -C --no-location --no-wrap -k_ *.{cpp,h} $(I18N_addfiles) ; \
+	xgettext -o $$name -C --no-location --no-wrap -k_ -ktrS *.{cpp,h} $(I18N_addfiles) ; \
 	if test "x$(I18N_add1)" != "x"; then xgettext --no-location -o $$name -j --no-wrap $(I18N_add1); fi; \
 	for cat in $$catalogs; do \
 	  msgmerge -U $$cat $$name ; \

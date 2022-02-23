@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfg file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,13 +31,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"WebCfg"
-#define MOD_NAME	_("Program configurator (WEB)")
+#define MOD_NAME	trS("Program configurator (WEB)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.8.2"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the WEB-based configurator of the OpenSCADA.")
+#define MOD_VER		"2.0.0"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the WEB-based configurator of the OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -78,10 +78,10 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 
     //Reg export functions
-    modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet));
-    modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost));
+    modFuncReg(new ExpFunc("void HTTP_GET(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"GET command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_GET));
+    modFuncReg(new ExpFunc("void HTTP_POST(const string&,string&,vector<string>&,const string&,TProtocolIn*);",
+	"POST command processing from HTTP protocol!",(void(TModule::*)( )) &TWEB::HTTP_POST));
 
     //Default CSS init
     mCSStables =
@@ -138,11 +138,11 @@ string TWEB::pgHead( string head_els )
 	head_els+
 	"  <link rel='shortcut icon' href='/" SUI_ID "." MOD_ID ".png' type='image' />\n"
 	// "  <link rel='shortcut icon' href='/" MOD_ID "/ico' type='image' />\n"
-	"  <title>" PACKAGE_NAME ". " + _(MOD_NAME) + "</title>\n"
+	"  <title>" PACKAGE_NAME ". " + _(mod->modInfo("Name")) + "</title>\n"
 	"  <style type='text/css'>\n" + mCSStables + "</style>\n"
 	"</head>\n"
 	"<body>\n"
-	"<h1 class='head'>" PACKAGE_NAME ". " + _(MOD_NAME) + "</h1>\n"
+	"<h1 class='head'>" PACKAGE_NAME ". " + _(mod->modInfo("Name")) + "</h1>\n"
 	"<hr size='3'/><br/>\n";
 }
 
@@ -151,14 +151,18 @@ string TWEB::pgTail( )
     return "<hr size='3'/>\n</body>\n</html>";
 }
 
-void TWEB::HttpGet( const string &urli, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string,string>::iterator prmEl;
-    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),sender,user,vars,"");
+    SSess ses(TSYS::strDecode(urli,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, "");
+
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
+
     ses.page = pgHead();
 
     try {
-	string zero_lev = TSYS::pathLev(ses.url,0);
+	string zero_lev = TSYS::pathLev(ses.url, 0);
 	//Get about module page
 	if(zero_lev == "about")	getAbout(ses);
 	//Get module icon and global image
@@ -170,13 +174,13 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	}
 	else {
 	    ses.pg_info.setName("info");
-	    ses.pg_info.setAttr("path",ses.url)->setAttr("user",ses.user);
+	    ses.pg_info.setAttr("path", ses.url)->setAttr("user", ses.user);
 	    if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
 	    ses.root = ses.pg_info.childGet(0);
 
 	    if(ses.root->name()=="img") {
 		// Transfer page image
-		XMLNode req("get"); req.setAttr("path",ses.url)->setAttr("user",ses.user);
+		XMLNode req("get"); req.setAttr("path", ses.url)->setAttr("user", ses.user);
 		if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
 		ses.page=TSYS::strDecode(req.text(),TSYS::base64);
 		page = httpHead("200 OK",ses.page.size(),string("image/")+req.attr("tp"))+ses.page;
@@ -186,11 +190,11 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		prmEl = ses.prm.find("com");
 		string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
 		if(wp_com == "load") {
-		    XMLNode reqc("load"); reqc.setAttr("path",ses.url+"/%2fobj")->setAttr("user",ses.user);
+		    XMLNode reqc("load"); reqc.setAttr("path", ses.url+"/%2fobj")->setAttr("user", ses.user);
 		    cntrIfCmd(reqc);
 		}
 		else if(wp_com == "save") {
-		    XMLNode reqc("save"); reqc.setAttr("path",ses.url+"/%2fobj")->setAttr("user",ses.user);
+		    XMLNode reqc("save"); reqc.setAttr("path", ses.url+"/%2fobj")->setAttr("user", ses.user);
 		    cntrIfCmd(reqc);
 		}
 		// Get area
@@ -208,33 +212,41 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
     colontDown( ses );
     ses.page += pgTail();
 
-    page = httpHead("200 OK",ses.page.size())+ses.page;
+    page = httpHead("200 OK",ses.page.size()) + ses.page;
 }
 
 void TWEB::getAbout( SSess &ses )
 {
-    ses.page = ses.page+"<center>\n"
+    string mess = string("<center>\n")+
 	"<table class='work'>\n"
 	"<tr><th>"+MOD_ID+" v"+MOD_VER+"</th></tr>\n"
 	"<tr><td class='content'>\n"
 	"<table border='0px' cellspacing='3px'>\n"
-	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(MOD_NAME)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Description: ")+"</TD><TD>"+_(DESCRIPTION)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+_(LICENSE)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(AUTHORS)+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(mod->modInfo("Name"))+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Description: ")+"</TD><TD>"+_(mod->modInfo("Description"))+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+mod->modInfo("License")+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(mod->modInfo("Author"))+"</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR>\n</table><br/>\n"
 	"<table class='work'>\n"
 	"<TR><th>"+PACKAGE+" v"+VERSION+"</th></TR>\n"
 	"<TR><TD class='content'>\n"
 	"<table border='0px' cellspacing='3px'>\n"
-	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>"+_(PACKAGE_DESCR)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>"+PACKAGE_LICENSE+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>"+_(PACKAGE_AUTHOR)+"</TD></TR>\n"
-	"<TR><TD style='color: blue;'>"+_("Web site: ")+"</TD><TD>"+PACKAGE_SITE+"</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Name: ")+"</TD><TD>%s</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("License: ")+"</TD><TD>%s</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Author: ")+"</TD><TD>%s</TD></TR>\n"
+	"<TR><TD style='color: blue;'>"+_("Web site: ")+"</TD><TD>%s</TD></TR>\n"
 	"</table>\n"
 	"</TD></TR></table><br/>\n"
 	"</center>\n";
+
+#undef _
+#define _(mess) Mess->I18N(mess).c_str()
+
+    ses.page += TSYS::strMess(mess.c_str(),_(PACKAGE_DESCR),PACKAGE_LICENSE,_(PACKAGE_AUTHOR),PACKAGE_SITE);
+
+#undef _
+#define _(mess) mod->I18N(mess).c_str()
 }
 
 void TWEB::getHead( SSess &ses )
@@ -243,14 +255,14 @@ void TWEB::getHead( SSess &ses )
 
     ses.page += "<table class='page_head'><tr>\n"
 	"<td class='tool'>\n"
-	"<a href='" + path + "?com=load' title='" + _("Load") + "'><img src='/" MOD_ID "/img_load' alt='" + _("Load") + "'/></a>\n"
-	"<a href='" + path + "?com=save' title='" + _("Save")+"'><img src='/" MOD_ID "/img_save' alt='" + _("Save") + "'/></a>\n"
+	"<a href='" + path+(ses.gPrms.size()?ses.gPrms+"&":"?")+"com=load' title='" + _("Load") + "'><img src='/" MOD_ID "/img_load' alt='" + _("Load") + "'/></a>\n"
+	"<a href='" + path+(ses.gPrms.size()?ses.gPrms+"&":"?")+"com=save' title='" + _("Save")+"'><img src='/" MOD_ID "/img_save' alt='" + _("Save") + "'/></a>\n"
 	"<img src='/" MOD_ID "/img_line'/>\n"
-	"<a href='/" MOD_ID "' title='" + _("Root page") + "'><img src='/" MOD_ID "/img_gohome' alt='" + _("Root page") + "'/></a>\n"
-	"<a href='" + path + "' title='" + _("Current page") + "'><img src='/" MOD_ID "/img_reload' alt='" +_("Curent page") + "'/></a>\n"
-	"<a href='" + path.substr(0,path.rfind("/")) + "' title='" + _("Previous page") + "'><img src='/" MOD_ID "/img_up' alt='" + _("Previous page") + "'/></a>\n"
+	"<a href='/" MOD_ID+ses.gPrms + "' title='" + _("Root page") + "'><img src='/" MOD_ID "/img_gohome' alt='" + _("Root page") + "'/></a>\n"
+	"<a href='" + path+ses.gPrms + "' title='" + _("Current page") + "'><img src='/" MOD_ID "/img_reload' alt='" +_("Curent page") + "'/></a>\n"
+	"<a href='" + path.substr(0,path.rfind("/"))+ses.gPrms + "' title='" + _("Previous page") + "'><img src='/" MOD_ID "/img_up' alt='" + _("Previous page") + "'/></a>\n"
 	"<img src='/" MOD_ID "/img_line'/>\n"
-	"<a href='/" MOD_ID "/about' title='" + _("About") + "'><img src='/" MOD_ID "/img_help' alt='" + _("About") + "'/></a>\n"
+	"<a href='/" MOD_ID "/about"+ses.gPrms + "' title='" + _("About") + "'><img src='/" MOD_ID "/img_help' alt='" + _("About") + "'/></a>\n"
 	"</td>\n"
 	"<td>";
     if(ses.root->childGet("id","ico",true))
@@ -258,7 +270,7 @@ void TWEB::getHead( SSess &ses )
     ses.page += "<h2 class='title'>"+TSYS::strEncode(ses.root->attr("dscr"),TSYS::Html)+"</h2></td>\n"
 	"<td class='user'"+((ses.user=="root")?" bgcolor='red'":" bgcolor='LawnGreen'")+">"+
 	_("user:")+" <b>"+ses.user+"</b><br/>"+_("from:")+" <b>"+ses.sender+"</b><br/>\n"
-	"(<a href='/login"+path+"'>"+_("Change")+"</a>, <a href='/logout'>"+_("Exit")+"</a>)\n"
+	"(<a href='/login"+path+ses.gPrms+"'>"+_("Change")+"</a>, <a href='/logout"+ses.gPrms+"'>"+_("Exit")+"</a>)\n"
 	"</tr></table><br/>\n";
 }
 
@@ -290,7 +302,7 @@ void TWEB::getArea( SSess &ses, XMLNode &node, string a_path )
 		XMLNode *t_c = t_s->childGet(i_el);
 		if(t_c->name() == "fld") {
 		    // First element
-		    if((c_cfg++) == 0)	ses.page += "<form action='"+path+"' method='post' enctype='multipart/form-data'>\n<table><tbody>\n";
+		    if((c_cfg++) == 0)	ses.page += "<form action='"+path+ses.gPrms+"' method='post' enctype='multipart/form-data'>\n<table><tbody>\n";
 		    // Start full element
 		    if(t_c->attr("dscr").size()) {
 			if(f_open) ses.page += "</td></tr>";
@@ -348,7 +360,7 @@ void TWEB::getCmd( SSess &ses, XMLNode &node, string a_path )
 {
     string path = string("/")+MOD_ID+ses.url;
 
-    ses.page += "<form action='"+path+"' method='post' enctype='multipart/form-data'>\n"
+    ses.page += "<form action='"+path+ses.gPrms+"' method='post' enctype='multipart/form-data'>\n"
 	"<input type='submit' name='comm:"+a_path+"' value='"+TSYS::strEncode(node.attr("dscr"),TSYS::Html)+"'/>\n";
     int f_cfg=0;
     for(unsigned i_el=0; i_el < node.childSize(); i_el++) {
@@ -472,7 +484,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 	}
     }
     else if(node.name() == "list") {
-	if(node.attr("tp") == "br" || wr) ses.page += "<form action='"+path+"' method='post' enctype='multipart/form-data'>\n";
+	if(node.attr("tp") == "br" || wr) ses.page += "<form action='"+path+ses.gPrms+"' method='post' enctype='multipart/form-data'>\n";
 
 	XMLNode req("get");
 	req.setAttr("path",ses.url+"/"+TSYS::strEncode(a_path, TSYS::PathEl))->setAttr("user",ses.user);
@@ -523,7 +535,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 	if(node.attr("tp") == "br" || wr) ses.page += "</form>\n";
     }
     else if(node.name() == "table") {
-	if(wr) ses.page += "<form action='"+path+"' method='post' enctype='multipart/form-data'>\n";
+	if(wr) ses.page += "<form action='"+path+ses.gPrms+"' method='post' enctype='multipart/form-data'>\n";
 
 	XMLNode req("get");
 	req.setAttr("path",ses.url+"/"+TSYS::strEncode(a_path, TSYS::PathEl))->setAttr("user",ses.user);
@@ -643,16 +655,19 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
     return wr;
 }
 
-void TWEB::HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
+void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, const string &user, TProtocolIn *iprt )
 {
     map<string, string>::iterator cntEl;
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, page);
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), TSYS::strLine(iprt->srcAddr(),0), user, vars, page);
+
+    TrCtxAlloc trCtx;
+    if(Mess->translDyn()) trCtx.hold(ses.user+"\n"+ses.lang);
 
     //Commands process
     ses.page = pgHead();
     try {
 	ses.pg_info.setName("info");
-	ses.pg_info.setAttr("path",ses.url)->setAttr("user",ses.user);
+	ses.pg_info.setAttr("path", ses.url)->setAttr("user", ses.user);
 	if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
 	ses.root = ses.pg_info.childGet(0);
 
@@ -670,7 +685,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    if(!(kz&0x01)) messPost(ses.page,nodePath(),_("The post request is broken!"),TWEB::Error);
 	    else if(!(kz&0x02)) {
 		ses.pg_info.setName("info");
-		ses.pg_info.setAttr("path",ses.url)->setAttr("user",ses.user);
+		ses.pg_info.setAttr("path", ses.url)->setAttr("user", ses.user);
 		if(cntrIfCmd(ses.pg_info)) throw TError(ses.pg_info.attr("mcat").c_str(),"%s",ses.pg_info.text().c_str());
 		ses.root = ses.pg_info.childGet(0);
 		getHead(ses);
@@ -682,7 +697,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     colontDown(ses);
     ses.page += pgTail();
 
-    page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
+    page = httpHead("200 OK",ses.page.size(),"text/html") + ses.page;
 }
 
 int TWEB::postArea( SSess &ses, XMLNode &node, const string &prs_comm, int level )
@@ -745,7 +760,7 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 
 	    mess_info(nodePath().c_str(),_("%s| Went to the link '%s'"),ses.user.c_str(),url.c_str());
 
-	    ses.page += "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
+	    ses.page += "<meta http-equiv='Refresh' content='0; url="+url+ses.gPrms+"'>\n";
 	    messPost(ses.page, nodePath(), TSYS::strMess(_("Went to '%s'."),url.c_str()), TWEB::Info);
 	    return 0x01|0x02;  //No error. That no draw current page
 	}
@@ -826,7 +841,8 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 
 	//printf("GO URL: %s\n",url.c_str());
 
-	ses.page += "<meta http-equiv='Refresh' content='0; url="+url+"'/>\n";
+	ses.page += "<meta http-equiv='Refresh' content='0; url="+url+ses.gPrms+"'/>\n";
+
 	messPost(ses.page, nodePath(), TSYS::strMess(_("Went to '%s'."),url.c_str()), TWEB::Info);
 	return 0x01|0x02;  //No error. That no draw current page
     }
@@ -1109,7 +1125,7 @@ string TWEB::cntGet( SSess &ses, const string &nm )
 //* SSess                                         *
 //*************************************************
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
-    url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
+    url(iurl), sender(isender), user(TSYS::strLine(iuser,0)), content(icontent), vars(ivars)
 {
     //URL parameters parse
     size_t prmSep = iurl.find("?");
@@ -1119,8 +1135,19 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	string sprm;
 	for(int iprm = 0; (sprm=TSYS::strSepParse(prms,0,'&',&iprm)).size(); )
 	    if((prmSep=sprm.find("=")) == string::npos) prm[sprm] = "true";
-	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
+	    else {
+		prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
+		if(sprm.substr(0,prmSep) == "lang") gPrms += (gPrms.size()?"&":"") + sprm;
+	    }
     }
+    if(gPrms.size()) gPrms = "?" + gPrms;
+
+    //Get language
+    for(size_t iVr = 0; iVr < vars.size(); iVr++)
+	if(TSYS::strParse(vars[iVr],0,":") == "oscd_lang") {
+	    lang = sTrm(TSYS::strParse(vars[iVr],1,":"));
+	    break;
+	}
 
     //Content parse
     string boundary;
@@ -1159,9 +1186,6 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     }
 }
 
-#undef _
-#define _(mess) mod->I18N(mess, lang.c_str())
-
 void TWEB::modInfo( vector<string> &list )
 {
     TModule::modInfo(list);
@@ -1169,19 +1193,10 @@ void TWEB::modInfo( vector<string> &list )
     list.push_back("Auth");
 }
 
-string TWEB::modInfo( const string &iname )
+string TWEB::modInfo( const string &name )
 {
-    string  name = TSYS::strParse(iname, 0, ":"),
-	    lang = TSYS::strParse(iname, 1, ":");
-
     if(name == "SubType")	return SUB_TYPE;
     if(name == "Auth")		return "1";
-
-    if(lang.size()) {
-	if(name == "Name")	return MOD_NAME;
-	if(name == "Author")	return AUTHORS;
-	if(name == "Description") return DESCRIPTION;
-    }
 
     return TModule::modInfo(name);
 }

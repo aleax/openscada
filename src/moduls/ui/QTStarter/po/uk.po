@@ -498,7 +498,7 @@ msgid "Style Sheets"
 msgstr "Таблиця Стилів"
 
 msgid "Hold when overloaded to another project."
-msgstr "Утримувати при перевантажені до іншого проекту."
+msgstr "Утримувати при перевантажені до іншого проєкту."
 
 msgid "Loading the module."
 msgstr "Завантаження модуля."
@@ -624,7 +624,7 @@ msgid "<Read back>"
 msgstr "<Прочитати назад>"
 
 msgid "OpenSCADA Project: %1"
-msgstr "OpenSCADA Проект: %1"
+msgstr "OpenSCADA Проєкт: %1"
 
 msgid "Exit the program"
 msgstr "Вихід з програми"
@@ -633,7 +633,7 @@ msgid "Qt-starter of OpenSCADA"
 msgstr "Qt-пускач OpenSCADA"
 
 msgid "Project: %1"
-msgstr "Проект: %1"
+msgstr "Проєкт: %1"
 
 msgid "OpenSCADA start"
 msgstr "Запуск OpenSCADA"
@@ -699,40 +699,40 @@ msgstr ""
 "Ліцензія: %7"
 
 msgid "Projects of OpenSCADA"
-msgstr "Проекти OpenSCADA"
+msgstr "Проєкти OpenSCADA"
 
 msgid "List of allowed to call/switch projects of OpenSCADA"
-msgstr "Перелік проектів OpenSCADA доступних для виклику/переключення"
+msgstr "Перелік проєктів OpenSCADA доступних для виклику/переключення"
 
 msgid "The list for call and switch to allowed projects of OpenSCADA."
-msgstr "Перелік проектів OpenSCADA доступних для виклику та переключення."
+msgstr "Перелік проєктів OpenSCADA доступних для виклику та переключення."
 
 msgid "Switch to the selected project"
-msgstr "Переключитися на обраний проект"
+msgstr "Переключитися на обраний проєкт"
 
 msgid "Call the selected project"
-msgstr "Викликати обраний проект"
+msgstr "Викликати обраний проєкт"
 
 msgid "The button for switch to the selected project."
-msgstr "Кнопка для переключення на обраний проект."
+msgstr "Кнопка для переключення на обраний проєкт."
 
 msgid "The button for call the selected project."
-msgstr "Кнопка для виклику обраного проекту."
+msgstr "Кнопка для виклику обраного проєкту."
 
 msgid "Create/update project"
-msgstr "Створити/оновити проект"
+msgstr "Створити/оновити проєкт"
 
 msgid ""
 "New projects creating or updating of presented ones, like to desktop links"
 msgstr ""
-"Створення нових проектів або оновлення наявних, на кшталт посилань робочої "
+"Створення нових проєктів або оновлення наявних, на кшталт посилань робочої "
 "стільниці"
 
 msgid ""
 "The button for new projects creating or updating of presented ones, like to "
 "desktop links."
 msgstr ""
-"Кнопка створення нових проектів або оновлення наявних, на кшталт посилань "
+"Кнопка створення нових проєктів або оновлення наявних, на кшталт посилань "
 "робочої стільниці"
 
 msgid "The button for exit the program."
@@ -779,31 +779,31 @@ msgid "No manual '%1' found offline or online!"
 msgstr "Не знайдено підручника '%1' локально та у мережі!"
 
 msgid "New project or project to update"
-msgstr "Новий проект або проект для оновлення"
+msgstr "Новий проєкт або проєкт для оновлення"
 
 msgid "Project name for new one creating or to update present one:"
-msgstr "Ім'я проекту для створення нового або оновлення існуючого:"
+msgstr "Ім'я проєкту для створення нового або оновлення існуючого:"
 
 msgid "Empty name of the project is unavailable!"
-msgstr "Порожне ім'я проекту недозволене!"
+msgstr "Порожне ім'я проєкту недозволене!"
 
 msgid "Switch project"
-msgstr "Переключити проект"
+msgstr "Переключити проєкт"
 
 msgid "Do you really want to change the current project \"%1\" to \"%2\"?"
-msgstr "Ви дійсно бажаєте змінити поточний проект \"%1\" на \"%2\"?"
+msgstr "Ви дійсно бажаєте змінити поточний проєкт \"%1\" на \"%2\"?"
 
 msgid "Call project"
-msgstr "Викликати проект"
+msgstr "Викликати проєкт"
 
 msgid "Project \"%1\" seems running now! You still want to switch the project?"
-msgstr "Проект \"%1\" схоже виконується! Ви ще бажаєте переключити проект?"
+msgstr "Проєкт \"%1\" схоже виконується! Ви ще бажаєте переключити проєкт?"
 
 msgid "Project \"%1\" seems running now! You still want to call the project?"
-msgstr "Проект \"%1\" схоже виконується! Ви ще бажаєте викликати проект?"
+msgstr "Проєкт \"%1\" схоже виконується! Ви ще бажаєте викликати проєкт?"
 
 msgid "Project \"%1\" seems wrong or broken!"
-msgstr "Проект \"%1\" схоже помилковий або зламаний!"
+msgstr "Проєкт \"%1\" схоже помилковий або зламаний!"
 
 msgid "BackUp"
 msgstr "Зарезервувати"
@@ -812,10 +812,10 @@ msgid "Restore from \"%1\""
 msgstr "Відновити із \"%1\""
 
 msgid "Remove project"
-msgstr "Видалити проект"
+msgstr "Видалити проєкт"
 
 msgid "Do you really want to remove the project \"%1\"?"
-msgstr "Ви дійсно бажаєте видалити проект \"%1\"?"
+msgstr "Ви дійсно бажаєте видалити проєкт \"%1\"?"
 
 #, c-format
 msgid "Untranslated Qt message: '%s'"

@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.MySQL file: my_sql.h
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,7 +27,9 @@
 #include <tbds.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using namespace OSCADA;
@@ -43,15 +45,18 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable( string name, MBD *iown, vector< vector<string> > *tblStrct = NULL );
+	MTable( string name, MBD *iown, vector<TStrIt> *tblStrct = NULL );
 	~MTable( );
 
-	//> Field's functions
 	void fieldStruct( TConfig &cfg );
-	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" );
-	void fieldGet( TConfig &cfg );
-	void fieldSet( TConfig &cfg );
-	void fieldDel( TConfig &cfg );
+	bool fieldSeek( int row, TConfig &cfg, const string &cacheKey = "" )
+	{ return fieldSQLSeek(row, cfg, cacheKey); }
+	void fieldGet( TConfig &cfg )	{ fieldSQLGet(cfg); }
+	void fieldSet( TConfig &cfg )	{ fieldSQLSet(cfg); }
+	void fieldDel( TConfig &cfg )	{ fieldSQLDel(cfg); }
+
+	void fieldFix( TConfig &cfg, const string &langLs = "" );
+	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 
 	MBD &owner( ) const;
 
@@ -59,18 +64,12 @@ class MTable : public TTable
 	//Private methods
 	void postDisable( int flag );
 	bool isEmpty( );
-	void fieldFix( TConfig &cfg, bool trPresent = false );
-	void fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt = 1 );
 
-	string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
-	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
+	string getSQLVal( TCfg &cfg, uint8_t RqFlg = 0 );
+	void   setSQLVal( TCfg &cfg, const string &vl, bool tr = false );
 
 	string UTCtoSQL( time_t val );
 	time_t SQLtoUTC( const string &val );
-
-	//Private attributes
-	vector< vector<string> > tblStrct;
-	map<string, vector< vector<string> > >	seekSess;
 };
 
 //************************************************
@@ -96,6 +95,8 @@ class MBD : public TBD
 	void transCommit( );
 	void transCloseCheck( );
 
+	void getStructDB( const string &nm, vector<TTable::TStrIt> &tblStrct );
+
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -112,7 +113,6 @@ class MBD : public TBD
 	int	reqCnt;
 	int64_t	reqCntTm, trOpenTm;
 	MYSQL	connect;
-	ResMtx	connRes;
 };
 
 //************************************************
@@ -124,6 +124,9 @@ class BDMod: public TTypeBD
 	//Public methods
 	BDMod( string name );
 	~BDMod( );
+
+	int lsPr( )	{ return 5; }
+	string features( );
 
     private:
 	//Private methods

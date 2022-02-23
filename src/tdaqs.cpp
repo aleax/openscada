@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,36 +32,36 @@ using namespace OSCADA;
 //*************************************************
 //* TDAQS                                         *
 //*************************************************
-TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data Acquisition"),true), mElErr("Error"), mRdRestDtTm(1)
+TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID, true), mElErr("Error"), mRdRestDtTm(1)
 {
     mTmpLib = grpAdd("tmplb_");
 
     //Templates lib db structure
-    mElLib.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mElLib.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mElLib.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    mElLib.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
+    mElLib.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mElLib.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mElLib.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    mElLib.fldAdd(new TFld("DB",trS("Data base"),TFld::String,TFld::NoFlag,"30"));	//????[v1.0] Remove
 
     //Template DB structure
-    mElTmpl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mElTmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mElTmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
-    mElTmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
-    mElTmpl.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    mElTmpl.fldAdd(new TFld("PROGRAM",_("Procedure"),TFld::String,TFld::TransltText,"1000000"));
-    mElTmpl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    mElTmpl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mElTmpl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mElTmpl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"1000"));
+    mElTmpl.fldAdd(new TFld("MAXCALCTM",trS("Maximum calculate time, seconds"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
+    mElTmpl.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mElTmpl.fldAdd(new TFld("PROGRAM",trS("Procedure"),TFld::String,TFld::TransltText,"1000000"));
+    mElTmpl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //Parameter template IO DB structure
-    mElTmplIO.fldAdd(new TFld("TMPL_ID",_("Template identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mElTmplIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
-    mElTmplIO.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mElTmplIO.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
-    mElTmplIO.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
-    mElTmplIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"50"));
-    mElTmplIO.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
+    mElTmplIO.fldAdd(new TFld("TMPL_ID",trS("Template identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mElTmplIO.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
+    mElTmplIO.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mElTmplIO.fldAdd(new TFld("TYPE",trS("Value type"),TFld::Integer,TFld::NoFlag,"1"));
+    mElTmplIO.fldAdd(new TFld("FLAGS",trS("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    mElTmplIO.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"50"));
+    mElTmplIO.fldAdd(new TFld("POS",trS("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 
     //Error attributes
-    mElErr.fldAdd(new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead));
+    mElErr.fldAdd(new TFld("err",trS("Error"),TFld::String,TFld::NoWrite|TVal::DirRead));
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(objName(), 1);
 }
@@ -132,7 +132,7 @@ void TDAQS::load_( )
 
     map<string, bool>	itReg;
 
-    //Load templates libraries of parameter
+    //Loading the template libraries of the DAQ-parameter
     try {
 	// Search and create new libraries
 	TConfig cEl(&elLib());
@@ -140,14 +140,14 @@ void TDAQS::load_( )
 	vector<string> dbLs;
 
 	// Search into DB
-	SYS->db().at().dbList(dbLs, true);
-	dbLs.push_back(DB_CFG);
+	TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-	    for(int libCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,false,true); ) {
-		string l_id = cEl.cfg("ID").getS();
-		if(!tmplLibPresent(l_id)) tmplLibReg(new TPrmTmplLib(l_id.c_str(),"",(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]));
-		tmplLibAt(l_id).at().load(&cEl);
-		itReg[l_id] = true;
+	    for(int libCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+tmplLibTable(),nodePath()+"tmplib",libCnt++,cEl,TBDS::UseCache); ) {
+		string lId = cEl.cfg("ID").getS();
+		if(!tmplLibPresent(lId)) tmplLibReg(new TPrmTmplLib(lId.c_str(),"",dbLs[iIt]));
+		if(tmplLibAt(lId).at().DB() == dbLs[iIt]) tmplLibAt(lId).at().load(&cEl);
+		tmplLibAt(lId).at().setDB(dbLs[iIt], true);
+		itReg[lId] = true;
 	    }
 
 	//  Check for remove items removed from DB
@@ -162,7 +162,7 @@ void TDAQS::load_( )
 	mess_sys(TMess::Error, _("Error loading template libraries."));
     }
 
-    //Load parameters
+    //Loading the DAQ-controller objects
     try {
 	AutoHD<TTypeDAQ> wmod;
 	vector<string> modLs, dbLs;
@@ -174,15 +174,15 @@ void TDAQS::load_( )
 	    //gCfg.cfgViewAll(false);
 	    itReg.clear();
 
-	    // Search into DB and create new controllers
-	    SYS->db().at().dbList(dbLs, true);
-	    dbLs.push_back(DB_CFG);
+	    // Search into the storage and create new controller objects
+	    TBDS::dbList(dbLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	    for(unsigned iIt = 0; iIt < dbLs.size(); iIt++)
-		for(int fldCnt = 0; SYS->db().at().dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,false,true); ) {
+		for(int fldCnt = 0; TBDS::dataSeek(dbLs[iIt]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fldCnt++,gCfg,TBDS::UseCache); ) {
 		    string mId = gCfg.cfg("ID").getS();
 		    try {
-			if(!wmod.at().present(mId)) wmod.at().add(mId,(dbLs[iIt]==SYS->workDB())?"*.*":dbLs[iIt]);
-			wmod.at().at(mId).at().load(&gCfg);
+			if(!wmod.at().present(mId)) wmod.at().add(mId, dbLs[iIt]);
+			if(wmod.at().at(mId).at().DB() == dbLs[iIt]) wmod.at().at(mId).at().load(&gCfg);
+			wmod.at().at(mId).at().setDB(dbLs[iIt], true);
 			itReg[mId] = true;
 		    } catch(TError &err) {
 			mess_err(err.cat.c_str(), "%s", err.mess.c_str());
@@ -199,7 +199,7 @@ void TDAQS::load_( )
     } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //Load parameters from the config-file and SYS DB
-    setRdRestDtTm(s2r(TBDS::genDBGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
+    setRdRestDtTm(s2r(TBDS::genPrmGet(nodePath()+"RdRestDtTm",r2s(rdRestDtTm()))));
 }
 
 void TDAQS::load__( )
@@ -215,10 +215,10 @@ void TDAQS::load__( )
 void TDAQS::save_( )
 {
     //Save parameters to SYS DB
-    TBDS::genDBSet(nodePath()+"RdRestDtTm", r2s(rdRestDtTm()));
+    TBDS::genPrmSet(nodePath()+"RdRestDtTm", r2s(rdRestDtTm()));
 }
 
-TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // TCntrNodeObj daqAt(string path, string sep = "", waitForAttr = true) - attaches to a DAQ node (controller object, parameter, attribute) in the ''path''
     //		or the separated string by the separator ''sep'', from the DAQ-subsystem. Check for an attribute in the path last element, at ''waitForAttr''.
@@ -227,7 +227,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     //  waitForAttr - wait for an attribute or other
     if(iid == "daqAt" && prms.size() >= 1) {
 	AutoHD<TCntrNode> nd = daqAt(prms[0].getS(), (prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0, true, (prms.size()>=3)?prms[2].getB():true);
-	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user));
+	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user_lang));
     }
     // bool funcCall(string progLang, TVarObj args, string prog, string fixId = "", string err = "") -
     //    Call function text <prog> whith arguments <args> for program language <progLang>
@@ -279,7 +279,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		}
 	    }
 	    //Prepare and execute
-	    TValFunc wCtx("UserFunc", &wFnc.at(), true, user);
+	    TValFunc wCtx("UserFunc", &wFnc.at(), true, TSYS::strLine(user_lang,0));
 
 	    // Load values
 	    for(unsigned iA = 0; iA < als.size(); iA++)
@@ -324,7 +324,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	return false;
     }
 
-    return TCntrNode::objFuncCall(iid, prms, user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TDAQS::unload( )
@@ -494,7 +494,7 @@ bool TDAQS::rdProcess( XMLNode *reqSt )
 	AutoHD<TController> cntr = at(TSYS::strParse(cls[iC],0,".")).at().at(TSYS::strParse(cls[iC],1,"."));
 
 	// Process remote run controllers, before the redundancy status change
-	// !!!!: Moved here from the end
+	// !!!! Moved here from the end
 	if(cntr.at().startStat() && cntr.at().redntUse()) cntr.at().redntDataUpdate();
 
 	// Check contoller run plane
@@ -587,7 +587,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //Service commands process
-    if(a_path == "/serv/redundant") {	//Redundant service requests
+    // Redundant service requests
+    if(a_path == "/serv/redundant") {
 	if(ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD)) {	//State
 	    opt->setAttr("inProc", "1");
 	    opt->setAttr("StLevel",i2s(SYS->rdStLevel()));
@@ -602,8 +603,11 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    return;
 	}
     }
-    else if(a_path == "/serv/PrmAttr" && ctrChkNode(opt,"list",RWRWR_,"root",SDAQ_ID,SEC_RD))	//Parameter and/or attributes list-browse
+    // Parameter and/or attributes list-browse
+    else if(a_path == "/serv/PrmAttr" && ctrChkNode(opt,"list",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	ctrListPrmAttr(opt, opt->attr("base"), s2i(opt->attr("toPrm")), opt->attr("sep")[0], opt->attr("pref"));
+	return;
+    }
 
     //Get page info
     if(opt->name() == "info") {
@@ -636,7 +640,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    tmplLibList(lst);
 	    for(unsigned iA = 0; iA < lst.size(); iA++)
-		opt->childAdd("el")->setAttr("id",lst[iA])->setText(tmplLibAt(lst[iA]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[iA])->setText(trD(tmplLibAt(lst[iA]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	    tmplLibReg(new TPrmTmplLib(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str(),"*.*"));

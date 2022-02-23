@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Quick start</h1>
@@ -95,6 +95,7 @@
 <li> filter parameters;</li>
 <li> parameters of the scale specifics, determining the authenticity, format of presentation and more.</li></ul></li>
 <li> <i>Data model</i> — organization and structuring of the technological process (TP) data or other automation object in the layer of SCADA data source, protocol or PLC. By default, this means <a href="Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">OpenSCADA data source layer</a> with the structure "Controller object" -&gt; "Parameter, Level 1" -&gt; ... "Parameter, Level N" -&gt; "Attribute of value - signal".</li>
+<li> <i>Generic Storage</i> — the primary storage of OpenSCADA pointed as "<b>*.*</b>" and designed for combination the Configuration File and the <a href="Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">work Data Base</a> in single storage of the generic OpenSCADA data. Where the Configuration File is primary for the data already existing there, ie their changes, and everything new is created in the Data Base.</li>
 <li> <i>Project</i> — this term has many meanings and, depending on the context, may be implied:
 <ul><li> <i>OpenSCADA project (program)</i> — free software, the documentation of which you are reading now.</li>
 <li> <a href="Program_manual.html#Projects" title="Special:MyLanguage/Documents/Program manual">Specified set-folder of the configuration and data</a> that are created by the user of OpenSCADA, where the configuration is stored in the configuration file (required) and one or more DB files (optionally and maybe online). For example — a demonstration project, simulator of the TP "AGLKS". That is, the author of the project is the user of the program — the engineer-developer or programmer of the SCADA system.</li>
@@ -301,24 +302,30 @@ $ openscada_AGLKS</pre>
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Close the program through the appropriate menu item "File", which must be made obligatory, otherwise its further background launch will not be able to open ports already busied by this program.
 </p>
 <h3><span class="mw-headline" id="Background_and_remote_execution_.E2.80.94_server.2C_PLC_execution_environment_and_remote_development"><span class="mw-headline-number">3.2</span> <span id="Demon" title="#Demon">Background and remote execution — server, PLC execution environment and remote development</span></span></h3>
-<p>As you will see right now, there are no problems and needs of any additional configuration or addition of the existing configuration, demo one in our case, to run it in the background mode (demon mode) with the provision of server functions.
-</p><p>To run OpenSCADA in the background, we need to install the <b>openscada-server</b> package as described in <a href="#Installation">the installation part</a> and which will already be set in the case of <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">the live disk</a>. After the installing this package, we have to do the following steps, in the console terminal (for example, the program "konsole" in the live disk environment at the Alt+F2 startup dialog) and from the superuser:
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> All the console operations you can do in a console terminal, for example, the program "konsole" in the Live Disk environment at the Alt+F2 startup dialog. And the "{HOME}" folder here is "<b>/home/user</b>".
+</p><p>The OpenSCADA project organisation in a separate folder makes it easy to run ready-made projects in the service space — execution in the background, as well as further update and maintenance of this project without direct remote control. In fact, you can develop a project locally by keeping its folder in the user's work folder (typically "{HOME}/.openscada"), and to run in the service space just copy or package, transfer to a remote work device and unpack into the system work folder (default "/usr/share/openscada").
+</p><p>Service-background execution of programs in Linux is serviced by a suitably generated scripts, which are located in the folder "/etc/ini.d" and must be separate for each OpenSCADA project that runs in the service space. To simplify and eliminate the need to create your own scripts, OpenSCADA provides appropriate ones for standard cases-profiles that are typically supplied with the <b>openscada-server</b> and <b>openscada-plc</b> packages.
+</p><p>Therefore, to launch <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the AGLKS library project</a> in the service space, we:
 </p>
-<pre style="white-space: pre-wrap;">
+<ul><li> install the packages <b>openscada-model-aglks</b> and <b>openscada-server</b>, if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
+<li> start the project "AGLKS", for getting its folder in the user's work folder;</li>
+<li> copy the project "AGLKS" folder to the system work folder also renaming to "server", previously stop the background execution of the project "server" and remove its project folder; for example, in that way from the console:</li></ul>
+<pre style="white-space: pre-wrap; margin-left: 30pt">
 # Connect from the superuser
 $ su -
-# ... for the live disk environment and some other Linux environments
+# ... for the live disk and some other Linux environments
 $ sudo bash
-# Stop down of execution of the empty server configuration
-$ service openscada-server stop
-# Create a link of the server project to "AGLKS"
-$ rm -R /usr/share/openscada/server
-$ ln -s AGLKS /usr/share/openscada/server
-$ ln -s /etc/oscada_AGLKS.xml /usr/share/openscada/server/oscada.xml
-# Start up the server with the demo DB already
+# Stop down of execution of the previous server configuration and remove its folder
+$ service openscada-server stop; rm -R /usr/share/openscada/server
+# Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"
+$ cp -R {HOME}/.openscada/AGLKS /usr/share/openscada/server 
+# Start the server already in the project "AGLKS"
 $ service openscada-server start
 </pre>
-<p>In this way, you will get the demo database that works in the background, which, however, we will not see until we try to connect to this configuration, as below. Now, every time you start the computer, it will be launched in this way and run in the background. In general, this is the way tor starting up and execution the server configurations, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC" title="Special:MyLanguage/Sub-projects/Embedding and PLC">PLC environments and one-board PCs</a> similar to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">RaspberyPi</a>.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note that locally you can not copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
+</p><p>Difference between the project execution in the service-background environment from the user environment of the desktop is actually one, except for the lack of the local graphical interface of course, it is the absence of a locale in the background, ie the interface language will be English. And what can be fixed simply by changing or adding <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">the configuration parameter</a> <b>&lt;prm id="Lang"&gt;uk_UA.UTF-8&lt;/prm&gt;</b> to the section-tag "station" of the file <b>oscada.xml</b> of the background project.
+</p><p><br />
+In this way, you will get the demo database (the "AGLKS" project) that works in the background, which, however, we will not see until we try to connect to this configuration, as below. Now, every time you start the computer, it will be launched in this way and run in the background. In general, this is the way tor starting up and execution the server configurations, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC" title="Special:MyLanguage/Sub-projects/Embedding and PLC">PLC environments and one-board PCs</a> similar to <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">RaspberyPi</a>.
 </p><p>If you still have problems working with the console-terminal, or you deliberately want a background run in the graphical environment — the so-called "start or close in the system tray", then at this stage you can re-run the demo configuration, as described in the beginning of this section (Fig.3.1.1), set the <b>Collapse or startup to the system tray</b> option of the <a href="Modules/QTStarter.html#Cfg" title="Special:MyLanguage/Modules/QTStarter">UI.QTStarter module</a> and close the configuration window so that the AGLKS simulator project collapses to the system tray.
 </p>
 <h3><span class="mw-headline" id="Your_own_project_creation"><span class="mw-headline-number">3.3</span> <span id="UserPrjCrt" title="#UserPrjCrt">Your own project creation</span></span></h3>
@@ -887,5 +894,5 @@ cooler2_speed = Cw/5;
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Quick_start/en">Documents/Quick_start/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Quick_start/en">Documents/Quick_start/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

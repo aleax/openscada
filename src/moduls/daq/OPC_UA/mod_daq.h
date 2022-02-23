@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.h
 /***************************************************************************
- *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,9 @@
 #include "libOPC_UA/libOPC_UA.h"
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::vector;
@@ -41,12 +43,12 @@ using namespace OPC;
 //*************************************************
 //* DAQ modul info!                               *
 #define DAQ_ID		"OPC_UA"
-#define DAQ_NAME	_("Client OPC-UA")
+#define DAQ_NAME	trS("Client OPC-UA")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"2.5.3"
-#define DAQ_AUTOR	_("Roman Savochenko")
-#define DAQ_DESCR	_("Provides OPC-UA client service implementation.")
+#define DAQ_MVER	"2.6.5"
+#define DAQ_AUTOR	trS("Roman Savochenko")
+#define DAQ_DESCR	trS("Provides OPC-UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
 //*************************************************
 
@@ -69,6 +71,7 @@ class TMdPrm : public TParamContr
 	bool isStd( ) const;
 	bool isLogic( ) const;
 
+	void loadDATA( bool incl = false );
 	void enable( );
 	void disable( );
 
@@ -81,7 +84,9 @@ class TMdPrm : public TParamContr
 	TElem *dynElCntr( )	{ return &pEl; }
 	TElem &elem( )		{ return pEl; }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
+
+	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 
 	TMdContr &owner( ) const;
 
@@ -190,6 +195,10 @@ class TMdContr: public TController, public Client
 
 	TTpContr &owner( ) const;
 
+	// Values processing
+	TVariant getVal( const string &iaddr, MtxString &err );
+	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
+
     protected:
 	//Methods
 	void load_( );
@@ -200,10 +209,6 @@ class TMdContr: public TController, public Client
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
-
-	// Values process
-	TVariant getVal( const string &iaddr, MtxString &err );
-	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
 
 	// Service
 	void postDisable( int flag );		//Delete all DB if flag 1
@@ -233,8 +238,7 @@ class TMdContr: public TController, public Client
 	int64_t	mPer;
 
 	bool	prcSt,		//Process task active
-		callSt,		//Calc now stat
-		isReload;
+		callSt;		//Calc now stat
 	int8_t	alSt;		//Alarm state
 
 	AutoHD<TTransportOut>	tr;

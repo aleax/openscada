@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_smart.h
 /***************************************************************************
- *   Copyright (C) 2005-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -52,7 +52,7 @@ class HddSmart: public DA
 
 	bool isSlow( )	{ return true; }
 
-	void init( TMdPrm *prm );
+	void init( TMdPrm *prm, bool update = false );
 	void deInit( TMdPrm *prm );
 	void getVal( TMdPrm *prm );
 

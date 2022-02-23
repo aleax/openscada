@@ -7,13 +7,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 19:53+0300\n"
+"POT-Creation-Date: 2022-01-05 21:10+0200\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Ready"
+msgstr "Готов"
+
+#, c-format
+msgid "The configurator is using the remote host %d times."
+msgstr "Конфигуратор использует удалённые хосты %d раз."
 
 msgid "Name"
 msgstr "Имя"
@@ -118,7 +125,8 @@ msgstr ""
 "Кнопка принудительной загрузки данных элемента из БД, не только когда "
 "изменено"
 
-msgid "Press for loading the item data from DB forcibly, not only when it changed."
+msgid ""
+"Press for loading the item data from DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительной загрузки данных элемента из БД, не только когда "
 "изменено."
@@ -141,12 +149,14 @@ msgstr "Принудительно сохранить в БД"
 msgid "Save the item data to DB forcibly"
 msgstr "Принудительно сохранить данные элемента в БД"
 
-msgid "The button for saving the item data to DB forcibly, not only when it changed"
+msgid ""
+"The button for saving the item data to DB forcibly, not only when it changed"
 msgstr ""
 "Кнопка принудительного сохранения данных элемента в БД, не только когда "
 "изменено"
 
-msgid "Press for saving the item data to DB forcibly, not only when it changed."
+msgid ""
+"Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительного сохранения данных элемента в БД, не только когда "
 "изменено."
@@ -233,7 +243,8 @@ msgid "The button for starting the cycled refreshing of the page content"
 msgstr "Кнопка запуска периодического обновления содержимого текущей страницы."
 
 msgid "Press for starting the cycled refreshing of the page content."
-msgstr "Нажать для запуска периодического обновления содержимого текущей страницы."
+msgstr ""
+"Нажать для запуска периодического обновления содержимого текущей страницы."
 
 msgid "&Stop"
 msgstr "&Остановить"
@@ -242,10 +253,12 @@ msgid "Stop the cycled refreshing"
 msgstr "Остановить периодическое обновление"
 
 msgid "The button for stopping the cycled refreshing of the page content"
-msgstr "Кнопка останова периодического обновления содержимого текущей страницы."
+msgstr ""
+"Кнопка останова периодического обновления содержимого текущей страницы."
 
 msgid "Press for stopping the cycled refreshing of the page content."
-msgstr "Нажать для останова периодического обновления содержимого текущей страницы."
+msgstr ""
+"Нажать для останова периодического обновления содержимого текущей страницы."
 
 msgid "&About"
 msgstr "Пр&о..."
@@ -302,7 +315,8 @@ msgid "The button for requesting information about the user interface elements"
 msgstr "Кнопка запроса информации про элементы пользовательского интерфейса"
 
 msgid "Press for requesting information about the user interface elements."
-msgstr "Нажать для запроса информации про элементы пользовательского интерфейса"
+msgstr ""
+"Нажать для запроса информации про элементы пользовательского интерфейса"
 
 msgid "&File"
 msgstr "&Файл"
@@ -339,13 +353,6 @@ msgstr "Эта кнопка для вызова истории строки ст
 
 msgid "Button for calling the status bar history."
 msgstr "Кнопка вызова истории строки статуса."
-
-msgid "Ready"
-msgstr "Готов"
-
-#, c-format
-msgid "The configurator is using the remote host %d times."
-msgstr "Конфигуратор использует удалённые хосты %d раз."
 
 msgid "Saving the changes"
 msgstr "Сохранение изменений."
@@ -532,6 +539,9 @@ msgstr "Вверх"
 msgid "Down"
 msgstr "Вниз"
 
+msgid "Copy"
+msgstr "Копировать"
+
 msgid "Setting the item name"
 msgstr "Установка имени элемента"
 
@@ -539,10 +549,10 @@ msgid "Add a new element."
 msgstr "Добавить новый элемент."
 
 msgid "Insert a new element."
-msgstr "Вставить новый елемент."
+msgstr "Вставить новый элемент."
 
 msgid "Rename the element."
-msgstr "Переименовать елемент."
+msgstr "Переименовать элемент."
 
 #, c-format
 msgid "%s| '%s' added by the element <%s:%s>!"
@@ -578,9 +588,6 @@ msgstr "Передвинуть вверх (Ctrl+Up)"
 
 msgid "Move Down (Ctrl+Down)"
 msgstr "Передвинуть вниз (Ctrl+Down)"
-
-msgid "Copy"
-msgstr "Копировать"
 
 #, c-format
 msgid "%s| '%s' add by a record."
@@ -773,4 +780,3 @@ msgstr "QTCfg диалог"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Выбор идентификатора и имени узла"
-

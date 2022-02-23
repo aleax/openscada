@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,9 @@
 #include <tsys.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::vector;
@@ -40,12 +42,12 @@ using namespace OSCADA;
 //*************************************************
 //* DAQ modul info!                               *
 #define DAQ_ID		"ModBus"
-#define DAQ_NAME	"ModBus"
+#define DAQ_NAME	trS("Client ModBus")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"3.3.1"
-#define DAQ_AUTHORS	_("Roman Savochenko")
-#define DAQ_DESCR	_("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
+#define DAQ_MVER	"3.4.4"
+#define DAQ_AUTHORS	trS("Roman Savochenko")
+#define DAQ_DESCR	trS("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
 //*************************************************
 
@@ -69,6 +71,7 @@ class TMdPrm: public TParamContr
 	bool isStd( ) const;
 	bool isLogic( ) const;
 
+	void loadDATA( bool incl = false );
 	void enable( );
 	void disable( );
 
@@ -78,7 +81,9 @@ class TMdPrm: public TParamContr
 	TElem *dynElCntr( )	{ return &pEl; }
 	TElem &elem( )		{ return pEl; }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
+
+	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 
 	TMdContr &owner( ) const;
 
@@ -181,7 +186,7 @@ class TMdContr: public TController
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	bool inWr( const string &addr );
 
@@ -222,8 +227,7 @@ class TMdContr: public TController
 
 	bool	prcSt,				//Process task active
 		callSt,				//Calc now stat
-		endrunReq,			//Request to stop of the Process task
-		isReload;
+		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
 	vector<SDataRec>	acqBlks;	//Acquisition data blocks for registers
 	vector<SDataRec>	acqBlksIn;	//Acquisition data blocks for input registers

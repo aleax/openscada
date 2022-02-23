@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,18 +28,18 @@
 #include "selfwidg.h"
 #include "tuimod.h"
 
-#include <tmess.h>
+// #include <tmess.h>
 
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTCfg"
-#define MOD_NAME	_("Program configurator (Qt)")
+#define MOD_NAME	trS("Program configurator (Qt)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.6.0"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Provides the Qt-based configurator of OpenSCADA.")
+#define MOD_VER		"5.7.7"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -99,10 +99,8 @@ void TUIMod::modInfo( vector<string> &list )
     list.push_back("SubType");
 }
 
-string TUIMod::modInfo( const string &iname )
+string TUIMod::modInfo( const string &name )
 {
-    string name = TSYS::strParse(iname, 0, ":");
-
     if(name == "SubType") return SUB_TYPE;
 
     return TModule::modInfo(name);
@@ -126,10 +124,10 @@ void TUIMod::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file and DB
-    setTmConChk(TBDS::genDBGet(nodePath()+"TmConChk",tmConChk()));
-    setStartPath(TBDS::genDBGet(nodePath()+"StartPath",startPath()));
-    setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
-    setToolTipLim(s2i(TBDS::genDBGet(nodePath()+"ToolTipLim",i2s(toolTipLim()))));
+    setTmConChk(TBDS::genPrmGet(nodePath()+"TmConChk",tmConChk()));
+    setStartPath(TBDS::genPrmGet(nodePath()+"StartPath",startPath()));
+    setStartUser(TBDS::genPrmGet(nodePath()+"StartUser",startUser()));
+    setToolTipLim(s2i(TBDS::genPrmGet(nodePath()+"ToolTipLim",i2s(toolTipLim()))));
 }
 
 void TUIMod::save_( )
@@ -137,10 +135,10 @@ void TUIMod::save_( )
     mess_debug(nodePath().c_str(),_("Saving the module."));
 
     //Save parameters to DB
-    TBDS::genDBSet(nodePath()+"TmConChk", tmConChk());
-    TBDS::genDBSet(nodePath()+"StartPath", startPath());
-    TBDS::genDBSet(nodePath()+"StartUser", startUser());
-    TBDS::genDBSet(nodePath()+"ToolTipLim",i2s(toolTipLim()));
+    TBDS::genPrmSet(nodePath()+"TmConChk", tmConChk());
+    TBDS::genPrmSet(nodePath()+"StartPath", startPath());
+    TBDS::genPrmSet(nodePath()+"StartUser", startUser());
+    TBDS::genPrmSet(nodePath()+"ToolTipLim",i2s(toolTipLim()));
 }
 
 void TUIMod::postEnable( int flag )
@@ -197,7 +195,10 @@ void TUIMod::modStop( )
     mEndRun = true;
 
     for(unsigned iW = 0; iW < cfapp.size(); iW++)
-	while(cfapp[iW]) TSYS::sysSleep(prmWait_DL);
+	while(cfapp[iW]) {
+	    if(!SYS->mainThr.freeStat()) qApp->processEvents();	//!!!! Else can lock here the main thread
+	    TSYS::sysSleep(prmWait_DL);
+	}
     TSYS::sysSleep(prmWait_DL);
 
     runSt = false;
@@ -271,7 +272,7 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
 	(type==TUIMod::Warning)?TMess::Warning:TMess::Info, "%s", mess.c_str());
 
     QMessageBox msgBox(parent);
-    msgBox.setWindowTitle(_(MOD_NAME));
+    msgBox.setWindowTitle(MOD_NAME.c_str());
     msgBox.setTextFormat(Qt::PlainText);
     msgBox.setText(mess.c_str());
     switch(type) {

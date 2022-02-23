@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: da_FlowTEC.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -37,23 +37,23 @@ FlowTEC::FlowTEC( TMdPrm *prm ) : DA(prm), mVer(10), mThread(1)
     mThread = vmin(3,vmax(1,atoi(mPrm->extPrmGet("Thread").c_str())));
 
     //> Values structure
-    mPrm->p_el.fldAdd( new TFld("val",_("Value"),TFld::Real,TFld::NoWrite) );
-    mPrm->p_el.fldAdd( new TFld("p",_("Pressure"),TFld::Real,TFld::NoWrite) );
-    mPrm->p_el.fldAdd( new TFld("t",_("Temperature"),TFld::Real,TFld::NoWrite) );
+    mPrm->p_el.fldAdd( new TFld("val",trS("Value"),TFld::Real,TFld::NoWrite) );
+    mPrm->p_el.fldAdd( new TFld("p",trS("Pressure"),TFld::Real,TFld::NoWrite) );
+    mPrm->p_el.fldAdd( new TFld("t",trS("Temperature"),TFld::Real,TFld::NoWrite) );
     if( mVer < 35 )
     {
-	mPrm->p_el.fldAdd( new TFld("curF",_("Current flow"),TFld::Real,TFld::NoWrite) );
-	mPrm->p_el.fldAdd( new TFld("qntDayStart",_("Quantity for start day"),TFld::Real,TFld::NoWrite) );
-	mPrm->p_el.fldAdd( new TFld("qntDayLast",_("Quantity for last day"),TFld::Real,TFld::NoWrite) );
-	mPrm->p_el.fldAdd( new TFld("qntStart",_("Quantity for start"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("curF",trS("Current flow"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("qntDayStart",trS("Quantity for start day"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("qntDayLast",trS("Quantity for last day"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("qntStart",trS("Quantity for start"),TFld::Real,TFld::NoWrite) );
     }
     else
     {
-	mPrm->p_el.fldAdd( new TFld("cal",_("Caloric"),TFld::Real,TFld::NoWrite) );
-	mPrm->p_el.fldAdd( new TFld("curF",_("Current flow"),TFld::Real,TFld::NoWrite) );
-	mPrm->p_el.fldAdd( new TFld("qntDayStart",_("Quantity for start day"),TFld::Real,TFld::NoWrite) );
-	mPrm->p_el.fldAdd( new TFld("qntDayLast",_("Quantity for last day"),TFld::Real,TFld::NoWrite) );
-	mPrm->p_el.fldAdd( new TFld("qntStart",_("Quantity for start"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("cal",trS("Caloric"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("curF",trS("Current flow"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("qntDayStart",trS("Quantity for start day"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("qntDayLast",trS("Quantity for last day"),TFld::Real,TFld::NoWrite) );
+	mPrm->p_el.fldAdd( new TFld("qntStart",trS("Quantity for start"),TFld::Real,TFld::NoWrite) );
     }
 }
 

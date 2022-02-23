@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvalue.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -129,7 +129,7 @@ TElem &TValue::vlElem( const string &name )
     for(unsigned iE = 0; iE < elem.size(); iE++)
 	if(elem[iE]->elName() == name)
 	    return *elem[iE];
-    throw err_sys(_("Element '%s' is not present!"), name.c_str());
+    throw err_sys(TError::Core_NoNode, _("Element '%s' is not present!"), name.c_str());
 }
 
 string TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
@@ -149,7 +149,7 @@ string TValue::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 void TValue::cntrCmdProc( XMLNode *opt )
 {
     vector<string> vLs;
-    string a_path = opt->attr("path"), u = opt->attr("user"), l = opt->attr("lang");
+    string a_path = opt->attr("path");
     //Service commands process
     if(a_path == "/serv/attr") {	//Attributes access
 	vlList(vLs);
@@ -211,13 +211,13 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		if(vl.at().arch().freeStat()) { opt->childDel(aNd); iA--; continue; }
 
 		AutoHD<TVArchive> arch = vl.at().arch();
-		int64_t vper = arch.at().period(BUF_ARCH_NM);
+		int64_t vper = arch.at().period(ARCH_BUF);
 		int64_t reqBeg = s2ll(aNd->attr("tm"));	//!!!! Some spare request of the last requested value
 							//     to prevent EVAL here at the connection lose
 				//(s2ll(aNd->attr("tm"))/vper+1)*vper;
-		int64_t vBufBeg = arch.at().begin(BUF_ARCH_NM);
+		int64_t vBufBeg = arch.at().begin(ARCH_BUF);
 		int64_t vbeg = vmax(reqBeg, vBufBeg);
-		int64_t vend = arch.at().end(BUF_ARCH_NM);
+		int64_t vend = arch.at().end(ARCH_BUF);
 
 		//  Longing to equivalent archivators
 		if(vbeg == vBufBeg) {
@@ -264,7 +264,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		if(n_e) {
 		    string sType = _("Unknown");
 		    switch(vl.at().fld().type()) {
-			case TFld::String:	sType = _("String");	break;
+			case TFld::String:
+			    sType = (vl.at().fld().flg()&TFld::FullText) ? _("Text") : _("String");
+			    if(vl.at().fld().flg()&TFld::TransltText)	sType = sType + " " + _("(translate)");
+			    break;
 			case TFld::Integer:	sType = _("Integer");	break;
 			case TFld::Real:	sType = _("Real");	break;
 			case TFld::Boolean:	sType = _("Boolean");	break;
@@ -278,7 +281,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			    "  Name: '%s'\n"
 			    "  Type: '%s'\n"
 			    "  Read only: %d"),
-			    vl.at().fld().name().c_str(),vl.at().fld().descr().c_str(),sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0));
+			    vl.at().fld().name().c_str(),trD(vl.at().fld().descr()).c_str(),
+			    sType.c_str(),(vl.at().fld().flg()&TFld::NoWrite)?1:0));
 		    if(vl.at().fld().values().size())
 			n_e->setAttr("help",n_e->attr("help")+_("\n  Values: ")+vl.at().fld().values());
 		    if(vl.at().fld().selNames().size())
@@ -293,10 +297,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list", opt, -1, "/arch/arch/atr", _("Attribute"), R_R_R_, "root", SARH_ID, 1, "tp", "str");
 		ctrMkNode("list", opt, -1, "/arch/arch/prc", _("Archiving"), RWRWR_, "root", SARH_ID, 1, "tp", "bool");
 		SYS->archive().at().modList(vLs);
-		for(unsigned i_ta = 0; i_ta < vLs.size(); i_ta++) {
-		    SYS->archive().at().at(vLs[i_ta]).at().valList(vLs2);
+		for(unsigned iTa = 0; iTa < vLs.size(); iTa++) {
+		    SYS->archive().at().at(vLs[iTa]).at().valList(vLs2);
 		    for(unsigned iA = 0; iA < vLs2.size(); iA++) {
-			string a_id = SYS->archive().at().at(vLs[i_ta]).at().valAt(vLs2[iA]).at().workId();
+			string a_id = SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().workId();
 			ctrMkNode("list",opt,-1,("/arch/arch/"+a_id).c_str(),a_id,RWRWR_,"root",SARH_ID,1,"tp","bool");
 		    }
 		}
@@ -316,10 +320,10 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_RD))
 	    opt->setText((vl.at().fld().type()==TFld::Real) ?
 		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : r2s(vl.at().getR(),6)) :
-		    ((Mess->translDyn() && vl.at().fld().type()==TFld::String) ? trLU(vl.at().getS(),l,u) :
+		    ((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ? trD(vl.at().getS()) :
 		    vl.at().getS()));
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String) ? trSetLU(vl.at().getS(),l,u,opt->text()) : opt->text());
+	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String) ? trDSet(vl.at().getS(),opt->text()) : opt->text());
 	    modif();
 	}
     }
@@ -330,11 +334,11 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list", opt, -1, "/arch/arch/atr", "", R_R_R_);
 	    ctrMkNode("list", opt, -1, "/arch/arch/prc", "", RWRWR_);
 	    SYS->archive().at().modList(vLs);
-	    for(unsigned i_ta = 0; i_ta < vLs.size(); i_ta++) {
-		SYS->archive().at().at(vLs[i_ta]).at().valList(vLs2);
+	    for(unsigned iTa = 0; iTa < vLs.size(); iTa++) {
+		SYS->archive().at().at(vLs[iTa]).at().valList(vLs2);
 		for(unsigned iA = 0; iA < vLs2.size(); iA++)
 		    ctrMkNode("list", opt, -1,
-			("/arch/arch/"+SYS->archive().at().at(vLs[i_ta]).at().valAt(vLs2[iA]).at().workId()).c_str(), "", RWRWR_);
+			("/arch/arch/"+SYS->archive().at().at(vLs[iTa]).at().valAt(vLs2[iA]).at().workId()).c_str(), "", RWRWR_);
 	    }
 	    // Fill table
 	    vlList(vLs);
@@ -836,7 +840,7 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
     //Set to archive. Set object to archive did not support
 }
 
-TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // ElTp get(int tm = 0, int utm = 0, bool sys = false) - get attribute value at time <tm:utm> and system access flag <sys>.
     //  tm, utm - the time for requested value
@@ -850,6 +854,8 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    bool isSys = false;
 	    if(prms.size() >= 3) isSys = prms[2].getB();
 	    rez = get(&tm, isSys);
+	    if(fld().type() == TFld::String && fld().flg()&TFld::TransltText)
+		rez = trD_LU(rez, TSYS::strLine(user_lang,1), TSYS::strLine(user_lang,0));
 	    if(prms.size() >= 1) { prms[0].setI(tm/1000000); prms[0].setModify(); }
 	    if(prms.size() >= 2) { prms[1].setI(tm%1000000); prms[1].setModify(); }
 
@@ -869,7 +875,9 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    bool isSys = false;
 	    if(prms.size() >= 4) isSys = prms[3].getB();
 	    if(isSys && isCfg() && fld().flg()&TFld::NoWrite) return false;
-	    set(prms[0], tm, isSys);
+	    if(fld().type() == TFld::String && fld().flg()&TFld::TransltText)
+		set(trDSet_LU(getS(),TSYS::strLine(user_lang,1),TSYS::strLine(user_lang,0),prms[0].getS()), tm, isSys);
+	    else set(prms[0], tm, isSys);
 	    return false;
 	} catch(...){ }
 	return true;
@@ -878,10 +886,10 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "arch") {
 	AutoHD<TVArchive> aobj = arch();
 	if(aobj.freeStat()) return false;
-	return new TCntrNodeObj(aobj, user);
+	return new TCntrNodeObj(aobj, user_lang);
     }
     // string descr() - get attribute description
-    if(iid == "descr")	return fld().descr();
+    if(iid == "descr")	return trD_LU(fld().descr(), TSYS::strLine(user_lang,1), TSYS::strLine(user_lang,0));
     // int time(int utm) - get last attribute's value time
     if(iid == "time") {
 	if(prms.size() >= 1)	{ prms[0].setI((int)(time()%1000000)); prms[0].setModify(); }
@@ -904,7 +912,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // bool isCfg() - check to a configuration field
     if(iid == "isCfg")	return isCfg();
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user_lang);
 }
 
 void TVal::preDisable( int flag )

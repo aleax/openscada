@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.DBGate file: DBGate.cpp
 /***************************************************************************
- *   Copyright (C) 2020 by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2020-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -26,13 +26,14 @@
 //************************************************
 //* Modul info!                                  *
 #define MOD_ID		"DBGate"
-#define MOD_NAME	_("DB gate")
+#define MOD_NAME	trS("DB gate")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.0.1"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
+#define MOD_VER		"1.1.5"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
 #define MOD_LICENSE	"GPL2"
+#define FEATURES	"SQL, LIST, STRUCT, GET, SEEK, PRELOAD, SET, DEL, FIX, TR, ERR"
 //************************************************
 
 BD_DBGate::BDMod *BD_DBGate::mod;	//Pointer for direct access to the module
@@ -76,6 +77,8 @@ BDMod::~BDMod( )
 
 }
 
+string BDMod::features( )	{ return FEATURES; }
+
 TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_E()); }
 
 
@@ -96,7 +99,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    /*if(flag && owner().fullDeleteDB()) {
+    /*if(flag&NodeRemove && owner().fullDeleteDB()) {
 
     }*/
 }
@@ -294,21 +297,22 @@ void MTable::fieldStruct( TConfig &cfg )
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldStruct")->setAttr("tbl", name());
     owner().cntrIfCmd(req);
-    SYS->db().at().dataSeek("", "", 0, cfg, false, NULL, &req);
+    TBDS::dataSeek("", "", 0, cfg, TBDS::NoFlg, &req);
 }
 
 bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldSeek")->
 	setAttr("tbl", name())->
 	setAttr("row", i2s(row))->
 	setAttr("cacheKey", cacheKey);
-    SYS->db().at().dataSet("", "", cfg, false, false, &req);
+    TBDS::dataSet("", "", cfg, TBDS::NoFlg, &req);
     owner().cntrIfCmd(req);
-    SYS->db().at().dataSeek("", "", 0, cfg, false, NULL, &req);
+    TBDS::dataSeek("", "", 0, cfg, TBDS::NoFlg, &req);
 
     return s2i(req.attr("fRez"));
 }
@@ -317,16 +321,16 @@ void MTable::fieldGet( TConfig &cfg )
 {
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldGet")->setAttr("tbl", name());
-    SYS->db().at().dataSet("", "", cfg, false, false, &req);
+    TBDS::dataSet("", "", cfg, TBDS::NoFlg, &req);
     owner().cntrIfCmd(req);
-    SYS->db().at().dataGet("", "", cfg, false, false, &req);
+    TBDS::dataGet("", "", cfg, TBDS::NoFlg, &req);
 }
 
 void MTable::fieldSet( TConfig &cfg )
 {
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldSet")->setAttr("tbl", name());
-    SYS->db().at().dataSet("", "", cfg, false, false, &req);
+    TBDS::dataSet("", "", cfg, TBDS::NoFlg, &req);
     owner().cntrIfCmd(req);
 }
 
@@ -335,6 +339,6 @@ void MTable::fieldDel( TConfig &cfg )
     XMLNode req("call");
     req.setAttr("path", "/%2fserv%2ffieldDel")->setAttr("tbl", name());
     cfg.cfgViewAll(false);
-    SYS->db().at().dataSet("", "", cfg, false, false, &req);
+    TBDS::dataSet("", "", cfg, TBDS::NoFlg, &req);
     owner().cntrIfCmd(req);
 }

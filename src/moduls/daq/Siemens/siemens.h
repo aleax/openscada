@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.h
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -32,9 +32,9 @@
 #include "nodave.h"
 
 #undef _
-#define _(mess) mod->I18N(mess)
-
-#define MaxLenReq	240
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using std::string;
 using std::vector;
@@ -87,6 +87,7 @@ class TMdPrm: public TParamContr
 	bool isSimple( ) const;
 	bool isLogic( ) const;
 
+	void loadDATA( bool incl = false );
 	void enable( );
 	void disable( );
 
@@ -96,7 +97,9 @@ class TMdPrm: public TParamContr
 	TElem *dynElCntr( )	{ return &pEl; }
 	TElem &elem( )		{ return pEl; }
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
+
+	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 
 	TMdContr &owner( ) const;
 
@@ -199,6 +202,11 @@ class TMdContr: public TController
 
 	TTpContr &owner( ) const;
 
+	// Values process
+	void regVal( const string &ival, bool wr );	//Register value for acquisition
+	TVariant getVal( const string &iaddr, MtxString &err );
+	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
+
     protected:
 	//Methods
 	void load_( );
@@ -210,11 +218,6 @@ class TMdContr: public TController
 
 	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( TMdPrm *prm, bool val );
-	void regVal( const string &ival, bool wr );	//Register value for acquisition
-
-	// Values process
-	TVariant getVal( const string &iaddr, MtxString &err );
-	bool setVal( const TVariant &ivl, const string &iaddr, MtxString &err );
 
 	// Service
 	void postDisable( int flag );				//Delete all DB if flag 1
@@ -255,14 +258,14 @@ class TMdContr: public TController
 		&mType,			//Connection type
 		&mSlot,
 		&mDev,			//CIF device number
-		&restTm;		//Restore timeout in seconds
+		&restTm,		//Restore timeout in seconds
+		&blkMaxSz;		//Maximum request block size
 	char	&mAssincWR;		//Asynchronous write mode
 	int64_t	mPer;
 
 	bool	prcSt,			//Process task active
 		callSt,			//Calc now stat
 		endrunReq,		//Request to stop of the Process task
-		isReload,
 		isInitiated;		//Only for SELF_ISO_TCP
 	int8_t	alSt;			//Alarm state
 	MtxString conErr;		//Connection error

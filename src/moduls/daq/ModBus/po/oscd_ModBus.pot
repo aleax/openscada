@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 10:18+0300\n"
+"POT-Creation-Date: 2022-02-16 16:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,8 +83,20 @@ msgstr ""
 msgid "Task terminated! "
 msgstr ""
 
+msgid "No transport."
+msgstr ""
+
+msgid "Empty transport."
+msgstr ""
+
+msgid "Error the transport."
+msgstr ""
+
+msgid "Error the connection."
+msgstr ""
+
 #, c-format
-msgid "Error of connection. Restoring in %.6g s."
+msgid "Restoring in %.6g s."
 msgstr ""
 
 msgid "Acquisition. "
@@ -99,7 +111,23 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of response %g."
+msgid "Spent time: %s[%s]. "
+msgstr ""
+
+#, c-format
+msgid "Read %g(%g) registers, %g(%g) coils. "
+msgstr ""
+
+#, c-format
+msgid "Wrote %g registers, %g coils. "
+msgstr ""
+
+#, c-format
+msgid "In the buffer %d. "
+msgstr ""
+
+#, c-format
+msgid "Errors of connection %g, of response %g. "
 msgstr ""
 
 #, c-format
@@ -123,6 +151,11 @@ msgstr ""
 
 #, c-format
 msgid "10:Generic error: %s."
+msgstr ""
+
+msgid ""
+"Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.\n"
+"Restart to apply the removed PLC links in run."
 msgstr ""
 
 msgid "Default port of the ModuBus/TCP is 502."
@@ -399,6 +432,10 @@ msgstr ""
 msgid "DB"
 msgstr ""
 
+#, c-format
+msgid "Remove from '%s'"
+msgstr ""
+
 msgid "Configuration"
 msgstr ""
 
@@ -455,10 +492,16 @@ msgstr ""
 msgid "Empty value is not allowed."
 msgstr ""
 
+msgid "Client ModBus"
+msgstr ""
+
 msgid "Roman Savochenko"
 msgstr ""
 
 msgid "Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported."
+msgstr ""
+
+msgid "Server ModBus"
 msgstr ""
 
 msgid "Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported."

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BFN file: mod_BFN.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"BFN"
-#define MOD_NAME	_("BFN module")
+#define MOD_NAME	trS("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.19"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
+#define MOD_VER		"0.6.23"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -81,18 +81,18 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    //fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("SYNCPER",_("Period of sync with the remote station, seconds"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
-    fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"50",""));
-    fldAdd(new TFld("PASS",_("Password"),TFld::String,TFld::NoFlag,"30",""));
-    //fldAdd(new TFld("HOUSE",_("House"),TFld::String,TFld::NoFlag,"50",""));
+    //fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("SYNCPER",trS("Period of sync with the remote station, seconds"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
+    fldAdd(new TFld("ADDR",trS("Transport address"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("USER",trS("User"),TFld::String,TFld::NoFlag,"50",""));
+    fldAdd(new TFld("PASS",trS("Password"),TFld::String,TFld::NoFlag,"30",""));
+    //fldAdd(new TFld("HOUSE",trS("House"),TFld::String,TFld::NoFlag,"50",""));
 
     //Parameter type bd structure
     int t_prm = tpParmAdd("std","",_("Standard"));
-    //tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
+    //tpPrmAt(t_prm).fldAdd( new TFld("OID_LS",trS("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100","") );
     // Set to read only
     for(unsigned i_sz = 0; i_sz < tpPrmAt(t_prm).fldSize(); i_sz++)
 	tpPrmAt(t_prm).fldAt(i_sz).setFlg(tpPrmAt(t_prm).fldAt(i_sz).flg()|TFld::NoWrite);
@@ -107,11 +107,11 @@ void TTpContr::postEnable( int flag )
     symbAlrm_el.fldAdd(new TFld("TEXT","Text",TFld::String,TFld::TransltText,"100"));
 }
 
-string TTpContr::symbDB( )	{ return TBDS::genDBGet(nodePath()+"symbDB","*.*"); }
+string TTpContr::symbDB( )	{ return TBDS::genPrmGet(nodePath()+"symbDB","*.*"); }
 
 void TTpContr::setSymbDB( const string &idb )
 {
-    TBDS::genDBSet(nodePath()+"symbDB",idb);
+    TBDS::genPrmSet(nodePath()+"symbDB",idb);
     modif();
 }
 
@@ -139,14 +139,14 @@ void TTpContr::load_( )
     TConfig c_el(&symbCode_el);
     MtxAlloc res(mSymbRes, true);
     mSymbCode.clear();
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
+    for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
 	mSymbCode[c_el.cfg("ID").getI()] = c_el.cfg("TEXT").getS();
 
     //Load Alarm symbols
     wtbl = MOD_ID"_SymbAlarm";
     c_el.setElem(&symbAlrm_el);
     mSymbAlrm.clear();
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
+    for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++)
 	mSymbAlrm[c_el.cfg("ID").getI()] = AlrmSymb(c_el.cfg("TEXT").getS(),c_el.cfg("CODE").getI());
 }
 
@@ -160,12 +160,12 @@ void TTpContr::save_( )
     for(map<unsigned,string>::iterator is = mSymbCode.begin(); is != mSymbCode.end(); is++) {
 	c_el.cfg("ID").setI(is->first);
 	c_el.cfg("TEXT").setS(is->second);
-	SYS->db().at().dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
+	TBDS::dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
     }
     // Clear no present codes
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
+    for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
 	if(mSymbCode.find(c_el.cfg("ID").getI()) != mSymbCode.end()) continue;
-	SYS->db().at().dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, true, false, true);
+	TBDS::dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
 	fld_cnt--;
     }
 
@@ -176,12 +176,12 @@ void TTpContr::save_( )
 	c_el.cfg("ID").setI(is->first);
 	c_el.cfg("CODE").setI(is->second.code);
 	c_el.cfg("TEXT").setS(is->second.text);
-	SYS->db().at().dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
+	TBDS::dataSet(wdb+"."+wtbl, nodePath()+wtbl, c_el);
     }
     // Clear no present codes
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
+    for(int fld_cnt = 0; TBDS::dataSeek(wdb+"."+wtbl,nodePath()+wtbl,fld_cnt,c_el); fld_cnt++) {
 	if(mSymbAlrm.find(c_el.cfg("ID").getI()) != mSymbAlrm.end()) continue;
-	SYS->db().at().dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, true, false, true);
+	TBDS::dataDel(wdb+"."+wtbl, nodePath()+wtbl, c_el, TBDS::UseAllKeys|TBDS::NoException);
 	fld_cnt--;
     }
 }
@@ -195,7 +195,8 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	TTypeDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/symbs",_("Symbols"))) {
 	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,
-		"tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		"tp","str","dest","select","select","/db/list",
+		"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
 	    if(ctrMkNode("table",opt,-1,"/symbs/codes",_("Codes"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/symbs/codes/text",_("Text"),RWRWR_,"root",SDAQ_ID,1,"tp","str");

@@ -853,7 +853,7 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
 	}
 	//ArrayDimension
 	if(vEMsk&OpcUa_ArrayDimension) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supporteded.");
-	//!!!!
+	//?!?!
     }
     if(eMsk&0x02) oN(buf, strtoul(vl.c_str(),NULL,10), 4);	//Status
     if(eMsk&0x04) oTm(buf, srcTmStmp ? srcTmStmp : curTime());	//SourceTimestamp
@@ -1497,7 +1497,7 @@ void Client::protIO( XML_N &io )
 		    oS(mReq, "");				//serverUri
 		    oS(mReq, sess.endPoint);			//endpointUrl
 		    oS(mReq, sessionName());			//sessionName
-		    io.setAttr("Nonce", randBytes(32));		//!!!! check for policy
+		    io.setAttr("Nonce", randBytes(32));		//?!?! check for the policy
 		    oS(mReq, io.attr("Nonce"));			//clientNonce
 		    oS(mReq, certPEM2DER(cert()));		//clientCertificate
 		    oR(mReq, str2real(io.attr("sesTm")), 8);	//Requested SessionTimeout, ms
@@ -1637,7 +1637,7 @@ void Client::protIO( XML_N &io )
 			oNodeId(mReq, 0);				//  filter
 			oNu(mReq, 0, 1);				//   EncodingMask
 			oNu(mReq, str2uint(chO->attr("qSz")), 4);	//  queueSize
-			oNu(mReq, 1, 1);				//  discardOldest, !!!!:discarded by default
+			oNu(mReq, 1, 1);				//  discardOldest, !!!! discarded by default
 		    }
 		}
 		else if(io.attr("id") == "DeleteMonitoredItems") {
@@ -1790,7 +1790,7 @@ void Client::protIO( XML_N &io )
 		rez = "";
 		//Waiting for request response, or just read the channel if there is no request
 		continueReadChnk:
-		resp_len = messIO(NULL, 0, buf, sizeof(buf), -(waitResponse&&rez.empty()?10000:1));	//???? Get 10000 from the transport timeouts
+		resp_len = messIO(NULL, 0, buf, sizeof(buf), -(waitResponse&&rez.empty()?10000:1));	//?!?! Get 10000 from the transport timeouts
 		rez.append(buf, resp_len);
 
 		//Reading the whole package
@@ -1903,7 +1903,7 @@ void Client::protIO( XML_N &io )
 			// * Lost intermediate 'C' just before 'F': clean the chunks buffer and 'F'.
 			// * Lost 'F' after 'C' before 'F': clean the chunks buffer and pass current 'F' to process but there is possible that is single 'F'
 			//	next, it will be checked by correct request type.
-			//!!!! Maybe set a mark for errors generation pass after checking to correct request type or the message's sequence begin.
+			//?!?! Maybe set a mark for errors generation pass after checking to correct request type or the message's sequence begin.
 			if(chCnt < 0 || (chCnt && (clSeqN-chClSeqN) > 1)) {
 			    chB = "";
 			    if(rb[3] == 'C' && reqId == chReqId) { chCnt = -1; passMessPrc = true; }
@@ -2116,7 +2116,7 @@ void Client::protIO( XML_N &io )
 				}
 			    }
 			    iN(rb, off, 4);				//diagnosticInfos []
-									//  !!!!: implement for parsing the non zero info
+									//  ?!?! Implement for parsing the non zero info
 			    waitResponse = false;
 			    break;
 			}
@@ -2143,7 +2143,7 @@ void Client::protIO( XML_N &io )
 				    io.childGet(iS)->setAttr("statusCode", uint2str(sC));
 			    }
 			    iN(rb, off, 4);				//diagnosticInfos []
-									//  !!!!: implement for parsing the non zero info
+									//  ?!?! Implement for parsing the non zero info
 
 			    waitResponse = false;
 			    break;
@@ -2167,10 +2167,10 @@ void Client::protIO( XML_N &io )
 				}
 				iNodeId(rb, off);			// filterResult
 				iNu(rb, off, 1);			// encodingMask
-									//  !!!!: implement for non zero filter
+									//  ?!?! Implement for parsing the non zero info
 			    }
 			    iN(rb, off, 4);				//diagnosticInfos []
-									//  !!!!: implement for parsing the non zero info
+									//  ?!?! Implement for parsing the non zero info
 
 			    waitResponse = false;
 			    break;
@@ -2186,7 +2186,7 @@ void Client::protIO( XML_N &io )
 				    io.childGet(iIt)->setAttr("statusCode", uint2str(sC));
 			    }
 			    iN(rb, off, 4);				//diagnosticInfos []
-									//  !!!!: implement for parsing the non zero info
+									//  ?!?! Implement for parsing the non zero info
 
 			    waitResponse = false;
 			    break;
@@ -2208,11 +2208,11 @@ void Client::protIO( XML_N &io )
 			    // Available sequences processing
 			    int32_t aSeqN = iN(rb, off, 4);		//availableSequence Numbers []
 			    for(int iSeq = 0; iSeq < aSeqN; ++iSeq)
-				//!!!! To implement at the republish implementing
+				//?!?! Implement at the republish implementing
 				iNu(rb, off, 4);			// sequenceNumber
 
 			    int moreNtfOff = iNu(rb, off, 1);		//moreNotifications
-									//  !!!!: use somewhat in the future
+									//  ?!?! Use somewhat in the future
 									//notificationMessage
 			    uint32_t curSeq = iNu(rb, off, 4);		// sequenceNumber, current
 			    iTm(rb, off);				// publishTime
@@ -2222,7 +2222,7 @@ void Client::protIO( XML_N &io )
 				NodeId ntfType = iNodeId(rb, off);	//  TypeId (must be OpcUa_DataChangeNotification)
 				int8_t eMsk = iNu(rb, off, 1);		//  encodingMask
 				iNu(rb, off, 4);			//  extension object size
-									//    !!!!: implement for checking to OpcUa_DataChangeNotification
+									//    ?!?!: Implement for checking to OpcUa_DataChangeNotification
 									//          and reading/parsing the data block independently
 				int32_t ntfItN = iN(rb, off, 4);	//  monitoredItems []
 				XML_N tObj;
@@ -2231,15 +2231,15 @@ void Client::protIO( XML_N &io )
 				    uint32_t clHdl = iNu(rb, off, 4);	//   clientHandle
 				    iDataValue(rb, off, (clHdl<curSbscr->mItems.size())?curSbscr->mItems[clHdl].val:tObj);
 				}
-				iN(rb, off, 4);			//  diagnosticInfos []
-									//  !!!!: implement for parsing the non zero info
+				iN(rb, off, 4);				//  diagnosticInfos []
+									//    ?!?! Implement for parsing the non zero info
 			    }
 			    int32_t resAckN = iN(rb, off, 4);		//results []
-									//  !!!!: implement for the acknowledge status processing
+									//  ?!?! Implement the acknowledge status processing
 			    for(int iResAckN = 0; iResAckN < resAckN; ++iResAckN)
 				iNu(rb, off, 4);			// result
 			    iN(rb, off, 4);				//diagnosticInfos []
-									//  !!!!: implement for parsing the non zero info
+									//  ?!?! Implement for parsing the non zero info
 			    break;
 			}
 			case OpcUa_ServiceFault: err = strMess("0x%x:%s", stCode, "Service fault");	break;
@@ -2903,7 +2903,7 @@ nextReq:
 		    // * Lost intermediate 'C' just before 'F': clean the chunks buffer and 'F'.
 		    // * Lost 'F' after 'C' before 'F': clean the chunks buffer and pass current 'F' to process but there is possible that is single 'F'
 		    //		next, it will be checked by correct request type.
-		    //!!!! Maybe set a mark for errors generation pass after checking to correct request type or the message's sequence begin.
+		    //?!?! Maybe set a mark for errors generation pass after checking for the correct requesting type or the message's sequence begin.
 		    if(scHd_.chCnt < 0 || (scHd_.chCnt && (clSeqN-scHd_.clSeqN) > 1)) {
 			scHd_.chB = "";
 			if(rb[3] == 'C' && reqId == scHd_.reqId) { scHd_.chCnt = -1; passMessPrc = true; }
@@ -3536,7 +3536,7 @@ nextReq:
 		    for(unsigned iN = 0; iN < nN; iN++) {
 			if(dbg) debugMess(strMess("RegisterNodesRequest: node=%d; off=%d.",iN,off));
 			NodeId rN = iNodeId(rb, off);	//>> registeredNode
-			//!!!! Maybe some check for the node <rN> presence
+			//?!?! Maybe some check for the node <rN> presence
 			oNodeId(respEp, rN);		//<< registeredNode
 		    }
 		    break;
@@ -3555,7 +3555,7 @@ nextReq:
 		    for(unsigned iN = 0; iN < nN; iN++) {
 			if(dbg) debugMess(strMess("UnregisterNodesRequest: node=%d; off=%d.",iN,off));
 			NodeId uN = iNodeId(rb, off);	//>> unregisteredNode
-			//!!!! Maybe some check for the node <uN> presence
+			//?!?! Maybe some check for the node <uN> presence
 		    }
 		    break;
 		}
@@ -3651,7 +3651,8 @@ nextReq:
 				    atoi(chN->attr("dir").c_str()), chN->attr("name"), atoi(chN->attr("NodeClass").c_str()),
 				    NodeId::fromAddr(chN->attr("typeDefinition")));
 			    }
-			    wep->sessCpSet(sesTokId, cp);	//Free previous continuationPoint. Unknown using "rCp" here!!!!
+			    wep->sessCpSet(sesTokId, cp);	//Free previous continuationPoint.
+								//!!!! Unknown using "rCp" here
 			}
 			else stCode = OpcUa_BadContinuationPointInvalid;
 
@@ -3886,8 +3887,8 @@ nextReq:
 				    ss.retrQueue.push_back(respEp.substr(ntfMsgOff));	//Queue to retranslation
 				    ss.seqN++;
 				    if(maxNtfPerPublLim) ss.setState(SS_LATE);	//Restore state to process into the next Publish request,
-										// !!!! maybe store the previous monitored item's position
-										//      and early call its into the subScrCycle()
+										// ?!?! Maybe store the previous monitored item's position
+										//      and early call it into the subScrCycle()
 				}
 				s->publishReqs.erase(s->publishReqs.begin()+iP);//Remove the publish request from the queue
 				ss.pubCntr++;
@@ -4313,7 +4314,7 @@ void Server::EP::subScrCycle( unsigned cntr )
 	}
 	else if((++scr.wLT) >= scr.lifetimeCnt) {
 	    // Send StatusChangeNotification with Bad_Timeout
-	    //!!!!
+	    // ?!?!
 	    scr.setState(SS_CLOSED);	//Free Subscription
 	}
 	if(scr.st == SS_LATE || scr.st == SS_KEEPALIVE)	scr.pubCntr_ = scr.pubCntr;
@@ -4540,7 +4541,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	if(!nd.isNull())	mIt.nd = nd;
 	if(aid != OpcUa_NPosID)	mIt.aid = aid;
 	if(tmToRet != -1)	mIt.tmToRet = tmToRet;
-	if(qSz != OpcUa_NPosID)	mIt.qSz = std::max(uint32_t(1), std::min(uint32_t(1000),qSz));	//!!!! Make the upper limit configurable
+	if(qSz != OpcUa_NPosID)	mIt.qSz = std::max(uint32_t(1), std::min(uint32_t(1000),qSz));	//?!?! Make the upper limit configurable
 	if(dO >= 0)		mIt.dO = dO;
 	if(cH != OpcUa_NPosID)	mIt.cH = cH;
 	if(ifltr)		mIt.fltr = *ifltr;
@@ -4624,7 +4625,7 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 	    //if(debug()) debugMess(strMess("Browse '%s'",req.save().c_str()));
 
 	    //typeDefinition reference process
-	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH)) {	//!!!! Check for other call
+	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH)) {	//!!!! Checking for other call
 		map<string, XML_N*>::iterator ndTpDef = ndMap.find(ndX->second->attr("typeDefinition"));
 		if(ndTpDef != ndMap.end()) {
 		    unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());

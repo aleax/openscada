@@ -1,7 +1,7 @@
 
 //OpenSCADA module DB.ODBC file: mod_ldap.cpp
 /***************************************************************************
- *   Copyright (C) 2017-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2017-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,13 +30,14 @@
 //************************************************
 //* Module info!                                 *
 #define MOD_ID		"LDAP"
-#define MOD_NAME	_("Directory by LDAP")
+#define MOD_NAME	trS("Directory by LDAP")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.6.2"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("BD module. Provides support of directories by LDAP.")
+#define MOD_VER		"0.6.7"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("BD module. Provides support of directories by LDAP.")
 #define MOD_LICENSE	"GPL2"
+#define FEATURES	"LIST, GET, SEEK, SET"
 //************************************************
 
 DB_LDAP::BDMod *DB_LDAP::mod;	//Pointer for direct access to the module
@@ -80,6 +81,8 @@ BDMod::~BDMod( )
 
 }
 
+string BDMod::features( )	{ return FEATURES; }
+
 TBD *BDMod::openBD( const string &name )	{ return new MBD(name, &owner().openDB_E()); }
 
 
@@ -101,7 +104,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
+    if(flag&NodeRemove && owner().fullDeleteDB()) {
 	MtxAlloc resource(connRes, true);
     }
 }
@@ -246,7 +249,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
     if(!owner().enableStat())	return false;
     mLstUse = SYS->sysTm();
 
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     vector< vector<string> >	inTbl, *tbl = &inTbl;
     MtxAlloc res(owner().connRes);

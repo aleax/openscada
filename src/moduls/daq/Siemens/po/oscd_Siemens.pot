@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 17:25+0300\n"
+"POT-Creation-Date: 2021-10-25 16:47+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,6 +57,9 @@ msgid "CPU slot of the PLC"
 msgstr ""
 
 msgid "CIF board"
+msgstr ""
+
+msgid "Maximum size of the request block, bytes"
 msgstr ""
 
 msgid "Logical"
@@ -404,6 +407,11 @@ msgid "OK"
 msgstr ""
 
 msgid "IN REDUNDANCY"
+msgstr ""
+
+msgid ""
+"Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.\n"
+"Restart to apply the removed PLC links in run."
 msgstr ""
 
 msgid ""

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: ICP_module.h
 /***************************************************************************
- *   Copyright (C) 2010-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -28,7 +28,9 @@
 #include <map>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 #define MaxLenReq 200
 #define TrIcpDasNm "<ICP DAS>"

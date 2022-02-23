@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.UserProtocol file: user_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -30,12 +30,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"UserProtocol"
-#define MOD_NAME	_("User protocol")
+#define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.4.2"
-#define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allows you to create your own user protocols on an internal OpenSCADA language.")
+#define MOD_VER		"1.5.6"
+#define AUTHORS		trS("Roman Savochenko")
+#define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -78,21 +78,21 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mPrtU = grpAdd("up_");
 
     // User protocol DB structure
-    mUPrtEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
-    mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
-    mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
-    mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
-    mUPrtEl.fldAdd(new TFld("DAQTmpl",_("Representative DAQ template"),TFld::String,TFld::NoFlag,"50"));
-    mUPrtEl.fldAdd(new TFld("WaitReqTm",_("Timeout of a request waiting, milliseconds"),TFld::Integer,TFld::NoFlag,"6","0"));
-    mUPrtEl.fldAdd(new TFld("InPROG",_("Input procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
-    mUPrtEl.fldAdd(new TFld("OutPROG",_("Output procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
-    mUPrtEl.fldAdd(new TFld("PR_TR",_("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    mUPrtEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
+    mUPrtEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key|TFld::NoWrite,i2s(limObjID_SZ).c_str()));
+    mUPrtEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
+    mUPrtEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
+    mUPrtEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0"));
+    mUPrtEl.fldAdd(new TFld("DAQTmpl",trS("Representative DAQ template"),TFld::String,TFld::NoFlag,"50"));
+    mUPrtEl.fldAdd(new TFld("WaitReqTm",trS("Timeout of a request waiting, milliseconds"),TFld::Integer,TFld::NoFlag,"6","0"));
+    mUPrtEl.fldAdd(new TFld("InPROG",trS("Input procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPrtEl.fldAdd(new TFld("OutPROG",trS("Output procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPrtEl.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    mUPrtEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //User protocol data IO DB structure
-    mUPrtIOEl.fldAdd(new TFld("UPRT_ID",_("User protocol ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mUPrtIOEl.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
-    mUPrtIOEl.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"100"));
+    mUPrtIOEl.fldAdd(new TFld("UPRT_ID",trS("User protocol ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPrtIOEl.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ).c_str()));
+    mUPrtIOEl.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"100"));
 }
 
 TProt::~TProt( )
@@ -122,14 +122,14 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(itLs, true);
-	itLs.push_back(DB_CFG);
+	TBDS::dbList(itLs, TBDS::LsCheckSel|TBDS::LsInclGenFirst);
 	for(unsigned iDB = 0; iDB < itLs.size(); iDB++)
-	    for(unsigned fldCnt = 0; SYS->db().at().dataSeek(itLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,false,true); ) {
+	    for(unsigned fldCnt = 0; TBDS::dataSeek(itLs[iDB]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fldCnt++,gCfg,TBDS::UseCache); ) {
 		string id = gCfg.cfg("ID").getS();
-		if(!uPrtPresent(id)) uPrtAdd(id,(itLs[iDB]==SYS->workDB())?"*.*":itLs[iDB]);
-		uPrtAt(id).at().load(&gCfg);
-		gCfg.cfg("DAQTmpl").setS("");	//!!!! To prevent the new field from duplicating on different not updated tables.
+		if(!uPrtPresent(id)) uPrtAdd(id, itLs[iDB]);
+		if(uPrtAt(id).at().DB() == itLs[iDB]) uPrtAt(id).at().load(&gCfg);
+		uPrtAt(id).at().setDB(itLs[iDB], true);
+		//gCfg.cfg("DAQTmpl").setS("");	//To prevent the new field from duplicating on different not updated tables.
 		itReg[id] = true;
 	    }
 
@@ -199,11 +199,11 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    vector<string> lst;
 	    uPrtList(lst);
-	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPrtAt(lst[i_f]).at().name());
+	    for(unsigned iF = 0; iF < lst.size(); iF++)
+		opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(uPrtAt(lst[iF]).at().name()));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))	{ opt->setAttr("id", uPrtAdd(opt->attr("id"))); uPrtAt(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mPrtU,opt->attr("id"),-1,1);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mPrtU,opt->attr("id"), -1, NodeRemove);
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -287,7 +287,11 @@ TCntrNode &UserPrt::operator=( const TCntrNode &node )
 
 void UserPrt::postDisable( int flag )
 {
-    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+    if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
+	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor), owner().nodePath()+tbl(), *this, TBDS::UseAllKeys);
+
+	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }
+    }
 }
 
 TProt &UserPrt::owner( ) const	{ return *(TProt*)nodePrev(); }
@@ -445,7 +449,7 @@ void UserPrt::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
-	SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+	TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
     }
 
     loadIO();
@@ -460,7 +464,7 @@ void UserPrt::loadIO( )
 	TConfig cf(&owner().uPrtIOEl());
 	cf.cfg("UPRT_ID").setS(id(), TCfg::ForceUse);
 	cf.cfg("VALUE").setExtVal(true);
-	for(int ioCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,false,true); ) {
+	for(int ioCnt = 0; TBDS::dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",ioCnt++,cf,TBDS::UseCache); ) {
 	    string sid = cf.cfg("ID").getS();
 	    int iid = func()->ioId(sid);
 	    if(iid < 0)	continue;
@@ -475,9 +479,11 @@ void UserPrt::loadIO( )
 void UserPrt::save_( )
 {
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
+    TBDS::dataSet(fullDB(), owner().nodePath()+tbl(), *this);
 
     saveIO();
+
+    setDB(DB(), true);
 }
 
 void UserPrt::saveIO( )
@@ -494,15 +500,15 @@ void UserPrt::saveIO( )
 	    cf.cfg("VALUE").setNoTransl(func()->io(iIO)->type() != IO::String || (func()->io(iIO)->flg()&TPrmTempl::CfgLink));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) cf.cfg("VALUE").setS(lnkAddr(iIO));  //f->io(iIO)->rez());
 	    else cf.cfg("VALUE").setS(getS(iIO));
-	    SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf);
+	    TBDS::dataSet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cf);
 	}
 
 	//Clear IO
 	cf.cfgViewAll(false);
-	for(int fldCnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf); ) {
+	for(int fldCnt = 0; TBDS::dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fldCnt++,cf); ) {
 	    string sio = cf.cfg("ID").getS();
 	    if(func()->ioId(sio) < 0) {
-		if(!SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,true,false,true)) break;
+		if(!TBDS::dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cf,TBDS::UseAllKeys|TBDS::NoException)) break;
 		fldCnt--;
 	    }
 	}
@@ -566,11 +572,11 @@ void UserPrt::setEnable( bool vl )
 	    if(inProg().size()) {
 		TFunction funcIO("uprt_"+id()+"_in");
 		funcIO.setStor(DB());
-		ioRez  = funcIO.ioAdd(new IO("rez",_("Input result"),IO::Boolean,IO::Return));
-		ioReq  = funcIO.ioAdd(new IO("request",_("Input request"),IO::String,IO::Default));
-		ioAnsw = funcIO.ioAdd(new IO("answer",_("Input answer"),IO::String,IO::Output));
-		ioSend = funcIO.ioAdd(new IO("sender",_("Input sender"),IO::String,IO::Default));
-		ioTrIn = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
+		ioRez  = funcIO.ioAdd(new IO("rez",trS("Input result"),IO::Boolean,IO::Return));
+		ioReq  = funcIO.ioAdd(new IO("request",trS("Input request"),IO::String,IO::Default));
+		ioAnsw = funcIO.ioAdd(new IO("answer",trS("Input answer"),IO::String,IO::Output));
+		ioSend = funcIO.ioAdd(new IO("sender",trS("Input sender"),IO::String,IO::Default));
+		ioTrIn = funcIO.ioAdd(new IO("tr",trS("Transport"),IO::Object,IO::Default));
 
 		string workInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
@@ -581,8 +587,8 @@ void UserPrt::setEnable( bool vl )
 	    if(outProg().size()) {
 		TFunction funcIO("uprt_"+id()+"_out");
 		funcIO.setStor(DB());
-		ioIO = funcIO.ioAdd(new IO("io",_("Output IO"),IO::Object,IO::Default));
-		ioTrOut = funcIO.ioAdd(new IO("tr",_("Transport"),IO::Object,IO::Default));
+		ioIO = funcIO.ioAdd(new IO("io",trS("Output IO"),IO::Object,IO::Default));
+		ioTrOut = funcIO.ioAdd(new IO("tr",trS("Transport"),IO::Object,IO::Default));
 
 		mWorkOutProg = SYS->daq().at().at(TSYS::strSepParse(outProgLang(),0,'.')).at().
 		    compileFunc(TSYS::strSepParse(outProgLang(),1,'.'),funcIO,outProg());
@@ -618,7 +624,10 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enabled"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
-		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		    "tp","str","dest","select","select","/db/list",
+		    "help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		if(DB(true).size())
+		    ctrMkNode("comm",opt,-1,"/up/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SPRT_ID);
 		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SPRT_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
@@ -681,6 +690,8 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/up/st/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))
+	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/up/cfg/inPROGLang") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());
@@ -701,7 +712,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	}
 	opt->childAdd("el")->setText("");
     }
-    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
+    else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SPRT_ID, RWRWR_);
     else if(a_path == "/in/WaitReqTm") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(waitReqTm()));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setWaitReqTm(s2i(opt->text()));

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-12 19:53+0300\n"
+"POT-Creation-Date: 2022-01-05 21:10+0200\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -19,6 +19,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Ready"
+msgstr "Fertig"
+
+#, c-format
+msgid "The configurator is using the remote host %d times."
+msgstr "Der Konfigurator verwendet %d-Zeiten eines Remote-Hosts."
 
 msgid "Name"
 msgstr "Name"
@@ -123,7 +130,8 @@ msgstr ""
 "Schaltfläche zum zwangsweisen Laden der Artikeldaten aus der DB, nicht nur "
 "beim Ändern"
 
-msgid "Press for loading the item data from DB forcibly, not only when it changed."
+msgid ""
+"Press for loading the item data from DB forcibly, not only when it changed."
 msgstr ""
 "Drücken Sie, um die Artikeldaten zwangsweise zu laden, nicht nur, wenn sie "
 "geändert wurden."
@@ -146,12 +154,14 @@ msgstr "Speichern Sie an die DB gewaltsam"
 msgid "Save the item data to DB forcibly"
 msgstr "Sichern Sie die Artikeldaten in der DB gewaltsam"
 
-msgid "The button for saving the item data to DB forcibly, not only when it changed"
+msgid ""
+"The button for saving the item data to DB forcibly, not only when it changed"
 msgstr ""
 "Schaltfläche zum zwangsweisen Speichern der Artikeldaten in den DB, nicht "
 "nur bei Änderung"
 
-msgid "Press for saving the item data to DB forcibly, not only when it changed."
+msgid ""
+"Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 "Drücken Sie, um die Artikeldaten zwangsweise in der Datenbank zu speichern, "
 "nicht nur, wenn sie geändert wurden."
@@ -235,7 +245,8 @@ msgid "Start the cycled refreshing"
 msgstr "Starten Sie die zyklische Aktualisierung"
 
 msgid "The button for starting the cycled refreshing of the page content"
-msgstr "Schaltfläche zum Starten der zyklischen Aktualisierung des Seiteninhalts"
+msgstr ""
+"Schaltfläche zum Starten der zyklischen Aktualisierung des Seiteninhalts"
 
 msgid "Press for starting the cycled refreshing of the page content."
 msgstr "Betätigen zum Starten der zyklischen Aktualisierung des Seiteninhalts."
@@ -247,7 +258,8 @@ msgid "Stop the cycled refreshing"
 msgstr "Stoppen Sie die zyklische Aktualisierung"
 
 msgid "The button for stopping the cycled refreshing of the page content"
-msgstr "Schaltfläche zum Beenden der zyklischen Aktualisierung des Seiteninhalts"
+msgstr ""
+"Schaltfläche zum Beenden der zyklischen Aktualisierung des Seiteninhalts"
 
 msgid "Press for stopping the cycled refreshing of the page content."
 msgstr "Betätigen zum Beenden der zyklischen Aktualisierung des Seiteninhalts."
@@ -292,7 +304,8 @@ msgid "Selected page manual"
 msgstr "Ausgewählte Seiten-Handbuch"
 
 msgid "The button for getting the using selected page manual."
-msgstr "Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
+msgstr ""
+"Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
 
 msgid "Press to get the using selected page manual."
 msgstr "Klicken um das Verwendung ausgewählter Seiten-Handbuch zu bekommen."
@@ -348,13 +361,6 @@ msgstr "Diese Schaltfläche ruft den Verlauf der Statusleiste auf."
 
 msgid "Button for calling the status bar history."
 msgstr "Schaltfläche zum Aufrufen des Statusleistenverlaufs."
-
-msgid "Ready"
-msgstr "Fertig"
-
-#, c-format
-msgid "The configurator is using the remote host %d times."
-msgstr "Der Konfigurator verwendet %d-Zeiten eines Remote-Hosts."
 
 msgid "Saving the changes"
 msgstr "Speichern der Änderungen"
@@ -541,6 +547,9 @@ msgstr "Nach oben"
 msgid "Down"
 msgstr "Nach unten"
 
+msgid "Copy"
+msgstr "Kopieren"
+
 msgid "Setting the item name"
 msgstr "Einstellen der Elementname"
 
@@ -587,9 +596,6 @@ msgstr "Nach oben stellen (Ctrl+Up)"
 
 msgid "Move Down (Ctrl+Down)"
 msgstr "Nach unten bewegen (Ctrl+Down)"
-
-msgid "Copy"
-msgstr "Kopieren"
 
 #, c-format
 msgid "%s| '%s' add by a record."
@@ -785,4 +791,3 @@ msgstr "QTCfg Dialog"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Auswahl des Bezeichners und des Knotens"
-

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,6 +59,9 @@
 
 using namespace OSCADA_QT;
 using namespace VISION;
+
+#undef _
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
 
 //****************************************
 //* Inspector of attributes model        *
@@ -528,7 +531,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		}
 	    }
 
-	    if(!mainWin()->cntrIfCmd(req) /*&& req.text() == val*/) {	//!!!! Commented by dynamic translation mode specific
+	    if(!mainWin()->cntrIfCmd(req) /*&& req.text() == val*/) {	//!!!! Commented by specifics of the dynamic translation mode
 		//Send change request to opened to edit widget
 		if(dw)	dw->chRecord(chCtx);
 
@@ -624,6 +627,9 @@ bool ModInspAttr::Item::setWdgs( const string &w, bool del )
 
     return !wdgsItem.empty();
 }
+
+#undef _
+#define _(mess) mod->I18N(mess, modelData.mainWin()->lang().c_str()).c_str()
 
 //****************************************
 //* Inspector of attributes widget       *
@@ -924,10 +930,13 @@ bool InspAttr::ItemDelegate::eventFilter( QObject *object, QEvent *event )
     return QItemDelegate::eventFilter(object, event);
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
+
 //****************************************
 //* Inspector of attributes dock widget  *
 //****************************************
-InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(QWidget*)parent)
+InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget((QWidget*)parent)
 {
     setObjectName("InspAttrDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -935,9 +944,16 @@ InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(
     ainsp_w = new InspAttr(this, owner());
     setWidget(ainsp_w);
     connect(ainsp_w, SIGNAL(modified(const string &)), this, SIGNAL(modified(const string &)));
+
+    messUpd();
 }
 
 InspAttrDock::~InspAttrDock( )		{ }
+
+void InspAttrDock::messUpd( )
+{
+    setWindowTitle(_("Attributes"));
+}
 
 VisDevelop *InspAttrDock::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
@@ -947,6 +963,9 @@ void InspAttrDock::setWdg( const string &iwdg )
 {
     if(!hasFocus()) ainsp_w->setWdg(iwdg);
 }
+
+#undef _
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
 
 //****************************************
 //* Inspector of links widget            *
@@ -1193,10 +1212,13 @@ void LinkItemDelegate::setModelData( QWidget *editor, QAbstractItemModel *model,
     else QItemDelegate::setModelData(editor, model, index);
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
+
 //****************************************
 //* Inspector of links dock widget       *
 //****************************************
-InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidget*)parent), is_visible(false)
+InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget((QWidget*)parent), is_visible(false)
 {
     setObjectName("InspLnkDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -1205,9 +1227,16 @@ InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidge
     setWidget(ainsp_w);
 
     connect(this, SIGNAL(visibilityChanged(bool)), this, SLOT(setVis(bool)));
+
+    messUpd();
 }
 
 InspLnkDock::~InspLnkDock( )		{ }
+
+void InspLnkDock::messUpd( )
+{
+    setWindowTitle(_("Links"));
+}
 
 VisDevelop *InspLnkDock::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
@@ -1223,10 +1252,13 @@ void InspLnkDock::setVis( bool visible )
     if(is_visible) setWdg(ainsp_w->mainWin()->workWdg());
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, owner()->lang().c_str()).c_str()
+
 //****************************************
 //* Widget's libraries tree              *
 //****************************************
-WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)parent), disIconsW(false), disIconsCW(false)
+WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget((QWidget*)parent), disIconsW(false), disIconsCW(false)
 {
     setObjectName("WdgTree");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -1234,10 +1266,7 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     //Create Tree Widget
     treeW = new QTreeWidget(this);
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
-    // Set collumn headers
-    QStringList headerLabels;
-    headerLabels << _("Name") << _("Type") << _("Identifier");
-    treeW->setHeaderLabels(headerLabels);
+    // Set column headers
     treeW->header()->setStretchLastSection(false);
     treeW->setColumnWidth(0, icoSize(14));
     treeW->setColumnWidth(1, icoSize(4));
@@ -1258,6 +1287,12 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
 }
 
 WdgTree::~WdgTree( )		{ }
+
+void WdgTree::messUpd( )
+{
+    setWindowTitle(_("Widgets"));
+    treeW->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Identifier"));
+}
 
 VisDevelop *WdgTree::owner( ) const	{ return (VisDevelop*)parentWidget(); }
 
@@ -1291,7 +1326,7 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 		QDataStream dataStream(&itemData, QIODevice::WriteOnly);
 		dataStream << QString(work_wdg.c_str());
 
-		// Prepare mime data
+		// Prepare resources
 		QMimeData *mimeData = new QMimeData;
 		mimeData->setData("application/OpenSCADA-libwdg", itemData);
 
@@ -1348,7 +1383,9 @@ void WdgTree::selectItem( bool force )
 
 void WdgTree::updateTree( const string &vca_it, bool initial )
 {
-    //???? Make for the images loading depending from the connetion productivity, seems:
+    messUpd();
+
+    //Make for the images loading depending from the connetion productivity, seems:
     // - First time:
     //   - enable all the icons loading in the local connection
     //   - OR disable the icons loading of the container widgets in the first time
@@ -1382,7 +1419,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
     if(disIconsCW)	req.setAttr("disIconsCW", "1");
     owner()->cntrIfCmd(req);
 
-    //!!!! Maybe take maximum from the requesting time
+    //?!?! Maybe take maximum from the requesting time
     if(1e-6*(TSYS::curTime()-d_cnt) > 5) {
 	if(disIconsCW) disIconsW = true;
 	else disIconsCW = true;
@@ -1469,7 +1506,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		owner()->lb_toolbar[iT]->setIconSize(QSize(icoSize(1.6),icoSize(1.6)));
 		owner()->addToolBar(owner()->lb_toolbar[iT]);
 		owner()->lb_toolbar[iT]->setMovable(true);
-		owner()->mn_view->addAction(owner()->lb_toolbar[iT]->toggleViewAction());
+		owner()->menuView->addAction(owner()->lb_toolbar[iT]->toggleViewAction());
 		is_create = true;
 	    }
 	    for(i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
@@ -1478,7 +1515,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	    if(i_m >= (int)owner()->lb_menu.size()) {
 		owner()->lb_menu.push_back(new QMenu(QString(_("Library: %1")).arg(wlbId.c_str())));
 		owner()->lb_menu[i_m]->setObjectName(wlbId.c_str());
-		owner()->mn_widg->addMenu(owner()->lb_menu[i_m]);
+		owner()->menuWidget->addMenu(owner()->lb_menu[i_m]);
 	    }
 	    //  Update menu icon
 	    if(!img.isNull()) owner()->lb_menu[i_m]->setIcon(QPixmap::fromImage(img));
@@ -1544,7 +1581,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		//   Get parent name
 		if(!root_allow && wdgN->attr("parent") == "root") root_allow = true;
 		//   Add action
-		/*if(upd_wdg.empty()) iA = use_act.size();	//!!!! Cause menu grow after global update
+		/*if(upd_wdg.empty()) iA = use_act.size();	//!!!! Causes the menu grow after global update
 		else*/
 		for(iA = 0; iA < use_act.size(); iA++)
 		    if(use_act[iA]->objectName() == wipath.c_str())
@@ -1663,7 +1700,7 @@ void WdgTree::ctrTreePopup( )
 //****************************************
 //* Project's tree                       *
 //****************************************
-ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)parent)
+ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget((QWidget*)parent)
 {
     setObjectName("ProjTree");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
@@ -1671,10 +1708,7 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     treeW = new QTreeWidget(this);
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    //Set collumn headers
-    QStringList headerLabels;
-    headerLabels << _("Name") << _("Type") << _("Identifier");
-    treeW->setHeaderLabels(headerLabels);
+    //Set column headers
     treeW->header()->setStretchLastSection(false);
     treeW->setColumnWidth(0, icoSize(14));
     treeW->setColumnWidth(1, icoSize(4));
@@ -1689,9 +1723,17 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     setWidget(treeW);
 
     treeW->installEventFilter(this);
+
+    messUpd();
 }
 
 ProjTree::~ProjTree( )	{ }
+
+void ProjTree::messUpd( )
+{
+    setWindowTitle(_("Projects"));
+    treeW->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Identifier"));
+}
 
 VisDevelop *ProjTree::owner( ) const	{ return (VISION::VisDevelop*)parentWidget(); }
 
@@ -1731,6 +1773,8 @@ void ProjTree::selectItem( bool force )
 
 void ProjTree::updateTree( QTreeWidgetItem *it )
 {
+    messUpd();
+
     vector<string> list_pr, list_pg;
     QTreeWidgetItem *nit, *nit_pg;
     string t_el, simg;
@@ -1965,12 +2009,20 @@ void LineEditProp::callDlg( )
     if(toClose) QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
 }
 
+#undef _
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
+
 //*********************************************
 //* Status bar scale indicator                *
 //*********************************************
-WScaleStBar::WScaleStBar( QWidget *parent ) : QLabel(parent)	{ setScale(false); }
+WScaleStBar::WScaleStBar( VisDevelop *mainWind ) : QLabel(mainWind), main_win(mainWind)
+{
+    setScale(false);
+}
 
-void WScaleStBar::setScale( bool val )				{ setText((isScale=val)?_("Scale"):_("Resize")); }
+VisDevelop *WScaleStBar::mainWin( ) const	{ return main_win; }
+
+void WScaleStBar::setScale( bool val )		{ setText((isScale=val)?_("Scale"):_("Resize")); }
 
 void WScaleStBar::mousePressEvent( QMouseEvent * event )	{ setScale(!scale()); }
 
@@ -2378,7 +2430,7 @@ void DevelWdgView::wdgPopup( )
 	    popup.addAction(mainWin()->actVisItDel);
 	    popup.addAction(mainWin()->actVisItClear);
 	    popup.addAction(mainWin()->actVisItChDown);
-	    /*if(sel_cnt == 1) {	//!!!! For what?
+	    /*if(sel_cnt == 1) {	//?!?! For what?
 		popup.addAction(mainWin()->actVisItProp);
 		popup.addAction(mainWin()->actVisItEdit);
 	    }*/
@@ -2388,7 +2440,7 @@ void DevelWdgView::wdgPopup( )
 	    popup.addSeparator();
 
 	    //   Insert item actions
-	    popup.addMenu(mainWin()->mn_widg_fnc);
+	    popup.addMenu(mainWin()->menuWidgetFunc);
 	}
 	else {
 	    popup.addAction(mainWin()->actVisItClear);
@@ -2701,7 +2753,7 @@ string DevelWdgView::cacheResGet( const string &res )
 
 void DevelWdgView::cacheResSet( const string &res, const string &val )
 {
-    if(val.size() > limUserFile_SZ) return;
+    if(val.size() > (unsigned)limUserFile_SZ) return;
     mCacheRes[res] = val;
 }
 
@@ -2763,7 +2815,7 @@ void DevelWdgView::chUnDo( )
     else if(rule->name() == "chldDel") {
 	QAction addAct(NULL);
 	addAct.setObjectName(rule->attr("parent").c_str());
-	mainWin()->visualItAdd(&addAct, QPointF(1,1), TSYS::pathLev(rule->attr("wdg"),2).substr(4), "", id(), true);
+	mainWin()->visualItAdd(&addAct, QPointF(A_GEOM_MIN,A_GEOM_MIN), TSYS::pathLevEnd(rule->attr("wdg"),0).substr(4), "", id(), true);
 	chRestoreCtx(*rule);
     }
     else if(rlW && rule->name() == "chldPaste")	mainWin()->visualItDel(rule->attr("dst"),true);
@@ -3105,7 +3157,7 @@ bool DevelWdgView::event( QEvent *event )
 			fMoveHold = true;
 			holdPnt = curp;
 		    }
-		    update();	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
+		    update();	//!!!! To hack the QT's included widget's update (Document,Protocol and other)
 		    return true;
 		}
 		break;
@@ -3158,7 +3210,7 @@ bool DevelWdgView::event( QEvent *event )
 		}
 
 		if(fSelChange) {
-		    setSelect(true, PrcChilds|NoUpdate);	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
+		    setSelect(true, PrcChilds|NoUpdate);	//!!!! To hack the QT's included widget's update (Document,Protocol and other)
 		    fSelChange = false;
 		}
 
@@ -3228,7 +3280,7 @@ bool DevelWdgView::event( QEvent *event )
 			!fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus())
 		{
 		    if(editWdg)	editWdg->setSelect(false, PrcChilds);
-		    //setSelect(false);	//!!!! To prevent spare requests for to the remote station at the window moving.
+		    //setSelect(false);	//!!!! To prevent spare requests for to the remote station at the window moving
 		}
 		return true;
 	    case QEvent::MouseMove: {

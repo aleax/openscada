@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -27,6 +27,7 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QProgressDialog>
+#include <QMenu>
 
 #include <string>
 #include <vector>
@@ -52,6 +53,7 @@ class QHBoxLayout;
 class QLabel;
 class QTabWidget;
 class QSplitter;
+class QFrame;
 
 using namespace OSCADA;
 
@@ -119,23 +121,28 @@ class ConfApp: public QMainWindow
 
     Q_OBJECT
 
-public:
+    public:
     //Methods
     ConfApp( string open_user );
     ~ConfApp( );
 
+    string user( );
+    string lang( bool withSystem = false );
+
+    void messUpd( );
+
     //Atributes
     bool	winClose;			//Closing window flag
 
-signals:
-    void makeStarterMenu( QWidget *mn );
+    signals:
+    void makeStarterMenu( QWidget *mn = NULL, QString lang = "" );
 
-protected:
+    protected:
     //Methods
     void closeEvent( QCloseEvent* );		//Close window event
     void resizeEvent( QResizeEvent * );		//Resize window event
 
-private slots:
+    private slots:
     //Slots
     void quitSt( );
     bool exitModifChk( );
@@ -214,30 +221,41 @@ private:
     void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool comm = false );
 
     // Control requests
-    void initHosts( );
+    static bool compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 );
+    void initHosts( bool toReconnect = false );
     int cntrIfCmd( XMLNode &node );
     int cntrIfCmdHosts( XMLNode &node );
 
-    string getPrintVal( const string &vl );
+    //string getPrintVal( const string &vl );
 
     //Attributes
     QTimer	*endRunTimer, *autoUpdTimer, *reqPrgrsTimer;
 
     QTreeWidget	*CtrTree;
+    QFrame	*gFrame;
     QSplitter	*splitter;
     QLabel	*titleIco,
 		*titleLab,
 		*mStModify;
     QTabWidget	*tabs;
     UserStBar	*wUser;
+    QPushButton	*stBt;
     QProgressDialog *reqPrgrs;
 
-    QAction	*actUp, *actPrev, *actNext,
+    QAction	*actClose, *actQuit,
+		*actUp, *actPrev, *actNext,
 		*actUpdate, *actStartUpd, *actStopUpd,
 		*actDBLoad, *actDBLoadF, *actDBSave, *actDBSaveF,
 		*actItAdd, *actItDel,
 		*actItCut, *actItCopy, *actItPaste,
-		*actManualPage;
+		*actAbout, *actQtAbout, *actManual, *actManualSYS, *actManualPage, *actWhatIs;
+
+    QMenu	*menuFile,	//Menu "File"
+		*menuEdit,	//Menu "Edit"
+		*menuView,	//Menu "View"
+		*menuHelp;	//Menu "Help"
+
+    QToolBar	*toolBar, *QTStarter;
 
     XMLNode	pgInfo, genReqs;
     XMLNode	*root;

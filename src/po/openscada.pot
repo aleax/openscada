@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-29 10:10+0300\n"
+"POT-Creation-Date: 2022-02-09 16:34+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,9 +24,6 @@ msgid "The resource tries to tightly block the thread!"
 msgstr ""
 
 msgid "Resource is timeouted!"
-msgstr ""
-
-msgid "Archives-History"
 msgstr ""
 
 msgid "Identifier"
@@ -50,7 +47,7 @@ msgstr ""
 msgid "Messages level"
 msgstr ""
 
-msgid "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"
+msgid "Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"
 msgstr ""
 
 msgid "Address"
@@ -204,7 +201,7 @@ msgstr ""
 msgid "Time, size (seconds) and level"
 msgstr ""
 
-msgid "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"
+msgid "Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X]);Information (1[X]), ALARMS;Notice (2[X]), ALARMS;Warning (3[X]), ALARMS;Error (4[X]), ALARMS;Critical (5[X]), ALARMS;Alert (6[X]), ALARMS;Emergency (7[X]), ALARMS"
 msgstr ""
 
 msgid "Receiving messages with a level greater or equal to the specified."
@@ -296,6 +293,10 @@ msgid "Running"
 msgstr ""
 
 msgid "Archiver DB"
+msgstr ""
+
+#, c-format
+msgid "Remove from '%s'"
 msgstr ""
 
 msgid "End"
@@ -450,12 +451,6 @@ msgstr ""
 msgid "Last read buffer"
 msgstr ""
 
-msgid "Data Bases"
-msgstr ""
-
-msgid "Value ID"
-msgstr ""
-
 msgid "DB type (module)"
 msgstr ""
 
@@ -463,6 +458,9 @@ msgid "Code page"
 msgstr ""
 
 msgid "To enable"
+msgstr ""
+
+msgid "Priority in list"
 msgstr ""
 
 msgid "Transaction closing: after opening, seconds"
@@ -484,11 +482,13 @@ msgstr ""
 msgid "Error writing to DB or configuration file."
 msgstr ""
 
+msgid "Value ID"
+msgstr ""
+
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"SYSStPref    <0|1>      Use the station ID in the common table (SYS).\n"
 "TblLifeTime  <seconds>  Opened tables lifetime (by default 600 seconds).\n"
 "\n"
 msgstr ""
@@ -538,6 +538,9 @@ msgstr ""
 msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr ""
 
+msgid "Priority in the range [0...99]. Useful for libraries placed in several databases for specifying the priority of the project - used ones."
+msgstr ""
+
 msgid "Tables"
 msgstr ""
 
@@ -574,6 +577,19 @@ msgid "Table offset, size"
 msgstr ""
 
 msgid "Data"
+msgstr ""
+
+msgid "Table is empty."
+msgstr ""
+
+#, c-format
+msgid "Row \"%s\" is not present. Are you saved the object?"
+msgstr ""
+
+msgid "The DB is in the Read only mode."
+msgstr ""
+
+msgid "Translation removed! Reload the base message."
 msgstr ""
 
 #, c-format
@@ -789,9 +805,6 @@ msgid ""
 "Also affects to specific-diagnostic messages generation by the data sources."
 msgstr ""
 
-msgid "Data Acquisition"
-msgstr ""
-
 msgid "Maximum calculate time, seconds"
 msgstr ""
 
@@ -966,7 +979,13 @@ msgstr ""
 msgid "Spent time"
 msgstr ""
 
+msgid "Text"
+msgstr ""
+
 msgid "String"
+msgstr ""
+
+msgid "(translate)"
 msgstr ""
 
 msgid "Integer"
@@ -1005,9 +1024,10 @@ msgstr ""
 msgid "Error getting object from non-object IO %d!"
 msgstr ""
 
-msgid ""
-"DB address in format \"{DB module}.{DB name}\".\n"
-"Set '*.*' for use the main work DB."
+msgid "Storage address in the format \"{DB module}.{DB name}\"."
+msgstr ""
+
+msgid "Set '*.*' to use the Generic Storage."
 msgstr ""
 
 msgid ""
@@ -1047,9 +1067,6 @@ msgid ""
 "  '*' - any substring;\n"
 "  '?' - any character.\n"
 "Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/)."
-msgstr ""
-
-msgid "Modules scheduler"
 msgstr ""
 
 #, c-format
@@ -1135,6 +1152,9 @@ msgstr ""
 msgid "License"
 msgstr ""
 
+msgid "Features"
+msgstr ""
+
 msgid "Module enabling."
 msgstr ""
 
@@ -1203,7 +1223,7 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-msgid "Real;Integer;Boolean;String;Text;Object;Integer numbers selection;Real numbers selection;Strings selection"
+msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object;Integer numbers selection;Real numbers selection;Strings selection"
 msgstr ""
 
 msgid "Input;Output"
@@ -1275,8 +1295,8 @@ msgid "Library DB"
 msgstr ""
 
 msgid ""
-"DB address in format \"{DB module}.{DB name}.{Table name}\".\n"
-"Set '*.*.{Table name}' for use the main work DB."
+"Storage address in the format \"{DB module}.{DB name}.{Table name}\".\n"
+"To use the Generic Storage, set '*.*.{Table name}'."
 msgstr ""
 
 msgid "Parameter templates"
@@ -1285,15 +1305,9 @@ msgstr ""
 msgid "Templates"
 msgstr ""
 
-msgid "Transport Protocols"
-msgstr ""
-
 msgid ""
 "=============== Subsystem \"Transport Protocols\" options =================\n"
 "\n"
-msgstr ""
-
-msgid "Security"
 msgstr ""
 
 msgid "Full name"
@@ -1323,16 +1337,16 @@ msgstr ""
 msgid "Error finding and creating new user groups."
 msgstr ""
 
-msgid "Administrator (superuser)!!!"
+msgid "Administrator"
 msgstr ""
 
-msgid "Simple user."
+msgid "Simple user"
 msgstr ""
 
-msgid "Administrators group."
+msgid "Administrators group"
 msgstr ""
 
-msgid "Users group."
+msgid "Users group"
 msgstr ""
 
 msgid ""
@@ -1375,9 +1389,6 @@ msgstr ""
 msgid "User group DB"
 msgstr ""
 
-msgid "Specials"
-msgstr ""
-
 msgid ""
 "======================= Subsystem \"Specials\" options =====================\n"
 "\n"
@@ -1415,10 +1426,6 @@ msgid "Subsystem: "
 msgstr ""
 
 msgid "Initial Station"
-msgstr ""
-
-#, c-format
-msgid "Program counters at the exit time: %s"
 msgstr ""
 
 #, c-format
@@ -1548,6 +1555,7 @@ msgid ""
 "\t\tand the part size of the big files transferring.\n"
 "limUserIts_N\t[1000...*1000000...1000000000] The limit on count of creating user items, like to array items.\n"
 "limCacheIts_N\t[*100...100000] The limit on count of the caching items.\n"
+"limCacheIts_TM\t[10...*60...1000] The limit on the caching items time, seconds.\n"
 "    Global configurable parameters:\n"
 "prmStrBuf_SZ\t[1000...*10000...1000000] Length of string buffers, no string class.\n"
 "prmWait_DL\t[0.001...*0.1...1] Quantum of the waiting time cycles, seconds.\n"
@@ -1839,12 +1847,12 @@ msgstr ""
 msgid "Translations"
 msgstr ""
 
-msgid "Base language of the text variables"
+msgid "Base language - locales list"
 msgstr ""
 
 msgid ""
-"Enables the multilingual support for text variables in the configuration DBs by selecting the base language.\n"
-"You can select or type here other language besides English(en), but take in your mind that all standard OpenSCADA libraries's formed for the base language English(en), so other base languages will break these DBs at change!"
+"Enables the multilingual support for text variables in the configuration DBs by entry the base language and the project whole locales (like to \"en_US.UTF-8\") list (optional) separated by ';'.\n"
+"You can entry here other language besides English(en) as the base, but take in your mind that all standard OpenSCADA libraries formed for the base language English(en), so other base languages will break these DBs at change!"
 msgstr ""
 
 msgid "dynamic translation"
@@ -1865,13 +1873,15 @@ msgstr ""
 msgid "List of the processing languages, in the two-character representation and separated by the character ';'."
 msgstr ""
 
-msgid "Source filter, check for mismatch, pass"
+msgid "Source filter, check/fix, pass"
 msgstr ""
 
 msgid "Source filter of limiting the manager work in some DBs, the source just must contain such substring."
 msgstr ""
 
-msgid "Enable for checking the equal base messages for their translation equality in different sources."
+msgid ""
+"Enable for checking the base messages translation equality in different sources\n"
+"and fixing by: propagation the translations to empty sources, clearing the double to base translations and merging the base messages as the translations."
 msgstr ""
 
 msgid "Pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing."
@@ -1967,17 +1977,49 @@ msgstr ""
 msgid "Error installing processors for the thread."
 msgstr ""
 
+msgid "SINGLELANGUAGE"
+msgstr ""
+
 msgid "only use the already multilanguage DBs with their modification"
+msgstr ""
+
+msgid "MULTILANGUAGE-DYNAMIC"
+msgstr ""
+
+msgid "MULTILANGUAGE"
 msgstr ""
 
 #, c-format
 msgid "creating or modification the configuration DBs as multilanguage ones with the pointed base language '%s'"
 msgstr ""
 
-msgid "<<<Unmatched sources!!!>>>\n"
+#, c-format
+msgid "Messages indexed=%d, cached=%d."
 msgstr ""
 
-msgid "Transports"
+#, c-format
+msgid "Translation contexts=%d."
+msgstr ""
+
+msgid "<<<Unmatched sources>>>\n"
+msgstr ""
+
+msgid "<<<Translation changed>>>\n"
+msgstr ""
+
+#, c-format
+msgid "Clearing the equel to base translation '%s' for '%s'."
+msgstr ""
+
+#, c-format
+msgid "Propagation the translation '%s' to all empty sources for '%s'.'%s'."
+msgstr ""
+
+#, c-format
+msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
+msgstr ""
+
+msgid "<<<Base changed>>>\n"
 msgstr ""
 
 msgid "Transport type"
@@ -2051,6 +2093,10 @@ msgid "Lifted hosts are not available for control here!"
 msgstr ""
 
 #, c-format
+msgid "The host '%s' is presented already!"
+msgstr ""
+
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "---- Parameters of the module section '%s' of the configuration file ----\n"
@@ -2062,6 +2108,9 @@ msgid "Input transport"
 msgstr ""
 
 msgid "Output transport"
+msgstr ""
+
+msgid "Transports"
 msgstr ""
 
 msgid "List"
@@ -2176,9 +2225,6 @@ msgid "Module does not support compilation of the programming language."
 msgstr ""
 
 msgid "Owner"
-msgstr ""
-
-msgid "User Interfaces"
 msgstr ""
 
 msgid ""
@@ -2320,8 +2366,17 @@ msgstr ""
 msgid "Value archiver is not supported!"
 msgstr ""
 
+msgid "Archives-History"
+msgstr ""
+
 #, c-format
 msgid "Function '%s' is not supported!"
+msgstr ""
+
+msgid "Data Bases"
+msgstr ""
+
+msgid "Data Acquisition"
 msgstr ""
 
 #, c-format
@@ -2330,6 +2385,18 @@ msgstr ""
 
 #, c-format
 msgid "%s: Error with ID or IO %d for the function '%s'!"
+msgstr ""
+
+msgid "Modules scheduler"
+msgstr ""
+
+msgid "Transport Protocols"
+msgstr ""
+
+msgid "Security"
+msgstr ""
+
+msgid "Specials"
 msgstr ""
 
 msgid "Open Supervisory Control And Data Acquisition"
@@ -2342,6 +2409,9 @@ msgid "Input transport is not supported!"
 msgstr ""
 
 msgid "Output transport is not supported!"
+msgstr ""
+
+msgid "User Interfaces"
 msgstr ""
 
 msgid "New project"

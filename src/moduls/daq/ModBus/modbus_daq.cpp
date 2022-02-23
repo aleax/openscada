@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,32 +57,32 @@ void TTpContr::postEnable( int flag )
     TTypeDAQ::postEnable(flag);
 
     //Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PRM_BD_L",_("Logical parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
-    fldAdd(new TFld("PRIOR",_("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
-    fldAdd(new TFld("PROT",_("ModBus protocol"),TFld::String,TFld::Selectable,"5","TCP","TCP;RTU;ASCII","TCP/IP;RTU;ASCII"));
-    fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,TFld::NoFlag,"41",""));
-    fldAdd(new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255"));
-    fldAdd(new TFld("FRAG_MERGE",_("Merging of the data fragments"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("WR_MULTI",_("Using the multi-items writing functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("WR_ASYNCH",_("Asynchronous write"),TFld::Boolean,TFld::NoFlag,"1","0"));
-    fldAdd(new TFld("TM_REQ",_("Timeout of connection, milliseconds"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
-    fldAdd(new TFld("TM_REST",_("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
-    fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
-    fldAdd(new TFld("MAX_BLKSZ",_("Maximum size of the request block, bytes"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
+    fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD_L",trS("Logical parameters table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;199"));
+    fldAdd(new TFld("PROT",trS("ModBus protocol"),TFld::String,TFld::Selectable,"5","TCP","TCP;RTU;ASCII","TCP/IP;RTU;ASCII"));
+    fldAdd(new TFld("ADDR",trS("Transport address"),TFld::String,TFld::NoFlag,"41",""));
+    fldAdd(new TFld("NODE",trS("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255"));
+    fldAdd(new TFld("FRAG_MERGE",trS("Merging of the data fragments"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("WR_MULTI",trS("Using the multi-items writing functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("WR_ASYNCH",trS("Asynchronous write"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("TM_REQ",trS("Timeout of connection, milliseconds"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
+    fldAdd(new TFld("TM_REST",trS("Timeout of restore, seconds"),TFld::Integer,TFld::NoFlag,"4","30","1;3600"));
+    fldAdd(new TFld("REQ_TRY",trS("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
+    fldAdd(new TFld("MAX_BLKSZ",trS("Maximum size of the request block, bytes"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
     //Parameter type bd structure
     // Standard parameter type by the simple attributes list
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",trS("Attributes list"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"100000",""));
     // Extended logical parameter type by the DAQ parameter template
     t_prm = tpParmAdd("logic", "PRM_BD_L", _("Logical"));
-    tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("TMPL",trS("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     //  Parameter template IO DB structure
-    elPrmIO.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ*6).c_str()));
-    elPrmIO.fldAdd(new TFld("ID",_("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
-    elPrmIO.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::TransltText,"1000000"));
+    elPrmIO.fldAdd(new TFld("PRM_ID",trS("Parameter ID"),TFld::String,TCfg::Key,i2s(limObjID_SZ*6).c_str()));
+    elPrmIO.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,i2s(limObjID_SZ*1.5).c_str()));
+    elPrmIO.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::TransltText,"1000000"));
 }
 
 void TTpContr::load_( )
@@ -107,7 +107,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	mSched(cfg("SCHEDULE")), mPrt(cfg("PROT")), mAddr(cfg("ADDR")),
 	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), mAsynchWr(cfg("WR_ASYNCH").getBd()),
 	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
-	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), isReload(false), alSt(-1),
+	mPer(1e9), prcSt(false), callSt(false), endrunReq(false), alSt(-1),
 	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
@@ -122,15 +122,13 @@ TMdContr::~TMdContr( )
 
 void TMdContr::postDisable( int flag )
 {
-    TController::postDisable(flag);
     try {
-	if(flag) {
-	    //Delete logical parameter's io table
-	    string tbl = DB()+"."+cfg("PRM_BD_L").getS()+"_io";
-	    SYS->db().at().open(tbl);
-	    SYS->db().at().close(tbl, true);
-	}
+	if(flag&(NodeRemove|NodeRemoveOnlyStor))
+	    TBDS::dataDelTbl(DB(flag&NodeRemoveOnlyStor)+"."+cfg("PRM_BD_L").getS()+"_io",
+				owner().nodePath()+cfg("PRM_BD_L").getS()+"_io");
     } catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
+    TController::postDisable(flag);
 }
 
 string TMdContr::getStatus( )
@@ -140,16 +138,27 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse()) {
 	if(!prcSt) val += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1) {
-	    val += TSYS::strMess(_("Error of connection. Restoring in %.6g s."), tmDelay);
-	    val.replace(0, 1, i2s(TError::Tr_Connect));
+	    int errCode = TError::Tr_Connect;
+	    if(addr().empty())	{ val += TSYS::strMess(_("No transport.")); errCode = TError::Tr_ErrTransport; }
+	    else try {
+		    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
+		    if(tr.at().addr().empty()) { val += TSYS::strMess(_("Empty transport.")); errCode = TError::Tr_ErrTransport; }
+		} catch(TError&) { val += TSYS::strMess(_("Error the transport.")); errCode = TError::Tr_ErrTransport; }
+	    if(errCode == TError::Tr_Connect)	val += TSYS::strMess(_("Error the connection."));
+	    val += " " + TSYS::strMess(_("Restoring in %.6g s."), tmDelay);
+	    val.replace(0, 1, i2s(errCode));
 	}
 	else {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
 	    if(period())val += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    val += TSYS::strMess(_("Spent time: %s[%s]. Read %g(%g) registers, %g(%g) coils. Wrote %g registers, %g coils. Errors of connection %g, of response %g."),
-			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(),
-			numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp);
+	    val += TSYS::strMess(_("Spent time: %s[%s]. "),
+			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
+			tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
+	    val += TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. "), numRReg, numRRegIn, numRCoil, numRCoilIn);
+	    val += TSYS::strMess(_("Wrote %g registers, %g coils. "), numWReg, numWCoil);
+	    if(asynchWrs.size()) val += TSYS::strMess(_("In the buffer %d. "), asynchWrs.size());
+	    val += TSYS::strMess(_("Errors of connection %g, of response %g. "), numErrCon, numErrResp);
 	}
     }
 
@@ -160,6 +169,9 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new 
 
 void TMdContr::disable_( )
 {
+    // Asynchronous writings buffer clean up
+    aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
+
     //Clear acquisition data block
     reqRes.resRequestW(true);
     acqBlks.clear();
@@ -167,6 +179,9 @@ void TMdContr::disable_( )
     acqBlksCoil.clear();
     acqBlksCoilIn.clear();
     reqRes.resRelease();
+
+    //Clear process parameters list
+    enRes.lock(); pHd.clear(); enRes.unlock();
 }
 
 void TMdContr::load_( )
@@ -182,29 +197,6 @@ void TMdContr::start_( )
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
     tmDelay = 0;
 
-    //Reenable parameters for data blocks structure update
-    // Asynchronous writings queue clean up
-    aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
-
-    // Clear data blocks
-    reqRes.resRequestW(true);
-    acqBlks.clear();
-    acqBlksIn.clear();
-    acqBlksCoil.clear();
-    acqBlksCoilIn.clear();
-    reqRes.resRelease();
-
-    // Reenable parameters
-    try {
-	vector<string> pls;
-	list(pls);
-
-	isReload = true;
-	for(unsigned iP = 0; iP < pls.size(); iP++)
-	    if(at(pls[iP]).at().enableStat()) at(pls[iP]).at().enable();
-	isReload = false;
-    } catch(TError&) { isReload = false; throw; }
-
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
@@ -216,13 +208,6 @@ void TMdContr::stop_( )
 
     alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
     alSt = -1;
-
-    //Clear statistic
-    numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
-
-    //Clear process parameters list
-    MtxAlloc res(enRes, true);
-    pHd.clear();
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -884,7 +869,7 @@ void *TMdContr::Task( void *icntr )
 	    isStart = false;
 	    prmRes.unlock();
 
-	    //Writing the asynchronous writings' queue
+	    //Writing the asynchronous writings' buffer
 	    MtxAlloc resAsWr(cntr.aWrRes, true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
@@ -934,7 +919,7 @@ void TMdContr::setCntrDelay( const string &err )
     tmDelay = restTm;
 }
 
-TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     // string messIO(string pdu) - sending the PDU <pdu> through the controller transpot by ModBus protocol.
     //  pdu - PDU request/response
@@ -944,7 +929,7 @@ TVariant TMdContr::objFuncCall( const string &iid, vector<TVariant> &prms, const
 	prms[0].setS(req); prms[0].setModify();
 	return rez;
     }
-    return TController::objFuncCall(iid, prms, user);
+    return TController::objFuncCall(iid, prms, user_lang);
 }
 
 bool TMdContr::inWr( const string &addr )
@@ -961,6 +946,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/st/runSt",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.\n"
+		    "Restart to apply the removed PLC links in run."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,
 	    4,"tp","str","dest","select","select","/cntr/cfg/trLst","help",_("Default port of the ModuBus/TCP is 502."));
@@ -980,7 +968,30 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
+    if(a_path == "/cntr/st/runSt" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && s2i(opt->text()) && enableStat()) {
+	// Asynchronous writings buffer clean up
+	aWrRes.lock(); asynchWrs.clear(); aWrRes.unlock();
+
+	// Data blocks clean up
+	reqRes.resRequestW(true);
+	acqBlks.clear();
+	acqBlksIn.clear();
+	acqBlksCoil.clear();
+	acqBlksCoilIn.clear();
+	reqRes.resRelease();
+
+	// Reloading the parameters' data
+	vector<string> pls;
+	list(pls);
+
+	for(unsigned iP = 0; iP < pls.size(); iP++)
+	    if(at(pls[iP]).at().enableStat())
+		at(pls[iP]).at().loadDATA(true);
+
+	// Now same starting
+	start();
+    }
+    else if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");
 	vector<string> sls;
 	SYS->transport().at().outTrList(sls);
@@ -1021,11 +1032,11 @@ void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
-    if(flag && isLogic()) {
+    if(flag&NodeRemove && isLogic()) {
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(ownerPath(true), true);
-	SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+	TBDS::dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -1065,10 +1076,17 @@ bool TMdPrm::isLogic( ) const		{ return (type().name == "logic"); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat() && !owner().isReload) return;
+    if(enableStat()) return;
 
     TParamContr::enable();
 
+    loadDATA();
+
+    owner().prmEn(this, true);	//Put to process
+}
+
+void TMdPrm::loadDATA( bool incl )
+{
     map<string, bool> als;
 
     //Parse ModBus attributes and convert to string list for standard type parameter
@@ -1164,7 +1182,7 @@ void TMdPrm::enable( )
 		loadIO(true);
 
 		// Init links
-		lCtx->chkLnkNeed = lCtx->initLnks(true);
+		lCtx->chkLnkNeed = lCtx->initLnks(/*true*/);	//!!!! Do not reconnect but that can be done in loadIO() early
 
 		// Init system attributes identifiers
 		lCtx->idFreq  = lCtx->ioId("f_frq");
@@ -1188,7 +1206,13 @@ void TMdPrm::enable( )
 	    try{ pEl.fldDel(iP); iP--; }
 	    catch(TError &err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 
-    owner().prmEn(this, true);	//Put to process
+    //Call the included paramers' data reload
+    if(incl) {
+	vector<string> prmLs;
+	list(prmLs);
+	for(unsigned iP = 0; iP < prmLs.size(); iP++)
+	    at(prmLs[iP]).at().loadDATA(incl);
+    }
 }
 
 void TMdPrm::disable( )
@@ -1236,10 +1260,10 @@ void TMdPrm::loadIO( bool force )
     //IO values loading and links set, by seek
     for(int iIO = 0; iIO < lCtx->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
+	if(!TBDS::dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,TBDS::NoException)) continue;
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    lCtx->lnkAddrSet(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));	//Force to no translation
-	else if(lCtx->func()->io(iIO)->type() != IO::String)
+	else if(lCtx->func()->io(iIO)->type() != IO::String || !(lCtx->func()->io(iIO)->flg()&IO::TransltText))
 	    lCtx->setS(iIO, cfg.cfg("VALUE").getS(TCfg::ExtValOne));		//Force to no translation
 	else lCtx->setS(iIO, cfg.cfg("VALUE").getS());
     }
@@ -1263,11 +1287,11 @@ void TMdPrm::saveIO( )
     for(int iIO = 0; iIO < lCtx->func()->ioSize(); iIO++) {
 	cfg.cfg("ID").setS(lCtx->func()->io(iIO)->id());
 	cfg.cfg("VALUE").setNoTransl(!(lCtx->func()->io(iIO)->type() == IO::String &&
-		!(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
+		(lCtx->func()->io(iIO)->flg()&IO::TransltText) && !(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)));
 	if(lCtx->func()->io(iIO)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(lCtx->lnkAddr(iIO));
 	else cfg.cfg("VALUE").setS(lCtx->getS(iIO));
-	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+	TBDS::dataSet(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
 }
 
@@ -1341,7 +1365,7 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
     acqErr.setVal("");	//But it is not used for the type
 }
 
-TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //bool attrAdd( string id, string name, string tp = "real", string selValsNms = "" ) - attribute <id> and <name> for type <tp> add.
     //  id, name - new attribute id and name;
@@ -1394,7 +1418,7 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 	return true;
     }
 
-    return TParamContr::objFuncCall(iid, prms, user);
+    return TParamContr::objFuncCall(iid, prms, user_lang);
 }
 
 void TMdPrm::vlGet( TVal &val )
@@ -1410,7 +1434,7 @@ void TMdPrm::vlGet( TVal &val )
     if(owner().redntUse()) return;
 
     if(val.name() == "err") {
-	if(owner().tmDelay > -1) val.setS(_("10:Error of connection or no response."), 0, true);
+	if(owner().tmDelay > -1) val.setS(owner().getStatus(), 0, true);
 	else if(acqErr.getVal().size()) val.setS(acqErr.getVal(), 0, true);
 	else if(lCtx && lCtx->idErr >= 0) val.setS(lCtx->getS(lCtx->idErr), 0, true);
 	else val.setS("0",0,true);

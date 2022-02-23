@@ -1,13 +1,13 @@
 # OpenSCADA.DB.MySQL translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DB.MySQL module.
 #
-# Roman Savochenko <roman@oscada.org>, 2003-2019.
+# Roman Savochenko <roman@oscada.org>, 2003-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-14 22:13+0200\n"
+"POT-Creation-Date: 2021-12-08 09:53+0200\n"
 "PO-Revision-Date: 2007-10-23 12:23+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -102,9 +102,5 @@ msgstr ""
 msgid "Close opened transaction"
 msgstr "Закрити відкриту транзакцію"
 
-msgid "Table is empty!"
-msgstr "Таблиця порожня!"
-
-#, c-format
-msgid "The row \"%s\" is not present. Are you saved the object?"
-msgstr "Запис \"%s\" відсутній! Ви зберігали цей об'єкт?"
+msgid "Table is empty."
+msgstr "Таблиця порожня."

@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
@@ -322,11 +322,12 @@ In the runtime mode, in the main field of the element, there are displayed the s
 <table class="wikitable">
 
 <tr>
-<td> <span id="TextLab" title="#TextLab"><h3><span class="mw-headline" id="Text_label_.28TextLab.29"><span class="mw-headline-number">1.3</span> Text label (<a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">TextLab</a>)</span></h3></span> </td>
-<td> 1.0 </td>
+<td> <span id="TextLab" title="#TextLab"><h3><span class="mw-headline" id="Text_label_.28TextLab.29"><span class="mw-headline-number">1.3</span> Text label (<a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">TextLab</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -452,11 +453,12 @@ In the runtime mode, in the main field of the element, there are displayed the t
 <table class="wikitable">
 
 <tr>
-<td> <span id="ImgLab" title="#ImgLab"><h3><span class="mw-headline" id="Image_label_.28ImgLab.29"><span class="mw-headline-number">1.4</span> Image label (<a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">ImgLab</a>)</span></h3></span> </td>
-<td> 1.0 </td>
+<td> <span id="ImgLab" title="#ImgLab"><h3><span class="mw-headline" id="Image_label_.28ImgLab.29"><span class="mw-headline-number">1.4</span> Image label (<a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">ImgLab</a>)</span></h3></span>
+</td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -593,11 +595,12 @@ In the runtime mode, in the main field of the element, there are displayed the i
 <table class="wikitable">
 
 <tr>
-<td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id="Alarms_.E2.80.94_active_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Alarms — active (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id="Alarms_.E2.80.94_active_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Alarms — active (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -610,6 +613,7 @@ In the runtime mode, in the main field of the element, there are displayed the i
 <ul><li> <i>atm</i> — time of the violation appearing;</li>
 <li> <i>qttm</i> — time of the violation confirmation (quietation), for quieted violations;</li>
 <li> <i>lev</i> — level of the violation;</li>
+<li> <i>type</i> — type-name of the violation from the level <i>lev</i> and the attribute "types";</li>
 <li> <i>cat</i> — category of the violation;</li>
 <li> <i>mess</i> — full and unparsed text of the violation message;</li>
 <li> <i>prm</i> — address of the DAQ-parameter of the data source;</li>
@@ -620,7 +624,8 @@ In the runtime mode, in the main field of the element, there are displayed the i
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This element and its fields generally represent the structure of the violation message, which is described in detail in <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the Program manual</a>.
 </p><p>As you can see from the list of possible table fields, this item supports confirmation (quietation), commenting, and user fields.
 </p>
-<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li></ul>
+<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li>
+<li> <b>Sponsored by, for appending the new user field "Type" on 0.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> INSERTEC LTDA</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:904px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsAct.png"><img class="thumbimage" height="170" src="files/LibMainEls_alarmsAct.png" width="902" /></a>  <div class="thumbcaption">Fig.1.5. The element "Alarms — active" in the development and runtime modes (top to down).</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 This widget can be used by the developer in creating mnemonic schemes with constant display of active violations or for their general display on <a href="#RootPgSo">the root page</a>. To use it you need to add this widget to a mnemonic scheme or the root page, adjust for the horizontal, vertical size, configure vertical extension and adjust other properties, such as the list and the order in which the table fields are displayed.
@@ -677,16 +682,17 @@ In the runtime mode, a table is created to list the active violations, by define
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Columns, by ',' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Columns, by ',' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
 <td> String </td>
 <td> Determine in the desired sequence and the fields filling.
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Highlight rules, {lev}{quitt}:{color}:{font}:{fontColor} </td>
+<td> Highlight rules, {lev}[{slev}]{quitt}:{color}:{font}:{fontColor} </td>
 <td> Text </td>
 <td> Highlight rules, where:
-<ul><li> <i>lev</i> — level of the message [0...7];</li>
+<ul><li> <i>lev</i> — main level of the message [0...7];</li>
+<li> <i>slev</i> — sub-level of the message [0...9], optional;</li>
 <li> <i>quitt</i> — sign of the message confirmation (quietation) [0|1];</li>
 <li> <i>color</i> — background color of the message row;</li>
 <li> <i>font</i> — text font of the message row;</li>
@@ -694,27 +700,40 @@ In the runtime mode, a table is created to list the active violations, by define
 <p>Te example:
 </p>
 <pre style="white-space: pre-wrap">
-5:gray
-4:red
-1:yellow
+50:gray
+40:red
+150:yellow
 </pre>
 </td></tr>
 <tr>
 <td> colDscrCustNames </td>
 <td> Names list of the user fields, separated by ';' </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> At the support of user fields and their visibility, their names are given here.
+</td></tr>
+<tr>
+<td> types </td>
+<td> Types list at the level from 0, separated by ';' </td>
+<td> String (translate) </td>
+<td> Types-names of alarms at their level, typically "Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency"
+</td></tr>
+<tr>
+<td> messCat </td>
+<td> Message category </td>
+<td> String </td>
+<td> Category of the processing alarm messages, typically it is empty for all alarms.
 </td></tr></table>
 <p><br />
 </p>
 <table class="wikitable">
 
 <tr>
-<td> <span id="objProps" title="#objProps"><h3><span class="mw-headline" id="Object_properties_.28objProps.29"><span class="mw-headline-number">1.6</span> Object properties (<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">objProps</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> <span id="objProps" title="#objProps"><h3><span class="mw-headline" id="Object_properties_.28objProps.29"><span class="mw-headline-number">1.6</span> Object properties (<a href="Libs_Main_graphical_elements.html#objProps" title="Special:MyLanguage/Libs/Main graphical elements">objProps</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -816,7 +835,7 @@ In the runtime mode, the year, month, and day are displayed according to the "se
 <tr>
 <td> <span id="RootPgSo" title="#RootPgSo"><h2><span class="mw-headline" id="Root_page_.28SO.29_.28RootPgSo.29"><span class="mw-headline-number">2</span> Root page (SO) (<a href="Libs_Main_graphical_elements.html#RootPgSo" title="Special:MyLanguage/Libs/Main graphical elements">RootPgSo</a>)</span></h2></span>
 </td>
-<td> 2.4 </td>
+<td> 2.5 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -1242,11 +1261,12 @@ In the runtime mode, in the main field of the element, there are displayed the p
 <table class="wikitable">
 
 <tr>
-<td> <span id="graphSelPrm" title="#graphSelPrm"><h4><span class="mw-headline" id="Graph_parameter_selection_.28graphSelPrm.29"><span class="mw-headline-number">3.1.2</span> Graph parameter selection (<a href="Libs_Main_graphical_elements.html#graphSelPrm" title="Special:MyLanguage/Libs/Main graphical elements">graphSelPrm</a>)</span></h4></span> </td>
-<td> 1.4 </td>
+<td> <span id="graphSelPrm" title="#graphSelPrm"><h4><span class="mw-headline" id="Graph_parameter_selection_.28graphSelPrm.29"><span class="mw-headline-number">3.1.2</span> Graph parameter selection (<a href="Libs_Main_graphical_elements.html#graphSelPrm" title="Special:MyLanguage/Libs/Main graphical elements">graphSelPrm</a>)</span></h4></span>
+</td>
+<td> 1.5 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -1273,7 +1293,7 @@ In the runtime mode, in the main field of the element, there are displayed the p
 <p><b><u>Using — development</u></b><br />
 This frame should be placed to the panels' logical container of the project tree. The "Select: parameters accessible to select (allowSelLst)" attribute must be defined to a list of sources according to the rules described above in the "<a href="#grpGraph">Graphics groups</a>", which should provide the selection of the sources by the user. As a result, the "Select" item will appear in the context menu of the <a href="#ElViewGraph">Graphics group element</a>.
 </p><p><b><u>Using — runtime</u></b><br />
-Calling the dialogue is made by the "Select" item of the <a href="#ElViewGraph">Graphics group element</a> context menu. The dialogue provides the user to the possibility of selection the data source from the list, as well as an indication of its basic parameters: name, scale, logarithmic scale, dimension and the color of the trend. When you accept the dialogue the selected parameters are applied to the graphics group element chart, replacing the links. The "&lt;Clear&gt;" item selection and applying causes to clearing all the links and the graph's item. Into a text field under the list you can rapidly find any needed parameter.
+Calling the dialogue is made by the "Select" item of the <a href="#ElViewGraph">Graphics group element</a> context menu. The dialogue provides the user to the possibility of selection the data source from the list, as well as an indication of its basic parameters: name, scale, logarithmic scale, dimension and the color of the trend, which you also can select typical/styled one by clearing. When you accept the dialogue the selected parameters are applied to the graphics group element chart, replacing the links. The "&lt;Clear&gt;" item selection and applying causes to clearing all the links and the graph's item. Into a text field under the list you can rapidly find any needed parameter.
 </p><p><br />
 </p>
 <table class="wikitable">
@@ -1592,11 +1612,12 @@ In the runtime mode, the main element field displays the group header, headers a
 <table class="wikitable">
 
 <tr>
-<td> <span id="cntrRegul" title="#cntrRegul"><h3><span class="mw-headline" id="Regulator.27s_control_panel_.28cntrRegul.29"><span class="mw-headline-number">3.5</span> Regulator's control panel (<a href="Libs_Main_graphical_elements.html#cntrRegul" title="Special:MyLanguage/Libs/Main graphical elements">cntrRegul</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> <span id="cntrRegul" title="#cntrRegul"><h3><span class="mw-headline" id="Regulator.27s_control_panel_.28cntrRegul.29"><span class="mw-headline-number">3.5</span> Regulator's control panel (<a href="Libs_Main_graphical_elements.html#cntrRegul" title="Special:MyLanguage/Libs/Main graphical elements">cntrRegul</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -1896,11 +1917,12 @@ In the runtime mode, you can see:
 <table class="wikitable">
 
 <tr>
-<td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id="Alarms_.E2.80.94_state_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Alarms — state (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span> </td>
-<td> 1.2 </td>
+<td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id="Alarms_.E2.80.94_state_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Alarms — state (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span>
+</td>
+<td> 1.4 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
 </td></tr></table>
@@ -1925,6 +1947,7 @@ In the runtime mode, you can see:
 <li> <i>qttm</i> — time of the violation confirmation;</li>
 <li> <i>nrmtm</i> — time of coming-returning the violation to the state "NORM";</li>
 <li> <i>lev</i> — level of the violation;</li>
+<li> <i>type</i> — type-name of the violation from the level <i>lev</i> and the attribute "types";</li>
 <li> <i>cat</i> — category of the violation;</li>
 <li> <i>mess</i> — full and unparsed text of the violation message;</li>
 <li> <i>prm</i> — address of the DAQ-parameter of the data source;</li>
@@ -1935,7 +1958,8 @@ In the runtime mode, you can see:
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> This frame and its fields generally represent the structure of the violation message, which is described in detail in <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the Program manual</a>.
 </p><p>As you can see from the list of possible table fields, this item supports confirmation, commenting, and user fields.
 </p>
-<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li></ul>
+<ul><li> <b>Sponsored by:</b> Ustijancev Michael</li>
+<li> <b>Sponsored by, for appending the new user field "Type" on 0.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> INSERTEC LTDA</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStD.png"><img class="thumbimage" height="550" src="files/LibMainEls_alarmsStD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.6a. The frame "Alarms — state" in the development mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The widget is designed to perform the role of page, and should therefore be placed directly in the project's tree. After adding, the frame must be adjusted for the properties, such as the list and the order in which the table fields are displayed.
@@ -2007,16 +2031,17 @@ In the runtime mode, a table is created from the active violations list, for the
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Columns, by ',' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Columns, by ',' (atm,qttm,nrmtm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
 <td> String </td>
 <td> Determine in the desired sequence and the fields filling.
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Highlight rules, {lev}{quitt}{act}:{color}:{font}:{fontColor} </td>
+<td> Highlight rules, {lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor} </td>
 <td> Text </td>
 <td> Highlight rules, where:
-<ul><li> <i>lev</i> — level of the message [0...7];</li>
+<ul><li> <i>lev</i> — main level of the message [0...7];</li>
+<li> <i>slev</i> — sub-level of the message [0...9], optional;</li>
 <li> <i>quitt</i> — sign of the message confirmation [0|1];</li>
 <li> <i>act</i> — sign of the message activity [0|1];</li>
 <li> <i>color</i> — background color of the message row;</li>
@@ -2027,17 +2052,23 @@ In the runtime mode, a table is created from the active violations list, for the
 <pre style="white-space: pre-wrap">
 501:gray
 401:red
-101:yellow
+1501:yellow
 511:gray:Arial 11 0 1
 411:red:Arial 11 0 1
-111:yellow:Arial 11 0 1
+1511:yellow:Arial 11 0 1
 </pre>
 </td></tr>
 <tr>
 <td> colDscrCustNames </td>
 <td> Names list of the user fields, separated by ';' </td>
-<td> String </td>
+<td> String (translate) </td>
 <td> At the support of user fields and their visibility, their names are given here.
+</td></tr>
+<tr>
+<td> types </td>
+<td> Types list at the level from 0, separated by ';' </td>
+<td> String (translate) </td>
+<td> Types-names of alarms at their level, typically "Debug;Info;Notice;Warning;Error;Critical;Alert;Emergency"
 </td></tr></table>
 <p><br />
 </p>
@@ -2289,8 +2320,9 @@ Calling the panel is made from <a href="#RootPgSo">the root page "RootPgSo"</a> 
 <table class="wikitable">
 
 <tr>
-<td> <span id="ElCadr" title="#ElCadr"><h3><span class="mw-headline" id="Element_cadre_.28ElCadr.29"><span class="mw-headline-number">4.2</span> Element cadre (<a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElCadr</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> <span id="ElCadr" title="#ElCadr"><h3><span class="mw-headline" id="Element_cadre_.28ElCadr.29"><span class="mw-headline-number">4.2</span> Element cadre (<a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElCadr</a>)</span></h3></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -3059,5 +3091,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.h
 /***************************************************************************
- *   Copyright (C) 2009-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -24,7 +24,9 @@
 #include <ttransports.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using namespace OSCADA;
 
@@ -172,7 +174,7 @@ class TTrOut: public TTransportOut
 	void save_( );
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Methods

@@ -49,15 +49,17 @@ class WidgetLib : public TCntrNode, public TConfig
 	string ico( ) const	{ return cfg("ICO").getS(); }	//Icon
 	string getStatus( );
 
-	string DB( ) const	{ return workLibDB; }		//Current library DB
-	string tbl( ) const	{ return cfg("DB_TBL").getS(); }//Table of storing library data
-	string fullDB( ) const	{ return DB()+'.'+tbl(); }	//Full address to library data storage ( DB()+"."+tbl() )
+	bool isStdStorAddr( ) const		{ return (tbl() == ("wlb_"+id())); }	//????[v1.0] Remove
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
+	string tbl( ) const	{ return cfg("DB_TBL").getS().empty() ? ("wlb_"+id()) : cfg("DB_TBL").getS(); }
+	string fullDB( bool qTop = false ) const{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &it )	{ cfg("NAME").setS(it); }
 	void setDescr( const string &it )	{ cfg("DESCR").setS(it); }
 	void setIco( const string &it )		{ cfg("ICO").setS(it); }
-	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 
+	void setDB( const string &vl, bool qTop = false ) { setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
+	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 	void setFullDB( const string &it );
 
 	// Enable stat
@@ -65,10 +67,10 @@ class WidgetLib : public TCntrNode, public TConfig
 	void setEnable( bool val, bool force = false );
 
         // Mime data access
-	void mimeDataList( vector<string> &list, const string &idb = "" ) const;
-	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "", int off = -1, int *size = NULL ) const;
-	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
-	void mimeDataDel( const string &id, const string &idb = "" );
+	void resourceDataList( vector<string> &list, const string &idb = "" ) const;
+	bool resourceDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "", int off = -1, int *size = NULL ) const;
+	void resourceDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
+	void resourceDataDel( const string &id, const string &idb = "" );
 
 	// Widgets
 	void list( vector<string> &ls ) const		{ chldList(mWdg, ls); }
@@ -76,7 +78,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	AutoHD<LWidget> at( const string &id ) const;
 	string add( const string &id, const string &name, const string &orig = "" );
 	void add( LWidget *iwdg );
-	void del( const string &id, bool full = false )	{ chldDel(mWdg, id, -1, full); }
+	void del( const string &id, bool full = false )	{ chldDel(mWdg, id, -1, full?NodeRemove:NodeNoFlg); }
 
     protected:
 	//Methods
@@ -99,7 +101,8 @@ class WidgetLib : public TCntrNode, public TConfig
     private:
 	//Attributes
 	TCfg	&mId;
-	string	workLibDB, mOldDB;
+	string	mDB,
+		mDB_MimeSrc;	//After the copy mostly
 	bool	mEnable;
 	bool	passAutoEn;
 };
@@ -118,7 +121,7 @@ class LWidget : public Widget, public TConfig
 
 	TCntrNode &operator=( const TCntrNode &node );
 
-	string	path( ) const;
+	string	addr( ) const;
 	string	ico( ) const;
 	string	type( )		{ return "LibWidget"; }
 	string	getStatus( );
@@ -128,7 +131,7 @@ class LWidget : public Widget, public TConfig
 	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
 	int	calcPer( ) const;
-	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
+	string	parentAddr( ) const	{ return cfg("PARENT").getS(); }
 	string	proc( ) const		{ return cfg("PROC").getS(); }
 	int64_t	timeStamp( )		{ return mTimeStamp; }
 
@@ -138,7 +141,7 @@ class LWidget : public Widget, public TConfig
 	void setCalcProgTr( bool vl )		{ cfg("PR_TR") = vl; }
 	void setCalcProg( const string &prg );
 	void setCalcPer( int vl )		{ mProcPer = vl; modif(); }
-	void setParentNm( const string &nm );
+	void setParentAddr( const string &nm );
 	void setEnableByNeed( )			{ enableByNeed = true; modifClr(); }
 
 	// Include widgets
@@ -151,7 +154,8 @@ class LWidget : public Widget, public TConfig
 
 	// Data access
 	void resourceList( vector<string> &ls );
-	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const;
+	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	void procChange( bool src = true );
 
@@ -175,13 +179,13 @@ class LWidget : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
+	void setWModif( Attr *a = NULL )	{ modif(); Widget::setWModif(a); }
 
     private:
 	//Attributes
 	int64_t	&mProcPer,	//Widget period
 		&mTimeStamp;
-	string	mParentNmPrev;	//Previous parent name after successful enable
+	string	mParentAddrPrev;//Previous parent name after successful enable
 	ResMtx	mFuncM;
 };
 
@@ -198,7 +202,7 @@ class CWidget : public Widget, public TConfig
 	TCntrNode &operator=( const TCntrNode &node );
 
 	// Main parameters
-	string	path( ) const;
+	string	addr( ) const;
 	string	ico( ) const;
 	string	type( )		{ return "LibLink"; }
 	string	calcId( );
@@ -206,10 +210,10 @@ class CWidget : public Widget, public TConfig
 	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
 	int	calcPer( ) const;
-	string	parentNm( ) const	{ return cfg("PARENT").getS(); }
+	string	parentAddr( ) const	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val, bool force = false );
-	void setParentNm( const string &isw );
+	void setParentAddr( const string &isw );
 
 	// Storing
 	void loadIO( );
@@ -217,7 +221,8 @@ class CWidget : public Widget, public TConfig
 
 	// Data access
 	void resourceList( vector<string> &ls );
-	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL );
+	string resourceGet( const string &id, string *mime = NULL, int off = -1, int *size = NULL, bool noParent = false ) const;
+	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	void procChange( bool src = true );
 
@@ -237,7 +242,7 @@ class CWidget : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
+	void setWModif( Attr *a = NULL )	{ modif(); Widget::setWModif(a); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };

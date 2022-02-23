@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.ODBC file: odbc.h
 /***************************************************************************
- *   Copyright (C) 2015-2016,2020 by Roman Savochenko, <roman@oscada.org>  *
+ *   Copyright (C) 2015-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,7 +25,9 @@
 #include <tbds.h>
 
 #undef _
-#define _(mess) mod->I18N(mess)
+#define _(mess) mod->I18N(mess).c_str()
+#undef trS
+#define trS(mess) mod->I18N(mess,mess_PreSave)
 
 using namespace OSCADA;
 
@@ -55,7 +57,7 @@ class MTable : public TTable
     private:
 	//Private methods
 	void postDisable( int flag );
-	//void fieldFix( TConfig &cfg );
+	//void fieldFix( TConfig &cfg, const string &langLs = "" );
 	//void getStructDB( string name, vector< vector<string> > &tblStrct );
 
 	//string getVal( TCfg &cfg, uint8_t RqFlg = 0 );
@@ -125,6 +127,8 @@ class BDMod: public TTypeBD
 	//Public methods
 	BDMod( string name );
 	~BDMod( );
+
+	string features( );
 
     private:
 	//Private methods

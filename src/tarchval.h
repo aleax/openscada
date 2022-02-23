@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.h
 /***************************************************************************
- *   Copyright (C) 2006-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -194,13 +194,13 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	bool	toStart( )  		{ return mStart; }
 	bool	startStat( ) const	{ return runSt; }
 
-	string	DB( ) const		{ return mDB; }
+	string	DB( bool qTop = false ) const		{ return storage(mDB, qTop); }
 	string	tbl( );
-	string	fullDB( )		{ return DB()+'.'+tbl(); }
+	string	fullDB( bool qTop = false )		{ return DB(qTop)+'.'+tbl(); }
 
-	int64_t	end( const string &arch = BUF_ARCH_NM );
-	int64_t	begin( const string &arch = BUF_ARCH_NM );
-	int64_t	period( const string &arch = BUF_ARCH_NM );
+	int64_t	end( const string &arch = ARCH_BUF );
+	int64_t	begin( const string &arch = ARCH_BUF );
+	int64_t	period( const string &arch = ARCH_BUF );
 	TFld::Type valType( bool full = false )	{ return TValBuf::valType(full); }
 	bool	hardGrid( )	{ return TValBuf::hardGrid(); }
 	bool	highResTm( )	{ return TValBuf::highResTm(); }
@@ -213,7 +213,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void setCombMode( CombMode vl )		{ mCombMode = (int)vl; }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
-	void setDB( const string &idb )		{ mDB = idb; modifG(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modifG(); }
 
 	void setValType( TFld::Type vl )	{ mVType = vl; }
 	void setHardGrid( bool vl )		{ mBHGrd = vl; setUpBuf(); modif(); }
@@ -258,7 +258,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void load_( TConfig *cfg );
 	void save_( );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
     private:
 	//Private methods
@@ -316,9 +316,9 @@ class TVArchivator : public TCntrNode, public TConfig
 	bool toStart( )		{ return mStart; }
 	bool startStat( ) const	{ return runSt; }
 
-	string DB( ) const	{ return mDB; }
+	string DB( bool qTop = false ) const	{ return storage(mDB, qTop); }
 	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string fullDB( bool qTop = false )	{ return DB(qTop)+'.'+tbl(); }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
@@ -328,12 +328,12 @@ class TVArchivator : public TCntrNode, public TConfig
 	void setSelPrior( int vl )		{ mSelPrior = std::max(0,std::min(1000,vl)); modif(); }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
-	void setDB( const string &idb )		{ mDB = idb; modif(); }
+	void setDB( const string &vl, bool qTop = false )	{ setStorage(mDB, vl, qTop); if(!qTop) modif(); }
 
 	virtual void start( );
 	virtual void stop( bool full_del = false );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	// Place archive functions
 	void archiveList( vector<string> &ls );

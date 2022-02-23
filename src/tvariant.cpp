@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -295,8 +295,8 @@ void TVariant::setS( const string &ivl )
 		val.sMini[ivl.size()] = 0;
 		mSize = ivl.size();
 	    }
-	    //!!!! Direct memory allocation mostly used now for constant strings like to key TCfg for prevent its "const char *" pointer changing.
-	    //     Maybe further there has a sense to use STL string also but check it to equal for the assign and then the pointer changing omit.
+	    //!!!! Direct memory allocation mostly used now for constant strings like to the TCfg keyw to prevent they "const char *" pointer changing.
+	    //     Maybe further here has a sense to use STL string also but check it to equal for the assign, then the pointer changing omit.
 	    else if(mStdStringOmit) {		//For middle blocks up to prmStrBuf_SZ
 		if(ivl.size() > 30000000)	throw TError("TVariant", _("Very large string for non STL string (> 30 MB)!"));
 		if(mStdString) { delete val.s; mStdString = false; }
@@ -761,7 +761,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     // Array sort( ) - lexicographic items sorting
     if(id == "sort") {
 	dataM.lock();
-	sort(mEls.begin(),mEls.end(),compareLess);
+	sort(mEls.begin(), mEls.end(), compareLess);
 	dataM.unlock();
 	return this;
     }
@@ -1336,7 +1336,7 @@ void XMLNodeObj::getElementsBy( const string &tag, const string &attr, const str
 //* TCntrNodeObj                                            *
 //*   TCntrNode object for access to system's objects       *
 //***********************************************************
-TCntrNodeObj::TCntrNodeObj( AutoHD<TCntrNode> ind, const string &iuser ) : mUser(iuser)
+TCntrNodeObj::TCntrNodeObj( AutoHD<TCntrNode> ind, const string &user_lang ) : mUserLang(user_lang)
 {
     cnd = ind;
 
@@ -1354,12 +1354,16 @@ string TCntrNodeObj::objName( )
     return cnd.at().objName();
 }
 
+string TCntrNodeObj::user( )	{ return TSYS::strLine(mUserLang, 0); }
+
+string TCntrNodeObj::lang( )	{ return TSYS::strLine(mUserLang, 1); }
+
 TVariant TCntrNodeObj::propGet( const string &id )
 {
     if(cnd.freeStat()) return TVariant();
     try {
 	AutoHD<TCntrNode> nnd = cnd.at().nodeAt(id);
-	return new TCntrNodeObj(nnd,user());
+	return new TCntrNodeObj(nnd, mUserLang);
     } catch(...) { }
 
     TVariant rez = cnd.at().objPropGet(id);
@@ -1378,6 +1382,6 @@ string TCntrNodeObj::getStrXML( const string &oid )	{ return "<TCntrNodeObj path
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     if(cnd.freeStat()) throw TError("TCntrNodeObj", _("Object is not connected to a node of the OpenSCADA tree."));
-    try{ return cnd.at().objFuncCall(id, prms, user()); } catch(TError&){ }
+    try{ return cnd.at().objFuncCall(id, prms, mUserLang); } catch(TError&){ }
     return TVarObj::funcCall(id, prms);
 }

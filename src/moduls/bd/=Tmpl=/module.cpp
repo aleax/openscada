@@ -2,7 +2,7 @@
 //!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module BD.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2017 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -33,12 +33,12 @@
 //************************************************
 //* Module info!                                 *
 #define MOD_ID		"Tmpl"
-#define MOD_NAME	_("DB Tmpl")
+#define MOD_NAME	trS("DB Tmpl")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
 #define MOD_VER		"0.0.1"
-#define AUTHORS		_("MyName MyFamily")
-#define DESCRIPTION	_("BD Tmpl description.")
+#define AUTHORS		trS("MyName MyFamily")
+#define DESCRIPTION	trS("BD Tmpl description.")
 #define MOD_LICENSE	"MyLicense"
 //************************************************
 
@@ -114,7 +114,7 @@ void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
-    if(flag && owner().fullDeleteDB()) {
+    if(flag&NodeRemove && owner().fullDeleteDB()) {
 	//!!! Process here the full deleting of the database code
 	MtxAlloc resource(connRes, true);
     }
@@ -230,7 +230,7 @@ void MTable::postDisable( int flag )
 {
     //!!! Commit the transaction
     owner().transCommit();
-    if(flag) {
+    if(flag&NodeRemove) {
         //!!! The code for the table drop
     }
 }
@@ -268,7 +268,8 @@ bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
     if(tblStrct.empty()) throw err_sys(_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
-    cfg.cfgToDefault();	//reset the not key and viewed fields
+    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.setTrcSet(true);
 
     //Check for no present and no empty keys allow
     if(row == 0) {
@@ -519,7 +520,7 @@ void MTable::fieldDel( TConfig &cfg )
 }
 
 //!!! The table structure fixing function to the field
-void MTable::fieldFix( TConfig &cfg )
+void MTable::fieldFix( TConfig &cfg, const string &langLs )
 {
     owner().transCommit();
 

@@ -33,7 +33,7 @@
 #include "vis_shapes.h"
 
 #undef _
-#define _(mess) mod->I18N(mess, mainWin()->lang().c_str())
+#define _(mess) mod->I18N(mess, mainWin()->lang().c_str()).c_str()
 
 using namespace VISION;
 
@@ -114,14 +114,14 @@ void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
     if(!aBr) {
 	aBr = new XMLNode("get");
 	aBr->setAttr("path", id()+"/%2fserv%2fattrBr")->
-	    setAttr("tm", u2s(full?0:mainWin()->reqTm()))->setAttr("FullTree", FullTree?"1":"0");
+	    setAttr("tm", u2s(full?0:mainWin()->reqTm()))->setAttr("FullTree", FullTree?"1":"");
 	cntrIfCmd(*aBr);
 	reqBrCr = true;
     }
 
     if(full)	setAllAttrLoad(true);
-    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++) {
-	XMLNode *cN = aBr->childGet(i_el);
+    for(unsigned iEl = 0; iEl < aBr->childSize(); iEl++) {
+	XMLNode *cN = aBr->childGet(iEl);
 	if(cN->name() == "el") attrSet(cN->attr("id"), cN->text(), s2i(cN->attr("p")));
     }
     if(full) {
@@ -148,7 +148,7 @@ void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
 	    if(qobject_cast<RunWdgView*>(children().at(iC)) && !qobject_cast<RunPageView*>(children().at(iC)) &&
 		    ((RunWdgView*)children().at(iC))->id() == (id()+"/wdg_"+aBr->childGet(iL)->attr("id")))
 	    {
-		((RunWdgView*)children().at(iC))->update(full,aBr->childGet(iL),FullTree);
+		((RunWdgView*)children().at(iC))->update(full, aBr->childGet(iL), FullTree);
 		break;
 	    }
 	if(iC < children().size()) continue;
@@ -209,8 +209,11 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos, b
 
     switch(uiPrmPos) {
 	case A_COM_FOCUS:
-	    if((bool)s2i(val) == hasFocus())	break;
-	    if((bool)s2i(val))	setFocus(Qt::OtherFocusReason);
+	    //if((bool)s2i(val) == hasFocus())	break;
+	    if(s2i(val)) {
+		mainWin()->setFocus(id(), true);
+		setFocus(Qt::OtherFocusReason);
+	    } else clearFocus();
 	    return true;
 	case A_PERM:
 	    setPermCntr(s2i(val)&SEC_WR);
@@ -523,7 +526,7 @@ bool RunWdgView::event( QEvent *event )
 		return true;
 	    }
 	    break;
-	case QEvent::FocusIn:	mainWin()->setFocus(id());	return true;
+	case QEvent::FocusIn:	mainWin()->setFocus(id()); return true;
 	    /*attrs.push_back(std::make_pair("focus","1"));
 	    attrs.push_back(std::make_pair("event","ws_FocusIn"));
 	    attrsSet(attrs);
@@ -609,7 +612,7 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
     //Self check
     if(id() == ipg) return this;
 
-    //Check to included widgets
+    //Checking for included widgets
     for(int iCh = 0; iCh < children().size(); iCh++) {
 	if(qobject_cast<RunPageView*>(children().at(iCh))) {
 	    pg = ((RunPageView*)children().at(iCh))->findOpenPage(ipg);
@@ -646,7 +649,9 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
 			req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fserv%2fpg")->setAttr("pg",pg_it_prev);
 			mainWin()->cntrIfCmd(req);
 		    }
-		    ((RunWdgView*)children().at(iCh))->setPgOpenSrc(pg_it);
+		    // Changing the pages only through 'pgOpenSrc' but the source page direct update may cause collisions on fast switching
+		    ((RunWdgView*)children().at(iCh))->attrSet("pgOpenSrc", pg_it, A_NO_ID, true);	//!!!! Only to the model
+		    //((RunWdgView*)children().at(iCh))->setPgOpenSrc(pg_it);
 		}
 		return true;
 	    }

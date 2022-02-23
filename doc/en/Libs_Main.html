@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="http://oscada.org"><img alt="OpenSCADA" src="../en/files/Logo-big.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main</h1>
@@ -88,7 +88,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> <span id="anUnif" title="#anUnif"><h3><span class="mw-headline" id="Analog_signal.2C_unified_.28anUnif.29"><span class="mw-headline-number">1.1</span> Analog signal, unified (<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">anUnif</a>)</span></h3></span>
 </td>
-<td> 2.1 </td>
+<td> 2.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -128,6 +128,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <a href="Libs_Documents.html#docRepMonth" title="Special:MyLanguage/Libs/Documents">Month report of the day-averaged values</a></li>
 <li> <a href="Libs_Documents.html#docRepYear" title="Special:MyLanguage/Libs/Documents">Year report of the month values</a></li>
 <li> <a href="Libs_Documents.html#docRep2WorkSh" title="Special:MyLanguage/Libs/Documents">Report of two working shifts</a></li></ul></li></ul>
+<ul><li> <b>Sponsored by, for expanding the common field DESCR using in the specific alarm parameters on 0.1 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> INSERTEC LTDA</li></ul>
 <p><b><u>Functions</u></b><br />
 </p>
 <ul><li> Generic processing of the raw analog input for:</li></ul>
@@ -144,10 +145,11 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> <i>min</i>, <i>max</i> [IN] — the main border IOs;</li>
 <li> <i>plcMin</i>, <i>plcMax</i> [IN] — the hardware border IOs;</li>
 <li> <i>plcImit</i>, <i>plcImitIn</i> [IN] — IOs of the simple imitation;</li>
-<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-79...0] and text of the error (the attribute "err" format);</li>
 <li> <i>f_frq</i> [IN] — frequency of calculation, the template IO;</li>
 <li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
-<li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
+<li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles;</li>
+<li> <i>toSave</i> [OUT] — to force save the parameter object at exit.</li></ul></dd></dl>
 <ul><li> Simple substitution for the variable <b>subVar</b> at the error (not valid) input variable (EVAL) in the modes: "no", "last" and "substitute".</li>
 <li> Processing the result variable <b>var</b> for violation some borders and criteria, generating the alarms and proper setting the attribute <b>err</b>. The alarm borders can have some hysteresis <b>HystBnd</b>, can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>. Next borders and criteria are provided:</li></ul>
 <dl><dd><ul><li> missing for data or connection with source at the EVAL input value — error code 1 and alarm level 5;</li>
@@ -157,6 +159,10 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul><li> exceeding the end variable of the warning border [<b>wMin</b>...<b>wMax</b>] — error code 5,6 and alarm level 2;</li></ul>
 <dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Disabled at setting for equal or inverted values of the border</dd></dl>
 <ul><li> big motion <b>speed</b> of the end variable — error code 7 and alarm level 2.</li></ul></dd></dl>
+<ul><li> Specific parameters redefinition in the common attribute <b>DESCR</b>:</li></ul>
+<dl><dd><ul><li> <i>the first line</i> — as description of the alarm messages;</li>
+<li> the field <i>CustomFlds</i> — specifying of <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the custom fields</a> of the alarm messages in the form "<b>CustomFlds: {CustFld0} =&gt; {CustFld1} =&gt; ... =&gt; {CustFldN}</b>";</li>
+<li> the field <i>CustomAlarms</i> — redefinition of the standard alarm levels of the alarm messages in the form "<b>CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}</b>".</li></ul></dd></dl>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -1171,7 +1177,7 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <tr>
 <td> <span id="digAlarm" title="#digAlarm"><h3><span class="mw-headline" id="Alarm_discrete_.28digAlarm.29"><span class="mw-headline-number">1.5</span> Alarm discrete (<a href="Libs_Main.html#digAlarm" title="Special:MyLanguage/Libs/Main">digAlarm</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -1193,11 +1199,14 @@ Completely identical to "<a href="#anUnif">Analog signal, unified</a>]" with the
 <ul><li> Direct obtaining, by link, of the initial state and formation of two representative states with the possibility of their inversion <b>stInv</b>.</li>
 <li> Complex preprocessing and complete generation-imitation of the discrete input on the internal programming language of OpenSCADA into the configuration IO <b>inProc</b>, where you can operate next service parameters:</li></ul>
 <dl><dd><ul><li> <i>in</i> [IN|OUT] — the same raw discrete input IO;</li>
-<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-79...0] and text of the error (the attribute "err" format);</li>
 <li> <i>f_frq</i> [IN] — frequency of calculation, the template IO;</li>
 <li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
 <li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
-<ul><li> Processing of the discrete input <b>in</b> for the purpose of creating a violation and correspondingly setting the attribute <b>err</b>, at the condition "<b>{st}:{lev}:{mess}</b>", that is generation violation of the level <i>lev</i> and the text <i>mess</i> for the input status <i>st</i> (0|1). What can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>.</li></ul>
+<ul><li> Processing of the discrete input <b>in</b> for the purpose of creating a violation and correspondingly setting the attribute <b>err</b>, at the condition "<b>{st}:{lev}:{mess}</b>", that is violation generation of the level <i>lev</i> and the text <i>mess</i> for the input status <i>st</i> (0|1). What can be delayed on the time <b>alDelay</b> and can be suppressed setting <b>alSup</b>.</li>
+<li> Specific parameters redefinition in the common attribute <b>DESCR</b>:</li></ul>
+<dl><dd><ul><li> <i>the first line</i> — as description of the alarm messages;</li>
+<li> the field <i>CustomFlds</i> — specifying of <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">the custom fields</a> of the alarm messages in the form "<b>CustomFlds: {CustFld0} =&gt; {CustFld1} =&gt; ... =&gt; {CustFldN}</b>".</li></ul></dd></dl>
 <p><b><u>Template IOs</u></b><br />
 </p>
 <table class="wikitable">
@@ -1413,7 +1422,7 @@ in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || stat
 <li> <i>text</i> [OUT] — direct text status setting;</li>
 <li> <i>coms</i> [IN] — list of available commands, of the corresponded IO;</li>
 <li> <i>com_text</i> [IN|OUT] — text of the received command;</li>
-<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-7...0] and text of the error (the attribute "err" format);</li>
+<li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — alarm level [-79...0] and text of the error (the attribute "err" format);</li>
 <li> <i>f_frq</i> [IN] — frequency of the calculation, the template IO;</li>
 <li> <i>this</i> [IN] — reference to the parameter object, what executing the template;</li>
 <li> <i>ctx</i> [IN] — object of the user context, what saved between the execution cycles.</li></ul></dd></dl>
@@ -3180,5 +3189,5 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/en">Libs/Main/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2021</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.4</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/en">Libs/Main/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>
