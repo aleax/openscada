@@ -323,7 +323,7 @@
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_The_FIFTH_update"><span class="mw-headline-number">7.1</span> [22.02.2022] The FIFTH update</span></h3>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>State:</b> <span style="color:red">the preparing and building week</span></li></ul>
+<ul><li> <b>State:</b> <span style="color:red">the testing and post building week</span></li></ul>
 <p>The common releasing process, for the users to estimate your expectations and for the developers to remind the tasks:<br />
 <b><u>1. The preparing and building week:</u></b><br />
 </p>
@@ -356,10 +356,10 @@
 <li> fixing the plymouth problems, then the installations are safe now and "/var/boot.log" doesn't grow.</li>
 <li> Updating TDE to 14.0.11.</li>
 <li> appending Debian 11 as the distributive base.</li></ul>
-<p><b><u>The main project WWW-resources — <a class="external text" href="http://oscada.org" rel="nofollow noreferrer noopener" target="_blank">Site</a></u></b><br />
+<p><b><u>Main WWW-resources of the project — <a class="external text" href="http://oscada.org" rel="nofollow noreferrer noopener" target="_blank">Site</a></u></b><br />
 </p>
 <ul><li> significant changes in the Site common interface:
-<ul><li> appending the Wiki-pages call in IFRAME for a waiting screen and an animated image of representing the loading wait; the opened pages vertical size was precisely fitted also at three attempts;</li>
+<ul><li> the Wiki-pages call in IFRAME appended for a waiting screen and an animated image of representing the loading wait; the opened pages vertical size was precisely fitted also at three attempts;</li>
 <li> the content window horizontal size limited in 1024 pixels;</li>
 <li> moving the vertical submenu of the main menu from the static left position to the call at an options button on the left of the main menu;</li>
 <li> moving to the top right for the service panel with buttons of the language select, call the print variant and the Google-search field;</li>
@@ -369,7 +369,7 @@
 <li> the registration module finished in the translation to Ukrainian and enabled for acknowledge the new users registration by the site administrator.</li></ul>
 <p><b><u>New and significantly updated parts</u></b><br />
 </p>
-<ul><li> OpenSCADA Core: 3:10:0 =&gt; <b>3:11:0</b></li>
+<ul><li> OpenSCADA Core: 3:11:0 =&gt; <b>3:12:0</b></li>
 <li> OpenSCADA "BD", "DAQ" subsystems: 14 =&gt; <b>15</b>, 13 =&gt; <b>14</b></li>
 <li> DAQ.DAQGate: 2.5 =&gt; <b>2.9</b></li>
 <li> DAQ.JavaLikeCalc: 5.1 =&gt; <b>5.4</b></li>
@@ -410,20 +410,245 @@
 <li> LibsDB.vcaBase.doc
 <ul><li> docAlarmsRep: 1.5 =&gt; <b>1.6</b></li>
 <li> docUsersSet: 1.5 =&gt; <b>1.7</b></li></ul></li></ul>
+<p><b><u>CONCEPTUAL &gt; Common Conception of the Data Storage</u></b><br />
+</p>
+<ul><li> the Сonception is commonly unified in the direct storage specification and definition the Generic Storage "*.*" as a combination of the Configuration File and the work Data Base, when the Configuration File is the priority one for accessing the allowed data and the work Data Base for new data.</li>
+<li> TBDS::{dataSeek,dataGet,dataSet,dataDel,genDBGet,genDBSet}() moved to the bit flags TBDS::ReqGenFlg;</li>
+<li> the TBDS::dbList() moved to the bit flags TBDS::DBLsFlg;</li>
+<li> TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data in different storages and offer a queue of source DB for the mechanism of sequentially removing duplicates and they used in the object's storage functions DB(), fullDB(), setDB();</li>
+<li> the objects are adapted for tracking the multiple storages and are appended of the sequentially removing duplicates: Security.{User,Group}, Transport.{Input,Output}, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}, DAQ.JavaLikeCalc.Lib, Protocol.{ModBus,OPC_UA,UserProtocol}.*, UI.WebUser.Page, UI.{VCAEngine,Vision}.{WdgLib,Proj};</li>
+<li> the generic parameters accessing functions TBDS::genDBGet() and TBDS::genPrmSet() moved under the new storage conception using TBDS::dataGet() and TBDS::dataSet() respectively, and renamed to genPrmGet() and genPrmSet() everywhere;</li>
+<li> most of the objects moved to use the new function dataDelTbl(): DAQ.{TController,TPrmTmplLib,JavaLikeCalc,LogicLev,BlockCalc,ModBus,Siemens,OPC_UA}, Archive.DBArch, UI.{VCAEngine,Vision}.{WdgLib,Proj};</li>
+<li> the functions moved and used everywhere as static ones: TBDS::{dbList,dataSeek,dataGet,dataSet,dataDel,dataDelTbl}();</li>
+<li> SYS,DAQ.{TemplateLib,JavaLikeCalc.Lib},UI.{VCAEngine,Vision}.{WdgLib,Proj}: the spare storage addresses with tables were shortened to the standard storage address with the table name unification, where the previous not standard names leave to be edited up to the 1.0 release;</li>
+<li> Archive.DBArch,Protocol.HTTP: switched to select only DBs;</li>
+<li> the root object of the DB subsystem appended of DB priority base [0...9] in the generic storages list and the TBD object appended of the configuration field "Priority in list" to control order of the databases from TBDS::dbList(), than control the loading order;</li>
+<li> the "Work DB" configuration field changing disabled on the modification marking of all nodes;</li></ul>
+<p>CONFIGURATION FILE
+</p>
+<ul><li> the configuration parameters and tables implementing in the common context of the TBDS::data{Seek,Get,Set}() functions;</li></ul>
+<p>REFACTORING THE TCntrNode FLAGS
+</p>
+<ul><li> TCntrNode::{chldDel,nodeDis}() moved to direct use the new TCntrNode::EnDisFlag;</li>
+<li> the flags TCntrNode::{NodeRemove,NodeRemoveOnlyStor} used everywhere of the function postDisable() checking and chldDel() call.</li></ul>
+<p><b><u>CONCEPTUAL &gt; Significant Unification the Common SQL-code in the OpenSCADA Core</u></b><br />
+</p>
+<ul><li> unification the table structure control by the structure item object TTable::TStrIt;</li>
+<li> refactored, initially on SQLite, in the request lists form in the separate list variables;</li>
+<li> common SQL-code moving to the functions: fieldSQLSeek(), fieldSQLGet(), fieldSQLSet(), fieldSQLDel();</li>
+<li> declaration in the core for the service definitions, methods and functions to the common SQL-code: SEEK_PRELOAD_LIM, tblStrct, seekSess, connRes, fieldFix(), getSQLVal(), setSQLVal();</li>
+<li> the fieldFix() appended an argument "langLs" of specifiyng need languages instead the argument "trPresent";</li>
+<li> propagating in such way of the last MULTILANGUAGE support code in DB.SQLite.</li></ul>
+<p><b><u>CONCEPTUAL &gt; Messages Translation</u></b><br />
+TFunction::IO object appended the flag IO::TransltText of marking the translate String IO directly:
+</p>
+<ul><li> the types "String (translate)" and "Text (translate)" appended in: template object of DAQ-Parameter, TFunction object of DAQ.JavaLikeCalc, UI-Attributes of UI.VCAEngine;</li>
+<li> the flag TFld::TransltText used in: value getting of TValue of DAQ-Atributes, DAQ-Attributes translation of DAQ.{LogicLev,ModBus,OPC_UA,Siemens}, UI-Attributes translation of UI.VCAEngine;</li>
+<li> set to the type "String (translate)" for: the field "colDscrCustNames" of wlb_Main.{alarmsAct,alarmsSt}.</li></ul>
+<p>Expanding the execution environment of the OpenSCADA object functions by the language, for functions like to strftime():
+</p>
+<ul><li> the object TCntrNodeObj and the function TCntrNode::objFuncCall() expanded in the argument "user" renaming to "user_lang" with pointing language in the second line;</li>
+<li> DAQ.JavaLikeCalc: the TCntrNodeObj execution appended of the language;</li>
+<li> SYS.strftime() appended of execution from the pointed language-locale.</li></ul>
+<p>TUIS,UI.{QTCfg,Vision}: docGet() expanded by the language in the second line.<br />
+FIX: The "Translations" tab expansion and fixing for:
+</p>
+<ul><li> the option "check for mismatch (TrChkUnMatch)" renamed to "check/fix (TrChkAndFix)" and expanded of the translation fixing functions: by propagation the translations to empty sources, clearing the double to base translations, merging the base messages as the translations;</li>
+<li> information of the non matching was appended in the second message text;</li>
+<li> the translation status appended of the short labels "SINGLELANGUAGE", "MULTILANGUAGE", "MULTILANGUAGE-DYNAMIC"; the message index; size of the cache and the translation context;</li>
+<li> the base language configuration field of the MULTILANGUAGE modes expanded by list the project locales separated by ";".</li></ul>
+<p>FIX: Expansion the Data Messages Translation in the tree modes: SINGLELANGUAGE, MULTILANGUAGE and MULTILANGUAGE-DYNAMIC:
+</p>
+<ul><li> the user language obtaining unified in the function lang2Code(), expanded by the arguments "user" and "onlyUser";</li>
+<li> the lang2CodeBase() function separated to the common one langBase() and appended the function langToLocale() of obtaining the complete locale at language from langBase();</li>
+<li> the language field of the objects TSYS, TUser appended of the selection list from langBase();</li>
+<li> the translation cache significant extending and unification:
+<ul><li> in the new TMess object's functions translCacheGet(), translCacheSet(), translCacheLimits() and the own lock trMessCacheRes;</li>
+<li> extended by the message category for caching the system translations and users;</li>
+<li> the cache limiting also appended by the time limit variable "limCacheIts_TM" for what it checked in the service task.</li></ul></li>
+<li> appended for the translation context at the new function TMess::trCtx() and the object TrCtxAlloc for handling the context registration as user and language bound to the call thread:
+<ul><li> TCntrNode::cntrCmd(), Protocol.HTTP, UI.{Vision,WebVision,WebUser,WebCfg,WebCfgD} attached to use the translation context.</li></ul></li>
+<li> the DB type-module objects were appended by the specific information field "Features" of specifying the supported by DB features;</li>
+<li> UI.QTCfg: the tree update enabled for the root page updation through the reconnection and the tree update at the user change; enabled for using the system language in the SINGLETRANSLATION mode for remote connections;</li>
+<li> FIX:UI.VCAEngine: the project styles moved under a new storing table "{DB_TBL}_stls" and its structure with translation;</li>
+<li> UI.{WebCfg,WebCfgD}: Generically adapted to the dynamic translation in the MULTILANGUAGE-DYNAMIC mode, using the HTTP-variable "lang", the user language and browser language;</li>
+<li> the <a href="Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">How to "Create multi language project"</a> document was created.</li></ul>
+<dl><dd> PRIMARY PROJECT OBJECTS</dd></dl>
+<ul><li> implemented for the base message and its translations mark as fuzzy - "&lt;!&gt;" in the text end, at changing and warning the translation removing;</li>
+<li> accessing the dynamic translation moved under the new functions trD()-&gt;TMess::translGet() and trDSet()-&gt;TMess::translSet(): TArchives,TDAQ,TTypeDAQ,TController,TParamContr,TFunction,TPrmTmpl,TTransports,DAQ.{BlockCalc,JavaLikeCalc};</li>
+<li> appended in the dynamic translation for:
+<ul><li> DAQ-attributes name-description postranslation after the system translation and translation in the context help;</li>
+<li> DAQ-attributes translation in the UserAPI functions: get(), set(), descr();</li>
+<li> DAQ.JavaLikeCalc: names setting part of the execution form moved to itself;</li>
+<li> Protocol;{ModBus,OPC_UA,UserProtocol},UI.{VCAEngine,WebUser}.</li></ul></li>
+<li> adapted commonly to the new changing conception in the MULTILANGUAGE-DYNAMIC mode through "{base}\000{lang}\000{mess}" for which the INSERT command also adapted in copy the translation and/or BASE independently the start locale;</li>
+<li> appended and used for a new function translIdxCacheUpd() of updating the operative translation messages' index and cache in the MULTILANGUAGE-DYNAMIC mode for the SET command;</li>
+<li> appended of the translation copy in the SQL INSERT command and for the MULTILANGUAGE-DYNAMIC mode;</li>
+<li> the configuration file appended of the MULTILANGUAGE-DYNAMIC mode support.</li></ul>
+<dl><dd> INDIVIDUAL MESSAGES - "Trs"</dd></dl>
+<ul><li> UI.VCAEngine: appended of changing the storage just after the widget procedure compile for placing of the dynamic messages translation to the project storage;</li>
+<li> the transitive dynamic translation prevented in appending the table "Trs" for messages available in other sources, so checking the message index before;</li>
+<li> appended for filtering the messages for they translatability before registering.</li>
+<li> LibsDB.vcaBase:
+<ul><li> wlb_Main.ElViewGraph: enabled for the transitive translation in the tooltip and for the parameter description;</li>
+<li> wlb_Main.objProps: enabled for the transitive dynamic translation.</li></ul></li></ul>
+<dl><dd> SYSTEM MESSAGES</dd></dl>
+<ul><li> implemented for a function of prestoring system messages translation trS(), where the base message just return with the catalogue information, that is "{base}\000{cat}" and what is translated really in second call inward the translation context or _(). In the background there is used Mess-&gt;I18N(), but for the specific language code mess_PreSave="&lt;PSV&gt;";</li>
+<li> the system translation function TMess::I18N() was attached to the messages cache;</li>
+<li> the TFld and IO objects expanded in work with the prestoring system messages;</li>
+<li> module info fields adapted to the MULTILANGUAGE-DYNAMIC mode;</li>
+<li> UI.{QTCfg,Vision}: adapted to the control items obtain in language of the user and update the main window interface language at it change;
+<ul><li> UI.Vision: appended in updation the toolbars at the user change, what also adapted for the dynamic translation; all development dialogs adapted for the dynamic translation.</li></ul></li>
+<li> UI.{QTStarter,QTCfg,Vision}: appended for the system Qt-messages translation relating to the selected user language, through the common application property "lang" for the Qt-translation reimplemented function QTranslator::translate(), and then the language commonly switched by the last interface and for all opened; the Starter Menu set for dynamic translation and updating.</li></ul>
+<p><b><u>CONCEPTUAL &gt; Message Sublevels {Main}[0...9] and Unification for the User Messages Transferring</u></b><br />
+</p>
+<ul><li> generic adaption to sublevels {Main}[0...9] of the main message levels [0...7];</li>
+<li> DAQ,DAQ.DAQGate: the function TController::messSet() appended of the messages transferring from the top to the down, so sinking down, making the function virtual one and redefine that in DAQGate, and defining also the new OpenSCADA control service request of the TController object "set:/serv/mess";</li>
+<li> DAQ: specified for the DAQ-transparency messages in the category form "{TP}{ModId}:{CntrId}[.{prm}][:{spec}]", appended of such messages creation function TController::messSet() and the User API functions SYS.DAQ["Modul"]["Controller"].messSet(), SYS.DAQ["Modul"]["Controller"]["Parameter"].messSet();</li>
+<li> LibsDB.vcaBase:
+<ul><li> wlb_Main.{ElCadr,TextLab,ImgLab,cntrRegul},mnEls.{El_Kran_Sh,Compressor}: adapted for the user action messages forming by the new DAQ-function messSet() with the unified category structure for transferring between OpenSCADA stations of different levels;</li>
+<li> wlb_Main.{alarmsAct,alarmsSt}: adapted to process of sublevels of the main levels with coloring all the levels; expanded by the new user field "Type" as name of the alarm level from the new configuration attribute "types";</li>
+<li> wlb_doc.{docUsersSet,docAlarmsRep}: appended in the DAQGate source complete scanning for whole transferring hierarchy;</li>
+<li> wlb_Main.alarmsSt,wlb_doc.{docMessRep,docAlarmsRep}: adapted to the transferred messages by DAQGate;</li>
+<li> wlb_Main.{alarmsSt,alarmsAct},wlb_doc.docMessRep: improved in the DAQGate source complete scanning for whole transferring hierarchy, also for user actions (OP).</li></ul></li></ul>
 <p><b><u>OpenSCADA libraries and projects</u></b><br />
 </p>
 <ul><li> FIX:LibsDB.{OscadaLibs,vcaBase,vcaTest},{AGLKS,Boiler}.*: Appended, cleaned and fixed for the multilanguage messages by applying the new translation fixing mechanisms.</li>
 <li> LibsDB.vcaBase,AGLKS.vca,Boiler.St: All project styles moved under a new storing table and its structure with translation.</li>
-<li> LibsDB.vcaBase:
+<li> FIX:LibsDB.vcaBase:
 <ul><li> FIX:wlb_Main.{alarmsAct,alarmsSt}: The default sorting at the field of the alarm time set back to "1" as not default descending order. wlb_Main.alarmsAct: Appended for the field "messCat" of specifying the alarm categories.</li>
 <li> wlb_Main.{ElViewGraph,graphSelPrm}: Adapted to reset the trend item color to the default styled at setting that to empty; appended of the empty color processing as the default one also taken from the style.</li>
 <li> FIX:wlb_Main.RootPgSo: Appended of complete updating at the user change, but language also can be changed, and the language.</li></ul></li>
 <li> LibsDB.OscadaLibs: The "DB" field content and the table base ID of UserFuncLibs.{techApp,servProc,Controller} renamed to the standard one "flb_techApp", "flb_servProc", "flb_Controller" respectively.
-<ul><li> tmplib_base.digAlarm: Expanded in the common field DESCR using for the specific parameters redefinition by the new fields "CustomFlds".</li>
-<li> tmplib_base.anUnif: Expanded in the common field DESCR using for the specific parameters redefinition by the new fields "CustomFlds" and "CustomAlarms". Appended of the user procedure option "toSave" of force saving the object at the exit.</li></ul></li>
+<ul><li> tmplib_base.digAlarm: Expanded in the common attribute DESCR using for the specific parameters redefinition by the new fields "CustomFlds".</li>
+<li> tmplib_base.anUnif: Expanded in the common attribute DESCR using for the specific parameters redefinition by the new fields "CustomFlds" and "CustomAlarms". Appended of the user procedure option "toSave" of force saving the object at the exit.</li></ul></li>
 <li> flb_servProc.docOffLine: Expanded for the index page accessing from any other pages.</li></ul>
-<p>...
+<p><b><u>API</u></b><br />
+<i>!!!!:Changes</i>:
 </p>
+<ul><li> SYS: TCntrNode::{chldDel,nodeDis}() moved to direct use the new TCntrNode::EnDisFlag: NodeNoFlg, NodeRemove, NodeRemoveOnlyStor; and the space after &gt; 0x100 was reserved for the node specific, where the TParamContr::EnDisFlag set only to NodeRemove_NoArch and Widget::EnDisFlag set only to Widget::NodeRemove_NoDelMark.
+<ul><li> Storage object's functions DB(), fullDB() and setDB() expanded of the argument "qTop".</li>
+<li> The subsystem name moved to the function subName() call and which set "virtual" and "constant", also as subVer() and subId().</li>
+<li> The description field type of the TFld object and the name field of the IO object changed to "string".</li>
+<li> Result of TCntrNode::nodeNameSYSM() changed to "string".</li>
+<li> TMess: The lang2CodeBase() function separated to the common one langBase() and appended the function langToLocale() of obtaining the complete locale at language from langBase().
+<ul><li> The function lang2Code() expanded by the arguments "user" and "onlyUser".</li>
+<li> I18N() changed in the arguments for "const string &amp;mess" the first and mLang moved to the second, it result changed to "string", also for TModule::I18N(), and updated all definitions _().</li>
+<li> The data translation functions (short definitions) renamed to trD_L(), trD_U(), trD_LU(), trDSet_L(), trDSet_U(), trDSet_LU().</li>
+<li> Removed for I18Ns().</li></ul></li>
+<li> Security: The static method "pHashMagic" moved to the definition SEC_HASH_MAGIC.</li></ul></li>
+<li> DB: The functions TBDS::{open,close}() renamed to TBDS::{tblOpen,tblClose}() and set to static ones.
+<ul><li> TBDS::{dataSeek,dataGet,dataSet,dataDel,genDBGet,genDBSet}() moved to the bit flags TBDS::ReqGenFlg (renamed from TBDS::ReqGen): NoFlg, NoException, OnlyCfg, UseTranslation (renamed from ReqGen::UseTranslation), UseCache, UseAllKeys.</li>
+<li> TBDS::dbList() moved to the bit flags TBDS::DBLsFlg: LsNoFlg, LsCheckSel, LsInclGenFirst.</li>
+<li> The functions moved as static ones: TBDS::{dbList,dataSeek,dataGet,dataSet,dataDel,dataDelTbl}(), TBDS::{fullDBSYS,fullDB}().</li>
+<li> The generic parameters accessing functions TBDS::genDBGet() and TBDS::genPrmSet() renamed to genPrmGet() and genPrmSet() everywhere.</li></ul></li>
+<li> Archives-History: Definitions of the archive specific names renamed for BUF_ARCH_NM, ALRM_ARCH_NM, ALRM_ARCH_CH_NM to ARCH_BUF, ARCH_ALRM, ARCH_ALRM_CH; and appended for ARCH_NOALRM ("&lt;noalarms&gt;").</li></ul>
+<p><i>Appends</i>:
+</p>
+<ul><li> SYS: The global short functions appended of s2l() and s2u().
+<ul><li> Appended of a new function strParseEnd() of parsing the separated string from the end.</li>
+<li> The function pathLev() appended of a new argument of position the offset to the next token begin and what also appended in the UserAPI function parsePath() of DAQ.JavaLikeCalc.</li>
+<li> TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data.</li>
+<li> The time limit variable "limCacheIts_TM" appended for the cache limiting.</li>
+<li> The common encoding function strEncode() and the User API one appended the variant "ShieldBin" of shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li>
+<li> TMess: Appended for a function of checking the messages for them translatability — isMessTranslable().
+<ul><li> Appended for functions of managing the translation cache: translCacheGet(), translCacheSet(), translCacheLimits() and the own lock trMessCacheRes. Appended for a function translIdxCacheUpd() of updating the operative translation messages' index and cache.</li>
+<li> Appended for the translation context at the new function trCtx() and the object TrCtxAlloc for handling.</li>
+<li> Appended for the data translation trD()-&gt;translGet() and trDSet()-&gt;translSet().</li>
+<li> Appended for the prestoring system messages translation trS(), as an other link to I18N().</li>
+<li> Appended for the function messLevelTest().</li>
+<li> The TMess::Type structure appended of an item "MaxLev" of the maximum message types/levels specifying.</li>
+<li> The TMess definitions appended of mess_PreSave="&lt;PSV&gt;" and mess_TrModifMark="&lt;!&gt;".</li></ul></li>
+<li> XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li>
+<li> TConfig,TCfg: Expanded for new parameters TConfig::{trcSet,setTrcSet}(), TCfg::{isSet,setIsSet}() of detection the configuration field changing and using in the partial DB-loading instead toDefault(); and TConfig::{noTransl,setNoTransl}() for global setting the structure default translation.</li>
+<li> TError: codes appended of: DB_TrRemoved (22) for mark the translation removing in DB, DB_ReadOnly (23) introduced by SQLite at the unification process, Core_NoNode (5) of the TCntrNode missing, Tr_ErrTransport (12) for the transport errors mark.</li></ul></li>
+<li> DB: The TBDS::realDBName() appended of the back conversion argument.
+<ul><li> The static methods of TBDS appended of the new function dbPart() of getting the storage address parts and appended of a new function dataDelTbl() of the common tables removing, also in the Configuration File.</li>
+<li> Appended for the structure item object TTable::TStrIt.</li>
+<li> Common SQL-code moving to the new functions: TTable::fieldSQLSeek(), TTable::fieldSQLGet(), TTable::fieldSQLSet(), TTable::fieldSQLDel(); with the flags TTable::SQLFeqFlag: SQLNoFlg, SQLOrderForSeek, SQLFirstSkipForSeek.</li>
+<li> Declaration in the core for the service definitions, methods and functions to the common SQL-code: SEEK_PRELOAD_LIM, tblStrct, seekSess, connRes, fieldFix(), getSQLVal(), setSQLVal().</li>
+<li> Appended of the list priority specifying functions TBD::lsPr(), TBD::setLsPr() and virtual one TTypeBD::lsPr().</li>
+<li> Appended of the DB features specifying virtual function TTypeBD::features().</li></ul></li>
+<li> DAQ: TFunction::IO object's structure IO::IOFlgs appended the flag IO::TransltText of marking the translate String IO directly.
+<ul><li> The function {TController,TParameter}::messSet() appended of the messages transferring from the top to the down, and also the User API functions SYS.DAQ["Modul"]["Controller"].messSet(), SYS.DAQ["Modul"]["Controller"]["Parameter"].messSet().</li>
+<li> The TCntrNodeObj appended of the function lang() obtained from the second line of the common method mUserLang.</li></ul></li>
+<li> Archives-History: Appended of the function "void TArchives::messPut( const TMess::SRec &amp;rec, const string &amp;arch = "" )" variant.</li>
+<li> Transports: Appended of the new function extHostSeek().</li>
+<li> VCAEngine: The User API functions mime() and mimeSet() appended of the correct equivalents resource() and resourceSet().</li></ul>
+<p><b><u>SYS</u></b><br />
+</p>
+<ul><li> FIX:Building: configure.ac: Core library version rose to 3:12:0 and the program version rose to 0.9.5.
+<ul><li> The module version of the subsystem "BD" rose to 15, the subsystem "DAQ" rose to 14.</li>
+<li> The Debian 11 root file systems (chroots) are appended for build OpenSCADA; and Nokia N900 removed since the compiler crashes now constantly in several places.</li>
+<li> data/*.xml: The TBDS Generic parameter "SYSStPref" removed.</li></ul></li>
+<li> The source code messages and program documentation:
+<ul><li> The "<a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">Program Manual</a>" document appended of the new section "<a href="Program_manual.html#Service" title="Special:MyLanguage/Documents/Program manual">Execution the ready OpenSCADA project in the service-background space</a>" and revised in the section "<a href="Program_manual.html#Startup" title="Special:MyLanguage/Documents/Program manual">Startup and execution</a>".</li>
+<li> The "<a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Quick start</a>" manual included the new section "Execution the ready OpenSCADA project in the service-background space" into own section "<a href="Quick_start.html#Demon" title="Special:MyLanguage/Documents/Quick start">Background and remote execution — server, PLC execution environment and remote development</a>".</li>
+<li> New document of the How to "<a href="Create_multi_language_project.html" title="Special:MyLanguage/Documents/How to/Create multi language project">Create multi language project</a>" appended for downloading to offline.</li>
+<li> The whole source code labels like to&nbsp;????,&nbsp;!!!!,&nbsp;?!?! and they comments were revised.</li>
+<li> UI.{VCAEngine,Vision}: The "Mime data" renamed to "Resources" and "Mime type" to "MIME".</li></ul></li>
+<li> .,DAQ.DAQGate: The messages redundancy and messages transferring in DAQ.DAQGate limited for depth of the requesting messages up to the restoring time or one hour.
+<ul><li> The archivers redundancy and DAQ.DAQGate switched in the initial messages requesting to:
+<ul><li> request the active alarms;</li>
+<li> request the archive in deep and up to the alarms requesting time, without the alarms activation;</li>
+<li> ordinal-periodic request of the last messages, without the alarms activation.</li></ul></li></ul></li>
+<li> Protocol.HTTP,UI.{WebCfg,WebCfgD,WebUser,WebVision}: Appended of the previous user detection to mark that actions for HTTP-modules with moving the previous user authentication session closing after successful the new one.
+<ul><li> All the HTTP-modules adapted to the user field in the HTTP-functions with the previous user in the second line.</li>
+<li> FIX:WebVision: The previous user is used now for detection of the user change between the ordinal users and for single session, than prevent to create new sessions.</li></ul></li>
+<li> Expanding the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F] shielding:
+<ul><li> XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F], what is significant for the WebBrowsers.</li>
+<li> UI.WebCfgD: Appended of encoding the XML traffic for the binary symbols shielding using the new option "BinShield".</li></ul></li>
+<li> FIX: strParse() rewrote and tested in processing the group symbols merging at the scan; and strParse(), strLine(), pathLev() in position the offset to the next token begin and limiting in the down for 0; and pathLevEnd() in positioning the offset to the next token end and limited in the up for the size. TModSchedul::chkAllowMod(),UI.QTCfg,Protocol.HTTP: switched in use TSYS::pathLevEnd() and  TSYS::pathLev() in the new behaviour.</li>
+<li> .,DB,DAQ: The global configuration context copying mechanism (interstation) appended for the marking link to the last setting operation object, to easy postmarks setting.
+<ul><li> DAQ: As a postmark to the saving DAQ-parameter object there appended the attribute "prmTp" with the parameter type, which is used next in true detection the parameter type changing at the following loading.</li></ul></li></ul>
+<p><b><u>DB</u></b><br />
+</p>
+<ul><li> FIX: The TBDS::dataDel() fixed-appended in removing multiple items and appended of removing the empty table nodes of the Configuration File.</li></ul>
+<p><b><u>DAQ</u></b><br />
+</p>
+<ul><li> FIX: The controller objects manual start defined for some specific hot doings of the object enabling, when the doing was prevented from call twice at the normal start:
+<ul><li> DAQGate: resync the remote source data at the sync period &gt;= 0;</li>
+<li> ModBus: force reformation of the acquisition blocks;</li>
+<li> OPC_UA: force reformation of the monitored items list;</li>
+<li> Siemens: force reformation of the acquisition blocks.</li></ul></li>
+<li> The "Return" type IO of the TFunction object was set to ReadOnly in the manual execution tab.</li>
+<li> FIX:DAQGate: Appended of the asynchronous writing mode implementation. The configuration field of the remote stations selection moved in simple combobox. The controller object status appended of the counters of read/archive's/wrote values, read messages and the writing buffer status.
+<ul><li> FIX: Fixed in reusing parameters with empty address for included ones and appended for clearing the address at the parameters copy so you can now copy all controller objects with the parameter archives store.</li>
+<li> FIX: Unified in the sync commonly and fixed in the attributes sync, with preventing in constantly sync of the missed on remote host parameters.</li></ul></li>
+<li> Siemens: Appended of the new option "Maximum size of the request block, bytes" of specifying the maximum requesting block.</li></ul>
+<p><b><u>Transports</u></b><br />
+</p>
+<ul><li> SSL: Both input and output parts appended of the possibility to point the certificates and the key directly from an external file. Appended for reloading the certificates file of the input transport at it change by the transport reconnect.</li></ul>
+<p><b><u>Transport Protocols</u></b><br />
+</p>
+<ul><li> FIX:HTTP: Fixed in reading the "accept-language" HTTP variable only as the two symbol language code, then the common interface is translated also now on FireFox who sends there the country code also.</li>
+<li> FIX:SelfSystem: In the input part switched to load the whole input message before checking the auth information, then preventing for strange error messages "Error the command format." for the message tail.</li></ul>
+<p><b><u>User Interface</u></b><br />
+</p>
+<ul><li> VCAEngine,Vision,WebVision: The "openlist:/serv/pg" control request appended in the attribute "pgGrp" of the opened page for detection several pages open in one container then open last one and close previous ones, to prevent mostly the included pages all close and allow of specifying-override the need pages open.
+<ul><li> Vision: Refactored also for early opening the restored and specified pages in the init procedure.</li></ul></li>
+<li> QTStarter,WebVision,WebCfgD: Qt part, in the generic Qt Library, and Web appended for the table edition text apply at Enter and new line at Ctrl+Enter.</li>
+<li> FIX:QTCfg,Vision: Prevented from hangs at stopping from a termination signal, from the console mostly, since locking the main Qt thread in modStop() without qApp-&gt;processEvents().</li>
+<li> VCAEngine: Finishing the changes obtaining in the runtime mode by the clocking cycles through, after observing the race condition on the attributes changing, which cause to do not update the value on visualizers:
+<ul><li><ul><li> rewrote for the modification control mechanism;</li>
+<li> specifying the forming and fixed cycles;</li>
+<li> reducing the main calculation clock to uint16;</li>
+<li> dividing the changes clock value of attributes and the widget commonly to the forming (uint16) and the fixed (uint16) = uint32;</li>
+<li> processing the changes clock value both at the modification and reading-checking;</li>
+<li> support of reloading the main calculation clock and clearing the old changes clock value;</li>
+<li> preventing the empty cycles for the common widgets requesting;</li>
+<li> removed for code of the previous slide current mark mechanism of the attributes changing detection with the doubles.</li></ul></li>
+<li> The Widget copy operation appended of copying the used widget resources (the Image type now only), and in that way there performed.</li>
+<li> FIX: The "&lt;deleted&gt;" mark setting for the removed inherited included widgets moved to the save function of the container widget, since that is lost at the copy operations and now you can easy undo/redo such widgets removing.</li>
+<li> FIX: Fixed in the mime data copy at the widget libraries and the projects copy, moving the copy to the copy save, with expanding the mime operations for work with completely specified DBs.</li>
+<li> FIX: Prevented in the attribute values inheriting for the output links, then do not write to DAQ the obviously wrong values at the hot edition of running projects and their items.</li></ul></li>
+<li> FIX:Vision: Fixed, or finished the implementation, for UNDO/REDO the removing operation of the inherited included Widgets of the Project Pages.
+<ul><li> Adjusted in the focus policy to the UI.WebVision way and appended the focus force clearing at lost, to prevent the widget focus return at window activation, so you can use now the event "ws_FocusIn" in opening external subwindows.</li></ul></li>
+<li> FIX:WebVision: The session methods mUser and mUserOrig moved under the data mutex lock, due to there can be crashes at active user manipulations.
+<ul><li> FIX: The view "Combo" of the type "Line" and the types "List" and "Combo" appended of creation value items missed in the selection list.</li>
+<li> FIX: The popup windows of the calendar and editable combo appended of the geometry check than preventing the main window overflow; and the popup windows closing moved completely at a mouse button press outward the window, together other popup menus.</li>
+<li> FIX: Improved and fixed in usability the view Table of the primitive FormEl and mostly in the text edition: true width fitting and minimum height setting to 40 pixels, FIX: fixed in specifying the column sorting value "0" as ascending-default and "1" as descending from the top, like to the UI.Vision behaviour and the numbers (integer,float) sort-comparing was implemented separately.</li>
+<li> Appended for the FrontEnd status display in the session status field with that requesting-scheduling at display the field.</li></ul></li></ul>
 <h3><span class="mw-headline" id=".5B14.06.2021.5D_The_FOURTH_update"><span class="mw-headline-number">7.2</span> [14.06.2021] The FOURTH update</span></h3>
 <p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 45 bugs and appends some improvements, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2758" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>User significant actions on the update</u></b><br />

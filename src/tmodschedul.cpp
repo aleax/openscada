@@ -322,10 +322,7 @@ void TModSchedul::libDet( const string &iname )
 
 bool TModSchedul::chkAllowMod( const string &name )
 {
-    string sel, nmFile;
-    int path_els = 0;
-
-    nmFile = TSYS::pathLevEnd(name, 0);
+    string sel, nmFile = TSYS::pathLevEnd(name, 0);
 
     if(allowList().empty())	return false;
     if(sTrm(allowList()) != "*") {

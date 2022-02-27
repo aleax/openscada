@@ -1692,15 +1692,14 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 		val_w.childNodes[0].value = val_w.childNodes[0].defaultValue = sval;
 		// Load combo list
 		if(t_s.getAttribute('dest') == 'sel_ed') {
-		    if(!t_s.getAttribute('select')) val_w.sel_list = t_s.getAttribute('sel_list').split(';');
-		    else {
+		    if(t_s.getAttribute('select')) {
 			val_w.sel_list = new Array();
 			var xLst = servGet(t_s.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
 			if(xLst)
 			    for(var iEl = 0; iEl < xLst.childNodes.length; iEl++)
 				if(xLst.childNodes[iEl].nodeName.toLowerCase() == 'el')
 				    val_w.sel_list.push(xLst.childNodes[iEl].textContent);
-		    }
+		    } else if(t_s.getAttribute('sel_list')) val_w.sel_list = t_s.getAttribute('sel_list').split(';');
 		}
 	    }
 	}

@@ -1,3 +1,8 @@
+2022-02-27 Roman (stable)
+- SYS: TModSchedul::chkAllowMod() removed for spare variable "path_els" declaration.
+- FIX:UI.WebCfgD: Fixed in processing empty "sel_list" of the editable combo.
+
+
 2022-02-21 Roman (stable)
 - FIX:AGLKS.vca: The style rule 'labColorGrph1' fixed in the transparecy level 200 for the Default.
 - FIX:SYS: AUTOMAKE options changed to "1.10 subdir-objects" since 1.9 doesn't support the options.
@@ -28,7 +33,7 @@
 2022-02-07 Roman (stable)
 - !:LibsDB.OscadaLibs: flb_servProc.docOffLine: Expanded for the index page accessing from any other pages.
 - !!!!:Protocol.HTTP,UI.{WebCfg,WebCfgD,WebUser,WebVision}: Appended of the previous user detection to mark that actions for HTTP-modules
-	with moving the previous user authentification session closing after successful the new one.
+	with moving the previous user authentication session closing after successful the new one.
     All the HTTP-modules adapted to the user field in the HTTP-functions with the previous user in the second line.
     The HTTP-functions HttpGet() and HttpPost() marked as deprecated and scheduled for removing after version 1.0.
 - UI.{=Tmpl=,WebCg}: Moved to use the actual HTTP-functions HTTP_GET() and HTTP_POST().
@@ -365,7 +370,7 @@
 	with the unified category structure for transferring between OpenSCADA stations of different levels.
     !: wlb_doc.docUsersSet: Initially adapted to the new DAQ-transferred category structure.
 - !!!!:SYS,*: Generic adaption to sublevels {Main}[0...9] of the main message levels [0...7].
-    !!:XMLNode: Appended of the new saving option BinShield(0x400) for controlable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F],
+    !!:XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F],
 	what is significant for the WebBrowsers.
     !: The common encoding function strEncode() and the User API one
 	appended the variant "ShieldBin" of shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].
@@ -379,7 +384,7 @@
     The text copy function of Tables renamed to "Copy text".
     The binary symbols encoding of the text fields moved to use the new variant "ShieldBin" of the TSYS::strEncode() function.
 - !:FIX:UI.VCAEngine: Prevented in the attribute values inheriting for the output links,
-    then do not write to DAQ the obviosly wrong values at the hot edition of running projects and their items.
+    then do not write to DAQ the obviously wrong values at the hot edition of running projects and their items.
 - FIX:UI.Vision: The view Table of the primitive FormEl fixed in the table refitting at adding first row and adding rows in whole.
 - !!:UI.WebVision: Appended for the FrontEnd status display in the session status field with that requesting-scheduling at display the field.
 - FIX:UI.WebCfgD: Appended of encoding the XML traffic for the binary symbols shielding using the new option "BinShield".
@@ -492,7 +497,7 @@
 	The spare storage addresses, with tables, were shortened to the standard storage address with the table name unification,
 	where the previous not standard names leave to be edited up to the 1.0 release.
     !!!:SYS: The whole source code labels and they comments were revised.
-- !:UI.{QTCfg,WebCfgD}: Appended of sorting the externel OpenSCADA hosts by name.
+- !:UI.{QTCfg,WebCfgD}: Appended of sorting the external OpenSCADA hosts by name.
 - FIX:UI.VCAEngine: The widget libraries and projects copy fixed in the spare copy "DB_TBL".
 - !!:UI.Vision: The parent field of the widgets was allowed for direct edition, not only selection, by moving to LineEdit.
 
@@ -532,7 +537,7 @@
 	    in different storages and offer a queue of source DB for the mechanism of sequentially removing duplicates.
     !!!!: The objects are adapted for tracking the multiple storages and are appended of the sequentially removing duplicates:
 	    Security.{User,Group}, Transport.{Input,Output}, DAQ.{Controller,TemplateLib}, Archives.{VArchive,VArchiver,MArchiver}.
-    !!: TCntrNode::{chldDel,nodeDis}() moved to direct use the the new TCntrNode::EnDisFlag: NodeNoFlg, NodeRemove, NodeRemoveOnlyStor;
+    !!: TCntrNode::{chldDel,nodeDis}() moved to direct use the new TCntrNode::EnDisFlag: NodeNoFlg, NodeRemove, NodeRemoveOnlyStor;
 	and the space after > 0x100 was reserved for the node specific, where the TParamContr::EnDisFlag set only to NodeRemove_NoArch.
     The "Work DB" configuration field changing disabled on the modification marking of all nodes.
     The TError codes appended of DB_TrRemoved for mark the translation removing in DB.
@@ -724,7 +729,7 @@
     of detection the configuration field changing and using in the partial DB-loading instead toDefault().
 - !!!:SYS,DB,DAQ: The global configuration context copying mechanism (interstation) appended for the marking link
 	to the last setting operation object, to easy postmarks setting.
-    !!:DAQ: As a postmark to the saving DAQ-parameter object there apended the attribute "prmTp" with the parameter type,
+    !!:DAQ: As a postmark to the saving DAQ-parameter object there appended the attribute "prmTp" with the parameter type,
 	which is used next in true detection the parameter type changing at the following loading.
 - FIX:DAQ,Archives,UI.QTCfg: DAQ-Parameters copy prevented from an error of presence already the binding archive.
     UI.QTCfg: Such errors also prevented on termination the group copying operation by a new acceptation dialogue.
@@ -1530,7 +1535,7 @@
 - FIX:LibsDB.vcaBase: The procedure translation was removed for doc.docRepInstVals.
 - !!!!:SYS,UI.QTStarter: Splash updating of the main threaded GUI module moved to the service task,
     before switching to performing the main function, for what there appended two new signs "isRunning" and "isServPrc"
-    and the service task starting moved to the TSYS constructor and the stopping moved to the the TSYS destructor.
+    and the service task starting moved to the TSYS constructor and the stopping moved to the TSYS destructor.
 - SYS,DB,DB.{SQLite,MySQL,PostgreSQL,FireBird}:
     TMess appended for a function of detection the configuration translation translCfg(), which used in all DB modules and in dataSet().
 - FIX:DB.SQLite: The debugging key for tracing the SQL-requests renamed to "{ModId}_tracing".
@@ -2337,7 +2342,7 @@
     !!:Main.grph_panel: Appended for an independent button of switching to the cursor time instead the indirect switching
 	at the depth of decreasing.
 	The microsecond part of the cursor time set hidden at the big intervals.
-- Model.Boiler.St: The simple pasport cadre replaced by the the extended one.
+- Model.Boiler.St: The simple pasport cadre replaced by the extended one.
 - DAQ: The user API function funcCall() expanded by the "err" argument.
 - FIX:SYS: Fixed from crashing at early exit in the lock-file presence.
 - UI.VCAEngine: Appended for some debug messages at the windows opening and closing.
@@ -2590,7 +2595,7 @@
 - !!:SYS.Archives: The common option "Add the attribute identifier to names of the automatic created archives" changed to
     "Mode of forming ID of the automatic created archives" with selection from the modes: "Both parameter and attribute ID", "Only parameter ID", "Only attribute ID".
 - !:FIX:DB.MySQL: Fixed completely for the error "BLOB/TEXT can't have a default value (1)" on modern MySQL server versions, wholly removing the DEFAULT for TEXT.
-- FIX:UI.{VCAEngine,Vision,WebVision}: Styles fixed in the the new items creating
+- FIX:UI.{VCAEngine,Vision,WebVision}: Styles fixed in the new items creating
     The styles moved under a scheme of disabling styles at their presence instead "No style".
 
 
@@ -5667,7 +5672,7 @@
 
 
 2015-03-29 Roman
-- DB: LibsDB.OscadaLibs.db: DAQ template of the protocol "Temperature measurement IT-3 (IT3)" were apended by checking and init the device code.
+- DB: LibsDB.OscadaLibs.db: DAQ template of the protocol "Temperature measurement IT-3 (IT3)" were appended by checking and init the device code.
 - !!!!:FIX:Archive:FSArch: Strings archiving final fixed after last the string archiving fix into last value.
     Repair values file's procedure fixed for fix value types and appended at last by not fixed type (like string) repairing code.
     For all the archiving types executed values placing tests (0...8) and the files errors immitations tests (1...3).
@@ -9769,7 +9774,7 @@
 - FIX:UI.Vision: Detecting the figures to be repainted is fixed for the properties dialog for the primitive ElFigure.
 - UI.Vision: Checkboxes for the default values set are added to the properties dialog of the ElFigure.
 - FIX:UI.Vision: Selecting elements by the rectangle is fixed for the primitive ElFigure.
-- FIX:UI.Vision: Focus loosing when properties dialog is called is fixed for the the primitive ElFigure.
+- FIX:UI.Vision: Focus loosing when properties dialog is called is fixed for the primitive ElFigure.
 - UI.Vision: The fills select for the popup menu options is changed to be from the end of the container for the primitive ElFigure.
 
 
