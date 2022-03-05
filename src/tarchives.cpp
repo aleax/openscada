@@ -1027,7 +1027,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    "sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X]);"
 			         "Information (1[X]), ALARMS;Notice (2[X]), ALARMS;Warning (3[X]), ALARMS;Error (4[X]), ALARMS;Critical (5[X]), ALARMS;Alert (6[X]), ALARMS;Emergency (7[X]), ALARMS"),
 		    "help",_("Receiving messages with a level greater or equal to the specified."));
-		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",TMess::labMessCat());
+		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",TMess::labMessCat().c_str());
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivers"),RWRW__,"root",SARH_ID,4,"tp","str","dest","sel_ed","select","/m_arch/lstAMess",
 		    "help",_("Message archivers.\nDo not set the field for processing the request by the buffer and all archivers.\nSet '<buffer>' for processing by the buffer."));
 		XMLNode *tNd = NULL;
@@ -1046,7 +1046,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrMkNode("area",opt,2,"/v_arch",_("Values"),R_R_R_,"root",SARH_ID)) {
 	    ctrMkNode("fld",opt,-1,"/v_arch/per",_("Period of the data receiving, milliseconds"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/v_arch/prior",_("Level of priority of the data receiving task"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",TMess::labTaskPrior());
+	    ctrMkNode("fld",opt,-1,"/v_arch/prior",_("Level of priority of the data receiving task"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",TMess::labTaskPrior().c_str());
 	    ctrMkNode("fld",opt,-1,"/v_arch/fCurTm",_("Forced to set timestampes in the current time"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/v_arch/appAttrIdMode",_("Mode of forming ID of the automatic created archives"),RWRWR_,"root",SARH_ID,4,"tp","dec", "dest","select",
 		"sel_id",TSYS::strMess("%d;%d;%d;%d",BothPrmAttrId,OnlyPrmId,OnlyAttrId,AllCntrPrmAttrId).c_str(),
@@ -1551,8 +1551,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/db",_("Archiver DB"),RWRWR_,"root","root",4,
-		    "tp","str","dest","select","select","/db/list",
-		    "help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		    "tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		if(DB(true).size())
 		    ctrMkNode("comm",opt,-1,"/prm/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SARH_ID);
 		ctrMkNode("fld",opt,-1,"/prm/st/end",_("End"),R_R_R_,"root","root",1,"tp","time");
@@ -1565,7 +1564,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrRemoveNode(opt,"/prm/cfg/REDNT_RUN");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/LEVEL",EVAL_STR,RWRWR_,"root",SARH_ID,1,
 		    "help",_("Receiving messages with a level greater or equal to the specified."));
-		ctrMkNode("fld",opt,-1,"/prm/cfg/CATEG",EVAL_STR,RWRWR_,"root",SARH_ID,1,"help",TMess::labMessCat());
+		ctrMkNode("fld",opt,-1,"/prm/cfg/CATEG",EVAL_STR,RWRWR_,"root",SARH_ID,1,"help",TMess::labMessCat().c_str());
 	    }
 	}
 	if(runSt && ctrMkNode("area",opt,-1,"/mess",_("Messages"),R_R___,"root",SARH_ID)) {
@@ -1575,7 +1574,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		"sel_id","0;1;2;3;4;5;6;7",
 		"sel_list",_("Debug (0);Information (1[X]);Notice (2[X]);Warning (3[X]);Error (4[X]);Critical (5[X]);Alert (6[X]);Emergency (7[X])"),
 		"help",_("Receiving messages with a level greater or equal to the specified."));
-	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str", "help",TMess::labMessCat());
+	    ctrMkNode("fld",opt,-1,"/mess/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str", "help",TMess::labMessCat().c_str());
 	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SARH_ID)) {
 		ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"root",SARH_ID,1,"tp","time");
 		ctrMkNode("list",opt,-1,"/mess/mess/0a",_("mcsec"),R_R___,"root",SARH_ID,1,"tp","dec");

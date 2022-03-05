@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("BFN module")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.6.23"
+#define MOD_VER		"0.6.24"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Support Big Farm Net (BFN) modules for Viper CT/BAS and other from \"Big Dutchman\" (http://www.bigdutchman.com).")
 #define LICENSE		"GPL2"
@@ -195,8 +195,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 	TTypeDAQ::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/symbs",_("Symbols"))) {
 	    ctrMkNode("fld",opt,-1,"/symbs/db",_("Symbols DB"),RWRWR_,"root",SDAQ_ID,4,
-		"tp","str","dest","select","select","/db/list",
-		"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 	    if(ctrMkNode("table",opt,-1,"/symbs/codes",_("Codes"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/symbs/codes/id",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 		ctrMkNode("list",opt,-1,"/symbs/codes/text",_("Text"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
@@ -607,8 +606,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
-	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/trLst");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/USER",cfg("USER").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PASS",cfg("PASS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);

@@ -3588,7 +3588,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/src","",R_R_R_,"root","root"));
 
 	    // Values requesting from the first source
-	    MtxAlloc res(Mess->mRes, true);
+	    MtxAlloc res(Mess->trMessIdxRes, true);
 	    time_t stTm = time(NULL);
 	    map<string, map<string,string> >::iterator im = Mess->trMessIdx.begin();
 	    for(unsigned pos = 0; im != Mess->trMessIdx.end() && (time(NULL)-stTm) < prmInterf_TM; ++im) {

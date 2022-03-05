@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.17"
+#define MOD_VER		"2.1.18"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -278,8 +278,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld", opt, -1, "/cntr/cfg/SCHEDULE", mSched.fld().descr(), startStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 4,
-	    "tp","str", "dest","sel_ed", "sel_list",TMess::labSecCRONsel(), "help",TMess::labSecCRON());
-	ctrMkNode("fld", opt, -1, "/cntr/cfg/PRIOR", cfg("PRIOR").fld().descr(), startStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 1, "help",TMess::labTaskPrior());
+	    "tp","str", "dest","sel_ed", "sel_list",TMess::labSecCRONsel().c_str(), "help",TMess::labSecCRON().c_str());
+	ctrMkNode("fld", opt, -1, "/cntr/cfg/PRIOR", cfg("PRIOR").fld().descr(), startStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 1, "help",TMess::labTaskPrior().c_str());
 	return;
     }
     //Process command to page

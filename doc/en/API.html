@@ -545,7 +545,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>void translCacheLimits( time_t tmLim = 0, const char *clrCat = NULL );</i> — Processing the translation cache limits at the size <i>trMessCache</i> and the nonzero time <i>tmLim</i>. Also that can clear the messages in the category <i>clrCat</i>.</li>
 <li> <i>void translIdxCacheUpd( const string &amp;base, const string &amp;lang, const string &amp;mess, const string &amp;src );</i> — Updating the operative translation messages' index and cache in the MULTILANGUAGE-DYNAMIC mode.</li>
 <li> <i>string trCtx( const string &amp;user_lang = mess_TrModifMark, bool *hold = NULL );</i> — Getting (by default) and registering(no empty)/clearing(empty) the translation context <i>user_lang</i> bound to the call pthread. <i>hold</i> can be pointed to detect the context already registered and do not clear that.</li>
-<li> <i>static const char *labDB( ); static const char *labSecCRON( ); static const char *labSecCRONsel( ); static const char *labTaskPrior( );</i> — Common help labels.</li>
+<li> <i>static string labStor( bool nogen = false ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
 <li> <i>static string setUTF8( int32_t symb );</i> — Set, form and return a UTF-8 symbol from their code <i>symb</i>.</li></ul>
 <h3><span class="mw-headline" id="Object_subsystem_.28TSubSYS.29"><span class="mw-headline-number">2.3</span> <span id="TSubSYS" title="#TSubSYS">Object subsystem (TSubSYS)</span></span></h3>
@@ -989,7 +989,7 @@ Redundancy modes (enum TController::Redundant):
 <p><b>Data:</b><br />
 Flags of the enabling/disabling modes of the node (enum TParamContr::EnDisFlag):
 </p>
-<ul><li> <i>TParamContr::NodeRemove_NoArch</i> (0x100) — do not remove archives at the DAQ-Parameter node removing.</li></ul>
+<ul><li> <i>TParamContr::NodeRemove_NoArch</i> (TCntrNode::NodeSpecific) — do not remove archives at the DAQ-Parameter node removing.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TParamContr( const string &amp;name, TTypeParam *tpprm );</i> — Initializing constructor.</li>
@@ -2995,21 +2995,22 @@ Named rights of access to control elements (definition):
 </p>
 <ul><li> <i>R_R_R_</i> (0444) — access to all read-only;</li>
 <li> <i>R_R___</i> (0440) — read access only to the owner and group;</li>
-<li> <i>R_<u /></i> (0400) — read access only to the owner;</li>
+<li> <i>R_____</i> (0400) — read access only to the owner;</li>
 <li> <i>RWRWRW</i> (0666) — full access to all;</li>
 <li> <i>RWRWR_</i> (0664) — full access to the owner and group, and for the rest — the read-only;</li>
 <li> <i>RWR_R_</i> (0644) — full access to the owner and for the group and the rest — the read-only;</li>
 <li> <i>RWR___</i> (0640) — full access to the owner, read-only — to the group and closed for the rest;</li>
-<li> <i>RW<u /></i> (0600) — full access to the owner, but for the group and everyone else is closed.</li></ul>
+<li> <i>RW____</i> (0600) — full access to the owner, but for the group and everyone else is closed.</li></ul>
 <p>Dynamic node's flags (enum TCntrNode::Flag):
 </p>
 <ul><li> <i>TCntrNode::DoDisable</i> — switching-off (0);</li>
 <li> <i>TCntrNode::Disabled</i> — disabled (1);</li>
 <li> <i>TCntrNode::DoEnable</i> — switching-on (2);</li>
 <li> <i>TCntrNode::Enabled</i> — enabled (3);</li>
-<li> <i>TCntrNode::SelfModify</i> — sign of the node's modification (0x04);</li>
-<li> <i>TCntrNode::SelfModifyS</i> — sign for node's modification save into <i>load_()</i> (0x08).</li>
-<li> <i>TCntrNode::SelfSaveForceOnChild</i> — force save, call "save_()", if changed-saving child nodes (0x10).</li></ul>
+<li> <i>TCntrNode::Modified</i> — sign of the Modified state (0x04);</li>
+<li> <i>TCntrNode::ModifiedS</i> — sign of saving the Modified state at it setting just in the loading (0x08);</li>
+<li> <i>TCntrNode::SaveForceOnChild</i> — sign of saving forcibly on children Modified flag set (0x10)</li>
+<li> <i>TCntrNode::LoadForcibly</i> — sign of the node forcibly loading, then the errors suppression for not modified nodes before that operation (0x20).</li></ul>
 <p>Flags of the enabling/disabling modes of the node (enum TCntrNode::EnDisFlag):
 </p>
 <ul><li> <i>TCntrNode::NodeNoFlg</i> (0) — no node flag;</li></ul>
@@ -3018,8 +3019,8 @@ Named rights of access to control elements (definition):
 <li> <i>TCntrNode::NodeRestore</i> (0x02) — restoration of the connection of the node;</li></ul>
 <dl><dd> <i>Disable flags</i></dd></dl>
 <ul><li> <i>TCntrNode::NodeRemove</i> (0x01) — node complete removing also from the storage;</li>
-<li> <i>TCntrNode::NodeRemoveOnlyStor</i> (0x02) — node removing only from the storage;</li></ul>
-<dl><dd> <i>&gt; 0x100 - reserved for the node specific</i></dd></dl>
+<li> <i>TCntrNode::NodeRemoveOnlyStor</i> (0x02) — node removing only from the storage;</li>
+<li> <i>TCntrNode::NodeSpecific</i> (0x100) — reserved for the node specific &gt; 0x100.</li></ul>
 <p>Modification of the node flags (enum TCntrNode::ModifFlag):
 </p>
 <ul><li> <i>TCntrNode::Self</i> — the given node is modified;</li>
@@ -3052,10 +3053,10 @@ Named rights of access to control elements (definition):
 <li> <i>unsigned nodeUse( bool selfOnly );</i> — Number of the connections to the node. <i>selfOnly</i> — only self connections, without childs.</li>
 <li> <i>unsigned nodePos( );</i> — The position of the node in the parent-node's container. It is valid only for ordered containers.</li>
 <li> <i>int isModify( int mflg = TCntrNode::All );</i> — Checking for the modification of the node or nodes' branch.</li>
-<li> <i>void modif( bool save = false );</i> — Setting the sign of the node's modification, with save sign <i>save</i>.</li>
-<li> <i>void modifG( );</i> — Setting the sign of the nodes' branch modification.</li>
-<li> <i>void modifClr( bool save = false );</i> — Clear the sign of the node's modification or save sign <i>save</i>.</li>
-<li> <i>void modifGClr( );</i> — Clear the sign of the nodes' branch modification.</li>
+<li> <i>void modif( bool save = false, bool forceLoad = false );</i> — Setting the modification sign of the node, with saving <i>save</i> the sign at the loading and marking for the force loading <i>forceLoad</i>.</li>
+<li> <i>void modifG( bool forceLoad = false );</i> — Setting the modification sign of the node branch, with marking for the force loading <i>forceLoad</i>.</li>
+<li> <i>void modifClr( bool save = false );</i> — Clearing the modification sign or the saving sign <i>save</i> of the node.</li>
+<li> <i>void modifGClr( );</i> — Clearing the modification sign of the node branch.</li>
 <li> <i>void load( TConfig *cfg = NULL, string *errs = NULL );</i> — Load the dynamic tree node for ready configuration <i>cfg</i>. The loading errors place to <i>errs</i> by lines.</li>
 <li> <i>void save( unsigned lev = 0, string *errs = NULL );</i> — Saving the dynamic tree node, on nesting level <i>lev</i> (service). The saving errors place to <i>errs</i> by lines.</li>
 <li> <i>virtual void AHDConnect( );</i> — Connection to the node (capture of the resource).</li>
@@ -4260,5 +4261,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2802</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2807</td></tr></table></body>
 </html>

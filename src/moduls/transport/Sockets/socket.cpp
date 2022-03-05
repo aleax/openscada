@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.7"
+#define MOD_VER		"4.3.8"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -986,7 +986,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "help",_("Empty value for the protocol selection switchs the transport to a mode\n"
 		     "of creation associated output transports for each connection to this transport."));
 	ctrMkNode("fld", opt, -1, "/prm/cfg/taskPrior", _("Priority"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
-	    "tp","dec", "help",TMess::labTaskPrior());
+	    "tp","dec", "help",TMess::labTaskPrior().c_str());
 	if(type == SOCK_TCP)
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/MSS", _("Maximum segment size (MSS)"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
 		"tp","str", "help",_("Set 0 for the system MSS."));

@@ -1175,7 +1175,8 @@ function selectChildRecArea( node, aPath, cBlk )
 					    if(this.nodeName == "TEXTAREA" && e.ctrlKey) {	//NewLine insertion
 						var selStart = this.selectionStart;
 						this.value = this.value.slice(0, selStart) + "\n" + this.value.slice(this.selectionEnd);
-						this.selectionStart = this.selectionEnd = selStart + 1;
+						this.setSelectionRange(selStart + 1, selStart + 1);
+						this.blur(); this.focus();
 						return true;
 					    }
 					    this.parentNode.apply();

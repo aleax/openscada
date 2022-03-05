@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.h
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -163,7 +163,7 @@ class Widget : public TCntrNode
     public:
 	//Public data
 	enum EnDisFlag {
-	    NodeRemove_NoDelMark = 0x100
+	    NodeRemove_NoDelMark = TCntrNode::NodeSpecific
 	};
 
 	//Methods

@@ -462,6 +462,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> the user language obtaining unified in the function lang2Code(), expanded by the arguments "user" and "onlyUser";</li>
 <li> the lang2CodeBase() function separated to the common one langBase() and appended the function langToLocale() of obtaining the complete locale at language from langBase();</li>
 <li> the language field of the objects TSYS, TUser appended of the selection list from langBase();</li>
+<li> FIX: the TMess::mRes lock renamed to TMess::trMessIdxRes and limited in use only for TMess::trMessIdx;</li>
 <li> the translation cache significant extending and unification:
 <ul><li> in the new TMess object's functions translCacheGet(), translCacheSet(), translCacheLimits() and the own lock trMessCacheRes;</li>
 <li> extended by the message category for caching the system translations and users;</li>
@@ -526,7 +527,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <p><b><u>API</u></b><br />
 <i>!!!!:Changes</i>:
 </p>
-<ul><li> SYS: TCntrNode::{chldDel,nodeDis}() moved to direct use the new TCntrNode::EnDisFlag: NodeNoFlg, NodeRemove, NodeRemoveOnlyStor; and the space after &gt; 0x100 was reserved for the node specific, where the TParamContr::EnDisFlag set only to NodeRemove_NoArch and Widget::EnDisFlag set only to Widget::NodeRemove_NoDelMark.
+<ul><li> SYS: TCntrNode::{chldDel,nodeDis}() moved to direct use the new TCntrNode::EnDisFlag: NodeNoFlg, NodeRemove, NodeRemoveOnlyStor; and the space after &gt; 0x100(TCntrNode::NodeSpecific) was reserved for the node specific, where the TParamContr::EnDisFlag set only to NodeRemove_NoArch and Widget::EnDisFlag set only to Widget::{NodeRemove_NoDelMark,NoContainer}. TCntrNode::Flag items renamed SelfModify-&gt;Modified, SelfModifyS-&gt;ModifiedS, SelfSaveForceOnChild-&gt;SaveForceOnChild.
 <ul><li> Storage object's functions DB(), fullDB() and setDB() expanded of the argument "qTop".</li>
 <li> The subsystem name moved to the function subName() call and which set "virtual" and "constant", also as subVer() and subId().</li>
 <li> The description field type of the TFld object and the name field of the IO object changed to "string".</li>
@@ -535,7 +536,8 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> The function lang2Code() expanded by the arguments "user" and "onlyUser".</li>
 <li> I18N() changed in the arguments for "const string &amp;mess" the first and mLang moved to the second, it result changed to "string", also for TModule::I18N(), and updated all definitions _().</li>
 <li> The data translation functions (short definitions) renamed to trD_L(), trD_U(), trD_LU(), trDSet_L(), trDSet_U(), trDSet_LU().</li>
-<li> Removed for I18Ns().</li></ul></li>
+<li> Removed for I18Ns();</li>
+<li> labStorGen() merged to labStor() and that labels labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() type changed to "string".</li></ul></li>
 <li> Security: The static method "pHashMagic" moved to the definition SEC_HASH_MAGIC.</li></ul></li>
 <li> DB: The functions TBDS::{open,close}() renamed to TBDS::{tblOpen,tblClose}() and set to static ones.
 <ul><li> TBDS::{dataSeek,dataGet,dataSet,dataDel,genDBGet,genDBSet}() moved to the bit flags TBDS::ReqGenFlg (renamed from TBDS::ReqGen): NoFlg, NoException, OnlyCfg, UseTranslation (renamed from ReqGen::UseTranslation), UseCache, UseAllKeys.</li>
@@ -548,7 +550,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> SYS: The global short functions appended of s2l() and s2u().
 <ul><li> Appended of a new function strParseEnd() of parsing the separated string from the end.</li>
 <li> The function pathLev() appended of a new argument of position the offset to the next token begin and what also appended in the UserAPI function parsePath() of DAQ.JavaLikeCalc.</li>
-<li> TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data.</li>
+<li> TCntrNode appended of the functions storage() and setStorage() for tracking the availability of node data. TCntrNode::Flag appended of the item LoadForcibly. TCntrNode::modif() and TCntrNode::modifG() appended of a new argument "forceLoad".</li>
 <li> The time limit variable "limCacheIts_TM" appended for the cache limiting.</li>
 <li> The common encoding function strEncode() and the User API one appended the variant "ShieldBin" of shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li>
 <li> TMess: Appended for a function of checking the messages for them translatability — isMessTranslable().
@@ -599,6 +601,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F], what is significant for the WebBrowsers.</li>
 <li> UI.WebCfgD: Appended of encoding the XML traffic for the binary symbols shielding using the new option "BinShield".</li></ul></li>
 <li> FIX: strParse() rewrote and tested in processing the group symbols merging at the scan; and strParse(), strLine(), pathLev() in position the offset to the next token begin and limiting in the down for 0; and pathLevEnd() in positioning the offset to the next token end and limited in the up for the size. TModSchedul::chkAllowMod(),UI.QTCfg,Protocol.HTTP: switched in use TSYS::pathLevEnd() and  TSYS::pathLev() in the new behaviour.</li>
+<li> Force loading appended of the errors suppression for not modified nodes before that operation.</li>
 <li> .,DB,DAQ: The global configuration context copying mechanism (interstation) appended for the marking link to the last setting operation object, to easy postmarks setting.
 <ul><li> DAQ: As a postmark to the saving DAQ-parameter object there appended the attribute "prmTp" with the parameter type, which is used next in true detection the parameter type changing at the following loading.</li></ul></li></ul>
 <p><b><u>DB</u></b><br />
@@ -1416,5 +1419,5 @@ FIX: The "Translations" tab expansion and fixing for:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/ru">Documents/Release_0.9/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2802</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/ru">Documents/Release_0.9/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2807</td></tr></table></body>
 </html>

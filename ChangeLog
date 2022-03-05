@@ -1,3 +1,26 @@
+2022-03-05 Roman (stable)
+- !!!:FIX:SYS: The TMess::mRes lock renamed to TMess::trMessIdxRes and limited in use only for TMess::trMessIdx,
+	than preventing in lock at the DB accessing - the complex hangs on the MULTILANGUAGE projects.
+    !!:FIX:SYS,*: labStorGen() merged to labStor()
+	and that labels labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() type changed to "string".
+    !!:FIX: Security: Description of the user and group fixed in the prestored translation.
+	FIX: Storage of the system users and groups moved to EMPTY to allow that loading from external storages.
+    !!: Most TCntrNode::Flag items renamed SelfModify->Modified, SelfModifyS->ModifiedS, SelfSaveForceOnChild->SaveForceOnChild.
+    !!: Force loading appended of the errors suppression for not modified nodes before that operation:
+	- the structure TCntrNode::Flag appended of the item LoadForcibly;
+	- TCntrNode::modif() and TCntrNode::modifG() appended of a new argument "forceLoad".
+- DAQ,UI.VCAEngine: The enum TParamContr::EnDisFlag and UI.VCAEngine::Widget::EnDisFlag first item directly linked
+	to the new item TCntrNode::NodeSpecific (0x100).
+- !!:FIX:UI.VCAEngine: The pages appended in disable and clear the parent address at the page type change for Page::Template, Page::Link;
+	also as the types exit Page::Template and Page::Container appended of a suggestion to remove the branch pages.
+    The subpages-branch loading allowed only for Page::Template and Page::Container and suppressed in whole of errors
+	at pages appending to non containers by Engine::NoContainer.
+    The object Engine appended of the own error codes ErrCodes with the items NotResLnk (link to TError::EXT) and NoContainer.
+- !:UI.WebCfgD: Improved in the table usability and mostly in the text edition:
+	true width fitting,
+	text cursor setting and tracing at the entry and Ctrl+Enter using setSelectionRange().
+
+
 2022-02-27 Roman (stable)
 - SYS: TModSchedul::chkAllowMod() removed for spare variable "path_els" declaration.
 - FIX:UI.WebCfgD: Fixed in processing empty "sel_list" of the editable combo.

@@ -194,28 +194,28 @@ void TSecurity::load_( )
     //Add surely users, groups and set their parameters, if its not loaded
     // Administrator
     if(!usrPresent("root")) {
-	usrAdd("root");
+	usrAdd("root", "");
 	usrAt("root").at().setDescr(trS("Administrator"));
 	usrAt("root").at().setPass("openscada");
     }
     usrAt("root").at().setSysItem(true);
     // Simple user
     if(!usrPresent("user")) {
-	usrAdd("user");
+	usrAdd("user", "");
 	usrAt("user").at().setDescr(trS("Simple user"));
 	usrAt("user").at().setPass("user");
     }
     usrAt("user").at().setSysItem(true);
     // Administrators group
     if(!grpPresent("root")) {
-	grpAdd("root");
+	grpAdd("root", "");
 	grpAt("root").at().setDescr(trS("Administrators group"));
 	grpAt("root").at().userAdd("root");
     }
     grpAt("root").at().setSysItem(true);
     // Simple users group
     if(!grpPresent("users")) {
-	grpAdd("users");
+	grpAdd("users", "");
 	grpAt("users").at().setDescr(trS("Users group"));
 	grpAt("users").at().userAdd("user");
     }
@@ -492,8 +492,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/prm/grps/vl",_("Include"),RWRWR_,"root",SSEC_ID,1,"tp","bool");
 	    }
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,
-		"tp","str","dest","select","select","/db/list",
-		"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 	    if(DB(true).size())
 		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID);
 	}
@@ -514,6 +513,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SSEC_ID,SEC_WR))
 	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/ico" && ctrChkNode(opt)) opt->setText(picture());
+    else if(a_path == "/prm/DESCR" && ctrChkNode(opt,"get",RWRWR_,name().c_str(),SSEC_ID,SEC_RD))
+	opt->setText(descr());
     else if(a_path == "/prm/PASS") {
 	if(ctrChkNode(opt,"get",RWRW__,name().c_str(),SSEC_ID,SEC_RD))	opt->setText("**********");
 	if(ctrChkNode(opt,"set",RWRW__,name().c_str(),SSEC_ID,SEC_WR))	setPass(opt->text());
@@ -636,8 +637,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	    TConfig::cntrCmdMake(opt,"/prm",0,"root",SSEC_ID,RWRWR_);
 	    ctrMkNode("list",opt,-1,"/prm/USERS",EVAL_STR,RWRWR_,"root",SSEC_ID,1,"s_com","add,del");
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SSEC_ID,4,
-		"tp","str","dest","select","select","/db/list",
-		"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+		"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 	    if(DB(true).size())
 		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID);
 	}
@@ -652,6 +652,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SSEC_ID,SEC_WR))
 	postDisable(NodeRemoveOnlyStor);
+    else if(a_path == "/prm/DESCR" && ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))
+	opt->setText(descr());
     else if(a_path == "/prm/USERS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    string val;

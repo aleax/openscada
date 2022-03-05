@@ -55,7 +55,7 @@
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.4"
+#define MOD_VER		"2.6.5"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -717,7 +717,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
 	    "    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
-	    "tp","dec", "help",TMess::labTaskPrior());
+	    "tp","dec", "help",TMess::labTaskPrior().c_str());
 	if(s2i(TSYS::strParse(addr(),4,":")) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout, seconds"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/mod/preInitDl",_("Pre-initial delay, seconds"),RWRWR_,"root",STR_ID,1,"tp","real");

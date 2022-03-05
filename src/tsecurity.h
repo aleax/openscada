@@ -49,7 +49,7 @@ class TUser : public TCntrNode, public TConfig
 	TCntrNode &operator=( const TCntrNode &node );
 
 	string	name( )		{ return mName; }
-	string	descr( )	{ return cfg("DESCR").getS(); }
+	string	descr( )	{ return _(cfg("DESCR").getS()); }
 	string	longDescr( )	{ return cfg("LONGDESCR").getS(); }
 	string	picture( )	{ return cfg("PICTURE").getS(); }
 	string	lang( )		{ return mLang; }
@@ -107,7 +107,7 @@ class TGroup : public TCntrNode, public TConfig
 	TCntrNode &operator=( const TCntrNode &node );
 
 	string	name( )		{ return mName; }
-	string	descr( )	{ return cfg("DESCR").getS(); }
+	string	descr( )	{ return _(cfg("DESCR").getS()); }
 	string	longDescr( )	{ return cfg("LONGDESCR").getS(); }
 	string	users( )	{ return cfg("USERS").getS(); }
 	bool	sysItem( )	{ return mSysIt; }

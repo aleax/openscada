@@ -2,7 +2,7 @@
 //!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Archive.Tmpl file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2012 by MyName MyFamily, <my@email.org>                 *
+ *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -114,7 +114,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     {
 	TVArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",SARH_ID,3,
-	    "dest","select","select","/db/list:onlydb","help",TMess::labStor());
+	    "dest","select","select","/db/list:onlydb","help",TMess::labStor(true).c_str());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	return;
     }
