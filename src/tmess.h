@@ -184,12 +184,11 @@ class TMess
 	string trCtx( const string &user_lang = mess_TrModifMark, bool *hold = NULL );
 
 	// Often used, generic text messages
-	static const char *labStor( );
-	static const char *labStorGen( );
-	static const char *labSecCRON( );
-	static const char *labSecCRONsel( );
-	static const char *labTaskPrior( );
-	static const char *labMessCat( );
+	static string labStor( bool nogen = false );
+	static string labSecCRON( );
+	static string labSecCRONsel( );
+	static string labTaskPrior( );
+	static string labMessCat( );
 
 	int getUTF8( const string &str, int off = 0, int32_t *symb = NULL );
 	static string setUTF8( int32_t symb );
@@ -215,7 +214,7 @@ class TMess
 	unsigned mTranslEnMan	:1;
 	unsigned mTranslSet	:1;
 
-	ResMtx	dtRes, mRes, dbgRes, trMessCacheRes;
+	ResMtx	dtRes, dbgRes, trMessIdxRes, trMessCacheRes;
 
 	MtxString	mLangBase, mLang2Code, mTranslLangs;
 

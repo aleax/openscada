@@ -259,7 +259,7 @@ void TMess::setTranslEnMan( bool vl, bool passive )
 	if(vl) {
 	    SYS->modifG(); SYS->load();	//Built messages load
 	    translReg("", "uapi:");	//User API messages load
-	} else trMessIdx.clear();
+	} else { trMessIdxRes.lock(); trMessIdx.clear(); trMessIdxRes.unlock(); }
     }
 
     mTranslSet = false;
@@ -303,11 +303,14 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 
 	//Checking the included sources from the index
 	if(!isUAPI || isDUAPI) {
-	    MtxAlloc res(mRes, true);
+	    MtxAlloc res(trMessIdxRes, true);
 	    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
 	    if(im != trMessIdx.end()) {
+		map<string,string> strgs = im->second;
+		res.unlock();
+
 		TConfig req;
-		for(map<string,string>::iterator is = im->second.begin(); rez.empty() && is != im->second.end(); ++is) {
+		for(map<string,string>::iterator is = strgs.begin(); rez.empty() && is != strgs.end(); ++is) {
 		    string trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#"), reqFld;
 		    bool isCfg = false;
 		    //  Source is config file or included DB
@@ -318,7 +321,7 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 			req.elem().fldAdd(new TFld(trFld.c_str(),"",TFld::String,0));
 			req.elem().fldAdd(new TFld(reqFld.c_str(),"",TFld::String,0));
 			req.cfg(trFld).setReqKey(true);
-			req.cfg(trFld).setS(im->first);
+			req.cfg(trFld).setS(base);
 
 			//  Get from config file or DB source
 			for(int inst = 0; rez.empty(); inst++) {
@@ -412,8 +415,10 @@ string TMess::translSet( const string &base, const string &lang, const string &m
     if(base.empty() && mess.size()) trLang = lang2CodeBase();
     bool chBase = (trLang == lang2CodeBase());
 
-    MtxAlloc res(mRes, true);
+    MtxAlloc res(trMessIdxRes, true);
     map<string,string> mI = trMessIdx[base];
+    res.unlock();
+
     for(map<string,string>::iterator is = mI.begin(); is != mI.end(); ++is) {
 	if(srcFltr.size() && (is->first+"#"+is->second).find(srcFltr) == string::npos)	continue;
 
@@ -437,11 +442,13 @@ string TMess::translSet( const string &base, const string &lang, const string &m
 	}
 	//  Move the source to new base
 	if(setRes && chBase) {
+	    res.lock();
 	    if(needReload) *needReload = trMessIdx[mess].size();
 	    trMessIdx[mess][is->first] = is->second;
+	    res.unlock();
 	}
     }
-    if(chBase) trMessIdx.erase(base);
+    if(chBase) { res.lock(); trMessIdx.erase(base); res.unlock(); }
     translCacheLimits(0, "");
 
     return chBase ? mess : base;
@@ -464,6 +471,8 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 {
     if(!translEnMan()) return;
 
+    MtxAlloc res(trMessIdxRes);
+
     //Service request of loading the translation index
     if(src.find("uapi:") == 0) {
 	vector<string> ls;
@@ -472,21 +481,24 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 
 	TConfig req;
 	req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
-
-	MtxAlloc res(mRes, true);
 	for(unsigned iL = 0; iL < ls.size(); iL++)
 	    if(ls[iL] == DB_CFG)
-		for(int io_cnt = 0; TBDS::dataSeek("","/" mess_TrUApiTbl,io_cnt++,req,TBDS::UseCache); )
+		for(int io_cnt = 0; TBDS::dataSeek("","/" mess_TrUApiTbl,io_cnt++,req,TBDS::UseCache); ) {
+		    res.lock();
 		    trMessIdx[req.cfg("base").getS()]["cfg:/" mess_TrUApiTbl] = prms;
+		    res.unlock();
+		}
 	    else
-		for(int io_cnt = 0; TBDS::dataSeek(ls[iL]+"." mess_TrUApiTbl,"",io_cnt++,req,TBDS::UseCache); )
+		for(int io_cnt = 0; TBDS::dataSeek(ls[iL]+"." mess_TrUApiTbl,"",io_cnt++,req,TBDS::UseCache); ) {
+		    res.lock();
 		    trMessIdx[req.cfg("base").getS()]["db:"+ls[iL]+"." mess_TrUApiTbl "#base"] = prms;
+		    res.unlock();
+		}
     }
     //Same translations registration
     else {
 	if(sTrm(mess).empty() || !isMessTranslable(mess)) return;
-	MtxAlloc res(mRes, true);
-	trMessIdx[mess][src] = prms;
+	res.lock(); trMessIdx[mess][src] = prms; res.unlock();
     }
 }
 
@@ -555,7 +567,7 @@ void TMess::translIdxCacheUpd( const string &base, const string &lang, const str
 	else {
 	    //!!!! Do not remove the previous message's source due to the source can be one for several messages-records,
 	    //     or after appendig they counting
-	    /*MtxAlloc res(mRes, true);
+	    /*MtxAlloc res(trMessIdxRes, true);
 	    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
 	    if(im != trMessIdx.end()) {
 		im->second.erase(src);			//Remove the message source from the base
@@ -819,8 +831,8 @@ void TMess::unload( )
 {
     dbgRes.lock(); debugCats.clear(); selectDebugCats.clear(); dbgRes.unlock();
 
-    mRes.lock(); mTranslLangs = ""; trMessIdx.clear(); mRes.unlock();
-
+    mTranslLangs = "";
+    trMessIdxRes.lock(); trMessIdx.clear(); trMessIdxRes.unlock();
     trMessCacheRes.lock(); trMessCache.clear(); trMessCacheRes.unlock();
 
     IOCharSet = "UTF-8", mMessLevel = Info, mLogDir = DIR_STDOUT|DIR_ARCHIVE;
@@ -838,11 +850,13 @@ void TMess::save( )
     TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
 }
 
-const char *TMess::labStor( )	{ return _("Storage address in the format \"{DB module}.{DB name}\"."); }
+string TMess::labStor( bool nogen )
+{
+    return string(_("Storage address in the format \"{DB module}.{DB name}\".")) +
+	(nogen?string(""):string("\n")+_("Set '*.*' to use the Generic Storage."));
+}
 
-const char *TMess::labStorGen( ){ return _("Set '*.*' to use the Generic Storage."); }
-
-const char *TMess::labSecCRON( )
+string TMess::labSecCRON( )
 {
     return _("Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
 	     "The seconds periodic form is one real number (1.5, 1e-3).\n"
@@ -866,9 +880,9 @@ const char *TMess::labSecCRON( )
 	     "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include).");
 }
 
-const char *TMess::labSecCRONsel( )	{ return "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"; }
+string TMess::labSecCRONsel( )	{ return "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"; }
 
-const char *TMess::labTaskPrior( )
+string TMess::labTaskPrior( )
 {
     return _("Task priority level (-1...199), where:\n"
 	     "  -1        - lowest priority batch policy;\n"
@@ -877,7 +891,7 @@ const char *TMess::labTaskPrior( )
 	     "  100...199 - realtime priority level (FIFO), often allowed only for \"root\".");
 }
 
-const char *TMess::labMessCat( )
+string TMess::labMessCat( )
 {
     return _("Specifies the category of the requested messages.\n"
 	     "Use template's symbols for group selection:\n  '*' - any substring;\n  '?' - any character.\n"

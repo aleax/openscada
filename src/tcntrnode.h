@@ -132,9 +132,10 @@ class TCntrNode
 	    DoEnable	= 0x02,		//Node do enable
 	    Enabled	= 0x03,		//Node enabled
 	    // Flags
-	    SelfModify	= 0x04,		//Self modify
-	    SelfModifyS	= 0x08,		//Self modify store
-	    SelfSaveForceOnChild = 0x10	//Save force on childs modify flag set
+	    Modified	= 0x04,		//Modified
+	    ModifiedS	= 0x08,		//Save the Modified status at it setting just in the loading
+	    SaveForceOnChild = 0x10,	//Save forcibly on children Modified flag set
+	    LoadForcibly = 0x20		//The node forcibly loading
 	};
 	// Node's enable and disable flags
 	enum EnDisFlag {
@@ -144,8 +145,8 @@ class TCntrNode
 	    NodeRestore	= 0x02,		//Restore node enabling after broken disabling.
 	    //  Disable flags
 	    NodeRemove	= 0x01,		//Completely remove node
-	    NodeRemoveOnlyStor = 0x02	//Remove node from the storage
-	    //  > 0x100 - reserved for the node specific 
+	    NodeRemoveOnlyStor = 0x02,	//Remove node from the storage
+	    NodeSpecific = 0x100	// > 0x100 - reserved for the node specific
 	};
 	enum ModifFlag	{ Self = 0x01, Child = 0x02, All = 0x03 };
 
@@ -171,10 +172,10 @@ class TCntrNode
 
 	// Modify process methods
 	int  isModify( int mflg = TCntrNode::All );	//Check for modify want
-	void modif( bool save = false );		//Set local modify
-	void modifG( );					//Set group modify
-	void modifClr( bool save = false );		//Clear modify
-	void modifGClr( );				//Modify group clear
+	void modif( bool save = false, bool forceLoad = false );//Set Modified the node
+	void modifG( bool forceLoad = false );		//Set Modified the node branch
+	void modifClr( bool save = false );		//Clear Modified the node
+	void modifGClr( );				//Clear Modified the node branch
 	void load( TConfig *cfg = NULL, string *errs = NULL );	//Load node, if modified
 	void save( unsigned lev = 0, string *errs = NULL );	//Save node, if modified
 

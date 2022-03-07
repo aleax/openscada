@@ -79,7 +79,7 @@ TCntrNode &Project::operator=( const TCntrNode &node )
 		(TCntrNode&)at(pls[iP]).at() = (TCntrNode&)src_n->at(pls[iP]).at();
 	    }
 	    catch(TError &err) {
-		if(err.cod == TError::EXT || (err.cod == TError::Core_NoNode && src_n->at(pls[iP]).at().prjFlags()&Page::Link))
+		if(err.cod == Engine::NotResLnk || (err.cod == TError::Core_NoNode && src_n->at(pls[iP]).at().prjFlags()&Page::Link))
 		    lnkErrEls.push_back(pls[iP]);
 		else throw;
 	    }
@@ -310,11 +310,11 @@ void Project::setEnable( bool val )
 
     mess_debug(nodePath().c_str(),val ? _("Enabling the project.") : _("Disabling the project."));
 
-    vector<string> f_lst;
-    list(f_lst);
-    for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++)
-	try{ at(f_lst[i_ls]).at().setEnable(val); }
-	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    vector<string> fLst;
+    list(fLst);
+    for(unsigned iLs = 0; iLs < fLst.size(); iLs++)
+	try{ at(fLst[iLs]).at().setEnable(val); }
+	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     mEnable = val;
 }
@@ -595,8 +595,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/en",_("Enabled"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		if(isStdStorAddr())
 		    ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
-			"tp","str","dest","select","select","/db/list",
-			"help",(string(TMess::labStor())+"\n"+TMess::labStorGen()).c_str());
+			"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 		else ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
 			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
@@ -925,7 +924,7 @@ Page::Page( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&m
     mPage = grpAdd("pg_");
 
     setParentAddr(isrcwdg);
-    setNodeFlg(TCntrNode::SelfSaveForceOnChild);
+    setNodeFlg(TCntrNode::SaveForceOnChild);
 }
 
 Page::~Page( )
@@ -963,7 +962,7 @@ TCntrNode &Page::operator=( const TCntrNode &node )
 		    (TCntrNode&)pageAt(els[iP]).at() = (TCntrNode&)src_n->pageAt(els[iP]).at();
 		}
 		catch(TError &err) {
-		    if(err.cod == TError::EXT || (err.cod == TError::Core_NoNode && src_n->pageAt(els[iP]).at().prjFlags()&Page::Link))
+		    if(err.cod == Engine::NotResLnk || (err.cod == TError::Core_NoNode && src_n->pageAt(els[iP]).at().prjFlags()&Page::Link))
 			lnkErrEls.push_back(els[iP]);
 		    else throw;
 		}
@@ -972,7 +971,7 @@ TCntrNode &Page::operator=( const TCntrNode &node )
 	}
 
 	if(lnkErrEls.size())
-	    throw TError(TError::EXT, nodePath().c_str(), "The copying operation is terminated by the not resolved links.");
+	    throw TError(Engine::NotResLnk, nodePath().c_str(), "The copying operation is terminated by the not resolved links.");
     }
 
     return *this;
@@ -1142,7 +1141,8 @@ void Page::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+
 void Page::setPrjFlags( int val )
 {
     int dif = mFlgs^val;
-    if(dif&Page::Empty) {
+    if(dif&(Page::Template|Page::Link)) {	//!!!! Clear the parent link and disable the page
+						//     at any change the project state Empty|Template|Link
 	//Clear page
 	setParentAddr("");
 	if(enable()) {
@@ -1184,34 +1184,37 @@ void Page::load_( TConfig *icfg )
     //Loading for the generic attributes
     mod->attrsLoad(*this, db+"."+tbl, addr(), "", tAttrs, true);
 
-    //Creating for new pages
-    map<string, bool>	itReg;
-    TConfig cEl(&mod->elPage());
-    //cEl.cfgViewAll(false);
-    cEl.cfg("OWNER").setS(ownerFullId()+"/"+id(), true);
-    for(int fldCnt = 0; TBDS::dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,TBDS::UseCache); ) {
-	string fId = cEl.cfg("ID").getS();
-	if(!pagePresent(fId))
-	    try { pageAdd(fId, "", ""); }
-	    catch(TError &err) { mess_err(err.cat.c_str(),err.mess.c_str()); }
-	pageAt(fId).at().load(&cEl);
-	itReg[fId] = true;
-    }
+    //Loading the inner pages only for containers and templates
+    if(prjFlags()&(Page::Template|Page::Container)) {
+	//Creating for new pages
+	map<string, bool>	itReg;
+	TConfig cEl(&mod->elPage());
+	//cEl.cfgViewAll(false);
+	cEl.cfg("OWNER").setS(ownerFullId()+"/"+id(), true);
+	for(int fldCnt = 0; TBDS::dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,TBDS::UseCache); ) {
+	    string fId = cEl.cfg("ID").getS();
+	    if(!pagePresent(fId))
+		try { pageAdd(fId, "", ""); }
+		catch(TError &err) { if(err.cod != Engine::NoContainer) mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    if(pagePresent(fId)) pageAt(fId).at().load(&cEl);
+	    itReg[fId] = true;
+	}
 
-    //Check for remove items removed from DB
-    if(SYS->chkSelDB(SYS->selDB(),true)) {
-	vector<string> itLs;
-	pageList(itLs);
-	for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
-	    if(itReg.find(itLs[iIt]) == itReg.end())
-		pageDel(itLs[iIt]);
-    }
+	//Check for remove items removed from DB
+	if(SYS->chkSelDB(SYS->selDB(),true)) {
+	    vector<string> itLs;
+	    pageList(itLs);
+	    for(unsigned iIt = 0; iIt < itLs.size(); iIt++)
+		if(itReg.find(itLs[iIt]) == itReg.end())
+		    pageDel(itLs[iIt]);
+	}
 
-    //Load present pages
-    vector<string> f_lst;
-    pageList(f_lst);
-    for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++)
-	pageAt(f_lst[i_ls]).at().load();
+	//Load present pages
+	vector<string> fLst;
+	pageList(fLst);
+	for(unsigned iLs = 0; iLs < fLst.size(); iLs++)
+	    pageAt(fLst[iLs]).at().load();
+    }
 
     //Load all widget attributes
     loadIO();
@@ -1349,7 +1352,7 @@ void Page::setEnable( bool val, bool force )
     pageList(ls);
     for(unsigned iL = 0; iL < ls.size(); iL++)
         try { pageAt(ls[iL]).at().setEnable(val); }
-	catch(TError &err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //Include widgets link update on the parrent change
     if(val) {
@@ -1440,7 +1443,7 @@ string Page::pageAdd( const string &iid, const string &name, const string &orig 
 {
     if(pagePresent(iid)) throw err_sys(_("The page '%s' is already present!"), iid.c_str());
     if(!(prjFlags()&(Page::Container|Page::Template)))
-	throw TError(nodePath().c_str(),_("Page is not a container or a template!"));
+	throw TError(Engine::NoContainer, nodePath().c_str(), _("Page is not a container or a template!"));
 
     string id = chldAdd(mPage, new Page(TSYS::strEncode(sTrm(iid),TSYS::oscdID),orig));
     pageAt(id).at().setName(name);
@@ -1453,7 +1456,7 @@ void Page::pageAdd( Page *iwdg )
     if(pagePresent(iwdg->id()))	delete iwdg;
     if(!(prjFlags()&(Page::Container|Page::Template))) {
 	delete iwdg;
-	throw TError(nodePath().c_str(),_("Page is not a container or a template!"));
+	throw TError(Engine::NoContainer, nodePath().c_str(), _("Page is not a container or a template!"));
     } else chldAdd(mPage, iwdg);
 }
 
@@ -1503,7 +1506,7 @@ void Page::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr(attr);
-    if(!mdf && !(nodeFlg()&SelfModifyS)) modifClr();
+    if(!mdf && !(nodeFlg()&ModifiedS)) modifClr();
 }
 
 TVariant Page::vlGet( Attr &a )
@@ -1584,8 +1587,22 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     else if(a_path == "/wdg/st/pgTp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	    opt->setText(i2s(prjFlags()&(Page::Container|Page::Template|Page::Empty|Page::Link)));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	    setPrjFlags(prjFlags()^((prjFlags()^s2i(opt->text()))&(Page::Container|Page::Template|Page::Empty|Page::Link)));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    int prevFlgs = prjFlags(),
+		newFlgs = prjFlags()^((prjFlags()^s2i(opt->text()))&(Page::Container|Page::Template|Page::Empty|Page::Link)),
+		difFlgs = prevFlgs^newFlgs;
+
+	    setPrjFlags(newFlgs);
+
+	    vector<string> ls;
+	    nodeList(ls, "pg_");
+	    if(ls.size()) {
+		if(difFlgs&Page::Template && !(newFlgs&Page::Template))
+		    throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Consider to remove included pages linked to this page as a template due to it is not the template more!"));
+		if(difFlgs&Page::Container && !(newFlgs&Page::Container))
+		    throw TError(TError::Core_CntrWarning, nodePath().c_str(), _("Consider to remove included pages due to this page is not a container more!"));
+	    }
+	}
     }
     else if(a_path == "/wdg/st/pgTpLst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id","0")->setText(_("Standard"));
@@ -1968,7 +1985,7 @@ void PageWdg::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr(attr);
-    if(!mdf && !(nodeFlg()&SelfModifyS)) modifClr();
+    if(!mdf && !(nodeFlg()&ModifiedS)) modifClr();
 }
 
 void PageWdg::resourceList( vector<string> &ls )

@@ -105,7 +105,7 @@ void TSubSYS::subStart( )
     mess_sys(TMess::Debug, _("Subsystem starting."));
 
     if(!SYS->security().at().grpPresent(subId())) {
-	SYS->security().at().grpAdd(subId());
+	SYS->security().at().grpAdd(subId(), "");
 	SYS->security().at().grpAt(subId()).at().setDescr(subName());
 	SYS->security().at().grpAt(subId()).at().setSysItem(true);
 	SYS->security().at().grpAt(subId()).at().userAdd("root");

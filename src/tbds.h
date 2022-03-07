@@ -54,7 +54,7 @@ class TTable : public TCntrNode
     public:
 	//Data
 	// Flags of the SQL requests
-	enum SQLFeqFlag {
+	enum SQLReqFlag {
 	    SQLNoFlg 		= 0,
 	    SQLOrderForSeek	= 0x01,
 	    SQLFirstSkipForSeek	= 0x02

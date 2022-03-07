@@ -44,6 +44,12 @@ namespace VCA
 class Engine : public TUI
 {
     public:
+	//Data
+	enum ErrCodes {
+	    NotResLnk = TError::EXT,
+	    NoContainer
+	};
+
 	//Methods
 	Engine( string name );
 	~Engine( );

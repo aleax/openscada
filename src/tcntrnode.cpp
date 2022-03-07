@@ -603,7 +603,7 @@ void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
     dataRes().unlock();
 
     //The queue
-    string work = TSYS::strLine(prcS,0);
+    string work = TSYS::strLine(prcS, 0);
     if(forQueueOfData)	prcS_ = work + "\n";
     //The work DB
     else if(vl.empty() || vl == work)	return;
@@ -627,7 +627,7 @@ void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
 void TCntrNode::setNodeFlg( char flg )
 {
     dataRes().lock();
-    mFlg |= flg&(SelfModify|SelfModifyS|SelfSaveForceOnChild);
+    mFlg |= flg&(Modified|ModifiedS|SaveForceOnChild);
     dataRes().unlock();
 }
 
@@ -692,7 +692,7 @@ int TCntrNode::isModify( int f )
 {
     int rflg = 0;
     MtxAlloc res1(dataRes(), true);
-    if(f&Self && mFlg&SelfModify) rflg |= Self;
+    if(f&Self && mFlg&Modified) rflg |= Self;
     if(f&Child) {
 	res1.unlock();
 
@@ -718,28 +718,30 @@ int TCntrNode::isModify( int f )
     return rflg;
 }
 
-void TCntrNode::modif( bool save )
+void TCntrNode::modif( bool save, bool forceLoad )
 {
     dataRes().lock();
-    mFlg |= (save?(SelfModifyS|SelfModify):SelfModify);
+    if(forceLoad && !(mFlg&Modified)) mFlg |= LoadForcibly;
+    mFlg |= (save?(ModifiedS|Modified):Modified);
+
     dataRes().unlock();
 }
 
 void TCntrNode::modifClr( bool save )
 {
     dataRes().lock();
-    mFlg &= ~(save?SelfModifyS:SelfModify);
+    mFlg &= ~(save?ModifiedS:Modified|LoadForcibly);
     dataRes().unlock();
 }
 
-void TCntrNode::modifG( )
+void TCntrNode::modifG( bool forceLoad )
 {
-    modif();
+    modif(false, forceLoad);
 
     MtxAlloc res(mChM, true);
     for(unsigned iG = 0; chGrp && iG < chGrp->size(); iG++)
 	for(TMap::iterator p = (*chGrp)[iG].elem.begin(); p != (*chGrp)[iG].elem.end(); ++p)
-	    p->second->modifG();
+	    p->second->modifG(forceLoad);
 }
 
 void TCntrNode::modifGClr( )
@@ -764,11 +766,14 @@ void TCntrNode::load( TConfig *cfg, string *errs )
 	    modifClr(true);			//Save flag clear
 	    load_(cfg);
 	    load_();
-	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
+	    modifClr(nodeFlg()&ModifiedS);	//Save modify or clear
 	    loadOwn = true;
 	} catch(TError &err) {
-	    if(err.cat.empty())	modifClr();	//Clearing the modification at the loading for not selected DB
-	    if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
+	    // Clearing the modification at the loading for not selected DB
+	    if(err.cat.empty())	modifClr();
+	    // Clearing the modification for forcibly loaded nodes since they must not be saved in whole so that is not an error
+	    if(nodeFlg()&LoadForcibly) modifClr();
+	    else if(errs && err.cat.size()) (*errs) += nodePath('.')+": "+err.mess+"\n";
 	    /*mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 	    mess_sys(TMess::Error, _("Error node loading: %s"), err.mess.c_str());*/
 	}
@@ -803,13 +808,13 @@ void TCntrNode::save( unsigned lev, string *errs )
 
     //Self save
     try {
-	if(mdfFlg&Self || (mdfFlg&Child && mFlg&SelfSaveForceOnChild) || SYS->cfgCtx())	save_();
-	// Check for prev nodes flag SelfSaveForceOnChild
+	if(mdfFlg&Self || (mdfFlg&Child && mFlg&SaveForceOnChild) || SYS->cfgCtx()) save_();
+	// Check for prev nodes flag SaveForceOnChild
 	if(lev == 0) {
 	    TCntrNode *nd = this;
 	    while(true) {
 		if(!(nd=nd->nodePrev(true))) break;
-		if(nd->nodeFlg()&SelfSaveForceOnChild)	nd->save_();
+		if(nd->nodeFlg()&SaveForceOnChild) nd->save_();
 	    }
 	}
     } catch(TError &err) {
@@ -1042,7 +1047,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    string selDB;
 	    MtxAlloc res(SYS->cfgLoadSaveM());
 	    if((selDB=opt->attr("force")).size()) {
-		if(!isdigit(selDB[0]) || s2i(selDB)) modifG();
+		if(!isdigit(selDB[0]) || s2i(selDB)) modifG(true);
 		if(!isdigit(selDB[0]))	{ res.lock(); SYS->setSelDB(selDB); }
 	    }
 	    else if(opt->childSize()) modifG();

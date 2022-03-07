@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	trS("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.9.3"
+#define MOD_VER		"1.9.4"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -415,8 +415,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	TController::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/cntr/cfg/LP_PRMS");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	    "dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	if(mBus < 0) ctrRemoveNode(opt,"/cntr/cfg/TR_OSCD");
 	else ctrMkNode("fld",opt,-1,"/cntr/cfg/TR_OSCD",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","select","select","/cntr/cfg/trLst");
