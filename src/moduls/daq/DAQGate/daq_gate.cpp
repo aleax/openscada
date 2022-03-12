@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.11"
+#define MOD_VER		"2.9.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -629,7 +629,8 @@ void *TMdContr::Task( void *icntr )
 						setAttr("tm_grnd", i2s(vmax(SYS->sysTm()-3600*vmax(1,cntr.restDtTm()),tm_grnd)));
 
 			    //Alarms force request
-			    if(!tm_grnd && cntr.mMessLev.getI() >= 0)	reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()));
+			    if(!tm_grnd && cntr.mMessLev.getI() >= 0)
+				reqCh->setAttr("lev", i2s(-cntr.mMessLev.getI()))->setAttr("tm_grnd", "");
 			    //Normal request
 			    else {
 				reqCh->setAttr("lev", cntr.mMessLev.getS());

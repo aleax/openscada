@@ -1,3 +1,10 @@
+2022-03-12 Roman (stable)
+- SYS: TTable::SQLFeqFlag renamed to TTable::SQLReqFlag.
+    The configuration field "Work DB" tooltip shortened.
+- !!:FIX:DAQ: The service request "set:/val" of the TValue object fixed in the dynamic translation setting.
+- FIX:DAQ.DAQGate: Restored in the actual alarms first reading for the unlimited depth.
+
+
 2022-03-05 Roman (stable)
 - !!!:FIX:SYS: The TMess::mRes lock renamed to TMess::trMessIdxRes and limited in use only for TMess::trMessIdx,
 	than preventing in lock at the DB accessing - the complex hangs on the MULTILANGUAGE projects.

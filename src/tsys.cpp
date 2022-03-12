@@ -3146,7 +3146,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/docdir",_("Documents directory"),R_R___,"root","root",4,"tp","str","dest","sel_ed","select","/gen/docDirList",
 		"help",_("Separate directory paths with documents by symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
-		"help",_("Work DB address in format \"{DB module}.{DB name}\".\nChange this field if you want to save or to reload all the program from other DB."));
+		"help",_("Work DB address in the format \"{DB module}.{DB name}\"."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save the program at exit"),RWRWR_,"root","root",2,"tp","bool",
 		"help",_("Select for the program automatic saving to DB on exit."));
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Period the program saving"),RWRWR_,"root","root",2,"tp","dec",
