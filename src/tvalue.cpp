@@ -309,8 +309,8 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	return;
     }
     // Process command to page
-    if(a_path.compare(0,4,"/val") == 0) {
-	if(a_path.compare(0,9,"/val/sel_") == 0 && ctrChkNode(opt)) {
+    if(a_path.find("/val") == 0) {
+	if(a_path.find("/val/sel_") == 0 && ctrChkNode(opt)) {
 	    AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1).substr(4));
 	    for(unsigned iA = 0; iA < vl.at().fld().selNm().size(); iA++)
 		opt->childAdd("el")->setText(vl.at().fld().selNm()[iA]);
@@ -323,7 +323,9 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		    ((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ? trD(vl.at().getS()) :
 		    vl.at().getS()));
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String) ? trDSet(vl.at().getS(),opt->text()) : opt->text());
+	    vl.at().setS((Mess->translDyn() && vl.at().fld().type() == TFld::String && vl.at().fld().flg()&TFld::TransltText) ?
+			    trDSet(vl.at().getS(),opt->text()) :
+			    opt->text());
 	    modif();
 	}
     }

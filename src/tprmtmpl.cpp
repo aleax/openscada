@@ -711,7 +711,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	TBDS::genPrmSet(obj->nodePath()+"onlAttr",opt->text(),opt->attr("user"));
     }
-    else if(a_path.compare(0,8,"/prm/pr_") == 0) {
+    else if(a_path.find("/prm/pr_") == 0) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    string lnk_val = lnks[s2i(a_path.substr(8))].addr;
 	    if(!SYS->daq().at().attrAt(TSYS::strParse(lnk_val,0,"#"),'.',true).freeStat()) {
@@ -741,14 +741,13 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	    obj->modif();
 	}
     }
-    else if((a_path.compare(0,8,"/prm/pl_") == 0 || a_path.compare(0,8,"/prm/ls_") == 0) && ctrChkNode(opt))
-    {
+    else if((a_path.find("/prm/pl_") == 0 || a_path.find("/prm/ls_") == 0) && ctrChkNode(opt)) {
 	bool is_pl = (a_path.compare(0,8,"/prm/pl_") == 0);
 	string m_prm = lnks[s2i(a_path.substr(8))].addr;
 	if(is_pl && !SYS->daq().at().attrAt(m_prm,'.',true).freeStat()) m_prm = m_prm.substr(0,m_prm.rfind("."));
 	SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, '.');
     }
-    else if(a_path.substr(0,8) == "/prm/el_") {
+    else if(a_path.find("/prm/el_") == 0) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    int iIO = s2i(a_path.substr(8));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
