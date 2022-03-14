@@ -48,18 +48,20 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
 
 include( GNUInstallDirs )
 
+set( libdir_full ${CMAKE_INSTALL_FULL_LIBDIR} )
 set( prefix ${CMAKE_INSTALL_PREFIX} )
+set( oscd_moddir_full "${CMAKE_INSTALL_PREFIX}/${CMAKE_PROJECT_NAME}" )
 
 add_definitions(-Dsysconfdir_full="${CMAKE_INSTALL_FULL_SYSCONFDIR}")
-set( libdir_full ${CMAKE_INSTALL_FULL_LIBDIR} )
 add_definitions(-Dlibdir_full="${libdir_full}")
-add_definitions(-Doscd_moddir_full="${CMAKE_INSTALL_FULL_LIBDIR}/${CMAKE_PROJECT_NAME}")
+add_definitions(-Doscd_moddir_full="${oscd_moddir_full}")
 add_definitions(-Doscd_datadir_full="${CMAKE_INSTALL_FULL_DATADIR}/${CMAKE_PROJECT_NAME}")
 add_definitions(-Ddatadir_full="${CMAKE_INSTALL_FULL_DATADIR}")
 add_definitions(-Dbindir_full="${CMAKE_INSTALL_FULL_BINDIR}")
 add_definitions(-DPACKAGE_NAME="${PACKAGE_NAME}")
 add_definitions(-DPACKAGE="${PACKAGE}")
 add_definitions(-DVERSION="${VERSION}")
+add_definitions(-DPACKAGE_STRING="${PACKAGE_STRING}")
 add_definitions(-DMODS_INCL="${ModsIncl}")  #TODO
 
 ### https://gitlab.kitware.com/cmake/community/wikis/doc/cmake/RPATH-handling

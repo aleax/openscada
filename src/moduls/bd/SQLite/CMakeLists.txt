@@ -38,3 +38,7 @@ target_link_libraries (${PROJECT_NAME}
 
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")    #no lib prefix: libbd_SQLite.so
+
+###https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
+install(TARGETS ${PROJECT_NAME}
+    LIBRARY DESTINATION ${oscd_moddir_full})
