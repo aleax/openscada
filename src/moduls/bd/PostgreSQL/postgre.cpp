@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.4"
+#define MOD_VER		"3.0.5"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -660,7 +660,7 @@ string MTable::getSQLVal( TCfg &cfg, uint8_t RqFlg )
     string rez = cfg.getS(RqFlg);
     if(rez == EVAL_STR)	return "NULL";
     if(cfg.fld().type() == TFld::String) {
-	//if(Mess->translDyn() && (cfg.fld().flg()&TFld::TransltText)) rez = trL(rez, Mess->lang2Code());
+	//if(Mess->translDyn() && (cfg.fld().flg()&TFld::TransltText)) rez = trL(rez, Mess->langCode());
 	rez = "'" + TSYS::strEncode(rez /*((cfg.fld().len()>0)?rez.substr(0,cfg.fld().len()):rez)*/, TSYS::SQL, "'") + "'";
     }
     else if(cfg.fld().flg()&TFld::DateTimeDec) rez = "'" + UTCtoSQL(s2i(rez)) + "'";

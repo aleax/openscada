@@ -467,7 +467,7 @@ TVariant TUser::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, name()+":"+SSEC_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, name()+":"+SSEC_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);
@@ -621,7 +621,7 @@ TVariant TGroup::objFuncCall( const string &id, vector<TVariant> &prms, const st
     if(id == "user" && prms.size())	return user(prms[0].getS());
 
     //Configuration functions call
-    TVariant cfRez = objFunc(id, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SSEC_ID);
+    TVariant cfRez = objFunc(id, prms, user_lang, RWRWR_, "root:" SSEC_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(id, prms, user_lang);

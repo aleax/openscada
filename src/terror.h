@@ -1,7 +1,7 @@
 
 //OpenSCADA file: terror.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,6 +45,8 @@ class TError
 	    Tr_Connect = 10,
 	    Tr_UnknownHost = 11,
 	    Tr_ErrTransport = 12,
+	    Tr_ErrResponse = 13,
+	    Tr_ErrDevice = 14,
 	    DB_SQL_Connect = 20,
 	    DB_SQL_Query = 21,
 	    DB_TrRemoved = 22,

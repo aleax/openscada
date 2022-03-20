@@ -1468,7 +1468,7 @@ void VisRun::fullUpdatePgs( )
 
 string VisRun::lang( )
 {
-    return Mess->lang2Code(user(), true);
+    return Mess->langCode(user(), true);
 
     //try { return SYS->security().at().usrAt(user()).at().lang(); } catch(...) { }
     //return "";

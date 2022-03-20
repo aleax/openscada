@@ -1,3 +1,20 @@
+2022-03-20 Roman (stable)
+- !!:SYS,data/ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}:
+	The configuration parameter "Lang2CodeBase" renamed to "LangBase" with support "Lang2CodeBase" up to the 1.0 release.
+    !!: TMess::lang2Code() and TMess::lang2CodeBase() renamed to TMess::langCode() and TMess::langCodeBase() respectively
+	for starting the adaption to the language code more than 2 symbols, for what TMess::langCodeBase() was adapted already.
+- !:SYS: TConfig::objFunc() adapted to passing the language through the argument "user_lang" renamed from "user".
+    !: The User API function TConfig::cfg() adapted to postranslation of the system translation of the translatable strings.
+- SYS: Appending the new error code TError::Tr_ErrResponse and TError::Tr_ErrDevice for more specific transport errors,
+    initially in DAQ.ModBus.
+- Transports,DAQ.JavaLikeCalc,UI.{QTStarter,WebVision}:
+    The monospace font of the syntax highlight rules changed from "Courier" to "monospace".
+- !:DAQ.ModBus: The connection errors caused by the transport configuration errors prevented of the alarm setting.
+    Unified in specifying and using the error code TError::Tr_ErrDevice(14) and TError::Tr_ErrResponse(13).
+- UI.VCAEngine: User action messages of the sessions switched to generate from the sessions not projects.
+- !:UI.WebVision: In the XML-responses generation appended for coding the binary symbols by the options XMLNode::BinShield.
+
+
 2022-03-12 Roman (stable)
 - SYS: TTable::SQLFeqFlag renamed to TTable::SQLReqFlag.
     The configuration field "Work DB" tooltip shortened.

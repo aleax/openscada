@@ -125,7 +125,7 @@ class TMess
 	string I18N( const string &mess, const char *mLang = NULL, const char *d_name = NULL );
 
 	string lang( );
-	string lang2Code( const string &user = "", bool onlyUser = false );
+	string langCode( const string &user = "", bool onlyUser = false );
 	string &charset( )	{ return IOCharSet; }
 	int logDirect( )	{ return mLogDir; }
 	int messLevel( )	{ return mMessLevel; }
@@ -144,10 +144,10 @@ class TMess
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 
 	// Internal messages translations
-	string lang2CodeBase( );
 	string langBase( )			{ return mLangBase; }
+	string langCodeBase( );
 	string langToLocale( const string &lang );
-	bool translCfg( )			{ return lang2CodeBase().size() && lang2Code() != lang2CodeBase(); }
+	bool translCfg( )			{ return langCodeBase().size() && langCode() != langCodeBase(); }
 	bool translDyn( bool plan = false )	{ return plan ? mTranslDynPlan : mTranslDyn; }
 	bool translEnMan( )			{ return mTranslEnMan; }
 	string translLangs( )			{ return mTranslLangs; }
@@ -216,7 +216,7 @@ class TMess
 
 	ResMtx	dtRes, dbgRes, trMessIdxRes, trMessCacheRes;
 
-	MtxString	mLangBase, mLang2Code, mTranslLangs;
+	MtxString	mLangBase, mLangCode, mTranslLangs;
 
 	map<string, bool>	debugCats;
 	vector<string>		selectDebugCats;

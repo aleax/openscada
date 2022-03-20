@@ -1044,7 +1044,7 @@
         &lt;prm id="StName"&gt;AGLKS&lt;/prm&gt;
         &lt;prm id="WorkDB"&gt;SQLite.GenDB&lt;/prm&gt;
         &lt;prm id="LogTarget"&gt;10&lt;/prm&gt;
-        &lt;prm id="Lang2CodeBase"&gt;en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8&lt;/prm&gt;
+        &lt;prm id="LangBase"&gt;en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8&lt;/prm&gt;
         &lt;prm id="SaveAtExit"&gt;0&lt;/prm&gt;
         &lt;prm id="SavePeriod"&gt;0&lt;/prm&gt;
 
@@ -1549,8 +1549,8 @@ LogTarget  &lt;direction&gt; Direct messages to, by the bitfield:
                           0x2 - stdout;
                           0x4 - stderr;
                           0x8 - the messages archive.
-Lang       &lt;lang&gt;       Station language, in the view "uk_UA.UTF-8".
-Lang2CodeBase &lt;lang&gt;    Base language for variable texts translation, in the two symbols code.
+Lang       &lt;lang&gt;       Station language-locale in the view "en_US.UTF-8".
+LangBase   &lt;lang&gt;       Base language and the project whole locales (like to "en_US.UTF-8") list (optional) separated by ';', for the multilanguage mode.
 MainCPUs   &lt;list&gt;       Main list of the using CPUs, separated by ':'.
 TaskInvPhs &lt;n&gt;          Number of phases of the task invoking, 1 to disable the phasing.
 ClockRT    &lt;0|1&gt;        Sets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.

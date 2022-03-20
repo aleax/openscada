@@ -273,9 +273,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //Send request
 	    int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm);
 	    rez.assign(buf,resp_len);
-	    if(rez.size() < 7)	err = _("13:Error of the server response");
+	    if(rez.size() < 7)	err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the server response");
 	    else if(TSYS::getUnalign16(rez.data()) != tid)
-		err = TSYS::strMess(_("13:The response Transaction ID %d is not suitable to the request one %d."), TSYS::getUnalign16(rez.data()), (int)tid);
+		err = i2s(TError::Tr_ErrResponse)+":"+TSYS::strMess(_("The response Transaction ID %d is not suitable to the request one %d."),
+								TSYS::getUnalign16(rez.data()), (int)tid);
 	    else {
 		unsigned resp_sz = (unsigned short)(rez[4]<<8) | (unsigned char)rez[5];
 
@@ -286,7 +287,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.append(buf, resp_len);
 		}
 		if(rez.size() >= MODBUS_FRM_LIM)
-		    throw TError(nodePath().c_str(), _("13:Error of the response: Too large."));
+		    throw TError(nodePath().c_str(), (i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: Too large.")).c_str());
 		pdu = rez.substr(7);
 	    }
 	}
@@ -318,15 +319,15 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			rez.append(buf, resp_len);
 		    }
 		} catch(TError &er) {	//By possible the send request breakdown and no response
-		    if(err.empty()) err = _("14:Device error: ") + er.mess;
+		    if(err.empty()) err = i2s(TError::Tr_ErrDevice)+":"+_("Device error: ") + er.mess;
 		    else if(err.find(er.mess) == string::npos) err += "; " + er.mess;
 		    continue;
 		}
 
-		if(rez.size() < 2) { err = _("13:Error of the response: Too short."); continue; }
-		if(rez.size() >= MODBUS_FRM_LIM) { err = _("13:Error of the response: Too large."); continue; }
+		if(rez.size() < 2) { err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: Too short."); continue; }
+		if(rez.size() >= MODBUS_FRM_LIM) { err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: Too large."); continue; }
 		if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
-		{ err = _("13:Error of the response: CRC error."); continue; }
+		{ err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: CRC error."); continue; }
 		pdu = rez.substr(1, rez.size()-3);
 		err = "";
 		break;
@@ -350,17 +351,17 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			rez.append(buf, resp_len);
 		    }
 		} catch(TError &er) {	//By possible the send request breakdown and no response
-		    if(err.empty()) err = _("14:Device error: ") + er.mess;
+		    if(err.empty()) err = i2s(TError::Tr_ErrDevice)+":"+_("Device error: ") + er.mess;
 		    else if(err.find(er.mess) != string::npos) err += "; " + er.mess;
 		    continue;
 		}
 
-		if(rez.size() >= MODBUS_FRM_LIM) { err = _("13:Error of the response: Too large."); continue; }
+		if(rez.size() >= MODBUS_FRM_LIM) { err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: Too large."); continue; }
 		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\x0D\x0A")
-		{ err = _("13:Error of the response: Format error."); continue; }
+		{ err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: Format error."); continue; }
 		string rezEnc = ASCIIToData(rez.substr(1,rez.size()-3));
 		if(LRC(rezEnc.substr(0,rezEnc.size()-1)) != (uint8_t)rezEnc[rezEnc.size()-1])
-		{ err = _("13:Error of the response: LRC error."); continue; }
+		{ err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the response: LRC error."); continue; }
 		pdu = rezEnc.substr(1,rezEnc.size()-2);
 		err = "";
 		break;
@@ -370,7 +371,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	//Check response pdu
 	if(err.empty()) {
-	    if(pdu.size() < 2) err = _("13:Error of the response");
+	    if(pdu.size() < 2) err = i2s(TError::Tr_ErrResponse)+":"+_("Error of the response");
 	    if(pdu[0]&0x80)
 		switch(pdu[1]) {
 		    case 0x1: err = TSYS::strMess(_("1:%02X:Function is not supported."),(unsigned char)(pdu[0]&(~0x80)));	break;
@@ -384,7 +385,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    default: err = TSYS::strMess(_("12:%02X:Unknown error."),(unsigned char)(pdu[1]));	break;
 		}
 	}
-    } catch(TError &er) { err = _("14:Device error: ") + er.mess; }
+    } catch(TError &er) { err = i2s(TError::Tr_ErrDevice)+":"+_("Device error: ") + er.mess; }
 
     io.setText(err.empty()?pdu:"");
     if(!err.empty()) io.setAttr("err",err);

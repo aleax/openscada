@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1796,7 +1796,7 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SARH_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);
@@ -2433,7 +2433,7 @@ TVariant TVArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
     if(iid == "status")	return startStat();
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SARH_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);

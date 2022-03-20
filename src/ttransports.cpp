@@ -888,7 +888,7 @@ TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, c
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" STR_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, "root:" STR_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);
@@ -984,7 +984,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    opt->setText(resLog);
 	}
 	if(ctrChkNode(opt,"SnthHgl",R_R___,"root",STR_ID,SEC_RD)) {
-	    opt->setAttr("font","Courier");
+	    opt->setAttr("font","monospace");
 	    opt->childAdd("rule")->setAttr("expr","^\\[[^\\]]+.+$")->setAttr("color","blue")->setAttr("font_italic","1")->
 		childAdd("rule")->setAttr("expr","^\\[[^\\]]+\\]")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	    //opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");
@@ -1202,7 +1202,7 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     }
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" STR_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, "root:" STR_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);
@@ -1296,14 +1296,14 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",STR_ID,SEC_RD)) {
-	    opt->setAttr("font","Courier");
+	    opt->setAttr("font","monospace");
 	}
     }
     else if(a_path == "/req/answ") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqAnsw","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ReqAnsw",opt->text(),opt->attr("user"));
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",STR_ID,SEC_RD)) {
-	    opt->setAttr("font","Courier");
+	    opt->setAttr("font","monospace");
 	}
     }
     else if(a_path == "/req/send" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
@@ -1379,7 +1379,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    opt->setText(resLog);
 	}
 	if(ctrChkNode(opt,"SnthHgl",R_R___,"root",STR_ID,SEC_RD)) {
-	    opt->setAttr("font","Courier");
+	    opt->setAttr("font","monospace");
 	    opt->childAdd("rule")->setAttr("expr","^\\[[^\\]]+.+$")->setAttr("color","blue")->setAttr("font_italic","1")->
 		childAdd("rule")->setAttr("expr","^\\[[^\\]]+\\]")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	    //opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");

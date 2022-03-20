@@ -1512,7 +1512,7 @@ TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
     if(iid == "begin")	return (int64_t)begin();
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SARH_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, "root:" SARH_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);

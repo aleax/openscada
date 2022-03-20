@@ -149,7 +149,7 @@ void VCASess::getReq( SSess &ses )
 	    for(unsigned iP = 0; iP < req.childGet(0)->childSize(); iP++)
 		pgCacheGet(TSYS::path2sepstr(req.childGet(0)->childGet(iP)->text()));
 
-	    ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    ses.page = mod->pgCreator(ses.prt, req.childGet(0)->save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
     }
     else if(wp_com == "style") {
@@ -165,7 +165,7 @@ void VCASess::getReq( SSess &ses )
 		    break;
 		}
 	}
-	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	ses.page = mod->pgCreator(ses.prt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Attribute get
     else if(wp_com == "attr") {
@@ -174,7 +174,7 @@ void VCASess::getReq( SSess &ses )
 
 	XMLNode req("get"); req.setAttr("path", ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req, ses);
-	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	ses.page = mod->pgCreator(ses.prt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Widget's (page) full attributes branch request
     else if(wp_com == "attrsBr") {
@@ -210,7 +210,7 @@ void VCASess::getReq( SSess &ses )
 	}
 
 	// Send the respond to the browser
-	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	ses.page = mod->pgCreator(ses.prt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Resources request (images and other files)
     else if(wp_com == "res") {
@@ -267,14 +267,14 @@ void VCASess::postReq( SSess &ses )
 	req.load(ses.content);
 	req.setAttr("path", ses.url+"/%2fserv%2fattr");
 	mod->cntrIfCmd(req, ses);
-	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	ses.page = mod->pgCreator(ses.prt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
     }
     //Open page command
     else if(wp_com == "pgClose" || wp_com == "pgOpen") {
 	XMLNode req((wp_com=="pgOpen")?"open":"close");
 	req.setAttr("path","/"+TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
 	mod->cntrIfCmd(req, ses);
-	ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	ses.page = mod->pgCreator(ses.prt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	// Remove for objects of that page - pages' cache
 	string oAddr = TSYS::path2sepstr(ses.url);
 	if(wp_com == "pgOpen")	pgCacheGet(oAddr);
@@ -4112,7 +4112,7 @@ void VCAElFigure::postReq( SSess &ses )
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
 	    req.childAdd("el")->setAttr("id","focus")->setText("1");
 	    mod->cntrIfCmd(req, ses.user);
-	    ses.page = mod->pgCreator(ses.prt, req.save(), "200 OK", "Content-Type: text/xml;charset=UTF-8");
+	    ses.page = mod->pgCreator(ses.prt, req.save(XMLNode::BinShield), "200 OK", "Content-Type: text/xml;charset=UTF-8");
 	}
     }
 }

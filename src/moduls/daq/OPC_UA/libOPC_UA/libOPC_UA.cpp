@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.cpp
 /******************************************************************************
- *   Copyright (C) 2009-2021 by Roman Savochenko, <roman@oscada.org>	      *
+ *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>	      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as	      *
@@ -846,7 +846,7 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk,
 		case OpcUa_NodeId:	oNodeId(buf, NodeId::fromAddr(setVl));	break;
 		case OpcUa_StatusCode:	oNu(buf, strtoll(setVl.c_str(),NULL,0), 4);	break;
 		case OpcUa_QualifiedName: oSqlf(buf, setVl);			break;
-		case OpcUa_LocalizedText: oSl(buf, setVl, lang2CodeSYS());	break;
+		case OpcUa_LocalizedText: oSl(buf, setVl, langCodeSYS());	break;
 		default: //oS(buf, setVl);	break;
 		    throw OPCError(OpcUa_BadDecodingError, "Data type '%d' do not support.", vEMsk&OpcUa_VarMask);
 	    }

@@ -673,7 +673,7 @@ string TMdContr::modBusReq( string &pdu )
     tr.at().messProtIO(req, "ModBus");
 
     if(!req.attr("err").empty()) {
-	if(s2i(req.attr("err")) == 14) numErrCon++;
+	if(s2i(req.attr("err")) == TError::Tr_ErrDevice) numErrCon++;
 	else numErrResp++;
 	if(messLev() >= TMess::Error) mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
 	return req.attr("err");
@@ -769,7 +769,7 @@ void *TMdContr::Task( void *icntr )
 			cntr.numRCoil += cntr.acqBlksCoil[iB].val.size();
 		    }
 		}
-		else if(s2i(cntr.acqBlksCoil[iB].err.getVal()) == 14) {
+		else if(s2i(cntr.acqBlksCoil[iB].err.getVal()) == TError::Tr_ErrDevice) {
 		    cntr.setCntrDelay(cntr.acqBlksCoil[iB].err.getVal());
 		    break;
 		}
@@ -797,7 +797,7 @@ void *TMdContr::Task( void *icntr )
 			cntr.numRCoilIn += cntr.acqBlksCoilIn[iB].val.size();
 		    }
 		}
-		else if(s2i(cntr.acqBlksCoilIn[iB].err.getVal()) == 14) {
+		else if(s2i(cntr.acqBlksCoilIn[iB].err.getVal()) == TError::Tr_ErrDevice) {
 		    cntr.setCntrDelay(cntr.acqBlksCoilIn[iB].err.getVal());
 		    break;
 		}
@@ -824,7 +824,7 @@ void *TMdContr::Task( void *icntr )
 			cntr.numRReg += cntr.acqBlks[iB].val.size()/2;
 		    }
 		}
-		else if(s2i(cntr.acqBlks[iB].err.getVal()) == 14) {
+		else if(s2i(cntr.acqBlks[iB].err.getVal()) == TError::Tr_ErrDevice) {
 		    cntr.setCntrDelay(cntr.acqBlks[iB].err.getVal());
 		    break;
 		}
@@ -851,7 +851,7 @@ void *TMdContr::Task( void *icntr )
 			cntr.numRRegIn += cntr.acqBlksIn[iB].val.size()/2;
 		    }
 		}
-		else if(s2i(cntr.acqBlksIn[iB].err.getVal()) == 14) {
+		else if(s2i(cntr.acqBlksIn[iB].err.getVal()) == TError::Tr_ErrDevice) {
 		    cntr.setCntrDelay(cntr.acqBlksIn[iB].err.getVal());
 		    break;
 		}
@@ -912,10 +912,17 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::setCntrDelay( const string &err )
 {
-    if(alSt <= 0) {
-	alSt = 1;
-	alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(err,"=").c_str()));
-    }
+    if(alSt <= 0) alSt = 1;
+
+    int alLev = -TMess::Crit;
+    //Device configuration error is not an alarm but only warning
+    if(addr().empty() || !SYS->transport().at().modPresent(TSYS::strParse(addr(),0,".")) ||
+	    !SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outPresent(TSYS::strParse(addr(),1,".")) ||
+	    SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,".")).at().addr().empty())
+	alLev = TMess::Warning;
+
+    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(err,"=").c_str()), alLev);
+
     tmDelay = restTm;
 }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tconfig.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -230,21 +230,23 @@ void TConfig::setNoTransl( bool vl )
 }
 
 TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
-    const string &user, int perm, const string &owner )
+    const string &user_lang, int perm, const string &owner )
 {
     // ElTp cfg(string nm) - config variable 'nm' get.
     //  nm - config variable name.
     if(iid == "cfg" && prms.size() >= 1 &&
-	    SYS->security().at().access(user,SEC_RD,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
+	    SYS->security().at().access(TSYS::strLine(user_lang,0),SEC_RD,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf) return EVAL_REAL;
+	if(cf->fld().type() == TFld::String && cf->fld().flg()&TFld::TransltText)
+	    return Mess->I18N(cf->getS(), TSYS::strLine(user_lang,1).c_str());
 	return *cf;
     }
     // ElTp cfgSet(string nm, ElTp val) - set config variable 'nm' to 'val'.
     //  nm - config variable name;
     //  val - variable value.
     if(iid == "cfgSet" && prms.size() >= 2 &&
-	    SYS->security().at().access(user,SEC_WR,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
+	    SYS->security().at().access(TSYS::strLine(user_lang,0),SEC_WR,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf || (cf->fld().flg()&TFld::NoWrite)) return false;
 	*(TVariant*)cf = prms[1];
@@ -431,7 +433,7 @@ void TCfg::setS( const string &ival )
 	    mOwner.mRes.lock();
 	    string tVal = TVariant::getS();
 	    if(extVal() && (fld().flg()&TFld::TransltText) && !noTransl() && ival.find(char(0)) == string::npos) {
-		if(Mess->lang2Code() == Mess->lang2CodeBase()) TVariant::setS(ival+string(2,0)+getS(ExtValThree));
+		if(Mess->langCode() == Mess->langCodeBase()) TVariant::setS(ival+string(2,0)+getS(ExtValThree));
 		else TVariant::setS(getS(ExtValOne)+string(1,0)+ival+string(1,0)+getS(ExtValThree));
 	    }
 	    else if(fld().flg()&TCfg::Key) TVariant::setS(TSYS::strEncode(ival,TSYS::Limit,i2s(fld().len())));

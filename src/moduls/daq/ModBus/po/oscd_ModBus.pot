@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 16:22+0200\n"
+"POT-Creation-Date: 2022-03-20 09:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -285,39 +285,39 @@ msgstr ""
 msgid "Error of searching and a new node creation."
 msgstr ""
 
-msgid "13:Error of the server response"
+msgid "Error of the server response"
 msgstr ""
 
 #, c-format
-msgid "13:The response Transaction ID %d is not suitable to the request one %d."
+msgid "The response Transaction ID %d is not suitable to the request one %d."
 msgstr ""
 
 msgid "Not full response"
 msgstr ""
 
-msgid "13:Error of the response: Too large."
+msgid "Error of the response: Too large."
 msgstr ""
 
-msgid "14:Device error: "
+msgid "Device error: "
 msgstr ""
 
-msgid "13:Error of the response: Too short."
+msgid "Error of the response: Too short."
 msgstr ""
 
-msgid "13:Error of the response: CRC error."
+msgid "Error of the response: CRC error."
 msgstr ""
 
-msgid "13:Error of the response: Format error."
+msgid "Error of the response: Format error."
 msgstr ""
 
-msgid "13:Error of the response: LRC error."
+msgid "Error of the response: LRC error."
 msgstr ""
 
 #, c-format
 msgid "Error of the protocol '%s'."
 msgstr ""
 
-msgid "13:Error of the response"
+msgid "Error of the response"
 msgstr ""
 
 #, c-format

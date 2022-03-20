@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.4"
+#define MOD_VER		"3.0.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -638,7 +638,7 @@ string MTable::getSQLVal( TCfg &cfg, uint8_t RqFlg )
     string rez = cfg.getS(RqFlg);
     if(rez == EVAL_STR)	return "NULL";
     if(cfg.fld().type() == TFld::String) {
-	//if(Mess->translDyn() && (cfg.fld().flg()&TFld::TransltText)) rez = trL(rez, Mess->lang2Code());
+	//if(Mess->translDyn() && (cfg.fld().flg()&TFld::TransltText)) rez = trL(rez, Mess->langCode());
 	rez = "'" + mod->sqlReqCode(rez /*(cfg.fld().len()>0)?rez.substr(0,cfg.fld().len()):rez*/) + "'";
     }
 

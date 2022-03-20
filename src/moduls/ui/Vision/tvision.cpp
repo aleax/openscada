@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"8.0.13"
+#define MOD_VER		"8.0.14"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -478,7 +478,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
     if(!glob) node.setAttr("path", "/UI/VCAEngine"+node.attr("path"));
     bool isLoc = (VCAStat.empty() || VCAStat == ".");
     node.setAttr("path", "/"+(isLoc?SYS->id():VCAStat)+node.attr("path"));
-    if(!isLoc) node.setAttr("lang", Mess->lang2Code(user));
+    if(!isLoc) node.setAttr("lang", Mess->langCode(user));
 
     try {
 	int rez = SYS->transport().at().cntrIfCmd(node, "UIVision", (isLoc?user:("\n"+user+"\n"+password)));

@@ -90,7 +90,7 @@ string TUIS::docGet( const string &iinm, string *tp, unsigned opt )
     //Find the offline document on the filesystem
     int hd = -1;
     char types[][5] = {"pdf", "html", "odt"};
-    transl.push_back(""); transl.push_back(lang.size()?lang:Mess->lang2Code()); transl.push_back("en");
+    transl.push_back(""); transl.push_back(lang.size()?lang:Mess->langCode()); transl.push_back("en");
 
     for(int off = 0; nm.size() && hd == -1 && (pathi=TSYS::strParse(SYS->docDir(),0,";",&off)).size(); )
 	for(iTr = 0; iTr < transl.size(); ++iTr) {

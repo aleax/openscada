@@ -231,7 +231,7 @@ void TPrmTempl::save_( )
 TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);
@@ -921,7 +921,7 @@ void TPrmTmplLib::add( const string &id, const string &name )
 TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user_lang )
 {
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);

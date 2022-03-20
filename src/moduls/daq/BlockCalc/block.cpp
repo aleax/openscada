@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.BlockCalc file: block.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -630,7 +630,7 @@ TVariant Block::objFuncCall( const string &iid, vector<TVariant> &prms, const st
     if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user_lang);
 
     //Configuration functions call
-    TVariant cfRez = objFunc(iid, prms, TSYS::strLine(user_lang,0), RWRWR_, "root:" SDAQ_ID);
+    TVariant cfRez = objFunc(iid, prms, user_lang, RWRWR_, "root:" SDAQ_ID);
     if(!cfRez.isNull()) return cfRez;
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);

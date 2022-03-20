@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.8.8"
+#define MOD_VER		"7.8.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -687,7 +687,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		    sesAt(sess).at().setUser(opt->attr("user"));
 		    sesAt(sess).at().stlCurentSet();
 
-		    sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User was changed to '%s' on the station '%s'."),
+		    sesAt(sess).at().mess_sys(TMess::Notice, _("User was changed to '%s' on the station '%s'."),
 			opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 		}
 	    }
@@ -703,7 +703,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		sesAt(sess).at().setStart(true);
 		opt->setAttr("conId", i2s(sesAt(sess).at().connect()));
 		opt->setAttr("sess", sess);
-		sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User '%s' has been connected on '%s'."),
+		sesAt(sess).at().mess_sys(TMess::Notice, _("User '%s' has been connected on '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 	    } else throw TError(nodePath().c_str(),_("Error arguments of the session connecting/creating."));
 	    opt->setAttr("userIsRoot", SYS->security().at().access(opt->attr("user"),SEC_WR,"root","root",RWRWR_)?"1":"0");
@@ -712,7 +712,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    string sess = opt->attr("sess");
 	    sesAt(sess).at().disconnect(s2i(opt->attr("conId")));
 	    if(sesAt(sess).at().connects() == 0 && !sesAt(sess).at().backgrnd()) {
-		sesAt(sess).at().parent().at().mess_sys(TMess::Notice, _("User '%s' has been disconnected on '%s'."),
+		sesAt(sess).at().mess_sys(TMess::Notice, _("User '%s' has been disconnected on '%s'."),
 		    opt->attr("user").c_str(), opt->attr("remoteSrcAddr").size()?opt->attr("remoteSrcAddr").c_str():"LocalHost");
 		sesDel(sess);
 	    }
