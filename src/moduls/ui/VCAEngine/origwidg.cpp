@@ -1005,8 +1005,8 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	    cfg.owner()->attrDel("curColor");
 	}
 	else {
-	    cfg.owner()->attrAdd(new TFld("curSek",trS("Cursor: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
-	    cfg.owner()->attrAdd(new TFld("curUSek",trS("Cursor: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curSek",trS("Cursor: seconds"),TFld::Integer,Attr::NotStored|Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
+	    cfg.owner()->attrAdd(new TFld("curUSek",trS("Cursor: microseconds"),TFld::Integer,Attr::NotStored|Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
 	    cfg.owner()->attrAdd(new TFld("curColor",trS("Cursor: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 	}
     }
@@ -1027,8 +1027,8 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd(new TFld("tUSek",trS("Time: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramTUSek).c_str()));
 		cfg.owner()->attrAdd(new TFld("tSize",trS("Size, seconds"),TFld::Real,Attr::Mutable,"","60","0;32e6","",i2s(A_DiagramTSize).c_str()));
 		if(cfg.owner()->attrAt("active").at().getB()) {
-		    cfg.owner()->attrAdd(new TFld("curSek",trS("Cursor: seconds"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
-		    cfg.owner()->attrAdd(new TFld("curUSek",trS("Cursor: microseconds"),TFld::Integer,Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curSek",trS("Cursor: seconds"),TFld::Integer,Attr::NotStored|Attr::DateTime|Attr::Mutable,"","","","",i2s(A_DiagramCurSek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("curUSek",trS("Cursor: microseconds"),TFld::Integer,Attr::NotStored|Attr::Mutable,"","","","",i2s(A_DiagramCurUSek).c_str()));
 		    cfg.owner()->attrAdd(new TFld("curColor",trS("Cursor: color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","",i2s(A_DiagramCurColor).c_str()));
 		}
 		cfg.owner()->attrAdd(new TFld("sclColor",trS("Scale: color"),TFld::String,Attr::Color|Attr::Mutable,"","grey","","",i2s(A_DiagramSclColor).c_str()));
@@ -1087,9 +1087,9 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		"","0","0;2;3;6;7",_("Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"),
 		i2s(A_DiagramTrs+A_DiagramTrScl+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(": value")).c_str(),
-		TFld::Real,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*iP).c_str()));
+		TFld::Real,Attr::NotStored|Attr::Mutable,"",r2s(EVAL_REAL).c_str(),"","",i2s(A_DiagramTrs+A_DiagramTrVal+A_DiagramTrsSz*iP).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"prop").c_str(),(fnmp+_(": properties")).c_str(),
-		TFld::String,Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrProp+A_DiagramTrsSz*iP).c_str()));
+		TFld::String,Attr::NotStored|Attr::Mutable,"","","","",i2s(A_DiagramTrs+A_DiagramTrProp+A_DiagramTrsSz*iP).c_str()));
 	}
     }
 
@@ -1335,7 +1335,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     }
 
     SessWdg *sw = dynamic_cast<SessWdg*>(cfg.owner());
-    if(!sw) return Widget::attrChange(cfg,prev);
+    if(!sw) return Widget::attrChange(cfg, prev);
 
     string u, l;
     if(sw) { u = sw->ownerSess()->reqUser(); l = sw->ownerSess()->reqLang(); }

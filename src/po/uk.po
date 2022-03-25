@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-20 10:54+0200\n"
+"POT-Creation-Date: 2022-03-24 10:12+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -1320,9 +1320,6 @@ msgstr "Перевірити модулі зараз."
 msgid "Shared libraries(modules)"
 msgstr "Поділяємі бібліотеки(модулі)"
 
-msgid "Path"
-msgstr "Шлях"
-
 msgid "Modules"
 msgstr "Модулі"
 
@@ -1700,6 +1697,7 @@ msgstr "КіБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2290,6 +2288,9 @@ msgstr ""
 msgid "Tasks"
 msgstr "Задачі"
 
+msgid "Path"
+msgstr "Шлях"
+
 msgid "Thread"
 msgstr "Нитка"
 
@@ -2665,10 +2666,19 @@ msgstr "Власник"
 
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
+"------ Parameters of the section '%s' of the configuration file ------\n"
+"FontSyntHighlCode <font>  Font used in the code syntax highlight, by default "
+"\"monospace\".\n"
 "\n"
 msgstr ""
 "================= Опції підсистеми \"Інтерфейси користувачів\" ============\n"
+"---------- Параметри секції '%s' конфігураційного файлу ----------\n"
+"FontSyntHighlCode <шрифт>  Шрифт використаний у підсвітлені синтаксису "
+"коду, по замовченню \"monospace\".\n"
 "\n"
+
+msgid "Syntax highlight font for code"
+msgstr "Шрифт підсвітлення синтаксису коду"
 
 msgid "User interface"
 msgstr "Інтерфейс користувача"

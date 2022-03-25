@@ -10255,7 +10255,7 @@ if(f_start || toCompleteUpd) {
 	}
 }
 
-toClearCntrPnl = false;
+toChangeCnt = "";
 if(pgCont_pgOpenSrc != lastView || toCompleteUpd) {
 	//Checking for SO selection change
 	curSO = pgCont_pgOpenSrc.parsePath(2).slice(3);
@@ -10339,19 +10339,18 @@ if((calcCnt%f_frq) == 0) {
 
 //Events process
 for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; )
-	if(sval == "ws_CombChange:/pgSel" && (tPg=pgSel_value.match("\\((.+)\\)$")).length) {
-		this.ownerSess().uiCmd("open", "/pg_so/"+pgCont_pgOpenSrc.parsePath(2)+"/"+pgCont_pgOpenSrc.parsePath(3)+"/pg_"+tPg[1], this.attr("path"));
-		//this[pgCont_pgOpenSrc.parsePath(2)][pgCont_pgOpenSrc.parsePath(3)]["pg_"+tPg[1]].attrSet("pgOpen",true);
-		toClearCntrPnl = true;
-	}
+	if(sval == "ws_CombChange:/pgSel" && (tPg=pgSel_value.match("\\((.+)\\)$")).length)
+		toChangeCnt = "/pg_so/" + pgCont_pgOpenSrc.parsePath(2) + "/" + pgCont_pgOpenSrc.parsePath(3) + "/pg_" + tPg[1];
 	else if(sval == "ws_BtPress:/cvt_light")	alarmSt = 0x1000001;
 	else if(sval == "ws_BtPress:/cvt_alarm")	alarmSt = 0x1000002;
 	else if(sval == "ws_BtPress:/cvt_sound")	alarmSt = 0x1000004;
 	else if(sval.parse(0,":") == "ws_BtRelease" && ((tVl=sval.parse(1,":")) == "/prev" || tVl == "/next" || tVl.indexOf("/so") == 0 || tVl.indexOf("/go_view") == 0))
-		toClearCntrPnl = true;
+		toChangeCnt = "1";
 
-if(toClearCntrPnl)
-	this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));
+if(toChangeCnt.length) {
+    this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));	//!!!! To open the terminator panel before other
+    if(toChangeCnt.length > 1) this.ownerSess().uiCmd("open", toChangeCnt, this.attr("path"));
+}
 
 //Demo play process
 if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
@@ -17635,7 +17634,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.5.2
+Version: 2.5.3
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17663,7 +17662,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.5.2
+Версія: 2.5.3
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -17693,7 +17692,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.5.2
+Версия: 2.5.3
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');

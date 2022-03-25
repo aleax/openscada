@@ -1001,10 +1001,12 @@
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:881px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_va_archs.png"><img class="thumbimage" height="533" src="files/QTCfg_subsys_arch_mod_va_archs.png" width="879" /></a>  <div class="thumbcaption">Fig. 4.6k. The tab "Archives" of a values archiver of the subsystem "Archives-History".</div></div></div></div>
 <h3><span class="mw-headline" id="Subsystem_.22User_interfaces.22"><span class="mw-headline-number">4.7</span> Subsystem "User interfaces"</span></h3>
-<p>The subsystem is modular one. To configure the subsystem the root page of the subsystem "User Interfaces" is provided, it contains the tab "Modules". The tab "Modules" (Fig.4.1b) contains a list of modules in the subsystem "User Interfaces" and it is identical for all modular subsystems.
-</p><p>Each module of the subsystem "User Interfaces" provides configuration page with the tabs "User Interface" and "Module". The "User Interface" tab (Fig.4.7) provides the parameter for monitoring the "Running" status of the module, as well as the configuration sections specialized for the modules of this subsystem. On the "Module" tab it is provided the information about the module of subsystem "User Interfaces" (Fig.4.1d), whose structure is identical for all modules.
+<p>The subsystem is modular one. To configure the subsystem the root page of the subsystem "User Interfaces" is provided, it contains the tab "Subsystem" and the tab "Modules". The tab "Subsystem" (Fig.4.7a) contains currently only a configuration field for setting the syntax highlight font for code. The tab "Modules" (Fig.4.1b) contains a list of modules in the subsystem "User Interfaces" and it is identical for all modular subsystems.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:748px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_ui_mod.png"><img class="thumbimage" height="548" src="files/QTCfg_subsys_ui_mod.png" width="746" /></a>  <div class="thumbcaption">Fig. 4.7. The tab "User Interface" of the module of the subsystem "User Interfaces".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:683px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_ui.png"><img class="thumbimage" height="404" src="files/QTCfg_subsys_ui.png" width="681" /></a>  <div class="thumbcaption">Fig. 4.7a. The tab "Subsystem" of the root page of the subsystem "User Interfaces".</div></div></div></div>
+<p>Each module of the subsystem "User Interfaces" provides configuration page with the tabs "User Interface" and "Module". The "User Interface" tab (Fig.4.7b) provides the parameter for monitoring the "Running" status of the module, as well as the configuration sections specialized for the modules of this subsystem. On the "Module" tab it is provided the information about the module of subsystem "User Interfaces" (Fig.4.1d), whose structure is identical for all modules.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:748px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_ui_mod.png"><img class="thumbimage" height="548" src="files/QTCfg_subsys_ui_mod.png" width="746" /></a>  <div class="thumbcaption">Fig. 4.7b. The tab "User Interface" of the module of the subsystem "User Interfaces".</div></div></div></div>
 <p>Due to the fact that most modules of this subsystem are graphical interfaces, they themselves can provide a developed configuration interface such as the <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">UI.Vision</a> module, and information on the specifics of their configuration can be find in their own documentation of these modules.
 </p>
 <h3><span class="mw-headline" id="Subsystem_.22Specials.22"><span class="mw-headline-number">4.8</span> Subsystem "Specials"</span></h3>
@@ -1021,11 +1023,11 @@
 <li> <i>Period of checking of the modules</i> — indicates the period of checking the modules on the fact of their updating, in seconds. Modules those are allowed for automatically connection and updating will be automatically updated.</li>
 <li> <i>Check the modules now</i> — command to check the modules on the fact of their updating. Modules those are allowed for automatically connection and updating will be automatically updated.</li>
 <li> <i>Shared libraries(modules)</i> — a table with the list of shared libraries with the modules detected by OpenSCADA. Rows are modules and in the columns there is information about them:
-<ul><li> <i>Path</i> — information on the full path to the shared library.</li>
+<ul><li> <i>Source</i> — the module(s) source, which is either the shared library or builtin code.</li>
 <li> <i>Time</i> — information about the date and time of the last modification of a shared library.</li>
 <li> <i>Modules</i> — information about the list of modules in a shared library.</li>
 <li> <i>Enabled</i> — state "Enabled" of the shared library. Privileged users are provided with an opportunity to manually enable/disable the shared libraries by changing this field.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1097px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_modshed.png"><img class="thumbimage" height="677" src="files/QTCfg_subsys_modshed.png" width="1095" /></a>  <div class="thumbcaption">Fig. 4.9. The main configuration tab of the subsystem "Modules scheduler".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1065px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_modshed.png"><img class="thumbimage" height="671" src="files/QTCfg_subsys_modshed.png" width="1063" /></a>  <div class="thumbcaption">Fig. 4.9. The main configuration tab of the subsystem "Modules scheduler".</div></div></div></div>
 <h3><span class="mw-headline" id="Configuration_File_and_command_line_parameters"><span class="mw-headline-number">4.10</span> <span id="CfgFilePrm" title="#CfgFilePrm">Configuration File and command line parameters</span></span></h3>
 <p>The Configuration File of OpenSCADA is provided to store the generic configuration of OpenSCADA-station. Only in the Configuration File and through the command-line options you can specify a part of the key parameters of the station, so familiarity with the Configuration File structure is necessary for professionals who make peculiar solutions based on OpenSCADA. More information on how to startup and execution OpenSCADA can be found in the section "<a href="#Startup">Startup and execution</a>".
 </p><p>Structure of the Configuration File based on the extensible markup language XML. Correspondingly, strict compliance with XML syntax rules is required. An illustrative example of an OpenSCADA Configuration File with examples of the configuration of most OpenSCADA components is given below:
@@ -1687,6 +1689,8 @@ Contains 7(8) tests of the value archiver to verify the correct functioning of t
   11) Base64Code        Mime Base64 algorithm encoding tests.
 
 ===================== Subsystem "User interfaces" options ===============
+------ Parameters of the section '/sub_UI/' of the configuration file ------
+FontSyntHighlCode &lt;font&gt;  Font used in the code syntax highlight, by default "monospace".
 
 ======================= Module &lt;UI:Vision&gt; options =======================
 ---- Parameters of the module section '/sub_UI/mod_Vision/' of the configuration file ----

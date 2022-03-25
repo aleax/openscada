@@ -1,3 +1,14 @@
+2022-03-25 Roman (stable)
+- FIX:LibsDB.vcaBase: wlb_Main.RootPgSo: Some unified in the terminator panel open before any content page.
+- SYS: The column "Path" of the "Shared libraries(modules)" table of the subsystem "Modules scheduler" renamed to "Source".
+- UI,SYS,DAQ.JavaLikeCalc: The subsystem configuration appended of the tab "Subsystem"
+    and the configuration field "Syntax highlight font for code" in that for configuration of the corresponded font in OpenSCADA parts.
+- !:FIX:UI.VCAEngine: The Attr::NotStored attributes prevented of the modification counter change than modification mark of them,
+	and the primitive's "Diagram" attributes set to Attr::NotStored: "Cursor: seconds (curSek)", "Cursor: microseconds (curUSek)",
+	"Parameter {N}: value (prm{N}val)" and "Parameter {N}: properties (prm{N}prop)".
+    FIX:The openReg() request switched to the new open page always appearing on the top, also for registered before.
+
+
 2022-03-20 Roman (stable)
 - !!:SYS,data/ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}:
 	The configuration parameter "Lang2CodeBase" renamed to "LangBase" with support "Lang2CodeBase" up to the 1.0 release.

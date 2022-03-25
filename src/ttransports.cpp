@@ -984,7 +984,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    opt->setText(resLog);
 	}
 	if(ctrChkNode(opt,"SnthHgl",R_R___,"root",STR_ID,SEC_RD)) {
-	    opt->setAttr("font","monospace");
+	    opt->setAttr("font", SYS->ui().at().fontSyntHighlCode());
 	    opt->childAdd("rule")->setAttr("expr","^\\[[^\\]]+.+$")->setAttr("color","blue")->setAttr("font_italic","1")->
 		childAdd("rule")->setAttr("expr","^\\[[^\\]]+\\]")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	    //opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");
@@ -1296,14 +1296,14 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",STR_ID,SEC_RD)) {
-	    opt->setAttr("font","monospace");
+	    opt->setAttr("font",SYS->ui().at().fontSyntHighlCode());
 	}
     }
     else if(a_path == "/req/answ") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genPrmGet(owner().nodePath()+"ReqAnsw","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genPrmSet(owner().nodePath()+"ReqAnsw",opt->text(),opt->attr("user"));
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",STR_ID,SEC_RD)) {
-	    opt->setAttr("font","monospace");
+	    opt->setAttr("font",SYS->ui().at().fontSyntHighlCode());
 	}
     }
     else if(a_path == "/req/send" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
@@ -1379,7 +1379,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    opt->setText(resLog);
 	}
 	if(ctrChkNode(opt,"SnthHgl",R_R___,"root",STR_ID,SEC_RD)) {
-	    opt->setAttr("font","monospace");
+	    opt->setAttr("font",SYS->ui().at().fontSyntHighlCode());
 	    opt->childAdd("rule")->setAttr("expr","^\\[[^\\]]+.+$")->setAttr("color","blue")->setAttr("font_italic","1")->
 		childAdd("rule")->setAttr("expr","^\\[[^\\]]+\\]")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	    //opt->childAdd("rule")->setAttr("expr","^[0-9a-fA-F]{2,} .+$")->setAttr("color","black");

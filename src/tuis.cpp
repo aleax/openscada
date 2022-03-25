@@ -35,8 +35,10 @@ using namespace OSCADA;
 //*************************************************
 //* TUIS                                          *
 //*************************************************
-TUIS::TUIS( ) : TSubSYS(SUI_ID, true)
+TUIS::TUIS( ) : TSubSYS(SUI_ID, true), mFontSyntHighlCode(dataRes())
 {
+    mFontSyntHighlCode = "monospace";
+
 #if HAVE_GD_FORCE
     gdFTUseFontConfig(1);
 #endif
@@ -45,7 +47,10 @@ TUIS::TUIS( ) : TSubSYS(SUI_ID, true)
 string TUIS::optDescr( )
 {
     return TSYS::strMess(_(
-	"===================== Subsystem \"User interfaces\" options ===============\n\n")) + TSubSYS::optDescr();
+	"===================== Subsystem \"User interfaces\" options ===============\n"
+	"------ Parameters of the section '%s' of the configuration file ------\n"
+	"FontSyntHighlCode <font>  Font used in the code syntax highlight, by default \"monospace\".\n\n"
+	),nodePath().c_str()) + TSubSYS::optDescr();
 }
 
 void TUIS::load_( )
@@ -53,6 +58,13 @@ void TUIS::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
+    setFontSyntHighlCode(TBDS::genPrmGet(nodePath()+"FontSyntHighlCode",fontSyntHighlCode()));
+}
+
+void TUIS::save_( )
+{
+    //Save parameters to the table "SYS"
+    TBDS::genPrmSet(nodePath()+"FontSyntHighlCode", fontSyntHighlCode());
 }
 
 string TUIS::icoGet( const string &inm, string *tp, bool retPath )
@@ -113,7 +125,7 @@ string TUIS::docGet( const string &iinm, string *tp, unsigned opt )
 	TArrayObj *tArr;
 	if((tArr=TRegExp("(0.\\d+|\\d+)\\.\\d+").match(VERSION))) {
 	    if(tArr->size() >= 2) {
-		const char  *docHost = "ftp.oscada.org/OpenSCADA";
+		const char *docHost = "ftp.oscada.org/OpenSCADA";
 
 		if(opt&GetPathURL) rez = string("http://") + docHost + "/" + tArr->arGet(1).getS() + "/doc/en/" + nm + ".html";
 		else if(opt&GetContent) ;//rez = req.text();
@@ -205,11 +217,17 @@ void TUIS::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_))
+	    ctrMkNode("fld",opt,-1,"/sub/fontSyntHighlCode",_("Syntax highlight font for code"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    TSubSYS::cntrCmdProc(opt);
+    if(a_path == "/sub/fontSyntHighlCode") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fontSyntHighlCode());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFontSyntHighlCode(opt->text());
+    }
+    else TSubSYS::cntrCmdProc(opt);
 }
 
 //*************************************************

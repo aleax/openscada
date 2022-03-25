@@ -425,7 +425,7 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Period of checking of the modules, seconds"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check the modules now."),RWRW__,"root",SMSH_ID);
 	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libraries(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path")) {
-		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Path"),R_R_R_,"root",SMSH_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/ms/libs/path",_("Source"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/ms/libs/tm",_("Time"),R_R_R_,"root",SMSH_ID,1,"tp","time");
 		ctrMkNode("list",opt,-1,"/ms/libs/mods",_("Modules"),R_R_R_,"root",SMSH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/ms/libs/en",_("Enabled"),RWRWR_,"root",SMSH_ID,1,"tp","bool");
