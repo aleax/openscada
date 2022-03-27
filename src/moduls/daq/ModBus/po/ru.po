@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 16:20+0200\n"
+"POT-Creation-Date: 2022-03-20 09:25+0200\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -356,41 +356,40 @@ msgstr "Реальное положение"
 msgid "Error of searching and a new node creation."
 msgstr "Ошибка поиска и создания нового узла."
 
-msgid "13:Error of the server response"
-msgstr "13:Ошибка ответа сервера"
+msgid "Error of the server response"
+msgstr "Ошибка ответа сервера"
 
 #, c-format
-msgid ""
-"13:The response Transaction ID %d is not suitable to the request one %d."
-msgstr "13:ID транзакции ответа %d не соответствует запросу %d."
+msgid "The response Transaction ID %d is not suitable to the request one %d."
+msgstr "ID транзакции ответа %d не соответствует запросу %d."
 
 msgid "Not full response"
 msgstr "Неполный ответ"
 
-msgid "13:Error of the response: Too large."
-msgstr "13:Ошибка ответа: Очень длинный."
+msgid "Error of the response: Too large."
+msgstr "Ошибка ответа: Очень длинный."
 
-msgid "14:Device error: "
-msgstr "14:Ошибка устройства: "
+msgid "Device error: "
+msgstr "Ошибка устройства: "
 
-msgid "13:Error of the response: Too short."
-msgstr "13:Ошибка ответа: Очень короткий."
+msgid "Error of the response: Too short."
+msgstr "Ошибка ответа: Очень короткий."
 
-msgid "13:Error of the response: CRC error."
-msgstr "13:Ошибка ответа: Ошибка CRC."
+msgid "Error of the response: CRC error."
+msgstr "Ошибка ответа: Ошибка CRC."
 
-msgid "13:Error of the response: Format error."
-msgstr "13:Ошибка ответа: Ошибка формата."
+msgid "Error of the response: Format error."
+msgstr "Ошибка ответа: Ошибка формата."
 
-msgid "13:Error of the response: LRC error."
-msgstr "13:Ошибка ответа: Ошибка LRC."
+msgid "Error of the response: LRC error."
+msgstr "Ошибка ответа: Ошибка LRC."
 
 #, c-format
 msgid "Error of the protocol '%s'."
 msgstr "Ошибка протокола '%s'."
 
-msgid "13:Error of the response"
-msgstr "13:Ошибка ответа"
+msgid "Error of the response"
+msgstr "Ошибка ответа"
 
 #, c-format
 msgid "1:%02X:Function is not supported."
@@ -629,3 +628,4 @@ msgid ""
 msgstr ""
 "Предоставляет реализацию протоколов ModBus. Поддерживаются Modbus/TCP, "
 "Modbus/RTU и Modbus/ASCII протоколы."
+

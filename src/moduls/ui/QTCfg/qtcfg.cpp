@@ -425,7 +425,7 @@ ConfApp::~ConfApp( )
 
 string ConfApp::user( )	{ return wUser->user().toStdString(); }
 
-string ConfApp::lang( bool withSystem )	{ return Mess->lang2Code(user(), !withSystem); }
+string ConfApp::lang( bool withSystem )	{ return Mess->langCode(user(), !withSystem); }
 
 void ConfApp::messUpd( )
 {
@@ -3437,7 +3437,7 @@ void SCADAHost::run( )
 	    QStringList brs;
 	    XMLNode req("CntrReqs"), *reqN;
 	    req.setAttr("path", "/"+id.toStdString())->
-		setAttr("lang", Mess->lang2Code(user.toStdString(),true));
+		setAttr("lang", Mess->langCode(user.toStdString(),true));
 	    req.childAdd("get")->setAttr("path", "%2fgen%2fstat");
 	    req.childAdd("get")->setAttr("path", "%2fico");
 	    req.childAdd("info")->setAttr("path","%2fbr");

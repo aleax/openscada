@@ -501,10 +501,10 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>void save( );</i> — Saving. </li>
 <li> <i>string codeConv( const string &amp;fromCH, const string &amp;toCH, const string &amp;mess);</i> — Conversion of the codepage of the messages. </li>
 <li> <i>string codeConvIn( const string &amp;fromCH, const string &amp;mess);</i> — Conversion the codepage of the messages into the internal system codepage. </li>
-<li> <i>string codeConvOut ( const string &amp;toCH, const string &amp;mess);</i> — Conversion of the message from the internal system codepage. </li>
+<li> <i>string codeConvOut ( const string &amp;toCH, const string &amp;mess);</i> — Conversion of the message from the internal system codepage.</li>
 <li> <i>string I18N( const string &amp;mess, const char *mLang = NULL, const char *d_name = NULL );</i> — Getting the message <i>mess</i> in the language <i>mLang</i> for the system translation from the directory <i>d_name</i>, NULL for the OpenSCADA core.</li>
 <li> <i>string lang( );</i> — Language of the system, as en_US.UTF-8. </li>
-<li> <i>string lang2Code( const string &amp;user = "", bool onlyUser = false );</i> — Language of the system in bi-symbolic codepage (en). Specify <i>user</i> for obtaining its language and <i>onlyUser</i> for only that.</li>
+<li> <i>string langCode( const string &amp;user = "", bool onlyUser = false );</i> — Language code of the system. Specify <i>user</i> for obtaining its language and <i>onlyUser</i> for only that.</li>
 <li> <i>string &amp;charset( );</i> — The system codepage. </li>
 <li> <i>int logDirect( );</i> — Receivers to whom the system messages (stdout, stderr, syslog, archive) are sent.</li>
 <li> <i>int messLevel( );</i> — The level below which the messages are ignored.</li>
@@ -522,10 +522,10 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>void put( const char *categ, int8_t level, const char *fmt,  ... );</i> — The message forming for the current time with the category <i>categ</i>, the <i>level</i>, the formatted message <i>fmt</i> and the followed arguments.</li>
 <li> <i>void put_( const char *categ, int8_t level, const char *fmt, ... ); void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );</i> — The message forming for the current time (selected level and debug categories are ignored) with the category <i>categ</i>, the <i>level</i>, the formatted message <i>fmt</i> and the followed arguments.</li>
 <li> <i>void get( time_t b_tm, time_t e_tm, vector&lt;TMess::SRec&gt; &amp;recs, const string &amp;category = "", int8_t level = Debug );</i> — Get the message from the archive for the period of time <i>b_tm</i> — <i>e_tm</i> under the category template <i>category</i> and minimum level <i>level</i>. </li>
-<li> <i>string lang2CodeBase( );</i> — The language of basic variables of the text messages in bi-symbolic code (en).</li>
+<li> <i>string langCodeBase( );</i> — The language of basic variables of the text messages.</li>
 <li> <i>string langBase( );</i> — The language-locale of basic variables and the locales list used in the project translation, separated by ';'.</li>
 <li> <i>string langToLocale( const string &amp;lang );</i> — Getting the complete locale from <i>langBase()</i> at the language <i>lang</i>.</li>
-<li> <i>bool translCfg( );</i> — The configuration translation sign, combined as "<b>lang2CodeBase().size() &amp;&amp; lang2Code()&nbsp;!= lang2CodeBase()</b>".</li>
+<li> <i>bool translCfg( );</i> — The configuration translation sign, combined as "<b>langCodeBase().size() &amp;&amp; langCode()&nbsp;!= langCodeBase()</b>".</li>
 <li> <i>bool translDyn( bool plan = false );</i> — Mode "Dynamic translation" or the <i>plan</i> to next start.</li>
 <li> <i>bool translEnMan( );</i> — The sign "Enabled translations manager", for activation of the built translation messages index and the translation manager.</li>
 <li> <i>string translLangs( );</i> — List of translation languages, into the manager.</li>
@@ -2163,7 +2163,7 @@ Parameter's type (enum — IO::Type):
 <li> <i>void setTrcSet( bool vl );</i> — Setting the setting elements tracing, at setting TRUE all marks of the items setting are cleared.</li>
 <li> <i>bool noTransl( ) const;</i> — The sign "No translation" is provided to disable the translation of all text variables of the record by default.</li>
 <li> <i>void setNoTransl( bool vl );</i> — Setting of the sign "No translation".</li>
-<li> <i>TVariant objFunc( const string &amp;id, vector&lt;TVariant&gt; &amp;prms, const string &amp;user, int perm, const string &amp;owner );</i> — User API object functions of accessing to the configuration with the permition control.</li></ul>
+<li> <i>TVariant objFunc( const string &amp;id, vector&lt;TVariant&gt; &amp;prms, const string &amp;user_lang, int perm, const string &amp;owner );</i> — User API object functions of accessing to the configuration with the permition control.</li></ul>
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual bool cfgChange( TCfg &amp;co, const TVariant &amp;pc );</i> — Is called in the case of changing the contents of the configuration element.</li></ul>
@@ -3237,7 +3237,9 @@ Error codes (enum — TError::Codes):
 <li> <i>TError::Core_NoNode (5)</i> — no node, error at accessing some missing node;</li>
 <li> <i>TError::Tr_Connect (10)</i> — transport level, error connection;</li>
 <li> <i>TError::Tr_UnknownHost (11)</i> — transport level, unknown host;</li>
-<li> <i>TError::Tr_ErrTransport (12)</i> — transport level, transport error; </li>
+<li> <i>TError::Tr_ErrTransport (12)</i> — transport level, transport error;</li>
+<li> <i>TError::Tr_ErrResponse (13)</i> — transport level, response error;</li>
+<li> <i>TError::Tr_ErrDevice (14)</i> — transport level, device error;</li>
 <li> <i>TError::DB_SQL_Connect (20)</i> — DB level, error the SQL-connection;</li>
 <li> <i>TError::DB_SQL_Query (21)</i> — DB level, error the SQL-query;</li>
 <li> <i>TError::DB_TrRemoved (22)</i> — DB level, translation removed;</li>

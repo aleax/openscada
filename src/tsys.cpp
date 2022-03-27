@@ -521,8 +521,8 @@ string TSYS::optDescr( )
 	"			  0x2 - stdout;\n"
 	"			  0x4 - stderr;\n"
 	"			  0x8 - the messages archive.\n"
-	"Lang       <lang>	Station language, in the view \"uk_UA.UTF-8\".\n"
-	"Lang2CodeBase <lang>	Base language for variable texts translation, in the two symbols code.\n"
+	"Lang       <lang>	Station language-locale in the view \"en_US.UTF-8\".\n"
+	"LangBase   <lang>	Base language and the project whole locales (like to \"en_US.UTF-8\") list (optional) separated by ';', for the multilanguage mode.\n"
 	"MainCPUs   <list>	Main list of the using CPUs, separated by ':'.\n"
 	"TaskInvPhs <n>		Number of phases of the task invoking, 1 to disable the phasing.\n"
 	"ClockRT    <0|1>	Sets the clock source to use to REALTIME (otherwise MONOTONIC), which is problematic one at the system clock modification.\n"
@@ -2827,7 +2827,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  full - microseconds of time
     if(iid == "lang") {
 	if(prms.size() >= 1) { prms[0].setS(Mess->lang()); prms[0].setModify(); }
-	return Mess->lang2Code();
+	return Mess->langCode();
     }
     // int sleep(real tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds (precised up to nanoseconds), up to prmInterf_TM(7 seconds)
@@ -3192,7 +3192,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    "You can entry here other language besides English(en) as the base, but take in your mind that "
 		    "all standard OpenSCADA libraries formed for the base language English(en), so other base languages "
 		    "will break these DBs at change!"));
-	    if(Mess->lang2CodeBase().size()) {
+	    if(Mess->langCodeBase().size()) {
 		blNd->setAttr("dscr", blNd->attr("dscr") + ", " + _("dynamic translation"));
 		ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Dynamic translation scheduling for next startup."));
 		if(!Mess->translDyn())
@@ -3213,10 +3213,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    "help",_("Pass the specified number of the table items from the top, "
 			    "useful for very big projects which are limited in time of the table complete processing."));
 		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRW__,"root","root",1,"key","base")) {
-		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->lang2CodeBase().c_str(),RWRW__,"root","root",1,"tp","str");
+		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->langCodeBase().c_str(),RWRW__,"root","root",1,"tp","str");
 		    string lngEl;
 		    for(int off = 0; (lngEl=strParse(Mess->translLangs(),0,";",&off)).size(); )
-			if(lngEl.size() == 2 && lngEl != Mess->lang2CodeBase())
+			if(lngEl.size() == 2 && lngEl != Mess->langCodeBase())
 			    ctrMkNode("list",opt,-1,("/tr/mess/"+lngEl).c_str(),lngEl.c_str(),RWRW__,"root","root",1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/tr/mess/src",_("Source"),R_R_R_,"root","root",1,"tp","str");
 		}
@@ -3524,14 +3524,14 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/tr/status" && ctrChkNode(opt)) {
 	string stM, stV;
-	if(Mess->lang2CodeBase().empty())
+	if(Mess->langCodeBase().empty())
 	    stM = _("SINGLELANGUAGE"), stV += _("only use the already multilanguage DBs with their modification");
 	else {
 	    if(Mess->translDyn()) stM = _("MULTILANGUAGE-DYNAMIC"), stV += _("dynamic translation");
 	    else stM = _("MULTILANGUAGE");
 	    stV += (Mess->translDyn()?", ":"") +
 		    TSYS::strMess(_("creating or modification the configuration DBs as multilanguage ones with the pointed base language '%s'"),
-			Mess->lang2CodeBase().c_str());
+			Mess->langCodeBase().c_str());
 	}
 	if(stV.size() && (Mess->trMessIdx.size() || Mess->trMessCache.size()))
 	    stV += ". " + TSYS::strMess(_("Messages indexed=%d, cached=%d."), Mess->trMessIdx.size(), Mess->trMessCache.size());
@@ -3583,7 +3583,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    // Columns list preparing
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/base","",RWRW__,"root","root"));
 	    for(int off = 0; (tStr=strParse(Mess->translLangs(),0,";",&off)).size(); )
-		if(tStr.size() == 2 && tStr != Mess->lang2CodeBase())
+		if(tStr.size() == 2 && tStr != Mess->langCodeBase())
 		    ns.push_back(ctrMkNode("list",opt,-1,("/tr/mess/"+tStr).c_str(),tStr.c_str(),RWRW__,"root","root"));
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/src","",R_R_R_,"root","root"));
 
@@ -3709,7 +3709,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			    }
 
 			    //   Replacing the message base
-			    Mess->translSet(recNd->text(), Mess->lang2CodeBase(), recNdBs->text(), &needReload);
+			    Mess->translSet(recNd->text(), Mess->langCodeBase(), recNdBs->text(), &needReload);
 			}
 			recNd->attrDel("unmatch")->attrDel("toPropagOnSp");
 		    }
@@ -3724,7 +3724,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR)) {
 	    bool needReload = false;
-	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->lang2CodeBase():opt->attr("col")), opt->text(),
+	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->langCodeBase():opt->attr("col")), opt->text(),
 				&needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
 	    if(!needReload) opt->setAttr("noReload","1");
 	}

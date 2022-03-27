@@ -1,3 +1,26 @@
+2022-03-27 Roman 0.9.5
+- FIX:LibsDB.vcaBase: wlb_Main.RootPgSo: Some unified in the terminator panel open before any content page.
+- !!:SYS,data/ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}:
+	The configuration parameter "Lang2CodeBase" renamed to "LangBase" with support "Lang2CodeBase" up to the 1.0 release.
+    !!: TMess::lang2Code() and TMess::lang2CodeBase() renamed to TMess::langCode() and TMess::langCodeBase() respectively
+	for starting the adaption to the language code more than 2 symbols, for what TMess::langCodeBase() was adapted already.
+- UI,SYS,DAQ.JavaLikeCalc: The subsystem configuration appended of the tab "Subsystem" and the configuration field
+    "Syntax highlight font for code" in that for configuration of the corresponded font in OpenSCADA parts, which set to "monospace".
+- !:SYS: TConfig::objFunc() adapted to passing the language through the argument "user_lang" renamed from "user".
+    !: The User API function TConfig::cfg() adapted to postranslation of the system translation of the translatable strings.
+- SYS: Appending the new error code TError::Tr_ErrResponse and TError::Tr_ErrDevice for more specific transport errors,
+    initially in DAQ.ModBus.
+- SYS: The column "Path" of the "Shared libraries(modules)" table of the subsystem "Modules scheduler" renamed to "Source".
+- !:DAQ.ModBus: The connection errors caused by the transport configuration errors prevented of the alarm setting.
+    Unified in specifying and using the error code TError::Tr_ErrDevice(14) and TError::Tr_ErrResponse(13).
+- !:FIX:UI.VCAEngine: The Attr::NotStored attributes prevented of the modification counter change than modification mark of them,
+	and the primitive's "Diagram" attributes set to Attr::NotStored: "Cursor: seconds (curSek)", "Cursor: microseconds (curUSek)",
+	"Parameter {N}: value (prm{N}val)" and "Parameter {N}: properties (prm{N}prop)".
+    FIX:The openReg() request switched to the new open page always appearing on the top, also for registered before.
+    User action messages of the sessions switched to generate from the sessions not projects.
+- !:UI.WebVision: In the XML-responses generation appended for coding the binary symbols by the options XMLNode::BinShield.
+
+
 2022-03-14 Roman 0.9.5
 - !!:FIX:DAQ: The service request "set:/val" of the TValue object fixed in the dynamic translation setting.
 - FIX:DAQ.DAQGate: Restored in the actual alarms first reading for the unlimited depth.

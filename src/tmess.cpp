@@ -58,7 +58,7 @@ using namespace OSCADA;
 //*************************************************
 TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE),
     mConvCode(true), mIsUTF8(true), mTranslDyn(false), mTranslDynPlan(false), mTranslEnMan(false), mTranslSet(false),
-    mLangBase(dtRes), mLang2Code(dtRes), mTranslLangs(dtRes), getMessRes(true)
+    mLangBase(dtRes), mLangCode(dtRes), mTranslLangs(dtRes), getMessRes(true)
 {
     openlog(PACKAGE, 0, LOG_USER);
 
@@ -78,12 +78,12 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
 #endif
 
     string tLng = lang();
-    mLang2Code = tLng;
-    if(mLang2Code.size() < 2 || mLang2Code.getVal() == "POSIX" || mLang2Code.getVal() == "C") mLang2Code = "en";
-    else mLang2Code = mLang2Code.getVal().substr(0,2);
+    mLangCode = tLng;
+    if(mLangCode.size() < 2 || mLangCode.getVal() == "POSIX" || mLangCode.getVal() == "C") mLangCode = "en";
+    else mLangCode = mLangCode.getVal().substr(0,2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
-    if(tLng == "C" || (mLang2Code.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")))
+    if(tLng == "C" || (mLangCode.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")))
 	mConvCode = false;
 }
 
@@ -213,7 +213,7 @@ bool TMess::isMessTranslable( const string &mess )
     return isTrSymb;
 }
 
-string TMess::lang2CodeBase( )	{ return TSYS::strParse(langBase(),0,";").substr(0,2); }
+string TMess::langCodeBase( )	{ return TSYS::strParse(TSYS::strParse(langBase(),0,";"), 0, "_"); }
 
 void TMess::setLangBase( const string &vl )
 {
@@ -281,18 +281,18 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 
     //Implementing the combained storing in "{base}\000{lang}\000{mess}"
     if(translDyn() && (tVl=TSYS::strParse(ibase,1,string(1,0))).size() &&
-	    (lang.find(tVl) == 0 || (lang.empty() && tVl == lang2Code())))
+	    (lang.find(tVl) == 0 || (lang.empty() && tVl == langCode())))
 	return TSYS::strParse(ibase,2,string(1,0));
 
     if(base.empty()) return base;
 
-    string rez, tStr, cKey = base, trLang = lang2Code();
+    string rez, tStr, cKey = base, trLang = langCode();
     bool isUAPI = (src.find("uapi:") != string::npos),
 	isDUAPI = (src.find("duapi:") == 0);
 
     if(translDyn()) {
 	if(lang.size() >= 2) trLang = lang.substr(0,2);
-	if(trLang == lang2CodeBase() && !isUAPI) return base;
+	if(trLang == langCodeBase() && !isUAPI) return base;
 	cKey = trLang+"#"+cKey;
     } else if(!isUAPI) return base;
 
@@ -363,8 +363,8 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		    break;
 		}
 		// Create new record into the translation table of the data source
-		else if((iA+1) == addrs.rend() /*&& lang2CodeBase().size()*/) {
-		    if(lang2CodeBase().size() && lang2CodeBase() == trLang)
+		else if((iA+1) == addrs.rend() /*&& langCodeBase().size()*/) {
+		    if(langCodeBase().size() && langCodeBase() == trLang)
 			req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
 		    TBDS::dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, TBDS::NoException);
 		    //  Early register the new message in the translation index after the real appending
@@ -382,7 +382,7 @@ string TMess::translGetU( const string &base, const string &user, const string &
 {
     if(!translDyn() && src.empty()) return base;
 
-    return translGet(base, lang2Code(user), src);
+    return translGet(base, langCode(user), src);
 }
 
 string TMess::translGetLU( const string &base, const string &lang, const string &user, const string &src )
@@ -401,19 +401,19 @@ string TMess::translSet( const string &base, const string &mess )
 
 string TMess::translSet( const string &base, const string &lang, const string &mess, bool *needReload, const string &srcFltr )
 {
-    string trLang = lang2Code();
+    string trLang = langCode();
     if(lang.size() >= 2)	trLang = lang.substr(0, 2);
-    else if(trLang.empty())	trLang = lang2Code();
+    else if(trLang.empty())	trLang = langCode();
 
     if(!needReload) {
-	if(!translDyn() || lang == lang2CodeBase()) return mess;
+	if(!translDyn() || lang == langCodeBase()) return mess;
 
 	//Implementing the combained storing in "{base}\000{lang}\000{mess}"
 	return TSYS::strParse(base,0,string(1,0)) + string(1,0) + trLang + string(1,0) + mess;
     }
 
-    if(base.empty() && mess.size()) trLang = lang2CodeBase();
-    bool chBase = (trLang == lang2CodeBase());
+    if(base.empty() && mess.size()) trLang = langCodeBase();
+    bool chBase = (trLang == langCodeBase());
 
     MtxAlloc res(trMessIdxRes, true);
     map<string,string> mI = trMessIdx[base];
@@ -458,7 +458,7 @@ string TMess::translSetU( const string &base, const string &user, const string &
 {
     if(!translDyn() && !needReload) return mess;
 
-    return translSet(base, lang2Code(user), mess, needReload);
+    return translSet(base, langCode(user), mess, needReload);
 }
 
 string TMess::translSetLU( const string &base, const string &lang, const string &user, const string &mess, bool *needReload )
@@ -559,7 +559,7 @@ void TMess::translIdxCacheUpd( const string &base, const string &lang, const str
     //printf("Updating the field '%s' translation '%s':'%s' for the base '%s'\n", src.c_str(), lang.c_str(), mess.c_str(), base.c_str());
 
     //Base message modification
-    if(lang.empty() || lang == Mess->lang2CodeBase()) {
+    if(lang.empty() || lang == Mess->langCodeBase()) {
 	//  1. Registering new one, the previous is empty
 	if(base.empty() && mess.size())	Mess->translReg(mess, src);
 	//  2. Changing available one
@@ -623,7 +623,7 @@ string TMess::lang( )
     else return "C";
 }
 
-string TMess::lang2Code( const string &user, bool onlyUser )
+string TMess::langCode( const string &user, bool onlyUser )
 {
     if(user.size()) {
 	bool ok = false;
@@ -635,7 +635,7 @@ string TMess::lang2Code( const string &user, bool onlyUser )
 	    return (toLang.size() > 2) ? toLang.substr(0,2) : toLang;
     }
 
-    return mLang2Code;
+    return mLangCode;
 }
 
 bool TMess::messLevelTest( int8_t condLev, int8_t messLev )
@@ -688,12 +688,12 @@ void TMess::setLang( const string &lng, bool init )
 #endif
 
     string tLng = lang();
-    mLang2Code = tLng;
-    if(mLang2Code.size() < 2 || mLang2Code.getVal() == "POSIX" || mLang2Code.getVal() == "C") mLang2Code = "en";
-    else mLang2Code = mLang2Code.getVal().substr(0, 2);
+    mLangCode = tLng;
+    if(mLangCode.size() < 2 || mLangCode.getVal() == "POSIX" || mLangCode.getVal() == "C") mLangCode = "en";
+    else mLangCode = mLangCode.getVal().substr(0, 2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
-    mConvCode = !(tLng == "C" || (mLang2Code.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")));
+    mConvCode = !(tLng == "C" || (mLangCode.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")));
 
     if(init) SYS->sysModifFlgs &= ~TSYS::MDF_LANG;
     else { SYS->sysModifFlgs |= TSYS::MDF_LANG; SYS->modif(); }
@@ -772,7 +772,7 @@ string TMess::I18N( const string &imess, const char *mLang, const char *d_name )
 	    string toUser;
 	    if(ctx.empty()) ctx = trCtx();
 	    if((toLang=TSYS::strLine(ctx,1)).empty() && (toUser=TSYS::strLine(ctx,0)).size())
-		toLang = lang2Code(toUser, true);
+		toLang = langCode(toUser, true);
 	}
 
 	//Obtaining the message translation from the cache
@@ -822,7 +822,9 @@ void TMess::load( )
     setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats",selDebCats()));
     setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(logDirect()))));
     setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
-    setLangBase(TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase",langBase()));
+    if((argVl=TBDS::genPrmGet(SYS->nodePath()+"LangBase")).size() ||
+	    (argVl=TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase")).size())	//????[v1.0] Remove, loading the deprecated parameter
+	setLangBase(argVl);
     setTranslDyn(s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()))), false);
     setTranslEnMan(translDyn() || s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()))), true);
 }
@@ -845,7 +847,8 @@ void TMess::save( )
     TBDS::genPrmSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
     TBDS::genPrmSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
     if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genPrmSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"Lang2CodeBase",langBase(),"root",TBDS::OnlyCfg);
+    TBDS::genPrmSet(SYS->nodePath()+"LangBase",langBase(),"root",TBDS::OnlyCfg);
+    TBDS::genPrmSet(SYS->nodePath()+"Lang2CodeBase","","root",TBDS::OnlyCfg);	//????[v1.0] Remove, cleaning up the deprecated parameter
     TBDS::genPrmSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
     TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
 }

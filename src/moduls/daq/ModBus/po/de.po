@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-16 16:20+0200\n"
+"POT-Creation-Date: 2022-03-20 09:25+0200\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -364,50 +364,47 @@ msgstr "Reale Position"
 msgid "Error of searching and a new node creation."
 msgstr "Fehler beim Suchen und eine neue Node-Erstellung."
 
-msgid "13:Error of the server response"
-msgstr "13:Fehler der Serverantwort"
+msgid "Error of the server response"
+msgstr "Fehler der Serverantwort"
 
 #, c-format
-msgid ""
-"13:The response Transaction ID %d is not suitable to the request one %d."
-msgstr ""
-"13:Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
+msgid "The response Transaction ID %d is not suitable to the request one %d."
+msgstr "Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
 
 msgid "Not full response"
 msgstr "Nicht voll antworten"
 
-msgid "13:Error of the response: Too large."
-msgstr "13:Fehler in der Antwort: Zu groß."
+msgid "Error of the response: Too large."
+msgstr "Fehler in der Antwort: Zu groß."
 
-msgid "14:Device error: "
-msgstr "14:Fehler im Baustein: "
+msgid "Device error: "
+msgstr "Fehler im Baustein: "
 
-msgid "13:Error of the response: Too short."
-msgstr "13:Fehler in der Antwort: Zu kurz."
+msgid "Error of the response: Too short."
+msgstr "Fehler in der Antwort: Zu kurz."
 
-msgid "13:Error of the response: CRC error."
-msgstr "13:Fehler in der Antwort: CRC-Fehler."
+msgid "Error of the response: CRC error."
+msgstr "Fehler in der Antwort: CRC-Fehler."
 
-msgid "13:Error of the response: Format error."
-msgstr "13:Fehler in der Antwort: Format Fehler."
+msgid "Error of the response: Format error."
+msgstr "Fehler in der Antwort: Format Fehler."
 
-msgid "13:Error of the response: LRC error."
-msgstr "13:Fehler in der Antwort: LRC-Fehler."
+msgid "Error of the response: LRC error."
+msgstr "Fehler in der Antwort: LRC-Fehler."
 
 #, c-format
 msgid "Error of the protocol '%s'."
 msgstr "Fehler des Protokolls '%s'."
 
-msgid "13:Error of the response"
-msgstr "13:Fehler in der Antwort"
+msgid "Error of the response"
+msgstr "Fehler in der Antwort"
 
 #, c-format
 msgid "1:%02X:Function is not supported."
 msgstr "1:%02X:Funktion wird nicht unterstützt."
 
 msgid "2:Request address is not allowed or the query range is too large."
-msgstr ""
-"2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
+msgstr "2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Illegale Datenwert in der Anfrage."
@@ -640,3 +637,4 @@ msgid ""
 msgstr ""
 "Bietet die Implementierung von ModBus-Protokollen. ModBus/TCP, ModBus/RTU "
 "und ModBus/ASCII-Protokolle werden unterstützt."
+

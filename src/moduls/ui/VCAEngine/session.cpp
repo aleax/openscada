@@ -319,11 +319,11 @@ bool Session::openCheck( const string &iid )
 
 void Session::openReg( const string &iid )
 {
-    unsigned iOp;
     dataResSes().lock();
-    for(iOp = 0; iOp < mOpen.size(); iOp++)
-	if(iid == mOpen[iOp]) break;
-    if(iOp >= mOpen.size())	mOpen.push_back(iid);
+    //!!!! The new open page will always appear on the top
+    for(int iOp = 0; iOp < (int)mOpen.size(); ++iOp)
+	if(iid == mOpen[iOp]) mOpen.erase(mOpen.begin()+(iOp--));
+    mOpen.push_back(iid);
     dataResSes().unlock();
 
     mess_debug(nodePath().c_str(), _("Registering/opening the page '%s'."), iid.c_str());
@@ -364,7 +364,7 @@ void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
     for(int iOp = opLs.size()-1; iOp >= 0; iOp--) {
 	string curPtEl, curEl;
 	for(int iEl = 0; (curPtEl=TSYS::pathLev(prm,iEl++)).size(); )
-	    if((curEl=TSYS::pathLev(opLs[iOp],iEl)).empty() || (curPtEl.compare(0,3,"pg_") == 0 && curPtEl != curEl)) break;
+	    if((curEl=TSYS::pathLev(opLs[iOp],iEl)).empty() || (curPtEl.find("pg_") == 0 && curPtEl != curEl)) break;
 	if(curPtEl.empty()) { oppg = opLs[iOp]; break; }
     }
 
@@ -378,7 +378,7 @@ void Session::uiCmd( const string &com, const string &prm, SessWdg *src )
 	AutoHD<SessPage> cpg;
 	for(unsigned iEl = 0; (curPtEl=TSYS::pathLev(prm,iEl++)).size(); ) {
 	    string opPg;
-	    if(curPtEl.compare(0,3,"pg_") == 0) opPg = curPtEl.substr(3);
+	    if(curPtEl.find("pg_") == 0) opPg = curPtEl.substr(3);
 	    else if(curPtEl == "*" || (curPtEl == "$" && (com == "next" || com == "prev"))) {
 		vector<string> pls;
 		if(cpg.freeStat()) list(pls); else cpg.at().pageList(pls);

@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2013.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2021.
+# Roman Savochenko <roman@oscada.org>, 2011-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-25 16:42+0200\n"
+"POT-Creation-Date: 2022-03-20 09:38+0200\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1290,9 +1290,14 @@ msgid ""
 "so they forced in checking for doubles when the last one will be opened and "
 "the previous ones be closed."
 msgstr ""
-"EMPTY und die Gruppe \"main\" sollen diese Seite als Root-Hauptseite verwenden, sodass diese andere Root-Hauptseiten ersetzen.\n"
-"Die \"fl\" Gruppe ist für die Verwendung in den \"fly\"-Fenstern gedacht, die für mehrfaches Öffnen geeignet sind und nicht für Doppel verfolgt werden dürfen.\n"
-"Alle anderen sind für die Aufnahme in die Container-Boxen oder Einzelöffnungen gedacht, so dass sie gezwungen sind, auf Doppel zu prüfen, wann die letzte geöffnet und die vorherigen geschlossen werden."
+"EMPTY und die Gruppe \"main\" sollen diese Seite als Root-Hauptseite "
+"verwenden, sodass diese andere Root-Hauptseiten ersetzen.\n"
+"Die \"fl\" Gruppe ist für die Verwendung in den \"fly\"-Fenstern gedacht, "
+"die für mehrfaches Öffnen geeignet sind und nicht für Doppel verfolgt werden "
+"dürfen.\n"
+"Alle anderen sind für die Aufnahme in die Container-Boxen oder "
+"Einzelöffnungen gedacht, so dass sie gezwungen sind, auf Doppel zu prüfen, "
+"wann die letzte geöffnet und die vorherigen geschlossen werden."
 
 #, c-format
 msgid "The project '%s' is used now by %d sessions!"
@@ -1414,6 +1419,15 @@ msgstr "Seite des Projekts: "
 
 msgid "Page type"
 msgstr "Typ der Seite"
+
+msgid ""
+"Consider to remove included pages linked to this page as a template due to "
+"it is not the template more!"
+msgstr ""
+
+msgid ""
+"Consider to remove included pages due to this page is not a container more!"
+msgstr ""
 
 msgid "Standard"
 msgstr "Standard"
@@ -1688,10 +1702,6 @@ msgstr "Arbeitsstil"
 
 msgid "Flags"
 msgstr "Schalter"
-
-#, c-format
-msgid "Value %d"
-msgstr "Wert %d"
 
 msgid "Original widgets"
 msgstr "Original Widgets"

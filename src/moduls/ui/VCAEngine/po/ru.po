@@ -1,13 +1,13 @@
 # OpenSCADA.UI.VCAEngine translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2006-2021.
+# Roman Savochenko <roman@oscada.org>, 2006-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-25 16:42+0200\n"
+"POT-Creation-Date: 2022-03-20 09:38+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1278,9 +1278,15 @@ msgid ""
 "so they forced in checking for doubles when the last one will be opened and "
 "the previous ones be closed."
 msgstr ""
-"ПУСТАЯ и \"main\" группа предусматривает использование этой страницы как Корневую-основную страницу, т.е. такая будет заменять другие Корневые-главные страницы.\n"
-"Группа \"fl\" предназначена для использования во внешних окнах, которые предусмотрены для многоразового одновременного открытия и которые не должны отслеживаться на дубликаты.\n"
-"Остальные предусмотрено для включения в контейнеры-боксы или одноразового одновременного открытия, т.е. они принудительно проверяются на дубликаты, когда последнее открывается, а предыдущие закрываются."
+"ПУСТАЯ и \"main\" группа предусматривает использование этой страницы как "
+"Корневую-основную страницу, т.е. такая будет заменять другие Корневые-"
+"главные страницы.\n"
+"Группа \"fl\" предназначена для использования во внешних окнах, которые "
+"предусмотрены для многоразового одновременного открытия и которые не должны "
+"отслеживаться на дубликаты.\n"
+"Остальные предусмотрено для включения в контейнеры-боксы или одноразового "
+"одновременного открытия, т.е. они принудительно проверяются на дубликаты, "
+"когда последнее открывается, а предыдущие закрываются."
 
 #, c-format
 msgid "The project '%s' is used now by %d sessions!"
@@ -1402,6 +1408,15 @@ msgstr "Страница проекта: "
 
 msgid "Page type"
 msgstr "Тип страницы"
+
+msgid ""
+"Consider to remove included pages linked to this page as a template due to "
+"it is not the template more!"
+msgstr ""
+
+msgid ""
+"Consider to remove included pages due to this page is not a container more!"
+msgstr ""
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -1674,10 +1689,6 @@ msgstr "Рабочий стиль"
 
 msgid "Flags"
 msgstr "Флаги"
-
-#, c-format
-msgid "Value %d"
-msgstr "Значение %d"
 
 msgid "Original widgets"
 msgstr "Базовые виджеты"

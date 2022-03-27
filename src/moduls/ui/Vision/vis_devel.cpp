@@ -890,7 +890,7 @@ QString VisDevelop::getFileName( const QString &caption, const QString &dir, con
 
 string VisDevelop::user( )	{ return mWUser->user(); }
 
-string VisDevelop::lang( )	{ return Mess->lang2Code(user(), true); }
+string VisDevelop::lang( )	{ return Mess->langCode(user(), true); }
 
 string VisDevelop::password( )	{ return mWUser->pass(); }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.h
 /***************************************************************************
- *   Copyright (C) 2006-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -179,7 +179,7 @@ class LWidget : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	void setWModif( Attr *a = NULL )	{ modif(); Widget::setWModif(a); }
+	void setWModif( Attr *a = NULL )	{ if(!a || !(a->flgGlob()&Attr::NotStored)) { modif(); Widget::setWModif(a); } }
 
     private:
 	//Attributes
@@ -242,7 +242,7 @@ class CWidget : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	void setWModif( Attr *a = NULL )	{ modif(); Widget::setWModif(a); }
+	void setWModif( Attr *a = NULL )	{ if(!a || !(a->flgGlob()&Attr::NotStored)) { modif(); Widget::setWModif(a); } }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };

@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.1.26								*
+ *   Version: 2.1.27								*
  *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
  *	* The function XML_N::childClear() appended by a result of returning	*
@@ -542,7 +542,7 @@ class UA
     UA( );
     ~UA( );
 
-    virtual string lang2CodeSYS( )	{ return "en"; }
+    virtual string langCodeSYS( )	{ return "en"; }
     virtual void debugMess( const string &mess ) { }
 
     // Generic constants
