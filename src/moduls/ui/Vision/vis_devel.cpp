@@ -1623,7 +1623,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
     string copy_buf_w = wsrc.empty() ? copy_buf : wsrc;
     string work_wdg_w = wdst.empty() ? work_wdg : wdst;
     vector<string> copy_els;
-    QCheckBox *wInher = NULL;
+    QCheckBox *wInher = NULL, *wAsPage = NULL;
     int zLev = 0;
 
     InputDlg dlg(this, actVisItPaste->icon(), "", _("Moving or copying the visual items"), true, true);
@@ -1644,7 +1644,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	//Copy visual item
 	XMLNode req("get");
 	// Project copy
-	if(s_el.substr(0,4) == "prj_") {
+	if(s_el.find("prj_") == 0) {
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Moving the project '%1'.\n") : _("Copying the project '%1'.\n"))+
 		_("Enter the identifier and the name of the new project.")).arg(s_el.substr(4).c_str()).toStdString();
 	    req.setAttr("path","/%2fprm%2fcfg%2fprj");
@@ -1652,7 +1652,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    t1_el = s_el.substr(4);
 	}
 	// Widget's library copy
-	else if(s_el.substr(0,4) == "wlb_") {
+	else if(s_el.find("wlb_") == 0) {
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Moving the widgets library '%1'.\n") : _("Copying the widgets library '%1'.\n"))+
 		_("Enter the identifier and the name of the new widgets library.")).arg(s_el.substr(4).c_str()).toStdString();
 	    req.setAttr("path","/%2fprm%2fcfg%2fwlb");
@@ -1660,33 +1660,47 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    t1_el = s_el.substr(4);
 	}
 	// Page copy
-	else if(s_el.substr(0,3) == "pg_" && (d_el.substr(0,4) == "prj_" || d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_"))
-	{
+	else if(s_el.find("pg_") == 0 && (d_el.find("prj_") == 0 || d_el.find("pg_") == 0 || d_el.find("wlb_") == 0)) {
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Moving the page '%1' to '%2'.\n") : _("Copying the page '%1' to '%2'.\n"))+
 		_("Enter the identifier and the name of the new widget/page.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
-	    if(d_el.substr(0,4)=="wlb_") req.setAttr("path",work_wdg_w+"/%2fwdg%2fwdg");
-	    else req.setAttr("path",work_wdg_w+"/%2fpage%2fpage");
-	    d_elp += ("/"+d_el);
-	    d_el = (d_el.substr(0,4)=="wlb_") ? "wdg_" : "pg_";
+	    if(d_el.find("wlb_") == 0) req.setAttr("path", work_wdg_w+"/%2fwdg%2fwdg");
+	    else req.setAttr("path", work_wdg_w+"/%2fpage%2fpage");
+	    d_elp += "/" + d_el;
+	    d_el = (d_el.find("wlb_") == 0) ? "wdg_" : "pg_";
 	    t1_el = s_el.substr(3);
 	}
 	// Widget copy
-	else if(s_el.substr(0,4) == "wdg_" && (d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_" ||
-	    (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del == 2)))
+	else if(s_el.find("wdg_") == 0 && (d_el.find("prj_") == 0 || d_el.find("pg_") == 0 || d_el.find("wlb_") == 0 ||
+	    (TSYS::pathLev(d_elp,0).find("wlb_") == 0 && n_del == 2)))
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Moving the widget '%1' to '%2'.\n") : _("Copying the widget '%1' to '%2'.\n"))+
 		_("Enter the identifier and the name of the new widget.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
-	    if(d_el.substr(0,4)=="wlb_") req.setAttr("path",work_wdg_w+"/%2fwdg%2fwdg");
-	    else req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
-	    d_elp += ("/"+d_el);
-	    d_el = "wdg_";
+
+	    d_elp += "/" + d_el;
 	    t1_el = s_el.substr(4);
+
+	    if(d_el.find("prj_") == 0) {
+		req.setAttr("path", work_wdg_w+"/%2fpage%2fpage");
+		d_el = "pg_";
+	    }
+	    else {
+		if(d_el.find("wlb_") == 0) req.setAttr("path", work_wdg_w+"/%2fwdg%2fwdg");
+		else {
+		    req.setAttr("path", work_wdg_w+"/%2finclwdg%2fwdg");
+
+		    //  Requesting about as page
+		    dlg.edLay()->addWidget(new QLabel(_("As a page:"),&dlg), 2, 0);
+		    wAsPage = new QCheckBox(&dlg);
+		    dlg.edLay()->addWidget(wAsPage, 2, 1);
+		}
+		d_el = "wdg_";
+	    }
 	}
 	// Direct widget to widget copy
-	else if(s_el.substr(0,4) == "wdg_" && d_el.substr(0,4) == "wdg_") {
+	else if(s_el.find("wdg_") == 0 && d_el.find("wdg_") == 0) {
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Moving the widget '%1' to '%2'.\n") : _("Copying the widget '%1' to '%2'.\n"))+
 		_("Enter the identifier and the name of the new widget.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
-	    req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
+	    req.setAttr("path", work_wdg_w+"/%2finclwdg%2fwdg");
 	    t1_el = d_el.substr(4);
 	    d_el = "wdg_";
 	}
@@ -1697,7 +1711,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    return;
 	}
 	// Prepare new widget identifier
-	//  Remove digits from end of new identifier
+	//  Remove digits from the end of the new identifier
 	if(wdst.empty()) {
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    else {
@@ -1712,11 +1726,12 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	dlg.setId(t1_el.c_str());
 	// Add Link flag for copy operation
 	if(copy_buf_w[0] != '1' && d_el != "prj_" && d_el != "wlb_" && d_el_.substr(0,4) != "wdg_") {
-	    dlg.edLay()->addWidget(new QLabel(_("Inherit:"),&dlg), 2, 0);
+	    dlg.edLay()->addWidget(new QLabel(_("Inherit:"),&dlg), 3, 0);
 	    wInher = new QCheckBox(&dlg);
-	    dlg.edLay()->addWidget(wInher, 2, 1);
+	    dlg.edLay()->addWidget(wInher, 3, 1);
 	}
 	if(!wsrc.empty() || dlg.exec() == QDialog::Accepted) {
+	    if(wAsPage && wAsPage->isChecked()) d_el = "pg_";
 	    dlg.setId(TSYS::strEncode(dlg.id().toStdString(),TSYS::oscdID).c_str());
 	    if(wdst.empty() && dlg.id().toStdString() != t1_el) {
 		unsigned iW = 0;
@@ -1803,9 +1818,10 @@ void VisDevelop::editToolUpdate( )
     { s_elp += "/" + s_el; s_el = t_el; }
     for(int off = 0; !(t_el=TSYS::pathLev(work_wdg,0,true,&off)).empty(); n_del++)
     { d_elp += "/" + d_el; d_el = t_el; }
-    if((s_el.substr(0,4) == "prj_" || s_el.substr(0,4) == "wlb_") ||										//Project and library copy
-	    (s_el.substr(0,3) == "pg_" && (d_el.substr(0,4) == "prj_" || d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_")) ||		//Page copy
-	    (s_el.substr(0,4) == "wdg_" && (d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_" || (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del==2))))	//Widget copy
+    if((s_el.find("prj_") == 0 || s_el.find("wlb_") == 0) ||									//Project and library copy
+	    (s_el.find("pg_") == 0 && (d_el.find("prj_") == 0 || d_el.find("pg_") == 0 || d_el.find("wlb_") == 0)) ||		//Page copy
+	    (s_el.find("wdg_") == 0 && (d_el.find("prj_") == 0 || d_el.find("pg_") == 0 || d_el.find("wlb_") == 0 ||
+			(TSYS::pathLev(d_elp,0).find("wlb_") == 0 && n_del == 2))))						//Widget copy
 	actVisItPaste->setEnabled(true);
     else actVisItPaste->setEnabled(false);
 }

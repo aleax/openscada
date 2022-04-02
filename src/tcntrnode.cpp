@@ -382,10 +382,10 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 {
     if(src == dst) return;
 
-    //Attach to source node
+    //Attaching to the source node
     AutoHD<TCntrNode> srcN = SYS->nodeAt(src);
 
-    //Parse destination node path
+    //Parsing the destination node path
     string dElp, dEl, tEl;
     int nDel = 0;
     for(int off = 0; !(tEl=TSYS::pathLev(dst,0,true,&off)).empty(); nDel++)
@@ -395,7 +395,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     //Connect to destination containers node
     AutoHD<TCntrNode> dstN = SYS->nodeAt(dElp);
 
-    //Get allow branches' containers and find want group
+    //Getting containers of the available branches and finding up for the needed group
     XMLNode brReq("info");
     brReq.setAttr("user",user)->setAttr("path","/%2fbr");
     dstN.at().cntrCmd(&brReq);
@@ -403,12 +403,16 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 	throw srcN.at().err_sys(_("Target node has no branches."));
     XMLNode *branch = brReq.childGet(0);
     int iB;
+    bool isWr = false;
     for(iB = 0; iB < (int)branch->childSize(); iB++)
-	if(branch->childGet(iB)->attr("id") == dEl.substr(0,branch->childGet(iB)->attr("id").size()) &&
-		s2i(branch->childGet(iB)->attr("acs"))&SEC_WR)
+	if(dEl.find(branch->childGet(iB)->attr("id")) == 0) {
+	    isWr = s2i(branch->childGet(iB)->attr("acs"))&SEC_WR;
 	    break;
+	}
     if(iB >= (int)branch->childSize())
-	throw srcN.at().err_sys(_("Target node does not have the required branch."));
+	throw srcN.at().err_sys(_("The target node '%s' does not have the required branch."), dst.c_str());
+    else if(!isWr) throw srcN.at().err_sys(_("End branch of the target node '%s' is not writeable."), dst.c_str());
+
     bool idm = s2i(branch->childGet(iB)->attr("idm"));
     string nGrp = branch->childGet(iB)->attr("id");
     dEl = dEl.substr(nGrp.size());

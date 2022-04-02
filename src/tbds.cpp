@@ -487,14 +487,24 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 		    }
 
 		    // Translation
-		    string sval = cf.getS(), toLang = Mess->langCode(), tVl;
+		    string sval = cf.getS(), toLang = Mess->langCode(), svalBASE = sval, tVl;
 		    bool isTransl = cf.fld().flg()&TFld::TransltText, isDynSet = false;
-		    if(Mess->translDyn() && (tVl=TSYS::strParse(sval,1,string(1,0))).size()) {
+		    //  ... system prestored
+		    bool isSysPreStor = (TSYS::strParse(sval,0,string(1,0)) != sval && TSYS::strParse(sval,2,string(1,0)).empty());
+		    if(isSysPreStor) {
+			svalBASE = TSYS::strParse(sval, 0, string(1,0));
+			sval = Mess->I18N(sval);
+			if(!Mess->translCfg()) svalBASE = sval;
+		    }
+		    //  ... dynamic data
+		    if(!isSysPreStor && Mess->translDyn() && (tVl=TSYS::strParse(sval,1,string(1,0))).size()) {
 			isDynSet = true;
 			toLang = tVl;
+			svalBASE = TSYS::strParse(sval, 0, string(1,0));
 			sval = TSYS::strParse(sval, 2, string(1,0));
 			isTransl = (isTransl && toLang != Mess->langCodeBase());
 		    }
+		    //  ... default
 		    else isTransl = (isTransl && ((Mess->translCfg() && toLang != Mess->langCodeBase()) ||
 					(isPrm && SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+toLang)) ||
 					(!isPrm && (wel->attr(vnm+"_"+toLang).size() || wel->childGet(vnm+"_"+toLang,0,true)))));
@@ -516,12 +526,12 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			if(Mess->translDyn() && cf.fld().flg()&TFld::TransltText && !cf.noTransl()) {
 			    tVl = isPrm ? wel->text(true) :
 					  ((tVl=wel->text(true)).size() ? tVl : wel->attr(vnm));
-			    Mess->translIdxCacheUpd(tVl, "", sval, "cfg:"+path+"#"+vnm);
+			    Mess->translIdxCacheUpd(tVl, "", svalBASE, "cfg:"+path+"#"+vnm);
 			}
 
 			// To attribute
-			if(!isPrm && sval.size() < NSTR_BUF_LEN) {
-			    wel->setAttr(vnm, sval);
+			if(!isPrm && svalBASE.size() < NSTR_BUF_LEN) {
+			    wel->setAttr(vnm, svalBASE);
 			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 			}
 			// To text
@@ -529,12 +539,12 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			    if(isPrm && (vnm == "val" || (nd=SYS->cfgNode(SYS->id()+"/"+path.substr(4)+"_"+TSYS::strParse(vnm,1,"_"),true))))
 				fnd = nd;
 			    else if(!isPrm && !(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			    fnd->setText(sval, true);
+			    fnd->setText(svalBASE, true);
 			    if(!isPrm) wel->setAttr(vnm, "");
 			}
 		    }
 		    // ... for translated
-		    if(isTransl && !cf.noTransl() && (!isPrm || vnm == "val") && (!Mess->translDyn() || isDynSet)) {
+		    if(isTransl && !cf.noTransl() && (!isPrm || vnm == "val") && (!Mess->translDyn() || isDynSet || isSysPreStor)) {
 			vnm = cf_el[iEl]+"_"+toLang;
 			if(!isPrm && sval.size() < NSTR_BUF_LEN) {
 			    wel->setAttr(vnm, sval);
@@ -1593,7 +1603,17 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		// Translation
 		string svalRAW = u_cfg.getS(), toLang = Mess->langCode(), svalBASE = sval, svalBASE_RAW = svalRAW;
 		bool isTransl = (u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl() && Mess->isMessTranslable(sval));
-		if(Mess->translDyn()) {
+		//  ... system prestored
+		bool isSysPreStor = (isTransl && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
+		if(isSysPreStor) {
+		    tVl = svalRAW;
+		    u_cfg.setS((svalRAW=Mess->I18N(tVl))); sval = getSQLVal(u_cfg);
+		    u_cfg.setS((svalBASE_RAW=TSYS::strParse(tVl,0,string(1,0)))); svalBASE = getSQLVal(u_cfg);
+		    u_cfg.setS(tVl);
+		    if(!Mess->translCfg()) svalBASE = sval;
+		}
+		//  ... dynamic data
+		if(!isSysPreStor && Mess->translDyn()) {
 		    if((tVl=TSYS::strParse(svalRAW,1,string(1,0))).size()) {
 			toLang = tVl; tVl = svalRAW;
 			u_cfg.setS((svalRAW=TSYS::strParse(tVl,2,string(1,0)))); sval = getSQLVal(u_cfg);
@@ -1606,7 +1626,9 @@ void TTable::fieldSQLSet( TConfig &cfg )
 			u_cfg.setS(tVl);
 		    }
 		    isTransl = (isTransl && toLang != Mess->langCodeBase());
-		} else isTransl = (isTransl && trPresent && toLang != Mess->langCodeBase());
+		}
+		//  ... default
+		else isTransl = (isTransl && trPresent && toLang != Mess->langCodeBase());
 
 		if(isTransl && langLs.find(toLang+";") == string::npos) langLs += toLang+";";
 
@@ -1621,7 +1643,8 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		if(Mess->translDyn() && !u_cfg.isKey() && u_cfg.view() && u_cfg.fld().flg()&TFld::TransltText && !u_cfg.noTransl()) {
 		    trCacheUpd.push_back(u_cfg.name()+string(1,0)+svalBASE_RAW+string(1,0)+svalRAW+(isTransl?string(1,0)+toLang:""));
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++)
-			if(tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.compare(3,string::npos,cf_el[iEl]) == 0 && tblStrct[iFld].nm.find(toLang) != 0) {
+			if(tblStrct[iFld].nm.size() > 3 && tblStrct[iFld].nm.compare(3,string::npos,cf_el[iEl]) == 0 &&
+				tblStrct[iFld].nm.find(toLang) != 0 && trD_L(svalBASE_RAW,tblStrct[iFld].nm.substr(0,2)) != svalBASE_RAW) {
 			    ls += (ls.size()?", \"":"\"") + TSYS::strEncode(tblStrct[iFld].nm,TSYS::SQL,"\"") + "\"";
 			    ls2 += (ls2.size()?", '":"'") + TSYS::strEncode(trD_L(svalBASE_RAW,tblStrct[iFld].nm.substr(0,2)),TSYS::SQL,"'") + "'";
 			}
@@ -1649,13 +1672,24 @@ void TTable::fieldSQLSet( TConfig &cfg )
 
 		// Translation
 		bool isTransl = u_cfg.fld().flg()&TFld::TransltText, isDynSet = false;
-		if(Mess->translDyn() && (tVl=TSYS::strParse(svalRAW,1,string(1,0))).size()) {
+		//  ... system prestored
+		bool isSysPreStor = (isTransl && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
+		if(isSysPreStor) {
+		    tVl = svalRAW;
+		    u_cfg.setS((svalRAW=Mess->I18N(tVl))); sval = getSQLVal(u_cfg);
+		    //u_cfg.setS((svalBASE_RAW=TSYS::strParse(tVl,0,string(1,0)))); svalBASE = getSQLVal(u_cfg);
+		    u_cfg.setS(tVl);
+		}
+		//  ... dynamic data
+		if(!isSysPreStor && Mess->translDyn() && (tVl=TSYS::strParse(svalRAW,1,string(1,0))).size()) {
 		    isDynSet = true;
 		    toLang = tVl; tVl = svalRAW;
 		    u_cfg.setS((svalRAW=TSYS::strParse(svalRAW,2,string(1,0)))); sval = getSQLVal(u_cfg);
 		    u_cfg.setS(tVl);
 		    isTransl = (isTransl && toLang != Mess->langCodeBase());
-		} else isTransl = (isTransl && trPresent && toLang != Mess->langCodeBase());
+		}
+		//  ... default
+		else isTransl = (isTransl && trPresent && toLang != Mess->langCodeBase());
 
 		if(isTransl && langLs.find(toLang+";") == string::npos) langLs += toLang+";";
 

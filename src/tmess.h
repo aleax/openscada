@@ -185,6 +185,7 @@ class TMess
 
 	// Often used, generic text messages
 	static string labStor( bool nogen = false );
+	static string labStorRemGenStor( );
 	static string labSecCRON( );
 	static string labSecCRONsel( );
 	static string labTaskPrior( );

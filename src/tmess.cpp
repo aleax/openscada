@@ -267,8 +267,12 @@ void TMess::setTranslEnMan( bool vl, bool passive )
     SYS->modif();
 }
 
-string TMess::translGet( const string &base )
+string TMess::translGet( const string &ibase )
 {
+    string base = ibase;
+    //Getting the real base for the system prestored messages
+    if(TSYS::strParse(base,0,string(1,0)) != base && TSYS::strParse(base,2,string(1,0)).empty()) base = Mess->I18N(base);
+
     if(!translDyn()) return base;
 
     string ctx = trCtx();
@@ -391,8 +395,12 @@ string TMess::translGetLU( const string &base, const string &lang, const string 
     return translGetU(base, user, src);
 }
 
-string TMess::translSet( const string &base, const string &mess )
+string TMess::translSet( const string &ibase, const string &mess )
 {
+    //Getting the real base for the system prestored messages
+    string base = ibase;
+    if(TSYS::strParse(base,0,string(1,0)) != base && TSYS::strParse(base,2,string(1,0)).empty()) base = Mess->I18N(base);
+
     if(!translDyn()) return mess;
 
     string ctx = trCtx();
@@ -406,7 +414,7 @@ string TMess::translSet( const string &base, const string &lang, const string &m
     else if(trLang.empty())	trLang = langCode();
 
     if(!needReload) {
-	if(!translDyn() || lang == langCodeBase()) return mess;
+	if(!translDyn() || lang == langCodeBase() || base.empty()) return mess;
 
 	//Implementing the combained storing in "{base}\000{lang}\000{mess}"
 	return TSYS::strParse(base,0,string(1,0)) + string(1,0) + trLang + string(1,0) + mess;
@@ -753,6 +761,7 @@ string TMess::I18N( const string &imess, const char *mLang, const char *d_name )
 {
 #ifdef HAVE_LIBINTL_H
     if(imess.empty()) return "";
+    if(TSYS::strParse(imess,2,string(1,0)).size()) return imess;	//That is a dynamic data changing message - pass
 
     int doff = 0;
     string  ctx,
@@ -857,6 +866,12 @@ string TMess::labStor( bool nogen )
 {
     return string(_("Storage address in the format \"{DB module}.{DB name}\".")) +
 	(nogen?string(""):string("\n")+_("Set '*.*' to use the Generic Storage."));
+}
+
+string TMess::labStorRemGenStor( )
+{
+    return TSYS::strMess(_("Please note that removing from the Generic Storage (*.*) "
+	"will cause the data removing both from the Configuration File (<cfg>) and the Work DB (%s)!"),SYS->workDB().c_str());
 }
 
 string TMess::labSecCRON( )

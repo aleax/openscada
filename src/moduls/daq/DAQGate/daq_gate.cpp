@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.12"
+#define MOD_VER		"2.9.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -267,7 +267,7 @@ void TMdContr::sync( bool onlyPrmLs )
 
 			if(!curP.at().enableStat()) {
 			    curP.at().enable();
-			    if(enableStat()) curP.at().load();
+			    if(enableStat()) curP.at().sync();	//curP.at().load(); !!!!: Since there is no data for load but we need sync
 			}
 			else if(!onlyPrmLs) {
 			    if(startStat()) curP.at().sync();
@@ -304,7 +304,7 @@ void TMdContr::sync( bool onlyPrmLs )
 		    gPrmLs.push_back(curP.at().ownerPath(true));
 		    if(!curP.at().enableStat()) {
 			curP.at().enable();
-			if(enableStat()) curP.at().load();
+			if(enableStat()) curP.at().sync();	//curP.at().load(); !!!!: Since there is no data for load but we need sync
 		    }
 		    else if(!onlyPrmLs) {
 			if(startStat()) curP.at().sync();
@@ -346,7 +346,7 @@ void TMdContr::sync( bool onlyPrmLs )
 			gPrmLs.push_back(curW.at().ownerPath(true));
 			if(!curW.at().enableStat()) {
 			    curW.at().enable();
-			    if(enableStat()) curW.at().load();
+			    if(enableStat()) curW.at().sync();	//curW.at().load(); !!!!: Since there is no data for load but we need sync
 			}
 			else if(!onlyPrmLs) {
 			    if(startStat()) curW.at().sync();

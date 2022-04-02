@@ -120,7 +120,7 @@ AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const strin
 string WidgetLib::name( ) const
 {
     string tNm = cfg("NAME").getS();
-    return tNm.size() ? _(tNm) : mId.getS().c_str();
+    return tNm.size() ? tNm : mId.getS().c_str();
 }
 
 string WidgetLib::getStatus( )
@@ -193,12 +193,12 @@ void WidgetLib::save_( )
 	if(mDB_MimeSrc.empty()) mDB_MimeSrc = DB(true);
 	vector<string> pls;
 	resourceDataList(pls, mDB_MimeSrc);
-	string mimeType, mimeData;
+	string mimeType, mimeData, srcDB = mDB_MimeSrc;
+	mDB_MimeSrc = "";
 	for(unsigned iM = 0; iM < pls.size(); iM++) {
-	    resourceDataGet(pls[iM], mimeType, &mimeData, mDB_MimeSrc);
+	    resourceDataGet(pls[iM], mimeType, &mimeData, srcDB);
 	    resourceDataSet(pls[iM], mimeType, mimeData, DB());
 	}
-	mDB_MimeSrc = "";
     }
 
     setDB(DB(), true);
@@ -299,7 +299,7 @@ bool WidgetLib::resourceDataGet( const string &iid, string &mimeType, string *mi
 
 void WidgetLib::resourceDataSet( const string &iid, const string &mimeType, const string &mimeData, const string &idb )
 {
-    if(mDB_MimeSrc.size()) return;	//Do not set the resource for just copied and not saved still Library
+    if(mDB_MimeSrc.size()) return;	//!!!! Do not set the resource for just copied and not saved still Library
 
     string wdb = DB(), wtbl;
     if(idb.size()) wdb = TBDS::dbPart(idb), wtbl = TBDS::dbPart(idb, true);
@@ -362,7 +362,8 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 			"tp","str","dest","sel_ed","select",("/db/tblList:wlb_"+id()).c_str(),
 			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID);
+		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID,
+			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }

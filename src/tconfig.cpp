@@ -201,12 +201,12 @@ void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user,
     }
     TCfg &cel = cfg(elem);
     if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD)) {
-	if(Mess->translDyn() && cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
+	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
 	    opt->setText(trD(cel.getS()));
 	else opt->setText(cel.getS());
     }
     if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR)) {
-	if(Mess->translDyn() && cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
+	if(cel.fld().type() == TFld::String && (cel.fld().flg()&TFld::TransltText))
 	    cel.setS(trDSet(cel.getS(),opt->text()));
 	else cel.setS(opt->text());
     }

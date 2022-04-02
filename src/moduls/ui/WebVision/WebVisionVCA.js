@@ -1029,6 +1029,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		case 0:	//Line edit
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
+		    this.place.view = parseInt(this.attrs['view']);
 		    if(toInit || comElMdf || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
 			brdW = (bordStyle?parseInt(bordStyle):1) + 1;
 			var geomWint = geomW - 2*brdW;
@@ -1037,8 +1038,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 						'height: '+(fntSz-brdW)+'px; font: '+this.place.fontCfg+';';
 			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
 			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
+			switch(this.place.view) {
+			    case 7:	//Password
+				formObj.type = "password";
+				break;
+			}
 		    }
-		    this.place.view = parseInt(this.attrs['view']);
 		    this.place.cfg = this.attrs['cfg'];
 		    if(formObj.valSet && (this.attrsMdf['value'] || this.attrsMdf['cfg'])) formObj.valSet(this.attrs['value']);
 		    if(!toInit) break;
@@ -1230,9 +1235,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					'font: '+formObj.parentNode.fontCfg+'; ';
 				    return false;
 				}
-				break;
-			    case 7:	//Password
-				formObj.type = "password";
 				break;
 			}
 			formObj.onmousedown = function(e) { this.setModify(true); }
@@ -1723,7 +1725,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    formObj.appendChild(optEl);
 			}
 			for(i = 0; i < selVal.length /*&& elTp == 4*/; i++) {
-			    if(elLst.indexOf(selVal[1]) >= 0) continue;
+			    if(!selVal[i].length || elLst.indexOf(selVal[i]) >= 0) continue;
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.textContent = selVal[i];
 			    optEl.selected = optEl.defaultSelected = true;

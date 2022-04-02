@@ -1,3 +1,37 @@
+2022-04-02 Roman (stable)
+- FIX:LibsDB.vcaBase: wlb_Main.userManager: prevented in setting for edition the denied users at opening the page from that user.
+    The table "Trs" appended of the message "Norm" translation.
+- SYS,DB,UI.Vision: The double messages removing button appended of a help message in the label labStorRemGenStor()
+    with a warning of removing from the Generic Storage (*.*).
+- !!!:FIX:SYS,DB,Security: The messages translation appended-finished in synchronization the system prestored
+	and the dynamic-data setting messages.
+    !!:FIX:DB: The data setting function TBDS::dataSet() and TTable::fieldSQLSet() appended of treating the system prestored messages
+	in writing the translated value.
+    TMess::translGet() and TMess::translSet() appended of the system prestored messages detection and resolving.
+    TMess::translSet() appended of just return the message at the base empty.
+    TMess::I18N() appended of just return the message at the dynamic-data message setting.
+    Security,UI.VCAEngine: Finished in the description field sync translation of the TUser and TGroup
+	and the name field of the widget library for the system prestored and the dynamic-data.
+    The TConfig control commands "get" and "set" allowed in the dynamic translation also for the non dynamic mode.
+- SYS: The "Target node does not have the required branch." error appended of the target node value
+	and separated to the non writibility detection message.
+    The error message "There is no access to create a real-time task ..." set just as a debug one.
+- FIX:DB: The data setting function TBDS::dataSet() expanded in dividing the message to the BASE one for the Configuration File.
+    The data setting function TTable::fieldSQLSet() prevented in copy not translated messages in the INSERT part.
+- FIX:DAQ.DAQGate: Fixed in not sync the parameter content at the new ones, mostly at the sync period "-1".
+- FIX:Transport.SSL: Fixed in the message "The input transport closed by the error ..." correct generation to the transport status.
+    And the message "BIO_should_retry: ..." set just as a warning one for the client certificate checking errors.
+- !!:UI.QTStarter: The project list updation rewrote to use a separated QTimer
+    for implementing the updating delay at some activity in the list.
+- !:FIX:UI.VCAEngine: Fixed in all resources copy at the project or widget library copy.
+- !:UI.Vision: The widgets copy allowed in copy to the project and the project page,
+    with a separated option "As a page:" at copy to the page.
+- FIX:UI.WebVision: The Password view of the Line Edit type of the primitive FormEl fixed in setting the INPUT tag type
+	to "password" for the RO mode also.
+    FIX: The List and Combo type of the primitive FormEl prevented from appending empty rows from the empty selection value
+	and the value correct processing.
+
+
 2022-03-25 Roman (stable)
 - FIX:LibsDB.vcaBase: wlb_Main.RootPgSo: Some unified in the terminator panel open before any content page.
 - SYS: The column "Path" of the "Shared libraries(modules)" table of the subsystem "Modules scheduler" renamed to "Source".

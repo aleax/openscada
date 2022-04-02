@@ -2222,7 +2222,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM) {
-	    mess_sys(TMess::Warning, _("There is no access to create a real-time task for '%s'. An ordinal task is created!"), path.c_str());
+	    mess_sys(TMess::Debug, _("There is no access to create a real-time task for '%s'. An ordinal task is created!"), path.c_str());
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;

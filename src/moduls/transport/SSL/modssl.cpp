@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.5"
+#define MOD_VER		"3.4.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -295,7 +295,7 @@ void TSocketIn::start( )
     trIn = trOut = prcTm = prcTmMax = 0;
     connNumb = clsConnByLim = 0;
 
-    //Wait connection main task start
+    //Main task for processing or client task creating
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
 
     TTransportIn::start();
@@ -352,7 +352,7 @@ unsigned TSocketIn::forksPerHost( const string &sender )
 
 void *TSocketIn::Task( void *sock_in )
 {
-    SSL *ssl;
+    SSL	*ssl;
     BIO	*bio = NULL, *abio = NULL;
     char err[255];
     TSocketIn &s = *(TSocketIn*)sock_in;
@@ -486,10 +486,8 @@ void *TSocketIn::Task( void *sock_in )
 	    FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(abio,NULL), &rd_fd);
 
 	    int kz = select(BIO_get_fd(abio,NULL)+1,&rd_fd,NULL,NULL,&tv);
-	    if(kz < 0 && errno != EINTR) {
-		mess_err(s.nodePath().c_str(), _("The input transport closed by the error %s"), strerror(errno));
-		break;
-	    }
+	    if(kz < 0 && errno != EINTR)
+		throw TError(s.nodePath().c_str(), _("The input transport closed by the error: %s"), strerror(errno));
 	    if(kz <= 0 || !FD_ISSET(BIO_get_fd(abio,NULL),&rd_fd)) continue;
 
 	    if(BIO_do_accept(abio) <= 0) {
@@ -572,7 +570,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	else {
 	    if(ERR_peek_last_error()) {
 		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
-		mess_err(s.s->nodePath().c_str(), "BIO_should_retry: %s", err);
+		mess_warning(s.s->nodePath().c_str(), "BIO_should_retry: %s", err);
 	    }
 	    BIO_flush(s.bio);
 	    //BIO_reset(s.bio);
