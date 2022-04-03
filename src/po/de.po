@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-24 10:12+0200\n"
+"POT-Creation-Date: 2022-04-02 09:25+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -732,6 +732,14 @@ msgstr "Kopieren von '%s' nach '%s' ist nicht zulässig."
 msgid "Target node has no branches."
 msgstr "Der Zielknoten hat keine Verzweigung."
 
+#, c-format
+msgid "The target node '%s' does not have the required branch."
+msgstr "Der Zielknoten '%s' hat keine erforderliche Verzweigung."
+
+#, c-format
+msgid "End branch of the target node '%s' is not writeable."
+msgstr "Der Endzweig des Zielknotens '%s' ist nicht beschreibbar."
+
 msgid "Target node does not have the required branch."
 msgstr "Der Zielknoten hat keine erforderliche Verzweigung."
 
@@ -1150,6 +1158,14 @@ msgstr "Speicheradresse im Format \"{DB-Modul}.{DB-Name}\"."
 
 msgid "Set '*.*' to use the Generic Storage."
 msgstr "Setzen Sie '*.*', um den generischen Speicher zu verwenden."
+
+msgid ""
+"Please note that removing from the Generic Storage (*.*) will cause the data "
+"removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
+msgstr ""
+"Bitte beachten Sie, dass das Entfernen aus dem Generischen Speicher (*.*) "
+"dazu führt, dass die Daten sowohl aus der Konfigurationsdatei (<cfg>) als "
+"auch aus der Arbeitsdatenbank (%s) entfernt werden!"
 
 msgid ""
 "Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
@@ -2692,6 +2708,7 @@ msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
 msgid "Owner"
 msgstr "Eigentümer"
 
+#, c-format
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"

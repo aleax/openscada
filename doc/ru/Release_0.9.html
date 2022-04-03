@@ -322,7 +322,7 @@
 <li> Адаптацию к работе в окружении операционных систем QNX и MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">7</span> Обновления</span></h2>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_.D0.9F.D0.AF.D0.A2.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.1</span> [22.02.2022] ПЯТОЕ обновление</span></h3>
-<p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 50 ошибок и добавляет МНОЖЕСТВО улучшения с парой значительных-концептуальных, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2815" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
+<p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 50 ошибок и добавляет МНОЖЕСТВО улучшения с парой значительных-концептуальных, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2817" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> <b><u>Significant actions of the developer of the OpenSCADA modules on the update</u></b><br />
 </p>
 <ul><li> FIX:SYS.TMess: Type of labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() changed to "string".</li></ul>
@@ -452,6 +452,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> the cache limiting also appended by the time limit variable "limCacheIts_TM" for what it checked in the service task.</li></ul></li>
 <li> appended for the translation context at the new function TMess::trCtx() and the object TrCtxAlloc for handling the context registration as user and language bound to the call thread:
 <ul><li> TCntrNode::cntrCmd(), Protocol.HTTP, UI.{Vision,WebVision,WebUser,WebCfg,WebCfgD} attached to use the translation context.</li></ul></li>
+<li> synchronized in the system prestored and the dynamic-data setting messages;</li>
 <li> the DB type-module objects were appended by the specific information field "Features" of specifying the supported by DB features;</li>
 <li> UI.QTCfg: the tree update enabled for the root page updation through the reconnection and the tree update at the user change; enabled for using the system language in the SINGLETRANSLATION mode for remote connections;</li>
 <li> FIX:UI.VCAEngine: the project styles moved under a new storing table "{DB_TBL}_stls" and its structure with translation;</li>
@@ -520,8 +521,8 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> The function lang2Code() expanded by the arguments "user" and "onlyUser".</li>
 <li> I18N() changed in the arguments for "const string &amp;mess" the first and mLang moved to the second, it result changed to "string", also for TModule::I18N(), and updated all definitions _().</li>
 <li> The data translation functions (short definitions) renamed to trD_L(), trD_U(), trD_LU(), trDSet_L(), trDSet_U(), trDSet_LU().</li>
-<li> Removed for I18Ns();</li>
-<li> labStorGen() merged to labStor() and that labels labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() type changed to "string";</li>
+<li> Removed for I18Ns().</li>
+<li> labStorGen() merged to labStor() and that labels labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() type changed to "string"; appended of the label labStorGen().</li>
 <li> lang2Code() and lang2CodeBase() renamed to langCode() and langCodeBase() respectively for starting the adaption to the language code more than 2 symbols.</li></ul></li>
 <li> Security: The static method "pHashMagic" moved to the definition SEC_HASH_MAGIC.</li></ul></li>
 <li> DB: The functions TBDS::{open,close}() renamed to TBDS::{tblOpen,tblClose}() and set to static ones.
@@ -1406,5 +1407,5 @@ FIX: The "Translations" tab expansion and fixing for:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/ru">Documents/Release_0.9/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/ru">Documents/Release_0.9/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 0.9.5</td></tr></table></body>
 </html>

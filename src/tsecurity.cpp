@@ -494,7 +494,8 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User DB"),RWRWR_,"root",SSEC_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 	    if(DB(true).size())
-		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID);
+		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID,
+		    1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
 	}
 	return;
     }
@@ -513,8 +514,6 @@ void TUser::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SSEC_ID,SEC_WR))
 	postDisable(NodeRemoveOnlyStor);
     else if(a_path == "/ico" && ctrChkNode(opt)) opt->setText(picture());
-    else if(a_path == "/prm/DESCR" && ctrChkNode(opt,"get",RWRWR_,name().c_str(),SSEC_ID,SEC_RD))
-	opt->setText(descr());
     else if(a_path == "/prm/PASS") {
 	if(ctrChkNode(opt,"get",RWRW__,name().c_str(),SSEC_ID,SEC_RD))	opt->setText("**********");
 	if(ctrChkNode(opt,"set",RWRW__,name().c_str(),SSEC_ID,SEC_WR))	setPass(opt->text());
@@ -639,7 +638,8 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/db",_("User group DB"),RWRWR_,"root",SSEC_ID,4,
 		"tp","str","dest","select","select","/db/list","help",TMess::labStor().c_str());
 	    if(DB(true).size())
-		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID);
+		ctrMkNode("comm",opt,-1,"/prm/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SSEC_ID,
+		    1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
 	}
 	return;
     }
@@ -652,8 +652,6 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/removeFromDB" && ctrChkNode(opt,"set",RWRW__,"root",SSEC_ID,SEC_WR))
 	postDisable(NodeRemoveOnlyStor);
-    else if(a_path == "/prm/DESCR" && ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD))
-	opt->setText(descr());
     else if(a_path == "/prm/USERS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    string val;
@@ -663,6 +661,6 @@ void TGroup::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SSEC_ID,SEC_WR))	userAdd(opt->text());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SSEC_ID,SEC_WR))	userDel(opt->text());
     }
-    else if(a_path.compare(0,4,"/prm") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,1), "root", SSEC_ID, RWRWR_);
+    else if(a_path.find("/prm") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,1), "root", SSEC_ID, RWRWR_);
     else TCntrNode::cntrCmdProc(opt);
 }

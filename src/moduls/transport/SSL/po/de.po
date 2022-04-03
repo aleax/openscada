@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 16:55+0300\n"
+"POT-Creation-Date: 2022-03-31 16:53+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -102,7 +102,9 @@ msgstr "Getrennt"
 
 #, c-format
 msgid "The certificate file '%s' was updated, reconnecting the transport..."
-msgstr "Die Zertifikatsdatei '%s' wurde aktualisiert, die Verbindung zum Transport wird wiederhergestellt..."
+msgstr ""
+"Die Zertifikatsdatei '%s' wurde aktualisiert, die Verbindung zum Transport "
+"wird wiederhergestellt..."
 
 #, c-format
 msgid "Error opening the temporary file '%s': '%s'"
@@ -112,9 +114,8 @@ msgstr "Fehler beim Öffnen der temporären Datei '%s': '%s'"
 msgid "Error writing the file '%s'."
 msgstr "Fehler beim Schreiben der Datei '%s'."
 
-#, c-format
-msgid "The input transport closed by the error %s"
-msgstr "Der Eingabetransport wurde geschlossen durch den Fehler %s"
+msgid "The input transport closed by the error: %s"
+msgstr "Der Eingabetransport wurde geschlossen durch den Fehler: %s"
 
 msgid "Error creating the thread!"
 msgstr "Fehler beim Erstellen des Threads!"
@@ -358,4 +359,3 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
-

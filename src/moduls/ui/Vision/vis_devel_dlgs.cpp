@@ -391,7 +391,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 
     //Generic dialog's page
     gnd = TCntrNode::ctrId(root, "/obj", true);
-    wdg_tabs->setTabEnabled(0,gnd);
+    wdg_tabs->setTabEnabled(0, gnd);
     if(gnd) {
 	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
 	// Status
@@ -428,6 +428,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	// Remove from DB
 	gnd = TCntrNode::ctrId(root, obj_remFromDB->objectName().toStdString(), true);
 	obj_remFromDB->setVisible(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+	obj_remFromDB->setToolTip(gnd?gnd->attr("help").c_str():"");
 	if(gnd) obj_remFromDB->setText(gnd->attr("dscr").c_str());
 
 	// Used

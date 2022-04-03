@@ -4,13 +4,13 @@
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2010-2021.
+# Roman Savochenko <roman@oscada.org>, 2010-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-05 21:11+0200\n"
+"POT-Creation-Date: 2022-03-29 11:54+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1009,6 +1009,9 @@ msgstr "Kopieren des Widgets '%1' nach '%2'.\n"
 
 msgid "Enter the identifier and the name of the new widget."
 msgstr "Geben Sie die Kennung und den Namen des neuen Widget."
+
+msgid "As a page:"
+msgstr "Als Seite:"
 
 msgid "Copy/move scheme from '%1' to '%2' is not supported."
 msgstr "Kopieren/Verschieben von '%1' nach '%2' wird nicht unterstützt."

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 3.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 16:55+0300\n"
+"POT-Creation-Date: 2022-03-31 16:53+0300\n"
 "PO-Revision-Date: 2008-10-13 18:53+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -109,9 +109,8 @@ msgstr "Ошибка открытия временного файла '%s': '%s'
 msgid "Error writing the file '%s'."
 msgstr "Ошибка записи файла '%s'."
 
-#, c-format
-msgid "The input transport closed by the error %s"
-msgstr "Закрытие входного транспорта по ошибке: %s"
+msgid "The input transport closed by the error: %s"
+msgstr "Входной транспорт закрыт по ошибке: %s"
 
 msgid "Error creating the thread!"
 msgstr "Ошибка создания потока!"
@@ -355,4 +354,3 @@ msgstr "Временные интервалы"
 
 msgid "Attempts"
 msgstr "Попыток"
-

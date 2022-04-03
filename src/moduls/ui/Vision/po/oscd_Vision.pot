@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-05 21:11+0200\n"
+"POT-Creation-Date: 2022-03-29 11:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -888,6 +888,9 @@ msgid "Copying the widget '%1' to '%2'.\n"
 msgstr ""
 
 msgid "Enter the identifier and the name of the new widget."
+msgstr ""
+
+msgid "As a page:"
 msgstr ""
 
 msgid "Copy/move scheme from '%1' to '%2' is not supported."

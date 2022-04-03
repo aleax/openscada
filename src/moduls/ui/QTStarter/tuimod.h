@@ -88,19 +88,17 @@ protected:
     void showEvent( QShowEvent* );
     void closeEvent( QCloseEvent* );
 
-    void updatePrjList( const string &stage = "" );
-
 private:
     //Attributes
     QListWidget	*prjsLs;
     QPushButton	*prjsBt;
 
-    int		updTmrId;
+    QTimer	*updTmr;
+
+    //Methods
+    bool eventFilter( QObject *object, QEvent *event );
 
 private slots:
-    //Methods
-    void timerEvent( QTimerEvent *event );
-
     void about( );
     void aboutQt( );
     void enterWhatsThis( );
@@ -111,6 +109,8 @@ private slots:
     void projSwitch( const QString &prj = "" );
 
     void prjsLsCtxMenuRequested( const QPoint &pos );
+
+    void updatePrjList( bool force = false, const string &stage = "" );
 };
 
 //*************************************************

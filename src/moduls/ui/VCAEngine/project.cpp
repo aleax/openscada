@@ -243,12 +243,12 @@ void Project::save_( )
 
 	vector<string> pls;
 	resourceDataList(pls, mDB_MimeSrc);
-	string mimeType, mimeData;
+	string mimeType, mimeData, srcDB = mDB_MimeSrc;
+	mDB_MimeSrc = "";
 	for(unsigned iM = 0; iM < pls.size(); iM++) {
-	    resourceDataGet(pls[iM], mimeType, &mimeData, mDB_MimeSrc);
+	    resourceDataGet(pls[iM], mimeType, &mimeData, srcDB);
 	    resourceDataSet(pls[iM], mimeType, mimeData, DB());
 	}
-	mDB_MimeSrc = "";
     }
 
     //Session's data copy
@@ -600,7 +600,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 			"tp","str","dest","sel_ed","select",("/db/tblList:prj_"+id()).c_str(),
 			"help",_("Storage address in the format \"{DB module}.{DB name}.{Table name}\".\nTo use the Generic Storage, set '*.*.{Table name}'."));
 		if(DB(true).size())
-		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID);
+		    ctrMkNode("comm",opt,-1,"/obj/st/removeFromDB",TSYS::strMess(_("Remove from '%s'"),DB(true).c_str()).c_str(),RWRW__,"root",SUI_ID,
+			1,"help",(DB(true)=="*.*")?TMess::labStorRemGenStor().c_str():"");
 		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 		ctrMkNode("fld",opt,-1,"/obj/st/use",_("Used"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	    }
@@ -1681,7 +1682,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt)) {
+    if((a_path.find("/links/lnk/pl_") == 0 || a_path.find("/links/lnk/ls_") == 0) && ctrChkNode(opt)) {
 	AutoHD<Widget> srcwdg(this);
 	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
 	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');

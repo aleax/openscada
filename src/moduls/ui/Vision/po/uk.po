@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2021.
+# Roman Savochenko <roman@oscada.org>, 2005-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-05 21:11+0200\n"
+"POT-Creation-Date: 2022-03-29 11:54+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -992,6 +992,9 @@ msgstr "Копіювання віджету '%1' до '%2'.\n"
 
 msgid "Enter the identifier and the name of the new widget."
 msgstr "Введіть ідентифікатор та ім'я нового віджета."
+
+msgid "As a page:"
+msgstr "Як сторінка: "
 
 msgid "Copy/move scheme from '%1' to '%2' is not supported."
 msgstr "Схема копіювання/переміщення з '%1' до '%2' не підтримується."

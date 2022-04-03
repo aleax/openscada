@@ -57,7 +57,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.12.2"
+#define MOD_VER		"5.12.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -971,7 +971,7 @@ void StApp::startDialog( )
 //*************************************************
 //* StartDialog                                   *
 //*************************************************
-StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
+StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmr(NULL)
 {
     if(SYS->prjCustMode()) setWindowTitle(_("Qt-starter of OpenSCADA"));
     else if(SYS->prjNm().size()) setWindowTitle(QString(_("Project: %1")).arg(SYS->prjNm().c_str()));
@@ -1121,7 +1121,7 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
 	connect(prjsLs, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(projSwitch()));
 	connect(prjsLs, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(prjsLsCtxMenuRequested(const QPoint&)));
 	wnd_lay->addWidget(prjsLs);
-	updatePrjList();
+	updatePrjList(true);
 
 	prjsBt = new QPushButton(QIcon(":/images/ok.png"), SYS->prjNm().size()?_("Switch to the selected project"):_("Call the selected project"), this);
 	prjsBt->setEnabled(false);
@@ -1140,6 +1140,8 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmrId(-1)
 	prjAddUpdt->setWhatsThis(_("The button for new projects creating or updating of presented ones, like to desktop links."));
 	QObject::connect(prjAddUpdt, SIGNAL(clicked(bool)), this, SLOT(projCreateUpdt()));
 	wnd_lay->addWidget(prjAddUpdt);
+
+	prjsLs->installEventFilter(this);
     }
 
     wnd_lay->addItem(new QSpacerItem(20,20,QSizePolicy::Minimum,QSizePolicy::Expanding));
@@ -1164,26 +1166,37 @@ void StartDialog::showEvent( QShowEvent* )
     if(prjsLs && prjsBt)
 	prjsBt->setVisible(!prjsLs->verticalScrollBar() || !prjsLs->verticalScrollBar()->isVisible() || prjsLs->height() > 3*QFontMetrics(prjsLs->font()).height());
 
-    updTmrId = startTimer(1e3*prmWait_TM);
+    updTmr = new QTimer(this);
+    connect(updTmr, SIGNAL(timeout()), this, SLOT(updatePrjList()));
+    updTmr->start(1e3*prmWait_TM);
 }
 
 void StartDialog::closeEvent( QCloseEvent *ce )
 {
-    if(updTmrId >= 0)	{ killTimer(updTmrId); updTmrId = -1; }
+    if(updTmr)	{ delete updTmr; updTmr = NULL; }
 
     if(!mod->QtApp->trayPresent() && mod->QtApp->topLevelWindows() <= 1) SYS->stop();
     ce->accept();
 }
 
-void StartDialog::updatePrjList( const string &stage )
+bool StartDialog::eventFilter( QObject *object, QEvent *event )
 {
+    if(object == prjsLs && updTmr) updTmr->start(1e3*prmWait_TM);	//Delay the updating at some activity in the project list
+
+    return false;
+}
+
+void StartDialog::updatePrjList( bool force, const string &stage )
+{
+    if(!force && (!isVisible() || !isActiveWindow())) return;
+
     if(stage.empty()) {
 	prjsLs->blockSignals(true);
 	for(int iIt = 0; iIt < prjsLs->count(); iIt++)
 	    prjsLs->item(iIt)->setData(Qt::UserRole+3, 0);
 
-	updatePrjList("user");
-	updatePrjList("sys");
+	updatePrjList(force, "user");
+	updatePrjList(force, "sys");
 
 	for(int iIt = 0; iIt < prjsLs->count(); iIt++)
 	    if(!prjsLs->item(iIt)->data(Qt::UserRole+3).toInt())
@@ -1272,11 +1285,6 @@ void StartDialog::updatePrjList( const string &stage )
 	free(scan_dirent);
 	closedir(IdDir);
     }
-}
-
-void StartDialog::timerEvent( QTimerEvent *event )
-{
-    if(isVisible() && isActiveWindow()) updatePrjList();
 }
 
 void StartDialog::about( )
@@ -1396,7 +1404,7 @@ void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
 	prms.push_back(string(bindir_full "/openscada-proj remove ") +
 	    prjsLs->currentItem()->data(Qt::UserRole).toString().toStdString());
 	SYS->objFuncCall("system", prms, "root").getS();
-	updatePrjList();
+	updatePrjList(true);
     }
     else if(rez == actBackUp && prjsLs->currentItem()) {
 	vector<TVariant> prms;
@@ -1406,7 +1414,7 @@ void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	SYS->objFuncCall("system", prms, "root").getS();
 	QApplication::restoreOverrideCursor();
-	updatePrjList();
+	updatePrjList(true);
     }
     else if(rez && rez->objectName().size()) {
 	vector<TVariant> prms;

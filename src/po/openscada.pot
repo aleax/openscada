@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-24 10:12+0200\n"
+"POT-Creation-Date: 2022-04-02 09:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -634,6 +634,14 @@ msgstr ""
 msgid "Target node has no branches."
 msgstr ""
 
+#, c-format
+msgid "The target node '%s' does not have the required branch."
+msgstr ""
+
+#, c-format
+msgid "End branch of the target node '%s' is not writeable."
+msgstr ""
+
 msgid "Target node does not have the required branch."
 msgstr ""
 
@@ -1028,6 +1036,10 @@ msgid "Storage address in the format \"{DB module}.{DB name}\"."
 msgstr ""
 
 msgid "Set '*.*' to use the Generic Storage."
+msgstr ""
+
+#, c-format
+msgid "Please note that removing from the Generic Storage (*.*) will cause the data removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
 msgstr ""
 
 msgid ""
