@@ -2173,7 +2173,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="storeHouse" title="#storeHouse"><h3><span class="mw-headline" id=".D0.A1.D0.BA.D0.BB.D0.B0.D0.B4_.28storeHouse.29"><span class="mw-headline-number">3.8</span> Склад (<a href="Libs_Main_graphical_elements.html#storeHouse" title="Special:MyLanguage/Libs/Main graphical elements">storeHouse</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk
@@ -2226,9 +2226,10 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li> <i>ID</i> [varchar(20)] — ІД специфічного поля класу;</li>
 <li> <i>NAME</i> [text] — локалізована назва специфічного поля класу, де перший рядок для типового значення та наступні рядки формуються у вигляді <b>{2СимвольнаМова}:{ЛокалізованийТекст}</b>;</li>
 <li> <i>TP</i> [varchar(100)] — тип специфічного поля класу, який наразі прямо відповідає типам БД MySQL;</li>
-<li> <i>TBL</i> [varchar(100)] — властивості представлення даних специфічного поля у таблиці, має формат <b>{вирівнювання}:{ширина}</b>, де:
+<li> <i>TBL</i> [varchar(100)] — властивості представлення даних специфічного поля у таблиці, має формат <b>{вирівнювання}:{ширина}:{позиція}</b>, де:
 <ul><li> <i>вирівнювання</i> — вирівнювання стовпчика, підтримуються значення: "left", "center", "right"; де значення "left" по замовченню для рядків та "center" для інших;</li>
-<li> <i>width</i> — примусова ширина стовпчика, у відсотках за символу "%" у кінці або у пікселях.</li></ul></li>
+<li> <i>ширина</i> — примусова ширина стовпчика, у відсотках за символу "%" у кінці або у пікселях;</li>
+<li> <i>позиція</i> — позиція стовпчика у вигляді рядка, тож ви можете записати це на кшталт "005" для правильного сортування.</li></ul></li>
 <li> <i>FILTER</i> [text] — властивості специфічного поля щодо приготування фільтрації та індексування списків для обрання у фільтрі, щодо варіантів: <b>index</b> and <b>list{СимволПоділювача}</b>, де:
 <ul><li> <i>index</i> — значення стовпчика враховується цілком при індексуванні;</li>
 <li> <i>list{СимволПоділювача}</i> — значення стовпчика вважається переліком елементів для індексування, поділено символом <i>СимволПоділювача</i>.</li></ul></li></ul>
@@ -2238,7 +2239,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li> <i>NAME</i> [varchar(200)] — назва елементу;</li>
 <li> <i>DSCR</i> [text] — опис елементу;</li>
 <li> <i>SP_{ID}X</i> — специфічне поле класу відповідно до <i>ID</i> класу таблиці.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Поле класу таблиці із <i>ID</i>="NAME" передбачає загальну локалізовану назву складу.
+<p>Зі спеціальним сенсом у таблиці "classes" зарезервовано та примусово створювано поля "*TITLE" для загальної локалізованої назви складу та "*NAME", "*DSCR" із контролем відповідних фіксованих плей.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseD_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseD_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8a. Кадр "Склад" у режимі розробки.</div></div></div></div>
 <p><b><u>Використання — розробка</u></b><br />
@@ -3091,5 +3092,5 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2807</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
 </html>

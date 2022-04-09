@@ -68,7 +68,7 @@ class TTypeDAQ : public TModule, public TElem
 
 	// Compile functions support API
 	virtual bool compileFuncLangs( vector<string> *ls = NULL )	{ return false; }
-	virtual void compileFuncSynthHighl( const string &lang, XMLNode &shgl )	{ }
+	virtual void compileFuncSnthHgl( const string &lang, XMLNode &shgl )	{ }
 	virtual string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "", int maxCalcTm = 0 );
 
 	// Redundancy

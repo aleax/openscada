@@ -34,7 +34,7 @@
 #define MOD_NAME	trS("DB MySQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.5"
+#define MOD_VER		"4.0.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS MySQL.")
 #define MOD_LICENSE	"GPL2"
@@ -441,8 +441,9 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    string pr_keys, ls, langLs = ilangLs;
+    string pr_keys, ls, langLs;
     for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
+	langLs = ilangLs;
 	TCfg &u_cfg = cfg.cfg(cf_el[iCf]);
 
 	// Check primary key

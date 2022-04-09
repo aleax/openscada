@@ -3077,7 +3077,7 @@ void Func::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/io/prog") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	{ setProg(opt->text()); progCompile(); }
-	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD)) mod->compileFuncSynthHighl("JavaScript",*opt);
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD)) mod->compileFuncSnthHgl("JavaScript",*opt);
     }
     else TFunction::cntrCmdProc(opt);
 }

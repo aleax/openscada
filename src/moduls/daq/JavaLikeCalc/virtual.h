@@ -206,7 +206,7 @@ class TpContr : public TTypeDAQ
 	BFunc *bFuncGet( const char *nm );
 
 	bool compileFuncLangs( vector<string> *ls = NULL );
-	void compileFuncSynthHighl( const string &lang, XMLNode &shgl );
+	void compileFuncSnthHgl( const string &lang, XMLNode &shgl );
 	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "", int maxCalcTm = 0 );
 
     protected:

@@ -2172,7 +2172,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="storeHouse" title="#storeHouse"><h3><span class="mw-headline" id="Storehouse_.28storeHouse.29"><span class="mw-headline-number">3.8</span> Storehouse (<a href="Libs_Main_graphical_elements.html#storeHouse" title="Special:MyLanguage/Libs/Main graphical elements">storeHouse</a>)</span></h3></span>
 </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk
@@ -2225,9 +2225,10 @@ The frame provides currently and in future for next features:
 <li> <i>ID</i> [varchar(20)] — specific field ID of the class;</li>
 <li> <i>NAME</i> [text] — specific field localised name of the class, where the first line for the default value and the next lines form in the view <b>{2SymbolLang}:{LocalizedText}</b>;</li>
 <li> <i>TP</i> [varchar(100)] — specific field type of the class, which correspond now directly to the MySQL DB types;</li>
-<li> <i>TBL</i> [varchar(100)] — specific field properties of representing data in the table, has the format <b>{align}:{width}</b>, where:
+<li> <i>TBL</i> [varchar(100)] — specific field properties of representing data in the table, has the format <b>{align}:{width}:{pos}</b>, where:
 <ul><li> <i>align</i> — column alignment, supports the values: "left", "center", "right"; where the "left" value is default one for strings and "center" for other;</li>
-<li> <i>width</i> — forced width for the column, in percents at symbol "%" in the end or in pixels.</li></ul></li>
+<li> <i>width</i> — forced width for the column, in percents at symbol "%" in the end or in pixels;</li>
+<li> <i>pos</i> — the column position in the string view, so you can write that like to "005" for true sort.</li></ul></li>
 <li> <i>FILTER</i> [text] — specific field properties of filtering and indexing lists preparing for the filter selection, for the variants: <b>index</b> and <b>list{SepSymb}</b>, where:
 <ul><li> <i>index</i> — the column value means as whole one for indexing;</li>
 <li> <i>list{SepSymb}</i> — the column value means as a list of items for indexing, separated by symbol <i>SepSymb</i>.</li></ul></li></ul>
@@ -2237,11 +2238,11 @@ The frame provides currently and in future for next features:
 <li> <i>NAME</i> [varchar(200)] — name of the item;</li>
 <li> <i>DSCR</i> [text] — description of the item;</li>
 <li> <i>SP_{ID}X</i> — specific field of the class corresponding to <i>ID</i> in the class table.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The class table field with <i>ID</i>="NAME" means the whole storehouse localised name.
+<p>For the special means there in the table "classes" reserved and forcibly created fields "*TITLE" for the whole storehouse localised name and "*NAME", "*DSCR" which control the corresponded fixed fields.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseD.png"><img class="thumbimage" height="580" src="../en/files/LibMainEls_storeHouseD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8a. The "Storehouse" frame in the development mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
-The widget is designed to perform the role of a page, and should therefore be placed directly in the project's tree. Additionally, into the panels folder of the project, you need to place <a href="#accept">the acception dialog frame</a> and some attribute configuration is required, below, where no links are provided.
+The widget is designed to perform the role of a page, and should therefore be placed directly in the project's tree. Additionally, into the panels folder of the project, you need to place <a href="#accept">the accepting dialog frame</a> and some attribute configuration is required, below, where no links are provided.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode you will see single big table for class (Fig.3.8b) and data (Fig.3.8c) edition and representing.
 </p><p>In the main class data representing mode the users can observe the table, filter and sort the representing data at the specified fields.
@@ -3090,5 +3091,5 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2807</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
 </html>

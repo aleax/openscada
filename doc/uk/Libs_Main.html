@@ -88,7 +88,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> <span id="anUnif" title="#anUnif"><h3><span class="mw-headline" id=".D0.90.D0.BD.D0.B0.D0.BB.D0.BE.D0.B3.D0.BE.D0.B2.D0.B8.D0.B9_.D1.81.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.2C_.D1.83.D0.BD.D1.96.D1.84.D1.96.D0.BA.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D0.B9_.28anUnif.29"><span class="mw-headline-number">1.1</span> Аналоговий сигнал, уніфікований (<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">anUnif</a>)</span></h3></span>
 </td>
-<td> 2.3 </td>
+<td> 2.4 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -139,7 +139,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li> фільтрування зміни вхідного значення на час <b>Tf</b>.</li></ul></dd></dl>
 <ul><li> Проста імітація аналогового входу, встановленням <b>plcImit</b> та підключенням джерела імітації-симуляції до <b>plcImitIn</b>.</li></ul>
 <dl><dd><dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Відсутність зв'язка <b>plcImitIn</b> (EVAL) призводить до генерації випадкового аналогового входу</dd></dl></dd></dl>
-<ul><li> Складна передобробка та повна генерація-імітація аналогового входу на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b>, де Ви можете оперувати наступними сервісними параметрами:</li></ul>
+<ul><li> Складна передобробка та повна генерація-імітація аналогового входу на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b> (із доповненням вбудованими правилами підсвітлення синтаксису), де ви можете оперувати наступними сервісними параметрами:</li></ul>
 <dl><dd><ul><li> <i>in</i> [IN|OUT] — той самий сирий аналоговий ВВ;</li>
 <li> <i>var</i> [IN] — ВВ кінцевої змінної;</li>
 <li> <i>min</i>, <i>max</i> [IN] — ВВ головної шкали;</li>
@@ -1177,7 +1177,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <tr>
 <td> <span id="digAlarm" title="#digAlarm"><h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F_.D0.B4.D0.B8.D1.81.D0.BA.D1.80.D0.B5.D1.82.D0.BD.D0.B0_.28digAlarm.29"><span class="mw-headline-number">1.5</span> Сигналізація дискретна (<a href="Libs_Main.html#digAlarm" title="Special:MyLanguage/Libs/Main">digAlarm</a>)</span></h3></span>
 </td>
-<td> 1.2 </td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -1197,7 +1197,7 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <p><b><u>Функції</u></b><br />
 </p>
 <ul><li> Пряме отримання, за посиланням, первинного стану та формування двох репрезентативних станів з можливістю їх інверсії <b>stInv</b>.</li>
-<li> Складна передобробка та повна генерація-імітація дискретного входу на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b>, де Ви можете оперувати наступними сервісними параметрами:</li></ul>
+<li> Складна передобробка та повна генерація-імітація дискретного входу на внутрішній мові програмування OpenSCADA у конфігураційному ВВ <b>inProc</b> (із доповненням вбудованими правилами підсвітлення синтаксису), де ви можете оперувати наступними сервісними параметрами:</li></ul>
 <dl><dd><ul><li> <i>in</i> [IN|OUT] — той самий сирий дискретний ВВ;</li>
 <li> <i>levErr</i>, <i>tErr</i> [IN|OUT] — рівень аварії [-79...0] та текст помилки (формат атрибуту "err");</li>
 <li> <i>f_frq</i> [IN] — частота обчислення, шаблонний ВВ;</li>
@@ -3189,5 +3189,5 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2807</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
 </html>

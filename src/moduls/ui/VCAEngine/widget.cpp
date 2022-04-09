@@ -1677,7 +1677,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
 	    try {
 		SYS->daq().at().at(TSYS::strParse(calcLang(),0,".")).at().
-				compileFuncSynthHighl(TSYS::strParse(calcLang(),1,"."),*opt);
+				compileFuncSnthHgl(TSYS::strParse(calcLang(),1,"."),*opt);
 	    } catch(...) { }
     }
     else if(a_path == "/proc/tp_ls" && ctrChkNode(opt)) {

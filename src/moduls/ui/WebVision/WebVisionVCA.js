@@ -1095,14 +1095,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    }
 
 				    if(combList.childNodes[0].childNodes.length) {
-					var combHeight = Math.min(elLst.length,10)*parseInt(this.style.height);
+					var combHeight = Math.min(combList.childNodes[0].length,10)*parseInt(this.style.height)+2;
 					var combTop = posGetY(formObj,true) + formObj.offsetHeight;
 					if((combTop+combHeight) > this.ownerDocument.body.scrollHeight)
 					    combTop = posGetY(formObj,true) - combHeight;
 					combList.style.cssText = 'left: '+posGetX(formObj,true)+'px; top: '+combTop+'px; '+
 								 'width: '+formObj.offsetWidth+'px; height: '+combHeight+'px; ';
-					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+(Math.min(elLst.length,10)*parseInt(this.style.height))+'px; '+
-									       'font: '+formObj.parentNode.fontCfg+'; ';
+					combList.childNodes[0].style.cssText = 'width: 100%; height: 100%; font: '+formObj.parentNode.fontCfg+'; ';
 					combList.childNodes[0].formObj = formObj;
 					combList.childNodes[0].focus();
 				    }
@@ -1900,7 +1899,23 @@ function makeEl( pgBr, inclPg, full, FullTree )
 						this.blur(); this.focus();
 						return true;
 					    }
+					    var cellObj = this.parentNode;
 					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
+					    //  Order the refitting at not fixed columns
+					    if(cellObj.innerHTML.length < 50 && cellObj.innerHTML.length != cellObj.svInnerHTML.length &&
+						    !cellObj.offsetParent.tHead.rows[0].cells[cellObj.cellIndex].widthSrc.length) {
+						var isGrow = (cellObj.innerHTML.length > cellObj.svInnerHTML.length);
+						var tRows = cellObj.offsetParent.tBodies[0].rows;
+						for(var iR = 0; iR < tRows.length; iR++)
+						    if(iR != (cellObj.parentNode.rowIndex-1) &&
+							    ((isGrow && tRows[iR].cells[cellObj.cellIndex].innerHTML.length >= cellObj.innerHTML.length) ||
+							     (!isGrow && tRows[iR].cells[cellObj.cellIndex].innerHTML.length >= cellObj.svInnerHTML.length)) )
+							break;
+						if(iR >= tRows.length) {
+						    cellObj.offsetParent.wdgLnk.toReFit = cellObj.offsetParent.wdgLnk.toReFitForce = true;
+						    cellObj.offsetParent.wdgLnk.perUpdtEn(true);
+						}
+					    }
 					}
 					if(e.keyCode == 27) {
 					    this.parentNode.isEnter = false; this.parentNode.offsetParent.edIt = null;
@@ -1975,11 +1990,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 		    if(toInit || this.attrsMdf['font'])  formObj.style.cssText = 'font: '+this.place.fontCfg+'; ';
 		    // Processing for fill and changes
-		    if(this.attrs['items'] && (toInit || ((this.attrsMdf['items'] /*|| this.attrsMdf['value']*/ || this.attrsMdf['font']) && !formObj.edIt))) {
+		    if(this.attrs['items'] && (toInit || this.attrsMdf['items'] /*|| this.attrsMdf['value']*/ || this.attrsMdf['font'])) {
 			hdrPresent = false, maxCols = 0, maxRows = 0;
 			toReFit = this.attrsMdf['font'];
 			var itemsO = (new DOMParser()).parseFromString(this.attrs['items'], "text/xml");
+			//  No table data
 			if(!itemsO.children.length || (tX=itemsO.children[0]).nodeName != "tbl")	formObj.innerHTML = "";
+			//  Detection the table complete change in the edition mode
+			else if(!(toInit || !formObj.edIt || !formObj.tBodies.length || !formObj.tBodies[0].rows.length ||
+				!itemsO.children[0].children.length || !itemsO.children[0].children[0].children.length ||
+				(itemsO.children[0].children.length-formObj.tBodies[0].rows.length) != 1 ||	//Rows in the date + header
+				(tVl=formObj.tBodies[0].rows[0].cells.length-itemsO.children[0].children[0].children.length) < 0 || tVl > 1)) ;	//Columns not equal or more than 1
+			//  Processing the table data
 			else {
 			    if(toInit || !formObj.children.length) formObj.innerHTML = "<THEAD><TR/></THEAD><TBODY/>";
 			    else if(!((wVl=tX.getAttribute("sortEn")) && parseInt(wVl))) formObj.sortCol = null;
@@ -2668,6 +2690,16 @@ function perUpdt( )
 	    var tblWdthSum = 0;
 	    hdrRow = this.place.childNodes[0].tHead.rows[0];
 	    if(hdrRow.style.display == "none") hdrRow = this.place.childNodes[0].tBodies[0].rows[0];
+
+	    //Clearing the fitting
+	    if(this.toReFitForce) {
+		this.place.childNodes[0].style.tableLayout = "auto";
+		this.place.childNodes[0].style.width = "";
+		for(iC = 0; iC < hdrRow.cells.length; iC++)
+		    hdrRow.cells[iC].style.width = hdrRow.cells[iC].widthSrc ? hdrRow.cells[iC].widthSrc : null;
+	    }
+
+	    //The same fitting
 	    for(iC = 0; iC < hdrRow.cells.length; iC++) {
 		if(hdrRow.cells[iC].style.display == "none")	continue;
 		if(!hdrRow.cells[iC].style.width.length) {
@@ -2682,7 +2714,7 @@ function perUpdt( )
 	    }
 	    this.place.childNodes[0].style.width = tblWdthSum+"px";
 	    this.place.childNodes[0].style.tableLayout = "fixed";
-	    this.toReFit = false;
+	    this.toReFit = this.toReFitForce = false;
 	    this.perUpdtEn(false);
 	}
 	else if(this.place.childNodes.length && this.place.childNodes[0].tmClearEdit && (this.place.childNodes[0].tmClearEdit-=prcTm) <= 0)

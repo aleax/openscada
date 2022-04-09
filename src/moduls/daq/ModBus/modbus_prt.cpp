@@ -1552,7 +1552,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
 		try {
 		    SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
-				    compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
+				    compileFuncSnthHgl(TSYS::strParse(progLang(),1,"."),*opt);
 		} catch(...) { }
 	}
 	else if(data && data->func() && data->TPrmTempl::Impl::cntrCmdProc(opt,"/cfg"))	;

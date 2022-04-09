@@ -69,8 +69,8 @@ class TUIS : public TSubSYS
 
 	AutoHD<TUI> at( const string &name ) const	{ return modAt(name); }
 
-	string fontSyntHighlCode( )			{ return mFontSyntHighlCode; }
-	void setFontSyntHighlCode( const string &val )	{ mFontSyntHighlCode = val; modif(); }
+	string fontSnthHglCode( )			{ return mFontSnthHglCode; }
+	void setFontSnthHglCode( const string &val )	{ mFontSnthHglCode = val; modif(); }
 
 	// All system UI functions
 	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
@@ -90,7 +90,7 @@ class TUIS : public TSubSYS
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Private attributes
-	MtxString	mFontSyntHighlCode;
+	MtxString	mFontSnthHglCode;
 };
 
 }

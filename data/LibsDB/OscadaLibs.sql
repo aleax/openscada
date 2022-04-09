@@ -15,7 +15,7 @@ The library was created to provide main templates of the DAQ-sources processing 
 Author: Roman Savochenko <roman@oscada.org>
 Used by: Most projects on OpenSCADA
 Founded: January 2006
-Version: 2.0.0
+Version: 2.0.1
 License: GPLv2
 DOC: Libs_Main|Libs/Main','Бібліотека основних шаблонів опрацювання DAQ-джерел та похідних сервісів.
 
@@ -24,7 +24,7 @@ DOC: Libs_Main|Libs/Main','Бібліотека основних шаблоні�
 Автор: Роман Савоченко <roman@oscada.org>
 Використано: Більшість проектів OpenSCADA
 Засновано: Січень 2006
-Версія: 2.0.0
+Версія: 2.0.1
 Ліцензія: GPLv2
 DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека','Библиотека основных шаблонов обработки DAQ-источников и производных сервисов.
 
@@ -33,7 +33,7 @@ DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека',
 Автор: Роман Савоченко <roman@oscada.org>
 Использовано: Большинство проектов OpenSCADA
 Основано: Январь 2006
-Версия: 2.0.0
+Версия: 2.0.1
 Лицензия: GPLv2
 DOC: Libs_Main|Libs/Main');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промислові пристрої','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
@@ -5517,6 +5517,7 @@ if(f_start) {
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
+	inPrcLn = 0;
 	inPrcArgs = new Object();
 	inPrcArgs.this = this;
 	inPrcArgs.ctx = new Object();
@@ -5528,6 +5529,14 @@ tErr = "0", levErr = 0;
 
 //Call a specific preprocessing procedure
 if(inProc.length)	{
+	// Checking the builtin syntax highlight
+	if(inProc.length != inPrcLn) {
+		inPrcLn = inProc.length;
+		if(!inProc.match("<SnthHgl\\b.*>.*<\\/ *SnthHgl>","gm").length)
+			inProc = SYS.DAQ.funcSnthHgl(inPrcLng).replace(new RegExp("^","gm"),"//") + "\n\n" + inProc;
+	}
+
+	// Same calculation
 	inPrcArgs.f_frq = f_frq;
 	inPrcArgs.in = in;
 	inPrcArgs.levErr = levErr; inPrcArgs.tErr = tErr;
@@ -5563,7 +5572,7 @@ else {
 	else	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1634539389);
+}','','',1649438488);
 INSERT INTO tmplib_base VALUES('simleBoard','Analog alarm by borders (obsolete)','Сигнал аналоговий за границями (застаріле)','Сигнал аналоговый по границам (устаревшее)','The template of simple parameter included borders and dimension variable.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -5799,7 +5808,7 @@ Functions:
   - the field "CustomAlarms" — redefinition of the standard alarm levels of the alarm messages in the form "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.3.0
+Version: 2.4.0
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів. Шаблон формує структуру складного аналогового параметру (тегу) який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Функції:
@@ -5839,7 +5848,7 @@ levErr, tErr [IN|OUT] — рівень аварії [-7...0] та текст п�
   - поле "CustomAlarms" — перевизначення стандартних рівнів порушень для повідомлень порушень у формі "CustomAlarms: {ConErr};{BrdAlarm};{BrdWarn}".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.3.0
+Версія: 2.4.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 function custAlarm(lev) {
 	rez = 0;
@@ -5854,11 +5863,13 @@ function custAlarm(lev) {
 }
 
 if(f_start) {
+	f_err = "0";
 	prevVar = EVAL_REAL;
 	alDelay_ = 0; firstNorm = alNormForceStart;
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
+	inPrcLn = 0;
 	inPrcArgs = new Object();
 	inPrcArgs.this = this;
 	inPrcArgs.ctx = new Object();
@@ -5888,7 +5899,15 @@ levErr = 0;
 tErr = "0";
 
 //Call specific preprocessing procedure
-if(inProc.length)	{
+if(inProc.length) {
+	// Checking the builtin syntax highlight
+	if(inProc.length != inPrcLn) {
+		inPrcLn = inProc.length;
+		if(!inProc.match("<SnthHgl\\b.*>.*<\\/ *SnthHgl>","gm").length)
+			inProc = SYS.DAQ.funcSnthHgl(inPrcLng).replace(new RegExp("^","gm"),"//") + "\n\n" + inProc;
+	}
+
+	// Same calculation
 	inPrcArgs.f_frq = f_frq;
 	inPrcArgs.in = in; inPrcArgs.var = var; inPrcArgs.min = min; inPrcArgs.max = max;
 	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
@@ -5959,7 +5978,7 @@ else {
 	else	this.alarmSet(DESCR.parseLine(0)+((tVl=DESCR.match("^CustomFlds: *(.+?) *$","m")).length?" [["+tVl[1]+"]]":"")+": "+tr("NORM"), 1, firstNorm);
 	f_err = tErr;
 	alDelay_ = 0; firstNorm = false;
-}','','',1636274565);
+}','','',1649438544);
 INSERT INTO tmplib_base VALUES('digitBlockUnif','Discrete block, unified','Блок дискретних, уніфікований','Блок дискретных, унифицированный','Common, representative and unified template of the block for union of Discrete parameters for the common control device. The template forms a structure of discrete parameter-block (complex tag) which can be easily connected to most widgets and cadres of the main elements library of the user interface just pointing the parameter object.
 
 The representative structure of discrete parameters (complex tags) is a latch object with two characteristic states and three commands, which in the final representation may have a different meaning and name:
@@ -6108,6 +6127,7 @@ License: GPLv2','Загальний, представницький та уні�
 Версія: 1.2.1
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
+	f_err = "0";
 	prevVar = EVAL_REAL;
 	alDelay_ = 0;
 	//Prepare data for preprocessing
@@ -6472,7 +6492,7 @@ Functions:
 - Formation of the violation and the corresponding setting of the attribute err, provided at setting in the processing procedure or lack of the communication (in = EVAL). What can be delayed on the time alDelay and can be suppressed setting alSup.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2','Варіант загального, представницького та уніфікованого шаблону блоку поєднання дискретних параметрів, розширений більш ніж двома станами та трьома командами які можна закодувати цілим значенням. Шаблон формує структуру параметру (складного тегу) стану за кодом який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Представницькою структурою параметру (складного тегу) стану за кодом є:
@@ -6499,7 +6519,7 @@ License: GPLv2','Варіант загального, представницьк
 - Формування порушення та відповідне встановлення атрибуту err, за умови встановлення у процедурі обробки або відсутності зв''язку (in = EVAL). Що може бути затримано на час alDelay та придушено встановленням alSup.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.3.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6573,7 +6593,7 @@ else {
 	else	this.alarmSet(DESCR+": "+tr("NORM"), 1);
 	f_err = tErr;
 	alDelay_ = 0;
-}','','',1572284562);
+}','','',1649438553);
 INSERT INTO tmplib_base VALUES('ntf','Notificator by SMS, EMail-SMTP','Повідомлювач за SMS, EMail-SMTP','Уведомитель посредством SMS, EMail-SMTP','The complex template of the notification contains of parts of the dispatcher and the output user protocol of notification by EMail(SMTP) and SMS.
 
 THE DISPATCHER can be performed for pointed messages of the message buffer of OpenSCADA and applied on the Logical level or the controller object of the module JavaLikeCalc.

@@ -57,7 +57,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.12.5"
+#define MOD_VER		"5.12.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -568,7 +568,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(palette());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPalette(opt->text());
 	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    opt->setAttr("font", SYS->ui().at().fontSyntHighlCode());
+	    opt->setAttr("font", SYS->ui().at().fontSnthHglCode());
 	    opt->childAdd("rule")->setAttr("expr", "#[0-9a-fA-F]{6}")->setAttr("color", "blue");
 	}
     }
@@ -576,7 +576,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(styleSheets());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStyleSheets(opt->text());
 	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD)) {
-	    opt->setAttr("font", SYS->ui().at().fontSyntHighlCode());
+	    opt->setAttr("font", SYS->ui().at().fontSnthHglCode());
 	    opt->childAdd("blk")->setAttr("beg", "/\\*")->setAttr("end", "\\*/")->setAttr("color", "gray")->setAttr("font_italic", "1");
 	    opt->childAdd("blk")->setAttr("beg", "\\{")->setAttr("end", "\\}")->setAttr("color", "#666666")->
 		childAdd("rule")->setAttr("expr", ":[^;]+")->setAttr("color", "blue");

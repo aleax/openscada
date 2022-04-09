@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: selfwidg.h
 /***************************************************************************
- *   Copyright (C) 2004-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -102,21 +102,27 @@ class LineEdit : public QWidget
 };
 
 //*************************************************
-//* SyntxHighl: Syntax highlighter                *
+//* SnthHgl: Syntax highlighter                   *
 //*************************************************
-class SyntxHighl : public QSyntaxHighlighter
+class SnthHgl : public QSyntaxHighlighter
 {
     Q_OBJECT
 
     public:
-	SyntxHighl( QTextDocument *parent = 0 );
+	//Methods
+	SnthHgl( QTextDocument *parent = 0 );
 
 	void setSnthHgl( XMLNode nd );
 
+	//Attributes
+	bool isBuiltInSH;
+
     protected:
+	//Methods
 	void highlightBlock( const QString &text );
 	void rule( XMLNode *irl, const QString &text, int off = 0, char lev = 0 );
 
+	//Attributes
 	XMLNode rules;
 };
 
@@ -159,6 +165,8 @@ class TextEdit : public QWidget
 	void resizeEvent( QResizeEvent *e );
 	bool event( QEvent *e );
 
+	bool checkInSnthHgl( const QString &text );
+
     private slots:
 	//Private slots
 	void changed( );
@@ -171,7 +179,7 @@ class TextEdit : public QWidget
 	bool		isInit, isCh;
 	QAction		*actFind, *actFindNext;
 	QTextEdit	*edFld;
-	SyntxHighl	*sntHgl;
+	SnthHgl		*sntHgl;
 	QDialogButtonBox *butBox;
 	QPoint		holdPnt;
 	QSize		mRowCol;

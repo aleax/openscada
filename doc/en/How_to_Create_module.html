@@ -288,7 +288,7 @@ SYS-&gt;db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);</pre>
 </p>
 <ul><li> <i>TTypeDAQ-&gt;TModule</i> —  The root module's object of the "Data acquisition" subsystem:
 <ul><li> <i>void compileFuncLangs( vector&lt;string&gt; &amp;ls );</i> — Request in the <i>ls</i> the list of user programming languages supported by the module.</li>
-<li> <i>void compileFuncSynthHighl( const string &amp;lang, XMLNode &amp;shgl );</i> — Request the syntax rules <i>shgl</i> of the specified user programming language <i>lang</i>.</li>
+<li> <i>void compileFuncSyntxHighl( const string &amp;lang, XMLNode &amp;shgl );</i> — Request the syntax rules <i>shgl</i> of the specified user programming language <i>lang</i>.</li>
 <li> <i>string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text );</i> — Calling the compilation of user's procedure <i>prog_text</i> and creation an object of the function's execution based on the <i>fnc_cfg</i> for the specified user programming language <i>lang</i> of this module. Returns address of the compiled function's object, ready for execution.</li>
 <li> <i>bool redntAllow( );</i> — A flag of support the redundancy mechanisms by module. Should be overridden and return "true" if supported, otherwise "false".</li>
 <li> <i>TController *ContrAttach( const string &amp;name, const string &amp;daq_db );</i> — It is called when you open or create a new controller's object <i>name</i> by this module in the <i>db</i> storage.</li></ul></li>
@@ -348,5 +348,5 @@ SYS-&gt;db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_module/en">Documents/How_to/Create_module/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2807</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_module/en">Documents/How_to/Create_module/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
 </html>

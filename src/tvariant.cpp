@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -864,7 +864,7 @@ string TRegExp::replace( const string &vl, const string &str )
 {
     string rez = vl, repl;
     if(!regex) return rez;
-    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0 && capv[1] > capv[0];
+    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0 && capv[1] >= capv[0];
 	curPos = capv[0]+repl.size())
     {
 	repl = substExprRepl(str, rez, capv, n);

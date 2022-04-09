@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB PostgreSQL")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.5"
+#define MOD_VER		"3.0.6"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2010-2011)")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS PostgreSQL.")
 #define MOD_LICENSE	"GPL2"
@@ -545,7 +545,7 @@ void MTable::fieldFix_( TConfig &cfg, const string &ilangLs, bool recurse )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    string pr_keys, ls, langLs = ilangLs;
+    string pr_keys, ls, langLs;
 
     //DROP fields
     for(unsigned iFld = 0, iCf; iFld < tblStrct.size() && !appMode; iFld++) {
@@ -587,6 +587,7 @@ void MTable::fieldFix_( TConfig &cfg, const string &ilangLs, bool recurse )
 
     //Add fields
     for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
+	langLs = ilangLs;
 	TCfg &cf = cfg.cfg(cf_el[iCf]);
 	// Check primary key
 	if(cf.fld().flg()&TCfg::Key && !appMode)

@@ -1,3 +1,32 @@
+2022-04-09 Roman (stable)
+- !!:LibsDB.OscadaLibs: tmplib_base.{digAlarm,anUnif}: Adapted to the syntax highlight builtin of the input preprocessing procedure.
+- !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Significantly expanded and fixed for:
+    - the class field NAME unbinded from the class common title specifying, for what there used the specific mark "*TITLE";
+    - the special class fields NAME and DESCR moved separately from the specific fields, marked as "*NAME" and "*DESCR"
+	and adapted for redefinition they name and table properties;
+    - the special fields "*{ID}" set to the forcibly creation together the class table and prevented from they removing;
+    - prevented of removing the specific fields for all classes of the table "classes";
+    - the class fields appended of the possibility to specify they order in the third argument of the table properties as a position;
+    - the class selection field fixed in listing more than one item;
+    - enabling the class edition and selection fields moved in the constant execution for correct processing at the user change;
+    - the class edition field allowed for the complete name.
+- FIX:SYS: The TRegExp::replace() function fixed in processing zero length replacing symbols, like to the line begin "^".
+- !:FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Fixed in the function fieldFix() for correct processing of the multiple languages.
+- !!:DAQ: The User API functions appended of the function funcSnthHgl() in the DAQ module object
+	and for obtaining the syntax highlight rules of the module and language.
+    !!: TTypeDAQ::compileFuncSynthHighl() renamed to TTypeDAQ::compileFuncSnthHgl() in a way of the name unification.
+    The text configuration field of the Logical Level parameters was cleaned for the columns limit.
+- !:DAQ.{ModBus,Siemens}: The attributes list field disabled for the translation.
+- !!:UI: TUIS::fontSyntHighlCode() and TUIS::setFontSyntHighlCode() renamed to
+	TUIS::fontSnthHglCode() and TUIS::setFontSnthHglCode() respectively in a way of the name unification.
+    !!: The Configuration File field "FontSyntHighlCode" renamed to "FontSnthHglCode" in a way of the name unification.
+- !!:UI.QTCfg: The text fields appended of checking and activation the builtin syntax highlight rules from the XML-tag "SnthHgl".
+- !:FIX:UI.WebVision: The type Table of the primitive FormEl expanded
+	of detection the table refitting need at length change of the not fixed fields and
+	of detection the table complete change in the edition mode.
+    FIX: The combobox field fixed in calculating the vertical size from real row count.
+
+
 2022-04-02 Roman (stable)
 - FIX:LibsDB.vcaBase: wlb_Main.userManager: prevented in setting for edition the denied users at opening the page from that user.
     The table "Trs" appended of the message "Norm" translation.

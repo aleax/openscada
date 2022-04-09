@@ -322,7 +322,7 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_The_FIFTH_update"><span class="mw-headline-number">7.1</span> [22.02.2022] The FIFTH update</span></h3>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 50 bugs and appends MANY improvements with a pair of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2812" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 50 bugs and appends MANY improvements with a pair of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2817" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>Significant actions of the developer of the OpenSCADA modules on the update</u></b><br />
 </p>
 <ul><li> FIX:SYS.TMess: Type of labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() changed to "string".</li></ul>
@@ -430,7 +430,7 @@ TFunction::IO object appended the flag IO::TransltText of marking the translate 
 <li> set to the type "String (translate)" for: the field "colDscrCustNames" of wlb_Main.{alarmsAct,alarmsSt}.</li></ul>
 <p>Expanding by the language for the execution environment of the user functions of the OpenSCADA object, for functions like to strftime():
 </p>
-<ul><li> the object TCntrNodeObj and the function TCntrNode::objFuncCall() expanded in the argument "user" renaming to "user_lang" with pointing language in the second line;</li>
+<ul><li> the object TCntrNodeObj, the function TCntrNode::objFuncCall() and TConfig::objFunc() expanded in the argument "user" renaming to "user_lang" with pointing language in the second line;</li>
 <li> DAQ.JavaLikeCalc: the TCntrNodeObj execution appended of the language;</li>
 <li> SYS.strftime() appended of execution from the pointed language-locale.</li></ul>
 <p>TUIS,UI.{QTCfg,Vision}: docGet() expanded by the language in the second line.<br />
@@ -452,6 +452,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> the cache limiting also appended by the time limit variable "limCacheIts_TM" for what it checked in the service task.</li></ul></li>
 <li> appended for the translation context at the new function TMess::trCtx() and the object TrCtxAlloc for handling the context registration as user and language bound to the call thread:
 <ul><li> TCntrNode::cntrCmd(), Protocol.HTTP, UI.{Vision,WebVision,WebUser,WebCfg,WebCfgD} attached to use the translation context.</li></ul></li>
+<li> synchronized in the system prestored and the dynamic-data setting messages;</li>
 <li> the DB type-module objects were appended by the specific information field "Features" of specifying the supported by DB features;</li>
 <li> UI.QTCfg: the tree update enabled for the root page updation through the reconnection and the tree update at the user change; enabled for using the system language in the SINGLETRANSLATION mode for remote connections;</li>
 <li> FIX:UI.VCAEngine: the project styles moved under a new storing table "{DB_TBL}_stls" and its structure with translation;</li>
@@ -481,6 +482,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> the system translation function TMess::I18N() was attached to the messages cache;</li>
 <li> the TFld and IO objects expanded in work with the prestoring system messages;</li>
 <li> module info fields adapted to the MULTILANGUAGE-DYNAMIC mode;</li>
+<li> adaption to the postranslation for the User API function TConfig::cfg() in the translatable strings;</li>
 <li> UI.{QTCfg,Vision}: adapted to the control items obtain in language of the user and update the main window interface language at it change;
 <ul><li> UI.Vision: appended in updation the toolbars at the user change, what also adapted for the dynamic translation; all development dialogs adapted for the dynamic translation.</li></ul></li>
 <li> UI.{QTStarter,QTCfg,Vision}: appended for the system Qt-messages translation relating to the selected user language, through the common application property "lang" for the Qt-translation reimplemented function QTranslator::translate(), and then the language commonly switched by the last interface and for all opened; the Starter Menu set for dynamic translation and updating.</li></ul>
@@ -519,8 +521,9 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> The function lang2Code() expanded by the arguments "user" and "onlyUser".</li>
 <li> I18N() changed in the arguments for "const string &amp;mess" the first and mLang moved to the second, it result changed to "string", also for TModule::I18N(), and updated all definitions _().</li>
 <li> The data translation functions (short definitions) renamed to trD_L(), trD_U(), trD_LU(), trDSet_L(), trDSet_U(), trDSet_LU().</li>
-<li> Removed for I18Ns();</li>
-<li> labStorGen() merged to labStor() and that labels labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() type changed to "string".</li></ul></li>
+<li> Removed for I18Ns().</li>
+<li> labStorGen() merged to labStor() and that labels labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() type changed to "string"; appended of the label labStorGen().</li>
+<li> lang2Code() and lang2CodeBase() renamed to langCode() and langCodeBase() respectively for starting the adaption to the language code more than 2 symbols.</li></ul></li>
 <li> Security: The static method "pHashMagic" moved to the definition SEC_HASH_MAGIC.</li></ul></li>
 <li> DB: The functions TBDS::{open,close}() renamed to TBDS::{tblOpen,tblClose}() and set to static ones.
 <ul><li> TBDS::{dataSeek,dataGet,dataSet,dataDel,genDBGet,genDBSet}() moved to the bit flags TBDS::ReqGenFlg (renamed from TBDS::ReqGen): NoFlg, NoException, OnlyCfg, UseTranslation (renamed from ReqGen::UseTranslation), UseCache, UseAllKeys.</li>
@@ -546,7 +549,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> The TMess definitions appended of mess_PreSave="&lt;PSV&gt;" and mess_TrModifMark="&lt;!&gt;".</li></ul></li>
 <li> XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li>
 <li> TConfig,TCfg: Expanded for new parameters TConfig::{trcSet,setTrcSet}(), TCfg::{isSet,setIsSet}() of detection the configuration field changing and using in the partial DB-loading instead toDefault(); and TConfig::{noTransl,setNoTransl}() for global setting the structure default translation.</li>
-<li> TError: codes appended of: DB_TrRemoved (22) for mark the translation removing in DB, DB_ReadOnly (23) introduced by SQLite at the unification process, Core_NoNode (5) of the TCntrNode missing, Tr_ErrTransport (12) for the transport errors mark.</li></ul></li>
+<li> TError: codes appended of: DB_TrRemoved (22) for mark the translation removing in DB, DB_ReadOnly (23) introduced by SQLite at the unification process, Core_NoNode (5) of the TCntrNode missing, Tr_ErrTransport (12) for the transport errors mark, Tr_ErrResponse (13) and Tr_ErrDevice (14) for more specific transport errors.</li></ul></li>
 <li> DB: The TBDS::realDBName() appended of the back conversion argument.
 <ul><li> The static methods of TBDS appended of the new function dbPart() of getting the storage address parts and appended of a new function dataDelTbl() of the common tables removing, also in the Configuration File.</li>
 <li> Appended for the structure item object TTable::TStrIt.</li>
@@ -565,7 +568,8 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> FIX:Building: configure.ac: Core library version rose to 3:12:0 and the program version rose to 0.9.5.
 <ul><li> The module version of the subsystem "BD" rose to 15, the subsystem "DAQ" rose to 14.</li>
 <li> The Debian 11 root file systems (chroots) are appended for build OpenSCADA; and Nokia N900 removed since the compiler crashes now constantly in several places.</li>
-<li> data/*.xml: The TBDS Generic parameter "SYSStPref" removed.</li></ul></li>
+<li> data/*.xml: The TBDS Generic parameter "SYSStPref" removed.</li>
+<li> SYS,data/ModelsDB/{AGLKS/oscada_AGLKS.xml,Boiler/oscada_Boiler.xml}: The configuration parameter "Lang2CodeBase" renamed to "LangBase" with support "Lang2CodeBase" up to the 1.0 release.</li></ul></li>
 <li> The source code messages and program documentation:
 <ul><li> The "<a href="Program_manual.html" title="Special:MyLanguage/Documents/Program manual">Program Manual</a>" document appended of the new section "<a href="Program_manual.html#Service" title="Special:MyLanguage/Documents/Program manual">Execution the ready OpenSCADA project in the service-background space</a>" and revised in the section "<a href="Program_manual.html#Startup" title="Special:MyLanguage/Documents/Program manual">Startup and execution</a>".</li>
 <li> The "<a href="Quick_start.html" title="Special:MyLanguage/Documents/Quick start">Quick start</a>" manual included the new section "Execution the ready OpenSCADA project in the service-background space" into own section "<a href="Quick_start.html#Demon" title="Special:MyLanguage/Documents/Quick start">Background and remote execution — server, PLC execution environment and remote development</a>".</li>
@@ -582,7 +586,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> FIX:WebVision: The previous user is used now for detection of the user change between the ordinal users and for single session, than prevent to create new sessions.</li></ul></li>
 <li> Expanding the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F] shielding:
 <ul><li> XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F], what is significant for the WebBrowsers.</li>
-<li> UI.WebCfgD: Appended of encoding the XML traffic for the binary symbols shielding using the new option "BinShield".</li></ul></li>
+<li> UI.{WebCfgD,WebVision}: Appended of encoding the XML traffic for the binary symbols shielding using the new option "BinShield".</li></ul></li>
 <li> FIX: strParse() rewrote and tested in processing the group symbols merging at the scan; and strParse(), strLine(), pathLev() in position the offset to the next token begin and limiting in the down for 0; and pathLevEnd() in positioning the offset to the next token end and limited in the up for the size. TModSchedul::chkAllowMod(),UI.QTCfg,Protocol.HTTP: switched in use TSYS::pathLevEnd() and  TSYS::pathLev() in the new behaviour.</li>
 <li> Force loading appended of the errors suppression for not modified nodes before that operation.</li>
 <li> .,DB,DAQ: The global configuration context copying mechanism (interstation) appended for the marking link to the last setting operation object, to easy postmarks setting.
@@ -1398,5 +1402,5 @@ FIX: The "Translations" tab expansion and fixing for:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2807</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
 </html>

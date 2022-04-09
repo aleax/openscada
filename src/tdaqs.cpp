@@ -323,6 +323,17 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 
 	return false;
     }
+    // string funcSnthHgl(string progLang) - Requesting the program language <progLang> syntax highlight rules.
+    //  progLang - program procedure language;
+    if(iid == "funcSnthHgl" && prms.size() >= 1) {
+	string langMod = TSYS::strParse(prms[0].getS(), 0, ".");
+	if(!modPresent(langMod)) return "";
+
+	XMLNode hgl_req("SnthHgl");
+	at(langMod).at().compileFuncSnthHgl(TSYS::strParse(prms[0].getS(),1,"."), hgl_req);
+
+	return hgl_req.childSize() ? hgl_req.save() : string("");
+    }
 
     return TCntrNode::objFuncCall(iid, prms, user_lang);
 }

@@ -1475,7 +1475,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    if(reRez->propGet("length").getI() >= 2) dcLng = reRez->arGet(1).getS();
 	    delete reRez;
 	    if(dcLng.size())
-		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().compileFuncSynthHighl(TSYS::strParse(dcLng,1,"."),*tag);
+		SYS->daq().at().at(TSYS::strParse(dcLng,0,".")).at().compileFuncSnthHgl(TSYS::strParse(dcLng,1,"."),*tag);
 	} catch(...) { }
 	tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
 	    tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");

@@ -551,13 +551,14 @@ SYS.messDebug("TEST DB","Value: "+req.childGet(2).text());</pre></li>
 </p>
 <ul>
 <li><i>TCntrNodeObj daqAt(string path, string sep = "", waitForAttr = true)</i> — attaches to a DAQ node (controller object, parameter, attribute) in the <i>path</i> or the separated string by the separator <i>sep</i>, from the DAQ-subsystem. Check for an attribute in the path last element, at <i>waitForAttr</i>.</li>
-<li><i>bool funcCall( string progLang, TVarObj args, string prog, string fixId = "", string err = "" );</i> — executes the function text <i>prog</i> with the arguments <i>args</i> on the program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Returns "true" when it is executed correctly or "false" and set <i>err</i>. The fixed function differ from the automatic one by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. To recreate the function, you must change the program or clear the <i>fixId</i> in its original id.
+<li><i>bool funcCall(string progLang, TVarObj args, string prog, string fixId = "", string err = "");</i> — executes the function text <i>prog</i> with the arguments <i>args</i> on the program language <i>progLang</i> and with the function fixing identifier <i>fixId</i> (automatic if it is empty). Returns "true" when it is executed correctly or "false" and set <i>err</i>. The fixed function differ from the automatic one by it does not remove after execution and uses repeatedly by an address into <i>fixId</i>, which replaces that original identifier in first call. To recreate the function, you must change the program or clear the <i>fixId</i> in its original id.
 <pre style="white-space: pre-wrap;">
 var args = new Object();
 args.y = 0;
 args.x = 123;
 SYS.DAQ.funcCall("JavaLikeCalc.JavaScript",args,"y=2*x;");
 SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y); </pre></li>
+<li><i>string funcSnthHgl(string progLang);</i> — requesting the program language <i>progLang</i> syntax highlight rules in <a href="API.html#SnthHgl" title="Special:MyLanguage/Documents/API">the XML-tag <i>SnthHgl</i></a>.</li>
 </ul>
 <p>Functions of the controller object (SYS.DAQ["Modul"]["Controller"]):
 </p>
@@ -974,5 +975,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">March 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2807</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/en">Documents/User_API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
 </html>
