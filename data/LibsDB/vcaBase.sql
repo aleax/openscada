@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.5
+Version: 2.1.6
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -66,7 +66,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.5
+Версія: 2.1.6
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +74,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.5
+Версия: 2.1.6
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -13685,29 +13685,22 @@ if(wUser != this.ownerSess().reqUser()) {
 }
 
 //Common events process
-for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-	//this.messInfo("TEST 01: Event="+sval);
-	if(sval == "ws_BtToggleChange:/btClassEdit") {
-		classEd_en = !classFix.length && btClassEdit_value;
-		classSel_en = !classFix.length && !btClassEdit_value;
-		toUpdate = true;
-		itDel_active = itCopy_active = false;
-	}
+for(off = 0; (sval=event.parse(0,"\n",off)).length; )
+	if(sval == "ws_BtToggleChange:/btClassEdit")	{ toUpdate = true; itDel_active = itCopy_active = false; }
 	else if(sval == "ws_BtToggleChange:/btEdit")	toUpdate = true;
 	else if(sval == "ws_CombChange:/classSel")	{ class = ((tVl=classSel_value.match("\\((.+)\\)$")).length) ? tVl[1] : classSel_value; toUpdate = true; colVars = new Object(); }
-	else if(sval == "ws_LnAccept:/classEd")		{ class = classEd_value; toUpdate = true; colVars = new Object(); }
-}
+	else if(sval == "ws_LnAccept:/classEd")		{ class = ((tVl=classEd_value.match("\\((.+)\\)$")).length) ? tVl[1] : classEd_value; toUpdate = true; colVars = new Object(); }
 
 if((f_start || toUpdate) /*&& !classFix.length*/) {
 	clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT DISTINCT CLASS FROM `classes`;");
 	classSel_items = "";
 	for(iR = 1; iR < clsLs.length; iR++) {
-		clsNm = SYS.BD.nodeAt(db,".").SQLReq("SELECT `NAME` FROM `classes` WHERE `CLASS`=''"+clsLs[iR][0]+"'' AND `ID`=''NAME'';");
-		classSel_items = (classSel_items.length?"\n":"") + ((clsNm.length==2)?messByLang(clsNm[1][0]) + " ("+clsLs[iR][0]+")":clsLs[iR][0]);
+		clsNm = SYS.BD.nodeAt(db,".").SQLReq("SELECT `NAME` FROM `classes` WHERE `CLASS`=''"+clsLs[iR][0]+"'' AND `ID`=''*TITLE'';");
+		classSel_items += (classSel_items.length?"\n":"") + ((clsNm.length==2)?messByLang(clsNm[1][0]) + " ("+clsLs[iR][0]+")":clsLs[iR][0]);
 	}
 	classEd_cfg = classSel_items;
 
-	clsNm = SYS.BD.nodeAt(db,".").SQLReq("SELECT `NAME` FROM `classes` WHERE `CLASS`=''"+class+"'' AND `ID`=''NAME'';");
+	clsNm = SYS.BD.nodeAt(db,".").SQLReq("SELECT `NAME` FROM `classes` WHERE `CLASS`=''"+class+"'' AND `ID`=''*TITLE'';");
 	classNm_text = classSel_value = classEd_value = class;
 	if(clsNm.length == 2)	classNm_text = classSel_value = messByLang(clsNm[1][0]) + " ("+class+")";
 
@@ -13723,6 +13716,8 @@ if((f_start || toUpdate) /*&& !classFix.length*/) {
 
 	btClassEdit_active = class.length;
 	itCopy_en = !btClassEdit_value;
+	classEd_en = !classFix.length && btClassEdit_value;
+	classSel_en = !classFix.length && !btClassEdit_value;
 }
 
 //The class edition mode
@@ -13762,27 +13757,30 @@ if(btClassEdit_value) {
 
 	//Class edition events process
 	for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-		//this.messInfo("TEST 01: Event="+sval);
 		itDel_active = itCopy_active = dataTbl_value.length;
 		if(sval == "ws_BtRelease:/itAdd") {
 			// Creation the empty data table with the default structure
-			if(dataTbl.length == 1)
+			if(dataTbl.length == 1) {
 				SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `sh_"+class+"` (`ID` INT AUTO_INCREMENT, `NAME` varchar(200) DEFAULT '''', `DSCR` text, PRIMARY KEY (`ID`));");
+				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*TITLE'','''');");
+				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*NAME'','''');");
+				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*DSCR'','''');");
+			}
 			SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`,`TP`) VALUES (''"+class+"'',''NewItem'',''"+tr("New item")+"'',''varchar(100)'');");
 			SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` ADD `SP_NewItem` varchar(100) DEFAULT '''';");
 			toUpdate = true;
 		}
-		else if(sval == "dlg_Apply:/itDel") {
+		else if(sval == "dlg_Apply:/itDel" && dataTbl_value[0] != "*") {
 		//else if(sval == "ws_BtRelease:/itDel") {
-			SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `classes` WHERE `ID`=''"+dataTbl_value+"'';");
+			SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `classes` WHERE `ID`=''"+dataTbl_value+"'' AND `CLASS`=''"+class+"'';");
 			if(dataTbl.length > 2)	SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` DROP `SP_"+dataTbl_value+"`;");
 			else SYS.BD.nodeAt(db,".").SQLReq("DROP TABLE `sh_"+class+"`;");
 			toUpdate = true;
 		}
-		else if(sval.slice(0,12) == "ws_TableEdit") {
+		else if(sval.indexOf("ws_TableEdit") == 0) {
 			col = sval.parse(0,"_",13).toInt(); row = sval.parse(1,"_",13).toInt();
 			colID = dataTbl[0][col];
-			if(!SYS.BD.nodeAt(db,".").SQLReq("UPDATE `classes` SET `"+colID+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `CLASS`=''"+class+"'' AND `ID`=''"+dataTbl[row+1][0]+"'';").err.length) {
+			if(!SYS.BD.nodeAt(db,".").SQLReq("UPDATE `classes` SET `"+colID+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `CLASS`=''"+class+"'' AND `ID`=''"+dataTbl[row+1][0]+"'';").err.length && dataTbl[row+1][0][0] != "*") {
 				if(colID == "ID") SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` CHANGE `SP_"+dataTbl[row+1][0]+"` `SP_"+dataTbl_set+"` "+dataTbl[row+1][2].parse(0,":")+";");	
 				else if(colID == "TP") SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `SP_"+dataTbl[row+1][0]+"` "+dataTbl_set.parse(0,":")+";");	
 			}
@@ -13801,17 +13799,33 @@ if(f_start || toUpdate) {
 
 	// Requesting the table structure
 	clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER` FROM `classes` WHERE `CLASS`=''"+class+"'';");
-	clsLsO = new Object();	
+	clsLsO = new Object();	 clsLsSort = new Array();
 	for(iR = 1; iR < clsLs.length; iR++) {
 		clsLsO[clsLs[iR][0]] = tO = new Object();
 		tO.name = ((tO.name=clsLs[iR][1]) == "<NULL>" || !tO.name.length) ? clsLs[iR][0] : messByLang(tO.name);
 		tO.tp = clsLs[iR][2];
 		tO.tbl = clsLs[iR][3];
 		if((tO.fltr=clsLs[iR][4]) == "<NULL>")	tO.fltr = "";
+		if(clsLs[iR][0] == "*NAME") {
+			tO.name = (tO.name==clsLs[iR][0]) ? tr("Name") : tO.name;
+			tO.tp = tO.tp.length ? tO.tp : "varchar(200)";
+			tO.tbl = tO.tbl.length ? tO.tbl : "center:170px";
+		}
+		else if(clsLs[iR][0] == "*DSCR") {
+			tO.name = (tO.name==clsLs[iR][0]) ? tr("Description") : tO.name;
+			tO.tp = tO.tp.length ? tO.tp : "text";
+			tO.tbl = tO.tbl.length ? tO.tbl : ":350px";
+		}
 
 		for(iF = 0; iF < fMax; iF++)
 			this["fltrCol"+iF].attrSet("items", this["fltrCol"+iF].attr("items")+"\n"+tO.name+" (SP_"+clsLs[iR][0]+")");
+
+		if(clsLs[iR][0] != "*TITLE") clsLsSort.push(tO.tbl.parse(2,":")+":"+iR.toString(10,3));
 	}
+	clsLsSort.sort();
+	clsLsReq = "";
+	for(iL = 0; iL < clsLsSort.length; iL++)
+		clsLsReq += (clsLsReq.length?",":"") + "`"+(((tVl=clsLs[clsLsSort[iL].parse(1,":").toInt()][0])[0]=="*")?tVl.slice(1):"SP_"+tVl)+"`";
 
 	//Updation the main table
 	// Where prepairing for the filter
@@ -13825,7 +13839,7 @@ if(f_start || toUpdate) {
 		if(colVars[iC]["<lock>"] == true)	delete colVars[iC]["<lock>"];
 		else delete colVars[iC];
 	// Same requesting
-	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT * FROM `sh_"+class+"` "+(wherePart.length?"WHERE"+wherePart:"")+"ORDER BY ''ID'';");
+	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` "+(wherePart.length?"WHERE"+wherePart:"")+"ORDER BY ''ID'';");
 	dataTbl_items = "<tbl sel=''row'' sortEn=''"+(btEdit_value?0:1)+"'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 	colTps = new Object();
 	for(iR = 0; iR < dataTbl.length; iR++) {
@@ -13837,9 +13851,7 @@ if(f_start || toUpdate) {
 				if(itVl == "ID")	opt += " width=''0px''";
 				else {
 					opt += btEdit_value ? " edit=''1''" : "";
-					if(itVl == "NAME")	{ itVl = tr("Name"); opt += " width=''170px'' align=''center''"; }
-					else if(itVl == "DSCR")	{ colTps[iC] = "t"; itVl = tr("Description"); opt += " width=''350px''"; }
-					else if(itVl.slice(0,3) == "SP_" && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) {
+					if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal())) {
 						if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl].isEVal()) {
 							colVars[itVl] = new Object();
 							colVars[itVl].ls = new Object();
@@ -13898,7 +13910,6 @@ if(f_start || toUpdate) {
 
 //Representing events process
 for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-	//this.messInfo("TEST 01: Event="+sval+" : "+dataTbl_value);
 	itDel_active = itCopy_active = dataTbl_value.length;
 	if(sval == "ws_BtRelease:/itAdd") {
 		nmLs = vlLs = "";
@@ -13945,8 +13956,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true;
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true;
-}
-','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1618140967);
+}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1649442231);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -23940,7 +23950,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.3
+Version: 1.1.0
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23954,7 +23964,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.3
+Версия: 1.1.0
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

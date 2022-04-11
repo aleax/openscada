@@ -348,14 +348,14 @@ bool LineEdit::event( QEvent * e )
 }
 
 //*************************************************
-//* SyntxHighl: Syntax highlighter                *
+//* SnthHgl: Syntax highlighter                   *
 //*************************************************
-SyntxHighl::SyntxHighl( QTextDocument *parent ) : QSyntaxHighlighter(parent)
+SnthHgl::SnthHgl( QTextDocument *parent ) : QSyntaxHighlighter(parent), isBuiltInSH(false)
 {
 
 }
 
-void SyntxHighl::setSnthHgl( XMLNode nd )
+void SnthHgl::setSnthHgl( XMLNode nd )
 {
     rules = nd;
 
@@ -376,7 +376,7 @@ void SyntxHighl::setSnthHgl( XMLNode nd )
     rehighlight();
 }
 
-void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
+void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
 {
     XMLNode *rl;
     vector<int> rul_pos(irl->childSize(), -1);
@@ -457,7 +457,7 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
     }
 }
 
-void SyntxHighl::highlightBlock( const QString &text )
+void SnthHgl::highlightBlock( const QString &text )
 {
     setCurrentBlockState((previousBlockState()<0)?0:previousBlockState());
     rule(&rules, text);
@@ -537,6 +537,8 @@ bool TextEdit::hasFocus( ) const	{ return edFld->hasFocus(); }
 
 void TextEdit::setText( const QString &text )
 {
+    checkInSnthHgl(text);	//Try the builtin syntax higlihgt
+
     isInit = true;
     edFld->blockSignals(true);	//!!!! The block to prevent the status bar updating and crashes here sometime
     edFld->setPlainText(text);
@@ -546,9 +548,27 @@ void TextEdit::setText( const QString &text )
     changed();
 }
 
+bool TextEdit::checkInSnthHgl( const QString &text )
+{
+    bool isInSH = false;
+
+    TArrayObj *rezSH = NULL;
+    if((!sntHgl || sntHgl->isBuiltInSH) && (rezSH=TRegExp("<SnthHgl\\b.*>.*<\\/ *SnthHgl>","gm").match(text.toStdString()))) {
+	if(rezSH->arSize())
+	    try {
+		XMLNode hglO("SnthHgl"); hglO.load(rezSH->arGet(0).getS());
+		setSnthHgl(hglO);
+		if(sntHgl) sntHgl->isBuiltInSH = isInSH = true;
+	    } catch(TError&) { }
+	delete rezSH;
+    }
+
+    return isInSH;
+}
+
 void TextEdit::setSnthHgl( XMLNode nd )
 {
-    if(!sntHgl)	sntHgl = new SyntxHighl(edFld->document());
+    if(!sntHgl)	sntHgl = new SnthHgl(edFld->document());
     sntHgl->setSnthHgl(nd);
 }
 
@@ -584,6 +604,13 @@ void TextEdit::btApply( )
     edFld->document()->setModified(isCh);
     edFld->resize(size());
     emit apply();
+
+    //Try the builtin syntax higlihgt
+    if(checkInSnthHgl(text())) {
+	edFld->blockSignals(true);
+	edFld->setPlainText(text());
+	edFld->blockSignals(false);
+    }
 }
 
 void TextEdit::btCancel( )

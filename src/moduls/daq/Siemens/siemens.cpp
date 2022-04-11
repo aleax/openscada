@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.7"
+#define MOD_VER		"4.4.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -114,7 +114,7 @@ void TTpContr::postEnable( int flag )
     elPrmIO.fldAdd(new TFld("VALUE",trS("Value"),TFld::String,TFld::NoFlag,"200"));
     // Simple parameter type by the attributes list
     t_prm = tpParmAdd("simple", "PRM_BD_S", _("Simple"), true);
-    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",trS("Attributes list"),TFld::String,TFld::FullText|TFld::TransltText|TCfg::NoVal,"100000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",trS("Attributes list"),TFld::String,TFld::FullText|/*TFld::TransltText|*/TCfg::NoVal,"100000",""));
 
     //CIF devices DB structure
     elCifDev.fldAdd(new TFld("ID",trS("Identifier"),TFld::Integer,TCfg::Key,"1"));

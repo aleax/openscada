@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("DB SQLite")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"4.0.5"
+#define MOD_VER		"4.0.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Provides support of the BD SQLite.")
 #define LICENSE		"GPL2"
@@ -365,7 +365,7 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
     cfg.cfgList(cf_el);
 
     //Create request variables
-    string all_flds, pr_keys, tpCfg, ls, langLs = ilangLs;
+    string all_flds, pr_keys, tpCfg, ls, langLs;
 
     //Curent context copy list
     if(appMode) {
@@ -381,6 +381,7 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 
     //Check for need to append or modify
     for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
+	langLs = ilangLs;
 	TCfg &cf = cfg.cfg(cf_el[iCf]);
 	// Check for update needs
 	for(iFld = 0; iFld < tblStrct.size(); iFld++)

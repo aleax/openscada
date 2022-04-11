@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.8"
+#define MOD_VER		"1.5.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -749,7 +749,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
 		try {
 		    SYS->daq().at().at(TSYS::strParse(inProgLang(),0,".")).at().
-				    compileFuncSynthHighl(TSYS::strParse(inProgLang(),1,"."),*opt);
+				    compileFuncSnthHgl(TSYS::strParse(inProgLang(),1,"."),*opt);
 		} catch(...) { }
 	}
 	else if(a_path.find("/in/cfg") == 0 && DAQTmpl().size() && func()) TPrmTempl::Impl::cntrCmdProc(opt, "/in/cfg");
@@ -760,7 +760,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
 	    try {
 		SYS->daq().at().at(TSYS::strParse(outProgLang(),0,".")).at().
-				compileFuncSynthHighl(TSYS::strParse(outProgLang(),1,"."),*opt);
+				compileFuncSnthHgl(TSYS::strParse(outProgLang(),1,"."),*opt);
 	    } catch(...) { }
     }
     else TCntrNode::cntrCmdProc(opt);

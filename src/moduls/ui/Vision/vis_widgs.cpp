@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -781,14 +781,14 @@ bool LineEdit::event( QEvent * e )
 }
 
 //*************************************************
-//* SyntxHighl: Syntax highlighter                *
+//* SnthHgl: Syntax highlighter                   *
 //*************************************************
-SyntxHighl::SyntxHighl( QTextDocument *parent ) : QSyntaxHighlighter(parent)
+SnthHgl::SnthHgl( QTextDocument *parent ) : QSyntaxHighlighter(parent)
 {
 
 }
 
-void SyntxHighl::setSnthHgl( XMLNode nd )
+void SnthHgl::setSnthHgl( XMLNode nd )
 {
     rules = nd;
 
@@ -798,7 +798,7 @@ void SyntxHighl::setSnthHgl( XMLNode nd )
     rehighlight();
 }
 
-void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
+void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
 {
     XMLNode *rl;
     vector<int> rul_pos(irl->childSize(),-1);
@@ -879,7 +879,7 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
     }
 }
 
-void SyntxHighl::highlightBlock( const QString &text )
+void SnthHgl::highlightBlock( const QString &text )
 {
     setCurrentBlockState((previousBlockState()<0)?0:previousBlockState());
     rule(&rules, text);
@@ -975,7 +975,7 @@ void TextEdit::setText( const QString &itext )
 
 void TextEdit::setSnthHgl( XMLNode nd )
 {
-    if(!snt_hgl) snt_hgl = new SyntxHighl(ed_fld->document());
+    if(!snt_hgl) snt_hgl = new SnthHgl(ed_fld->document());
     snt_hgl->setSnthHgl(nd);
 }
 

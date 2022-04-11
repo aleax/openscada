@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("DB FireBird")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"3.0.5"
+#define MOD_VER		"3.0.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("DB module. Provides support of the DBMS FireBird.")
 #define LICENSE		"GPL2"
@@ -540,7 +540,7 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 
     bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty());	//Only for append no present fields
 
-    string pr_keys, ls, langLs = ilangLs;
+    string pr_keys, ls, langLs;
 
     //DROP fields
     for(unsigned iFld = 0, iCf; iFld < tblStrct.size() && !appMode; iFld++) {
@@ -576,6 +576,7 @@ void MTable::fieldFix( TConfig &cfg, const string &ilangLs )
 
     //Add fields
     for(unsigned iCf = 0, iFld; iCf < cf_el.size(); iCf++) {
+	langLs = ilangLs;
 	TCfg &cf = cfg.cfg(cf_el[iCf]);
 	// Check primary key
 	if(cf.fld().flg()&TCfg::Key && !appMode)

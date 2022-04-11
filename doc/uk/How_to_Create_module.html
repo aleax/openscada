@@ -288,7 +288,7 @@ SYS-&gt;db().at().dataSet(fullDB(),owner().nodePath()+"DAQ",*this);</pre>
 </p>
 <ul><li> <i>TTypeDAQ-&gt;TModule</i> — Кореневий об'єкт модуля підсистеми "Збір даних":
 <ul><li> <i>void compileFuncLangs( vector&lt;string&gt; &amp;ls );</i> — Запит переліку мов користувацького програмування, які підтримуються модулем в <i>ls</i>.</li>
-<li> <i>void compileFuncSynthHighl( const string &amp;lang, XMLNode &amp;shgl );</i> — Запит правил підсвічення синтаксису <i>shgl</i> вказаної мови користувацького програмування <i>lang</i>.</li>
+<li> <i>void compileFuncSyntxHighl( const string &amp;lang, XMLNode &amp;shgl );</i> — Запит правил підсвічення синтаксису <i>shgl</i> вказаної мови користувацького програмування <i>lang</i>.</li>
 <li> <i>string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text );</i> — Виклик компіляції користувацької процедури у <i>prog_text</i> та створення об'єкту виконання функції на основі <i>fnc_cfg</i> для вказаної мови користувацького програмування <i>lang</i> цього модуля. Повертається адреса до скомпільованого об'єкту функції, готового для виконання.</li>
 <li> <i>bool redntAllow( );</i> — Ознака підтримки механізмів резервування модулів. Повинен перевизначатися та повертати "true" у випадку підтримки, інакше "false".</li>
 <li> <i>TController *ContrAttach( const string &amp;name, const string &amp;daq_db );</i> — Викликається при відкритті або створені нового об'єкта контролера <i>name</i> цим модулем зі сховищем у <i>db</i>.</li></ul></li>

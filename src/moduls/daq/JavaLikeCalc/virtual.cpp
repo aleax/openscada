@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.18"
+#define MOD_VER		"5.4.19"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -196,10 +196,10 @@ bool TpContr::compileFuncLangs( vector<string> *ls )
     return true;
 }
 
-void TpContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
+void TpContr::compileFuncSnthHgl( const string &lang, XMLNode &shgl )
 {
     if(lang == "JavaScript") {
-	shgl.setAttr("font",SYS->ui().at().fontSyntHighlCode());
+	shgl.setAttr("font",SYS->ui().at().fontSnthHglCode());
 	//shgl.childAdd("rule")->setAttr("expr","(\"\"|\".*[^\\\\](|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\")")->setAttr("min","1")->setAttr("color","darkgreen")->
 	shgl.childAdd("rule")->setAttr("expr","(\"(|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\"|\".*[^\\\\](|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\")")->setAttr("min","1")->setAttr("color","darkgreen")->
 	     childAdd("rule")->setAttr("expr","\\\\([xX][a-zA-Z0-9]{2}|[0-7]{3}|.{1})")->setAttr("color","green")->setAttr("font_weight","1");
@@ -828,7 +828,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    ((Func *)func())->setStart(true);
 	    modif();
 	}
-	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))	mod->compileFuncSynthHighl("JavaScript",*opt);
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))	mod->compileFuncSnthHgl("JavaScript",*opt);
     }
     else if(isDAQTmpl && func() && TPrmTempl::Impl::cntrCmdProc(opt))	;
     else TController::cntrCmdProc(opt);

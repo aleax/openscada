@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_widgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -225,14 +225,14 @@ namespace VISION
     };
 
     //*************************************************
-    //* SyntxHighl: Syntax highlighter                *
+    //* SnthHgl: Syntax highlighter                   *
     //*************************************************
-    class SyntxHighl : public QSyntaxHighlighter
+    class SnthHgl : public QSyntaxHighlighter
     {
 	Q_OBJECT
 
 	public:
-	    SyntxHighl( QTextDocument *parent = 0 );
+	    SnthHgl( QTextDocument *parent = 0 );
 
 	    void setSnthHgl( XMLNode nd );
 
@@ -287,7 +287,7 @@ namespace VISION
 	    bool		isInit;
 	    QString		m_text;
 	    QTextEdit		*ed_fld;
-	    SyntxHighl		*snt_hgl;
+	    SnthHgl		*snt_hgl;
 	    QDialogButtonBox	*but_box;
 	    QAction		*actFind, *actFindNext;
 	    QMainWindow		*stWin;

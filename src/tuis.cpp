@@ -35,9 +35,9 @@ using namespace OSCADA;
 //*************************************************
 //* TUIS                                          *
 //*************************************************
-TUIS::TUIS( ) : TSubSYS(SUI_ID, true), mFontSyntHighlCode(dataRes())
+TUIS::TUIS( ) : TSubSYS(SUI_ID, true), mFontSnthHglCode(dataRes())
 {
-    mFontSyntHighlCode = "monospace";
+    mFontSnthHglCode = "monospace";
 
 #if HAVE_GD_FORCE
     gdFTUseFontConfig(1);
@@ -49,7 +49,7 @@ string TUIS::optDescr( )
     return TSYS::strMess(_(
 	"===================== Subsystem \"User interfaces\" options ===============\n"
 	"------ Parameters of the section '%s' of the configuration file ------\n"
-	"FontSyntHighlCode <font>  Font used in the code syntax highlight, by default \"monospace\".\n\n"
+	"FontSnthHglCode <font>  Font used in the code syntax highlight, by default \"monospace\".\n\n"
 	),nodePath().c_str()) + TSubSYS::optDescr();
 }
 
@@ -58,13 +58,13 @@ void TUIS::load_( )
     //Load parameters from command line
 
     //Load parameters from config-file
-    setFontSyntHighlCode(TBDS::genPrmGet(nodePath()+"FontSyntHighlCode",fontSyntHighlCode()));
+    setFontSnthHglCode(TBDS::genPrmGet(nodePath()+"FontSnthHglCode",fontSnthHglCode()));
 }
 
 void TUIS::save_( )
 {
     //Save parameters to the table "SYS"
-    TBDS::genPrmSet(nodePath()+"FontSyntHighlCode", fontSyntHighlCode());
+    TBDS::genPrmSet(nodePath()+"FontSnthHglCode", fontSnthHglCode());
 }
 
 string TUIS::icoGet( const string &inm, string *tp, bool retPath )
@@ -218,14 +218,14 @@ void TUIS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_))
-	    ctrMkNode("fld",opt,-1,"/sub/fontSyntHighlCode",_("Syntax highlight font for code"),RWRWR_,"root",SUI_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/sub/fontSnthHglCode",_("Syntax highlight font for code"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	return;
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/sub/fontSyntHighlCode") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fontSyntHighlCode());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFontSyntHighlCode(opt->text());
+    if(a_path == "/sub/fontSnthHglCode") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fontSnthHglCode());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFontSnthHglCode(opt->text());
     }
     else TSubSYS::cntrCmdProc(opt);
 }

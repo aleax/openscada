@@ -870,7 +870,7 @@ Flags of the SQL requests (enum – TTable::SQLFeqFlag):
 <li> <i>unsigned tpPrmSize( );</i> — Quantity of the parameters' types.</li>
 <li> <i>TTypeParam &amp;tpPrmAt( unsigned id );</i> — Get the object of the parameters' type.</li>
 <li> <i>virtual bool compileFuncLangs( vector&lt;string&gt; *ls = NULL );</i> — Request of the list of languages for which it is realized the possibility of formation of user procedures in this module, and check for it support fact.</li>
-<li> <i>virtual void compileFuncSynthHighl( const string &amp;lang, XMLNode &amp;shgl );</i> — The rules of syntax highlight request for specifying language.</li>
+<li> <i>virtual void compileFuncSnthHgl( const string &amp;lang, XMLNode &amp;shgl );</i> — The rules of syntax highlight request for specifying language.</li>
 <li> <i>virtual string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text, const string &amp;usings = "", int maxCalcTm = 0 );</i> — Compiling/setup of the user function on the supported programming language <i>lang</i> and on the source code of procedure <i>prog_text</i>, based on the parameters of procedure <i>fnc_cfg</i>. The result is the address to the prepared function object.</li>
 <li> <i>virtual bool redntAllow( );</i> — The indication of support of redundancy mechanisms by the module. It must be simply overridden and return <b>true</b>.</li></ul>
 <p><b>Protected methods:</b>
@@ -1789,6 +1789,8 @@ Requests parameters (enum — GetOpts):
 <li> <i>void subStart( );</i> — Start of the subsystem.</li>
 <li> <i>void subStop( );</i> — Stop of the subsystem.</li>
 <li> <i>AutoHD&lt;TUI&gt; at( const string &amp;name ) const;</i> — Connects to the user's interface module.</li>
+<li> <i>string fontSnthHglCode( );</i> — Getting the font name used in the syntax highlight for code.</li>
+<li> <i>void setFontSnthHglCode( const string &amp;val )</i> — Setting the font name used in the syntax highlight for code.</li>
 <li> <i>static string icoGet( const string &amp;inm, string *tp = NULL, bool retPath = false );</i> — Downloads image of the icon <i>inm</i> from standard directories or return path, on <i>retPath</i>, to allowed icon. Detecting icons for file extensions "png", "gif", "jpg", "jpeg", which return into <i>tp</i>.</li>
 <li> <i>static string docGet( const string &amp;inm, string *tp = NULL, unsigned opt = 0 );</i> — Downloads document <i>inm</i> from standard directories or return path, on <i>retPath</i>, to allowed document. Detecting documents for file extensions "pdf", "html", "odt", which return into <i>tp</i>.</li>
 <li> <i>static string docKeyGet( const string &amp;itxt );</i> — Gets the inline documentation key from the text <i>itxt</i> of a configuration field, often it is the node description and the key "DOC" in it.</li>
@@ -2587,8 +2589,8 @@ Where:
 <tr>
 <td>Request for the rules of syntax highlight, for text fields (the attribute "rows" set).</td>
 <td>
-<p><i>Request:</i> command "SnthHgl": <i>&lt;SnthHgl path="/fld_teg" user="user"/&gt;</i><br />
-<i>Result:</i> confirmation whith the rules of syntax highlight list:
+<p><i>Request:</i> <span id="SnthHgl" title="#SnthHgl">command "SnthHgl"</span>: <i>&lt;SnthHgl path="/fld_teg" user="user"/&gt;</i><br />
+<i>Result:</i> confirmation with the rules of syntax highlight list:
 </p>
 <pre style="white-space: pre-wrap;">
 &lt;rule expr="\b(if|else|for|while|in|using|new|var|break|continue|return|Array|Object)\b" color="darkblue" font_weight="1"/&gt;
@@ -4142,7 +4144,7 @@ extern "C"
 <tr>
 <td><b>Controller's type (child from TTypeDAQ):</b>
 <ul><li> <i>virtual void compileFuncLangs( vector&lt;string&gt; &amp;ls );</i> — The list of user programming languages that are supported by the module.</li>
-<li> <i>virtual void compileFuncSynthHighl( const string &amp;lang, XMLNode &amp;shgl );</i> — Syntax highlight rules <i>shgl</i> request for user programming language <i>lang</i>.</li>
+<li> <i>virtual void compileFuncSnthHgl( const string &amp;lang, XMLNode &amp;shgl );</i> — Syntax highlight rules <i>shgl</i> request for user programming language <i>lang</i>.</li>
 <li> <i>virtual string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text );</i> — Compilation of the user procedure and creation of the object of function's execution for the specified language of user programming.</li>
 <li> <i>virtual bool redntAllow( );</i> — The sign of support of the redundancy mechanisms by the module. Should by simply redefined and return true.</li>
 <li> <i>virtual TController *ContrAttach( const string &amp;name, const string &amp;daq_db );</i> — Opening/connection of the controller.</li></ul>

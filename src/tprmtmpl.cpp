@@ -389,7 +389,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))
 	    try {
 		SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
-				compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
+				compileFuncSnthHgl(TSYS::strParse(progLang(),1,"."),*opt);
 	    } catch(...){ }
     }
     else TCntrNode::cntrCmdProc(opt);
@@ -697,7 +697,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		    XMLNode *wn = ctrMkNode("fld",opt,-1,(pref+"/prm/el_"+i2s(iIO)).c_str(),
 			    func()->io(iIO)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
 		    if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select",pref+"/prm/ls_"+i2s(iIO))->setAttr("help",lnkHelp());
-		    if(wn && fullTxt)wn->setAttr("cols","100")->setAttr("rows","4");
+		    if(wn && fullTxt)wn/*->setAttr("cols","100")*/->setAttr("rows","4");
 		}
 	    }
 	return true;

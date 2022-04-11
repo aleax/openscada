@@ -806,7 +806,7 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
 	if(!sHgl.isEmpty()) {
 	    XMLNode rules;
 	    rules.load(sHgl.toStdString());
-	    SyntxHighl *snt_hgl = new SyntxHighl(((QTextEdit*)w_del)->document());
+	    SnthHgl *snt_hgl = new SnthHgl(((QTextEdit*)w_del)->document());
 	    snt_hgl->setSnthHgl(rules);
 	}
     }

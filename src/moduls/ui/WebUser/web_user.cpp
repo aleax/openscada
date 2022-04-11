@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.11"
+#define MOD_VER		"1.5.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -748,7 +748,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	    if(ctrChkNode(opt,"SnthHgl",(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,SEC_RD))
 		try {
 		    SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
-					compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
+					compileFuncSnthHgl(TSYS::strParse(progLang(),1,"."),*opt);
 		} catch(...){ }
 	}
 	else if(a_path.find("/prgm/cfg") == 0 && isDAQTmpl && func()) TPrmTempl::Impl::cntrCmdProc(opt, "/prgm/cfg");
