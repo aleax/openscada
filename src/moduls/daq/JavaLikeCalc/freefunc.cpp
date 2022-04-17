@@ -41,7 +41,6 @@ Func::Func( const string &iid, const string &name ) : TConfig(&mod->elFnc()), TF
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
-    cfg("FORMULA").setExtVal(true);
     mMaxCalcTm = mod->safeTm();
 }
 
@@ -145,7 +144,11 @@ void Func::load_( TConfig *icfg )
     if(owner().DB().empty() || (!SYS->chkSelDB(owner().DB())))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
+    else {
+	cfg("FORMULA").setExtVal(true);
+	TBDS::dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
+    }
+    if(!progTr()) cfg("FORMULA").setExtVal(false, true);
 
     loadIO();
 }
@@ -3076,8 +3079,8 @@ void Func::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/io/prog") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	{ setProg(opt->text()); progCompile(); }
-	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD)) mod->compileFuncSnthHgl("JavaScript",*opt);
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	setProg(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD)) mod->compileFuncSnthHgl("JavaScript", *opt);
     }
     else TFunction::cntrCmdProc(opt);
 }

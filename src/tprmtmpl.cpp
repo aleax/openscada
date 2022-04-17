@@ -32,7 +32,6 @@ TPrmTempl::TPrmTempl( const string &iid, const string &iname ) :
 {
     mId = iid;
     setName(iname);
-    cfg("PROGRAM").setExtVal(true);
 }
 
 TPrmTempl::~TPrmTempl( )
@@ -156,7 +155,11 @@ void TPrmTempl::load_( TConfig *icfg )
     if(!SYS->chkSelDB(owner().DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this);
+    else {
+	cfg("PROGRAM").setExtVal(true);
+	TBDS::dataGet(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this);
+    }
+    if(!progTr()) cfg("PROGRAM").setExtVal(false, true);
 
     //Load IO
     vector<string> u_pos;
@@ -872,6 +875,7 @@ void TPrmTmplLib::load_( TConfig *icfg )
     //Load templates
     map<string, bool>	itReg;
     TConfig cEl(&owner().elTmpl());
+    cEl.cfg("PROGRAM").setExtVal(true);
     //cEl.cfgViewAll(false);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();

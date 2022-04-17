@@ -197,6 +197,7 @@ class ConfApp: public QMainWindow
     void listBoxGo( QListWidgetItem* );		//QListBox go for banch
     void listBoxPopup();			//QListBox popup menu
     void tablePopup( const QPoint &pos );	//QTable popup menu
+    void tableFind( );				//QTable find menu
     void tableSet( int row, int col );		//QTable set
     void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
     void applyButton( );			//Apply button

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-02 09:25+0300\n"
+"POT-Creation-Date: 2022-04-16 15:37+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1150,6 +1150,7 @@ msgstr "Адрес хранилища в формате \"{Модуль БД}.{�
 msgid "Set '*.*' to use the Generic Storage."
 msgstr "Установить '*.*' для использования Общего Хранилища."
 
+#, c-format
 msgid ""
 "Please note that removing from the Generic Storage (*.*) will cause the data "
 "removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
@@ -2428,13 +2429,11 @@ msgstr ""
 "создание или модификация конфигурационных БД как многоязычные с указанным "
 "базовым языком '%s'"
 
-#, c-format
-msgid "Messages indexed=%d, cached=%d."
-msgstr "Сообщений индексировано=%d, кешировано=%d."
+msgid "Messages indexed: %d, cached: %d."
+msgstr "Сообщений индексировано: %d, кешировано: %d."
 
-#, c-format
-msgid "Translation contexts=%d."
-msgstr "Контекстов перевода=%d."
+msgid "Translation contexts: %d."
+msgstr "Контекстов перевода: %d."
 
 msgid "<<<Unmatched sources>>>\n"
 msgstr "<<<Несовпадение источников!!!>>>\n"
@@ -2686,17 +2685,16 @@ msgstr "Модуль не поддерживает функцию компиля
 msgid "Owner"
 msgstr "Владелец"
 
-#, c-format
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"FontSyntHighlCode <font>  Font used in the code syntax highlight, by default "
+"FontSnthHglCode <font>  Font used in the code syntax highlight, by default "
 "\"monospace\".\n"
 "\n"
 msgstr ""
 "============= Опции подсистемы \"Пользовательские интерфейсы\" ============\n"
 "---------- Параметры секции '%s' конфигурационного файла ----------\n"
-"FontSyntHighlCode <шрифт>  Шрифт использованный в подсветке синтаксиса кода, "
+"FontSnthHglCode <шрифт>  Шрифт использованный в подсветке синтаксиса кода, "
 "по умолчанию \"monospace\".\n"
 "\n"
 

@@ -322,7 +322,7 @@
 <li> Адаптацию к работе в окружении операционных систем QNX и MS Windows.</li></ul>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">7</span> Обновления</span></h2>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_.D0.9F.D0.AF.D0.A2.D0.9E.D0.95_.D0.BE.D0.B1.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.B8.D0.B5"><span class="mw-headline-number">7.1</span> [22.02.2022] ПЯТОЕ обновление</span></h3>
-<p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 50 ошибок и добавляет МНОЖЕСТВО улучшения с парой значительных-концептуальных, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2817" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
+<p>Это обновление <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">релиза 0.9 LTS</a> исправляет около 50 ошибок и добавляет МНОЖЕСТВО улучшений с несколькими значительными-концептуальными, с которыми целиком можно ознакомиться в <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2819" rel="nofollow noreferrer noopener" target="_blank">протоколе изменений обновления</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> <b><u>Significant actions of the developer of the OpenSCADA modules on the update</u></b><br />
 </p>
 <ul><li> FIX:SYS.TMess: Type of labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() changed to "string".</li></ul>
@@ -368,7 +368,7 @@
 <li> BD.PostgreSQL: 2.5 =&gt; <b>3.0</b></li>
 <li> BD.FireBird: 2.5 =&gt; <b>3.0</b></li>
 <li> UI.QTStarter: 5.10 =&gt; <b>5.12</b></li>
-<li> UI.QTCfg: 5.6 =&gt; <b>5.7</b></li>
+<li> UI.QTCfg: 5.6 =&gt; <b>5.8</b></li>
 <li> UI.WebCfg: 1.8 =&gt; <b>2.0</b></li>
 <li> UI.WebCfgD: 2.1 =&gt; <b>2.2</b></li>
 <li> UI.VCAEngine: 7.1 =&gt; <b>7.8</b></li></ul>
@@ -377,7 +377,8 @@
 <dl><dd> (<a href="#Vision">early opening the restored and specified pages in the init procedure</a>)</dd></dl>
 <ul><li> UI.WebUser: 1.4 =&gt; <b>1.5</b></li>
 <li> UI.WebVision: 6.2 =&gt; <b>6.6</b></li>
-<li> LibsDB.OscadaLibs.base.anUnif: 2.1 =&gt; <b>2.3</b></li>
+<li> LibsDB.OscadaLibs.base.anUnif: 2.1 =&gt; <b>2.4</b></li>
+<li> LibsDB.OscadaLibs.base.digAlarm: 1.2 =&gt; <b>1.3</b></li>
 <li> LibsDB.OscadaLibs.servProc.docOffLine: 1.2 =&gt; <b>1.3</b></li>
 <li> LibsDB.OscadaLibs.Controller.test: 1.1 =&gt; <b>1.2</b></li>
 <li> LibsDB.vcaBase.Main
@@ -388,7 +389,8 @@
 <li> TextLab,ImgLab: 1.0 =&gt; <b>1.1</b></li>
 <li> graphSelPrm: 1.4 =&gt; <b>1.5</b></li>
 <li> objProps: 1.1 =&gt; <b>1.2</b></li>
-<li> cntrRegul: 1.1 =&gt; <b>1.2</b></li></ul></li>
+<li> cntrRegul: 1.1 =&gt; <b>1.2</b></li>
+<li> storeHouse: 1.0 =&gt; <b>1.1</b></li></ul></li>
 <li> LibsDB.vcaBase.mnEls.El_Kran_Sh,Compressor: 1.0 =&gt; <b>1.1</b></li>
 <li> LibsDB.vcaBase.doc
 <ul><li> docAlarmsRep: 1.5 =&gt; <b>1.6</b></li>
@@ -476,7 +478,8 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> appended for filtering the messages for they translatability before registering.</li>
 <li> LibsDB.vcaBase:
 <ul><li> wlb_Main.ElViewGraph: enabled for the transitive translation in the tooltip and for the parameter description;</li>
-<li> wlb_Main.objProps: enabled for the transitive dynamic translation.</li></ul></li></ul>
+<li> wlb_Main.objProps: enabled for the transitive dynamic translation;</li>
+<li> wlb_Main.storeHouse: significantly expanded for the specific fields, ordering the columns and fixed in whole work.</li></ul></li></ul>
 <dl><dd> SYSTEM MESSAGES</dd></dl>
 <ul><li> implemented for a function of prestoring system messages translation trS(), where the base message just return with the catalogue information, that is "{base}\000{cat}" and what is translated really in the call _() — in the background there is used Mess-&gt;I18N(), but for the specific language code mess_PreSave="&lt;PSV&gt;";</li>
 <li> the system translation function TMess::I18N() was attached to the messages cache;</li>
@@ -506,7 +509,8 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> wlb_Main.{ElViewGraph,graphSelPrm}: Adapted to reset the trend item color to the default styled at setting that to empty; appended of the empty color processing as the default one also taken from the style.</li>
 <li> FIX:wlb_Main.RootPgSo: Appended of complete updating at the user change, but language also can be changed, and the language.</li></ul></li>
 <li> LibsDB.OscadaLibs: The "DB" field content and the table base ID of UserFuncLibs.{techApp,servProc,Controller} renamed to the standard one "flb_techApp", "flb_servProc", "flb_Controller" respectively.
-<ul><li> tmplib_base.digAlarm: Expanded in the common attribute DESCR using for the specific parameters redefinition by the new fields "CustomFlds".</li>
+<ul><li> tmplib_base.{digAlarm,anUnif}: Adapted to the syntax highlight builtin of the input preprocessing procedure.</li>
+<li> tmplib_base.digAlarm: Expanded in the common attribute DESCR using for the specific parameters redefinition by the new fields "CustomFlds".</li>
 <li> tmplib_base.anUnif: Expanded in the common attribute DESCR using for the specific parameters redefinition by the new fields "CustomFlds" and "CustomAlarms". Appended of the user procedure option "toSave" of force saving the object at the exit.</li></ul></li>
 <li> flb_servProc.docOffLine: Expanded for the index page accessing from any other pages.</li></ul>
 <p><b><u>API</u></b><br />
@@ -530,6 +534,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> TBDS::dbList() moved to the bit flags TBDS::DBLsFlg: LsNoFlg, LsCheckSel, LsInclGenFirst.</li>
 <li> The functions moved as static ones: TBDS::{dbList,dataSeek,dataGet,dataSet,dataDel,dataDelTbl}(), TBDS::{fullDBSYS,fullDB}().</li>
 <li> The generic parameters accessing functions TBDS::genDBGet() and TBDS::genPrmSet() renamed to genPrmGet() and genPrmSet() everywhere.</li></ul></li>
+<li> DAQ: TTypeDAQ::compileFuncSynthHighl() renamed to TTypeDAQ::compileFuncSnthHgl() in a way of the name unification.</li>
 <li> Archives-History: Definitions of the archive specific names renamed for BUF_ARCH_NM, ALRM_ARCH_NM, ALRM_ARCH_CH_NM to ARCH_BUF, ARCH_ALRM, ARCH_ALRM_CH; and appended for ARCH_NOALRM ("&lt;noalarms&gt;").</li></ul>
 <p><i>Appends</i>:
 </p>
@@ -559,10 +564,12 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> Appended of <a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">the DB features</a> specifying virtual function TTypeBD::features().</li></ul></li>
 <li> DAQ: TFunction::IO object's structure IO::IOFlgs appended the flag IO::TransltText of marking the translate String IO directly.
 <ul><li> The function {TController,TParameter}::messSet() appended of the messages transferring from the top to the down, and also the User API functions SYS.DAQ["Modul"]["Controller"].messSet(), SYS.DAQ["Modul"]["Controller"]["Parameter"].messSet().</li>
-<li> The TCntrNodeObj appended of the function lang() obtained from the second line of the common method mUserLang.</li></ul></li>
+<li> The TCntrNodeObj appended of the function lang() obtained from the second line of the common method mUserLang.</li>
+<li> The User API functions appended of the function funcSnthHgl() in the DAQ module object and for obtaining the syntax highlight rules of the module and language.</li></ul></li>
 <li> Archives-History: Appended of the function "void TArchives::messPut( const TMess::SRec &amp;rec, const string &amp;arch = "" )" variant.</li>
 <li> Transports: Appended of the new function extHostSeek().</li>
-<li> VCAEngine: The User API functions mime() and mimeSet() appended of the correct equivalents resource() and resourceSet().</li></ul>
+<li> UI: Appended of the Configuration File option "FontSnthHglCode" and the corresponded functions TUIS::fontSnthHglCode() and TUIS::setFontSnthHglCode().
+<ul><li> VCAEngine: The User API functions mime() and mimeSet() appended of the correct equivalents resource() and resourceSet().</li></ul></li></ul>
 <p><b><u>SYS</u></b><br />
 </p>
 <ul><li> FIX:Building: configure.ac: Core library version rose to 3:12:0 and the program version rose to 0.9.5.
@@ -619,6 +626,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> <span id="Vision" title="#Vision">Vision</span>: Refactored also for early opening the restored and specified pages in the init procedure.</li></ul></li>
 <li> QTStarter,WebVision,WebCfgD: Qt part, in the generic Qt Library, and Web appended for the table edition text apply at Enter and new line at Ctrl+Enter.</li>
 <li> FIX:QTCfg,Vision: Prevented from hangs at stopping from a termination signal, from the console mostly, since locking the main Qt thread in modStop() without qApp-&gt;processEvents().</li>
+<li> QTCfg: The text fields appended of checking and activation the builtin syntax highlight rules from the XML-tag "SnthHgl".</li>
 <li> <span id="VCAEngine" title="#VCAEngine">VCAEngine</span>:
 <ul><li> Finishing of implementing the changes obtaining in the runtime mode by the clocking cycles through, after observing the race condition on the attributes changing, which cause to do not update the value on visualizers:
 <ul><li> rewrote for the modification control mechanism;</li>

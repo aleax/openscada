@@ -2138,11 +2138,13 @@ void SessWdg::calc( bool first, bool last, int pos )
 	    AutoHD<Attr> attr;
 	    AutoHD<TVal> vl;
 	    inLnkGet = true;
+	    string  reqLang = ownerSess()->reqLang(),
+		    reqUser = ownerSess()->reqUser();
 	    for(unsigned iA = 0; iA < mAttrLnkLs.size(); iA++) {
 		try { attr = attrAt(mAttrLnkLs[iA]); } catch(TError &err) { continue; }
 		string	cfgVal = attr.at().cfgVal(), cfgValTr = cfgVal;
 		if(attr.at().type() == TFld::String)
-		    cfgValTr = trD_LU(cfgVal, ownerSess()->reqLang(), ownerSess()->reqUser());
+		    cfgValTr = trD_LU(cfgVal, reqLang, reqUser);
 		if(attr.at().flgSelf()&Attr::CfgConst && !cfgValTr.empty()) attr.at().setS(cfgValTr);
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !cfgValTr.empty() && TSYS::strParse(cfgValTr,0,":") == "val")
 		    attr.at().setS(cfgValTr.substr(4));
@@ -2194,8 +2196,8 @@ void SessWdg::calc( bool first, bool last, int pos )
 		if(evId >= 0)	setS(evId, wevent);
 
 		// Load the data to the calc area
-		TValFunc::setUser(ownerSess()->reqUser());
-		TValFunc::setLang(ownerSess()->reqLang());
+		TValFunc::setUser(reqUser);
+		TValFunc::setLang(reqLang);
 		setR(SpIO_Frq, 1000/(isPer?ownerSess()->period(true)*vmax(calcPer()/ownerSess()->period(true),1):ownerSess()->period(true)));
 		setB(SpIO_Start, first);
 		setB(SpIO_Stop, last);
@@ -2204,7 +2206,9 @@ void SessWdg::calc( bool first, bool last, int pos )
 		    sw_attr = TSYS::pathLev(func()->io(iIO)->rez(), 0);
 		    s_attr  = TSYS::pathLev(func()->io(iIO)->rez(), 1);
 		    attr = (sw_attr==".") ? attrAt(s_attr) : wdgAt(sw_attr).at().attrAt(s_attr);
-		    set(iIO, attr.at().get());
+		    if(attr.at().type() == TFld::String && attr.at().flgGlob()&TFld::TransltText)
+			set(iIO, trD_LU(attr.at().getS(),reqLang,reqUser));
+		    else set(iIO, attr.at().get());
 		}
 
 		// Calc

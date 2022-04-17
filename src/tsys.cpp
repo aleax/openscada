@@ -3534,9 +3534,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			Mess->langCodeBase().c_str());
 	}
 	if(stV.size() && (Mess->trMessIdx.size() || Mess->trMessCache.size()))
-	    stV += ". " + TSYS::strMess(_("Messages indexed=%d, cached=%d."), Mess->trMessIdx.size(), Mess->trMessCache.size());
+	    stV += ". " + TSYS::strMess(_("Messages indexed: %d, cached: %d."), Mess->trMessIdx.size(), Mess->trMessCache.size());
 	if(stV.size() && Mess->trCtxs.size())
-	    stV += (stV[stV.size()-1]!='.'?". ":" ") + TSYS::strMess(_("Translation contexts=%d."), Mess->trCtxs.size());
+	    stV += (stV[stV.size()-1]!='.'?". ":" ") + TSYS::strMess(_("Translation contexts: %d."), Mess->trCtxs.size());
 	opt->setText(stM+", "+stV);
     }
     else if(a_path == "/tr/baseLang") {
@@ -3588,10 +3588,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/src","",R_R_R_,"root","root"));
 
 	    // Values requesting from the first source
-	    MtxAlloc res(Mess->trMessIdxRes, true);
+	    Mess->trMessIdxRes.lock();
+	    map<string, map<string,string> > trMessIdx = Mess->trMessIdx;
+	    Mess->trMessIdxRes.unlock();
+
 	    time_t stTm = time(NULL);
-	    map<string, map<string,string> >::iterator im = Mess->trMessIdx.begin();
-	    for(unsigned pos = 0; im != Mess->trMessIdx.end() && (time(NULL)-stTm) < prmInterf_TM; ++im) {
+	    map<string, map<string,string> >::iterator im = trMessIdx.begin();
+	    for(unsigned pos = 0; im != trMessIdx.end() && (time(NULL)-stTm) < prmInterf_TM; ++im) {
 		//  Checking for the filter
 		if(trFltr.size()) {
 		    map<string,string>::iterator is;
@@ -3698,7 +3701,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 				Mess->translSet(recNdBs->text(), lng, recNd->text(), &needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
 			    }
 			}
-			if(recNd->text().size() && recNd->text() != recNdBs->text() && Mess->trMessIdx.find(recNd->text()) != Mess->trMessIdx.end()) {
+			if(recNd->text().size() && recNd->text() != recNdBs->text() && trMessIdx.find(recNd->text()) != trMessIdx.end()) {
 			    mess_warning((nodePath()+"Tr").c_str(), _("Merging the base message to the translation '%s' for '%s' > '%s'."),
 				lng.c_str(), recNd->text().c_str(), recNdBs->text().c_str());
 			    //   Copying the real translations

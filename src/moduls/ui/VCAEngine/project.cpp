@@ -180,6 +180,7 @@ void Project::load_( TConfig *icfg )
     //Create new pages
     map<string, bool> itReg;
     TConfig cEl(&mod->elPage());
+    cEl.cfg("PROC").setExtVal(true);
     //cEl.cfgViewAll(false);
     cEl.cfg("OWNER").setS("/"+id(), true);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fldCnt++,cEl,TBDS::UseCache); ) {
@@ -920,7 +921,6 @@ Page::Page( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&m
     mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
 {
     cfg("ID").setS(id());
-    cfg("PROC").setExtVal(true);
 
     mPage = grpAdd("pg_");
 
@@ -1166,7 +1166,11 @@ void Page::load_( TConfig *icfg )
     string tbl = ownerProj()->tbl();
     string tbl_io = tbl+"_io";
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    else {
+	cfg("PROC").setExtVal(true);
+	TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    }
+    if(!calcProgTr()) cfg("PROC").setExtVal(false, true);
     setParentAddr(cfg("PARENT").getS());
 
     //Inheriting the modified attributes
@@ -1190,6 +1194,7 @@ void Page::load_( TConfig *icfg )
 	//Creating for new pages
 	map<string, bool>	itReg;
 	TConfig cEl(&mod->elPage());
+	cEl.cfg("PROC").setExtVal(true);
 	//cEl.cfgViewAll(false);
 	cEl.cfg("OWNER").setS(ownerFullId()+"/"+id(), true);
 	for(int fldCnt = 0; TBDS::dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,TBDS::UseCache); ) {

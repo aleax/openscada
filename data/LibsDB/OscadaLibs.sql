@@ -6115,7 +6115,7 @@ Functions:
 Mostly the same as the basic "Analog signal, unified" and the borderline signs are additionally provided: "H", "L", "HH", "LL", "EVAL".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1
+Version: 1.3.0
 License: GPLv2','Загальний, представницький та уніфікований шаблон обробки аналогових вхідних сигналів, розширений бінарними станами індикації порушень. Шаблон засновано на базовому шаблоні "Аналоговий сигнал, уніфікований" з відповідною до нього представницькою структурою та деякими відмінностями, характерними до незалежного розвитку та розширення.
 
 Бінарні стани передбачалося для зручного використання у алгоритмах роботи за границями порушення об''єкту параметру, переважно у блокових схемах загальних алгоритмів керування.
@@ -6124,7 +6124,7 @@ License: GPLv2','Загальний, представницький та уні�
 Переважно відповідають базовому шаблону "Аналоговий сигнал, уніфікований" та додатково надаються ознаки порушень границь: "H", "L", "HH", "LL", "EVAL".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.1
+Версія: 1.3.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6133,6 +6133,7 @@ if(f_start) {
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
+	inPrcLn = 0;
 	inPrcArgs = new Object();
 	inPrcArgs.this = this;
 	inPrcArgs.ctx = new Object();
@@ -6155,6 +6156,14 @@ if(plcImit) {	//Data imitation
 
 //Call specific preprocessing procedure
 if(inProc.length)	{
+	// Checking the builtin syntax highlight
+	if(inProc.length != inPrcLn) {
+		inPrcLn = inProc.length;
+		if(!inProc.match("<SnthHgl\\b.*>.*<\\/ *SnthHgl>","gm").length)
+			inProc = SYS.DAQ.funcSnthHgl(inPrcLng).replace(new RegExp("^","gm"),"//") + "\n\n" + inProc;
+	}
+
+	// Same calculation
 	inPrcArgs.f_frq = f_frq;
 	inPrcArgs.in = in; inPrcArgs.var = var; inPrcArgs.min = min; inPrcArgs.max = max;
 	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
@@ -6492,7 +6501,7 @@ Functions:
 - Formation of the violation and the corresponding setting of the attribute err, provided at setting in the processing procedure or lack of the communication (in = EVAL). What can be delayed on the time alDelay and can be suppressed setting alSup.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.4.0
 License: GPLv2','Варіант загального, представницького та уніфікованого шаблону блоку поєднання дискретних параметрів, розширений більш ніж двома станами та трьома командами які можна закодувати цілим значенням. Шаблон формує структуру параметру (складного тегу) стану за кодом який може бути легко підключений до більшості віджетів та кадрів бібліотеки основних елементів інтерфейсу користувача просто вказавши об''єкт параметру.
 
 Представницькою структурою параметру (складного тегу) стану за кодом є:
@@ -6519,7 +6528,7 @@ License: GPLv2','Варіант загального, представницьк
 - Формування порушення та відповідне встановлення атрибуту err, за умови встановлення у процедурі обробки або відсутності зв''язку (in = EVAL). Що може бути затримано на час alDelay та придушено встановленням alSup.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.0
+Версія: 1.4.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6527,6 +6536,7 @@ if(f_start) {
 	//Prepare data for preprocessing
 	inPrcId = this.nodePath("_");
 	inPrcLng = "JavaLikeCalc.JavaScript";
+	inPrcLn = 0;
 	inPrcArgs = new Object();
 	inPrcArgs.this = this;
 	inPrcArgs.ctx = new Object();
@@ -6539,6 +6549,14 @@ tErr = "0", levErr = 0;
 //Call a specific preprocessing procedure
 st_text = "";
 if(inProc.length)	{
+	// Checking the builtin syntax highlight
+	if(inProc.length != inPrcLn) {
+		inPrcLn = inProc.length;
+		if(!inProc.match("<SnthHgl\\b.*>.*<\\/ *SnthHgl>","gm").length)
+			inProc = SYS.DAQ.funcSnthHgl(inPrcLng).replace(new RegExp("^","gm"),"//") + "\n\n" + inProc;
+	}
+
+	// Same calculation
 	inPrcArgs.f_frq = f_frq;
 	inPrcArgs.in = in;
 	inPrcArgs.text = "";
@@ -12268,7 +12286,7 @@ CRC1=SYS.strFromCharCode(out1&0xFF,(out1&0xFF00)>>8 );
 if((CRCans==CRC1)&&(request.charCodeAt(0)==answer.charCodeAt(0))&&(request.charCodeAt(1)==answer.charCodeAt(1))&&(request.charCodeAt(2)==answer.charCodeAt(2))&&(request.charCodeAt(3)==answer.charCodeAt(3)))//break;
 //k++;}
 io.setText(Special.FLibSYS.strDec4Bin(resp));
-',1,1509290174);
+',0,1649833969);
 INSERT INTO UserProtocol_uPrt VALUES('m230','Mercury 230','Меркурій 230','Меркурий 230','Protocol level of three phase counter of electricity Mercury 230, 231, 232, 233, 234, 236 from firm Incotex (http://www.incotexcom.ru).
 Author: Arsen Zakojan <godzilla919@gmail.com>
 Version: 1.0.0','','Протокольный уровень трехфазных счетчиков электроэнергии Меркурий 230, 231, 232, 233,  234,  236  компании Инкотекс (http://www.incotexcom.ru).
@@ -12354,7 +12372,7 @@ else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x16)&&(request.c
 //чтение серийного номера
 else if((request.charCodeAt(1)==0x08)&&(request.charCodeAt(2)==0x00)&&(answer.length==8))
  io.setText(b1.toInt(16).toString(10,2,)+b2.toInt(16).toString(10,2,)+b3.toInt(16).toString(10,2,)+b4.toInt(16).toString(10,2,));
-;}',1,1509290179);
+;}',0,1649833969);
 INSERT INTO UserProtocol_uPrt VALUES('NIK2303','NIK2303','','','Protocol level of three phase counter of electricity NIK 2303 from firm NIK LLC (http://www.nik.net.ua).
 Author: Ruslan Yarmoliuk <rylio74@gmail.com>
 Version: 1.0.1','','',1,'',0,'','JavaLikeCalc.JavaScript
@@ -12446,7 +12464,7 @@ if(FCS != ((resp.charCodeAt(resp.length-1)<<8)+ resp.charCodeAt(resp.length-2)))
 }
 io.setText(resp.slice(10,resp.length-2));
 io.setAttr("cntr", resp[7]);
-io.setAttr("err", "0");',1,1512240522);
+io.setAttr("err", "0");',0,1649833969);
 CREATE TABLE IF NOT EXISTS 'flb_techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO flb_techApp VALUES('lag','Lag','Затримка','Запаздывание','Lag model. Can be used for lag imitation of the sensor variables.','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Модель задержки. Может использоваться для имитации запаздывания значений датчиков.',1,10,0,'out -= (out-in)/(t_lg*f_frq);',1556609878);
 INSERT INTO flb_techApp VALUES('noise','Noise: 2 harmonic + rand','Шум: 2 гармоніки + випадковий.','Шум: 2 гармоники + случайное','Noise model. Contains three parts:

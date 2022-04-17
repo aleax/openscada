@@ -228,7 +228,8 @@ class TBD : public TCntrNode, public TConfig
 	vector< vector<string> > userSQLResTbl;
 	char	userSQLTrans;
 
-	bool	mDisByUser;	//Disabled by user to prevent of restoring the enabling
+	bool	mDisByUser,	//Disabled by user to prevent of restoring the enabling
+		mIsFirst;	//First entry or after the address change
 };
 
 //************************************************

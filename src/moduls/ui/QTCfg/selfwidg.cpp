@@ -675,7 +675,7 @@ void TextEdit::find( )
     int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',0,0).toInt();
     QString fstr = actFind->objectName().section(':',1);
     if(sender() == actFind) {
-	InputDlg dlg(this,actFind->icon(), QString(_("Enter a string to search:")), _("Searching a string"), 0, 0);
+	InputDlg dlg(this, actFind->icon(), QString(_("Enter a string to search:")), _("Searching a string"), 0, 0);
 	QLineEdit *le = new QLineEdit(fstr, &dlg);
 	dlg.edLay->addWidget(le, 0, 0);
 	QCheckBox *bw = new QCheckBox(_("Backward"), &dlg);

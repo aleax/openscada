@@ -1710,7 +1710,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
 		    }
 		    formObj.multiple = parseInt(this.attrs['mult']) ? true : null;
-		    if(this.attrsMdf['items'] || this.attrsMdf['value']) {
+		    if(toInit || this.attrsMdf['items'] || this.attrsMdf['value']) {
 			while(formObj.childNodes.length) formObj.removeChild(formObj.childNodes[0]);
 			var selVal = this.attrs['value'].split('\n');
 			var elLst = this.attrs['items'].split('\n');
@@ -2095,7 +2095,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				} else hdrPresent = true;
 			    }
 
-			    if((!startRows && formObj.tBodies[0].rows.length) || (formObj.tBodies[0].rows.length && formObj.tBodies[0].rows[0].cells.length > startCols))
+			    if(Math.abs(maxRows-startRows) > 3 || (!startRows && formObj.tBodies[0].rows.length) ||
+				    (formObj.tBodies[0].rows.length && formObj.tBodies[0].rows[0].cells.length > startCols))
 				toReFit = true;
 
 			    // Generic properties set

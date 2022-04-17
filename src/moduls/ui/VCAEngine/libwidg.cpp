@@ -162,6 +162,7 @@ void WidgetLib::load_( TConfig *icfg )
     //Create new widgets
     map<string, bool>	itReg;
     TConfig cEl(&mod->elWdg());
+    cEl.cfg("PROC").setExtVal(true);
     //cEl.cfgViewAll(false);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
@@ -501,7 +502,6 @@ LWidget::LWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TCon
     enableByNeed(false), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mFuncM(true)
 {
     cfg("ID").setS(id());
-    cfg("PROC").setExtVal(true);
 
     setParentAddr(isrcwdg);
     setNodeFlg(TCntrNode::SaveForceOnChild);
@@ -667,7 +667,11 @@ void LWidget::load_( TConfig *icfg )
     string tbl = ownerLib().tbl();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    else {
+	cfg("PROC").setExtVal(true);
+	TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    }
+    if(!calcProgTr()) cfg("PROC").setExtVal(false, true);
 
     //Inherit modify attributes
     vector<string> als;

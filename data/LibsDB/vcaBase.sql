@@ -11959,7 +11959,7 @@ if(f_start || ((cnt++)%max(1,f_frq*10)) == 0) {
 //Display label from st_text
 stCur = -1;
 if(!st_text.isEVal() && st_text.length) {
-	if(!fixText)	text = st_text.parse(0,":");
+	if(!fixText)	text = tr(st_text.parse(0,":"));
 	blink = st_text.parse(2,":").toInt();
 	backClr = st_text.parse(1,":").parse(0,"-");
 	if(blink) {
@@ -13743,7 +13743,7 @@ if(btClassEdit_value) {
 					else if(itVl == "FILTER")	itVl = tr("Filter");
 				}
 				else {
-				    if(iC == 1)	tNm = "t";
+				    if(iC == 1 || iC == 4)	tNm = "t";
 				    if(itVl == "<NULL>")	itVl = "";
 				}
 				dataTbl_items += "<"+tNm+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+tNm+">";
@@ -13817,8 +13817,9 @@ if(f_start || toUpdate) {
 			tO.tbl = tO.tbl.length ? tO.tbl : ":350px";
 		}
 
-		for(iF = 0; iF < fMax; iF++)
-			this["fltrCol"+iF].attrSet("items", this["fltrCol"+iF].attr("items")+"\n"+tO.name+" (SP_"+clsLs[iR][0]+")");
+		if(clsLs[iR][0][0] != "*")
+			for(iF = 0; iF < fMax; iF++)
+				this["fltrCol"+iF].attrSet("items", this["fltrCol"+iF].attr("items")+"\n"+tO.name+" (SP_"+clsLs[iR][0]+")");
 
 		if(clsLs[iR][0] != "*TITLE") clsLsSort.push(tO.tbl.parse(2,":")+":"+iR.toString(10,3));
 	}
@@ -13843,7 +13844,7 @@ if(f_start || toUpdate) {
 	dataTbl_items = "<tbl sel=''row'' sortEn=''"+(btEdit_value?0:1)+"'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 	colTps = new Object();
 	for(iR = 0; iR < dataTbl.length; iR++) {
-		dataTbl_items += iR ? "<r>" : "<h>";
+		cntR = optR = "";
 		for(iC = 0; iC < dataTbl[iR].length; iC++) {
 			itVl = dataTbl[iR][iC];
 			opt = "";
@@ -13867,23 +13868,28 @@ if(f_start || toUpdate) {
 						//this.messInfo("iC="+iC+"; tp="+tVl.tp+" = "+colTps[iC]+"; tVl.fltr="+tVl.fltr);
 					}
 				}
-				dataTbl_items += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
+				cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
 			}
 			else {
 				if(itVl == "<NULL>")	itVl = "";
-				if(!colTps[iC].isEVal())	dataTbl_items += "<"+colTps[iC]+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+colTps[iC]+">";
-				else dataTbl_items += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
 				if(!(tVl2=colVars[dataTbl[0][iC]]).isEVal())	{
-					if(tVl2.fltr == "index" && itVl.length)	tVl2.ls[itVl] = true;
-					else if(tVl2.fltr.indexOf("list") == 0) {
-						tLs = itVl.split(tVl2.fltr[4]);
-						for(iLs = 0; iLs < tLs.length; iLs++)
-							tVl2.ls[tLs[iLs].trim()] = true;
-					}
+					tLs = new Array();
+					if(tVl2.fltr.indexOf("index") == 0 && itVl.length) { tVl2.ls[tVl=itVl.trim()] = true; tLs.push(tVl); }
+					else if(tVl2.fltr.indexOf("list") == 0)
+						for(tLs = itVl.split(tVl2.fltr[4]), iLs = 0; iLs < tLs.length; iLs++)
+							tVl2.ls[tLs[iLs]=tLs[iLs].trim()] = true;
+					// Highlight
+					for(iLn = 0, off = 0; tLs.length && (tVl1=tVl2.fltr.parseLine(0,off)).length; iLn++)
+						if(iLn && tLs.indexOf(tVl1.parse(0,":")) >= 0) {
+							tVl = ((tVl=tVl1.parse(2,":")).length?" color=''"+tVl+"''":"") + ((tVl=tVl1.parse(3,":")).length?" font=''"+tVl+"''":"");
+							if(tVl1.parse(1,":")[0] == "1") optR += tVl; else opt += tVl;
+						}
 				}
+				if(!colTps[iC].isEVal())	cntR += "<"+colTps[iC]+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+colTps[iC]+">";
+				else cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
 			}
 		}
-		dataTbl_items += iR ? "</r>\n" : "</h>\n";
+		dataTbl_items += (iR?"<r":"<h")+optR+">" + cntR + (iR?"</r>\n":"</h>\n");
 	}
 	dataTbl_items += "</tbl>";
 
@@ -13956,7 +13962,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true;
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true;
-}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1649442231);
+}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1650193827);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -23776,17 +23782,17 @@ INSERT INTO wlb_Main_io VALUES('TextLab','dscr','The element is used to display 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.1.0
+Версія: 1.1.1
 Ліцензія: GPLv2','','Элемент служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.1.0
+Версия: 1.1.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ImgLab','dscr','The element is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
 

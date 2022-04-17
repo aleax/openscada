@@ -109,6 +109,7 @@ void Lib::load_( TConfig *icfg )
     //Load functions
     map<string, bool>   itReg;
     TConfig cEl(&mod->elFnc());
+    cEl.cfg("FORMULA").setExtVal(true);
     //cEl.cfgViewAll(false);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();

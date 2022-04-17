@@ -865,7 +865,7 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mEn(false), mId(cfg("ID")), mToEn(cfg("EN").getBd()),
     mTrTm_ClsOnOpen(cfg("TRTM_CLS_ON_OPEN").getRd()), mTrTm_ClsOnReq(cfg("TRTM_CLS_ON_REQ").getRd()), mTrPr_ClsTask(cfg("TRPR_CLS_TASK").getId()),
-    userSQLTrans(EVAL_BOOL), mDisByUser(true)
+    userSQLTrans(EVAL_BOOL), mDisByUser(true), mIsFirst(true)
 {
     mId = iid;
     mTbl = grpAdd("tbl_");
@@ -921,6 +921,7 @@ void TBD::postDisable( int flag )
 
 bool TBD::cfgChange( TCfg &co, const TVariant &pc )
 {
+    if(co.name() == "ADDR") mIsFirst = true;
     if(co.name() == "TRTM_CLS_ON_OPEN" || co.name() == "TRTM_CLS_ON_REQ") {
 	mTrTm_ClsOnOpen = vmax(0.1, vmin(100,mTrTm_ClsOnOpen));
 	mTrTm_ClsOnReq = vmax(0.1, vmin(mTrTm_ClsOnOpen,mTrTm_ClsOnReq));
@@ -948,11 +949,13 @@ void TBD::enable( )
 
     mEn = true; mDisByUser = false;
 
-    Mess->translReg("", "uapi:"+fullDBName());
+    if(mIsFirst) Mess->translReg("", "uapi:"+fullDBName());
 
     if(trTm_ClsOnReq() < prmServTask_PER)
 	try { SYS->taskCreate(nodePath('.',true), trPr_ClsTask(), Task, this, 0); }
 	catch(TError&) { }	//Can be for retry to enable the DB
+
+    mIsFirst = false;
 }
 
 void TBD::disable( )
