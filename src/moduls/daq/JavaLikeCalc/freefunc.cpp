@@ -3043,14 +3043,20 @@ void Func::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
-	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)));
-	    else ioAdd(new IO("new",trS("New IO"),IO::Real,IO::Default));
+	    if(ioPrev) {
+		string ioID = TSYS::strLabEnum(ioPrev->id());
+		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
+		ioAdd(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)));
+	    } else ioAdd(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default));
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    IO *ioPrev = row ? io(row-1) : NULL;
-	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)), row);
-	    else ioIns(new IO("new",trS("New IO"),IO::Real,IO::Default), row);
+	    if(ioPrev) {
+		string ioID = TSYS::strLabEnum(ioPrev->id());
+		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
+		ioIns(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)), row);
+	    } else ioIns(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default), row);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioDel(s2i(opt->attr("row")));
 	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioMove(s2i(opt->attr("row")), s2i(opt->attr("to")));

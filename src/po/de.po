@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-16 15:37+0300\n"
+"POT-Creation-Date: 2022-04-19 19:57+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -236,8 +236,7 @@ msgstr ""
 "(5[X]), ALARM;Wach (6[X]), ALARM;Notfall (7[X]), ALARM"
 
 msgid "Receiving messages with a level greater or equal to the specified."
-msgstr ""
-"Empfangen von Nachrichten mit einem Level größer oder gleich dem angegebenen."
+msgstr "Empfangen von Nachrichten mit einem Level größer oder gleich dem angegebenen."
 
 msgid "Category pattern"
 msgstr "Kategoriemuster"
@@ -354,10 +353,8 @@ msgid "Requested %d records for time %s."
 msgstr "Fordert %d Datensätze für Zeit %s."
 
 #, c-format
-msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
-msgstr ""
-"Gittermodus unterstützt nicht das Einfügen sehr alter Werte %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgstr "Gittermodus unterstützt nicht das Einfügen sehr alter Werte %lld (%lld-%lld)."
 
 msgid "The grid mode doesn't support inserting too old values."
 msgstr "Gittermodus unterstützt nicht das Einfügen alter Werte."
@@ -429,8 +426,7 @@ msgid "Default for fast processing of archiving values."
 msgstr "Standard für die schnelle Verarbeitung von Archivierungswerten."
 
 msgid "Set in case of periodicity of values in less than a second."
-msgstr ""
-"Im Falle der Periodizität der Werte in weniger als einer Sekunde eingestellt."
+msgstr "Im Falle der Periodizität der Werte in weniger als einer Sekunde eingestellt."
 
 msgid ""
 "The passage values mostly fill by EVAL but sometime data periodicity of the "
@@ -614,8 +610,7 @@ msgstr "Tabellen sind in der Datenbank aber nicht geöffnet."
 msgid "Load the program from this DB"
 msgstr "Programm aus der Datenbank laden"
 
-msgid ""
-"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr ""
 "Unicode Zeichensatz in der Datenbank, zum Beispiel: UTF-8, KOI8-R, KOI8-"
 "U ... ."
@@ -1394,8 +1389,7 @@ msgstr "2:Akquisition wurde gestoppt."
 msgid "Parameter: "
 msgstr "Parameter: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr ""
 "Die Typänderung führt dazu, dass einige Daten der spezifischen "
 "Konfigurationen verloren gehen."
@@ -1967,8 +1961,7 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Fehler beim Schreiben der Konfigurationsdatei '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr ""
 "Unmöglich, die Projektsperre zu halten! Scheint, dass das Projekt '%s' "
 "bereits läuft."
@@ -2328,6 +2321,12 @@ msgstr ""
 "für sehr große Projekte, die in der Zeit der vollständigen Verarbeitung der "
 "Tabelle begrenzt sind."
 
+msgid "Remove from Trs"
+msgstr "Entfernen von Trs"
+
+msgid "Split item"
+msgstr "Artikel teilen"
+
 msgid "Tasks"
 msgstr "Aufgaben"
 
@@ -2449,9 +2448,11 @@ msgstr ""
 "Erstellen oder Ändern der Konfigurations-DBs als mehrsprachige mit der "
 "angegebenen Basissprache '%s'"
 
+#, c-format
 msgid "Messages indexed: %d, cached: %d."
 msgstr "Nachrichten indexiert: %d, zwischengespeichert: %d."
 
+#, c-format
 msgid "Translation contexts: %d."
 msgstr "Übersetzungskontexte: %d."
 
@@ -2471,8 +2472,7 @@ msgstr "Propagiere die Übersetzung '%s' an alle leeren Quellen für '%s'.'%s'."
 
 #, c-format
 msgid "Merging the base message to the translation '%s' for '%s' > '%s'."
-msgstr ""
-"Zusammenführen der Basisnachricht mit der Übersetzung '%s' für '%s' > '%s'."
+msgstr "Zusammenführen der Basisnachricht mit der Übersetzung '%s' für '%s' > '%s'."
 
 msgid "<<<Base changed>>>\n"
 msgstr "<<<Basis geändert>>>\n"
@@ -2707,6 +2707,7 @@ msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
 msgid "Owner"
 msgstr "Eigentümer"
 
+#, c-format
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
@@ -2815,8 +2816,7 @@ msgid "3:Error loading the file '%s'."
 msgstr "3:Fehler beim Laden der Datei '%s'."
 
 msgid "Object is not connected to a node of the OpenSCADA tree."
-msgstr ""
-"Objekt ist nicht mit einem Knoten der OpenSCADA-Baumstruktur verbunden."
+msgstr "Objekt ist nicht mit einem Knoten der OpenSCADA-Baumstruktur verbunden."
 
 #, c-format
 msgid "Child %d is not present."
@@ -2942,3 +2942,4 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
+

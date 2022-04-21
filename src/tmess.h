@@ -179,6 +179,8 @@ class TMess
 	void translCacheSet( const string &key, const string &val );
 	void translCacheLimits( time_t tmLim = 0, const char *clrCat = NULL );
 	void translIdxCacheUpd( const string &base, const string &lang, const string &mess, const string &src );
+	bool translItSplit( const string &base, const string &srcFltr = "" );
+	bool translItRemTrs( const string &base, const string &srcFltr = "" );
 
 	// Getting and registering/clearing the translation context bound to the call pthread
 	string trCtx( const string &user_lang = mess_TrModifMark, bool *hold = NULL );

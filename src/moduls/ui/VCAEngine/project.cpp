@@ -821,8 +821,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 
 		// Appending for the style name
 		map< string, vector<string> >::iterator iStPrp = mStProp.find(STL_PRM_NM);
-		if(iStPrp == mStProp.end()) mStProp[STL_PRM_NM] = vector<string>(1,_("New style"));
-		else iStPrp->second.push_back(_("New style"));
+		if(iStPrp == mStProp.end()) mStProp[STL_PRM_NM] = vector<string>(1,trDSet("",_("New style")));
+		else iStPrp->second.push_back(trDSet("",_("New style")));
 
 		// Appending for the properties
 		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)

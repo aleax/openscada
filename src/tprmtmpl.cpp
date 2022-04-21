@@ -334,7 +334,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		string ioID = TSYS::strLabEnum(ioPrev->id());
 		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
 		ioAdd(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()));
-	    } else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
+	    } else ioAdd(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default));
 	    modif();
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
@@ -344,7 +344,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		string ioID = TSYS::strLabEnum(ioPrev->id());
 		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
 		ioIns(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()), row);
-	    } else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
+	    } else ioIns(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default), row);
 	    modif();
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR)) {

@@ -1,3 +1,18 @@
+2022-04-20 Roman (stable)
+- LibsDB.vcaBase: wlb_Main.TextLab: Enabled for the transitive translation optionally in the status text.
+- !!!!:FIX:SYS: Fixed in the new values changing and saving for the MULTILANGUAGE mode:
+    - at missing the BASE value there used the new set value as a BASE and it is registered in the messages index;
+    - removed for the spare posttranslation in TFld::descr();
+    - the function TMess::isMessTranslable() switched to direct checking for the untranslatable symbols;
+    - the function TMess::translSet() adapted for empty BASE what can appear at the new values setting;
+    - the follow OpenSCADA Nodes adapted for setting new translated values, using trDSet("",{NEW_VAL}):
+	TPrmTempl, TTransportS, DAQ.JavaLikeCalc::Func, Protocol.ModBus::Node, UI.VCAEngine::{Project,Widget}.
+- !!!!:SYS,UI.{QTCfg,WebCfgD}: The OpenSCADA Control Interface for Tables expanded by the user commands.
+- !!!!:SYS: The translation management table appended of the user functions "Split item" and "Remove from Trs"
+	with implementing in new functions TMess::translItSplit() and TMess::translItRemTrs() respectively.
+- DAQ.JavaLikeCalc: New IO creation appended the new ID enumeration.
+
+
 2022-04-17 Roman (stable)
 - !!:LibsDB.OscadaLibs: tmplib_base.{anUnifSt,codeState}: Adapted to the syntax highlight builtin of the input preprocessing procedure.
 - !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Expanded and fixed for:

@@ -530,7 +530,8 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		if(nUpRiseLev)	nUpRiseLev->childAdd("el")->setText(i2s(host.upRiseLev));
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))	extHostSet(ExtHost(u,"newHost",_("New external host"),"","",u));
+	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))
+	    extHostSet(ExtHost(u,"newHost",trDSet("",_("New external host")),"","",u));
 	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR)) {
 	    if(TSYS::strParse(opt->attr("key_id"),1,".").size())
 		throw err_sys(_("Lifted hosts are not available for control here!"));

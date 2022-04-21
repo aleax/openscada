@@ -3019,29 +3019,41 @@ void ConfApp::tablePopup( const QPoint &pos )
 
     int row = tbl->currentRow();
 
+    bool noReload = false;
     try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(tbl->objectName().toStdString(),TSYS::PathEl));
 
 	if((s2i(n_el->attr("acs"))&SEC_WR) && n_el->attr("s_com").size()) {
-	    if(n_el->attr("s_com").find("add") != string::npos) {
-	        actAdd = last_it = new QAction(_("Add record"),this);
-		popup.addAction(actAdd);
-	    }
-	    if(n_el->attr("s_com").find("ins") != string::npos && row != -1) {
-		actIns = last_it = new QAction(_("Insert record"),this);
-		popup.addAction(actIns);
-	    }
-	    if(n_el->attr("s_com").find("del") != string::npos && row != -1) {
-		actDel = last_it = new QAction(_("Delete record"),this);
-		popup.addAction(actDel);
-	    }
-	    if(n_el->attr("s_com").find("move") != string::npos && row != -1) {
-		popup.addSeparator();
-		actMoveUp = last_it = new QAction(_("Move Up (Ctrl+Up)"),this);
-		popup.addAction(actMoveUp);
-		actMoveDown = last_it = new QAction(_("Move Down (Ctrl+Down)"),this);
-		popup.addAction(actMoveDown);
-	    }
+	    string sVl, sVl1;
+	    for(int off = 0; (sVl=TSYS::strParse(n_el->attr("s_com"),0,",",&off)).size(); )
+		if((sVl1=TSYS::strParse(sVl,0,":")) == "add") {
+		    actAdd = last_it = new QAction((sVl1=TSYS::strParse(sVl,1,":")).size()?sVl1.c_str():_("Add record"), this);
+		    popup.addAction(actAdd);
+		}
+		else if(sVl1 == "ins") {
+		    if(row < 0)	continue;
+		    actIns = last_it = new QAction((sVl1=TSYS::strParse(sVl,1,":")).size()?sVl1.c_str():_("Insert record"), this);
+		    popup.addAction(actIns);
+		}
+		else if(sVl1 == "del") {
+		    if(row < 0)	continue;
+		    actDel = last_it = new QAction((sVl1=TSYS::strParse(sVl,1,":")).size()?sVl1.c_str():_("Delete record"), this);
+		    popup.addAction(actDel);
+		}
+		else if(sVl1 == "move") {
+		    if(row < 0)	continue;
+		    //popup.addSeparator();
+		    actMoveUp = last_it = new QAction(_("Move Up (Ctrl+Up)"),this);
+		    popup.addAction(actMoveUp);
+		    actMoveDown = last_it = new QAction(_("Move Down (Ctrl+Down)"),this);
+		    popup.addAction(actMoveDown);
+		}
+		else {	//User commands
+		    string comId = sVl1;
+		    last_it = new QAction((sVl1=TSYS::strParse(sVl,1,":")).size()?sVl1.c_str():comId.c_str(), this);
+		    last_it->setObjectName(comId.c_str());
+		    popup.addAction(last_it);
+		}
 	}
 	if(!tbl->selectedItems().isEmpty()) {
 	    popup.addSeparator();
@@ -3095,27 +3107,6 @@ void ConfApp::tablePopup( const QPoint &pos )
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' inserted for the record %d."),
 			user().c_str(), el_path.c_str(), row);
 	    }
-	    else if(rez == actDel) {
-		n_el1.setName("del");
-		string row_addr;
-		if(!n_el->attr("key").size()) {
-		    row_addr = i2s(row);
-		    n_el1.setAttr("row",row_addr);
-		}
-		else {
-		    // Get Key columns
-		    string key;
-		    for(int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
-			for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
-			    if(n_el->childGet(iEl)->attr("id") == key) {
-				n_el1.setAttr("key_"+key,n_el->childGet(iEl)->childGet(row)->text());
-				row_addr = row_addr+"key_"+key+"="+n_el1.attr("key_"+key)+",";
-				break;
-			    }
-		}
-		mess_info(mod->nodePath().c_str(),_("%s| '%s' deleted for the record '%s'."),
-			user().c_str(), el_path.c_str(), row_addr.c_str());
-	    }
 	    else if(rez == actMoveUp || rez == actMoveDown) {
 		int r_new = row-1;
 		if(rez == actMoveDown)	r_new = row+1;
@@ -3124,13 +3115,40 @@ void ConfApp::tablePopup( const QPoint &pos )
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' moved for the record %d to %d."),
 			user().c_str(), el_path.c_str(), row, r_new);
 	    }
+	    else {	//Key commands
+		string row_addr, key;
+		if(!n_el->attr("key").size()) n_el1.setAttr("row", (row_addr=i2s(row)));
+		else if(row >= 0) {	// Getting the Key columns
+		    for(int iOff = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&iOff)).size(); )
+			for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
+			    if(n_el->childGet(iEl)->attr("id") == key) {
+				n_el1.setAttr("key_"+key,n_el->childGet(iEl)->childGet(row)->text());
+				row_addr = row_addr+"key_"+key+"="+n_el1.attr("key_"+key)+",";
+				break;
+			    }
+		}
+
+		if(rez == actDel) {
+		    n_el1.setName("del");
+		    mess_info(mod->nodePath().c_str(),_("%s| '%s' deleted for the record '%s'."),
+			user().c_str(), el_path.c_str(), row_addr.c_str());
+		}
+		else {	//User commands
+		    n_el1.setName(rez->objectName().toStdString());
+		    mess_info(mod->nodePath().c_str(),_("%s| '%s' user command '%s(%s)' to the record '%s'."),
+			user().c_str(), el_path.c_str(),
+			rez->text().toStdString().c_str(), rez->objectName().toStdString().c_str(), row_addr.c_str());
+		}
+	    }
+
 	    if(cntrIfCmd(n_el1)) throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
+	    noReload = s2i(n_el1.attr("noReload"));
 
 	    popup.clear();
 	}
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    pageRefresh(CH_REFR_TM);	//Redraw
+    if(!noReload) pageRefresh(CH_REFR_TM);	//Redraw
 }
 
 void ConfApp::tableFind( )
@@ -3295,7 +3313,7 @@ void ConfApp::tableSet( int row, int col )
 	else {
 	    // Get Key columns
 	    string key;
-	    for(int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
+	    for(int iOff = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&iOff)).size(); )
 		for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
 		    if(n_el->childGet(iEl)->attr("id") == key) {
 			n_el1.setAttr("key_"+key,n_el->childGet(iEl)->childGet(row)->text());

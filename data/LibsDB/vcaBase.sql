@@ -11959,7 +11959,7 @@ if(f_start || ((cnt++)%max(1,f_frq*10)) == 0) {
 //Display label from st_text
 stCur = -1;
 if(!st_text.isEVal() && st_text.length) {
-	if(!fixText)	text = tr(st_text.parse(0,":"));
+	if(!fixText)	text = transTr ? tr(st_text.parse(0,":")) : st_text.parse(0,":");
 	blink = st_text.parse(2,":").toInt();
 	backClr = st_text.parse(1,":").parse(0,"-");
 	if(blink) {
@@ -12036,7 +12036,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1635753802);
+event = ev_rez;','','',500,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1650374406);
 INSERT INTO wlb_Main VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -23782,17 +23782,17 @@ INSERT INTO wlb_Main_io VALUES('TextLab','dscr','The element is used to display 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.1.1
+Version: 1.1.2
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.1.1
+Версія: 1.1.2
 Ліцензія: GPLv2','','Элемент служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.1.1
+Версия: 1.1.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ImgLab','dscr','The element is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
 
@@ -28427,6 +28427,7 @@ INSERT INTO wlb_Main_uio VALUES('alarmsAct','messCat','Message category',131077,
 INSERT INTO wlb_Main_uio VALUES('ElCadr','prmErr','Parameter: error',196613,'',10,'<page>|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('TextLab','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('TextLab','transTr','Transitive transl.',131072,'0',9,'','','','Транзитивний перекл.','','','Транзитивный перев.','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_io VALUES('docRepDay','name','Day report of the hour-averaged values',32,'','','','Добовий звіт середніх за годину значень','','Суточный отчёт среднечасовых значений','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','geomZ','1',32,'','','doc','','','','','','','');

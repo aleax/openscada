@@ -1489,7 +1489,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		    case '+': case '=': case '*': case '{': case '}':
 		    case ':': case ';': case '"': case '\'': case '<':
 		    case '>': case '?': case '.': case ',':
-			sout+="_";	break;
+			sout += "_";	break;
 		    default:	sout += in[iSz];
 		}
 	    break;
@@ -3212,7 +3212,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/tr/pass","",RWRW__,"root","root",3,"tp","dec","min","0",
 		    "help",_("Pass the specified number of the table items from the top, "
 			    "useful for very big projects which are limited in time of the table complete processing."));
-		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRW__,"root","root",1,"key","base")) {
+		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRW__,"root","root",
+			2,"key","base","s_com",TSYS::strMess("remTrs:%s,split:%s",_("Remove from Trs"),_("Split item")).c_str()))
+		{
 		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->langCodeBase().c_str(),RWRW__,"root","root",1,"tp","str");
 		    string lngEl;
 		    for(int off = 0; (lngEl=strParse(Mess->translLangs(),0,";",&off)).size(); )
@@ -3729,8 +3731,14 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    bool needReload = false;
 	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->langCodeBase():opt->attr("col")), opt->text(),
 				&needReload, TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user")));
-	    if(!needReload) opt->setAttr("noReload","1");
+	    if(!needReload) opt->setAttr("noReload", "1");
 	}
+	if(ctrChkNode(opt,"remTrs",RWRW__,"root","root",SEC_WR) &&
+		!Mess->translItRemTrs(opt->attr("key_base"),TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user"))))
+	    opt->setAttr("noReload", "1");
+	if(ctrChkNode(opt,"split",RWRW__,"root","root",SEC_WR) &&
+		!Mess->translItSplit(opt->attr("key_base"),TBDS::genPrmGet(nodePath()+"TrFltr","",opt->attr("user"))))
+	    opt->setAttr("noReload", "1");
     }
     else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root")) {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/debug/cntr/id","",R_R_R_,"root","root");

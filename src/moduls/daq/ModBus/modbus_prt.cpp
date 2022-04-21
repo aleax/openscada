@@ -1499,7 +1499,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
 		IO *ioPrev = f->ioSize() ? f->io(f->ioSize()-1) : NULL;
 		if(ioPrev) f->ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)));
-		else f->ioAdd(new IO("new",trS("New IO"),IO::Integer,IO::Output));
+		else f->ioAdd(new IO("new",trDSet("",_("New IO")),IO::Integer,IO::Output));
 		modif();
 	    }
 	    if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR)) {
@@ -1507,7 +1507,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		int row = s2i(opt->attr("row"));
 		IO *ioPrev = row ? f->io(row-1) : NULL;
 		if(ioPrev) f->ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)), row);
-		else f->ioIns(new IO("new",trS("New IO"),IO::Integer,IO::Output), row);
+		else f->ioIns(new IO("new",trDSet("",_("New IO")),IO::Integer,IO::Output), row);
 		modif();
 	    }
 	    if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR)) {

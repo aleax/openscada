@@ -1620,7 +1620,11 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    if((tVl=TSYS::strParse(svalRAW,1,string(1,0))).size()) {
 			toLang = tVl; tVl = svalRAW;
 			u_cfg.setS((svalRAW=TSYS::strParse(tVl,2,string(1,0)))); sval = getSQLVal(u_cfg);
-			u_cfg.setS((svalBASE_RAW=TSYS::strParse(tVl,0,string(1,0)))); svalBASE = getSQLVal(u_cfg);
+			if((svalBASE_RAW=TSYS::strParse(tVl,0,string(1,0))).empty()) {
+			    svalBASE_RAW = svalRAW;
+			    trCacheUpd.push_back(u_cfg.name()+string(1,0)+""+string(1,0)+svalBASE_RAW);
+			}
+			u_cfg.setS(svalBASE_RAW); svalBASE = getSQLVal(u_cfg);
 			u_cfg.setS(tVl);
 		    }
 		    else if(toLang != Mess->langCodeBase()) {

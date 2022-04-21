@@ -1573,7 +1573,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		newAId = TSYS::strLabEnum(newAId);
 		newANm = TSYS::strLabEnum(newANm);
 	    }
-	    wdg.at().attrAdd(new TFld(newAId.c_str(),newANm.c_str(),TFld::String,Attr::IsUser), -1, false, false, true);
+	    wdg.at().attrAdd(new TFld(newAId.c_str(),trDSet("",newANm),TFld::String,Attr::IsUser), -1, false, false, true);
 	    //wdg.at().attrAt(newAId).at().setS(EVAL_STR);
 	    wdg.at().attrAt(newAId).at().setAModif_(1);
 	    wdg.at().modif();
@@ -1620,7 +1620,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		    tflg = tflg^((tflg^((s2i(opt->text())>>4)|Attr::IsUser))&(TFld::FullText|TFld::TransltText|TFld::Selectable|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
 		}
 		wdg.at().attrDel(idattr);
-		wdg.at().attrAdd(new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()), -1, false, false, true);
+		wdg.at().attrAdd(new TFld(tid.c_str(),tnm,ttp,tflg,"","",tvals.c_str(),tsels.c_str()), -1, false, false, true);
 		wdg.at().attrAt(tid).at().setS(tvl);
 		wdg.at().attrAt(tid).at().setFlgSelf((Attr::SelfAttrFlgs)((sflgs&(~Attr::VizerSpec))|(wdg.at().attrAt(tid).at().flgSelf()&Attr::VizerSpec)));
 		wdg.at().attrAt(tid).at().setCfgVal(cfgval);
@@ -1631,7 +1631,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		if(idcol == "name") {
 		    if(!(!(wdg.at().attrAt(idattr).at().flgSelf()&Attr::IsInher) && wdg.at().attrAt(idattr).at().fld().flg()&Attr::IsUser))
 			throw TError(nodePath().c_str(), _("Unable to change non-user attribute '%s'."), idattr.c_str());
-		    wdg.at().attrAt(idattr).at().fld().setDescr(trDSet(wdg.at().attrAt(idattr).at().fld().descr(),opt->text()));
+		    wdg.at().attrAt(idattr).at().fld().setDescr(trDSet(wdg.at().attrAt(idattr).at().name(),opt->text()));
 		}
 		else if(idcol == "wa") {
 		    wdg.at().attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
