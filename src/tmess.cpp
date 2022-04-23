@@ -206,11 +206,21 @@ string TMess::translFld( const string &lng, const string &fld, bool isCfg )	{ re
 
 bool TMess::isMessTranslable( const string &mess )
 {
-    bool isTrSymb = false;
-    for(unsigned iCh = 0; iCh < mess.size() && !isTrSymb; ++iCh)
-	isTrSymb = !(isspace(mess[iCh]) || isdigit(mess[iCh]) || ispunct(mess[iCh]));
-
-    return isTrSymb;
+    for(unsigned iCh = 0; iCh < mess.size(); ++iCh)
+	switch(mess[iCh]) {
+	    case '0' ... '9':					//Digits
+	    case ' ': case '\t': case '\x0D': case '\x0A':	//Space
+	    case '!': case '"': case '#': case '$': case '%':	//Punctuation
+	    case '&': case '\'': case '(': case ')': case '*':
+	    case '+': case ',': case '-': case '.': case '/':
+	    case ':': case ';': case '<': case '=': case '>':
+	    case '?': case '@': case '[': case '\\': case ']':
+	    case '^': case '_': case '`': case '{': case '|':
+	    case '}': case '~':
+		continue;
+	    default: return true;
+	}
+    return false;
 }
 
 string TMess::langCodeBase( )	{ return TSYS::strParse(TSYS::strParse(langBase(),0,";"), 0, "_"); }
@@ -414,7 +424,7 @@ string TMess::translSet( const string &base, const string &lang, const string &m
     else if(trLang.empty())	trLang = langCode();
 
     if(!needReload) {
-	if(!translDyn() || lang == langCodeBase() || base.empty()) return mess;
+	if(!translDyn() || lang == langCodeBase() /*|| base.empty()*/) return mess;	//!!!! base.empty() can be for new values
 
 	//Implementing the combained storing in "{base}\000{lang}\000{mess}"
 	return TSYS::strParse(base,0,string(1,0)) + string(1,0) + trLang + string(1,0) + mess;
@@ -602,6 +612,95 @@ void TMess::translIdxCacheUpd( const string &base, const string &lang, const str
 	    else trMessCache.erase(iCach);
 	}
     }
+}
+
+bool TMess::translItSplit( const string &base, const string &srcFltr )
+{
+    bool isFirst = true, isRenFirst = false;
+    vector<string> toRename;
+
+    trMessIdxRes.lock();
+    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
+    if(im != trMessIdx.end())
+	for(map<string,string>::iterator imSrc = im->second.begin(); imSrc != im->second.end(); ) {
+	    if(imSrc->first.find("db:") == 0 && imSrc->first.find(mess_TrUApiTbl "#base") == string::npos &&
+		(srcFltr.empty() || imSrc->first.find(srcFltr) != string::npos))
+	    {
+		if(isFirst) isRenFirst = true;
+		toRename.push_back(imSrc->first);
+		if(!isFirst) { im->second.erase(imSrc++); continue; }
+	    }
+	    isFirst = false;
+	    ++imSrc;
+	}
+    trMessIdxRes.unlock();
+
+    bool needReload = false;
+    for(unsigned iRen = 0, iRenCnt = 0; iRen < toRename.size(); ++iRen) {
+	string trSrc = TSYS::strParse(toRename[iRen],0,"#").substr(3), trFld = TSYS::strParse(toRename[iRen],1,"#");
+
+	AutoHD<TTable> tbl = SYS->db().at().tblOpen(trSrc);
+
+	TConfig req;
+	req.setNoTransl(true);
+	tbl.at().fieldStruct(req);
+	req.cfgViewAll(false);
+	req.cfg(trFld).setReqKey(true);
+	req.cfg(trFld).setS(base, true);
+
+	// Get from config file or DB source
+	for(int iPos = 0; tbl.at().fieldSeek(iPos,req,__FUNCTION__); ++iPos) {
+	    if(isRenFirst && iRenCnt == 0) { isRenFirst = false; continue; }
+	    req.cfg(trFld).setReqKey(false);
+	    req.cfg(trFld).setS(base+i2s(iRenCnt+2), TCfg::ForceUse);
+	    tbl.at().fieldSet(req);
+
+	    translReg(base+i2s(iRenCnt+2), toRename[iRen]);
+	    iRenCnt++;
+	    needReload = true;
+
+	    //  For continue the checking
+	    req.cfg(trFld).setReqKey(true);
+	    req.cfg(trFld).setS(base, true);
+	}
+    }
+
+    return needReload;
+}
+
+bool TMess::translItRemTrs( const string &base, const string &srcFltr )
+{
+    vector<string> toRemove;
+
+    trMessIdxRes.lock();
+    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
+    if(im != trMessIdx.end()) {
+	for(map<string,string>::iterator imSrc = im->second.begin(); imSrc != im->second.end(); ) {
+	    if(imSrc->first.find(mess_TrUApiTbl "#base") != string::npos && (srcFltr.empty() || imSrc->first.find(srcFltr) != string::npos)) {
+		toRemove.push_back(imSrc->first);
+		im->second.erase(imSrc++);
+		continue;
+	    }
+	    ++imSrc;
+	}
+	if(im->second.empty()) trMessIdx.erase(im);
+    }
+    trMessIdxRes.unlock();
+
+    for(unsigned iRem = 0; iRem < toRemove.size(); ++iRem) {
+	string trSrc = TSYS::strParse(toRemove[iRem],0,"#"), trFld = TSYS::strParse(toRemove[iRem],1,"#");
+
+	TConfig req;
+	req.setNoTransl(true);
+	req.elem().fldAdd(new TFld(trFld.c_str(),"",TFld::String,0));
+	req.cfg(trFld).setReqKey(true);
+	req.cfg(trFld).setS(base, true);
+
+	if(trSrc.find("cfg:") == 0) TBDS::dataDel("", trSrc.substr(4), req);
+	else TBDS::dataDel(trSrc.substr(3), "", req);
+    }
+
+    return (bool)toRemove.size();
 }
 
 string TMess::trCtx( const string &user_lang, bool *hold )

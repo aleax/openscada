@@ -544,6 +544,8 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>void translCacheSet( const string &amp;key, const string &amp;val );</i> — Setting the translation message <i>val</i> at the <i>key</i> to the translation cache.</li>
 <li> <i>void translCacheLimits( time_t tmLim = 0, const char *clrCat = NULL );</i> — Processing the translation cache limits at the size <i>trMessCache</i> and the nonzero time <i>tmLim</i>. Also that can clear the messages in the category <i>clrCat</i>.</li>
 <li> <i>void translIdxCacheUpd( const string &amp;base, const string &amp;lang, const string &amp;mess, const string &amp;src );</i> — Updating the operative translation messages' index and cache in the MULTILANGUAGE-DYNAMIC mode.</li>
+<li> <i>bool translItSplit( const string &amp;base, const string &amp;srcFltr = "" );</i> — Splitting the BASE message <i>base</i> per it sources and only for matched ones to <i>srcFltr</i>.</li>
+<li> <i>bool translItRemTrs( const string &amp;base, const string &amp;srcFltr = "" );</i> — Removing the BASE message <i>base</i> from the individual messages table "Trs" and only for matched sources to <i>srcFltr</i>.</li>
 <li> <i>string trCtx( const string &amp;user_lang = mess_TrModifMark, bool *hold = NULL );</i> — Getting (by default) and registering(no empty)/clearing(empty) the translation context <i>user_lang</i> bound to the call pthread. <i>hold</i> can be pointed to detect the context already registered and do not clear that.</li>
 <li> <i>static string labStor( bool nogen = false ); static string labStorRemGenStor( ); static string labSecCRON( ); static string labSecCRONsel( ); static string labTaskPrior( ); static string labMessCat( );</i> — Common help labels.</li>
 <li> <i>int getUTF8( const string &amp;str, int off = 0, int32_t *symb = NULL );</i> — Get and parse a UTF-8 symbol.</li>
@@ -2755,6 +2757,15 @@ Where:
 </p>
 </td></tr>
 <tr>
+<td> User command of the row </td>
+<td>
+<p><i>Request:</i> command "{user}": <i>&lt;{user} path="/fld_teg" user="user" row="3"/&gt;</i> or <i>&lt;{user} path="/fld_teg" user="user" key_id="Test"/&gt;</i> for the key mode
+</p>
+<dl><dd>To send a <i>{user}</i> command for position 3 or string in the position where the <i>id</i> column value is "Test".<br /></dd></dl>
+<p><i>Result:</i> confirmation or an error message.
+</p>
+</td></tr>
+<tr>
 <td> Changing of the row </td>
 <td>
 <p><i>Request:</i> command "set": <i>&lt;set path="/fld_teg" user="user" row="3" col="id"&gt;Test&lt;/set&gt;</i> or <i>&lt;set path="/fld_teg" user="user" key_id="Test" col="id"&gt;Test1&lt;/set&gt;</i> for the key mode
@@ -2962,12 +2973,13 @@ Where:
 <i>key</i> — key columns (key="id,name,per");<br />
 <i>cols</i> — list of columns in the request attribute;<br />
 <i>rows</i> — range of rows in the attribute of the request;<br />
-<i>s_com</i> — types of the table's modification [add][,del][,ins][,move]:
+<i>s_com</i> — types of the table's modification [add][,del][,ins][,move][,{user}]:
 </p>
-<dl><dd><i>add</i> — add rows;</dd>
-<dd><i>ins</i> — insert rows;</dd>
-<dd><i>del</i> — delete rows;</dd>
-<dd><i>move</i> — move rows.</dd></dl>
+<dl><dd><i>add[:{CustName}]</i> — add row, with the menu item custom name <i>CustName</i>;</dd>
+<dd><i>ins[:{CustName}]</i> — insert row, with the menu item custom name <i>CustName</i>;</dd>
+<dd><i>del[:{CustName}]</i> — delete row, with the menu item custom name <i>CustName</i>;</dd>
+<dd><i>move</i> — move row;</dd>
+<dd><i>{user}[:{name}]</i> — user command to row or in whole table with the menu item name <i>name</i>.</dd></dl>
 </td>
 <td>list
 </td></tr>

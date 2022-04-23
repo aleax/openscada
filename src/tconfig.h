@@ -78,7 +78,7 @@ class TCfg : public TVariant
 	void	setKeyUse( bool vl )	{ if(fld().flg()&Key) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 	void	setReqKey( bool vl, bool treatDep = true );
-	void	setExtVal( bool vw );
+	void	setExtVal( bool vw, bool toOne = false );
 	void	setIsSet( bool vl )	{ mIsSet = vl; }
 	void	toDefault( bool notSetType = false );
 

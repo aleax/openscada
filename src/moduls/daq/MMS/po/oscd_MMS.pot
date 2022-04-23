@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:37+0300\n"
+"POT-Creation-Date: 2022-04-22 17:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,14 +60,14 @@ msgid "No activity data."
 msgstr ""
 
 #, c-format
-msgid "Connection error. Restoring in %.6g s."
+msgid "Connection error, restoring at %.6g s."
 msgstr ""
 
 msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Acquisition with the period: %s. "
+msgid "Acquisition with the period %s. "
 msgstr ""
 
 #, c-format
@@ -75,7 +75,7 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s[%s]. Requests %.6g."
+msgid "Spent time %s[%s], requests %.6g."
 msgstr ""
 
 msgid "Remote host error"

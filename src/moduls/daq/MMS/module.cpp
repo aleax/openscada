@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.8"
+#define MOD_VER		"1.4.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -154,14 +154,14 @@ string TMdContr::getStatus( )
     string rez = TController::getStatus();
     if(startStat() && !redntUse()) {
 	if(tmDelay >= 0) {
-	    rez += (tmDelay == 0) ? TSYS::strMess(_("No activity data.")) : TSYS::strMess(_("Connection error. Restoring in %.6g s."), tmDelay);
+	    rez += (tmDelay == 0) ? TSYS::strMess(_("No activity data.")) : TSYS::strMess(_("Connection error, restoring at %.6g s."), tmDelay);
 	    rez.replace(0, 1, "10");
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
-	    if(period()) rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	    if(period()) rez += TSYS::strMess(_("Acquisition with the period %s. "), tm2s(1e-9*period()).c_str());
 	    else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s[%s]. Requests %.6g."),
+	    rez += TSYS::strMess(_("Spent time %s[%s], requests %.6g."),
 		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(), -tmDelay);
 	}
     }

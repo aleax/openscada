@@ -179,16 +179,16 @@ msgid "Acquisition. "
 msgstr "Сбор. "
 
 #, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Сбор с периодом: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Сбор с периодом %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий cбор по cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s."
-msgstr "Spent time: %s."
+msgid "Spent time %s."
+msgstr "Spent time %s."
 
 #, c-format
 msgid "Break %d"

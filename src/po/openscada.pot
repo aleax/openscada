@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-02 09:25+0300\n"
+"POT-Creation-Date: 2022-04-22 18:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1894,6 +1894,12 @@ msgstr ""
 msgid "Pass the specified number of the table items from the top, useful for very big projects which are limited in time of the table complete processing."
 msgstr ""
 
+msgid "Remove from Trs"
+msgstr ""
+
+msgid "Split item"
+msgstr ""
+
 msgid "Tasks"
 msgstr ""
 
@@ -1952,7 +1958,7 @@ msgid "Monotonic %s"
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s[%s]."
+msgid "Spent time %s[%s]."
 msgstr ""
 
 msgid "<newStat>"
@@ -2004,11 +2010,11 @@ msgid "creating or modification the configuration DBs as multilanguage ones with
 msgstr ""
 
 #, c-format
-msgid "Messages indexed=%d, cached=%d."
+msgid "Messages indexed %d, cached %d."
 msgstr ""
 
 #, c-format
-msgid "Translation contexts=%d."
+msgid "Translation contexts %d."
 msgstr ""
 
 msgid "<<<Unmatched sources>>>\n"
@@ -2178,7 +2184,7 @@ msgid "Connected. "
 msgstr ""
 
 #, c-format
-msgid "Established: %s. Last: %s. "
+msgid "Established %s, last %s. "
 msgstr ""
 
 #, c-format
@@ -2241,7 +2247,7 @@ msgstr ""
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"FontSyntHighlCode <font>  Font used in the code syntax highlight, by default \"monospace\".\n"
+"FontSnthHglCode <font>  Font used in the code syntax highlight, by default \"monospace\".\n"
 "\n"
 msgstr ""
 

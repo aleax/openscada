@@ -1,7 +1,7 @@
 # OpenSCADA.DAQ.Comedi translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.Comedi package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2012б 2018.
+# Roman Savochenko <roman@oscada.org>, 2012-2022.
 #
 msgid ""
 msgstr ""
@@ -51,16 +51,16 @@ msgid "Acquisition. "
 msgstr "Сбор. "
 
 #, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Сбор с периодом: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Сбор с периодом %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. "
-msgstr "Затрачено времени: %s. "
+msgid "Spent time %s. "
+msgstr "Затрачено времени %s. "
 
 msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."

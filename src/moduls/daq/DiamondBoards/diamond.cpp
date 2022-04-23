@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.18"
+#define MOD_VER		"2.1.19"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -205,9 +205,9 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(callSt)	val += TSYS::strMess(_("Acquisition. "));
-	if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	if(period())	val += TSYS::strMess(_("Acquisition with the period %s. "), tm2s(1e-9*period()).c_str());
 	else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s[%s]. "),
+	val += TSYS::strMess(_("Spent time %s[%s]. "),
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
 

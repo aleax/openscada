@@ -69,8 +69,8 @@ TConfig &TConfig::exclCopy( const TConfig &config, const string &passCpLs, bool 
 	switch(d_cfg.fld().type()) {
 	    case TFld::String:
 		d_cfg.setExtVal(s_cfg.extVal());
-		if(s_cfg.extVal()) d_cfg.TVariant::operator=(s_cfg);
-		d_cfg.setS(s_cfg.getS());
+		if(s_cfg.extVal()) d_cfg = s_cfg;
+		else d_cfg.setS(s_cfg.getS());
 		break;
 	    case TFld::Real:	d_cfg.setR(s_cfg.getR());break;
 	    case TFld::Integer:	d_cfg.setI(s_cfg.getI());break;
@@ -297,13 +297,13 @@ TCfg::~TCfg( )
     if(mFld->flg()&TFld::SelfFld)	delete mFld;
 }
 
-TCfg &TCfg::operator=( const TCfg & cfg )
+TCfg &TCfg::operator=( const TCfg &cfg )
 {
     switch(type()) {
-	case TVariant::String:	setS(cfg.getS());	break;
-	case TVariant::Integer:	setI(cfg.getI());	break;
-	case TVariant::Real:	setR(cfg.getR());	break;
-	case TVariant::Boolean:	setB(cfg.getB());	break;
+	case TVariant::String:	TVariant::setS(cfg.TVariant::getS());	break;
+	case TVariant::Integer:	TVariant::setI(cfg.TVariant::getI());	break;
+	case TVariant::Real:	TVariant::setR(cfg.TVariant::getR());	break;
+	case TVariant::Boolean:	TVariant::setB(cfg.TVariant::getB());	break;
 	default: break;
     }
 
@@ -321,12 +321,12 @@ void TCfg::setReqKey( bool vl, bool treatDep )
     mOwner.reqKeysUpdate();
 }
 
-void TCfg::setExtVal( bool vw )
+void TCfg::setExtVal( bool vw, bool toOne )
 {
     if(!vw) {
-	string fVl = getS();
+	string fVl = toOne ? getS(TCfg::ExtValOne) : getS();
 	mExtVal = vw;
-	setS(fVl);
+	TVariant::setS(fVl);
     } else mExtVal = vw;
 }
 

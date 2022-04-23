@@ -135,8 +135,8 @@ string WidgetLib::getStatus( )
 	cnt += at(tls[iT]).at().herit().size();
 	maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
     }
-    rez += TSYS::strMess(_("Used: %d. "), cnt);
-    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(maxTm).c_str());
+    rez += TSYS::strMess(_("Used %d. "), cnt);
+    rez += TSYS::strMess(_("Date of modification %s. "), atm2s(maxTm).c_str());
 
     return rez;
 }
@@ -162,6 +162,7 @@ void WidgetLib::load_( TConfig *icfg )
     //Create new widgets
     map<string, bool>	itReg;
     TConfig cEl(&mod->elWdg());
+    cEl.cfg("PROC").setExtVal(true);
     //cEl.cfgViewAll(false);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
@@ -501,7 +502,6 @@ LWidget::LWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TCon
     enableByNeed(false), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), mFuncM(true)
 {
     cfg("ID").setS(id());
-    cfg("PROC").setExtVal(true);
 
     setParentAddr(isrcwdg);
     setNodeFlg(TCntrNode::SaveForceOnChild);
@@ -569,9 +569,9 @@ string LWidget::ico( ) const
 string LWidget::getStatus( )
 {
     string rez = Widget::getStatus();
-    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(timeStamp()).c_str());
+    rez += TSYS::strMess(_("Date of modification %s. "), atm2s(timeStamp()).c_str());
     if(calcProg().size()) {
-	rez += _("Calculating procedure: ");
+	rez += _("Calculating procedure - ");
 	if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
 	    rez += _("!!redefined!!");
 	else if(!parent().freeStat() && parent().at().calcProg().size())
@@ -667,7 +667,11 @@ void LWidget::load_( TConfig *icfg )
     string tbl = ownerLib().tbl();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    else {
+	cfg("PROC").setExtVal(true);
+	TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    }
+    if(!calcProgTr()) cfg("PROC").setExtVal(false, true);
 
     //Inherit modify attributes
     vector<string> als;

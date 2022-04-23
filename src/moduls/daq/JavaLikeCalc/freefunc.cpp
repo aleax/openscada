@@ -41,7 +41,6 @@ Func::Func( const string &iid, const string &name ) : TConfig(&mod->elFnc()), TF
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
-    cfg("FORMULA").setExtVal(true);
     mMaxCalcTm = mod->safeTm();
 }
 
@@ -145,7 +144,11 @@ void Func::load_( TConfig *icfg )
     if(owner().DB().empty() || (!SYS->chkSelDB(owner().DB())))	throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
+    else {
+	cfg("FORMULA").setExtVal(true);
+	TBDS::dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
+    }
+    if(!progTr()) cfg("FORMULA").setExtVal(false, true);
 
     loadIO();
 }
@@ -3003,7 +3006,7 @@ void Func::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/func/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else if(a_path == "/func/st/compileSt" && ctrChkNode(opt))
-	opt->setText(TSYS::strMess(_("Size source=%s, bytecode=%s; Registers totally=%d, constants=%d, internal functions'=%d; Functions external=%d, internal=%d."),
+	opt->setText(TSYS::strMess(_("Size source %s, bytecode %s; Registers totally %d, constants %d, internal functions' %d; Functions external %d, internal %d."),
 	    TSYS::cpct2str(prog().size()).c_str(),TSYS::cpct2str(prg.size()).c_str(),mRegs.size(),cntrCnst,cntrInFRegs,mFncs.size(),cntrInF));
     else if(a_path == "/func/cfg/NAME") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));
@@ -3040,14 +3043,20 @@ void Func::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
-	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)));
-	    else ioAdd(new IO("new",trS("New IO"),IO::Real,IO::Default));
+	    if(ioPrev) {
+		string ioID = TSYS::strLabEnum(ioPrev->id());
+		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
+		ioAdd(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)));
+	    } else ioAdd(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default));
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int row = s2i(opt->attr("row"));
 	    IO *ioPrev = row ? io(row-1) : NULL;
-	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)), row);
-	    else ioIns(new IO("new",trS("New IO"),IO::Real,IO::Default), row);
+	    if(ioPrev) {
+		string ioID = TSYS::strLabEnum(ioPrev->id());
+		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
+		ioIns(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~SysAttr)), row);
+	    } else ioIns(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default), row);
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioDel(s2i(opt->attr("row")));
 	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioMove(s2i(opt->attr("row")), s2i(opt->attr("to")));
@@ -3076,8 +3085,8 @@ void Func::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/io/prog") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	{ setProg(opt->text()); progCompile(); }
-	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD)) mod->compileFuncSnthHgl("JavaScript",*opt);
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	setProg(opt->text());
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD)) mod->compileFuncSnthHgl("JavaScript", *opt);
     }
     else TFunction::cntrCmdProc(opt);
 }

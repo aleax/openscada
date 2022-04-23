@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2018.
+# Roman Savochenko <roman@oscada.org>, 2011-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 11:09+0200\n"
+"POT-Creation-Date: 2022-04-22 18:14+0300\n"
 "PO-Revision-Date: 2009-08-18 09:32+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -68,16 +68,15 @@ msgstr "OID-Liste (Trennung in neuer Zeile)"
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Erwerb mit dem Zeitraum: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Erwerb mit dem Zeitraum %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s."
-msgstr "Verbrauchte Zeit: %s."
+msgid "Spent time %s."
+msgstr "Verbrauchte Zeit %s."
 
 msgid "Error generating Ku from authentication pass phrase."
 msgstr "Fehler beim Generieren von Ku-Authentifizierung Passphrase."
@@ -110,9 +109,11 @@ msgstr "Auth"
 msgid "Privacy"
 msgstr "Datenschutz"
 
+#, c-format
 msgid "ASN type '%d' is not supported."
 msgstr "ASN-Typ '%d' nicht behandelt."
 
+#, c-format
 msgid "10:Timeout: No response from %s."
 msgstr "10:Timeout: Keine Antwort von %s."
 

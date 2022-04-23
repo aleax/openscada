@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-20 09:38+0200\n"
+"POT-Creation-Date: 2022-04-22 18:31+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -21,13 +21,11 @@ msgstr "Включен. "
 msgid "Disabled. "
 msgstr "Выключен. "
 
-#, c-format
-msgid "Used: %d. "
-msgstr "Использовано: %d. "
+msgid "Used %d. "
+msgstr "Использовано %d. "
 
-#, c-format
-msgid "Date of modification: %s. "
-msgstr "Дата модификации: %s. "
+msgid "Date of modification %s. "
+msgstr "Дата модификации %s. "
 
 msgid "Loading widgets library."
 msgstr "Загрузка библиотеки виджетов."
@@ -114,8 +112,8 @@ msgstr "MIME"
 msgid "Data"
 msgstr "Данные"
 
-msgid "Calculating procedure: "
-msgstr "Вычислительная процедура: "
+msgid "Calculating procedure - "
+msgstr "Вычислительная процедура - "
 
 msgid "!!redefined!!"
 msgstr "!!переопределена!!"
@@ -1601,11 +1599,11 @@ msgstr "Модификация формирование %d, фиксация %d.
 msgid "Processing at %s. "
 msgstr "Обработка в %s. "
 
-msgid "Spent time on the branch: "
-msgstr "Затрачено времени на ветвь: "
+msgid "Spent time on the branch "
+msgstr "Затрачено времени на ветвь "
 
-msgid "the item: "
-msgstr "элемент: "
+msgid "the item "
+msgstr "элемент "
 
 #, c-format
 msgid "It is a try of creating a widget in depth bigger to %d!"

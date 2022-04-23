@@ -128,9 +128,9 @@ string TMdContr::getStatus( )
 	}
 	else {
 	    if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
-	    if(period()) rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	    if(period()) rez += TSYS::strMess(_("Acquisition with the period %s. "), tm2s(1e-9*period()).c_str());
 	    else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s[%s]. Requests %.6g. "),
+	    rez += TSYS::strMess(_("Spent time %s[%s], requests %.6g. "),
 		tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str(), -tmDelay);
 	    OPCAlloc res(mtxData, true);
 	    rez += TSYS::strMess(_("Secure channel %u, token %u, lifetime %s; Request ID %u, handle %u; Session %s. "),

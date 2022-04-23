@@ -2,14 +2,14 @@
 # Copyright (C) 2008-2009 Almaz Karimov
 # This file is distributed under the same license as the OpenSCADA.DAQ.DCON package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2008-2018.
+# Roman Savochenko <roman@oscada.org>, 2008-2022.
 # Almaz Karimov, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:14+0300\n"
+"POT-Creation-Date: 2022-04-22 18:09+0300\n"
 "PO-Revision-Date: 2011-02-28 16:29+0300\n"
 "Last-Translator: Almaz Karimov\n"
 "Language-Team:  <ru@li.org>\n"
@@ -132,17 +132,15 @@ msgstr "Нет CI;2CI (#AA);3CI (#AA)"
 msgid "Acquisition. "
 msgstr "Сбор. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Сбор с периодом: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Сбор с периодом %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s. "
-msgstr "Затрачено времени: %s. "
+msgid "Spent time %s. "
+msgstr "Затрачено времени %s. "
 
 #, c-format
 msgid "REQ -> '%s'"

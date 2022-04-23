@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.13"
+#define MOD_VER		"2.9.15"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -139,10 +139,10 @@ string TMdContr::getStatus( )
 	if(syncSt)	val += TSYS::strMess(_("Sync. "));
 	else {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
-	    if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
+	    if(period())	val += TSYS::strMess(_("Acquisition with the period %s. "),tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	}
-	val += TSYS::strMess(_("Spent time: %s[%s]. "),
+	val += TSYS::strMess(_("Spent time %s[%s]. "),
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
 
 	bool isWork = false;
@@ -156,7 +156,7 @@ string TMdContr::getStatus( )
 		    inWrBuf += iPrm->second.size();
 		st->second.aWrRes.unlock();
 
-		val += TSYS::strMess(_("Requests to '%s': %.6g; "), st->first.c_str(), -st->second.cntr);
+		val += TSYS::strMess(_("Requests to '%s' - %.6g; "), st->first.c_str(), -st->second.cntr);
 		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "), st->second.numR, st->second.numRA, st->second.numRM);
 		val += TSYS::strMess(_("wrote %g values, %g messages, in the buffer %d. "), st->second.numW, st->second.numWM, inWrBuf);
 		isWork = true;
@@ -517,6 +517,7 @@ void *TMdContr::Task( void *icntr )
 		//Acquisition cycle of the stations
 		//for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st) {
 		string statV;
+		bool someLive = false;
 		for(int stOff = 0; (statV=TSYS::strParse(stLs,0,";",&stOff)).size(); ) {
 		    map<string,StHd>::iterator st = cntr.mStatWork.find(statV);
 		    if(st == cntr.mStatWork.end() || st->second.cntr > 0) continue;
@@ -550,8 +551,10 @@ void *TMdContr::Task( void *icntr )
 			}
 
 			// Same request
-			if(!cntr.cntrIfCmd(req)) { aWrs.clear(); stO.numW += vlToWr; stO.numWM += mToWr; }
-			else if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), "%s", req.text().c_str());
+			try {
+			    if(!cntr.cntrIfCmd(req)) { aWrs.clear(); stO.numW += vlToWr; stO.numWM += mToWr; }
+			    else if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), "%s", req.text().c_str());
+			} catch(TError&) { }
 
 			req.childClear();
 
@@ -643,10 +646,14 @@ void *TMdContr::Task( void *icntr )
 		    if(!req.childSize()) continue;
 
 		    //Same request
-		    if(cntr.cntrIfCmd(req)) {
-			if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), "%s", req.text().c_str());
-			continue;
-		    }
+		    try {
+			if(cntr.cntrIfCmd(req)) {
+			    if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), "%s", req.text().c_str());
+			    continue;
+			}
+		    } catch(TError&) { continue; }
+
+		    someLive = true;
 
 		    //Result process
 		    for(unsigned iR = 0; iR < req.childSize(); ++iR) {
@@ -725,7 +732,7 @@ void *TMdContr::Task( void *icntr )
 		//Mark not processed parameters as EVAL
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 		    TMdPrm &prm = cntr.pHd[iP].at();
-		    if(prm.isPrcOK || prm.isEVAL) continue;
+		    if((someLive && prm.isPrcOK) || prm.isEVAL) continue;
 		    vector<string> vLs;
 		    prm.elem().fldList(vLs);
 		    for(unsigned iV = 0; iV < vLs.size(); iV++) {

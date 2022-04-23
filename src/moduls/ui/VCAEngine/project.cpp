@@ -140,8 +140,8 @@ string Project::getStatus( )
     time_t maxTm = 0;
     for(unsigned iT = 0; iT < tls.size(); iT++)
 	maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
-    rez += TSYS::strMess(_("Used: %d. "), mHerit.size());
-    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(maxTm).c_str());
+    rez += TSYS::strMess(_("Used %d. "), mHerit.size());
+    rez += TSYS::strMess(_("Date of modification %s. "), atm2s(maxTm).c_str());
 
     return rez;
 }
@@ -180,6 +180,7 @@ void Project::load_( TConfig *icfg )
     //Create new pages
     map<string, bool> itReg;
     TConfig cEl(&mod->elPage());
+    cEl.cfg("PROC").setExtVal(true);
     //cEl.cfgViewAll(false);
     cEl.cfg("OWNER").setS("/"+id(), true);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB(),mod->nodePath()+tbl()+"/",fldCnt++,cEl,TBDS::UseCache); ) {
@@ -820,8 +821,8 @@ void Project::cntrCmdProc( XMLNode *opt )
 
 		// Appending for the style name
 		map< string, vector<string> >::iterator iStPrp = mStProp.find(STL_PRM_NM);
-		if(iStPrp == mStProp.end()) mStProp[STL_PRM_NM] = vector<string>(1,_("New style"));
-		else iStPrp->second.push_back(_("New style"));
+		if(iStPrp == mStProp.end()) mStProp[STL_PRM_NM] = vector<string>(1,trDSet("",_("New style")));
+		else iStPrp->second.push_back(trDSet("",_("New style")));
 
 		// Appending for the properties
 		for(iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
@@ -920,7 +921,6 @@ Page::Page( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&m
     mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
 {
     cfg("ID").setS(id());
-    cfg("PROC").setExtVal(true);
 
     mPage = grpAdd("pg_");
 
@@ -1083,9 +1083,9 @@ void Page::setParentAddr( const string &isw )
 string Page::getStatus( )
 {
     string rez = Widget::getStatus();
-    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(timeStamp()).c_str());
+    rez += TSYS::strMess(_("Date of modification %s. "), atm2s(timeStamp()).c_str());
     if(calcProg().size()) {
-	rez += _("Calculating procedure: ");
+	rez += _("Calculating procedure - ");
 	if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
 	    rez += _("!!redefined!!");
 	else if(!parent().freeStat() && parent().at().calcProg().size())
@@ -1166,7 +1166,11 @@ void Page::load_( TConfig *icfg )
     string tbl = ownerProj()->tbl();
     string tbl_io = tbl+"_io";
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    else {
+	cfg("PROC").setExtVal(true);
+	TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    }
+    if(!calcProgTr()) cfg("PROC").setExtVal(false, true);
     setParentAddr(cfg("PARENT").getS());
 
     //Inheriting the modified attributes
@@ -1190,6 +1194,7 @@ void Page::load_( TConfig *icfg )
 	//Creating for new pages
 	map<string, bool>	itReg;
 	TConfig cEl(&mod->elPage());
+	cEl.cfg("PROC").setExtVal(true);
 	//cEl.cfgViewAll(false);
 	cEl.cfg("OWNER").setS(ownerFullId()+"/"+id(), true);
 	for(int fldCnt = 0; TBDS::dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,TBDS::UseCache); ) {

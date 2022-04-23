@@ -92,6 +92,7 @@ void TProt::load_( )
     // Search and create new nodes
     try {
 	TConfig gCfg(&nodeEl());
+	gCfg.cfg("DT_PROG").setExtVal(true);
 	//gCfg.cfgViewAll(false);
 	vector<string> itLs;
 	map<string, bool> itReg;
@@ -597,7 +598,6 @@ Node::Node( const string &iid, const string &idb, TElem *el ) :
     mId = iid;
 
     cfg("MODE").setI(0);
-    cfg("DT_PROG").setExtVal(true);
 }
 
 Node::~Node( )
@@ -752,9 +752,11 @@ void Node::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
+	cfg("DT_PROG").setExtVal(true);
 	TBDS::dataGet(fullDB(),owner().nodePath()+tbl(), *this);
 	//cfg("MODE").setI(cfg("MODE").getI());
     }
+    if(!progTr()) cfg("DT_PROG").setExtVal(false, true);
 
     loadIO();
 
@@ -1422,7 +1424,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    }
 	    if((enableStat() && !isDAQTmpl) || isDirFunc) {
-		ctrMkNode("fld",opt,-1,"/dt/progTr",cfg("DT_PR_TR").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,1, "tp","bool");
+		if(progTr())
+		    ctrMkNode("fld",opt,-1,"/dt/progTr",cfg("DT_PR_TR").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,1, "tp","bool");
 		ctrMkNode("fld",opt,-1,"/dt/prog",cfg("DT_PROG").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,3, "tp","str", "rows","10", "SnthHgl","1");
 	    }
 	}
@@ -1496,7 +1499,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		if(enableStat()) throw TError(nodePath().c_str(),_("Turn off the node for this operation"));
 		IO *ioPrev = f->ioSize() ? f->io(f->ioSize()-1) : NULL;
 		if(ioPrev) f->ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)));
-		else f->ioAdd(new IO("new",trS("New IO"),IO::Integer,IO::Output));
+		else f->ioAdd(new IO("new",trDSet("",_("New IO")),IO::Integer,IO::Output));
 		modif();
 	    }
 	    if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR)) {
@@ -1504,7 +1507,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		int row = s2i(opt->attr("row"));
 		IO *ioPrev = row ? f->io(row-1) : NULL;
 		if(ioPrev) f->ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~TPrmTempl::LockAttr)), row);
-		else f->ioIns(new IO("new",trS("New IO"),IO::Integer,IO::Output), row);
+		else f->ioIns(new IO("new",trDSet("",_("New IO")),IO::Integer,IO::Output), row);
 		modif();
 	    }
 	    if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR)) {

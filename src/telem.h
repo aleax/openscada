@@ -85,7 +85,7 @@ class TFld
 
 	// Main
 	const string &name( ) const	{ return mName; }	//Name
-	string descr( ) const		{ return _(mDescr); }	//Description
+	string descr( ) const		{ return mDescr; }	//Description
 	string lenS( ) const;					//Length summary-string
 	int len( ) const		{ return mLen; }	//Length
 	int dec( ) const		{ return mDec; }	//Float dec

@@ -33,7 +33,7 @@
 #define MOD_NAME	trS("User protocol")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.5.9"
+#define MOD_VER		"1.5.11"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows you to create your own user protocols on an internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -117,6 +117,8 @@ void TProt::load_( )
     // Search and create new user protocols
     try {
 	TConfig gCfg(&uPrtEl());
+	gCfg.cfg("InPROG").setExtVal(true);
+	gCfg.cfg("OutPROG").setExtVal(true);
 	//gCfg.cfgViewAll(false);
 	vector<string> itLs;
 	map<string, bool> itReg;
@@ -248,8 +250,6 @@ UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
     ioTrIn(-1), ioTrOut(-1), ioRez(-1), ioReq(-1), ioAnsw(-1), ioSend(-1), ioIO(-1), chkLnkNeed(false)
 {
     mId = iid;
-    cfg("InPROG").setExtVal(true);
-    cfg("OutPROG").setExtVal(true);
 }
 
 UserPrt::~UserPrt( )
@@ -449,8 +449,11 @@ void UserPrt::load_( TConfig *icfg )
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	//cfgViewAll(true);
+	cfg("InPROG").setExtVal(true);
+	cfg("OutPROG").setExtVal(true);
 	TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
     }
+    if(!progTr()) { cfg("InPROG").setExtVal(false, true); cfg("OutPROG").setExtVal(false, true); }
 
     loadIO();
 }
@@ -632,10 +635,11 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SPRT_ID,RWRWR_);
-		ctrRemoveNode(opt,"/up/cfg/InPROG");
-		ctrRemoveNode(opt,"/up/cfg/OutPROG");
-		ctrRemoveNode(opt,"/up/cfg/TIMESTAMP");
-		ctrRemoveNode(opt,"/up/cfg/WaitReqTm");
+		if(!progTr()) ctrRemoveNode(opt, "/up/cfg/PR_TR");
+		ctrRemoveNode(opt, "/up/cfg/InPROG");
+		ctrRemoveNode(opt, "/up/cfg/OutPROG");
+		ctrRemoveNode(opt, "/up/cfg/TIMESTAMP");
+		ctrRemoveNode(opt, "/up/cfg/WaitReqTm");
 		ctrMkNode("fld",opt,-1,"/up/cfg/DAQTmpl",_("DAQ template"),(enableStat()?R_R___:RWRW__),"root",SPRT_ID,3,
 		    "tp","str", "dest","select", "select","/up/cfg/listTmpl");
 		if(DAQTmpl().size())	ctrRemoveNode(opt,"/up/cfg/PR_TR");

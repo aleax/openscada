@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.7"
+#define MOD_VER		"1.12.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -194,9 +194,9 @@ string Contr::getStatus( )
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Calculation. "));
-	if(period())	rez += TSYS::strMess(_("Calculation with the period: %s. "), tm2s(1e-9*period()).c_str());
+	if(period())	rez += TSYS::strMess(_("Calculation with the period %s. "), tm2s(1e-9*period()).c_str());
 	else rez += TSYS::strMess(_("Next calculation by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s[%s]. "),
+	rez += TSYS::strMess(_("Spent time %s[%s]. "),
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }
     return rez;

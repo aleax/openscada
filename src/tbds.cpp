@@ -865,7 +865,7 @@ void TTypeBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 TBD::TBD( const string &iid, TElem *cf_el ) : TConfig(cf_el), mEn(false), mId(cfg("ID")), mToEn(cfg("EN").getBd()),
     mTrTm_ClsOnOpen(cfg("TRTM_CLS_ON_OPEN").getRd()), mTrTm_ClsOnReq(cfg("TRTM_CLS_ON_REQ").getRd()), mTrPr_ClsTask(cfg("TRPR_CLS_TASK").getId()),
-    userSQLTrans(EVAL_BOOL), mDisByUser(true)
+    userSQLTrans(EVAL_BOOL), mDisByUser(true), mIsFirst(true)
 {
     mId = iid;
     mTbl = grpAdd("tbl_");
@@ -921,6 +921,7 @@ void TBD::postDisable( int flag )
 
 bool TBD::cfgChange( TCfg &co, const TVariant &pc )
 {
+    if(co.name() == "ADDR") mIsFirst = true;
     if(co.name() == "TRTM_CLS_ON_OPEN" || co.name() == "TRTM_CLS_ON_REQ") {
 	mTrTm_ClsOnOpen = vmax(0.1, vmin(100,mTrTm_ClsOnOpen));
 	mTrTm_ClsOnReq = vmax(0.1, vmin(mTrTm_ClsOnOpen,mTrTm_ClsOnReq));
@@ -948,11 +949,13 @@ void TBD::enable( )
 
     mEn = true; mDisByUser = false;
 
-    Mess->translReg("", "uapi:"+fullDBName());
+    if(mIsFirst) Mess->translReg("", "uapi:"+fullDBName());
 
     if(trTm_ClsOnReq() < prmServTask_PER)
 	try { SYS->taskCreate(nodePath('.',true), trPr_ClsTask(), Task, this, 0); }
 	catch(TError&) { }	//Can be for retry to enable the DB
+
+    mIsFirst = false;
 }
 
 void TBD::disable( )
@@ -1617,7 +1620,11 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    if((tVl=TSYS::strParse(svalRAW,1,string(1,0))).size()) {
 			toLang = tVl; tVl = svalRAW;
 			u_cfg.setS((svalRAW=TSYS::strParse(tVl,2,string(1,0)))); sval = getSQLVal(u_cfg);
-			u_cfg.setS((svalBASE_RAW=TSYS::strParse(tVl,0,string(1,0)))); svalBASE = getSQLVal(u_cfg);
+			if((svalBASE_RAW=TSYS::strParse(tVl,0,string(1,0))).empty()) {
+			    svalBASE_RAW = svalRAW;
+			    trCacheUpd.push_back(u_cfg.name()+string(1,0)+""+string(1,0)+svalBASE_RAW);
+			}
+			u_cfg.setS(svalBASE_RAW); svalBASE = getSQLVal(u_cfg);
 			u_cfg.setS(tVl);
 		    }
 		    else if(toLang != Mess->langCodeBase()) {

@@ -530,7 +530,8 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		if(nUpRiseLev)	nUpRiseLev->childAdd("el")->setText(i2s(host.upRiseLev));
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))	extHostSet(ExtHost(u,"newHost",_("New external host"),"","",u));
+	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))
+	    extHostSet(ExtHost(u,"newHost",trDSet("",_("New external host")),"","",u));
 	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR)) {
 	    if(TSYS::strParse(opt->attr("key_id"),1,".").size())
 		throw err_sys(_("Lifted hosts are not available for control here!"));
@@ -1077,7 +1078,7 @@ bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 string TTransportOut::getStatus( )
 {
     return (startStat()?_("Connected. "):_("Disconnected. ")) +
-	TSYS::strMess(_("Established: %s. Last: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str(), atm2s(1e-6*lstReqTm(),"%d-%m-%Y %H:%M:%S").c_str());
+	TSYS::strMess(_("Established %s, last %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str(), atm2s(1e-6*lstReqTm(),"%d-%m-%Y %H:%M:%S").c_str());
 }
 
 void TTransportOut::load_( TConfig *icfg )

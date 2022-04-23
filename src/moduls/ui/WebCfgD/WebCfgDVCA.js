@@ -983,14 +983,24 @@ function selectChildRecArea( node, aPath, cBlk )
 				    if(!e) e = window.event;
 				    var popUpMenu = getPopup();
 				    var optEl = '';
-				    if(this.srcNode.getAttribute('s_com').search('add') != -1)
-					optEl += "<option posId='add'>###Add row###</option>";
-				    if(this.srcNode.getAttribute('s_com').search('ins') != -1 && rowP)
-					optEl += "<option posId='ins'>###Insert row###</option>";
-				    if(this.srcNode.getAttribute('s_com').search('del') != -1 && rowP)
-					optEl += "<option posId='del'>###Delete row###</option>";
-				    if(this.srcNode.getAttribute('s_com').search('move') != -1 && rowP)
-					optEl += "<option disabled='true'>--------------</option><option posId='up'>###Up row###</option><option posId='down'>###Down row###</option>";
+				    var coms = this.srcNode.getAttribute('s_com').split(',');
+				    for(var iCom = 0; iCom < coms.length; iCom++)
+					if((tVl=coms[iCom].split(":"))[0] == 'add')
+					    optEl += "<option posId='add'>"+((tVl.length>1)?tVl[1]:"###Add row###")+"</option>";
+					else if(tVl[0] == 'ins') {
+					    if(!rowP) continue;
+					    optEl += "<option posId='ins'>"+((tVl.length>1)?tVl[1]:"###Insert row###")+"</option>";
+					}
+					else if(tVl[0] == 'del') {
+					    if(!rowP) continue;
+					    optEl += "<option posId='del'>"+((tVl.length>1)?tVl[1]:"###Delete row###")+"</option>";
+					}
+					else if(tVl[0] == 'move') {
+					    if(!rowP) continue;
+					    optEl += "<option posId='up'>###Up row###</option><option posId='down'>###Down row###</option>";
+					}
+					//    User commands
+					else optEl += "<option posId='"+tVl[0]+"'>"+((tVl.length>1)?tVl[1]:tVl[0])+"</option>";
 				    popUpMenu.childNodes[0].innerHTML = optEl;
 
 				    if(popUpMenu.childNodes[0].childNodes.length) {
@@ -1010,10 +1020,13 @@ function selectChildRecArea( node, aPath, cBlk )
 					    else if(posId == 'ins')	com = "<ins row='"+this.rowP+"'/>";
 					    else if(posId == 'up')	com = "<move row='"+this.rowP+"' to='"+(this.rowP-1)+"'/>";
 					    else if(posId == 'down')	com = "<move row='"+this.rowP+"' to='"+(this.rowP+1)+"'/>";
-					    else if(posId == 'del') {
-						var com = "<del ";
+					    else {
+						var com;
+						if(posId == 'del') com = "<del ";
+						else com = "<"+posId+" ";	//User commands
+
 						if(!this.srcNode.getAttribute('key')) com += "row='"+this.rowP+"' ";
-						else {
+						else if(this.rowP) {
 						    var keys = this.srcNode.getAttribute('key').split(',');
 						    for(var iOff = 0; iOff < keys.length; iOff++)
 							for(var iEl = 0; iEl < this.srcNode.childNodes.length; iEl++)
@@ -1025,7 +1038,7 @@ function selectChildRecArea( node, aPath, cBlk )
 					    if(com.length) {
 						var rez = servSet(this.itPath,'com=com',com,true);
 						if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(rez.textContent);
-						setTimeout('pageRefresh()',200);
+						if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()', 200);
 					    }
 					    return false;
 					}

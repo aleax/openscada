@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:14+0300\n"
+"POT-Creation-Date: 2022-04-22 18:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,7 +96,7 @@ msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Acquisition with the period: %s. "
+msgid "Acquisition with the period %s. "
 msgstr ""
 
 #, c-format
@@ -104,7 +104,7 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s. "
+msgid "Spent time %s. "
 msgstr ""
 
 #, c-format

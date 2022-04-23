@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.19"
+#define MOD_VER		"0.1.20"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -367,10 +367,10 @@ string TMdContr::getStatus()
     if(startStat() && !redntUse()) {
 	if(callSt) rez += TSYS::strMess(_("Acquisition. "));
 	if(period())
-	    rez += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	    rez += TSYS::strMess(_("Acquisition with the period %s. "), tm2s(1e-9*period()).c_str());
 	else
 	    rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s."), tm2s(1e-6*tmGath).c_str());
+	rez += TSYS::strMess(_("Spent time %s."), tm2s(1e-6*tmGath).c_str());
     }
     return rez;
 }

@@ -150,9 +150,9 @@ string TMdContr::getStatus( )
 	}
 	else {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
-	    if(period())val += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	    if(period())val += TSYS::strMess(_("Acquisition with the period %s. "), tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    val += TSYS::strMess(_("Spent time: %s[%s]. "),
+	    val += TSYS::strMess(_("Spent time %s[%s]. "),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
 			tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
 	    val += TSYS::strMess(_("Read %g(%g) registers, %g(%g) coils. "), numRReg, numRRegIn, numRCoil, numRCoilIn);
@@ -216,11 +216,12 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 
     if(co.fld().name() == "SCHEDULE")
 	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
-    else if(co.fld().name() == "PROT") {
+    else if(co.fld().name() == "PROT" && co.getS() != pc.getS()) {
 	cfg("REQ_TRY").setView(co.getS()!="TCP");
 	if(startStat()) stop();
     }
-    else if(co.fld().name() == "FRAG_MERGE" && enableStat()) disable();
+    else if(co.fld().name() == "FRAG_MERGE" && enableStat() && co.getB() != pc.getB())
+	disable();
 
     return true;
 }
@@ -916,7 +917,7 @@ void TMdContr::setCntrDelay( const string &err )
 
     int alLev = -TMess::Crit;
     //Device configuration error is not an alarm but only warning
-    if(addr().empty() || !SYS->transport().at().modPresent(TSYS::strParse(addr(),0,".")) ||
+    if(endrunReq || addr().empty() || !SYS->transport().at().modPresent(TSYS::strParse(addr(),0,".")) ||
 	    !SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outPresent(TSYS::strParse(addr(),1,".")) ||
 	    SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,".")).at().addr().empty())
 	alLev = TMess::Warning;

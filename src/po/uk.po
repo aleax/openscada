@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-02 09:25+0300\n"
+"POT-Creation-Date: 2022-04-22 18:22+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -1149,6 +1149,7 @@ msgstr "Адреса сховища у форматі \"{Модуль БД}.{І�
 msgid "Set '*.*' to use the Generic Storage."
 msgstr "Встановити '*.*' для використання Загального Сховку."
 
+#, c-format
 msgid ""
 "Please note that removing from the Generic Storage (*.*) will cause the data "
 "removing both from the Configuration File (<cfg>) and the Work DB (%s)!"
@@ -2300,6 +2301,12 @@ msgstr ""
 "Пропустити визначену кількість елементів таблиці від початку, корисно для "
 "дуже великих проєктів які обмежено у часі повного опрацювання таблиці."
 
+msgid "Remove from Trs"
+msgstr "Видалити із Trs"
+
+msgid "Split item"
+msgstr "Розділити елемент"
+
 msgid "Tasks"
 msgstr "Задачі"
 
@@ -2362,8 +2369,8 @@ msgid "Monotonic %s"
 msgstr "Монотонний %s"
 
 #, c-format
-msgid "Spent time: %s[%s]."
-msgstr "Витрачено часу: %s[%s]."
+msgid "Spent time %s[%s]."
+msgstr "Витрачено часу %s[%s]."
 
 msgid "<newStat>"
 msgstr "<новСтанц>"
@@ -2422,12 +2429,12 @@ msgstr ""
 "базовою мовою '%s'"
 
 #, c-format
-msgid "Messages indexed=%d, cached=%d."
-msgstr "Повідомлень індексовано=%d, кешовано=%d."
+msgid "Messages indexed %d, cached %d."
+msgstr "Повідомлень індексовано %d, кешовано %d."
 
 #, c-format
-msgid "Translation contexts=%d."
-msgstr "Контекстів перекладу=%d."
+msgid "Translation contexts %d."
+msgstr "Контекстів перекладу %d."
 
 msgid "<<<Unmatched sources>>>\n"
 msgstr "<<<Незбіг джерел!!!>>>\n"
@@ -2608,8 +2615,8 @@ msgid "Connected. "
 msgstr "Підключено. "
 
 #, c-format
-msgid "Established: %s. Last: %s. "
-msgstr "Встановлено: %s. Останнє: %s. "
+msgid "Established %s, last %s. "
+msgstr "Встановлено %s, останнє %s. "
 
 #, c-format
 msgid "Transport protocol '%s' is missing"
@@ -2683,13 +2690,13 @@ msgstr "Власник"
 msgid ""
 "===================== Subsystem \"User interfaces\" options ===============\n"
 "------ Parameters of the section '%s' of the configuration file ------\n"
-"FontSyntHighlCode <font>  Font used in the code syntax highlight, by default "
+"FontSnthHglCode <font>  Font used in the code syntax highlight, by default "
 "\"monospace\".\n"
 "\n"
 msgstr ""
 "================= Опції підсистеми \"Інтерфейси користувачів\" ============\n"
 "---------- Параметри секції '%s' конфігураційного файлу ----------\n"
-"FontSyntHighlCode <шрифт>  Шрифт використаний у підсвітлені синтаксису коду, "
+"FontSnthHglCode <шрифт>  Шрифт використаний у підсвітлені синтаксису коду, "
 "по замовченню \"monospace\".\n"
 "\n"
 

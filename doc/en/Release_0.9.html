@@ -322,7 +322,7 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_The_FIFTH_update"><span class="mw-headline-number">7.1</span> [22.02.2022] The FIFTH update</span></h3>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 50 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2819" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 50 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2822" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>Significant actions of the developer of the OpenSCADA modules on the update</u></b><br />
 </p>
 <ul><li> FIX:SYS.TMess: Type of labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() changed to "string".</li></ul>
@@ -368,9 +368,9 @@
 <li> BD.PostgreSQL: 2.5 =&gt; <b>3.0</b></li>
 <li> BD.FireBird: 2.5 =&gt; <b>3.0</b></li>
 <li> UI.QTStarter: 5.10 =&gt; <b>5.12</b></li>
-<li> UI.QTCfg: 5.6 =&gt; <b>5.8</b></li>
+<li> UI.QTCfg: 5.6 =&gt; <b>5.9</b></li>
 <li> UI.WebCfg: 1.8 =&gt; <b>2.0</b></li>
-<li> UI.WebCfgD: 2.1 =&gt; <b>2.2</b></li>
+<li> UI.WebCfgD: 2.1 =&gt; <b>2.3</b></li>
 <li> UI.VCAEngine: 7.1 =&gt; <b>7.8</b></li></ul>
 <dl><dd> (<a href="#VCAEngine">finishing of implementing the changes obtaining in the runtime mode by the clocking cycles through</a>)</dd></dl>
 <ul><li> UI.Vision: 7.14 =&gt; <b>8.0</b></li></ul>
@@ -378,7 +378,9 @@
 <ul><li> UI.WebUser: 1.4 =&gt; <b>1.5</b></li>
 <li> UI.WebVision: 6.2 =&gt; <b>6.6</b></li>
 <li> LibsDB.OscadaLibs.base.anUnif: 2.1 =&gt; <b>2.4</b></li>
+<li> LibsDB.OscadaLibs.base.anUnifSt: 1.2 =&gt; <b>1.3</b></li>
 <li> LibsDB.OscadaLibs.base.digAlarm: 1.2 =&gt; <b>1.3</b></li>
+<li> LibsDB.OscadaLibs.base.codeState: 1.3 =&gt; <b>1.4</b></li>
 <li> LibsDB.OscadaLibs.servProc.docOffLine: 1.2 =&gt; <b>1.3</b></li>
 <li> LibsDB.OscadaLibs.Controller.test: 1.1 =&gt; <b>1.2</b></li>
 <li> LibsDB.vcaBase.Main
@@ -440,6 +442,7 @@ FIX: The "Translations" tab expansion and fixing for:
 </p>
 <ul><li> the option "check for mismatch (TrChkUnMatch)" renamed to "check/fix (TrChkAndFix)" and expanded of the translation fixing functions: by propagation the translations to empty sources, clearing the double to base translations, merging the base messages as the translations;</li>
 <li> information of the non matching was appended in the second message text;</li>
+<li> the translation management table appended of the user functions "Split item" and "Remove from Trs";</li>
 <li> the translation status appended of the short labels "SINGLELANGUAGE", "MULTILANGUAGE", "MULTILANGUAGE-DYNAMIC"; the message index; size of the cache and the translation context;</li>
 <li> the base language configuration field of the MULTILANGUAGE modes expanded by list the project locales separated by ";".</li></ul>
 <p>FIX: Expansion the Data Messages Translation in the tree modes: SINGLELANGUAGE, MULTILANGUAGE and MULTILANGUAGE-DYNAMIC:
@@ -456,6 +459,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> TCntrNode::cntrCmd(), Protocol.HTTP, UI.{Vision,WebVision,WebUser,WebCfg,WebCfgD} attached to use the translation context.</li></ul></li>
 <li> synchronized in the system prestored and the dynamic-data setting messages;</li>
 <li> the DB type-module objects were appended by the specific information field "Features" of specifying the supported by DB features;</li>
+<li> FIX: complete disabling the translation and registering in the message index at the loading for generic TConfig nodes with the JavaLikeCalc procedure text and a deprecated flag of enabling that procedure whole translation;</li>
 <li> UI.QTCfg: the tree update enabled for the root page updation through the reconnection and the tree update at the user change; enabled for using the system language in the SINGLETRANSLATION mode for remote connections;</li>
 <li> FIX:UI.VCAEngine: the project styles moved under a new storing table "{DB_TBL}_stls" and its structure with translation;</li>
 <li> UI.{WebCfg,WebCfgD}: Generically adapted to the dynamic translation in the MULTILANGUAGE-DYNAMIC mode, using the HTTP-variable "lang", the user language and browser language;</li>
@@ -479,7 +483,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> LibsDB.vcaBase:
 <ul><li> wlb_Main.ElViewGraph: enabled for the transitive translation in the tooltip and for the parameter description;</li>
 <li> wlb_Main.objProps: enabled for the transitive dynamic translation;</li>
-<li> wlb_Main.storeHouse: significantly expanded for the specific fields, ordering the columns and fixed in whole work.</li></ul></li></ul>
+<li> wlb_Main.storeHouse: significantly expanded for the specific fields, ordering the columns, appending of the highlighting rules for column values with filter index or list, fixed in whole work.</li></ul></li></ul>
 <dl><dd> SYSTEM MESSAGES</dd></dl>
 <ul><li> implemented for a function of prestoring system messages translation trS(), where the base message just return with the catalogue information, that is "{base}\000{cat}" and what is translated really in the call _() — in the background there is used Mess-&gt;I18N(), but for the specific language code mess_PreSave="&lt;PSV&gt;";</li>
 <li> the system translation function TMess::I18N() was attached to the messages cache;</li>
@@ -499,7 +503,8 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> wlb_Main.{alarmsAct,alarmsSt}: adapted to process of sublevels of the main levels with coloring all the levels; expanded by the new user field "Type" as name of the alarm level from the new configuration attribute "types";</li>
 <li> wlb_doc.{docUsersSet,docAlarmsRep}: appended in the DAQGate source complete scanning for whole transferring hierarchy;</li>
 <li> wlb_Main.alarmsSt,wlb_doc.{docMessRep,docAlarmsRep}: adapted to the transferred messages by DAQGate;</li>
-<li> wlb_Main.{alarmsSt,alarmsAct},wlb_doc.docMessRep: improved in the DAQGate source complete scanning for whole transferring hierarchy, also for user actions (OP).</li></ul></li></ul>
+<li> wlb_Main.{alarmsSt,alarmsAct},wlb_doc.docMessRep: improved in the DAQGate source complete scanning for whole transferring hierarchy, also for user actions (OP);</li>
+<li> wlb_Main.TextLab: optionally enabled for the transitive translation in the status text which often comes from some DAQ-source.</li></ul></li></ul>
 <p><b><u>OpenSCADA libraries and projects</u></b><br />
 </p>
 <ul><li> FIX:LibsDB.{OscadaLibs,vcaBase,vcaTest},{AGLKS,Boiler}.*: Appended, cleaned and fixed for the multilanguage messages by applying the new translation fixing mechanisms.</li>
@@ -509,7 +514,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> wlb_Main.{ElViewGraph,graphSelPrm}: Adapted to reset the trend item color to the default styled at setting that to empty; appended of the empty color processing as the default one also taken from the style.</li>
 <li> FIX:wlb_Main.RootPgSo: Appended of complete updating at the user change, but language also can be changed, and the language.</li></ul></li>
 <li> LibsDB.OscadaLibs: The "DB" field content and the table base ID of UserFuncLibs.{techApp,servProc,Controller} renamed to the standard one "flb_techApp", "flb_servProc", "flb_Controller" respectively.
-<ul><li> tmplib_base.{digAlarm,anUnif}: Adapted to the syntax highlight builtin of the input preprocessing procedure.</li>
+<ul><li> tmplib_base.{anUnif,anUnifSt,digAlarm,codeState}: Adapted to the syntax highlight builtin of the input preprocessing procedure.</li>
 <li> tmplib_base.digAlarm: Expanded in the common attribute DESCR using for the specific parameters redefinition by the new fields "CustomFlds".</li>
 <li> tmplib_base.anUnif: Expanded in the common attribute DESCR using for the specific parameters redefinition by the new fields "CustomFlds" and "CustomAlarms". Appended of the user procedure option "toSave" of force saving the object at the exit.</li></ul></li>
 <li> flb_servProc.docOffLine: Expanded for the index page accessing from any other pages.</li></ul>
@@ -545,7 +550,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> The time limit variable "limCacheIts_TM" appended for the cache limiting.</li>
 <li> The common encoding function strEncode() and the User API one appended the variant "ShieldBin" of shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li>
 <li> TMess: Appended for a function of checking the messages for them translatability — isMessTranslable().
-<ul><li> Appended for functions of managing the translation cache: translCacheGet(), translCacheSet(), translCacheLimits() and the own lock trMessCacheRes. Appended for a function translIdxCacheUpd() of updating the operative translation messages' index and cache.</li>
+<ul><li> Appended for functions of managing the translation cache: translCacheGet(), translCacheSet(), translCacheLimits() and the own lock trMessCacheRes. Appended for a function translIdxCacheUpd() of updating the operative translation messages' index and cache, and functions translItSplit(), translItRemTrs() of the items splitting and removing from Trs.</li>
 <li> Appended for the translation context at the new function trCtx() and the object TrCtxAlloc for handling.</li>
 <li> Appended for the data translation trD()-&gt;translGet() and trDSet()-&gt;translSet().</li>
 <li> Appended for the prestoring system messages translation trS(), as an other link to I18N().</li>
@@ -553,7 +558,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> The TMess::Type structure appended of an item "MaxLev" of the maximum message types/levels specifying.</li>
 <li> The TMess definitions appended of mess_PreSave="&lt;PSV&gt;" and mess_TrModifMark="&lt;!&gt;".</li></ul></li>
 <li> XMLNode: Appended of the new saving option BinShield(0x400) for controllable shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F].</li>
-<li> TConfig,TCfg: Expanded for new parameters TConfig::{trcSet,setTrcSet}(), TCfg::{isSet,setIsSet}() of detection the configuration field changing and using in the partial DB-loading instead toDefault(); and TConfig::{noTransl,setNoTransl}() for global setting the structure default translation.</li>
+<li> TConfig,TCfg: Expanded for new parameters TConfig::{trcSet,setTrcSet}(), TCfg::{isSet,setIsSet}() of detection the configuration field changing and using in the partial DB-loading instead toDefault(); and TConfig::{noTransl,setNoTransl}() for global setting the structure default translation. TCfg::setExtVal() function appended an argument "toOne".</li>
 <li> TError: codes appended of: DB_TrRemoved (22) for mark the translation removing in DB, DB_ReadOnly (23) introduced by SQLite at the unification process, Core_NoNode (5) of the TCntrNode missing, Tr_ErrTransport (12) for the transport errors mark, Tr_ErrResponse (13) and Tr_ErrDevice (14) for more specific transport errors.</li></ul></li>
 <li> DB: The TBDS::realDBName() appended of the back conversion argument.
 <ul><li> The static methods of TBDS appended of the new function dbPart() of getting the storage address parts and appended of a new function dataDelTbl() of the common tables removing, also in the Configuration File.</li>
@@ -597,10 +602,12 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> FIX: strParse() rewrote and tested in processing the group symbols merging at the scan; and strParse(), strLine(), pathLev() in position the offset to the next token begin and limiting in the down for 0; and pathLevEnd() in positioning the offset to the next token end and limited in the up for the size. TModSchedul::chkAllowMod(),UI.QTCfg,Protocol.HTTP: switched in use TSYS::pathLevEnd() and  TSYS::pathLev() in the new behaviour.</li>
 <li> Force loading appended of the errors suppression for not modified nodes before that operation.</li>
 <li> .,DB,DAQ: The global configuration context copying mechanism (interstation) appended for the marking link to the last setting operation object, to easy postmarks setting.
-<ul><li> DAQ: As a postmark to the saving DAQ-parameter object there appended the attribute "prmTp" with the parameter type, which is used next in true detection the parameter type changing at the following loading.</li></ul></li></ul>
+<ul><li> DAQ: As a postmark to the saving DAQ-parameter object there appended the attribute "prmTp" with the parameter type, which is used next in true detection the parameter type changing at the following loading.</li></ul></li>
+<li> .,UI.{QTCfg,WebCfgD}: The OpenSCADA Control Interface for Tables expanded by the user commands.</li></ul>
 <p><b><u>DB</u></b><br />
 </p>
-<ul><li> FIX: The TBDS::dataDel() fixed-appended in removing multiple items and appended of removing the empty table nodes of the Configuration File.</li></ul>
+<ul><li> FIX: The TBD object appended an internal flag "mIsFirst" of control the object first enable and what used to prevent of the table "Trs" registering at each enable-connection-reconnection.</li>
+<li> FIX: The TBDS::dataDel() fixed-appended in removing multiple items and appended of removing the empty table nodes of the Configuration File.</li></ul>
 <p><b><u>DAQ</u></b><br />
 </p>
 <ul><li> FIX: The controller objects manual start defined for some specific hot doings of the object enabling, when the doing was prevented from call twice at the normal start:
@@ -612,6 +619,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> FIX:<span id="DAQGate" title="#DAQGate">DAQGate</span>: Appended of the asynchronous writing mode implementation. The configuration field of the remote stations selection moved in simple combobox. The controller object status appended of the counters of read/archive's/wrote values, read messages and the writing buffer status.
 <ul><li> FIX: Fixed in reusing parameters with empty address for included ones and appended for clearing the address at the parameters copy.</li>
 <li> FIX: Unified in the sync commonly and fixed in the attributes sync, with preventing in constantly sync of the missed on remote host parameters.</li></ul></li>
+<li> FIX:JavaLikeCalc: Prevented in some resources lock of the library function at its program change, when performed the program compile at disabled function.</li>
 <li> Siemens: Appended of the new option "Maximum size of the request block, bytes" of specifying the maximum requesting block.</li></ul>
 <p><b><u>Transports</u></b><br />
 </p>
@@ -626,7 +634,7 @@ FIX: The "Translations" tab expansion and fixing for:
 <ul><li> <span id="Vision" title="#Vision">Vision</span>: Refactored also for early opening the restored and specified pages in the init procedure.</li></ul></li>
 <li> QTStarter,WebVision,WebCfgD: Qt part, in the generic Qt Library, and Web appended for the table edition text apply at Enter and new line at Ctrl+Enter.</li>
 <li> FIX:QTCfg,Vision: Prevented from hangs at stopping from a termination signal, from the console mostly, since locking the main Qt thread in modStop() without qApp-&gt;processEvents().</li>
-<li> QTCfg: The text fields appended of checking and activation the builtin syntax highlight rules from the XML-tag "SnthHgl".</li>
+<li> QTCfg: The text fields appended of checking and activation the builtin syntax highlight rules from the XML-tag "SnthHgl". The Tables appended of finding for pointed strings.</li>
 <li> <span id="VCAEngine" title="#VCAEngine">VCAEngine</span>:
 <ul><li> Finishing of implementing the changes obtaining in the runtime mode by the clocking cycles through, after observing the race condition on the attributes changing, which cause to do not update the value on visualizers:
 <ul><li> rewrote for the modification control mechanism;</li>

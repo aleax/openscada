@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.SNMP translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.SNMP package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2006-2018.
+# Roman Savochenko <roman@oscada.org>, 2006-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 11:09+0200\n"
+"POT-Creation-Date: 2022-04-22 18:14+0300\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -63,16 +63,15 @@ msgstr "Список OID (разделение след. строкой)"
 msgid "Acquisition. "
 msgstr "Сбор. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Сбор с периодом: %s."
+msgid "Acquisition with the period %s. "
+msgstr "Сбор с периодом %s."
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s."
-msgstr "Затрачено времени: %s. "
+msgid "Spent time %s."
+msgstr "Затрачено времени %s. "
 
 msgid "Error generating Ku from authentication pass phrase."
 msgstr "Ошибка генерации Ku из пароля аутентификации."
@@ -105,9 +104,11 @@ msgstr "Авторизация"
 msgid "Privacy"
 msgstr "Приватность"
 
+#, c-format
 msgid "ASN type '%d' is not supported."
 msgstr "ASN тип '%d' не поддерживается."
 
+#, c-format
 msgid "10:Timeout: No response from %s."
 msgstr "10:Истекло время ожидания ответа от %s."
 

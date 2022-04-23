@@ -32,7 +32,6 @@ TPrmTempl::TPrmTempl( const string &iid, const string &iname ) :
 {
     mId = iid;
     setName(iname);
-    cfg("PROGRAM").setExtVal(true);
 }
 
 TPrmTempl::~TPrmTempl( )
@@ -156,7 +155,11 @@ void TPrmTempl::load_( TConfig *icfg )
     if(!SYS->chkSelDB(owner().DB())) throw TError();
 
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this);
+    else {
+	cfg("PROGRAM").setExtVal(true);
+	TBDS::dataGet(owner().fullDB(), owner().owner().nodePath()+owner().tbl(), *this);
+    }
+    if(!progTr()) cfg("PROGRAM").setExtVal(false, true);
 
     //Load IO
     vector<string> u_pos;
@@ -331,7 +334,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		string ioID = TSYS::strLabEnum(ioPrev->id());
 		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
 		ioAdd(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()));
-	    } else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
+	    } else ioAdd(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default));
 	    modif();
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
@@ -341,7 +344,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		string ioID = TSYS::strLabEnum(ioPrev->id());
 		while(ioId(ioID) >= 0) ioID = TSYS::strLabEnum(ioID);
 		ioIns(new IO(ioID.c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr),ioPrev->def().c_str()), row);
-	    } else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
+	    } else ioIns(new IO("new",trDSet("",_("New IO")),IO::Real,IO::Default), row);
 	    modif();
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
@@ -872,6 +875,7 @@ void TPrmTmplLib::load_( TConfig *icfg )
     //Load templates
     map<string, bool>	itReg;
     TConfig cEl(&owner().elTmpl());
+    cEl.cfg("PROGRAM").setExtVal(true);
     //cEl.cfgViewAll(false);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB(),owner().nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();

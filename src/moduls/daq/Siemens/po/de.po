@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2021.
+# Roman Savochenko <roman@oscada.org>, 2011-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-25 16:47+0300\n"
+"POT-Creation-Date: 2022-04-22 17:52+0300\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -237,17 +237,15 @@ msgstr "Wiederherstellung in %.6g sek. "
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Erwerb mit dem Zeitraum: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Erwerb mit dem Zeitraum %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s[%s]. Read %s. Wrote %s. Connection errors %g. "
-msgstr "Verbrachte Zeit: %s[%s]. Lesen %s. Schrieb %s. Verbindungsfehler %g. "
+msgid "Spent time %s[%s], read %s, wrote %s, connection errors %g. "
+msgstr "Verbrachte Zeit %s[%s], lesen %s, schrieb %s, verbindungsfehler %g. "
 
 #, c-format
 msgid "Connection to the data source: %s."

@@ -39,7 +39,7 @@ extern "C"
 #define MOD_NAME	trS("ICP DAS hardware")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.9.4"
+#define MOD_VER		"1.9.5"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides implementation for 'ICP DAS' hardware support.\
  Includes main I-87xxx DCON modules, I-8xxx fast modules and boards on ISA bus.")
@@ -175,9 +175,9 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(callSt)	val += TSYS::strMess(_("Acquisition. "));
-	if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
+	if(period())	val += TSYS::strMess(_("Acquisition with the period %s. "),tm2s(1e-9*period()).c_str());
 	else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "), tm2s(1e-6*tmGath).c_str(), numReq, numErr);
+	val += TSYS::strMess(_("Spent time %s. Serial requests %g, errors %g. "), tm2s(1e-6*tmGath).c_str(), numReq, numErr);
     }
 
     return val;

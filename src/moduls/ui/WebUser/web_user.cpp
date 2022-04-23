@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"1.5.12"
+#define MOD_VER		"1.5.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for creating your own web-pages on internal OpenSCADA language.")
 #define LICENSE		"GPL2"
@@ -90,7 +90,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mUPgEl.fldAdd(new TFld("NAME",trS("Name"),TFld::String,TFld::TransltText,i2s(limObjNm_SZ).c_str()));
     mUPgEl.fldAdd(new TFld("DESCR",trS("Description"),TFld::String,TFld::FullText|TFld::TransltText,"300"));
     mUPgEl.fldAdd(new TFld("EN",trS("To enable"),TFld::Boolean,0,"1","0") );
-    mUPgEl.fldAdd(new TFld("PROG",trS("Procedure"),TFld::String,TFld::FullText|TFld::TransltText,"1000000"));
+    mUPgEl.fldAdd(new TFld("PROG",trS("Procedure"),TFld::String,TFld::FullText/*|TFld::TransltText*/,"1000000"));
     mUPgEl.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
     //User page data IO DB structure

@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.JavaLikeCalc translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2020.
+# Roman Savochenko <roman@oscada.org>, 2005-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-17 15:23+0300\n"
+"POT-Creation-Date: 2022-04-22 17:31+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -35,7 +35,8 @@ msgid "%s, pos: (%d,%d)-(%d,%d)."
 msgstr "%s, позиция: (%d,%d)-(%d,%d)."
 
 msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr "Неожиданное окончание программы, ожидается символ окончания строки '\"', "
+msgstr ""
+"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
 
 msgid "The next line symbol failed into string, "
 msgstr "Символ перевода линии недопустим в строке, "
@@ -76,7 +77,8 @@ msgid "Operation code %d is not supported."
 msgstr "Не поддерживаемый код операции %d."
 
 #, c-format
-msgid "Number of external functions reached the limit of %d on the function '%s'"
+msgid ""
+"Number of external functions reached the limit of %d on the function '%s'"
 msgstr "Число внешних функций достигло лимита в %d на функции '%s'"
 
 #, c-format
@@ -151,8 +153,10 @@ msgstr "Идентификатор"
 msgid "Type"
 msgstr "Тип"
 
-msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
-msgstr "Веществ.;Целый;Логич.;Строка;Строка (перевод);Текст;Текст (перевод);Объект"
+msgid ""
+"Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
+msgstr ""
+"Веществ.;Целый;Логич.;Строка;Строка (перевод);Текст;Текст (перевод);Объект"
 
 msgid "Mode"
 msgstr "Режим"
@@ -166,13 +170,12 @@ msgstr "Скрытый"
 msgid "Default"
 msgstr "Умолчание"
 
-#, c-format
 msgid ""
-"Size source=%s, bytecode=%s; Registers totally=%d, constants=%d, internal "
-"functions'=%d; Functions external=%d, internal=%d."
+"Size source %s, bytecode %s; Registers totally %d, constants %d, internal "
+"functions' %d; Functions external %d, internal %d."
 msgstr ""
-"Размер исходных=%s, байткода=%s; Регистров в целом=%d, постоянных=%d, "
-"внутрен.функций=%d; Функций внешних=%d, внутренних=%d."
+"Размер исходных %s, байткода %s; Регистров в целом %d, постоянных %d, "
+"внутрен.функций %d; Функций внешних %d, внутренних %d."
 
 msgid "New IO"
 msgstr "Новый ВВ"
@@ -405,4 +408,3 @@ msgstr ""
 "  anm - имя создаваемого атрибута.\n"
 "Если 'aid' или 'anm' не установлены то они будут генерироваться из "
 "выбранного ВВ функции."
-

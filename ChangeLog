@@ -1,3 +1,50 @@
+2022-04-22 Roman 0.9.5
+- !!:LibsDB.OscadaLibs: tmplib_base.{anUnifSt,codeState}: Adapted to the syntax highlight builtin of the input preprocessing procedure.
+- !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Expanded and fixed for:
+        - appended of the highlighting rules for column values with filter index or list;
+        - removed for spare and wrong filtering of the special fields "*{ID}".
+    wlb_Main.TextLab: Optionally enabled for the transitive translation in the status text which often comes from some DAQ-source.
+- AGLKS.St: ModBus_node.test updated during of the complete disabling the translation, the translation loading and registering.
+    Cleaned from the table "FSArch_Pack".
+- !!!!:FIX:SYS: Fixed in the new values changing and saving for the MULTILANGUAGE mode:
+    - at missing the BASE value there used the new set value as a BASE and it is registered in the messages index;
+    - removed for the spare posttranslation in TFld::descr();
+    - the function TMess::isMessTranslable() switched to direct checking for the untranslatable symbols;
+    - the function TMess::translSet() adapted for empty BASE what can appear at the new values setting;
+    - the follow OpenSCADA Nodes adapted for setting new translated values, using trDSet("",{NEW_VAL}):
+        TPrmTempl, TTransportS, DAQ.JavaLikeCalc::Func, Protocol.ModBus::Node, UI.VCAEngine::{Project,Widget}.
+- !!!!:FIX:SYS: Complete disabling the translation and registering in the message index at the loading for generic TConfig nodes
+        with the JavaLikeCalc procedure text and a deprecated flag of enabling that procedure whole translation:
+    - performed for: TPrmTempl, DAQ.JavaLikeCalc::Func, Protocol.{ModBus.Node,UserProtocol.UserPrt}, UI.VCAEngine.{LWidget,Page}.
+    - the TCfg::setExtVal() function appended an argument "toOne" for reseting the extension mode to the One value instead the Two
+        and that value is writed directly to the inherited TVariant container;
+    - TCfg::operator=() switched to direct copy in the inherited TVariant container;
+    - the copying function TConfig::exclCopy() provided in copy the external fields directly through TCfg::operator=()
+        and prevented of double the copy in the common way.
+- !!!!:SYS,UI.{QTCfg,WebCfgD}: The OpenSCADA Control Interface for Tables expanded by the user commands.
+- SYS,DAQ.*,UI.VCAEngine: Status texts of different objects were unified in removing the symbol ":".
+- !!!!:FIX:SYS: Accessing the TMess::trMessIdx container in the control interface edition table moved to
+        it complete copy under the lock trMessIdxRes and it copy using outside the lock, then preventing for dead locks at the DB access.
+- !!!!:SYS: The translation management table appended of the user functions "Split item" and "Remove from Trs"
+        with implementing in new functions TMess::translItSplit() and TMess::translItRemTrs() respectively.
+- !!!!:FIX:DB: The TBD object appended an internal flag "mIsFirst" of control the object first enable and what used to prevent
+    of the table "Trs" registering at each enable-connection-reconnection.
+- DAQ.{JavaLikeCalc,ModBus}: Prevented of the controller object disable and/or stop at
+    the some configuration fields reloading witout a change.
+- !!:FIX:DAQ.JavaLikeCalc: Prevented in some resources lock of the library function at its program change,
+	when performed the program compile at disabled function.
+    New IO creation appended the new ID enumeration.
+- DAQ.DAQGate: Appended for rapid detection of the generic connections loss and marking all the parameter attributes to EVAL.
+- DAQ.ModBus: Prevented of setting alarms in the endrun stage.
+- Protocol.{ModBus,UserProtocol}: The whole translation flag is hidden for unset values.
+- !!:UI.QTCfg: The Tables appended of finding for pointed strings.
+- UI.VCAEngine: Widget attributes loading in the project execution context appended of the dynamic-data translation for
+    the translatable strings.
+- UI.WebUser: The program text field was set to non translatable in whole.
+- FIX:UI.WebVision: Items of the type Combo of the primitive FormEl were set to reloading content at the init.
+    Items of the type Table of the primitive FormEl appended for refiting at rows number change more than 3.
+
+
 2022-04-10 Roman 0.9.5
 - !!:LibsDB.OscadaLibs: tmplib_base.{digAlarm,anUnif}: Adapted to the syntax highlight builtin of the input preprocessing procedure.
 - !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Significantly expanded and fixed for:

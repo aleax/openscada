@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.LogicLev translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.LogicLev package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2006-2020.
+# Roman Savochenko <roman@oscada.org>, 2006-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-26 14:37+0200\n"
+"POT-Creation-Date: 2022-04-22 18:25+0300\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -60,17 +60,15 @@ msgstr "Исходный параметр"
 msgid "Calculation. "
 msgstr "Вычисление. "
 
-#, c-format
-msgid "Calculation with the period: %s. "
-msgstr "Вычисление с периодом: %s. "
+msgid "Calculation with the period %s. "
+msgstr "Вычисление с периодом %s. "
 
 #, c-format
 msgid "Next calculation by the cron '%s'. "
 msgstr "Следующее вычисление по cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s[%s]. "
-msgstr "Затрачено времени: %s[%s]. "
+msgid "Spent time %s[%s]. "
+msgstr "Затрачено времени %s[%s]. "
 
 msgid "1:Parameter disabled."
 msgstr "1:Параметр отключен."

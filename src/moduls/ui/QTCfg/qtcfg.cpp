@@ -1397,6 +1397,23 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
 		widget->layout()->addWidget(tbl);
 
+		//  Find items
+		QImage ico_t;
+		if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
+		QAction *actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), tbl);
+		actFind->setObjectName("tableFind");
+		actFind->setShortcut(Qt::CTRL+Qt::Key_F);
+		actFind->setShortcutContext(Qt::WidgetShortcut);
+		connect(actFind, SIGNAL(triggered()), this, SLOT(tableFind()));
+		tbl->addAction(actFind);
+		QAction *actFindNext = new QAction(_("Find next"), tbl);
+		actFindNext->setObjectName("tableFindNext");
+		actFindNext->setShortcut(Qt::Key_F3);
+		actFindNext->setShortcutContext(Qt::WidgetShortcut);
+		connect(actFindNext, SIGNAL(triggered()), this, SLOT(tableFind()));
+		tbl->addAction(actFindNext);
+		actFindNext->setEnabled(false);
+
 		//t_s.attr("addr_lab",TSYS::addr2str(lab));
 		t_s.setAttr("addr_tbl",TSYS::addr2str(tbl));
 	    }
@@ -2997,39 +3014,58 @@ void ConfApp::tablePopup( const QPoint &pos )
     QTableWidget *tbl = (QTableWidget *)sender();
     string el_path = selPath+"/"+tbl->objectName().toStdString();
 
-    QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy;
-    last_it = actAdd = actIns = actDel = actMoveUp = actMoveDown = actCopy = NULL;
+    QAction *last_it, *actAdd, *actIns, *actDel, *actMoveUp, *actMoveDown, *actCopy, *actFind, *actFindNext;
+    last_it = actAdd = actIns = actDel = actMoveUp = actMoveDown = actCopy = actFind = actFindNext = NULL;
 
     int row = tbl->currentRow();
 
+    bool noReload = false;
     try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(tbl->objectName().toStdString(),TSYS::PathEl));
 
 	if((s2i(n_el->attr("acs"))&SEC_WR) && n_el->attr("s_com").size()) {
-	    if(n_el->attr("s_com").find("add") != string::npos) {
-	        actAdd = last_it = new QAction(_("Add record"),this);
-		popup.addAction(actAdd);
-	    }
-	    if(n_el->attr("s_com").find("ins") != string::npos && row != -1) {
-		actIns = last_it = new QAction(_("Insert record"),this);
-		popup.addAction(actIns);
-	    }
-	    if(n_el->attr("s_com").find("del") != string::npos && row != -1) {
-		actDel = last_it = new QAction(_("Delete record"),this);
-		popup.addAction(actDel);
-	    }
-	    if(n_el->attr("s_com").find("move") != string::npos && row != -1) {
-		popup.addSeparator();
-		actMoveUp = last_it = new QAction(_("Move Up (Ctrl+Up)"),this);
-		popup.addAction(actMoveUp);
-		actMoveDown = last_it = new QAction(_("Move Down (Ctrl+Down)"),this);
-		popup.addAction(actMoveDown);
-	    }
+	    string sVl, sVl1;
+	    for(int off = 0; (sVl=TSYS::strParse(n_el->attr("s_com"),0,",",&off)).size(); )
+		if((sVl1=TSYS::strParse(sVl,0,":")) == "add") {
+		    actAdd = last_it = new QAction((sVl1=TSYS::strParse(sVl,1,":")).size()?sVl1.c_str():_("Add record"), this);
+		    popup.addAction(actAdd);
+		}
+		else if(sVl1 == "ins") {
+		    if(row < 0)	continue;
+		    actIns = last_it = new QAction((sVl1=TSYS::strParse(sVl,1,":")).size()?sVl1.c_str():_("Insert record"), this);
+		    popup.addAction(actIns);
+		}
+		else if(sVl1 == "del") {
+		    if(row < 0)	continue;
+		    actDel = last_it = new QAction((sVl1=TSYS::strParse(sVl,1,":")).size()?sVl1.c_str():_("Delete record"), this);
+		    popup.addAction(actDel);
+		}
+		else if(sVl1 == "move") {
+		    if(row < 0)	continue;
+		    //popup.addSeparator();
+		    actMoveUp = last_it = new QAction(_("Move Up (Ctrl+Up)"),this);
+		    popup.addAction(actMoveUp);
+		    actMoveDown = last_it = new QAction(_("Move Down (Ctrl+Down)"),this);
+		    popup.addAction(actMoveDown);
+		}
+		else {	//User commands
+		    string comId = sVl1;
+		    last_it = new QAction((sVl1=TSYS::strParse(sVl,1,":")).size()?sVl1.c_str():comId.c_str(), this);
+		    last_it->setObjectName(comId.c_str());
+		    popup.addAction(last_it);
+		}
 	}
 	if(!tbl->selectedItems().isEmpty()) {
 	    popup.addSeparator();
-	    actCopy = last_it = new QAction(_("Copy"),this);
+	    actCopy = last_it = new QAction(_("Copy"), this);
 	    popup.addAction(actCopy);
+	}
+	if(tbl->rowCount()) {
+	    popup.addSeparator();
+	    actFind = tbl->findChild<QAction*>("tableFind");
+	    if(actFind) popup.addAction(last_it=actFind);
+	    actFindNext = tbl->findChild<QAction*>("tableFindNext");
+	    if(actFindNext) popup.addAction(last_it=actFindNext);
 	}
 
 	if(last_it) {
@@ -3056,6 +3092,7 @@ void ConfApp::tablePopup( const QPoint &pos )
 		popup.clear();
 		return;
 	    }
+	    else if(rez == actFind || rez == actFindNext) return;
 
 	    XMLNode n_el1;
 	    n_el1.setAttr("path",el_path);
@@ -3070,27 +3107,6 @@ void ConfApp::tablePopup( const QPoint &pos )
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' inserted for the record %d."),
 			user().c_str(), el_path.c_str(), row);
 	    }
-	    else if(rez == actDel) {
-		n_el1.setName("del");
-		string row_addr;
-		if(!n_el->attr("key").size()) {
-		    row_addr = i2s(row);
-		    n_el1.setAttr("row",row_addr);
-		}
-		else {
-		    // Get Key columns
-		    string key;
-		    for(int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
-			for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
-			    if(n_el->childGet(iEl)->attr("id") == key) {
-				n_el1.setAttr("key_"+key,n_el->childGet(iEl)->childGet(row)->text());
-				row_addr = row_addr+"key_"+key+"="+n_el1.attr("key_"+key)+",";
-				break;
-			    }
-		}
-		mess_info(mod->nodePath().c_str(),_("%s| '%s' deleted for the record '%s'."),
-			user().c_str(), el_path.c_str(), row_addr.c_str());
-	    }
 	    else if(rez == actMoveUp || rez == actMoveDown) {
 		int r_new = row-1;
 		if(rez == actMoveDown)	r_new = row+1;
@@ -3099,13 +3115,84 @@ void ConfApp::tablePopup( const QPoint &pos )
 		mess_info(mod->nodePath().c_str(),_("%s| '%s' moved for the record %d to %d."),
 			user().c_str(), el_path.c_str(), row, r_new);
 	    }
+	    else {	//Key commands
+		string row_addr, key;
+		if(!n_el->attr("key").size()) n_el1.setAttr("row", (row_addr=i2s(row)));
+		else if(row >= 0) {	// Getting the Key columns
+		    for(int iOff = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&iOff)).size(); )
+			for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
+			    if(n_el->childGet(iEl)->attr("id") == key) {
+				n_el1.setAttr("key_"+key,n_el->childGet(iEl)->childGet(row)->text());
+				row_addr = row_addr+"key_"+key+"="+n_el1.attr("key_"+key)+",";
+				break;
+			    }
+		}
+
+		if(rez == actDel) {
+		    n_el1.setName("del");
+		    mess_info(mod->nodePath().c_str(),_("%s| '%s' deleted for the record '%s'."),
+			user().c_str(), el_path.c_str(), row_addr.c_str());
+		}
+		else {	//User commands
+		    n_el1.setName(rez->objectName().toStdString());
+		    mess_info(mod->nodePath().c_str(),_("%s| '%s' user command '%s(%s)' to the record '%s'."),
+			user().c_str(), el_path.c_str(),
+			rez->text().toStdString().c_str(), rez->objectName().toStdString().c_str(), row_addr.c_str());
+		}
+	    }
+
 	    if(cntrIfCmd(n_el1)) throw TError(n_el1.attr("mcat").c_str(), n_el1.text().c_str());
+	    noReload = s2i(n_el1.attr("noReload"));
 
 	    popup.clear();
 	}
     } catch(TError &err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    pageRefresh(CH_REFR_TM);	//Redraw
+    if(!noReload) pageRefresh(CH_REFR_TM);	//Redraw
+}
+
+void ConfApp::tableFind( )
+{
+    QAction *actFind = (QAction *)sender();
+    QTableWidget *tbl = (QTableWidget *)actFind->parent();
+    if(!tbl->rowCount()) return;
+
+    if(actFind->objectName() == "tableFindNext") {
+	int findPos = tbl->property("findPos").toInt();
+	string findIt = TSYS::strParse(tbl->property("findRez").toString().toStdString(),findPos,"|");
+	tbl->setCurrentItem(tbl->item(s2i(TSYS::strParse(findIt,0,":")),s2i(TSYS::strParse(findIt,1,":"))));
+	tbl->setProperty("findPos", ++findPos);
+	if(findPos >= tbl->property("findRezLen").toInt()) actFind->setEnabled(false);
+	return;
+    }
+
+    int fopt = tbl->property("findOpt").toInt();
+    QString fstr = tbl->property("findStr").toString();
+    InputDlg dlg(this, actFind->icon(), QString(_("Enter a string to search:")), _("Searching a string"), 0, 0);
+    QLineEdit *le = new QLineEdit(fstr, &dlg);
+    dlg.edLay->addWidget(le, 0, 0);
+    QCheckBox *cs = new QCheckBox(_("Case sensitively"), &dlg);
+    if(fopt & Qt::MatchCaseSensitive) cs->setCheckState(Qt::Checked);
+    dlg.edLay->addWidget(cs, 1, 0);
+    le->setFocus(Qt::OtherFocusReason);
+    if(dlg.exec() == QDialog::Accepted && !le->text().isEmpty()) {
+	tbl->setProperty("findStr", le->text());
+	Qt::MatchFlags flgs = Qt::MatchContains;
+	if(cs->checkState() == Qt::Checked) flgs |= Qt::MatchCaseSensitive;
+	tbl->setProperty("findOpt", (int)flgs);
+	QList<QTableWidgetItem *> its = tbl->findItems(le->text(), flgs);
+	if(its.length()) tbl->setCurrentItem(its[0]);
+	if(its.length() > 1) {
+	    tbl->setProperty("findPos", 0);
+	    string fRez;
+	    for(int iIt = 1; iIt < its.length(); ++iIt)
+		fRez += TSYS::strMess("%d:%d|",its[iIt]->row(),its[iIt]->column());
+	    tbl->setProperty("findRez", fRez.c_str());
+	    tbl->setProperty("findRezLen", its.length()-1);
+	    if((actFind=tbl->findChild<QAction*>("tableFindNext"))) actFind->setEnabled(true);
+	}
+	else { tbl->setProperty("findPos", 0); tbl->setProperty("findRez", ""); tbl->setProperty("findRezLen", 0); }
+    }
 }
 
 void ConfApp::imgPopup( const QPoint &pos )
@@ -3226,7 +3313,7 @@ void ConfApp::tableSet( int row, int col )
 	else {
 	    // Get Key columns
 	    string key;
-	    for(int i_off = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&i_off)).size(); )
+	    for(int iOff = 0; (key=TSYS::strSepParse(n_el->attr("key"),0,',',&iOff)).size(); )
 		for(unsigned iEl = 0; iEl < n_el->childSize(); iEl++)
 		    if(n_el->childGet(iEl)->attr("id") == key) {
 			n_el1.setAttr("key_"+key,n_el->childGet(iEl)->childGet(row)->text());
