@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.14"
+#define MOD_VER		"2.9.15"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -139,10 +139,10 @@ string TMdContr::getStatus( )
 	if(syncSt)	val += TSYS::strMess(_("Sync. "));
 	else {
 	    if(callSt)	val += TSYS::strMess(_("Acquisition. "));
-	    if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "),tm2s(1e-9*period()).c_str());
+	    if(period())	val += TSYS::strMess(_("Acquisition with the period %s. "),tm2s(1e-9*period()).c_str());
 	    else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	}
-	val += TSYS::strMess(_("Spent time: %s[%s]. "),
+	val += TSYS::strMess(_("Spent time %s[%s]. "),
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
 
 	bool isWork = false;
@@ -156,7 +156,7 @@ string TMdContr::getStatus( )
 		    inWrBuf += iPrm->second.size();
 		st->second.aWrRes.unlock();
 
-		val += TSYS::strMess(_("Requests to '%s': %.6g; "), st->first.c_str(), -st->second.cntr);
+		val += TSYS::strMess(_("Requests to '%s' - %.6g; "), st->first.c_str(), -st->second.cntr);
 		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "), st->second.numR, st->second.numRA, st->second.numRM);
 		val += TSYS::strMess(_("wrote %g values, %g messages, in the buffer %d. "), st->second.numW, st->second.numWM, inWrBuf);
 		isWork = true;

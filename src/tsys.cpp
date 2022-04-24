@@ -3372,7 +3372,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setAttr("id",lst[iA])->setText(at(lst[iA]).at().subName());
     }
     else if(a_path == "/redund/status" && ctrChkNode(opt,"get",R_R_R_,"root","root"))
-	opt->setText(TSYS::strMess(_("Spent time: %s[%s]."),
+	opt->setText(TSYS::strMess(_("Spent time %s[%s]."),
 	    tm2s(SYS->taskUtilizTm("SYS_Redundancy")).c_str(), tm2s(SYS->taskUtilizTm("SYS_Redundancy",true)).c_str()));
     else if(a_path == "/redund/statLev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(rdStLevel()));
@@ -3536,9 +3536,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			Mess->langCodeBase().c_str());
 	}
 	if(stV.size() && (Mess->trMessIdx.size() || Mess->trMessCache.size()))
-	    stV += ". " + TSYS::strMess(_("Messages indexed: %d, cached: %d."), Mess->trMessIdx.size(), Mess->trMessCache.size());
+	    stV += ". " + TSYS::strMess(_("Messages indexed %d, cached %d."), Mess->trMessIdx.size(), Mess->trMessCache.size());
 	if(stV.size() && Mess->trCtxs.size())
-	    stV += (stV[stV.size()-1]!='.'?". ":" ") + TSYS::strMess(_("Translation contexts: %d."), Mess->trCtxs.size());
+	    stV += (stV[stV.size()-1]!='.'?". ":" ") + TSYS::strMess(_("Translation contexts %d."), Mess->trCtxs.size());
 	opt->setText(stM+", "+stV);
     }
     else if(a_path == "/tr/baseLang") {

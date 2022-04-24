@@ -250,7 +250,7 @@ void Widget::setWModif( Attr *a )		{ if(a) a->aModif_()++; }
 string Widget::getStatus( )
 {
     string rez = enable() ? _("Enabled. ") : _("Disabled. ");
-    rez += TSYS::strMess(_("Used: %d. "), herit().size());
+    rez += TSYS::strMess(_("Used %d. "), herit().size());
 
     return rez;
 }

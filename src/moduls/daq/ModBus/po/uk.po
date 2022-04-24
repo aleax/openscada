@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-20 09:25+0200\n"
+"POT-Creation-Date: 2022-04-22 16:56+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -100,17 +100,15 @@ msgstr "Відновлення через %.6g c."
 msgid "Acquisition. "
 msgstr "Збір. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Збір з періодом: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Збір з періодом %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s[%s]. "
-msgstr "Витрачено часу: %s[%s]. "
+msgid "Spent time %s[%s]. "
+msgstr "Витрачено часу %s[%s]. "
 
 #, c-format
 msgid "Read %g(%g) registers, %g(%g) coils. "
@@ -359,6 +357,7 @@ msgstr "Помилка пошуку та створення нового вуз�
 msgid "Error of the server response"
 msgstr "Помилка відповіді сервера"
 
+#, c-format
 msgid "The response Transaction ID %d is not suitable to the request one %d."
 msgstr "ID транзакції відповіді %d не відповідає запиту %d."
 
@@ -627,4 +626,3 @@ msgid ""
 msgstr ""
 "Надає реалізацію ModBus протоколів. Підтримуються Modbus/TCP, Modbus/RTU та "
 "Modbus/ASCII протоколи."
-

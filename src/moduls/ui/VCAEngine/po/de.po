@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-20 09:38+0200\n"
+"POT-Creation-Date: 2022-04-22 18:31+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -26,13 +26,11 @@ msgstr "Aktiviert. "
 msgid "Disabled. "
 msgstr "Deaktiviert. "
 
-#, c-format
-msgid "Used: %d. "
-msgstr "Verwendet: %d. "
+msgid "Used %d. "
+msgstr "Verwendet %d. "
 
-#, c-format
-msgid "Date of modification: %s. "
-msgstr "Änderungsdatum: %s. "
+msgid "Date of modification %s. "
+msgstr "Änderungsdatum %s. "
 
 msgid "Loading widgets library."
 msgstr "Widgetsbibliothek laden."
@@ -119,8 +117,8 @@ msgstr "MIME"
 msgid "Data"
 msgstr "Daten"
 
-msgid "Calculating procedure: "
-msgstr "Berechnungsverfahren: "
+msgid "Calculating procedure - "
+msgstr "Berechnungsverfahren - "
 
 msgid "!!redefined!!"
 msgstr "!!neu definiert!!"
@@ -1613,11 +1611,11 @@ msgstr "Änderung bilden %d, fixieren %d. "
 msgid "Processing at %s. "
 msgstr "Verarbeitung bei %s. "
 
-msgid "Spent time on the branch: "
-msgstr "Verbrachte Zeit in der Branche: "
+msgid "Spent time on the branch "
+msgstr "Verbrachte Zeit in der Branche "
 
-msgid "the item: "
-msgstr "der Gegenstand: "
+msgid "the item "
+msgstr "der Gegenstand "
 
 #, c-format
 msgid "It is a try of creating a widget in depth bigger to %d!"

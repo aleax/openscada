@@ -140,8 +140,8 @@ string Project::getStatus( )
     time_t maxTm = 0;
     for(unsigned iT = 0; iT < tls.size(); iT++)
 	maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
-    rez += TSYS::strMess(_("Used: %d. "), mHerit.size());
-    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(maxTm).c_str());
+    rez += TSYS::strMess(_("Used %d. "), mHerit.size());
+    rez += TSYS::strMess(_("Date of modification %s. "), atm2s(maxTm).c_str());
 
     return rez;
 }
@@ -1083,9 +1083,9 @@ void Page::setParentAddr( const string &isw )
 string Page::getStatus( )
 {
     string rez = Widget::getStatus();
-    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(timeStamp()).c_str());
+    rez += TSYS::strMess(_("Date of modification %s. "), atm2s(timeStamp()).c_str());
     if(calcProg().size()) {
-	rez += _("Calculating procedure: ");
+	rez += _("Calculating procedure - ");
 	if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
 	    rez += _("!!redefined!!");
 	else if(!parent().freeStat() && parent().at().calcProg().size())

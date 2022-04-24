@@ -135,8 +135,8 @@ string WidgetLib::getStatus( )
 	cnt += at(tls[iT]).at().herit().size();
 	maxTm = vmax(maxTm, at(tls[iT]).at().timeStamp());
     }
-    rez += TSYS::strMess(_("Used: %d. "), cnt);
-    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(maxTm).c_str());
+    rez += TSYS::strMess(_("Used %d. "), cnt);
+    rez += TSYS::strMess(_("Date of modification %s. "), atm2s(maxTm).c_str());
 
     return rez;
 }
@@ -569,9 +569,9 @@ string LWidget::ico( ) const
 string LWidget::getStatus( )
 {
     string rez = Widget::getStatus();
-    rez += TSYS::strMess(_("Date of modification: %s. "), atm2s(timeStamp()).c_str());
+    rez += TSYS::strMess(_("Date of modification %s. "), atm2s(timeStamp()).c_str());
     if(calcProg().size()) {
-	rez += _("Calculating procedure: ");
+	rez += _("Calculating procedure - ");
 	if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
 	    rez += _("!!redefined!!");
 	else if(!parent().freeStat() && parent().at().calcProg().size())

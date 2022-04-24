@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.JavaLikeCalc translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.JavaLikeCalc module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2020.
+# Roman Savochenko <roman@oscada.org>, 2005-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-17 15:23+0300\n"
+"POT-Creation-Date: 2022-04-22 17:31+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -76,7 +76,8 @@ msgid "Operation code %d is not supported."
 msgstr "Код виконання %d не підтримується."
 
 #, c-format
-msgid "Number of external functions reached the limit of %d on the function '%s'"
+msgid ""
+"Number of external functions reached the limit of %d on the function '%s'"
 msgstr "Кількість зовнішніх функцій досягло ліміту у %d на функції '%s'"
 
 #, c-format
@@ -151,8 +152,10 @@ msgstr "Ідентифікатор"
 msgid "Type"
 msgstr "Тип"
 
-msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
-msgstr "Реальний;Цілий;Логічний;Рядок;Рядок (переклад);Текст;Текст (переклад);Об'єкт"
+msgid ""
+"Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
+msgstr ""
+"Реальний;Цілий;Логічний;Рядок;Рядок (переклад);Текст;Текст (переклад);Об'єкт"
 
 msgid "Mode"
 msgstr "Режим"
@@ -166,13 +169,12 @@ msgstr "Приховано"
 msgid "Default"
 msgstr "Замовчення"
 
-#, c-format
 msgid ""
-"Size source=%s, bytecode=%s; Registers totally=%d, constants=%d, internal "
-"functions'=%d; Functions external=%d, internal=%d."
+"Size source %s, bytecode %s; Registers totally %d, constants %d, internal "
+"functions' %d; Functions external %d, internal %d."
 msgstr ""
-"Розмір вихідних=%s, байткоду=%s; Регістрів загалом=%d, постійних=%d, "
-"внутрішн.функцій=%d; Функцій зовнішніх=%d, внутрішніх=%d."
+"Розмір вихідних %s, байткоду %s; Регістрів загалом %d, постійних %d, "
+"внутрішн.функцій %d; Функцій зовнішніх %d, внутрішніх %d."
 
 msgid "New IO"
 msgstr "Нове ВВ"
@@ -405,4 +407,3 @@ msgstr ""
 "  anm - ім'я створюваного атрибута.\n"
 "Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з обраного "
 "ВВ функції."
-

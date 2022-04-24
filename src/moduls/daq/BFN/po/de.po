@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the OpenSCADA.DAQ.BFN package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010, 2011.
-# Roman Savochenko <roman@oscada.org>, 2011, 2017-2018.
+# Roman Savochenko <roman@oscada.org>, 2011-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:31+0300\n"
+"POT-Creation-Date: 2022-04-22 18:03+0300\n"
 "PO-Revision-Date: 2011-07-19 20:40+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -92,17 +92,15 @@ msgstr "Fehler: '%s'. "
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Erwerb mit dem Zeitraum: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Erwerb mit dem Zeitraum %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Nächste Übernahme durch den Cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s."
-msgstr "Verbrauchte Zeit: %s."
+msgid "Spent time %s."
+msgstr "Verbrauchte Zeit %s."
 
 msgid "House:\n"
 msgstr "Haus:\n"
@@ -110,6 +108,7 @@ msgstr "Haus:\n"
 msgid "House computer:\n"
 msgstr "Haus-Computer:\n"
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Verbindung zur Datenquelle: %s."
 

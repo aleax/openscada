@@ -1078,7 +1078,7 @@ bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 string TTransportOut::getStatus( )
 {
     return (startStat()?_("Connected. "):_("Disconnected. ")) +
-	TSYS::strMess(_("Established: %s. Last: %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str(), atm2s(1e-6*lstReqTm(),"%d-%m-%Y %H:%M:%S").c_str());
+	TSYS::strMess(_("Established %s, last %s. "), atm2s(startTm(),"%d-%m-%Y %H:%M:%S").c_str(), atm2s(1e-6*lstReqTm(),"%d-%m-%Y %H:%M:%S").c_str());
 }
 
 void TTransportOut::load_( TConfig *icfg )

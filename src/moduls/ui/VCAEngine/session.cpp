@@ -1832,7 +1832,7 @@ string SessWdg::getStatus( )
     if(process())
 	rez += TSYS::strMess(_("Processing at %s. "), TSYS::time2str(1e-3*((calcPer()>0)?calcPer():ownerSess()->period())).c_str());
     if(mess_lev() == TMess::Debug)
-	rez += _("Spent time on the branch: ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("the item: ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
+	rez += _("Spent time on the branch ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("the item ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
 
     return rez;
 }

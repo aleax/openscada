@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 19:57+0300\n"
+"POT-Creation-Date: 2022-04-22 18:22+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1958,7 +1958,7 @@ msgid "Monotonic %s"
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s[%s]."
+msgid "Spent time %s[%s]."
 msgstr ""
 
 msgid "<newStat>"
@@ -2010,11 +2010,11 @@ msgid "creating or modification the configuration DBs as multilanguage ones with
 msgstr ""
 
 #, c-format
-msgid "Messages indexed: %d, cached: %d."
+msgid "Messages indexed %d, cached %d."
 msgstr ""
 
 #, c-format
-msgid "Translation contexts: %d."
+msgid "Translation contexts %d."
 msgstr ""
 
 msgid "<<<Unmatched sources>>>\n"
@@ -2184,7 +2184,7 @@ msgid "Connected. "
 msgstr ""
 
 #, c-format
-msgid "Established: %s. Last: %s. "
+msgid "Established %s, last %s. "
 msgstr ""
 
 #, c-format

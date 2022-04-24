@@ -1,7 +1,7 @@
 # OpenSCADA.DAQ.ICP_DAS translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ICP_DAS package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2009-2018.
+# Roman Savochenko <roman@oscada.org>, 2009-2022.
 #
 msgid ""
 msgstr ""
@@ -284,16 +284,16 @@ msgid "Acquisition. "
 msgstr "Збір. "
 
 #, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Збір з періодом: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Збір з періодом %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
 #, c-format
-msgid "Spent time: %s. Serial requests %g, errors %g. "
-msgstr "Витрачено часу: %s. Послід. запитів %g, помилок %g. "
+msgid "Spent time %s. Serial requests %g, errors %g. "
+msgstr "Витрачено часу %s. Послід. запитів %g, помилок %g. "
 
 msgid "Open All LP-slots error."
 msgstr "Помилка відкриття всіх LP-слотів."

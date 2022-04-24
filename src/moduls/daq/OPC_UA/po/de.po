@@ -1,14 +1,14 @@
 # OpenSCADA.DAQ.OPC_UA translate to German.
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2011-2021.
+# Roman Savochenko <roman@oscada.org>, 2011-2022.
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 09:13+0300\n"
+"POT-Creation-Date: 2022-04-22 17:36+0300\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -103,17 +103,15 @@ msgstr "Wiederherstellung in %.6g s. "
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Erwerb mit dem Zeitraum: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Erwerb mit dem Zeitraum %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s[%s]. Requests %.6g. "
-msgstr "Verbrauchte Zeit: %s[%s]. Anfragen %.6g. "
+msgid "Spent time %s[%s], requests %.6g. "
+msgstr "Verbrauchte Zeit %s[%s], anfragen %.6g. "
 
 #, c-format
 msgid ""
@@ -163,7 +161,8 @@ msgid ""
 "of the monitored items list.\n"
 "Restart to apply the removed PLC links in run."
 msgstr ""
-"Ein manueller Neustart des freigegebenen Controller-Objekts bewirkt, dass die Neuformatierung der Liste der überwachten Elemente erzwungen wird.\n"
+"Ein manueller Neustart des freigegebenen Controller-Objekts bewirkt, dass "
+"die Neuformatierung der Liste der überwachten Elemente erzwungen wird.\n"
 "Starten Sie neu, um die entfernten SPS-Links im Lauf zu übernehmen."
 
 msgid "Zero for disable periodic sync."
@@ -503,7 +502,8 @@ msgstr "0 für die automatische Setzen von cntrKeepAlive*publInterv"
 
 #, c-format
 msgid "%d(%s): at %s(live %s), secure channel %u; Publish requests %u"
-msgstr "%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
+msgstr ""
+"%d(%s): bei %s(live %s), sicherer Kanal %u; Anfragen veröffentlichen %u"
 
 msgid "Closed"
 msgstr "Geschlossen"
@@ -549,4 +549,3 @@ msgstr "Server OPC-UA"
 
 msgid "Provides OPC-UA server service implementation."
 msgstr "Bietet OPC-UA Server-Service-Implementierung."
-

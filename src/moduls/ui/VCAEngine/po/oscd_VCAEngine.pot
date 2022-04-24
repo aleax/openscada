@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-20 09:38+0200\n"
+"POT-Creation-Date: 2022-04-22 18:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -24,11 +24,11 @@ msgid "Disabled. "
 msgstr ""
 
 #, c-format
-msgid "Used: %d. "
+msgid "Used %d. "
 msgstr ""
 
 #, c-format
-msgid "Date of modification: %s. "
+msgid "Date of modification %s. "
 msgstr ""
 
 msgid "Loading widgets library."
@@ -114,7 +114,7 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-msgid "Calculating procedure: "
+msgid "Calculating procedure - "
 msgstr ""
 
 msgid "!!redefined!!"
@@ -1258,10 +1258,10 @@ msgstr ""
 msgid "Processing at %s. "
 msgstr ""
 
-msgid "Spent time on the branch: "
+msgid "Spent time on the branch "
 msgstr ""
 
-msgid "the item: "
+msgid "the item "
 msgstr ""
 
 #, c-format

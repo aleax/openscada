@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.System translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2018.
+# Roman Savochenko <roman@oscada.org>, 2005-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 13:53+0200\n"
+"POT-Creation-Date: 2022-04-22 17:55+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -251,16 +251,15 @@ msgstr "Дополнительные параметры"
 msgid "Acquisition. "
 msgstr "Сбор. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Сбор с периодом: %s."
+msgid "Acquisition with the period %s. "
+msgstr "Сбор с периодом %s. "
 
+#, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s[%s]. "
-msgstr "Затрачено времени: %s[%s]. "
+msgid "Spent time %s[%s]. "
+msgstr "Затрачено времени %s[%s]. "
 
 msgid "2:Controller stopped"
 msgstr "2:Контроллер остановлен"
@@ -268,6 +267,7 @@ msgstr "2:Контроллер остановлен"
 msgid "1:Parameter disabled"
 msgstr "1:Параметр отключен"
 
+#, c-format
 msgid "Error writing value to attribute '%s': %s"
 msgstr "Ошибка записи значения в атрибут '%s': %s"
 

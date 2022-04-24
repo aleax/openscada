@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 19:57+0300\n"
+"POT-Creation-Date: 2022-04-22 18:22+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -184,7 +184,8 @@ msgid "Redundancy"
 msgstr "Резервирование"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr "Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
+msgstr ""
+"Глубина принудительной перезагрузки истории резерва при запуске, в сутках."
 
 msgid "Message archivers"
 msgstr "Архиваторы сообщений"
@@ -349,7 +350,8 @@ msgid "Requested %d records for time %s."
 msgstr "Запрошено %d записей в течении %s."
 
 #, c-format
-msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid ""
+"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Режим привязки к сетке не поддерживает вставку очень старых значений %lld "
 "(%lld-%lld)."
@@ -608,7 +610,8 @@ msgstr "Таблицы которые в БД, но не открыты на д�
 msgid "Load the program from this DB"
 msgstr "Загрузить программу из этой БД"
 
-msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid ""
+"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодировка данных в БД. Для примера: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -1386,7 +1389,8 @@ msgstr "2:Сбор остановлен."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid "The type changing leads to lose some data of the specific configurations."
+msgid ""
+"The type changing leads to lose some data of the specific configurations."
 msgstr "Смена типа повлечёт за собой потерю данных специфических конфигураций."
 
 msgid "Inclusion"
@@ -1946,8 +1950,10 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Ошибка записи в конфигурационный файл '%s': %s"
 
 #, c-format
-msgid "Impossible to hold the project lock! Seems the project '%s' already running."
-msgstr "Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
+msgid ""
+"Impossible to hold the project lock! Seems the project '%s' already running."
+msgstr ""
+"Невозможно захватить замок проекта! Похоже проект '%s' уже исполняется."
 
 msgid "Loading."
 msgstr "Загрузка."
@@ -2370,8 +2376,8 @@ msgid "Monotonic %s"
 msgstr "Монотонные %s"
 
 #, c-format
-msgid "Spent time: %s[%s]."
-msgstr "Затрачено времени: %s[%s]."
+msgid "Spent time %s[%s]."
+msgstr "Затрачено времени %s[%s]."
 
 msgid "<newStat>"
 msgstr "<новаяСтанц>"
@@ -2430,12 +2436,12 @@ msgstr ""
 "базовым языком '%s'"
 
 #, c-format
-msgid "Messages indexed: %d, cached: %d."
-msgstr "Сообщений индексировано: %d, кешировано: %d."
+msgid "Messages indexed %d, cached %d."
+msgstr "Сообщений индексировано %d, кешировано %d."
 
 #, c-format
-msgid "Translation contexts: %d."
-msgstr "Контекстов перевода: %d."
+msgid "Translation contexts %d."
+msgstr "Контекстов перевода %d."
 
 msgid "<<<Unmatched sources>>>\n"
 msgstr "<<<Несовпадение источников!!!>>>\n"
@@ -2616,8 +2622,8 @@ msgid "Connected. "
 msgstr "Подключено. "
 
 #, c-format
-msgid "Established: %s. Last: %s. "
-msgstr "Установлено: %s. Последнее: %s. "
+msgid "Established %s, last %s. "
+msgstr "Установлено %s, последнее %s. "
 
 #, c-format
 msgid "Transport protocol '%s' is missing"
@@ -2921,4 +2927,3 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
-

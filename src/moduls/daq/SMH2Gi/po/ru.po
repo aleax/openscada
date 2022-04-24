@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.SMH2Gi translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2012-2013, 2018-2020.
+# Roman Savochenko <roman@oscada.org>, 2012-2013, 2018-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-16 10:06+0200\n"
+"POT-Creation-Date: 2022-04-22 17:58+0300\n"
 "PO-Revision-Date: 2012-10-31 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -64,17 +64,15 @@ msgstr "Директория с *.ini файлами устройств MR/MC"
 msgid "Acquisition. "
 msgstr "Сбор. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Сбор с периодом: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Сбор с периодом %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s."
-msgstr "Затрачено времени: %s."
+msgid "Spent time %s."
+msgstr "Затрачено времени %s."
 
 #, c-format
 msgid "Error opening GPIO %s for MC reset."
@@ -91,9 +89,11 @@ msgstr "Автоматически созданный транспорт Segneti
 msgid "ModBUS REQ -> '%s': %s"
 msgstr "ModBUS Запрос -> '%s': %s"
 
+#, c-format
 msgid "13:Error respond: Too short: %s."
 msgstr "13:Ошибка ответа: Очень короткий: %s."
 
+#, c-format
 msgid "13:Error respond: CRC error: %s."
 msgstr "13:Ошибка ответа: Ошибка CRC: %s."
 
@@ -101,6 +101,7 @@ msgstr "13:Ошибка ответа: Ошибка CRC: %s."
 msgid "ModBUS RESP -> '%s': %s"
 msgstr "ModBUS Ответ -> '%s': %s"
 
+#, c-format
 msgid "ModBUS ERR -> '%s': %s"
 msgstr "ModBUS Ошибка -> '%s': %s"
 
@@ -156,7 +157,8 @@ msgstr "Ошибка отправки тюн-запроса: %s."
 msgid "20:PDU short."
 msgstr "20:PDU короткий."
 
-msgid "21:Position lost. Need reload MR/MC bus - re-enable the controller object."
+msgid ""
+"21:Position lost. Need reload MR/MC bus - re-enable the controller object."
 msgstr ""
 "21:Потеря позиции. Необходима перегрузка MR/MC шины - переподключение "
 "объекта контроллера."
@@ -202,4 +204,3 @@ msgstr "DO %d"
 
 msgid "<No select>"
 msgstr "<Не выбрано>"
-

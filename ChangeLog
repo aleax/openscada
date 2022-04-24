@@ -1,3 +1,10 @@
+2022-04-24 Roman (stable)
+- DAQ.{JavaLikeCalc,ModBus}: Prevented of the controller object disable and/or stop at
+    the some configuration fields reloading witout a change.
+- DAQ.ModBus: Prevented of setting alarms in the endrun stage.
+- SYS,DAQ.*,UI.VCAEngine: Status texts of different objects were unified in removing the symbol ":".
+
+
 2022-04-20 Roman (stable)
 - LibsDB.vcaBase: wlb_Main.TextLab: Enabled for the transitive translation optionally in the status text.
 - !!!!:FIX:SYS: Fixed in the new values changing and saving for the MULTILANGUAGE mode:
@@ -33,7 +40,7 @@
 	it complete copy under the lock trMessIdxRes and it copy using outside the lock, then preventing for dead locks at the DB access.
     Fields of the translation status replaced for the separator from "=" to the common one ": ".
 - !!!!:FIX:DB: The TBD object appended an internal flag "mIsFirst" of control the object first enable and what used to prevent
-    of the table "Tr" registering at each enable-connection-reconnection.
+    of the table "Trs" registering at each enable-connection-reconnection.
 - DAQ.DAQGate: Appended for rapid detection of the generic connections loss and marking all the parameter attributes to EVAL.
 - !!:FIX:DAQ.JavaLikeCalc: Prevented in some resources lock of the library function at its program change,
     when performed the program compile at disabled function.

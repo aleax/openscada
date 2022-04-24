@@ -3006,7 +3006,7 @@ void Func::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/func/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else if(a_path == "/func/st/compileSt" && ctrChkNode(opt))
-	opt->setText(TSYS::strMess(_("Size source=%s, bytecode=%s; Registers totally=%d, constants=%d, internal functions'=%d; Functions external=%d, internal=%d."),
+	opt->setText(TSYS::strMess(_("Size source %s, bytecode %s; Registers totally %d, constants %d, internal functions' %d; Functions external %d, internal %d."),
 	    TSYS::cpct2str(prog().size()).c_str(),TSYS::cpct2str(prg.size()).c_str(),mRegs.size(),cntrCnst,cntrInFRegs,mFncs.size(),cntrInF));
     else if(a_path == "/func/cfg/NAME") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(trD(name()));

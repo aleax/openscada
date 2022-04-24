@@ -255,7 +255,7 @@ msgid "Acquisition. "
 msgstr ""
 
 #, c-format
-msgid "Acquisition with the period: %s. "
+msgid "Acquisition with the period %s. "
 msgstr ""
 
 #, c-format
@@ -263,7 +263,7 @@ msgid "Next acquisition by the cron '%s'. "
 msgstr ""
 
 #, c-format
-msgid "Spent time: %s. Serial requests %g, errors %g. "
+msgid "Spent time %s. Serial requests %g, errors %g. "
 msgstr ""
 
 msgid "Open All LP-slots error."

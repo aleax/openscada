@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.MMS translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.MMS module.
 #
-# Roman Savochenko <roman@oscada.org>, 2013-2014, 2017-2018.
+# Roman Savochenko <roman@oscada.org>, 2013-2014, 2017-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:37+0300\n"
+"POT-Creation-Date: 2022-04-22 17:40+0300\n"
 "PO-Revision-Date: 2013-10-20 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -57,24 +57,21 @@ msgstr "Перелік змінних (поділено наступним ря�
 msgid "No activity data."
 msgstr "Немає активності даних."
 
-#, c-format
-msgid "Connection error. Restoring in %.6g s."
-msgstr "Помилка з'єднання. Відновлення за %.6g с."
+msgid "Connection error, restoring at %.6g s."
+msgstr "Помилка з'єднання, відновлення за %.6g с."
 
 msgid "Acquisition. "
 msgstr "Збір. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Збір з періодом: %s."
+msgid "Acquisition with the period %s. "
+msgstr "Збір з періодом %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s[%s]. Requests %.6g."
-msgstr "Витрачено часу: %s[%s]. Запитів %.6g."
+msgid "Spent time %s[%s], requests %.6g."
+msgstr "Витрачено часу %s[%s], запитів %.6g."
 
 msgid "Remote host error"
 msgstr "Помилка віддаленого хосту"
@@ -83,6 +80,7 @@ msgstr "Помилка віддаленого хосту"
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "Автоматично створений транспорт MMS для контролеру '%s'."
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Підключення до джерела даних: %s."
 

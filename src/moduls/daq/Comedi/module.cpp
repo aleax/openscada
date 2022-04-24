@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.18"
+#define MOD_VER		"1.0.19"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -117,9 +117,9 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse()) {
 	if(call_st)	val += TSYS::strMess(_("Acquisition. "));
-	if(period())	val += TSYS::strMess(_("Acquisition with the period: %s. "), tm2s(1e-9*period()).c_str());
+	if(period())	val += TSYS::strMess(_("Acquisition with the period %s. "), tm2s(1e-9*period()).c_str());
 	else val += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s. "), tm2s(1e-6*tm_gath).c_str());
+	val += TSYS::strMess(_("Spent time %s. "), tm2s(1e-6*tm_gath).c_str());
     }
 
     return val;

@@ -2,13 +2,13 @@
 # Copyright (C) 2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.BFN package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2010, 2017-2018.
+# Roman Savochenko <roman@oscada.org>, 2010-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BFN 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-23 09:31+0300\n"
+"POT-Creation-Date: 2022-04-22 18:03+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -88,17 +88,15 @@ msgstr "Ошибка: '%s'. "
 msgid "Acquisition. "
 msgstr "Сбор. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Сбор с периодом: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Сбор с периодом %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s."
-msgstr "Затрачено времени: %s."
+msgid "Spent time %s."
+msgstr "Затрачено времени %s."
 
 msgid "House:\n"
 msgstr "Помещение:\n"
@@ -106,6 +104,7 @@ msgstr "Помещение:\n"
 msgid "House computer:\n"
 msgstr "Компьютер помещения:\n"
 
+#, c-format
 msgid "Connection to the data source: %s."
 msgstr "Подключение к источнику данных: %s."
 

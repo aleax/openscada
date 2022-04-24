@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2018.
+# Roman Savochenko <roman@oscada.org>, 2011-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-04 10:38+0200\n"
+"POT-Creation-Date: 2022-04-22 18:21+0300\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -186,16 +186,15 @@ msgstr "Verbindungswert"
 msgid "Calculation. "
 msgstr "Berechnung. "
 
-msgid "Calculation with the period: %s. "
-msgstr "Berechnung mit einer Periode: %s. "
+msgid "Calculation with the period %s. "
+msgstr "Berechnung mit einer Periode %s. "
 
 #, c-format
 msgid "Next calculation by the cron '%s'. "
 msgstr "Berechnung nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s[%s]. "
-msgstr "Verbrauchte Zeit: %s[%s]. "
+msgid "Spent time %s[%s]. "
+msgstr "Verbrauchte Zeit %s[%s]. "
 
 #, c-format
 msgid "Enable block '%s' error."

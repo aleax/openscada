@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009-2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2011-2021.
+# Roman Savochenko <roman@oscada.org>, 2011-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-20 09:25+0200\n"
+"POT-Creation-Date: 2022-04-22 16:56+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -105,17 +105,15 @@ msgstr "Wiederherstellung in %.6g sek."
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
-#, c-format
-msgid "Acquisition with the period: %s. "
-msgstr "Erwerb mit dem Zeitraum: %s. "
+msgid "Acquisition with the period %s. "
+msgstr "Erwerb mit dem Zeitraum %s. "
 
 #, c-format
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
-#, c-format
-msgid "Spent time: %s[%s]. "
-msgstr "Verbrauchte Zeit: %s[%s]. "
+msgid "Spent time %s[%s]. "
+msgstr "Verbrauchte Zeit %s[%s]. "
 
 #, c-format
 msgid "Read %g(%g) registers, %g(%g) coils. "
@@ -369,7 +367,8 @@ msgstr "Fehler der Serverantwort"
 
 #, c-format
 msgid "The response Transaction ID %d is not suitable to the request one %d."
-msgstr "Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
+msgstr ""
+"Die Antworttransaktions-ID %d ist nicht für die Anforderung %d geeignet."
 
 msgid "Not full response"
 msgstr "Nicht voll antworten"
@@ -404,7 +403,8 @@ msgid "1:%02X:Function is not supported."
 msgstr "1:%02X:Funktion wird nicht unterstützt."
 
 msgid "2:Request address is not allowed or the query range is too large."
-msgstr "2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
+msgstr ""
+"2:Adresse anfordern ist nicht erlaubt oder der Abfragebereich ist zu groß."
 
 msgid "3:Illegal value of the data in the request."
 msgstr "3:Illegale Datenwert in der Anfrage."
@@ -637,4 +637,3 @@ msgid ""
 msgstr ""
 "Bietet die Implementierung von ModBus-Protokollen. ModBus/TCP, ModBus/RTU "
 "und ModBus/ASCII-Protokolle werden unterstützt."
-
