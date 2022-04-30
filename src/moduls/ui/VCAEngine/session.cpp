@@ -754,8 +754,8 @@ void Session::cntrCmdProc( XMLNode *opt )
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/obj/st/o_a","",R_R_R_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("fld",opt,-1,"/obj/st/prj",_("Project"),enable()?R_R_R_:permit(),owner().c_str(),grp().c_str(),4,
-		    "tp","str","idm","1","dest","select","select","/obj/prj_ls");
+		ctrMkNode("fld",opt,-1,"/obj/st/prj",_("Project"),enable()?R_R_R_:permit(),owner().c_str(),grp().c_str(),3,
+		    "tp","str","dest","select","select","/obj/prj_ls");
 		ctrMkNode("fld",opt,-1,"/obj/st/backgrnd",_("Background execution mode"),R_R_R_,"root",SUI_ID,1,"tp","bool");
 		if(start()) {
 		    ctrMkNode("fld",opt,-1,"/obj/st/calc_tm",_("Counter, time of calculating"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -811,11 +811,12 @@ void Session::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/obj/st/reqLang" && ctrChkNode(opt))	opt->setText(reqLang());
     else if(a_path == "/obj/st/userActTime" && ctrChkNode(opt))	opt->setText(i2s(userActTm()));
     else if(a_path == "/obj/st/leftToClose" && ctrChkNode(opt))	opt->setText(i2s(vmax(0,DIS_SES_TM-(time(NULL)-reqTm()))));
-    else if(a_path == "/obj/prj_ls" && ctrChkNode(opt)) {
+    else if(a_path == "/obj/prj_ls" && ctrChkNode(opt)) {	//!!!! Without the project name to prevent other projects spare loading here
+								//     at the name obtaining
 	vector<string> lst;
 	mod->prjList(lst);
 	for(unsigned iF = 0; iF < lst.size(); iF++)
-	    opt->childAdd("el")->setAttr("id",lst[iF])->setText(mod->prjAt(lst[iF]).at().name());
+	    opt->childAdd("el")->setText(lst[iF]);
     }
     else if(a_path == "/obj/cfg/per") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(period()));

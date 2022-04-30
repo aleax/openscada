@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 18:31+0300\n"
+"POT-Creation-Date: 2022-04-29 10:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,10 +37,10 @@ msgstr ""
 msgid "Saving widgets library."
 msgstr ""
 
-msgid "Enabling widgets library."
+msgid "Enabling the widgets library."
 msgstr ""
 
-msgid "Disabling widgets library."
+msgid "Disabling the widgets library."
 msgstr ""
 
 #, c-format
@@ -124,6 +124,12 @@ msgid "inherited"
 msgstr ""
 
 msgid "presented"
+msgstr ""
+
+msgid "Enabling the widget."
+msgstr ""
+
+msgid "Disabling the widget."
 msgstr ""
 
 msgid "Widget is not container!"
@@ -1051,6 +1057,12 @@ msgstr ""
 msgid "Page: process not opened"
 msgstr ""
 
+msgid "Enabling the project page."
+msgstr ""
+
+msgid "Disabling the project page."
+msgstr ""
+
 #, c-format
 msgid "The target page '%s' of the link is empty or recursive!"
 msgstr ""
@@ -1472,9 +1484,6 @@ msgstr ""
 
 #, c-format
 msgid "Error enabling the widget: %s"
-msgstr ""
-
-msgid "Disabling the widget."
 msgstr ""
 
 #, c-format

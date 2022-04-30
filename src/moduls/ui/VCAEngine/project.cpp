@@ -309,7 +309,7 @@ void Project::setEnable( bool val )
 
     MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
-    mess_debug(nodePath().c_str(),val ? _("Enabling the project.") : _("Disabling the project."));
+    mess_sys(TMess::Info, val ? _("Enabling the project.") : _("Disabling the project."));
 
     vector<string> fLst;
     list(fLst);
@@ -583,6 +583,15 @@ void Project::pageEnable( const string &pg, bool vl )
 
 void Project::cntrCmdProc( XMLNode *opt )
 {
+    string a_path = opt->attr("path");
+
+    //Service commands process
+    if(a_path == "/serv/access") {	//Access operations
+	if(ctrChkNode(opt,"read",RWRWRW,"root",SUI_ID,SEC_RD))
+	    opt->setText(SYS->security().at().access(opt->attr("user"),SEC_RD,owner(),grp(),permit())?"1":"0");
+	return;
+    }
+
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
@@ -660,7 +669,6 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path");
     if(a_path == "/obj/st/status" && ctrChkNode(opt))		opt->setText(getStatus());
     else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
@@ -1332,6 +1340,8 @@ void Page::wClear( )
 void Page::setEnable( bool val, bool force )
 {
     if(enable() == val) return;
+
+    mess_sys(TMess::Debug, val ? _("Enabling the project page.") : _("Disabling the project page."));
 
     if(prjFlags()&Page::Empty) cfg("PARENT").setS("root");
     else if(prjFlags()&Page::Link) {

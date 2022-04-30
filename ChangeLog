@@ -1,3 +1,18 @@
+2022-04-30 Roman (stable)
+- !!:LibsDB.OscadaLibs: flb_doc.diagram: Fixed in using the horizontal size at the required period (reqPer) calculation.
+- SYS: The User API function TVArchive::getVals() switched to the result value bufer in the FillLast mode,
+    for the possible requested data period lesser than the real data, then fill holes in the previous value.
+- UI.VCAEngine: The Project object appended a Control Interface service request "read:/serv/access", of checking the read access.
+    The Control Interface service request "get:/prm/cfg/prj" appended an option "noName" for preventing the project name request,
+	than preventing other projects spare loading here at the name obtaining.
+    The project list requesting in the Project Session object prevented of requesting the project name
+	to prevent other projects spare loading here at the name obtaining.
+    The project and Widget Library enabling/disabling message set to the TMess::Info level.
+    The Project Page and Widget Library Widget enabling/disabling appended of a TMess::Debug level message.
+- UI.WebVision: Checking the projects accessing moved to check the HTTP accessibility before the access checking in VCAEngine,
+    than preventing other projects spare loading here at the name obtaining if there is no access on the HTTP level.
+
+
 2022-04-24 Roman (stable)
 - DAQ.{JavaLikeCalc,ModBus}: Prevented of the controller object disable and/or stop at
     the some configuration fields reloading witout a change.

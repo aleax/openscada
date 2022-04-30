@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.8.18"
+#define MOD_VER		"7.8.20"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -795,15 +795,17 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst, lst1;
 	    prjList(lst);
+
 	    bool chkUserPerm = s2i(opt->attr("chkUserPerm"));
 	    bool getChPgN = s2i(opt->attr("getChPgN"));
+	    bool noName = s2i(opt->attr("noName"));
 	    for(unsigned iA = 0; iA < lst.size(); iA++) {
 		if(chkUserPerm) {
 		    AutoHD<Project> prj = prjAt(lst[iA]);
 		    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,prj.at().owner(),prj.at().grp(),prj.at().permit()))
 			continue;
 		}
-		XMLNode *no = opt->childAdd("el")->setAttr("id", lst[iA])->setText(trD(prjAt(lst[iA]).at().name()));
+		XMLNode *no = opt->childAdd("el")->setAttr("id", lst[iA])->setText(noName?"":trD(prjAt(lst[iA]).at().name()));
 		if(getChPgN) { prjAt(lst[iA]).at().list(lst1); no->setAttr("chPgN", i2s(lst1.size())); }
 	    }
 	}

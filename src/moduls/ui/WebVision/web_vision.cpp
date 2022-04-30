@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.6.10"
+#define MOD_VER		"6.6.11"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -416,15 +416,28 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 			"</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
-		// Get present projects list
+
+		// Getting the present projects list
 		prjSesEls = "";
-		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
+		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("noName","1");
 		cntrIfCmd(req, ses);
+
 		for(unsigned iCh = 0; iCh < req.childSize(); iCh++) {
+		    //  Checking for the HTTP-page accessibility
 		    if(!pgAccess(iprt,sender+"/" MOD_ID "/prj_"+req.childGet(iCh)->attr("id")+"/"))	continue;
+
+		    //  Checking for a session availability for such project and user
 		    if(!ses.isRoot() && self_prjSess.find(req.childGet(iCh)->attr("id")+";") != string::npos)	continue;
+
+		    //  Checking for real permition
+		    XMLNode req2("CntrReqs"); req2.setAttr("path","/prj_"+req.childGet(iCh)->attr("id"));
+		    req2.childAdd("read")->setAttr("path","/%2fserv%2faccess");
+		    req2.childAdd("get")->setAttr("path","/%2fobj%2fcfg%2fname");
+		    cntrIfCmd(req2, ses);
+		    if(!s2i(req2.childGet(0)->text())) continue;
+
 		    prjSesEls += "<tr><td><img src='/" MOD_ID "/ico?it=/prj_" + req.childGet(iCh)->attr("id") + "' height='32' width='32'/> "
-			"<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/"+ses.gPrms+"'>" + req.childGet(iCh)->text() + "</a></td></tr>";
+			"<a href='/" MOD_ID "/prj_" + req.childGet(iCh)->attr("id") + "/"+ses.gPrms+"'>" + req2.childGet(1)->text() + "</a></td></tr>";
 		}
 		if(!prjSesEls.empty()) {
 		    page = page +

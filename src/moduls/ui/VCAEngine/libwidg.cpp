@@ -209,16 +209,16 @@ void WidgetLib::setEnable( bool val, bool force )
 {
     if(val == enable())	return;
 
-    mess_debug(nodePath().c_str(),val ? _("Enabling widgets library.") : _("Disabling widgets library."));
+    mess_sys(TMess::Info, val ? _("Enabling the widgets library.") : _("Disabling the widgets library."));
 
     passAutoEn = true;
 
     vector<string> f_lst;
     list(f_lst);
-    for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++) {
-	if(at(f_lst[i_ls]).at().enableByNeed)	continue;
-	try { at(f_lst[i_ls]).at().setEnable(val); }
-	catch(TError &err) { mess_err(nodePath().c_str(),_("Error enabling/disabling widget '%s': %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
+    for(unsigned iLs = 0; iLs < f_lst.size(); iLs++) {
+	if(at(f_lst[iLs]).at().enableByNeed)	continue;
+	try { at(f_lst[iLs]).at().setEnable(val); }
+	catch(TError &err) { mess_err(nodePath().c_str(),_("Error enabling/disabling widget '%s': %s."),f_lst[iLs].c_str(),err.mess.c_str()); }
     }
 
     passAutoEn = false;
@@ -636,6 +636,8 @@ void LWidget::setEnable( bool val, bool force )
 
     MtxAlloc fRes(funcM(), true);	//Prevent multiple entry
 
+    mess_sys(TMess::Debug, val ? _("Enabling the widget.") : _("Disabling the widget."));
+
     Widget::setEnable(val);
 
     //Include widgets link update on the parrent change
@@ -643,9 +645,9 @@ void LWidget::setEnable( bool val, bool force )
 	if(mParentAddrPrev.size() && parentAddr() != mParentAddrPrev) {
 	    vector<string> lst;
 	    wdgList(lst, true);
-	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
+	    for(unsigned iL = 0; iL < lst.size(); iL++)
 		try {
-		    AutoHD<Widget> iw = wdgAt(lst[i_l]);
+		    AutoHD<Widget> iw = wdgAt(lst[iL]);
 		    if(iw.at().parentAddr().compare(0,mParentAddrPrev.size()+1,mParentAddrPrev+"/") == 0) {
 			iw.at().setParentAddr(parentAddr()+iw.at().parentAddr().substr(mParentAddrPrev.size()));
 			iw.at().setEnable(true);
@@ -845,11 +847,11 @@ void LWidget::resourceList( vector<string> &ls )
 {
     //Append to the map for doublets remove
     map<string,bool> sortLs;
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
+    for(unsigned iL = 0; iL < ls.size(); iL++) sortLs[ls[iL]] = true;
     ownerLib().resourceDataList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
+    for(unsigned iL = 0; iL < ls.size(); iL++) sortLs[ls[iL]] = true;
     ls.clear();
-    for(map<string,bool>::iterator i_l = sortLs.begin(); i_l != sortLs.end(); ++i_l) ls.push_back(i_l->first);
+    for(map<string,bool>::iterator iL = sortLs.begin(); iL != sortLs.end(); ++iL) ls.push_back(iL->first);
 
     if(!parent().freeStat()) parent().at().resourceList(ls);
 }

@@ -9437,7 +9437,7 @@ Currently, only value archives can be used as a data source, either directly to 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Magomed, SAVTECH
-Version: 1.4.0
+Version: 1.4.1
 License: GPLv2','Побудова діаграми трендів у SVG, яка може надалі вбудовуватися у XHTML-документу, для даних за вказаний період часу [(end-size)...end] та із джерел srcs.
 
 Код формування діаграми засновано на коді примітиву "Діаграма" візуалізаторів, та який було доволі просто перенесено із мови C++ на вбудовану мову JavaLikeCalc. Наразі перенесено-реалізовано лише тренди!
@@ -9458,7 +9458,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: Магомед, SAVTECH
-Версія: 1.4.0
+Версія: 1.4.1
 Ліцензія: GPLv2','Построение диаграммы трендов в SVG, которая может далее встраиваться в XHTML-документ, для данных за указанный период времени [(end-size)...end] и из источников srcs.
 
 Код формирования диаграммы основан на коде примитива "Диаграмма" визуализаторов, и который был довольно просто перенесен с языка C++ на встроенный язык JavaLikeCalc. Сейчас перенесено-реализовано только тренды!
@@ -9479,7 +9479,7 @@ License: GPLv2','Побудова діаграми трендів у SVG, яка
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: Магомед, SAVTECH
-Версия: 1.4.0
+Версия: 1.4.1
 Лицензия: GPLv2',1,10,0,'function strChars(inS) {
 	for(inSz = 0, off = 0; off < inS.length; inSz++)
 		inS.charAt(off, "UTF-8");
@@ -9499,7 +9499,7 @@ FD_LOG = 0x4;
 
 if(!end)	end = SYS.time();
 begin = end - size;
-reqPer = size/vsz;
+reqPer = size/hsz;
 
 //Getting the trends data
 trends = new Array();

@@ -1761,6 +1761,7 @@ TVariant TVArchive::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  arch   - requesting archiver, set to empty to try for the buffer and all archivers, set to "<buffer>" to process only the buffer.
     if(iid == "getVals" && prms.size() >= 3) {
 	TValBuf buf(TValBuf::valType(), 0, vmax(TValBuf::period(),prms[2].getI()), true, true);
+	buf.setFillLast(true);	//For low quality archives, but which mach longer
 	getVals(buf, prms[0].getI(), prms[1].getI(), (prms.size()>=4?prms[3].getS():""));
 	TArrayObj *rez = new TArrayObj();
 	int64_t btm = (buf.begin()/buf.period())*buf.period();

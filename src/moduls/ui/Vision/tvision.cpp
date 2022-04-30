@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"8.0.17"
+#define MOD_VER		"8.0.18"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -414,16 +414,16 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	req.childAdd("get")->setAttr("path", "%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm", "1");
 	cntrIfCmd(req, userStart(), userPass(), VCAStation());
 	XMLNode *reqN = req.childGet(0);
-	for(unsigned i_ch = 0; i_ch < reqN->childSize(); i_ch++)
-	    opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(i_ch)->text());
+	for(unsigned iCh = 0; iCh < reqN->childSize(); iCh++)
+	    opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(iCh)->text());
 	    /*if(SYS->security().at().access(userStart(),SEC_WR,"root","root",RWRWR_) ||
-		    reqN->childGet(i_ch)->attr("user") == userStart())
-		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(i_ch)->text());*/
+		    reqN->childGet(iCh)->attr("user") == userStart())
+		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(iCh)->text());*/
 	reqN = req.childGet(1);
-	for(unsigned i_ch = 0; i_ch < reqN->childSize(); i_ch++)
-	    opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));
+	for(unsigned iCh = 0; iCh < reqN->childSize(); iCh++)
+	    opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(iCh)->attr("id"));
 	    /*if(SYS->security().at().access(userStart(),SEC_WR,"root","root",RWRWR_))
-		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));*/
+		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(iCh)->attr("id"));*/
     }
     else if(a_path == "/prm/cfg/exit_on_lst_run_prj_cls") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(exitLstRunPrjCls()));
