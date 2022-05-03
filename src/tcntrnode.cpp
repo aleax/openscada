@@ -595,7 +595,10 @@ string TCntrNode::storage( const string &cnt, bool forQueueOfData ) const
     //The queue
     string work = TSYS::strLine(prcS, 0), tLn;
     for(int pos = 1 /*queue start*/; (tLn=TSYS::strLine(prcS,pos)).size(); ++pos)
-	if(tLn != work) return tLn;
+	if((work == "*.*" && (tLn == DB_CFG || tLn == SYS->workDB())) ||
+		(tLn == "*.*" && (work == DB_CFG || work == SYS->workDB())))
+	    continue;
+	else if(tLn != work) return tLn;
 
     return "";
 }
@@ -605,6 +608,13 @@ void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
     dataRes().lock();
     string prcS = cnt, prcS_, tLn;
     dataRes().unlock();
+
+    bool freeGenStorParts = (forQueueOfData && vl == "*.*");
+    string genStorSplitTo;
+    if(!freeGenStorParts && forQueueOfData) {
+	if(vl == DB_CFG) genStorSplitTo = SYS->workDB();
+	else if(vl == SYS->workDB()) genStorSplitTo = DB_CFG;
+    }
 
     //The queue
     string work = TSYS::strLine(prcS, 0);
@@ -617,10 +627,10 @@ void TCntrNode::setStorage( string &cnt, const string &vl, bool forQueueOfData )
     bool isFound = false;
     for(int pos = 1 /*queue start*/; (tLn=TSYS::strLine(prcS,pos)).size(); ++pos) {
 	// Pass for equal items
-	if(forQueueOfData && tLn == vl)	continue;
+	if((forQueueOfData && tLn == vl) || (freeGenStorParts && (tLn == DB_CFG || tLn == SYS->workDB()))) continue;
 	// Pass for removing first not work item
 	if(forQueueOfData && vl.empty() && !isFound && tLn != work) { isFound = true; continue; }
-	prcS_ += tLn + "\n";
+	prcS_ += ((genStorSplitTo.size() && tLn == "*.*") ? genStorSplitTo : tLn) + "\n";
     }
 
     dataRes().lock();

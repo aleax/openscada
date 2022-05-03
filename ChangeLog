@@ -1,3 +1,11 @@
+2022-05-03 Roman (stable)
+- SYS: TCntrNode::storage() expanded for show to remove not the Generic Storage parts.
+    TCntrNode::setStorage() expanded at setting to the queue in splitting the Generic Storage at setting its part
+	and removing its parts at it setting.
+- !!:FIX:DAQ.DAQGate: Fixed for several stations selection in the controller object.
+    Allowed for sync the new parameter attributes during the enabling also, after moving that process also to the task.
+
+
 2022-04-30 Roman (stable)
 - !!:LibsDB.OscadaLibs: flb_doc.diagram: Fixed in using the horizontal size at the required period (reqPer) calculation.
 - SYS: The User API function TVArchive::getVals() switched to the result value bufer in the FillLast mode,
