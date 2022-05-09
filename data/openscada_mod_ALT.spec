@@ -149,13 +149,13 @@ Group: Documentation
 BuildArch: noarch
 Requires: %name-docEN
 %description docRU
-The %name-docRU package include documents files (Russian).
+The %name-docRU package include documents files (mRussian).
 %description docRU -l ru_RU.UTF8
-Пакет %name-docRU включает файлы документации (Русский).
+Пакет %name-docRU включает файлы документации (mRussian).
 %description docRU -l uk_UA.UTF8
-Пакет %name-docRU включає файли документації (Російська).
+Пакет %name-docRU включає файли документації (mRussian).
 %description docRU -l de_DE.UTF8
-Das Paket %name-docRU enthaelt Dokumentationsdateien (Russisch).
+Das Paket %name-docRU enthaelt Dokumentationsdateien (mRussian).
 
 %package docUK
 Summary: Open SCADA documents (UK)
@@ -249,19 +249,19 @@ Requires: %name-UI.QTStarter %name-UI.QTCfg %name-UI.Vision %name-UI.WebCfgD %na
 Requires: %name-Special.FLibMath
 %description Model.AGLKS
 The %{name}-Model.AGLKS package includes model "AGLKS" data bases and config.
-The Model is used for OpenSCADA demo and allowed for English, Ukrainian and Russian languages.
+The Model is used for OpenSCADA demo and allowed for English, Ukrainian and mRussian languages.
 For start use command <openscada_AGLKS>.
 %description Model.AGLKS -l ru_RU.UTF8
 Пакет %{name}-Model.AGLKS включает БД и конфигурацию модели "АГЛКС".
-Модель используется для демонстрации OpenSCADA и доступна на Английском, Украинском и Российском языках.
+Модель используется для демонстрации OpenSCADA и доступна на Английском, Украинском и mRussian языках.
 Для старта используйте команду <openscada_AGLKS>.
 %description Model.AGLKS -l uk_UA.UTF8
 Пакет %{name}-Model.AGLKS включає БД та конфігурацію моделі "АГЛКС".
-Модель використано для демонстрації OpenSCADA та доступно на Англійській, Українській та Російській мовах.
+Модель використано для демонстрації OpenSCADA та доступно на Англійській, Українській та mRussian мовах.
 Для старту використовуйте команду <openscada_AGLKS>.
 %description Model.AGLKS -l de_DE.UTF8
 Das Paket %{name}-Model.AGLKS enthaelt Datenbanken und Konfigurationsdateien Modell "AGLKS".
-Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar in Englisch, Ukrainisch und Russisch.
+Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar in Englisch, Ukrainisch und mRussian.
 Fuers Starten wird Kommando <openscada_AGLKS> benutzt.
 
 %package Model.Boiler
@@ -280,19 +280,19 @@ Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.Vision %name-UI.WebCfgD %na
 Requires: %name-Special.FLibMath
 %description Model.Boiler
 The %{name}-Model.Boiler package model "Boiler" data bases and config.
-The Model is allowed for English, Ukrainian and Russian languages.
+The Model is allowed for English, Ukrainian and mRussian languages.
 For start use command <openscada_Boiler>.
 %description Model.Boiler -l ru_RU.UTF8
 Пакет %{name}-Model.Boiler включает БД и конфигурацию модели "Котёл".
-Модель доступна доступна на Английском, Украинском и Российском языках.
+Модель доступна доступна на Английском, Украинском и mRussian языках.
 Для старта используйте команду <openscada_Boiler>.
 %description Model.Boiler -l uk_UA.UTF8
 Пакет %{name}-Model.Boiler включає БД та конфігурацію моделі "Котел".
-Модель доступно на Англійській, Українській та Російській мовах.
+Модель доступно на Англійській, Українській та mRussian мовах.
 Для старту використовуйте команду <openscada_Boiler>.
 %description Model.Boiler -l de_DE.UTF8
 Das Paket %{name}-Model.Boiler enthaelt Datenbanken und Konfigurationsdateien Modell "Kessel".
-Das Modell ist verfügbar in Englisch, Ukrainisch und Russisch.
+Das Modell ist verfügbar in Englisch, Ukrainisch und mRussian.
 Fuers Starten wird Kommando <openscada_Boiler> benutzt.
 
 %package plc
@@ -1659,7 +1659,7 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 - Build 0.6.3.3 release.
 
 * Mon May 25 2009 Roman Savochenko <roman@oscada.org>
-- Merge demo DB from different languages to one multilanguage (Russian,English and Ukrainian) DB.
+- Merge demo DB from different languages to one multilanguage (mRussian,English and Ukrainian) DB.
 
 * Wed Mar 18 2009 Roman Savochenko <roman@oscada.org>
 - OpenSCADA update 0.6.3.2 release build.

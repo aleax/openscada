@@ -895,7 +895,7 @@ void Node::setEnable( bool vl )
 	    mess_err(nodePath().c_str(),_("Error compiling function on the language '%s': %s"),progLang().c_str(),err.mess.c_str());
 	    throw;
 	}
-	// Links, registers and coins init
+	// Links, registers and coils init
 	data->addLinksAttrs();
 
 	for(int iIO = 0; iIO < data->func()->ioSize(); iIO++) {

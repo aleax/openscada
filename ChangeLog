@@ -1,3 +1,8 @@
+2022-05-09 Roman (stable)
+- LibsDB.{OscadaLibs,vcaBase,vcaElectroEls},data/*.spec,data/{debian,debian_mod}/control:
+    The language Russian,Російська,Российский renamed to its true name mRussian.
+
+
 2022-05-03 Roman (stable)
 - SYS: TCntrNode::storage() expanded for show to remove not the Generic Storage parts.
     TCntrNode::setStorage() expanded at setting to the queue in splitting the Generic Storage at setting its part

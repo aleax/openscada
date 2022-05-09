@@ -38,24 +38,22 @@ DOC: Libs_Main|Libs/Main','tmplib_base','Основная библиотека',
 DOC: Libs_Main|Libs/Main');
 INSERT INTO ParamTemplLibs VALUES('DevLib','Industrial devices','Промислові пристрої','The user protocol devices library created to provide access to industrial device''s data through network, like to common industrial automation devices and wide resources counters, with protocols simple enough to implement into the User Protocol module, using the presented complex protocols (ModBus, OPC_UA, HTTP) or directly on the internal like to Java language.
 
-The template''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
-
 Author: Roman Savochenko <roman@oscada.org>, Constantine (IrmIngeneer) (2018), Arsen Zakojan (2017), Ruslan Yarmoliuk (2017)
 Founded: January 2010
-Version: 2.6.1
+Version: 2.6.2
 License: GPLv2
 DOC: Libs_Devices|Libs/Devices','Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних промислових пристроїв через мережу із доволі простим протоколом, на кшталт пристроїв загальної промислової автоматики та лічильників різних ресурсів, із протоколом достатньо простим до реалізації у модулі користувацького протоколу, з використанням наявних комплексних протоколів (ModBus, OPC_UA, HTTP) або безпосередньо на внутрішній мові подібній до Java.
 
 Автор: Роман Савоченко <roman@oscada.org>, Константин (IrmIngeneer) (2018), Арсен Закоян (2017), Руслан Ярмолюк (2017)
 Засновано: Січень 2010
-Версія: 2.6.1
+Версія: 2.6.2
 Ліцензія: GPLv2
 DOC: Libs_Devices|Libs/Devices','tmplib_DevLib','Промышленные устройства','');
 INSERT INTO ParamTemplLibs VALUES('PrescrTempl','Prescriptions','Рецепти','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
 
 The section contains DAQ-templates of the prescription manager and commands of the "command-template" mode, which are intended to be connected to the logic level controller, by creating related parameters of the prescription manager and commands, which available for the user to choose from, and which will carry out all the work with the prescriptions-programs for their processing and execution.
 
-The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
+The element''s names and their parameters are available in languages: English, Ukrainian and mRussian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and mRussian.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
@@ -67,7 +65,7 @@ DOC: Libs_Prescriptions|Libs/Prescriptions','Бібліотека створює
 
 Розділ містить DAQ-шаблони менеджеру рецептів та команд режиму "команда-шаблон", які призначено до підключення у контролері логічного рівня, через створення відповідно параметрів менеджеру рецептів та команд, доступних до обрання користувачем, які і здійснюватимуть там всю роботу із рецептами-програмами щодо їх опрацювання та виконання.
 
-Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: Василь Григор''єв, Лабораторія Вакуумних Технологій
@@ -79,7 +77,7 @@ DOC: Libs_Prescriptions|Libs/Prescriptions','tmplib_PrescrTempl','Рецепты
 
 Раздел содержит DAQ-шаблоны менеджера рецептов и команд режима "команда-шаблон", которые предназначены к подключению в контроллере логического уровня, путём создания соответственно параметров менеджера рецептов и команд, доступных для выбора пользователем, которые и будут осуществлять там всю роботу с рецептами-програмами на предмет их обработки и исполнения.
 
-Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
+Названия элементов и их параметров доступны на языках: Английский, Украинский и mRussian. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и mRussian.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: Василий Григорьев, Лаборатория Вакуумных Технологий
@@ -92,7 +90,7 @@ INSERT INTO ParamTemplLibs VALUES('LowDevLib','Low-level devices','Низько�
 
 The user protocol devices library created to provide access to device''s data of low-level buses, with protocols simple enough to implement into the User Protocol module or directly on the internal like to Java language.
 
-The template''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
+The template''s names and their parameters are available in languages: English, Ukrainian and mRussian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and mRussian.
 
 Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
 Founded: Jul 2016
@@ -102,7 +100,7 @@ DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','Бібліотека шабло
 
 Бібліотеку пристроїв користувацьких протоколів створено для надання доступу до даних пристроїв низькорівневих шин, із протоколом достатньо простим до реалізації у модулі користувацького протоколу або безпосередньо на внутрішній мові подібній до Java.
 
-Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
 
 Автор: Роман Савоченко <roman@oscada.org>, Аркадій Кисіль (2017)
 Засновано: Липень 2016
@@ -112,7 +110,7 @@ DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','tmplib_LowDevLib','Низкоу
 
 Библиотека устройств пользовательских протоколов создана для предоставления доступа к данным устройств низкоуровневых шин, с протоколом достаточно простым для реализации в модуле пользовательского протокола или непосредственно на внутреннем языке подобном на Java.
 
-Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
+Названия элементов и их параметров доступны на языках: Английский, Украинский и mRussian. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и mRussian.
 
 Автор: Роман Савоченко <roman@oscada.org>, Аркадий Кысиль (2017)
 Основано: Июль 2016
@@ -156,7 +154,7 @@ DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses','Техно�
 DOC: Libs_Technological_apparatuses|Libs/Technological_apparatuses',0);
 INSERT INTO UserFuncLibs VALUES('servProc','Service procedures','Library of the service procedures of different application.
 
-The library is created to provide service functions of performing service tasks about the OpenSCADA environment. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language. The functions'' names and their parameters are available in languages: English, Ukrainian and Russian.
+The library is created to provide service functions of performing service tasks about the OpenSCADA environment. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language. The functions'' names and their parameters are available in languages: English, Ukrainian and mRussian.
 
 To addressing the library functions you can use the static call address DAQ.JavaLikeCalc.lib_servProc.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}()". Where {Func} — function identifier in the library.
 
@@ -166,7 +164,7 @@ Version: 1.2.1
 License: GPLv2
 DOC: Libs_Service_procedures|Libs/Service_procedures','flb_servProc','Сервісні процедури','Бібліотека сервісних процедур різноманітного застосування.
 
-Бібліотека створюється для надання сервісних функцій виконання службових завдань довкола оточення OpenSCADA. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
+Бібліотека створюється для надання сервісних функцій виконання службових завдань довкола оточення OpenSCADA. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та mRussian.
 
 Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_servProc.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
 
@@ -176,7 +174,7 @@ DOC: Libs_Service_procedures|Libs/Service_procedures','flb_servProc','Серві
 Ліцензія: GPLv2
 DOC: Libs_Service_procedures|Libs/Service_procedures','Сервисные процедуры','Библиотека сервисных процедур различного применения.
 
-Библиотека создаётся для предоставления сервисных функций исполнения служебных задач около окружения OpenSCADA. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и Российский.
+Библиотека создаётся для предоставления сервисных функций исполнения служебных задач около окружения OpenSCADA. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и mRussian.
 
 Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_servProc.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_servProc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_servProc"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
 
@@ -191,7 +189,7 @@ The service functions of the frames of reports and documents are intended to per
 
 To address the library functions you can use the static call address DAQ.JavaLikeCalc.lib_doc.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}()". Where {Func} — function identifier in the library.
 
-The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
+The element''s names and their parameters are available in languages: mEnglish, Ukrainian and mRussian. Their source code wrote in human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and mRussian.
 
 Founded: January 2008
 Author: Roman Savochenko <roman@oscada.org>
@@ -203,7 +201,7 @@ DOC: Libs_Documents|Libs/Documents','flb_doc','Бібліотека звітів
 
 Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_doc.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
 
-Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
 
 Засновано: січень 2008р
 Автор: Роман Савоченко <roman@oscada.org>
@@ -215,7 +213,7 @@ DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и до
 
 Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_doc.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_doc"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_doc"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
 
-Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
+Названия элементов и их параметров доступны на языках: Английский, Украинский и mRussian. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и mRussian.
 
 Основано: январь 2008г
 Автор: Роман Савоченко <roman@oscada.org>
@@ -224,7 +222,7 @@ DOC: Libs_Documents|Libs/Documents','Библиотека отчётов и до
 DOC: Libs_Documents|Libs/Documents',1);
 INSERT INTO UserFuncLibs VALUES('regEl','Regulation elements','Regulation elements library of block-schemes of the module DAQ.BlockCalc.
 
-The library is created to provide functions of different control algorithms and it can be used in programmable logic controllers (PLC) based on OpenSCADA for construction control schemes in the module DAQ.BlockCalc. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language. The functions'' names and its parameters are available in languages: English, Ukrainian and Russian.
+The library is created to provide functions of different control algorithms and it can be used in programmable logic controllers (PLC) based on OpenSCADA for construction control schemes in the module DAQ.BlockCalc. The library is not static, but based on the module JavaLikeCalc, allowing to create calculations on the Java-like language. The functions'' names and its parameters are available in languages: English, Ukrainian and mRussian.
 
 To addressing the library functions you can use the static call address DAQ.JavaLikeCalc.lib_regEl.{Func}() or dynamic SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}()". Where {Func} — function identifier in the library.
 
@@ -235,7 +233,7 @@ Version: 1.0.0
 License: GPLv2
 DOC: Libs_Regulation_elements|Libs/Regulation_elements','flb_regEl','Елементи регулювання','Бібліотека елементів регулювання блокових схем модуля DAQ.BlockCalc.
 
-Бібліотека створюється для надання функцій різних алгоритмів контролю та вона може бути використана у програмованих логічних контролерах (PLC) заснованих на OpenSCADA для побудови схем контролю у модулі DAQ.BlockCalc. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та Російська.
+Бібліотека створюється для надання функцій різних алгоритмів контролю та вона може бути використана у програмованих логічних контролерах (PLC) заснованих на OpenSCADA для побудови схем контролю у модулі DAQ.BlockCalc. Бібліотека не є статичною, а будується на основі модуля JavaLikeCalc, який дозволяє створювати обчислення на мові схожій на Java. Назви функцій та їх параметрів доступні на мовах: Англійська, Українська та mRussian.
 
 Для адресації до функцій цієї бібліотеки можна використати статичну адресу виклику DAQ.JavaLikeCalc.lib_regEl.{Func}() або динамічну SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}(). Де {Func} — ідентифікатор функції у бібліотеці.
 
@@ -246,7 +244,7 @@ DOC: Libs_Regulation_elements|Libs/Regulation_elements','flb_regEl','Елеме�
 Ліцензія: GPLv2
 DOC: Libs_Regulation_elements|Libs/Regulation_elements','Элементы регулирования','Библиотека элементов регулирования блочных схем модуля DAQ.BlockCalc.
 
-Библиотека создаётся для предоставления функций различных алгоритмов контроля и она может быть использована в программированных логических контроллерах (PLC) основанных на OpenSCADA для построения схем контроля в модуле DAQ.BlockCalc. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и Российский.
+Библиотека создаётся для предоставления функций различных алгоритмов контроля и она может быть использована в программированных логических контроллерах (PLC) основанных на OpenSCADA для построения схем контроля в модуле DAQ.BlockCalc. Библиотека не является статической, а строится на основе модуля JavaLikeCalc, позволяющего создавать вычисления на Java-подобном языке. Названия функций и их параметров доступны на языках: Английский, Украинский и mRussian.
 
 Для адресации к функции этой библиотеки можно использовать статический адрес вызова DAQ.JavaLikeCalc.lib_regEl.{Func}() или динамический SYS.DAQ.JavaLikeCalc["lib_regEl"]["{Func}"].call(), SYS.DAQ.JavaLikeCalc["lib_regEl"].{Func}(). Где {Func} — идентификатор функции в библиотеке.
 
@@ -8818,7 +8816,7 @@ for(pos = 0; pos < ibuf.length; ) {
 }
 
 return obuf;','','',1560098890);
-INSERT INTO flb_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, Russian.
+INSERT INTO flb_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, mRussian.
 
 Author: Roman Savochenko <roman@oscada.org>
 Version: 1.3.0','','',1,360,0,'trNm = "offLine";
