@@ -109,6 +109,7 @@ void TSubSYS::subStart( )
 	SYS->security().at().grpAt(subId()).at().setDescr(subName());
 	SYS->security().at().grpAt(subId()).at().setSysItem(true);
 	SYS->security().at().grpAt(subId()).at().userAdd("root");
+	SYS->security().at().grpAt(subId()).at().modifClr();
     }
 
     if(!subModule())	return;

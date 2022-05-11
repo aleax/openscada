@@ -1666,7 +1666,7 @@ if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == fal
 CREATE TABLE IF NOT EXISTS 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO VCALibs VALUES('ElectroEls','Elements of the electric','Элементы электрики','Елементи електрики','The library is created to provide mnemonic elements of the user interface and it contains graphic elements, often need when forming the user interface of the electrical substations and the electricity generation station. The library is built mostly on the primitive "ElFigure" basis and the internal programming language JavaLikeCalc.
 
-The element''s names and their parameters are available in languages: English, Ukrainian and Russian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and Russian.
+The element''s names and their parameters are available in languages: English, Ukrainian and mRussian. Their source code wrote in the human-language independent mode with calls for the translations by the function tr() and the message''s translation also allowed for English, Ukrainian and mRussian.
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2009)
 Initially sponsored by: Valeriy Nikolaev
@@ -1676,7 +1676,7 @@ Version: 2.0.0
 License: GPLv2
 DOC: Libs_Electrical_elements|Libs/Electrical_elements','Библиотека создаётся для предоставления мнемонических элементов пользовательского интерфейса и содержит элементы мнемосхем, которые часто востребованы при формировании пользовательского интерфейса электрических подстанций и станций генерации электрики. Строится библиотека на основе примитива "ElFigure" и языка внутреннего программирования JavaLikeCalc.
 
-Названия элементов и их параметров доступны на языках: Английский, Украинский и Российский. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и Российским.
+Названия элементов и их параметров доступны на языках: Английский, Украинский и mRussian. Их исходный код написан в языко(человеческий)-независимом режиме с вызовом функции перевода tr() и перевод этих сообщений также доступен Английским, Украинским и mRussian.
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2009)
 Изначально спонсировано: Валерий Николаев
@@ -1686,7 +1686,7 @@ DOC: Libs_Electrical_elements|Libs/Electrical_elements','Библиотека с
 Лицензия: GPLv2
 DOC: Libs_Electrical_elements|Libs/Electrical_elements','Бібліотека створюється для надання мнемонічних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу електричних підстанцій та станцій генерації електрики. Будується бібліотека переважно на основі примітиву "ElFigure" та мови внутрішнього програмування JavaLikeCalc.
 
-Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та Російська. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та Російською.
+Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2009)
 Початково спонсоровано: Валерій Ніколаєв

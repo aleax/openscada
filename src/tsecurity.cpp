@@ -197,6 +197,7 @@ void TSecurity::load_( )
 	usrAdd("root", "");
 	usrAt("root").at().setDescr(trS("Administrator"));
 	usrAt("root").at().setPass("openscada");
+	usrAt("root").at().modifClr();
     }
     usrAt("root").at().setSysItem(true);
     // Simple user
@@ -204,6 +205,7 @@ void TSecurity::load_( )
 	usrAdd("user", "");
 	usrAt("user").at().setDescr(trS("Simple user"));
 	usrAt("user").at().setPass("user");
+	usrAt("user").at().modifClr();
     }
     usrAt("user").at().setSysItem(true);
     // Administrators group
@@ -211,6 +213,7 @@ void TSecurity::load_( )
 	grpAdd("root", "");
 	grpAt("root").at().setDescr(trS("Administrators group"));
 	grpAt("root").at().userAdd("root");
+	grpAt("root").at().modifClr();
     }
     grpAt("root").at().setSysItem(true);
     // Simple users group
@@ -218,6 +221,7 @@ void TSecurity::load_( )
 	grpAdd("users", "");
 	grpAt("users").at().setDescr(trS("Users group"));
 	grpAt("users").at().userAdd("user");
+	grpAt("users").at().modifClr();
     }
     grpAt("users").at().setSysItem(true);
 }

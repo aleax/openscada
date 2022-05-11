@@ -36,7 +36,7 @@
 #define MOD_NAME	_("Fastwel IO")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.20"
+#define MOD_VER		"0.1.21"
 #define AUTHORS		_("Maxim Kochetkov")
 #define DESCRIPTION	_("Fastwel IO FBUS client implementation")
 #define LICENSE		"GPL2"
@@ -449,9 +449,9 @@ void TMdContr::cntrCmdProc(XMLNode * opt)
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld", opt, -1, "/cntr/cfg/SCHEDULE", cfg("SCHEDULE").fld().descr(), startStat() ? R_R_R_ : RWRWR_, "root", SDAQ_ID, 3, "dest", "sel_ed",
+	ctrMkNode("fld", opt, -1, "/cntr/cfg/SCHEDULE", EVAL_STR, startStat() ? R_R_R_ : RWRWR_, "root", SDAQ_ID, 3, "dest", "sel_ed",
 		"sel_list",TMess::labSecCRONsel().c_str(), "help",TMess::labSecCRON().c_str());
-	ctrMkNode("fld", opt, -1, "/cntr/cfg/PRIOR", cfg("PRIOR").fld().descr(), startStat() ? R_R_R_ : RWRWR_, "root", SDAQ_ID, 1,
+	ctrMkNode("fld", opt, -1, "/cntr/cfg/PRIOR", EVAL_STR, startStat() ? R_R_R_ : RWRWR_, "root", SDAQ_ID, 1,
 		"help",TMess::labTaskPrior().c_str());
 	return;
     }
@@ -1033,7 +1033,7 @@ void TMdPrm::cntrCmdProc(XMLNode * opt)
 //> Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	//ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	//ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
 

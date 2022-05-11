@@ -61,7 +61,7 @@ Package: openscada-doc-ru
 Architecture: all
 Depends: openscada-doc-en
 Description: OpenSCADA documents (RU)
- The openscada-doc-ru package include documents files (Russian).
+ The openscada-doc-ru package include documents files (mRussian).
 
 Package: openscada-doc-uk
 Architecture: all
@@ -96,12 +96,12 @@ Depends: openscada, openscada-libdb-main, openscada-libdb-vca
 Description: Model "AGLKS" data bases and config (Demo: EN,UK,RU)
  The openscada-model-aglks package includes model "AGLKS" data bases and config.
  The Model is used for OpenSCADA demo and allowed for English, Ukrainian and
- Russian languages. For start use command <openscada_AGLKS>.
+ mRussian languages. For start use command <openscada_AGLKS>.
 
 Package: openscada-model-boiler
 Architecture: all
 Depends: openscada, openscada-libdb-main, openscada-libdb-vca
 Description: Model "Boiler" data bases and config (EN,UK,RU)
  The openscada-model-boiler package model "Boiler" data bases and config.
- The Model is allowed for English, Ukrainian and Russian languages.
+ The Model is allowed for English, Ukrainian and mRussian languages.
  For start use command <openscada_Boiler>.

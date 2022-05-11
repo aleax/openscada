@@ -1,3 +1,28 @@
+2022-05-11 Roman 0.9.5
+- !!!!:DOC: The "Quick start" manual completely revised and actualized for last 0.9.5 LTS changes.
+- DOC,LibsDB.{OscadaLibs,vcaBase,vcaElectroEls},data/*.spec,data/{debian,debian_mod}/control:
+    The language Russian,Російська,Российский renamed to its true name mRussian.
+- !:LibsDB.OscadaLibs: flb_doc.diagram: Fixed in using the horizontal size at the required period (reqPer) calculation.
+- !!:SYS.TPrmTempl,DAQ.*: Fixed in the prestored system translation of configuration fields directly used at reading TFld::dscr().
+- SYS: TCntrNode::storage() expanded for show to remove not the Generic Storage parts.
+    TCntrNode::setStorage() expanded at setting to the queue in splitting the Generic Storage at setting its part
+	and removing its parts at it setting.
+    The User API function TVArchive::getVals() switched to the result value bufer in the FillLast mode,
+	for the possible requested data period lesser than the real data, then fill holes in the previous value.
+- FIX:Security: The system users and groups is cleaned for the modification flag just after they new ones creation.
+- !!:FIX:DAQ.DAQGate: Fixed for several stations selection in the controller object.
+    Allowed for sync the new parameter attributes during the enabling also, after moving that process also to the task.
+- UI.VCAEngine: The Project object appended a Control Interface service request "read:/serv/access", of checking the read access.
+    The Control Interface service request "get:/prm/cfg/prj" appended an option "noName" for preventing the project name request,
+	than preventing other projects spare loading here at the name obtaining.
+    The project list requesting in the Project Session object prevented of requesting the project name
+	to prevent other projects spare loading here at the name obtaining.
+    The project and Widget Library enabling/disabling message set to the TMess::Info level.
+    The Project Page and Widget Library Widget enabling/disabling appended of a TMess::Debug level message.
+- UI.WebVision: Checking the projects accessing moved to check the HTTP accessibility before the access checking in VCAEngine,
+    than preventing other projects spare loading here at the name obtaining if there is no access on the HTTP level.
+
+
 2022-04-22 Roman 0.9.5
 - !!:LibsDB.OscadaLibs: tmplib_base.{anUnifSt,codeState}: Adapted to the syntax highlight builtin of the input preprocessing procedure.
 - !!:FIX:LibsDB.vcaBase: wlb_Main.storeHouse: Expanded and fixed for:

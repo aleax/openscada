@@ -965,7 +965,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,/*startStat()?R_R_R_:*/RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/FRAG_MERGE",cfg("FRAG_MERGE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/FRAG_MERGE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
 	    "help",_("Merge non-adjacent fragments of registers for request in a single block.\n"
 		    "WARNING! Some devices do not support the passing query of wrong registers in one block."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM_REQ",EVAL_STR,RWRWR_,"root",SDAQ_ID,1,

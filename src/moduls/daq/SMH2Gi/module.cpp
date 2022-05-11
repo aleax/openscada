@@ -41,7 +41,7 @@
 #define MOD_NAME	trS("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.12"
+#define MOD_VER		"1.1.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -711,7 +711,7 @@ bool SHMParam::cntrCmdProc( TParamContr *p, XMLNode *opt )
 {
     //Get page info
     if(opt->name() == "info") {
-	p->ctrMkNode("fld",opt,-1,"/prm/cfg/VAR_LS",p->cfg("VAR_LS").fld().descr(),(p->enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
+	p->ctrMkNode("fld",opt,-1,"/prm/cfg/VAR_LS",EVAL_STR,(p->enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
 	return true;
     }
     //Process command to page

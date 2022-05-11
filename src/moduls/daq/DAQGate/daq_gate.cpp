@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.15"
+#define MOD_VER		"2.9.18"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -265,10 +265,7 @@ void TMdContr::sync( bool onlyPrmLs )
 			    curP.at().setPrmAddr(cntrId);
 			} else curP = at(cntrId);
 
-			if(!curP.at().enableStat()) {
-			    curP.at().enable();
-			    if(enableStat()) curP.at().sync();	//curP.at().load(); !!!!: Since there is no data for load but we need sync
-			}
+			if(!curP.at().enableStat()) curP.at().enable();
 			else if(!onlyPrmLs) {
 			    if(startStat()) curP.at().sync();
 			    else curP.at().isSynced = false;
@@ -302,16 +299,13 @@ void TMdContr::sync( bool onlyPrmLs )
 
 		    curP.at().setStats(st->first);
 		    gPrmLs.push_back(curP.at().ownerPath(true));
-		    if(!curP.at().enableStat()) {
-			curP.at().enable();
-			if(enableStat()) curP.at().sync();	//curP.at().load(); !!!!: Since there is no data for load but we need sync
-		    }
+		    if(!curP.at().enableStat()) curP.at().enable();
 		    else if(!onlyPrmLs) {
 			if(startStat()) curP.at().sync();
 			else curP.at().isSynced = false;
 		    }
 
-		    //  Process included parameters
+		    //  Processing the included parameters
 		    string prmPath = prmLs[iP], prmPathW = prmPath, prmPathW_;
 		    XMLNode *prmN = req.childGet(2), *prmW;
 		    vector<SPrmsStack> stack;
@@ -330,7 +324,7 @@ void TMdContr::sync( bool onlyPrmLs )
 			prmId = prmW->attr("id");
 			prmPathW_ = prmPathW + "/prm_" + prmId;
 
-			//   Find for the parameter
+			//   Finding for the parameter
 			curP.at().list(prmLs1);
 			unsigned iP1 = 0;
 			while(iP1 < prmLs1.size() && curP.at().at(prmLs1[iP1]).at().prmAddr() != prmPathW_) iP1++;
@@ -344,10 +338,7 @@ void TMdContr::sync( bool onlyPrmLs )
 
 			curW.at().setStats(st->first);
 			gPrmLs.push_back(curW.at().ownerPath(true));
-			if(!curW.at().enableStat()) {
-			    curW.at().enable();
-			    if(enableStat()) curW.at().sync();	//curW.at().load(); !!!!: Since there is no data for load but we need sync
-			}
+			if(!curW.at().enableStat()) curW.at().enable();
 			else if(!onlyPrmLs) {
 			    if(startStat()) curW.at().sync();
 			    else curW.at().isSynced = false;
@@ -505,7 +496,7 @@ void *TMdContr::Task( void *icntr )
 		//Mark no process
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 		    TMdPrm &pO = cntr.pHd[iP].at();
-		    if((!pO.isSynced && cntr.syncPer() >= 0) || (!div && syncCnt <= 0) || (div && itCnt > div && (((itCnt+iP)%div) == 0))) {
+		    if(!pO.isSynced || (!div && syncCnt <= 0) || (div && itCnt > div && (((itCnt+iP)%div) == 0))) {
 			cntr.syncSt = true;
 			pO.sync();
 		    }
@@ -855,7 +846,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "help",_("Manual restart of the enabled controller object causes the force resync at the sync period >= 0.\n"
 		"Restart to refresh the removed source data configuration."));
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),RWRWR_,"root",SDAQ_ID,
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,RWRWR_,"root",SDAQ_ID,
 	    "dest","sel_ed", "sel_list",TMess::labSecCRONsel().c_str(), "help",TMess::labSecCRON().c_str(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior().c_str(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable the access to the remote archive."), NULL);
@@ -888,7 +879,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	SYS->transport().at().extHostList("*", list);
 	for(unsigned iL = 0; iL < list.size(); iL++)
 	    if(!TRegExp("(^|;)"+list[iL].id+"(;|$)","m").test(mStat))
-		opt->childAdd("el")->setText((mStat.getS().size()?mStat+";":"")+list[iL].id);
+		opt->childAdd("el")->setText((mStat.getS().size()?mStat.getS()+";":"")+list[iL].id);
 	opt->childAdd("el")->setText("");
     }
     else if(a_path == "/cntr/cfg/CPRM_TREE") {

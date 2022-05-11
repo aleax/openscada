@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.AMRDevs file: da_Ergomera.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -235,7 +235,7 @@ bool Ergomera::cntrCmdProc( XMLNode *opt )
     // Get page info
     if(opt->name() == "info")
     {
-	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",mPrm->cfg("DEV_ADDR").fld().descr().c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","65535");
+	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","65535");
 	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/attrs",_("Attributes list"),RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
 	    "help",_("Attributes configuration list. List must be written by lines in format: [dt:numb:id:name]\n"
 		    "Where:\n"

@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.19"
+#define MOD_VER		"2.1.20"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -277,9 +277,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld", opt, -1, "/cntr/cfg/SCHEDULE", mSched.fld().descr(), startStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 4,
+	ctrMkNode("fld", opt, -1, "/cntr/cfg/SCHEDULE", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 4,
 	    "tp","str", "dest","sel_ed", "sel_list",TMess::labSecCRONsel().c_str(), "help",TMess::labSecCRON().c_str());
-	ctrMkNode("fld", opt, -1, "/cntr/cfg/PRIOR", cfg("PRIOR").fld().descr(), startStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 1, "help",TMess::labTaskPrior().c_str());
+	ctrMkNode("fld", opt, -1, "/cntr/cfg/PRIOR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 1, "help",TMess::labTaskPrior().c_str());
 	return;
     }
     //Process command to page
@@ -876,19 +876,19 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld", opt, -1, "/prm/cfg/TP", cfg("TP").fld().descr(), enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 2,
+	ctrMkNode("fld", opt, -1, "/prm/cfg/TP", EVAL_STR, enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 2,
 	    "dest","select", "select","/prm/cfg/brdLst");
-	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", cfg("ADDR").fld().descr(), enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID);
+	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID);
 	if(tdev.AI&0xFF && tdev.AI&0xFF00) {
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/INT", cfg("INT").fld().descr(), enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID);
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/S_RATE", cfg("S_RATE").fld().descr(), enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID);
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/INT", EVAL_STR, enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID);
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/S_RATE", EVAL_STR, enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID);
 	}
 	else {
 	    ctrRemoveNode(opt, "/prm/cfg/INT");
 	    ctrRemoveNode(opt, "/prm/cfg/S_RATE");
 	}
-	ctrMkNode("fld", opt, -1, "/prm/cfg/AI_VAL", cfg("AI_VAL").fld().descr(), enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID);
-	ctrMkNode("fld", opt, -1, "/prm/cfg/ASYNCH_RD", cfg("ASYNCH_RD").fld().descr(), RWRWR_, "root", SDAQ_ID);
+	ctrMkNode("fld", opt, -1, "/prm/cfg/AI_VAL", EVAL_STR, enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID);
+	ctrMkNode("fld", opt, -1, "/prm/cfg/ASYNCH_RD", EVAL_STR, RWRWR_, "root", SDAQ_ID);
 	ctrRemoveNode(opt, "/prm/cfg/PRMS");
 	if(tdev.AI)
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/modAI", _("AI numbers process"), enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID, 3,

@@ -895,7 +895,7 @@ void Node::setEnable( bool vl )
 	    mess_err(nodePath().c_str(),_("Error compiling function on the language '%s': %s"),progLang().c_str(),err.mess.c_str());
 	    throw;
 	}
-	// Links, registers and coins init
+	// Links, registers and coils init
 	data->addLinksAttrs();
 
 	for(int iIO = 0; iIO < data->func()->ioSize(); iIO++) {
@@ -1425,8 +1425,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    }
 	    if((enableStat() && !isDAQTmpl) || isDirFunc) {
 		if(progTr())
-		    ctrMkNode("fld",opt,-1,"/dt/progTr",cfg("DT_PR_TR").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,1, "tp","bool");
-		ctrMkNode("fld",opt,-1,"/dt/prog",cfg("DT_PROG").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,3, "tp","str", "rows","10", "SnthHgl","1");
+		    ctrMkNode("fld",opt,-1,"/dt/progTr",EVAL_STR,RWRWR_,"root",SPRT_ID,1, "tp","bool");
+		ctrMkNode("fld",opt,-1,"/dt/prog",EVAL_STR,RWRWR_,"root",SPRT_ID,3, "tp","str", "rows","10", "SnthHgl","1");
 	    }
 	}
 	if(data && data->func()) data->TPrmTempl::Impl::cntrCmdProc(opt, "/cfg");

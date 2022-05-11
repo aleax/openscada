@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.23"
+#define MOD_VER		"5.4.24"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -697,10 +697,10 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	opt->childGet(0)->setAttr("doc", "User_API|Documents/User_API");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cntr/flst");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cntr/flst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
 	if(enableStat())
 	    ctrMkNode("comm",opt,-1,"/cntr/cfg/toFunc",_("Go to the used function"),R_R_R_,"root",SDAQ_ID,1,"tp","lnk");
 	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calculation"))) {
@@ -987,7 +987,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",cfg("FLD").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"SnthHgl","1",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/FLD",EVAL_STR,RWRWR_,"root",SDAQ_ID,2,"SnthHgl","1",
 	    "help",_("List of configuration of the attributes. List must be written by lines in the format: \"{io}[:{aid}[:{anm}]]\"\n"
 	    "Where:\n"
 	    "  io - IO of the computable function;\n"
