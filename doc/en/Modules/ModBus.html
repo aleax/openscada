@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -208,7 +208,7 @@
 <li> <b>w~</b> — flags: write mode 'w', registers order inversion '~'.</li></ul></dd>
 <dd>Examples:
 <dl><dd>"R0x300w" — register access;</dd>
-<dd>"C100w" — coin access, allowed to write;</dd>
+<dd>"C100w" — coil access, allowed to write;</dd>
 <dd>"R_f200", "R_f200~" — get float from registers 200 and 201, 201 and 200;</dd>
 <dd>"R_i400,300" — get int32 from registers 400 and 300;</dd>
 <dd>"R_s15,20" — get string, registers block, from register 15 and size 20.</dd>
@@ -315,7 +315,7 @@ Where:
 <p>Examples:
 </p>
 <dl><dd>"R:0x300:rw:var:Variable" — register access;</dd>
-<dd>"C:100:rw:var1:Variable 1" — coin access;</dd>
+<dd>"C:100:rw:var1:Variable 1" — coil access;</dd>
 <dd>"R_f:200:r:float:Float", "R_f:200:r~:float:Float" — get float from registers 200 and 201, 201 and 200;</dd>
 <dd>"R_i4:400,300:r:int32:Int32" — get int32 from registers 400 and 300;</dd>
 <dd>"R_b10:25:r:rBit:Reg bit", "R_b:25.10:r:rBit:Reg bit" — get bit 10 from register 25;</dd>
@@ -338,7 +338,7 @@ Where:
 <p>Examples:
 </p>
 <dl><dd>"R:0x300:rw" — register access;</dd>
-<dd>"C:100:rw" — coin access;</dd>
+<dd>"C:100:rw" — coil access;</dd>
 <dd>"R_f:200:r", "R_f:200:r~" — get float from registers 200 and 201, 201 and 200;</dd>
 <dd>"R_i4:400,300:r" — get int32 from registers 400 and 300;</dd>
 <dd>"R_b10:25:r", "R_b:25.10:r" — get bit 10 from register 25;</dd>
@@ -381,5 +381,5 @@ Where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2828</td></tr></table></body>
 </html>

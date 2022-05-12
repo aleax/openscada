@@ -1,3 +1,11 @@
+2022-05-12 Roman (stable)
+- !!!!:DOC: The "Quick start" manual completely revised and actualized for last 0.9.5 LTS changes.
+    The language Russian,Російська,Российский renamed to its true name mRussian.
+- !!:SYS.TPrmTempl,DAQ.*: Fixed in the prestored system translation of configuration fields directly used at reading TFld::dscr().
+- !:SYS: Fixed for some CLang compiling warnings from Sergij Doroska (mr_dsv).
+- FIX:Security: The system users and groups is cleaned for the modification flag just after they new ones creation.
+
+
 2022-05-09 Roman (stable)
 - LibsDB.{OscadaLibs,vcaBase,vcaElectroEls},data/*.spec,data/{debian,debian_mod}/control:
     The language Russian,Російська,Российский renamed to its true name mRussian.

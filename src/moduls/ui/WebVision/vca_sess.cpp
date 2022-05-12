@@ -6543,7 +6543,7 @@ VCADiagram::TrendObj::TrendObj( VCADiagram *iowner ) :
 VCADiagram::TrendObj::~TrendObj( )
 {
 #if HAVE_FFTW3_H
-    if(fftOut) { delete fftOut; fftN = 0; }
+    if(fftOut) { free(fftOut); fftN = 0; }
 #endif
 }
 
@@ -6630,7 +6630,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 		    valEnd_ = (valEnd()/wantPer)*wantPer;
 	    if(lstTm && lstTm >= valEnd_) {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
-		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && (int64_t)curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
 		/*if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));	//!!!! Can cause to flaws on slow remote channels
 		else*/ if((lstTm-valEnd_) >= wantPer) vals.push_back(SHg(lstTm,curVal));
@@ -6729,7 +6729,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    curPos = s2i(TSYS::strParse(svl,0," ",&var_off,true));
 	    curVal = s2r((curValS=TSYS::strParse(svl,0," ",&var_off,true)));
 	    if(curValS == EVAL_STR || (val_tp == TFld::Boolean && curVal == EVAL_BOOL) ||
-				      (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+				      (val_tp == TFld::Integer && (int64_t)curVal == EVAL_INT) || isinf(curVal))
 		curVal = EVAL_REAL;
 	}
 	else curPos = maxPos+1;
@@ -6769,7 +6769,7 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
     if(!valBeg() || !valEnd()) return;
 
 #if HAVE_FFTW3_H
-    if(fftOut) { delete fftOut; fftN = 0; }
+    if(fftOut) { free(fftOut); fftN = 0; }
 
     int64_t tSize	= (int64_t)(1e6*owner().tSize);
     int64_t tTime	= owner().tTime;
@@ -6800,7 +6800,7 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
     }
 
     fftN = fftLstPos-fftFirstPos;
-    if(fftN < 20) { delete fftOut; fftOut = NULL; fftN = 0; return; }
+    if(fftN < 20) { free(fftOut); fftOut = NULL; fftN = 0; return; }
 
     fftw_plan p = fftw_plan_dft_r2c_1d(fftN, fftIn, fftOut, FFTW_ESTIMATE);
     fftw_execute(p);

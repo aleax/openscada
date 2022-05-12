@@ -11,13 +11,13 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/How to/Install</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Install.html" title="Документы/Как сделать/Установить (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Install.html" title="Документи/Як зробити/Встановити (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Install.html" title="Документы/Как сделать/Установить (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/How_to_Install.html" title="Документи/Як зробити/Встановити (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a></li></ul>
 </div>
 <p>Installing OpenSCADA, in general, can be done in two ways. The first and simplest way is to get ready-made packages for the Linux distribution that you are using. The second is to compile OpenSCADA from the source code.
 </p><p>The installation procedure is highly dependent on the Linux distribution you are using and it is not possible to describe it exhaustively in this manual. Therefore, you may need to get a deep knowledge of the mechanisms of installing the software of the selected Linux distribution from its documentation. In the event that the user does not have such knowledge, skills and preferences for a Linux distribution, it is advisable to choose it according to the availability of OpenSCADA packages and even a packages repository, which provides the simplest and most trouble free installation.
-</p><p>If the user is having trouble installing not only OpenSCADA, but also the Linux distribution, then for the first time, he can use the "live" Linux distribution with installed and ready to work and studying the demonstration and full-featured OpenSCADA. If this environment of rapid availability is suited for you then you can stop on it and install it. At this time, "live" builds based on the Debian and ALTLinux (deprecated) distributions are available as hybrid CD/DVD/USB stamps, at the page: <a class="external free" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/main/download/</a>. For more information, see the "How to ..." document <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">"Live disk CD/DVD/USB"</a>.
+</p><p>If the user is having trouble installing not only OpenSCADA, but also the Linux distribution, then for the first time, he can use the "live" Linux distribution with installed and ready to work and studying the demonstration and full-featured OpenSCADA. If this environment of rapid availability is suited for you then you can stop on it and install it. At this time, "live" builds based on the Debian and ALTLinux (deprecated) distributions are available as hybrid CD/DVD/USB stamps, at the page: <a class="external free" href="http://oscada.org/en/main/download/" rel="nofollow noreferrer noopener" target="_blank">http://oscada.org/en/main/download/</a>. For more information, see the "How to ..." document "<a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live disk CD/DVD/USB</a>".
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -46,7 +46,7 @@
 <li> <b>openscada-server</b> — template project of the SCADA server, running in the background — the daemon mode;</li>
 <li> <b>openscada-plc</b> — PLC template project, running in the background — the daemon mode;</li>
 <li> <b>openscada</b> — typical-complete installation of OpenSCADA.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In the case of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux distributive</a> and LTS packages, the suffix "-lts"  is added to the main package name — "openscada-lts", since the repository is one and it contains packages of both branches, Work and LTS.
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> In the case of the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux Distributive</a> and LTS packages, the suffix "-lts"  is added to the main package name — "openscada-lts", since the repository is one and it contains packages of both branches, Work and LTS.
 </p><p>Installation-update from the repository is simple but specific to the Linux distribution, window manager or a separate program for working with repositories and packages, so we will send the reader to the appropriate documentation for the distribution or program that it uses. Here's a brief look at adding a repository and installing OpenSCADA with standard command line tools:
 </p><p><b>Packages repositories based on the package manager APT (Debian, Ubuntu, ALTLinux)</b> — are added by the location of the downloaded file "openscada.list" to the /etc/apt/sources.list.d folder or by editing the /etc/apt/sources.list file by inserting one line:<br />
 <i>Debian (LTS and Work, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux repository</a>):</i> "deb <a class="external free" href="http://ftp.oscada.org/Debian/9/openscada" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/Debian/9/openscada</a> ./"<br />
@@ -109,7 +109,7 @@ $ zypper in openscada-Model.AGLKS </pre>
 <li> <b>openscada-model-boiler</b> — DB and the configuration of the dynamic real-time model "Boiler" (EN,UK,RU);</li>
 <li> <b>openscada-doc-en</b> — offline documentation of OpenSCADA, English;</li>
 <li> <b>openscada-doc-uk</b> — offline documentation of OpenSCADA, Ukrainian;</li>
-<li> <b>openscada-doc-ru</b> — offline documentation of OpenSCADA, Russian;</li>
+<li> <b>openscada-doc-ru</b> — offline documentation of OpenSCADA, mRussian;</li>
 <li> <b>openscada-dev</b> — development package for the OpenSCADA modules separate creation;</li>
 <li> <b>openscada-dbg</b> — debugging package, contains debugging binary file information for <a href="How_to_Crash_report.html" title="Special:MyLanguage/Documents/How to/Crash report">report</a> and search for errors in the program.</li></ul>
 <p>The second set is represented by about fifty packages, with separate OpenSCADA modules in separate packages:
@@ -132,7 +132,7 @@ $ zypper in openscada-Model.AGLKS </pre>
 <li> <b>openscada-model-boiler</b> — DB and the configuration of the dynamic real-time model "Boiler" (EN,UK,RU);</li>
 <li> <b>openscada-doc-en</b> — offline documentation of OpenSCADA, English;</li>
 <li> <b>openscada-doc-uk</b> — offline documentation of OpenSCADA, Ukrainian;</li>
-<li> <b>openscada-doc-ru</b> — offline documentation of OpenSCADA, Russian;</li>
+<li> <b>openscada-doc-ru</b> — offline documentation of OpenSCADA, mRussian;</li>
 <li> <b>openscada-dev</b> — development package for the OpenSCADA modules separate creation;</li>
 <li> <b>openscada-dbg</b> — debugging package, contains debugging binary file information for <a href="How_to_Crash_report.html" title="Special:MyLanguage/Documents/How to/Crash report">report</a> and search for errors in the program.</li></ul>
 <p>The first set of packages is more intended for simple-manual installation, since it contains only eleven packages. The second set is intended to be located in the Linux repository and then installs them with the package manager that automatically resolves dependencies, and also allows you to install only the required OpenSCADA components, thereby optimizing the work environment.
@@ -156,5 +156,5 @@ $ apt-get install -f</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Install/en">Documents/How_to/Install/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Install/en">Documents/How_to/Install/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2828</td></tr></table></body>
 </html>

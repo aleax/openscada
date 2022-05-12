@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.DBF file: dbf.cpp
 /***************************************************************************
- *   Copyright (C) 2001-2018 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2001-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -296,7 +296,7 @@ int TBasaDBF::setField( int posField, db_str_rec *attr )
 	for(int i = 0; i < db_head_ptr->numb_rec; i++)
 	{
 	    str_tmp = (char*)calloc(db_head_ptr->len_rec+attr->len_fild-db_field_ptr[posField].len_fild, 1);
-	    memmove(str_tmp, items[i], rec_len+(attr->len_fild<db_field_ptr[posField].len_fild)?attr->len_fild:db_field_ptr[posField].len_fild);
+	    memmove(str_tmp, items[i], rec_len+((attr->len_fild<db_field_ptr[posField].len_fild)?attr->len_fild:db_field_ptr[posField].len_fild));
 	    memmove(str_tmp+rec_len+attr->len_fild, (char*)items[i]+rec_len+db_field_ptr[posField].len_fild, db_head_ptr->len_rec-rec_len-db_field_ptr[posField].len_fild);
 	    free(items[i]);
 	    items[i] = str_tmp;

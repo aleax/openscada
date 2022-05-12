@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.0.19"
+#define MOD_VER		"1.0.20"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -192,7 +192,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
 	return;
     }
@@ -454,7 +454,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    2,"dest","sel_ed","select","/prm/cfg/devLst");
 	ctrRemoveNode(opt,"/prm/cfg/PRMS");
 	// Configuration page: ranges

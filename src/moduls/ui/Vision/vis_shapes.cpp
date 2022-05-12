@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -3917,7 +3917,7 @@ ShapeDiagram::TrendObj::TrendObj( WdgView *iview ) : adjL(3e300), adjU(-3e300), 
 ShapeDiagram::TrendObj::~TrendObj( )
 {
 #if HAVE_FFTW3_H
-    if(fftOut) { delete fftOut; fftN = 0; }
+    if(fftOut) { free(fftOut); fftN = 0; }
 #endif
 }
 
@@ -4007,7 +4007,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		    valEnd_ = (valEnd()/wantPer)*wantPer;
 	    if(lstTm && lstTm >= valEnd_) {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
-		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && (int64_t)curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
 
 		/*if(valEnd_ && (lstTm-valEnd_)/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lstTm-trcPer,EVAL_REAL));	//!!!! Can cause to flaws on slow remote channels
@@ -4107,7 +4107,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    curPos = s2i(TSYS::strParse(svl,0," ",&var_off,true));
 	    curVal = s2r((curValS=TSYS::strParse(svl,0," ",&var_off,true)));
 	    if(curValS == EVAL_STR || (val_tp == TFld::Boolean && curVal == EVAL_BOOL) ||
-				      (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+				      (val_tp == TFld::Integer && (int64_t)curVal == EVAL_INT) || isinf(curVal))
 		curVal = EVAL_REAL;
 	}
 	else curPos = maxPos+1;
@@ -4149,7 +4149,7 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
     if(!valBeg() || !valEnd()) return;
 
 #if HAVE_FFTW3_H
-    if(fftOut) { delete fftOut; fftN = 0; }
+    if(fftOut) { free(fftOut); fftN = 0; }
 
     int64_t tSize	= (int64_t)(1e6*shD->tSize);
     int64_t tTime	= shD->tTime;
@@ -4180,7 +4180,7 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
     }
 
     fftN = fftLstPos-fftFirstPos;
-    if(fftN < 20) { delete fftOut; fftOut = NULL; fftN = 0; return; }
+    if(fftN < 20) { free(fftOut); fftOut = NULL; fftN = 0; return; }
 
     fftw_plan p = fftw_plan_dft_r2c_1d( fftN, fftIn, fftOut, FFTW_ESTIMATE );
     fftw_execute(p);

@@ -46,7 +46,7 @@ using namespace OPC;
 #define PRT_NAME	trS("Server OPC-UA")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.2.10"
+#define PRT_MVER	"2.2.11"
 #define PRT_AUTOR	trS("Roman Savochenko")
 #define PRT_DESCR	trS("Provides OPC-UA server service implementation.")
 #define PRT_LICENSE	"GPL2"

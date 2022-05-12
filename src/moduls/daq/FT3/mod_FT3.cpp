@@ -1457,7 +1457,7 @@ void TMdContr::cntrCmdProc(XMLNode *opt)
     //> Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld", opt, -1, "/cntr/cfg/ADDR", cfg("ADDR").fld().descr(), enableStat() ? R_R_R_ : RWRWR_, "root", SDAQ_ID, 3, "tp", "str", "dest",
+	ctrMkNode("fld", opt, -1, "/cntr/cfg/ADDR", EVAL_STR, enableStat() ? R_R_R_ : RWRWR_, "root", SDAQ_ID, 3, "tp", "str", "dest",
 		"select", "select", "/cntr/cfg/trLst");
 	return;
     }

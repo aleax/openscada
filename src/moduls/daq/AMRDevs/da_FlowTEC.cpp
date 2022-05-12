@@ -138,7 +138,7 @@ bool FlowTEC::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if(opt->name() == "info")
     {
-	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",mPrm->cfg("DEV_ADDR").fld().descr().c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","255");
+	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","255");
 	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/Thread",_("Thread number"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","3");
 	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/FirmWareVer",_("Firmware version"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 	return true;

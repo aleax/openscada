@@ -241,9 +241,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 	    "dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
 	return;
     }
     //Process command to page
@@ -336,7 +336,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
 

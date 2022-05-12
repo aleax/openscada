@@ -2544,7 +2544,8 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	    string reqPath = node.attr("path");
 	    size_t reqElPos = reqPath.rfind("/");
 	    if(reqElPos != string::npos) {
-		string reqPathEl = reqPath.substr(reqElPos+1), reqPath = reqPath.substr(0,reqElPos), selNds_lim;
+		string reqPathEl = reqPath.substr(reqElPos+1), selNds_lim;
+		reqPath = reqPath.substr(0, reqElPos);
 		vector<string> selNds;
 		QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
 		for(unsigned iEl = 0; iEl < sel_ls.size(); iEl++)

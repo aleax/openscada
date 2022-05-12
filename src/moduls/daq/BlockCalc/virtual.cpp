@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Block based calculator")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.12.8"
+#define MOD_VER		"1.12.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a block based calculator.")
 #define LICENSE		"GPL2"
@@ -445,9 +445,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	TController::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm",i2s(limObjNm_SZ).c_str(),"idSz",i2s(limObjID_SZ).c_str());
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme"))) {
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),RWRWR_,"root",SDAQ_ID,5,
@@ -674,7 +674,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",cfg("IO").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/IO",EVAL_STR,RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
 	    "help",_("Attributes configuration list. List must be written by lines in format: \"{blk}.{blk_io}[:{aid}:{anm}]\"\n"
 	    "Where:\n"
 	    "  blk - block identifier from block's scheme; for constant value set to:\n"

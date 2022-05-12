@@ -47,7 +47,7 @@
 #define MOD_NAME	trS("SNMP client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.9.11"
+#define MOD_VER		"0.9.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an implementation of the client of SNMP-service.")
 #define LICENSE		"GPL2"
@@ -343,16 +343,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel().c_str(),"help",TMess::labSecCRON().c_str());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str",
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str",
 	    "help",_("SNMP agent host in IP address or domain host name.\nAlso you can set port like \"localhost:161\""));
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM",cfg("TM").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/VER",cfg("VER").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/COMM",cfg("COMM").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str",
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/VER",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/COMM",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str",
 	    "help",_("Community group or user."));
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PATTR_LIM",cfg("PATTR_LIM").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PATTR_LIM",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrRemoveNode(opt,"/cntr/cfg/V3");
 	if(ver() == "3") {
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/SecLev",_("Security level"),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,5,"tp","str","idm","1","dest","select",
@@ -668,7 +668,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode2("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"SnthHgl","1","rows","8",
+	ctrMkNode2("fld",opt,-1,"/prm/cfg/OID_LS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"SnthHgl","1","rows","8",
 	    "help",_("The list of SNMP OIDs, including directories to get all of the subelements. The OID can be written as follows:\n"
 		"  \".1.3.6.1.2.1.1\" - direct code addressing for the object \"System\";\n"
 		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbolic addressing to direct one for the object \"System\";\n"

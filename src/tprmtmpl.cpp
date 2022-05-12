@@ -280,8 +280,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    }
 	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Program language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
 	    if(progTr())
-		ctrMkNode("fld",opt,-1,"/io/prog_tr",cfg("PR_TR").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/io/prog",cfg("PROGRAM").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
+		ctrMkNode("fld",opt,-1,"/io/prog_tr",EVAL_STR,RWRW__,"root",SDAQ_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/io/prog",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
     }
@@ -549,7 +549,7 @@ bool TPrmTempl::Impl::lnkOutput( int num, const TVariant &vl )
 	it->second.addr = ""; it->second.con.free();
 	it->second.hops = 0;
 	mess_warning(obj->nodePath().c_str(), _("Detected of the link recursion."));
-	return EVAL_REAL;
+	return false;
     }
     it->second.hops++;
 

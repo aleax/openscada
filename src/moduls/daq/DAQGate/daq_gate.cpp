@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.17"
+#define MOD_VER		"2.9.18"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -674,7 +674,7 @@ void *TMdContr::Task( void *icntr )
 				lstRdMess = TMess::SRec(SYS->sysTm()-3600*cntr.restDtTm(), 0, "", 0, cntr.restDtTm()?prmNd->attr("tm"):"");
 			    else {
 				//  First initial request for not active alarms
-				if(isHistReq=(lstRdMess.categ.empty() && !lstRdMess.mess.empty())) lstRdMess.mess = "";
+				if((isHistReq=(lstRdMess.categ.empty() && !lstRdMess.mess.empty()))) lstRdMess.mess = "";
 
 				if(lstRdMess_.time > lstRdMess.time) lstRdMess = lstRdMess_;
 				else if(lstRdMess_.time) lstRdMess = TMess::SRec(lstRdMess_.time+1);
@@ -846,7 +846,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "help",_("Manual restart of the enabled controller object causes the force resync at the sync period >= 0.\n"
 		"Restart to refresh the removed source data configuration."));
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),RWRWR_,"root",SDAQ_ID,
+	ctrMkNode2("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,RWRWR_,"root",SDAQ_ID,
 	    "dest","sel_ed", "sel_list",TMess::labSecCRONsel().c_str(), "help",TMess::labSecCRON().c_str(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID, "help",TMess::labTaskPrior().c_str(), NULL);
 	ctrMkNode2("fld",opt,-1,"/cntr/cfg/TM_REST_DT",EVAL_STR,RWRWR_,"root",SDAQ_ID, "help",_("Zero to disable the access to the remote archive."), NULL);

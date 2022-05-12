@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/Program manual</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (100% translated)">российский</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Program_manual.html" title="Документы/Руководство по программе (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Program_manual.html" title="Документи/Посібник по програмі (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -1856,10 +1856,10 @@ openscada-proj backupList {ProjName}
 </p>
 <h3><span class="mw-headline" id="Execution_the_ready_OpenSCADA_project_in_the_service-background_space"><span class="mw-headline-number">5.2</span> <span id="Service" title="#Service">Execution the ready OpenSCADA project in the service-background space</span></span></h3>
 <p>The OpenSCADA project organisation in a separate folder makes it easy to run ready-made projects in the service space — execution in the background, as well as further update and maintenance of this project without direct remote control. In fact, you can develop a project locally by keeping its folder in the user's work folder (typically "{HOME}/.openscada"), and to run in the service space just copy or package, transfer to a remote work device and unpack into the system work folder (default "/usr/share/openscada").
-</p><p>Service-background execution of programs in Linux is serviced by a suitably generated scripts, which are located in the folder "/etc/ini.d" and must be separate for each OpenSCADA project that runs in the service space. To simplify and eliminate the need to create your own scripts, OpenSCADA provides appropriate ones for standard cases-profiles that are typically supplied with the <b>openscada-server</b> and <b>openscada-plc</b> packages.
+</p><p>Service-background execution of programs in Linux is serviced by a suitably generated scripts, which are located in the folder "/etc/ini.d" and must be separate for each OpenSCADA project that runs in the service space. To simplify and eliminate the need to create your own scripts, OpenSCADA provides appropriate ones for standard cases-profiles that are typically supplied with the <b>openscada-server</b> and <b>openscada-plc</b> packages (<b>openscada-lts-server</b> and <b>openscada-lts-plc</b> for LTS).
 </p><p>Therefore, to launch <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Model_AGLKS" title="Special:MyLanguage/Using/Model AGLKS">the AGLKS library project</a> in the service space, we:
 </p>
-<ul><li> install the packages <b>openscada-model-aglks</b> and <b>openscada-server</b>, if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
+<ul><li> install the packages <b>openscada-model-aglks</b> (<b>openscada-lts-model-aglks</b> for LTS) and <b>openscada-server</b> (<b>openscada-lts-server</b> for LTS), if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
 <li> start the project "AGLKS", for getting its folder in the user's work folder;</li>
 <li> copy the project "AGLKS" folder to the system work folder also renaming to "server", previously stop the background execution of the project "server" and remove its project folder; for example, in that way from the console:</li></ul>
 <pre style="white-space: pre-wrap; margin-left: 30pt">
@@ -1869,10 +1869,14 @@ $ su -
 $ sudo bash
 # Stop down of execution of the previous server configuration and remove its folder
 $ service openscada-server stop; rm -R /usr/share/openscada/server
+# ... for LTS
+$ service openscada-lts-server stop; rm -R /usr/share/openscada/server
 # Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"
 $ cp -R {HOME}/.openscada/AGLKS /usr/share/openscada/server 
 # Start the server already in the project "AGLKS"
 $ service openscada-server start
+# ... for LTS
+$ service openscada-lts-server start
 </pre>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note that locally you can not copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
 </p><p>Difference between the project execution in the service-background environment from the user environment of the desktop is actually one, except for the lack of the local graphical interface of course, it is the absence of a locale in the background, ie the interface language will be English. And what can be fixed simply by changing or adding <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">the configuration parameter</a> <b>&lt;prm id="Lang"&gt;uk_UA.UTF-8&lt;/prm&gt;</b> to the section-tag "station" of the file <b>oscada.xml</b> of the background project.
@@ -1892,5 +1896,5 @@ $ service openscada-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">April 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2818</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2828</td></tr></table></body>
 </html>
