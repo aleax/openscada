@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.18"
+#define MOD_VER		"2.9.19"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -121,7 +121,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mSched(cfg("SCHEDULE")), mStat(cfg("STATIONS")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
     mSync(cfg("SYNCPER").getId()), mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     mAsynchWr(cfg("WR_ASYNCH").getBd()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
-    prcSt(false), callSt(false), syncSt(false), endrunReq(false), alSt(-1), mPer(1e9)
+    prcSt(false), callSt(false), syncSt(false), syncForce(false), endrunReq(false), alSt(-1), mPer(1e9)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
@@ -366,8 +366,8 @@ void TMdContr::sync( bool onlyPrmLs )
 		    string pId = pHd[iPrm].at().id();
 		    try {
 			TParamContr *pCntr = dynamic_cast<TParamContr*>(pHd[iPrm].at().nodePrev());
-			if(pCntr) pCntr->del(pId, TParamContr::NodeRemove_NoArch);
-			else del(pId, TParamContr::NodeRemove_NoArch);
+			if(pCntr) pCntr->del(pId, NodeRemove|TParamContr::NodeRemove_NoArch);
+			else del(pId, NodeRemove|TParamContr::NodeRemove_NoArch);
 			continue;
 		    } catch(TError &err) {
 			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -459,6 +459,10 @@ void *TMdContr::Task( void *icntr )
 
     for(unsigned int itCnt = 0; !cntr.endrunReq; itCnt++) {
 	if(cntr.redntUse()) {
+	    if(cntr.syncForce)
+		try { cntr.sync(); cntr.syncForce = false; }
+		catch(TError &err) { }
+
 	    //Just using the standard message archives redundancy
 	    TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
 	    continue;
@@ -485,10 +489,11 @@ void *TMdContr::Task( void *icntr )
 		} else { div = 0; syncCnt = 1; }	//Disable sync
 
 		//Parameters list update
-		if(/*(firstCall && cntr.syncPer() >= 0) ||*/ (!firstCall && needToResync) || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
+		if(cntr.syncForce || (!firstCall && needToResync) || (!div && syncCnt <= 0) || (div && itCnt > div && (itCnt%div) == 0))
 		    try {
 			cntr.syncSt = true;
-			cntr.sync(!needToResync);
+			cntr.sync(!(cntr.syncForce || needToResync));
+			cntr.syncForce = false;
 		    } catch(TError &err) { }
 
 		MtxAlloc resPrm(cntr.enRes, true);
@@ -871,7 +876,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/cntr/st/runSt" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && s2i(opt->text()) && enableStat()) {
-	sync();
+	syncForce = true;
 	start();
     }
     else if(a_path == "/cntr/cfg/SEL_STAT_lst" && ctrChkNode(opt)) {

@@ -388,7 +388,7 @@ void TParamContr::setType( const string &tpId )
     if(mPrm >= 0 && !owner().owner().tpPrmAt(owner().owner().tpPrmToId(tpId)).isPrmCntr) {
 	vector<string> pls;
 	list(pls);
-	for(unsigned iP = 0; iP < pls.size(); iP++) del(pls[iP], true);
+	for(unsigned iP = 0; iP < pls.size(); iP++) del(pls[iP], NodeRemove);
 	grpDel(mPrm); mPrm = -1;
     }
 
@@ -529,7 +529,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR)) { opt->setAttr("id", add(opt->attr("id"))); at(opt->attr("id")).at().setName(opt->text()); }
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), NodeRemove);
     }
     else if(type().cntrCmdProc(this, opt)) /* Process OK */;
     else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);

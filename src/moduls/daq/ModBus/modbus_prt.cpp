@@ -1425,8 +1425,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    }
 	    if((enableStat() && !isDAQTmpl) || isDirFunc) {
 		if(progTr())
-		    ctrMkNode("fld",opt,-1,"/dt/progTr",EVAL_STR,RWRWR_,"root",SPRT_ID,1, "tp","bool");
-		ctrMkNode("fld",opt,-1,"/dt/prog",EVAL_STR,RWRWR_,"root",SPRT_ID,3, "tp","str", "rows","10", "SnthHgl","1");
+		    ctrMkNode("fld",opt,-1,"/dt/progTr",_(cfg("DT_PR_TR").fld().descr()),RWRWR_,"root",SPRT_ID,1, "tp","bool");
+		ctrMkNode("fld",opt,-1,"/dt/prog",_(cfg("DT_PROG").fld().descr()),RWRWR_,"root",SPRT_ID,3, "tp","str", "rows","10", "SnthHgl","1");
 	    }
 	}
 	if(data && data->func()) data->TPrmTempl::Impl::cntrCmdProc(opt, "/cfg");

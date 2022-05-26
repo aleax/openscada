@@ -322,7 +322,7 @@ class SessWdg : public Widget, public TValFunc
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	uint32_t wModif( Attr *a = NULL );
-	void setWModif( Attr *a = NULL );
+	void setWModif( Attr *a = NULL, bool force = false );
 
 	//Attributes
 	unsigned	mProc	: 1;

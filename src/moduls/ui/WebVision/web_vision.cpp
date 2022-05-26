@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.6.12"
+#define MOD_VER		"6.6.15"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"

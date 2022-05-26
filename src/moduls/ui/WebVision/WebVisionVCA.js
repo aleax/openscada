@@ -1030,15 +1030,22 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
 		    this.place.view = parseInt(this.attrs['view']);
+
 		    if(toInit || comElMdf || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
 			brdW = (bordStyle?parseInt(bordStyle):1) + 1;
 			var geomWint = geomW - 2*brdW;
 			formObj.className = "LineEd";
-			formObj.style.cssText = 'padding: 1px; top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
+			formObj.style.cssText = 'padding: 1px; top: 0; bottom: 0; margin: auto; width: '+geomWint+'px; '+
 						'height: '+(fntSz-brdW)+'px; font: '+this.place.fontCfg+';';
 			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
 			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');
 			switch(this.place.view) {
+			    case 1: case 2: case 3: case 5: case 6:	//Combo, Integer, Real, Date, Date and time
+				if(formObj.nextSibling) {
+				    formObj.style.width = (geomWint-16)+'px';
+				    formObj.nextSibling.style.left = (geomW-16)+'px';
+				}
+				break;
 			    case 7:	//Password
 				formObj.type = "password";
 				break;
@@ -1055,7 +1062,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 1:		//Combo
 				var combImg = this.place.ownerDocument.createElement('img');
 				combImg.className = "cntr"; combImg.src = '/'+MOD_ID+'/img_combar';
-				combImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
+				combImg.style.cssText = 'left: '+(geomW-16)+'px; top: 0; bottom: 0; margin: auto; height: '+fntSz+'px; ';
 				this.place.appendChild(combImg);
 				formObj.style.width = (geomWint-16)+'px';
 				combImg.onclick = function( ) {
@@ -1112,7 +1119,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(this.place.childNodes.length >= 2) break;
 				var spinImg = this.place.ownerDocument.createElement('img');
 				spinImg.className = "cntr"; spinImg.src = '/'+MOD_ID+'/img_spinar';
-				spinImg.style.cssText = 'left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; height: '+fntSz+'px; ';
+				spinImg.style.cssText = 'left: '+(geomW-16)+'px; top: 0; bottom: 0; margin: auto; height: '+fntSz+'px; ';
 				spinImg.border = '0';
 				formObj.style.width = (geomWint-16)+'px';
 				spinImg.onclick = function(e) {
@@ -1467,7 +1474,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var okImg = this.place.ownerDocument.createElement('img');
 		    okImg.className = "ok";
 		    okImg.src = '/'+MOD_ID+'/img_button_ok';
-		    okImg.style.cssText = 'left: '+(geomW-applySz)+'px; top: '+((geomH-applySz)/2)+'px; height: '+applySz+'px; width: '+applySz+'px; ';
+		    okImg.style.cssText = 'right: 0px; top: 0; bottom: 0; margin: auto; height: '+applySz+'px; width: '+applySz+'px; ';
 		    okImg.onclick = function() { this.parentNode.childNodes[0].chApply(); return false; };
 		    this.place.appendChild(okImg);
 		    formObj.valSet(this.attrs['value']);
@@ -1536,22 +1543,21 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.appendChild(cancelImg);
 		    break;
 		case 2:	//Chek box
-		    var toInit = !this.place.childNodes.length;
-		    var tblCell = toInit ? this.place.ownerDocument.createElement('div') : this.place.childNodes[0];
-		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
-			tblCell.className = 'vertalign';
-			tblCell.style.cssText = 'position: absolute; top: '+((geomH-15)/2)+'px; width: '+geomW+'px; '+
-					    'height: '+Math.min(geomH,15)+'px; text-align: left; font: '+this.place.fontCfg+'; ';
-		    }
-		    var formObj = tblCell.childNodes.length ? tblCell.childNodes[0] : this.place.ownerDocument.createElement('input');
-		    var spanObj = tblCell.childNodes.length > 1 ? tblCell.childNodes[1] : this.place.ownerDocument.createElement('span');
-		    spanObj.style.cssText = 'display: table-cell; white-space: pre-line; word-break: break-word; height: '+geomH+'px; ';
+		    this.place.classList.add("vertalign");
 
-		    if(toInit || this.attrsMdf['value']) formObj.checked = parseInt(this.attrs['value']);
+		    var toInit = !this.place.childNodes.length;
+
+		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
+		    formObj.style.cssText = 'width: '+Math.min(geomW,geomH)+'px; height: '+Math.min(geomW,geomH)+'px;';
+		    formObj.checked = parseInt(this.attrs['value']);
+
+		    var spanObj = toInit ? this.place.ownerDocument.createElement('span') : this.place.childNodes[1];
+		    spanObj.style.cssText = 'font: '+this.place.fontCfg+';';
+		    spanObj.textContent = this.attrs['name'];
+
 		    if(toInit) {
 			formObj.type = 'checkbox';
 			formObj.disabled = !elWr;
-			formObj.style.cssText = 'width: '+Math.min(geomW,geomH)+'px; height: '+Math.min(geomW,geomH)+'px;';
 			formObj.wdgLnk = this;
 			formObj.onclick = function( ) {
 			    var attrs = new Object();
@@ -1559,12 +1565,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    setWAttrs(this.wdgLnk.addr,attrs);
 			    return true;
 			}
-			tblCell.appendChild(formObj);
-			tblCell.appendChild(spanObj);
-			spanObj.textContent = this.attrs['name'];
-			this.place.appendChild(tblCell);
+			this.place.appendChild(formObj); this.place.appendChild(spanObj);
 		    }
-		    if(this.attrsMdf['name'])	spanObj.textContent = this.attrs['name'];
 		    break;
 		case 3:	//Button
 		    var formObj;
@@ -1698,13 +1700,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.valuePrev = this.attrs['value'];
 		    }
 		    break;
-		case 4: case 5:	//Combo box, List
+		case 4: case 5:	//ComboBox, List
 		    elStyle += 'pointer-events: all; ';
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('select') : this.place.childNodes[0];
 		    if(toInit || comElMdf || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font']) {
 			formObj.style.cssText = 'padding: 0; top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
-					    'height: '+((elTp==4)?fntSz:geomH)+'px; width: '+geomW+'px; '+
+					    'height: '+((elTp==4)?fntSz+'px':'inherit')+'; width: inherit; '+
 					    'font: '+this.place.fontCfg+'; ';
 			formObj.style.cssText += "border: "+(bordStyle?bordStyle:"1px solid gray")+"; ";
 			formObj.style.cssText += (backStyle == null) ? 'background-color: white; ' : (backStyle.length?backStyle:'');

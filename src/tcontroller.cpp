@@ -620,7 +620,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    opt->setAttr("id", add(opt->attr("id"),owner().tpPrmToId(TBDS::genPrmGet(owner().nodePath()+"addType",owner().tpPrmAt(0).name,opt->attr("user")))));
 	    at(opt->attr("id")).at().setName(opt->text());
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), true);
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"), NodeRemove);
     }
     else if(a_path == "/prm/t_lst" && owner().tpPrmSize() && ctrChkNode(opt,"get",R_R_R_)) {
 	for(unsigned iA = 0; iA < owner().tpPrmSize(); iA++)

@@ -5097,7 +5097,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 	default: up = false;
     }
 
-    if(up) {
+    if(up && runW) {
 	if(shD->realAct && shD->backGrnd.color().isValid() && shD->backGrnd.color().alpha())
 	    w->setCursor(Qt::PointingHandCursor);
 	else w->setCursor(Qt::ArrowCursor);	// w->unsetCursor();
@@ -5105,7 +5105,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val, const strin
 
     if(up && !w->allAttrLoad()) {
 	if(uiPrmPos != -1) w->update();
-	if(qobject_cast<RunWdgView*>(w)) w->setVisible(shD->en && (runW->permView() || runP));
+	if(runW) runW->setVisible(shD->en && (runW->permView() || runP));
     }
 
     return up;

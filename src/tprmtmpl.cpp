@@ -280,8 +280,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    }
 	    ctrMkNode("fld",opt,-1,"/io/prog_lang",_("Program language"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/plang/list");
 	    if(progTr())
-		ctrMkNode("fld",opt,-1,"/io/prog_tr",EVAL_STR,RWRW__,"root",SDAQ_ID,1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/io/prog",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
+		ctrMkNode("fld",opt,-1,"/io/prog_tr",_(cfg("PR_TR").fld().descr()),RWRW__,"root",SDAQ_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_(cfg("PROGRAM").fld().descr()),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
     }

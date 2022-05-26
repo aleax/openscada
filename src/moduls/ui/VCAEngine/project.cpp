@@ -1271,11 +1271,13 @@ void Page::loadIO( )
 	    TBDS::dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys);
 	    fldCnt--;
 	}
-	if(!wdgPresent(sid))
-	    try{ wdgAdd(sid, "", ""); }
+	bool isNew = false;
+	if((isNew=!wdgPresent(sid)))
+	    try { wdgAdd(sid, "", ""); }
 	    catch(TError &err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
 	wdgAt(sid).at().load(&cEl);
+	if(isNew && enable()) wdgAt(sid).at().setEnable(true);
 	itReg[sid] = true;
     }
 

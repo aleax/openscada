@@ -179,7 +179,8 @@ class LWidget : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	void setWModif( Attr *a = NULL )	{ if(!a || !(a->flgGlob()&Attr::NotStored)) { modif(); Widget::setWModif(a); } }
+	void setWModif( Attr *a = NULL, bool force = false )
+	{ if(!a || !(a->flgGlob()&Attr::NotStored) || force) { modif(); Widget::setWModif(a); } }
 
     private:
 	//Attributes
@@ -242,7 +243,8 @@ class CWidget : public Widget, public TConfig
 	void save_( );
 	void wClear( );
 
-	void setWModif( Attr *a = NULL )	{ if(!a || !(a->flgGlob()&Attr::NotStored)) { modif(); Widget::setWModif(a); } }
+	void setWModif( Attr *a = NULL, bool force = false )
+	{ if(!a || !(a->flgGlob()&Attr::NotStored) || force) { modif(); Widget::setWModif(a); } }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };

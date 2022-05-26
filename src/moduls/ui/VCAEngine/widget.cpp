@@ -245,7 +245,7 @@ void Widget::setPermit( short iperm )		{ attrAt("perm").at().setI(iperm); }
 
 uint32_t Widget::wModif( Attr *a )		{ return a ? a->aModif_() : 0; }
 
-void Widget::setWModif( Attr *a )		{ if(a) a->aModif_()++; }
+void Widget::setWModif( Attr *a, bool force )		{ if(a) a->aModif_()++; }
 
 string Widget::getStatus( )
 {
@@ -641,7 +641,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
 	    a->setFlgSelf((Attr::SelfAttrFlgs)(a->flgSelf()|Attr::VizerSpec), true);
 
 	//Set modif for new attribute reload allow
-	if(forceMdf) a->setAModif();
+	if(forceMdf) a->setAModif(true);
     } catch(...) { }
     mtxAttr().unlock();
 
@@ -2063,7 +2063,7 @@ void Attr::setCfgTempl( const string &vl )
 	owner()->mtxAttr().lock();
 	cfg = t_tmpl+"\n"+cfgVal();
 	owner()->mtxAttr().unlock();
-    } else setAModif();
+    } else setAModif(true);
 }
 
 void Attr::setCfgVal( const string &vl )
@@ -2078,7 +2078,7 @@ void Attr::setCfgVal( const string &vl )
 	owner()->mtxAttr().lock();
 	cfg = cfgTempl() + "\n" + t_val;
 	owner()->mtxAttr().unlock();
-    } else setAModif();
+    } else setAModif(true);
 }
 
 void Attr::setFlgSelf( SelfAttrFlgs flg, bool sys )
@@ -2088,12 +2088,12 @@ void Attr::setFlgSelf( SelfAttrFlgs flg, bool sys )
     mFlgSelf = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
     if(sys) return;
     if(!owner()->attrChange(*this,TVariant()))	mFlgSelf = t_flg;
-    else setAModif();
+    else setAModif(true);
 }
 
-unsigned Attr::aModif( )	{ return owner() ? owner()->wModif(this) : aModif_(); }
+unsigned Attr::aModif( ){ return owner() ? owner()->wModif(this) : aModif_(); }
 
-void Attr::setAModif( )	{ if(owner()) owner()->setWModif(this); }
+void Attr::setAModif( bool force )	{ if(owner()) owner()->setWModif(this, force); }
 
 void Attr::AHDConnect( )
 {

@@ -202,6 +202,7 @@ class TMdContr: public TController
 	bool	prcSt,				//Process task active
 		callSt,				//Call now stat
 		syncSt,				//Sync start
+		syncForce,			//Force sync in the task
 		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
 	map<string, StHd> mStatWork;		//Work stations and it status
