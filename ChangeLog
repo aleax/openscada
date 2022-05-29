@@ -1,3 +1,11 @@
+2022-05-29 Roman (stable)
+- data/*.xml: The field MaxClientsPerHost of the Sockets.CNTR transport increased up to 10.
+- !!:Transports: The UpRiseLev stations splited in the requesting transport per the first host of the "reforwardHost" address,
+    than preventing the common connection hung at long connection to very far reforward missing station.
+- !!:UI.Vision: Requesting of the widget attributes' values of the developed widget moved to a single big request,
+    than the remote development is become much faster.
+
+
 2022-05-25 Roman (stable)
 - !!!!:FIX:SYS,DAQ.DAQGate: The controller objects fixed in call the parameter objects deletion for explict using the flag NodeRemove.
 - SYS.TPrmTempl,DAQ.JavaLikeCalc,Protocol.ModBus: Restored in using the configuration field values at the fields move in other branch.

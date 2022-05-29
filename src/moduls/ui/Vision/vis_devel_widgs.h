@@ -66,7 +66,7 @@ class ModInspAttr: public QAbstractItemModel //QAbstractTableModel
 		    SelEd	= 0x1000
 		};
 
-		//Public attributes
+		//Public methods
 		Item( const string &iid, Type tp, Item *parent = NULL );
 		~Item( );
 
@@ -105,6 +105,7 @@ class ModInspAttr: public QAbstractItemModel //QAbstractTableModel
 		Item *parent( )		{ return parentItem; }
 
 	    private:
+		//Private attributes
 		string	idItem, nameItem, wdgsItem, helpItem, snthHglItem;
 		Type	typeItem;
 		QVariant dataItem, dataEditItem, dataEdit1Item;;

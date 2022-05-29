@@ -176,16 +176,12 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
     string itId = it->id();
 
     try {
-	XMLNode info_req("info");
-	XMLNode req("get");
-
-	//Set/update widget name
-	req.setAttr("path",itId+"/"+TSYS::strEncode("/wdg/cfg/name",TSYS::PathEl));
-	if(!mainWin()->cntrIfCmd(req))	it->setName(req.text().c_str());
-
-	info_req.setAttr("path",itId+"/%2fattr");
+	XMLNode info_req("CntrReqs"); info_req.setAttr("path", itId);
+	info_req.childAdd("get")->setAttr("path", "/%2fwdg%2fcfg%2fname");
+	info_req.childAdd("info")->setAttr("path", "/%2fattr");
 	mainWin()->cntrIfCmd(info_req);
-	XMLNode *root = info_req.childGet(0);
+	it->setName(info_req.childGet(0)->text().c_str());	//Setting/updating the widget name
+	XMLNode *root = info_req.childGet(1)->childGet(0);	//Linking to the info root
 
 	repIt:
 	//Delete items of a no present attributes
@@ -197,7 +193,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	// Get next item
 	while(idst[it_lev] < curit->childCount()) {
 	    // Process next attribute
-	    if(curit->child(idst[it_lev])->type( ) == Item::Attr) {
+	    if(curit->child(idst[it_lev])->type() == Item::Attr) {
 		string it_id = curit->child(idst[it_lev])->id();
 		//  Find into present attributes list
 		unsigned iA;
@@ -245,6 +241,9 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	}
 
 	//Add items for present attributes
+	XMLNode req("CntrReqs"); req.setAttr("path", itId);
+
+	// Preparing the primary data and the value request
 	for(unsigned iA = 0; iA < root->childSize(); iA++) {
 	    XMLNode *gnd = root->childGet(iA);
 	    if(grpW && !(s2i(gnd->attr("acs"))&SEC_WR)) continue;
@@ -274,26 +273,65 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    cur_it->child(ga_id)->setModify(grpW ? false : s2i(gnd->attr("modif")));
 	    cur_it->child(ga_id)->setHelp(gnd->attr("help"));
 	    if(grpW) cur_it->child(ga_id)->setWdgs(itId);
-	    // Get Value
-	    string sval;
-	    req.clear()->setName("CntrReqs")->setAttr("path",itId);
-	    req.childAdd("get")->setAttr("path","/%2fattr%2f"+a_id);
-	    if(s2i(gnd->attr("SnthHgl")))
-		req.childAdd("SnthHgl")->setAttr("path","/%2fattr%2f"+a_id);
-	    if(!mainWin()->cntrIfCmd(req)) sval = req.childGet(0)->text();
 
-	    /*req.clear()->setAttr("path", itId+"/%2fattr%2f"+a_id);
-	    if(!mainWin()->cntrIfCmd(req))	sval = req.text();*/
+	    // Get Value
+	    req.childAdd("get")->setAttr("path", "/%2fattr%2f"+a_id);
+	    if(s2i(gnd->attr("SnthHgl")))
+		req.childAdd("SnthHgl")->setAttr("path", "/%2fattr%2f"+a_id);
+	    if(gnd->attr("select").size() && !req.childGet("path","/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl),true))
+		req.childAdd("get")->setAttr("path", "/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
+
+	    gnd->setAttr("*cur_it", TSYS::addr2str(cur_it));
+	}
+
+	// Requesting all values
+	mainWin()->cntrIfCmd(req);
+
+	// Applying the obtained values
+	for(unsigned iA = 0, iACnt = 0; iA < root->childSize(); iA++) {
+	    XMLNode *gnd = root->childGet(iA);
+	    Item *cur_it = (Item *)TSYS::str2addr(gnd->attr("*cur_it"));
+	    if(!cur_it)	continue;
+
+	    string a_id = gnd->attr("id"), sval, shgl;
+	    int ga_id = cur_it->childGet(a_id);
+
+	    // Finding up the proper value field
+	    XMLNode *itVal = (iACnt >= req.childSize()) ? NULL : req.childGet(iACnt);
+	    if(itVal && itVal->name() == "get" && itVal->attr("path") == ("/%2fattr%2f"+a_id)) ++iACnt;
+	    else {	//Checking for the non sequential placing
+		for(iACnt = 0; iACnt < req.childSize(); ++iACnt)
+		    if((itVal=req.childGet(iACnt))->name() == "get" && itVal->attr("path") == ("/%2fattr%2f"+a_id))
+			break;
+		if(iACnt >= req.childSize())	continue;
+		else ++iACnt;
+	    }
+	    sval = itVal->text();
+
+	    // Finding up the Syntax Highlight rules field
+	    if(s2i(gnd->attr("SnthHgl"))) {
+		XMLNode *itVal = (iACnt >= req.childSize()) ? NULL : req.childGet(iACnt);
+		if(itVal && itVal->name() == "SnthHgl" && itVal->attr("path") == ("/%2fattr%2f"+a_id)) ++iACnt;
+		else {	//Checking for the non sequential placing
+		    for(iACnt = 0; iACnt < req.childSize(); ++iACnt)
+			if((itVal=req.childGet(iACnt))->name() == "SnthHgl" && itVal->attr("path") == ("/%2fattr%2f"+a_id))
+			    break;
+		    if(iACnt >= req.childSize()) itVal = NULL;
+		    else ++iACnt;
+		}
+		if(itVal) shgl = itVal->save();
+	    }
+
 	    string stp = gnd->attr("tp");
 	    if(stp == "bool")		cur_it->child(ga_id)->setData((bool)s2i(sval));
 	    else if(stp == "dec" || stp == "hex" || stp == "oct")
 					cur_it->child(ga_id)->setData(s2i(sval));
 	    else if(stp == "real")	cur_it->child(ga_id)->setData(s2r(sval));
 	    else if(stp == "str") {
-		if(req.childSize() > 1)	cur_it->child(ga_id)->setSnthHgl(req.childGet(1)->save());
+		if(shgl.size())	cur_it->child(ga_id)->setSnthHgl(shgl);
 		cur_it->child(ga_id)->setData(sval.c_str());
 	    }
-	    // Get selected list
+	    // Getting the selection list
 	    if(gnd->attr("dest") == "select" || gnd->attr("dest") == "sel_ed") {
 		cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::Select);
 		QStringList selLs, selIds;
@@ -304,20 +342,18 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		else {
 		    cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::SelEd);
 
-		    XMLNode req1("get");
-		    req1.setAttr("path", itId+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
-		    if(!mainWin()->cntrIfCmd(req1)) {
+		    if((itVal=req.childGet("path","/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl),true))) {
 			bool ind_ok = s2i(gnd->attr("idm"));
-			for(unsigned iCh = 0; iCh < req1.childSize(); iCh++) {
-			    if(!iCh) ind_ok = req1.childGet(iCh)->attr("id").size();
-			    if(ind_ok) selIds << req1.childGet(iCh)->attr("id").c_str();
-			    selLs << req1.childGet(iCh)->text().c_str();
+			for(unsigned iCh = 0; iCh < itVal->childSize(); iCh++) {
+			    if(!iCh) ind_ok = itVal->childGet(iCh)->attr("id").size();
+			    if(ind_ok) selIds << itVal->childGet(iCh)->attr("id").c_str();
+			    selLs << itVal->childGet(iCh)->text().c_str();
 			}
 		    }
 		}
-		for(int i_sId = 0; i_sId < selIds.size() && i_sId < selLs.size(); i_sId++)
-		    if(selIds[i_sId].toStdString() == sval)
-		    { cur_it->child(ga_id)->setData(selLs[i_sId]); break; }
+		for(int iSId = 0; iSId < selIds.size() && iSId < selLs.size(); iSId++)
+		    if(selIds[iSId].toStdString() == sval)
+		    { cur_it->child(ga_id)->setData(selLs[iSId]); break; }
 		cur_it->child(ga_id)->setDataEdit(selLs);
 		cur_it->child(ga_id)->setDataEdit1(selIds);
 	    }
@@ -1406,7 +1442,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
     int vca_lev = 0;
     for(int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); ) vca_lev++;
 
-    if(vca_lev && TSYS::pathLev(vca_it,0).compare(0,4,"wlb_") != 0) return;
+    if(vca_lev && TSYS::pathLev(vca_it,0).find("wlb_") != 0) return;
     string upd_lb   = (vca_lev>=1) ? TSYS::pathLev(vca_it,0).substr(4) : "";
     string upd_wdg  = (vca_lev>=2) ? TSYS::pathLev(vca_it,1).substr(4) : "";
     string upd_wdgi = (vca_lev>=3) ? TSYS::pathLev(vca_it,2).substr(4) : "";

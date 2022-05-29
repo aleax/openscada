@@ -314,7 +314,7 @@ void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool a
 	req.clear()->setAttr("path", "/"+list[iH].id+"/Transport/%2fsub%2fehost")->
 		     setAttr("upRiseLev", i2s(wUpRiseLev-1))->setAttr("upRiseSYS", i2s(andSYS));
 	try {
-	    if(cntrIfCmd(req,"UpRiseLev",user)) continue;
+	    if(cntrIfCmd(req,"" /* "UpRiseLev" */,user)) continue;
 	    nId = req.childGet("id", "id", true);
 	    for(unsigned iH1 = 0; nId && iH1 < nId->childSize(); ++iH1) {
 		ExtHost eh(user, list[iH].id+"."+nId->childGet(iH1)->text());
@@ -410,20 +410,22 @@ AutoHD<TTransportOut> TTransportS::extHost( TTransportS::ExtHost host, const str
     if(!host.id.size() || !modPresent(host.transp))
 	throw err_sys(_("Error the remote host '%s'!"), host.id.c_str());
 
-    if(!at(host.transp).at().outPresent(pref+host.id)) at(host.transp).at().outAdd(pref+host.id);
-    if(at(host.transp).at().outAt(pref+host.id).at().addr() != host.addr) {
-	at(host.transp).at().outAt(pref+host.id).at().setAddr(host.addr);
-	at(host.transp).at().outAt(pref+host.id).at().stop();
+    string trId = pref + host.id;
+    if(!at(host.transp).at().outPresent(trId)) at(host.transp).at().outAdd(trId);
+    if(at(host.transp).at().outAt(trId).at().addr() != host.addr) {
+	at(host.transp).at().outAt(trId).at().setAddr(host.addr);
+	at(host.transp).at().outAt(trId).at().stop();
     }
 
-    return at(host.transp).at().outAt(pref+host.id);
+    return at(host.transp).at().outAt(trId);
 }
 
-int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const string &iuser )
+int TTransportS::cntrIfCmd( XMLNode &node, const string &isenderPref, const string &iuser )
 {
     int off = 0;
     string path = node.attr("path");
     string station = TSYS::pathLev(path, 0, false, &off);
+    string senderPref = isenderPref;
     if(station.empty()) station = SYS->id();
     else node.setAttr("path", path.substr(off));
 
@@ -435,8 +437,13 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     }
 
     //Checking to reforward
-    off = 0; TSYS::strParse(station, 0, ".", &off);
-    if(off && off < (int)station.size()) { node.setAttr("reforwardHost", station.substr(off)); station.erase(off-1); }
+    off = 0;
+    string tVl = TSYS::strParse(station, 0, ".", &off);
+    if(off && off < (int)station.size()) {
+	node.setAttr("reforwardHost", station.substr(off));
+	senderPref += TSYS::strParse(station, 0, ".", &off);
+	station = tVl;
+    }
 
     //Connection to the transport
     off = 0;
