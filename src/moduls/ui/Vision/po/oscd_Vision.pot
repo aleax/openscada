@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-29 11:54+0300\n"
+"POT-Creation-Date: 2022-05-31 20:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,11 +116,11 @@ msgid "Required for some widget styles like \"gtk\" in some specific widgets in 
 msgstr ""
 
 #, c-format
-msgid "%d: Development by \"%s\"."
+msgid "%d: Development by \"%s\" for the station \"%s\"."
 msgstr ""
 
 #, c-format
-msgid "%d: Running \"%s:%s\" from \"%s\" - %s, updating period %s(%s), cached pages %d and resources %d."
+msgid "%d: Running \"%s:%s\" from \"%s\" - %s, for the station \"%s\", updating period %s(%s), cached pages %d and resources %d."
 msgstr ""
 
 msgid "Connected"

@@ -196,7 +196,7 @@ class TSocketOut: public TTransportOut
 
 	void setTimings( const string &vl, bool isDef = false );
 	void setAttempts( unsigned short vl );
-	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(1000000,vl)) : 0; modif(); }
+	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
 	void setTmCon( int vl )		{ mTmCon = vmax(1,vmin(60000,vl)); }
 
 	void start( int time = 0 );

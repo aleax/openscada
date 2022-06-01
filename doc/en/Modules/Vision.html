@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Vision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Vision.html" title="Модули/Vision (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Vision.html" title="Модули/Vision (93% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Vision.html" title="Модулі/Vision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -23,8 +23,7 @@
 <th> Languages </th>
 <th> Platforms </th>
 <th> Type </th>
-<th> Author </th>
-<th> Description
+<th> Author
 </th></tr>
 
 <tr>
@@ -38,8 +37,13 @@
 <td> x86,x86_64,ARM
 </td>
 <td> UI </td>
-<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font> </td>
-<td> Visual operation user interface, based on the Qt library — front-end to the VCA engine.
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2007-2012), Ksenia Yashina (2007-2008)</i></font>
+</td></tr>
+<tr>
+<th colspan="9"> Description
+</th></tr>
+<tr>
+<td colspan="9"> Visual operation user interface, based on the Qt library — front-end to the VCA engine.
 <ul><li> <b>Total complexity:</b> &gt; 50 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Sponsored by, for finishing the mirroring of the primitive ElFigure on 0.3 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> SVItoVYR Ltd</li></ul>
 </td></tr></table>
@@ -57,31 +61,32 @@
 <ul>
 <li class="toclevel-2 tocsection-3"><a href="#Styles"><span class="tocnumber">2.1</span> <span class="toctext">Styles</span></a></li>
 <li class="toclevel-2 tocsection-4"><a href="#Linkage_with_the_dynamics"><span class="tocnumber">2.2</span> <span class="toctext">Linkage with the dynamics</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Visual_editing"><span class="tocnumber">2.3</span> <span class="toctext">Visual editing</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-5"><a href="#Execution_of_the_VCA_interfaces"><span class="tocnumber">3</span> <span class="toctext"><span>Execution of the VCA interfaces</span></span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#Presentation_of_the_basic_elements_.28primitives.29"><span class="tocnumber">4</span> <span class="toctext"><span>Presentation of the basic elements (primitives)</span></span></a>
+<li class="toclevel-1 tocsection-6"><a href="#Execution_of_the_VCA_interfaces"><span class="tocnumber">3</span> <span class="toctext"><span>Execution of the VCA interfaces</span></span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Presentation_of_the_basic_elements_.28primitives.29"><span class="tocnumber">4</span> <span class="toctext"><span>Presentation of the basic elements (primitives)</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-7"><a href="#Elementary_figure_primitive_.28ElFigure.29"><span class="tocnumber">4.1</span> <span class="toctext">Elementary figure primitive (ElFigure)</span></a></li>
-<li class="toclevel-2 tocsection-8"><a href="#Text_primitive_.28Text.29"><span class="tocnumber">4.2</span> <span class="toctext">Text primitive (Text)</span></a></li>
-<li class="toclevel-2 tocsection-9"><a href="#Primitive_of_the_form_element_.28FormEl.29"><span class="tocnumber">4.3</span> <span class="toctext">Primitive of the form element (FormEl)</span></a></li>
-<li class="toclevel-2 tocsection-10"><a href="#Primitive_of_the_displaying_the_media-materials_.28Media.29"><span class="tocnumber">4.4</span> <span class="toctext">Primitive of the displaying the media-materials (Media)</span></a></li>
-<li class="toclevel-2 tocsection-11"><a href="#Primitive_of_constructing_diagrams_.28Diagram.29"><span class="tocnumber">4.5</span> <span class="toctext">Primitive of constructing diagrams (Diagram)</span></a></li>
-<li class="toclevel-2 tocsection-12"><a href="#Primitive_of_the_protocol_formation_.28Protocol.29"><span class="tocnumber">4.6</span> <span class="toctext">Primitive of the protocol formation (Protocol)</span></a></li>
-<li class="toclevel-2 tocsection-13"><a href="#Primitive_of_the_report_formation_.28Document.29"><span class="tocnumber">4.7</span> <span class="toctext">Primitive of the report formation (Document)</span></a></li>
-<li class="toclevel-2 tocsection-14"><a href="#Primitive_of_the_box-container_.28Box.29"><span class="tocnumber">4.8</span> <span class="toctext">Primitive of the box-container (Box)</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Elementary_figure_primitive_.28ElFigure.29"><span class="tocnumber">4.1</span> <span class="toctext"><span>Elementary figure primitive (ElFigure)</span></span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Text_primitive_.28Text.29"><span class="tocnumber">4.2</span> <span class="toctext">Text primitive (Text)</span></a></li>
+<li class="toclevel-2 tocsection-10"><a href="#Primitive_of_the_form_element_.28FormEl.29"><span class="tocnumber">4.3</span> <span class="toctext">Primitive of the form element (FormEl)</span></a></li>
+<li class="toclevel-2 tocsection-11"><a href="#Primitive_of_the_displaying_the_media-materials_.28Media.29"><span class="tocnumber">4.4</span> <span class="toctext">Primitive of the displaying the media-materials (Media)</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Primitive_of_constructing_diagrams_.28Diagram.29"><span class="tocnumber">4.5</span> <span class="toctext">Primitive of constructing diagrams (Diagram)</span></a></li>
+<li class="toclevel-2 tocsection-13"><a href="#Primitive_of_the_protocol_formation_.28Protocol.29"><span class="tocnumber">4.6</span> <span class="toctext">Primitive of the protocol formation (Protocol)</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#Primitive_of_the_report_formation_.28Document.29"><span class="tocnumber">4.7</span> <span class="toctext">Primitive of the report formation (Document)</span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Primitive_of_the_box-container_.28Box.29"><span class="tocnumber">4.8</span> <span class="toctext"><span>Primitive of the box-container (Box)</span></span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-15"><a href="#Vector_graphics_editor"><span class="tocnumber">5</span> <span class="toctext"><span>Vector graphics editor</span></span></a>
+<li class="toclevel-1 tocsection-16"><a href="#Vector_graphics_editor"><span class="tocnumber">5</span> <span class="toctext"><span>Vector graphics editor</span></span></a>
 <ul>
-<li class="toclevel-2 tocsection-16"><a href="#Purpose_2"><span class="tocnumber">5.1</span> <span class="toctext">Purpose</span></a></li>
-<li class="toclevel-2 tocsection-17"><a href="#Principles_and_functions_of_the_graphic_editor"><span class="tocnumber">5.2</span> <span class="toctext">Principles and functions of the graphic editor</span></a></li>
-<li class="toclevel-2 tocsection-18"><a href="#Basic_principles_of_operation_in_the_graphical_editor"><span class="tocnumber">5.3</span> <span class="toctext">Basic principles of operation in the graphical editor</span></a></li>
-<li class="toclevel-2 tocsection-19"><a href="#Popup_menu_of_the_graphic_editor"><span class="tocnumber">5.4</span> <span class="toctext">Popup menu of the graphic editor</span></a></li>
-<li class="toclevel-2 tocsection-20"><a href="#Properties_dialog_of_the_elementary_figure"><span class="tocnumber">5.5</span> <span class="toctext">Properties dialog of the elementary figure</span></a></li>
+<li class="toclevel-2 tocsection-17"><a href="#Purpose_2"><span class="tocnumber">5.1</span> <span class="toctext">Purpose</span></a></li>
+<li class="toclevel-2 tocsection-18"><a href="#Principles_and_functions_of_the_graphic_editor"><span class="tocnumber">5.2</span> <span class="toctext">Principles and functions of the graphic editor</span></a></li>
+<li class="toclevel-2 tocsection-19"><a href="#Basic_principles_of_operation_in_the_graphical_editor"><span class="tocnumber">5.3</span> <span class="toctext">Basic principles of operation in the graphical editor</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#Popup_menu_of_the_graphic_editor"><span class="tocnumber">5.4</span> <span class="toctext">Popup menu of the graphic editor</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#Properties_dialog_of_the_elementary_figure"><span class="tocnumber">5.5</span> <span class="toctext">Properties dialog of the elementary figure</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-21"><a href="#General_module_configuration"><span class="tocnumber">6</span> <span class="toctext"><span>General module configuration</span></span></a></li>
+<li class="toclevel-1 tocsection-22"><a href="#General_module_configuration"><span class="tocnumber">6</span> <span class="toctext"><span>General module configuration</span></span></a></li>
 </ul>
 </div>
 
@@ -407,6 +412,23 @@
 <td> - </td>
 <td> EVAL
 </td></tr></table>
+<h3><span class="mw-headline" id="Visual_editing"><span class="mw-headline-number">2.3</span> Visual editing</span></h3>
+<p>Visual editing of opened frames in main space of the working window is performed mostly for <a href="#PrimBox">the Box primitive</a> or by inner specific editing for not container primitives like to <a href="#PrimElFigure">ElFigure</a>, entry to which performed at twice mouse click.
+</p><p>For any frames in the visual editor available only visually changing the geometry, what you can do by placing the mouse cursor to right and/or bottom edges of the frame and next move the edge whether by mouse, holding the left button, or by keyboard, pressing the arrow keys — the arrow keys clicking cause of the corresponding size changing at 5 pixels on 1x scale and holding the Shift key you get 1 pixel. You can also change the frame scaling in the same way but holding the key Ctrl or toggling of the size mode on the status panel right.
+</p><p>Visual editing of <a href="#PrimBox">the Box primitive</a> means of the children widgets APPENDING, REMOVING, MOVING, GEOMETRY CHANGING, SCALE CHANGING and PROPERTIES EDITING.
+</p><p>Only for the widgets APPENDING you need no other widgets selection on the frame, just select needed widget from the library on the toolbar, or drag and drop from the tree of the widgets libraries, and place that in a mouse position by clicking the left mouse button. To cancel the add operation from the library on the toolbar, click the right mouse button.
+</p><p>For other operations you need to select an available child widget or a group of them, so let's see all features of the selection:
+</p>
+<ul><li> SINGLE SELECTION — performed by single click the left mouse button above child widget, next click puts down the selection to widget under the previous one and up to this frame itself, unselecting child widgets. That is the widget stack transition at the fact.</li>
+<li> SELECTION BY WINDOW — performs the group selection of the child widgets by drawing a window around those widgets, starting the window from the left mouse button press on any unselected frame space and finishing on the button release.</li>
+<li> ADDITIVE SELECTION — you can append some child widgets to the selection holding the Shift key and performing whether single selection or by window. In the case of the single selection, the widget stack transition is turned off here, and instead triggering of the top widgets selection is actually turned on!</li></ul>
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The selection is saved at the keyboard focus loss when pressing the left mouse button on the selection for return.
+</p><p>For REMOVING the selected widget or group of them you can press whether the toolbar or context menu button "Delete visual item", or the Ctrl+D key shortcut.
+</p><p>As a combination of the APPENDING and REMOVING there for the selected widget or group of them you can copy/cut by the corresponding toolbar or context menu button or by the keyboard shortcut Ctrl+C/X and next unselect all and paste by the corresponding toolbar or context menu button or by the keyboard shortcut Ctrl+V.
+</p><p>For MOVING you can the selected widget or group of them drag, by pressing the left mouse button on the selected area, move the mouse to need position and drop, by releasing the mouse button; or can use for that the arrow keys — the arrow keys clicking cause of the corresponding position coordinate changing at 5 pixels on 1x scale and holding the Shift key you get 1 pixel.
+</p><p>For the GEOMETRY CHANGING of the selected widget or group of them you can point the mouse cursor to a green dot of the selection representation and next move the dot whether by mouse, holding the left button, or by keyboard, pressing the arrow keys — the arrow keys clicking cause of the corresponding size changing at 5 pixels on 1x scale and holding the Shift key you get 1 pixel. You can perform the SCALE CHANGING of the selection in the same way but holding the key Ctrl or toggling of the size mode on the status panel right. The coordinates of individual widgets in the selection change according to the ratio of their position in this selection!
+</p><p>The PROPERTIES EDITING of the selected widget or group of them is not a graphical operation mostly and performed in the control panel of the widget attributes, but the child widgets selection is very useful as allows you to select a group widgets for next them properties editing in general.
+</p>
 <h2><span class="mw-headline" id="Execution_of_the_VCA_interfaces"><span class="mw-headline-number">3</span> <span id="RunTime" title="#RunTime">Execution of the VCA interfaces</span></span></h2>
 <p>Execution of the IU interface consists in launching a new project session or connecting to the current one, at the level of the VCA engine. Then the module of direct visualization represents and controls the session data. The main window of the execution mode of this module has the view presented at Figure 3.
 </p><p>Update of the contents of the open pages of the visual interface with periodicity of the project session is implemented. During the upgrade process:
@@ -624,7 +646,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 </td></tr></table>
 <p>Consider the implementation of each primitive in more detail.
 </p>
-<h3><span class="mw-headline" id="Elementary_figure_primitive_.28ElFigure.29"><span class="mw-headline-number">4.1</span> Elementary figure primitive (ElFigure)</span></h3>
+<h3><span class="mw-headline" id="Elementary_figure_primitive_.28ElFigure.29"><span class="mw-headline-number">4.1</span> <span id="PrimElFigure" title="#PrimElFigure">Elementary figure primitive (ElFigure)</span></span></h3>
 <p>Support of the following elementary figures is provided: line, elliptical arc, Bézier curve and fill of the closed circuit with the color and image. For the elementary figures the following operations are provided:
 </p>
 <ul><li> creation/deleting of the figures;</li>
@@ -639,7 +661,8 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 <p>Figure shows a part of the screen with a frame containing the elementary figures.
 </p>
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_elfig_new.png"><img alt="Vision elfig new.png" height="298" src="../files/Vision_elfig_new.png" width="299" /></a></div></div>
-<p>The figures underlying this widget, containing the points (the start and end ones) that can be connected with the according points of other figures; and the points with the help of which the geometry of the figure can be changed.
+<p>About the inner graphical editor on the module Vision in details you can read in the corresponding section "<a href="../Modules/Vision.html#ElFigure" title="Special:MyLanguage/Modules/Vision">Vector graphics editor</a>" and here we describe only useful tips.
+</p><p>The figures underlying this widget, containing the points (the start and end ones) that can be connected with the according points of other figures; and the points with the help of which the geometry of the figure can be changed.
 </p><p>It is possible to add the figure using the mouse manipulator:
 </p>
 <ol><li> Select the desired figure from the context menu.</li>
@@ -665,7 +688,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 <ul><li> from the context menu, right-clicking of the mouse manipulator over the fill;</li>
 <li> breaking the closed contour;</li>
 <li> double-clicking of the mouse manipulator on the filled space.</li></ul>
-<p>Rotation of the figure is made around the widget center.
+<p>Rotation of the figure is made around the widget center and mirroring is made around the central vertical axis-line.
 </p><p><br />
 </p>
 <h3><span class="mw-headline" id="Text_primitive_.28Text.29"><span class="mw-headline-number">4.2</span> Text primitive (Text)</span></h3>
@@ -801,7 +824,7 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 <div class="center"><div class="floatnone"><a class="image" href="http://oscada.org/wiki/File:Vision_doc.png"><img alt="Vision doc.png" height="580" src="../files/Vision_doc.png" width="900" /></a></div></div>
 <p><br />
 </p>
-<h3><span class="mw-headline" id="Primitive_of_the_box-container_.28Box.29"><span class="mw-headline-number">4.8</span> Primitive of the box-container (Box)</span></h3>
+<h3><span class="mw-headline" id="Primitive_of_the_box-container_.28Box.29"><span class="mw-headline-number">4.8</span> <span id="PrimBox" title="#PrimBox">Primitive of the box-container (Box)</span></span></h3>
 <p>Provides for support of the container primitive, which, in combination, plays the role of project pages. This primitive is the only container-element, which can itself include links to frames from the library, thus forming the user elements of the desired configuration. The primitive implements the properties provided by the project. Let's list, in points, the properties of this primitive:
 </p>
 <ul><li> <i>Container</i> — Allows forming the desired objects by grouping in the primitive borders.</li>

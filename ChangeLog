@@ -1,3 +1,31 @@
+2022-05-31 Roman 0.9.5
+- data/*.xml: The field MaxClientsPerHost of the Sockets.CNTR transport increased up to 10.
+- !!!!:FIX:SYS,DAQ.DAQGate: The controller objects fixed in call the parameter objects deletion for explict using the flag NodeRemove.
+- !!!!:SYS.TPrmTempl,DAQ.JavaLikeCalc,Protocol.ModBus: Restored in using the configuration field values at the fields move in other branch.
+- !:SYS: Fixed for some CLang compiling warnings from Sergij Doroska (mr_dsv).
+- !!:Transports: The UpRiseLev stations splited in the requesting transport per the first host of the "reforwardHost" address,
+    than preventing the common connection hung at long connection to very far reforward missing station.
+- !:DAQ.DAQGate: The sync operation completely moved into the acquisition task at restart the enabled controllers.
+- !!!!:FIX:UI.VCAEngine: Processing the Attr::NotStored flag limited on the value change, not for the configuration
+	like to the processing flag of direct accessing from the procedures.
+    !: The container widgets and pages loading is set to enable new included widgets at loading the enabled containers.
+- !!:FIX:UI.Vision: The child widgets selection conception at the visual editing of the development mode was unified
+	    and fixed in a new part "Visual editing" of the UI.Vision module documentation. Some fixed and improved in the way:
+	- prevented in the selection loss at the keyboard focus loss on navigation to some other items,
+	    so the selection saved at mouse clicking on that;
+	- selection by window can be performed now starting the window draw from any unselected space
+	    and the new selected part can be appended to already present selection holding the Shift key;
+	- shape of the mouse cursor of the primitive Box for the runtime mode prevented for set in the development mode.
+    !!: Requesting of the widget attributes' values of the developed widget moved to a single big request,
+	than the remote development is become much faster.
+    Status of the opened windows in the module configuration page appended of the station name,
+	for remote stations mostly and their multiple opening.
+- !:UI.WebVision: The type CheckBox of the primitive FormEl was some improved, simplified, centered vertically
+	and allowed to the dynamic resize.
+    !: The type LineEdit of the primitive FormEl was centered vertically by "margin: auto" and allowed to the dynamic resize for all views.
+    The type ComboBox and List of the primitive FormEl inherited the height and width for the SELECT element.
+
+
 2022-05-11 Roman 0.9.5
 - !!!!:DOC: The "Quick start" manual completely revised and actualized for last 0.9.5 LTS changes.
 - DOC,LibsDB.{OscadaLibs,vcaBase,vcaElectroEls},data/*.spec,data/{debian,debian_mod}/control:

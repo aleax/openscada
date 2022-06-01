@@ -66,7 +66,7 @@ class ModInspAttr: public QAbstractItemModel //QAbstractTableModel
 		    SelEd	= 0x1000
 		};
 
-		//Public attributes
+		//Public methods
 		Item( const string &iid, Type tp, Item *parent = NULL );
 		~Item( );
 
@@ -105,6 +105,7 @@ class ModInspAttr: public QAbstractItemModel //QAbstractTableModel
 		Item *parent( )		{ return parentItem; }
 
 	    private:
+		//Private attributes
 		string	idItem, nameItem, wdgsItem, helpItem, snthHglItem;
 		Type	typeItem;
 		QVariant dataItem, dataEditItem, dataEdit1Item;;
@@ -579,9 +580,9 @@ class DevelWdgView: public WdgView
 	uint8_t	fHoldSelRect	:1;	//Hold for select rect
 	uint8_t	fMoveHoldMove	:1;	//Mouse move on hold
 	uint8_t	fHideChilds	:1;	//Hide childs on move
-	uint8_t	fSelChange	:1;	//Changed select map
 	uint8_t	fPrevEdExitFoc  :1;	//Prevention exit from widget edition by focus loosing
 	uint8_t	fFocus		:1;	//Edition window of the widget in focus
+	uint8_t	fFocusLostSelSv	:1;	//Flag of the focus lost detection and the widget selection save
 	uint8_t	fMakeIco	:1;	//Make icon flag for background disable
 
 	float		mVisScale;	//Visual scale value of root widget.

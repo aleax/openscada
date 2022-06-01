@@ -99,7 +99,7 @@ class Attr
 	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
 
 	void setFlgSelf( SelfAttrFlgs flg, bool sys = false );
-	void setAModif( );
+	void setAModif( bool force = false );
 	void setAModif_( uint32_t set )	{ mModif = set; }
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );
@@ -199,7 +199,7 @@ class Widget : public TCntrNode
 	void setOwner( const string &iown );
 	void setGrp( const string &igrp );
 	void setPermit( short iperm );
-	virtual void setWModif( Attr *a = NULL );
+	virtual void setWModif( Attr *a = NULL, bool force = false );
 	virtual void setCalcLang( const string &ilng )	{ };
 	virtual void setCalcProgTr( bool vl )		{ };
 	virtual void setCalcProg( const string &iprg )	{ };

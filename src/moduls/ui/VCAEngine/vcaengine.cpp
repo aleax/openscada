@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.8.20"
+#define MOD_VER		"7.8.22"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -501,7 +501,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 
 	tCfgVal = cEl.cfg("CFG_VAL").getS(TCfg::ExtValOne);
 	attr.at().setCfgVal((!cEl.cfg("CFG_VAL").noTransl() && (selfFlg&Attr::CfgConst ||
-				(selfFlg&Attr::CfgLnkIn && tCfgVal.compare(0,4,"val:") == 0))) ? cEl.cfg("CFG_VAL").getS() : tCfgVal);
+				(selfFlg&Attr::CfgLnkIn && tCfgVal.find("val:") == 0))) ? cEl.cfg("CFG_VAL").getS() : tCfgVal);
 
 	if(!(attr.at().flgGlob()&Attr::NotStored)) {
 	    if(selfFlg&Attr::CfgConst && tCfgVal.size()) attr.at().setS(attr.at().cfgVal());

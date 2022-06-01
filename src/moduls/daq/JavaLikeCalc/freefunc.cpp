@@ -2991,8 +2991,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    if(!owner().DB().empty() && progTr())
-		ctrMkNode("fld",opt,-1,"/io/prog_tr",EVAL_STR,RWRW__,"root",SDAQ_ID,1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/io/prog",EVAL_STR,RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
+		ctrMkNode("fld",opt,-1,"/io/prog_tr",_(cfg("PR_TR").fld().descr()),RWRW__,"root",SDAQ_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/io/prog",_(cfg("FORMULA").fld().descr()),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	if(opt->childSize() && ctrId(opt->childGet(0),"/exec/io",true))
 	    for(int iIO = 0; iIO < ioSize(); iIO++)

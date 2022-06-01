@@ -526,7 +526,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path", ed_it+"/"+TSYS::strEncode(obj_name->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_name->setValue(req.text().c_str());
 	}
- 	// Description
+	// Description
 	gnd = TCntrNode::ctrId(root,obj_descr->objectName().toStdString(),true);
 	obj_descr->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 	if(gnd) {

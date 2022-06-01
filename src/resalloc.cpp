@@ -1,7 +1,7 @@
 
 //OpenSCADA file: resalloc.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2020 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -47,7 +47,7 @@ void ResRW::resRequestW( unsigned short tm )
     int rez = 0;
 #if !__GLIBC_PREREQ(2,4)
     //EDEADLK imitation
-    if(wThr && wThr == pthread_self()) rez == EDEADLK;
+    if(wThr && wThr == pthread_self()) rez = EDEADLK;
     else
 #endif
     if(!tm) rez = pthread_rwlock_wrlock(&rwc);
@@ -80,7 +80,7 @@ void ResRW::resRequestR( unsigned short tm )
     int rez = 0;
 #if !__GLIBC_PREREQ(2,4)
     //EDEADLK imitation
-    if(wThr && wThr == pthread_self()) rez == EDEADLK;
+    if(wThr && wThr == pthread_self()) rez = EDEADLK;
     else
 #endif
     if(!tm) rez = pthread_rwlock_rdlock(&rwc);

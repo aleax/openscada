@@ -2089,7 +2089,7 @@ uint32_t SessWdg::wModif( Attr *a )
     return ownerSess()->clkPairPrc(a->aModif_());
 }
 
-void SessWdg::setWModif( Attr *a )
+void SessWdg::setWModif( Attr *a, bool force )
 {
     if(!a || !a->isVisual()) return;
 
