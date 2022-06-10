@@ -322,7 +322,7 @@
 <li> Adaptation to work in the environment of the operating systems QNX and MS Windows.</li></ul>
 <h2><span class="mw-headline" id="Updates"><span class="mw-headline-number">7</span> Updates</span></h2>
 <h3><span class="mw-headline" id=".5B22.02.2022.5D_The_FIFTH_update"><span class="mw-headline-number">7.1</span> [22.02.2022] The FIFTH update</span></h3>
-<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 50 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2827" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
+<p>This update of the <a href="Release_0.9.html" title="Special:MyLanguage/Documents/Release 0.9">0.9 LTS release</a> fixes about 50 bugs and appends MANY improvements with several of significant-conceptual ones, which you can read wholly in <a class="external text" href="http://oscada.org/svn/tags/openscada_0.9/ChangeLog?p=2831" rel="nofollow noreferrer noopener" target="_blank">the update ChangeLog</a>.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> <b><u>Significant actions of the developer of the OpenSCADA modules on the update</u></b><br />
 </p>
 <ul><li> FIX:SYS.TMess: Type of labStor(), labSecCRON(), labSecCRONsel(), labTaskPrior(), labMessCat() changed to "string".</li></ul>
@@ -628,7 +628,8 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> Siemens: Appended of the new option "Maximum size of the request block, bytes" of specifying the maximum requesting block.</li></ul>
 <p><b><u>Transports</u></b><br />
 </p>
-<ul><li> <span id="SSL" title="#SSL">SSL</span>: Both input and output parts appended of the possibility to point the certificates and the key directly from an external file. Appended for reloading the certificates file of the input transport at it change by the transport reconnect.</li></ul>
+<ul><li> The UpRiseLev stations splited in the requesting transport per the first host of the "reforwardHost" address, than preventing the common connection hung at long connection to very far reforward missing station.</li>
+<li> <span id="SSL" title="#SSL">SSL</span>: Both input and output parts appended of the possibility to point the certificates and the key directly from an external file. Appended for reloading the certificates file of the input transport at it change by the transport reconnect.</li></ul>
 <p><b><u>Transport Protocols</u></b><br />
 </p>
 <ul><li> FIX:HTTP: Fixed in reading the "accept-language" HTTP variable only as the two symbol language code, then the common interface is translated also now on FireFox who sends there the country code also.</li>
@@ -655,7 +656,9 @@ FIX: The "Translations" tab expansion and fixing for:
 <li> FIX: Fixed in the mime data copy at the widget libraries and the projects copy, moving the copy to the copy save, with expanding the mime operations for work with completely specified DBs.</li>
 <li> FIX: Prevented in the attribute values inheriting for the output links, then do not write to DAQ the obviously wrong values at the hot edition of running projects and their items.</li></ul></li>
 <li> FIX:Vision: Fixed, or finished the implementation, for UNDO/REDO the removing operation of the inherited included Widgets of the Project Pages.
-<ul><li> Adjusted in the focus policy to the UI.WebVision way and appended the focus force clearing at lost, to prevent the widget focus return at window activation, so you can use now the event "ws_FocusIn" in opening external subwindows.</li></ul></li>
+<ul><li> Adjusted in the focus policy to the UI.WebVision way and appended the focus force clearing at lost, to prevent the widget focus return at window activation, so you can use now the event "ws_FocusIn" in opening external subwindows.</li>
+<li> The child widgets selection conception at the visual editing of the development mode was unified and fixed in a new part "Visual editing" of <a href="Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">the UI.Vision module documentation</a>.</li>
+<li> Requesting of the widget attributes' values of the developed widget moved to a single big request, than the remote development is become much faster.</li></ul></li>
 <li> FIX:WebVision: The session methods mUser and mUserOrig moved under the data mutex lock, due to there can be crashes at active user manipulations.
 <ul><li> FIX: The view "Combo" of the type "Line" and the types "List" and "Combo" appended of creation value items missed in the selection list.</li>
 <li> FIX: The popup windows of the calendar and editable combo appended of the geometry check than preventing the main window overflow; and the popup windows closing moved completely at a mouse button press outward the window, together other popup menus.</li>
@@ -1423,5 +1426,5 @@ FIX: The "Translations" tab expansion and fixing for:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">May 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2828</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Release_0.9/en">Documents/Release_0.9/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2832</td></tr></table></body>
 </html>

@@ -1,3 +1,12 @@
+2022-06-10 Roman (stable)
+- data/icons/,UI.QTCfg: The icon collection appended of the files favorites.png, favorites_add.png, favorites_del.png.
+- Transport.SSL: The input transport stopping appended of termination client tasks like to Transport.Sockets.
+- !!!!:UI.QTCfg: Appended of the Favorite pages implementation.
+- UI.Vision: Status of the opened windows in the module configuration page appended of the station name,
+    for remote stations mostly and their multiple opening.
+- UI.WebVision: The type ComboBox of the primitive FormEl appended for adding empty values to the list.
+
+
 2022-05-29 Roman (stable)
 - data/*.xml: The field MaxClientsPerHost of the Sockets.CNTR transport increased up to 10.
 - !!:Transports: The UpRiseLev stations splited in the requesting transport per the first host of the "reforwardHost" address,

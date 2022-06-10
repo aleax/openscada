@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-05 21:10+0200\n"
+"POT-Creation-Date: 2022-06-10 11:09+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -130,8 +130,7 @@ msgstr ""
 "Schaltfläche zum zwangsweisen Laden der Artikeldaten aus der DB, nicht nur "
 "beim Ändern"
 
-msgid ""
-"Press for loading the item data from DB forcibly, not only when it changed."
+msgid "Press for loading the item data from DB forcibly, not only when it changed."
 msgstr ""
 "Drücken Sie, um die Artikeldaten zwangsweise zu laden, nicht nur, wenn sie "
 "geändert wurden."
@@ -154,14 +153,12 @@ msgstr "Speichern Sie an die DB gewaltsam"
 msgid "Save the item data to DB forcibly"
 msgstr "Sichern Sie die Artikeldaten in der DB gewaltsam"
 
-msgid ""
-"The button for saving the item data to DB forcibly, not only when it changed"
+msgid "The button for saving the item data to DB forcibly, not only when it changed"
 msgstr ""
 "Schaltfläche zum zwangsweisen Speichern der Artikeldaten in den DB, nicht "
 "nur bei Änderung"
 
-msgid ""
-"Press for saving the item data to DB forcibly, not only when it changed."
+msgid "Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 "Drücken Sie, um die Artikeldaten zwangsweise in der Datenbank zu speichern, "
 "nicht nur, wenn sie geändert wurden."
@@ -245,8 +242,7 @@ msgid "Start the cycled refreshing"
 msgstr "Starten Sie die zyklische Aktualisierung"
 
 msgid "The button for starting the cycled refreshing of the page content"
-msgstr ""
-"Schaltfläche zum Starten der zyklischen Aktualisierung des Seiteninhalts"
+msgstr "Schaltfläche zum Starten der zyklischen Aktualisierung des Seiteninhalts"
 
 msgid "Press for starting the cycled refreshing of the page content."
 msgstr "Betätigen zum Starten der zyklischen Aktualisierung des Seiteninhalts."
@@ -258,11 +254,32 @@ msgid "Stop the cycled refreshing"
 msgstr "Stoppen Sie die zyklische Aktualisierung"
 
 msgid "The button for stopping the cycled refreshing of the page content"
-msgstr ""
-"Schaltfläche zum Beenden der zyklischen Aktualisierung des Seiteninhalts"
+msgstr "Schaltfläche zum Beenden der zyklischen Aktualisierung des Seiteninhalts"
 
 msgid "Press for stopping the cycled refreshing of the page content."
 msgstr "Betätigen zum Beenden der zyklischen Aktualisierung des Seiteninhalts."
+
+#, c-format
+msgid "Append to favorite for '%s'"
+msgstr "Favoriten anhängen für '%s'"
+
+msgid "The button to toggle the current page as favorite"
+msgstr "Schaltfläche zum Umschalten der aktuellen Seite als Favorit"
+
+msgid "Press to toggle the current page as favorite."
+msgstr "Klicken um die aktuelle Seite als Favorit umzuschalten."
+
+msgid "Favorite"
+msgstr "Favorit"
+
+msgid "Go to favorite"
+msgstr "Zu Favoriten gehen"
+
+msgid "The button-menu to go the favorite page"
+msgstr "Schaltflächenmenü zum Aufrufen der Favoritenseite"
+
+msgid "Press to go the favorite page."
+msgstr "Klicken um zur Favoritenseite zu gehen."
 
 msgid "&About"
 msgstr "&Über"
@@ -304,8 +321,7 @@ msgid "Selected page manual"
 msgstr "Ausgewählte Seiten-Handbuch"
 
 msgid "The button for getting the using selected page manual."
-msgstr ""
-"Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
+msgstr "Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
 
 msgid "Press to get the using selected page manual."
 msgstr "Klicken um das Verwendung ausgewählter Seiten-Handbuch zu bekommen."
@@ -423,6 +439,10 @@ msgstr ""
 "Kopieren/Verschieben des Knotens '%1' Fehler '%2'.\n"
 "Andere Knoten fortsetzen?"
 
+#, c-format
+msgid "Remove from favorite for '%s'"
+msgstr "Aus Favoriten entfernen für '%s'"
+
 msgid "List of messages in the status bar:"
 msgstr "Liste der Nachrichten in der Statusleiste:"
 
@@ -458,6 +478,12 @@ msgstr "Handbuch"
 
 msgid "The manual '%1' was not found offline or online!"
 msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
+
+msgid "Find"
+msgstr "Suche"
+
+msgid "Find next"
+msgstr "Weitersuchen"
 
 msgid "<EVAL>"
 msgstr "<EVAL>"
@@ -606,12 +632,25 @@ msgid "%s| '%s' inserted for the record %d."
 msgstr "%s| '%s' wurde für den Datensatz %d eingefügt."
 
 #, c-format
+msgid "%s| '%s' moved for the record %d to %d."
+msgstr "%s| '%s' wurde für den Datensatz %d nach %d verschoben."
+
+#, c-format
 msgid "%s| '%s' deleted for the record '%s'."
 msgstr "%s| '%s' wurde für den Datensatz '%s' gelöscht."
 
 #, c-format
-msgid "%s| '%s' moved for the record %d to %d."
-msgstr "%s| '%s' wurde für den Datensatz %d nach %d verschoben."
+msgid "%s| '%s' user command '%s(%s)' to the record '%s'."
+msgstr "%s| '%s' Benutzerbefehl '%s(%s)' in den Datensatz '%s'."
+
+msgid "Enter a string to search:"
+msgstr "Geben Sie eine Zeichenfolge suchen:"
+
+msgid "Searching a string"
+msgstr "Eine Zeichenfolge suchen"
+
+msgid "Case sensitively"
+msgstr "Case sensibel"
 
 msgid "Saving an image"
 msgstr "Speichern eines Bildes"
@@ -669,29 +708,14 @@ msgstr "Keine Verbindung hergestellt"
 msgid "Picture is not set!"
 msgstr "Es ist kein Bild hinterlegt!"
 
-msgid "Find"
-msgstr "Suche"
-
-msgid "Find next"
-msgstr "Weitersuchen"
-
 msgid "Apply"
 msgstr "Übernehmen"
 
 msgid "Cursor = (%1:%2)"
 msgstr "Cursor = (%1:%2)"
 
-msgid "Enter a string to search:"
-msgstr "Geben Sie eine Zeichenfolge suchen:"
-
-msgid "Searching a string"
-msgstr "Eine Zeichenfolge suchen"
-
 msgid "Backward"
 msgstr "Rückwärts"
-
-msgid "Case sensitively"
-msgstr "Case sensibel"
 
 msgid "Whole words"
 msgstr "Ganze Wörter"
@@ -791,3 +815,4 @@ msgstr "QTCfg Dialog"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Auswahl des Bezeichners und des Knotens"
+

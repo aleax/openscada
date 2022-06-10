@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.9"
+#define MOD_VER		"4.3.10"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -713,7 +713,7 @@ void *TSocketIn::Task( void *sock_in )
     //Client tasks stop command
     sock->endrunCl = true;
 
-    //Find already registry
+    //Finding up already registered to terminate
     MtxAlloc res(sock->sockRes, true);
     for(map<int, SSockIn*>::iterator iId = sock->clId.begin(); iId != sock->clId.end(); ++iId)
 	if(iId->second->pid) pthread_kill(iId->second->pid, SIGALRM);

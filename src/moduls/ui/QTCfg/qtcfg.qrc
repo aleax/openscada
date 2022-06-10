@@ -7,6 +7,9 @@
     <file>images/exit.png</file>
     <file>images/help.png</file>
     <file>images/next.png</file>
+    <file>images/favorites.png</file>
+    <file>images/favorites_add.png</file>
+    <file>images/favorites_del.png</file>
     <file>images/oscada_cfg.png</file>
     <file>images/previous.png</file>
     <file>images/reload.png</file>

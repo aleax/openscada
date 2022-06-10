@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-05 21:10+0200\n"
+"POT-Creation-Date: 2022-06-10 11:09+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -260,6 +260,32 @@ msgid "Press for stopping the cycled refreshing of the page content."
 msgstr ""
 "Нажать для останова периодического обновления содержимого текущей страницы."
 
+#, c-format
+msgid "Append to favorite for '%s'"
+msgstr ""
+
+#, fuzzy
+msgid "The button to toggle the current page as favorite"
+msgstr "Кнопка перехода к родительской странице"
+
+#, fuzzy
+msgid "Press to toggle the current page as favorite."
+msgstr "Нажать для получения руководства выбранной страницы."
+
+msgid "Favorite"
+msgstr ""
+
+msgid "Go to favorite"
+msgstr ""
+
+#, fuzzy
+msgid "The button-menu to go the favorite page"
+msgstr "Кнопка перехода к родительской странице"
+
+#, fuzzy
+msgid "Press to go the favorite page."
+msgstr "Нажать для перехода к родительской странице."
+
 msgid "&About"
 msgstr "Пр&о..."
 
@@ -415,6 +441,10 @@ msgstr ""
 "Ошибка Копирования/Перемещения узла '%1': '%2'.\n"
 "Продолжить другие узлы?"
 
+#, c-format
+msgid "Remove from favorite for '%s'"
+msgstr ""
+
 msgid "List of messages in the status bar:"
 msgstr "Список сообщений строки статуса:"
 
@@ -450,6 +480,12 @@ msgstr "Руководство"
 
 msgid "The manual '%1' was not found offline or online!"
 msgstr "Не найдено руководства '%1' локально и в сети!"
+
+msgid "Find"
+msgstr "Поиск"
+
+msgid "Find next"
+msgstr "Поиск следующего"
 
 msgid "<EVAL>"
 msgstr "<EVAL>"
@@ -598,12 +634,25 @@ msgid "%s| '%s' inserted for the record %d."
 msgstr "%s| '%s' вставлена запись %d."
 
 #, c-format
+msgid "%s| '%s' moved for the record %d to %d."
+msgstr "%s| '%s' перемещение записи из %d в %d."
+
+#, c-format
 msgid "%s| '%s' deleted for the record '%s'."
 msgstr "%s| '%s' удалена запись '%s'."
 
-#, c-format
-msgid "%s| '%s' moved for the record %d to %d."
-msgstr "%s| '%s' перемещение записи из %d в %d."
+#, fuzzy, c-format
+msgid "%s| '%s' user command '%s(%s)' to the record '%s'."
+msgstr "%s| '%s' удалена запись '%s'."
+
+msgid "Enter a string to search:"
+msgstr "Введите строку поиска:"
+
+msgid "Searching a string"
+msgstr "Поиск строки"
+
+msgid "Case sensitively"
+msgstr "Чувствительный к регистру"
 
 msgid "Saving an image"
 msgstr "Сохранение изображения"
@@ -661,29 +710,14 @@ msgstr "Не установлено подключения"
 msgid "Picture is not set!"
 msgstr "Картинка не установлена!"
 
-msgid "Find"
-msgstr "Поиск"
-
-msgid "Find next"
-msgstr "Поиск следующего"
-
 msgid "Apply"
 msgstr "Принять"
 
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"
 
-msgid "Enter a string to search:"
-msgstr "Введите строку поиска:"
-
-msgid "Searching a string"
-msgstr "Поиск строки"
-
 msgid "Backward"
 msgstr "Обратно"
-
-msgid "Case sensitively"
-msgstr "Чувствительный к регистру"
 
 msgid "Whole words"
 msgstr "Слово целиком"

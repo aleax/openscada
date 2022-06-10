@@ -244,7 +244,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     // Start of "Auto update"
     if(!ico_t.load(TUIS::icoGet("start",NULL,true).c_str())) ico_t.load(":/images/start.png");
     actStartUpd = new QAction(QPixmap::fromImage(ico_t), "", this);
-    actStartUpd->setShortcut(Qt::CTRL+Qt::Key_B);
+    actStartUpd->setShortcut(Qt::CTRL+Qt::Key_R);
     connect(actStartUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStart()));
     // Stop of "Auto update"
     if(!ico_t.load(TUIS::icoGet("stop",NULL,true).c_str())) ico_t.load(":/images/stop.png");
@@ -252,6 +252,19 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStop()));
+    // Favorite page toggling
+    if(!favToggleAdd.load(TUIS::icoGet("favorites_add",NULL,true).c_str())) favToggleAdd.load(":/images/favorites_add.png");
+    if(!favToggleDel.load(TUIS::icoGet("favorites_del",NULL,true).c_str())) favToggleDel.load(":/images/favorites_del.png");
+    actFavToggle = new QAction(QPixmap::fromImage(favToggleAdd), "", this);
+    actFavToggle->setShortcut(Qt::CTRL+Qt::Key_B);
+    actFavToggle->setEnabled(false);
+    connect(actFavToggle, SIGNAL(triggered()), this, SLOT(favToggle()));
+    // Favorite page
+    if(!ico_t.load(TUIS::icoGet("favorites",NULL,true).c_str())) ico_t.load(":/images/favorites.png");
+    actFav = new QAction(QPixmap::fromImage(ico_t), "", this);
+    actFav->setEnabled(false);
+    actFav->setMenu(new QMenu(this));
+    connect(actFav, SIGNAL(triggered()), this, SLOT(favGo()));
     // About "System info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
     actAbout = new QAction(QPixmap::fromImage(ico_t), "", this);
@@ -305,6 +318,9 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     menuView->addAction(actUpdate);
     menuView->addAction(actStartUpd);
     menuView->addAction(actStopUpd);
+    menuView->addSeparator();
+    menuView->addAction(actFav);
+    menuView->addAction(actFavToggle);
 
     menuBar()->addMenu((menuHelp=new QMenu(this)));
     menuHelp->addAction(actAbout);
@@ -339,6 +355,9 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     toolBar->addAction(actUpdate);
     toolBar->addAction(actStartUpd);
     toolBar->addAction(actStopUpd);
+    toolBar->addSeparator();
+    toolBar->addAction(actFav);
+    toolBar->addAction(actFavToggle);
     toolBar->addSeparator();
     toolBar->addAction(actManualPage);
     // QTStarter
@@ -398,6 +417,8 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     initHosts();
     try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
+
+    favUpd(true);
 
     winCntr++;
 }
@@ -525,6 +546,16 @@ void ConfApp::messUpd( )
     actStopUpd->setToolTip(_("Stop the cycled refreshing"));
     actStopUpd->setWhatsThis(_("The button for stopping the cycled refreshing of the page content"));
     actStopUpd->setStatusTip(_("Press for stopping the cycled refreshing of the page content."));
+    // Favorite page toggling
+    actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),"?").c_str());
+    actFavToggle->setToolTip(actFavToggle->text());
+    actFavToggle->setWhatsThis(_("The button to toggle the current page as favorite"));
+    actFavToggle->setStatusTip(_("Press to toggle the current page as favorite."));
+    // Favorite page
+    actFav->setText(_("Favorite"));
+    actFav->setToolTip(_("Go to favorite"));
+    actFav->setWhatsThis(_("The button-menu to go the favorite page"));
+    actFav->setStatusTip(_("Press to go the favorite page."));
     // About "System info"
     actAbout->setText(_("&About"));
     actAbout->setToolTip(_("Program and OpenSCADA information"));
@@ -669,15 +700,15 @@ void ConfApp::treeSearch( )
 
 void ConfApp::pageUp( )
 {
-    size_t i_l = string::npos;
+    size_t iL = string::npos;
     while(true) {
-	i_l = selPath.rfind("/",i_l);
-	if(i_l == string::npos || i_l == 0) return;
-	if((selPath.size()-i_l) > 1) break;
-	i_l--;
+	iL = selPath.rfind("/", iL);
+	if(iL == string::npos || iL == 0) return;
+	if((selPath.size()-iL) > 1) break;
+	iL--;
     }
 
-    selectPage(selPath.substr(0,i_l));
+    selectPage(selPath.substr(0,iL));
 }
 
 void ConfApp::pagePrev( )
@@ -699,6 +730,8 @@ void ConfApp::pageNext( )
 
     try{ pageDisplay(path); } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
+
+
 
 void ConfApp::itDBLoad( )
 {
@@ -970,6 +1003,70 @@ void ConfApp::itPaste( )
     else pageRefresh();
 }
 
+void ConfApp::favToggle( )
+{
+    string selNmPath = getTreeWItNmPath(selPath);
+
+    int fvPresent = -1;
+    for(unsigned iFv = 0; fvPresent < 0 && iFv < favs.size(); ++iFv)
+	if(TSYS::strParse(favs[iFv],0,":") == selPath) fvPresent = iFv;
+
+    if(fvPresent >= 0) {
+	favs.erase(favs.begin()+fvPresent);
+	actFavToggle->setIcon(QPixmap::fromImage(favToggleAdd));
+	actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),(selNmPath.size()?selNmPath:selPath).c_str()).c_str());
+    }
+    else {
+	favs.push_back(selPath+(selNmPath.size()?":"+selNmPath:""));
+	while(favs.size() > limCacheIts_N) favs.erase(favs.begin());
+
+	actFavToggle->setIcon(QPixmap::fromImage(favToggleDel));
+	actFavToggle->setText(TSYS::strMess(_("Remove from favorite for '%s'"),(selNmPath.size()?selNmPath:selPath).c_str()).c_str());
+    }
+    actFavToggle->setToolTip(actFavToggle->text());
+
+    string sfavs;
+    for(unsigned iFv = 0; iFv < favs.size(); ++iFv)
+	sfavs += (sfavs.size()?"\n":"") + favs[iFv];
+
+    TBDS::genPrmSet(mod->nodePath()+"favorites", sfavs, user());
+
+    favUpd();
+}
+
+void ConfApp::favUpd( bool withReload )
+{
+    if(withReload) {
+	favs.clear();
+	string sfavs = TBDS::genPrmGet(mod->nodePath()+"favorites", "", user()), fav;
+	for(int off = 0; (fav=TSYS::strLine(sfavs,0,&off)).size() || off < sfavs.size(); )
+	    favs.push_back(fav);
+    }
+    actFav->setEnabled(favs.size());
+
+    actFav->setMenu(new QMenu(this));
+
+    QAction *actFavLnk;
+    for(int iFv = (int)favs.size()-1; iFv >= 0; --iFv) {
+	int off = 0;
+	string spath = TSYS::strParse(favs[iFv], 0, ":", &off);
+	actFavLnk = new QAction(((off<favs[iFv].size())?favs[iFv].substr(off):spath).c_str(), this);
+	actFavLnk->setObjectName(spath.c_str());
+	actFav->menu()->addAction(actFavLnk);
+	connect(actFavLnk, SIGNAL(triggered()), this, SLOT(favGo()));
+    }
+}
+
+void ConfApp::favGo( )
+{
+    if(!sender()) return;
+    QAction *sa = (QAction*)sender();
+    if(sa->menu() && sa->menu()->actions().size()) sa = sa->menu()->actions()[0];
+
+    try{ pageDisplay(sa->objectName().toStdString()); }
+    catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+}
+
 void ConfApp::editToolUpdate( )
 {
     int rootAccess = root ? s2i(root->attr("acs")) : 0;
@@ -1014,6 +1111,7 @@ void ConfApp::userSel( )
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
 
     treeUpdate();
+    favUpd(true);
 }
 
 void ConfApp::pageRefresh( int tm )
@@ -2122,13 +2220,31 @@ void ConfApp::pageDisplay( const string path )
     pgDisplay = true;
 
     try {
-    //Chek Up
+    //Checking for Up
     actUp->setEnabled(path.rfind("/") != string::npos && path.rfind("/") != 0);
 
-    //Check Prev and Next
+    //Checking for Prev and Next
     actPrev->setEnabled(prev.size());
     actNext->setEnabled(next.size());
 
+    //Checking for Favorite Pages
+    actFavToggle->setEnabled(path.size());
+    string selNmPath = getTreeWItNmPath(path);
+    bool fvPresent = false;
+    for(unsigned iFv = 0; !fvPresent && iFv < favs.size(); ++iFv)
+	fvPresent = (TSYS::strParse(favs[iFv],0,":") == path);
+    if(!fvPresent) {
+	actFavToggle->setIcon(QPixmap::fromImage(favToggleAdd));
+	actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),(selNmPath.size()?selNmPath:path).c_str()).c_str());
+    }
+    else {
+	actFavToggle->setIcon(QPixmap::fromImage(favToggleDel));
+	actFavToggle->setText(TSYS::strMess(_("Remove from favorite for '%s'"),(selNmPath.size()?selNmPath:path).c_str()).c_str());
+    }
+    actFavToggle->setToolTip(actFavToggle->text());
+    actFav->setEnabled(favs.size());
+
+    //Updating the current page
     if(path != pgInfo.attr("path")) {
 	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure of proper working of the checking for not applied editable widgets
 
@@ -2341,6 +2457,10 @@ void ConfApp::ctrTreePopup( )
 		popup.addAction(actItCopy);
 		popup.addAction(actItPaste);
 		popup.addSeparator();
+		//Favorite
+		popup.addAction(actFav);
+		popup.addAction(actFavToggle);
+		popup.addSeparator();
 	    }
 	}
 	//Main action add
@@ -2488,7 +2608,9 @@ QTreeWidgetItem *ConfApp::getExpandTreeWIt( const string &path )
 	if(curIt && !curIt->isExpanded()) curIt->setExpanded(true);
 	for(int iIt = 0; iIt < (curIt?curIt->childCount():CtrTree->topLevelItemCount()); iIt++) {
 	    QTreeWidgetItem *tit = curIt ? curIt->child(iIt) : CtrTree->topLevelItem(iIt);
-	    if(tit->text(2)[0] == '*' && ((isGrpOK=sit.find(tit->text(2).toStdString().substr(1)) == 0) || (iIt+1) >= curIt->childCount())) {
+	    if(tit->text(2)[0] == '*' &&
+		    ((isGrpOK=sit.find(tit->text(2).toStdString().substr(1)) == 0) || (iIt+1) >= curIt->childCount()))
+	    {
 		curIt = isGrpOK ? tit : curIt->child(0); iIt = -1;
 		if(!curIt->isExpanded()) curIt->setExpanded(true);
 	    }
@@ -2504,6 +2626,18 @@ QTreeWidgetItem *ConfApp::getExpandTreeWIt( const string &path )
     }
 
     return curIt;
+}
+
+string ConfApp::getTreeWItNmPath( const string &path )
+{
+    string selNmPath;
+    QTreeWidgetItem *treeIt = getExpandTreeWIt(path);
+    while(treeIt) {
+	selNmPath = treeIt->text(0).toStdString() + (selNmPath.size()?" > "+selNmPath:"");
+	treeIt = treeIt->parent();
+    }
+
+    return selNmPath;
 }
 
 int ConfApp::cntrIfCmd( XMLNode &node )
@@ -2867,26 +3001,26 @@ void ConfApp::listBoxPopup( )
     try {
 	n_el = SYS->ctrId(root, TSYS::strDecode(lbox->objectName().toStdString(),TSYS::PathEl));
 	if(n_el->attr("tp") == "br" && item != NULL) {
-	    actBr = last_it = new QAction(_("Go"),this);
+	    actBr = last_it = new QAction(_("Go"), this);
 	    popup.addAction(actBr);
 	    popup.addSeparator();
 	}
 	if((s2i(n_el->attr("acs"))&SEC_WR) && n_el->attr("s_com").size()) {
 	    if(n_el->attr("s_com").find("add") != string::npos) {
-	        actAdd = last_it = new QAction(_("Add"),this);
+	        actAdd = last_it = new QAction(_("Add"), this);
 		popup.addAction(actAdd);
 	    }
 	    if(n_el->attr("s_com").find("ins") != string::npos && item != NULL) {
-		actIns = last_it = new QAction(_("Insert"),this);
+		actIns = last_it = new QAction(_("Insert"), this);
 		popup.addAction(actIns);
 	    }
 	    if(n_el->attr("s_com").find("edit") != string::npos && item != NULL) {
-		actEd = last_it = new QAction(_("Edit"),this);
+		actEd = last_it = new QAction(_("Edit"), this);
 		popup.addAction(actEd);
 	    }
 	    if(n_el->attr("s_com").find("del") != string::npos && item != NULL) {
 		popup.addSeparator();
-		actDel = last_it = new QAction(_("Delete"),this);
+		actDel = last_it = new QAction(_("Delete"), this);
 		popup.addAction(actDel);
 	    }
 	    if(n_el->attr("s_com").find("move") != string::npos && item != NULL) {
