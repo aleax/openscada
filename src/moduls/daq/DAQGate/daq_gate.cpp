@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.19"
+#define MOD_VER		"2.9.20"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -1182,7 +1182,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(isEmpty) { ctrRemoveNode(opt,"/val"); ctrRemoveNode(opt, "/arch"); }
 
 	if(ctrMkNode("area",opt,0,"/prm",_("Parameter"))) {
-	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State"))) {
+	    if(ctrMkNode("area",opt,-1,"/prm/st",_("State of the local representative parameter"))) {
 		ctrMkNode("fld",opt,-1,"/prm/st/type",_("Type"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		if(owner().enableStat())
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -1202,7 +1202,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    } catch(TError &err) { continue; }
 		if(req.childSize()) {
 		    *cfgN = *req.childGet(0);
-		    cfgN->setAttr("dscr",_("Remote station configuration"));
+		    cfgN->setAttr("dscr",_("Configuration of the remote parameter"));
 		}
 	    }
 	    if(isEmpty && cfgN) ctrRemoveNode(opt, "/prm/cfg");

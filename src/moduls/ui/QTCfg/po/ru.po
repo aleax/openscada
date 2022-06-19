@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-10 11:09+0300\n"
+"POT-Creation-Date: 2022-06-18 10:45+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -125,8 +125,7 @@ msgstr ""
 "Кнопка принудительной загрузки данных элемента из БД, не только когда "
 "изменено"
 
-msgid ""
-"Press for loading the item data from DB forcibly, not only when it changed."
+msgid "Press for loading the item data from DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительной загрузки данных элемента из БД, не только когда "
 "изменено."
@@ -149,14 +148,12 @@ msgstr "Принудительно сохранить в БД"
 msgid "Save the item data to DB forcibly"
 msgstr "Принудительно сохранить данные элемента в БД"
 
-msgid ""
-"The button for saving the item data to DB forcibly, not only when it changed"
+msgid "The button for saving the item data to DB forcibly, not only when it changed"
 msgstr ""
 "Кнопка принудительного сохранения данных элемента в БД, не только когда "
 "изменено"
 
-msgid ""
-"Press for saving the item data to DB forcibly, not only when it changed."
+msgid "Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительного сохранения данных элемента в БД, не только когда "
 "изменено."
@@ -243,8 +240,7 @@ msgid "The button for starting the cycled refreshing of the page content"
 msgstr "Кнопка запуска периодического обновления содержимого текущей страницы."
 
 msgid "Press for starting the cycled refreshing of the page content."
-msgstr ""
-"Нажать для запуска периодического обновления содержимого текущей страницы."
+msgstr "Нажать для запуска периодического обновления содержимого текущей страницы."
 
 msgid "&Stop"
 msgstr "&Остановить"
@@ -253,12 +249,10 @@ msgid "Stop the cycled refreshing"
 msgstr "Остановить периодическое обновление"
 
 msgid "The button for stopping the cycled refreshing of the page content"
-msgstr ""
-"Кнопка останова периодического обновления содержимого текущей страницы."
+msgstr "Кнопка останова периодического обновления содержимого текущей страницы."
 
 msgid "Press for stopping the cycled refreshing of the page content."
-msgstr ""
-"Нажать для останова периодического обновления содержимого текущей страницы."
+msgstr "Нажать для останова периодического обновления содержимого текущей страницы."
 
 #, c-format
 msgid "Append to favorite for '%s'"
@@ -341,8 +335,7 @@ msgid "The button for requesting information about the user interface elements"
 msgstr "Кнопка запроса информации про элементы пользовательского интерфейса"
 
 msgid "Press for requesting information about the user interface elements."
-msgstr ""
-"Нажать для запроса информации про элементы пользовательского интерфейса"
+msgstr "Нажать для запроса информации про элементы пользовательского интерфейса"
 
 msgid "&File"
 msgstr "&Файл"
@@ -443,6 +436,9 @@ msgstr ""
 
 #, c-format
 msgid "Remove from favorite for '%s'"
+msgstr ""
+
+msgid "Clear the list"
 msgstr ""
 
 msgid "List of messages in the status bar:"
@@ -641,9 +637,9 @@ msgstr "%s| '%s' перемещение записи из %d в %d."
 msgid "%s| '%s' deleted for the record '%s'."
 msgstr "%s| '%s' удалена запись '%s'."
 
-#, fuzzy, c-format
+#, c-format
 msgid "%s| '%s' user command '%s(%s)' to the record '%s'."
-msgstr "%s| '%s' удалена запись '%s'."
+msgstr "%s| '%s' команда пользователя '%s(%s)' к записи '%s'."
 
 msgid "Enter a string to search:"
 msgstr "Введите строку поиска:"
@@ -788,7 +784,7 @@ msgstr "Останов модуля."
 msgid "Module options"
 msgstr "Опции модуля"
 
-msgid "Timeouts of checking connections '{fail}:{good}', seconds"
+msgid "Timeouts of the connection checking '{fail}:{good}', seconds"
 msgstr "Таймауты проверки подключения '{нет}:{есть}', в секундах"
 
 msgid "Initial path of the configurator"
@@ -800,8 +796,8 @@ msgstr "Стартовый пользователь конфигуратора"
 msgid "ToolTip limit, zero to disable"
 msgstr "Ограничение ToolTip, ноль для отключения"
 
-msgid "Go to the configuration of the list of remote stations"
-msgstr "Перейти к конфигурации списка удалённых станций"
+msgid "Go to configuration of the remote OpenSCADA hosts list"
+msgstr "Перейти к конфигурации списка удалённых хостов OpenSCADA"
 
 msgid "Page"
 msgstr "Страница"
@@ -814,3 +810,4 @@ msgstr "QTCfg диалог"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Выбор идентификатора и имени узла"
+

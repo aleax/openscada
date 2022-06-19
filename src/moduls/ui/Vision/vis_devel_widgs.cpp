@@ -123,16 +123,16 @@ void ModInspAttr::setWdg( const string &iwdg )
 
 	//Check for delete widgets from group
 	bool masterWdg = !isChange && (rootItem->childCount() && rootItem->child(0)->id() == "<*>");
-	for(int i_it = (masterWdg?1:0); i_it < rootItem->childCount(); i_it++) {
+	for(int iIt = (masterWdg?1:0); iIt < rootItem->childCount(); iIt++) {
 	    unsigned iW;
 	    for(iW = 0; iW < wdg_ls.size(); iW++)
-		if(rootItem->child(i_it)->id() == wdg_ls[iW])
+		if(rootItem->child(iIt)->id() == wdg_ls[iW])
 		    break;
 	    if(iW >= wdg_ls.size()) {
-		beginRemoveRows(QModelIndex(),i_it,i_it);
-		rootItem->childDel(i_it);
+		beginRemoveRows(QModelIndex(),iIt,iIt);
+		rootItem->childDel(iIt);
 		endRemoveRows();
-		i_it--;
+		iIt--;
 	    }
 	}
 
@@ -545,8 +545,8 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 	if(it->data() == value && !isGrp) return true;
 
 	//Check for list
-	for(int i_it = 0; i_it < it->dataEdit().toStringList().size() && i_it < it->dataEdit1().toStringList().size(); i_it++)
-	    if(it->dataEdit().toStringList()[i_it] == value) { value = it->dataEdit1().toStringList()[i_it]; break; }
+	for(int iIt = 0; iIt < it->dataEdit().toStringList().size() && iIt < it->dataEdit1().toStringList().size(); iIt++)
+	    if(it->dataEdit().toStringList()[iIt] == value) { value = it->dataEdit1().toStringList()[iIt]; break; }
 
 	XMLNode chCtx("attr");
 
@@ -567,21 +567,25 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		}
 	    }
 
-	    if(!mainWin()->cntrIfCmd(req) /*&& req.text() == val*/) {	//!!!! Commented by specifics of the dynamic translation mode
+	    string reqVal = req.text();
+	    int reqRez = 0;
+	    if((reqRez=mainWin()->cntrIfCmd(req)))
+		mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), (reqRez==TError::Core_CntrWarning)?TVision::Warning:TVision::Error, mainWin());
+
+	    if(reqRez == TError::NoError || reqRez == TError::Core_CntrWarning) {
 		//Send change request to opened to edit widget
 		if(dw)	dw->chRecord(chCtx);
 
 		// List check
-		for(int i_it = 0; i_it < it->dataEdit1().toStringList().size() && i_it < it->dataEdit().toStringList().size(); i_it++)
-		    if(it->dataEdit1().toStringList()[i_it] == value) { value = it->dataEdit().toStringList()[i_it]; break; }
+		for(int iIt = 0; iIt < it->dataEdit1().toStringList().size() && iIt < it->dataEdit().toStringList().size(); iIt++)
+		    if(it->dataEdit1().toStringList()[iIt] == value) { value = it->dataEdit().toStringList()[iIt]; break; }
 
 		//Local update
-		//it->setData((it->data().type()==QVariant::Bool) ? value.toBool() : value);
 		switch(it->data().type()) {
-		    case QVariant::Bool:	it->setData((bool)s2i(req.text()));	break;
-		    case QVariant::Int:		it->setData(s2i(req.text()));		break;
-		    case QVariant::Double:	it->setData(s2r(req.text()));		break;
-		    default:			it->setData(req.text().c_str());	break;
+		    case QVariant::Bool:	it->setData((bool)s2i(reqVal));	break;
+		    case QVariant::Int:		it->setData(s2i(reqVal));	break;
+		    case QVariant::Double:	it->setData(s2r(reqVal));	break;
+		    default:			it->setData(reqVal.c_str());	break;
 		}
 
 		it->setModify(true);
@@ -1085,11 +1089,11 @@ void InspLnk::setWdg( const string &iwdg )
 
 	//Search widget item
 	QTreeWidgetItem *wdg_it;
-	int i_it;
-	for(i_it = 0; i_it < topLevelItemCount(); i_it++)
-	    if(lnwdg == topLevelItem(i_it)->text(0).toStdString())
+	int iIt;
+	for(iIt = 0; iIt < topLevelItemCount(); iIt++)
+	    if(lnwdg == topLevelItem(iIt)->text(0).toStdString())
 		break;
-	if(i_it < topLevelItemCount()) wdg_it = topLevelItem(i_it);
+	if(iIt < topLevelItemCount()) wdg_it = topLevelItem(iIt);
 	else {
 	    wdg_it = new QTreeWidgetItem(this);
 	    wdg_it->setText(0,lnwdg.c_str());
@@ -1097,10 +1101,10 @@ void InspLnk::setWdg( const string &iwdg )
 
 	if(!lngrp.empty()) {
 	    // Search group
-	    for(i_it = 0; i_it < wdg_it->childCount(); i_it++)
-		if(lngrp == wdg_it->child(i_it)->text(0).toStdString())
+	    for(iIt = 0; iIt < wdg_it->childCount(); iIt++)
+		if(lngrp == wdg_it->child(iIt)->text(0).toStdString())
 		    break;
-	    if(i_it < wdg_it->childCount()) wdg_it = wdg_it->child(i_it);
+	    if(iIt < wdg_it->childCount()) wdg_it = wdg_it->child(iIt);
 	    else {
 		wdg_it = new QTreeWidgetItem(wdg_it);
 		wdg_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
@@ -1119,10 +1123,10 @@ void InspLnk::setWdg( const string &iwdg )
 	}
 	// Search parameter
 	QTreeWidgetItem *prm_it;
-	for(i_it = 0; i_it < wdg_it->childCount(); i_it++)
-	    if(lnatr == wdg_it->child(i_it)->text(0).toStdString())
+	for(iIt = 0; iIt < wdg_it->childCount(); iIt++)
+	    if(lnatr == wdg_it->child(iIt)->text(0).toStdString())
 		break;
-	if(i_it < wdg_it->childCount()) prm_it = wdg_it->child(i_it);
+	if(iIt < wdg_it->childCount()) prm_it = wdg_it->child(iIt);
 	else {
 	    prm_it = new QTreeWidgetItem(wdg_it);
 	    prm_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
@@ -1135,9 +1139,9 @@ void InspLnk::setWdg( const string &iwdg )
     }
 
     //Check for deleted links
-    for(int i_it = 0; i_it < topLevelItemCount(); i_it++)
-	for(int i_g = 0, iA = 0; i_g < topLevelItem(i_it)->childCount(); ) {
-	    QTreeWidgetItem *wdg_g  = topLevelItem(i_it)->child(i_g);
+    for(int iIt = 0; iIt < topLevelItemCount(); iIt++)
+	for(int i_g = 0, iA = 0; i_g < topLevelItem(iIt)->childCount(); ) {
+	    QTreeWidgetItem *wdg_g  = topLevelItem(iIt)->child(i_g);
 	    QTreeWidgetItem *wdg_it = (wdg_g->childCount())?wdg_g->child(iA):wdg_g;
 
 	    unsigned iL;
@@ -1151,12 +1155,12 @@ void InspLnk::setWdg( const string &iwdg )
 		delete wdg_it;
 		if(wdg_g != wdg_it && !wdg_g->childCount()) {
 		    delete wdg_g; iA = 0;
-		    if(topLevelItem(i_it)->childCount())	continue;
-		    delete topLevelItem(i_it); i_it--;
+		    if(topLevelItem(iIt)->childCount())	continue;
+		    delete topLevelItem(iIt); iIt--;
 		    break;
 		}
-		if(wdg_g == wdg_it && !topLevelItem(i_it)->childCount()) {
-		    delete topLevelItem(i_it); i_it--;
+		if(wdg_g == wdg_it && !topLevelItem(iIt)->childCount()) {
+		    delete topLevelItem(iIt); iIt--;
 		    break;
 		}
 	    }

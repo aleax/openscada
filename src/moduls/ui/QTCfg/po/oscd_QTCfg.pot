@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-10 14:50+0300\n"
+"POT-Creation-Date: 2022-06-18 10:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -420,6 +420,9 @@ msgstr ""
 msgid "Remove from favorite for '%s'"
 msgstr ""
 
+msgid "Clear the list"
+msgstr ""
+
 msgid "List of messages in the status bar:"
 msgstr ""
 
@@ -743,7 +746,7 @@ msgstr ""
 msgid "Module options"
 msgstr ""
 
-msgid "Timeouts of checking connections '{fail}:{good}', seconds"
+msgid "Timeouts of the connection checking '{fail}:{good}', seconds"
 msgstr ""
 
 msgid "Initial path of the configurator"
@@ -755,7 +758,7 @@ msgstr ""
 msgid "ToolTip limit, zero to disable"
 msgstr ""
 
-msgid "Go to the configuration of the list of remote stations"
+msgid "Go to configuration of the remote OpenSCADA hosts list"
 msgstr ""
 
 msgid "Page"

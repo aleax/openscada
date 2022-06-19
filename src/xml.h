@@ -1,7 +1,7 @@
 
 //OpenSCADA file: xml.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,7 +57,7 @@ class XMLNode
 	    Clean		= 0x80,		//Clean service tags: <??>, <!-- -->
 	    MissTagEnc		= 0x100,	//Omit for tag's name encoding
 	    MissAttrEnc		= 0x200,	//Omit for attribute's name encoding
-	    BinShield		= 0x400		//Shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F]
+	    BinShield		= 0x400		//Shield the binary symbols [\x0-\x8\xB-\xC\x0E-\x1F] and wrong UTF-8
 	};
 
 	//Methods

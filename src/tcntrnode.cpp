@@ -210,7 +210,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    opt->setAttr("path", s_br);
 
 	    cntrCmdProc(opt);
-	    if(opt->attr("rez") != "0")
+	    if(s2i(opt->attr("rez")) != TError::NoError)
 		throw TError("ContrItfc", _("%s:%s:> Error in the control item '%s'!"), opt->name().c_str(), (nodePath()+path).c_str(), s_br.c_str());
 
 	    // Check and put the command to the redundant stations
@@ -223,6 +223,9 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		opt->setAttr("path", nodePath()+"/"+TSYS::strEncode(s_br,TSYS::PathEl))->setAttr("primaryCmd", "")->setAttr("reforwardRedundReq", "1");
 		try{ while((lstStat=SYS->rdStRequest(*opt,lstStat,true)).size()) ; }
 		catch(TError &) { }
+
+		if(s2i(opt->attr("rez")) == TError::Core_CntrError)	//!!!! Since the remote errors are not errors for the local station, only warnings
+		    opt->setAttr("rez", i2s(TError::Core_CntrWarning));
 	    }
 	    opt->attrDel("reforwardRedundReq");
 	}

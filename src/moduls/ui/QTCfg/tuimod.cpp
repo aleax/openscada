@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.10.0"
+#define MOD_VER		"5.10.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -225,12 +225,12 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/tmConChk",_("Timeouts of checking connections '{fail}:{good}', seconds"),RWRWR_,"root",SUI_ID,1, "tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/tmConChk",_("Timeouts of the connection checking '{fail}:{good}', seconds"),RWRWR_,"root",SUI_ID,1, "tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/startPath",_("Initial path of the configurator"),RWRWR_,"root",SUI_ID,1, "tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/startUser",_("Initial user of the configurator"),RWRWR_,"root",SUI_ID,3,
 		"tp","str", "dest","select", "select","/prm/cfg/u_lst");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/toolTipLim",_("ToolTip limit, zero to disable"),RWRWR_,"root",SUI_ID,1, "tp","int");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to the configuration of the list of remote stations"),RWRW__,"root",SUI_ID,1, "tp","lnk");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to configuration of the remote OpenSCADA hosts list"),RWRW__,"root",SUI_ID,1, "tp","lnk");
 	}
 	return;
     }

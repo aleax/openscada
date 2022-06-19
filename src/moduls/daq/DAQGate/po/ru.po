@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:46+0300\n"
+"POT-Creation-Date: 2022-06-18 15:19+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -21,8 +21,7 @@ msgstr "Шлюз источников данных"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid ""
-"Allows to locate data sources of the remote OpenSCADA stations to local ones."
+msgid "Allows to locate data sources of the remote OpenSCADA stations to local ones."
 msgstr ""
 "Позволяет выполнять шлюзование источников данных удалённых OpenSCADA станций "
 "на локальные."
@@ -88,6 +87,7 @@ msgstr "Синхронизация. "
 msgid "Acquisition. "
 msgstr "Сбор. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Сбор с периодом %s. "
 
@@ -95,6 +95,7 @@ msgstr "Сбор с периодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s]. "
 msgstr "Затрачено времени %s[%s]. "
 
@@ -102,6 +103,7 @@ msgstr "Затрачено времени %s[%s]. "
 msgid "Error '%s', restoring in %.3g s."
 msgstr "Ошибка '%s', восстановление через %.3g с."
 
+#, c-format
 msgid "Requests to '%s' - %.6g; "
 msgstr "Запросов к '%s' - %.6g; "
 
@@ -204,8 +206,8 @@ msgstr "<<Добавить текущий>>"
 msgid "Parameter"
 msgstr "Параметр"
 
-msgid "State"
-msgstr "Состояние"
+msgid "State of the local representative parameter"
+msgstr "Состояние локального репрезентирующего параметра"
 
 msgid "Type"
 msgstr "Тип"
@@ -222,8 +224,9 @@ msgstr "Имя"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-msgid "Remote station configuration"
-msgstr "Конфигурация удалённой станции"
+msgid "Configuration of the remote parameter"
+msgstr "Конфигурация удаленного параметра"
 
 msgid "Controller is not started!"
 msgstr "Контроллер не запущен!"
+

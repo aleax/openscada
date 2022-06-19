@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-10 11:09+0300\n"
+"POT-Creation-Date: 2022-06-18 10:45+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -430,6 +430,9 @@ msgstr ""
 msgid "Remove from favorite for '%s'"
 msgstr "Видалити із улюблених для '%s'"
 
+msgid "Clear the list"
+msgstr "Очистити перелік"
+
 msgid "List of messages in the status bar:"
 msgstr "Перелік повідомлень рядка статусу:"
 
@@ -773,7 +776,7 @@ msgstr "Зупинка модуля."
 msgid "Module options"
 msgstr "Параметри модуля"
 
-msgid "Timeouts of checking connections '{fail}:{good}', seconds"
+msgid "Timeouts of the connection checking '{fail}:{good}', seconds"
 msgstr "Таймаути перевірки підключення '{немає}:{є}', у секундах"
 
 msgid "Initial path of the configurator"
@@ -785,8 +788,8 @@ msgstr "Початковий користувач конфігуратору"
 msgid "ToolTip limit, zero to disable"
 msgstr "Обмеження ToolTip, нуль для вимкнення"
 
-msgid "Go to the configuration of the list of remote stations"
-msgstr "Перейти до конфігурації переліку віддалених станцій"
+msgid "Go to configuration of the remote OpenSCADA hosts list"
+msgstr "Перейти до конфігурації переліку віддалених хостів OpenSCADA"
 
 msgid "Page"
 msgstr "Сторінка"

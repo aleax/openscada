@@ -341,16 +341,16 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     toolBar->addAction(actDBLoad);
     toolBar->addAction(actDBSave);
     toolBar->addSeparator();
-    toolBar->addAction(actUp);
-    toolBar->addAction(actPrev);
-    toolBar->addAction(actNext);
-    toolBar->addSeparator();
     toolBar->addAction(actItAdd);
     toolBar->addAction(actItDel);
     toolBar->addSeparator();
     toolBar->addAction(actItCopy);
     toolBar->addAction(actItCut);
     toolBar->addAction(actItPaste);
+    toolBar->addSeparator();
+    toolBar->addAction(actUp);
+    toolBar->addAction(actPrev);
+    toolBar->addAction(actNext);
     toolBar->addSeparator();
     toolBar->addAction(actUpdate);
     toolBar->addAction(actStartUpd);
@@ -418,7 +418,7 @@ ConfApp::ConfApp( string open_user ) : winClose(false), reqPrgrs(NULL),
     try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
 
-    favUpd(true);
+    favUpd(Fav_Reload|Fav_List);
 
     winCntr++;
 }
@@ -1031,30 +1031,58 @@ void ConfApp::favToggle( )
 
     TBDS::genPrmSet(mod->nodePath()+"favorites", sfavs, user());
 
-    favUpd();
+    favUpd(Fav_List);
 }
 
-void ConfApp::favUpd( bool withReload )
+void ConfApp::favUpd( unsigned opts )
 {
-    if(withReload) {
+    if(opts&Fav_Reload) {
 	favs.clear();
 	string sfavs = TBDS::genPrmGet(mod->nodePath()+"favorites", "", user()), fav;
 	for(int off = 0; (fav=TSYS::strLine(sfavs,0,&off)).size() || off < sfavs.size(); )
 	    favs.push_back(fav);
     }
-    actFav->setEnabled(favs.size());
 
-    actFav->setMenu(new QMenu(this));
+    if(opts&Fav_List) {
+	actFav->setMenu(new QMenu(this));
 
-    QAction *actFavLnk;
-    for(int iFv = (int)favs.size()-1; iFv >= 0; --iFv) {
-	int off = 0;
-	string spath = TSYS::strParse(favs[iFv], 0, ":", &off);
-	actFavLnk = new QAction(((off<favs[iFv].size())?favs[iFv].substr(off):spath).c_str(), this);
-	actFavLnk->setObjectName(spath.c_str());
-	actFav->menu()->addAction(actFavLnk);
-	connect(actFavLnk, SIGNAL(triggered()), this, SLOT(favGo()));
+	QAction *actFavLnk;
+	for(int iFv = (int)favs.size()-1; iFv >= 0; --iFv) {
+	    int off = 0;
+	    string spath = TSYS::strParse(favs[iFv], 0, ":", &off);
+	    actFavLnk = new QAction(((off<favs[iFv].size())?favs[iFv].substr(off):spath).c_str(), this);
+	    actFavLnk->setObjectName(spath.c_str());
+	    actFav->menu()->addAction(actFavLnk);
+	    connect(actFavLnk, SIGNAL(triggered()), this, SLOT(favGo()));
+	}
+	if(favs.size()) {
+	    actFav->menu()->addSeparator();
+	    actFavLnk = new QAction(_("Clear the list"), this);
+	    actFav->menu()->addAction(actFavLnk);
+	    connect(actFavLnk, SIGNAL(triggered()), this, SLOT(favGo()));
+	}
     }
+
+    if(opts&Fav_Sel) {
+	actFavToggle->setEnabled(selPath.size());
+	string selNmPath = getTreeWItNmPath(selPath);
+	if(selNmPath.size()) {
+	    bool fvPresent = false;
+	    for(unsigned iFv = 0; !fvPresent && iFv < favs.size(); ++iFv)
+		fvPresent = (TSYS::strParse(favs[iFv],0,":") == selPath);
+	    if(!fvPresent) {
+		actFavToggle->setIcon(QPixmap::fromImage(favToggleAdd));
+		actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),selNmPath.c_str()).c_str());
+	    }
+	    else {
+		actFavToggle->setIcon(QPixmap::fromImage(favToggleDel));
+		actFavToggle->setText(TSYS::strMess(_("Remove from favorite for '%s'"),selNmPath.c_str()).c_str());
+	    }
+	    actFavToggle->setToolTip(actFavToggle->text());
+	}
+    }
+
+    actFav->setEnabled(favs.size());
 }
 
 void ConfApp::favGo( )
@@ -1063,8 +1091,12 @@ void ConfApp::favGo( )
     QAction *sa = (QAction*)sender();
     if(sa->menu() && sa->menu()->actions().size()) sa = sa->menu()->actions()[0];
 
-    try{ pageDisplay(sa->objectName().toStdString()); }
-    catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+    if(sa->objectName().isEmpty()) {
+	TBDS::genPrmSet(mod->nodePath()+"favorites", "", user());
+	favUpd(Fav_Reload|Fav_List|Fav_Sel);
+    }
+    else try{ pageDisplay(sa->objectName().toStdString()); }
+	catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
 void ConfApp::editToolUpdate( )
@@ -1111,7 +1143,7 @@ void ConfApp::userSel( )
     catch(TError &err) { pageDisplay("/"+SYS->id()); }
 
     treeUpdate();
-    favUpd(true);
+    favUpd(Fav_Reload|Fav_List);
 }
 
 void ConfApp::pageRefresh( int tm )
@@ -2227,23 +2259,6 @@ void ConfApp::pageDisplay( const string path )
     actPrev->setEnabled(prev.size());
     actNext->setEnabled(next.size());
 
-    //Checking for Favorite Pages
-    actFavToggle->setEnabled(path.size());
-    string selNmPath = getTreeWItNmPath(path);
-    bool fvPresent = false;
-    for(unsigned iFv = 0; !fvPresent && iFv < favs.size(); ++iFv)
-	fvPresent = (TSYS::strParse(favs[iFv],0,":") == path);
-    if(!fvPresent) {
-	actFavToggle->setIcon(QPixmap::fromImage(favToggleAdd));
-	actFavToggle->setText(TSYS::strMess(_("Append to favorite for '%s'"),(selNmPath.size()?selNmPath:path).c_str()).c_str());
-    }
-    else {
-	actFavToggle->setIcon(QPixmap::fromImage(favToggleDel));
-	actFavToggle->setText(TSYS::strMess(_("Remove from favorite for '%s'"),(selNmPath.size()?selNmPath:path).c_str()).c_str());
-    }
-    actFavToggle->setToolTip(actFavToggle->text());
-    actFav->setEnabled(favs.size());
-
     //Updating the current page
     if(path != pgInfo.attr("path")) {
 	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure of proper working of the checking for not applied editable widgets
@@ -2346,8 +2361,11 @@ loadGenReqDate:
     req.setAttr("path","/"+SYS->id()+"/%2fobj");
     if(!cntrIfCmd(req) && s2i(req.text()))	mStModify->setText("*");
 
-    //Edit tools update
+    //Edit tools updating
     editToolUpdate();
+
+    //Checking for Favorite Pages
+    favUpd(Fav_Sel);
 
     pgDisplay = false;
     if(winClose) close();

@@ -122,6 +122,9 @@ class ConfApp: public QMainWindow
     Q_OBJECT
 
     public:
+    //Data
+    enum FavUpd { Fav_Reload = 1, Fav_List = 2, Fav_Sel = 4 };
+
     //Methods
     ConfApp( string open_user );
     ~ConfApp( );
@@ -162,7 +165,7 @@ class ConfApp: public QMainWindow
     void pageCyclRefrStart( );
     void pageCyclRefrStop( );
     void favToggle( );
-    void favUpd( bool withReload = false );
+    void favUpd( unsigned opts );
     void favGo( );
 
     void stMessChanged( const QString &mess );

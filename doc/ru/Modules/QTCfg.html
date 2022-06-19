@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Конфигуратор на Qt</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FQTCfg&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/QTCfg" title="Modules/QTCfg">Modules/QTCfg</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/QTCfg.html" title="Modules/QTCfg (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/QTCfg.html" title="Модулі/Конфігуратор на Qt (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FQTCfg&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/QTCfg" title="Modules/QTCfg">Modules/QTCfg</a> and the translation is 85% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/QTCfg.html" title="Modules/QTCfg (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/QTCfg.html" title="Модулі/Конфігуратор на Qt (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> </td>
 <td> Конфигуратор программы (Qt)
 </td>
-<td> 5.9 </td>
+<td> 5.10 </td>
 <td> GPL2 </td>
 <td> ui_QTCfg.so </td>
 <td> en,uk,ru,de </td>
@@ -60,67 +60,73 @@
 <dd>5 <i>Рабочее поле</i> — поделено на части:
 <dl><dd>5.1 <i>Имя узла</i> — содержит имя текущего узла.</dd>
 <dd>5.2 <i>Табулятор рабочих областей</i> — в табулятор помещаются корневые страницы (области управления) узла. Области управления следующих уровней помещаются в основном пространстве контроля.</dd></dl></dd></dl>
-<p>Меню конфигуратора содержит следующие пункты:
+<p>Menu of the configurator contains the following items:
 </p>
-<ul><li> <i>Файл</i> — группа общих команд:
-<ul><li> <i>Загрузить из БД</i> — загрузка выбранного объекта или ветви объектов из БД.</li>
-<li> <i>Принудительно загрузить из БД</i> — принудительная загрузка выбранного объекта или ветви объектов из БД, не только когда изменено.</li>
-<li> <i>Сохранить в БД</i> — сохранение выбранного объекта или ветви объектов в БД.</li>
-<li> <i>Принудительно сохранить в БД</i> — принудительное сохранение выбранного объекта или ветви объектов в БД, не только когда изменено.</li>
-<li> <i>Закрыть</i> — закрытие окна конфигуратора.</li>
-<li> <i>Выход</i> — завершение работы программы.</li></ul></li>
-<li> <i>Редактирование</i> — команды редактирования:
-<ul><li> <i>Добавить</i> — добавление нового объекта в контейнер.</li>
-<li> <i>Удалить</i> — удаление выбранного объекта.</li>
-<li> <i>Копировать элемент</i> — копирование выбранного объекта.</li>
-<li> <i>Вырезать элемент</i> — вырезание выбранного объекта. Исходный объект удаляется после вставки.</li>
-<li> <i>Вставить элемент</i> — вставка скопированного или вырезанного элемента.</li></ul></li>
-<li> <i>Вид</i> — команды навигации и управления видом:
-<ul><li> <i>Вверх</i> — поднятие вверх по дереву.</li>
-<li> <i>Предыдущая</i> — открытие предыдущей открываемой страницы.</li>
-<li> <i>Следующая</i> — открытие следующую открываемой страницы.</li>
-<li> <i>Обновить</i> — обновление содержимого текущей страницы.</li>
-<li> <i>Запустить</i> — запуск периодического обновления содержимого текущей страницы с интервалом одна секунда.</li>
-<li> <i>Остановить</i> — останов периодического обновления содержимого текущей страницы с интервалом одна секунда.</li></ul></li>
-<li> <i>Помощь</i> — команды вызова помощи:
-<ul><li> <i>Про</i> — информация об этом модуле и OpenSCADA.</li>
-<li> <i>Про Qt</i> — информация о библиотеке Qt.</li>
-<li> <i>QTCfg руководство</i> — вызов локального или удалённого руководства по модулю QTCfg.</li>
-<li> <i>OpenSCADA руководство</i> — вызов локального или удалённого индекса ссылок на документацию иа руководства по OpenSCADA.</li>
-<li> <i>Руководство этой страницы</i> — вызов локального или удалённого руководства выбранной страницы.</li>
-<li> <i>Что это</i> — запрос информации о элементах интерфейса и получение их полной контекстной помощи.</li></ul></li></ul>
-<p>Панель инструментов содержит следующие кнопки быстрого управления (слева на право):
+<ul><li> <i>File</i> — group of the general commands:
+<ul><li> <i>Load from DB</i> — loads the selected object or branch of the object from the database.</li>
+<li> <i>Load from DB forcibly</i> — loads the selected object or branch of the object from the database forcibly, not only when it changed.</li>
+<li> <i>Save to DB</i> — saves the selected object or branch of the object to the database.</li>
+<li> <i>Save to DB forcibly</i> — saves the selected object or branch of the object to the database forcibly, not only when it changed.</li>
+<li> <i>Close</i> — closes the configurator window.</li>
+<li> <i>Quit</i> — quits OpenSCADA.</li></ul></li>
+<li> <i>Edit</i> — editing commands:
+<ul><li> <i>Add</i> — adds a new object to the container.</li>
+<li> <i>Delete</i> — deletes the selected object.</li>
+<li> <i>Copy item</i> — copies the selected object.</li>
+<li> <i>Cut item</i> — cuts of the selected object. The original object is removed after paste.</li>
+<li> <i>Paste item</i> — pastes of the copied or cut item.</li></ul></li>
+<li> <i>View</i> — navigation and control of the view commands:
+<ul><li> <i>Up</i> — goes to the parent page.</li>
+<li> <i>Back</i> — goes back to the previous page.</li>
+<li> <i>Forward</i> — goes forward to the forward page.</li>
+<li> <i>Refresh</i> — refreshes the current page.</li>
+<li> <i>Start</i> — runs periodically update of the current page content with an interval of one second.</li>
+<li> <i>Stop</i> — stops the periodically update of the current page content with an interval of one second.</li>
+<li> <i>Favorite</i> — going to the selected favorite pages.</li>
+<li> <i>Append to favorite for {Page}/Remove from favorite  for {Page}</i> — toggles the current page as favorite.</li></ul></li>
+<li> <i>Help</i> — assistance call commands:
+<ul><li> <i>About</i> — information about this module and OpenSCADA.</li>
+<li> <i>About Qt</i> — information about the Qt library.</li>
+<li> <i>Manual on 'QTCfg' </i> — calls inline or offline manual on the module QTCfg.</li>
+<li> <i>Manual on 'OpenSCADA 0.9' </i> — calls inline or offline index of links to documents and manuals on OpenSCADA.</li>
+<li> <i>Manual on the page</i> — calls inline or offline manual on selected page.</li>
+<li> <i>What's This</i> — requests information for the interface elements and receive their full contextual help.</li></ul></li></ul>
+<p>The toolbar contains the following management buttons (from left to right):
 </p>
-<ul><li> <i>Загрузить из БД</i> — загрузка выбранного объекта или ветви объектов из БД.</li>
-<li> <i>Сохранить в БД</i> — сохранение выбранного объекта или ветви объектов в БД.</li>
-<li> <i>Вверх</i> — поднятие вверх по дереву.</li>
-<li> <i>Предыдущая</i> — открытие предыдущей открываемой страницы.</li>
-<li> <i>Следующая</i> — открытие следующую открываемой страницы.</li>
-<li> <i>Добавить</i> — добавление нового объекта в контейнер.</li>
-<li> <i>Удалить</i> — удаление выбранного объекта.</li>
-<li> <i>Копировать элемент</i> — копирование выбранного объекта.</li>
-<li> <i>Вырезать элемент</i> — вырезание выбранного объекта. Исходный объект удаляется после вставки.</li>
-<li> <i>Вставить элемент</i> — вставка скопированного или вырезанного элемента.</li>
-<li> <i>Обновить</i> — обновление содержимого текущей страницы.</li>
-<li> <i>Запустить</i> — запуск периодического обновления содержимого текущей страницы с интервалом одна секунда.</li>
-<li> <i>Остановить</i> — останов периодического обновления содержимого текущей страницы с интервалом одна секунда.</li>
-<li> <i>Руководство этой страницы</i> — вызов локального или удалённого руководства выбранной страницы.</li>
-<li> Кнопки вызова модулей графических интерфейсов OpenSCADA на библиотеке Qt.</li></ul>
-<p>В дереве навигации поддерживается контекстное меню следующего содержания:
+<ul><li> <i>Load from the DB</i> — loads the selected object or branch of the object from the database.</li>
+<li> <i>Save to the DB</i> — saves the selected object or branch of the object to the database.</li>
+<li> <i>Add</i> — adds a new object to the container.</li>
+<li> <i>Delete</i> — deletes the selected object.</li>
+<li> <i>Copy item</i> — copies the selected object.</li>
+<li> <i>Cut item</i> — cuts of the selected object. The original object is removed after paste.</li>
+<li> <i>Paste item</i> — pastes of the copied or cut item.</li>
+<li> <i>Up</i> — goes to the parent page.</li>
+<li> <i>Back</i> — goes back to the previous page.</li>
+<li> <i>Forward</i> — goes forward to the forward page.</li>
+<li> <i>Refresh</i> — refreshes the current page.</li>
+<li> <i>Start</i> — runs periodically update of the current page content with an interval of one second.</li>
+<li> <i>Stop</i> — stops periodically update of the current page content with an interval of one second.</li>
+<li> <i>Favorite</i> — going to the selected favorite pages.</li>
+<li> <i>Append to favorite for {Page}/Remove from favorite  for {Page}</i> — toggles the current page as favorite.</li>
+<li> <i>Manual on the page</i> — calls inline or offline manual on selected page.</li>
+<li> Call buttons of the graphical interface modules of OpenSCADA based on the Qt library</li></ul>
+<p>In the navigation tree the context menu of following contents is supported:
 </p>
-<ul><li> <i>Загрузить из БД</i> — загрузка выбранного объекта или ветви объектов из БД.</li>
-<li> <i>Сохранить в БД</i> — сохранение выбранного объекта или ветви объектов в БД.</li>
-<li> <i>Добавить</i> — добавление нового объекта в контейнер.</li>
-<li> <i>Удалить</i> — удаление выбранного объекта.</li>
-<li> <i>Копировать элемент</i> — копирование выбранного объекта.</li>
-<li> <i>Вырезать элемент</i> — вырезание выбранного объекта. Исходный объект удаляется после вставки.</li>
-<li> <i>Вставить элемент</i> — вставка скопированного или вырезанного элемента.</li>
-<li> <i>Обновить элементы дерева</i> — обновление содержимого дерева навигации.</li></ul>
+<ul><li> <i>Load from the DB</i> — loads the selected object or branch of the object from the database.</li>
+<li> <i>Save to the DB</i> — saves the selected object or branch of the object to the database.</li>
+<li> <i>Add</i> — adds a new object to the container.</li>
+<li> <i>Delete</i> — deletes the selected object.</li>
+<li> <i>Copy item</i> — copies the selected object.</li>
+<li> <i>Cut item</i> — cuts of the selected object. The original object is removed after paste.</li>
+<li> <i>Paste item</i> — pastes of the copied or cut item.</li>
+<li> <i>Favorite</i> — going to the selected favorite pages.</li>
+<li> <i>Append to favorite for {Page}/Remove from favorite  for {Page}</i> — toggles the current page as favorite.</li>
+<li> <i>Refresh the items tree</i> — refreshes the navigation tree content.</li></ul>
 <p>Элементы управления делятся на: базовые, команды, списки, таблицы и изображения. Все элементы отображаются в последовательности, строго соответствующей их расположению в описании языка интерфейса управления.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1 tocsection-1"><a href="#.D0.9A.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D1.8F"><span class="tocnumber">1</span> <span class="toctext">Конфигурация</span></a></li>
+<li class="toclevel-1 tocsection-1"><a href="#Configuration"><span class="tocnumber">1</span> <span class="toctext">Configuration</span></a></li>
 <li class="toclevel-1 tocsection-2"><a href="#.D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.8B.D0.B5_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.8B"><span class="tocnumber">2</span> <span class="toctext">Базовые элементы</span></a></li>
 <li class="toclevel-1 tocsection-3"><a href="#.D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D1.8B"><span class="tocnumber">3</span> <span class="toctext">Команды</span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#.D0.A1.D0.BF.D0.B8.D1.81.D0.BA.D0.B8"><span class="tocnumber">4</span> <span class="toctext">Списки</span></a></li>
@@ -129,14 +135,14 @@
 </ul>
 </div>
 
-<h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BD.D1.84.D0.B8.D0.B3.D1.83.D1.80.D0.B0.D1.86.D0.B8.D1.8F"><span class="mw-headline-number">1</span> Конфигурация</span></h2>
-<p>Для настройки собственного поведения в отдельных случаях, модулем предоставляется возможность настройки отдельных параметров посредством интерфейса управления OpenSCADA (рис.2). Таковыми параметрами являются:
+<h2><span class="mw-headline" id="Configuration"><span class="mw-headline-number">1</span> Configuration</span></h2>
+<p>In order to customize its own behavior in some cases, the module provides the ability to configure the parameters through the control interface of OpenSCADA (Fig.2). These parameters are:
 </p>
-<ul><li> Таймауты проверки подключения, в секундах, "{нет}:{есть}" — иногда (для туннеля SSH) полезно уменьшить таймаут проверки наличия подключения до 30 секунд с целью поддержания подключения.</li>
-<li> Начальный путь конфигуратора — позволяет определить, какую локальную страницу открывать при запуске конфигуратора.</li>
-<li> Начальный пользователь конфигуратора — указывает, от имени какого пользователя открывать конфигуратор без запроса пароля.</li>
-<li> Ограничение ToolTip, в символах, для предотвращения всплывания больших окон помощи, по умолчанию 150. Установить в ноль для отключения.</li>
-<li> Переход на страницу конфигурации перечня внешних OpenSCADA станций, что используется для предоставления возможности удалённой конфигурации.</li></ul>
+<ul><li> Timeouts of the connection checking '{fail}:{good}' — sometimes (for the SSH tunnels), it is useful to reduce the connecting timeout up to 30 seconds to keep the connection.</li>
+<li> Initial path of the configurator — allows to determine what local page to open when you start the configurator.</li>
+<li> Initial user of the configurator — points on behalf of the which user to open configuration without requiring a password.</li>
+<li> ToolTip limit in chars to prevent of big emerging help windows, by default 150. Set zero for disable.</li>
+<li> Go to configuration of the remote OpenSCADA hosts list, which is used to provide the remote configuration.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:939px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_ru.png"><img class="thumbimage" height="506" src="../files/QTCfg_ru.png" width="937" /></a>  <div class="thumbcaption">Рис.2. Страница конфигурации самого конфигуратора.</div></div></div></div>
 <p>Вертикально масштабированные поля (перечень, текст и таблица) предусматривают автоматичное масштабирование на доступное пространство и под содержимое полей. Кроме этого, для них доступна возможность ручного изменение высоты путём хватания за нижний край виджета и перетягивания его, что однако работает не для всех стилей виджетов Qt.
 </p>

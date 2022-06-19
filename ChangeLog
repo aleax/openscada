@@ -1,3 +1,15 @@
+2022-06-19 Roman (stable)
+- FIX:AGLKS.St: Some fixed in the library vcaAGLKS description.
+- !:SYS,UI.Vision: Errors for control commands of the Control Interface to the redundant stations set to mark as warnings on the local ones.
+    UI.Vision: The warnings are processed now as the local successful result only with notifying about the problem
+	for the attributes modification and widgets removing.
+- !:SYS.XMLNode: The saving option BinShield(0x400) appended of encoding-shielding of the wrong UTF-8 symbols,
+    to prevent of XML-parsing errors on FireFox.
+- DAQ.DAQGate: Appended in the location information for group names of control parameters of the main control page of the DAQ parameter.
+- !:UI.QTCfg: The Favorite pages implementation improved in the updating and the "Favorite" button menu appended of the item "Clear the list".
+    Improved in naming some control fields of the module main configuration page.
+
+
 2022-06-10 Roman (stable)
 - data/icons/,UI.QTCfg: The icon collection appended of the files favorites.png, favorites_add.png, favorites_del.png.
 - Transport.SSL: The input transport stopping appended of termination client tasks like to Transport.Sockets.
