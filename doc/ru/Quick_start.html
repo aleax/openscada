@@ -336,7 +336,7 @@ $ service openscada-server start
 # ... для LTS
 $ service openscada-lts-server start
 </pre>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Отметьте, что локально вы можете не копировать каталог проекта целком, а только сделать на него символическую ссылку, но вы получите риск двойного исполнения проекта на общий каталог и данные, что приводит к аварийному завершению одного исполнения или их обоих!
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Отметьте, что локально вы можете не копировать каталог проекта целком, а только установить на него символическую ссылку, но вы получите риск двойного исполнения проекта на общий каталог и данные, что приводит к аварийному завершению одного исполнения или их обоих!
 </p><p>Отличие исполнения проекта в среде сервиса-фона от пользовательской среды рабочего стола собственно одно, естественно кроме отсутствия локального графического интерфейса, это — отсутствие в фоне определения локали, т.е. язык интерфейса там будет Английский. И что можно просто исправить сменой или добавлением <a href="#CfgFilePrm">конфигурационного параметра</a> <b>&lt;prm id="Lang"&gt;ru_RU.UTF-8&lt;/prm&gt;</b> в секции-теге "station" файла <b>oscada.xml</b> фонового проекта.
 </p><p><br />
 Таким образом Вы получите демонстрационную БД (проект "АГЛКС") которая работает в фоне, что однако мы не увидим пока не попробуем подключиться к этой конфигурации, про что ниже. Теперь, при каждом запуске компьютера, она будет таким образом запускаться и работать в фоне. В целом, именно так осуществляется запуск и выполнение серверных конфигураций, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Embedding_and_PLC" title="Special:MyLanguage/Sub-projects/Embedding and PLC">окружений ПЛК и одноплатных ПК</a> вроде <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Raspberry_Pi" title="Special:MyLanguage/Using/Raspberry Pi">RaspberyPi</a>.
@@ -911,5 +911,5 @@ cooler2_speed = Cw/5;
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Quick_start/ru">Documents/Quick_start/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2832</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Quick_start/ru">Documents/Quick_start/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
 </html>

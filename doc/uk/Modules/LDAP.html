@@ -47,13 +47,13 @@
 <td colspan="9"> Модуль БД. Надає підтримку директорій за посередництвом LDAP.
 <ul><li> <b>Загальна працемісткість:</b> 1.9 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Спонсоровано, початкової імплементації на 1.7 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Олександр Колесов, <a class="external text" href="http://www.biocad.ru" rel="nofollow noreferrer noopener" target="_blank">BIOCAD</a>, 2017</li>
-<li> <b>Зробити (To Do):</b></li></ul>
+<li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
 <dl><dd> - розширити механізм автентифікації функціями сховища (об'єкту БД), а саме віртуальними функціями до TBD:
 <dl><dd><ul><li> <i>auth()</i> — пряма перевірка автентифікації користувача, через "bind" або <i>ldap_whoami()</i>;</li>
 <li> <i>passHash()</i> — отримання хешу паролю, для порівняння, якщо <i>auth()</i> відсутній, та зміна паролю за допомогою функції <i>ldap_passwd()</i> або подивитися на утиліту <b>slappasswd</b>.</li></ul></dd></dl></dd>
 <dd> - розширити "OSCADA-user" схему:
 <dl><dd><ul><li> поле пароля "PASS" встановити синонімом на "userPassword";</li>
-<li> свою схему зробити залежною від "simpleSecurityObject";</li>
+<li> свою схему виконати залежною від "simpleSecurityObject";</li>
 <li> перевірити роботу з полем-типом "userPassword".</li></ul></dd></dl></dd></dl>
 </td></tr></table>
 <p>Модуль надає до OpenSCADA підтримку директорій за допомогою протоколу легкого доступу до директорій (<a class="extiw" href="https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol" title="wikipedia:Lightweight Directory Access Protocol">LDAP</a>). Модуль оснований на <a class="external text" href="https://www.openldap.org/" rel="nofollow noreferrer noopener" target="_blank">OpenLDAP</a> бібліотеці на мові програмування "C". Через концептуальну різницю сервісу директорій від баз даних (БД) цей модуль дозволяє здійснювати переважно читання та модифікацію записів, представлених як табличні записи у концепції БД.
@@ -130,5 +130,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/LDAP/uk">Modules/LDAP/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2832</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/LDAP/uk">Modules/LDAP/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
 </html>

@@ -1,3 +1,23 @@
+2022-07-05 Roman (stable)
+- !:FIX:LibsDB.OscadaLibs: tmplib_DevLib.mbBase: Adapted to the builtin syntax highlighting for the attribute "Items set (items)".
+    tmplib_base.ntf: For the server address in the SMTP HELLO request used the EMail sender address instead
+	SYS.system("hostname -f").parse(0,"\n"), which can be wrong for the SMTP-servers.
+    FIX:flb_servProc.wacko2media: fixed for the WHERE value's quotter of the SELECT SQL request.
+- !:LibsDB.vcaBase: wlb_Main.{alarmsAct,alarmsSt}: Adapted to the builtin syntax highlighting for the attribute "Highlight rules (highLght)".
+- SYS.TRegExp: The TRegExp object appended of a new option 'U' (ungreedy) of the greedy mode toggle, together the User API method "ungreedy".
+    search() function of the object appended of an argument "length" of the measured block size return.
+- DAQ: Text attribute fields disabled for the text width limit, for the builtin syntax highlighting mostly.
+- !!!!:FIX:Archive.FSArch: Prevented for access to files[iA] in ModVArchEl::setValsProc() outside the lock using the read-lock switching.
+- !!:UI.{QTStarter,QTCfg,Vision}: The QT-generic library (lib_qtgen) appended of the static-external functions getFont() and getColor()
+	from UI.Vision and the object SnthHgl from UI.Vision and UI.QTCfg.
+    The function SnthHgl::rule() some unified, made optimal and appended of commented code of using TRegExp instead QRegExp,
+	and that commented due to difference of the position counting as completed UTF-symbols in QRegExp and chars in TRegExp (PCRE),
+	but TRegExp using is still interested due to TRegExp (PCRE) functional is richer to QRegExp.
+- UI.QTCfg: The text fields with the builtin syntax highlighting appended of deep text cursor position restore at the syntax rules apply
+    and in whole.
+- !!!:UI.Vision: The text areas with the syntax highlighting appended of the builtin variant.
+
+
 2022-06-19 Roman (stable)
 - FIX:AGLKS.St: Some fixed in the library vcaAGLKS description.
 - !:SYS,UI.Vision: Errors for control commands of the Control Interface to the redundant stations set to mark as warnings on the local ones.

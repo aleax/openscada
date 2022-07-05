@@ -2010,7 +2010,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(lab)	lab->setText((t_s.attr("dscr")+":").c_str());
 	    string tVl;
 	    if(edit && !edit->isChanged() && rezReq >= 0 && ((tVl=TSYS::strEncode(data_req.text(),TSYS::ShieldBin)) != edit->text().toStdString() || !edit->text().size())) {
-		int scrollPos = edit->edit()->verticalScrollBar()->value();
+		int cursorPos = edit->edit()->textCursor().position();
+		int scrollVPos = edit->edit()->verticalScrollBar()->value();
+		int scrollHPos = edit->edit()->horizontalScrollBar()->value();
 		//Requesting the syntax higlihgt
 		if(s2i(t_s.attr("SnthHgl"))) {
 		    XMLNode hgl_req("SnthHgl");
@@ -2021,7 +2023,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, edit);
 
 		edit->setText(tVl.c_str());
-		edit->edit()->verticalScrollBar()->setValue(scrollPos);
+
+		//Cursor position restore
+		QTextCursor tCur = edit->edit()->textCursor(); tCur.setPosition(cursorPos);
+		edit->edit()->setTextCursor(tCur); edit->edit()->ensureCursorVisible();
+		edit->edit()->verticalScrollBar()->setValue(scrollVPos);
+		edit->edit()->horizontalScrollBar()->setValue(scrollHPos);
 	    }
 	}
 	//View Data-Time fields

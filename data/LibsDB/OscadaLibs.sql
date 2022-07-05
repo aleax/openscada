@@ -4779,7 +4779,7 @@ INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base templ
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.5 HD
 Sponsored by, for whole complexity: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
@@ -4808,8 +4808,8 @@ if(items != items_) {
 	for(var iDt in dt)
 		if(iDt != "10000") dt[iDt].mark = false;
 	// Append/Update present ones
-	for(off = 0; (sIt=items.parseLine(0,off)).length; ) {
-		if(sIt[0] == "#")	continue;
+	for(off = 0; (sIt=items.parseLine(0,off)).length || off < items.length; ) {
+		if(!sIt.length || sIt[0] == "#")	continue;
 		off1 = 0;
 		itO = new Object();
 		itO.tp = sIt.parse(0, ":", off1);
@@ -6620,7 +6620,7 @@ THE OUTPUT USER PROTOCOL PART "SMTP" provides operations with a SMTP-server for 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: SVItoVYR LTD
-Version: 1.0.4
+Version: 1.0.5
 License: GPLv2','Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
 
 ДИСПЕТЧЕР може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на Логічному рівні або об''єкті контролеру модуля JavaLikeCalc.
@@ -6631,7 +6631,7 @@ License: GPLv2','Комплексний шаблон повідомлення м
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "СВІТоВИР АВТоМАТИК"
-Версія: 1.0.4
+Версія: 1.0.5
 Ліцензія: GPLv2','',120,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -6659,7 +6659,7 @@ function SMTP( ) {
 	auth = io.attr("auth");
 
 	//Send HELLO
-	rez = tr.messIO("EHLO "+SYS.system("hostname -f").parse(0,"\n")+"\x0D\x0A");
+	rez = tr.messIO("EHLO "+emailSender.parse(1,"@")+"\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
 	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	for(off = 0; (sit=rez.parse(0,"\x0D\x0A",off)).length; )
@@ -8720,9 +8720,9 @@ if(step < 0 || step == 8) {
 INSERT INTO flb_servProc VALUES('wacko2media','EXT: WackoWiki to MediaWiki','','','Procedure of conversion Wiki-dialect from WackoWiki to MediaWiki. Used to move OpenSCADA Wiki to MediaWiki.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
+Version: 1.1.1','','',1,10,0,'dbO = SYS.BD.MySQL[ndb];
 if(!dbO)	return "Error: DB ''"+ndb+"'' missed!";
-DBTbl = dbO.SQLReq("SELECT body FROM `wk_pages` WHERE `tag`=\""+wpg+"\";");
+DBTbl = dbO.SQLReq("SELECT body FROM `wk_pages` WHERE `tag`=''"+wpg+"'';");
 if(DBTbl.err.length) return "Error: "+DBTbl.err;
 else if(DBTbl.length < 2 || !DBTbl[1].length)	return "Error: Page ''"+wpg+"'' is not found!"; 
 ibuf = DBTbl[1][0];
@@ -12138,7 +12138,7 @@ while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) 
 auth = io.attr("auth");
 
 //Send HELLO
-rez = tr.messIO("EHLO "+SYS.system("hostname -f").parse(0,"\n")+"\x0D\x0A");
+rez = tr.messIO("EHLO "+emailSender.parse(1,"@")+"\x0D\x0A");
 while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
 if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 for(off = 0; (sit=rez.parse(0,"\x0D\x0A",off)).length; )
@@ -14833,7 +14833,10 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','addr','Device address, [0...247]',
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus, [RTU|ASCII|TCP]','','Тип ModBus, [RTU|ASCII|TCP]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'Максимальный размер блока ModBus, [10...200]','','Максимальний розмір блоку ModBus, [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
-INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,'',5,'Набор элементов "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','Набір елементів "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','');
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,
+'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+
+',5,'Набор элементов "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','Набір елементів "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','','');

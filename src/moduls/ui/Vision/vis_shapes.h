@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -90,10 +90,6 @@ class WdgShape : public QObject
 
 	virtual bool event( WdgView *view, QEvent *event );
 	virtual bool eventFilter( WdgView *view, QObject *object, QEvent *event )	{ return false; }
-
-	//Static methods
-	static QFont getFont( const string &vl, float fsc = 1, bool pixSize = true, const QFont &defFnt = QFont() );
-	static QColor getColor( const string &vl );
 
     protected:
 	//Methods

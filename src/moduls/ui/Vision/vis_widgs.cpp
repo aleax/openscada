@@ -43,8 +43,8 @@
 #include <QToolTip>
 #include <QCompleter>
 #include <QDesktopWidget>
+#include <QScrollBar>
 
-#include "../QTStarter/lib_qtgen.h"
 #include "vis_run.h"
 #include "vis_shapes.h"
 #include "vis_widgs.h"
@@ -112,18 +112,18 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     sep->setFrameShadow(QFrame::Raised);
     dlg_lay->addWidget(sep);
 
-    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+    QDialogButtonBox *butBox = new QDialogButtonBox(QDialogButtonBox::Ok|
 						     QDialogButtonBox::Cancel, Qt::Horizontal, this);
     QImage ico_t;
-    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+    butBox->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
-    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
-    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
-    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+    butBox->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+    connect(butBox, SIGNAL(accepted()), this, SLOT(accept()));
+    butBox->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
     if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
-    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
-    dlg_lay->addWidget(but_box);
+    butBox->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+    connect(butBox, SIGNAL(rejected()), this, SLOT(reject()));
+    dlg_lay->addWidget(butBox);
 
     //Restore the window state
     if(parentWidget()->property("oscdUser").toString().size() && stCtxId.size()) {
@@ -208,17 +208,17 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     sep->setFrameShadow(QFrame::Raised);
     dlg_lay->addWidget(sep);
 
-    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    QDialogButtonBox *butBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, Qt::Horizontal, this);
     QImage ico_t;
-    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+    butBox->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
-    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
-    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
-    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+    butBox->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+    connect(butBox, SIGNAL(accepted()), this, SLOT(accept()));
+    butBox->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
     if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
-    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
-    dlg_lay->addWidget(but_box);
+    butBox->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+    connect(butBox, SIGNAL(rejected()), this, SLOT(reject()));
+    dlg_lay->addWidget(butBox);
 
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
@@ -421,18 +421,18 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     sep->setFrameShadow(QFrame::Raised);
     dlg_lay->addWidget(sep, 4, 0, 1, 2);
 
-    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+    QDialogButtonBox *butBox = new QDialogButtonBox(QDialogButtonBox::Ok|
 						     QDialogButtonBox::Cancel, Qt::Horizontal, this);
     QImage ico_t;
-    but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
+    butBox->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
-    but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
-    connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
-    but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
+    butBox->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
+    connect(butBox, SIGNAL(accepted()), this, SLOT(accept()));
+    butBox->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
     if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
-    but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-    connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
-    dlg_lay->addWidget(but_box, 5, 0, 1, 2);
+    butBox->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+    connect(butBox, SIGNAL(rejected()), this, SLOT(reject()));
+    dlg_lay->addWidget(butBox, 5, 0, 1, 2);
 
     setFont(ifnt);
 }
@@ -489,15 +489,15 @@ void FontDlg::showEvent( QShowEvent * event )
 //*********************************************************************************************
 LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
     QWidget(parent), m_tp((LineEdit::LType)-1), mPrev(!prev_dis), applyReserve(resApply), mIsEdited(false),
-    ed_fld(NULL), bt_fld(NULL), bt_tm(NULL)
+    edFld(NULL), btFld(NULL), btTm(NULL)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
     box->setMargin(0);
     box->setSpacing(0);
 
     if(resApply) {
-	bt_tm = new QTimer(this);
-	connect(bt_tm, SIGNAL(timeout()), this, SLOT(cancelSlot()));
+	btTm = new QTimer(this);
+	connect(btTm, SIGNAL(timeout()), this, SLOT(cancelSlot()));
     }
 
     setType(tp);
@@ -505,20 +505,20 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
 
 void LineEdit::viewApplyBt( bool view )
 {
-    if(view == (bool)bt_fld) return;
+    if(view == (bool)btFld) return;
 
-    if(view && !bt_fld) {
-	bt_fld = new QPushButton(this);
-	bt_fld->setIcon(QIcon(":/images/button_ok.png"));
-	bt_fld->setIconSize(QSize(icoSize(),icoSize()));
-	bt_fld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-	bt_fld->setMaximumWidth(icoSize(1.2));
-	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
-	layout()->addWidget(bt_fld);
+    if(view && !btFld) {
+	btFld = new QPushButton(this);
+	btFld->setIcon(QIcon(":/images/button_ok.png"));
+	btFld->setIconSize(QSize(icoSize(),icoSize()));
+	btFld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+	btFld->setMaximumWidth(icoSize(1.2));
+	connect(btFld, SIGNAL(clicked()), this, SLOT(applySlot()));
+	layout()->addWidget(btFld);
     }
-    if(!view && bt_fld) {
-	if(bt_tm) bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
-	bt_fld->deleteLater(); bt_fld = NULL;
+    if(!view && btFld) {
+	if(btTm) btTm->stop(); //btTm->deleteLater(); btTm = NULL;
+	btFld->deleteLater(); btFld = NULL;
 	mIsEdited = false;
     }
 }
@@ -527,13 +527,13 @@ bool LineEdit::isEdited( )	{ return mIsEdited; }
 
 void LineEdit::setReadOnly( bool val )
 {
-    if(!ed_fld)	return;
+    if(!edFld)	return;
     switch(type()) {
 	case Text: case Password:
-	    ((QLineEdit*)ed_fld)->setReadOnly(val);			break;
+	    ((QLineEdit*)edFld)->setReadOnly(val);			break;
 	case Integer: case Real: case Time: case Date: case DateTime:
-	    ((QAbstractSpinBox*)ed_fld)->setReadOnly(val);		break;
-	case Combo:	((QComboBox*)ed_fld)->setEnabled(!val);		break;
+	    ((QAbstractSpinBox*)edFld)->setReadOnly(val);		break;
+	case Combo:	((QComboBox*)edFld)->setEnabled(!val);		break;
     }
 }
 
@@ -543,57 +543,57 @@ void LineEdit::setType( LType tp )
     if(tp == m_tp) return;
 
     //Delete previous
-    if(tp >= 0 && ed_fld) ed_fld->deleteLater(); //delete ed_fld;
+    if(tp >= 0 && edFld) edFld->deleteLater(); //delete edFld;
 
     //Create new widget
     switch(tp) {
 	case Text: case Password:
-	    ed_fld = new QLineEdit(this);
-	    ((QLineEdit*)ed_fld)->setEchoMode((tp==Password)?QLineEdit::Password:QLineEdit::Normal);
-	    connect((QLineEdit*)ed_fld, SIGNAL(textEdited(const QString&)), SLOT(changed()));
+	    edFld = new QLineEdit(this);
+	    ((QLineEdit*)edFld)->setEchoMode((tp==Password)?QLineEdit::Password:QLineEdit::Normal);
+	    connect((QLineEdit*)edFld, SIGNAL(textEdited(const QString&)), SLOT(changed()));
 	    break;
 	case Integer:
-	    ed_fld = new QSpinBox(this);
-	    connect((QSpinBox*)ed_fld, SIGNAL(valueChanged(int)), SLOT(changed()));
+	    edFld = new QSpinBox(this);
+	    connect((QSpinBox*)edFld, SIGNAL(valueChanged(int)), SLOT(changed()));
 	    if(mPrev) needReserver = true;
 	    break;
 	case Real:
-	    ed_fld = new QDoubleSpinBox(this);
-	    connect((QDoubleSpinBox*)ed_fld, SIGNAL(valueChanged(double)), SLOT(changed()));
+	    edFld = new QDoubleSpinBox(this);
+	    connect((QDoubleSpinBox*)edFld, SIGNAL(valueChanged(double)), SLOT(changed()));
 	    if(mPrev) needReserver = true;
 	    break;
 	case Time:
-	    ed_fld = new QTimeEdit(this);
-	    connect((QTimeEdit*)ed_fld, SIGNAL(timeChanged(const QTime&)), SLOT(changed()));
+	    edFld = new QTimeEdit(this);
+	    connect((QTimeEdit*)edFld, SIGNAL(timeChanged(const QTime&)), SLOT(changed()));
 	    if(mPrev) needReserver = true;
 	    break;
 	case Date:
-	    ed_fld = new QDateEdit(this);
-	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
-	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
-	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
-	    connect((QDateEdit*)ed_fld, SIGNAL(dateChanged(const QDate&)), SLOT(changed()));
+	    edFld = new QDateEdit(this);
+	    ((QDateEdit*)edFld)->setCalendarPopup(true);
+	    ((QDateEdit*)edFld)->calendarWidget()->setGridVisible(true);
+	    ((QDateEdit*)edFld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
+	    connect((QDateEdit*)edFld, SIGNAL(dateChanged(const QDate&)), SLOT(changed()));
 	    break;
 	case DateTime:
-	    ed_fld = new QDateTimeEdit(this);
-	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
-	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
-	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
-	    connect((QDateTimeEdit*)ed_fld, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(changed()));
+	    edFld = new QDateTimeEdit(this);
+	    ((QDateEdit*)edFld)->setCalendarPopup(true);
+	    ((QDateEdit*)edFld)->calendarWidget()->setGridVisible(true);
+	    ((QDateEdit*)edFld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
+	    connect((QDateTimeEdit*)edFld, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(changed()));
 	    break;
 	case Combo:
-	    ed_fld = new QComboBox(this);
-	    ((QComboBox*)ed_fld)->setEditable(true);
-	    connect((QComboBox*)ed_fld, SIGNAL(editTextChanged(const QString&)), SLOT(changed()));
-	    connect((QComboBox*)ed_fld, SIGNAL(activated(int)), this, SLOT(applySlot()));
+	    edFld = new QComboBox(this);
+	    ((QComboBox*)edFld)->setEditable(true);
+	    connect((QComboBox*)edFld, SIGNAL(editTextChanged(const QString&)), SLOT(changed()));
+	    connect((QComboBox*)edFld, SIGNAL(activated(int)), this, SLOT(applySlot()));
 	    break;
     }
-    ((QBoxLayout*)layout())->insertWidget(0, ed_fld);
+    ((QBoxLayout*)layout())->insertWidget(0, edFld);
     if(applyReserve && needReserver) {
-	ed_fld->setMaximumWidth(width()-icoSize(1.2)); ed_fld->setMinimumWidth(width()-icoSize(1.2));
-	((QBoxLayout*)layout())->setAlignment(ed_fld, Qt::AlignLeft);
+	edFld->setMaximumWidth(width()-icoSize(1.2)); edFld->setMinimumWidth(width()-icoSize(1.2));
+	((QBoxLayout*)layout())->setAlignment(edFld, Qt::AlignLeft);
     }
-    setFocusProxy(ed_fld);
+    setFocusProxy(edFld);
 
     m_tp = tp;
 }
@@ -601,8 +601,8 @@ void LineEdit::setType( LType tp )
 void LineEdit::changed( )
 {
     //Enable apply
-    if(mPrev && !bt_fld) viewApplyBt(true);
-    if(bt_tm) bt_tm->start(mPrev ? 10000 : 500);
+    if(mPrev && !btFld) viewApplyBt(true);
+    if(btTm) btTm->start(mPrev ? 10000 : 500);
     mIsEdited = true;
 
     emit valChanged(value());
@@ -610,49 +610,49 @@ void LineEdit::changed( )
 
 void LineEdit::setValue( const QString &txt )
 {
-    if(ed_fld) ed_fld->blockSignals(true);
+    if(edFld) edFld->blockSignals(true);
     switch(type()) {
 	case Text: case Password:
 	    if(txt == value())	break;
-	    ((QLineEdit*)ed_fld)->setText(txt);
-	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
+	    ((QLineEdit*)edFld)->setText(txt);
+	    ((QLineEdit*)edFld)->setCursorPosition(0);
 	    break;
 	case Integer:
-	    ((QSpinBox*)ed_fld)->setValue(txt.toInt());
+	    ((QSpinBox*)edFld)->setValue(txt.toInt());
 	    break;
 	case Real:
-	    ((QDoubleSpinBox*)ed_fld)->setValue(txt.toDouble());
+	    ((QDoubleSpinBox*)edFld)->setValue(txt.toDouble());
 	    break;
 	case Time: {
 	    int secs = txt.toInt();
-	    ((QTimeEdit*)ed_fld)->setTime(QTime(secs/3600,(secs/60)%60,secs%60)/*.addSecs(txt.toInt())*/);
+	    ((QTimeEdit*)edFld)->setTime(QTime(secs/3600,(secs/60)%60,secs%60)/*.addSecs(txt.toInt())*/);
 	    break;
 	}
 	case Date: case DateTime:
-	    if(((QDateTimeEdit*)ed_fld)->calendarWidget() && ((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible()) break;
-	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
+	    if(((QDateTimeEdit*)edFld)->calendarWidget() && ((QDateTimeEdit*)edFld)->calendarWidget()->isVisible()) break;
+	    ((QDateTimeEdit*)edFld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
 	    break;
 	case Combo:
-	    if(((QComboBox*)ed_fld)->findText(txt) < 0) ((QComboBox*)ed_fld)->addItem(txt);
+	    if(((QComboBox*)edFld)->findText(txt) < 0) ((QComboBox*)edFld)->addItem(txt);
 	    if(txt != value()) {
-		((QComboBox*)ed_fld)->setEditText(txt);
-		((QComboBox*)ed_fld)->setCurrentIndex(((QComboBox*)ed_fld)->findText(txt));
+		((QComboBox*)edFld)->setEditText(txt);
+		((QComboBox*)edFld)->setCurrentIndex(((QComboBox*)edFld)->findText(txt));
 	    }
 	    break;
     }
-    if(ed_fld) ed_fld->blockSignals(false);
+    if(edFld) edFld->blockSignals(false);
 
     m_val = txt;
 
-    if(bt_fld) viewApplyBt(false);
+    if(btFld) viewApplyBt(false);
 }
 
 void LineEdit::setCfg( const QString &cfg )
 {
-    if(ed_fld) ed_fld->blockSignals(true);
+    if(edFld) edFld->blockSignals(true);
     switch(type()) {
 	case Text:
-	    ((QLineEdit*)ed_fld)->setInputMask(cfg);
+	    ((QLineEdit*)edFld)->setInputMask(cfg);
 	    break;
 	case Integer: {
 	    int		minv = 0, maxv = 100, sstep = 1;
@@ -664,10 +664,10 @@ void LineEdit::setCfg( const QString &cfg )
 		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
 		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
 	    }
-	    ((QSpinBox*)ed_fld)->setRange(minv,maxv);
-	    ((QSpinBox*)ed_fld)->setSingleStep(sstep);
-	    ((QSpinBox*)ed_fld)->setPrefix(pref.c_str());
-	    ((QSpinBox*)ed_fld)->setSuffix(suff.c_str());
+	    ((QSpinBox*)edFld)->setRange(minv,maxv);
+	    ((QSpinBox*)edFld)->setSingleStep(sstep);
+	    ((QSpinBox*)edFld)->setPrefix(pref.c_str());
+	    ((QSpinBox*)edFld)->setSuffix(suff.c_str());
 	    break;
 	}
 	case Real: {
@@ -682,31 +682,31 @@ void LineEdit::setCfg( const QString &cfg )
 		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
 		dec   = s2i(TSYS::strSepParse(cfg.toStdString(),5,':'));
 	    }
-	    ((QDoubleSpinBox*)ed_fld)->setRange(minv,maxv);
-	    ((QDoubleSpinBox*)ed_fld)->setSingleStep(sstep);
-	    ((QDoubleSpinBox*)ed_fld)->setPrefix(pref.c_str());
-	    ((QDoubleSpinBox*)ed_fld)->setSuffix(suff.c_str());
-	    ((QDoubleSpinBox*)ed_fld)->setDecimals(dec);
+	    ((QDoubleSpinBox*)edFld)->setRange(minv,maxv);
+	    ((QDoubleSpinBox*)edFld)->setSingleStep(sstep);
+	    ((QDoubleSpinBox*)edFld)->setPrefix(pref.c_str());
+	    ((QDoubleSpinBox*)edFld)->setSuffix(suff.c_str());
+	    ((QDoubleSpinBox*)edFld)->setDecimals(dec);
 	    break;
 	}
 	case Time: case Date: case DateTime:
-	    ((QDateTimeEdit*)ed_fld)->setDisplayFormat(cfg);
+	    ((QDateTimeEdit*)edFld)->setDisplayFormat(cfg);
 	    break;
 	case Combo: {
-	    QString ctext = ((QComboBox*)ed_fld)->currentText();
-	    ((QComboBox*)ed_fld)->clear();
-	    ((QComboBox*)ed_fld)->addItems(cfg.split("\n"));
+	    QString ctext = ((QComboBox*)edFld)->currentText();
+	    ((QComboBox*)edFld)->clear();
+	    ((QComboBox*)edFld)->addItems(cfg.split("\n"));
 	    if(!ctext.isEmpty()) {
-		if(((QComboBox*)ed_fld)->findText(ctext) < 0) ((QComboBox*)ed_fld)->addItem(ctext);
-		((QComboBox*)ed_fld)->setEditText(ctext);
+		if(((QComboBox*)edFld)->findText(ctext) < 0) ((QComboBox*)edFld)->addItem(ctext);
+		((QComboBox*)edFld)->setEditText(ctext);
 	    }
-	    if(((QComboBox*)ed_fld)->completer()) ((QComboBox*)ed_fld)->completer()->setCaseSensitivity(Qt::CaseSensitive);
+	    if(((QComboBox*)edFld)->completer()) ((QComboBox*)edFld)->completer()->setCaseSensitivity(Qt::CaseSensitive);
 	    break;
 	}
 	default: break;
     }
-    if(bt_fld) viewApplyBt(false);
-    if(ed_fld) ed_fld->blockSignals(false);
+    if(btFld) viewApplyBt(false);
+    if(edFld) edFld->blockSignals(false);
 }
 
 void LineEdit::setFont( const QFont &f )
@@ -727,16 +727,16 @@ QString LineEdit::value( )
 {
     switch(type()) {
 	case Text: case Password:
-			return ((QLineEdit*)ed_fld)->text();
-	case Integer:	return QString::number(((QSpinBox*)ed_fld)->value());
-	case Real:	return QString::number(((QDoubleSpinBox*)ed_fld)->value());
+			return ((QLineEdit*)edFld)->text();
+	case Integer:	return QString::number(((QSpinBox*)edFld)->value());
+	case Real:	return QString::number(((QDoubleSpinBox*)edFld)->value());
 	case Time: {
-	    QTime tm = ((QTimeEdit*)ed_fld)->time();
-	    return QString::number(tm.hour()*3600 + tm.minute()*60 + tm.second() /*QTime().secsTo(((QTimeEdit*)ed_fld)->time())*/);
+	    QTime tm = ((QTimeEdit*)edFld)->time();
+	    return QString::number(tm.hour()*3600 + tm.minute()*60 + tm.second() /*QTime().secsTo(((QTimeEdit*)edFld)->time())*/);
 	}
 	case Date: case DateTime:
-			return QString::number(((QDateTimeEdit*)ed_fld)->dateTime().toTime_t());
-	case Combo:	return ((QComboBox*)ed_fld)->currentText();
+			return QString::number(((QDateTimeEdit*)edFld)->dateTime().toTime_t());
+	case Combo:	return ((QComboBox*)edFld)->currentText();
     }
     return "";
 }
@@ -763,126 +763,21 @@ void LineEdit::cancelSlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if(e->type() == QEvent::KeyRelease && bt_fld) {
+    if(e->type() == QEvent::KeyRelease && btFld) {
 	QKeyEvent *keyEvent = (QKeyEvent*)e;
 	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
-	    bt_fld->animateClick();
+	    btFld->animateClick();
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
     }
     else if(e->type() == QEvent::Resize && applyReserve && needReserver) {
-	int btW = bt_fld ? bt_fld->width() : icoSize(1.2);
-	ed_fld->setMaximumWidth(width()-btW);
-	ed_fld->setMinimumWidth(width()-btW);
+	int btW = btFld ? btFld->width() : icoSize(1.2);
+	edFld->setMaximumWidth(width()-btW);
+	edFld->setMinimumWidth(width()-btW);
     }
 
     return QWidget::event(e);
-}
-
-//*************************************************
-//* SnthHgl: Syntax highlighter                   *
-//*************************************************
-SnthHgl::SnthHgl( QTextDocument *parent ) : QSyntaxHighlighter(parent)
-{
-
-}
-
-void SnthHgl::setSnthHgl( XMLNode nd )
-{
-    rules = nd;
-
-    //Set current font settings
-    document()->setDefaultFont(WdgShape::getFont(rules.attr("font"),1,false,document()->defaultFont()));
-
-    rehighlight();
-}
-
-void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
-{
-    XMLNode *rl;
-    vector<int> rul_pos(irl->childSize(),-1);
-    int minPos = -1, minRule, endIndex, startBlk, sizeBlk;
-    QTextCharFormat kForm;
-    QRegExp expr;
-
-    if(lev > 3) return;
-
-    //Init previous block continue
-    int curBlk = (currentBlockState()>>(lev*8))&0xFF;
-
-    //Stream process by rules
-    for(int i_t = 0; i_t < text.length(); ) {
-	if(curBlk && !i_t) { minRule = curBlk-1; minPos = 0; }
-	else minRule = -1;
-
-	for(int iCh = 0; i_t != minPos && iCh < (int)irl->childSize(); iCh++) {
-	    if(!(minPos < i_t || rul_pos[iCh] < i_t || rul_pos[iCh] < minPos)) continue;
-	    if(rul_pos[iCh] >= i_t && rul_pos[iCh] < minPos)	{ minPos = rul_pos[iCh]; minRule = iCh; continue; }
-	    if(rul_pos[iCh] == i_t && rul_pos[iCh] == minPos)	{ minRule = iCh; break; }
-
-	    //Call rule
-	    rl = irl->childGet(iCh);
-	    if(rl->name() == "rule")    expr.setPattern(rl->attr("expr").c_str());
-	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
-	    else continue;
-	    expr.setMinimal(s2i(rl->attr("min")));
-	    rul_pos[iCh] = expr.indexIn(text,i_t);
-	    if(expr.matchedLength() <= 0) continue;
-	    if(rul_pos[iCh] < 0) rul_pos[iCh] = text.length();
-	    if(minPos < i_t || rul_pos[iCh] < minPos) { minPos = rul_pos[iCh]; minRule = iCh; }
-	}
-	if(minRule < 0) break;
-
-	//Process minimal rule
-	rl = irl->childGet(minRule);
-	kForm.setForeground(colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
-	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
-	kForm.setFontItalic(s2i(rl->attr("font_italic")));
-
-	if(rl->name() == "rule") {
-	    expr.setPattern(rl->attr("expr").c_str());
-	    expr.setMinimal(s2i(rl->attr("min")));
-	    if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
-	    setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
-	    //Call include rules
-	    if(rl->childSize()) rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
-	    i_t = rul_pos[minRule]+expr.matchedLength();
-	}
-	else if(rl->name() == "blk") {
-	    if(curBlk) rul_pos[minRule] = curBlk = startBlk = 0;
-	    else {
-		expr.setPattern(rl->attr("beg").c_str());
-		expr.setMinimal(s2i(rl->attr("min")));
-		if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
-		startBlk = rul_pos[minRule]+expr.matchedLength();
-	    }
-	    QRegExp eExpr(rl->attr("end").c_str());
-	    eExpr.setMinimal(s2i(rl->attr("min")));
-	    endIndex = eExpr.indexIn(text, startBlk);
-	    if(endIndex == -1 || eExpr.matchedLength() <= 0) {
-		setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
-		sizeBlk = text.length()-startBlk;
-		i_t = text.length();
-	    }
-	    else {
-		setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+eExpr.matchedLength()), kForm);
-		sizeBlk = endIndex-startBlk;
-		i_t = endIndex + eExpr.matchedLength();
-	    }
-	    //Call include rules
-	    if(rl->childSize()) rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
-	    if(endIndex == -1 || eExpr.matchedLength() <= 0)
-		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
-	    else setCurrentBlockState(currentBlockState()& ~(0xFFFFFFFF<<(lev*8)));
-	}
-    }
-}
-
-void SnthHgl::highlightBlock( const QString &text )
-{
-    setCurrentBlockState((previousBlockState()<0)?0:previousBlockState());
-    rule(&rules, text);
 }
 
 #undef _
@@ -892,7 +787,7 @@ void SnthHgl::highlightBlock( const QString &text )
 //* Text edit widget                              *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
-    QWidget(parent), isInit(false), snt_hgl(NULL), but_box(NULL), stWin(NULL)
+    QWidget(parent), isInit(false), sntHgl(NULL), butBox(NULL), stWin(NULL)
 {
     lang = dynamic_cast<VisRun*>(window()) ? ((VisRun*)window())->lang() : "";
 
@@ -900,50 +795,50 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     box->setMargin(0);
     box->setSpacing(0);
 
-    ed_fld = new QTextEdit(this);
-    ed_fld->setContextMenuPolicy(Qt::CustomContextMenu);
+    edFld = new QTextEdit(this);
+    edFld->setContextMenuPolicy(Qt::CustomContextMenu);
 #if QT_VERSION >= 0x050A00
-    ed_fld->setTabStopDistance(20);
+    edFld->setTabStopDistance(20);
 #else
-    ed_fld->setTabStopWidth(20);
+    edFld->setTabStopWidth(20);
 #endif
-    ed_fld->setAcceptRichText(false);
-    ed_fld->setLineWrapMode(QTextEdit::NoWrap);
-    setFocusProxy(ed_fld);
-    connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()));
-    connect(ed_fld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()) );
-    connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
-    box->addWidget(ed_fld);
+    edFld->setAcceptRichText(false);
+    edFld->setLineWrapMode(QTextEdit::NoWrap);
+    setFocusProxy(edFld);
+    connect(edFld, SIGNAL(textChanged()), this, SLOT(changed()));
+    connect(edFld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()) );
+    connect(edFld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(custContextMenu()));
+    box->addWidget(edFld);
 
     QImage ico_t;
     if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
-    actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), ed_fld);
+    actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), edFld);
     actFind->setShortcut(Qt::CTRL+Qt::Key_F);
     actFind->setShortcutContext(Qt::WidgetShortcut);
     connect(actFind, SIGNAL(triggered()), this, SLOT(find()));
-    ed_fld->addAction(actFind);
-    actFindNext = new QAction(_("Find next"), ed_fld);
+    edFld->addAction(actFind);
+    actFindNext = new QAction(_("Find next"), edFld);
     actFindNext->setShortcut(Qt::Key_F3);
     actFindNext->setShortcutContext(Qt::WidgetShortcut);
     connect(actFindNext, SIGNAL(triggered()), this, SLOT(find()));
-    ed_fld->addAction(actFindNext);
+    edFld->addAction(actFindNext);
 
     if(!prev_dis) {
-	but_box = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel,Qt::Horizontal,this);
+	butBox = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	QImage ico_t;
-	but_box->button(QDialogButtonBox::Apply)->setText("");
+	butBox->button(QDialogButtonBox::Apply)->setText("");
 	if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
-	but_box->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
-	but_box->button(QDialogButtonBox::Apply)->setIconSize(QSize(icoSize(),icoSize()));
-	connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(applySlot()));
-	but_box->button(QDialogButtonBox::Cancel)->setText("");
+	butBox->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
+	butBox->button(QDialogButtonBox::Apply)->setIconSize(QSize(icoSize(),icoSize()));
+	connect(butBox->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(applySlot()));
+	butBox->button(QDialogButtonBox::Cancel)->setText("");
 	if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
-	but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
-	but_box->button(QDialogButtonBox::Cancel)->setIconSize(QSize(icoSize(),icoSize()));
-	connect(but_box->button(QDialogButtonBox::Cancel), SIGNAL(pressed()), this, SLOT(cancelSlot()));
-	but_box->setVisible(false);
-	but_box->setEnabled(false);
-	box->addWidget(but_box);
+	butBox->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
+	butBox->button(QDialogButtonBox::Cancel)->setIconSize(QSize(icoSize(),icoSize()));
+	connect(butBox->button(QDialogButtonBox::Cancel), SIGNAL(pressed()), this, SLOT(cancelSlot()));
+	butBox->setVisible(false);
+	butBox->setEnabled(false);
+	box->addWidget(butBox);
     }
 
     //Check for window with status present
@@ -951,68 +846,101 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     while(w && w->parentWidget() && (!dynamic_cast<QMainWindow *>(w) || !((QMainWindow*)w)->statusBar())) w = w->parentWidget();
     stWin = dynamic_cast<QMainWindow *>(w);
 
-    bt_tm = new QTimer(this);
-    connect(bt_tm, SIGNAL(timeout()), this, SLOT(applySlot()));
+    btTm = new QTimer(this);
+    connect(btTm, SIGNAL(timeout()), this, SLOT(applySlot()));
 }
 
-bool TextEdit::isEdited( )	{ return (but_box && but_box->isEnabled()); }	//isVisible() sometime wrong but it can be hidden commonly
+bool TextEdit::isEdited( )	{ return (butBox && butBox->isEnabled()); }	//isVisible() sometime wrong but it can be hidden commonly
 
-QString TextEdit::text( )	{ return ed_fld->toPlainText(); }
+QString TextEdit::text( )	{ return edFld->toPlainText(); }
 
 void TextEdit::setText( const QString &itext )
 {
     isInit = true;
-    if(itext != text()) ed_fld->setPlainText(itext);
-    if(but_box && but_box->isEnabled()) {
-	but_box->setVisible(false);
-	but_box->setEnabled(false);
+    if(itext != text()) {
+	if(!sntHgl || sntHgl->isBuiltInSH) {	//Try the builtin syntax higlihgt
+	    XMLNode hglO("SnthHgl");
+	    if(SnthHgl::checkInSnthHgl(itext,hglO)) { setSnthHgl(hglO); sntHgl->isBuiltInSH = true; }
+	}
+
+	edFld->setPlainText(itext);
     }
-    //if(!itext.size() && snt_hgl) { delete snt_hgl; snt_hgl = NULL; }	//!!!! Otherwise all empty text fields will be without the syntax highlighting
+    if(butBox && butBox->isEnabled()) {
+	butBox->setVisible(false);
+	butBox->setEnabled(false);
+    }
+    //if(!itext.size() && sntHgl) { delete sntHgl; sntHgl = NULL; }	//!!!! Otherwise all empty text fields will be without the syntax highlighting
     isInit = false;
 
-    m_text = itext;
+    mText = itext;
 }
 
 void TextEdit::setSnthHgl( XMLNode nd )
 {
-    if(!snt_hgl) snt_hgl = new SnthHgl(ed_fld->document());
-    snt_hgl->setSnthHgl(nd);
+    if(!sntHgl) sntHgl = new SnthHgl(edFld->document());
+    sntHgl->setSnthHgl(nd);
 }
 
 void TextEdit::changed( )
 {
     if(isInit) return;
-    if(but_box && !but_box->isEnabled() && text() != m_text) {
-	but_box->setVisible(true);
-	but_box->setEnabled(true);
+    if(butBox && !butBox->isEnabled() && text() != mText) {
+	butBox->setVisible(true);
+	butBox->setEnabled(true);
 
 	string labApply = _("Apply"), labCncl = _("Cancel");
-	bool noLab = (QFontMetrics(but_box->font()).size(Qt::TextSingleLine,(labApply+labCncl).c_str()).width()+30) > width();
-	but_box->button(QDialogButtonBox::Apply)->setText(noLab?"":labApply.c_str());
-	but_box->button(QDialogButtonBox::Cancel)->setText(noLab?"":labCncl.c_str());
+	bool noLab = (QFontMetrics(butBox->font()).size(Qt::TextSingleLine,(labApply+labCncl).c_str()).width()+30) > width();
+	butBox->button(QDialogButtonBox::Apply)->setText(noLab?"":labApply.c_str());
+	butBox->button(QDialogButtonBox::Cancel)->setText(noLab?"":labCncl.c_str());
     }
 
-    if(!but_box) bt_tm->start(500);
+    if(!butBox) btTm->start(500);
 
-    if(text() != m_text) emit textChanged(text());
+    if(text() != mText) emit textChanged(text());
 }
 
 void TextEdit::applySlot( )
 {
-    if(but_box && but_box->isEnabled()) {
-	but_box->setVisible(false);
-	but_box->setEnabled(false);
+    if(butBox && butBox->isEnabled()) {
+	butBox->setVisible(false);
+	butBox->setEnabled(false);
     }
 
-    m_text = text();
+    if(mText == text()) return;
+
+    mText = text();
 
     emit apply();
+
+    //Try the builtin syntax higlihgt
+    if(!sntHgl || sntHgl->isBuiltInSH) {
+	XMLNode hglO("SnthHgl");
+	if(SnthHgl::checkInSnthHgl(text(),hglO) && (!sntHgl || sntHgl->snthHgl().save() != hglO.save())) {
+	    setSnthHgl(hglO);
+	    sntHgl->isBuiltInSH = true;
+
+	    //Activation the syntax rules change
+	    int cursorPos = edFld->textCursor().position();
+	    int scrollVPos = edFld->verticalScrollBar()->value();
+	    int scrollHPos = edFld->horizontalScrollBar()->value();
+
+	    edFld->blockSignals(true);
+	    edFld->setPlainText(text());
+	    edFld->blockSignals(false);
+
+	    //Cursor position restore
+	    QTextCursor tCur = edFld->textCursor(); tCur.setPosition(cursorPos);
+	    edFld->setTextCursor(tCur); edFld->ensureCursorVisible();
+	    edFld->verticalScrollBar()->setValue(scrollVPos);
+	    edFld->horizontalScrollBar()->setValue(scrollHPos);
+	}
+    }
 }
 
 void TextEdit::cancelSlot( )
 {
     int edPosSave = text().size() ? workWdg()->textCursor().position() : -1;
-    setText(m_text);
+    setText(mText);
     if(edPosSave >= 0 && text().size()) {
 	QTextCursor tCur = workWdg()->textCursor(); tCur.setPosition(edPosSave);
 	workWdg()->setTextCursor(tCur); workWdg()->ensureCursorVisible();
@@ -1025,19 +953,19 @@ void TextEdit::curPosChange( )
 {
     QStatusBar *stBar = window()->findChild<QStatusBar*>();
     if(!stBar && stWin) stBar = stWin->statusBar();
-    if(stBar) stBar->showMessage(QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1), 10000);
+    if(stBar) stBar->showMessage(QString(_("Cursor = (%1:%2)")).arg(edFld->textCursor().blockNumber()+1).arg(edFld->textCursor().columnNumber()+1), 10000);
 }
 
 bool TextEdit::event( QEvent * e )
 {
-    if(but_box && e->type() == QEvent::KeyRelease) {
+    if(butBox && e->type() == QEvent::KeyRelease) {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
 	if((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier) {
-	    but_box->button(QDialogButtonBox::Apply)->animateClick();
+	    butBox->button(QDialogButtonBox::Apply)->animateClick();
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape) {
-	    but_box->button(QDialogButtonBox::Cancel)->animateClick();
+	    butBox->button(QDialogButtonBox::Cancel)->animateClick();
 	    return true;
 	}
     }
@@ -1047,7 +975,7 @@ bool TextEdit::event( QEvent * e )
 
 void TextEdit::custContextMenu( )
 {
-    QMenu *menu = ed_fld->createStandardContextMenu();
+    QMenu *menu = edFld->createStandardContextMenu();
     menu->addSeparator();
     menu->addAction(actFind);
     menu->addAction(actFindNext);
@@ -1087,7 +1015,7 @@ void TextEdit::find( )
     else if(sender() == actFindNext && !fstr.isEmpty()) isFind = true;
 
     if(isFind) {
-	ed_fld->find(fstr,(QTextDocument::FindFlag)fopt);
+	edFld->find(fstr,(QTextDocument::FindFlag)fopt);
 	actFind->setObjectName(QString::number(fopt)+":"+fstr);
     }
 }

@@ -90,7 +90,7 @@
 <li> <b>Спонсорування, роботу з UAExpert 1.4 та kepware2 на 0.9 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Устьянцев Михайло</li>
 <li> <b>Спонсорування, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Documents/Release_0.9/Update4#OPC_UA" title="Special:MyLanguage/Documents/Release 0.9/Update4">роботу з UAExpert 1.5, реалізації клієнтського Publish та Chunks, значної уніфікації</a>, підтримки Логічного Рівня та цілковитої ревізії документу на 10.4 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Fund" title="Special:MyLanguage/Fund">Фонд</a></li>
 <li> <a class="external text" href="http://oscada.org/en/development/tasks/posts/subsystem_daq/module_opc_ua_functions_extending/" rel="nofollow noreferrer noopener" target="_blank">Задача розширення модуля</a></li>
-<li> <b>Зробити (To Do):</b></li></ul>
+<li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
 <dl><dd> + відревізувати представницьку сторінку документації;</dd>
 <dd> - вирішити суперечність у <i>Client::messIO()</i> стосовно змішування режиму чистого запиту із режимом вільного читання/запису та часу очікування тут відповіді без прямої передачі таймауту підключення;</dd>
 <dd> + доповнити вбудованим Логічним Режимом DAQ-Параметрів;</dd>
@@ -809,7 +809,7 @@
 <li> <i>pthread_mutex_t&gt; mtxData;</i> — мютекс блокування багатопотокового доступу;</li>
 <li> <i>Server *serv;</i> — посилання на сервер — контейнер об'єкту кінцевої точки.</li></ul>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.B2.D0.B0.D1.82.D0.BD.D1.96_.D0.BA.D0.BB.D1.8E.D1.87.D1.96_.D1.82.D0.B0_.D1.81.D0.B5.D1.80.D1.82.D0.B8.D1.84.D1.96.D0.BA.D0.B0.D1.82.D0.B8"><span class="mw-headline-number">5</span> Приватні ключі та сертифікати</span></h2>
-<p>Для роботи клієнтської та серверної-протокольної частини OPC-UA потрібно створення та розташування приватного ключа і сертифікату у конфігурації об'єкту клієнта та сервера. У загальному випадку достатньо створення звичайного самопідписаного сертифікату та приватного ключа без пароля, однак, для виключення попереджувальних повідомлень, потрібно додати низку службових полів до сертифікату. Це можна зробити взявши <a class="external" href="http://oscada.org/wiki/File:OPC-UA_openssl.cnf" title="File:OPC-UA openssl.cnf">файл конфігурації створення сертифікату</a> та виконати наступну процедуру:
+<p>Для роботи клієнтської та серверної-протокольної частини OPC-UA потрібно створення та розташування приватного ключа і сертифікату у конфігурації об'єкту клієнта та сервера. У загальному випадку достатньо створення звичайного самопідписаного сертифікату та приватного ключа без пароля, однак, для виключення попереджувальних повідомлень, потрібно додати низку службових полів до сертифікату. Це можна виконати взявши <a class="external" href="http://oscada.org/wiki/File:OPC-UA_openssl.cnf" title="File:OPC-UA openssl.cnf">файл конфігурації створення сертифікату</a> та виконати наступну процедуру:
 </p>
 <pre style="white-space: pre-wrap;">
 # Створення приватного ключа:
@@ -976,5 +976,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2832</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/uk">Modules/OPC_UA/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
 </html>

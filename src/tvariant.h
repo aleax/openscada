@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tvariant.h
 /***************************************************************************
- *   Copyright (C) 2010-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2010-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -245,7 +245,7 @@ class TRegExp : public TVarObj
 
 	TArrayObj *match( const string &vl, bool all = false );
 	bool test( const string &vl );
-	int search( const string &vl, int off = 0 );
+	int search( const string &vl, int off = 0, int *length = NULL );
 	string replace( const string &vl, const string &str );
 	TArrayObj *split( const string &vl, int limit = 0 );
 
@@ -269,6 +269,7 @@ class TRegExp : public TVarObj
 	unsigned global		: 1;
 	unsigned ignoreCase	: 1;
 	unsigned multiline	: 1;
+	unsigned ungreedy	: 1;
 	unsigned isSimplePat	: 1;
 	unsigned UTF8		: 1;
 

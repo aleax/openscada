@@ -348,122 +348,6 @@ bool LineEdit::event( QEvent * e )
 }
 
 //*************************************************
-//* SnthHgl: Syntax highlighter                   *
-//*************************************************
-SnthHgl::SnthHgl( QTextDocument *parent ) : QSyntaxHighlighter(parent), isBuiltInSH(false)
-{
-
-}
-
-void SnthHgl::setSnthHgl( XMLNode nd )
-{
-    rules = nd;
-
-    //Set current font settings
-    QFont rez = document()->defaultFont();
-
-    char family[101]; family[0] = 0; //strcpy(family, "Arial");
-    int size = -1, bold = -1, italic = -1, underline = -1, strike = -1;
-    sscanf(nd.attr("font").c_str(), "%100s %d %d %d %d %d", family, &size, &bold, &italic, &underline, &strike);
-    if(strlen(family))	rez.setFamily(QString(family).replace(QRegExp("_")," "));
-    if(size >= 0)	rez.setPointSize(size);
-    if(bold >= 0)	rez.setBold(bold);
-    if(italic >= 0)	rez.setItalic(italic);
-    if(underline >= 0)	rez.setUnderline(underline);
-    if(strike >= 0)	rez.setStrikeOut(strike);
-    document()->setDefaultFont(rez);
-
-    rehighlight();
-}
-
-void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
-{
-    XMLNode *rl;
-    vector<int> rul_pos(irl->childSize(), -1);
-    int minPos = -1, minRule, endIndex, startBlk, sizeBlk;
-    QTextCharFormat kForm;
-    QRegExp expr;
-
-    if(lev > 3) return;
-
-    //Init previous block continue
-    int curBlk = (currentBlockState()>>(lev*8))&0xFF;
-
-    //Stream process by rules
-    for(int iT = 0; iT < text.length(); ) {
-	if(curBlk && !iT) { minRule = curBlk-1; minPos = 0; }
-	else minRule = -1;
-
-	for(int iCh = 0; iT != minPos && iCh < (int)irl->childSize(); iCh++) {
-	    if(!(minPos < iT || rul_pos[iCh] < iT || rul_pos[iCh] < minPos)) continue;
-	    if(rul_pos[iCh] >= iT && rul_pos[iCh] < minPos)	{ minPos = rul_pos[iCh]; minRule = iCh; continue; }
-	    if(rul_pos[iCh] == iT && rul_pos[iCh] == minPos)	{ minRule = iCh; break; }
-
-	    //Call rule
-	    rl = irl->childGet(iCh);
-	    if(rl->name() == "rule")	expr.setPattern(rl->attr("expr").c_str());
-	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
-	    else continue;
-	    expr.setMinimal(s2i(rl->attr("min")));
-	    rul_pos[iCh] = expr.indexIn(text,iT);
-	    if(expr.matchedLength() <= 0) continue;
-	    if(rul_pos[iCh] < 0) rul_pos[iCh] = text.length();
-	    if(minPos < iT || rul_pos[iCh] < minPos) { minPos = rul_pos[iCh]; minRule = iCh; }
-	}
-	if(minRule < 0)	break;
-
-	//Process minimal rule
-	rl = irl->childGet(minRule);
-	kForm.setForeground(colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
-	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
-	kForm.setFontItalic(s2i(rl->attr("font_italic")));
-
-	if(rl->name() == "rule") {
-	    expr.setPattern(rl->attr("expr").c_str());
-	    expr.setMinimal(s2i(rl->attr("min")));
-	    if(expr.indexIn(text,iT) != rul_pos[minRule]) break;
-	    setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
-	    //Call include rules
-	    if(rl->childSize()) rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
-	    iT = rul_pos[minRule]+expr.matchedLength();
-	}
-	else if(rl->name() == "blk") {
-	    if(curBlk) rul_pos[minRule] = curBlk = startBlk = 0;
-	    else {
-		expr.setPattern(rl->attr("beg").c_str());
-		expr.setMinimal(s2i(rl->attr("min")));
-		if(expr.indexIn(text,iT) != rul_pos[minRule]) break;
-		startBlk = rul_pos[minRule]+expr.matchedLength();
-	    }
-	    QRegExp eExpr(rl->attr("end").c_str());
-	    eExpr.setMinimal(s2i(rl->attr("min")));
-	    endIndex = eExpr.indexIn(text, startBlk);
-	    if(endIndex == -1 || eExpr.matchedLength() <= 0) {
-		setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
-		sizeBlk = text.length()-startBlk;
-		iT = text.length();
-	    }
-	    else {
-		setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+eExpr.matchedLength()), kForm);
-		sizeBlk = endIndex-startBlk;
-		iT = endIndex + eExpr.matchedLength();
-	    }
-	    //Call include rules
-	    if(rl->childSize()) rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
-	    if(endIndex == -1 || eExpr.matchedLength() <= 0)
-		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
-	    else setCurrentBlockState(currentBlockState()& ~(0xFFFFFFFF<<(lev*8)));
-	}
-    }
-}
-
-void SnthHgl::highlightBlock( const QString &text )
-{
-    setCurrentBlockState((previousBlockState()<0)?0:previousBlockState());
-    rule(&rules, text);
-}
-
-//*************************************************
 //* TextEdit: Text edit widget.                   *
 //*************************************************
 TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
@@ -537,7 +421,10 @@ bool TextEdit::hasFocus( ) const	{ return edFld->hasFocus(); }
 
 void TextEdit::setText( const QString &text )
 {
-    checkInSnthHgl(text);	//Try the builtin syntax higlihgt
+    if(!sntHgl || sntHgl->isBuiltInSH) {	//Try the builtin syntax higlihgt
+	XMLNode hglO("SnthHgl");
+	if(SnthHgl::checkInSnthHgl(text,hglO)) { setSnthHgl(hglO); sntHgl->isBuiltInSH = true; }
+    }
 
     isInit = true;
     edFld->blockSignals(true);	//!!!! The block to prevent the status bar updating and crashes here sometime
@@ -546,24 +433,6 @@ void TextEdit::setText( const QString &text )
     edFld->document()->setModified(false);
     isInit = false;
     changed();
-}
-
-bool TextEdit::checkInSnthHgl( const QString &text )
-{
-    bool isInSH = false;
-
-    TArrayObj *rezSH = NULL;
-    if((!sntHgl || sntHgl->isBuiltInSH) && (rezSH=TRegExp("<SnthHgl\\b.*>.*<\\/ *SnthHgl>","gm").match(text.toStdString()))) {
-	if(rezSH->arSize())
-	    try {
-		XMLNode hglO("SnthHgl"); hglO.load(rezSH->arGet(0).getS());
-		setSnthHgl(hglO);
-		if(sntHgl) sntHgl->isBuiltInSH = isInSH = true;
-	    } catch(TError&) { }
-	delete rezSH;
-    }
-
-    return isInSH;
 }
 
 void TextEdit::setSnthHgl( XMLNode nd )
@@ -606,10 +475,24 @@ void TextEdit::btApply( )
     emit apply();
 
     //Try the builtin syntax higlihgt
-    if(checkInSnthHgl(text())) {
-	edFld->blockSignals(true);
-	edFld->setPlainText(text());
-	edFld->blockSignals(false);
+    if(!sntHgl || sntHgl->isBuiltInSH) {
+	XMLNode hglO("SnthHgl");
+	if(SnthHgl::checkInSnthHgl(text(),hglO) && (!sntHgl || sntHgl->snthHgl().save() != hglO.save())) {
+	    //Activation the syntax rules change
+	    int cursorPos = edFld->textCursor().position();
+	    int scrollVPos = edFld->verticalScrollBar()->value();
+	    int scrollHPos = edFld->horizontalScrollBar()->value();
+
+	    edFld->blockSignals(true);
+	    edFld->setPlainText(text());
+	    edFld->blockSignals(false);
+
+	    //Cursor position restore
+	    QTextCursor tCur = edFld->textCursor(); tCur.setPosition(cursorPos);
+	    edFld->setTextCursor(tCur); edFld->ensureCursorVisible();
+	    edFld->verticalScrollBar()->setValue(scrollVPos);
+	    edFld->horizontalScrollBar()->setValue(scrollHPos);
+	}
     }
 }
 

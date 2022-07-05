@@ -43,7 +43,7 @@
 <ul><li> <b>Основано:</b> Сентябрь 2007</li>
 <li> <b>Изначально создано:</b> в <a class="external text" href="http://wiki.oscada.org/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">старой Wiki</a></li>
 <li> <b>Использовано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">большинство проектов на OpenSCADA</a></li>
-<li> <b>Сделать (To Do):</b></li></ul>
+<li> <b><a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Задачи (To Do)</a>:</b></li></ul>
 <dl><dd> - <a href="#storeHouse">Склад</a>: расширить детализированным просмотрщиком и редактором специфических полей, начав эти поля в целом;</dd>
 <dd> - <a href="#storeHouse">Склад</a>: расширить генерацией отчётных документов к выбранным элементам, готовой для печати и удобной для полного обзора;</dd>
 <dd> - <a href="#storeHouse">Склад</a>: расширить генерацией отчётных документов к основной таблице с учётом настроек фильтра и природным отображением специфических полей.</dd></dl>
@@ -597,7 +597,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="alarmsAct" title="#alarmsAct"><h3><span class="mw-headline" id=".D0.9D.D0.B0.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.B8.D1.8F_.E2.80.94_.D0.B0.D0.BA.D1.82.D0.B8.D0.B2.D0.BD.D0.BE.D0.B5_.28alarmsAct.29"><span class="mw-headline-number">1.5</span> Нарушения — активное (<a href="Libs_Main_graphical_elements.html#alarmsAct" title="Special:MyLanguage/Libs/Main graphical elements">alarmsAct</a>)</span></h3></span>
 </td>
-<td> 1.3 </td>
+<td> 1.4 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -629,7 +629,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:904px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsAct_ru.png"><img class="thumbimage" height="170" src="files/LibMainEls_alarmsAct_ru.png" width="902" /></a>  <div class="thumbcaption">Рис.1.5. Элемент "Нарушения — активное" в режиме разработки и исполнения (сверху вниз).</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
 Этот виджет может быть использован разработчиком при создании мнемосхем с постоянным отображением активных нарушений или для общего их отображения на <a href="#RootPgSo">корневой странице</a>. Для использования необходимо добавить этот виджет на мнемосхему или корневую страницу, подстроить горизонтальный, вертикальный размер, настроить вертикальное расширение и откорректировать другие свойства вроде перечня и последовательности отображаемых полей таблицы.
-</p><p>Если нужно выключить функцию подтверждения то вы должны исключить время подтверждения "qttm" из перечня полей и сделать элемент неактивным.
+</p><p>Если нужно выключить функцию подтверждения то вы должны исключить время подтверждения "qttm" из перечня полей и установить элемент неактивным.
 </p><p><b><u>Использование — исполнение</u></b><br />
 В режиме использования строится таблица из перечня активных нарушений, для определённых полей, правила сортирования и выделения; содержимое которой периодически и динамически обновляется. При выборе  таблицы, получение фокуса, её высота может расширяться, отобразив больше сообщений, если эта функцию включена и есть соответствие условию из определённого количества нарушений.
 </p><p>Пользователю предоставляется возможность подтвердить нарушение, изменив значение поля времени подтверждения или с помощью панели управления, которая выплывет при выборе элемента и строки нарушения.
@@ -700,6 +700,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <p>Например:
 </p>
 <pre style="white-space: pre-wrap">
+#&lt;SnthHgl font="monospace"&gt;&lt;rule expr="^#[^\n]*" color="gray" font_italic="1"/&gt;&lt;rule expr="^[0-9]*" color="blue"&gt;&lt;rule expr="[01]$" color="red"/&gt;&lt;/rule&gt;&lt;/SnthHgl&gt;
 50:gray
 40:red
 150:yellow
@@ -1919,7 +1920,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="alarmsSt" title="#alarmsSt"><h3><span class="mw-headline" id=".D0.9D.D0.B0.D1.80.D1.83.D1.88.D0.B5.D0.BD.D0.B8.D0.B5_.E2.80.94_.D1.81.D0.BE.D1.81.D1.82.D0.BE.D1.8F.D0.BD.D0.B8.D0.B5_.28alarmsSt.29"><span class="mw-headline-number">3.6</span> Нарушение — состояние (<a href="Libs_Main_graphical_elements.html#alarmsSt" title="Special:MyLanguage/Libs/Main graphical elements">alarmsSt</a>)</span></h3></span>
 </td>
-<td> 1.4 </td>
+<td> 1.5 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
@@ -1965,7 +1966,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 Виджет предназначен для выполнения роли страницы, а, соответственно, он должен непосредственно располагаться в дереве проекта. После добавления, для кадра нужно отредактировать свойства вроде перечня и последовательности отображаемых полей таблицы.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Поскольку кадр предусматривает отображение состояния и истории нарушений, то создание и использование <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">архиватора сообщений</a> является обязательным. Поэтому создайте или используйте шаблонный архиватор стартового проекта "Нарушения (alarms)" с опциями исключения дублирования, и укажите его (FSArch.alarms) в свойстве кадра "<b>alArch</b>".
 </p><p>Комбобокс выбора правила сортировки по умолчанию выключен из соображений использования встроенной функции сортирования по колонке таблицы соответствующего визуализатора. Если такая функция визуализатором не предоставляется то включите этот комбобокс.
-</p><p>Если нужно выключить функцию подтверждения то вы должны исключить время подтверждения "qttm" из перечня полей и сделать элемент таблицы неактивным.
+</p><p>Если нужно выключить функцию подтверждения то вы должны исключить время подтверждения "qttm" из перечня полей и установить элемент таблицы неактивным.
 </p><p>Построение отчёта от текущих данных в таблице также, по умолчанию, выключено. Для включения вы должны разместить <a href="#alarmsStReport">кадр отчёта нарушений</a> в логическом контейнере панелей дерева проекта, а затем включить характерную кнопку генерации отчётов в правом верхнем углу этого кадра.
 </p><p><b><u>Использование — исполнение</u></b><br />
 В режиме исполнения строится таблица из перечня активных нарушений, для текущего времени, и нарушений из истории по определённым полям, с контролем и отметкой активности и правилом выделения; содержимое которой периодически и динамически обновляется для текущего времени.
@@ -2050,6 +2051,7 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <p>Например:
 </p>
 <pre style="white-space: pre-wrap">
+#&lt;SnthHgl font="monospace"&gt;&lt;rule expr="^#[^\n]*" color="gray" font_italic="1"/&gt;&lt;rule expr="^[0-9]*" color="blue"&gt;&lt;rule expr="[01]{2}$" color="red"&gt;&lt;rule expr="[01]$" color="darkorange"/&gt;&lt;/rule&gt;&lt;/rule&gt;&lt;/SnthHgl&gt;
 501:gray
 401:red
 1501:yellow
@@ -3096,5 +3098,5 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2832</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/ru">Libs/Main_graphical_elements/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
 </html>

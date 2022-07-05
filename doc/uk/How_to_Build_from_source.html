@@ -3,17 +3,17 @@
 <html class="client-nojs" dir="ltr" lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Документи/Як зробити/Скласти з вихідних текстів - OpenSCADAWiki</title>
+<title>Документи/Як виконати/Скласти з вихідних текстів - OpenSCADAWiki</title>
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
 <body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
-			<h1 id="firstHeading" lang="uk">Документи/Як зробити/Скласти з вихідних текстів</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FBuild+from+source&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Build_from_source" title="Documents/How to/Build from source">Documents/How to/Build from source</a> and the translation is 97% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/How_to_Build_from_source.html" title="Documents/How to/Build from source (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Build_from_source.html" title="Документы/Как сделать/Собрать из исходных текстов (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+			<h1 id="firstHeading" lang="uk">Документи/Як виконати/Скласти з вихідних текстів</h1>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FHow+to%2FBuild+from+source&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/How_to/Build_from_source" title="Documents/How to/Build from source">Documents/How to/Build from source</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/How_to_Build_from_source.html" title="Documents/How to/Build from source (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/How_to_Build_from_source.html" title="Документы/Как сделать/Собрать из исходных текстов (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
-<ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, <a class="external text" href="http://oscada.org/en/forum/user/IrmIngeneer/" rel="nofollow noreferrer noopener" target="_blank">Constantine</a> </li></ul>
+<ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>, <a class="external text" href="http://oscada.org/en/forum/user/IrmIngeneer/" rel="nofollow noreferrer noopener" target="_blank">Константин</a> </li></ul>
 </div>
 <p>Цей посібник покликано допомогти у збірці OpenSCADA з вихідних текстів. Протягом накопичення досвіду збірки OpenSCADA на різних дистрибутивах ОС Linux та на інших платформах взагалі, документ буде доповнюватися особливостями та деталями збірки у різноманітних оточеннях.
 </p><p>На останніх версіях OpenSCADA, попереднього налаштування зібраної програми не потребується, у разі використання при збірці пакету з ресурсами "openscada-res" або дерева вихідних текстів з репозиторію SVN, навіть після прямої збірки. Тому одразу після збірки та встановлення програма готова до використання!
@@ -166,7 +166,7 @@ Portage tree and overlays:
  [0] /usr/portage
  [1] /usr/local/portage</pre>
 <dl><dd>5. Якщо у Вас немає підключення до інтернету, тоді потрібно завантажити тарболи вихідних текстів та ресурсів з ftp/http-серверу проекту та розташувати їх заздалегідь у теці вихідних текстів portage "/usr/portage/distfiles". Якщо ж у Вас є підключення до інтернету, тоді все потрібне для збірки буде отримано із сервера проекту автоматично.</dd>
-<dd>6. Потрібно виставити необхідні Вам USE-прапорці, з якими буде зібрано OpenSCADA. Це можна зробити у файлі "/etc/portage/package.use", наприклад:
+<dd>6. Потрібно виставити необхідні Вам USE-прапорці, з якими буде зібрано OpenSCADA. Це можна виконати у файлі "/etc/portage/package.use", наприклад:
 <dl><dd><i>dev-util/openscada dcon demo http javalikecalc mysql qtcfg qtstarter ssl vision webcfg webcfgd webvision blockcalc dbarch dbase doc flibcomplex1 flibmath flibsys fsarch logiclev modbus serial sockets sqlite vcaengine</i></dd></dl></dd>
 <dd>7. Безпосередньо збірка:
 <dl><dd>$ emerge -q openscada</dd></dl></dd>
@@ -182,5 +182,5 @@ Portage tree and overlays:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Build_from_source/uk">Documents/How_to/Build_from_source/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2832</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Build_from_source/uk">Documents/How_to/Build_from_source/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
 </html>

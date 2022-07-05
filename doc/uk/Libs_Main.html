@@ -502,7 +502,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <dd>3. У вкладці "Конфігурація шаблону" об'єкту логічного параметру Ви маєте встановити:
 <ul><li> <i>Вхід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для складної передобробки та повної генерації-імітації аналогового входу на внутрішній мові програмування OpenSCADA. Є необов'язковою та має визначатися за складних випадків, наприклад:</li></ul>
-<dl><dd><ul><li> проста та прозора попередня обробка з приведення відсотків навантаження ДБЖ до потужності, що можна зробити і за допомогою <b>iMult</b>:</li></ul></dd></dl></dd></dl>
+<dl><dd><ul><li> проста та прозора попередня обробка з приведення відсотків навантаження ДБЖ до потужності, що можна виконати і за допомогою <b>iMult</b>:</li></ul></dd></dl></dd></dl>
 <pre style="white-space: pre-wrap; margin-left: 40pt">
 in = 490*in/100;	//the UPS has 480W </pre>
 <dl><dd><dl><dd><ul><li> реалізація лічильника вхідного сигналу — спожитої електрики ДБЖ:</li></ul></dd></dl></dd></dl>
@@ -3189,5 +3189,5 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">June 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2832</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main/uk">Libs/Main/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
 </html>

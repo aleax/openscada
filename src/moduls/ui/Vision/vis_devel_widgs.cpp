@@ -841,11 +841,11 @@ QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOpti
 	((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
 	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	((QTextEdit*)w_del)->resize(50,50);
+	((QTextEdit*)w_del)->resize(50, 50);
 	QString sHgl = index.data(Qt::UserRole+1).toString();
-	if(!sHgl.isEmpty()) {
-	    XMLNode rules;
-	    rules.load(sHgl.toStdString());
+	XMLNode rules;
+	if(!sHgl.isEmpty() || SnthHgl::checkInSnthHgl(value.toString(),rules)) {
+	    if(!sHgl.isEmpty()) rules.load(sHgl.toStdString());
 	    SnthHgl *snt_hgl = new SnthHgl(((QTextEdit*)w_del)->document());
 	    snt_hgl->setSnthHgl(rules);
 	}
@@ -3171,7 +3171,7 @@ bool DevelWdgView::event( QEvent *event )
 		DevelWdgView *cwdg = NULL;
 
 		// Selection by the window
-		if(fSelWin=(fHoldSelRect && (curp-holdPnt).manhattanLength() >= QApplication::startDragDistance()))
+		if((fSelWin=(fHoldSelRect && (curp-holdPnt).manhattanLength() >= QApplication::startDragDistance())))
 		    for(int iC = children().size()-1; iC >= 0; iC--) {
 			cwdg = qobject_cast<DevelWdgView*>(children().at(iC));
 			if(cwdg && QRect(holdPnt,curp).contains(cwdg->geometryF().toRect()))
