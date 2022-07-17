@@ -42,7 +42,7 @@ class da_ISA: public DA
 
 	string id( )	{ return "ISA"; }
 	string name( )	{ return _("ISA DAQ boards"); }
-	string modType( const string &modTp );      //Module type, include dynamic ISA and other processing
+	string modType( TMdPrm *prm, const string &modTp );      //Module type, include dynamic ISA and other processing
 
 	void tpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl = NULL );
 

@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <tsys.h>
 
@@ -199,7 +200,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 		val = ~(((rV&0x08) >> 3) | ((rV&0x04) >> 1) | ((rV&0x02) << 1) | ((rV&0x01) << 3)) & 0x0f;
 	    }
 	    if(close(hd) != 0)
-		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
+		mess_warning(p->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	p->vlAt("RS").at().setI(val, 0, true);
     }

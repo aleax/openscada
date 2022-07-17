@@ -350,12 +350,12 @@ class TTransportS : public TSubSYS
 	void load_( );
 	void save_( );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
+
     private:
 	//Methods
 	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	//Attributes
 	TElem	elIn, elOut, elExt;

@@ -22,6 +22,7 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <errno.h>
 
 #include <algorithm>
 
