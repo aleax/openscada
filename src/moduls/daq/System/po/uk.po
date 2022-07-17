@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:55+0300\n"
+"POT-Creation-Date: 2022-07-15 20:40+0300\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -29,6 +29,10 @@ msgstr "Бездія (%)"
 
 msgid "General"
 msgstr "Взагалі"
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Помилка закриття файлу %p - '%s (%d)'!"
 
 msgid "10:Device is not available."
 msgstr "10:Пристрій недоступний."
@@ -158,6 +162,10 @@ msgstr "Підключений=%d; Активний=%d; Зайнятий=%d; П�
 msgid "Property "
 msgstr "Властивість "
 
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr "Помилка закриття каналу %p - '%s (%d)'!"
+
 msgid "Data sensors"
 msgstr "Дані сенсорів"
 
@@ -251,6 +259,7 @@ msgstr "Додаткові параметри"
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Збір з періодом %s. "
 
@@ -258,6 +267,7 @@ msgstr "Збір з періодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s]. "
 msgstr "Витрачено часу %s[%s]. "
 
@@ -300,3 +310,4 @@ msgstr "ДБЖ (NUT)"
 
 msgid "Up time"
 msgstr "Час роботи"
+

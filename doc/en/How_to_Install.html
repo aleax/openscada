@@ -54,49 +54,46 @@
 <i>Ubuntu (Work):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04</a> ./"<br />
 Installing:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get update
-$ apt-get install openscada-model-aglks
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get update
+apt-get install openscada-model-aglks
+</pre></div>
 <p><i>ALTLinux (LTS and Work, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux repository</a>):</i> "rpm <a class="external free" href="http://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
 Installing:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get update
-$ apt-get install openscada-Model.AGLKS
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get update
+apt-get install openscada-Model.AGLKS
+</pre></div>
 <p>Adding the signature verification key (the authenticity) of the repository and packages in it (not necessarily and not in all repositories):
 </p>
-<pre style="white-space: pre-wrap;">
- $ wget -O - http://ftp.oscada.org/Misc/pkgSignKey | sudo apt-key add - </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>wget -O - http://ftp.oscada.org/Misc/pkgSignKey <span class="p">|</span> sudo apt-key add -
+</pre></div>
 <p><b>Packages repositories based on the package manager YUM (RedHat, Fedora, CentOs)</b> — are added by uploading or creating a file /etc/yum.repos.d/openscada.repo with the contents:
 </p>
-<pre style="white-space: pre-wrap;">
-[openscada]
-name=OpenSCADA
-#CentoOs (LTS)
-baseurl=http://ftp.oscada.org/OpenSCADA/LTS/CentOs/7
-#CentoOs (Work)
-#baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6
-#Fedora (Work)
-#baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=http://ftp.oscada.org/Misc/pkgSignKey
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">[openscada]</span>
+<span class="na">name</span><span class="o">=</span><span class="s">OpenSCADA</span>
+<span class="c1">#CentoOs (LTS)</span>
+<span class="na">baseurl</span><span class="o">=</span><span class="s">http://ftp.oscada.org/OpenSCADA/LTS/CentOs/7</span>
+<span class="c1">#CentoOs (Work)</span>
+<span class="c1">#baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6</span>
+<span class="c1">#Fedora (Work)</span>
+<span class="c1">#baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">repo_gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgkey</span><span class="o">=</span><span class="s">http://ftp.oscada.org/Misc/pkgSignKey</span>
+</pre></div>
 <p>Installing:
 </p>
-<pre style="white-space: pre-wrap;">
-$ yum install openscada-Model.AGLKS </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>yum install openscada-Model.AGLKS
+</pre></div>
 <p><b>The packages repositories SuSE YaST</b> — are added by the command:
 </p>
-<pre style="white-space: pre-wrap;">
-$ zypper ar -f http://ftp.oscada.org/OpenSCADA/LTS/SuSE/15 OpenSCADA</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>zypper ar -f http://ftp.oscada.org/OpenSCADA/LTS/SuSE/15 OpenSCADA
+</pre></div>
 <p>Installing:
 </p>
-<pre style="white-space: pre-wrap;">
-$ zypper in openscada-Model.AGLKS </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>zypper in openscada-Model.AGLKS
+</pre></div>
 <h4><span class="mw-headline" id="Manual_installation_of_the_OpenSCADA_packages"><span class="mw-headline-number">1.2</span> Manual installation of the OpenSCADA packages</span></h4>
 <p>To manually install the OpenSCADA packages, you need to download them from the official site or another source. You can usually download two sets of the packages.
 </p><p>The first set is represented by eleventh packages:
@@ -138,16 +135,16 @@ $ zypper in openscada-Model.AGLKS </pre>
 <p>The first set of packages is more intended for simple-manual installation, since it contains only eleven packages. The second set is intended to be located in the Linux repository and then installs them with the package manager that automatically resolves dependencies, and also allows you to install only the required OpenSCADA components, thereby optimizing the work environment.
 </p><p>Manual setup of the first set of DEB packages can be done by command, having previously changed the working directory to the directory with the packages:
 </p>
-<pre style="white-space: pre-wrap;">
-$ dpkg -i openscada-libdb.main_0.9.0-1_all.deb openscada-libdb.vca_0.9.0-1_all.deb openscada-model.aglks_0.9.0-1_all openscada_0.9.0-1_i386.deb</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>dpkg -i openscada-libdb.main_0.9.0-1_all.deb openscada-libdb.vca_0.9.0-1_all.deb openscada-model.aglks_0.9.0-1_all openscada_0.9.0-1_i386.deb
+</pre></div>
 <p>Manual setup of the first set of RPM packages can be done by command, having previously changed the working directory to the directory with the packages:
 </p>
-<pre style="white-space: pre-wrap;">
-$ rpm -i openscada-LibDB.Main-0.9.0-alt1.noarch.rpm openscada-LibDB.VCA-0.9.0-alt1.noarch.rpm openscada-Model.AGLKS-0.9.0-alt1.i586.rpm openscada-0.9.0-alt1.i586.rpm </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>rpm -i openscada-LibDB.Main-0.9.0-alt1.noarch.rpm openscada-LibDB.VCA-0.9.0-alt1.noarch.rpm openscada-Model.AGLKS-0.9.0-alt1.i586.rpm openscada-0.9.0-alt1.i586.rpm
+</pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> During the installation process, there may be errors related to the unsatisfactory dependencies. When manually installing from packages, they will need to be handled manually, just like installing the OpenSCADA packages, or through the Linux distribution package manager. Cases of the dependency problems can exist even when installing through the packages manager if the OpenSCADA repository is used that does not match the Linux distribution or its version, or the main package repositories of the distribution itself are not connected. In the APT packages manager, you can use the command to automatically resolve external dependencies that arose when manually installing OpenSCADA:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get install -f</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get install -f
+</pre></div>
 <h3><span class="mw-headline" id="Installing-building_from_the_source_texts"><span class="mw-headline-number">2</span> Installing-building from the source texts</span></h3>
 <p>If there is no way to get ready-made OpenSCADA packages for the selected distribution, then only the variant of the OpenSCADA build from the source texts remains. This process is described in detail in <a href="How_to_Build_from_source.html" title="Special:MyLanguage/Documents/How to/Build from source">the manual of building OpenSCADA from the source texts</a>.
 </p>

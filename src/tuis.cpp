@@ -84,7 +84,8 @@ string TUIS::icoGet( const string &inm, string *tp, bool retPath )
 	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
 	}
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning("TUIS", _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     }
 
     return rez;
@@ -117,7 +118,8 @@ string TUIS::docGet( const string &iinm, string *tp, unsigned opt )
 	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
 	} else rez = "xdg-open "+pathi+"/"+transl[iTr]+"/"+nm+"."+types[iT]+" &";
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning("TUIS", _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     }
 
     // Detect the LTS and connect to the network copy of the offline documentation

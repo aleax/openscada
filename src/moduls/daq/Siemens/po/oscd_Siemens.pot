@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:52+0300\n"
+"POT-Creation-Date: 2022-07-15 20:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -250,6 +250,10 @@ msgid "No one driver or board are present."
 msgstr ""
 
 msgid "Error opening the remote PLC socket."
+msgstr ""
+
+#, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
 msgstr ""
 
 msgid "Error connecting to the PLC."

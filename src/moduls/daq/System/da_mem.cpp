@@ -67,8 +67,7 @@ void Mem::getVal( TMdPrm *prm )
 
     FILE *f = fopen("/proc/meminfo","r");
     m_total = m_free = m_buff = m_cach = sw_total = sw_free = 0;
-    while(f && fgets(buf,sizeof(buf),f) != NULL)
-    {
+    while(f && fgets(buf,sizeof(buf),f) != NULL) {
 	sscanf(buf,"MemTotal: %d kB\n",&m_total);
 	sscanf(buf,"MemFree: %d kB\n",&m_free);
 	sscanf(buf,"Buffers: %d kB\n",&m_buff);
@@ -76,10 +75,10 @@ void Mem::getVal( TMdPrm *prm )
 	sscanf(buf,"SwapTotal: %d kB\n",&sw_total);
 	sscanf(buf,"SwapFree: %d kB\n",&sw_free);
     }
-    fclose(f);
+    if(fclose(f) != 0)
+	mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 
-    if(m_total || m_free || m_buff || m_cach || sw_total || sw_free)
-    {
+    if(m_total || m_free || m_buff || m_cach || sw_total || sw_free) {
 	prm->daErr = "";
 	prm->vlAt("free").at().setI(m_free+m_buff+m_cach,0,true);
 	prm->vlAt("total").at().setI(m_total,0,true);
@@ -90,26 +89,23 @@ void Mem::getVal( TMdPrm *prm )
 	prm->vlAt("sw_total").at().setI(sw_total,0,true);
 	prm->vlAt("sw_use").at().setI(sw_total-sw_free,0,true);
     }
-    else if(!prm->daErr.getVal().size())
-    {
-        prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+    else if(!prm->daErr.getVal().size()) {
+	prm->setEval();
+	prm->daErr = _("10:Device is not available.");
     }
 }
 
 void Mem::makeActiveDA( TMdContr *aCntr )
 {
     FILE *f = fopen("/proc/meminfo", "r");
-    if(f && !aCntr->present("MemInfo"))
-    {
+    if(f && !aCntr->present("MemInfo")) {
 	vector<string> pLs;
 	// Find propper parameter's object
 	aCntr->list(pLs);
-	unsigned i_p;
-	for(i_p = 0; i_p < pLs.size(); i_p++)
-	    if(aCntr->at(pLs[i_p]).at().cfg("TYPE").getS() == id()) break;
-	if(i_p >= pLs.size())
-	{
+	unsigned iP;
+	for(iP = 0; iP < pLs.size(); iP++)
+	    if(aCntr->at(pLs[iP]).at().cfg("TYPE").getS() == id()) break;
+	if(iP >= pLs.size()) {
 	    string pId = "MemInfo";
 	    while(aCntr->present(pId)) pId = TSYS::strLabEnum(pId);
 	    aCntr->add(pId, 0);
@@ -121,5 +117,6 @@ void Mem::makeActiveDA( TMdContr *aCntr )
 	    if(aCntr->enableStat()) dprm.at().enable();
 	}
     }
-    if(f) fclose(f);
+    if(f && fclose(f) != 0)
+	mess_warning(aCntr->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }

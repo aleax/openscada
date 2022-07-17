@@ -1569,8 +1569,11 @@ External hosts mode (enum — ExtHost::Mode):
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
 <li> <i>void inTrList( vector&lt;string&gt; &amp;ls );</i> — Full list of input transports.</li>
 <li> <i>void outTrList( vector&lt;string&gt; &amp;ls );</i> — Full list of output transports.</li>
-<li> <i>string extHostsDB( );</i> — Database for the storing the list of external hosts.</li>
-<li> <i>void extHostList( const string &amp;user, vector&lt;ExtHost&gt; &amp;list, bool andSYS = false, int upRiseLev = -1 );</i> — The <i>list</i> of external hosts for <i>user</i>, include system <i>andSYS</i> and the uprising level <i>upRiseLev</i> (-1 - starting from the host's entry level).</li>
+<li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;addr );</i> — Unified function of the output transport generic obtaining at that address <i>addr</i> in the form:</li></ul>
+<dl><dd> "<b>{TrModule}.[out_]{TrID}[:{TrAddr}]</b>" — typical output with automatic creation <i>TrID</i> at it missing and allowing <i>TrAddr</i>;</dd>
+<dd> "<b>{TrModule}.in_{TrID}:{RemConId}</b>" — initiative input with the connection identifier in <i>RemConId</i>.</dd></dl>
+<ul><li> <i>string extHostsDB( );</i> — Database for the storing the list of external hosts.</li>
+<li> <i>void extHostList( const string &amp;user, vector&lt;ExtHost&gt; &amp;list, bool andSYS = false, int upRiseLev = -1, const string &amp;lang = "" );</i> — The <i>list</i> of external hosts for <i>user</i>, include system <i>andSYS</i>, the uprising level <i>upRiseLev</i> (-1 - starting from the host's entry level) and for the language <i>lang</i>.</li>
 <li> <i>ExtHost extHostGet( const string &amp;user, const string &amp;id, bool andSYS = false );</i> — Getting the information object from the external host <i>id</i> on behalf of the user <i>user</i>, include system <i>andSYS</i> ( "*" — for the system hosts).</li>
 <li> <i>ExtHost extHostSeek( const string &amp;id, int lev );</i> — Direct hosts scanning at the station <i>id</i> and the level <i>lev</i>. The scanning starts at <i>lev</i> in 0 and stops at return empty host ID.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; extHost( TTransportS::ExtHost host, const string &amp;pref = "" );</i> — Creation - request of the output transport to service the external host <i>host</i> with the prefix of the identification of the system node <i>pref</i>.</li>
@@ -1595,7 +1598,8 @@ External hosts mode (enum — ExtHost::Mode):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
+<ul><li> <i>virtual bool isNetwork( );</i> — The sign — "The transport module is network one".</li>
+<li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
 <li> <i>bool inPresent( const string &amp;id ) const;</i> — Check for an input transport presence.</li>
 <li> <i>string inAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the input transport. Returns the end created identifier.</li>
 <li> <i>void inDel( const string &amp;id, bool complete = false );</i> — Deleting of the input transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
@@ -1650,14 +1654,15 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
 <li> <i>virtual void stop( );</i> — Stop of the transport.</li>
 <li> <i>virtual int writeTo( const string &amp;sender, const string &amp;data );</i> — Sending <i>data</i> backward to the <i>sender</i>.</li>
-<li> <i>vector&lt;AutoHD&lt;TTransportOut&gt; &gt; assTrs( bool checkForCleanDisabled = false );</i> — The assigned output transports massive, created by the input transport for typical requests to the connection initiator. Set <i>checkForCleanDisabled</i> for prior checking and clean up disabled ones.</li>
+<li> <i>vector&lt;AutoHD&lt;TTransportOut&gt; &gt; associateTrs( bool checkForCleanDisabled = false );</i> — The associated output transports massive, created by the input transport for typical requests to the connection initiator. Set <i>checkForCleanDisabled</i> for prior checking and clean up disabled ones.</li>
+<li> <i>AutoHD&lt;TTransportOut&gt; associateTr( const string &amp;id );</i> — Getting the associated output transport at that connection ID.</li>
 <li> <i>int logLen( );</i> — length of the IO log.</li>
 <li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
 <li> <i>void pushLogMess( const string &amp;vl, const string &amp;data = "", int dataDir = 0 );</i> — push the message <i>vl</i> with the <i>data</i> in the direction <i>dataDir</i> to the log in the format "<b>{vl}\n{data}</b>".</li>
 <li> <i>TTypeTransport &amp;owner( ) const;</i> — Transport's type – the owner of the input transport.</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>string assTrO( const string &amp;addr );</i> — The assigned output transport creation with address <i>addr</i>.</li></ul>
+<ul><li> <i>string associateTrO( const string &amp;addr );</i> — The associated output transport creation with the address <i>addr</i>.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
 <ul><li> <i>bool runSt;</i> — The sign "Running".</li></ul>
@@ -1675,7 +1680,7 @@ External hosts mode (enum — ExtHost::Mode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TTransportOut( const string &amp;id, const string &amp;db, TElem *el );</i> — Initializing constructor.</li>
-<li> <i>virtual bool isNetwork( );</i> — The sign — "The transport is network one", what is specified by the timeouts in seconds.</li>
+<li> <i>bool isNetwork( );</i> — The sign — "The transport is network one", what is specified by the timeouts in seconds.</li>
 <li> <i>string id( );</i> — Transport's Id.</li>
 <li> <i>string workId( );</i> — Full ID including the ID of the module.</li>
 <li> <i>string name( );</i> — Transport name.</li>

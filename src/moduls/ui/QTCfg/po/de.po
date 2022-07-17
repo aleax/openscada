@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-18 10:45+0300\n"
+"POT-Creation-Date: 2022-07-15 21:19+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -680,6 +680,10 @@ msgstr "Abbildungen (*.png *.jpg)"
 #, c-format
 msgid "Error opening the file '%s'\n"
 msgstr "Fehler beim Öffnen der Datei '%s'\n"
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
 
 #, c-format
 msgid "Error image file '%s'\n"

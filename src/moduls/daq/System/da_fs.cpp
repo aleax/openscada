@@ -54,7 +54,7 @@ void FS::init( TMdPrm *prm, bool update )
     if(!update) cSubt.fld().setDescr(trS("Mount point"));
 
     vector<string> list;
-    mpList(list);
+    dList(prm, list);
     string mpls;
     for(unsigned iL = 0; iL < list.size(); iL++) mpls += list[iL]+";";
     MtxAlloc res(prm->dataRes(), true);
@@ -66,7 +66,7 @@ void FS::init( TMdPrm *prm, bool update )
     //	cSubt.setS(list[0]);
 }
 
-void FS::mpList( vector<string> &list )
+void FS::dList( TCntrNode *obj, vector<string> &list )
 {
     char name[512];
     char buf[1024], *s;
@@ -84,7 +84,8 @@ void FS::mpList( vector<string> &list )
 	list.push_back(name);
     }
 
-    if(f) fclose(f);
+    if(f && fclose(f) != 0)
+	mess_warning(obj->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }
 
 void FS::getVal( TMdPrm *prm )
@@ -112,7 +113,7 @@ void FS::makeActiveDA( TMdContr *aCntr )
     string ap_nm = "FS";
 
     vector<string> list;
-    mpList(list);
+    dList(aCntr, list);
     for(unsigned iHD = 0; iHD < list.size(); iHD++) {
 	vector<string> pLs;
 

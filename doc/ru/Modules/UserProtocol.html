@@ -89,33 +89,32 @@
 <li> Если результат процедуры обработки равен "true" то транспорт продолжает ожидать данные. При получении следующей порции данных они добавляются к переменной "request" и выполнение процедуры повторяется.</li></ul>
 <p>В качестве примера рассмотрим реализацию обработки запросов по протоколу DCON для некоторых запросов к источнику данных с адресом "10":
 </p>
-<pre style="white-space: pre-wrap;">
-var enCRC = true;
-//SYS.messDebug("/DCON/in","REQ: "+request);
-//Проверка запроса на полноту
-if(request.length &lt; 4 || request[request.length-1]&nbsp;!= "\r") {
-  if(request.length &gt; 10) request = "";
-  return true;
-}
-//Проверка запроса на целостность (CRC) и адрес
-if(enCRC) {
-  CRC = 0;
-  for(i = 0; i &lt; (request.length-3); i++) CRC += request.charCodeAt(i);
-  if(CRC&nbsp;!= request.slice(request.length-3,request.length-1).toInt(16) || request.slice(1,3).toInt(16)&nbsp;!= 10) return false;
-}
-//Анализ запроса и подготовка ответа
-if(request[0] == "#") answer = "&gt;+05.123+04.153+07.234-02.356+10.000-05.133+02.345+08.234";
-else if(request[0] == "@") answer = "&gt;AB3C";
-else answer = "?";
-//Завершение ответа
-if(enCRC) {
-  CRC = 0;
-  for(i=0; i &lt; answer.length; i++) CRC += answer.charCodeAt(i);
-  answer += (CRC&amp;0xFF).toString(16,2)+"\r";
-}
-//SYS.messDebug("/DCON/in","ANSV: "+answer[0]);
-return 0;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">var</span> <span class="nx">enCRC</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<span class="c1">//SYS.messDebug("/DCON/in","REQ: "+request);</span>
+<span class="c1">//Проверка запроса на полноту</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">||</span> <span class="nx">request</span><span class="p">[</span><span class="nx">request</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"\r"</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="nx">request</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//Проверка запроса на целостность (CRC) и адрес</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">enCRC</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">CRC</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">3</span><span class="p">);</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="nx">CRC</span> <span class="o">+=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">CRC</span> <span class="o">!=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="nx">request</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nx">toInt</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">||</span> <span class="nx">request</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">).</span><span class="nx">toInt</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">10</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//Анализ запроса и подготовка ответа</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">request</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"#"</span><span class="p">)</span> <span class="nx">answer</span> <span class="o">=</span> <span class="s2">"&gt;+05.123+04.153+07.234-02.356+10.000-05.133+02.345+08.234"</span><span class="p">;</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">request</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"@"</span><span class="p">)</span> <span class="nx">answer</span> <span class="o">=</span> <span class="s2">"&gt;AB3C"</span><span class="p">;</span>
+<span class="k">else</span> <span class="nx">answer</span> <span class="o">=</span> <span class="s2">"?"</span><span class="p">;</span>
+<span class="c1">//Завершение ответа</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">enCRC</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">CRC</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">answer</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="nx">CRC</span> <span class="o">+=</span> <span class="nx">answer</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+  <span class="nx">answer</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">CRC</span><span class="o">&amp;</span><span class="mh">0xFF</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="s2">"\r"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//SYS.messDebug("/DCON/in","ANSV: "+answer[0]);</span>
+<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</pre></div>
 <h2><span class="mw-headline" id=".D0.92.D1.8B.D1.85.D0.BE.D0.B4.D0.BD.D0.B0.D1.8F_.D1.87.D0.B0.D1.81.D1.82.D1.8C_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0"><span class="mw-headline-number">2</span> Выходная часть протокола</span></h2>
 <p>Протокол исходящих запросов работает в кооперации с исходящим транспортом и отдельным объектом "Пользовательского протокола". Источником запроса через протокол может выступать <a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">функция общесистемного API пользовательского программирования выходного транспорта</a> "<b>int messIO( XMLNodeObj req, string prt );</b>", в параметрах которой указывается:
 </p>
@@ -138,51 +137,49 @@ return 0;
 <p>Суть выделения протокольной части кода в процедуру пользовательского протокола заключается в упрощении и унификации интерфейса клиентского обмена при многократном использовании и предполагает формирование структуры XML-узла обмена в виде атрибутов адресов удалённых станций, адресов читаемых и записываемых переменных, а также значений самих переменных. При этом весь груз непосредственного кодирования запроса и декодирования ответа возлагается на процедуру пользовательского протокола. Если это одноразовая реализация, которая к тому-же не предусматривает реализации входной части, то проще это сделать прямо в исходном шаблоне к источнику данных, в виде встроенной функции.
 </p><p>В качестве примера рассмотрим реализацию запросов посредством протокола DCON к обработчику, реализованному в предыдущем разделе. Начнём с реализации протокольной части:
 </p>
-<pre style="white-space: pre-wrap;">
-//Формирование конечного запроса
-request = io.name().slice(0,1) + io.attr("addr").toInt().toString(16,2) + io.text();
-if(io.attr("CRC").toInt()) {
-  CRC = 0;
-  for(i = 0; i &lt; request.length; i++) CRC += request.charCodeAt(i);
-    request += (CRC&amp;0xFF).toString(16,2) + "\r";
-}
-else request += "\r";
-//Отправка запроса
-resp = tr.messIO(request);
-while(resp[resp.length-1]&nbsp;!= "\r") {
-  tresp = tr.messIO("");
-  if(!tresp.length) break;
-  resp += tresp;
-}
-//Анализ ответа
-if(io.attr("CRC").toInt()) {
-  if(resp.length &lt; 4 || resp[resp.length-1]&nbsp;!= "\r") { io.setAttr("err","10:"+tr("Error or no response.")); return; }
-  //Проверка ответа на целостность (CRC)
-  CRC = 0;
-  for(i = 0; i &lt; (resp.length-3); i++) CRC += resp.charCodeAt(i);
-    if(CRC&nbsp;!= resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","11:"+tr("CRC error.")); return; }
-}
-else if(resp.length &lt; 2 || resp[resp.length-1]&nbsp;!= "\r") { io.setAttr("err","10:"+tr("Error or no response.")); return; }
-if(resp[0]&nbsp;!= "&gt;") { io.setAttr("err","12:"+resp[0]+":"+tr("DCON error.")); return; }
-//Возврат результата
-io.setAttr("err","");
-io.setText(resp.slice(1,resp.length-3));
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Формирование конечного запроса</span>
+<span class="nx">request</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">name</span><span class="p">().</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">io</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"addr"</span><span class="p">).</span><span class="nx">toInt</span><span class="p">().</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nx">io</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">io</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"CRC"</span><span class="p">).</span><span class="nx">toInt</span><span class="p">())</span> <span class="p">{</span>
+  <span class="nx">CRC</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">request</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="nx">CRC</span> <span class="o">+=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="nx">request</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">CRC</span><span class="o">&amp;</span><span class="mh">0xFF</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"\r"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="nx">request</span> <span class="o">+=</span> <span class="s2">"\r"</span><span class="p">;</span>
+<span class="c1">//Отправка запроса</span>
+<span class="nx">resp</span> <span class="o">=</span> <span class="nx">tr</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">request</span><span class="p">);</span>
+<span class="k">while</span><span class="p">(</span><span class="nx">resp</span><span class="p">[</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"\r"</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">tresp</span> <span class="o">=</span> <span class="nx">tr</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="s2">""</span><span class="p">);</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">tresp</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="k">break</span><span class="p">;</span>
+  <span class="nx">resp</span> <span class="o">+=</span> <span class="nx">tresp</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//Анализ ответа</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">io</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"CRC"</span><span class="p">).</span><span class="nx">toInt</span><span class="p">())</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="o">||</span> <span class="nx">resp</span><span class="p">[</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"\r"</span><span class="p">)</span> <span class="p">{</span> <span class="nx">io</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">,</span><span class="s2">"10:"</span><span class="o">+</span><span class="nx">tr</span><span class="p">(</span><span class="s2">"Error or no response."</span><span class="p">));</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+  <span class="c1">//Проверка ответа на целостность (CRC)</span>
+  <span class="nx">CRC</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">3</span><span class="p">);</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="nx">CRC</span> <span class="o">+=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">CRC</span> <span class="o">!=</span> <span class="nx">resp</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">).</span><span class="nx">toInt</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span> <span class="p">{</span> <span class="nx">io</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">,</span><span class="s2">"11:"</span><span class="o">+</span><span class="nx">tr</span><span class="p">(</span><span class="s2">"CRC error."</span><span class="p">));</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">||</span> <span class="nx">resp</span><span class="p">[</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"\r"</span><span class="p">)</span> <span class="p">{</span> <span class="nx">io</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">,</span><span class="s2">"10:"</span><span class="o">+</span><span class="nx">tr</span><span class="p">(</span><span class="s2">"Error or no response."</span><span class="p">));</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">resp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"&gt;"</span><span class="p">)</span> <span class="p">{</span> <span class="nx">io</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">,</span><span class="s2">"12:"</span><span class="o">+</span><span class="nx">resp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s2">":"</span><span class="o">+</span><span class="nx">tr</span><span class="p">(</span><span class="s2">"DCON error."</span><span class="p">));</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+<span class="c1">//Возврат результата</span>
+<span class="nx">io</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">,</span><span class="s2">""</span><span class="p">);</span>
+<span class="nx">io</span><span class="p">.</span><span class="nx">setText</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nx">resp</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">3</span><span class="p">));</span>
+</pre></div>
 <p>И процедура непосредственной отправки DCON запроса, через предыдущую процедуру протокола. Эту процедуру необходимо поместить в нужную задачу или промежуточную функцию OpenSCADA, например, в процедуру объекта контроллера <a href="../Modules/JavaLikeCalc.html#Examples" title="Special:MyLanguage/Modules/JavaLikeCalc">DAQ.JavaLikeCalc</a>:
 </p>
-<pre style="white-space: pre-wrap;">
-//Подготовка запроса
-req = SYS.XMLNode("#").setAttr("ProtIt","DCON").setAttr("addr",10);
-//Отправка запроса
-SYS.Transport["Serial"]["out_TestDCON"].messIO(req,"UserProtocol");
-if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Подготовка запроса</span>
+<span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"#"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"DCON"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"addr"</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>
+<span class="c1">//Отправка запроса</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">[</span><span class="s2">"Serial"</span><span class="p">][</span><span class="s2">"out_TestDCON"</span><span class="p">].</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="s2">"UserProtocol"</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">req</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">).</span><span class="nx">length</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">messDebug</span><span class="p">(</span><span class="s2">"TEST REQ"</span><span class="p">,</span><span class="s2">"RES: "</span><span class="o">+</span><span class="nx">req</span><span class="p">.</span><span class="nx">text</span><span class="p">());</span>
 
-//Подготовка второго запроса
-req = SYS.XMLNode("@").setAttr("ProtIt","DCON").setAttr("addr",10);
-//Отправка второго запроса
-SYS.Transport["Serial"]["out_TestDCON"].messIO(req,"UserProtocol");
-if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
-</pre>
+<span class="c1">//Подготовка второго запроса</span>
+<span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"@"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"DCON"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"addr"</span><span class="p">,</span><span class="mi">10</span><span class="p">);</span>
+<span class="c1">//Отправка второго запроса</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">[</span><span class="s2">"Serial"</span><span class="p">][</span><span class="s2">"out_TestDCON"</span><span class="p">].</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="s2">"UserProtocol"</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">req</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">).</span><span class="nx">length</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">messDebug</span><span class="p">(</span><span class="s2">"TEST REQ"</span><span class="p">,</span><span class="s2">"RES: "</span><span class="o">+</span><span class="nx">req</span><span class="p">.</span><span class="nx">text</span><span class="p">());</span>
+</pre></div>
 
 
 

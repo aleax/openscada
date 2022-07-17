@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 17:07+0300\n"
+"POT-Creation-Date: 2022-07-15 21:14+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -130,16 +130,16 @@ msgstr "Ошибка подключения %s сокета: '%s (%d)'!"
 msgid "Error binding the %s socket: '%s (%d)'!"
 msgstr "Ошибка связывания с %s сокетом: '%s (%d)'!"
 
+#, fuzzy, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr "Закрытие сокета '%d' при ошибке '%s (%d)'!"
+
 #, c-format
 msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN сокет подключен к '%s'!"
 
 msgid "Connected"
 msgstr "Подключено"
-
-#, c-format
-msgid "Closing the socket '%d' error '%s (%d)'!"
-msgstr "Закрытие сокета '%d' при ошибке '%s (%d)'!"
 
 msgid "Disconnected"
 msgstr "Отключено"
@@ -187,7 +187,8 @@ msgid "%d:> Transmitted to '%s'\n"
 msgstr "%d:> Передано на '%s'\n"
 
 #, c-format
-msgid "Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
+msgid ""
+"Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
 "Получено CAN сообщение id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
 "%02X!"
@@ -490,4 +491,3 @@ msgstr "Временные интервалы"
 
 msgid "Attempts"
 msgstr "Попыток"
-

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-31 20:41+0300\n"
+"POT-Creation-Date: 2022-07-15 21:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1429,6 +1429,10 @@ msgid "Empty"
 msgstr ""
 
 msgid "\"Frequency (Hz)\""
+msgstr ""
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
 msgstr ""
 
 msgid "Error writing to: %1."

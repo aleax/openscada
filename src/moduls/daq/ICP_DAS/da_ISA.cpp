@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ICP_DAS file: da_ISA.cpp
 /***************************************************************************
- *   Copyright (C) 2012-2014 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2012-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -71,9 +71,13 @@ string da_ISA::modType( const string &modTp )
     if(fd_proc) {
 	char rbuf[200], isadev[31], isaname[31];
 	while(fgets(rbuf,sizeof(rbuf),fd_proc))
-	    if(sscanf(rbuf,"dev: %30s %*x %*x %30s",isadev,isaname) == 2 && modTp == isadev)
-	    { fclose(fd_proc); return isaname; }
-	fclose(fd_proc);
+	    if(sscanf(rbuf,"dev: %30s %*x %*x %30s",isadev,isaname) == 2 && modTp == isadev) {
+		if(fclose(fd_proc) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fd_proc, strerror(errno), errno);
+		return isaname;
+	    }
+	if(fclose(fd_proc) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fd_proc, strerror(errno), errno);
     }
 
     return "";
@@ -89,7 +93,8 @@ void da_ISA::tpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl )
 	while(fgets(rbuf,sizeof(rbuf),fd_proc))
 	    if(sscanf(rbuf,"dev: %30s %*x %*x %30s",isadev,isaname) == 2)
 	    { tpl.push_back(isadev); if(ntpl) ntpl->push_back(TSYS::strMess("%s (%s)",isaname,isadev)); }
-	fclose(fd_proc);
+	if(fclose(fd_proc) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fd_proc, strerror(errno), errno);
     }
 }
 
@@ -190,7 +195,8 @@ void da_ISA::disable( TMdPrm *p )
 {
     if(p->extPrms) {
 	tval *ePrm = (tval*)p->extPrms;
-	if(ePrm->devFd >= 0) close(ePrm->devFd);
+	if(ePrm->devFd >= 0 && close(ePrm->devFd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), ePrm->devFd, strerror(errno), errno);
 	delete (tval *)p->extPrms;
 	p->extPrms = NULL;
     }

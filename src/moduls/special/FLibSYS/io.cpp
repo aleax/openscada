@@ -49,7 +49,9 @@ void IOObj::open( const string &nm, const string &perm, const string &imFormat, 
 
 void IOObj::close( )
 {
-    if(fhd) { fclose(fhd); fhd = NULL; }
+    if(fhd && fclose(fhd) != 0)
+	mess_warning("IOObj", _("Closing the file %p error '%s (%d)'!"), fhd, strerror(errno), errno);
+    fhd = NULL;
     str = ""; pos = 0;
 }
 

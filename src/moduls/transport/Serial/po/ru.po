@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-16 18:12+0300\n"
+"POT-Creation-Date: 2022-07-15 21:01+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -139,6 +139,10 @@ msgstr "Ошибка количества стоп битов %d."
 #, c-format
 msgid "No response to the initial request '%s'."
 msgstr "Нет ответа на запрос инициализации '%s'."
+
+#, fuzzy, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Запись: ошибка '%s (%d)'."
 
 msgid "Connected"
 msgstr "Подключено"

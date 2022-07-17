@@ -137,10 +137,12 @@ void ModVArch::start( )
 		int hd1 = open((vAt.at().addr()+"/"+fLock).c_str(), O_RDONLY);
 		if(hd1 >= 0 || vAt.at().addr() == addr()) {
 		    dbl = vAt.at().addr();
-		    if(hd1 >= 0) close(hd1);
+		    if(hd1 >= 0 && close(hd1) != 0)
+			mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd1, strerror(errno), errno);
 		}
 	    }
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    remove((addr()+"/"+fLock).c_str());
 	}
 	res.unlock();
@@ -221,7 +223,8 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 		    infoOK = true;
 		}
 	    }
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 
 	//Get file info from DB
@@ -252,7 +255,8 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     // Read Header
     VFileArch::FHead head;
     int r_len = read(hd, &head, sizeof(VFileArch::FHead));
-    close(hd);
+    if(close(hd) != 0)
+	mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     if(r_len < (int)sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55) return false;
     string aId = getArchiveID(head, TSYS::pathLevEnd(a_fnm,0));
     // Check to archive present
@@ -281,7 +285,8 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    // Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, aId.c_str(), head.period, head.vtp|(head.vtpExt<<4));
 	    bool fOK = (write(hd,si.data(),si.size()) == (int)si.size());
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    if(!fOK) return false;
 	}
     }
@@ -482,7 +487,8 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
 	chnk.chunksize = val_cnt*sizeof(float);
 	fOK = fOK && (write(hd,&chnk,sizeof(chnk)) == sizeof(chnk));
 
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     }
     else {
 	char c_val[40];
@@ -502,7 +508,8 @@ void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const str
 		fOK = fOK && (write(hd,c_val,strlen(c_val)) == (int)strlen(c_val));
 	    }
 	}
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     }
 }
 
@@ -1140,7 +1147,8 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	default: break;
     }
     mSize = lseek(hd, 0, SEEK_END);
-    close(hd);
+    if(close(hd) != 0)
+	mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     mAcces = time(NULL);
     mErr = !fOK;
 }
@@ -1235,7 +1243,8 @@ void VFileArch::attach( const string &iname )
 	mSize = lseek(hd, 0, SEEK_END);
 	mpos = (end()-begin())/period();
 	if(!mPack && cur_tm >= begin() && cur_tm <= end()) repairFile(hd);
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	res.release();
 
 	// Load previous value
@@ -1264,7 +1273,11 @@ void VFileArch::check( )
 
 	// Get file size
 	int hd = open(name().c_str(), O_RDONLY);
-	if(hd > 0) { mSize = lseek(hd, 0, SEEK_END); close(hd);	}
+	if(hd > 0) {
+	    mSize = lseek(hd, 0, SEEK_END);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
+	}
 
 	if(!owner().archivator().packInfoFiles() || owner().archivator().infoTbl.size()) {
 	    // Write info to DB
@@ -1283,7 +1296,8 @@ void VFileArch::check( )
 	    string si = TSYS::strMess("%llx %llx %s %llx %d",begin(),end(),owner().archive().id().c_str(),period(),type());
 	    if(write(hd,si.data(),si.size()) != (int)si.size())
 		mod->mess_sys(TMess::Error, _("Error writing to '%s'!"), (name()+".info").c_str());
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
     }
 }
@@ -1316,7 +1330,8 @@ int64_t VFileArch::endData( )
     res.request(false);
 
     //Free file resource and close the file
-    close(hd);
+    if(close(hd) != 0)
+	mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     mAcces = time(NULL);
     res.release();
 
@@ -1411,7 +1426,8 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     }
 
     //Free file resource and close file
-    close(hd);
+    if(close(hd) != 0)
+	mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     mAcces = time(NULL);
     res.release();
 
@@ -1496,39 +1512,46 @@ TVariant VFileArch::getVal( int vpos )
     switch(type()) {
 	case TFld::Boolean: {
 	    char rez = *(char*)getValue(hd, calcVlOff(hd,vpos), sizeof(char)).c_str();
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    return rez;
 	}
 	case TFld::Int16: {
 	    int16_t rez = *(int16_t*)getValue(hd, calcVlOff(hd,vpos), sizeof(int16_t)).c_str();
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    return (rez==EVAL_INT16) ? (int64_t)EVAL_INT : rez;
 	}
 	case TFld::Int32: {
 	    int32_t rez = *(int32_t*)getValue(hd, calcVlOff(hd,vpos), sizeof(int32_t)).c_str();
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    return (rez==EVAL_INT32) ? (int64_t)EVAL_INT : rez;
 	}
 	case TFld::Int64: {
 	    int64_t rez = *(int64_t*)getValue(hd, calcVlOff(hd,vpos), sizeof(int64_t)).c_str();
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    return (rez==EVAL_INT64) ? (int64_t)EVAL_INT : rez;
 	}
 	case TFld::Float: {
 	    float rez = TSYS::floatLErev(*(float*)getValue(hd, calcVlOff(hd,vpos), sizeof(float)).c_str());
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    return (rez<=EVAL_RFlt) ? EVAL_REAL : rez;
 	}
 	case TFld::Double: {
 	    double rez = TSYS::doubleLErev(*(double*)getValue(hd, calcVlOff(hd,vpos), sizeof(double)).c_str());
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    return (rez<=EVAL_RDbl) ? EVAL_REAL : rez;
 	}
 	case TFld::String: {
 	    int v_sz;
 	    int v_off = calcVlOff(hd, vpos, &v_sz);
 	    string rez = getValue(hd, v_off, v_sz);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    return rez;
 	}
 	default: break;
@@ -1773,7 +1796,8 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     mSize = lseek(hd, 0, SEEK_END);
 
-    close(hd);
+    if(close(hd) != 0)
+	mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 
     if(!fOK) owner().archivator().mess_sys(TMess::Error, _("Error writing to the archive '%s' file '%s': %s(%d)"),
 			owner().archive().id().c_str(), name().c_str(), strerror(errno), errno);
@@ -2015,7 +2039,8 @@ void VFileArch::repairFile( int hd )
 		lseek(hd, 0, SEEK_SET);
 		for(int rs = 0; fOK && (rs=read(hd, cpBuf, sizeof(cpBuf))) > 0; )
 		    fOK = (write(ehd,cpBuf,rs) == rs);
-		close(ehd);
+		if(close(ehd) != 0)
+		    mess_warning(owner().archivator().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), ehd, strerror(errno), errno);
 	    }
 	}
 

@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.7"
+#define MOD_VER		"3.4.8"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -211,7 +211,8 @@ string TTransSock::MD5( const string &file )
     string data;
     char buf[prmStrBuf_SZ];
     for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) data.append(buf, len);
-    close(hd);
+    if(close(hd) != 0)
+	mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 
     unsigned char result[MD5_DIGEST_LENGTH];
     ::MD5((unsigned char*)data.data(), data.size(), result);
@@ -430,7 +431,8 @@ void *TSocketIn::Task( void *sock_in )
 	    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
 	    if(icfile < 0) throw TError(s.nodePath().c_str(), _("Error opening the temporary file '%s': '%s'"), cfile.c_str(), strerror(errno));
 	    bool fOK = (write(icfile,s.certKey().data(),s.certKey().size()) == (int)s.certKey().size());
-	    close(icfile);
+	    if(close(icfile) != 0)
+		mess_warning(s.nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), icfile, strerror(errno), errno);
 	    if(!fOK) throw TError(s.nodePath().c_str(), _("Error writing the file '%s'."), cfile.c_str());
 	}
 
@@ -1092,7 +1094,8 @@ void TSocketOut::start( int tmCon )
 		    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
 		    if(icfile < 0) throw TError(nodePath().c_str(), _("Error opening the temporary file '%s': '%s'"), cfile.c_str(), strerror(errno));
 		    bool fOK = (write(icfile,certKey().data(),certKey().size()) == (int)certKey().size());
-		    close(icfile);
+		    if(close(icfile) != 0)
+			mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), icfile, strerror(errno), errno);
 		    if(!fOK) throw TError(nodePath().c_str(), _("Error writing the file '%s'."), cfile.c_str());
 		}
 
@@ -1151,7 +1154,8 @@ void TSocketOut::start( int tmCon )
 	    } catch(TError &err) {
 		aErr = err.mess;
 		if(conn)	BIO_reset(conn);
-		if(sockFd >= 0)	close(sockFd);
+		if(sockFd >= 0 && close(sockFd) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), sockFd, strerror(errno), errno);
 		sockFd = -1;
 		if(conn)	BIO_free_all(conn);	//BIO_free(conn);
 		if(ssl)		SSL_free(ssl);
@@ -1192,7 +1196,8 @@ void TSocketOut::stop( )
     //SSL deinit
     BIO_flush(conn);
     BIO_reset(conn);
-    close(BIO_get_fd(conn,NULL));
+    if(close(BIO_get_fd(conn,NULL)) != 0)
+	mess_warning(nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), BIO_get_fd(conn,NULL), strerror(errno), errno);
     //BIO_free(conn);
     BIO_free_all(conn);
     SSL_free(ssl);

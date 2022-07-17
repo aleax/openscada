@@ -198,7 +198,8 @@ void da_LP_8x::getVal( TMdPrm *p )
 		rV = (rV>>1)&0x0f;
 		val = ~(((rV&0x08) >> 3) | ((rV&0x04) >> 1) | ((rV&0x02) << 1) | ((rV&0x01) << 3)) & 0x0f;
 	    }
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	p->vlAt("RS").at().setI(val, 0, true);
     }

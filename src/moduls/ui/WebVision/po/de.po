@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-23 17:36+0300\n"
+"POT-Creation-Date: 2022-07-15 21:31+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -19,6 +19,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
 
 msgid "Resource not found"
 msgstr "Ressource nicht gefunden"
@@ -82,8 +86,7 @@ msgid "Operation user interface (WEB)"
 msgstr "Benutzerschnittstelle (WEB)"
 
 msgid "Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)"
-msgstr ""
-"Roman Savotschenko, Maxim Lysjenko (2008-2012), Ksenija Jaschina (2007)"
+msgstr "Roman Savotschenko, Maxim Lysjenko (2008-2012), Ksenija Jaschina (2007)"
 
 msgid ""
 "Visual operation user interface, based on the WEB - front-end to the VCA "
@@ -233,12 +236,10 @@ msgid "Available projects"
 msgstr "Verfügbare Projekte"
 
 msgid "There is no session and project of the VCA engine for the user!"
-msgstr ""
-"Es gibt keine Sitzung und kein Projekt der VCA-Engine für den Benutzer!"
+msgstr "Es gibt keine Sitzung und kein Projekt der VCA-Engine für den Benutzer!"
 
 msgid "Sorry, the number of open sessions has reached a limit!"
-msgstr ""
-"Entschuldigung, die Anzahl der offenen Sitzungen hat ein Limit erreicht!"
+msgstr "Entschuldigung, die Anzahl der offenen Sitzungen hat ein Limit erreicht!"
 
 #, c-format
 msgid "Going to the session '%s' for the project '%s' ..."
@@ -348,3 +349,4 @@ msgstr ""
 
 msgid "FrontEnd: "
 msgstr "VorderesEnde: "
+

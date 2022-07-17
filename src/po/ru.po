@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 18:22+0300\n"
+"POT-Creation-Date: 2022-07-16 09:13+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1144,6 +1144,10 @@ msgstr "%s: Ошибка идентификатора или IO %d!"
 msgid "Error getting object from non-object IO %d!"
 msgstr "Ошибка получения объекта из не объектного IO %d!"
 
+#, c-format
+msgid "Closing the iconv handler error '%s (%d)'!"
+msgstr ""
+
 msgid "Storage address in the format \"{DB module}.{DB name}\"."
 msgstr "Адрес хранилища в формате \"{Модуль БД}.{Имя БД}\"."
 
@@ -1234,6 +1238,10 @@ msgstr ""
 "  '?' - любой символ.\n"
 "Регулярное выражение заключается между символами '/' (/mod_(System|"
 "LogicLev)/)."
+
+#, c-format
+msgid "Closing the thread %d error '%s (%d)'!"
+msgstr ""
 
 #, c-format
 msgid ""
@@ -1930,6 +1938,10 @@ msgid "Error the configuration file '%s': %s"
 msgstr "Ошибка конфигурационного файла '%s': %s"
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
 msgid "Error loading the configuration file '%s'."
 msgstr "Ошибка загрузки конфигурационного файла '%s'."
 
@@ -2008,6 +2020,10 @@ msgstr "Программа прервана!"
 msgid "Unknown signal %d!"
 msgstr "Неизвестный сигнал %d!"
 
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr ""
+
 msgid "Timeouted !!!"
 msgstr "Превышение времени ожидания !!!"
 
@@ -2064,6 +2080,10 @@ msgstr "Резервная станция '%s' недоступна."
 #, c-format
 msgid "System clock changed to '%s'. Correction the cron '%s' target!"
 msgstr "Системные часы изменены в '%s'. Коррекция цели крона '%s'!"
+
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr ""
 
 msgid "1:Request is not an object!"
 msgstr "1:Запрос не объект!"
@@ -2491,6 +2511,10 @@ msgstr "Пароль запросов"
 msgid "Level of lifting"
 msgstr "Уровень поднятия"
 
+#, fuzzy, c-format
+msgid "Error the output address '%s'!"
+msgstr "Ошибка удалённого хоста '%s'!"
+
 msgid "Error finding and creating new input transports."
 msgstr "Ошибка поиска и создания новых входных транспортов."
 
@@ -2520,15 +2544,14 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "Error the remote host '%s'!"
-msgstr "Ошибка удалённого хоста '%s'!"
-
-#, c-format
 msgid "External hosts of %s"
 msgstr "Внешние хосты %s"
 
 msgid "User;System;User and System"
 msgstr "Пользов.;Системн.;Пользов. и Системн."
+
+msgid "Initial connection identifier to what bind for control."
+msgstr ""
 
 msgid "New external host"
 msgstr "Новый внешний хост"
@@ -2586,13 +2609,17 @@ msgstr "Отключено. "
 msgid "Error deletion the node: %s"
 msgstr "Ошибка удаления узла: %s."
 
-#, c-format
-msgid "Error removing the assigned node/connection: %s"
-msgstr "Ошибка удаления назначенного узла/подключения: %s"
+#, fuzzy, c-format
+msgid "The initiative connection '%s' is not presented!"
+msgstr "Элемент '%s' отсутствует!"
 
-#, c-format
-msgid "Error connection the new assigned node: %s"
+#, fuzzy, c-format
+msgid "Error connection the new associated node: %s"
 msgstr "Ошибка подключения нового назначенного узла: %s"
+
+#, fuzzy, c-format
+msgid "Error removing the associated node/connection: %s"
+msgstr "Ошибка удаления назначенного узла/подключения: %s"
 
 msgid "Input transport: "
 msgstr "Входной транспорт: "
@@ -2624,6 +2651,10 @@ msgstr "Подключено. "
 #, c-format
 msgid "Established %s, last %s. "
 msgstr "Установлено %s, последнее %s. "
+
+#, c-format
+msgid "Initiative connection ID '%s'. "
+msgstr ""
 
 #, c-format
 msgid "Transport protocol '%s' is missing"

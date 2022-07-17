@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"8.1.0"
+#define MOD_VER		"8.1.2"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -453,7 +453,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id",".")->setText("Local");
 	vector<TTransportS::ExtHost> lst;
-	SYS->transport().at().extHostList("*", lst);
+	SYS->transport().at().extHostList("*", lst, false, -1, opt->attr("lang"));
 	for(unsigned iLs = 0; iLs < lst.size(); iLs++)
 	    opt->childAdd("el")->setAttr("id", lst[iLs].id)->setText(lst[iLs].name);
     }

@@ -41,7 +41,7 @@
 #define MOD_NAME	trS("Segnetics SMH2Gi and SMH4")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.1.13"
+#define MOD_VER		"1.1.14"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Data acquisition and control by Segnetics SMH2Gi and SMH4 hardware interfaces and modules.")
 #define LICENSE		"GPL2"
@@ -239,7 +239,8 @@ void TMdContr::enable_( )
 	if(write(hd,"0",1) != 1) mess_err(nodePath().c_str(), _("Write to gpio94 error!"));
 	TSYS::sysSleep(200e-3);	//200ms
 
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     }
 
     //MR bus init by send 250*0xCC symbols

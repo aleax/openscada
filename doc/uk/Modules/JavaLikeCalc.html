@@ -54,10 +54,9 @@
 </p><p>У процесі генерації коду, компілятор мови здійснює оптимізацію за константам та приведення типів констант до потрібного типу. Під оптимізацією констант мається на увазі обчислення двох констант та вставка результату у код, у процесі побудови байт-коду. Наприклад, вираз <b>y=pi*10;</b> згорнеться у просте привласнення <b>y=31.4159;</b>. Під приведенням типів констант до потрібного типу мається на увазі формування константи у коді, яка виключає приведення типу в процесі виконання. Наприклад, вираз <b>y=x*"10";</b>, у випадку реального типу змінної <b>x</b>, перетвориться у <b>y=x*10;</b>.
 </p><p>Вирази привласнення можуть записуватися через символ ',', наприклад:
 </p>
-<pre style="white-space: pre-wrap;">
-var1 = 1, var2 = 3, var4 = var1+var2;
-for(var1 = 0, var2 = 0, var3 = -1; var1 &lt; 10; var1++, var2++) var3++;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">var1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">var2</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">var4</span> <span class="o">=</span> <span class="nx">var1</span><span class="o">+</span><span class="nx">var2</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">var1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">var2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">var3</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">var1</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">var1</span><span class="o">++</span><span class="p">,</span> <span class="nx">var2</span><span class="o">++</span><span class="p">)</span> <span class="nx">var3</span><span class="o">++</span><span class="p">;</span>
+</pre></div>
 <p>Мова підтримує виклики зовнішніх та внутрішніх функцій. Ім'я будь-якої функції, взагалі, сприймається як символ, перевірка якого на належність до тієї або іншої категорії здійснюється у наступній послідовності:
 </p>
 <ul><li> не починається з крапки:
@@ -74,9 +73,9 @@ for(var1 = 0, var2 = 0, var3 = -1; var1 &lt; 10; var1++, var2++) var3++;
 <ul><li> елементи шляху до властивості та функції об'єкту, ім'я яких не має починатися на цифру та містити символи операцій.</li></ul></li></ul>
 <p>Виклик зовнішньої функції, як і глобального атрибуту параметру DAQ, записується у вигляді адреси до <a href="../User_API.html" title="Special:MyLanguage/Documents/User API">вузла об'єктної моделі OpenSCADA</a>: "DAQ.JavaLikeCalc.lib_techApp.klapNotLin". Для статичних функцій Ви можете наступним чином здійснювати динамічне підключення:
 </p>
-<pre style="white-space: pre-wrap;">
-function klapNotLin = "DAQ.JavaLikeCalc.lib_techApp.klapNotLin";
-rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">klapNotLin</span> <span class="o">=</span> <span class="s2">"DAQ.JavaLikeCalc.lib_techApp.klapNotLin"</span><span class="p">;</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="nx">klapNotLin</span><span class="p">(</span><span class="nx">prm1</span><span class="p">,</span> <span class="nx">prm2</span><span class="p">,</span> <span class="p">...,</span> <span class="nx">prmN</span><span class="p">);</span>
+</pre></div>
 <p>Для надання можливості написання користувацьких процедур управління різними компонентами OpenSCADA, цим модулем надається реалізація API прекомпіляції користувацьких процедур окремих компонентів OpenSCADA на мові подібної до Java. Такими компонентами, наприклад, є: шаблони параметрів <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">підсистеми "Збір даних"</a> та <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">середовище візуалізації та управління (СВУ)</a>.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -214,11 +213,13 @@ rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
 <p>Мовою підтримуються два типи умов. Перший — це операції умови для використання всередині виразу, другий — глобальний, заснований на умовних операторах.
 </p><p>Умова всередині виразу будується на операціях '?' та ':'. У якості прикладу можна записати наступний практичний вираз:
 </p>
-<pre style="white-space: pre-wrap;">st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">st_open</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+</pre></div>
 <p>Що читається як — якщо змінна <i>pos</i> більша або дорівнює <b>100</b>, тоді змінній <i>st_open</i> привласнюється значення <b>true</b>, інакше — <b>false</b>.
 </p><p>Глобальна умова будується на основі умовних операторів "if" та "else". У якості прикладу можна привести той-же вираз, але записаний у інший спосіб:
 </p>
-<pre style="white-space: pre-wrap;">if(pos &gt; 100) st_open = true; else st_open = false;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">if</span><span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="nx">st_open</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="k">else</span> <span class="nx">st_open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</pre></div>
 <h4><span class="mw-headline" id=".D0.A6.D0.B8.D0.BA.D0.BB.D0.B8"><span class="mw-headline-number">1.4.2</span> Цикли</span></h4>
 <p>Підтримується три типи циклів: <b>while</b>, <b>for</b> та <b>for-in</b>. Синтаксис циклів відповідає мовам програмування: C++, Java та JavaScript.
 </p><p>Цикл <b>while</b>, загалом, записується наступним чином: <b>while({умова}) {тіло циклу};</b><br />
@@ -239,10 +240,9 @@ rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
 </p><p>Оператор "return", в середині внутрішньої функції, здійснює контрольоване її завершення та розташування вказаної змінної, або результату виразу, як результату викликуваної внутрішньої функції.
 </p><p>Приклад типового визначення та використання внутрішньої функції наведено далі:
 </p>
-<pre style="white-space: pre-wrap;">
-function sum(a, b, c, d) { return a + ((b==EVAL)?0:b) + ((c==EVAL)?0:c) + ((d==EVAL)?0:d); }
-rez = sum(1, 2);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="p">((</span><span class="nx">b</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">b</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">c</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">d</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">d</span><span class="p">);</span> <span class="p">}</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</pre></div>
 <h4><span class="mw-headline" id=".D0.A1.D0.BF.D0.B5.D1.86.D1.96.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D0.B7.D0.BC.D1.96.D0.BD.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1.4.4</span> Спеціальні символи строкових змінних</span></h4>
 <p>Мовою передбачено підтримку наступних спеціальних символів строкових змінних:
 </p>
@@ -262,11 +262,10 @@ rez = sum(1, 2);
 </p><p>Об'єкт регулярного виразу "RegExp" створюється командою <b>varO = new RegExp(pat, flg)</b>, де <i>pat</i> — шаблон регулярного виразу, а <i>flg</i> — ознаки пошуку. Об'єкт роботи із регулярними виразами оснований на бібліотеці "PCRE". При глобальному пошуку встановлюється атрибут об'єкту "lastIndex", що дозволяє продовжити пошук у наступному виклику функції. У випадку невдалого пошуку атрибут "lastIndex" скидається у нуль. Детальніше про властивості та функції об'єкту регулярного виразу можна прочитати за <a href="../User_API.html#RegExp" title="Special:MyLanguage/Documents/User API">посиланням</a>.
 </p><p>Для довільного доступу до аргументів функції передбачено об'єкт аргументів, звернутися до якого можна за посередництвом символу "arguments". Цей об'єкт містить властивість "length" з кількістю аргументів у функції та дозволяє звернутися до значень аргументу за посередництвом його <b>номеру</b> або <b>ідентифікатору</b>. Розглянемо перебір аргументів по циклу:
 </p>
-<pre style="white-space: pre-wrap;">
-args = new Array();
-for(var i = 0; i &lt; arguments.length; i++)
-  args[i] = arguments[i];
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">args</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+  <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</pre></div>
 <p>Часткові властивості об'єкту мають і базові типи. Властивості та функції базових типів приведено нижче:
 </p>
 <ul><li> Нульовий тип, функції:
@@ -301,32 +300,32 @@ for(var i = 0; i &lt; arguments.length; i++)
 <li> <i>int indexOf( string substr, int start = 0 );</i> — повертає позицію пошукового рядка <i>substr</i> у вихідному рядку, починаючи з позиції <i>start</i>. Якщо вихідна позиція не вказана то пошук починається з початку. Якщо шуканого рядка не знайдено то повертається "-1".</li>
 <li> <i>int lastIndexOf( string substr, int start = {end} );</i> — повертає позицію шуканого рядка <i>substr</i> у вихідному рядку починаючи з позиції <i>start</i>, при пошуку з кінця. Якщо вихідна позиція не вказана то пошук починається з кінця. Якщо шуканого рядку не знайдено то повертається "-1".</li>
 <li> <i>int search( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає положення знайденого рядку інакше "-1".</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "Java123Script".search("script","i");  // rez = 7</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Java123Script"</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"script"</span><span class="p">,</span><span class="s2">"i"</span><span class="p">);</span>  <span class="c1">// rez = 7</span>
+</pre></div>
 <dl><dd><ul><li> <i>int search( RegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає положення найденого підрядку інакше "-1".</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Java123Script"</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"script"</span><span class="p">,</span><span class="s2">"i"</span><span class="p">));</span>  <span class="c1">// rez = 7</span>
+</pre></div>
 <dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — шукає у рядку за шаблоном <i>pat</i> та ознаками шаблону <i>flg</i>. Повертає масив із знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок. Атрибут "err" встановлюється у код помилки операції.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "1 плюс 2 плюс 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1 плюс 2 плюс 3"</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="s2">"\\d+"</span><span class="p">,</span><span class="s2">"g"</span><span class="p">);</span>  <span class="c1">// rez = [1], [2], [3]</span>
+</pre></div>
 <dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — шукає у рядку за шаблоном "RegExp" <i>pat</i>. Повертає масив зі знайденим підрядком (0) та підвиразами (&gt;1). Атрибут "index" масиву встановлюється у позицію знайденого підрядка. Атрибут "input" встановлюється у початковий рядок. Атрибут "err" встановлюється у код помилки операції.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "1 плюс 2 плюс 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1 плюс 2 плюс 3"</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\\d+"</span><span class="p">,</span><span class="s2">"g"</span><span class="p">));</span>  <span class="c1">// rez = [1], [2], [3]</span>
+</pre></div>
 <dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — повертає підрядок вилучений з початкового, починаючи з позиції <i>beg</i> та до <i>end</i> (не включаючи), нумерація з нуля. Якщо значення початку або кінця негативне, то відлік ведеться з кінця рядку. Якщо кінець не вказано, то кінцем є кінець рядку. Наприклад, конструкція <b>substring(-2)</b> поверне останні два символи рядку.</li>
 <li> <i>Array split( string sep, int limit );</i> — повертає масив елементів рядку, поділених <i>sep</i> та з обмеженням кількості елементів <i>limit</i>.</li>
 <li> <i>Array split( RegExp pat, int limit );</i> — повертає масив елементів рядку, поділених шаблоном "RegExp" <i>pat</i> та з обмеженням кількості елементів <i>limit</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));  // rez = [1], [2], [3], [4], [5]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1,2, 3 , 4 ,5"</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\\s*,\\s*"</span><span class="p">));</span>  <span class="c1">// rez = [1], [2], [3], [4], [5]</span>
+</pre></div>
 <dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — вставляє підрядок <i>substr</i> у позицію <i>pos</i> поточного рядку.</li>
 <li> <i>string replace( int pos, int n, string str );</i> — замінює підрядок з позиції <i>pos</i> та довжиною <i>n</i> у поточному рядку, на рядок <i>str</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "Javascript".replace(4,3,"67");  // rez = "Java67ipt"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Javascript"</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s2">"67"</span><span class="p">);</span>  <span class="c1">// rez = "Java67ipt"</span>
+</pre></div>
 <dl><dd><ul><li> <i>string replace( string substr, string str );</i> — замінює всі підрядки <i>substr</i> на рядок <i>str</i>. </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"123 321"</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">"3"</span><span class="p">,</span><span class="s2">"55"</span><span class="p">);</span>  <span class="c1">// rez = "1255 5521"</span>
+</pre></div>
 <dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — замінює підрядок за шаблоном <i>pat</i> на рядок <i>str</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"value = \"123\""</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\"([^\"]*)\""</span><span class="p">,</span><span class="s2">"g"</span><span class="p">),</span><span class="s2">"``$1''"</span><span class="p">));</span>  <span class="c1">// rez = "value = ``123''"</span>
+</pre></div>
 <dl><dd><ul><li> <i>real toReal();</i> — перетворює поточной рядок у реальне число.</li>
 <li> <i>int toInt( int base = 10 );</i> — перетворює поточний рядок у ціле число, відповідно до основи <i>base</i> (від 2 до 36). Якщо основа дорівнює 0 тоді буде враховуватися префіксний запис для визначення основи (123-десяткове; 0123-вісімкове; 0x123-шістнадцяткове).</li>
 <li> <i>string {parse,parseEnd}( int pos, string sep = ".", int off = {0,{length}}, bool mergeSepSymb = false );</i> — виокремлює із вихідного рядку елемент <i>pos</i> для роздільника елементів <i>sep</i> та від зміщення <i>off</i> (зупинка на початку наступного токену, або кінці для <i>parseEnd</i>). <i>mergeSepSymb</i> визначає дозвіл поєднання групи однакових символів у один роздільник. Результуюче зміщення поміщається назад до <i>off</i>. <i>parseEnd()</i> робить те саме, але з кінця.</li>
@@ -341,28 +340,26 @@ rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // r
 <h3><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.BA.D0.BB.D0.B0.D0.B4.D0.B8_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.B8_.D0.BD.D0.B0_.D1.86.D1.96.D0.B9_.D0.BC.D0.BE.D0.B2.D1.96"><span class="mw-headline-number">1.6</span> <span id="Examples" title="#Examples">Приклади програми на цій мові</span></span></h3>
 <p>Наведемо декілька прикладів програм на мові подібній до Java:
 </p>
-<pre style="white-space: pre-wrap;">
-//Модель ходу виконавчого механізму шарового крану
-if(!(st_close &amp;&amp;&nbsp;!com) &amp;&amp;&nbsp;!(st_open &amp;&amp; com))
-{
-  tmp_up = (pos&gt;0&amp;&amp;pos&lt;100)&nbsp;? 0&nbsp;: (tmp_up&gt;0&amp;&amp;lst_com==com)&nbsp;? tmp_up-1/frq&nbsp;: t_up;
-  pos += (tmp_up&gt;0)&nbsp;? 0&nbsp;: (100*(com?1:-1))/(t_full*frq);
-  pos = (pos&gt;100)&nbsp;? 100&nbsp;: (pos&lt;0)&nbsp;? 0&nbsp;: pos;
-  st_open = (pos&gt;=100)&nbsp;? true&nbsp;: false;
-  st_close = (pos&lt;=0)&nbsp;? true&nbsp;: false;
-  lst_com = com;
-}
-</pre>
-<pre style="white-space: pre-wrap;">
-//Модель клапану
-Qr = Q0 + Q0*Kpr*(Pi-1) + 0.01;
-Sr = (S_kl1*l_kl1+S_kl2*l_kl2)/100;
-Ftmp = (Pi&gt;2*Po)&nbsp;? Pi*pow(Q0*0.75/Ti,0.5)&nbsp;: (Po&gt;2*Pi)&nbsp;? Po*pow(Q0*0.75/To,0.5)&nbsp;: pow(abs(Q0*(pow(Pi,2)-pow(Po,2))/Ti),0.5);
-Fi -= (Fi-7260*Sr*sign(Pi-Po)*Ftmp)/(0.01*lo*frq);
-Po += 0.27*(Fi-Fo)/(So*lo*Q0*frq);
-Po = (Po&lt;0)&nbsp;? 0&nbsp;: (Po&gt;100)&nbsp;? 100&nbsp;: Po;
-To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Модель ходу виконавчого механізму кульового крану</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">st_close</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">com</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="nx">st_open</span> <span class="o">&amp;&amp;</span> <span class="nx">com</span><span class="p">))</span>
+<span class="p">{</span>
+  <span class="nx">tmp_up</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="nx">pos</span><span class="o">&lt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="nx">tmp_up</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="nx">lst_com</span><span class="o">==</span><span class="nx">com</span><span class="p">)</span> <span class="o">?</span> <span class="nx">tmp_up</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="nx">frq</span> <span class="o">:</span> <span class="nx">t_up</span><span class="p">;</span>
+  <span class="nx">pos</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">tmp_up</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="nx">com</span><span class="o">?</span><span class="mi">1</span><span class="o">:-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nx">t_full</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+  <span class="nx">pos</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span> <span class="o">:</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">pos</span><span class="p">;</span>
+  <span class="nx">st_open</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;=</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">st_close</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">lst_com</span> <span class="o">=</span> <span class="nx">com</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Модель клапану</span>
+<span class="nx">Qr</span> <span class="o">=</span> <span class="nx">Q0</span> <span class="o">+</span> <span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">;</span>
+<span class="nx">Sr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">S_kl1</span><span class="o">*</span><span class="nx">l_kl1</span><span class="o">+</span><span class="nx">S_kl2</span><span class="o">*</span><span class="nx">l_kl2</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="p">;</span>
+<span class="nx">Ftmp</span> <span class="o">=</span> <span class="p">(</span><span class="nx">Pi</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">*</span><span class="nx">Po</span><span class="p">)</span> <span class="o">?</span> <span class="nx">Pi</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="mf">0.75</span><span class="o">/</span><span class="nx">Ti</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">*</span><span class="nx">Pi</span><span class="p">)</span> <span class="o">?</span> <span class="nx">Po</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="mf">0.75</span><span class="o">/</span><span class="nx">To</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">:</span> <span class="nx">pow</span><span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="p">(</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Pi</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="nx">Ti</span><span class="p">),</span><span class="mf">0.5</span><span class="p">);</span>
+<span class="nx">Fi</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="mi">7260</span><span class="o">*</span><span class="nx">Sr</span><span class="o">*</span><span class="nx">sign</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="nx">Po</span><span class="p">)</span><span class="o">*</span><span class="nx">Ftmp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.01</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">+=</span> <span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">=</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span> <span class="o">:</span> <span class="nx">Po</span><span class="p">;</span>
+<span class="nx">To</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Fi</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po</span><span class="o">/</span><span class="nx">Pi</span><span class="p">,</span><span class="mf">0.02</span><span class="p">)</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Fwind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Twind</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">/</span><span class="nx">Riz</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Ct</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Qr</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+</pre></div>
 <h2><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83_.D1.82.D0.B0_.D0.B9.D0.BE.D0.B3.D0.BE_.D0.BA.D0.BE.D0.BD.D1.84.D1.96.D0.B3.D1.83.D1.80.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Об'єкт контролеру та його конфігурація</span></span></h2>
 <p>Об'єкт контролеру цього модуля, для забезпечення безпосередніх обчислень, пов'язується з функціями із бібліотек, побудованими за його допомогою, або з <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">шаблоном збору даних</a>. У випадку з шаблоном збору даних, додається можливість зовнішнього зв'язування, з іншими параметрами та атрибутами підсистеми "Збір даних". Для надання обчислювальних даних до OpenSCADA, у об'єкті контролеру можуть створюватися параметри. Приклад вкладки конфігурації об'єкту контролеру даного типу наведено на рисунку 2.
 </p>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 18:22+0300\n"
+"POT-Creation-Date: 2022-07-16 09:13+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1032,6 +1032,10 @@ msgstr ""
 msgid "Error getting object from non-object IO %d!"
 msgstr ""
 
+#, c-format
+msgid "Closing the iconv handler error '%s (%d)'!"
+msgstr ""
+
 msgid "Storage address in the format \"{DB module}.{DB name}\"."
 msgstr ""
 
@@ -1079,6 +1083,10 @@ msgid ""
 "  '*' - any substring;\n"
 "  '?' - any character.\n"
 "Regular expression enclosed between the symbols '/' (/mod_(System|LogicLev)/)."
+msgstr ""
+
+#, c-format
+msgid "Closing the thread %d error '%s (%d)'!"
 msgstr ""
 
 #, c-format
@@ -1579,6 +1587,10 @@ msgid "Error the configuration file '%s': %s"
 msgstr ""
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
 msgid "Error loading the configuration file '%s'."
 msgstr ""
 
@@ -1651,6 +1663,10 @@ msgstr ""
 msgid "Unknown signal %d!"
 msgstr ""
 
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr ""
+
 msgid "Timeouted !!!"
 msgstr ""
 
@@ -1702,6 +1718,10 @@ msgstr ""
 
 #, c-format
 msgid "System clock changed to '%s'. Correction the cron '%s' target!"
+msgstr ""
+
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
 msgstr ""
 
 msgid "1:Request is not an object!"
@@ -2065,6 +2085,10 @@ msgstr ""
 msgid "Level of lifting"
 msgstr ""
 
+#, c-format
+msgid "Error the output address '%s'!"
+msgstr ""
+
 msgid "Error finding and creating new input transports."
 msgstr ""
 
@@ -2092,14 +2116,13 @@ msgid ""
 msgstr ""
 
 #, c-format
-msgid "Error the remote host '%s'!"
-msgstr ""
-
-#, c-format
 msgid "External hosts of %s"
 msgstr ""
 
 msgid "User;System;User and System"
+msgstr ""
+
+msgid "Initial connection identifier to what bind for control."
 msgstr ""
 
 msgid "New external host"
@@ -2149,11 +2172,15 @@ msgid "Error deletion the node: %s"
 msgstr ""
 
 #, c-format
-msgid "Error removing the assigned node/connection: %s"
+msgid "The initiative connection '%s' is not presented!"
 msgstr ""
 
 #, c-format
-msgid "Error connection the new assigned node: %s"
+msgid "Error connection the new associated node: %s"
+msgstr ""
+
+#, c-format
+msgid "Error removing the associated node/connection: %s"
 msgstr ""
 
 msgid "Input transport: "
@@ -2185,6 +2212,10 @@ msgstr ""
 
 #, c-format
 msgid "Established %s, last %s. "
+msgstr ""
+
+#, c-format
+msgid "Initiative connection ID '%s'. "
 msgstr ""
 
 #, c-format

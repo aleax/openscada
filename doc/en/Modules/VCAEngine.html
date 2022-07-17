@@ -587,15 +587,14 @@ The mechanism "Processing the events with the help of computational procedure of
 </p><p>The content of the attribute "event" is a list of events in the format "<b>{event}:{evSrc}</b>", with the event on the separate line. Here is an example of processing events in the Java-like programming language of the OpenSCADA:
 &lt;/translate&gt;
 </p>
-<pre style="white-space: pre-wrap;">
-for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-  if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
-  else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
-  else if(sval == "ws_BtPress:/cvt_sound") alarmSt = 0x1000004;
-  else ev_rez += sval+"\n";
-}
-event = ev_rez;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">for</span><span class="p">(</span><span class="nx">ev_rez</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="nx">off</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">sval</span><span class="o">=</span><span class="nx">event</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">"\n"</span><span class="p">,</span><span class="nx">off</span><span class="p">)).</span><span class="nx">length</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_light"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000001</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_alarm"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000002</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_sound"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000004</span><span class="p">;</span>
+  <span class="k">else</span> <span class="nx">ev_rez</span> <span class="o">+=</span> <span class="nx">sval</span><span class="o">+</span><span class="s2">"\n"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">event</span> <span class="o">=</span> <span class="nx">ev_rez</span><span class="p">;</span>
+</pre></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Signaling_.28Alarms.29"><span class="mw-headline-number">3.6</span> <span id="Alarms" title="#Alarms">Signaling (Alarms)</span></span></h3>
@@ -628,39 +627,36 @@ Quietance — approving process is a fact of the operative personal take its att
 </p><p>Quietance performs by specifying the root of the branch of the widgets and the types of notification, which allows to make quietance on the side of the visualiser, as in groups, for example, on the signalling object, and individually by the object of the source. It is possible to independently quietance different types of alarms. Setting of the quietance is made by the simple modification of the attribute "alarmSt".
 </p><p>Example of the script to work with the signals gives below:
 </p>
-<pre style="white-space: pre-wrap;">
-//Separating the fact of the presence of alarms of different methods-types of notification
-cvt_light_en = alarmSt&amp;0x100; cvt_alarm_en = alarmSt&amp;0x200; cvt_sound_en = alarmSt&amp;0x400;
-//Separating the fact of the presence of alarms without quietance of various ways of notification
-cvt_light_active = alarmSt&amp;0x10000; cvt_alarm_active = alarmSt&amp;0x20000; cvt_sound_active = alarmSt&amp;0x40000;
-//Processing of the button's events of quietance and the quietance for different ways of notification
-for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-  if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
-  else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
-  else if(sval == "ws_BtPress:/cvt_sound") alarmSt = 0x1000004;
-  else ev_rez += sval + "\n";
-}
-event = ev_rez;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Separating the fact of the presence of alarms of different methods-types of notification</span>
+<span class="nx">cvt_light_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x100</span><span class="p">;</span> <span class="nx">cvt_alarm_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x200</span><span class="p">;</span> <span class="nx">cvt_sound_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x400</span><span class="p">;</span>
+<span class="c1">//Separating the fact of the presence of alarms without quietance of various ways of notification</span>
+<span class="nx">cvt_light_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x10000</span><span class="p">;</span> <span class="nx">cvt_alarm_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x20000</span><span class="p">;</span> <span class="nx">cvt_sound_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x40000</span><span class="p">;</span>
+<span class="c1">//Processing of the button's events of quietance and the quietance for different ways of notification</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">ev_rez</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="nx">off</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">sval</span><span class="o">=</span><span class="nx">event</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">"\n"</span><span class="p">,</span><span class="nx">off</span><span class="p">)).</span><span class="nx">length</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_light"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000001</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_alarm"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000002</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_sound"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000004</span><span class="p">;</span>
+  <span class="k">else</span> <span class="nx">ev_rez</span> <span class="o">+=</span> <span class="nx">sval</span> <span class="o">+</span> <span class="s2">"\n"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">event</span> <span class="o">=</span> <span class="nx">ev_rez</span><span class="p">;</span>
+</pre></div>
 <p><b>External notification methods</b><br />
 The first and the typical method of notifications is screen's light notification by alarm colors and its dynamic about proper visual elements, which always presents and does not require of specific configuration. But often we need for an external type notification, for example: external lamp, PC buzzer or "howler", arbitrary sound, synthesised speech and etc.
 </p><p>In order to realize this possibility, the external methods of the notification and the corresponding notification types, are freely described for the visualisation server and the visualiser itself. On the side of the visualisation server, the formation/receipt of the notification resource and the notification itself is described. On the side of the visualiser, the notification is described according to the resources of the visualisation server.
 </p><p>Description of the rules and scenarios of the notifications performs with user attributes of the text type for pages of the visualisation project, which applies at the page open. That is, potentially, for each open page, you can describe your own rules of the notification, though, it's usually enough and describes the general rules of the notification on the project's main page — a page that opens one-off and does not close at work:
 </p>
 <ul><li> For the visualisation server/engine, by the attribute "notify{N}" into the format:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]]
-//resStatic={ResourceFile}
-if(doRes) { The command text to form the resource. }
-if(doNtf) { The command text to notify. }
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]]</span>
+<span class="c1">//resStatic={ResourceFile}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="p">{</span> <span class="nx">The</span> <span class="nx">command</span> <span class="nx">text</span> <span class="nx">to</span> <span class="nx">form</span> <span class="nx">the</span> <span class="nx">resource</span><span class="p">.</span> <span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span><span class="p">)</span> <span class="p">{</span> <span class="nx">The</span> <span class="nx">command</span> <span class="nx">text</span> <span class="nx">to</span> <span class="nx">notify</span><span class="p">.</span> <span class="p">}</span>
+</pre></div>
 <ul><li> For a visualiser by the attribute "notifyVis[Vision|WebVision]{N}" into the format:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|quietanceRet]]]
-//name={The notifier name}
-//ico={The icon name}
-{ The notification command text to any or concrete visualiser. }
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//flags=notify[{DL}][|resource[|queue[|quietanceRet]]]</span>
+<span class="c1">//name={The notifier name}</span>
+<span class="c1">//ico={The icon name}</span>
+<span class="p">{</span> <span class="nx">The</span> <span class="nx">notification</span> <span class="nx">command</span> <span class="nx">text</span> <span class="nx">to</span> <span class="nx">any</span> <span class="nx">or</span> <span class="nx">concrete</span> <span class="nx">visualiser</span><span class="p">.</span> <span class="p">}</span>
+</pre></div>
 <p>Flags:
 </p>
 <ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — enables the notification with the repeating by the time <i>DL</i>, if the set; for <i>DL</i> = 0 the repeat carried out immediately.</li>
@@ -684,147 +680,140 @@ if(doNtf) { The command text to notify. }
 <ul><li> Beep (buzzer) on the visualiser or the visualisation server side:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify|notifyServ
-if(en) SYS.system("beep -f 1000 -l 1000000 &amp;", true);
-else if((beepPID=SYS.system("pidof beep")).toInt()) SYS.system("kill "+beepPID); </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify|notifyServ</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"beep -f 1000 -l 1000000 &amp;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="nx">beepPID</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"pidof beep"</span><span class="p">)).</span><span class="nx">toInt</span><span class="p">())</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill "</span><span class="o">+</span><span class="nx">beepPID</span><span class="p">);</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify|notifyServ
-if test $en = 1; then
-	beep -f 1000 -l 1000000 &amp;
-else
-	beepPID=$(pidof beep)
-	if test "x$beepPID"&nbsp;!= "x"; then kill $beepPID; fi
-fi </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify|notifyServ</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span>
+	beep -f <span class="m">1000</span> -l <span class="m">1000000</span> <span class="p">&amp;</span>
+<span class="k">else</span>
+	<span class="nv">beepPID</span><span class="o">=</span><span class="k">$(</span>pidof beep<span class="k">)</span>
+	<span class="k">if</span> <span class="nb">test</span> <span class="s2">"x</span><span class="nv">$beepPID</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"x"</span><span class="p">;</span> <span class="k">then</span> <span class="nb">kill</span> <span class="nv">$beepPID</span><span class="p">;</span> <span class="k">fi</span>
+<span class="k">fi</span>
+</pre></div>
 <ul><li> Repeating play for ready audio file, one common, on the visualiser or the visualisation server side:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2
-if(en) SYS.system("play -q alarm.ogg");</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q alarm.ogg"</span><span class="p">);</span>
+</pre></div>
 <dl><dd><ul><li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2
-if test $en = 1; then play -q alarm.ogg; fi</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> play -q alarm.ogg<span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Play an individual audio file for the source, on the visualisation server side:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=queue</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Speech synth for an individual message for the source, on the visualiser side:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=queue</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(doNtf &amp;&amp; en &amp;&amp; mess.length) {
-  SYS.fileWrite("tmpForSpeech", mess);
-  SYS.system("festival --tts tmpForSpeech");
-  SYS.fileRemove("tmpForSpeech");
-}
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">mess</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpForSpeech"</span><span class="p">,</span> <span class="nx">mess</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"festival --tts tmpForSpeech"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpForSpeech"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $doNtf = 1 -a $en = 1 -a "x"&nbsp;!= "x$mess"; then
-  echo $mess &gt; tmpForSpeech
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a <span class="s2">"x"</span> !<span class="o">=</span> <span class="s2">"x</span><span class="nv">$mess</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="nv">$mess</span> &gt; tmpForSpeech
   festival --tts tmpForSpeech
   rm tmpForSpeech
-fi
-</pre>
+<span class="k">fi</span>
+</pre></div>
 <ul><li> Preparing a sound file, one common, and playing it on the side of the visualiser or the visualisation server:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2|resource
-if(doRes) res = SYS.fileRead("alarm.ogg");  //Insert here a different method of the generation
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|resource</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"alarm.ogg"</span><span class="p">);</span>  <span class="c1">//Insert here a different method of the generation</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notify2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2|resource
-if test $doRes = 1; then cp -f alarm.ogg $res; fi  #Insert here a different method of the generation
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2|resource</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> cp -f alarm.ogg <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>  <span class="c">#Insert here a different method of the generation</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|resource
-if(en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|resource</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|resource
-if test $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|resource</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Prepare an individual audio file for the source of notification through the speech synth, on side of the visualiser or the visualisation server:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Text message of the speech synth|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2|queue
-if(doRes &amp;&amp; mess.length) {
- SYS.fileWrite("tmpText", mess);
- SYS.system("text2wave tmpText -o tmpWAV");
- res = SYS.fileRead("tmpWAV");
- SYS.fileRemove("tmpText"); SYS.fileRemove("tmpWAV");
-}
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
- SYS.fileWrite("tmpPlay", res);
- SYS.system("play -q tmpPlay");
- SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span> <span class="o">&amp;&amp;</span> <span class="nx">mess</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpText"</span><span class="p">,</span> <span class="nx">mess</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"text2wave tmpText -o tmpWAV"</span><span class="p">);</span>
+ <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"tmpWAV"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpText"</span><span class="p">);</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpWAV"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2|queue
-if test $doRes = 1 -a "x"&nbsp;!= "x$mess"; then
- echo $mess &gt; tmpText
- text2wave tmpText -o $res
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> <span class="m">1</span> -a <span class="s2">"x"</span> !<span class="o">=</span> <span class="s2">"x</span><span class="nv">$mess</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
+ <span class="nb">echo</span> <span class="nv">$mess</span> &gt; tmpText
+ text2wave tmpText -o <span class="nv">$res</span>
  rm tmpText
-fi
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<span class="k">fi</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(en &amp;&amp; res.length) {
- SYS.fileWrite("tmpPlay", res);
- SYS.system("play -q tmpPlay");
- SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Rights_management"><span class="mw-headline-number">3.7</span> Rights management</span></h3>
@@ -1747,12 +1736,12 @@ Where:
 <td>
 <p>The table structure and content in the XML view:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;tbl&gt;
-&lt;h&gt;&lt;s&gt;{Header1}&lt;/s&gt;&lt;s&gt;{Header2}&lt;/s&gt;&lt;/h&gt;
-&lt;r&gt;&lt;s&gt;{Row1Column1String}&lt;/s&gt;&lt;i&gt;{Row1Column1Integer}&lt;/i&gt;&lt;/r&gt;
-&lt;r&gt;&lt;b&gt;{Row2Column1Logical}&lt;/b&gt;&lt;r&gt;{Row2Column2Real}&lt;/r&gt;&lt;/r&gt;
-&lt;/tbl&gt;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;tbl&gt;</span>
+<span class="nt">&lt;h&gt;&lt;s&gt;</span>{Header1}<span class="nt">&lt;/s&gt;&lt;s&gt;</span>{Header2}<span class="nt">&lt;/s&gt;&lt;/h&gt;</span>
+<span class="nt">&lt;r&gt;&lt;s&gt;</span>{Row1Column1String}<span class="nt">&lt;/s&gt;&lt;i&gt;</span>{Row1Column1Integer}<span class="nt">&lt;/i&gt;&lt;/r&gt;</span>
+<span class="nt">&lt;r&gt;&lt;b&gt;</span>{Row2Column1Logical}<span class="nt">&lt;/b&gt;&lt;r&gt;</span>{Row2Column2Real}<span class="nt">&lt;/r&gt;&lt;/r&gt;</span>
+<span class="nt">&lt;/tbl&gt;</span>
+</pre></div>
 <p>The tags:
 </p>
 <dl><dd>"tbl" — Table, the properties at all:
@@ -2578,10 +2567,10 @@ Where:
 <td> Template </td>
 <td> 21 </td>
 <td> Template of the document in XHTML, starts from the tag "body" and includes the procedure parts:
-<pre style="white-space: pre-wrap;">
-&lt;body docProcLang="JavaLikeCalc.JavaScript"&gt;
-  &lt;h1&gt;Value&lt;?dp return wCod+1.314;?&gt;&lt;/h1&gt;
-&lt;/body&gt;</pre> 
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;body</span> <span class="na">docProcLang=</span><span class="s">"JavaLikeCalc.JavaScript"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>Value<span class="cp">&lt;?dp return wCod+1.314;?&gt;</span><span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div> 
 </td></tr>
 <tr>
 <td> doc </td>
@@ -2941,11 +2930,10 @@ Where:
 <li> <i>TCntrNodeObj ownerPage( )</i> — parent page object for the current widget.</li>
 <li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — parent widget object for the current widget. If set <i>base</i> then returns the parent page objects also.</li>
 <li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — adds the new widget <i>wid</i> with the name <i>wname</i> and based on the library widget <i>parent</i>.</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//Adds the new widget, based at the text primitive
-nw = this.wdgAdd("nw", "New widget", "/wlb_originals/wdg_Text");
-nw.attrSet("geomX", 50).attrSet("geomY", 50);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Adds the new widget, based at the text primitive</span>
+<span class="nx">nw</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">wdgAdd</span><span class="p">(</span><span class="s2">"nw"</span><span class="p">,</span> <span class="s2">"New widget"</span><span class="p">,</span> <span class="s2">"/wlb_originals/wdg_Text"</span><span class="p">);</span>
+<span class="nx">nw</span><span class="p">.</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomX"</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomY"</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+</pre></div>
 <ul><li> <i>bool wdgDel( string wid )</i> — deletes the widget <i>wid</i>.</li>
 <li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attaches to child or global widget, by the path <i>byPath</i>. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is ignored. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
 <li> <i>Array attrList()</i> — list of the widget attributes.</li>
@@ -2954,10 +2942,9 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 <li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — sets the value <i>vl</i> to the attribute <i>attr</i> of the widget or to the session, by <i>toSess</i>. The object is returned for the function concatenation.</li>
 <li> <i>string link( string attr, bool prm = false )</i> — link for the widget attribute <i>attr</i>. At set <i>prm</i> requests the link for the attributes block (parameter), represented by the attribute. </li>
 <li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — sets the link for the widget attribute <i>attr</i>. At set <i>prm</i>, sets the link for the attributes block (parameter), represented by the attribute.</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//Sets the link to the parameter for the eight trend
-this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Sets the link to the parameter for the eight trend</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">linkSet</span><span class="p">(</span><span class="s2">"el8.name"</span><span class="p">,</span> <span class="s2">"prm:/LogicLev/experiment/Pi"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</pre></div>
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — resource object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the <i>MIME</i>, from the session table or the source. It is designed for the resource objects edition and that substitution to this session's context, for example, images SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — sets the resource object to <i>data</i> with <i>MIME</i> by the address <i>addr</i>.</li>
 <li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li></ul>

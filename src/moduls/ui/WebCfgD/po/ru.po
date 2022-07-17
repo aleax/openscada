@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfgD 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-12 16:39+0300\n"
+"POT-Creation-Date: 2022-07-15 21:29+0300\n"
 "PO-Revision-Date: 2008-12-15 15:28+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -198,6 +198,10 @@ msgstr "Автор: "
 
 msgid "Web site: "
 msgstr "Web сайт: "
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
 
 #, c-format
 msgid "Unknown command: %s."

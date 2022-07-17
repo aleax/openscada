@@ -1,3 +1,37 @@
+2022-07-17 Roman (stable)
+- !:FIX:LibsDB.OscadaLibs: tmplib_base.ntf: For the server address in the SMTP HELLO request used the EMail sender address
+	from the attribute "from" of the "io" object.
+    !: tmplib_base.initConsAssignTrs: Renamed to initConAssociateTrs
+	and adapted to use the function conPrm("initConID") and associateTrsList().
+- !!!!:SYS.*: Most close(), iconv_close(), dlclose(), pclose() functions appended of checking the result and warning at problems.
+- !!!!:FIX:Transports: Unification the assigned output transports processing of the input Sockets transport without protocol specifying for:
+	- the function TTransportIn::assTrO() renamed to TTransportIn::associateTrO() and expanded for creation new ones at the first
+	    and next removing for stopped ones, and the just created transports appended for reading the initial connection ID
+	    with it registering in the connection parameter "initConID";
+	- new function TTransportIn::associateTr() and its UserAPI variant SYS.Transport["Modul"]["in_Transp"].associateTr()
+	    of obtaining the output transport object at its Connection ID;
+	- new function TTransportS::outAt() and its UserAPI variant SYS.Transport.outAt()
+	    of the output transport generic obtaining from the unified address;
+	- TTransportS::extHost() moved to use TTransportS::outAt();
+	- the field "Transport" of the external hosts table expanded for specifying the transport address in the unified-common form;
+	- the assigned output transports from an input one appended for removing at the inactivity at the TTransportIn::keepAliveTm();
+	- the UserAPI finction SYS.Transport["Modul"]["in_Transp"].assTrsList() appended of its correct naming variant associateTrsList();
+	- the output transport object appended of the UserAPI functions conPrm() and setConPrm() of accessing the connection parameters.
+    !!!:FIX: The output transports appended for the force stopping at the object system disable-disconnection,
+	not in destructors what is late then there can be lost the socket handlers.
+    The "in_" and "out_" prefix moved to the definitions STR_IN_PREF and STR_OUT_PREF respectively.
+    The TTransportOut::isNetwork() virtual function sign moved to the TTypeTransport object with linking the old one to new one,
+	for marking all module as the network one.
+- !!!!:FIX:Transport.Sockets: The input transports prevented at spare socket closing in the initiative mode.
+    FIX: The new initiative connection limit checking moved to the main limits checking part.
+    The input transport modes were named.
+    The S_NM_SOCK definition renamed to S_NM_SOCKET with the content "SOCK" renaming to "SOCKET".
+    The SOCK_FORCE, SOCK_TCP, SOCK_UDP. SOCK_UNIX, SOCK_RAWCAN renamed to S_FORCE, S_TCP, S_UDP. S_UNIX, S_RAWCAN respectively.
+- FIX:Transports,UI.{QTCfg,Vision,WebCfgD}: The function TTransportS::extHostList() appended an argument "lang"
+    to allow the remote host names obtaining translated.
+- DAQ.DAQGate: Appended for messaging about disable parameters.
+
+
 2022-07-05 Roman (stable)
 - !:FIX:LibsDB.OscadaLibs: tmplib_DevLib.mbBase: Adapted to the builtin syntax highlighting for the attribute "Items set (items)".
     tmplib_base.ntf: For the server address in the SMTP HELLO request used the EMail sender address instead

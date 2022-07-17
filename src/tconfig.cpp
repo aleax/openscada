@@ -232,7 +232,7 @@ void TConfig::setNoTransl( bool vl )
 TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
     const string &user_lang, int perm, const string &owner )
 {
-    // ElTp cfg(string nm) - config variable 'nm' get.
+    // ElTp cfg( string nm ) - config variable 'nm' get.
     //  nm - config variable name.
     if(iid == "cfg" && prms.size() >= 1 &&
 	    SYS->security().at().access(TSYS::strLine(user_lang,0),SEC_RD,TSYS::strParse(owner,0,":"),TSYS::strParse(owner,1,":"),perm)) {
@@ -242,7 +242,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms,
 	    return Mess->I18N(cf->getS(), TSYS::strLine(user_lang,1).c_str());
 	return *cf;
     }
-    // ElTp cfgSet(string nm, ElTp val) - set config variable 'nm' to 'val'.
+    // bool cfgSet( string nm, ElTp val ) - set config variable 'nm' to 'val'.
     //  nm - config variable name;
     //  val - variable value.
     if(iid == "cfgSet" && prms.size() >= 2 &&

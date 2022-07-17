@@ -41,7 +41,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.3.0"
+#define MOD_VER		"2.3.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -261,7 +261,8 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		if((hd=open("WebCfgDVCA.js",O_RDONLY)) >= 0) {
 		    char buf[prmStrBuf_SZ];
 		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
-		    close(hd);
+		    if(close(hd) != 0)
+			mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 		    page = trMessReplace(page);
 		}
 		else page = trMessReplace(WebCfgDVCA_js);
@@ -272,7 +273,8 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		if((hd=open("WebCfgDVCA.html",O_RDONLY)) >= 0) {
 		    char buf[prmStrBuf_SZ];
 		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
-		    close(hd);
+		    if(close(hd) != 0)
+			mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 		    page = trMessReplace(page);
 		}
 		else page = trMessReplace(WebCfgDVCA_html);
@@ -307,7 +309,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		// Getting information about the available stations
 		if(zero_lev.empty()) {
 		    vector<TTransportS::ExtHost> stls;
-		    SYS->transport().at().extHostList(ses.user, stls);
+		    SYS->transport().at().extHostList(ses.user, stls, false, -1, ses.lang);
 		    sort(stls.begin(), stls.end(), compareHosts);
 		    stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 		    for(unsigned iSt = 0; iSt < stls.size(); iSt++) {

@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.9"
+#define MOD_VER		"4.4.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -692,7 +692,8 @@ void TMdContr::connectRemotePLC( bool initOnly )
 	    dc = daveNewConnection(di, 2, 0, mSlot);
 	    daveSetTimeout(di, 1500000);	//1.5s
 	    if(daveConnectPLC(dc)) {
-		close(fds.wfd);
+		if(close(fds.wfd) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), fds.wfd, strerror(errno), errno);
 		free(dc); dc = NULL;
 		free(di); di = NULL;
 		throw TError(nodePath().c_str(), _("Error connecting to the PLC."));
@@ -721,7 +722,8 @@ void TMdContr::disconnectRemotePLC( )
 	    daveDisconnectPLC(dc);
 	    res2.release();
 
-	    close(di->fd.rfd);
+	    if(close(di->fd.rfd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the socket %d error '%s (%d)'!"), di->fd.rfd, strerror(errno), errno);
 	    free(dc); dc = NULL;
 	    free(di); di = NULL;
 	    break;

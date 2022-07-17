@@ -54,49 +54,46 @@
 <i>Ubuntu (Work):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04</a> ./"<br />
 Встановлення:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get update
-$ apt-get install openscada-model-aglks
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get update
+apt-get install openscada-model-aglks
+</pre></div>
 <p><i>ALTLinux (LTS та Work, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">репозиторій Linux автоматизації</a>):</i> "rpm <a class="external free" href="http://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
 Встановлення:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get update
-$ apt-get install openscada-Model.AGLKS
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get update
+apt-get install openscada-Model.AGLKS
+</pre></div>
 <p>Додання ключа перевірки підпису (дійсності) репозиторію та пакетів у ньому (необов'язково та використовується не у всіх репозиторіях):
 </p>
-<pre style="white-space: pre-wrap;">
- $ wget -O - http://ftp.oscada.org/Misc/pkgSignKey | sudo apt-key add - </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>wget -O - http://ftp.oscada.org/Misc/pkgSignKey <span class="p">|</span> sudo apt-key add -
+</pre></div>
 <p><b>Репозиторії пакетів що засновано на менеджері пакетів YUM (RedHat, Fedora, CentOs)</b> — додаються завантаженням або створенням файлу /etc/yum.repos.d/openscada.repo з вмістом:
 </p>
-<pre style="white-space: pre-wrap;">
-[openscada]
-name=OpenSCADA
-#CentoOs (LTS)
-baseurl=http://ftp.oscada.org/OpenSCADA/LTS/CentOs/7
-#CentoOs (Work)
-#baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6
-#Fedora (Work)
-#baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=http://ftp.oscada.org/Misc/pkgSignKey
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">[openscada]</span>
+<span class="na">name</span><span class="o">=</span><span class="s">OpenSCADA</span>
+<span class="c1">#CentoOs (LTS)</span>
+<span class="na">baseurl</span><span class="o">=</span><span class="s">http://ftp.oscada.org/OpenSCADA/LTS/CentOs/7</span>
+<span class="c1">#CentoOs (Work)</span>
+<span class="c1">#baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6</span>
+<span class="c1">#Fedora (Work)</span>
+<span class="c1">#baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">repo_gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgkey</span><span class="o">=</span><span class="s">http://ftp.oscada.org/Misc/pkgSignKey</span>
+</pre></div>
 <p>Встановлення:
 </p>
-<pre style="white-space: pre-wrap;">
-$ yum install openscada-Model.AGLKS </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>yum install openscada-Model.AGLKS
+</pre></div>
 <p><b>Репозиторії пакетів SuSE YaST</b> — додаються командою:
 </p>
-<pre style="white-space: pre-wrap;">
-$ zypper ar -f http://ftp.oscada.org/OpenSCADA/LTS/SuSE/15 OpenSCADA</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>zypper ar -f http://ftp.oscada.org/OpenSCADA/LTS/SuSE/15 OpenSCADA
+</pre></div>
 <p>Встановлення:
 </p>
-<pre style="white-space: pre-wrap;">
-$ zypper in openscada-Model.AGLKS </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>zypper in openscada-Model.AGLKS
+</pre></div>
 <h4><span class="mw-headline" id=".D0.A0.D1.83.D1.87.D0.BD.D0.B5_.D0.B2.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.BF.D0.B0.D0.BA.D0.B5.D1.82.D1.96.D0.B2_OpenSCADA"><span class="mw-headline-number">1.2</span> Ручне встановлення пакетів OpenSCADA</span></h4>
 <p>Для ручного встановлення пакетів OpenSCADA їх треба завантажити з офіційного сайту або іншого джерела. Завантажити зазвичай можна два набори пакетів.
 </p><p>Перший набір представлено одиннадцатю пакетами:
@@ -138,16 +135,16 @@ $ zypper in openscada-Model.AGLKS </pre>
 <p>Перший набір пакетів більш призначено для простого-ручного встановлення, оскільки він містить тільки одинадцять пакетів. Другий набір призначено для розташування у репозиторії дистрибутиву Linux та подальшого встановлення їх за допомогою пакетного менеджеру, який здійснює автоматичне розв'язання залежностей, а також дозволяє встановити тільки потрібні компоненти OpenSCADA тим самим оптимізуючи робоче оточення.
 </p><p>Ручне встановлення DEB-пакетів першого набору можна здійснити командою, попередньо змінивши робочу директорію на директорію з пакетами:
 </p>
-<pre style="white-space: pre-wrap;">
-$ dpkg -i openscada-libdb.main_0.9.0-1_all.deb openscada-libdb.vca_0.9.0-1_all.deb openscada-model.aglks_0.9.0-1_all openscada_0.9.0-1_i386.deb </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>dpkg -i openscada-libdb.main_0.9.0-1_all.deb openscada-libdb.vca_0.9.0-1_all.deb openscada-model.aglks_0.9.0-1_all openscada_0.9.0-1_i386.deb
+</pre></div>
 <p>Ручне встановлення RPM-пакетів першого набору можна здійснити командою, попередньо змінивши робочу директорію на директорію з пакетами:
 </p>
-<pre style="white-space: pre-wrap;">
-$ rpm -i openscada-LibDB.Main-0.9.0-alt1.noarch.rpm openscada-LibDB.VCA-0.9.0-alt1.noarch.rpm openscada-Model.AGLKS-0.9.0-alt1.i586.rpm openscada-0.9.0-alt1.i586.rpm </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>rpm -i openscada-LibDB.Main-0.9.0-alt1.noarch.rpm openscada-LibDB.VCA-0.9.0-alt1.noarch.rpm openscada-Model.AGLKS-0.9.0-alt1.i586.rpm openscada-0.9.0-alt1.i586.rpm
+</pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> У процесі виконання встановлення можуть виникнути помилки, пов'язані з незадоволеними залежностями. При ручному встановлені із пакетів задовольняти їх треба буде вручну, подібно до встановлення пакетів OpenSCADA, або через менеджер пакетів дистрибутиву Linux. Випадки наявності проблем залежності можуть бути навіть при встановлені через пакетний менеджер якщо використовується репозиторій OpenSCADA який не відповідає дистрибутиву Linux або його версії, або-ж не підключено основні репозиторії пакетів самого дистрибутиву. У пакетному менеджері APT для автоматичного розв'язання проблем зовнішніх залежностей, які виникли при ручному встановлені OpenSCADA, можна використовувати команду:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get install -f</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get install -f
+</pre></div>
 <h3><span class="mw-headline" id=".D0.92.D1.81.D1.82.D0.B0.D0.BD.D0.BE.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F-.D0.B7.D0.B1.D1.96.D1.80.D0.BA.D0.B0_.D0.B7_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D0.B5.D0.BA.D1.81.D1.82.D1.96.D0.B2"><span class="mw-headline-number">2</span> Встановлення-збірка з вихідних текстів</span></h3>
 <p>Якщо немає можливості отримати готові пакети OpenSCADA для обраного дистрибутиву, то залишається лише варіант складання OpenSCADA з вихідних текстів. Цей процес детально описано у <a href="How_to_Build_from_source.html" title="Special:MyLanguage/Documents/How to/Build from source">Посібнику по збірці OpenSCADA з вихідних текстів</a>.
 </p>

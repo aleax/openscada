@@ -97,7 +97,8 @@ void VCASess::getReq( SSess &ses )
 	if((hd=open("WebVisionVCA.html",O_RDONLY)) >= 0) {
 	    char buf[prmStrBuf_SZ];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	} else ses.page = WebVisionVCA_html;
 	ses.page = mod->trMessReplace(ses.page);
 	// User replace

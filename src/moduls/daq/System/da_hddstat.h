@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_hddstat.h
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,7 @@ class HddStat: public DA
 
     private:
 	//Methods
-	void dList( vector<string> &list, bool part = false );
+	void dList( TCntrNode *obj, vector<string> &list, bool part = false );
 };
 
 } //End namespace

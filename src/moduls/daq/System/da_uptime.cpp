@@ -68,17 +68,16 @@ void UpTime::getVal( TMdPrm *prm )
 
     string trg = prm->cfg("SUBT").getS();
 
-    if(trg == "sys")
-    {
+    if(trg == "sys") {
 	FILE *f = fopen("/proc/uptime","r");
 	if(f == NULL) return;
 	devOK = (fscanf(f,"%lu",&val) == 1);
-	fclose(f);
+	if(fclose(f) != 0)
+	    mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
     }
     else { val = time(NULL) - st_tm; devOK = true; }
 
-    if(devOK)
-    {
+    if(devOK) {
 	prm->daErr = "";
 	prm->vlAt("full").at().setI(val, 0, true);
 	prm->vlAt("day").at().setI(val/86400, 0, true);
@@ -86,10 +85,9 @@ void UpTime::getVal( TMdPrm *prm )
 	prm->vlAt("min").at().setI(((val%86400)%3600)/60, 0, true);
 	prm->vlAt("sec").at().setI(((val%86400)%3600)%60, 0, true);
     }
-    else if(!prm->daErr.getVal().size())
-    {
-        prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+    else if(!prm->daErr.getVal().size()) {
+	prm->setEval();
+	prm->daErr = _("10:Device is not available.");
     }
 }
 
@@ -98,19 +96,16 @@ void UpTime::makeActiveDA( TMdContr *aCntr )
     vector<string> pLs;
     aCntr->list(pLs);
 
-    unsigned i_p;
-    for(i_p = 0; i_p < pLs.size(); i_p++)
-    {
-	AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+    unsigned iP;
+    for(iP = 0; iP < pLs.size(); iP++) {
+	AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
 	if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == "sys") break;
     }
-    if(i_p >= pLs.size())
-    {
+    if(iP >= pLs.size()) {
 	string ap_nm = "UpTimeSystem";
 	while(aCntr->present(ap_nm)) ap_nm = TSYS::strLabEnum(ap_nm);
 	FILE *f = fopen("/proc/uptime","r");
-	if(f != NULL)
-	{
+	if(f != NULL) {
 	    aCntr->add(ap_nm, 0);
 	    AutoHD<TMdPrm> dprm = aCntr->at(ap_nm);
 	    dprm.at().setName(_("System up time"));
@@ -119,17 +114,16 @@ void UpTime::makeActiveDA( TMdContr *aCntr )
 	    dprm.at().cfg("SUBT").setS("sys");
 	    dprm.at().cfg("EN").setB(true);
 	    if(aCntr->enableStat()) dprm.at().enable();
-	    fclose(f);
+	    if(fclose(f) != 0)
+		mess_warning(aCntr->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 	}
     }
 
-    for(i_p = 0; i_p < pLs.size(); i_p++)
-    {
-	AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+    for(iP = 0; iP < pLs.size(); iP++) {
+	AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
 	if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == "stat") break;
     }
-    if(i_p >= pLs.size())
-    {
+    if(iP >= pLs.size()) {
 	string ap_nm = "UpTimeStation";
 	while(aCntr->present(ap_nm)) ap_nm = TSYS::strLabEnum(ap_nm);
 	aCntr->add(ap_nm, 0);

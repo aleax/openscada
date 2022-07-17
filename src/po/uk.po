@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 18:22+0300\n"
+"POT-Creation-Date: 2022-07-16 09:13+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -1143,6 +1143,10 @@ msgstr "%s: Помилка ідентифікатору або IO %d!"
 msgid "Error getting object from non-object IO %d!"
 msgstr "Помилка отримання об'єкту з не об'єктного IO %d!"
 
+#, c-format
+msgid "Closing the iconv handler error '%s (%d)'!"
+msgstr "Помилка закриття тримача iconv '%s (%d)'!"
+
 msgid "Storage address in the format \"{DB module}.{DB name}\"."
 msgstr "Адреса сховища у форматі \"{Модуль БД}.{Ім'я БД}\"."
 
@@ -1231,6 +1235,10 @@ msgstr ""
 "  '*' - будь який підрядок;\n"
 "  '?' - будь який символ.\n"
 "Регулярний вираз включається між символами '/' (/mod_(System|LogicLev)/)."
+
+#, c-format
+msgid "Closing the thread %d error '%s (%d)'!"
+msgstr "Помилка закриття потоку %d - '%s (%d)'!"
 
 #, c-format
 msgid ""
@@ -1926,6 +1934,10 @@ msgid "Error the configuration file '%s': %s"
 msgstr "Помилка конфігураційного файлу '%s': %s"
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"
+
+#, c-format
 msgid "Error loading the configuration file '%s'."
 msgstr "Помилка завантаження конфігураційного файлу '%s'."
 
@@ -2003,6 +2015,10 @@ msgstr "Програму перевано!"
 msgid "Unknown signal %d!"
 msgstr "Невідомий сигнал %d!"
 
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Помилка закриття файлу %p - '%s (%d)'!"
+
 msgid "Timeouted !!!"
 msgstr "Час очікування вичерпано!!!"
 
@@ -2059,6 +2075,10 @@ msgstr "Резервна станція '%s' недоступна."
 #, c-format
 msgid "System clock changed to '%s'. Correction the cron '%s' target!"
 msgstr "Системний годинник змінено у '%s'. Корекція цілі крону '%s'!"
+
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr "Помилка закриття каналу %p - '%s (%d)'!"
 
 msgid "1:Request is not an object!"
 msgstr "1:Запит не є об'єкт!"
@@ -2484,6 +2504,10 @@ msgstr "Пароль запитів"
 msgid "Level of lifting"
 msgstr "Рівень підняття"
 
+#, c-format
+msgid "Error the output address '%s'!"
+msgstr "Помилка вихідної адреси '%s'!"
+
 msgid "Error finding and creating new input transports."
 msgstr "Помилка пошуку та створення нових вхідних транспортів."
 
@@ -2513,15 +2537,15 @@ msgstr ""
 "\n"
 
 #, c-format
-msgid "Error the remote host '%s'!"
-msgstr "Помилка віддаленого хосту '%s'!"
-
-#, c-format
 msgid "External hosts of %s"
 msgstr "Зовнішні хости %s"
 
 msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
+
+msgid "Initial connection identifier to what bind for control."
+msgstr ""
+"Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
 
 msgid "New external host"
 msgstr "Новий зовнішній хост"
@@ -2580,12 +2604,14 @@ msgid "Error deletion the node: %s"
 msgstr "Помилка видалення вузла: %s"
 
 #, c-format
-msgid "Error removing the assigned node/connection: %s"
-msgstr "Помилка видалення призначеного вузла/підключення: %s"
+msgid "The initiative connection '%s' is not presented!"
+msgstr "Ініціативне підключення '%s' відсутнє!"
 
-#, c-format
-msgid "Error connection the new assigned node: %s"
-msgstr "Помилка підключення нового призначеного вузла: %s"
+msgid "Error connection the new associated node: %s"
+msgstr "Помилка підключення нового асоційованого вузла: %s"
+
+msgid "Error removing the associated node/connection: %s"
+msgstr "Помилка видалення асоційованого вузла/підключення: %s"
 
 msgid "Input transport: "
 msgstr "Вхідний транспорт: "
@@ -2617,6 +2643,10 @@ msgstr "Підключено. "
 #, c-format
 msgid "Established %s, last %s. "
 msgstr "Встановлено %s, останнє %s. "
+
+#, c-format
+msgid "Initiative connection ID '%s'. "
+msgstr "ІД ініціативного підключення '%s'. "
 
 #, c-format
 msgid "Transport protocol '%s' is missing"

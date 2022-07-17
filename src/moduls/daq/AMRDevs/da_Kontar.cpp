@@ -180,12 +180,12 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 	if(trO.freeStat())
 	{
 	    //Same find
-	    vector<AutoHD<TTransportOut> > trsO = ttr.at().inAt(p->cfg("ADDR")).at().assTrs();
-	    for(unsigned i_t = 0; i_t < trsO.size() && trO.freeStat(); i_t++)
+	    vector<AutoHD<TTransportOut> > trsO = ttr.at().inAt(p->cfg("ADDR")).at().associateTrs();
+	    for(unsigned iT = 0; iT < trsO.size() && trO.freeStat(); iT++)
 	    {
-		if(!trsO[i_t].at().startStat())	continue;
+		if(!trsO[iT].at().startStat())	continue;
 		// Serial number request
-		if(trsO[i_t].at().conPrm("M_PLC").isEVal())
+		if(trsO[iT].at().conPrm("M_PLC").isEVal())
 		    try
 		    {
 			int resp_len = 0;
@@ -194,10 +194,10 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 			if(p->owner().messLev() == TMess::Debug)
 			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Request: '%s'"),TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 
-			if((resp_len=trsO[i_t].at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) >= 4)
+			if((resp_len=trsO[iT].at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) >= 4)
 			{
-			    trsO[i_t].at().setConPrm("M_PLC", (int)TSYS::i32_BE(*(uint32_t*)buf));
-			    trsO[i_t].at().setDscr(TSYS::strMess(_("Connection from PLC Kontar %xh."),(int)TSYS::i32_BE(*(uint32_t*)buf)));
+			    trsO[iT].at().setConPrm("M_PLC", (int)TSYS::i32_BE(*(uint32_t*)buf));
+			    trsO[iT].at().setDscr(TSYS::strMess(_("Connection from PLC Kontar %xh."),(int)TSYS::i32_BE(*(uint32_t*)buf)));
 			    if(resp_len >= 13 && (uint8_t)buf[4] == 0xC0)
 			    {
 				ePrm->pass = ePrm->RC5Decr(string(buf+5,8), ePrm->RC5Key(TSYS::strEncode(p->cfg("PASS").getS(),TSYS::Bin)));
@@ -210,7 +210,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 			if(p->owner().messLev() == TMess::Debug)
 			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Response: '%s'"),TSYS::strDecode(string(buf,resp_len),TSYS::Bin," ").c_str());
 		    } catch(...) { }
-		if(trsO[i_t].at().conPrm("M_PLC").getI() == cntrMN) { trO = trsO[i_t]; ePrm->prevTr = trO.at().id(); }
+		if(trsO[iT].at().conPrm("M_PLC").getI() == cntrMN) { trO = trsO[iT]; ePrm->prevTr = trO.at().id(); }
 	    }
 	}
 	if(trO.freeStat()) throw TError(p->nodePath().c_str(), _("No a propper connection from PLC."));
@@ -303,7 +303,8 @@ bool Kontar::cfgChange( TParamContr *ip, TCfg &cfg )
 	    buf = (char*)malloc(cf_sz+1);
 	    if(read(hd,buf,cf_sz) != cf_sz) cf_sz = 0;
 	}
-	if(hd >= 0) close(hd);
+	if(hd >= 0 && close(hd) != 0)
+	    mess_warning(p->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 
 	MtxAlloc res(p->dataM, true);
 	ePrm->cfg.clear();
@@ -510,10 +511,10 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 	} catch(TError &err) { }
     else if(a_path == "/prm/cfg/mPLCLst" && ip->ctrChkNode(opt,"get"))
 	try {
-	    vector<AutoHD<TTransportOut> > trsO = SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().assTrs();
-	    for(unsigned i_t = 0; i_t < trsO.size(); i_t++)
-		if(trsO[i_t].at().startStat())
-		    opt->childAdd("el")->setText(u2s(trsO[i_t].at().conPrm("M_PLC").getI()));
+	    vector<AutoHD<TTransportOut> > trsO = SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().associateTrs();
+	    for(unsigned iT = 0; iT < trsO.size(); iT++)
+		if(trsO[iT].at().startStat())
+		    opt->childAdd("el")->setText(u2s(trsO[iT].at().conPrm("M_PLC").getI()));
 	} catch(TError &err) { }
     else if(a_path == "/prm/cfg/fileList" && ip->ctrChkNode(opt,"get")) TSYS::ctrListFS(opt, ip->cfg("CNTR_NET_CFG"), "xml;");
     else if(a_path == "/prm/cfg/PLCList" && ip->ctrChkNode(opt,"get")) {

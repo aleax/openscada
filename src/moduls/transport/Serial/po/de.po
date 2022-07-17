@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-16 18:12+0300\n"
+"POT-Creation-Date: 2022-07-15 21:01+0300\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -143,6 +143,10 @@ msgstr "Fehler die Stoppbits %d."
 #, c-format
 msgid "No response to the initial request '%s'."
 msgstr "Keine Antwort auf die erste Anfrage '%s'."
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
 
 msgid "Connected"
 msgstr "Verbunden"
@@ -434,3 +438,4 @@ msgstr "den Hörer legen"
 
 msgid "Hangup response"
 msgstr "den Hörer legen, Ergebnis"
+

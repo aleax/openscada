@@ -161,49 +161,46 @@
 <i>Ubuntu (Work):</i> "deb <a class="external free" href="http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/OpenSCADA/Work/Ubuntu/18.04</a> ./"<br />
 Installing:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get update
-$ apt-get install openscada-model-aglks
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get update
+apt-get install openscada-model-aglks
+</pre></div>
 <p><i>ALTLinux (LTS and Work, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Automation Linux repository</a>):</i> "rpm <a class="external free" href="http://ftp.oscada.org/ALTLinux/7" rel="nofollow noreferrer noopener" target="_blank">http://ftp.oscada.org/ALTLinux/7</a> openscada main"<br />
 Installing:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get update
-$ apt-get install openscada-Model.AGLKS
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get update
+apt-get install openscada-Model.AGLKS
+</pre></div>
 <p>Adding the signature verification key (the authenticity) of the repository and packages in it (not necessarily and not in all repositories):
 </p>
-<pre style="white-space: pre-wrap;">
- $ wget -O - http://ftp.oscada.org/Misc/pkgSignKey | sudo apt-key add - </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>wget -O - http://ftp.oscada.org/Misc/pkgSignKey <span class="p">|</span> sudo apt-key add -
+</pre></div>
 <p><b>Packages repositories based on the package manager YUM (RedHat, Fedora, CentOs)</b> — are added by uploading or creating a file /etc/yum.repos.d/openscada.repo with the contents:
 </p>
-<pre style="white-space: pre-wrap;">
-[openscada]
-name=OpenSCADA
-#CentoOs (LTS)
-baseurl=http://ftp.oscada.org/OpenSCADA/LTS/CentOs/7
-#CentoOs (Work)
-#baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6
-#Fedora (Work)
-#baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12
-enabled=1
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=http://ftp.oscada.org/Misc/pkgSignKey
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">[openscada]</span>
+<span class="na">name</span><span class="o">=</span><span class="s">OpenSCADA</span>
+<span class="c1">#CentoOs (LTS)</span>
+<span class="na">baseurl</span><span class="o">=</span><span class="s">http://ftp.oscada.org/OpenSCADA/LTS/CentOs/7</span>
+<span class="c1">#CentoOs (Work)</span>
+<span class="c1">#baseurl=http://ftp.oscada.org/OpenSCADA/Work/CentOs/6</span>
+<span class="c1">#Fedora (Work)</span>
+<span class="c1">#baseurl=http://ftp.oscada.org/OpenSCADA/Work/Fedora/12</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">repo_gpgcheck</span><span class="o">=</span><span class="s">1</span>
+<span class="na">gpgkey</span><span class="o">=</span><span class="s">http://ftp.oscada.org/Misc/pkgSignKey</span>
+</pre></div>
 <p>Installing:
 </p>
-<pre style="white-space: pre-wrap;">
-$ yum install openscada-Model.AGLKS </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>yum install openscada-Model.AGLKS
+</pre></div>
 <p><b>The packages repositories SuSE YaST</b> — are added by the command:
 </p>
-<pre style="white-space: pre-wrap;">
-$ zypper ar -f http://ftp.oscada.org/OpenSCADA/LTS/SuSE/15 OpenSCADA</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>zypper ar -f http://ftp.oscada.org/OpenSCADA/LTS/SuSE/15 OpenSCADA
+</pre></div>
 <p>Installing:
 </p>
-<pre style="white-space: pre-wrap;">
-$ zypper in openscada-Model.AGLKS </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>zypper in openscada-Model.AGLKS
+</pre></div>
 <h4><span class="mw-headline" id="Manual_installation_of_the_OpenSCADA_packages"><span class="mw-headline-number">2.1.2</span> Manual installation of the OpenSCADA packages</span></h4>
 <p>To manually install the OpenSCADA packages, you need to download them from the official site or another source. You can usually download two sets of the packages.
 </p><p>The first set is represented by eleventh packages:
@@ -245,16 +242,16 @@ $ zypper in openscada-Model.AGLKS </pre>
 <p>The first set of packages is more intended for simple-manual installation, since it contains only eleven packages. The second set is intended to be located in the Linux repository and then installs them with the package manager that automatically resolves dependencies, and also allows you to install only the required OpenSCADA components, thereby optimizing the work environment.
 </p><p>Manual setup of the first set of DEB packages can be done by command, having previously changed the working directory to the directory with the packages:
 </p>
-<pre style="white-space: pre-wrap;">
-$ dpkg -i openscada-libdb.main_0.9.0-1_all.deb openscada-libdb.vca_0.9.0-1_all.deb openscada-model.aglks_0.9.0-1_all openscada_0.9.0-1_i386.deb</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>dpkg -i openscada-libdb.main_0.9.0-1_all.deb openscada-libdb.vca_0.9.0-1_all.deb openscada-model.aglks_0.9.0-1_all openscada_0.9.0-1_i386.deb
+</pre></div>
 <p>Manual setup of the first set of RPM packages can be done by command, having previously changed the working directory to the directory with the packages:
 </p>
-<pre style="white-space: pre-wrap;">
-$ rpm -i openscada-LibDB.Main-0.9.0-alt1.noarch.rpm openscada-LibDB.VCA-0.9.0-alt1.noarch.rpm openscada-Model.AGLKS-0.9.0-alt1.i586.rpm openscada-0.9.0-alt1.i586.rpm </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>rpm -i openscada-LibDB.Main-0.9.0-alt1.noarch.rpm openscada-LibDB.VCA-0.9.0-alt1.noarch.rpm openscada-Model.AGLKS-0.9.0-alt1.i586.rpm openscada-0.9.0-alt1.i586.rpm
+</pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> During the installation process, there may be errors related to the unsatisfactory dependencies. When manually installing from packages, they will need to be handled manually, just like installing the OpenSCADA packages, or through the Linux distribution package manager. Cases of the dependency problems can exist even when installing through the packages manager if the OpenSCADA repository is used that does not match the Linux distribution or its version, or the main package repositories of the distribution itself are not connected. In the APT packages manager, you can use the command to automatically resolve external dependencies that arose when manually installing OpenSCADA:
 </p>
-<pre style="white-space: pre-wrap;">
-$ apt-get install -f</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>apt-get install -f
+</pre></div>
 <h3><span class="mw-headline" id="Installing-building_from_the_source_texts"><span class="mw-headline-number">2.2</span> Installing-building from the source texts</span></h3>
 <p>If there is no way to get ready-made OpenSCADA packages for the selected distribution, then only the variant of the OpenSCADA build from the source texts remains. This process is described in detail in <a href="How_to_Build_from_source.html" title="Special:MyLanguage/Documents/How to/Build from source">the manual of building OpenSCADA from the source texts</a>.
 </p>
@@ -283,8 +280,8 @@ $ apt-get install -f</pre>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1026px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_demenu_oscada.png"><img class="thumbimage" height="768" src="files/QuickStart_demenu_oscada.png" width="1024" /></a>  <div class="thumbcaption">Fig. 3.1.1. Menu item of the desktop environment for local start up the demo of OpenSCADA.</div></div></div></div>
 <p>Local start up also can be done from the console by the command:
 </p>
-<pre style="white-space: pre-wrap;">
-$ openscada_AGLKS</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>openscada_AGLKS
+</pre></div>
 <p>After start up we'll get the window of the OpenSCADA graphical configurator — <a href="Modules/QTCfg.html" title="Special:MyLanguage/Modules/QTCfg">QTCfg</a> (Fig.3.1.2) with the opened root page. The demo database specially configured so that the first window you'll see after the starting it is the configurator's window. You can then open a window for creating graphical user interfaces, as well as run the user interface project for execution.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:723px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_QTCfg_root.png"><img class="thumbimage" height="713" src="files/QuickStart_QTCfg_root.png" width="721" /></a>  <div class="thumbcaption">Fig. 3.1.2. OpenSCADA program configurator — QTCfg, the root page.</div></div></div></div>
@@ -310,22 +307,21 @@ $ openscada_AGLKS</pre>
 <ul><li> install the packages <b>openscada-model-aglks</b> (<b>openscada-lts-model-aglks</b> for LTS) and <b>openscada-server</b> (<b>openscada-lts-server</b> for LTS), if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
 <li> start the project "AGLKS", for getting its folder in the user's work folder;</li>
 <li> copy the project "AGLKS" folder to the system work folder also renaming to "server", previously stop the background execution of the project "server" and remove its project folder; for example, in that way from the console:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-# Connect from the superuser
-$ su -
-# ... for the live disk and some other Linux environments
-$ sudo bash
-# Stop down of execution of the previous server configuration and remove its folder
-$ service openscada-server stop; rm -R /usr/share/openscada/server
-# ... for LTS
-$ service openscada-lts-server stop; rm -R /usr/share/openscada/server
-# Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"
-$ cp -R {HOME}/.openscada/AGLKS /usr/share/openscada/server 
-# Start the server already in the project "AGLKS"
-$ service openscada-server start
-# ... for LTS
-$ service openscada-lts-server start
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="c"># Connect from the superuser</span>
+su -
+<span class="c"># ... for the live disk and some other Linux environments</span>
+sudo bash
+<span class="c"># Stop down of execution of the previous server configuration and remove its folder</span>
+service openscada-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
+<span class="c"># ... for LTS</span>
+service openscada-lts-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
+<span class="c"># Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"</span>
+cp -R <span class="o">{</span>HOME<span class="o">}</span>/.openscada/AGLKS /usr/share/openscada/server 
+<span class="c"># Start the server already in the project "AGLKS"</span>
+service openscada-server start
+<span class="c"># ... for LTS</span>
+service openscada-lts-server start
+</pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note that locally you can not copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
 </p><p>Difference between the project execution in the service-background environment from the user environment of the desktop is actually one, except for the lack of the local graphical interface of course, it is the absence of a locale in the background, ie the interface language will be English. And what can be fixed simply by changing or adding <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">the configuration parameter</a> <b>&lt;prm id="Lang"&gt;uk_UA.UTF-8&lt;/prm&gt;</b> to the section-tag "station" of the file <b>oscada.xml</b> of the background project.
 </p><p><br />
@@ -335,8 +331,8 @@ In this way, you will get the demo database (the "AGLKS" project) that works in 
 <h3><span class="mw-headline" id="Your_own_project_creation"><span class="mw-headline-number">3.3</span> <span id="UserPrjCrt" title="#UserPrjCrt">Your own project creation</span></span></h3>
 <p>In the window of the OpenSCADA project manager (Fig.3.3), we will create our own project, which can be called from the desktop environment menu in the "Graphics" section, the general item "Open SCADA system" with the characteristic icon (Fig.3.1.1) or the command from the console-terminal:
 </p>
-<pre style="white-space: pre-wrap;">
-$ openscada</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>openscada
+</pre></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:717px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_ProjManager.png"><img class="thumbimage" height="509" src="files/QuickStart_ProjManager.png" width="715" /></a>  <div class="thumbcaption">Fig. 3.3. Window of the project manager of OpenSCADA.</div></div></div></div>
 <p>In this window, we can also check the background execution of server and demo configurations.
 </p><p>That is, press the corresponding <b>Create-update project</b> button and enter the name of the new project, for example <b>Start</b>.
@@ -853,18 +849,17 @@ deg.C
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:765px;"><a class="image" href="http://oscada.org/wiki/File:QuickStart_cwValueProc.png"><img class="thumbimage" height="553" src="files/QuickStart_cwValueProc.png" width="763" /></a>  <div class="thumbcaption">Fig. 5.3.2.15. Enabling the processing of the attribute "value" of the combo box "cw".</div></div></div></div>
 <p>Finally, we will install the user programming language "JavaLikeCalc.JavaScript" and write this very program for processing the widget:
 </p>
-<pre style="white-space: pre-wrap;">
-Ti_arg0val = Ti;
-To_arg0val = To;
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">Ti_arg0val</span> <span class="o">=</span> <span class="nx">Ti</span><span class="p">;</span>
+<span class="nx">To_arg0val</span> <span class="o">=</span> <span class="nx">To</span><span class="p">;</span>
 
-for(ev_rez = "", off = 0; (ev_wrk=event.parse(0,"\n",off)).length; )
-    if(ev_wrk == "ws_CombChange:/cw") Cw = cw_value;
-    else ev_rez += ev_wrk+"\n";
-event = ev_rez;
+<span class="k">for</span><span class="p">(</span><span class="nx">ev_rez</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="nx">off</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">ev_wrk</span><span class="o">=</span><span class="nx">event</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">"\n"</span><span class="p">,</span><span class="nx">off</span><span class="p">)).</span><span class="nx">length</span><span class="p">;</span> <span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">ev_wrk</span> <span class="o">==</span> <span class="s2">"ws_CombChange:/cw"</span><span class="p">)</span> <span class="nx">Cw</span> <span class="o">=</span> <span class="nx">cw_value</span><span class="p">;</span>
+    <span class="k">else</span> <span class="nx">ev_rez</span> <span class="o">+=</span> <span class="nx">ev_wrk</span><span class="o">+</span><span class="s2">"\n"</span><span class="p">;</span>
+<span class="nx">event</span> <span class="o">=</span> <span class="nx">ev_rez</span><span class="p">;</span>
 
-cw_value = Cw;
-cooler2_speed = Cw/5;
-</pre>
+<span class="nx">cw_value</span> <span class="o">=</span> <span class="nx">Cw</span><span class="p">;</span>
+<span class="nx">cooler2_speed</span> <span class="o">=</span> <span class="nx">Cw</span><span class="o">/</span><span class="mi">5</span><span class="p">;</span>
+</pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Placing or editing the widget program does not directly compile it, that is, there will be no error messages in the program, if they have a place to be. This is due to the fact that the direct execution of the program, and thus its compilation, is carried out in the context of execution and at the moment of starting up of the visualization project for execution. In this case, all errors that occurred during the compilation are displayed as OpenSCADA messages, and the error widgets are not executed. For details on how to debug user procedures, see "How to <a href="How_to_Debug.html" title="Special:MyLanguage/Documents/How to/Debug"> Debug OpenSCADA project</a>".
 </p><p>The resulting tab "Process" of the widget "elCooler" of the library "CM 101" will look like shown in Figure 5.3.2.16.
 </p>

@@ -118,8 +118,6 @@ class TTrOut: public TTransportOut
 	TTrOut( string name, const string &idb, TElem *el );
 	~TTrOut( );
 
-	bool isNetwork( )			{ return false; }
-
 	string getStatus( );
 
 	string timings( )			{ return mTimings; }
@@ -212,6 +210,8 @@ class TTr: public TTypeTransport
     public:
 	TTr( string name );
 	~TTr( );
+
+	bool isNetwork( )			{ return false; }
 
 	AutoHD<TTrIn> inAt( const string &name );
 	AutoHD<TTrOut> outAt( const string &name );

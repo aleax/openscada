@@ -54,10 +54,9 @@
 </p><p>During the code generation, the language compiler produces an optimization of constants and casting the types of the constants to the required type. The optimization of the constants means the calculation of two constants and the insertion of the result into the code in the process of constructing a byte-code. For example, the expression <b>y=pi*10;</b> reduces to a simple assignment <b>y=31.4159;</b>. Casting the types of constants to the required type means formation of the constant in the code which excludes the cast in the execution process. For example, the expression <b>y=x*"10";</b>, in the case of the real type of the variable <b>x</b>, is transformed into <b>y=x*10;</b>.
 </p><p>Assignment expressions can be recorded through symbol ',', for example:
 </p>
-<pre style="white-space: pre-wrap;">
-var1 = 1, var2 = 3, var4 = var1+var2;
-for(var1 = 0, var2 = 0, var3 = -1; var1 &lt; 10; var1++, var2++) var3++;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">var1</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">var2</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">var4</span> <span class="o">=</span> <span class="nx">var1</span><span class="o">+</span><span class="nx">var2</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">var1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">var2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">var3</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">var1</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">var1</span><span class="o">++</span><span class="p">,</span> <span class="nx">var2</span><span class="o">++</span><span class="p">)</span> <span class="nx">var3</span><span class="o">++</span><span class="p">;</span>
+</pre></div>
 <p>The language supports calls of the external and internal functions. Name of any function in general is perceived as a character, which is tested to belong a particular category in the following order:
 </p>
 <ul><li> does not begin with a point:
@@ -74,9 +73,9 @@ for(var1 = 0, var2 = 0, var3 = -1; var1 &lt; 10; var1++, var2++) var3++;
 <ul><li> element of the path to the property and function of the object, whose name should not begin with a digit and contain operations symbols.</li></ul></li></ul>
 <p>Calling an external function, like the global attribute of the DAQ parameter, is written as an address to <a href="../User_API.html" title="Special:MyLanguage/Documents/User API">the node of the object model OpenSCADA</a>: "DAQ.JavaLikeCalc.lib_techApp.klapNotLin". For static functions you are allowed to the dynamic linking also in the following way:
 </p>
-<pre style="white-space: pre-wrap;">
-function klapNotLin = "DAQ.JavaLikeCalc.lib_techApp.klapNotLin";
-rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">klapNotLin</span> <span class="o">=</span> <span class="s2">"DAQ.JavaLikeCalc.lib_techApp.klapNotLin"</span><span class="p">;</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="nx">klapNotLin</span><span class="p">(</span><span class="nx">prm1</span><span class="p">,</span> <span class="nx">prm2</span><span class="p">,</span> <span class="p">...,</span> <span class="nx">prmN</span><span class="p">);</span>
+</pre></div>
 <p>To provide the writing of custom control procedures for various components of OpenSCADA, this module provides the implementation of the precompiling API of custom procedures for individual components of OpenSCADA in the Java-like language. These components for example are: templates of the parameters of <a href="../Program_manual.html#DAQ" title="Special:MyLanguage/Documents/Program manual">the subsystem "Data acquisition"</a> and <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the visual control area (VCA)</a>.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
@@ -214,11 +213,13 @@ rez = klapNotLin(prm1, prm2, ..., prmN);</pre>
 <p>The language supports two types of conditions. First — this is the operation of condition for use within the expression, second — a global, based on the conditional operators.
 </p><p>The condition inside an expression is based on the operations '?' and ':'. As an example we'll write the following practical expression:
 </p>
-<pre style="white-space: pre-wrap;">st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">st_open</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+</pre></div>
 <p>Which reads as — if the variable <i>pos</i> greater than or equal to <b>100</b>, the variable <i>st_open</i> is set to <b>true</b>, otherwise — to <b>false</b>.
 </p><p>The global condition is based on the conditional operators "if" and "else". As an example, we can show the same expression, but recorded in another way:
 </p>
-<pre style="white-space: pre-wrap;">if(pos &gt; 100) st_open = true; else st_open = false;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">if</span><span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="nx">st_open</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="k">else</span> <span class="nx">st_open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</pre></div>
 <h4><span class="mw-headline" id="Loops"><span class="mw-headline-number">1.4.2</span> Loops</span></h4>
 <p>Two types of the loops are supported: <b>while</b>, <b>for</b> and <b>for-in</b>. The syntax of the loops corresponds to the programming languages: C++, Java and JavaScript.
 </p><p>Loop <b>while</b> is written generally as follows: <b>while({condition}) {body of the loop};</b><br />
@@ -239,10 +240,9 @@ Where:
 </p><p>Operator "return" into the internal function makes controllable finishing of the function execution and places a pointed variable or an expression result as the internal function call result.
 </p><p>An example of the internal function declaration and using in typical way shown next:
 </p>
-<pre style="white-space: pre-wrap;">
-function sum(a, b, c, d) { return a + ((b==EVAL)?0:b) + ((c==EVAL)?0:c) + ((d==EVAL)?0:d); }
-rez = sum(1, 2);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="p">((</span><span class="nx">b</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">b</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">c</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">c</span><span class="p">)</span> <span class="o">+</span> <span class="p">((</span><span class="nx">d</span><span class="o">==</span><span class="nx">EVAL</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">d</span><span class="p">);</span> <span class="p">}</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+</pre></div>
 <h4><span class="mw-headline" id="Special_characters_of_the_string_variables"><span class="mw-headline-number">1.4.4</span> Special characters of the string variables</span></h4>
 <p>The language supports the following special characters of the string variables:
 </p>
@@ -262,11 +262,10 @@ rez = sum(1, 2);
 </p><p>The object of regular expression "RegExp" is created by command <b>varO = new RegExp(pat, flg)</b>, where <i>pat</i> — pattern of the regular expression, and <i>flg</i> — match flags. The object for work with regular expressions, based on the library "PCRE". In the global search set object attribute "lastIndex", which allows you to continue searching for the next function call. In the case of an unsuccessful search for the attribute "lastIndex" reset to zero. For more details about the properties and functions of the regular expression object can be read <a href="../User_API.html#RegExp" title="Special:MyLanguage/Documents/User API">here</a>.
 </p><p>For random access to the function arguments provided the arguments object, which you can refer to by the symbol "arguments". This object contains the property "length" with a number of arguments in the function and allows you to access to a value of the argument by its <b>number</b> or <b>ID</b>. Consider the enumeration of the arguments on the cycle:
 </p>
-<pre style="white-space: pre-wrap;">
-args = new Array();
-for(var i = 0; i &lt; arguments.length; i++)
-  args[i] = arguments[i];
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">args</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">();</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">arguments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span>
+  <span class="nx">args</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">arguments</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+</pre></div>
 <p>The basic types have the partial properties of the object. Properties and functions of the basic types are listed below: 
 </p>
 <ul><li> NULL type, functions:
@@ -301,32 +300,32 @@ for(var i = 0; i &lt; arguments.length; i++)
 <li> <i>int indexOf( string substr, int start = 0 );</i> — returns the position of the required string <i>substr</i> in the original row from the position <i>start</i>. If the initial position is not specified then the search starts from the beginning. If the search string is not found then "-1" is returned.</li>
 <li> <i>int lastIndexOf( string substr, int start = {end} );</i> — returns the position of the search string <i>substr</i> in the original one beginning from the position of <i>start</i> when searching from the end. If the initial position is not specified then the search begins from the end. If the search string is not found then "-1" is returned.</li>
 <li> <i>int search( string pat, string flg = "" );</i> — searches into the string by the pattern <i>pat</i> and pattern's flags <i>flg</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "Java123Script".search("script","i");  // rez = 7</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Java123Script"</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="s2">"script"</span><span class="p">,</span><span class="s2">"i"</span><span class="p">);</span>  <span class="c1">// rez = 7</span>
+</pre></div>
 <dl><dd><ul><li> <i>int search( RegExp pat );</i> — searches into the string by the "RegExp" pattern <i>pat</i>. Returns found substring position or "-1" for else.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "Java123Script".search(new RegExp("script","i"));  // rez = 7</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Java123Script"</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"script"</span><span class="p">,</span><span class="s2">"i"</span><span class="p">));</span>  <span class="c1">// rez = 7</span>
+</pre></div>
 <dl><dd><ul><li> <i>Array match( string pat, string flg = "" );</i> — calls match for the string by the pattern <i>pat</i> and flags <i>flg</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets "index" attribute of the array to the substring position. Sets the "input" attribute to the source string. Sets the "err" attribute to the operation error code.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "1 plus 2 plus 3".match("\\d+","g");  // rez = [1], [2], [3]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1 plus 2 plus 3"</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="s2">"\\d+"</span><span class="p">,</span><span class="s2">"g"</span><span class="p">);</span>  <span class="c1">// rez = [1], [2], [3]</span>
+</pre></div>
 <dl><dd><ul><li> <i>Array match( TRegExp pat );</i> — calls match for the string and "RegExp" pattern <i>pat</i>. Returns matched substring (0) and subexpressions (&gt;0) array. Sets the "index" attribute of the array to substring position. Sets the "input" attribute to the source string. Sets the "err" attribute to the operation error code.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-var rez = "1 plus 2 plus 3".match(new RegExp("\\d+","g"));  // rez = [1], [2], [3]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="kd">var</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1 plus 2 plus 3"</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\\d+"</span><span class="p">,</span><span class="s2">"g"</span><span class="p">));</span>  <span class="c1">// rez = [1], [2], [3]</span>
+</pre></div>
 <dl><dd><ul><li> <i>string slice( int beg, int end ); string substring( int beg, int end );</i> — returns the string extracted from the original one starting from the <i>beg</i> position and ending before the <i>end</i> (not included), numbering from zero. If the begin or end is negative, then the count is conducted from the end of the line. If the end is not specified, then the end is the end of the line. For example, the construction <b>substring(-2)</b> return two last symbols of the string.</li>
 <li> <i>Array split( string sep, int limit );</i> — returns the array of strings separated by <i>sep</i> with the <i>limit</i> of the number of elements.</li>
 <li> <i>Array split( RegExp pat, int limit );</i> — returns the array of strings separated by the RegExp pattern <i>pat</i> with the <i>limit</i> of the number of elements.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));  // rez = [1], [2], [3], [4], [5]</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1,2, 3 , 4 ,5"</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\\s*,\\s*"</span><span class="p">));</span>  <span class="c1">// rez = [1], [2], [3], [4], [5]</span>
+</pre></div>
 <dl><dd><ul><li> <i>string insert( int pos, string substr );</i> — inserts the substring <i>substr</i> into this string's position <i>pos</i>.</li>
 <li> <i>string replace( int pos, int n, string str );</i> — replaces substring into the position <i>pos</i> and length <i>n</i> to the string <i>str</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "Javascript".replace(4,3,"67");  // rez = "Java67ipt"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"Javascript"</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s2">"67"</span><span class="p">);</span>  <span class="c1">// rez = "Java67ipt"</span>
+</pre></div>
 <dl><dd><ul><li> <i>string replace( string substr, string str );</i> — replaces all the substrings <i>substr</i> to the string <i>str</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "123 321".replace("3","55");  // rez = "1255 5521"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"123 321"</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">"3"</span><span class="p">,</span><span class="s2">"55"</span><span class="p">);</span>  <span class="c1">// rez = "1255 5521"</span>
+</pre></div>
 <dl><dd><ul><li> <i>string replace( RegExp pat, string str );</i> — replaces substrings by the pattern <i>pat</i> to the string <i>str</i>.</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-rez = "value = \"123\"".replace(new RegExp("\"([^\"]*)\"","g"),"``$1''"));  // rez = "value = ``123''"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">rez</span> <span class="o">=</span> <span class="s2">"value = \"123\""</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"\"([^\"]*)\""</span><span class="p">,</span><span class="s2">"g"</span><span class="p">),</span><span class="s2">"``$1''"</span><span class="p">));</span>  <span class="c1">// rez = "value = ``123''"</span>
+</pre></div>
 <dl><dd><ul><li> <i>real toReal();</i> — converts this string to a real number.</li>
 <li> <i>int toInt( int base = 0 );</i> — converts this string to an integer number in accordance with <i>base</i> (from 2 to 36). If the base is 0, then the prefix will be considered a prefix for determining the base (123-decimal; 0123-octal; 0x123-hex).</li>
 <li> <i>string {parse,parseEnd}( int pos, string sep = ".", int off = {0,{length}}, bool mergeSepSymb = false );</i> — gets a token with the number <i>pos</i> from the string when separated by <i>sep</i> and from the offset <i>off</i> (stopping on the next token begin, end for <i>parseEnd</i>). <i>mergeSepSymb</i> specifies of allowing of merging of the group of identical symbols to one separator. Result offset is returned back to <i>off</i>. <i>parseEnd()</i> does the same but from the end.</li>
@@ -341,28 +340,26 @@ For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/Use
 <h3><span class="mw-headline" id="Examples_of_programs_on_this_language"><span class="mw-headline-number">1.6</span> <span id="Examples" title="#Examples">Examples of programs on this language</span></span></h3>
 <p>Here are some examples of programs on the Java-like language:
 </p>
-<pre style="white-space: pre-wrap;">
-//Model of the course of the executive machinery of ball valve
-if(!(st_close &amp;&amp;&nbsp;!com) &amp;&amp;&nbsp;!(st_open &amp;&amp; com))
-{
-  tmp_up = (pos&gt;0&amp;&amp;pos&lt;100)&nbsp;? 0&nbsp;: (tmp_up&gt;0&amp;&amp;lst_com==com)&nbsp;? tmp_up-1/frq&nbsp;: t_up;
-  pos += (tmp_up&gt;0)&nbsp;? 0&nbsp;: (100*(com?1:-1))/(t_full*frq);
-  pos = (pos&gt;100)&nbsp;? 100&nbsp;: (pos&lt;0)&nbsp;? 0&nbsp;: pos;
-  st_open = (pos&gt;=100)&nbsp;? true&nbsp;: false;
-  st_close = (pos&lt;=0)&nbsp;? true&nbsp;: false;
-  lst_com = com;
-}
-</pre>
-<pre style="white-space: pre-wrap;">
-//Valve model
-Qr = Q0 + Q0*Kpr*(Pi-1) + 0.01;
-Sr = (S_kl1*l_kl1+S_kl2*l_kl2)/100;
-Ftmp = (Pi&gt;2*Po)&nbsp;? Pi*pow(Q0*0.75/Ti,0.5)&nbsp;: (Po&gt;2*Pi)&nbsp;? Po*pow(Q0*0.75/To,0.5)&nbsp;: pow(abs(Q0*(pow(Pi,2)-pow(Po,2))/Ti),0.5);
-Fi -= (Fi-7260*Sr*sign(Pi-Po)*Ftmp)/(0.01*lo*frq);
-Po += 0.27*(Fi-Fo)/(So*lo*Q0*frq);
-Po = (Po&lt;0)&nbsp;? 0&nbsp;: (Po&gt;100)&nbsp;? 100&nbsp;: Po;
-To += (abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Model of the course of the executive machinery of ball valve</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">st_close</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">com</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="nx">st_open</span> <span class="o">&amp;&amp;</span> <span class="nx">com</span><span class="p">))</span>
+<span class="p">{</span>
+  <span class="nx">tmp_up</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="nx">pos</span><span class="o">&lt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="nx">tmp_up</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="nx">lst_com</span><span class="o">==</span><span class="nx">com</span><span class="p">)</span> <span class="o">?</span> <span class="nx">tmp_up</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="nx">frq</span> <span class="o">:</span> <span class="nx">t_up</span><span class="p">;</span>
+  <span class="nx">pos</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">tmp_up</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="nx">com</span><span class="o">?</span><span class="mi">1</span><span class="o">:-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nx">t_full</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+  <span class="nx">pos</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span> <span class="o">:</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">pos</span><span class="p">;</span>
+  <span class="nx">st_open</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&gt;=</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">st_close</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&lt;=</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">lst_com</span> <span class="o">=</span> <span class="nx">com</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Valve model</span>
+<span class="nx">Qr</span> <span class="o">=</span> <span class="nx">Q0</span> <span class="o">+</span> <span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">;</span>
+<span class="nx">Sr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">S_kl1</span><span class="o">*</span><span class="nx">l_kl1</span><span class="o">+</span><span class="nx">S_kl2</span><span class="o">*</span><span class="nx">l_kl2</span><span class="p">)</span><span class="o">/</span><span class="mi">100</span><span class="p">;</span>
+<span class="nx">Ftmp</span> <span class="o">=</span> <span class="p">(</span><span class="nx">Pi</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">*</span><span class="nx">Po</span><span class="p">)</span> <span class="o">?</span> <span class="nx">Pi</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="mf">0.75</span><span class="o">/</span><span class="nx">Ti</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&gt;</span><span class="mi">2</span><span class="o">*</span><span class="nx">Pi</span><span class="p">)</span> <span class="o">?</span> <span class="nx">Po</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="mf">0.75</span><span class="o">/</span><span class="nx">To</span><span class="p">,</span><span class="mf">0.5</span><span class="p">)</span> <span class="o">:</span> <span class="nx">pow</span><span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="p">(</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Pi</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span><span class="o">/</span><span class="nx">Ti</span><span class="p">),</span><span class="mf">0.5</span><span class="p">);</span>
+<span class="nx">Fi</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="mi">7260</span><span class="o">*</span><span class="nx">Sr</span><span class="o">*</span><span class="nx">sign</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="nx">Po</span><span class="p">)</span><span class="o">*</span><span class="nx">Ftmp</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.01</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">+=</span> <span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">=</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="nx">Po</span><span class="o">&gt;</span><span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span> <span class="o">:</span> <span class="nx">Po</span><span class="p">;</span>
+<span class="nx">To</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Fi</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po</span><span class="o">/</span><span class="nx">Pi</span><span class="p">,</span><span class="mf">0.02</span><span class="p">)</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Fwind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Twind</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">/</span><span class="nx">Riz</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Ct</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Qr</span><span class="o">*</span><span class="nx">frq</span><span class="p">);</span>
+</pre></div>
 <h2><span class="mw-headline" id="Controller_object_and_its_configuration"><span class="mw-headline-number">2</span> <span id="Controller" title="#Controller">Controller object and its configuration</span></span></h2>
 <p>The controller object of the module, to provide immediate calculations, connects with the functions of libraries, built with his help, or with <a href="../DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">the data acquisition template</a>. In the case of a data acquisition template, the possibility of external linking with other parameters and attributes of the subsystem "Data Collection" is added. In order to provide calculated data in OpenSCADA, parameters can be created in the controller object. Example of the configuration tab of the controller object of the given type shown in Figure 2.
 </p>

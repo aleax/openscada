@@ -60,7 +60,11 @@ void TModSchedul::preDisable( int flag )
 
     //All shared libraries detach
     for(int iSh = 0; iSh < (int)schHD.size(); iSh++)
-	if(schHD[iSh].hd) { dlclose(schHD[iSh].hd); schHD.erase(schHD.begin()+(iSh--)); }
+	if(schHD[iSh].hd) {
+	    if(dlclose(schHD[iSh].hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the thread %d error '%s (%d)'!"), schHD[iSh].hd, strerror(errno), errno);
+	    schHD.erase(schHD.begin()+(iSh--));
+	}
 }
 
 string TModSchedul::optDescr( )
@@ -109,7 +113,8 @@ void TModSchedul::unload( )
     //All shared libraries detach
     for(int iSh = 0; iSh < (int)schHD.size(); iSh++)
 	if(!schHD[iSh].hd || !schHD[iSh].use.size()) {
-	    if(schHD[iSh].hd) dlclose(schHD[iSh].hd);
+	    if(schHD[iSh].hd && dlclose(schHD[iSh].hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the thread %d error '%s (%d)'!"), schHD[iSh].hd, strerror(errno), errno);
 	    schHD.erase(schHD.begin()+(iSh--));
     }
 
@@ -219,27 +224,29 @@ void TModSchedul::libAtt( const string &iname, bool full )
 #else
 	    else dlNm = NULL;
 #endif
-	    void *h_lib = dlopen(dlNm, RTLD_LAZY|RTLD_LOCAL);
-	    if(!h_lib) {
+	    void *hLib = dlopen(dlNm, RTLD_LAZY|RTLD_LOCAL);
+	    if(!hLib) {
 		schHD[iSh].err = dlerror();
 		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Connect to module function
 	    TModule::SAt (*module)( int );
-	    module = (TModule::SAt (*)(int)) dlsym(h_lib,(iname[0]!='*')?"module":(iname.substr(1)+"_module").c_str());
+	    module = (TModule::SAt (*)(int)) dlsym(hLib,(iname[0]!='*')?"module":(iname.substr(1)+"_module").c_str());
 	    if((dlErr=dlerror()) != NULL) {
 		schHD[iSh].err = dlErr;
-		dlclose(h_lib);
+		if(dlclose(hLib) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the thread %d error '%s (%d)'!"), hLib, strerror(errno), errno);
 		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
 	    //Connect to attach function
 	    TModule *(*attach)( const TModule::SAt &, const string & );
-	    attach = (TModule * (*)(const TModule::SAt &, const string &)) dlsym(h_lib,(iname[0]!='*')?"attach":(iname.substr(1)+"_attach").c_str());
+	    attach = (TModule * (*)(const TModule::SAt &, const string &)) dlsym(hLib,(iname[0]!='*')?"attach":(iname.substr(1)+"_attach").c_str());
 	    if((dlErr=dlerror()) != NULL) {
 		schHD[iSh].err = dlErr;
-		dlclose(h_lib);
+		if(dlclose(hLib) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the thread %d error '%s (%d)'!"), hLib, strerror(errno), errno);
 		throw err_sys(_("Error SO '%s': %s"), iname.c_str(), schHD[iSh].err.c_str());
 	    }
 
@@ -281,8 +288,10 @@ void TModSchedul::libAtt( const string &iname, bool full )
 		    }
 		}
 	    }
-	    if(add_mod == 0) dlclose(h_lib);
-	    else schHD[iSh].hd = h_lib;
+	    if(add_mod == 0) {
+		if(dlclose(hLib) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the thread %d error '%s (%d)'!"), hLib, strerror(errno), errno);
+	    } else schHD[iSh].hd = hLib;
 	    return;
 	}
     throw err_sys(_("SO '%s' is missing!"), iname.c_str());
@@ -313,7 +322,8 @@ void TModSchedul::libDet( const string &iname )
 			modAt(TSYS::strSepParse(schHD[iSh].use[i_m],1,'.')).at().modStart();
 		throw;
 	    }
-	    dlclose(schHD[iSh].hd);
+	    if(dlclose(schHD[iSh].hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the thread %d error '%s (%d)'!"), schHD[iSh].hd, strerror(errno), errno);
 	    schHD[iSh].hd = NULL;
 	    return;
 	}

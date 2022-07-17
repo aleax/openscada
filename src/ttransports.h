@@ -23,6 +23,8 @@
 
 #define STR_VER		25		//TransportS type modules version
 #define STR_ID		"Transport"
+#define STR_IN_PREF	"in_"
+#define STR_OUT_PREF	"out_"
 
 #include <string>
 
@@ -77,7 +79,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	virtual void stop( );
 	virtual int writeTo( const string &sender, const string &data )	{ return 0; }
 
-	vector<AutoHD<TTransportOut> > assTrs( bool checkForCleanDisabled = false );	//Assigned transports
+	vector<AutoHD<TTransportOut> > associateTrs( bool checkForCleanDisabled = false );	//Associated output transports
+	AutoHD<TTransportOut> associateTr( const string &id );	//Getting the associated output transport at that connection ID
 
 	// IO log
 	int logLen( )	{ return mLogLen; }
@@ -90,9 +93,9 @@ class TTransportIn : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	string assTrO( const string &addr );	//Assign new output transport
+	string associateTrO( const string &addr );	//Associated new output transport
 
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
@@ -116,8 +119,8 @@ class TTransportIn : public TCntrNode, public TConfig
 	char	&mStart;
 	string	mDB;
 
-	ResMtx	assTrRes, mLogRes;
-	vector<AutoHD<TTransportOut> >	mAssTrO;
+	ResMtx	associateTrRes, mLogRes;
+	vector<AutoHD<TTransportOut> >	mAssociateTrO;
 
 	// IO log
 	int		mLogLen, mLogItLim, mLogLstDt;
@@ -135,7 +138,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	TTransportOut( const string &id, const string &db, TElem *el );
 	virtual ~TTransportOut( );
 
-	virtual bool isNetwork( )	{ return true; }
+	bool isNetwork( );
 
 	TCntrNode &operator=( const TCntrNode &node );
 
@@ -235,6 +238,8 @@ class TTypeTransport: public TModule
 	TTypeTransport( const string &id );
 	virtual ~TTypeTransport( );
 
+	virtual bool isNetwork( )	{ return true; }
+
 	// Input transports
 	void inList( vector<string> &list ) const		{ chldList(mIn, list); }
 	bool inPresent( const string &id ) const		{ return chldPresent(mIn, id); }
@@ -287,6 +292,7 @@ class TTransportS : public TSubSYS
 	    public:
 		//Data
 		enum Mode { User = 0, System, UserSystem };
+
 		//Methods
 		ExtHost( const string &iUserOpen, const string &iid, const string &iname = "", const string &itransp = "",
 			 const string &iaddr = "", const string &iuser = "", const string &ipass = "", uint8_t iUpRiseLev = 0 ) :
@@ -316,9 +322,11 @@ class TTransportS : public TSubSYS
 	void inTrList( vector<string> &ls );
 	void outTrList( vector<string> &ls );
 
+	AutoHD<TTransportOut> outAt( const string &addr );	//Common output transport connection
+
 	// External hosts
 	string extHostsDB( );
-	void extHostList( const string &user, vector<ExtHost> &list, bool andSYS = false, int upRiseLev = -1 );
+	void extHostList( const string &user, vector<ExtHost> &list, bool andSYS = false, int upRiseLev = -1, const string &lang = "" );
 	ExtHost extHostGet( const string &user, const string &id, bool andSYS = false );
 	ExtHost extHostSeek( const string &id, int lev );
 	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
@@ -346,6 +354,8 @@ class TTransportS : public TSubSYS
 	//Methods
 	string optDescr( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user_lang );
 
 	//Attributes
 	TElem	elIn, elOut, elExt;

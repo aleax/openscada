@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-01 11:07+0300\n"
+"POT-Creation-Date: 2022-07-15 20:16+0300\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -102,7 +102,7 @@ msgid "Firmware version"
 msgstr "Версія ПЗ"
 
 msgid "Kontar"
-msgstr ""
+msgstr "Kontar"
 
 msgid "Input transport"
 msgstr "Вхідний транспорт"
@@ -193,6 +193,10 @@ msgid "Error: '%s': '%s'"
 msgstr "Помилка: '%s': '%s'"
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"
+
+#, c-format
 msgid "15:Response PDU size (%d from %d) error."
 msgstr "15:Помилка розміру PDU (%d з %d) відповіді."
 
@@ -250,3 +254,4 @@ msgstr "Обслуговування"
 
 msgid "11:Value not gathered."
 msgstr "11:Значення не отримано."
+

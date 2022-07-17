@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:58+0300\n"
+"POT-Creation-Date: 2022-07-15 20:30+0300\n"
 "PO-Revision-Date: 2012-10-31 10:58+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -64,6 +64,7 @@ msgstr "Тека з *.ini файлами пристроїв MR/MC"
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Збір з періодом %s. "
 
@@ -71,6 +72,7 @@ msgstr "Збір з періодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
+#, c-format
 msgid "Spent time %s."
 msgstr "Витрачено часу %s."
 
@@ -80,6 +82,10 @@ msgstr "Помилка відкриття GPIO %s для скидання MC."
 
 msgid "Write to gpio94 error!"
 msgstr "Помилка запису до gpio94!"
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"
 
 #, c-format
 msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"
@@ -157,8 +163,7 @@ msgstr "Помилка відправлення тюн-запиту: %s."
 msgid "20:PDU short."
 msgstr "20:PDU короткий"
 
-msgid ""
-"21:Position lost. Need reload MR/MC bus - re-enable the controller object."
+msgid "21:Position lost. Need reload MR/MC bus - re-enable the controller object."
 msgstr ""
 "21:Втрата позиції. Потрібне перевантаження MR/MC шини - перепідключення "
 "об'єкта контролеру."
@@ -204,3 +209,4 @@ msgstr "DO %d"
 
 msgid "<No select>"
 msgstr "<Не обрано>"
+

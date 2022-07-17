@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:55+0300\n"
+"POT-Creation-Date: 2022-07-15 20:40+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -29,6 +29,10 @@ msgstr "Простой (%)"
 
 msgid "General"
 msgstr "В общем"
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr ""
 
 msgid "10:Device is not available."
 msgstr "10:Устройство недоступно."
@@ -158,6 +162,10 @@ msgstr "Подключен=%d; Активный=%d; Занятый=%d; Ошиб�
 msgid "Property "
 msgstr "Свойство "
 
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr ""
+
 msgid "Data sensors"
 msgstr "Данные сенсоров"
 
@@ -251,6 +259,7 @@ msgstr "Дополнительные параметры"
 msgid "Acquisition. "
 msgstr "Сбор. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Сбор с периодом %s. "
 
@@ -258,6 +267,7 @@ msgstr "Сбор с периодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s]. "
 msgstr "Затрачено времени %s[%s]. "
 

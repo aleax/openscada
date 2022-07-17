@@ -585,15 +585,14 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <p>Механізм "Обробка подій за допомогою обчислювальної процедури віджета" заснований на атрибуті "event" та користувацькій процедурі обчислення, на мові програмування OpenSCADA. Події, по мірі надходження, акумулюються у атрибуті "event" до моменту виклику обчислювальної процедури. Обчислювальна процедура викликається з вказаним періодом обчислення віджета та отримує значення атрибуту "event" у вигляді переліку подій. У процедурі обчислення, користувач може: проаналізувати, обробити та виключити оброблені події з переліку, а також додати до переліку нові події. Решта подій, після виконання процедури, та нові аналізуються на предмет відповідності умовам виклику сценарієм первинного механізму, після чого, події, що залишилися, передаються на верхній за ієрархією віджет, для обробки ним, при цьому здійснюється доповнення шляху події згідно до ієрархії проникнення.
 </p><p>Вмістом атрибуту "event" є перелік подій формату "<b>{event}:{evSrc}</b>", з подією у окремому рядку. Наведемо приклад процедури обробки події на Java-подібній мові користувацького програмування OpenSCADA:
 </p>
-<pre style="white-space: pre-wrap;">
-for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-  if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
-  else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
-  else if(sval == "ws_BtPress:/cvt_sound") alarmSt = 0x1000004;
-  else ev_rez += sval+"\n";
-}
-event = ev_rez;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">for</span><span class="p">(</span><span class="nx">ev_rez</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="nx">off</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">sval</span><span class="o">=</span><span class="nx">event</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">"\n"</span><span class="p">,</span><span class="nx">off</span><span class="p">)).</span><span class="nx">length</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_light"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000001</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_alarm"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000002</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_sound"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000004</span><span class="p">;</span>
+  <span class="k">else</span> <span class="nx">ev_rez</span> <span class="o">+=</span> <span class="nx">sval</span><span class="o">+</span><span class="s2">"\n"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">event</span> <span class="o">=</span> <span class="nx">ev_rez</span><span class="p">;</span>
+</pre></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A1.D0.B8.D0.B3.D0.BD.D0.B0.D0.BB.D1.96.D0.B7.D0.B0.D1.86.D1.96.D1.8F"><span class="mw-headline-number">3.6</span> <span id="Alarms" title="#Alarms">Сигналізація</span></span></h3>
@@ -626,39 +625,36 @@ event = ev_rez;
 </p><p>Квітація здійснюється шляхом вказання кореня гілки віджетів та типів сповіщення, що дозволяє реалізувати квітацію на боці візуалізатору як за групами, наприклад, за об'єктом сигналізації, так і індивідуально за об'єктом джерела. При цьому можна незалежно квитувати різні типи сигналізацій. Встановлення квітації здійснюється простою модифікацією атрибуту "alarmSt".
 </p><p>Приклад скрипту, для роботи з сигналами, приведено нижче:
 </p>
-<pre style="white-space: pre-wrap;">
-//Виокремлення факту наявності сигналізацій різних способів-типів сповіщення
-cvt_light_en = alarmSt&amp;0x100; cvt_alarm_en = alarmSt&amp;0x200; cvt_sound_en = alarmSt&amp;0x400;
-//Виокремлення факту наявності несквітованих сигналізацій різних способів сповіщення
-cvt_light_active = alarmSt&amp;0x10000; cvt_alarm_active = alarmSt&amp;0x20000; cvt_sound_active = alarmSt&amp;0x40000;
-//Обробка подій кнопок квітації та квітація різних способів сповіщення
-for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-  if(sval == "ws_BtPress:/cvt_light") alarmSt = 0x1000001;
-  else if(sval == "ws_BtPress:/cvt_alarm") alarmSt = 0x1000002;
-  else if(sval == "ws_BtPress:/cvt_sound") alarmSt = 0x1000004;
-  else ev_rez += sval + "\n";
-}
-event = ev_rez;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//Виокремлення факту наявності сигналізацій різних способів-типів сповіщення</span>
+<span class="nx">cvt_light_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x100</span><span class="p">;</span> <span class="nx">cvt_alarm_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x200</span><span class="p">;</span> <span class="nx">cvt_sound_en</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x400</span><span class="p">;</span>
+<span class="c1">//Виокремлення факту наявності несквітованих сигналізацій різних способів сповіщення</span>
+<span class="nx">cvt_light_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x10000</span><span class="p">;</span> <span class="nx">cvt_alarm_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x20000</span><span class="p">;</span> <span class="nx">cvt_sound_active</span> <span class="o">=</span> <span class="nx">alarmSt</span><span class="o">&amp;</span><span class="mh">0x40000</span><span class="p">;</span>
+<span class="c1">//Обробка подій кнопок квітації та квітація різних способів сповіщення</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">ev_rez</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="nx">off</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="p">(</span><span class="nx">sval</span><span class="o">=</span><span class="nx">event</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s2">"\n"</span><span class="p">,</span><span class="nx">off</span><span class="p">)).</span><span class="nx">length</span><span class="p">;</span> <span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_light"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000001</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_alarm"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000002</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">sval</span> <span class="o">==</span> <span class="s2">"ws_BtPress:/cvt_sound"</span><span class="p">)</span> <span class="nx">alarmSt</span> <span class="o">=</span> <span class="mh">0x1000004</span><span class="p">;</span>
+  <span class="k">else</span> <span class="nx">ev_rez</span> <span class="o">+=</span> <span class="nx">sval</span> <span class="o">+</span> <span class="s2">"\n"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">event</span> <span class="o">=</span> <span class="nx">ev_rez</span><span class="p">;</span>
+</pre></div>
 <p><b>Зовнішні методи сповіщення</b><br />
 Основним та типовим способом сповіщення є дисплейна світлова сигналізація аварійними кольорами та їх динамікою у елементів візуалізації, яка присутня завжди та не потребує специфічної конфігурації. Однак, часто потрібні сповіщення зовнішнього типу, наприклад: зовнішньою лампою, бузером PC або "ревуном", довільним звуком, синтезованою мовою та інше.
 </p><p>Для здійснення такої можливості, зовнішні способи сповіщення, та відповідні до них типи сповіщення, вільно описуються для серверу візуалізації та самого візуалізатору. На боці серверу візуалізації описується формування/отримання ресурсу сповіщення та саме сповіщення. На боці візуалізатору описується сповіщення згідно ресурсам серверу візуалізації.
 </p><p>Опис правил та сценаріїв зовнішнього сповіщення здійснюється за допомогою користувацьких атрибутів текстового типу для сторінок проєкту візуалізації, які застосовуються при відкритті цих сторінок. Тобто, потенційно, для кожної відкриваної сторінки можна описати власні правила сповіщення, хоча, зазвичай достатньо та описуються загальні правила сповіщення на головній сторінці проєкту — сторінці, яка відкривається одноразово та не закривається при роботі:
 </p>
 <ul><li> Для серверу/рушія візуалізації, атрибутом "notify{N}" у форматі:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]];
-//resStatic={ResourceFile}
-if(doRes) { Текст команди формування ресурсу. }
-if(doNtf) { Текст команди сповіщення. }
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//flags=notifyServ[{DL}][|resource[|queue[|qMergeMess]]];</span>
+<span class="c1">//resStatic={ResourceFile}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="p">{</span> <span class="nx">Текст</span> <span class="nx">команди</span> <span class="nx">формування</span> <span class="nx">ресурсу</span><span class="p">.</span> <span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span><span class="p">)</span> <span class="p">{</span> <span class="nx">Текст</span> <span class="nx">команди</span> <span class="nx">сповіщення</span><span class="p">.</span> <span class="p">}</span>
+</pre></div>
 <ul><li> Для візуалізатору, атрибутом "notifyVis[Vision|WebVision]{N}" у форматі:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//flags=notify[{DL}][|resource[|queue[|quietanceRet]]];
-//name={Ім'я сповіщувача}
-//ico={Ім'я іконки}
-{ Текст команди сповіщення для будь-якого або конкретного візуалізатору. }
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//flags=notify[{DL}][|resource[|queue[|quietanceRet]]];</span>
+<span class="c1">//name={Ім'я сповіщувача}</span>
+<span class="c1">//ico={Ім'я іконки}</span>
+<span class="p">{</span> <span class="nx">Текст</span> <span class="nx">команди</span> <span class="nx">сповіщення</span> <span class="nx">для</span> <span class="nx">будь</span><span class="o">-</span><span class="nx">якого</span> <span class="nx">або</span> <span class="nx">конкретного</span> <span class="nx">візуалізатору</span><span class="p">.</span> <span class="p">}</span>
+</pre></div>
 <p>Прапорці:
 </p>
 <ul><li> <i>notify[{DL}]</i>, <i>notifyServ[{DL}]</i> — включає сповіщення з повтором через час <i>DL</i>, якщо вказано; для <i>DL</i> = 0 повтор здійснюється одразу.</li>
@@ -682,147 +678,140 @@ if(doNtf) { Текст команди сповіщення. }
 <ul><li> Бузер на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x02"</li>
 <li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify|notifyServ
-if(en) SYS.system("beep -f 1000 -l 1000000 &amp;", true);
-else if((beepPID=SYS.system("pidof beep")).toInt()) SYS.system("kill "+beepPID); </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify|notifyServ</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"beep -f 1000 -l 1000000 &amp;"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">((</span><span class="nx">beepPID</span><span class="o">=</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"pidof beep"</span><span class="p">)).</span><span class="nx">toInt</span><span class="p">())</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"kill "</span><span class="o">+</span><span class="nx">beepPID</span><span class="p">);</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision1 | notify1 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify|notifyServ
-if test $en = 1; then
-	beep -f 1000 -l 1000000 &amp;
-else
-	beepPID=$(pidof beep)
-	if test "x$beepPID"&nbsp;!= "x"; then kill $beepPID; fi
-fi </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify|notifyServ</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span>
+	beep -f <span class="m">1000</span> -l <span class="m">1000000</span> <span class="p">&amp;</span>
+<span class="k">else</span>
+	<span class="nv">beepPID</span><span class="o">=</span><span class="k">$(</span>pidof beep<span class="k">)</span>
+	<span class="k">if</span> <span class="nb">test</span> <span class="s2">"x</span><span class="nv">$beepPID</span><span class="s2">"</span> !<span class="o">=</span> <span class="s2">"x"</span><span class="p">;</span> <span class="k">then</span> <span class="nb">kill</span> <span class="nv">$beepPID</span><span class="p">;</span> <span class="k">fi</span>
+<span class="k">fi</span>
+</pre></div>
 <ul><li> Повторюване програвання готового звукового файлу, одного загального, на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2
-if(en) SYS.system("play -q alarm.ogg");</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span><span class="p">)</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q alarm.ogg"</span><span class="p">);</span>
+</pre></div>
 <dl><dd><ul><li> notify2 | notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2
-if test $en = 1; then play -q alarm.ogg; fi</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> play -q alarm.ogg<span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Програвання індивідуального, для джерела, звукового файлу, на боці візуалізатору:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04|res:al_prm1"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=queue</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Синтез мови індивідуального сповіщення, для джерела, на боці візуалізатору:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Текстове повідомлення синтезу мови|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=queue</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=queue</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(doNtf &amp;&amp; en &amp;&amp; mess.length) {
-  SYS.fileWrite("tmpForSpeech", mess);
-  SYS.system("festival --tts tmpForSpeech");
-  SYS.fileRemove("tmpForSpeech");
-}
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">mess</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpForSpeech"</span><span class="p">,</span> <span class="nx">mess</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"festival --tts tmpForSpeech"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpForSpeech"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $doNtf = 1 -a $en = 1 -a "x"&nbsp;!= "x$mess"; then
-  echo $mess &gt; tmpForSpeech
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a <span class="s2">"x"</span> !<span class="o">=</span> <span class="s2">"x</span><span class="nv">$mess</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">echo</span> <span class="nv">$mess</span> &gt; tmpForSpeech
   festival --tts tmpForSpeech
   rm tmpForSpeech
-fi
-</pre>
+<span class="k">fi</span>
+</pre></div>
 <ul><li> Приготування звукового файлу, одного загального, та його програвання на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm||0x04"</li>
 <li> notify2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2|resource
-if(doRes) res = SYS.fileRead("alarm.ogg");  //Вставити сюди інший метод генерації
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|resource</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span><span class="p">)</span> <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"alarm.ogg"</span><span class="p">);</span>  <span class="c1">//Вставити сюди інший метод генерації</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notify2 = </li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2|resource
-if test $doRes = 1; then cp -f alarm.ogg $res; fi  #Вставити сюди інший метод генерації
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2|resource</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> 1<span class="p">;</span> <span class="k">then</span> cp -f alarm.ogg <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>  <span class="c">#Вставити сюди інший метод генерації</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|resource
-if(en &amp;&amp; res.length) {
-  SYS.fileWrite("tmpPlay", res);
-  SYS.system("play -q tmpPlay");
-  SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|resource</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+  <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|resource
-if test $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|resource</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <ul><li> Приготування індивідуального, для джерела сповіщення, звукового файлу через синтез мови, на боці візуалізатору або серверу візуалізації:</li></ul>
 <dl><dd><ul><li> alarm = "10|Prm|Текстове повідомлення синтезу мови|0x04"</li>
 <li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|notifyServ2|queue
-if(doRes &amp;&amp; mess.length) {
- SYS.fileWrite("tmpText", mess);
- SYS.system("text2wave tmpText -o tmpWAV");
- res = SYS.fileRead("tmpWAV");
- SYS.fileRemove("tmpText"); SYS.fileRemove("tmpWAV");
-}
-if(doNtf &amp;&amp; en &amp;&amp; res.length) {
- SYS.fileWrite("tmpPlay", res);
- SYS.system("play -q tmpPlay");
- SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|notifyServ2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doRes</span> <span class="o">&amp;&amp;</span> <span class="nx">mess</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpText"</span><span class="p">,</span> <span class="nx">mess</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"text2wave tmpText -o tmpWAV"</span><span class="p">);</span>
+ <span class="nx">res</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRead</span><span class="p">(</span><span class="s2">"tmpWAV"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpText"</span><span class="p">);</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpWAV"</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">doNtf</span> <span class="o">&amp;&amp;</span> <span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notify2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|notifyServ2|queue
-if test $doRes = 1 -a "x"&nbsp;!= "x$mess"; then
- echo $mess &gt; tmpText
- text2wave tmpText -o $res
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|notifyServ2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doRes</span> <span class="o">=</span> <span class="m">1</span> -a <span class="s2">"x"</span> !<span class="o">=</span> <span class="s2">"x</span><span class="nv">$mess</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
+ <span class="nb">echo</span> <span class="nv">$mess</span> &gt; tmpText
+ text2wave tmpText -o <span class="nv">$res</span>
  rm tmpText
-fi
-if test $doNtf = 1 -a $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<span class="k">fi</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$doNtf</span> <span class="o">=</span> <span class="m">1</span> -a <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-//flags=notify2|queue
-if(en &amp;&amp; res.length) {
- SYS.fileWrite("tmpPlay", res);
- SYS.system("play -q tmpPlay");
- SYS.fileRemove("tmpPlay");
-}</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c1">//flags=notify2|queue</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">en</span> <span class="o">&amp;&amp;</span> <span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileWrite</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">,</span> <span class="nx">res</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">"play -q tmpPlay"</span><span class="p">);</span>
+ <span class="nx">SYS</span><span class="p">.</span><span class="nx">fileRemove</span><span class="p">(</span><span class="s2">"tmpPlay"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><ul><li> notifyVisVision2 =</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-#!/bin/sh
-#flags=notify2|queue
-if test $en = 1 -a -s $res; then play -q $res; fi
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="c">#!/bin/sh</span>
+<span class="c">#flags=notify2|queue</span>
+<span class="k">if</span> <span class="nb">test</span> <span class="nv">$en</span> <span class="o">=</span> <span class="m">1</span> -a -s <span class="nv">$res</span><span class="p">;</span> <span class="k">then</span> play -q <span class="nv">$res</span><span class="p">;</span> <span class="k">fi</span>
+</pre></div>
 <p><br />
 </p>
 <h3><span class="mw-headline" id=".D0.A3.D0.BF.D1.80.D0.B0.D0.B2.D0.BB.D1.96.D0.BD.D0.BD.D1.8F_.D0.BF.D1.80.D0.B0.D0.B2.D0.B0.D0.BC.D0.B8"><span class="mw-headline-number">3.7</span> Управління правами</span></h3>
@@ -1765,12 +1754,12 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <td>
 <p>Структура та вміст таблиці у вигляді XML:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;tbl&gt;
-&lt;h&gt;&lt;s&gt;{Заголовок1}&lt;/s&gt;&lt;s&gt;{Заголовок2}&lt;/s&gt;&lt;/h&gt;
-&lt;r&gt;&lt;s&gt;{Рядок1Стовпчик1Рядок}&lt;/s&gt;&lt;i&gt;{Рядок1Стовпчик2Ціле}&lt;/i&gt;&lt;/r&gt;
-&lt;r&gt;&lt;b&gt;{Рядок2Стовпчик1Логічне}&lt;/b&gt;&lt;r&gt;{Рядок2Стовпчик2Реальне}&lt;/r&gt;&lt;/r&gt;
-&lt;/tbl&gt;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;tbl&gt;</span>
+<span class="nt">&lt;h&gt;&lt;s&gt;</span>{Заголовок1}<span class="nt">&lt;/s&gt;&lt;s&gt;</span>{Заголовок2}<span class="nt">&lt;/s&gt;&lt;/h&gt;</span>
+<span class="nt">&lt;r&gt;&lt;s&gt;</span>{Рядок1Стовпчик1Рядок}<span class="nt">&lt;/s&gt;&lt;i&gt;</span>{Рядок1Стовпчик2Ціле}<span class="nt">&lt;/i&gt;&lt;/r&gt;</span>
+<span class="nt">&lt;r&gt;&lt;b&gt;</span>{Рядок2Стовпчик1Логічне}<span class="nt">&lt;/b&gt;&lt;r&gt;</span>{Рядок2Стовпчик2Реальне}<span class="nt">&lt;/r&gt;&lt;/r&gt;</span>
+<span class="nt">&lt;/tbl&gt;</span>
+</pre></div>
 <p>Теги:
 </p>
 <dl><dd>"tbl" — Таблиця, властивості таблиці загалом:
@@ -2628,10 +2617,10 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <td>
 <p>Шаблон документу у XHTML, починаючи з тегу "body" та включаючи процедурні вставки:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;body docProcLang="JavaLikeCalc.JavaScript"&gt;
-  &lt;h1&gt;Значення&lt;?dp return wCod+1.314;?&gt;&lt;/h1&gt;
-&lt;/body&gt;</pre> 
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;body</span> <span class="na">docProcLang=</span><span class="s">"JavaLikeCalc.JavaScript"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>Значення<span class="cp">&lt;?dp return wCod+1.314;?&gt;</span><span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div> 
 </td></tr>
 <tr>
 <td> doc </td>
@@ -2999,11 +2988,10 @@ if test $en = 1 -a -s $res; then play -q $res; fi
 <li> <i>TCntrNodeObj ownerPage( )</i> — об'єкт батьківської сторінки даного віджету.</li>
 <li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — об'єкт батьківського віджету даного віджету. При указанні <i>base</i> буде повернено й об'єкти сторінок.</li>
 <li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — додає віджет <i>wid</i> з ім'ям <i>wname</i> на основі бібліотечного віджету <i>parent</i>.</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//Додає новий віджет на основі віджету текстового примітиву
-nw = this.wdgAdd("nw", "Новий віджет", "/wlb_originals/wdg_Text");
-nw.attrSet("geomX", 50).attrSet("geomY", 50);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Додає новий віджет на основі віджету текстового примітиву</span>
+<span class="nx">nw</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">wdgAdd</span><span class="p">(</span><span class="s2">"nw"</span><span class="p">,</span> <span class="s2">"Новий віджет"</span><span class="p">,</span> <span class="s2">"/wlb_originals/wdg_Text"</span><span class="p">);</span>
+<span class="nx">nw</span><span class="p">.</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomX"</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomY"</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
+</pre></div>
 <ul><li> <i>bool wdgDel( string wid )</i> — видаляє віджет <i>wid</i>.</li>
 <li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — підключається до дочірнього або глобального віджету, за посередництвом шляху <i>byPath</i>. У випадку глобального підключення можна використати абсолютний або відносний шлях до віджету. Точкою відліку абсолютної адреси виступає об'єкт кореня модуля "VCAEngine", а значить, першим елементом абсолютної адреси є ідентифікатор сеансу, який опускається. Відносна адреса бере відлік від поточного віджету. Спеціальним елементом відносної адреси є елемент вищестоящого вузла "..".</li>
 <li> <i>Array attrList()</i> — перелік атрибутів віджету.</li>
@@ -3012,10 +3000,9 @@ nw.attrSet("geomX", 50).attrSet("geomY", 50);
 <li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — встановлює значення <i>vl</i> у атрибут віджету <i>attr</i> або сеанс, для <i>toSess</i>. Повертає поточний об'єкт, для конкатенації функцій встановлення.</li>
 <li> <i>string link( string attr, bool prm = false )</i> — посилання атрибуту віджету <i>attr</i>. При встановленні <i>prm</i> запитує посилання групи атрибутів (параметр), представлене вказаним атрибутом.</li>
 <li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — встановлює посилання атрибуту віджету <i>attr</i>. При встановленні <i>prm</i> здійснює встановлення посилання групи атрибутів (параметр), представленого вказаним атрибутом.</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-//Встановлює посилання восьмого тренду параметром
-this.linkSet("el8.name", "prm:/LogicLev/experiment/Pi", true);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Встановлює посилання восьмого тренду параметром</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">linkSet</span><span class="p">(</span><span class="s2">"el8.name"</span><span class="p">,</span> <span class="s2">"prm:/LogicLev/experiment/Pi"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+</pre></div>
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — ресурс об'єкту за адресою <i>addr</i> (пряме посилання на ресурс або атрибут віджету з цим посиланням) з типом <i>MIME</i>, з таблиці сеансу або джерела. Призначено для редагування ресурсу об'єкта та підставлення його у контексті сеансу, наприклад, зображень SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — встановлює ресурс об'єкту у <i>data</i> з типом <i>MIME</i> за адресою <i>addr</i>.</li>
 <li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формує повідомлення програми <i>mess</i> з категорією — шлях до даного віджету.</li></ul>

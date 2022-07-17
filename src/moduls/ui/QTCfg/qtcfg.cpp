@@ -2823,7 +2823,7 @@ bool ConfApp::compareHosts( const TTransportS::ExtHost &v1, const TTransportS::E
 void ConfApp::initHosts( bool toReconnect )
 {
     vector<TTransportS::ExtHost> stls;
-    SYS->transport().at().extHostList(user(), stls);
+    SYS->transport().at().extHostList(user(), stls, false, -1, lang(true));
     sort(stls.begin(), stls.end(), compareHosts);
     stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 
@@ -3395,7 +3395,8 @@ void ConfApp::imgPopup( const QPoint &pos )
 		int hd = open(fileName.toStdString().c_str(), O_RDONLY);
 		if(hd < 0) throw TError(mod->nodePath().c_str(), _("Error opening the file '%s'\n"), fileName.toStdString().c_str());
 		while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf, len);
-		::close(hd);
+		if(::close(hd) != 0)
+		    mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 
 		//Set image to widget
 		if(!img->setImage(rez))

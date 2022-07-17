@@ -35,7 +35,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.1"
+#define MOD_VER		"3.8.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -220,7 +220,8 @@ TVariant TProtIn::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    if(hd >= 0) {
 		char buf[prmStrBuf_SZ];
 		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf, len);
-		::close(hd);
+		if(::close(hd) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 		if(answer.find("#####CONTEXT#####") == string::npos && !forceTmpl.size()) answer.clear();
 		else {
 		    try {
@@ -916,7 +917,8 @@ bool TProtIn::mess( const string &reqst, string &answer )
 		    answer.clear();
 		    char buf[prmStrBuf_SZ];
 		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) answer.append(buf,len);
-		    close(hd);
+		    if(close(hd) != 0)
+			mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 		    //Extension process
 		    size_t ext_pos = uris.rfind(".");
 		    string fext = (ext_pos != string::npos) ? uris.substr(ext_pos+1) : "";

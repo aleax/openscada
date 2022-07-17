@@ -662,7 +662,8 @@ void TSYS::cfgFileLoad( )
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) s_buf.append(buf, len);
 	    fOK = s_buf.size();
 	}
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	if(!fOK) mess_sys(TMess::Error, _("Error loading the configuration file '%s'."), mConfFile.c_str());
 
 	try {
@@ -702,7 +703,8 @@ void TSYS::cfgFileSave( )
 	if(rez != (int)rezFile.size()) mess_sys(TMess::Error,_("Error writing the configuration file '%s': %s"), mConfFile.c_str(), ((rez<0)?strerror(errno):""));
 	rootModifCnt = 0;
 	rootFlTm = time(NULL);
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     }
 }
 
@@ -1081,7 +1083,8 @@ void TSYS::clkCalc( )
 			(fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq","r")))) {
 	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
 	    mSysclc = uint64_t(s2r(buf)*1e3);
-	    fclose(fp);
+	    if(fclose(fp) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	}
 
 	//Try read file cat /proc/cpuinfo for CPU frequency or BogoMIPS get
@@ -1093,7 +1096,8 @@ void TSYS::clkCalc( )
 		    mSysclc = (uint64_t)(frq*1e6);
 		    break;
 		}
-	    fclose(fp);
+	    if(fclose(fp) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	}
     }
 }
@@ -2140,7 +2144,8 @@ bool TSYS::prjLock( const char *cmd )
 	    int bufLn = 35;
 	    char buf[bufLn+1]; buf[bufLn] = 0;
 	    bool toRemove = (read(hd,buf,bufLn) <= 0);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    if(!toRemove) {
 		int pid = 0, tm = 0;
 		toRemove = ((sscanf(buf,"%d %d",&pid,&tm) < 2) || pid == getpid() || abs(sysTm()-tm) > 2*prjLockUpdPer());
@@ -2158,7 +2163,8 @@ bool TSYS::prjLock( const char *cmd )
     if(hd >= 0) {
 	string lockInfo = TSYS::strMess("%010d %020d", (int)getpid(), (int)sysTm());
 	write(hd, lockInfo.data(), lockInfo.size());
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	return true;
     }
 
@@ -2752,7 +2758,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	for(int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)) || !feof(fp); )
 	    rez.append(buf,r_cnt);
 
-	pclose(fp);
+	if(pclose(fp) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	return rez;
     }
     // int fileSize( string file ) - Return the <file> size.
@@ -2761,7 +2768,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int rez = -1;
 	if(hd >= 0) {
 	    rez = lseek(hd, 0, SEEK_END);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	return rez;
     }
@@ -2779,7 +2787,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    else
 		for(int len = 0, rLen = 0; rLen < sz && (len=read(hd,buf,fmin(sz-rLen,(int)sizeof(buf)))) > 0; rLen += len)
 		    rez.append(buf, len);
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	return rez;
     }
@@ -2792,7 +2801,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int hd = open(prms[0].getS().c_str(), wflags, permCrtFiles());
 	if(hd >= 0) {
 	    wcnt = write(hd, val.data(), val.size());
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	return wcnt;
     }

@@ -1226,7 +1226,8 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) s_buf.append(buf, len);
 		fOK = s_buf.size();
 	    }
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning("XMLNodeObj", _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    if(!fOK) return TSYS::strMess(_("3:Error loading the file '%s'."), prms[0].getS().c_str());
 
 	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getI():0), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
@@ -1258,7 +1259,8 @@ TVariant XMLNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 	    int hd = open(prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, SYS->permCrtFiles());
 	    if(hd < 0)	return "";
 	    bool fOK = (write(hd,s_buf.data(),s_buf.size()) == (int)s_buf.size());
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning("XMLNodeObj", _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    if(!fOK)	return "";
 	}
 	return s_buf;

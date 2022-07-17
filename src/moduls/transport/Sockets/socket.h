@@ -30,17 +30,17 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
-#define S_NM_SOCK	"SOCK"
+#define S_NM_SOCKET	"SOCKET"
 #define S_NM_TCP	"TCP"
 #define S_NM_UDP	"UDP"
 #define S_NM_UNIX	"UNIX"
 #define S_NM_RAWCAN	"RAWCAN"
 
-#define SOCK_FORCE	-1
-#define SOCK_TCP	0
-#define SOCK_UDP	1
-#define SOCK_UNIX	2
-#define SOCK_RAWCAN	3
+#define S_FORCE		-1
+#define S_TCP		0
+#define S_UDP		1
+#define S_UNIX		2
+#define S_RAWCAN	3
 
 using namespace OSCADA;
 
@@ -75,6 +75,11 @@ class SSockIn
 class TSocketIn: public TTransportIn
 {
     public:
+	//Data
+	// Flags of the SQL requests
+	enum TRModes { M_ForceDiscon = 0, M_NoDiscon, M_Initiative };
+
+	//Methods
 	/* Open input socket <name> for locale <address>
 	 * address : <type:<specific>>
 	 * type:
@@ -178,7 +183,7 @@ class TSocketOut: public TTransportOut
 	/* Open output socket <name> for locale <address>
 	 * address : <type:<specific>>
 	 * type:
-	 *   SOCK - direct socket with "SOCK:{fd}"
+	 *   SOCKET - direct socket with "SOCKET:{fd}"
 	 *   TCP  - TCP socket with  "UDP:{host}:{port}"
 	 *   UDP  - UDP socket with  "TCP:{host}:{port}"
 	 *   UNIX - UNIX socket with "UNIX:{path}"

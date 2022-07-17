@@ -124,10 +124,12 @@ void ModMArch::start( )
 		int hd1 = open((mAt.at().addr()+"/"+fLock).c_str(), O_RDONLY);
 		if(hd1 >= 0 || mAt.at().addr() == addr()) {
 		    dbl = mAt.at().addr();
-		    if(hd1 >= 0) close(hd1);
+		    if(hd1 >= 0 && close(hd1) != 0)
+			mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd1, strerror(errno), errno);
 		}
 	    }
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    remove((addr()+"/"+fLock).c_str());
 	}
 	res.unlock();
@@ -579,7 +581,8 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
 	snprintf(buf, bufSz, "%s %s %s %8x %8x\n", MOD_ID, MOD_VER, mChars.c_str(), (unsigned int)mBeg, (unsigned int)mEnd);
 	fOK = (write(hd,buf,strlen(buf)) == (int)strlen(buf));
     }
-    close(hd);
+    if(close(hd) != 0)
+	mess_warning(owner().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
     //if(!fOK) throw owner().err_sys(_("Error writing to file '%s'"), name().c_str());
     if(fOK) {
 	mLoad = true;
@@ -629,7 +632,8 @@ void MFileArch::attach( const string &iname, bool full )
 		    char bChars[100];
 		    if(sscanf(buf,"%lx %lx %99s %hhd",&mBeg,&mEnd,bChars,&mXML) == 4) { mChars = bChars; infoOK = true; }
 		}
-		close(hd);
+		if(close(hd) != 0)
+		    mess_warning(owner().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    }
 
 	    // Get archive info from DB
@@ -648,7 +652,11 @@ void MFileArch::attach( const string &iname, bool full )
 	    if(infoOK && (!mXML || !full)) {
 		//  Get the file size
 		int hd = open(name().c_str(), O_RDONLY);
-		if(hd > 0) { mSize = lseek(hd,0,SEEK_END); close(hd); }
+		if(hd > 0) {
+		    mSize = lseek(hd,0,SEEK_END);
+		    if(close(hd) != 0)
+			mess_warning(owner().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
+		}
 		return;
 	    }
 
@@ -676,7 +684,8 @@ void MFileArch::attach( const string &iname, bool full )
 	    if(mNode) delete mNode;
 	    mNode = NULL;
 
-	    fclose(f);
+	    if(fclose(f) != 0)
+		mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 	}
 	else {
 	    if(!mNode) mNode = new XMLNode();
@@ -688,7 +697,9 @@ void MFileArch::attach( const string &iname, bool full )
 
 		// Read full file to buffer
 		while((r_cnt=fread(buf,1,bufSz,f))) s_buf.append(buf, r_cnt);
-		fclose(f); f = NULL;
+		if(fclose(f) != 0)
+		    mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
+		f = NULL;
 
 		// Parse full file
 		mNode->load(s_buf);
@@ -717,7 +728,8 @@ void MFileArch::attach( const string &iname, bool full )
 		    if(c == EOF) {
 			owner().mess_sys(TMess::Error, _("Error the archive file '%s'."), name().c_str());
 			mErr = true;
-			fclose(f);
+			if(fclose(f) != 0)
+			    mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 			return;
 		    }
 		    prm.clear();
@@ -725,7 +737,8 @@ void MFileArch::attach( const string &iname, bool full )
 		    if(c == EOF) {
 			owner().mess_sys(TMess::Error, _("Error the archive file '%s'."), name().c_str());
 			mErr = true;
-			fclose(f);
+			if(fclose(f) != 0)
+			    mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 			return;
 		    }
 		} while(prm != MOD_ID);
@@ -744,7 +757,8 @@ void MFileArch::attach( const string &iname, bool full )
 		}
 		fseek(f, 0, SEEK_END);
 		mSize = ftell(f);
-		fclose(f);
+		if(fclose(f) != 0)
+		    mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 		mWrite = false;
 		mLoad = false;
 		mXML = true;
@@ -756,7 +770,8 @@ void MFileArch::attach( const string &iname, bool full )
 	if(mNode) delete mNode;
 	mNode = NULL;
 	mErr = true;
-	if(f)	fclose(f);
+	if(f && fclose(f) != 0)
+	    mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
     }
 }
 
@@ -848,7 +863,11 @@ bool MFileArch::put( TMess::SRec mess )
 		    if(!mv_beg)	mv_beg = ftell(f) - strlen(buf);
 		    if(xTm > FTM(mess)) break;
 		}
-		if(tTm == mess.time && s_buf == buf) { fclose(f); return true; }
+		if(tTm == mess.time && s_buf == buf) {
+		    if(fclose(f) != 0)
+			mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
+		    return true;
+		}
 		if(owner().prevDblTmCatLev() && xTm == FTM(mess) && tLev == mess.level &&
 		    TSYS::strDecode(Mess->codeConvIn(mChars,tCat),TSYS::HttpURL) == mess.categ)
 		{
@@ -920,7 +939,8 @@ bool MFileArch::put( TMess::SRec mess )
 	}
 	fseek(f, 0, SEEK_END);
 	mSize = ftell(f);
-	fclose(f);
+	if(fclose(f) != 0)
+	    mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 	if(!fOK) owner().mess_sys(TMess::Error, _("Error writing to the archive file '%s': %s(%d)"), name().c_str(), strerror(errno), errno);
 
 	return fOK;
@@ -1041,7 +1061,8 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 	    }
 	    lastTm = FTM(bRec);
 	}
-	fclose(f);
+	if(fclose(f) != 0)
+	    mess_warning(owner().nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
     }
 
     return result;
@@ -1058,7 +1079,8 @@ void MFileArch::check( bool free )
 		mSize = x_cf.size();
 		mWrite = !(write(hd,x_cf.c_str(),mSize) == mSize);
 		if(mWrite) owner().mess_sys(TMess::Error, _("Error writing to '%s'!"), name().c_str());
-		close(hd);
+		if(close(hd) != 0)
+		    mess_warning(owner().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    }
 	}
 	//Free memory of XML-archive after 10 minets
@@ -1073,7 +1095,11 @@ void MFileArch::check( bool free )
 	mPack = true;
 	// Get file size
 	int hd = open(name().c_str(), O_RDONLY);
-	if(hd > 0) { mSize = lseek(hd, 0, SEEK_END); close(hd); }
+	if(hd > 0) {
+	    mSize = lseek(hd, 0, SEEK_END);
+	    if(close(hd) != 0)
+		mess_warning(owner().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
+	}
 
 	if(!owner().packInfoFiles() || owner().infoTbl.size()) {
 	    // Write info to DB
@@ -1090,7 +1116,8 @@ void MFileArch::check( bool free )
 	    string si = TSYS::strMess("%lx %lx %s %d",begin(),end(),charset().c_str(),xmlM());
 	    if(write(hd,si.data(),si.size()) != (int)si.size())
 		mod->mess_sys(TMess::Error, _("Error writing to '%s'!"), (name()+".info").c_str());
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner().nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
     }
 }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 17:07+0300\n"
+"POT-Creation-Date: 2022-07-15 21:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,14 +94,14 @@ msgid "Error binding the %s socket: '%s (%d)'!"
 msgstr ""
 
 #, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
 msgid "RAWCAN socket binded to '%s'!"
 msgstr ""
 
 msgid "Connected"
-msgstr ""
-
-#, c-format
-msgid "Closing the socket '%d' error '%s (%d)'!"
 msgstr ""
 
 msgid "Disconnected"

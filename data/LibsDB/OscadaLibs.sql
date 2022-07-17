@@ -6620,7 +6620,7 @@ THE OUTPUT USER PROTOCOL PART "SMTP" provides operations with a SMTP-server for 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: SVItoVYR LTD
-Version: 1.0.5
+Version: 1.0.6
 License: GPLv2','Комплексний шаблон повідомлення містить частини диспетчеру та вихідний користувацький протокол повідомлення за EMail(SMTP) та SMS.
 
 ДИСПЕТЧЕР може виконуватися для вказаних повідомлень буферу повідомлень OpenSCADA та застосовується на Логічному рівні або об''єкті контролеру модуля JavaLikeCalc.
@@ -6631,7 +6631,7 @@ License: GPLv2','Комплексний шаблон повідомлення м
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ТОВ "СВІТоВИР АВТоМАТИК"
-Версія: 1.0.5
+Версія: 1.0.6
 Ліцензія: GPLv2','',120,0,'JavaLikeCalc.JavaScript
 if(f_start)	io = tr = EVAL;
 
@@ -6659,7 +6659,7 @@ function SMTP( ) {
 	auth = io.attr("auth");
 
 	//Send HELLO
-	rez = tr.messIO("EHLO "+emailSender.parse(1,"@")+"\x0D\x0A");
+	rez = tr.messIO("EHLO "+io.attr("from").parse(1,"@")+"\x0D\x0A");
 	while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
 	if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 	for(off = 0; (sit=rez.parse(0,"\x0D\x0A",off)).length; )
@@ -7068,12 +7068,15 @@ else {
 	f_err = tErr;
 	alDelay_ = 0;
 }','','',1572284562);
-INSERT INTO tmplib_base VALUES('initConsAssignTrs','Initiative connections processing for assigned output transports','Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів','Обработка инициативных подключений на предмет ассоциативных выходных транспортов','The template of processing input initiative connections was created to provide the latest chain of implementation and support for conception of data acquisition in the passive mode and the initiative connection, that is — the control of associative connections, created by the input transport at each connection.
+INSERT INTO tmplib_base VALUES('initConAssociateTrs','Initiative connections processing for the associated output transports','Опрацювання ініціативних підключень щодо асоційованих вихідних транспортів','Обработка инициативных подключений на предмет ассоциированных выходных транспортов','
+The template of processing input initiative connections was created to provide the last link of implementation and support for conception of data acquisition in the passive mode and the initiative connection, that is — the control of associative connections, created by the input transport at each connection.
 
-The function of creation associative output transports at connections is currently only supported by the module "Sockets" and for TCP-sockets.
+!!!! After implementation this control together the new common-unified output transport connection function outAt() that template became deprecated for sources adapted to use the new mechanism, but you still can use the template for not adapted sources.
 
-The control of associative transport means:
-  - obtaining a list of the associative transports, by the function assTrsList() of the input transports;
+The function of creation associated output transports at connections is currently only supported by the module "Sockets" and for TCP-sockets.
+
+The control of associated transport means:
+  - obtaining a list of the associated transports, by the function assignTrsList() of the input transports;
   - reading from new transports (opened) of identification information, which currently represents only the source object identifier;
     - search, by the received identifier, the source object and assigning to it of this transport;
     - registering in the attribute "prcTr" of the object type.
@@ -7085,17 +7088,19 @@ The template can control the containers of data source objects, constructed both
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 1.1.2
-License: GPLv2','Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки концепції збору даних у пасивному режимі та ініціативного підключення, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
+Version: 1.2.0
+License: GPLv2','Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки концепції збору даних у пасивному режимі та ініціативного підключення, а саме — контролю асоційованих транспортів створюваних вхідним транспортом за кожного підключення.
 
-Функцію створення вихідних асоціативних транспортів за підключенням на вхідний наразі підтримує лише модуль транспортів "Сокети" та для TCP-сокетів.
+!!!! Після реалізації цього контролю разом із новою функцією загального-уніфікованого підключення вихідного транспорту outAt() цей шаблон став застарілим для джерел адаптованих до використання нового механізму, але ви все ще можете використовувати шаблон для неадаптованих джерел.
 
-Контроль асоціативних транспортів передбачає:
-  - отримання переліку асоціативних транспортів, функцією вхідного транспорту assTrsList();
-  - читання із нових транспортів (відкритих) ідентифікаційної інформації, яка наразі репрезентує тільки ідентифікатор об''єкту джерела;
-    - пошук, за отриманим ідентифікатором, об''єкта джерела та призначення йому адреси цього транспорту;
+Функцію створення вихідних асоційованих транспортів за підключенням на вхідний наразі підтримує лише модуль транспортів "Сокети" та для TCP-сокетів.
+
+Контроль асоційованих транспортів передбачає:
+  - отримання переліку асоційованих транспортів функцією вхідного транспорту assignTrsList();
+  - читання із нових транспортів (відкритих) ідентифікаційної інформації яка наразі репрезентує тільки ідентифікатор об''єкту джерела;
+    - пошук за отриманим ідентифікатором об''єкта джерела та призначення йому адреси цього транспорту;
     - реєстрацію у атрибуті об''єктного типу "prcTr".
-  - перевірка діючих транспортів на предмет їх закриття (від''єднання), щодо чого здійснюється дереєстрація у атрибуті об''єктного типу "prcTr" та встановлення об''єкту джерела порожнього значення; вимкнені вихідні асоціативні транспорти повторно використовуються вхідним за отриманням нового підключення, після чого він вмикається.
+  - перевірка діючих транспортів на предмет їх закриття (від''єднання), щодо чого здійснюється дереєстрація у атрибуті об''єктного типу "prcTr" та встановлення об''єкту джерела порожнього значення; вимкнені вихідні асоціативні транспорти повторно використовуються вхідним за отриманням нового підключення після чого він вмикається.
 
 Шаблон може керувати контейнерами об''єктів джерел даних, побудованих як у вигляді DAQ-об''єктів контролерів, так і параметрів логічного рівня, що репрезентують джерело даних та мають поле визначення адреси транспорту та що загалом визначається конфігураційним полем "srcObjPath" із форматом {CntrAddr}:{TrCntrFldAddr}, де:
   - CntrAddr — адреса контейнеру, наприклад: "ModBus" — для DAQ-об''єктів контролерів, "LogicLev.CntrPLC" — для параметрів логічного рівня;
@@ -7103,7 +7108,7 @@ License: GPLv2','Шаблон служби опрацювання вхідних
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 1.1.2
+Версія: 1.2.0
 Ліцензія: GPLv2','',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	inTransport_ = "", inTr = EVAL;
@@ -7125,7 +7130,7 @@ else if(!(CntrFldPath=srcObjPath.parse(1,":")).length)
 else {
 	isLogPrm = srcObjPath.parse(0,":").parse(1).length;
 
-	outTrs = inTr.assTrsList();
+	outTrs = inTr.associateTrsList();
 	for(iTr = 0; iTr < outTrs.length; iTr++) {
 		oTrNm = outTrs[iTr];
 		// The transport is present and active
@@ -7133,13 +7138,13 @@ else {
 			//  and not registered
 			if(prcTr[oTrNm].isEVal()) {
 				//   reading the source identifier
-				idSeq = oTrO.messIO("").parse(0, ":");
+				idSeq = oTrO.conPrm("initConID"); //messIO("").parse(0, ":");
 				if(idSeq.length > 20)	idSeq = idSeq.slice(0, 20);
 				//   stop for empty-missed identification or missed PLC object
-				if(!idSeq.length || (PLC_O=CNTR_O[(isLogPrm?"prm_":"")+idSeq]).isEVal())	{
+				if(!idSeq.length || idSeq.isEVal() || (PLC_O=CNTR_O[(isLogPrm?"prm_":"")+idSeq]).isEVal())	{
 					oTrO.start(false);
 					if(idSeq.length)
-						SYS.messNote("initConsAssignTrs", tr("The requested identificator ''%1'' is mіssing in the container ''%2'' of the data source objects!").replace("%1",idSeq).replace("%2",srcObjPath.parse(0,":")));
+						SYS.messNote("initConAssociateTrs", tr("The requested identificator ''%1'' is mіssing in the container ''%2'' of the data source objects!").replace("%1",idSeq).replace("%2",srcObjPath.parse(0,":")));
 					continue;
 				}
 
@@ -7169,7 +7174,7 @@ else {
 
 //Error set
 if(tErr.length)	f_err = tErr;
-else f_err = "0";','','',1571249552);
+else f_err = "0";','','',1657998607);
 CREATE TABLE IF NOT EXISTS 'flb_Controller' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_Controller VALUES('prescr','Prescriptions manager (moved)','','','!!!!: Moved and replaced by the template PrescrTempl.manager. Will be removed soon
 Prescriptions manager and controller. Used in addition with user interface''s cadre "Prescription: editing" and "Prescription: runtime" for which into a parameter of the controller you must pass that parameters: "mode", "prog", "startTm", "curCom", "comLs", "work".
@@ -12116,7 +12121,7 @@ io.setText(resp.slice(1,resp.length-1));',0,1509287419);
 INSERT INTO UserProtocol_uPrt VALUES('SMTP','SMTP (replaced)','SMTP','','!!!!: Replaced by the complex template Main.ntf. Will be removed soon
 Provides EMAIL sending by the protocol SMTP.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0','','',1,'',0,'','JavaLikeCalc.JavaScript
+Version: 1.0.1','','',1,'',0,'','JavaLikeCalc.JavaScript
 //Request form:
 //<send auth="{user}:{pass}" from="{FromAddr}" to="{ToAddr}" topic="{My Topic}" err="1:Error">{MessageText}</send>
 //  topic - the message topic;
@@ -12138,7 +12143,7 @@ while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) 
 auth = io.attr("auth");
 
 //Send HELLO
-rez = tr.messIO("EHLO "+emailSender.parse(1,"@")+"\x0D\x0A");
+rez = tr.messIO("EHLO "+io.attr("from").parse(1,"@")+"\x0D\x0A");
 while(rez.length && rez.slice(-2) != "\x0D\x0A" && (trez=tr.messIO("")).length) rez += trez;
 if(!rez.length)	{ io.setAttr("err", "100:"+tr("No response.")); return; }
 for(off = 0; (sit=rez.parse(0,"\x0D\x0A",off)).length; )
@@ -14270,10 +14275,10 @@ INSERT INTO tmplib_base_io VALUES('UPS','this','Object',4,0,'',16,'Об''єкт'
 INSERT INTO tmplib_base_io VALUES('UPS','SHIFR','Code',0,0,'',17,'Шифр','','Шифр','','');
 INSERT INTO tmplib_base_io VALUES('UPS','NAME','Name',0,0,'',18,'Ім''я','','Имя','','Име');
 INSERT INTO tmplib_base_io VALUES('UPS','DESCR','Description',0,0,'',19,'Опис','','Описание','','Опис');
-INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','inTransport','Input transport',0,64,'InitiateCons',0,'Вхідний транспорт','','Входной транспорт','','');
-INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'Таймаути вихідних транспортів','','Таймауты выходных транспортов','','');
-INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','prcTr','Processed transports',4,17,'',3,'Опрацьовані транспорти','','Обработанные транспорты','','');
-INSERT INTO tmplib_base_io VALUES('initConsAssignTrs','srcObjPath','Source object path',0,64,'ModBus:%2fcntr%2fcfg%2fADDR',2,'Шлях об''єкту джерела','','Путь объекта источника','','');
+INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','inTransport','Input transport',0,64,'InitiateCons',0,'Вхідний транспорт','InitiateCons','Входной транспорт','','');
+INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','outTrTm','Output transport timeouts',0,64,'10:0.1',1,'Таймаути вихідних транспортів','','Таймауты выходных транспортов','','');
+INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','prcTr','Processed transports',4,17,'',3,'Опрацьовані транспорти','','Обработанные транспорты','','');
+INSERT INTO tmplib_base_io VALUES('initConAssociateTrs','srcObjPath','Source object path',0,64,'ModBus:%2fcntr%2fcfg%2fADDR',2,'Шлях об''єкту джерела','ModBus:%2fcntr%2fcfg%2fADDR','Путь объекта источника','','');
 INSERT INTO tmplib_base_io VALUES('SNMP','alSup','Violations suppress',3,32,'',2,'Придушення порушень','','Подавление нарушений','','');
 INSERT INTO tmplib_base_io VALUES('SNMP','alDelay','Violations delay, seconds',2,32,'0',3,'Затримка порушень, секунди','','Задержка нарушений, секунды','','');
 INSERT INTO tmplib_base_io VALUES('UPS','alSup','Violations suppress',3,32,'',1,'Придушення порушень','','Подавление нарушений','','');
@@ -14833,8 +14838,7 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','addr','Device address, [0...247]',
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus, [RTU|ASCII|TCP]','','Тип ModBus, [RTU|ASCII|TCP]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'Максимальный размер блока ModBus, [10...200]','','Максимальний розмір блоку ModBus, [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
-INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,
-'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
 
 ',5,'Набор элементов "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','Набір елементів "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-18 10:45+0300\n"
+"POT-Creation-Date: 2022-07-15 21:19+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -125,7 +125,8 @@ msgstr ""
 "Кнопка принудительной загрузки данных элемента из БД, не только когда "
 "изменено"
 
-msgid "Press for loading the item data from DB forcibly, not only when it changed."
+msgid ""
+"Press for loading the item data from DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительной загрузки данных элемента из БД, не только когда "
 "изменено."
@@ -148,12 +149,14 @@ msgstr "Принудительно сохранить в БД"
 msgid "Save the item data to DB forcibly"
 msgstr "Принудительно сохранить данные элемента в БД"
 
-msgid "The button for saving the item data to DB forcibly, not only when it changed"
+msgid ""
+"The button for saving the item data to DB forcibly, not only when it changed"
 msgstr ""
 "Кнопка принудительного сохранения данных элемента в БД, не только когда "
 "изменено"
 
-msgid "Press for saving the item data to DB forcibly, not only when it changed."
+msgid ""
+"Press for saving the item data to DB forcibly, not only when it changed."
 msgstr ""
 "Нажать для принудительного сохранения данных элемента в БД, не только когда "
 "изменено."
@@ -240,7 +243,8 @@ msgid "The button for starting the cycled refreshing of the page content"
 msgstr "Кнопка запуска периодического обновления содержимого текущей страницы."
 
 msgid "Press for starting the cycled refreshing of the page content."
-msgstr "Нажать для запуска периодического обновления содержимого текущей страницы."
+msgstr ""
+"Нажать для запуска периодического обновления содержимого текущей страницы."
 
 msgid "&Stop"
 msgstr "&Остановить"
@@ -249,10 +253,12 @@ msgid "Stop the cycled refreshing"
 msgstr "Остановить периодическое обновление"
 
 msgid "The button for stopping the cycled refreshing of the page content"
-msgstr "Кнопка останова периодического обновления содержимого текущей страницы."
+msgstr ""
+"Кнопка останова периодического обновления содержимого текущей страницы."
 
 msgid "Press for stopping the cycled refreshing of the page content."
-msgstr "Нажать для останова периодического обновления содержимого текущей страницы."
+msgstr ""
+"Нажать для останова периодического обновления содержимого текущей страницы."
 
 #, c-format
 msgid "Append to favorite for '%s'"
@@ -335,7 +341,8 @@ msgid "The button for requesting information about the user interface elements"
 msgstr "Кнопка запроса информации про элементы пользовательского интерфейса"
 
 msgid "Press for requesting information about the user interface elements."
-msgstr "Нажать для запроса информации про элементы пользовательского интерфейса"
+msgstr ""
+"Нажать для запроса информации про элементы пользовательского интерфейса"
 
 msgid "&File"
 msgstr "&Файл"
@@ -677,6 +684,10 @@ msgid "Error opening the file '%s'\n"
 msgstr "Ошибка открытия файла %s\n"
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
 msgid "Error image file '%s'\n"
 msgstr "Ошибка файла изображения '%s'\n"
 
@@ -810,4 +821,3 @@ msgstr "QTCfg диалог"
 
 msgid "Selecting the identifier and the name of the node"
 msgstr "Выбор идентификатора и имени узла"
-

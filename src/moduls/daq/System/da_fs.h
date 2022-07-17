@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_fs.h
 /***************************************************************************
- *   Copyright (C) 2016-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2016-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,7 @@ class FS: public DA
 
     private:
 	//Methods
-	void mpList( vector<string> &list );
+	void dList( TCntrNode *obj, vector<string> &list );
 };
 
 } //End namespace

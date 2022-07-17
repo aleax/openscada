@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0Report-Msgid-Bugs-To: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:52+0300\n"
+"POT-Creation-Date: 2022-07-15 20:33+0300\n"
 "PO-Revision-Date: 2007-10-28 09:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -231,6 +231,7 @@ msgstr "Восстановления через %.6g с."
 msgid "Acquisition. "
 msgstr "Сбор. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Сбор с периодом %s. "
 
@@ -238,6 +239,7 @@ msgstr "Сбор с периодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Следующий сбор по cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s], read %s, wrote %s, connection errors %g. "
 msgstr ""
 "Затрачено время %s[%s], прочитано %s, записано %s, ошибок подключения %g. "
@@ -257,6 +259,10 @@ msgstr "Нет ни одного CP или драйвера."
 
 msgid "Error opening the remote PLC socket."
 msgstr "Ошибка открытия сокета удалённого ПЛК."
+
+#, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr ""
 
 msgid "Error connecting to the PLC."
 msgstr "Ошибка подключения к ПЛК."

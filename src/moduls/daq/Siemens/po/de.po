@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Siemens 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:52+0300\n"
+"POT-Creation-Date: 2022-07-15 20:33+0300\n"
 "PO-Revision-Date: 2009-08-18 09:05+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -237,6 +237,7 @@ msgstr "Wiederherstellung in %.6g sek. "
 msgid "Acquisition. "
 msgstr "Erwerb. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Erwerb mit dem Zeitraum %s. "
 
@@ -244,6 +245,7 @@ msgstr "Erwerb mit dem Zeitraum %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Erwerb nächsten durch cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s], read %s, wrote %s, connection errors %g. "
 msgstr "Verbrachte Zeit %s[%s], lesen %s, schrieb %s, verbindungsfehler %g. "
 
@@ -262,6 +264,10 @@ msgstr "Treiber oder CP (Karte) sind nicht vorhanden."
 
 msgid "Error opening the remote PLC socket."
 msgstr "Fehler beim Öffnen des Remote-SPS-Sockets."
+
+#, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
 
 msgid "Error connecting to the PLC."
 msgstr "Fehler beim Verbinden mit der PLC."
@@ -403,8 +409,7 @@ msgid "Unknown data encoding type, %d."
 msgstr "Unbekannter Datencodierungstyp, %d."
 
 #, c-format
-msgid ""
-"Inconsistency in the size of the data block to the response size, %d(%d)."
+msgid "Inconsistency in the size of the data block to the response size, %d(%d)."
 msgstr "Inkonsistenz in der Größe des Datenblocks zur Antwortgröße, %d(%d)."
 
 #, c-format
@@ -640,3 +645,4 @@ msgstr ""
 "direkt in \"Grp 3\", Offset 20 und Größe 20.\n"
 "\n"
 "Gemeinsames Adressformat:\n"
+

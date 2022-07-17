@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-29 10:27+0300\n"
+"POT-Creation-Date: 2022-07-15 21:23+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -49,6 +49,10 @@ msgstr "Widgetsbibliothek abschalten."
 #, c-format
 msgid "Error enabling/disabling widget '%s': %s."
 msgstr "Fehler beim Ein-/Abschaltens des Widgets '%s': %s."
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
 
 #, c-format
 msgid "The widget '%s' is already present!"
@@ -1430,10 +1434,14 @@ msgstr "Typ der Seite"
 msgid ""
 "Consider to remove included pages linked to this page as a template due to "
 "it is not the template more!"
-msgstr "Erwägen Sie, enthaltene Seiten, die mit dieser Seite als Vorlage verknüpft sind, zu entfernen, da es sich nicht um die Vorlage mehr handelt!"
+msgstr ""
+"Erwägen Sie, enthaltene Seiten, die mit dieser Seite als Vorlage verknüpft "
+"sind, zu entfernen, da es sich nicht um die Vorlage mehr handelt!"
 
 msgid "Consider to remove included pages due to this page is not a container more!"
-msgstr "Erwägen Sie, enthaltene Seiten zu entfernen, da diese Seite kein Container mehr ist!"
+msgstr ""
+"Erwägen Sie, enthaltene Seiten zu entfernen, da diese Seite kein Container "
+"mehr ist!"
 
 msgid "Standard"
 msgstr "Standard"
@@ -1589,6 +1597,10 @@ msgstr "Ressourcenstromtyp"
 
 msgid "Procedure ID"
 msgstr "Prozedur-ID"
+
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr "Schließen der Pipe %p Fehler '%s (%d)'!"
 
 msgid "Opened. "
 msgstr "Geöffnet. "

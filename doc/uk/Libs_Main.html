@@ -45,10 +45,9 @@
 </p>
 <ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
 <li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre></div>
 <ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
 <p>Цей завантажений файл ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
 </p><p>Для DAQ-шаблонів загалом Вам треба створити представницький об'єкт пристрою у <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">модулі Логічного Рівня</a> та обрати відповідний шаблон з бібліотеки шаблонів. Далі, для коректної конфігурації, дотримуйтесь специфіки шаблону у особистому описі.
@@ -76,7 +75,7 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <li class="toclevel-1 tocsection-3"><a href="#.D0.A1.D0.B5.D1.80.D0.B2.D1.96.D1.81.D0.B8"><span class="tocnumber">3</span> <span class="toctext">Сервіси</span></a>
 <ul>
 <li class="toclevel-2"><a href="#.D0.A1.D0.BF.D0.BE.D0.B2.D1.96.D1.89.D1.83.D0.B2.D0.B0.D1.87_.D0.B7.D0.B0_SMS.2C_EMail-SMTP_.28ntf.29"><span class="tocnumber">3.1</span> <span class="toctext">Сповіщувач за SMS, EMail-SMTP (ntf)</span></a></li>
-<li class="toclevel-2"><a href="#.D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConsAssignTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів (initConsAssignTrs)</span></a></li>
+<li class="toclevel-2"><a href="#.D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B9.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConAssociateTrs.29"><span class="tocnumber">3.2</span> <span class="toctext">Опрацювання ініціативних підключень щодо асоційованих вихідних транспортів (initConAssociateTrs)</span></a></li>
 </ul>
 </li>
 </ul>
@@ -503,32 +502,32 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <ul><li> <i>Вхід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для складної передобробки та повної генерації-імітації аналогового входу на внутрішній мові програмування OpenSCADA. Є необов'язковою та має визначатися за складних випадків, наприклад:</li></ul>
 <dl><dd><ul><li> проста та прозора попередня обробка з приведення відсотків навантаження ДБЖ до потужності, що можна виконати і за допомогою <b>iMult</b>:</li></ul></dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt">
-in = 490*in/100;	//the UPS has 480W </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt"><pre><span class="k">in</span> <span class="o">=</span> <span class="mi">490</span><span class="o">*</span><span class="k">in</span><span class="sr">/100;	/</span><span class="o">/</span><span class="nx">the</span> <span class="nx">UPS</span> <span class="nx">has</span> <span class="mi">480</span><span class="nx">W</span>
+</pre></div>
 <dl><dd><dl><dd><ul><li> реалізація лічильника вхідного сигналу — спожитої електрики ДБЖ:</li></ul></dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt">
-//Checking for the data validity
-if(ctx.cntr.isEVal())	ctx.cntr = this.var.get();
-if(!in.isEVal()) {
-	pUPS = 33;
-	if(ctx.cntr.isEVal())	ctx.cntr = (pUPS+in)/(3600*f_frq);
-	else ctx.cntr += (pUPS+in)/(3600*f_frq);
-}
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt"><pre><span class="c1">//Checking for the data validity</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">cntr</span><span class="p">.</span><span class="nx">isEVal</span><span class="p">())</span>	<span class="nx">ctx</span><span class="p">.</span><span class="nx">cntr</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="kd">var</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">in</span><span class="p">.</span><span class="nx">isEVal</span><span class="p">())</span> <span class="p">{</span>
+	<span class="nx">pUPS</span> <span class="o">=</span> <span class="mi">33</span><span class="p">;</span>
+	<span class="k">if</span><span class="p">(</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">cntr</span><span class="p">.</span><span class="nx">isEVal</span><span class="p">())</span>	<span class="nx">ctx</span><span class="p">.</span><span class="nx">cntr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pUPS</span><span class="o">+</span><span class="k">in</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">3600</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+	<span class="k">else</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">cntr</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">pUPS</span><span class="o">+</span><span class="k">in</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">3600</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+<span class="p">}</span>
 
-//Checking for the next month reset
-month = 0; SYS.localtime(SYS.time(), 0, 0, 0, 0, month);
-if(!ctx.month.isEVal() &amp;&amp; month&nbsp;!= ctx.month)	ctx.cntr = 0;
-ctx.month = month;
+<span class="c1">//Checking for the next month reset</span>
+<span class="nx">month</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">localtime</span><span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">time</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">month</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">ctx</span><span class="p">.</span><span class="nx">month</span><span class="p">.</span><span class="nx">isEVal</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">month</span> <span class="o">!=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">month</span><span class="p">)</span>	<span class="nx">ctx</span><span class="p">.</span><span class="nx">cntr</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nx">ctx</span><span class="p">.</span><span class="nx">month</span> <span class="o">=</span> <span class="nx">month</span><span class="p">;</span>
 
-in = ctx.cntr; </pre>
+<span class="k">in</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">cntr</span><span class="p">;</span>
+</pre></div>
 <dl><dd><dl><dd><ul><li> генерації розширених порушень — обробка зовнішніх сигналів, пов'язаних з джерелом:</li></ul></dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt">
-gO = this.cntr().prm_grps;
-if(SYS.DAQ.JavaLikeCalc.lib_aviary.sensorError(gO.prm_generic.PRG_Input_Err_T_room_S.get(),levErr,tErr));
-else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_max.get()).isEVal() &amp;&amp; tVl)
-	levErr = -4, tErr = "11:above the set limit";
-else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
-	levErr = -4, tErr = "11:below the set limit"; </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt"><pre><span class="nx">gO</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cntr</span><span class="p">().</span><span class="nx">prm_grps</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">SYS</span><span class="p">.</span><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_aviary</span><span class="p">.</span><span class="nx">sensorError</span><span class="p">(</span><span class="nx">gO</span><span class="p">.</span><span class="nx">prm_generic</span><span class="p">.</span><span class="nx">PRG_Input_Err_T_room_S</span><span class="p">.</span><span class="nx">get</span><span class="p">(),</span><span class="nx">levErr</span><span class="p">,</span><span class="nx">tErr</span><span class="p">));</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">tVl</span><span class="o">=</span><span class="nx">gO</span><span class="p">.</span><span class="nx">prm_alarms</span><span class="p">.</span><span class="nx">PRG_Alarm_T_max</span><span class="p">.</span><span class="nx">get</span><span class="p">()).</span><span class="nx">isEVal</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">tVl</span><span class="p">)</span>
+	<span class="nx">levErr</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tErr</span> <span class="o">=</span> <span class="s2">"11:above the set limit"</span><span class="p">;</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">tVl</span><span class="o">=</span><span class="nx">gO</span><span class="p">.</span><span class="nx">prm_alarms</span><span class="p">.</span><span class="nx">PRG_Alarm_T_min</span><span class="p">.</span><span class="nx">get</span><span class="p">()).</span><span class="nx">isEVal</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">tVl</span><span class="p">)</span>
+	<span class="nx">levErr</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tErr</span> <span class="o">=</span> <span class="s2">"11:below the set limit"</span><span class="p">;</span>
+</pre></div>
 <dl><dd><ul><li> <i>Мінімум та максимум шкали модуля</i> — має вказуватися у випадку значного розходження апаратної шкали із загальною, наприклад:</li></ul>
 <dl><dd><ul><li> вхід сирий та вимірюється значенням струму [4...20]мА, тобто тут треба вказати 4 та 20 мА;</li>
 <li> попередній випадок де треба просто та прозоро відкалібрувати покази — зразковим приладом задаємо 4мА та 20мА та вказуємо тут реальні виміряні значення "сирого" сигналу.</li></ul></dd></dl>
@@ -1375,10 +1374,10 @@ else if(!(tVl=gO.prm_alarms.PRG_Alarm_T_min.get()).isEVal() &amp;&amp; tVl)
 <li> "Вхід" — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для складної передобробки та повної генерації-імітації дискретного входу на внутрішній мові програмування OpenSCADA. Наприклад:</li></ul>
 <dl><dd><ul><li> повне створення складного статусу:</li></ul></dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt">
-gO = this.cntr().prm_grps;
-status = gO.prm_generic.PRG_Input_Err_T_Zone1_S.get();
-in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || status == 2 || status == 3); </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt"><pre><span class="nx">gO</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cntr</span><span class="p">().</span><span class="nx">prm_grps</span><span class="p">;</span>
+<span class="nx">status</span> <span class="o">=</span> <span class="nx">gO</span><span class="p">.</span><span class="nx">prm_generic</span><span class="p">.</span><span class="nx">PRG_Input_Err_T_Zone1_S</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+<span class="k">in</span> <span class="o">=</span> <span class="nx">gO</span><span class="p">.</span><span class="nx">prm_generic</span><span class="p">.</span><span class="nx">SET_CalcFan_UseSensor_T1</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span> <span class="o">||</span> <span class="o">!</span><span class="p">(</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">status</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">||</span> <span class="nx">status</span> <span class="o">==</span> <span class="mi">3</span><span class="p">);</span>
+</pre></div>
 <dl><dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: змінної, стану помилки; та генерацію порушень, якщо стан помилки ненульовий.</dd></dl>
 <p><br />
 </p>
@@ -1611,29 +1610,29 @@ in = gO.prm_generic.SET_CalcFan_UseSensor_T1.get() ||&nbsp;!(status == 0 || stat
 <ul><li> <i>Вхід</i> та <i>Вихід</i> — <a href="DAQ.html#LogicLevLnks" title="Special:MyLanguage/Documents/DAQ">зв'язати із джерелом "сирого" сигналу</a>.</li>
 <li> <i>Вхідна процедура обробки</i> — сформувати для обробки та повної генерації-імітації входу, та видачі специфічного виходу, на внутрішній мові програмування OpenSCADA. Наприклад:</li></ul>
 <dl><dd><ul><li> повне створення коду статусу та формування порушення:</li></ul></dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt">
-gO = this.cntr().prm_grps;
-if(gO.prm_fansControl.PRG_CntrFan_AutoMode_G1.get().isEVal())	in = 4;
-else {
-  if(!(tVl=gO.prm_fansControl.PRG_CntrFan_Alarm_ThermalRelay.get()).isEVal() &amp;&amp; tVl)
-    levErr = -4, tErr = "11:alarm";
-  if(gO.prm_fansControl.PRG_CntrFan_AutoMode_G1.get())
-    in = gO.prm_fansControl.PRG_CntrFan_On_G1.get()&nbsp;? 1&nbsp;: 2;
-  else in = 3;
-} </pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt"><pre><span class="nx">gO</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cntr</span><span class="p">().</span><span class="nx">prm_grps</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">gO</span><span class="p">.</span><span class="nx">prm_fansControl</span><span class="p">.</span><span class="nx">PRG_CntrFan_AutoMode_G1</span><span class="p">.</span><span class="nx">get</span><span class="p">().</span><span class="nx">isEVal</span><span class="p">())</span>	<span class="k">in</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="k">else</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">tVl</span><span class="o">=</span><span class="nx">gO</span><span class="p">.</span><span class="nx">prm_fansControl</span><span class="p">.</span><span class="nx">PRG_CntrFan_Alarm_ThermalRelay</span><span class="p">.</span><span class="nx">get</span><span class="p">()).</span><span class="nx">isEVal</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="nx">tVl</span><span class="p">)</span>
+    <span class="nx">levErr</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="nx">tErr</span> <span class="o">=</span> <span class="s2">"11:alarm"</span><span class="p">;</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">gO</span><span class="p">.</span><span class="nx">prm_fansControl</span><span class="p">.</span><span class="nx">PRG_CntrFan_AutoMode_G1</span><span class="p">.</span><span class="nx">get</span><span class="p">())</span>
+    <span class="k">in</span> <span class="o">=</span> <span class="nx">gO</span><span class="p">.</span><span class="nx">prm_fansControl</span><span class="p">.</span><span class="nx">PRG_CntrFan_On_G1</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">in</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd><dl><dd><ul><li> формування тексту часу годинника та виклик синхронізації часу — пряме встановлення тексту статусу та виконання специфічних команд:</li></ul></dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt">
-curTm = SYS.time();
-text = SYS.strftime(curTm, "%H։%M&nbsp;%d.%m.%Y");
-gO = this.cntr().prm_grps;
-if(!(tVl=gO.prm_other.PRG_RTC_UNIX.get()).isEVal()) {
-  text += " ("+(tVl-curTm).toString(10,0,true)+")";
-}
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt"><pre><span class="nx">curTm</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">time</span><span class="p">();</span>
+<span class="nx">text</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">strftime</span><span class="p">(</span><span class="nx">curTm</span><span class="p">,</span> <span class="s2">"%H։%M %d.%m.%Y"</span><span class="p">);</span>
+<span class="nx">gO</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">cntr</span><span class="p">().</span><span class="nx">prm_grps</span><span class="p">;</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">tVl</span><span class="o">=</span><span class="nx">gO</span><span class="p">.</span><span class="nx">prm_other</span><span class="p">.</span><span class="nx">PRG_RTC_UNIX</span><span class="p">.</span><span class="nx">get</span><span class="p">()).</span><span class="nx">isEVal</span><span class="p">())</span> <span class="p">{</span>
+  <span class="nx">text</span> <span class="o">+=</span> <span class="s2">" ("</span><span class="o">+</span><span class="p">(</span><span class="nx">tVl</span><span class="o">-</span><span class="nx">curTm</span><span class="p">).</span><span class="nx">toString</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="kc">true</span><span class="p">)</span><span class="o">+</span><span class="s2">")"</span><span class="p">;</span>
+<span class="p">}</span>
 
-if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match("^([^:]+):"+com_text,"m")).length &amp;&amp; tVl[1] == 1) {
-  gO.prm_other.SET_RTC_New_UNIX.set(curTm);
-  gO.prm_other.KEY_RTC_set_time.set(true);
-} </pre>
+<span class="k">if</span><span class="p">(</span><span class="nx">com_text</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">com_text</span><span class="p">.</span><span class="nx">isEVal</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">tVl</span><span class="o">=</span><span class="nx">coms</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="s2">"^([^:]+):"</span><span class="o">+</span><span class="nx">com_text</span><span class="p">,</span><span class="s2">"m"</span><span class="p">)).</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">tVl</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">gO</span><span class="p">.</span><span class="nx">prm_other</span><span class="p">.</span><span class="nx">SET_RTC_New_UNIX</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">curTm</span><span class="p">);</span>
+  <span class="nx">gO</span><span class="p">.</span><span class="nx">prm_other</span><span class="p">.</span><span class="nx">KEY_RTC_set_time</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
 <dl><dd>4. РЕЗУЛЬТАТ: Запустивши об'єкт контролеру (де створено цей параметр) та якщо він не був запущений, маємо отримати оперативні дані у вкладці "Атрибути", для: входу, виходу, стану за кодом-входом, стану помилки; та генерацію порушень, якщо стан помилки ненульовий.</dd>
 <dd>5. У процесі роботи, через вкладку оперативних даних "Атрибути", окрім отримання результату можна здійснювати оперативне налаштування та контроль щодо:
 <ul><li> <i>Стани</i> — встановити у перелік відповідності коду стану до його тексту.</li>
@@ -3026,11 +3025,10 @@ if(com_text.length &amp;&amp;&nbsp;!com_text.isEVal() &amp;&amp; (tVl=coms.match
 <dd>2. Встановити властиву адресу. Швидкість, формат асинхронних даних та таймаути послідовного порту будуть налаштовані функцією.</dd>
 <dd>3. Створити потрібний <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">об'єкт користувацького протоколу</a> заснованого на шаблонах, із Ідентифікатором на кшталт "SMS".</dd>
 <dd>4. Розмістити деякі команди запиту безпосередньо у наявній або новій внутрішній процедурі OpenSCADA на кшталт:</dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-req = SYS.XMLNode("send"); req.setAttr("ProtIt","SMS").setAttr("pin","1111").setAttr("tel","+380XXXXXXXXX").setText("Notify message");
-SYS.Transport.Serial.out_SMS.messIO(req, "UserProtocol");
-rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"send"</span><span class="p">);</span> <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"SMS"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"pin"</span><span class="p">,</span><span class="s2">"1111"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"tel"</span><span class="p">,</span><span class="s2">"+380XXXXXXXXX"</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"Notify message"</span><span class="p">);</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Serial</span><span class="p">.</span><span class="nx">out_SMS</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="s2">"UserProtocol"</span><span class="p">);</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">).</span><span class="nx">toInt</span><span class="p">()</span> <span class="o">?</span> <span class="nx">req</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">)</span> <span class="o">:</span> <span class="s2">"OK"</span><span class="p">;</span>
+</pre></div>
 <dl><dd>5. РЕЗУЛЬТАТ: У змінній <i>rez</i> ви отримаєте "OK" якщо не виникло жодної помилки та повідомлення вдало надіслано одержувачу.</dd></dl>
 <p><b>"SMTP" ЧАСТИНА ВИХІДНОГО КОРИСТУВАЦЬКОГО ПРОТОКОЛУ</b> надає операції із SMTP-сервером щодо доставки електронної пошти відправленням через TCP-Сокет або SSL. Наразі підтримуються: TCP, SSL, AUTH, кодування теми у UTF-8.<br />
 </p><p><b><u>Структура XML-запиту вихідного користувацького протоколу</u></b><br />
@@ -3048,20 +3046,20 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 <dd>2. Встановити властиву адресу, для Сокетів(25) або SSL(465). Таймаути транспорту будуть налаштовані функцією.</dd>
 <dd>3. Створити потрібний <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">об'єкт користувацького протоколу</a> заснованого на шаблонах, із Ідентифікатором на кшталт "SMTP".</dd>
 <dd>4. Розмістити деякі команди запиту безпосередньо у наявній або новій внутрішній процедурі OpenSCADA на кшталт:</dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-req = SYS.XMLNode("send"); req.setAttr("ProtIt","SMTP").setAttr("from","noreply@oscada.org").setAttr("to","oscada@oscada.org").setAttr("topic","My topic").setText("My message");
-SYS.Transport.Sockets.out_SMTP.messIO(req, "UserProtocol");
-rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"send"</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"SMTP"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"from"</span><span class="p">,</span><span class="s2">"noreply@oscada.org"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"to"</span><span class="p">,</span><span class="s2">"oscada@oscada.org"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"topic"</span><span class="p">,</span><span class="s2">"My topic"</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"My message"</span><span class="p">);</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Sockets</span><span class="p">.</span><span class="nx">out_SMTP</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="s2">"UserProtocol"</span><span class="p">);</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">).</span><span class="nx">toInt</span><span class="p">()</span> <span class="o">?</span> <span class="nx">req</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">)</span> <span class="o">:</span> <span class="s2">"OK"</span><span class="p">;</span>
+</pre></div>
 <dl><dd>5. РЕЗУЛЬТАТ: У змінній <i>rez</i> ви отримаєте "OK" якщо не виникло жодної помилки та повідомлення вдало надіслано одержувачу.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
 
 <tr>
-<td> <span id="initConsAssignTrs" title="#initConsAssignTrs"><h3><span class="mw-headline" id=".D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConsAssignTrs.29"><span class="mw-headline-number">3.2</span> Опрацювання ініціативних підключень щодо асоціативних вихідних транспортів (<a href="Libs_Main.html#initConsAssignTrs" title="Special:MyLanguage/Libs/Main">initConsAssignTrs</a>)</span></h3></span>
+<td> <span id="initConAssociateTrs" title="#initConAssociateTrs"><h3><span class="mw-headline" id=".D0.9E.D0.BF.D1.80.D0.B0.D1.86.D1.8E.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D1.96.D0.BD.D1.96.D1.86.D1.96.D0.B0.D1.82.D0.B8.D0.B2.D0.BD.D0.B8.D1.85_.D0.BF.D1.96.D0.B4.D0.BA.D0.BB.D1.8E.D1.87.D0.B5.D0.BD.D1.8C_.D1.89.D0.BE.D0.B4.D0.BE_.D0.B0.D1.81.D0.BE.D1.86.D1.96.D0.B9.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.85_.D0.B2.D0.B8.D1.85.D1.96.D0.B4.D0.BD.D0.B8.D1.85_.D1.82.D1.80.D0.B0.D0.BD.D1.81.D0.BF.D0.BE.D1.80.D1.82.D1.96.D0.B2_.28initConAssociateTrs.29"><span class="mw-headline-number">3.2</span> Опрацювання ініціативних підключень щодо асоційованих вихідних транспортів (<a href="Libs_Main.html#initConAssociateTrs" title="Special:MyLanguage/Libs/Main">initConAssociateTrs</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
@@ -3069,18 +3067,19 @@ rez = req.attr("err").toInt()&nbsp;? req.attr("err")&nbsp;: "OK";
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
 </td></tr></table>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsMainInitConsAssignTrsOp_uk.png" title="Результат та оперативні налаштування."><img alt="Результат та оперативні налаштування." height="388" src="files/LibsMainInitConsAssignTrsOp_uk.png" width="346" /></a></div>
-<p>Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки <a href="DAQ.html#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">концепції збору даних у пасивному режимі та ініціативного підключення</a>, а саме — контролю асоціативних транспортів, створюваних вхідним транспортом за кожним підключенням.
-</p><p>Функцію створення вихідних асоціативних транспортів за підключенням на вхідний наразі підтримує лише <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">модуль транспортів "Сокети"</a> та для TCP-сокетів.
+<p>Шаблон служби опрацювання вхідних ініціативних підключень створено для надання останньої ланки реалізації та підтримки <a href="DAQ.html#PassiveAndInitiative" title="Special:MyLanguage/Documents/DAQ">концепції збору даних у пасивному режимі та ініціативного підключення</a>, а саме — контролю асоційованих транспортів створюваних вхідним транспортом за кожного підключення.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Після реалізації цього контролю разом із новою функцією загального-уніфікованого підключення вихідного транспорту <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">outAt()</a> цей шаблон став застарілим для джерел адаптованих до використання нового механізму, але ви все ще можете використовувати шаблон для неадаптованих джерел.
+</p><p>Функцію створення вихідних асоційованих транспортів за підключенням на вхідний наразі підтримує лише <a href="Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">модуль транспортів "Сокети"</a> та для TCP-сокетів.
 </p>
 <ul><li> <b>Загальна працемісткість:</b> 0.9 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span></li>
 <li> <b>Спонсоровано, загальну працемісткість:</b> Еліор Турабоєв, ТОВ BLUE STAR GROUP</li></ul>
-<p>Контроль асоціативних транспортів передбачає:
+<p>Контроль асоційованих транспортів передбачає:
 </p>
-<ul><li> отримання переліку асоціативних транспортів, функцією вхідного транспорту <i>assTrsList()</i>;</li>
-<li> читання із нових транспортів (відкритих) ідентифікаційної інформації, яка наразі репрезентує тільки ідентифікатор об'єкту джерела;
-<ul><li> пошук, за отриманим ідентифікатором, об'єкта джерела та призначення йому адреси цього транспорту;</li>
+<ul><li> отримання переліку асоційованих транспортів функцією вхідного транспорту <i>assignTrsList()</i>;</li>
+<li> читання із нових транспортів (відкритих) ідентифікаційної інформації яка наразі репрезентує тільки ідентифікатор об'єкту джерела;
+<ul><li> пошук за отриманим ідентифікатором об'єкта джерела та призначення йому адреси цього транспорту;</li>
 <li> реєстрацію у атрибуті об'єктного типу "prcTr".</li></ul></li>
-<li> перевірка діючих транспортів на предмет їх закриття (від'єднання), щодо чого здійснюється дереєстрація у атрибуті об'єктного типу "prcTr" та встановлення об'єкту джерела порожнього значення; вимкнені вихідні асоціативні транспорти повторно використовуються вхідним за отриманням нового підключення, після чого він вмикається.</li></ul>
+<li> перевірка діючих транспортів на предмет їх закриття (від'єднання), щодо чого здійснюється дереєстрація у атрибуті об'єктного типу "prcTr" та встановлення об'єкту джерела порожнього значення; вимкнені вихідні асоціативні транспорти повторно використовуються вхідним за отриманням нового підключення після чого він вмикається.</li></ul>
 <p>Шаблон може керувати контейнерами об'єктів джерел даних, побудованих як у вигляді DAQ-об'єктів контролерів, так і параметрів логічного рівня, що репрезентують джерело даних та мають поле визначення адреси транспорту та що загалом визначається конфігураційним полем "srcObjPath" із форматом <b>{CntrAddr}:{TrCntrFldAddr}</b>, де:
 </p>
 <ul><li> <i>CntrAddr</i> — адреса контейнеру, наприклад: "ModBus" — для DAQ-об'єктів контролерів, "LogicLev.CntrPLC" — для параметрів логічного рівня;</li>

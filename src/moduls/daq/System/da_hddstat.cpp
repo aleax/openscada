@@ -58,7 +58,7 @@ void HddStat::init( TMdPrm *prm, bool update )
     if(!update) c_subt.fld().setDescr(trS("Disk(part)"));
 
     vector<string> list;
-    dList(list, true);
+    dList(prm, list, true);
     string dls;
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
 	dls += list[i_l]+";";
@@ -71,7 +71,7 @@ void HddStat::init( TMdPrm *prm, bool update )
 	c_subt.setS(list[0]);
 }
 
-void HddStat::dList( vector<string> &list, bool part )
+void HddStat::dList( TCntrNode *obj, vector<string> &list, bool part )
 {
     int major, minor;
     char name[11];
@@ -84,7 +84,8 @@ void HddStat::dList( vector<string> &list, bool part )
 	    continue;
 	list.push_back(name);
     }
-    if(f) fclose(f);
+    if(f && fclose(f) != 0)
+	mess_warning(obj->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }
 
 void HddStat::getVal( TMdPrm *prm )
@@ -109,7 +110,8 @@ void HddStat::getVal( TMdPrm *prm )
 	    devOK = true;
 	    break;
 	}
-	fclose(f);
+	if(fclose(f) != 0)
+	    mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
     }
     if(!devOK && (f=fopen("/proc/partitions","r"))) {
 	//major minor #blocks name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
@@ -121,7 +123,8 @@ void HddStat::getVal( TMdPrm *prm )
 		devOK = true;
 		break;
 	    }
-	fclose(f);
+	if(fclose(f) != 0)
+	    mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
     }
 
     if(devOK) {
@@ -147,27 +150,27 @@ void HddStat::makeActiveDA( TMdContr *aCntr )
     string ap_nm = "Statistic_";
 
     vector<string> list;
-    dList(list,true);
-    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
+    dList(aCntr, list, true);
+    for(unsigned iHd = 0; iHd < list.size(); iHd++) {
 	vector<string> pLs;
 	//Find propper parameter's object
 	aCntr->list(pLs);
 
-	unsigned i_p;
-	for(i_p = 0; i_p < pLs.size(); i_p++) {
-	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
-	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
+	unsigned iP;
+	for(iP = 0; iP < pLs.size(); iP++) {
+	    AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
+	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[iHd])	break;
 	}
-	if(i_p < pLs.size()) continue;
+	if(iP < pLs.size()) continue;
 
-	string hddprm = ap_nm+list[i_hd];
+	string hddprm = ap_nm+list[iHd];
 	while(aCntr->present(hddprm)) hddprm = TSYS::strLabEnum(hddprm);
 	aCntr->add(hddprm, 0);
 	AutoHD<TMdPrm> dprm = aCntr->at(hddprm);
-	dprm.at().setName(_("HD statistic: ")+list[i_hd]);
+	dprm.at().setName(_("HD statistic: ")+list[iHd]);
 	dprm.at().autoC(true);
 	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("SUBT").setS(list[i_hd]);
+	dprm.at().cfg("SUBT").setS(list[iHd]);
 	dprm.at().cfg("EN").setB(true);
 	if(aCntr->enableStat()) dprm.at().enable();
     }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_sensors.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -46,7 +46,8 @@ Sensors::Sensors( ) : libsensor_ok(false)
     FILE *f = fopen("/etc/sensors.conf", "r");
     if(f) {
 	if(sensors_init(f) == 0) libsensor_ok = true;
-	fclose(f);
+	if(fclose(f) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
     }
 #endif
 #endif
@@ -147,7 +148,8 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 	    if(!onlyCreate) prm->vlAt(name).at().setR(val, 0, true);
 	    devOK = true;
 	}
-	pclose(fp);
+	if(pclose(fp) == -1)
+	    mess_warning(prm->nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
     }
 
     if(devOK) prm->daErr = "";
@@ -218,7 +220,8 @@ void Sensors::makeActiveDA( TMdContr *aCntr )
 	    while(fgets(buf,sizeof(buf),fp))
 		if(sscanf(buf,"%31s : %f",name,&val) == 2)
 		{ sens_allow = true; break; }
-	    pclose(fp);
+	    if(pclose(fp) == -1)
+		mess_warning(aCntr->nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	}
     }
     //Sensor parameter create

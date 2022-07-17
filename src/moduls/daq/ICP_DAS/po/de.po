@@ -367,3 +367,11 @@ msgstr "ISA DAQ Board"
 
 msgid "LP-8000, I-8000 parallel bus"
 msgstr "LP-8000, I-8000 Parallel Bus"
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Schließen der Datei %p Fehler '%s (%d)'!"
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Beim Schließen der Datei %d Fehler '%s (%d)'!"

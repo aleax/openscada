@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-16 18:12+0300\n"
+"POT-Creation-Date: 2022-07-15 21:01+0300\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -105,8 +105,7 @@ msgstr "Немає очікуваної відповіді, але отрима�
 
 #, c-format
 msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms. "
-msgstr ""
-"Трафік вхідний %s, вихідний %s. Максимальний час очікування символу %.4g мс. "
+msgstr "Трафік вхідний %s, вихідний %s. Максимальний час очікування символу %.4g мс. "
 
 #, c-format
 msgid "Processing time %s[%s]. "
@@ -139,6 +138,10 @@ msgstr "Помилка кількості стопових бітів %d."
 #, c-format
 msgid "No response to the initial request '%s'."
 msgstr "Немає відповіді на запит ініціалізації '%s'."
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"
 
 msgid "Connected"
 msgstr "Під'єднано"
@@ -429,3 +432,4 @@ msgstr "Повісити слухавку"
 
 msgid "Hangup response"
 msgstr "Повісити слухавку, результат"
+

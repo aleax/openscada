@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.System file: da_smart.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@ void HddSmart::init( TMdPrm *prm, bool update )
     if(!update) c_subt.fld().setDescr(_("Disk"));
 
     vector<string> list;
-    dList(list);
+    dList(prm, list);
     string dls;
     for(unsigned iL = 0; iL < list.size(); iL++)
 	dls += list[iL]+";";
@@ -75,7 +75,7 @@ void HddSmart::deInit( TMdPrm *prm )
     prm->daData = NULL;
 }
 
-void HddSmart::dList( vector<string> &list, bool part )
+void HddSmart::dList( TCntrNode *obj, vector<string> &list, bool part )
 {
     int major, minor;
     char name[11];
@@ -99,11 +99,13 @@ void HddSmart::dList( vector<string> &list, bool part )
 		access_true = true;
 		break;
 	    }
-	    pclose(fp);
+	    if(pclose(fp) == -1)
+		mess_warning(obj->nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
 	    if(access_true) list.push_back(name);
 	}
     }
-    fclose(f);
+    if(fclose(f) != 0)
+	mess_warning(obj->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }
 
 void HddSmart::getVal( TMdPrm *prm )
@@ -127,7 +129,8 @@ void HddSmart::getVal( TMdPrm *prm )
 	prm->vlAt(sId).at().setI(val,0,true);
 	devOK = true;
     }
-    if(fp) fclose(fp);
+    if(fp && fclose(fp) != 0)
+	mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
 
     if(devOK) prm->daErr = "";
     else if(!prm->daErr.getVal().size()) {
@@ -141,27 +144,27 @@ void HddSmart::makeActiveDA( TMdContr *aCntr )
     string ap_nm = "Smart_";
 
     vector<string> list;
-    dList(list);
-    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
+    dList(aCntr, list);
+    for(unsigned iHd = 0; iHd < list.size(); iHd++) {
 	vector<string> pLs;
 	// Find propper parameter's object
 	aCntr->list(pLs);
 
-	unsigned i_p;
-	for(i_p = 0; i_p < pLs.size(); i_p++) {
-	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
-	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
+	unsigned iP;
+	for(iP = 0; iP < pLs.size(); iP++) {
+	    AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
+	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[iHd])	break;
 	}
-	if(i_p < pLs.size()) continue;
+	if(iP < pLs.size()) continue;
 
-	string hddprm = ap_nm+list[i_hd];
+	string hddprm = ap_nm+list[iHd];
 	while(aCntr->present(hddprm)) hddprm = TSYS::strLabEnum(hddprm);
 	aCntr->add(hddprm,0);
 	AutoHD<TMdPrm> dprm = aCntr->at(hddprm);
-	dprm.at().setName(_("HDD SMART: ")+list[i_hd]);
+	dprm.at().setName(_("HDD SMART: ")+list[iHd]);
 	dprm.at().autoC(true);
 	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("SUBT").setS(list[i_hd]);
+	dprm.at().cfg("SUBT").setS(list[iHd]);
 	dprm.at().cfg("EN").setB(true);
 	if(aCntr->enableStat()) dprm.at().enable();
     }

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-18 15:19+0300\n"
+"POT-Creation-Date: 2022-07-15 20:23+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -208,6 +208,10 @@ msgstr "Parameter Baum"
 
 msgid "<<Append current>>"
 msgstr "<<Anhängen aktuellen>>"
+
+#, c-format
+msgid "The parameter disabling in the reason '%d: %s' ..."
+msgstr "Parameterabschaltung im Grund '%d: %s' ..."
 
 msgid "Parameter"
 msgstr "Parameter"

@@ -880,7 +880,8 @@ Session::Notify::Notify( uint8_t itp, const string &ipgProps, Session *iown ) : 
 	int hd = open(comProc.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles(true));
 	if(hd >= 0) {
 	    fOK = write(hd, props().data(), props().size()) == (ssize_t)props().size();
-	    close(hd);
+	    if(close(hd) != 0)
+		mess_warning(owner()->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	}
 	if(!fOK) {
 	    mess_err(owner()->nodePath().c_str(), _("Error function '%s' of the notificator: %s"), comProc.c_str(), strerror(errno));
@@ -1079,7 +1080,11 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, string &res
     if(comIsExtScript) {
 	string resFile = "ses_"+owner()->id()+"_res"+i2s(tp);
 	int hdRes = res.size() ? open(resFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, SYS->permCrtFiles()) : -1;
-	if(hdRes >= 0) { write(hdRes, res.data(), res.size()); close(hdRes); }
+	if(hdRes >= 0) {
+	    write(hdRes, res.data(), res.size());
+	    if(close(hdRes) != 0)
+		mess_warning(owner()->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hdRes, strerror(errno), errno);
+	}
 	// Prepare environment and execute the external script
 	string cmdSeq = "prcID=ses_"+owner()->id()+"_ntf"+i2s(tp)+" en="+i2s(alEn)+" doNtf="+i2s(doNtf)+" doRes="+i2s(doRes)+" res="+resFile+" resTp="+resTp+
 		" mess=\""+TSYS::strEncode(mess,TSYS::SQL)+"\" lang=\""+TSYS::strEncode(lang,TSYS::SQL)+"\" ./"+wcomProc;
@@ -1090,7 +1095,8 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, string &res
 		char buf[prmStrBuf_SZ];
 		for(int r_cnt = 0; (r_cnt=fread(buf,1,sizeof(buf),fp)) || !feof(fp); )
 		    resTp.append(buf, r_cnt);
-		pclose(fp);
+		if(pclose(fp) == -1)
+		    mess_warning(owner()->nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
 		resTp = TSYS::strLine(resTp, 0);
 	    }
 
@@ -1102,7 +1108,8 @@ void Session::Notify::commCall( bool doNtf, bool doRes, string &res, string &res
 		    lseek(hdRes, 0, SEEK_SET);
 		    for(int len; (len=read(hdRes,buf,sizeof(buf))) > 0; ) res.append(buf, len);
 		}
-		close(hdRes);
+		if(close(hdRes) != 0)
+		    mess_warning(owner()->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hdRes, strerror(errno), errno);
 	    }
 	}
 	if(hdRes >= 0) remove(resFile.c_str());

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 17:07+0300\n"
+"POT-Creation-Date: 2022-07-15 21:14+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -101,7 +101,8 @@ msgstr ""
 
 #, c-format
 msgid "Connections %d, opened %d, last %s, closed by the limit %d. "
-msgstr "Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
+msgstr ""
+"Verbindungen %d, geöffnet %d, zuletzt %s, geschlossen durch das Limit %d. "
 
 #, c-format
 msgid "%s traffic in %s, out %s. "
@@ -134,16 +135,16 @@ msgstr "Fehler beim Verbinden des Sockets %s: '%s (%d)'!"
 msgid "Error binding the %s socket: '%s (%d)'!"
 msgstr "Fehler beim Binden des Sockets %s: '%s (%d)'!"
 
+#, fuzzy, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr "Schließen des Sockets '%d' Fehler '%s (%d)'!"
+
 #, c-format
 msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN Socket ist verbunden mit '%s'!"
 
 msgid "Connected"
 msgstr "Verbunden"
-
-#, c-format
-msgid "Closing the socket '%d' error '%s (%d)'!"
-msgstr "Schließen des Sockets '%d' Fehler '%s (%d)'!"
 
 msgid "Disconnected"
 msgstr "Getrennt"
@@ -191,7 +192,8 @@ msgid "%d:> Transmitted to '%s'\n"
 msgstr "%d:> Übertragen in '%s'\n"
 
 #, c-format
-msgid "Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
+msgid ""
+"Received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"
 msgstr ""
 "Empfangenen CAN-Rahmen id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
 "%02X!"
@@ -495,4 +497,3 @@ msgstr "Zeitabstände"
 
 msgid "Attempts"
 msgstr "Versuche"
-

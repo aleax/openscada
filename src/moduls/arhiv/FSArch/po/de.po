@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-26 09:41+0200\n"
+"POT-Creation-Date: 2022-07-15 20:11+0300\n"
 "PO-Revision-Date: 2009-08-17 10:44+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -51,8 +51,13 @@ msgstr "Fehler beim Überprüfen des Nachrichtenarchivers '%s'."
 msgid "Error checking the value archiver '%s'."
 msgstr "Fehler beim Überprüfen des Wertarchivers '%s'."
 
+#, c-format
 msgid "Cannot create the archive directory '%s'."
 msgstr "Das Archivverzeichnis '%s' kann nicht erstellt werden."
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
 
 #, c-format
 msgid "The value archiver '%s' uses the same folder '%s' as an other archiver."
@@ -79,6 +84,7 @@ msgstr "Archiv ist nicht gestartet!"
 msgid "Error creating a new archive file '%s'!"
 msgstr "Fehler beim Erstellen einer neuen Archivdatei '%s'!"
 
+#, c-format
 msgid "The archive directory '%s' is not present."
 msgstr "Das Archivverzeichnis '%s' ist nicht vorhanden."
 
@@ -269,6 +275,10 @@ msgstr "Fehler beim Erstellen einer Datei '%s': %s(%d)."
 #, c-format
 msgid "Error header of the file '%s'!"
 msgstr "Fehlerheader der Datei '%s'!"
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Schließen der Datei %p Fehler '%s (%d)'!"
 
 #, c-format
 msgid "The archive file '%s' is not mine."
@@ -465,18 +475,15 @@ msgid "Error writing to the file '%s'!"
 msgstr "Fehler beim Schreiben in die Datei '%s'!"
 
 #, c-format
-msgid ""
-"Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
-msgstr ""
-"Fehler in der Dateistruktur: '%s'. Differenz = %d byte. Reparaturversuch!"
+msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix that!"
+msgstr "Fehler in der Dateistruktur: '%s'. Differenz = %d byte. Reparaturversuch!"
 
 #, c-format
 msgid "Error openning/creating an archive file for the copy here: %s"
 msgstr "Fehler beim Öffnen/Erstellen einer Archivdatei für die Kopie hier: %s"
 
 #, c-format
-msgid ""
-"Last value for the actual archive file '%s' is not EVAL. Will try fix that!"
+msgid "Last value for the actual archive file '%s' is not EVAL. Will try fix that!"
 msgstr ""
 "Der letzte Wert für die aktuelle Archivdatei '%s' ist nicht EVAL. Werde "
 "versuchen, das zu beheben!"
@@ -493,3 +500,4 @@ msgid ""
 msgstr ""
 "Das Archivierungsmodul. Funktionen zum Archivieren von Nachrichten und "
 "Werten in dasDateisystem"
+

@@ -34,7 +34,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"6.6.16"
+#define MOD_VER		"6.6.17"
 #define AUTHORS		trS("Roman Savochenko, Lysenko Maxim (2008-2012), Yashina Kseniya (2007)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the WEB - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -370,7 +370,8 @@ void TWEB::HTTP_GET( const string &url, string &page, vector<string> &vars, cons
 	    if((hd=open("WebVisionVCA.js",O_RDONLY)) >= 0) {
 		char buf[prmStrBuf_SZ];
 		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) page.append(buf, len);
-		close(hd);
+		if(close(hd) != 0)
+		    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 	    }
 	    else page = WebVisionVCA_js;
 	    page = trMessReplace(page);

@@ -403,7 +403,8 @@ bool Project::resourceDataGet( const string &iid, string &mimeType, string *mime
 	for(int len = 0; (len=read(hd,buf,vmin(sizeof(buf),partSz-mimeData->size()))) > 0; )
 	    mimeData->append(buf, len);
 
-	close(hd);
+	if(close(hd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
 
 	*mimeData = TSYS::strEncode(*mimeData, TSYS::base64);
 

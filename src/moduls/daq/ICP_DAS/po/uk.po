@@ -361,3 +361,11 @@ msgstr "ISA DAQ плати"
 
 msgid "LP-8000, I-8000 parallel bus"
 msgstr "LP-8000, I-8000 паралельна шина"
+
+#, c-format
+msgid "Closing the file %p error '%s (%d)'!"
+msgstr "Помилка закриття файлу %p - '%s (%d)'!"
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"

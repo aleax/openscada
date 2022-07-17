@@ -657,8 +657,8 @@
 </p>
 <ul><li> <i>Identifier</i> — identifier of the external station.</li>
 <li> <i>Name</i> — name of the external host.</li>
-<li> <i>Transport</i> — selection of a module of the "Transports" subsystem from the list to use it for access to an external station.</li>
-<li> <i>Address</i> — address of the external station in format, specific to the module of the subsystem "Transports" selected in the previous field.</li>
+<li> <i>Transport</i> — selection for the transport type or address directly from list of the network transports, output transports directly and input transports allowed to creation associated output connections.</li>
+<li> <i>Address</i> — additional address to the previous field used at creation the missed or automatic output transports and as the remote initiative connection ID for the input transports. Address of the external station through the output connection is specific to the module of the subsystem "Transports" selected in the previous field.</li>
 <li> <i>User</i> — name/identifier of the user of the external station on behalf of whom to perform the connection.</li>
 <li> <i>Password</i> — password of the user of the external station.</li>
 <li> <i>Mode</i> — host mode: "User", "System", "User and System".</li>
@@ -1032,476 +1032,475 @@
 <p>The Configuration File of OpenSCADA is provided to store the generic configuration of OpenSCADA-station. Only in the Configuration File and through the command-line options you can specify a part of the key parameters of the station, so familiarity with the Configuration File structure is necessary for professionals who make peculiar solutions based on OpenSCADA. More information on how to startup and execution OpenSCADA can be found in the section "<a href="#Startup">Startup and execution</a>".
 </p><p>Structure of the Configuration File based on the extensible markup language XML. Correspondingly, strict compliance with XML syntax rules is required. An illustrative example of an OpenSCADA Configuration File with examples of the configuration of most OpenSCADA components is given below:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;?xml version='1.0' encoding='UTF-8'&nbsp;?&gt;
-&lt;OpenSCADA&gt;
-    &lt;!--
-    This is the OpenSCADA configuration file.
-    --&gt;
-    &lt;station id="SimulatorStation"&gt;
-        &lt;!--
-        Description of the internal parameters of the station.
-        The station is the OpenSCADA program.
-        --&gt;
-        &lt;prm id="StName"&gt;AGLKS&lt;/prm&gt;
-        &lt;prm id="WorkDB"&gt;SQLite.GenDB&lt;/prm&gt;
-        &lt;prm id="LogTarget"&gt;10&lt;/prm&gt;
-        &lt;prm id="LangBase"&gt;en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8&lt;/prm&gt;
-        &lt;prm id="SaveAtExit"&gt;0&lt;/prm&gt;
-        &lt;prm id="SavePeriod"&gt;0&lt;/prm&gt;
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="cp">&lt;?xml version='1.0' encoding='UTF-8' ?&gt;</span>
+<span class="nt">&lt;OpenSCADA&gt;</span>
+    <span class="c">&lt;!--</span>
+<span class="c">    This is the OpenSCADA configuration file.</span>
+<span class="c">    --&gt;</span>
+    <span class="nt">&lt;station</span> <span class="na">id=</span><span class="s">"SimulatorStation"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!--</span>
+<span class="c">        Description of the internal parameters of the station.</span>
+<span class="c">        The station is the OpenSCADA program.</span>
+<span class="c">        --&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StName"</span><span class="nt">&gt;</span>AGLKS<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"WorkDB"</span><span class="nt">&gt;</span>SQLite.GenDB<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"LogTarget"</span><span class="nt">&gt;</span>10<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"LangBase"</span><span class="nt">&gt;</span>en_US.UTF-8;uk_UA.UTF-8;ru_RU.UTF-8<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SaveAtExit"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SavePeriod"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/prm&gt;</span>
 
-        &lt;node id="sub_BD"&gt;
-            &lt;tbl id="DB"&gt;
-                &lt;fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_uk="Основна БД" NAME_ru="Основная БД" ADDR="St.db" CODEPAGE="UTF-8" /&gt;
-            &lt;/tbl&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_BD"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"DB"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">ID=</span><span class="s">"GenDB"</span> <span class="na">TYPE=</span><span class="s">"SQLite"</span> <span class="na">NAME=</span><span class="s">"Generic DB"</span> <span class="na">NAME_uk=</span><span class="s">"Основна БД"</span> <span class="na">NAME_ru=</span><span class="s">"Основная БД"</span> <span class="na">ADDR=</span><span class="s">"St.db"</span> <span class="na">CODEPAGE=</span><span class="s">"UTF-8"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Security"&gt;
-            &lt;tbl id="Security_user"&gt;
-                &lt;fld NAME="roman" DESCR="Roman Savochenko" PASS="$1$roman$wleNCf/uyA84cGpBn5QuG." /&gt;
-                &lt;fld NAME="root" DESCR="Administrator (superuser)!!!" DESCR_uk="Супер користувач" DESCR_ru="Супер пользователь" PASS="$1$root$lCn57dP9yzkCIAyrwJ24r1" /&gt;
-                &lt;fld NAME="test" DESCR="Test user" PASS="$1$test$pi/xDtU5WFVRqYS6BMU8X/" /&gt;
-                &lt;fld NAME="user" DESCR="Simple user" DESCR_uk="Звичайний користувач" DESCR_ru="Простой пользователь" PASS="$1$user$k8sntSoh7jhsc6lwspjsU." /&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="Security_grp"&gt;
-                &lt;fld NAME="Archive" DESCR="Archives-History" DESCR_uk="Архіви-Історія" DESCR_ru="Архивы-История" /&gt;
-                &lt;fld NAME="BD" DESCR="Databases" DESCR_uk="Бази даних" DESCR_ru="Базы данных" /&gt;
-                &lt;fld NAME="DAQ" DESCR="Data acquisition" DESCR_uk="Збір даних" DESCR_ru="Сбор данных" /&gt;
-                &lt;fld NAME="ModSched" DESCR="Modules scheduler" DESCR_uk="Диспетчер модулів" DESCR_ru="Диспетчер модулей" /&gt;
-                &lt;fld NAME="Protocol" DESCR="Transport protocols" DESCR_uk="Транспортні протоколи" DESCR_ru="Транспортные протоколы" /&gt;
-                &lt;fld NAME="Security" DESCR="Security" DESCR_uk="Безпека" DESCR_ru="Безопасность" /&gt;
-                &lt;fld NAME="Special" DESCR="Specials" DESCR_uk="Спеціальні" DESCR_ru="Специальные" /&gt;
-                &lt;fld NAME="Transport" DESCR="Transports" DESCR_uk="Транспорти" DESCR_ru="Транспорты" /&gt;
-                &lt;fld NAME="UI" DESCR="User Interfaces" DESCR_uk="Інтерфейси користувача" DESCR_ru="Интерфейсы пользователя" /&gt;
-                &lt;fld NAME="root" DESCR="Administartors group" DESCR_uk="Група адміністраторів" DESCR_ru="Группа администраторов" USERS="roman;" /&gt;
-                &lt;fld NAME="users" DESCR="Users group" DESCR_uk="Група користувачів" DESCR_ru="Группа пользователей" USERS="test;user;" /&gt;
-                &lt;fld NAME="ITW" DESCR="IT worker" DESCR_uk="Робітник IT" DESCR_ru="Работник IT"
-                    LONGDESCR="Information Technology or service worker."
-                    LONGDESCR_uk="Робітник Інформаційних Технологій та сервісу."
-                    LONGDESCR_ru="Работник Информационных Технологий и сервиса." /&gt;
-                &lt;fld NAME="op" DESCR="Operator" DESCR_uk="Оператор" DESCR_ru="Оператор" /&gt;
-            &lt;/tbl&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Security"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"Security_user"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"roman"</span> <span class="na">DESCR=</span><span class="s">"Roman Savochenko"</span> <span class="na">PASS=</span><span class="s">"$1$roman$wleNCf/uyA84cGpBn5QuG."</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"root"</span> <span class="na">DESCR=</span><span class="s">"Administrator (superuser)!!!"</span> <span class="na">DESCR_uk=</span><span class="s">"Супер користувач"</span> <span class="na">DESCR_ru=</span><span class="s">"Супер пользователь"</span> <span class="na">PASS=</span><span class="s">"$1$root$lCn57dP9yzkCIAyrwJ24r1"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"test"</span> <span class="na">DESCR=</span><span class="s">"Test user"</span> <span class="na">PASS=</span><span class="s">"$1$test$pi/xDtU5WFVRqYS6BMU8X/"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"user"</span> <span class="na">DESCR=</span><span class="s">"Simple user"</span> <span class="na">DESCR_uk=</span><span class="s">"Звичайний користувач"</span> <span class="na">DESCR_ru=</span><span class="s">"Простой пользователь"</span> <span class="na">PASS=</span><span class="s">"$1$user$k8sntSoh7jhsc6lwspjsU."</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"Security_grp"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Archive"</span> <span class="na">DESCR=</span><span class="s">"Archives-History"</span> <span class="na">DESCR_uk=</span><span class="s">"Архіви-Історія"</span> <span class="na">DESCR_ru=</span><span class="s">"Архивы-История"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"BD"</span> <span class="na">DESCR=</span><span class="s">"Databases"</span> <span class="na">DESCR_uk=</span><span class="s">"Бази даних"</span> <span class="na">DESCR_ru=</span><span class="s">"Базы данных"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"DAQ"</span> <span class="na">DESCR=</span><span class="s">"Data acquisition"</span> <span class="na">DESCR_uk=</span><span class="s">"Збір даних"</span> <span class="na">DESCR_ru=</span><span class="s">"Сбор данных"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"ModSched"</span> <span class="na">DESCR=</span><span class="s">"Modules scheduler"</span> <span class="na">DESCR_uk=</span><span class="s">"Диспетчер модулів"</span> <span class="na">DESCR_ru=</span><span class="s">"Диспетчер модулей"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Protocol"</span> <span class="na">DESCR=</span><span class="s">"Transport protocols"</span> <span class="na">DESCR_uk=</span><span class="s">"Транспортні протоколи"</span> <span class="na">DESCR_ru=</span><span class="s">"Транспортные протоколы"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Security"</span> <span class="na">DESCR=</span><span class="s">"Security"</span> <span class="na">DESCR_uk=</span><span class="s">"Безпека"</span> <span class="na">DESCR_ru=</span><span class="s">"Безопасность"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Special"</span> <span class="na">DESCR=</span><span class="s">"Specials"</span> <span class="na">DESCR_uk=</span><span class="s">"Спеціальні"</span> <span class="na">DESCR_ru=</span><span class="s">"Специальные"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Transport"</span> <span class="na">DESCR=</span><span class="s">"Transports"</span> <span class="na">DESCR_uk=</span><span class="s">"Транспорти"</span> <span class="na">DESCR_ru=</span><span class="s">"Транспорты"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"UI"</span> <span class="na">DESCR=</span><span class="s">"User Interfaces"</span> <span class="na">DESCR_uk=</span><span class="s">"Інтерфейси користувача"</span> <span class="na">DESCR_ru=</span><span class="s">"Интерфейсы пользователя"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"root"</span> <span class="na">DESCR=</span><span class="s">"Administartors group"</span> <span class="na">DESCR_uk=</span><span class="s">"Група адміністраторів"</span> <span class="na">DESCR_ru=</span><span class="s">"Группа администраторов"</span> <span class="na">USERS=</span><span class="s">"roman;"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"users"</span> <span class="na">DESCR=</span><span class="s">"Users group"</span> <span class="na">DESCR_uk=</span><span class="s">"Група користувачів"</span> <span class="na">DESCR_ru=</span><span class="s">"Группа пользователей"</span> <span class="na">USERS=</span><span class="s">"test;user;"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"ITW"</span> <span class="na">DESCR=</span><span class="s">"IT worker"</span> <span class="na">DESCR_uk=</span><span class="s">"Робітник IT"</span> <span class="na">DESCR_ru=</span><span class="s">"Работник IT"</span>
+                    <span class="na">LONGDESCR=</span><span class="s">"Information Technology or service worker."</span>
+                    <span class="na">LONGDESCR_uk=</span><span class="s">"Робітник Інформаційних Технологій та сервісу."</span>
+                    <span class="na">LONGDESCR_ru=</span><span class="s">"Работник Информационных Технологий и сервиса."</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"op"</span> <span class="na">DESCR=</span><span class="s">"Operator"</span> <span class="na">DESCR_uk=</span><span class="s">"Оператор"</span> <span class="na">DESCR_ru=</span><span class="s">"Оператор"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_ModSched"&gt;
-            &lt;prm id="ModAllow"&gt;*&lt;/prm&gt;
-            &lt;prm id="ModDeny" /&gt;
-            &lt;prm id="ChkPer"&gt;0&lt;/prm&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_ModSched"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ModAllow"</span><span class="nt">&gt;</span>*<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ModDeny"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ChkPer"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/prm&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Transport"&gt;
-            &lt;tbl id="ExtTansp"&gt;
-                &lt;fld OP_USER="roman" ID="loop" NAME="Loop" NAME_uk="Петля" NAME_ru="Петля" TRANSP="Sockets" ADDR="TCP:localhost:10005" USER="roman" PASS="roman" /&gt;
-                &lt;fld OP_USER="*" ID="loop" NAME="Loop" NAME_uk="Петля" NAME_ru="Петля" TRANSP="Sockets" ADDR="TCP:localhost:10005" USER="roman" PASS="roman" /&gt;
-                &lt;fld OP_USER="roman" ID="loopSSL" NAME="Loop SSL" NAME_uk="Петля SSL" NAME_ru="Петля SSL" TRANSP="SSL" ADDR="localhost:10045" USER="roman" PASS="roman" /&gt;
-                &lt;fld OP_USER="*" ID="loopSSL" NAME="Loop SSL" NAME_uk="Петля SSL" NAME_ru="Петля SSL" TRANSP="SSL" ADDR="localhost:10045" USER="roman" PASS="roman" /&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="Transport_in"&gt;
-                &lt;fld ID="Self" MODULE="Sockets" NAME="Self system" DESCRIPT="Main transport of OpenSCADA self protocol."
-                        DESCRIPT_uk="Основний транспорт власного протоколу OpenSCADA." DESCRIPT_ru="Основной транспорт собственного протокола OpenSCADA." ADDR="TCP::10005:1" PROT="SelfSystem" START="1"&gt;
-                    &lt;A_PRMS&gt;&amp;lt;prms MaxQueue="10" MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /&amp;gt;&lt;/A_PRMS&gt;
-                &lt;/fld&gt;
-                &lt;fld ID="WEB_1" MODULE="Sockets" NAME="WEB 1" DESCRIPT="Main transport of the WEB interfaces."
-                        DESCRIPT_uk="Основний транспорт WEB інтерфейсів." DESCRIPT_ru="Основной транспорт WEB интерфейсов." ADDR="TCP::10002:0" PROT="HTTP" START="1"&gt;
-                    &lt;A_PRMS&gt;&amp;lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /&amp;gt;&lt;/A_PRMS&gt;
-                &lt;/fld&gt;
-                &lt;fld ID="WEB_2" MODULE="Sockets" NAME="WEB 2" DESCRIPT="Reserve transport of the WEB interfaces."
-                        DESCRIPT_uk="Резервний транспорт WEB інтерфейсів." DESCRIPT_ru="Резервный транспорт WEB интерфейсов." ADDR="TCP::10004:0" PROT="HTTP" START="1"&gt;
-                    &lt;A_PRMS&gt;&amp;lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /&amp;gt;&lt;/A_PRMS&gt;
-                &lt;/fld&gt;
-            &lt;/tbl&gt;
-            &lt;!--
-            &lt;tbl id="Transport_out"&gt;
-                &lt;fld
-                    ID="testModBus"
-                    MODULE="Sockets"
-                    NAME="Test ModBus"
-                    NAME_uk="Тест ModBus"
-                    NAME_ru="Тест ModBus"
-                    DESCRIPT="ModBus protocol exchange test."
-                    DESCRIPT_uk="Тест обміну за протоколом ModBus."
-                    DESCRIPT_ru="Тест обмена по протоколу ModBus."
-                    ADDR="TCP:localhost:10502"
-                    START="1"/&gt;
-            &lt;/tbl&gt;--&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Transport"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"ExtTansp"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">OP_USER=</span><span class="s">"roman"</span> <span class="na">ID=</span><span class="s">"loop"</span> <span class="na">NAME=</span><span class="s">"Loop"</span> <span class="na">NAME_uk=</span><span class="s">"Петля"</span> <span class="na">NAME_ru=</span><span class="s">"Петля"</span> <span class="na">TRANSP=</span><span class="s">"Sockets"</span> <span class="na">ADDR=</span><span class="s">"TCP:localhost:10005"</span> <span class="na">USER=</span><span class="s">"roman"</span> <span class="na">PASS=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">OP_USER=</span><span class="s">"*"</span> <span class="na">ID=</span><span class="s">"loop"</span> <span class="na">NAME=</span><span class="s">"Loop"</span> <span class="na">NAME_uk=</span><span class="s">"Петля"</span> <span class="na">NAME_ru=</span><span class="s">"Петля"</span> <span class="na">TRANSP=</span><span class="s">"Sockets"</span> <span class="na">ADDR=</span><span class="s">"TCP:localhost:10005"</span> <span class="na">USER=</span><span class="s">"roman"</span> <span class="na">PASS=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">OP_USER=</span><span class="s">"roman"</span> <span class="na">ID=</span><span class="s">"loopSSL"</span> <span class="na">NAME=</span><span class="s">"Loop SSL"</span> <span class="na">NAME_uk=</span><span class="s">"Петля SSL"</span> <span class="na">NAME_ru=</span><span class="s">"Петля SSL"</span> <span class="na">TRANSP=</span><span class="s">"SSL"</span> <span class="na">ADDR=</span><span class="s">"localhost:10045"</span> <span class="na">USER=</span><span class="s">"roman"</span> <span class="na">PASS=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">OP_USER=</span><span class="s">"*"</span> <span class="na">ID=</span><span class="s">"loopSSL"</span> <span class="na">NAME=</span><span class="s">"Loop SSL"</span> <span class="na">NAME_uk=</span><span class="s">"Петля SSL"</span> <span class="na">NAME_ru=</span><span class="s">"Петля SSL"</span> <span class="na">TRANSP=</span><span class="s">"SSL"</span> <span class="na">ADDR=</span><span class="s">"localhost:10045"</span> <span class="na">USER=</span><span class="s">"roman"</span> <span class="na">PASS=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+            <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"Transport_in"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">ID=</span><span class="s">"Self"</span> <span class="na">MODULE=</span><span class="s">"Sockets"</span> <span class="na">NAME=</span><span class="s">"Self system"</span> <span class="na">DESCRIPT=</span><span class="s">"Main transport of OpenSCADA self protocol."</span>
+                        <span class="na">DESCRIPT_uk=</span><span class="s">"Основний транспорт власного протоколу OpenSCADA."</span> <span class="na">DESCRIPT_ru=</span><span class="s">"Основной транспорт собственного протокола OpenSCADA."</span> <span class="na">ADDR=</span><span class="s">"TCP::10005:1"</span> <span class="na">PROT=</span><span class="s">"SelfSystem"</span> <span class="na">START=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;A_PRMS&gt;</span><span class="ni">&amp;amp;</span>lt;prms MaxQueue="10" MaxClients="20" MaxClientsPerHost="5" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" /<span class="ni">&amp;amp;</span>gt;<span class="nt">&lt;/A_PRMS&gt;</span>
+                <span class="nt">&lt;/fld&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">ID=</span><span class="s">"WEB_1"</span> <span class="na">MODULE=</span><span class="s">"Sockets"</span> <span class="na">NAME=</span><span class="s">"WEB 1"</span> <span class="na">DESCRIPT=</span><span class="s">"Main transport of the WEB interfaces."</span>
+                        <span class="na">DESCRIPT_uk=</span><span class="s">"Основний транспорт WEB інтерфейсів."</span> <span class="na">DESCRIPT_ru=</span><span class="s">"Основной транспорт WEB интерфейсов."</span> <span class="na">ADDR=</span><span class="s">"TCP::10002:0"</span> <span class="na">PROT=</span><span class="s">"HTTP"</span> <span class="na">START=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;A_PRMS&gt;</span><span class="ni">&amp;amp;</span>lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /<span class="ni">&amp;amp;</span>gt;<span class="nt">&lt;/A_PRMS&gt;</span>
+                <span class="nt">&lt;/fld&gt;</span>
+                <span class="nt">&lt;fld</span> <span class="na">ID=</span><span class="s">"WEB_2"</span> <span class="na">MODULE=</span><span class="s">"Sockets"</span> <span class="na">NAME=</span><span class="s">"WEB 2"</span> <span class="na">DESCRIPT=</span><span class="s">"Reserve transport of the WEB interfaces."</span>
+                        <span class="na">DESCRIPT_uk=</span><span class="s">"Резервний транспорт WEB інтерфейсів."</span> <span class="na">DESCRIPT_ru=</span><span class="s">"Резервный транспорт WEB интерфейсов."</span> <span class="na">ADDR=</span><span class="s">"TCP::10004:0"</span> <span class="na">PROT=</span><span class="s">"HTTP"</span> <span class="na">START=</span><span class="s">"1"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;A_PRMS&gt;</span><span class="ni">&amp;amp;</span>lt;prms MaxQueue="10" MaxClients="100" MaxClientsPerHost="25" BufLen="5" KeepAliveReqs="0" KeepAliveTm="5" /<span class="ni">&amp;amp;</span>gt;<span class="nt">&lt;/A_PRMS&gt;</span>
+                <span class="nt">&lt;/fld&gt;</span>
+            <span class="nt">&lt;/tbl&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">            &lt;tbl id="Transport_out"&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="testModBus"</span>
+<span class="c">                    MODULE="Sockets"</span>
+<span class="c">                    NAME="Test ModBus"</span>
+<span class="c">                    NAME_uk="Тест ModBus"</span>
+<span class="c">                    NAME_ru="Тест ModBus"</span>
+<span class="c">                    DESCRIPT="ModBus protocol exchange test."</span>
+<span class="c">                    DESCRIPT_uk="Тест обміну за протоколом ModBus."</span>
+<span class="c">                    DESCRIPT_ru="Тест обмена по протоколу ModBus."</span>
+<span class="c">                    ADDR="TCP:localhost:10502"</span>
+<span class="c">                    START="1"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;--&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_DAQ"&gt;
-            &lt;!--
-            &lt;tbl id="tmplib"&gt;
-                &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" DB="tmplib_test2"/&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="tmplib_test2"&gt;
-                &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""
-                    PROGRAM="JavaLikeCalc.JavaScript&amp;#010;cnt=5*i;"/&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="tmplib_test2_io"&gt;
-                &lt;fld TMPL_ID="test2" ID="i" NAME="I" NAME_uk="I" NAME_ru="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/&gt;
-                &lt;fld TMPL_ID="test2" ID="cnt" NAME="Cnt" NAME_uk="Cnt" NAME_ru="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/&gt;
-            &lt;/tbl&gt;--&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_DAQ"</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">            &lt;tbl id="tmplib"&gt;</span>
+<span class="c">                &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" DB="tmplib_test2"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;</span>
+<span class="c">            &lt;tbl id="tmplib_test2"&gt;</span>
+<span class="c">                &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""</span>
+<span class="c">                    PROGRAM="JavaLikeCalc.JavaScript&amp;amp;#010;cnt=5*i;"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;</span>
+<span class="c">            &lt;tbl id="tmplib_test2_io"&gt;</span>
+<span class="c">                &lt;fld TMPL_ID="test2" ID="i" NAME="I" NAME_uk="I" NAME_ru="I" TYPE="4" FLAGS="160" VALUE="" POS="0"/&gt;</span>
+<span class="c">                &lt;fld TMPL_ID="test2" ID="cnt" NAME="Cnt" NAME_uk="Cnt" NAME_ru="Cnt" TYPE="4" FLAGS="32" VALUE="" POS="0"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;--&gt;</span>
 
-            &lt;node id="mod_LogicLev"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld
-                        ID="test2"
-                        NAME="Test 2"
-                        NAME_uk="Тест 2"
-                        NAME_ru="Тест 2"
-                        DESCR=""
-                        ENABLE="1"
-                        START="1"
-                        PRM_BD="test2prm"
-                        PERIOD="1000"
-                        PRIOR="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""
-                        EN="1" MODE="2" PRM="test2.test2"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_LogicLev"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld</span>
+<span class="c">                        ID="test2"</span>
+<span class="c">                        NAME="Test 2"</span>
+<span class="c">                        NAME_uk="Тест 2"</span>
+<span class="c">                        NAME_ru="Тест 2"</span>
+<span class="c">                        DESCR=""</span>
+<span class="c">                        ENABLE="1"</span>
+<span class="c">                        START="1"</span>
+<span class="c">                        PRM_BD="test2prm"</span>
+<span class="c">                        PERIOD="1000"</span>
+<span class="c">                        PRIOR="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""</span>
+<span class="c">                        EN="1" MODE="2" PRM="test2.test2"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_System"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld
-                        ID="dataOS"
-                        NAME="OS data"
-                        NAME_uk="Дані ОС"
-                        NAME_ru="Даные ОС"
-                        DESCR="Data of services and subsystems of OS."
-                        DESCR_uk="Дані сервісів та підсистем ОС."
-                        DESCR_ru="Данные сервисов и подсистем ОС."
-                        ENABLE="1"
-                        START="1"
-                        AUTO_FILL="0"
-                        PRM_BD="DataOSprm"
-                        PERIOD="1000"
-                        PRIOR="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="DataOSprm"&gt;
-                    &lt;fld SHIFR="CPU" NAME="CPU load" NAME_uk="Навантаження CPU" NAME_ru="Нагрузка CPU" DESCR=""
-                        EN="1" TYPE="CPU" SUBT="gen"/&gt;
-                    &lt;fld SHIFR="MEM" NAME="Memory" NAME_uk="Пам'ять" NAME_ru="Память" DESCR="" EN="1" TYPE="MEM"/&gt;
-                &lt;/tbl&gt;
-                --&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_System"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld</span>
+<span class="c">                        ID="dataOS"</span>
+<span class="c">                        NAME="OS data"</span>
+<span class="c">                        NAME_uk="Дані ОС"</span>
+<span class="c">                        NAME_ru="Даные ОС"</span>
+<span class="c">                        DESCR="Data of services and subsystems of OS."</span>
+<span class="c">                        DESCR_uk="Дані сервісів та підсистем ОС."</span>
+<span class="c">                        DESCR_ru="Данные сервисов и подсистем ОС."</span>
+<span class="c">                        ENABLE="1"</span>
+<span class="c">                        START="1"</span>
+<span class="c">                        AUTO_FILL="0"</span>
+<span class="c">                        PRM_BD="DataOSprm"</span>
+<span class="c">                        PERIOD="1000"</span>
+<span class="c">                        PRIOR="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="DataOSprm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="CPU" NAME="CPU load" NAME_uk="Навантаження CPU" NAME_ru="Нагрузка CPU" DESCR=""</span>
+<span class="c">                        EN="1" TYPE="CPU" SUBT="gen"/&gt;</span>
+<span class="c">                    &lt;fld SHIFR="MEM" NAME="Memory" NAME_uk="Пам'ять" NAME_ru="Память" DESCR="" EN="1" TYPE="MEM"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                --&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_DiamondBoards"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="Athena" NAME="Athena board" NAME_uk="Плата Athena" NAME_ru="Плата Athena" DESCR=""
-                        ENABLE="1" START="0" BOARD="25" PRM_BD_A="AthenaAnPrm" PRM_BD_D="AthenaDigPrm" ADDR="640" INT="5"
-                        DIO_CFG="0" ADMODE="0" ADRANGE="0" ADPOLAR="0" ADGAIN="0" ADCONVRATE="1000"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="AthenaAnPrm"&gt;
-                    &lt;fld SHIFR="ai0" NAME="AI 0" NAME_uk="AI 0" NAME_ru="AI 0" DESCR="" EN="0" TYPE="0" CNL="0" GAIN="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="AthenaDigPrm"&gt;
-                    &lt;fld SHIFR="di0" NAME="DI 0" NAME_uk="DI 0" NAME_ru="DI 0" DESCR="" EN="0" TYPE="0" PORT="0" CNL="0"/&gt;
-                &lt;/tbl&gt;
-                --&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_DiamondBoards"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="Athena" NAME="Athena board" NAME_uk="Плата Athena" NAME_ru="Плата Athena" DESCR=""</span>
+<span class="c">                        ENABLE="1" START="0" BOARD="25" PRM_BD_A="AthenaAnPrm" PRM_BD_D="AthenaDigPrm" ADDR="640" INT="5"</span>
+<span class="c">                        DIO_CFG="0" ADMODE="0" ADRANGE="0" ADPOLAR="0" ADGAIN="0" ADCONVRATE="1000"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="AthenaAnPrm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="ai0" NAME="AI 0" NAME_uk="AI 0" NAME_ru="AI 0" DESCR="" EN="0" TYPE="0" CNL="0" GAIN="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="AthenaDigPrm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="di0" NAME="DI 0" NAME_uk="DI 0" NAME_ru="DI 0" DESCR="" EN="0" TYPE="0" PORT="0" CNL="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                --&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_BlockCalc"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="Model" NAME="Model" NAME_uk="Модель" NAME_ru="Модель" DESCR=""
-                        ENABLE="1" START="1" PRM_BD="Model_prm" BLOCK_SH="Model_blcks" PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="Model_blcks"&gt;
-                    &lt;fld ID="Klap" NAME="Klapan" NAME_uk="Клапан" NAME_ru="Клапан" DESCR=""
-                        FUNC="DAQ.JavaLikeCalc.lib_techApp.klap" EN="1" PROC="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="Model_blcks_io"&gt;
-                    &lt;fld BLK_ID="Klap" ID="l_kl1" TLNK="0" LNK="" VAL="50"/&gt;
-                    &lt;fld BLK_ID="Klap" ID="l_kl2" TLNK="0" LNK="" VAL="20"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="Model_prm"&gt;
-                    &lt;fld SHIFR="l_kl" NAME="Klap level" NAME_uk="Положення клапану" NAME_ru="Положение клапана" DESCR=""
-                        EN="1" IO="Klap.l_kl1"/&gt;
-                &lt;/tbl&gt;
-                --&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_BlockCalc"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="Model" NAME="Model" NAME_uk="Модель" NAME_ru="Модель" DESCR=""</span>
+<span class="c">                        ENABLE="1" START="1" PRM_BD="Model_prm" BLOCK_SH="Model_blcks" PERIOD="1000" PRIOR="0" PER_DB="0" ITER="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="Model_blcks"&gt;</span>
+<span class="c">                    &lt;fld ID="Klap" NAME="Klapan" NAME_uk="Клапан" NAME_ru="Клапан" DESCR=""</span>
+<span class="c">                        FUNC="DAQ.JavaLikeCalc.lib_techApp.klap" EN="1" PROC="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="Model_blcks_io"&gt;</span>
+<span class="c">                    &lt;fld BLK_ID="Klap" ID="l_kl1" TLNK="0" LNK="" VAL="50"/&gt;</span>
+<span class="c">                    &lt;fld BLK_ID="Klap" ID="l_kl2" TLNK="0" LNK="" VAL="20"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="Model_prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="l_kl" NAME="Klap level" NAME_uk="Положення клапану" NAME_ru="Положение клапана" DESCR=""</span>
+<span class="c">                        EN="1" IO="Klap.l_kl1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                --&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_JavaLikeCalc"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="CalcTest" NAME="Calculation test" NAME_uk="Тест обчислення" NAME_ru="Тест вычисления" DESCR=""
-                        ENABLE="1" START="1" PRM_BD="CalcTest_prm" FUNC="TemplFunc.d_alarm" SCHEDULE="1" PRIOR="0" ITER="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="CalcTest_val"&gt;
-                    &lt;fld ID="in" VAL="0"/&gt;
-                    &lt;fld ID="alrm" VAL=""/&gt;
-                    &lt;fld ID="alrm_md" VAL="1"/&gt;
-                    &lt;fld ID="alrm_mess" VAL="Error present."/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="CalcTest_prm"&gt;
-                    &lt;fld SHIFR="alrm" NAME="Alarm" NAME_uk="Аварія" NAME_ru="Авария" DESCR="" EN="1" FLD="alrm"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="lib"&gt;
-                    &lt;fld ID="TemplFunc" NAME="" DESCR="" DB="lib_TemplFunc"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="lib_TemplFunc"&gt;
-                    &lt;fld ID="d_alarm" NAME="Digit alarm" NAME_uk="Аварія за дискретним" NAME_ru="Авария по дискретному" DESCR=""
-                        FORMULA="alrm=(in==alrm_md)?&amp;quot;1:&amp;quot;+alrm_mess:&amp;quot;0&amp;quot;;"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="lib_TemplFunc_io"&gt;
-                    &lt;fld F_ID="d_alarm" ID="in" NAME="Input" NAME_uk="Вхід" NAME_ru="Вход" TYPE="3" MODE="0" DEF="" HIDE="0" POS="0"/&gt;
-                    &lt;fld F_ID="d_alarm" ID="alrm" NAME="Alarm" NAME_uk="Аварія" NAME_ru="Авария" TYPE="0" MODE="1" DEF="" HIDE="0" POS="1"/&gt;
-                    &lt;fld F_ID="d_alarm" ID="alrm_md" NAME="Alarm mode" NAME_uk="Режим аварії" NAME_ru="Режим аварии"
-                        TYPE="3" MODE="0" DEF="" HIDE="0" POS="2"/&gt;
-                    &lt;fld F_ID="d_alarm" ID="alrm_mess" NAME="Alarm message" NAME_uk="Повідомлення аварії" NAME_ru="Сообщение аварии"
-                        TYPE="0" MODE="0" DEF="" HIDE="0" POS="3"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_JavaLikeCalc"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="CalcTest" NAME="Calculation test" NAME_uk="Тест обчислення" NAME_ru="Тест вычисления" DESCR=""</span>
+<span class="c">                        ENABLE="1" START="1" PRM_BD="CalcTest_prm" FUNC="TemplFunc.d_alarm" SCHEDULE="1" PRIOR="0" ITER="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="CalcTest_val"&gt;</span>
+<span class="c">                    &lt;fld ID="in" VAL="0"/&gt;</span>
+<span class="c">                    &lt;fld ID="alrm" VAL=""/&gt;</span>
+<span class="c">                    &lt;fld ID="alrm_md" VAL="1"/&gt;</span>
+<span class="c">                    &lt;fld ID="alrm_mess" VAL="Error present."/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="CalcTest_prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="alrm" NAME="Alarm" NAME_uk="Аварія" NAME_ru="Авария" DESCR="" EN="1" FLD="alrm"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="lib"&gt;</span>
+<span class="c">                    &lt;fld ID="TemplFunc" NAME="" DESCR="" DB="lib_TemplFunc"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="lib_TemplFunc"&gt;</span>
+<span class="c">                    &lt;fld ID="d_alarm" NAME="Digit alarm" NAME_uk="Аварія за дискретним" NAME_ru="Авария по дискретному" DESCR=""</span>
+<span class="c">                        FORMULA="alrm=(in==alrm_md)?&amp;amp;quot;1:&amp;amp;quot;+alrm_mess:&amp;amp;quot;0&amp;amp;quot;;"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="lib_TemplFunc_io"&gt;</span>
+<span class="c">                    &lt;fld F_ID="d_alarm" ID="in" NAME="Input" NAME_uk="Вхід" NAME_ru="Вход" TYPE="3" MODE="0" DEF="" HIDE="0" POS="0"/&gt;</span>
+<span class="c">                    &lt;fld F_ID="d_alarm" ID="alrm" NAME="Alarm" NAME_uk="Аварія" NAME_ru="Авария" TYPE="0" MODE="1" DEF="" HIDE="0" POS="1"/&gt;</span>
+<span class="c">                    &lt;fld F_ID="d_alarm" ID="alrm_md" NAME="Alarm mode" NAME_uk="Режим аварії" NAME_ru="Режим аварии"</span>
+<span class="c">                        TYPE="3" MODE="0" DEF="" HIDE="0" POS="2"/&gt;</span>
+<span class="c">                    &lt;fld F_ID="d_alarm" ID="alrm_mess" NAME="Alarm message" NAME_uk="Повідомлення аварії" NAME_ru="Сообщение аварии"</span>
+<span class="c">                        TYPE="0" MODE="0" DEF="" HIDE="0" POS="3"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_Siemens"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" CIF_DEV="0" ADDR="5" ASINC_WR="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" TMPL="S7.ai_man"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_Siemens"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" CIF_DEV="0" ADDR="5" ASINC_WR="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" TMPL="S7.ai_man"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_SNMP"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""
-                        ENABLE="1" START="1" PRM_BD="test2prm" PERIOD="1000" PRIOR="0" ADDR="localhost" COMM="public" PATTR_LIM="20"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" OID_LS="system"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_SNMP"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""</span>
+<span class="c">                        ENABLE="1" START="1" PRM_BD="test2prm" PERIOD="1000" PRIOR="0" ADDR="localhost" COMM="public" PATTR_LIM="20"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" OID_LS="system"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_ModBus"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" TRANSP="Sockets" ADDR="exlar.diya.org" NODE="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1"
-                        ATTR_LS="321:0:tst:Test"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_ModBus"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" TRANSP="Sockets" ADDR="exlar.diya.org" NODE="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1"</span>
+<span class="c">                        ATTR_LS="321:0:tst:Test"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_DAQGate"&gt;
-                &lt;!--
-                &lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" SYNCPER="60" STATIONS="loop" CNTRPRM="System.AutoDA"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_DAQGate"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1000" PRIOR="0" SYNCPER="60" STATIONS="loop" CNTRPRM="System.AutoDA"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_DCON"&gt;
-                &lt;!--&lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1" PRIOR="0" ADDR="" REQ_TRY="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" MOD_TP="0"
-                        MOD_ADDR="1" CRC_CTRL="1"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_DCON"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--&lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1" PRIOR="0" ADDR="" REQ_TRY="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" MOD_TP="0"</span>
+<span class="c">                        MOD_ADDR="1" CRC_CTRL="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_ICP_DAS"&gt;
-                &lt;!--&lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" PERIOD="1" PRIOR="0" BUS="1" BAUD="115200" LP_PRMS="" REQ_TRY="3"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1"
-                        MOD_TP="552985" MOD_ADDR="0" MOD_SLOT="1" MOD_PRMS="0"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_ICP_DAS"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--&lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" PERIOD="1" PRIOR="0" BUS="1" BAUD="115200" LP_PRMS="" REQ_TRY="3"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1"</span>
+<span class="c">                        MOD_TP="552985" MOD_ADDR="0" MOD_SLOT="1" MOD_PRMS="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_OPC_UA"&gt;
-                &lt;!--&lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" SCHEDULE="1" PRIOR="0" SYNCPER="60" ADDR="" EndPoint="opc.tcp://localhost:4841" SecPolicy="None"
-                        SecMessMode="1" Cert="" PvKey="" AttrsLimit="100"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" ND_LS=""/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_OPC_UA"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--&lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" SCHEDULE="1" PRIOR="0" SYNCPER="60" ADDR="" EndPoint="opc.tcp://localhost:4841" SecPolicy="None"</span>
+<span class="c">                        SecMessMode="1" Cert="" PvKey="" AttrsLimit="100"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" ND_LS=""/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
 
-            &lt;node id="mod_SoundCard"&gt;
-                &lt;!--&lt;tbl id="DAQ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"
-                        PRM_BD="test2prm" CARD="" SMPL_RATE="8000" SMPL_TYPE="1"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="test2prm"&gt;
-                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" CHANNEL="0"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
-        &lt;/node&gt;
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_SoundCard"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--&lt;tbl id="DAQ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" ENABLE="1" START="1"</span>
+<span class="c">                        PRM_BD="test2prm" CARD="" SMPL_RATE="8000" SMPL_TYPE="1"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="test2prm"&gt;</span>
+<span class="c">                    &lt;fld SHIFR="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" EN="1" CHANNEL="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Archive"&gt;
-            &lt;prm id="MessBufSize"&gt;1000&lt;/prm&gt;
-            &lt;prm id="MessPeriod"&gt;5&lt;/prm&gt;
-            &lt;prm id="ValPeriod"&gt;1000&lt;/prm&gt;
-            &lt;prm id="ValPriority"&gt;10&lt;/prm&gt;
-            &lt;!--
-            &lt;tbl id="Archive_mess_proc"&gt;
-                &lt;fld
-                    ID="StatErrors"
-                    MODUL="FSArch"
-                    NAME="Errors"
-                    NAME_uk="Помилки"
-                    NAME_ru="Ошибки"
-                    DESCR="Archive of local errors"
-                    DESCR_uk="Архів локальних помилок"
-                    DESCR_ru="Архив локальных ощибок"
-                    START="1"
-                    CATEG="/DemoStation*"
-                    LEVEL="4"
-                    ADDR="ARCHIVES/MESS/stError/"/&gt;
-                &lt;fld
-                    ID="NetRequsts"
-                    MODUL="FSArch"
-                    NAME="Network requests"
-                    NAME_uk="Мережеві запити"
-                    NAME_ru="Сетевые запросы"
-                    DESCR="Requests to the server via Sockets transport."
-                    DESCR_uk="Запити до сервера через транспорт Sockets."
-                    DESCR_ru="Запросы к серверу через транспорт Sockets."
-                    START="1"
-                    CATEG="/DemoStation/Transport/Sockets*"
-                    LEVEL="1"
-                    ADDR="ARCHIVES/MESS/Net/"/&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="Archive_val_proc"&gt;
-                &lt;fld
-                    ID="1h"
-                    MODUL="FSArch"
-                    NAME="1hour"
-                    NAME_uk="1година"
-                    NAME_ru="1час"
-                    DESCR="Averaging at hour"
-                    DESCR_uk="Усереднення за годину"
-                    DESCR_ru="Усреднение за час"
-                    START="1"
-                    ADDR="ARCHIVES/VAL/1h/"
-                    V_PER="360"
-                    A_PER="60"/&gt;
-            &lt;/tbl&gt;
-            &lt;tbl id="Archive_val"&gt;
-                &lt;fld
-                    ID="test1"
-                    NAME="Test 1"
-                    NAME_uk="Тест 1"
-                    NAME_ru="Тест 1"
-                    DESCR="Test 1"
-                    DESCR_uk="Тест 1"
-                    DESCR_ru="Тест 1"
-                    START="1"
-                    VTYPE="1"
-                    BPER="1"
-                    BSIZE="200"
-                    BHGRD="1"
-                    BHRES="0"
-                    SrcMode="0"
-                    Source=""
-                    ArchS=""/&gt;
-            &lt;/tbl&gt;--&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Archive"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"MessBufSize"</span><span class="nt">&gt;</span>1000<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"MessPeriod"</span><span class="nt">&gt;</span>5<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ValPeriod"</span><span class="nt">&gt;</span>1000<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ValPriority"</span><span class="nt">&gt;</span>10<span class="nt">&lt;/prm&gt;</span>
+            <span class="c">&lt;!--</span>
+<span class="c">            &lt;tbl id="Archive_mess_proc"&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="StatErrors"</span>
+<span class="c">                    MODUL="FSArch"</span>
+<span class="c">                    NAME="Errors"</span>
+<span class="c">                    NAME_uk="Помилки"</span>
+<span class="c">                    NAME_ru="Ошибки"</span>
+<span class="c">                    DESCR="Archive of local errors"</span>
+<span class="c">                    DESCR_uk="Архів локальних помилок"</span>
+<span class="c">                    DESCR_ru="Архив локальных ощибок"</span>
+<span class="c">                    START="1"</span>
+<span class="c">                    CATEG="/DemoStation*"</span>
+<span class="c">                    LEVEL="4"</span>
+<span class="c">                    ADDR="ARCHIVES/MESS/stError/"/&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="NetRequsts"</span>
+<span class="c">                    MODUL="FSArch"</span>
+<span class="c">                    NAME="Network requests"</span>
+<span class="c">                    NAME_uk="Мережеві запити"</span>
+<span class="c">                    NAME_ru="Сетевые запросы"</span>
+<span class="c">                    DESCR="Requests to the server via Sockets transport."</span>
+<span class="c">                    DESCR_uk="Запити до сервера через транспорт Sockets."</span>
+<span class="c">                    DESCR_ru="Запросы к серверу через транспорт Sockets."</span>
+<span class="c">                    START="1"</span>
+<span class="c">                    CATEG="/DemoStation/Transport/Sockets*"</span>
+<span class="c">                    LEVEL="1"</span>
+<span class="c">                    ADDR="ARCHIVES/MESS/Net/"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;</span>
+<span class="c">            &lt;tbl id="Archive_val_proc"&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="1h"</span>
+<span class="c">                    MODUL="FSArch"</span>
+<span class="c">                    NAME="1hour"</span>
+<span class="c">                    NAME_uk="1година"</span>
+<span class="c">                    NAME_ru="1час"</span>
+<span class="c">                    DESCR="Averaging at hour"</span>
+<span class="c">                    DESCR_uk="Усереднення за годину"</span>
+<span class="c">                    DESCR_ru="Усреднение за час"</span>
+<span class="c">                    START="1"</span>
+<span class="c">                    ADDR="ARCHIVES/VAL/1h/"</span>
+<span class="c">                    V_PER="360"</span>
+<span class="c">                    A_PER="60"/&gt;</span>
+<span class="c">            &lt;/tbl&gt;</span>
+<span class="c">            &lt;tbl id="Archive_val"&gt;</span>
+<span class="c">                &lt;fld</span>
+<span class="c">                    ID="test1"</span>
+<span class="c">                    NAME="Test 1"</span>
+<span class="c">                    NAME_uk="Тест 1"</span>
+<span class="c">                    NAME_ru="Тест 1"</span>
+<span class="c">                    DESCR="Test 1"</span>
+<span class="c">                    DESCR_uk="Тест 1"</span>
+<span class="c">                    DESCR_ru="Тест 1"</span>
+<span class="c">                    START="1"</span>
+<span class="c">                    VTYPE="1"</span>
+<span class="c">                    BPER="1"</span>
+<span class="c">                    BSIZE="200"</span>
+<span class="c">                    BHGRD="1"</span>
+<span class="c">                    BHRES="0"</span>
+<span class="c">                    SrcMode="0"</span>
+<span class="c">                    Source=""</span>
+<span class="c">                    ArchS=""/&gt;</span>
+<span class="c">            &lt;/tbl&gt;--&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Protocol"&gt;
-        &lt;/node&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Protocol"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_UI"&gt;
-            &lt;node id="mod_QTStarter"&gt;
-                &lt;prm id="StartMod"&gt;QTCfg&lt;/prm&gt;
-                &lt;prm id="CloseToTray"&gt;0&lt;/prm&gt;
-                &lt;prm id="Style"&gt;&lt;/prm&gt;
-                &lt;prm id="Palette"&gt;&lt;/prm&gt;
-                &lt;prm id="StyleSheets"&gt;&lt;/prm&gt;
-                &lt;tbl id="LookFeel"&gt;
-                    &lt;fld NAME="Typical TDE" STYLE="" STL_SHTS=""&gt;
-                        &lt;PALETTE&gt;#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_UI"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_QTStarter"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StartMod"</span><span class="nt">&gt;</span>QTCfg<span class="nt">&lt;/prm&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"CloseToTray"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/prm&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Style"</span><span class="nt">&gt;&lt;/prm&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Palette"</span><span class="nt">&gt;&lt;/prm&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StyleSheets"</span><span class="nt">&gt;&lt;/prm&gt;</span>
+                <span class="nt">&lt;tbl</span> <span class="na">id=</span><span class="s">"LookFeel"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Typical TDE"</span> <span class="na">STYLE=</span><span class="s">""</span> <span class="na">STL_SHTS=</span><span class="s">""</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;PALETTE&gt;</span>#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b
 #808080, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #c7c7c7, #ffffff, #808080, #ffffff, #efefef, #000000, #567594, #ffffff, #0000ee, #52188b
-#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b&lt;/PALETTE&gt;
-                    &lt;/fld&gt;
-                    &lt;fld NAME="Blue Slate" STYLE="" STL_SHTS=""&gt;
-                        &lt;PALETTE&gt;#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
+#000000, #dddfe4, #ffffff, #ffffff, #555555, #c7c7c7, #000000, #ffffff, #000000, #ffffff, #efefef, #000000, #678db2, #ffffff, #0000ee, #52188b<span class="nt">&lt;/PALETTE&gt;</span>
+                    <span class="nt">&lt;/fld&gt;</span>
+                    <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Blue Slate"</span> <span class="na">STYLE=</span><span class="s">""</span> <span class="na">STL_SHTS=</span><span class="s">""</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;PALETTE&gt;</span>#000000, #9db9c8, #f6fcff, #c9dae3, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
 #808080, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #808080, #bfe2f4, #808080, #c3c3c3, #9db9c8, #000000, #558097, #808080, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000
-#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000&lt;/PALETTE&gt;
-                    &lt;/fld&gt;
-                    &lt;fld NAME="Blue Darkness" STYLE="" STL_SHTS=""&gt;
-                        &lt;PALETTE&gt;#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff
+#000000, #9db9c8, #f6fcff, #b5d5e6, #4e5c64, #697b85, #000000, #bfe2f4, #000000, #c3c3c3, #9db9c8, #000000, #558097, #ffffff, #0000ee, #52188b, #b4b4b4, #000000, #ffffdc, #000000<span class="nt">&lt;/PALETTE&gt;</span>
+                    <span class="nt">&lt;/fld&gt;</span>
+                    <span class="nt">&lt;fld</span> <span class="na">NAME=</span><span class="s">"Blue Darkness"</span> <span class="na">STYLE=</span><span class="s">""</span> <span class="na">STL_SHTS=</span><span class="s">""</span><span class="nt">&gt;</span>
+                        <span class="nt">&lt;PALETTE&gt;</span>#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff
 #555555, #426794, #5788c3, #4871a2, #162231, #37567b, #37567b, #5788c3, #555555, #002a4e, #426794, #000000, #4c95d4, #ffffff, #00ffff, #c0c0ff
-#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff&lt;/PALETTE&gt;
-                    &lt;/fld&gt;
-                &lt;/tbl&gt;
-            &lt;/node&gt;
-            &lt;node id="mod_QTCfg"&gt;
-                &lt;prm id="StartUser"&gt;roman&lt;/prm&gt;
-            &lt;/node&gt;
-            &lt;node id="mod_Vision"&gt;
-                &lt;prm id="StartUser"&gt;roman&lt;/prm&gt;
-            &lt;/node&gt;
-            &lt;node id="mod_WebCfg"&gt;
-                &lt;prm id="SessTimeLife"&gt;20&lt;/prm&gt;
-            &lt;/node&gt;
-            &lt;node id="mod_VCAEngine"&gt;
-                &lt;!--
-                &lt;tbl id="LIB"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""
-                        DB_TBL="wlib_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="wlib_test2"&gt;
-                    &lt;fld ID="test2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1"
-                        USER="root" GRP="UI" PERMIT="436"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="wlib_test2_io"&gt;
-                    &lt;fld IDW="test2" ID="name" IO_VAL="Test 2" IO_VAL_uk="Тест 2" IO_VAL_ru="Тест 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/&gt;
-                    &lt;fld IDW="test2" ID="dscr" IO_VAL="Test of the module 2" IO_VAL_uk="Тест модуля 2" IO_VAL_ru="Тест модуля 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="PRJ"&gt;
-                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" DB_TBL="prj_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="prj_test2"&gt;
-                    &lt;fld OWNER="/test2" ID="pg1" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="1"/&gt;
-                    &lt;fld OWNER="/test2/pg1" ID="pg2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="0"/&gt;
-                &lt;/tbl&gt;
-                &lt;tbl id="prj_test2_incl"&gt;
-                    &lt;fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/&gt;
-                &lt;/tbl&gt;--&gt;
-            &lt;/node&gt;
-        &lt;/node&gt;
+#ffffff, #426794, #5788c3, #4871a2, #162231, #37567b, #dcdcdc, #5788c3, #ffffff, #002a4e, #426794, #000000, #5cb3ff, #000000, #00ffff, #c0c0ff<span class="nt">&lt;/PALETTE&gt;</span>
+                    <span class="nt">&lt;/fld&gt;</span>
+                <span class="nt">&lt;/tbl&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_QTCfg"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StartUser"</span><span class="nt">&gt;</span>roman<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_Vision"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"StartUser"</span><span class="nt">&gt;</span>roman<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_WebCfg"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SessTimeLife"</span><span class="nt">&gt;</span>20<span class="nt">&lt;/prm&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_VCAEngine"</span><span class="nt">&gt;</span>
+                <span class="c">&lt;!--</span>
+<span class="c">                &lt;tbl id="LIB"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR=""</span>
+<span class="c">                        DB_TBL="wlib_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="wlib_test2"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1"</span>
+<span class="c">                        USER="root" GRP="UI" PERMIT="436"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="wlib_test2_io"&gt;</span>
+<span class="c">                    &lt;fld IDW="test2" ID="name" IO_VAL="Test 2" IO_VAL_uk="Тест 2" IO_VAL_ru="Тест 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/&gt;</span>
+<span class="c">                    &lt;fld IDW="test2" ID="dscr" IO_VAL="Test of the module 2" IO_VAL_uk="Тест модуля 2" IO_VAL_ru="Тест модуля 2" SELF_FLG="" CFG_TMPL="" CFG_VAL=""/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="PRJ"&gt;</span>
+<span class="c">                    &lt;fld ID="test2" NAME="Test 2" NAME_uk="Тест 2" NAME_ru="Тест 2" DESCR="" DB_TBL="prj_test2" ICO="" USER="root" GRP="UI" PERMIT="436"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="prj_test2"&gt;</span>
+<span class="c">                    &lt;fld OWNER="/test2" ID="pg1" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="1"/&gt;</span>
+<span class="c">                    &lt;fld OWNER="/test2/pg1" ID="pg2" ICO="" PARENT="/wlb_originals/wdg_Box" PROC="" PROC_PER="-1" USER="root" GRP="UI" PERMIT="436" FLGS="0"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;</span>
+<span class="c">                &lt;tbl id="prj_test2_incl"&gt;</span>
+<span class="c">                    &lt;fld IDW="/prj_test2/pg_pg1" ID="wdg1" PARENT="/wlb_originals/wdg_Box"/&gt;</span>
+<span class="c">                &lt;/tbl&gt;--&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
 
-        &lt;node id="sub_Special"&gt;
-            &lt;node id="mod_SystemTests"&gt;
-                &lt;prm id="Param" on="0" per="5" name="LogicLev.experiment.F3" /&gt;
-                &lt;prm id="XML" on="0" per="10" file="/etc/oscada.xml" /&gt;
-                &lt;prm id="Mess" on="0" per="10" arhtor="DBArch.test3" depth="10" /&gt;
-                &lt;prm id="SOAttach" on="0" per="20" name="../../lib/openscada/daq_LogicLev.so" mode="0" full="1" /&gt;
-                &lt;prm id="Val" on="0" per="1" name="LogicLev.experiment.F3.var" arch_len="5" arch_per="1000000" /&gt;
-                &lt;prm id="Val" on="0" per="1" name="System.AutoDA.CPULoad.load" arch_len="10" arch_per="1000000" /&gt;
-                &lt;prm id="DB" on="0" per="10" type="MySQL" addr="server.diya.org;roman;123456;oscadaTest" table="test" size="1000" /&gt;
-                &lt;prm id="DB" on="0" per="10" type="DBF" addr="./DATA/DBF" table="test.dbf" size="1000" /&gt;
-                &lt;prm id="DB" on="0" per="10" type="SQLite" addr="./DATA/test.db" table="test" size="1000" /&gt;
-                &lt;prm id="DB" on="0" per="10" type="FireBird" addr="server.diya.org:/var/tmp/test.fdb;roman;123456" table="test" size="1000" /&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="TCP:127.0.0.1:10001" type="Sockets" req="time" /&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:10001" type="Sockets" req="time" /&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UNIX:./oscada" type="Sockets" req="time" /&gt;
-                &lt;prm id="TrOut" on="0" per="1" addr="UDP:127.0.0.1:daytime" type="Sockets" req="time" /&gt;
-                &lt;prm id="SysContrLang" on="0" per="10" path="/Archive/FSArch/mess_StatErrors/%2fprm%2fst" /&gt;
-                &lt;prm id="ValBuf" on="0" per="5" /&gt;
-                &lt;prm id="Archive" on="0" per="30" arch="test1" period="1000000" /&gt;
-                &lt;prm id="Base64Code" on="0" per="10" /&gt;
-            &lt;/node&gt;
-        &lt;/node&gt;
-  &lt;/station&gt;
+        <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"sub_Special"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;node</span> <span class="na">id=</span><span class="s">"mod_SystemTests"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Param"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"5"</span> <span class="na">name=</span><span class="s">"LogicLev.experiment.F3"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"XML"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">file=</span><span class="s">"/etc/oscada.xml"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Mess"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">arhtor=</span><span class="s">"DBArch.test3"</span> <span class="na">depth=</span><span class="s">"10"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SOAttach"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"20"</span> <span class="na">name=</span><span class="s">"../../lib/openscada/daq_LogicLev.so"</span> <span class="na">mode=</span><span class="s">"0"</span> <span class="na">full=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Val"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">name=</span><span class="s">"LogicLev.experiment.F3.var"</span> <span class="na">arch_len=</span><span class="s">"5"</span> <span class="na">arch_per=</span><span class="s">"1000000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Val"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">name=</span><span class="s">"System.AutoDA.CPULoad.load"</span> <span class="na">arch_len=</span><span class="s">"10"</span> <span class="na">arch_per=</span><span class="s">"1000000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"MySQL"</span> <span class="na">addr=</span><span class="s">"server.diya.org;roman;123456;oscadaTest"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"DBF"</span> <span class="na">addr=</span><span class="s">"./DATA/DBF"</span> <span class="na">table=</span><span class="s">"test.dbf"</span> <span class="na">size=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"SQLite"</span> <span class="na">addr=</span><span class="s">"./DATA/test.db"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"DB"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">type=</span><span class="s">"FireBird"</span> <span class="na">addr=</span><span class="s">"server.diya.org:/var/tmp/test.fdb;roman;123456"</span> <span class="na">table=</span><span class="s">"test"</span> <span class="na">size=</span><span class="s">"1000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"TCP:127.0.0.1:10001"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UDP:127.0.0.1:10001"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UNIX:./oscada"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"TrOut"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"1"</span> <span class="na">addr=</span><span class="s">"UDP:127.0.0.1:daytime"</span> <span class="na">type=</span><span class="s">"Sockets"</span> <span class="na">req=</span><span class="s">"time"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"SysContrLang"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_StatErrors/%2fprm%2fst"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"ValBuf"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Archive"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"30"</span> <span class="na">arch=</span><span class="s">"test1"</span> <span class="na">period=</span><span class="s">"1000000"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;prm</span> <span class="na">id=</span><span class="s">"Base64Code"</span> <span class="na">on=</span><span class="s">"0"</span> <span class="na">per=</span><span class="s">"10"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/node&gt;</span>
+        <span class="nt">&lt;/node&gt;</span>
+  <span class="nt">&lt;/station&gt;</span>
 
-&lt;/OpenSCADA&gt;
-</pre>
+<span class="nt">&lt;/OpenSCADA&gt;</span>
+</pre></div>
 <p>Let's examine the structure of the configuration file in detail. One configuration file can contain the configuration of several stations in the sections <i>&lt;station id="SimulatorStation"/&gt;</i>. The "id" attribute specifies the station identifier — class of the station. Use of this or that section of the station is indicated by the command line parameter <i>--station=SimulatorStation</i> when starting. The section of the station directly contains station parameters and subsystem sections. Section configuration parameters are written as <i>&lt;prm id="StName"&gt;AGLKS&lt;/prm&gt; </i>, where the "id" attribute specifies the parameter ID, and in the body of the "prm" tag, the value "AGLKS" for the parameter is specified. The list of available parameters and their description for the station and all other sections can be obtained from the console by starting OpenSCADA with the parameter <i>--help</i>.
 </p><p>The subsystem sections <i>&lt;node id="sub_DAQ" /&gt;</i> contain: subsystem parameters, module sections, and table sections for reflections of the data of databases in the configuration file. Module sections <i>&lt;node id="mod_DiamondBoards" /&gt; </i> contain individual module parameters and table sections for reflections of the data of databases in the configuration file.
 </p><p>The sections of the tables of reflection of the data of databases are provided for placement in the configuration file records of DB tables for the OpenSCADA components. Let's examine the table of the input transports "Transport_in" of the subsystem "Transports" <i>&lt;node id="sub_Transport"&gt;</i> from the above provided example of the configuration file. The table contains three records with the fields: ID, MODULE, NAME, DESCRIPT, ADDR, PROT, START. After starting with this section and in general without the DB in the subsystem "Transports" of the module "Sockets" you'll see three input transports. The formats of the table structures of the main components are included into the demo configuration file — models of technological processes. For details of the structure of the database tables refer to the documentation of the corresponding modules or simply save the desired object to the configuration file.
@@ -1862,22 +1861,21 @@ openscada-proj backupList {ProjName}
 <ul><li> install the packages <b>openscada-model-aglks</b> (<b>openscada-lts-model-aglks</b> for LTS) and <b>openscada-server</b> (<b>openscada-lts-server</b> for LTS), if they were not installed yet and that is not environments of the <a href="How_to_Live_disk.html" title="Special:MyLanguage/Documents/How to/Live disk">Live Disk</a> or the <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/Automation_Linux_distributive" title="Special:MyLanguage/Sub-projects/Automation Linux distributive">Linux Automation</a> from the Disk installation;</li>
 <li> start the project "AGLKS", for getting its folder in the user's work folder;</li>
 <li> copy the project "AGLKS" folder to the system work folder also renaming to "server", previously stop the background execution of the project "server" and remove its project folder; for example, in that way from the console:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 30pt">
-# Connect from the superuser
-$ su -
-# ... for the live disk and some other Linux environments
-$ sudo bash
-# Stop down of execution of the previous server configuration and remove its folder
-$ service openscada-server stop; rm -R /usr/share/openscada/server
-# ... for LTS
-$ service openscada-lts-server stop; rm -R /usr/share/openscada/server
-# Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"
-$ cp -R {HOME}/.openscada/AGLKS /usr/share/openscada/server 
-# Start the server already in the project "AGLKS"
-$ service openscada-server start
-# ... for LTS
-$ service openscada-lts-server start
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30pt"><pre><span class="c"># Connect from the superuser</span>
+su -
+<span class="c"># ... for the live disk and some other Linux environments</span>
+sudo bash
+<span class="c"># Stop down of execution of the previous server configuration and remove its folder</span>
+service openscada-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
+<span class="c"># ... for LTS</span>
+service openscada-lts-server stop<span class="p">;</span> rm -R /usr/share/openscada/server
+<span class="c"># Copy the project "AGLKS" from the user home folder "{HOME}" also renaming to "server"</span>
+cp -R <span class="o">{</span>HOME<span class="o">}</span>/.openscada/AGLKS /usr/share/openscada/server 
+<span class="c"># Start the server already in the project "AGLKS"</span>
+service openscada-server start
+<span class="c"># ... for LTS</span>
+service openscada-lts-server start
+</pre></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note that locally you can not copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
 </p><p>Difference between the project execution in the service-background environment from the user environment of the desktop is actually one, except for the lack of the local graphical interface of course, it is the absence of a locale in the background, ie the interface language will be English. And what can be fixed simply by changing or adding <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">the configuration parameter</a> <b>&lt;prm id="Lang"&gt;uk_UA.UTF-8&lt;/prm&gt;</b> to the section-tag "station" of the file <b>oscada.xml</b> of the background project.
 </p><p><br />

@@ -72,7 +72,8 @@ void CPU::init( TMdPrm *prm, bool update )
     c_subt.fld().setValues(cpuLs);
     c_subt.fld().setSelNames(cpuLsNm);
 
-    if(f) fclose(f);
+    if(f && fclose(f) != 0)
+	mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 
     if(!TRegExp("(^|;)"+c_subt.getS()+";").test(cpuLs)) c_subt.setS("gen");
 }
@@ -134,7 +135,8 @@ void CPU::getVal( TMdPrm *prm )
 	    break;
 	}
     }
-    if(f) fclose(f);
+    if(f && fclose(f) != 0)
+	mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 
     //Device error
     if(devOK) prm->daErr = "";
@@ -166,12 +168,12 @@ void CPU::makeActiveDA( TMdContr *aCntr )
 	    vector<string> pLs;
 	    // Find propper parameter's object
 	    aCntr->list(pLs);
-	    unsigned i_p;
-	    for(i_p = 0; i_p < pLs.size(); i_p++) {
-		AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+	    unsigned iP;
+	    for(iP = 0; iP < pLs.size(); iP++) {
+		AutoHD<TMdPrm> p = aCntr->at(pLs[iP]);
 		if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == pSTp)	break;
 	    }
-	    if(i_p < pLs.size()) continue;
+	    if(iP < pLs.size()) continue;
 
 	    while(aCntr->present(pId)) pId = TSYS::strLabEnum(pId);
 	    aCntr->add(pId, 0);
@@ -183,5 +185,6 @@ void CPU::makeActiveDA( TMdContr *aCntr )
 	    dprm.at().cfg("EN").setB(true);
 	    if(aCntr->enableStat()) dprm.at().enable();
 	}
-    fclose(f);
+    if(fclose(f) != 0)
+	mess_warning(aCntr->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }

@@ -55,7 +55,7 @@
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.5"
+#define MOD_VER		"2.6.6"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -455,7 +455,9 @@ void TTrIn::connect( )
 	    }
 	}
     } catch(TError &err) {
-	if(fd >= 0) { close(fd); fd = -1; }
+	if(fd >= 0 && close(fd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), fd, strerror(errno), errno);
+	fd = -1;
 	throw;
     }
 }
@@ -492,7 +494,8 @@ void TTrIn::stop( )
 
     SYS->taskDestroy(nodePath('.',true), &endrun);
 
-    if(fd >= 0) close(fd);
+    if(fd >= 0 && close(fd) != 0)
+	mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), fd, strerror(errno), errno);
     fd = -1;
 
     TTransportIn::stop();
@@ -554,7 +557,9 @@ void *TTrIn::Task( void *tr_in )
 	}
 	if(tr->endrun || req.empty()) {
 	    if(r_len == 0) {
-		close(tr->fd); tr->fd = -1;
+		if(close(tr->fd) != 0)
+		    mess_warning(tr->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), tr->fd, strerror(errno), errno);
+		tr->fd = -1;
 		if(tr->mMdmMode && tr->mMdmDataMode) {
 		    // Reconnect try after hung up by remote agent
 		    mod->devUnLock(tr->mDevPort);
@@ -1106,7 +1111,9 @@ void TTrOut::start( int tmCon )
 	//HangUp
 	if(mMdmMode) TTr::writeLine(fd,mdmHangUp());
 
-	if(fd >= 0) { close(fd); fd = -1; }
+	if(fd >= 0 && close(fd) != 0)
+	    mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), fd, strerror(errno), errno);
+	fd = -1;
 	if(isLock) mod->devUnLock(mDevPort);
 	runSt = false;
 	mMdmMode = false;
@@ -1140,7 +1147,9 @@ void TTrOut::stop( )
     trIn = trOut = 0;
 
     //Port close
-    close(fd); fd = -1;
+    if(close(fd) != 0)
+	mess_warning(nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), fd, strerror(errno), errno);
+    fd = -1;
 
     //Unlock device
     mod->devUnLock(mDevPort);

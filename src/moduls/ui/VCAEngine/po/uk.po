@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-29 10:27+0300\n"
+"POT-Creation-Date: 2022-07-15 21:23+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -44,6 +44,10 @@ msgstr "Вимкнення бібліотеки віджетів."
 #, c-format
 msgid "Error enabling/disabling widget '%s': %s."
 msgstr "Помилка ввімкнення/вимкнення віджету '%s': %s."
+
+#, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Помилка закриття файлу %d - '%s (%d)'!"
 
 #, c-format
 msgid "The widget '%s' is already present!"
@@ -1420,7 +1424,9 @@ msgstr "Тип сторінки"
 msgid ""
 "Consider to remove included pages linked to this page as a template due to "
 "it is not the template more!"
-msgstr "Розгляньте видалення вкладених сторінок прив'язаних до цієї сторінки як шаблону, оскільки це більше не шаблон!"
+msgstr ""
+"Розгляньте видалення вкладених сторінок прив'язаних до цієї сторінки як "
+"шаблону, оскільки це більше не шаблон!"
 
 msgid "Consider to remove included pages due to this page is not a container more!"
 msgstr "Розгляньте видалення вкладених сторінок, оскільки це більше не контейнер!"
@@ -1579,6 +1585,10 @@ msgstr "Тип потоку ресурсу"
 
 msgid "Procedure ID"
 msgstr "ID процедури"
+
+#, c-format
+msgid "Closing the pipe %p error '%s (%d)'!"
+msgstr "Помилка закриття каналу %p - '%s (%d)'!"
 
 msgid "Opened. "
 msgstr "Відкрито. "

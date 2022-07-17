@@ -844,7 +844,8 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 	if(obuf > outbuf) buf.append(outbuf, obuf-outbuf);
 	if(rez == (size_t)(-1) && errno == EILSEQ) { buf += '?'; ilen--; ibuf++; chwrcnt++; }
     }
-    iconv_close(hd);
+    if(iconv_close(hd) != 0)
+	mess_warning("IConv", _("Closing the iconv handler error '%s (%d)'!"), strerror(errno), errno);
 
     //Deadlock possible on the error message print
     //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for the message part: '%s'(%d)"),
