@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <stdint.h>
 #include <string.h>
+#include <errno.h>
 
 #include <algorithm>
 

@@ -21,6 +21,7 @@
 #include <fcntl.h>
 #include <time.h>
 #include <string.h>
+#include <errno.h>
 #include <string>
 #include <algorithm>
 

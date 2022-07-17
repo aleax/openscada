@@ -21,6 +21,7 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <string.h>
+#include <errno.h>
 
 #include <tsys.h>
 #include <tmess.h>

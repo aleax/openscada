@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <sys/times.h>
+#include <errno.h>
 
 #include <tsys.h>
 
@@ -32,7 +33,7 @@ using namespace SystemCntr;
 //*************************************************
 Mem::Mem( )
 {
-    //> Memory value structure
+    //Memory value structure
     fldAdd(new TFld("free",trS("Free (KiB)"),TFld::Integer,TFld::NoWrite));
     fldAdd(new TFld("total",trS("Total (KiB)"),TFld::Integer,TFld::NoWrite));
     fldAdd(new TFld("use",trS("Used (KiB)"),TFld::Integer,TFld::NoWrite));

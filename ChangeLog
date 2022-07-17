@@ -1,4 +1,11 @@
 2022-07-17 Roman (stable)
+- doc/en/files/doc.css: Appended of the used syntax highlighting rules.
+- FIX:SYS,DAQ.{AMRDevs,Siemens,System},Protocol.HTTP,Special.FLibSYS,UI.{QTCfg,VCAEngine,WebCfgD,WebVision}:
+    Restored in building into old environments after most close(), iconv_close(), dlclose(), pclose() functions appending
+	of checking the result.
+
+
+2022-07-17 Roman (stable)
 - !:FIX:LibsDB.OscadaLibs: tmplib_base.ntf: For the server address in the SMTP HELLO request used the EMail sender address
 	from the attribute "from" of the "io" object.
     !: tmplib_base.initConsAssignTrs: Renamed to initConAssociateTrs

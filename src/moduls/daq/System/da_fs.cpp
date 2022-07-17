@@ -20,6 +20,7 @@
 
 #include <sys/vfs.h>
 #include <string.h>
+#include <errno.h>
 
 #include <tsys.h>
 

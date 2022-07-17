@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <sys/times.h>
+#include <errno.h>
 
 #include <tsys.h>
 
@@ -34,7 +35,7 @@ UpTime::UpTime( )
 {
     st_tm = time(NULL);
 
-    //> Uptime value structure
+    //Uptime value structure
     fldAdd(new TFld("full",trS("Full seconds"),TFld::Integer,TFld::NoWrite));
     fldAdd(new TFld("sec",trS("Seconds"),TFld::Integer,TFld::NoWrite));
     fldAdd(new TFld("min",trS("Minutes"),TFld::Integer,TFld::NoWrite));

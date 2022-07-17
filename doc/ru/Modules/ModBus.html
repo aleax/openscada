@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -56,17 +56,18 @@
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
-<td> Протокол </td>
-<td> Роман Савоченко
+<td> Protocol </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009) — the page initial translation</i></font>
 </td></tr>
 <tr>
-<th colspan="9"> Описание
+<th colspan="9"> Description
 </th></tr>
 <tr>
-<td colspan="9"> Предоставляет реализацию протоколов ModBus. Поддерживаются ModBus/TCP, ModBus/RTU и ModBus/ASCII протоколы.
-<ul><li> <b>Общая трудоёмкость:</b> &gt; 20 <span title="человеко-дней, 1ЧД — 10 часов">ЧД<sup style="color: blue">[!]</sup></span></li>
-<li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Задачи (To Do)</a>:</b></li></ul>
-<dl><dd> - добавить опцию 'L' для байтов регистра в порядке "младший-первый" (LE) вместо стандартного "старший-первый" (BE).</dd></dl>
+<td colspan="9"> Provides implementation of the ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.
+<ul><li> <b>Total complexity:</b> &gt; 20 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
+<dl><dd> - adapt to the new common-unified <a href="../User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">output transport connection function outAt()</a> in the controller object transport address field;</dd>
+<dd> - append the option 'L' for the register bytes in little-endian (LE) instead the standard big-endian (BE) order.</dd></dl>
 </td></tr></table>
 <p>ModBus — коммуникационный протокол, основанный на клиент-серверной архитектуре. Разработан фирмой Modicon для использования в контроллерах с программируемой логикой (PLC). Стал стандартом де-факто в промышленности и широко применяется для организации связи промышленного электронного оборудования. Используется для передачи данных через последовательные линии связи RS-485, RS-422, RS-232, а также сети TCP/IP. В настоящее время поддерживается некоммерческой организацией ModBus-IDA.
 </p><p>Существуют три режима протокола: ModBus/RTU, ModBus/ASCII и ModBus/TCP. Первые два используют последовательные линии связи (в основном RS-485, реже RS-422/RS-232), последний использует сети TCP/IP для передачи данных.
