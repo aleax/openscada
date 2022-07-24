@@ -1443,14 +1443,19 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	if(!chNoWr && (dw=work_space->findChild<DevelWdgView*>(del_wdg.c_str()))) dw->chLoadCtx(chCtx, "parent;");
 
 	//Send remove context
-	if(cntrIfCmd(req))	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
-	else if(pElCnt < 3)	emit modifiedItem(del_wdg);
-	else {
-	    if(!lst_wdg.empty() && lst_wdg != it_own)	emit modifiedItem(lst_wdg);
-	    lst_wdg = it_own;
+	int reqRez = 0;
+	if((reqRez=cntrIfCmd(req)))
+	    mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), (reqRez==TError::Core_CntrWarning)?TVision::Warning:TVision::Error, this);
 
-	    //Sending the change request for the opened for editing widget
-	    if(dw) dw->chRecord(chCtx);
+	if(reqRez == TError::NoError || reqRez == TError::Core_CntrWarning) {
+	    if(pElCnt < 3)	emit modifiedItem(del_wdg);
+	    else {
+		if(!lst_wdg.empty() && lst_wdg != it_own)	emit modifiedItem(lst_wdg);
+		lst_wdg = it_own;
+
+		//Sending the change request for the opened for editing widget
+		if(dw) dw->chRecord(chCtx);
+	    }
 	}
     }
     if(!lst_wdg.empty()) emit modifiedItem(lst_wdg);

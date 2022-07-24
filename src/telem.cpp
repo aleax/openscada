@@ -520,7 +520,7 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
 	else switch(type()) {
 	    case TFld::String:
 		n_e->setAttr("tp","str");
-		if(flg()&FullText)	n_e->setAttr("cols","100")->setAttr("rows","4");
+		if(flg()&FullText)	n_e->/*setAttr("cols","100")->*/setAttr("rows","4");
 		break;
 	    case TFld::Integer:	n_e->setAttr("tp",(flg()&HexDec)?"hex":((flg()&OctDec)?"oct":"dec"));	break;
 	    case TFld::Real:	n_e->setAttr("tp","real");	break;

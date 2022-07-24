@@ -292,7 +292,7 @@ string TTransportS::optDescr( )
 	)) + TSubSYS::optDescr();
 }
 
-void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool andSYS, int upRiseLev )
+void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool andSYS, int upRiseLev, const string &lang )
 {
     list.clear();
     ResAlloc res(extHostRes, false);
@@ -311,7 +311,7 @@ void TTransportS::extHostList( const string &user, vector<ExtHost> &list, bool a
     XMLNode req("get"), *nId, *nT;
     for(unsigned iH = 0, nH = list.size(), wUpRiseLev; iH < nH; iH++) {
 	if(!(wUpRiseLev=(upRiseLev<0)?list[iH].upRiseLev:upRiseLev)) continue;
-	req.clear()->setAttr("path", "/"+list[iH].id+"/Transport/%2fsub%2fehost")->
+	req.clear()->setAttr("path", "/"+list[iH].id+"/Transport/%2fsub%2fehost")->setAttr("lang", lang)->
 		     setAttr("upRiseLev", i2s(wUpRiseLev-1))->setAttr("upRiseSYS", i2s(andSYS));
 	try {
 	    if(cntrIfCmd(req,"" /* "UpRiseLev" */,user)) continue;
@@ -522,7 +522,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    vector<ExtHost> list;
 	    string tVl;
 	    extHostList(u, list, ((tVl=opt->attr("upRiseSYS")).size()?(bool)s2i(tVl):(bool)nMode),
-				 ((tVl=opt->attr("upRiseLev")).size()?s2i(tVl):-1));
+				 ((tVl=opt->attr("upRiseLev")).size()?s2i(tVl):-1), opt->attr("lang"));
 	    for(unsigned iH = 0; iH < list.size(); iH++) {
 		ExtHost &host = list[iH];
 		if(nId)		nId->childAdd("el")->setText(host.id);
@@ -692,10 +692,7 @@ TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
     mId = iid;
 }
 
-TTransportIn::~TTransportIn( )
-{
-    try{ stop(); } catch(...){ }
-}
+TTransportIn::~TTransportIn( )	{ }
 
 void TTransportIn::preEnable( int flag )
 {
@@ -1012,10 +1009,7 @@ TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) 
     mId = iid;
 }
 
-TTransportOut::~TTransportOut( )
-{
-    try{ stop(); } catch(...){ }
-}
+TTransportOut::~TTransportOut( )	{ }
 
 TCntrNode &TTransportOut::operator=( const TCntrNode &node )
 {
@@ -1068,6 +1062,8 @@ void TTransportOut::start( int time )	{ mStartTm = SYS->sysTm(); mLogLstDt = 0; 
 
 void TTransportOut::postDisable( int flag )
 {
+    if(!(flag&NodeRemoveOnlyStor))
+	try{ stop(); } catch(...){ }	//Stop at any disabling
     if(flag&(NodeRemove|NodeRemoveOnlyStor)) {
 	TBDS::dataDel(fullDB(flag&NodeRemoveOnlyStor) ,SYS->transport().at().nodePath()+tbl(), *this, TBDS::UseAllKeys);
 	if(flag&NodeRemoveOnlyStor) { setStorage(mDB, "", true); return; }

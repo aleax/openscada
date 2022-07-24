@@ -42,7 +42,7 @@
 #define MOD_NAME	trS("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"3.4.6"
+#define MOD_VER		"3.4.7"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides transport based on the secure sockets' layer.\
  OpenSSL is used and SSLv3, TLSv1, TLSv1.1, TLSv1.2, DTLSv1, DTLSv1_2 are supported.")
@@ -533,6 +533,12 @@ void *TSocketIn::Task( void *sock_in )
 
     //Client tasks stop command
     s.endrunCl = true;
+
+    //Finding up already registered to terminate
+    MtxAlloc res(s.sockRes, true);
+    for(vector<SSockIn*>::iterator iId = s.clId.begin(); iId != s.clId.end(); ++iId)
+	if((*iId)->pid) pthread_kill((*iId)->pid, SIGALRM);
+    res.unlock();
     TSYS::eventWait(s.clFree, true, string(MOD_ID)+": "+s.id()+_(" stopping client tasks ..."));
 
     //Free context

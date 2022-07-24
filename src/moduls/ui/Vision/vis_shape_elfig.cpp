@@ -48,8 +48,10 @@
 #include "vis_run_widgs.h"
 #include "vis_devel.h"
 #include "vis_devel_widgs.h"
+#include "../QTStarter/lib_qtgen.h"
 #include "vis_shape_elfig.h"
 
+using namespace OSCADA_QT;
 using namespace VISION;
 
 ShapeElFigure::ShapeElFigure( ) :
@@ -5507,7 +5509,7 @@ void ElFigDt::properties( )
 	if(sender()->objectName() == "Fill")
 	{
 	    string res_fColor = f_color->value().toStdString();
-	    QColor res_fClr = WdgShape::getColor(res_fColor);
+	    QColor res_fClr = getColor(res_fColor);
 	    if(fc_en->isChecked() && f_color->isEnabled())
 	    {
 		if(inundItems[elF->fill_index].brush == -7)
@@ -5583,8 +5585,8 @@ void ElFigDt::properties( )
 	    }
 	    string res_lColor = l_color->value().toStdString();
 	    string res_lbColor = lb_color->value().toStdString();
-	    QColor res_lClr = WdgShape::getColor(res_lColor);
-	    QColor res_lbClr = WdgShape::getColor(res_lbColor);
+	    QColor res_lClr = getColor(res_lColor);
+	    QColor res_lbClr = getColor(res_lbColor);
 	    Qt::PenStyle ln_style = Qt::SolidLine;
 	    switch(l_style->currentIndex())
 	    {

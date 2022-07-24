@@ -1725,8 +1725,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    }
 			    formObj.appendChild(optEl);
 			}
-			for(i = 0; i < selVal.length /*&& elTp == 4*/; i++) {
-			    if(!selVal[i].length || elLst.indexOf(selVal[i]) >= 0) continue;
+			for(i = 0; i < selVal.length; i++) {
+			    if(!(selVal[i].length || elTp == 4) || elLst.indexOf(selVal[i]) >= 0) continue;
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.textContent = selVal[i];
 			    optEl.selected = optEl.defaultSelected = true;

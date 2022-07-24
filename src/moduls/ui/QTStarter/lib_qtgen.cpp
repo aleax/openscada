@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: lib_qtgen.cpp
 /***************************************************************************
- *   Copyright (C) 2021 by Roman Savochenko, <roman@oscada.org>            *
+ *   Copyright (C) 2021-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -54,6 +54,38 @@ QColor OSCADA_QT::colorAdjToBack( const QColor &clr, const QColor &backClr )
     else wS = clr.saturation();
 
     return QColor::fromHsv(clr.hue(), wS, wV, clr.alpha());
+}
+
+QFont OSCADA_QT::getFont( const string &val, float fsc, bool pixSize, const QFont &defFnt )
+{
+    QFont rez = defFnt;
+
+    char family[101]; family[0] = 0; //strcpy(family,"Arial");
+    int size = -1, bold = -1, italic = -1, underline = -1, strike = -1;
+    sscanf(val.c_str(), "%100s %d %d %d %d %d", family, &size, &bold, &italic, &underline, &strike);
+    if(strlen(family)) rez.setFamily(QString(family).replace(QRegExp("_")," "));
+    if(size >= 0) {
+	if(pixSize) rez.setPixelSize((int)(fsc*(float)size));
+	else rez.setPointSize((int)(fsc*(float)size));
+    }
+    if(bold >= 0)	rez.setBold(bold);
+    if(italic >= 0)	rez.setItalic(italic);
+    if(underline >= 0)	rez.setUnderline(underline);
+    if(strike >= 0)	rez.setStrikeOut(strike);
+
+    return rez;
+}
+
+QColor OSCADA_QT::getColor( const string &val )
+{
+    QColor res_color;
+    size_t fPs = val.find("-");
+    if(fPs == string::npos) res_color = QColor(val.c_str());
+    else {
+	res_color = QColor(val.substr(0,fPs).c_str());
+	res_color.setAlpha(s2i(val.substr(fPs+1)));
+    }
+    return res_color;
 }
 
 using namespace OSCADA;
@@ -241,4 +273,128 @@ bool TableDelegate::eventFilter( QObject *object, QEvent *event )
     }
 
     return QItemDelegate::eventFilter(object,event);
+}
+
+//*************************************************
+//* SnthHgl: Syntax highlighter                   *
+//*************************************************
+SnthHgl::SnthHgl( QTextDocument *parent ) : QSyntaxHighlighter(parent), isBuiltInSH(false)
+{
+
+}
+
+void SnthHgl::setSnthHgl( const XMLNode &nd )
+{
+    rules = nd;
+
+    //Set current font settings
+    document()->setDefaultFont(getFont(rules.attr("font"),1,false,document()->defaultFont()));
+
+    rehighlight();
+}
+
+bool SnthHgl::checkInSnthHgl( const QString &text, XMLNode &nd )
+{
+    bool isInSH = false;
+
+    TArrayObj *rezSH = NULL;
+    if((rezSH=TRegExp("<SnthHgl\\b.*>.*<\\/ *SnthHgl>","gm").match(text.toStdString()))) {
+	if(rezSH->arSize())
+	    try {
+		nd.load(rezSH->arGet(0).getS());
+		isInSH = true;
+	    } catch(TError&) { }
+	delete rezSH;
+
+    }
+
+    return isInSH;
+}
+
+void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
+{
+    XMLNode *rl;
+    vector<int> rul_pos(irl->childSize(),-1);
+    vector<int> matchedLength(irl->childSize(), 0);
+    int minPos = -1, minRule, endIndex, startBlk, sizeBlk;
+    QTextCharFormat kForm;
+    //TRegExp expr;
+    QRegExp expr; expr.setPatternSyntax(QRegExp::RegExp2);
+
+    if(lev > 3) return;
+
+    //Init previous block continue
+    int curBlk = (currentBlockState()>>(lev*8))&0xFF;
+
+    //Stream process by rules
+    for(int iT = 0; iT < text.length(); ) {
+	if(curBlk && !iT) { minRule = curBlk-1; minPos = 0; }
+	else minRule = -1;
+
+	for(int iCh = 0; iT != minPos && iCh < (int)irl->childSize(); iCh++) {
+	    if(!(minPos < iT || rul_pos[iCh] < iT || rul_pos[iCh] < minPos)) continue;
+	    if(rul_pos[iCh] >= iT && rul_pos[iCh] < minPos)	{ minPos = rul_pos[iCh]; minRule = iCh; continue; }
+	    if(rul_pos[iCh] == iT && rul_pos[iCh] == minPos)	{ minRule = iCh; break; }
+
+	    //Call rule
+	    rl = irl->childGet(iCh);
+	    if(rl->name() == "rule")	expr.setPattern(rl->attr("expr").c_str()/*, s2i(rl->attr("min"))?"U":""*/);
+	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str()/*, s2i(rl->attr("min"))?"U":""*/);
+	    else continue;
+
+	    expr.setMinimal(s2i(rl->attr("min")));
+	    rul_pos[iCh] = expr.indexIn(text, iT); matchedLength[iCh] = expr.matchedLength();
+	    //rul_pos[iCh] = expr.search(text.toStdString(), iT, &matchedLength[iCh]);
+	    if(matchedLength[iCh] <= 0) continue;
+
+	    if(rul_pos[iCh] < 0) rul_pos[iCh] = text.length();
+	    if(minPos < iT || rul_pos[iCh] < minPos) { minPos = rul_pos[iCh]; minRule = iCh; }
+	}
+	if(minRule < 0) break;
+
+	//Process minimal rule
+	rl = irl->childGet(minRule);
+	kForm.setForeground(colorAdjToBack(rl->attr("color").c_str(),qApp->palette().color(QPalette::Base)));
+	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
+	kForm.setFontItalic(s2i(rl->attr("font_italic")));
+
+	if(rl->name() == "rule") {
+	    setFormat(rul_pos[minRule]+off, matchedLength[minRule], kForm);
+
+	    //Call include rules
+	    if(rl->childSize()) rule(rl, text.mid(rul_pos[minRule],matchedLength[minRule]), rul_pos[minRule]+off, lev+1);
+	    iT = rul_pos[minRule] + matchedLength[minRule];
+	}
+	else if(rl->name() == "blk") {
+	    if(curBlk) rul_pos[minRule] = curBlk = startBlk = 0;
+	    else startBlk = rul_pos[minRule] + matchedLength[minRule];
+
+	    expr.setPattern(rl->attr("end").c_str()/*, s2i(rl->attr("min"))?"U":""*/);
+	    expr.setMinimal(s2i(rl->attr("min")));
+	    endIndex = expr.indexIn(text, startBlk); matchedLength[minRule] = expr.matchedLength();
+	    //endIndex = expr.search(text.toStdString(), startBlk, &matchedLength[minRule]);
+
+	    if(endIndex == -1 || matchedLength[minRule] <= 0) {
+		setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
+		sizeBlk = text.length()-startBlk;
+		iT = text.length();
+	    }
+	    else {
+		setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+matchedLength[minRule]), kForm);
+		sizeBlk = endIndex-startBlk;
+		iT = endIndex + matchedLength[minRule];
+	    }
+	    //Call include rules
+	    if(rl->childSize()) rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
+	    if(endIndex == -1 || matchedLength[minRule] <= 0)
+		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
+	    else setCurrentBlockState(currentBlockState()& ~(0xFFFFFFFF<<(lev*8)));
+	}
+    }
+}
+
+void SnthHgl::highlightBlock( const QString &text )
+{
+    setCurrentBlockState((previousBlockState()<0)?0:previousBlockState());
+    rule(&rules, text);
 }

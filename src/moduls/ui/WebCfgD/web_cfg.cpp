@@ -41,7 +41,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.3.0"
+#define MOD_VER		"2.3.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -307,7 +307,7 @@ void TWEB::HTTP_GET( const string &urli, string &page, vector<string> &vars, con
 		// Getting information about the available stations
 		if(zero_lev.empty()) {
 		    vector<TTransportS::ExtHost> stls;
-		    SYS->transport().at().extHostList(ses.user, stls);
+		    SYS->transport().at().extHostList(ses.user, stls, false, -1, ses.lang);
 		    sort(stls.begin(), stls.end(), compareHosts);
 		    stls.insert(stls.begin(), TTransportS::ExtHost("",SYS->id()));
 		    for(unsigned iSt = 0; iSt < stls.size(); iSt++) {

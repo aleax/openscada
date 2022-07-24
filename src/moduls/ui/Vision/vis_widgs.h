@@ -27,11 +27,10 @@
 #include <QMap>
 #include <QVariant>
 #include <QGridLayout>
-#include <QSyntaxHighlighter>
 #include <QItemDelegate>
 #include <QTableWidget>
 
-#include <xml.h>
+#include "../QTStarter/lib_qtgen.h"
 
 #include "tvision.h"
 
@@ -199,7 +198,7 @@ namespace VISION
 	    void setCfg( const QString& );
 	    void setFont( const QFont& );
 
-	    QWidget *workWdg( )	{ return ed_fld; }
+	    QWidget *workWdg( )	{ return edFld; }
 	    void viewApplyBt( bool view );
 
 	signals:
@@ -219,28 +218,9 @@ namespace VISION
 	    LType	m_tp;
 	    QString	m_val;
 	    bool	mPrev, applyReserve, needReserver, mIsEdited;
-	    QWidget	*ed_fld;
-	    QPushButton	*bt_fld;
-	    QTimer	*bt_tm;
-    };
-
-    //*************************************************
-    //* SnthHgl: Syntax highlighter                   *
-    //*************************************************
-    class SnthHgl : public QSyntaxHighlighter
-    {
-	Q_OBJECT
-
-	public:
-	    SnthHgl( QTextDocument *parent = 0 );
-
-	    void setSnthHgl( XMLNode nd );
-
-	protected:
-	    void highlightBlock( const QString &text );
-	    void rule( XMLNode *irl, const QString &text, int off = 0, char lev = 0 );
-
-	    XMLNode rules;
+	    QWidget	*edFld;
+	    QPushButton	*btFld;
+	    QTimer	*btTm;
     };
 
     //*********************************************
@@ -259,7 +239,7 @@ namespace VISION
 	    void setText( const QString & );
 	    void setSnthHgl( XMLNode nd );
 
-	    QTextEdit *workWdg( )	{ return ed_fld; }
+	    QTextEdit *workWdg( )	{ return edFld; }
 
 	    string		lang;
 
@@ -285,13 +265,13 @@ namespace VISION
 
 	private:
 	    bool		isInit;
-	    QString		m_text;
-	    QTextEdit		*ed_fld;
-	    SnthHgl		*snt_hgl;
-	    QDialogButtonBox	*but_box;
+	    QString		mText;
+	    QTextEdit		*edFld;
+	    OSCADA_QT::SnthHgl	*sntHgl;
+	    QDialogButtonBox	*butBox;
 	    QAction		*actFind, *actFindNext;
 	    QMainWindow		*stWin;
-	    QTimer		*bt_tm;
+	    QTimer		*btTm;
     };
 
     //*********************************************

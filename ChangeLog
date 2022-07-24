@@ -1,3 +1,38 @@
+2022-07-24 Roman 0.9.5.1
+- !:FIX:LibsDB.OscadaLibs: tmplib_DevLib.mbBase: Adapted to the builtin syntax highlighting for the attribute "Items set (items)".
+	tmplib_base.ntf: For the server address in the SMTP HELLO request used the EMail sender address instead
+	    SYS.system("hostname -f").parse(0,"\n"), which can be wrong for the SMTP-servers.
+    FIX:flb_servProc.wacko2media: fixed for the WHERE value's quotter of the SELECT SQL request.
+- !:LibsDB.vcaBase: wlb_Main.{alarmsAct,alarmsSt}: Adapted to the builtin syntax highlighting for the attribute "Highlight rules (highLght)".
+- FIX:AGLKS.St: Some fixed in the library vcaAGLKS description.
+- !:SYS,UI.Vision: Errors for control commands of the Control Interface to the redundant stations set to mark as warnings on the local ones.
+    UI.Vision: The warnings are processed now as the local successful result only with notifying about the problem
+	for the attributes modification and widgets removing.
+- SYS.TRegExp: The TRegExp object appended of a new option 'U' (ungreedy) of the greedy mode toggle, together the User API method "ungreedy".
+    search() function of the object appended of an argument "length" of the measured block size return.
+- !:SYS.XMLNode: The saving option BinShield(0x400) appended of encoding-shielding of the wrong UTF-8 symbols,
+    to prevent of XML-parsing errors on FireFox.
+- FIX:Transports,UI.{QTCfg,Vision,WebCfgD}: The function TTransportS::extHostList() appended an argument "lang"
+    to allow the remote host names obtaining translated.
+- !!!:FIX:Transports: The output transports appended for the force stopping at the object system disable-disconnection,
+    not in destructors what is late then there can be lost the socket handlers.
+- !!!!:FIX:Transport.Sockets: The input transports prevented at spare socket closing in the initiative mode.
+- Transport.SSL: The input transport stopping appended of termination client tasks like to Transport.Sockets.
+- DAQ: Text attribute fields disabled for the text width limit, for the builtin syntax highlighting mostly.
+- DAQ.DAQGate: Appended for messaging about disable parameters.
+    Appended in the location information for group names of control parameters of the main control page of the DAQ parameter.
+- !!!!:FIX:Archive.FSArch: Prevented for access to files[iA] in ModVArchEl::setValsProc() outside the lock using the read-lock switching.
+- !!:UI.{QTStarter,QTCfg,Vision}: The QT-generic library (lib_qtgen) appended of the static-external functions getFont() and getColor()
+	from UI.Vision and the object SnthHgl from UI.Vision and UI.QTCfg.
+    The function SnthHgl::rule() some unified, made optimal and appended of commented code of using TRegExp instead QRegExp,
+	and that commented due to difference of the position counting as completed UTF-symbols in QRegExp and chars in TRegExp (PCRE),
+	but TRegExp using is still interested due to TRegExp (PCRE) functional is richer to QRegExp.
+- UI.QTCfg: The text fields with the builtin syntax highlighting appended of deep text cursor position restore at the syntax rules apply
+    and in whole.
+- !!!:UI.Vision: The text areas with the syntax highlighting appended of the builtin variant.
+- UI.WebVision: The type ComboBox of the primitive FormEl appended for adding empty values to the list.
+
+
 2022-05-31 Roman 0.9.5
 - data/*.xml: The field MaxClientsPerHost of the Sockets.CNTR transport increased up to 10.
 - !!!!:FIX:SYS,DAQ.DAQGate: The controller objects fixed in call the parameter objects deletion for explict using the flag NodeRemove.

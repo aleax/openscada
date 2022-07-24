@@ -32,9 +32,10 @@
 #include <QDateTimeEdit>
 #include <QItemDelegate>
 #include <QDialogButtonBox>
-#include <QSyntaxHighlighter>
 #include <QTableWidget>
 #include <QListWidget>
+
+#include "../QTStarter/lib_qtgen.h"
 
 #include "tuimod.h"
 
@@ -102,31 +103,6 @@ class LineEdit : public QWidget
 };
 
 //*************************************************
-//* SnthHgl: Syntax highlighter                   *
-//*************************************************
-class SnthHgl : public QSyntaxHighlighter
-{
-    Q_OBJECT
-
-    public:
-	//Methods
-	SnthHgl( QTextDocument *parent = 0 );
-
-	void setSnthHgl( XMLNode nd );
-
-	//Attributes
-	bool isBuiltInSH;
-
-    protected:
-	//Methods
-	void highlightBlock( const QString &text );
-	void rule( XMLNode *irl, const QString &text, int off = 0, char lev = 0 );
-
-	//Attributes
-	XMLNode rules;
-};
-
-//*************************************************
 //* TextEdit: Text edit widget                    *
 //*************************************************
 class TextEdit : public QWidget
@@ -165,8 +141,6 @@ class TextEdit : public QWidget
 	void resizeEvent( QResizeEvent *e );
 	bool event( QEvent *e );
 
-	bool checkInSnthHgl( const QString &text );
-
     private slots:
 	//Private slots
 	void changed( );
@@ -179,7 +153,7 @@ class TextEdit : public QWidget
 	bool		isInit, isCh;
 	QAction		*actFind, *actFindNext;
 	QTextEdit	*edFld;
-	SnthHgl		*sntHgl;
+	OSCADA_QT::SnthHgl *sntHgl;
 	QDialogButtonBox *butBox;
 	QPoint		holdPnt;
 	QSize		mRowCol;

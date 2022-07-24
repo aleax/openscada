@@ -1,7 +1,7 @@
 
 //OpenSCADA file: xml.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -309,7 +309,7 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp ) const
 
 void XMLNode::encode( const string &s, string &rez, bool text, unsigned flg ) const
 {
-    int	len;
+    int len;
     int32_t symb;
     char buf[10];
 
@@ -321,7 +321,7 @@ void XMLNode::encode( const string &s, string &rez, bool text, unsigned flg ) co
 	    case 0xB ... 0xC:
 	    case 0x0E ... 0x1F:
 		if(!(flg&BinShield)) break;
-		sprintf(buf, "\\%03o", s[iSz]);
+		sprintf(buf, "\\%03o", s[iSz]&0xFF);
 		replStr = buf;
 		break;
 	    //case 0:	replStr = "\\000";	break;
@@ -337,9 +337,14 @@ void XMLNode::encode( const string &s, string &rez, bool text, unsigned flg ) co
 	else if((len=Mess->getUTF8(s,iSz,&symb)) >= 2) {
 	    switch(symb) {
 		case 0xA0: rez += (flg&XHTMLHeader) ? "&nbsp;" : "&#x00A0;";	break;
-		default: rez.append(s,iSz,len);	break;
+		default:   rez.append(s, iSz, len);	break;
 	    }
 	    iSz += len-1;
+	    continue;
+	}
+	else if(!len && (flg&BinShield)) {	//!!!! Wrong UTF-8 symbol
+	    sprintf(buf, "\\%03o", s[iSz]&0xFF);
+	    rez += buf;
 	    continue;
 	}
 	rez += s[iSz];

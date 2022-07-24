@@ -794,7 +794,7 @@ bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )	{ return v
 //*   Regular expression object                             *
 //***********************************************************
 TRegExp::TRegExp( const string &rule, const string &flg ) :
-    lastIndex(0), pattern(rule), global(false), ignoreCase(false), multiline(false), isSimplePat(false), UTF8(false),
+    lastIndex(0), pattern(rule), global(false), ignoreCase(false), multiline(false), ungreedy(false), isSimplePat(false), UTF8(false),
     regex(NULL), vSz(90), capv(NULL)
 {
     setPattern(rule, flg);
@@ -813,9 +813,10 @@ TRegExp::~TRegExp( )
 void TRegExp::setPattern( const string &rule, const string &flg )
 {
     //Global properties init
-    global = (flg.find('g')!=string::npos);
-    ignoreCase = (flg.find('i')!=string::npos);
-    multiline = (flg.find('m')!=string::npos);
+    global = (flg.find('g') != string::npos);
+    ignoreCase = (flg.find('i') != string::npos);
+    multiline = (flg.find('m') != string::npos);
+    ungreedy = (flg.find('U') != string::npos);
     UTF8 = /*Mess->isUTF8() &&*/ (flg.find('u')!=string::npos);
     isSimplePat = false;
     pattern = rule;
@@ -833,7 +834,8 @@ void TRegExp::setPattern( const string &rule, const string &flg )
     if(!isSimplePat && pattern.size()) {
 	const char *terr;
 	int erroff;
-	regex = pcre_compile(pattern.c_str(), PCRE_DOTALL|(UTF8?PCRE_UTF8:0)|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),
+	regex = pcre_compile(pattern.c_str(),
+	    PCRE_DOTALL|(UTF8?PCRE_UTF8:0)|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0)|(ungreedy?PCRE_UNGREEDY:0),
 	    &terr, &erroff, NULL);
 	if(!regex) err = terr;
 	else if(!capv) capv = new int[90];
@@ -925,11 +927,14 @@ bool TRegExp::test( const string &vl )
     return (n>0);
 }
 
-int TRegExp::search( const string &vl, int off )
+int TRegExp::search( const string &vl, int off, int *length )
 {
     if(!regex) return -1;
+
     int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), off, 0, capv, vSz);
-    return (n>0) ? capv[0] : -1;
+
+    if(length) *length = (n > 0) ? capv[1]-capv[0] : 0;
+    return (n > 0) ? capv[0] : -1;
 }
 
 string TRegExp::substExprRepl( const string &str, const string &val, int *icapv, int n )
@@ -960,6 +965,7 @@ TVariant TRegExp::propGet( const string &id )
     if(id == "global")		return (bool)global;
     if(id == "ignoreCase")	return (bool)ignoreCase;
     if(id == "multiline")	return (bool)multiline;
+    if(id == "ungreedy")	return (bool)ungreedy;
     if(id == "UTF8")		return (bool)UTF8;
     if(id == "lastIndex")	return lastIndex;
     return TVariant();
@@ -990,7 +996,7 @@ string TRegExp::getStrXML( const string &oid )
     if(!oid.empty()) nd += " p='"+oid+"'";
     nd += ">\n";
     nd += "<rule>"+TSYS::strEncode(pattern,TSYS::Html)+"</rule>\n";
-    nd = nd+"<flg>"+(global?"g":"")+(ignoreCase?"i":"")+(multiline?"m":"")+"</flg>\n";
+    nd = nd+"<flg>"+(global?"g":"")+(ignoreCase?"i":"")+(multiline?"m":"")+(ungreedy?"U":"")+"</flg>\n";
     nd += "</TRegExp>\n";
 
     return nd;

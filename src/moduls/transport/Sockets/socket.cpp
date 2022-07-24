@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.3.9"
+#define MOD_VER		"4.3.10"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -181,10 +181,7 @@ TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
     setAddr("localhost:10005");
 }
 
-TSocketIn::~TSocketIn( )
-{
-
-}
+TSocketIn::~TSocketIn( )	{ }
 
 string TSocketIn::getStatus( )
 {
@@ -375,6 +372,7 @@ void TSocketIn::start( )
 	else if(bind(sockFd,(sockaddr*)&nameUn,sizeof(nameUn)) == -1) {
 	    int rez = errno;
 	    close(sockFd);
+	    sockFd = -1;
 	    throw TError(nodePath().c_str(),_("Error binding the %s socket: '%s (%d)'!"), s_type.c_str(), strerror(rez), rez);
 	}
 	listen(sockFd, maxQueue());
@@ -398,6 +396,7 @@ void TSocketIn::start( )
 	name_can.can_ifindex = ifr.ifr_ifindex;
 	if(bind(sockFd,(struct sockaddr*)&name_can,sizeof(name_can)) == -1) {
 	    close(sockFd);
+	    sockFd = -1;
 	    throw TError(nodePath().c_str(), _("Error binding the %s socket: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 	}
 	else if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("RAWCAN socket binded to '%s'!"), addr().c_str());
@@ -410,7 +409,7 @@ void TSocketIn::start( )
 	    endrunCl = false;
 	    SYS->taskCreate(nodePath('.',true)+"."+i2s(sockFd), taskPrior(), ClTask, sin);
 	    connNumb++;
-	} catch(TError &err) { close(sockFd); delete sin; throw; }
+	} catch(TError &err) { close(sockFd); sockFd = -1; delete sin; throw; }
     }
     else SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);	//main task for processing or client task create
     runSt = true;
@@ -434,8 +433,9 @@ void TSocketIn::stop( )
 
     shutdown(sockFd, SHUT_RDWR);
 
-    if(close(sockFd) == 0) sockFd = -1;
-    else mess_err(nodePath().c_str(), _("Closing the socket '%d' error '%s (%d)'!"), sockFd, strerror(errno), errno);
+    if(sockFd >= 0 && mode() != 2 && close(sockFd) != 0)
+	mess_err(nodePath().c_str(), _("Closing the socket '%d' error '%s (%d)'!"), sockFd, strerror(errno), errno);
+    sockFd = -1;
 
     if(type == SOCK_UNIX) remove(path.c_str());
 
@@ -1193,6 +1193,7 @@ void TSocketOut::start( int itmCon )
 	if(sockFd < 0)	throw TError(nodePath().c_str(), _("The force socket is deactivated!"));
 	else if((rez=fcntl(sockFd,F_GETFL,0)) < 0 || fcntl(sockFd,F_SETFL,rez|O_NONBLOCK) < 0) {
 	    close(sockFd);
+	    sockFd = -1;
 	    throw TError(nodePath().c_str(), _("Error the force socket %d using: '%s (%d)'!"), sockFd, strerror(errno), errno);
 	}
     }
@@ -1318,6 +1319,7 @@ void TSocketOut::start( int itmCon )
 	name_can.can_ifindex = ifr.ifr_ifindex;
 	if(bind(sockFd,(struct sockaddr*)&name_can,sizeof(name_can)) == -1) {
 	    close(sockFd);
+	    sockFd = -1;
 	    throw TError(nodePath().c_str(), _("RAWCAN socket doesn't bind to '%s'!"), addr_.c_str());
 	}
     }

@@ -318,7 +318,7 @@ class TTransportS : public TSubSYS
 
 	// External hosts
 	string extHostsDB( );
-	void extHostList( const string &user, vector<ExtHost> &list, bool andSYS = false, int upRiseLev = -1 );
+	void extHostList( const string &user, vector<ExtHost> &list, bool andSYS = false, int upRiseLev = -1, const string &lang = "" );
 	ExtHost extHostGet( const string &user, const string &id, bool andSYS = false );
 	ExtHost extHostSeek( const string &id, int lev );
 	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );

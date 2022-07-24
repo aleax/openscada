@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: val.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -939,7 +939,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 	    // Insert values to the archive
 	    if(beg <= files[iA]->end() && end >= files[iA]->begin()) {
 		int64_t n_end = (end > files[iA]->end())?files[iA]->end():end;
-		res.release();
+		res.request(false);	//release(); !!!! relocking during the use files[iA], then prevent files[iA] loss also
 		if((wrCurOK=files[iA]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
 		wrOK = wrOK && wrCurOK;
 		beg = n_end + v_per;

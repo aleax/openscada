@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 17:46+0300\n"
+"POT-Creation-Date: 2022-07-15 20:23+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,8 +21,7 @@ msgstr "Шлюз джерел даних"
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid ""
-"Allows to locate data sources of the remote OpenSCADA stations to local ones."
+msgid "Allows to locate data sources of the remote OpenSCADA stations to local ones."
 msgstr ""
 "Дозволяє виконувати шлюзування джерел даних віддалених OpenSCADA станцій до "
 "локальних."
@@ -89,6 +88,7 @@ msgstr "Синхронізація. "
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Збір з періодом %s. "
 
@@ -96,6 +96,7 @@ msgstr "Збір з періодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s]. "
 msgstr "Витрачено часу %s[%s]. "
 
@@ -103,6 +104,7 @@ msgstr "Витрачено часу %s[%s]. "
 msgid "Error '%s', restoring in %.3g s."
 msgstr "Помилка '%s', відновлення через %.3g с."
 
+#, c-format
 msgid "Requests to '%s' - %.6g; "
 msgstr "Запитів до '%s' - %.6g; "
 
@@ -116,8 +118,7 @@ msgstr "записано %g значень, %g повідомлень, у буф
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."
-msgstr ""
-"Включення: станція '%s' опрацьовує елемент '%s' на предмет параметрів %d."
+msgstr "Включення: станція '%s' опрацьовує елемент '%s' на предмет параметрів %d."
 
 #, c-format
 msgid ""
@@ -203,11 +204,15 @@ msgstr "Дерево параметрів"
 msgid "<<Append current>>"
 msgstr "<<Додати поточний>>"
 
+#, c-format
+msgid "The parameter disabling in the reason '%d: %s' ..."
+msgstr "Вимкнення параметру через '%d: %s' ..."
+
 msgid "Parameter"
 msgstr "Параметр"
 
-msgid "State"
-msgstr "Стан"
+msgid "State of the local representative parameter"
+msgstr "Стан локального репрезентуючого параметру"
 
 msgid "Type"
 msgstr "Тип"
@@ -224,8 +229,9 @@ msgstr "Ім'я"
 msgid "Configuration"
 msgstr "Конфігурація"
 
-msgid "Remote station configuration"
-msgstr "Конфігурація віддаленої станції"
+msgid "Configuration of the remote parameter"
+msgstr "Конфігурація віддаленого параметру"
 
 msgid "Controller is not started!"
 msgstr "Контролер не запущено!"
+
