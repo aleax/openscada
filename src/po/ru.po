@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-16 09:13+0300\n"
+"POT-Creation-Date: 2022-07-27 16:42+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -2099,55 +2099,6 @@ msgstr "%s станция: \"%s\""
 msgid "Station"
 msgstr "Станция"
 
-msgid "Station name"
-msgstr "Имя станции"
-
-msgid "Program"
-msgstr "Программа"
-
-msgid "Version"
-msgstr "Версия"
-
-msgid "Host name"
-msgstr "Имя хоста"
-
-msgid "System user"
-msgstr "Системный пользователь"
-
-msgid "Operation system"
-msgstr "Операционная система"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Main CPUs set"
-msgstr "Основной набор процессоров"
-
-msgid ""
-"To set up the processors you use, write a row of numbers separated by a ':' "
-"character.\n"
-"Processor numbers start at 0."
-msgstr ""
-"Для указания используемых процессоров записывайте строку номеров разделённых "
-"символом ':'.\n"
-"Номера процессоров начинаются с 0."
-
-msgid "Tasks planning clock"
-msgstr "Часы планирования задач"
-
-msgid "Number of phases of the task invoking"
-msgstr "Количество фаз вызова задач"
-
-msgid ""
-"To set up phasing of the task invoking in the determined phases number, <= 0 "
-"to set optimal, 1 to disable the tasks phasing."
-msgstr ""
-"Для установки фазирования вызова задач в определённое количество фаз, <= 0 "
-"для установки оптимально, 1 для выключения фазирования задач."
-
-msgid "Internal charset"
-msgstr "Внутренняя кодировка"
-
 msgid "Configuration file"
 msgstr "Конфигурационный файл"
 
@@ -2175,18 +2126,17 @@ msgstr "Рабочая БД"
 msgid "Work DB address in the format \"{DB module}.{DB name}\"."
 msgstr "Адрес рабочей БД в формате \"{Модуль БД}.{Имя БД}\"."
 
-msgid "Save the program at exit"
+#, fuzzy
+msgid "Save the program at exit, with the period"
 msgstr "Сохранить программу при выходе"
 
 msgid "Select for the program automatic saving to DB on exit."
 msgstr "Выбрать для автоматического сохранения программы в БД при выходе."
 
-msgid "Period the program saving"
-msgstr "Период сохранения программы"
-
+#, fuzzy
 msgid ""
-"Use not a zero period (seconds) to periodically save program changes to the "
-"DB."
+"Use not a zero period in seconds to periodically save program changes to the "
+"storage."
 msgstr ""
 "Использовать ненулевой период (секунды) для периодического сохранения "
 "изменённых частей программы в БД."
@@ -2205,9 +2155,6 @@ msgstr ""
 "Но неудобно в режиме разработки, постоянно напоминая про необходимость "
 "сохранения."
 
-msgid "Least level"
-msgstr "Наименьший уровень"
-
 msgid "Least messages level which is procesed by the program."
 msgstr "Наименьший уровень сообщений, который обрабатывается программой."
 
@@ -2222,6 +2169,64 @@ msgstr "На стандартный выход ошибок(stderr)"
 
 msgid "To archive"
 msgstr "В архив"
+
+msgid "Environment"
+msgstr ""
+
+msgid "Program"
+msgstr "Программа"
+
+#, fuzzy
+msgid "System"
+msgstr "Подсистема"
+
+#, fuzzy
+msgid "System time"
+msgstr "Системный пользователь"
+
+#, fuzzy
+msgid "System planning clock"
+msgstr "Часы планирования задач"
+
+msgid "System user"
+msgstr "Системный пользователь"
+
+#, fuzzy
+msgid "System locale charset."
+msgstr "Внутренняя кодировка"
+
+msgid ""
+"Complete locale information with language, country and charset in the view "
+"\"en_GB.UTF-8\"."
+msgstr ""
+
+msgid "Host name"
+msgstr "Имя хоста"
+
+msgid "CPU"
+msgstr "CPU"
+
+#, fuzzy
+msgid ""
+"Main CPUs set.\n"
+"To set up the processors you use, write a row of numbers separated by the "
+"character ':'.\n"
+"Processor numbers start at 0."
+msgstr ""
+"Для указания используемых процессоров записывайте строку номеров разделённых "
+"символом ':'.\n"
+"Номера процессоров начинаются с 0."
+
+msgid "Number of phases of the task invoking"
+msgstr "Количество фаз вызова задач"
+
+#, fuzzy
+msgid ""
+"To set up phasing of the task invoking in the determined phases number,\n"
+" <= 0 to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+"Для установки фазирования вызова задач в определённое количество фаз, <= 0 "
+"для установки оптимально, 1 для выключения фазирования задач."
 
 msgid "Subsystems"
 msgstr "Подсистемы"
@@ -2384,16 +2389,16 @@ msgid "See to the messages"
 msgstr "Просмотр сообщений"
 
 #, c-format
-msgid "%dx%0.3gGHz"
-msgstr "%dx%0.3gГГц"
-
-#, c-format
 msgid "Real-time %s"
 msgstr "Реального времени %s"
 
 #, c-format
 msgid "Monotonic %s"
 msgstr "Монотонные %s"
+
+#, c-format
+msgid "%dx%0.3gGHz"
+msgstr "%dx%0.3gГГц"
 
 #, c-format
 msgid "Spent time %s[%s]."
@@ -2958,3 +2963,21 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
+
+#~ msgid "Station name"
+#~ msgstr "Имя станции"
+
+#~ msgid "Version"
+#~ msgstr "Версия"
+
+#~ msgid "Operation system"
+#~ msgstr "Операционная система"
+
+#~ msgid "Main CPUs set"
+#~ msgstr "Основной набор процессоров"
+
+#~ msgid "Period the program saving"
+#~ msgstr "Период сохранения программы"
+
+#~ msgid "Least level"
+#~ msgstr "Наименьший уровень"

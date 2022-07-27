@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:14+0300\n"
+"POT-Creation-Date: 2022-07-27 17:00+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -108,6 +108,10 @@ msgid "Processing time %s[%s]. "
 msgstr "Время обработки %s[%s]. "
 
 #, c-format
+msgid "Size input buffer %s, MSS %s. "
+msgstr ""
+
+#, c-format
 msgid "Error the socket type '%s'!"
 msgstr "Ошибка типа сокета '%s'!"
 
@@ -152,12 +156,12 @@ msgstr "Переподключение из-за отсутствия входн
 msgid "Write: wrote %s."
 msgstr "Запись: записано %s."
 
-msgid "Write: the answer is zero byte."
-msgstr "Запись: ответ ноль байт."
-
 #, c-format
-msgid "Write: error '%s (%d)'!"
-msgstr "Запись: ошибка '%s (%d)'!"
+msgid "Error writing '%s (%d)'"
+msgstr "Ошибка записи '%s (%d)'"
+
+msgid "No data wrote"
+msgstr "Не записаны данные"
 
 #, c-format
 msgid "%d:> Transmitted directly to '%s'\n"
@@ -221,12 +225,8 @@ msgid "Wrote message %s to '%s'."
 msgstr "Записано сообщение %s на '%s'."
 
 #, c-format
-msgid "Write: error '%s (%d)'."
-msgstr "Запись: ошибка '%s (%d)'."
-
-#, c-format
-msgid "Error transmitting: %s"
-msgstr "Ошибка передачи: %s"
+msgid "Error writing: %s"
+msgstr "Ошибка записи: %s"
 
 #, c-format
 msgid "Disconnected by '%s'!"
@@ -333,14 +333,17 @@ msgstr ""
 msgid "Priority"
 msgstr "Приоритет"
 
-msgid "Maximum segment size (MSS)"
-msgstr "Максимальный размер сегмента (MSS)"
+#, fuzzy
+msgid "Input buffer size, kB"
+msgstr "Входной буфер, кБ"
 
-msgid "Set 0 for the system MSS."
+#, fuzzy
+msgid "Set 0 for the system value."
 msgstr "Установить 0 для системного MSS."
 
-msgid "Input buffer, KB"
-msgstr "Входной буфер, кБ"
+#, fuzzy
+msgid "Maximum segment size (MSS), B"
+msgstr "Максимальный размер сегмента (MSS)"
 
 msgid "Queue length"
 msgstr "Длина очереди"
@@ -443,17 +446,6 @@ msgstr "Транспорт не подключен!"
 msgid "Error requesting: %s"
 msgstr "Ошибка запроса: %s"
 
-#, c-format
-msgid "Error writing '%s (%d)'"
-msgstr "Ошибка записи '%s (%d)'"
-
-msgid "No data wrote"
-msgstr "Не записаны данные"
-
-#, c-format
-msgid "Error writing: %s"
-msgstr "Ошибка записи: %s"
-
 msgid "> Transmitted to\n"
 msgstr "> Передано\n"
 
@@ -491,3 +483,18 @@ msgstr "Временные интервалы"
 
 msgid "Attempts"
 msgstr "Попыток"
+
+#~ msgid "Write: the answer is zero byte."
+#~ msgstr "Запись: ответ ноль байт."
+
+#, c-format
+#~ msgid "Write: error '%s (%d)'!"
+#~ msgstr "Запись: ошибка '%s (%d)'!"
+
+#, c-format
+#~ msgid "Write: error '%s (%d)'."
+#~ msgstr "Запись: ошибка '%s (%d)'."
+
+#, c-format
+#~ msgid "Error transmitting: %s"
+#~ msgstr "Ошибка передачи: %s"

@@ -95,20 +95,20 @@ class TSocketIn: public TTransportIn
 
 	int lastConn( )			{ return connTm; }
 	unsigned mode( )		{ return mMode; }
+	unsigned inBufLen( )		{ return mInBufLen; }
 	unsigned MSS( )			{ return mMSS; }
 	unsigned maxQueue( )		{ return mMaxQueue; }
 	unsigned maxFork( )		{ return mMaxFork; }
 	unsigned maxForkPerHost( )	{ return mMaxForkPerHost; }
-	unsigned bufLen( )		{ return mBufLen; }
 	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
 	unsigned keepAliveTm( )		{ return mKeepAliveTm; }
 	int taskPrior( )		{ return mTaskPrior; }
 
+	void setInBufLen( unsigned vl )	{ mInBufLen = vl ? vmax(4,vmin(10240,vl)) : 0; modif(); }
 	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
 	void setMaxQueue( unsigned vl )	{ mMaxQueue = vmax(1,vmin(100,vl)); modif(); }
 	void setMaxFork( unsigned vl )	{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
 	void setMaxForkPerHost( unsigned vl )	{ mMaxForkPerHost = vmin(1000, vl); modif(); }
-	void setBufLen( unsigned vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vl; modif(); }
 	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vl; modif(); }
 	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(199,vl)); modif(); }
@@ -153,11 +153,11 @@ class TSocketIn: public TTransportIn
 	string		addon;
 
 	unsigned short	mMode,			//Mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect; 2 - initiative connection)
+			mInBufLen,		//Input buffer length
 			mMSS,			//MSS
 			mMaxQueue,		//Max queue for TCP, UNIX sockets
 			mMaxFork,		//Maximum forking (opened sockets)
 			mMaxForkPerHost,	//Maximum forking (opened sockets), per host
-			mBufLen,		//Input buffer length
 			mKeepAliveReqs,		//KeepAlive requests
 			mKeepAliveTm;		//KeepAlive timeout
 	int		mTaskPrior;		//Requests processing task prioritet

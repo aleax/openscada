@@ -732,8 +732,6 @@ void ConfApp::pageNext( )
     try{ pageDisplay(path); } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
-
-
 void ConfApp::itDBLoad( )
 {
     XMLNode req("load"); req.setAttr("path", selPath+"/%2fobj")->setAttr("force", (sender()==actDBLoadF)?"1":"");
@@ -1306,7 +1304,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 {
     //For append no named widgets
     QHBoxLayout *l_hbox = NULL;
-    int		i_area = 0;	//Areas counter
+    int		iArea = 0;	//Areas counter
     int		l_pos = 0;
     int		rez;
 
@@ -1354,15 +1352,15 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    break;
 	    if(iTbs >= tabs->count()) {
 		QScrollArea *scrl = new QScrollArea();
-		tabs->insertTab(i_area, scrl, t_s.attr("dscr").c_str());
+		tabs->insertTab(iArea, scrl, t_s.attr("dscr").c_str());
 		t_s.setAttr("qview", "0");
 	    }
 
 	    //  Find and prepare current tab
-	    if(actRemoved && i_area == 0)	tabs->setCurrentIndex(0);
-	    if(tabs->currentIndex() == i_area) {
+	    if(actRemoved && iArea == 0)	tabs->setCurrentIndex(0);
+	    if(tabs->currentIndex() == iArea) {
 		if(!s2i(t_s.attr("qview"))) {
-		    QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
+		    QScrollArea *scrl = (QScrollArea*)tabs->widget(iArea);
 		    int v_scrl = (scrl->verticalScrollBar()) ? scrl->verticalScrollBar()->value() : 0;
 
 		    QWidget *wdg = new QFrame;
@@ -1383,8 +1381,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 
 		// Elements of scalable by vertical get and their grow up to the scroll appear into the container
 		if(!s2i(genReqs.attr("fillMode"))) {
-		    QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
+		    QScrollArea *scrl = (QScrollArea*)tabs->widget(iArea);
 		    QWidget *lastW = qobject_cast<QWidget*>(scrl->widget()->children().last());
+
 		    QList<TextEdit*> texts = scrl->findChildren<TextEdit*>();
 		    QList<QTableWidget*> tbls = scrl->findChildren<QTableWidget*>();
 		    QList<ListView*> lsts = scrl->findChildren<ListView*>();
@@ -1430,7 +1429,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    }
 		}
 	    }
-	    i_area++;
+	    iArea++;
 	}
 	return;
     }
@@ -2056,7 +2055,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    connect(val_w, SIGNAL(cancel()), this, SLOT(cancelButton()));
 		}
 
-		// Check use label
+		// Checking the label using
 		if(t_s.attr("dscr").size()) {
 		    lab = new QLabel(widget);
 		    lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
@@ -2065,8 +2064,8 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    (*l_hbox)->insertWidget(l_pos++, lab);
 		    if(val_w)	(*l_hbox)->insertWidget(l_pos++, val_w);
 		    if(val_r) {
-			(*l_hbox)->insertWidget( l_pos++, val_r );
-			lab->setAlignment( Qt::AlignTop );
+			(*l_hbox)->insertWidget(l_pos++, val_r);
+			//lab->setAlignment(Qt::AlignTop);
 		    }
 		    (*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
 		    widget->layout()->addItem(*l_hbox);
@@ -2110,19 +2109,23 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(!wr) {
 		    val_r = new QLabel(widget);
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
-		    QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
-		    sp.setHorizontalStretch(1);
-		    val_r->setSizePolicy(sp);
-		    val_r->setAlignment(Qt::AlignVCenter);
 		    val_r->setWordWrap(true);
+		    //val_r->setAlignment(Qt::AlignVCenter);
 		    //val_r->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+
+		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Preferred);
+		    sp.setControlType(QSizePolicy::Label);
+		    sp.setWidthForHeight(true);
+		    sp.setHorizontalStretch(1);	//!!!! At setting there 0 we enable work at size hint which is very wrapping big texts,
+						//     then we need to reimplement the size hint calculation in that case
+		    val_r->setSizePolicy(sp);
 		}
 		// View edit
 		else {
 		    val_w = new LineEdit(widget, LineEdit::Text, comm);
 		    val_w->setObjectName(br_path.c_str());
 		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Fixed);
-		    sp.setHorizontalStretch(1);
+		    sp.setHorizontalStretch(10);
 		    val_w->setSizePolicy(sp);
 		    connect(val_w, SIGNAL(valChanged(const QString&)), this, SLOT(editChange(const QString&)));
 		    connect(val_w, SIGNAL(apply()), this, SLOT(applyButton()));
@@ -2177,7 +2180,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    if(val_w)	(*l_hbox)->insertWidget(l_pos++, val_w);
 		    if(val_r) {
 			(*l_hbox)->insertWidget(l_pos++, val_r);
-			lab->setAlignment(Qt::AlignTop);
+			//lab->setAlignment(Qt::AlignTop);
 		    }
 
 		    (*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
@@ -2214,6 +2217,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(val_r) {
 		mod->setHelp(t_s.attr("help"), selPath+"/"+br_path, val_r);
 		val_r->setText((string("<b>")+TSYS::strEncode(sval,TSYS::Html)+"</b>").c_str());
+		//val_r->adjustSize();
 	    }
 	    if(val_w && !val_w->isEdited()) {
 		if(rezReq >= 0) {
@@ -2393,63 +2397,63 @@ bool ConfApp::upStruct( XMLNode &w_nd, const XMLNode &n_nd )
     if(w_nd.attr("acs") != n_nd.attr("acs")) str_ch = true;
 
     //Scan deleted nodes
-    for(unsigned i_w = 0, i_n; i_w < w_nd.childSize(); ) {
-	for(i_n = 0; i_n < n_nd.childSize(); i_n++)
-	    if(w_nd.childGet(i_w)->name() == n_nd.childGet(i_n)->name() &&
-		    w_nd.childGet(i_w)->attr("id") == n_nd.childGet(i_n)->attr("id"))
+    for(unsigned iW = 0, iN; iW < w_nd.childSize(); ) {
+	for(iN = 0; iN < n_nd.childSize(); iN++)
+	    if(w_nd.childGet(iW)->name() == n_nd.childGet(iN)->name() &&
+		    w_nd.childGet(iW)->attr("id") == n_nd.childGet(iN)->attr("id"))
 		break;
-	if(i_n >= n_nd.childSize()) {
-	    w_nd.childDel(i_w);
+	if(iN >= n_nd.childSize()) {
+	    w_nd.childDel(iW);
 	    if(w_nd.name() != "table" && w_nd.name() != "list" && w_nd.name() != "oscada_cntr") str_ch = true;
 	    continue;
 	}
-	i_w++;
+	iW++;
     }
 
     //Scan for the new nodes and check present nodes
-    for(unsigned i_n = 0, i_w; i_n < n_nd.childSize(); i_n++) {
-	for(i_w = 0; i_w < w_nd.childSize(); i_w++)
-	    if(w_nd.childGet(i_w)->name() == n_nd.childGet(i_n)->name() &&
-		    w_nd.childGet(i_w)->attr("id") == n_nd.childGet(i_n)->attr("id"))
+    for(unsigned iN = 0, iW; iN < n_nd.childSize(); iN++) {
+	for(iW = 0; iW < w_nd.childSize(); iW++)
+	    if(w_nd.childGet(iW)->name() == n_nd.childGet(iN)->name() &&
+		    w_nd.childGet(iW)->attr("id") == n_nd.childGet(iN)->attr("id"))
 		break;
-	if(i_w >= w_nd.childSize()) {
+	if(iW >= w_nd.childSize()) {
 	    // Add node
-	    *w_nd.childIns(i_n) = *n_nd.childGet(i_n);
+	    *w_nd.childIns(iN) = *n_nd.childGet(iN);
 	    str_ch = true;
-	    i_w = i_n;
+	    iW = iN;
 	}
 	else {
 	    // Check present node
-	    if(upStruct(*w_nd.childGet(i_w),*n_nd.childGet(i_n))) str_ch = true;
+	    if(upStruct(*w_nd.childGet(iW),*n_nd.childGet(iN))) str_ch = true;
 	    if(str_ch && w_nd.name() == "oscada_cntr") {
-		w_nd.childGet(i_w)->setAttr("qview","0");
+		w_nd.childGet(iW)->setAttr("qview","0");
 		str_ch = false;
 		continue;
 	    }
 	}
 
 	//Check of the description present
-	if((bool)w_nd.childGet(i_w)->attr("dscr").size() ^ (bool)n_nd.childGet(i_n)->attr("dscr").size())
+	if((bool)w_nd.childGet(iW)->attr("dscr").size() ^ (bool)n_nd.childGet(iN)->attr("dscr").size())
 	    str_ch = true;
 
 	//Check base fields destination change
-	if(w_nd.childGet(i_w)->name() == "fld" &&
-	    (w_nd.childGet(i_w)->attr("dest") != n_nd.childGet(i_n)->attr("dest") ||
-	     w_nd.childGet(i_w)->attr("tp") != n_nd.childGet(i_n)->attr("tp")))
+	if(w_nd.childGet(iW)->name() == "fld" &&
+	    (w_nd.childGet(iW)->attr("dest") != n_nd.childGet(iN)->attr("dest") ||
+	     w_nd.childGet(iW)->attr("tp") != n_nd.childGet(iN)->attr("tp")))
 	{
-	    w_nd.childGet(i_w)->setAttr("dest", "");
-	    w_nd.childGet(i_w)->setAttr("tp", "");
+	    w_nd.childGet(iW)->setAttr("dest", "");
+	    w_nd.childGet(iW)->setAttr("tp", "");
 	    str_ch = true;
 	}
 
 	//Sync node parameters (text and attributes)
-	w_nd.childGet(i_w)->setText(n_nd.childGet(i_n)->text());
+	w_nd.childGet(iW)->setText(n_nd.childGet(iN)->text());
 
-	w_nd.childGet(i_w)->setAttr("dscr", "");
+	w_nd.childGet(iW)->setAttr("dscr", "");
 	vector<string> ls;
-	n_nd.childGet(i_n)->attrList(ls);
-	for(unsigned i_a = 0; i_a < ls.size(); i_a++)
-	    w_nd.childGet(i_w)->setAttr(ls[i_a],n_nd.childGet(i_n)->attr(ls[i_a]));
+	n_nd.childGet(iN)->attrList(ls);
+	for(unsigned iA = 0; iA < ls.size(); iA++)
+	    w_nd.childGet(iW)->setAttr(ls[iA],n_nd.childGet(iN)->attr(ls[iA]));
     }
 
     return str_ch;

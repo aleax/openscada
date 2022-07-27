@@ -129,8 +129,8 @@ void HddSmart::getVal( TMdPrm *prm )
 	prm->vlAt(sId).at().setI(val,0,true);
 	devOK = true;
     }
-    if(fp && fclose(fp) != 0)
-	mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), fp, strerror(errno), errno);
+    if(fp && pclose(fp) == -1)
+	mess_warning(prm->nodePath().c_str(), _("Closing the pipe %p error '%s (%d)'!"), fp, strerror(errno), errno);
 
     if(devOK) prm->daErr = "";
     else if(!prm->daErr.getVal().size()) {

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-16 09:13+0300\n"
+"POT-Creation-Date: 2022-07-27 16:42+0300\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -185,8 +185,7 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -350,8 +349,7 @@ msgid "Requested %d records for time %s."
 msgstr "Запитано %d записів протягом %s."
 
 #, c-format
-msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки "
 "%lld (%lld-%lld)."
@@ -609,8 +607,7 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid ""
-"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -1394,8 +1391,7 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -1958,8 +1954,7 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проєкту! Схоже проєкт '%s' вже виконується."
 
 msgid "Loading."
@@ -2094,55 +2089,6 @@ msgstr "%s станція: \"%s\""
 msgid "Station"
 msgstr "Станція"
 
-msgid "Station name"
-msgstr "Ім'я станції"
-
-msgid "Program"
-msgstr "Програма"
-
-msgid "Version"
-msgstr "Версія"
-
-msgid "Host name"
-msgstr "Ім'я хосту"
-
-msgid "System user"
-msgstr "Системний користувач"
-
-msgid "Operation system"
-msgstr "Операційна система"
-
-msgid "CPU"
-msgstr "CPU"
-
-msgid "Main CPUs set"
-msgstr "Основний набір процессорів"
-
-msgid ""
-"To set up the processors you use, write a row of numbers separated by a ':' "
-"character.\n"
-"Processor numbers start at 0."
-msgstr ""
-"Для встановлення використовуваних процесорів записуйте рядок номерів, "
-"поділених символом ':'.\n"
-"Номера процесорів починаються з 0."
-
-msgid "Tasks planning clock"
-msgstr "Годинник планування задач"
-
-msgid "Number of phases of the task invoking"
-msgstr "Кількість фаз виклику задач"
-
-msgid ""
-"To set up phasing of the task invoking in the determined phases number, <= 0 "
-"to set optimal, 1 to disable the tasks phasing."
-msgstr ""
-"Для встановлення фазування виклику задач у визначену кількість фаз, <= 0 для "
-"встановлення оптимально, 1 для вимкнення фазування задач."
-
-msgid "Internal charset"
-msgstr "Внутрішнє кодування"
-
 msgid "Configuration file"
 msgstr "Конфігураційний файл"
 
@@ -2170,21 +2116,18 @@ msgstr "Робоча БД"
 msgid "Work DB address in the format \"{DB module}.{DB name}\"."
 msgstr "Адреса Робочої БД у форматі \"{Модуль БД}.{Ім'я БД}\"."
 
-msgid "Save the program at exit"
-msgstr "Зберігати програму при виході"
+msgid "Save the program at exit, with the period"
+msgstr "Зберігати програму при виході, за періодом"
 
 msgid "Select for the program automatic saving to DB on exit."
 msgstr "Вибрати для автоматичного збереження програми у БД під час виходу."
 
-msgid "Period the program saving"
-msgstr "Період збереження програми"
-
 msgid ""
-"Use not a zero period (seconds) to periodically save program changes to the "
-"DB."
+"Use not a zero period in seconds to periodically save program changes to the "
+"storage."
 msgstr ""
-"Використати не нульовий період (секунди) для періодичного збереження змін "
-"частин програми у БД."
+"Використати не нульовий період у секундах для періодичного збереження змін "
+"частин програми у сховку."
 
 msgid "Set modification for the calculated objects"
 msgstr "Встановлювати модифікацію для обчислювальних об'єктів"
@@ -2200,9 +2143,6 @@ msgstr ""
 "Але незручно у режимі розробки, постійно нагадуючи про необхідність "
 "збереження."
 
-msgid "Least level"
-msgstr "Найменший рівень"
-
 msgid "Least messages level which is procesed by the program."
 msgstr "Найменший рівень повідомлень, які обробляються програмою."
 
@@ -2217,6 +2157,61 @@ msgstr "До стандартного виходу помилок(stderr)"
 
 msgid "To archive"
 msgstr "До архіву"
+
+msgid "Environment"
+msgstr "Оточення"
+
+msgid "Program"
+msgstr "Програма"
+
+msgid "System"
+msgstr "Система"
+
+msgid "System time"
+msgstr "Системний час"
+
+msgid "System planning clock"
+msgstr "Системний годинник планування"
+
+msgid "System user"
+msgstr "Системний користувач"
+
+msgid "System locale charset."
+msgstr "Системне кодування локалі"
+
+msgid ""
+"Complete locale information with language, country and charset in the view "
+"\"en_GB.UTF-8\"."
+msgstr ""
+"Повна інформація щодо локалі із мовою, країною та кодуванням у вигляді "
+"\"uk_UA.UTF-8\"."
+
+msgid "Host name"
+msgstr "Ім'я хосту"
+
+msgid "CPU"
+msgstr "CPU"
+
+msgid ""
+"Main CPUs set.\n"
+"To set up the processors you use, write a row of numbers separated by the "
+"character ':'.\n"
+"Processor numbers start at 0."
+msgstr ""
+"Основний набір процесорів.\n"
+"Для встановлення використовуваних процесорів записуйте рядок номерів, "
+"поділених символом ':'.\n"
+"Номера процесорів починаються з 0."
+
+msgid "Number of phases of the task invoking"
+msgstr "Кількість фаз виклику задач"
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number,\n"
+" <= 0 to set optimal, 1 to disable the tasks phasing."
+msgstr ""
+"Для встановлення фазування виклику завдань у визначену кількість фаз,\n"
+" <= 0 для встановлення оптимально, 1 для вимкнення фазування задач."
 
 msgid "Subsystems"
 msgstr "Підсистеми"
@@ -2377,16 +2372,16 @@ msgid "See to the messages"
 msgstr "Перегляд повідомлень"
 
 #, c-format
-msgid "%dx%0.3gGHz"
-msgstr "%dx%0.3gГГц"
-
-#, c-format
 msgid "Real-time %s"
 msgstr "Реального часу %s"
 
 #, c-format
 msgid "Monotonic %s"
 msgstr "Монотонний %s"
+
+#, c-format
+msgid "%dx%0.3gGHz"
+msgstr "%dx%0.3gГГц"
 
 #, c-format
 msgid "Spent time %s[%s]."
@@ -2544,8 +2539,7 @@ msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
 
 msgid "Initial connection identifier to what bind for control."
-msgstr ""
-"Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
+msgstr "Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
 
 msgid "New external host"
 msgstr "Новий зовнішній хост"
@@ -2607,9 +2601,11 @@ msgstr "Помилка видалення вузла: %s"
 msgid "The initiative connection '%s' is not presented!"
 msgstr "Ініціативне підключення '%s' відсутнє!"
 
+#, c-format
 msgid "Error connection the new associated node: %s"
 msgstr "Помилка підключення нового асоційованого вузла: %s"
 
+#, c-format
 msgid "Error removing the associated node/connection: %s"
 msgstr "Помилка видалення асоційованого вузла/підключення: %s"
 
@@ -2950,3 +2946,4 @@ msgstr "Встановлено назву проєкту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:15+0300\n"
+"POT-Creation-Date: 2022-07-27 17:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,10 @@ msgid "Processing time %s[%s]. "
 msgstr ""
 
 #, c-format
+msgid "Size input buffer %s, MSS %s. "
+msgstr ""
+
+#, c-format
 msgid "Error the socket type '%s'!"
 msgstr ""
 
@@ -115,11 +119,11 @@ msgstr ""
 msgid "Write: wrote %s."
 msgstr ""
 
-msgid "Write: the answer is zero byte."
+#, c-format
+msgid "Error writing '%s (%d)'"
 msgstr ""
 
-#, c-format
-msgid "Write: error '%s (%d)'!"
+msgid "No data wrote"
 msgstr ""
 
 #, c-format
@@ -181,11 +185,7 @@ msgid "Wrote message %s to '%s'."
 msgstr ""
 
 #, c-format
-msgid "Write: error '%s (%d)'."
-msgstr ""
-
-#, c-format
-msgid "Error transmitting: %s"
+msgid "Error writing: %s"
 msgstr ""
 
 #, c-format
@@ -255,13 +255,13 @@ msgstr ""
 msgid "Priority"
 msgstr ""
 
-msgid "Maximum segment size (MSS)"
+msgid "Input buffer size, kB"
 msgstr ""
 
-msgid "Set 0 for the system MSS."
+msgid "Set 0 for the system value."
 msgstr ""
 
-msgid "Input buffer, KB"
+msgid "Maximum segment size (MSS), B"
 msgstr ""
 
 msgid "Queue length"
@@ -354,17 +354,6 @@ msgstr ""
 
 #, c-format
 msgid "Error requesting: %s"
-msgstr ""
-
-#, c-format
-msgid "Error writing '%s (%d)'"
-msgstr ""
-
-msgid "No data wrote"
-msgstr ""
-
-#, c-format
-msgid "Error writing: %s"
 msgstr ""
 
 msgid "> Transmitted to\n"

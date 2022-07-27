@@ -91,6 +91,7 @@ table.wikitable h3, table.wikitable h4 { margin: 0; }
 .mw-highlight .k { color: #008000; font-weight: bold; }
 .mw-highlight .kc { color: #008000; font-weight: bold; }
 .mw-highlight .kd { color: #008000; font-weight: bold; }
+.mw-highlight .kt { color: #B00040; }
 .mw-highlight .p { }
 .mw-highlight .s { color: #BA2121; }
 .mw-highlight .s1 { color: #BA2121; }
@@ -98,6 +99,7 @@ table.wikitable h3, table.wikitable h4 { margin: 0; }
 .mw-highlight .sb { color: #BA2121; }
 .mw-highlight .si { color: #BB6688; font-weight: bold; }
 .mw-highlight .sr { color: #BB6688; }
+.mw-highlight .n { }
 .mw-highlight .na { color: #7D9029; }
 .mw-highlight .nb { color: #008000; }
 .mw-highlight .nt { color: #008000; font-weight: bold; }

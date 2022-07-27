@@ -64,7 +64,7 @@
 #define mess_crit(cat,fmt,args...)	Mess->put(cat,TMess::Crit,fmt,##args)
 #define mess_alert(cat,fmt,args...)	Mess->put(cat,TMess::Alert,fmt,##args)
 #define mess_emerg(cat,fmt,args...)	Mess->put(cat,TMess::Emerg,fmt,##args)
-//Unlimited to mess_lev() messages
+//Unlimited to mess_lev() messages and for not periodic notifications mostly
 #define message_(cat,lev,fmt,args...)	Mess->put_(cat,lev,fmt,##args)
 #define mess_debug_(cat,fmt,args...)	Mess->put_(cat,TMess::Debug,fmt,##args)
 #define mess_info_(cat,fmt,args...)	Mess->put_(cat,TMess::Info,fmt,##args)

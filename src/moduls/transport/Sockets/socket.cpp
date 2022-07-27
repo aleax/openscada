@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.4.0"
+#define MOD_VER		"4.5.0"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -176,7 +176,7 @@ string TTransSock::outAttemptsHelp( )
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
     TTransportIn(name,idb,el), sockRes(true), wrToRes(true), type(S_TCP),
-    mMode(M_ForceDiscon), mMSS(0), mMaxQueue(10), mMaxFork(20), mMaxForkPerHost(0), mBufLen(5),
+    mMode(M_ForceDiscon), mInBufLen(0), mMSS(0), mMaxQueue(10), mMaxFork(20), mMaxForkPerHost(0),
     mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), clFree(true)
 {
     setAddr("localhost:10005");
@@ -205,6 +205,10 @@ string TSocketIn::getStatus( )
 				s_type.c_str(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 	if(mess_lev() == TMess::Debug)
 	    rez += TSYS::strMess(_("Processing time %s[%s]. "), tm2s(1e-6*prcTm).c_str(), tm2s(1e-6*prcTmMax).c_str());
+	int bufSz, MSSsz; unsigned int sz = sizeof(int);
+	getsockopt(sockFd, SOL_SOCKET, SO_RCVBUF, (void*)&bufSz, &sz);
+	getsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, (void*)&MSSsz, &sz);
+	rez += TSYS::strMess(_("Size input buffer %s, MSS %s. "), TSYS::cpct2str(bufSz).c_str(), TSYS::cpct2str(MSSsz).c_str());
     }
 
     return rez;
@@ -218,11 +222,11 @@ void TSocketIn::load_( )
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
+	vl = prmNd.attr("InBufLen");	if(!vl.empty()) setInBufLen(s2i(vl));
 	vl = prmNd.attr("MSS");		if(!vl.empty()) setMSS(s2i(vl));
 	vl = prmNd.attr("MaxQueue");	if(!vl.empty()) setMaxQueue(s2i(vl));
 	vl = prmNd.attr("MaxClients");	if(!vl.empty()) setMaxFork(s2i(vl));
 	vl = prmNd.attr("MaxClientsPerHost");	if(!vl.empty()) setMaxForkPerHost(s2i(vl));
-	vl = prmNd.attr("BufLen");	if(!vl.empty()) setBufLen(s2i(vl));
 	vl = prmNd.attr("KeepAliveReqs");	if(!vl.empty()) setKeepAliveReqs(s2i(vl));
 	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
 	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
@@ -232,11 +236,11 @@ void TSocketIn::load_( )
 void TSocketIn::save_( )
 {
     XMLNode prmNd("prms");
+    prmNd.setAttr("InBufLen", i2s(inBufLen()));
     prmNd.setAttr("MSS", i2s(MSS()));
     prmNd.setAttr("MaxQueue", i2s(maxQueue()));
     prmNd.setAttr("MaxClients", i2s(maxFork()));
     prmNd.setAttr("MaxClientsPerHost", i2s(maxForkPerHost()));
-    prmNd.setAttr("BufLen", i2s(bufLen()));
     prmNd.setAttr("KeepAliveReqs", i2s(keepAliveReqs()));
     prmNd.setAttr("KeepAliveTm", i2s(keepAliveTm()));
     prmNd.setAttr("TaskPrior", i2s(taskPrior()));
@@ -304,6 +308,7 @@ void TSocketIn::start( )
 			throw TError(nodePath().c_str(), _("Error creating the %s socket: '%s (%d)'!"), s_type.c_str(), strerror(errno), errno);
 		    int vl = 1; setsockopt(sockFd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 		    if(MSS()) { vl = MSS(); setsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, &vl, sizeof(int)); }
+		    if(inBufLen()) { vl = inBufLen()*1024; setsockopt(sockFd, SOL_SOCKET, SO_RCVBUF, &vl, sizeof(int)); }
 		}
 		else {
 		    if((sockFd=socket((((sockaddr*)&addrs[iA])->sa_family==AF_INET6)?PF_INET6:PF_INET,SOCK_DGRAM,0)) == -1)
@@ -499,18 +504,17 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Write: wrote %s."), TSYS::cpct2str(data.size()).c_str());
 	    ssize_t wL = 1;
 	    unsigned wOff = 0;
-	    for( ; wOff != data.size() && wL > 0; wOff += wL) {
-		wL = write(sId, data.data()+wOff, data.size()-wOff);
-		if(wL == 0) { mess_err(nodePath().c_str(), _("Write: the answer is zero byte.")); break; }
-		else if(wL < 0) {
-		    if(errno == EAGAIN) {
-			tv.tv_sec = 1; tv.tv_usec = 0;		//?!?! Where get the time?
+	    for( ; wOff != data.size(); wOff += wL) {
+		if((wL=write(sId,data.data()+wOff,data.size()-wOff)) <= 0) {
+		    if(wL == 0 || (wL < 0 && errno == EAGAIN)) {
+			tv.tv_sec = 1; tv.tv_usec = 0;		//?!?! Where to get the time?
 			FD_ZERO(&rw_fd); FD_SET(sId, &rw_fd);
 			int kz = select(sId+1, NULL, &rw_fd, NULL, &tv);
 			if(kz > 0 && FD_ISSET(sId,&rw_fd)) { wL = 0; continue; }
 			//?!?! Maybe some flush
 		    }
-		    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+		    mess_err(nodePath().c_str(), (wL < 0) ? TSYS::strMess(_("Error writing '%s (%d)'"),strerror(errno),errno).c_str() :
+							    _("No data wrote"));
 		    break;
 		}
 
@@ -585,7 +589,7 @@ void *TSocketIn::Task( void *sock_in )
     sock->endrunCl	= false;
     sock->endrun	= false;
 
-    if(sock->type == S_UDP) buf = new char[sock->bufLen()*1024 + 1];
+    if(sock->type == S_UDP) buf = new char[STR_BUF_LEN];
 
     while(!sock->endrun) {
 	tv.tv_sec  = 0; tv.tv_usec = prmWait_DL*1000000;
@@ -664,7 +668,7 @@ void *TSocketIn::Task( void *sock_in )
 	else if(sock->type == S_UDP) {
 	    string req, answ;
 
-	    ssize_t r_len = recvfrom(sock->sockFd, buf, sock->bufLen()*1000, 0, sadr, &sadrLen);
+	    ssize_t r_len = recvfrom(sock->sockFd, buf, sizeof(buf), 0, sadr, &sadrLen);
 	    if(r_len <= 0) continue;
 	    sock->trIn += r_len;
 	    req.assign(buf, r_len);
@@ -760,7 +764,7 @@ void *TSocketIn::ClTask( void *s_inf )
     struct timeval tv;
     fd_set rw_fd;
     string req, answ;
-    char   buf[s.s->bufLen()*1000 + 1];
+    char   buf[STR_BUF_LEN];
     vector< AutoHD<TProtocolIn> > prot_in;
     bool   sessOk = false;
     int    actPrts = 0;
@@ -792,7 +796,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    }
 
 	    ssize_t r_len = 0;
-	    if(kz && (r_len=read(s.sock,buf,s.s->bufLen()*1000)) <= 0) {
+	    if(kz && (r_len=read(s.sock,buf,sizeof(buf))) <= 0) {
 		if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("%d:Terminated by the reading %d error \"%s (%d)\"\n"),s.sock,r_len,strerror(errno),errno));
 		break;
 	    }
@@ -820,19 +824,17 @@ void *TSocketIn::ClTask( void *s_inf )
 		if(mess_lev() == TMess::Debug)
 		    mess_debug(s.s->nodePath().c_str(), _("Wrote message %s to '%s'."), TSYS::cpct2str(answ.size()).c_str(), s.sender.c_str());
 		ssize_t wL = 1;
-		for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL) {
-		    wL = write(s.sock, answ.data()+wOff, answ.size()-wOff);
-		    if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: the answer is zero byte.")); break; }
-		    else if(wL < 0) {
-			if(errno == EAGAIN) {
-			    tv.tv_sec = 1; tv.tv_usec = 0;		//?!?! Where get the time?
+		for(unsigned wOff = 0; wOff != answ.size(); wOff += wL) {
+		    if((wL=write(s.sock,answ.data()+wOff,answ.size()-wOff)) <= 0) {
+			if(wL == 0 || (wL < 0 && errno == EAGAIN)) {
+			    tv.tv_sec = 1; tv.tv_usec = 0;		//?!?! Where to get the time?
 			    FD_ZERO(&rw_fd); FD_SET(s.sock, &rw_fd);
 			    kz = select(s.sock+1, NULL, &rw_fd, NULL, &tv);
 			    if(kz > 0 && FD_ISSET(s.sock,&rw_fd)) { wL = 0; continue; }
 			    //?!?! Maybe some flush
 			}
-			string err = TSYS::strMess(_("Write: error '%s (%d)'."), strerror(errno), errno);
-			if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("Error transmitting: %s"),err.c_str()));
+			string err = (wL < 0) ? TSYS::strMess(_("Error writing '%s (%d)'"),strerror(errno),errno) : _("No data wrote");
+			if(s.s->logLen()) s.s->pushLogMess(TSYS::strMess(_("Error writing: %s"), err.c_str()));
 			mess_err(s.s->nodePath().c_str(), "%s", err.c_str());
 			s.s->dataRes().lock();
 			s.s->clntDetchCnt++;
@@ -1007,10 +1009,12 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 		     "of creation associated output transports for each connection to this transport."));
 	ctrMkNode("fld", opt, -1, "/prm/cfg/taskPrior", _("Priority"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
 	    "tp","dec", "help",TMess::labTaskPrior().c_str());
-	if(type == S_TCP)
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/MSS", _("Maximum segment size (MSS)"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
-		"tp","str", "help",_("Set 0 for the system MSS."));
-	ctrMkNode("fld", opt, -1, "/prm/cfg/bfLn", _("Input buffer, KB"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "tp","dec");
+	if(type == S_TCP) {
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/inBfLn", _("Input buffer size, kB"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+		"tp","dec", "help",_("Set 0 for the system value."));
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/MSS", _("Maximum segment size (MSS), B"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+		"tp","dec", "help",_("Set 0 for the system value."));
+	}
 	if(type == S_TCP || type == S_UNIX || type == S_RAWCAN) {
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/qLn", _("Queue length"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "tp","dec");
 	    if(mode() != M_Initiative) {
@@ -1041,6 +1045,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(mess);
 	}
     }
+    else if(a_path == "/prm/cfg/inBfLn") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(inBufLen()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setInBufLen(s2i(opt->text()));
+    }
     else if(a_path == "/prm/cfg/MSS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(MSS()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMSS(s2i(opt->text()));
@@ -1056,10 +1064,6 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/clMaxPerHost") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxForkPerHost()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxForkPerHost(s2i(opt->text()));
-    }
-    else if(a_path == "/prm/cfg/bfLn") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(bufLen()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setBufLen(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/keepAliveReqs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveReqs()));
@@ -1105,6 +1109,10 @@ string TSocketOut::getStatus( )
 	rez += TSYS::strMess(_("%s traffic in %s, out %s. "), s_type.c_str(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str());
 	if(mess_lev() == TMess::Debug && respTmMax)
 	    rez += TSYS::strMess(_("Response time %s[%s]. "), tm2s(1e-6*respTm).c_str(), tm2s(1e-6*respTmMax).c_str());
+	int bufSz, MSSsz; unsigned int sz = sizeof(int);
+	getsockopt(sockFd, SOL_SOCKET, SO_RCVBUF, (void*)&bufSz, &sz);
+	getsockopt(sockFd, IPPROTO_TCP, TCP_MAXSEG, (void*)&MSSsz, &sz);
+	rez += TSYS::strMess(_("Size input buffer %s, MSS %s. "), TSYS::cpct2str(bufSz).c_str(), TSYS::cpct2str(MSSsz).c_str());
     }
 
     return rez;
@@ -1554,8 +1562,8 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1, "help",owner().outAddrHelp().c_str());
 	if(type == S_TCP)
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/MSS",_("Maximum segment size (MSS)"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
-		"tp","str","help",_("Set 0 for the system MSS."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/MSS",_("Maximum segment size (MSS), B"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,
+		"tp","dec","help",_("Set 0 for the system value."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2, "tp","str", "help",((TTransSock&)owner()).outTimingsHelp().c_str());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/attempts",_("Attempts"),RWRWR_,"root",STR_ID,2, "tp","dec", "help",((TTransSock&)owner()).outAttemptsHelp().c_str());
 	return;

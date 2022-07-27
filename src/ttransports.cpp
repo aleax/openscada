@@ -923,7 +923,7 @@ string TTransportIn::associateTrO( const string &addr )
     MtxAlloc resN(associateTrRes, true);
 
     //Creating for new associated output transport
-    string associateTrID = "inAss"+id()+"_0";
+    string associateTrID = "inA_"+id()+"_0";
     string initConID;
     while(owner().outPresent(associateTrID)) associateTrID = TSYS::strLabEnum(associateTrID);
     owner().outAdd(associateTrID);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-16 09:13+0300\n"
+"POT-Creation-Date: 2022-07-27 16:42+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1738,47 +1738,6 @@ msgstr ""
 msgid "Station"
 msgstr ""
 
-msgid "Station name"
-msgstr ""
-
-msgid "Program"
-msgstr ""
-
-msgid "Version"
-msgstr ""
-
-msgid "Host name"
-msgstr ""
-
-msgid "System user"
-msgstr ""
-
-msgid "Operation system"
-msgstr ""
-
-msgid "CPU"
-msgstr ""
-
-msgid "Main CPUs set"
-msgstr ""
-
-msgid ""
-"To set up the processors you use, write a row of numbers separated by a ':' character.\n"
-"Processor numbers start at 0."
-msgstr ""
-
-msgid "Tasks planning clock"
-msgstr ""
-
-msgid "Number of phases of the task invoking"
-msgstr ""
-
-msgid "To set up phasing of the task invoking in the determined phases number, <= 0 to set optimal, 1 to disable the tasks phasing."
-msgstr ""
-
-msgid "Internal charset"
-msgstr ""
-
 msgid "Configuration file"
 msgstr ""
 
@@ -1806,16 +1765,13 @@ msgstr ""
 msgid "Work DB address in the format \"{DB module}.{DB name}\"."
 msgstr ""
 
-msgid "Save the program at exit"
+msgid "Save the program at exit, with the period"
 msgstr ""
 
 msgid "Select for the program automatic saving to DB on exit."
 msgstr ""
 
-msgid "Period the program saving"
-msgstr ""
-
-msgid "Use not a zero period (seconds) to periodically save program changes to the DB."
+msgid "Use not a zero period in seconds to periodically save program changes to the storage."
 msgstr ""
 
 msgid "Set modification for the calculated objects"
@@ -1824,9 +1780,6 @@ msgstr ""
 msgid ""
 "Most suitable for the production systems together with the previous configuration properties, for the calculation context saving.\n"
 "But it is inconvinient in the development mode, all time reminding for the saving need."
-msgstr ""
-
-msgid "Least level"
 msgstr ""
 
 msgid "Least messages level which is procesed by the program."
@@ -1842,6 +1795,50 @@ msgid "To stderr"
 msgstr ""
 
 msgid "To archive"
+msgstr ""
+
+msgid "Environment"
+msgstr ""
+
+msgid "Program"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "System time"
+msgstr ""
+
+msgid "System planning clock"
+msgstr ""
+
+msgid "System user"
+msgstr ""
+
+msgid "System locale charset."
+msgstr ""
+
+msgid "Complete locale information with language, country and charset in the view \"en_GB.UTF-8\"."
+msgstr ""
+
+msgid "Host name"
+msgstr ""
+
+msgid "CPU"
+msgstr ""
+
+msgid ""
+"Main CPUs set.\n"
+"To set up the processors you use, write a row of numbers separated by the character ':'.\n"
+"Processor numbers start at 0."
+msgstr ""
+
+msgid "Number of phases of the task invoking"
+msgstr ""
+
+msgid ""
+"To set up phasing of the task invoking in the determined phases number,\n"
+" <= 0 to set optimal, 1 to disable the tasks phasing."
 msgstr ""
 
 msgid "Subsystems"
@@ -1966,15 +1963,15 @@ msgid "See to the messages"
 msgstr ""
 
 #, c-format
-msgid "%dx%0.3gGHz"
-msgstr ""
-
-#, c-format
 msgid "Real-time %s"
 msgstr ""
 
 #, c-format
 msgid "Monotonic %s"
+msgstr ""
+
+#, c-format
+msgid "%dx%0.3gGHz"
 msgstr ""
 
 #, c-format
