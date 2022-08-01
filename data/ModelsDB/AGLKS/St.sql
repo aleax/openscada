@@ -1122,7 +1122,7 @@ SYS.messDebug("TESTWWW","User-Agent: "+HTTPvars["User-Agent"]);
 SYS.messDebug("TESTWWW","Page: "+page);
 page = "TEST 00";','','','','');
 CREATE TABLE IF NOT EXISTS 'testCalc_prm' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"FLD" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
-INSERT INTO testCalc_prm VALUES('test','','',1,'out:o:Выход','','','','');
+INSERT INTO testCalc_prm VALUES('test','','',1,'out:o:Output','','','','');
 CREATE TABLE IF NOT EXISTS 'testCalc_val' ("ID" TEXT DEFAULT '' ,"VAL" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO testCalc_val VALUES('out','50');
 INSERT INTO testCalc_val VALUES('test','1');

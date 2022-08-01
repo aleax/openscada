@@ -1,3 +1,8 @@
+2022-08-01 Roman (stable)
+- FIX:AGLKS.St: testCalc_prm.test: Fixed for the messages translation of some attributes.
+- !!!!:FIX:DAQ.ParamTmpl: Fixed for the IO name edition in the non basic mode of the dynamic translation.
+
+
 2022-07-27 Roman (stable)
 - doc/en/files/doc.css: Appended for some additional CSS-rules of the used syntax highlighting rules.
 - FIX:SYS,DAQ.System: Fixed for the result correct processing of pclose() with instead that wrong using fclose() in DAQ.System.
