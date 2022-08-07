@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:27+0300\n"
+"POT-Creation-Date: 2022-08-07 08:18+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1020,9 +1020,6 @@ msgstr "Бібліотека віджетів"
 msgid "State"
 msgstr "Стан"
 
-msgid "Item icon. Click to download another."
-msgstr "Іконка елементу. Натисніть для завантаження іншої."
-
 msgid "Status:"
 msgstr "Статус:"
 
@@ -1119,14 +1116,34 @@ msgstr "Повідомлення"
 msgid "Error getting the node '%1' information."
 msgstr "Помилка запиту інформації вузла '%1'."
 
-msgid "Downloading the image icon"
-msgstr "Завантажити зображення іконки"
+msgid "Save image"
+msgstr "Зберегти зображення"
+
+msgid "Load image"
+msgstr "Завантажити зображення"
+
+msgid "Clear image"
+msgstr "Очистити зображення"
+
+msgid "Saving the picture"
+msgstr "Збереження картинки"
+
+msgid "Images (*.png *.xpm *.jpg)"
+msgstr "Зображення (*.png *.xpm *.jpg)"
+
+#, c-format
+msgid "Error saving to the file '%s'."
+msgstr "Помилка збереження у файл '%s'."
+
+msgid "Loading the picture"
+msgstr "Завантаження картинки"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-msgid "Error downloading the icon image '%1'."
-msgstr "Помилка завантаження зображення іконки '%1'."
+#, c-format
+msgid "Error loading the picture '%s'."
+msgstr "Помилка завантаження картинки '%s'."
 
 msgid "Saving the changes"
 msgstr "Збереження змін"
@@ -1381,9 +1398,6 @@ msgstr "Натисніть для встановлення візуальног�
 
 msgid "Saving the widget image"
 msgstr "Збереження зображення віджету"
-
-msgid "Images (*.png *.xpm *.jpg)"
-msgstr "Зображення (*.png *.xpm *.jpg)"
 
 msgid "Error saving to the file '%1'."
 msgstr "Помилка збереження у файл '%1'."

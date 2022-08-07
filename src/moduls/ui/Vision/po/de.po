@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:27+0300\n"
+"POT-Creation-Date: 2022-08-07 08:18+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1036,9 +1036,6 @@ msgstr "Widgetsbibliothek"
 msgid "State"
 msgstr "Zustand"
 
-msgid "Item icon. Click to download another."
-msgstr "Artikel-Symbol. Klicken Sie, um eine andere herunterzuladen."
-
 msgid "Status:"
 msgstr "Status:"
 
@@ -1135,14 +1132,34 @@ msgstr "Nachricht"
 msgid "Error getting the node '%1' information."
 msgstr "Fehler beim Abrufen des Knoten '%1' Informationen."
 
-msgid "Downloading the image icon"
-msgstr "Herunterladen des Iconbildes"
+msgid "Save image"
+msgstr "Speichern Bild"
+
+msgid "Load image"
+msgstr "Laden Bild"
+
+msgid "Clear image"
+msgstr "Klares Bild"
+
+msgid "Saving the picture"
+msgstr "Speichern des Bildes"
+
+msgid "Images (*.png *.xpm *.jpg)"
+msgstr "Bilder (*.png *.xpm *.jpg)"
+
+#, c-format
+msgid "Error saving to the file '%s'."
+msgstr "Fehler beim Speichern in die Datei '%s'."
+
+msgid "Loading the picture"
+msgstr "Laden des Bildes"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Bilder (*.png *.jpg)"
 
-msgid "Error downloading the icon image '%1'."
-msgstr "Fehler beim Laden des Iconbildes '%1'."
+#, c-format
+msgid "Error loading the picture '%s'."
+msgstr "Fehler beim Laden des Bildes '%s'."
 
 msgid "Saving the changes"
 msgstr "Speichern der Änderungen"
@@ -1401,9 +1418,6 @@ msgstr "Betätigen um die visuelle Skalierung des Widgets auf 100% zurückzusetz
 
 msgid "Saving the widget image"
 msgstr "Speichern des Widgetbildes"
-
-msgid "Images (*.png *.xpm *.jpg)"
-msgstr "Bilder (*.png *.xpm *.jpg)"
 
 msgid "Error saving to the file '%1'."
 msgstr "Fehler beim Speichern in der Datei '%1'."

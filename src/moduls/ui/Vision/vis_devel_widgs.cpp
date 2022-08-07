@@ -1077,7 +1077,7 @@ void InspLnk::setWdg( const string &iwdg )
     //Get links info
     XMLNode info_req("info");
     info_req.setAttr("path",it_wdg+"/%2flinks%2flnk")->setAttr("showAttr","1")->setAttr("inclValue","1");
-    if(mainWin()->cntrIfCmd(info_req)) return;
+    if(it_wdg.empty() || mainWin()->cntrIfCmd(info_req) || !info_req.childSize()) return;
     XMLNode *rootel = info_req.childGet(0);
     //Create widget's root items
     for(unsigned iL = 0; iL < rootel->childSize(); iL++) {
@@ -1528,7 +1528,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	img = QImage();
 	simg = TSYS::strDecode(wlbN->childGet("ico")->text(), TSYS::base64);
 	img.loadFromData((const uchar*)simg.data(),simg.size());
-	if(!img.isNull()) nit->setIcon(0, QPixmap::fromImage(img));
+	nit->setIcon(0, QPixmap::fromImage(img));
 	nit->setText(0, wlbN->text().c_str());
 	nit->setText(1, _("Library"));
 	nit->setText(2, wlbId.c_str());
@@ -1558,7 +1558,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		owner()->menuWidget->addMenu(owner()->lb_menu[iM]);
 	    }
 	    //  Update menu icon
-	    if(!img.isNull()) owner()->lb_menu[iM]->setIcon(QPixmap::fromImage(img));
+	    owner()->lb_menu[iM]->setIcon(QPixmap::fromImage(img));
 	}
 
 	//  Remove no present widgets
@@ -1607,7 +1607,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	    if(wdgN->childGet("ico")->text().size()) {
 		simg = TSYS::strDecode(wdgN->childGet("ico")->text(), TSYS::base64);
 		img.loadFromData((const uchar*)simg.data(),simg.size());
-		if(!img.isNull()) nit_w->setIcon(0, QPixmap::fromImage(img));
+		nit_w->setIcon(0, QPixmap::fromImage(img));
 	    }
 	    nit_w->setText(0, wdgN->text().c_str());
 	    nit_w->setText(1, _("Widget"));
@@ -1645,7 +1645,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		    owner()->lb_menu[iM]->addAction(cur_act);
 		}
 		//   Update action
-		if(!img.isNull()) cur_act->setIcon(QPixmap::fromImage(img));
+		cur_act->setIcon(QPixmap::fromImage(img));
 	    }
 
 	    //  Remove no present widgets
@@ -1680,7 +1680,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		if(cwdgN->childGet("ico")->text().size()) {
 		    simg = TSYS::strDecode(cwdgN->childGet("ico")->text(), TSYS::base64);
 		    img.loadFromData((const uchar*)simg.data(),simg.size());
-		    if(!img.isNull()) nit_cw->setIcon(0, QPixmap::fromImage(img));
+		    nit_cw->setIcon(0, QPixmap::fromImage(img));
 		}
 		nit_cw->setText(0, cwdgN->text().c_str());
 		nit_cw->setText(1, _("Container widget"));
@@ -1818,7 +1818,6 @@ void ProjTree::updateTree( QTreeWidgetItem *it )
     vector<string> list_pr, list_pg;
     QTreeWidgetItem *nit, *nit_pg;
     string t_el, simg;
-    QImage img;
 
     XMLNode req("get");
 
@@ -1854,12 +1853,13 @@ void ProjTree::updateTree( QTreeWidgetItem *it )
 	    nit = (iTop >= treeW->topLevelItemCount()) ? new QTreeWidgetItem(treeW) : treeW->topLevelItem(iTop);
 
 	    // Updating the projects data
+	    QImage img;
 	    req.clear()->setAttr("path", "/prj_"+list_pr[iL]+"/%2fico");
 	    if(!owner()->cntrIfCmd(req)) {
 		simg = TSYS::strDecode(req.text(), TSYS::base64);
-		if(img.loadFromData((const uchar*)simg.data(),simg.size()))
-		    nit->setIcon(0, QPixmap::fromImage(img));
+		img.loadFromData((const uchar*)simg.data(),simg.size());
 	    }
+	    nit->setIcon(0, QPixmap::fromImage(img));
 	    nit->setText(0, prj_req.childGet(iL)->text().c_str());
 	    nit->setText(1, _("Project"));
 	    nit->setText(2, list_pr[iL].c_str());
@@ -1915,12 +1915,13 @@ void ProjTree::updateTree( QTreeWidgetItem *it )
 	nit_pg = (iPit >= it->childCount()) ? new QTreeWidgetItem(it) : it->child(iPit);
 
 	//   Updating the page data
+	QImage img;
 	req.clear()->setAttr("path",work_wdg+"/pg_"+list_pg[iP]+"/%2fico");
 	if(!owner()->cntrIfCmd(req)) {
 	    simg = TSYS::strDecode(req.text(), TSYS::base64);
-	    if(img.loadFromData((const uchar*)simg.data(),simg.size()))
-		nit_pg->setIcon(0, QPixmap::fromImage(img));
+	    img.loadFromData((const uchar*)simg.data(),simg.size());
 	}
+	nit_pg->setIcon(0, QPixmap::fromImage(img));
 	nit_pg->setText(0, pg_req.childGet(iP)->text().c_str());
 	nit_pg->setText(1, _("Page"));
 	nit_pg->setText(2, list_pg[iP].c_str());
@@ -2971,7 +2972,7 @@ void DevelWdgView::chLoadCtx( XMLNode &chCtx, const string &forceAttrs, const st
     XMLNode reqCtf("info"), reqVls("CntrReqs");
     reqCtf.setAttr("path",id()+"/%2fattr");
     reqVls.setAttr("path",id());
-    if(!mainWin()->cntrIfCmd(reqCtf)) {
+    if(!mainWin()->cntrIfCmd(reqCtf) && reqCtf.childSize()) {
 	XMLNode *root = reqCtf.childGet(0), *chEl;
 
 	bool fromOK = fromAttr.empty();

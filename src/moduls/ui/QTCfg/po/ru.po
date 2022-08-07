@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:19+0300\n"
+"POT-Creation-Date: 2022-08-07 08:01+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -657,11 +657,16 @@ msgstr "Поиск строки"
 msgid "Case sensitively"
 msgstr "Чувствительный к регистру"
 
-msgid "Saving an image"
+#, fuzzy
+msgid "Save image"
 msgstr "Сохранение изображения"
 
-msgid "Loading an image"
+#, fuzzy
+msgid "Load image"
 msgstr "Загрузка изображения"
+
+msgid "Clear image"
+msgstr ""
 
 msgid "Saving the picture"
 msgstr "Сохранение картинки"
@@ -694,6 +699,10 @@ msgstr "Ошибка файла изображения '%s'\n"
 #, c-format
 msgid "%s| '%s' uploaded by the picture '%s'."
 msgstr "%s| '%s' загружена картинка в '%s'."
+
+#, fuzzy, c-format
+msgid "%s| '%s' cleared."
+msgstr "%s| '%s' добавлена запись."
 
 #, c-format
 msgid "The value '%s' is wrong!"

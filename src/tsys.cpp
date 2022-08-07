@@ -74,8 +74,8 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     isLoaded(false), mRunning(false), isServPrc(false), mFinalKill(false),
     mUser("root"), mConfFile(sysconfdir_full "/oscada.xml"), mId("InitSt"),
     mModDir(oscd_moddir_full), mIcoDir("icons;" oscd_datadir_full "/icons"), mDocDir("docs;" oscd_datadir_full "/docs"),
-    mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()), mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0),
-    mModifCalc(false), rootModifCnt(0), sysModifFlgs(0), mStopSignal(0), mN_CPU(1),
+    mName(dataRes()), mNameB(dataRes()), mWorkDB(dataRes()), mSelDB(dataRes()), mMainCPUs(dataRes()),
+    mTaskInvPhs(10), mSaveAtExit(false), mSavePeriod(0), mModifCalc(false), rootModifCnt(0), sysModifFlgs(MDF_NONE), mStopSignal(0), mN_CPU(1),
     mainPthr(0), mSysTm(0), mClockRT(false), mPrjCustMode(true), mPrjNm(dataRes()), mCfgCtx(NULL), mCfgCtxLast(NULL),
     mRdStLevel(0), mRdRestConnTm(10), mRdTaskPer(1), mRdPrimCmdTr(false)
 {
@@ -186,6 +186,26 @@ TSYS::~TSYS( )
 	delete iCL->second;
 }
 
+string TSYS::ico( string *tp )
+{
+    string itp, rez;
+
+    //At the localised name
+    rez = TSYS::strEncode(TUIS::icoGet(trD(name()),&itp), TSYS::base64);
+    //... or the base name
+    if(!itp.size()) {
+	if(mNameB.empty()) mNameB = TBDS::genPrmGet(nodePath()+"StName", "", "root");
+	rez = TSYS::strEncode(TUIS::icoGet(mNameB,&itp), TSYS::base64);
+    }
+    //... or ID
+    if(!itp.size())
+	rez = TSYS::strEncode(TUIS::icoGet(id(),&itp), TSYS::base64);
+
+    if(tp) *tp = itp;
+
+    return rez;
+}
+
 string TSYS::host( )
 {
     utsname ubuf; uname(&ubuf);
@@ -208,23 +228,10 @@ void TSYS::setWorkDir( const string &wdir, bool init )
     else { sysModifFlgs |= MDF_WorkDir; modif(); }
 }
 
-void TSYS::setIcoDir( const string &idir, bool init )
-{
-    mIcoDir = idir;
-    if(init) sysModifFlgs &= ~MDF_IcoDir;
-    else { sysModifFlgs |= MDF_IcoDir; modif(); }
-}
-
-void TSYS::setDocDir( const string &idir, bool init )
-{
-    mDocDir = idir;
-    if(init) sysModifFlgs &= ~MDF_DocDir;
-    else { sysModifFlgs |= MDF_DocDir; modif(); }
-}
-
 void TSYS::setModDir( const string &mdir, bool init )
 {
     mModDir = mdir;
+
     if(init) sysModifFlgs &= ~MDF_ModDir;
     else { sysModifFlgs |= MDF_ModDir; modif(); }
 }
@@ -728,12 +735,12 @@ void TSYS::cfgPrmLoad( )
 
     //System parameters
     setClockRT(s2i(TBDS::genPrmGet(nodePath()+"ClockRT",i2s(clockRT()))));
-    mName = TBDS::genPrmGet(nodePath()+"StName", name(), "root", TBDS::UseTranslation);
+    setName(TBDS::genPrmGet(nodePath()+"StName", name(),"root",TBDS::UseTranslation));
     mWorkDB = TBDS::genPrmGet(nodePath()+"WorkDB",workDB());
     setWorkDir(TBDS::genPrmGet(nodePath()+"Workdir","").c_str(), true);
     setModDir(TBDS::genPrmGet(nodePath()+"ModDir",modDir()), true);
-    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir()), true);
-    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir()), true);
+    setIcoDir(TBDS::genPrmGet(nodePath()+"IcoDir",icoDir()));
+    setDocDir(TBDS::genPrmGet(nodePath()+"DocDir",docDir()));
     setMainCPUs(TBDS::genPrmGet(nodePath()+"MainCPUs",mainCPUs()));
     setTaskInvPhs(s2i(TBDS::genPrmGet(nodePath()+"TaskInvPhs",i2s(taskInvPhs()))));
     setSaveAtExit(s2i(TBDS::genPrmGet(nodePath()+"SaveAtExit",i2s(saveAtExit()))));
@@ -750,6 +757,8 @@ void TSYS::cfgPrmLoad( )
     for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
 	if(mSt.find(stId) == mSt.end()) mSt[stId] = SStat();
     mRdRes.unlock();
+
+    sysModifFlgs = MDF_NONE;
 }
 
 void TSYS::load_( )
@@ -854,7 +863,7 @@ void TSYS::save_( )
     mess_sys(TMess::Info, _("Saving."));
 
     //System parameters
-    TBDS::genPrmSet(nodePath()+"StName", mName, "root", TBDS::UseTranslation);
+    if(sysModifFlgs&MDF_Name)	{ TBDS::genPrmSet(nodePath()+"StName", name(), "root", TBDS::UseTranslation); mNameB = ""; }
     TBDS::genPrmSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_WorkDir)TBDS::genPrmSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_ModDir)	TBDS::genPrmSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
@@ -868,16 +877,20 @@ void TSYS::save_( )
     TBDS::genPrmSet(nodePath()+"ModifCalc", i2s(modifCalc()));
 
     //Redundancy parameters
-    TBDS::genPrmSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
-    TBDS::genPrmSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
-    TBDS::genPrmSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
-    TBDS::genPrmSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
-    mRdRes.lock(false);
-    string stLs;
-    for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
-	stLs += sit->first+";";
-    mRdRes.unlock();
-    TBDS::genPrmSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_RD) {
+	TBDS::genPrmSet(nodePath()+"RdStLevel", i2s(rdStLevel()), "root", TBDS::OnlyCfg);
+	TBDS::genPrmSet(nodePath()+"RdTaskPer", r2s(rdTaskPer()), "root", TBDS::OnlyCfg);
+	TBDS::genPrmSet(nodePath()+"RdRestConnTm", i2s(rdRestConnTm()), "root", TBDS::OnlyCfg);
+	TBDS::genPrmSet(nodePath()+"RdPrimCmdTr", i2s(rdPrimCmdTr()), "root", TBDS::OnlyCfg);
+	mRdRes.lock(false);
+	string stLs;
+	for(map<string,TSYS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
+	    stLs += sit->first+";";
+	mRdRes.unlock();
+	TBDS::genPrmSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
+    }
+
+    sysModifFlgs = MDF_NONE;
 
     Mess->save();	//Messages load
 }
@@ -988,7 +1001,7 @@ void TSYS::unload( )
     mIcoDir = "icons;" oscd_datadir_full "/icons";
     mDocDir = "docs;" oscd_datadir_full "/docs";
     mWorkDB = DB_CFG;
-    mSaveAtExit = false, mSavePeriod = 0, isLoaded = false, rootModifCnt = 0, sysModifFlgs = 0, mPrjCustMode = true;
+    mSaveAtExit = false, mSavePeriod = 0, isLoaded = false, rootModifCnt = 0, sysModifFlgs = MDF_NONE, mPrjCustMode = true;
 
     modifG();
 }
@@ -3131,7 +3144,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    setAttr("doc","Program_manual|Documents/Program_manual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
-	if(TUIS::icoGet(name(),NULL,true).size() || TUIS::icoGet(id(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
+	if(ico().size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);	//!!!! Checking to deny the real data requesting
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),R_R_R_)) {
 	    ctrMkNode("fld",opt,-1,"/gen/id",_("Station"),R_R_R_,"root","root",2,"tp","str", "help",_("Identifier"));
 	    ctrMkNode("fld",opt,-1,"/gen/stat","",RWRWR_,"root","root",2,"tp","str", "help",_("Name"));
@@ -3274,13 +3287,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    if(a_path == "/ico" && ctrChkNode(opt)) {
-	string itp;
-	opt->setText(TSYS::strEncode(TUIS::icoGet(name(),&itp),TSYS::base64));
-	if(!itp.size())
-	    opt->setText(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
-	opt->setAttr("tp", itp);
-    }
+    if(a_path == "/ico" && ctrChkNode(opt)) { string itp; opt->setText(ico(&itp)); opt->setAttr("tp", itp); }
     //else if(a_path == "/gen/ver" && ctrChkNode(opt))	opt->setText(VERSION);
     else if(a_path == "/gen/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/gen/stat") {
@@ -3435,6 +3442,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		mSt[opt->text()] = SStat();
 		modif();
 	    }
+	    sysModifFlgs |= MDF_RD;
 	}
     }
     else if(a_path == "/redund/lsSt" && ctrChkNode(opt)) {

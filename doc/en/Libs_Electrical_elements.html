@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Electrical elements</h1>
@@ -21,6 +21,7 @@
 <th> Source </th>
 <th> Languages </th>
 <th> Author </th>
+<th> Icon </th>
 <th> Description
 </th></tr>
 
@@ -32,7 +33,8 @@
 <td> vcaElectroEls.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">GZip</a>) &gt; VCA.wlb_ElectroEls </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009)</i></font>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009)</i></font> </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:LibElectricalElements.png"><img alt="LibElectricalElements.png" height="64" src="files/LibElectricalElements.png" width="64" /></a>
 </td>
 <td> Provides the mnemonic elements library of the user interface of the electrical substations and the electricity generation station.
 <ul><li> <b>Founded:</b> June 2009</li>
@@ -48,10 +50,9 @@
 </p>
 <ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
 <li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql
-$ sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql
+sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
+</pre></div>
 <ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">the one attached here</a>.</li></ul>
 <p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
 </p>
@@ -611,5 +612,5 @@ These elements are counted as the deprecated ones, but their are remained in the
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Electrical_elements/en">Libs/Electrical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Electrical_elements/en">Libs/Electrical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

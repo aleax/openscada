@@ -1,3 +1,37 @@
+2022-08-07 Roman (stable)
+- !:LibsDB.vcaBase.wlb_{Main,mnEls,doc,prescr},LibsDB.vcaElectroEls.wlb_ElectroEls:
+	Appended for the library representative icon.
+    !:LibsDB.vcaBase.prj_tmplSO,ModelsDB.AGLKS.vca.prj_AGLKS,ModelsDB.Boiler.St:
+	Removed of the VCA project representative icon for use the common project one.
+- !:data/ModelsDB/AGLKS: During of renaming AGLKS to AGLCS and appending the translated icons there performed:
+    - appended for AGLCS.png and AGLKS.png,openscada_AGLKS.png moved to the English;
+    - appended for АГЛКС.png icon file localised to Ukrainian and mRussian;
+    - oscada_AGLKS.xml: appended for the field "StName" translation to Ukrainian and mRussian.
+- !:data/ModelsDB/Boiler: During of appending the translated icons there performed:
+    - Boiler.png,openscada_Boiler.png moved to the English;
+    - appended for Котел.png icon file localised to Ukrainian and mRussian;
+    - oscada_Boiler.xml: appended for the field "StName" translation to Ukrainian and mRussian.
+- data/icons: The icon collection appended of an icon of representing the simulator-model station class-ID - SimulatorStation.png.
+- SYS:Building:Makefile.am: Modified for including to the icons folded all data/ModelsDB/{AGLKS,Boiler} files.
+- !!:SYS: During unification the common project icon obtaining through using the project name and ID there performed
+    - the Base Language Name used also for obtaining the icon, so now checked: The Translated Name, the Base Language Name, ID;
+    - the icon obtaining mechanism moved in a new separated function TSYS::ico();
+    - the "StName" method mName moved under the mutex control.
+- !:SYS: The separated control of the control fields modifications was some unified for:
+    - appending for the generic clearing mechanism of the modification flags sysModifFlgs in the loading and saving functions;
+    - moving under the generic clearing mechanism for the configuration fields: "Lang", "IcoDir", "DocDir";
+    - appending under the modification flags sysModifFlgs control for the configuration fields: MDF_Name("StName"),
+	MDF_MESS("MessLev","LogTarget"), MDF_TR("LangBase","Lang2CodeBase","TranslDyn","TranslEnMan"), MDF_DBG("SelDebCats"),
+	MDF_RD("RdStLevel","RdTaskPer","RdRestConnTm","RdPrimCmdTr","RdStList").
+- SYS: The functions TSYS::id(), TSYS::name() and TSYS::user() were set as constant.
+- !!!!:FIX:Archive.FSArch: Prevented for access to "files" in ModMArch::checkArchivator() outside the lock.
+- !!!:UI.QTCfg: The image element appended of a function of clearing the image completely.
+- !!!:UI.VCAEngine: Icons of the projects and the widget libraries switched to download the common project icon at missing local.
+- !!!!:FIX:UI.Vision: All control requests "<info>" appended of checking the child nodes presence to prevent crashes in some cases.
+    !!!: The image elements (icons) of the item dialogs appended of a button menu with the functions: Save, Load, Clear.
+    !: The project and widget library tree's icons appended of the forcibly setting for clearing also.
+
+
 2022-08-01 Roman (stable)
 - FIX:AGLKS.St: testCalc_prm.test: Fixed for the messages translation of some attributes.
 - !!!!:FIX:DAQ.ParamTmpl: Fixed for the IO name edition in the non basic mode of the dynamic translation.

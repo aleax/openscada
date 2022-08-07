@@ -46,7 +46,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	string id( ) const	{ return mId; }			//Identifier
 	string name( ) const;					//Name
 	string descr( ) const	{ return cfg("DESCR").getS(); }	//Description
-	string ico( ) const	{ return cfg("ICO").getS(); }	//Icon
+	string ico( ) const	{ string sval = cfg("ICO").getS(); return sval.size() ? sval : SYS->ico(); }	//Icon
 	string getStatus( );
 
 	bool isStdStorAddr( ) const		{ return (tbl() == ("wlb_"+id())); }	//????[v1.0] Remove

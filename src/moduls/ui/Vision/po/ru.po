@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:27+0300\n"
+"POT-Creation-Date: 2022-08-07 08:18+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1025,9 +1025,6 @@ msgstr "Библиотека виджетов"
 msgid "State"
 msgstr "Состояние"
 
-msgid "Item icon. Click to download another."
-msgstr "Иконка элемента. Нажмите для загрузки другой."
-
 msgid "Status:"
 msgstr "Статус:"
 
@@ -1124,13 +1121,38 @@ msgstr "Сообщение"
 msgid "Error getting the node '%1' information."
 msgstr "Ошибка запроса информации узла '%1'."
 
-msgid "Downloading the image icon"
-msgstr "Загрузка изображения иконки"
+#, fuzzy
+msgid "Save image"
+msgstr "Сохранение изображения страницы"
+
+#, fuzzy
+msgid "Load image"
+msgstr "Загрузить данные"
+
+#, fuzzy
+msgid "Clear image"
+msgstr "Очистить изменения"
+
+#, fuzzy
+msgid "Saving the picture"
+msgstr "Сохранение данных"
+
+msgid "Images (*.png *.xpm *.jpg)"
+msgstr "Изображения (*.png *.xpm *.jpg)"
+
+#, fuzzy, c-format
+msgid "Error saving to the file '%s'."
+msgstr "Ошибка сохранения в файл '%1'."
+
+#, fuzzy
+msgid "Loading the picture"
+msgstr "Загрузка данных"
 
 msgid "Images (*.png *.jpg)"
 msgstr "Изображения (*.png *.jpg)"
 
-msgid "Error downloading the icon image '%1'."
+#, fuzzy, c-format
+msgid "Error loading the picture '%s'."
 msgstr "Ошибка загрузки изображения иконки '%1'."
 
 msgid "Saving the changes"
@@ -1388,9 +1410,6 @@ msgstr "Нажать для установки визуального масшт
 
 msgid "Saving the widget image"
 msgstr "Сохранение изображения виджета"
-
-msgid "Images (*.png *.xpm *.jpg)"
-msgstr "Изображения (*.png *.xpm *.jpg)"
 
 msgid "Error saving to the file '%1'."
 msgstr "Ошибка сохранения в файл '%1'."
@@ -2286,3 +2305,9 @@ msgstr "Время инициализации '%s': %f мс."
 
 msgid "Input dialog of Vision"
 msgstr "Диалог ввода Vision"
+
+#~ msgid "Item icon. Click to download another."
+#~ msgstr "Иконка элемента. Нажмите для загрузки другой."
+
+#~ msgid "Downloading the image icon"
+#~ msgstr "Загрузка изображения иконки"

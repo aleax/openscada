@@ -3366,18 +3366,22 @@ void ConfApp::imgPopup( const QPoint &pos )
     ImgView *img = (ImgView *)sender();
     string el_path = selPath+"/"+img->objectName().toStdString();
 
-    QAction *last_it, *save_img, *load_img;
-    last_it=save_img=load_img=NULL;
+    QAction *last_it, *save_img, *load_img, *clear_img;
+    last_it = save_img = load_img = clear_img = NULL;
 
     try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(img->objectName().toStdString(),TSYS::PathEl));
 	if(!img->image().isNull()) {
-	    save_img = last_it = new QAction(_("Saving an image"),this);
+	    save_img = last_it = new QAction(_("Save image"),this);
 	    popup.addAction(save_img);
 	}
 	if(s2i(n_el->attr("acs"))&SEC_WR) {
-	    load_img = last_it = new QAction(_("Loading an image"),this);
+	    load_img = last_it = new QAction(_("Load image"),this);
 	    popup.addAction(load_img);
+	    if(!img->image().isNull()) {
+		clear_img = last_it = new QAction(_("Clear image"),this);
+		popup.addAction(clear_img);
+	    }
 	}
 
 	if(last_it) {
@@ -3413,6 +3417,13 @@ void ConfApp::imgPopup( const QPoint &pos )
 		mess_info(mod->nodePath().c_str(), _("%s| '%s' uploaded by the picture '%s'."),
 		    user().c_str(), el_path.c_str(), fileName.toStdString().c_str());
 		if(cntrIfCmd(n_el1)) { mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this); return; }
+	    }
+	    else if(rez == clear_img) {
+		XMLNode n_el1("set");
+		n_el1.setAttr("path", el_path)->setText("");
+		mess_info(mod->nodePath().c_str(), _("%s| '%s' cleared."), user().c_str(), el_path.c_str());
+		if(cntrIfCmd(n_el1)) { mod->postMess(n_el1.attr("mcat"),n_el1.text(),TUIMod::Error,this); return; }
+		img->setImage("");
 	    }
 	}
     } catch(TError &err) {

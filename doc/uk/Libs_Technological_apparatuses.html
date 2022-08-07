@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотека/Технологічні апарати</h1>
@@ -49,10 +49,9 @@
 </p>
 <ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
 <li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre></div>
 <ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
 <p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
 </p>
@@ -190,9 +189,8 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-out -= (out-in)/(t_lg*f_frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">out</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">out</span><span class="o">-</span><span class="k">in</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_lg</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A8.D1.83.D0.BC:_2_.D0.B3.D0.B0.D1.80.D0.BC.D0.BE.D0.BD.D1.96.D0.BA.D0.B8_.2B_.D0.B2.D0.B8.D0.BF.D0.B0.D0.B4.D0.BA.D0.BE.D0.B2.D0.B8.D0.B9_.28noise.29"><span class="mw-headline-number">2.2</span> Шум: 2 гармоніки + випадковий (noise)</span></h3>
 <p>Модель шуму. Містить три складові:
 </p>
@@ -293,11 +291,10 @@ out -= (out-in)/(t_lg*f_frq);
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-tmp_g1 = (tmp_g1 &gt; 6.28)&nbsp;? 0&nbsp;: tmp_g1+6.28/(per_g1*f_frq);
-tmp_g2 = (tmp_g2 &gt; 6.28)&nbsp;? 0&nbsp;: tmp_g2+6.28/(per_g2*f_frq);
-out = off + a_g1*sin(tmp_g1) + a_g2*sin(tmp_g2) + a_rnd*(rand(2)-1);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">tmp_g1</span> <span class="o">=</span> <span class="p">(</span><span class="nx">tmp_g1</span> <span class="o">&gt;</span> <span class="mf">6.28</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">tmp_g1</span><span class="o">+</span><span class="mf">6.28</span><span class="o">/</span><span class="p">(</span><span class="nx">per_g1</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">tmp_g2</span> <span class="o">=</span> <span class="p">(</span><span class="nx">tmp_g2</span> <span class="o">&gt;</span> <span class="mf">6.28</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">tmp_g2</span><span class="o">+</span><span class="mf">6.28</span><span class="o">/</span><span class="p">(</span><span class="nx">per_g2</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">out</span> <span class="o">=</span> <span class="nx">off</span> <span class="o">+</span> <span class="nx">a_g1</span><span class="o">*</span><span class="nx">sin</span><span class="p">(</span><span class="nx">tmp_g1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">a_g2</span><span class="o">*</span><span class="nx">sin</span><span class="p">(</span><span class="nx">tmp_g2</span><span class="p">)</span> <span class="o">+</span> <span class="nx">a_rnd</span><span class="o">*</span><span class="p">(</span><span class="nx">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9A.D1.83.D0.BB.D1.8C.D0.BE.D0.B2.D0.B8.D0.B9_.D0.BA.D1.80.D0.B0.D0.BD_.28ballCrane.29"><span class="mw-headline-number">2.3</span> Кульовий кран (ballCrane)</span></h3>
 <p>Модель кульового крану. Включає час ходу та час відриву.
 </p><p><b><u>Параметри</u></b><br />
@@ -386,16 +383,15 @@ out = off + a_g1*sin(tmp_g1) + a_g2*sin(tmp_g2) + a_rnd*(rand(2)-1);
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-if(!(st_close &amp;&amp;&nbsp;!com) &amp;&amp;&nbsp;!(st_open &amp;&amp; com)) {
-  tmp_up = (pos &gt; 0 &amp;&amp; pos &lt; 100)&nbsp;? 0&nbsp;: (tmp_up&gt;0&amp;&amp;lst_com==com)?tmp_up-1/f_frq:t_up;
-  pos += (tmp_up &gt; 0)&nbsp;? 0&nbsp;: (100*(com?1:-1))/(t_full*f_frq);
-  pos = (pos &gt; 100)&nbsp;? 100&nbsp;: (pos&lt;0)?0:pos;
-  st_open = (pos &gt;= 100)&nbsp;? true&nbsp;: false;
-  st_close = (pos &lt;= 0)&nbsp;? true&nbsp;: false;
-  lst_com = com;
-}
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">st_close</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">com</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="p">(</span><span class="nx">st_open</span> <span class="o">&amp;&amp;</span> <span class="nx">com</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">tmp_up</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">pos</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="nx">tmp_up</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="nx">lst_com</span><span class="o">==</span><span class="nx">com</span><span class="p">)</span><span class="o">?</span><span class="nx">tmp_up</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="nx">f_frq</span><span class="o">:</span><span class="nx">t_up</span><span class="p">;</span>
+  <span class="nx">pos</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">tmp_up</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="nx">com</span><span class="o">?</span><span class="mi">1</span><span class="o">:-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nx">t_full</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+  <span class="nx">pos</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span> <span class="o">:</span> <span class="p">(</span><span class="nx">pos</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span><span class="o">?</span><span class="mi">0</span><span class="o">:</span><span class="nx">pos</span><span class="p">;</span>
+  <span class="nx">st_open</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">st_close</span> <span class="o">=</span> <span class="p">(</span><span class="nx">pos</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">lst_com</span> <span class="o">=</span> <span class="nx">com</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A1.D0.B5.D0.BF.D0.B0.D1.80.D0.B0.D1.82.D0.BE.D1.80_.28separator.29"><span class="mw-headline-number">2.4</span> Сепаратор (separator)</span></h3>
 <p>Модель сепаратору з двома фазами, рідинною та газовою.
 </p><p><b><u>Параметри</u></b><br />
@@ -532,12 +528,11 @@ if(!(st_close &amp;&amp;&nbsp;!com) &amp;&amp;&nbsp;!(st_open &amp;&amp; com)) {
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-Flq = max(0, Fi*PercLq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo+Flq, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
-Llq = max(0, min(100,Llq+0.27*(Flq-Fo_lq)/(Vap*Qlq*f_frq)));
-Po_lq = Po + Llq*Vap/Qlq;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">Flq</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Fi</span><span class="o">*</span><span class="nx">PercLq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si</span><span class="p">,</span> <span class="nx">Fo</span><span class="o">+</span><span class="nx">Flq</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Llq</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Llq</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Flq</span><span class="o">-</span><span class="nx">Fo_lq</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Vap</span><span class="o">*</span><span class="nx">Qlq</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
+<span class="nx">Po_lq</span> <span class="o">=</span> <span class="nx">Po</span> <span class="o">+</span> <span class="nx">Llq</span><span class="o">*</span><span class="nx">Vap</span><span class="o">/</span><span class="nx">Qlq</span><span class="p">;</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD_.28valve.29"><span class="mw-headline-number">2.5</span> Клапан (valve)</span></h3>
 <p>Модель клапану яка враховує:
 </p>
@@ -761,18 +756,17 @@ Po_lq = Po + Llq*Vap/Qlq;
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-Qr = Q0+Q0*Kpr*(Pi-1);
-tmp_l1 += (abs(l_kl1-tmp_l1) &gt; 5)&nbsp;? 100*sign(l_kl1-tmp_l1)/(t_kl1*f_frq)&nbsp;: (l_kl1-tmp_l1)/(t_kl1*f_frq);
-tmp_l2 += (abs(l_kl2-tmp_l2) &gt; 5)&nbsp;? 100*sign(l_kl2-tmp_l2)/(t_kl2*f_frq)&nbsp;: (l_kl2-tmp_l2)/(t_kl2*f_frq);
-Sr = (S_kl1*pow(tmp_l1,Kln)+S_kl2*pow(tmp_l2,Kln))/pow(100,Kln);
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">Qr</span> <span class="o">=</span> <span class="nx">Q0</span><span class="o">+</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">tmp_l1</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">l_kl1</span><span class="o">-</span><span class="nx">tmp_l1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span><span class="o">*</span><span class="nx">sign</span><span class="p">(</span><span class="nx">l_kl1</span><span class="o">-</span><span class="nx">tmp_l1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_kl1</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="nx">l_kl1</span><span class="o">-</span><span class="nx">tmp_l1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_kl1</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">tmp_l2</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">l_kl2</span><span class="o">-</span><span class="nx">tmp_l2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">?</span> <span class="mi">100</span><span class="o">*</span><span class="nx">sign</span><span class="p">(</span><span class="nx">l_kl2</span><span class="o">-</span><span class="nx">tmp_l2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_kl2</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)</span> <span class="o">:</span> <span class="p">(</span><span class="nx">l_kl2</span><span class="o">-</span><span class="nx">tmp_l2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_kl2</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Sr</span> <span class="o">=</span> <span class="p">(</span><span class="nx">S_kl1</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">tmp_l1</span><span class="p">,</span><span class="nx">Kln</span><span class="p">)</span><span class="o">+</span><span class="nx">S_kl2</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">tmp_l2</span><span class="p">,</span><span class="nx">Kln</span><span class="p">))</span><span class="o">/</span><span class="nx">pow</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Kln</span><span class="p">);</span>
 
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, Ti, Sr, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
-if(noBack) Fi = max(0, Fi);
-Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="nx">Ti</span><span class="p">,</span> <span class="nx">Sr</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">noBack</span><span class="p">)</span> <span class="nx">Fi</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Fi</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Po</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
 
-To = max(0, min(2e3,To+(abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Qr*f_frq)));
-</pre>
+<span class="nx">To</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">2</span><span class="nx">e3</span><span class="p">,</span><span class="nx">To</span><span class="o">+</span><span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Fi</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po</span><span class="o">/</span><span class="nx">Pi</span><span class="p">,</span><span class="mf">0.02</span><span class="p">)</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Fwind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Twind</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">/</span><span class="nx">Riz</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Ct</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Qr</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.97.D0.B0.D1.82.D1.80.D0.B8.D0.BC.D0.BA.D0.B0:_.D1.87.D0.B8.D1.81.D1.82.D0.B0_.28lagClean.29"><span class="mw-headline-number">2.6</span> Затримка: чиста (lagClean)</span></h3>
 <p>Модель чистої(транспортної) затримки. Реалізується шляхом включення декількох ланок простої затримки. Призначено для імітації затримок у довгих трубопроводах.
 </p><p><b><u>Параметри</u></b><br />
@@ -845,12 +839,11 @@ To = max(0, min(2e3,To+(abs(Fi)*(Ti*pow(Po/Pi,0.02)-To)+(Fwind+1)*(Twind-To)/Riz
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-cl1 -= (cl1-in)/(t_lg*f_frq/4);
-cl2 -= (cl2-cl1)/(t_lg*f_frq/4);
-cl3 -= (cl3-cl2)/(t_lg*f_frq/4);
-out -= (out-cl3)/(t_lg*f_frq/4);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">cl1</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">cl1</span><span class="o">-</span><span class="k">in</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_lg</span><span class="o">*</span><span class="nx">f_frq</span><span class="o">/</span><span class="mi">4</span><span class="p">);</span>
+<span class="nx">cl2</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">cl2</span><span class="o">-</span><span class="nx">cl1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_lg</span><span class="o">*</span><span class="nx">f_frq</span><span class="o">/</span><span class="mi">4</span><span class="p">);</span>
+<span class="nx">cl3</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">cl3</span><span class="o">-</span><span class="nx">cl2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_lg</span><span class="o">*</span><span class="nx">f_frq</span><span class="o">/</span><span class="mi">4</span><span class="p">);</span>
+<span class="nx">out</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">out</span><span class="o">-</span><span class="nx">cl3</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_lg</span><span class="o">*</span><span class="nx">f_frq</span><span class="o">/</span><span class="mi">4</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9A.D0.BE.D1.82.D0.B5.D0.BB:_.D0.B1.D0.B0.D1.80.D0.B0.D0.B1.D0.B0.D0.BD_.28boilerBarrel.29"><span class="mw-headline-number">2.7</span> Котел: барабан (boilerBarrel)</span></h3>
 <p>Модель барабану котлоагрегату.
 </p><p><b><u>Параметри</u></b><br />
@@ -1051,31 +1044,30 @@ out -= (out-cl3)/(t_lg*f_frq/4);
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-// Water
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po1, 293, So1, lo1, 1e3, 0.001, 0.01, f_frq);
-Fi1 = max(0, Fi1);
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">// Water</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi1</span><span class="p">,</span> <span class="nx">Pi1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si1</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So1</span><span class="p">,</span> <span class="nx">lo1</span><span class="p">,</span> <span class="mi">1</span><span class="nx">e3</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Fi1</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Fi1</span><span class="p">);</span>
 
-// Steam
-Lo = max(0, min(100,Lo+(Fi1-Fstm)*100/(Vi1*1000*f_frq)));
-To1 = (100*pow(Po1,0.241)+5) + 273;
+<span class="c1">// Steam</span>
+<span class="nx">Lo</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Lo</span><span class="o">+</span><span class="p">(</span><span class="nx">Fi1</span><span class="o">-</span><span class="nx">Fstm</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="p">(</span><span class="nx">Vi1</span><span class="o">*</span><span class="mi">1000</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
+<span class="nx">To1</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po1</span><span class="p">,</span><span class="mf">0.241</span><span class="p">)</span><span class="o">+</span><span class="mi">5</span><span class="p">)</span> <span class="o">+</span> <span class="mi">273</span><span class="p">;</span>
 
-if(Tv &lt; To1) {
-  Tv += (k*S*(Ti2-Tv)-Fi1*0.00418*(Tv-Ti1))/f_frq;
-  Fstm = 0;
-}
-if(Tv &gt;= To1) {
-  Tv = To1;
-  Lambda = 2750-0.00418*(Tv-273);
-  Fstm = (5*S*Fi2*(Ti2-Tv)-Fi1*0.00418*(Tv-Ti1))/(Po1*Lambda);
-}
+<span class="k">if</span><span class="p">(</span><span class="nx">Tv</span> <span class="o">&lt;</span> <span class="nx">To1</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Tv</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">k</span><span class="o">*</span><span class="nx">S</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti2</span><span class="o">-</span><span class="nx">Tv</span><span class="p">)</span><span class="o">-</span><span class="nx">Fi1</span><span class="o">*</span><span class="mf">0.00418</span><span class="o">*</span><span class="p">(</span><span class="nx">Tv</span><span class="o">-</span><span class="nx">Ti1</span><span class="p">))</span><span class="o">/</span><span class="nx">f_frq</span><span class="p">;</span>
+  <span class="nx">Fstm</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">Tv</span> <span class="o">&gt;=</span> <span class="nx">To1</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Tv</span> <span class="o">=</span> <span class="nx">To1</span><span class="p">;</span>
+  <span class="nx">Lambda</span> <span class="o">=</span> <span class="mi">2750</span><span class="o">-</span><span class="mf">0.00418</span><span class="o">*</span><span class="p">(</span><span class="nx">Tv</span><span class="o">-</span><span class="mi">273</span><span class="p">);</span>
+  <span class="nx">Fstm</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="o">*</span><span class="nx">S</span><span class="o">*</span><span class="nx">Fi2</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti2</span><span class="o">-</span><span class="nx">Tv</span><span class="p">)</span><span class="o">-</span><span class="nx">Fi1</span><span class="o">*</span><span class="mf">0.00418</span><span class="o">*</span><span class="p">(</span><span class="nx">Tv</span><span class="o">-</span><span class="nx">Ti1</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="nx">Po1</span><span class="o">*</span><span class="nx">Lambda</span><span class="p">);</span>
+<span class="p">}</span>
 
-To2 = Ti2-Tv/k;
-Po1 = max(0, min(100,Po1+0.27*(Fstm-Fo)/(1.2*0.98*((1-Lo/100)*Vi1+So1*lo1)*f_frq)));
+<span class="nx">To2</span> <span class="o">=</span> <span class="nx">Ti2</span><span class="o">-</span><span class="nx">Tv</span><span class="o">/</span><span class="nx">k</span><span class="p">;</span>
+<span class="nx">Po1</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Po1</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fstm</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.2</span><span class="o">*</span><span class="mf">0.98</span><span class="o">*</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="nx">Lo</span><span class="o">/</span><span class="mi">100</span><span class="p">)</span><span class="o">*</span><span class="nx">Vi1</span><span class="o">+</span><span class="nx">So1</span><span class="o">*</span><span class="nx">lo1</span><span class="p">)</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
 
-// Smoke gas
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, Fo2, Po2, 293, Si2, 30, 1.2, 0.98, 0.01, f_frq);
-</pre>
+<span class="c1">// Smoke gas</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi2</span><span class="p">,</span> <span class="nx">Pi2</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si2</span><span class="p">,</span> <span class="nx">Fo2</span><span class="p">,</span> <span class="nx">Po2</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si2</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9A.D0.BE.D1.82.D0.B5.D0.BB:_.D1.82.D0.BE.D0.BF.D0.BA.D0.B0_.28boilerBurner.29"><span class="mw-headline-number">2.8</span> Котел: топка (boilerBurner)</span></h3>
 <p>Модель топки котлоагрегату, який працює на трьох видах палива, початково це: доменний, коксовий та природний гази.
 </p><p><b><u>Параметри</u></b><br />
@@ -1292,24 +1284,23 @@ DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, Fo2, Po2, 293, Si2, 30
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-using DAQ.JavaLikeCalc.lib_techApp;
-pipeBase(Fi1, Pi1, Ti1, Si1, EVAL_REAL, Po, 293, So, lo, 1.2, 0.95, 0.01, f_frq); Fi1 = max(0, Fi1);
-pipeBase(Fi2, Pi2, Ti2, Si2, EVAL_REAL, Po, 293, So, lo, 0.7, 0.95, 0.01, f_frq); Fi2 = max(0, Fi2);
-pipeBase(Fi3, Pi3, Ti3, Si3, EVAL_REAL, Po, 293, So, lo, 1.33, 0.95, 0.01, f_frq); Fi3 = max(0, Fi3);
-pipeBase(Fi4, Pi4, Ti4, Si4, EVAL_REAL, Po, 293, So, lo, 1.293, 0.95, 0.01, f_frq); Fi4 = max(0, Fi4);
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">using</span> <span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">;</span>
+<span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi1</span><span class="p">,</span> <span class="nx">Pi1</span><span class="p">,</span> <span class="nx">Ti1</span><span class="p">,</span> <span class="nx">Si1</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span> <span class="nx">Fi1</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Fi1</span><span class="p">);</span>
+<span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi2</span><span class="p">,</span> <span class="nx">Pi2</span><span class="p">,</span> <span class="nx">Ti2</span><span class="p">,</span> <span class="nx">Si2</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span> <span class="nx">Fi2</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Fi2</span><span class="p">);</span>
+<span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi3</span><span class="p">,</span> <span class="nx">Pi3</span><span class="p">,</span> <span class="nx">Ti3</span><span class="p">,</span> <span class="nx">Si3</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="mf">1.33</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span> <span class="nx">Fi3</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Fi3</span><span class="p">);</span>
+<span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi4</span><span class="p">,</span> <span class="nx">Pi4</span><span class="p">,</span> <span class="nx">Ti4</span><span class="p">,</span> <span class="nx">Si4</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="mf">1.293</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span> <span class="nx">Fi4</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">Fi4</span><span class="p">);</span>
 
-Neobhod_vzd = Fi1 + 10*Fi2 + 4*Fi3;
-F_DG = Fi1 + Fi2 + Fi3 + Fi4;
-O2 = max(0, min(100,(Fi4-Neobhod_vzd)*100/F_DG));
-CO = min(100, (O2&lt;1)&nbsp;? (1.2*abs(O2))&nbsp;: 0);
-koef = min(1, Fi4/Neobhod_vzd);
-Q = koef*(8050*Fi2+3900*Fi3+930*Fi1);
-delta_t = Q/(F_DG*1.047);
-To = max(0, min(2000,(delta_t+(Ti4-273)+(Ti3-273)*(Fi3/Fi1)+(Ti2-273)*(Fi2/Fi1)+(Ti1-273)*(Fi1/Fi4))+273));
+<span class="nx">Neobhod_vzd</span> <span class="o">=</span> <span class="nx">Fi1</span> <span class="o">+</span> <span class="mi">10</span><span class="o">*</span><span class="nx">Fi2</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="nx">Fi3</span><span class="p">;</span>
+<span class="nx">F_DG</span> <span class="o">=</span> <span class="nx">Fi1</span> <span class="o">+</span> <span class="nx">Fi2</span> <span class="o">+</span> <span class="nx">Fi3</span> <span class="o">+</span> <span class="nx">Fi4</span><span class="p">;</span>
+<span class="nx">O2</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,(</span><span class="nx">Fi4</span><span class="o">-</span><span class="nx">Neobhod_vzd</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="o">/</span><span class="nx">F_DG</span><span class="p">));</span>
+<span class="nx">CO</span> <span class="o">=</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="p">(</span><span class="nx">O2</span><span class="o">&lt;</span><span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="p">(</span><span class="mf">1.2</span><span class="o">*</span><span class="nx">abs</span><span class="p">(</span><span class="nx">O2</span><span class="p">))</span> <span class="o">:</span> <span class="mi">0</span><span class="p">);</span>
+<span class="nx">koef</span> <span class="o">=</span> <span class="nx">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">Fi4</span><span class="o">/</span><span class="nx">Neobhod_vzd</span><span class="p">);</span>
+<span class="nx">Q</span> <span class="o">=</span> <span class="nx">koef</span><span class="o">*</span><span class="p">(</span><span class="mi">8050</span><span class="o">*</span><span class="nx">Fi2</span><span class="o">+</span><span class="mi">3900</span><span class="o">*</span><span class="nx">Fi3</span><span class="o">+</span><span class="mi">930</span><span class="o">*</span><span class="nx">Fi1</span><span class="p">);</span>
+<span class="nx">delta_t</span> <span class="o">=</span> <span class="nx">Q</span><span class="o">/</span><span class="p">(</span><span class="nx">F_DG</span><span class="o">*</span><span class="mf">1.047</span><span class="p">);</span>
+<span class="nx">To</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">2000</span><span class="p">,(</span><span class="nx">delta_t</span><span class="o">+</span><span class="p">(</span><span class="nx">Ti4</span><span class="o">-</span><span class="mi">273</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Ti3</span><span class="o">-</span><span class="mi">273</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi3</span><span class="o">/</span><span class="nx">Fi1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Ti2</span><span class="o">-</span><span class="mi">273</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi2</span><span class="o">/</span><span class="nx">Fi1</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Ti1</span><span class="o">-</span><span class="mi">273</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi1</span><span class="o">/</span><span class="nx">Fi4</span><span class="p">))</span><span class="o">+</span><span class="mi">273</span><span class="p">));</span>
 
-Po = max(0, min(10,Po+0.27*(F_DG-Fo)/(1.2*0.95*(So*lo+V)*f_frq)));
-</pre>
+<span class="nx">Po</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="nx">Po</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">F_DG</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">1.2</span><span class="o">*</span><span class="mf">0.95</span><span class="o">*</span><span class="p">(</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">+</span><span class="nx">V</span><span class="p">)</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9C.D0.B5.D1.80.D0.B5.D0.B6.D0.B0:_.D0.BD.D0.B0.D0.B2.D0.B0.D0.BD.D1.82.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F_.28net.29"><span class="mw-headline-number">2.9</span> Мережа: навантаження (net)</span></h3>
 <p>Навантаження з фіксованим тиском мережі. Містить параметр для підключення шуму.
 </p><p><b><u>Параметри</u></b><br />
@@ -1390,9 +1381,8 @@ Po = max(0, min(10,Po+0.27*(F_DG-Fo)/(1.2*0.95*(So*lo+V)*f_frq)));
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, EVAL_REAL, Po, 293, So, 10, Q0, Kpr, 0.01, f_frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE:_.D1.82.D0.B8.D1.81.D0.BA_.28src_press.29"><span class="mw-headline-number">2.10</span> Джерело: тиск (src_press)</span></h3>
 <p>Джерело з фіксованим тиском. Містить параметр для підключення шуму.
 </p><p><b><u>Параметри</u></b><br />
@@ -1489,9 +1479,8 @@ DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, EVAL_REAL, Po, 293, So, 1
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit, Pi*Noise, 293, So, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fit</span><span class="p">,</span> <span class="nx">Pi</span><span class="o">*</span><span class="nx">Noise</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">Fo</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B2.D1.96.D1.82.D1.80.D1.8F.D0.BD.D0.B8.D0.B9_.D1.85.D0.BE.D0.BB.D0.BE.D0.B4.D0.B8.D0.BB.D1.8C.D0.BD.D0.B8.D0.BA_.28cooler.29"><span class="mw-headline-number">2.11</span> Повітряний холодильник (cooler)</span></h3>
 <p>Модель повітряного охолоджувача газового потоку.
 </p><p><b><u>Параметри</u></b><br />
@@ -1636,11 +1625,10 @@ DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fit, Pi*Noise, 293, So, Fo, Po, 293, So, l
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Si, Fo, Po, 293, So, lo, Q0, 0.95, 0.01, f_frq);
-Qr = Q0 + Q0*0.95*(Pi-1);
-To += (Fi*(Ti-To)+Wc*(Tair-To)/Rt)/(Ct*(Si*li+So*lo)*Qr*f_frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si</span><span class="p">,</span> <span class="nx">Fo</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Qr</span> <span class="o">=</span> <span class="nx">Q0</span> <span class="o">+</span> <span class="nx">Q0</span><span class="o">*</span><span class="mf">0.95</span><span class="o">*</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">To</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">Fi</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="nx">Wc</span><span class="o">*</span><span class="p">(</span><span class="nx">Tair</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">/</span><span class="nx">Rt</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Ct</span><span class="o">*</span><span class="p">(</span><span class="nx">Si</span><span class="o">*</span><span class="nx">li</span><span class="o">+</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="p">)</span><span class="o">*</span><span class="nx">Qr</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.BF.D1.80.D0.B5.D1.81.D0.BE.D1.80_.D0.B3.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D0.B9_.28compressor.29"><span class="mw-headline-number">2.12</span> Компресор газовий (compressor)</span></h3>
 <p>Модель газового компресора. Враховує ефект помпажу. Помпаж розраховується за газово-динамічною кривою, виходячи з якої розраховується коефіцієнт запасу за помпажем.
 </p><p><b><u>Параметри</u></b><br />
@@ -1825,20 +1813,19 @@ To += (Fi*(Ti-To)+Wc*(Tair-To)/Rt)/(Ct*(Si*li+So*lo)*Qr*f_frq);
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-Pmax = max(Pi, Po);
-Pmin = min(Pi, Po);
-Qr = Q0 + Q0*Kpr*(Pi-1);
-Qrf = Q0 + Q0*Kpr*(Pmax-1);
-Ftmp = (N &gt; 0.1)&nbsp;? (1-10*(Po-Pi)/(Qr*(pow(N,3)+0.1)*Kpmp))&nbsp;: 1;
-Kmrg = 1-Ftmp;  //The margin coefficient
-Fi = V*N*Qr*sign(Ftmp)*pow(abs(Ftmp),Kslp)+
-     0.3*(4*So*Qrf/(0.01*lo*1.7724+4*Qrf))*sign(Pi-Po)*pow(Qrf*(Pmax-max(Pmax*0.528,Pmin)),0.5);
-Fit -= (Fit-Fi)/max(1,(lo*f_frq)/max(1e-4,abs(Fi/(Qrf*So))));
-Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">Pmax</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="nx">Pi</span><span class="p">,</span> <span class="nx">Po</span><span class="p">);</span>
+<span class="nx">Pmin</span> <span class="o">=</span> <span class="nx">min</span><span class="p">(</span><span class="nx">Pi</span><span class="p">,</span> <span class="nx">Po</span><span class="p">);</span>
+<span class="nx">Qr</span> <span class="o">=</span> <span class="nx">Q0</span> <span class="o">+</span> <span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">Qrf</span> <span class="o">=</span> <span class="nx">Q0</span> <span class="o">+</span> <span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="p">(</span><span class="nx">Pmax</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">Ftmp</span> <span class="o">=</span> <span class="p">(</span><span class="nx">N</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">?</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mi">10</span><span class="o">*</span><span class="p">(</span><span class="nx">Po</span><span class="o">-</span><span class="nx">Pi</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Qr</span><span class="o">*</span><span class="p">(</span><span class="nx">pow</span><span class="p">(</span><span class="nx">N</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="o">+</span><span class="mf">0.1</span><span class="p">)</span><span class="o">*</span><span class="nx">Kpmp</span><span class="p">))</span> <span class="o">:</span> <span class="mi">1</span><span class="p">;</span>
+<span class="nx">Kmrg</span> <span class="o">=</span> <span class="mi">1</span><span class="o">-</span><span class="nx">Ftmp</span><span class="p">;</span>  <span class="c1">//The margin coefficient</span>
+<span class="nx">Fi</span> <span class="o">=</span> <span class="nx">V</span><span class="o">*</span><span class="nx">N</span><span class="o">*</span><span class="nx">Qr</span><span class="o">*</span><span class="nx">sign</span><span class="p">(</span><span class="nx">Ftmp</span><span class="p">)</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Ftmp</span><span class="p">),</span><span class="nx">Kslp</span><span class="p">)</span><span class="o">+</span>
+     <span class="mf">0.3</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">Qrf</span><span class="o">/</span><span class="p">(</span><span class="mf">0.01</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="mf">1.7724</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="nx">Qrf</span><span class="p">))</span><span class="o">*</span><span class="nx">sign</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="nx">Po</span><span class="p">)</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Qrf</span><span class="o">*</span><span class="p">(</span><span class="nx">Pmax</span><span class="o">-</span><span class="nx">max</span><span class="p">(</span><span class="nx">Pmax</span><span class="o">*</span><span class="mf">0.528</span><span class="p">,</span><span class="nx">Pmin</span><span class="p">)),</span><span class="mf">0.5</span><span class="p">);</span>
+<span class="nx">Fit</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">Fit</span><span class="o">-</span><span class="nx">Fi</span><span class="p">)</span><span class="o">/</span><span class="nx">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="nx">lo</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)</span><span class="o">/</span><span class="nx">max</span><span class="p">(</span><span class="mi">1</span><span class="nx">e</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Fi</span><span class="o">/</span><span class="p">(</span><span class="nx">Qrf</span><span class="o">*</span><span class="nx">So</span><span class="p">))));</span>
+<span class="nx">Po</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Po</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
 
-To += (abs(Fi)*(Ti*pow(Po/Pi,0.3)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*(V+So*lo)*Qr*f_frq);
-</pre>
+<span class="nx">To</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Fi</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Po</span><span class="o">/</span><span class="nx">Pi</span><span class="p">,</span><span class="mf">0.3</span><span class="p">)</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Fwind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Twind</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">/</span><span class="nx">Riz</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Ct</span><span class="o">*</span><span class="p">(</span><span class="nx">V</span><span class="o">+</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="p">)</span><span class="o">*</span><span class="nx">Qr</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.94.D0.B6.D0.B5.D1.80.D0.B5.D0.BB.D0.BE:_.D0.B2.D0.B8.D1.82.D1.80.D0.B0.D1.82.D0.B8_.28src_flow.29"><span class="mw-headline-number">2.13</span> Джерело: витрати (src_flow)</span></h3>
 <p>Джерело з фіксованими витратами. Містить параметр для підключення шуму.
 </p><p><b><u>Параметри</u></b><br />
@@ -1927,9 +1914,8 @@ To += (abs(Fi)*(Ti*pow(Po/Pi,0.3)-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*(V+So*lo)*Qr
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-Po = max(0, min(100,Po+0.27*(Noise*Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">Po</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Po</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Noise</span><span class="o">*</span><span class="nx">Fi</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0-.D0.B1.D0.B0.D0.B7.D0.B0_.28pipeBase.29"><span class="mw-headline-number">2.14</span> Труба-база (pipeBase)</span></h3>
 <p>Реалізація базових основ моделі труби:
 </p>
@@ -2054,14 +2040,13 @@ Po = max(0, min(100,Po+0.27*(Noise*Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-Pmax = max(Pi, Po);
-Pmin = min(Pi, Po);
-Qr = Q0 + Q0*Kpr*(Pmax-1);
-Fit = 630*(4*Si*So*Qr/(Ktr*lo*1.7724*Si+4*So*Qr))*sign(Pi-Po)*pow(Qr*(Pmax-max(Pmax*0.528,Pmin)),0.5);
-Fi -= (Fi-Fit)/max(1,(lo*f_frq)/max(1,abs(Fit/(Qr*So))));
-if(!Fo.isEVal()) Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">Pmax</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="nx">Pi</span><span class="p">,</span> <span class="nx">Po</span><span class="p">);</span>
+<span class="nx">Pmin</span> <span class="o">=</span> <span class="nx">min</span><span class="p">(</span><span class="nx">Pi</span><span class="p">,</span> <span class="nx">Po</span><span class="p">);</span>
+<span class="nx">Qr</span> <span class="o">=</span> <span class="nx">Q0</span> <span class="o">+</span> <span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="p">(</span><span class="nx">Pmax</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="nx">Fit</span> <span class="o">=</span> <span class="mi">630</span><span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="nx">Si</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">Qr</span><span class="o">/</span><span class="p">(</span><span class="nx">Ktr</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="mf">1.7724</span><span class="o">*</span><span class="nx">Si</span><span class="o">+</span><span class="mi">4</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">Qr</span><span class="p">))</span><span class="o">*</span><span class="nx">sign</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="nx">Po</span><span class="p">)</span><span class="o">*</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Qr</span><span class="o">*</span><span class="p">(</span><span class="nx">Pmax</span><span class="o">-</span><span class="nx">max</span><span class="p">(</span><span class="nx">Pmax</span><span class="o">*</span><span class="mf">0.528</span><span class="p">,</span><span class="nx">Pmin</span><span class="p">)),</span><span class="mf">0.5</span><span class="p">);</span>
+<span class="nx">Fi</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="nx">Fit</span><span class="p">)</span><span class="o">/</span><span class="nx">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,(</span><span class="nx">lo</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)</span><span class="o">/</span><span class="nx">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nx">abs</span><span class="p">(</span><span class="nx">Fit</span><span class="o">/</span><span class="p">(</span><span class="nx">Qr</span><span class="o">*</span><span class="nx">So</span><span class="p">))));</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">Fo</span><span class="p">.</span><span class="nx">isEVal</span><span class="p">())</span> <span class="nx">Po</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Po</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E1_.28pipe1_1.29"><span class="mw-headline-number">2.15</span> Труба 1-&gt;1 (pipe1_1)</span></h3>
 <p>Модель вузла труб за схемою "1 -&gt; 1".
 </p><p><b><u>Параметри</u></b><br />
@@ -2182,11 +2167,10 @@ if(!Fo.isEVal()) Po = max(0, min(100,Po+0.27*(Fi-Fo)/(Q0*Kpr*So*lo*f_frq)));
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, So, Ft1, Pti, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Ft1, Pti, 293, So, Fto, Pt1, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fto, Pt1, 293, So, Fo, Po, 293, So, 0.33*lo, Q0, Kpr, 0.01, f_frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">Ft1</span><span class="p">,</span> <span class="nx">Pti</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Ft1</span><span class="p">,</span> <span class="nx">Pti</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">Fto</span><span class="p">,</span> <span class="nx">Pt1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fto</span><span class="p">,</span> <span class="nx">Pt1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">Fo</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="mf">0.33</span><span class="o">*</span><span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_2-.3E1_.28pipe2_1.29"><span class="mw-headline-number">2.16</span> Труба 2-&gt;1 (pipe2_1)</span></h3>
 <p>Модель вузла труб за схемою "2 -&gt; 1".
 </p><p><b><u>Параметри</u></b><br />
@@ -2363,12 +2347,11 @@ DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fto, Pt1, 293, So, Fo, Po, 293, So, 0.33*l
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
-Po = max(0, min(100,Po+0.27*(Fi1+Fi2-Fo)/(Q0*Kpr*So*lo*f_frq)));
-To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi1</span><span class="p">,</span> <span class="nx">Pi1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si1</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi2</span><span class="p">,</span> <span class="nx">Pi2</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si2</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Po</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi1</span><span class="o">+</span><span class="nx">Fi2</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
+<span class="nx">To</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">To</span><span class="o">+</span><span class="p">(</span><span class="nx">Fi1</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti1</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="nx">Fi2</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti2</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Fwind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Twind</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">/</span><span class="nx">Riz</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Ct</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">));</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_3-.3E1_.28pipe3_1.29"><span class="mw-headline-number">2.17</span> Труба 3-&gt;1 (pipe3_1)</span></h3>
 <p>Модель вузла труб за схемою "3 -&gt; 1".
 </p><p><b><u>Параметри</u></b><br />
@@ -2577,13 +2560,12 @@ To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, 293, Si1, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, 293, Si2, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi3, Pi3, 293, Si3, EVAL_REAL, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
-Po = max(0, min(100,Po+0.27*(Fi1+Fi2+Fi3-Fo)/(Q0*Kpr*So*lo*f_frq)));
-To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+Fi3*(Ti3-To)+(Fwind+1)*(Twind-To)/Riz)/(Ct*So*lo*Q0*f_frq));
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi1</span><span class="p">,</span> <span class="nx">Pi1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si1</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi2</span><span class="p">,</span> <span class="nx">Pi2</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si2</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi3</span><span class="p">,</span> <span class="nx">Pi3</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Si3</span><span class="p">,</span> <span class="nx">EVAL_REAL</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Po</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="nx">Po</span><span class="o">+</span><span class="mf">0.27</span><span class="o">*</span><span class="p">(</span><span class="nx">Fi1</span><span class="o">+</span><span class="nx">Fi2</span><span class="o">+</span><span class="nx">Fi3</span><span class="o">-</span><span class="nx">Fo</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">Kpr</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">)));</span>
+<span class="nx">To</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">To</span><span class="o">+</span><span class="p">(</span><span class="nx">Fi1</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti1</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="nx">Fi2</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti2</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="nx">Fi3</span><span class="o">*</span><span class="p">(</span><span class="nx">Ti3</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="nx">Fwind</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="nx">Twind</span><span class="o">-</span><span class="nx">To</span><span class="p">)</span><span class="o">/</span><span class="nx">Riz</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Ct</span><span class="o">*</span><span class="nx">So</span><span class="o">*</span><span class="nx">lo</span><span class="o">*</span><span class="nx">Q0</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">));</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E2_.28pipe1_2.29"><span class="mw-headline-number">2.18</span> Труба 1-&gt;2 (pipe1_2)</span></h3>
 <p>Модель вузла труб за схемою "1 -&gt; 2".
 </p><p><b><u>Параметри</u></b><br />
@@ -2736,11 +2718,10 @@ To = max(0, To+(Fi1*(Ti1-To)+Fi2*(Ti2-To)+Fi3*(Ti3-To)+(Fwind+1)*(Twind-To)/Riz)
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
-Fi = F1tmp + F2tmp;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F1tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So1</span><span class="p">,</span> <span class="nx">Fo1</span><span class="p">,</span> <span class="nx">Po1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So1</span><span class="p">,</span> <span class="nx">lo1</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F2tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So2</span><span class="p">,</span> <span class="nx">Fo2</span><span class="p">,</span> <span class="nx">Po2</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So2</span><span class="p">,</span> <span class="nx">lo2</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Fi</span> <span class="o">=</span> <span class="nx">F1tmp</span> <span class="o">+</span> <span class="nx">F2tmp</span><span class="p">;</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E3_.28pipe1_3.29"><span class="mw-headline-number">2.19</span> Труба 1-&gt;3 (pipe1_3)</span></h3>
 <p>Модель вузла труб за схемою "1 -&gt; 3".
 </p><p><b><u>Параметри</u></b><br />
@@ -2941,12 +2922,11 @@ Fi = F1tmp + F2tmp;
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
-Fi = F1tmp + F2tmp + F3tmp;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F1tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So1</span><span class="p">,</span> <span class="nx">Fo1</span><span class="p">,</span> <span class="nx">Po1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So1</span><span class="p">,</span> <span class="nx">lo1</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F2tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So2</span><span class="p">,</span> <span class="nx">Fo2</span><span class="p">,</span> <span class="nx">Po2</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So2</span><span class="p">,</span> <span class="nx">lo2</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F3tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So3</span><span class="p">,</span> <span class="nx">Fo3</span><span class="p">,</span> <span class="nx">Po3</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So3</span><span class="p">,</span> <span class="nx">lo3</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Fi</span> <span class="o">=</span> <span class="nx">F1tmp</span> <span class="o">+</span> <span class="nx">F2tmp</span> <span class="o">+</span> <span class="nx">F3tmp</span><span class="p">;</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A2.D1.80.D1.83.D0.B1.D0.B0_1-.3E4_.28pipe1_4.29"><span class="mw-headline-number">2.20</span> Труба 1-&gt;4 (pipe1_4)</span></h3>
 <p>Модель вузла труб за схемою "1 -&gt; 3".
 </p><p><b><u>Параметри</u></b><br />
@@ -3195,13 +3175,12 @@ Fi = F1tmp + F2tmp + F3tmp;
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F1tmp, Pi, 293, So1, Fo1, Po1, 293, So1, lo1, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F2tmp, Pi, 293, So2, Fo2, Po2, 293, So2, lo2, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F3tmp, Pi, 293, So3, Fo3, Po3, 293, So3, lo3, Q0, Kpr, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(F4tmp, Pi, 293, So4, Fo4, Po4, 293, So4, lo4, Q0, Kpr, 0.01, f_frq);
-Fi = F1tmp + F2tmp + F3tmp + F4tmp;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F1tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So1</span><span class="p">,</span> <span class="nx">Fo1</span><span class="p">,</span> <span class="nx">Po1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So1</span><span class="p">,</span> <span class="nx">lo1</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F2tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So2</span><span class="p">,</span> <span class="nx">Fo2</span><span class="p">,</span> <span class="nx">Po2</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So2</span><span class="p">,</span> <span class="nx">lo2</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F3tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So3</span><span class="p">,</span> <span class="nx">Fo3</span><span class="p">,</span> <span class="nx">Po3</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So3</span><span class="p">,</span> <span class="nx">lo3</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">F4tmp</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So4</span><span class="p">,</span> <span class="nx">Fo4</span><span class="p">,</span> <span class="nx">Po4</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So4</span><span class="p">,</span> <span class="nx">lo4</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">Fi</span> <span class="o">=</span> <span class="nx">F1tmp</span> <span class="o">+</span> <span class="nx">F2tmp</span> <span class="o">+</span> <span class="nx">F3tmp</span> <span class="o">+</span> <span class="nx">F4tmp</span><span class="p">;</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.9A.D0.BB.D0.B0.D0.BF.D0.B0.D0.BD:_.D0.B2.D0.B8.D0.BA.D0.BE.D0.BD.D0.B0.D0.B2.D1.87.D0.B8.D0.B9_.D0.BC.D0.B5.D1.85.D0.B0.D0.BD.D1.96.D0.B7.D0.BC_.28valveMech.29"><span class="mw-headline-number">2.21</span> Клапан: виконавчий механізм (valveMech)</span></h3>
 <p>Модель виконавчого механізму клапана. Включає час ходу та час відриву.
 </p><p><b><u>Параметри</u></b><br />
@@ -3306,20 +3285,19 @@ Fi = F1tmp + F2tmp + F3tmp + F4tmp;
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-if((pos &gt;= 99 &amp;&amp; com &gt;= 99) || (pos &lt;= 1 &amp;&amp; com &lt;= 1)) { 
-  tmp_up = t_up;
-  if(pos &gt;= 99) { pos = 100; st_open = true; }
-  else { pos = 0; st_close = true; }
-}
-else if(tmp_up &gt; 0) tmp_up -= 1/f_frq;
-else {
-  st_open = st_close = false;
-  lst_com += (com-lst_com)/(0.5*t_full*f_frq);
-  pos += (lst_com-pos)/(0.5*t_full*f_frq);
-}
-pos_sensor += (pos-pos_sensor)/(t_sensor*f_frq);
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="k">if</span><span class="p">((</span><span class="nx">pos</span> <span class="o">&gt;=</span> <span class="mi">99</span> <span class="o">&amp;&amp;</span> <span class="nx">com</span> <span class="o">&gt;=</span> <span class="mi">99</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">pos</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">com</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">))</span> <span class="p">{</span> 
+  <span class="nx">tmp_up</span> <span class="o">=</span> <span class="nx">t_up</span><span class="p">;</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">pos</span> <span class="o">&gt;=</span> <span class="mi">99</span><span class="p">)</span> <span class="p">{</span> <span class="nx">pos</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">st_open</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span> <span class="nx">pos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">st_close</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">tmp_up</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">tmp_up</span> <span class="o">-=</span> <span class="mi">1</span><span class="o">/</span><span class="nx">f_frq</span><span class="p">;</span>
+<span class="k">else</span> <span class="p">{</span>
+  <span class="nx">st_open</span> <span class="o">=</span> <span class="nx">st_close</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="nx">lst_com</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">com</span><span class="o">-</span><span class="nx">lst_com</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="nx">t_full</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+  <span class="nx">pos</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">lst_com</span><span class="o">-</span><span class="nx">pos</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="nx">t_full</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">pos_sensor</span> <span class="o">+=</span> <span class="p">(</span><span class="nx">pos</span><span class="o">-</span><span class="nx">pos_sensor</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">t_sensor</span><span class="o">*</span><span class="nx">f_frq</span><span class="p">);</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.94.D1.96.D0.B0.D1.84.D1.80.D0.B0.D0.B3.D0.BC.D0.B0_.28diaphragm.29"><span class="mw-headline-number">2.22</span> Діафрагма (diaphragm)</span></h3>
 <p>Модель діафрагми.
 </p><p><b><u>Параметри</u></b><br />
@@ -3424,10 +3402,9 @@ pos_sensor += (pos-pos_sensor)/(t_sensor*f_frq);
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi, Pi, 293, Sdf, Fo, Po, 293, So, lo, Q0, Kpr, 0.01, f_frq);
-dP -= (dP-100*(Pi-Po))/f_frq;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi</span><span class="p">,</span> <span class="nx">Pi</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">Sdf</span><span class="p">,</span> <span class="nx">Fo</span><span class="p">,</span> <span class="nx">Po</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So</span><span class="p">,</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">Q0</span><span class="p">,</span> <span class="nx">Kpr</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">dP</span> <span class="o">-=</span> <span class="p">(</span><span class="nx">dP</span><span class="o">-</span><span class="mi">100</span><span class="o">*</span><span class="p">(</span><span class="nx">Pi</span><span class="o">-</span><span class="nx">Po</span><span class="p">))</span><span class="o">/</span><span class="nx">f_frq</span><span class="p">;</span>
+</pre></div>
 <h3><span class="mw-headline" id=".D0.A2.D0.B5.D0.BF.D0.BB.D0.BE.D0.BE.D0.B1.D0.BC.D1.96.D0.BD.D0.BD.D0.B8.D0.BA_.28heatExch.29"><span class="mw-headline-number">2.23</span> Теплообмінник (heatExch)</span></h3>
 <p>Модель теплообміннику, що розраховує теплообмін двох потоків.
 </p><p><b><u>Параметри</u></b><br />
@@ -3668,18 +3645,17 @@ dP -= (dP-100*(Pi-Po))/f_frq;
 </td></tr></table>
 <p><b><u>Програма</u></b><br />
 </p>
-<pre style="white-space: pre-wrap;">
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi1, Pi1, Ti1, Si1, Fo1, Po1, 293, So1, lo1, Q0i1, Kpr1, 0.01, f_frq);
-DAQ.JavaLikeCalc.lib_techApp.pipeBase(Fi2, Pi2, Ti2, Si2, Fo2, Po2, 293, So2, lo2, Q0i2, Kpr2, 0.01, f_frq);
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi1</span><span class="p">,</span> <span class="nx">Pi1</span><span class="p">,</span> <span class="nx">Ti1</span><span class="p">,</span> <span class="nx">Si1</span><span class="p">,</span> <span class="nx">Fo1</span><span class="p">,</span> <span class="nx">Po1</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So1</span><span class="p">,</span> <span class="nx">lo1</span><span class="p">,</span> <span class="nx">Q0i1</span><span class="p">,</span> <span class="nx">Kpr1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
+<span class="nx">DAQ</span><span class="p">.</span><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">lib_techApp</span><span class="p">.</span><span class="nx">pipeBase</span><span class="p">(</span><span class="nx">Fi2</span><span class="p">,</span> <span class="nx">Pi2</span><span class="p">,</span> <span class="nx">Ti2</span><span class="p">,</span> <span class="nx">Si2</span><span class="p">,</span> <span class="nx">Fo2</span><span class="p">,</span> <span class="nx">Po2</span><span class="p">,</span> <span class="mi">293</span><span class="p">,</span> <span class="nx">So2</span><span class="p">,</span> <span class="nx">lo2</span><span class="p">,</span> <span class="nx">Q0i2</span><span class="p">,</span> <span class="nx">Kpr2</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="nx">f_frq</span><span class="p">);</span>
 
-To1 = max(0, min(1e4,(Fi1*Ti1*Ci1+ki*Fi2*Ti2*Ci2)/(Fi1*Ci1+ki*Fi2*Ci2)));
-To2 = max(0, min(1e4,(ki*Fi1*Ti1*Ci1+Fi2*Ti2*Ci2)/(ki*Fi1*Ci1+Fi2*Ci2)));
-</pre>
-
+<span class="nx">To1</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">1</span><span class="nx">e4</span><span class="p">,(</span><span class="nx">Fi1</span><span class="o">*</span><span class="nx">Ti1</span><span class="o">*</span><span class="nx">Ci1</span><span class="o">+</span><span class="nx">ki</span><span class="o">*</span><span class="nx">Fi2</span><span class="o">*</span><span class="nx">Ti2</span><span class="o">*</span><span class="nx">Ci2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">Fi1</span><span class="o">*</span><span class="nx">Ci1</span><span class="o">+</span><span class="nx">ki</span><span class="o">*</span><span class="nx">Fi2</span><span class="o">*</span><span class="nx">Ci2</span><span class="p">)));</span>
+<span class="nx">To2</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">min</span><span class="p">(</span><span class="mi">1</span><span class="nx">e4</span><span class="p">,(</span><span class="nx">ki</span><span class="o">*</span><span class="nx">Fi1</span><span class="o">*</span><span class="nx">Ti1</span><span class="o">*</span><span class="nx">Ci1</span><span class="o">+</span><span class="nx">Fi2</span><span class="o">*</span><span class="nx">Ti2</span><span class="o">*</span><span class="nx">Ci2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nx">ki</span><span class="o">*</span><span class="nx">Fi1</span><span class="o">*</span><span class="nx">Ci1</span><span class="o">+</span><span class="nx">Fi2</span><span class="o">*</span><span class="nx">Ci2</span><span class="p">)));</span>
+</pre></div>
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Technological_apparatuses/uk">Libs/Technological_apparatuses/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Technological_apparatuses/uk">Libs/Technological_apparatuses/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

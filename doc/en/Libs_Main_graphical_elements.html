@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
@@ -20,7 +20,8 @@
 <th> License </th>
 <th> Source </th>
 <th> Languages </th>
-<th> Author
+<th> Author </th>
+<th> Icon
 </th></tr>
 
 <tr>
@@ -33,7 +34,8 @@
 </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2011-2012) — the page initial translation</i></font> </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:LibMainGraphElements.png"><img alt="LibMainGraphElements.png" height="64" src="files/LibMainGraphElements.png" width="64" /></a>
 </td></tr>
 <tr>
 <th colspan="9"> Description
@@ -54,10 +56,9 @@
 </p>
 <ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
 <li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
-$ sqlite3 -init vcaBase.sql vcaBase.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre></div>
 <ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">the one attached here</a>.</li></ul>
 <p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
 </p>
@@ -699,12 +700,16 @@ In the runtime mode, a table is created to list the active violations, by define
 <li> <i>fontColor</i> — text color of the message row.</li></ul>
 <p>Te example:
 </p>
-<pre style="white-space: pre-wrap">
-#&lt;SnthHgl font="monospace"&gt;&lt;rule expr="^#[^\n]*" color="gray" font_italic="1"/&gt;&lt;rule expr="^[0-9]*" color="blue"&gt;&lt;rule expr="[01]$" color="red"/&gt;&lt;/rule&gt;&lt;/SnthHgl&gt;
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c">#&lt;SnthHgl font="monospace"&gt;</span>
+<span class="c"># &lt;rule expr="^#[^\n]*" color="gray" font_italic="1"/&gt;</span>
+<span class="c"># &lt;rule expr="^[0-9]*" color="blue"&gt;</span>
+<span class="c">#  &lt;rule expr="[01]$" color="red"/&gt;</span>
+<span class="c"># &lt;/rule&gt;</span>
+<span class="c">#&lt;/SnthHgl&gt;</span>
 50:gray
 40:red
 150:yellow
-</pre>
+</pre></div>
 </td></tr>
 <tr>
 <td> colDscrCustNames </td>
@@ -2050,15 +2055,21 @@ In the runtime mode, a table is created from the active violations list, for the
 <li> <i>fontColor</i> — text color of the message row.</li></ul>
 <p>Te example:
 </p>
-<pre style="white-space: pre-wrap">
-#&lt;SnthHgl font="monospace"&gt;&lt;rule expr="^#[^\n]*" color="gray" font_italic="1"/&gt;&lt;rule expr="^[0-9]*" color="blue"&gt;&lt;rule expr="[01]{2}$" color="red"&gt;&lt;rule expr="[01]$" color="darkorange"/&gt;&lt;/rule&gt;&lt;/rule&gt;&lt;/SnthHgl&gt;
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c">#&lt;SnthHgl font="monospace"&gt;</span>
+<span class="c"># &lt;rule expr="^#[^\n]*" color="gray" font_italic="1"/&gt;</span>
+<span class="c"># &lt;rule expr="^[0-9]*" color="blue"&gt;</span>
+<span class="c">#  &lt;rule expr="[01]{2}$" color="red"&gt;</span>
+<span class="c">#   &lt;rule expr="[01]$" color="darkorange"/&gt;</span>
+<span class="c">#  &lt;/rule&gt;</span>
+<span class="c"># &lt;/rule&gt;</span>
+<span class="c">#&lt;/SnthHgl&gt;</span>
 501:gray
 401:red
 1501:yellow
-511:gray:Arial 11 0 1
-411:red:Arial 11 0 1
-1511:yellow:Arial 11 0 1
-</pre>
+511:gray:Arial <span class="m">11</span> <span class="m">0</span> 1
+411:red:Arial <span class="m">11</span> <span class="m">0</span> 1
+1511:yellow:Arial <span class="m">11</span> <span class="m">0</span> 1
+</pre></div>
 </td></tr>
 <tr>
 <td> colDscrCustNames </td>
@@ -3099,5 +3110,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

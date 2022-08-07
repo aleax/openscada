@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Документи</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDocuments&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Documents" title="Libs/Documents">Libs/Documents</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Documents.html" title="Libs/Documents (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../ru/Libs_Documents.html" title="Библиотеки/Документы (32% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FDocuments&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Documents" title="Libs/Documents">Libs/Documents</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Documents.html" title="Libs/Documents (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../ru/Libs_Documents.html" title="Библиотеки/Документы (34% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -21,6 +21,7 @@
 <th> Джерело </th>
 <th> Мови </th>
 <th> Автор </th>
+<th> Іконка </th>
 <th> Опис
 </th></tr>
 
@@ -36,7 +37,8 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:LibDocuments.png"><img alt="LibDocuments.png" height="64" src="../en/files/LibDocuments.png" width="64" /></a>
 </td>
 <td> Надає комбіновану бібліотеку звітів, документів та пов'язаних функцій загальної та промислової автоматизації.
 <ul><li> <b>Засновано:</b> Січень 2008</li>
@@ -88,10 +90,9 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 </p>
 <ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
 <li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
-$ sqlite3 -init vcaBase.sql vcaBase.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre></div>
 <ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">прикріпленого тут</a>.</li></ul>
 <p>Цей отриманий файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
 </p><p><br />
@@ -904,10 +905,9 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p>
 <ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
 <li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre></div>
 <ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
 <p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
 </p><p><br />
@@ -1280,22 +1280,21 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <td> Вхід </td>
 <td> false </td>
 <td>
-<pre style="white-space: pre-wrap;">
-&lt;svg xmlns="http://www.w3.org/2000/svg" version="1.1" sclMarkFont="Arial 10" sclHor="2" sclVer="3" sclColor="gray" sclMarkColor="gray"&gt;
-    &lt;style type="text/css"&gt;
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;svg</span> <span class="na">xmlns=</span><span class="s">"http://www.w3.org/2000/svg"</span> <span class="na">version=</span><span class="s">"1.1"</span> <span class="na">sclMarkFont=</span><span class="s">"Arial 10"</span> <span class="na">sclHor=</span><span class="s">"2"</span> <span class="na">sclVer=</span><span class="s">"3"</span> <span class="na">sclColor=</span><span class="s">"gray"</span> <span class="na">sclMarkColor=</span><span class="s">"gray"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;style</span> <span class="na">type=</span><span class="s">"text/css"</span><span class="nt">&gt;</span>
 	    #scVer rect { stroke: none; }
 	    #scVer text { stroke: none; }
 	    #scHor rect { stroke: none; }
 	    #scHor text { stroke: none; }
 	    #drawArea path { fill: none; }
-    &lt;/style&gt;
-    &lt;!--Draw grid and markers--&gt;
-    &lt;g id="scVer" /&gt;
-    &lt;g id="scHor" /&gt;
-    &lt;!--Curves area --&gt;
-    &lt;g id="drawArea" /&gt;
-&lt;/svg&gt;
-</pre>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="c">&lt;!--Draw grid and markers--&gt;</span>
+    <span class="nt">&lt;g</span> <span class="na">id=</span><span class="s">"scVer"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;g</span> <span class="na">id=</span><span class="s">"scHor"</span> <span class="nt">/&gt;</span>
+    <span class="c">&lt;!--Curves area --&gt;</span>
+    <span class="nt">&lt;g</span> <span class="na">id=</span><span class="s">"drawArea"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/svg&gt;</span>
+</pre></div>
 </td></tr></table>
 
 
@@ -1303,5 +1302,5 @@ $ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/uk">Libs/Documents/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Documents/uk">Libs/Documents/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

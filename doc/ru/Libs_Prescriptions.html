@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Библиотеки/Рецепты</h1>
@@ -21,6 +21,7 @@
 <th> Источник </th>
 <th> Языки </th>
 <th> Автор </th>
+<th> Иконка </th>
 <th> Описание
 </th></tr>
 
@@ -36,7 +37,8 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:LibPrescriptions.png"><img alt="LibPrescriptions.png" height="64" src="../en/files/LibPrescriptions.png" width="64" /></a>
 </td>
 <td> Библиотека элементов сценариев технологических процессов — рецептов.
 <ul><li> <b>Основано:</b> Сентябрь 2011</li>
@@ -89,13 +91,13 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 <li> <i>arg{N}</i> — определённые пользователем значения аргументов от 1 до 5.</li></ul>
 <p>Например, для рецепта с четырьмя шагами получим:
 </p>
-<pre style="white-space: pre-wrap; margin-left: 20pt;">
-&lt;prg&gt;
-  &lt;com arg1="10" id="Таймер" /&gt;
-  &lt;com arg1="10" id="Вакуум" /&gt;
-  &lt;com arg1="20" id="Таймер" /&gt;
-  &lt;com arg1="34" id="Включить катушки" /&gt;
-&lt;/prg&gt;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt;"><pre><span class="nt">&lt;prg&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"10"</span> <span class="na">id=</span><span class="s">"Таймер"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"10"</span> <span class="na">id=</span><span class="s">"Вакуум"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"20"</span> <span class="na">id=</span><span class="s">"Таймер"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"34"</span> <span class="na">id=</span><span class="s">"Включить катушки"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/prg&gt;</span>
+</pre></div>
 <p>Вычисление рецепта осуществляется через параметр <a href="#manager">менеджера рецептов</a>, который поддерживает два способа исполнения команд рецепта:
 </p>
 <ul><li> <b>команда-параметр</b> — размещённые в виде параметров контроллера <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">логического уровня</a> и с учётом их контекста, если в менеджере рецептов указан логический контроллер;</li>
@@ -128,14 +130,14 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 <li> <i>arg{1...5}</i> — значение аргумента 1...5;</li>
 <li> <i>tmp{1...10}</i> — значение временного параметра (контекст вычисления) 1...10;</li></ul></li></ul>
 <dl><dd><dl><dd>Пример текста программы для команды "Таймер", не зависящей от прикладной области:</dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt;">
-JavaLikeCalc.JavaScript
-if(f_start) tmp1 = arg1;
-var curTm = tmp1.toReal();
-if(curTm &lt;= 0) { rez = "1:Время истекло для "+arg1+"с"; return; }
-curTm -= 1/f_frq;
-tmp1 = max(0, curTm);
-rez = "0:Ожидание сейчас "+curTm+"с";</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt;"><pre><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">JavaScript</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">f_start</span><span class="p">)</span> <span class="nx">tmp1</span> <span class="o">=</span> <span class="nx">arg1</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">curTm</span> <span class="o">=</span> <span class="nx">tmp1</span><span class="p">.</span><span class="nx">toReal</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">curTm</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1:Время истекло для "</span><span class="o">+</span><span class="nx">arg1</span><span class="o">+</span><span class="s2">"с"</span><span class="p">;</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+<span class="nx">curTm</span> <span class="o">-=</span> <span class="mi">1</span><span class="o">/</span><span class="nx">f_frq</span><span class="p">;</span>
+<span class="nx">tmp1</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">curTm</span><span class="p">);</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="s2">"0:Ожидание сейчас "</span><span class="o">+</span><span class="nx">curTm</span><span class="o">+</span><span class="s2">"с"</span><span class="p">;</span>
+</pre></div>
 <ul><li> <i>arg{1...5}</i> — метка аргумента 1...5, только аргументы с меткой будут отображаться при редактировании шага рецепта; в метке возможно указание минимальной и максимальной границы числового значения аргумента в виде "<b>{имя}|{мин}|{макс}</b>".</li></ul>
 <p>Для специальных целей зарезервировано несколько имён команд:
 </p>
@@ -147,10 +149,9 @@ rez = "0:Ожидание сейчас "+curTm+"с";</pre>
 </p>
 <ul><li> такой что поставляется с готовым и соответствующим пакетом дистрибутива Linux вроде "openscada-libdb-main", "openscada-LibDB.Main";</li>
 <li> наиболее актуальный и непосредственно полученный из <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозитория subversion</a>, преобразованный в файл БД SQLite путём:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre></div>
 <ul><li> загрузка <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикреплённого тут</a>.</li></ul>
 <p>Этот загруженный файл Вы далее можете разместить в каталоге проекта станции и создать объект базы данных модуля БД "SQLite", зарегистрировав файл базы данных в конфигурации.
 </p><p><br />
@@ -716,10 +717,9 @@ work
 </p>
 <ul><li> такой что поставляется с готовым и соответствующим пакетом дистрибутива Linux вроде "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
 <li> наиболее актуальный и непосредственно полученный из <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторию subversion</a>, преобразованный в файл БД SQLite путём:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
-$ sqlite3 -init vcaBase.sql vcaBase.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre></div>
 <ul><li> загрузка <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">прикреплённого тут</a>.</li></ul>
 <p>Этот полученный файл Вы далее можете разместить в каталоге проекта станции и создать объект базы данных модуля БД "SQLite", зарегистрировав файл базы данных в конфигурации.
 </p><p><br />
@@ -961,5 +961,5 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Prescriptions/ru">Libs/Prescriptions/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Prescriptions/ru">Libs/Prescriptions/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

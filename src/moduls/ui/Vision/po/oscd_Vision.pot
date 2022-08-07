@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:27+0300\n"
+"POT-Creation-Date: 2022-08-07 08:18+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -919,9 +919,6 @@ msgstr ""
 msgid "State"
 msgstr ""
 
-msgid "Item icon. Click to download another."
-msgstr ""
-
 msgid "Status:"
 msgstr ""
 
@@ -1018,13 +1015,33 @@ msgstr ""
 msgid "Error getting the node '%1' information."
 msgstr ""
 
-msgid "Downloading the image icon"
+msgid "Save image"
+msgstr ""
+
+msgid "Load image"
+msgstr ""
+
+msgid "Clear image"
+msgstr ""
+
+msgid "Saving the picture"
+msgstr ""
+
+msgid "Images (*.png *.xpm *.jpg)"
+msgstr ""
+
+#, c-format
+msgid "Error saving to the file '%s'."
+msgstr ""
+
+msgid "Loading the picture"
 msgstr ""
 
 msgid "Images (*.png *.jpg)"
 msgstr ""
 
-msgid "Error downloading the icon image '%1'."
+#, c-format
+msgid "Error loading the picture '%s'."
 msgstr ""
 
 msgid "Saving the changes"
@@ -1267,9 +1284,6 @@ msgid "Press to reset the visual scale of the widget to 100%."
 msgstr ""
 
 msgid "Saving the widget image"
-msgstr ""
-
-msgid "Images (*.png *.xpm *.jpg)"
 msgstr ""
 
 msgid "Error saving to the file '%1'."

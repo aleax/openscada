@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: mess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -362,10 +362,12 @@ void ModMArch::checkArchivator( bool now )
 	//Check file count and delete odd files
 	if(mNumbFiles && !mod->noArchLimit) {
 	    int f_cnt = 0;	//Work files number
+	    res.request(false);
 	    for(unsigned iF = 0; iF < files.size(); iF++)
 		if(!files[iF]->err()) f_cnt++;
 	    if(f_cnt > mNumbFiles) {
 		// Delete oldest files
+		res.request(true);
 		for(int iF = files.size()-1; iF >= 0; iF--)
 		    if(f_cnt <= mNumbFiles)	break;
 		    else if(!files[iF]->err()) {
@@ -375,6 +377,7 @@ void ModMArch::checkArchivator( bool now )
 			f_cnt--;
 		    }
 	    }
+	    res.release();
 	}
 
 	//Check for not presented files into the info table

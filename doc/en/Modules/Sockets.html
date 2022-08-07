@@ -7,11 +7,11 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="../index.html"><img alt="OpenSCADA" src="../../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="../index.html"><img src="../../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Sockets</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Sockets.html" title="Модули/Sockets (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Sockets.html" title="Модулі/Sockets (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Sockets.html" title="Модули/Sockets (89% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Sockets.html" title="Модулі/Sockets (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,14 +31,14 @@
 <td> <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Sockets</a> </td>
 <td> Sockets
 </td>
-<td> 4.4 </td>
+<td> 4.5 </td>
 <td> GPL2 </td>
 <td> tr_Sockets.so </td>
 <td> en,uk,ru,de </td>
 <td> x86,x86_64,ARM
 </td>
 <td> Transport </td>
-<td> Roman Savochenko, Maxim Kochetkov<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2009-2010) — this page initial translation</i></font> </td>
+<td> Roman Savochenko<br />&nbsp;&nbsp;<font size="-2"><i>Maxim Kochetkov(2014), Maxim Lysenko (2009-2010) — this page initial translation</i></font> </td>
 <td> Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.
 </td></tr></table>
 <p>The module provides support for sockets based transports to the program. Input and output transports is supported, based on network sockets TCP, UDP, UNIX and RAWCAN.
@@ -56,20 +56,19 @@
 </p><p>Each input transport is associated with one of the available transport protocols, to which input messages are transmitted. Together with the transport protocol, the mechanism of combining fragmented pieces when sending requests is supported.
 </p><p>Configuration dialog of the input socket is shown in Figure 1.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:926px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="824" src="../files/Sockets_in.png" width="924" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of an input socket.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:905px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_in.png"><img class="thumbimage" height="839" src="../files/Sockets_in.png" width="903" /></a>  <div class="thumbcaption">Fig.1. Configuration dialog of an input socket.</div></div></div></div>
 <p>This dialog allows you to set:
 </p>
 <ul><li> State of the transport, that is: status, "Connect", name of the database (containing the configuration) and information about the active connections.</li>
 <li> Identifier, name and description of the transport.</li>
 <li> Address of the transport. The format of the address is listed in the table below.</li>
 <li> Selecting of the transport protocols.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Empty value of the protocols selection switches the transport mode to creating the associated output transports for each connection to that input.</dd>
-<dd>The associated output transports mode for the input transport demands for presence some external for the transport procedure, which serve as the protocol and which must go through all the associated output transports and do requests to read or write-read.</dd>
-<dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The procedure missing will necessarily come to growing the associated output transports by miss an essence, which stops transports with closed connections and the ability to next remove the stopped output transports by this input.</dd></dl>
-<ul><li> State "Connect", in which the transport must be switched at start up. </li>
-<li> Priority of the transport tasks .</li>
-<li> Maximum segment size (MSS), for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size.</li>
-<li> Input buffer size, Queue length of the sockets, Maximum number of clients and Maximum number of clients per host.</li>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Empty value of the protocols selection switches the transport mode to creating the associated output transports for each connection ID read from to that input.</dd></dl>
+<ul><li> State "Connect", in which the transport must be switched at start up.</li>
+<li> Priority of the transport tasks.</li>
+<li> System input buffer size in kilobytes of the socket. Set to 0 for disabling the user size. Actual size you can see in the status.</li>
+<li> Maximum segment size (MSS) in bytes, for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size. Actual size you can see in the status.</li>
+<li> Queue length of the sockets, Maximum number of clients and Maximum number of clients per host.</li>
 <li> Keep alive requests — closing the connection after specified number of the requests. Zero value for disabling — never closes.</li>
 <li> Keep alive timeout, seconds — closing the connection after missing requests within a specified time. Zero value for disabling — never closes.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Disabling this feature is not recommended because the TCP/IP network property does not guarantee the server notification about the disconnection, say in the event of a power failure on the client. As a result, the opened client connections can remain <span style="color:red">forever</span>, and when the limit is reached the server will stop accepting new ones!</dd></dl>
@@ -139,13 +138,13 @@ where:
 </p><p>The transport supports the direct definition of multiple server addresses and the processing of all IP addresses in which the symbolic address is resolved, which allows you to build <a href="../DAQ.html#Redundancy" title="Special:MyLanguage/Documents/DAQ">vertical redundancy</a> directly by the transport that will be automatically connected to the first available server.
 </p><p>Main tab of the configuration page of an output socket is shown in Figure 2.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:779px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="621" src="../files/Sockets_out.png" width="777" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of an output socket.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="622" src="../files/Sockets_out.png" width="820" /></a>  <div class="thumbcaption">Fig.2. Main tab of the configuration page of an output socket.</div></div></div></div>
 <p>This dialog allows you to set:
 </p>
 <ul><li> State of the transport, that is: status, "Connect" and the name of the database, containing the configuration.</li>
 <li> Identifier, name and description of the transport.</li>
 <li> Address of the transport. The format of the addresses is listed in the table below.</li>
-<li> Maximum segment size (MSS), for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size.</li>
+<li> Maximum segment size (MSS) in bytes, for limit the transmitted packages size (segments TCP) on bad link channels. Set to 0 for disabling the user limit for size. Actual size you can see in the status.</li>
 <li> Connection timings in the format "<b>{conn}:{next}[:{rep}]</b>", where:
 <ul><li> <i>conn</i> — maximum connection waiting time, in seconds;</li>
 <li> <i>next</i> — maximum time for waiting the continue of the response, in seconds;</li>
@@ -206,5 +205,5 @@ where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Sockets/en">Modules/Sockets/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Sockets/en">Modules/Sockets/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

@@ -179,10 +179,11 @@ class TSYS : public TCntrNode
 	void	stop( int sig = SIGUSR1 );	// SIGUSR2 used for reloading from other project
 
 	// Program options
-	string	id( )		{ return mId.c_str(); }
-	string	name( )		{ return mName; }
-	void setName( const string &vl )	{ mName = vl; modif(); }
-	string	user( )		{ return mUser; }	//Run user name
+	string	id( ) const	{ return mId.c_str(); }
+	string	name( ) const	{ return mName.getVal(); }
+	void setName( const string &vl )	{ mName = vl; sysModifFlgs |= MDF_Name; modif(); }
+	string	ico( string *tp = NULL );
+	string	user( ) const	{ return mUser; }	//Run user name
 	string	host( );
 
 	void	list( vector<string> &list ) const	{ chldList(mSubst, list); }
@@ -207,8 +208,8 @@ class TSYS : public TCntrNode
 	string	docDir( )	{ return mDocDir; }
 	void	setWorkDir( const string &wdir, bool init = false );
 	void	setModDir( const string &mdir, bool init = false );
-	void	setIcoDir( const string &idir, bool init = false );
-	void	setDocDir( const string &idir, bool init = false );
+	void	setIcoDir( const string &idir )	{ mIcoDir = idir; sysModifFlgs |= MDF_IcoDir; modif(); }
+	void	setDocDir( const string &idir )	{ mDocDir = idir; sysModifFlgs |= MDF_DocDir; modif(); }
 
 	// Config-file functions
 	string	cfgFile( )	{ return mConfFile; }
@@ -307,13 +308,13 @@ class TSYS : public TCntrNode
 	SStat rdSt( const string &id );
 	map<string, SStat> rdSts( );
 	int rdStLevel( )		{ return mRdStLevel; }
-	void setRdStLevel( int vl )	{ mRdStLevel = vmin(255,vmax(0,vl)); modif(); }
+	void setRdStLevel( int vl )	{ mRdStLevel = vmin(255,vmax(0,vl)); sysModifFlgs |= MDF_RD; modif(); }
 	float rdTaskPer( )		{ return mRdTaskPer; }
-	void setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); modif(); }
+	void setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); sysModifFlgs |= MDF_RD; modif(); }
 	int rdRestConnTm( )		{ return mRdRestConnTm; }
-	void setRdRestConnTm( int vl )	{ mRdRestConnTm = vmin(255,vmax(0,vl)); modif(); }
+	void setRdRestConnTm( int vl )	{ mRdRestConnTm = vmin(255,vmax(0,vl)); sysModifFlgs |= MDF_RD; modif(); }
 	bool rdPrimCmdTr( )		{ return mRdPrimCmdTr; }
-	void setRdPrimCmdTr( bool vl )	{ mRdPrimCmdTr = vl; modif(); }
+	void setRdPrimCmdTr( bool vl )	{ mRdPrimCmdTr = vl; sysModifFlgs |= MDF_RD; modif(); }
 	string rdStRequest( XMLNode &req, const string &st = "", bool toScan = false );	//Request to a remote station if <st> is empty or force
 
 	// Convert value to string
@@ -432,11 +433,12 @@ class TSYS : public TCntrNode
 
     private:
 	//Data
-	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08, MDF_DocDir = 0x10 };
+	enum MdfSYSFlds	{ MDF_NONE = 0, MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08, MDF_DocDir = 0x10,
+			  MDF_Name = 0x20, MDF_TR = 0x40, MDF_DBG = 0x80, MDF_MESS = 0x100, MDF_RD = 0x200 };
 
 	//Private methods
 	const char *nodeName( ) const	{ return mId.c_str(); }
-	string nodeNameSYSM( ) const	{ return mName; }
+	string nodeNameSYSM( ) const	{ return name(); }
 	void	cfgFileLoad( );
 	void	cfgFileSave( );
 	void	cfgPrmLoad( );
@@ -464,13 +466,13 @@ class TSYS : public TCntrNode
 	string	mUser,		// An owner user name!
 	 	mConfFile,	// Config-file name
 		mId,		// Station id
-		mName,		// Station name
 		mModDir,	// Modules directory
 		mIcoDir,	// Icons directory
 		mDocDir,	// Icons directory
 		prjLockFile;	// Lock file of the project OpenSCADA
 
-	MtxString mWorkDB, mSelDB,// Work and selected DB
+	MtxString mName, mNameB,// Station name and base one
+		mWorkDB, mSelDB,// Work and selected DB
 		mMainCPUs;	// Main used processors set
 	int	mTaskInvPhs;	// Number of phases of the task invoking
 	bool	mSaveAtExit;	// Save at exit

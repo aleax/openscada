@@ -95,12 +95,16 @@ TMess::~TMess( )
 void TMess::setMessLevel( int level )
 {
     mMessLevel = vmax(Debug, vmin(Crit,level));
+
+    SYS->sysModifFlgs |= TSYS::MDF_MESS;
     SYS->modif();
 }
 
 void TMess::setLogDirect( int dir )
 {
     mLogDir = dir;
+
+    SYS->sysModifFlgs |= TSYS::MDF_MESS;
     SYS->modif();
 }
 
@@ -234,6 +238,7 @@ void TMess::setLangBase( const string &vl )
 
     mLangBase = tvl + ((off<vl.size())?";" + vl.substr(off):"");
 
+    SYS->sysModifFlgs |= TSYS::MDF_TR;
     SYS->modif();
 
     //Setting to the translation languages by default
@@ -257,6 +262,7 @@ void TMess::setTranslDyn( bool val, bool plan )
     if(plan) mTranslDynPlan = val;
     else mTranslDyn = mTranslDynPlan = val;
 
+    SYS->sysModifFlgs |= TSYS::MDF_TR;
     SYS->modif();
 }
 
@@ -274,6 +280,7 @@ void TMess::setTranslEnMan( bool vl, bool passive )
 
     mTranslSet = false;
 
+    SYS->sysModifFlgs |= TSYS::MDF_TR;
     SYS->modif();
 }
 
@@ -776,10 +783,12 @@ void TMess::setSelDebCats( const string &vl )
 	debugCats[curCat] = true;
 	selectDebugCats.push_back(curCat);
     }
+
+    SYS->sysModifFlgs |= TSYS::MDF_DBG;
     SYS->modif();
 }
 
-void TMess::setLang( const string &lng, bool init )
+void TMess::setLang( const string &lng )
 {
     char *prvLng = NULL;
     if((prvLng=getenv("LANGUAGE")) && strlen(prvLng)) setenv("LANGUAGE", lng.c_str(), 1);
@@ -802,8 +811,8 @@ void TMess::setLang( const string &lng, bool init )
 
     mConvCode = !(tLng == "C" || (mLangCode.getVal() == "en" && (IOCharSet == "ISO-8859-1" || IOCharSet == "ANSI_X3.4-1968" || IOCharSet == "ASCII" || IOCharSet == "US-ASCII")));
 
-    if(init) SYS->sysModifFlgs &= ~TSYS::MDF_LANG;
-    else { SYS->sysModifFlgs |= TSYS::MDF_LANG; SYS->modif(); }
+    SYS->sysModifFlgs |= TSYS::MDF_LANG;
+    SYS->modif();
 }
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess )
@@ -919,7 +928,7 @@ void TMess::load( )
 {
     //Load params from command line
     string argVl;
-    if((argVl=SYS->cmdOpt("lang")).size()) setLang(argVl, true);
+    if((argVl=SYS->cmdOpt("lang")).size()) setLang(argVl);
     if((argVl=SYS->cmdOpt("messLev")).size()) {
 	int i = s2i(argVl);
 	if(i >= Debug && i <= Emerg) setMessLevel(i);
@@ -930,12 +939,14 @@ void TMess::load( )
     setMessLevel(s2i(TBDS::genPrmGet(SYS->nodePath()+"MessLev",i2s(messLevel()))));
     setSelDebCats(TBDS::genPrmGet(SYS->nodePath()+"SelDebCats",selDebCats()));
     setLogDirect(s2i(TBDS::genPrmGet(SYS->nodePath()+"LogTarget",i2s(logDirect()))));
-    setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
+    setLang(TBDS::genPrmGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg));
     if((argVl=TBDS::genPrmGet(SYS->nodePath()+"LangBase")).size() ||
 	    (argVl=TBDS::genPrmGet(SYS->nodePath()+"Lang2CodeBase")).size())	//????[v1.0] Remove, loading the deprecated parameter
 	setLangBase(argVl);
     setTranslDyn(s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()))), false);
     setTranslEnMan(translDyn() || s2i(TBDS::genPrmGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()))), true);
+
+    SYS->sysModifFlgs = TSYS::MDF_NONE;
 }
 
 void TMess::unload( )
@@ -952,14 +963,20 @@ void TMess::unload( )
 
 void TMess::save( )
 {
-    TBDS::genPrmSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
+    if(SYS->sysModifFlgs&TSYS::MDF_MESS) {
+	TBDS::genPrmSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);
+	TBDS::genPrmSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
+    }
+    if(SYS->sysModifFlgs&TSYS::MDF_DBG) TBDS::genPrmSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
     if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genPrmSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"LangBase",langBase(),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"Lang2CodeBase","","root",TBDS::OnlyCfg);	//????[v1.0] Remove, cleaning up the deprecated parameter
-    TBDS::genPrmSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
-    TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
+    if(SYS->sysModifFlgs&TSYS::MDF_TR) {
+	TBDS::genPrmSet(SYS->nodePath()+"LangBase",langBase(),"root",TBDS::OnlyCfg);
+	TBDS::genPrmSet(SYS->nodePath()+"Lang2CodeBase","","root",TBDS::OnlyCfg);	//????[v1.0] Remove, cleaning up the deprecated parameter
+	TBDS::genPrmSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
+	TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
+    }
+
+    SYS->sysModifFlgs = TSYS::MDF_NONE;
 }
 
 string TMess::labStor( bool nogen )

@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Елементи електрики</h1>
@@ -21,6 +21,7 @@
 <th> Джерело </th>
 <th> Мови </th>
 <th> Автор </th>
+<th> Іконка </th>
 <th> Опис
 </th></tr>
 
@@ -32,7 +33,8 @@
 <td> vcaElectroEls.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">GZip</a>) &gt; VCA.wlb_ElectroEls </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лисенко (2009)</i></font>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a><br />&nbsp;&nbsp;<font size="-2"><i>Максим Лисенко (2009)</i></font> </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:LibElectricalElements.png"><img alt="LibElectricalElements.png" height="64" src="../en/files/LibElectricalElements.png" width="64" /></a>
 </td>
 <td> Надає бібліотеку мнемонічних елементів інтерфейсу користувача електричних підстанцій та станцій генерації електрики.
 <ul><li> <b>Засновано:</b> Червень 2009</li>
@@ -48,10 +50,9 @@
 </p>
 <ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
 <li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql
-$ sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaElectroEls.sql
+sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
+</pre></div>
 <ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:VcaElectroEls.db.gz" title="File:VcaElectroEls.db.gz">прикріпленого тут</a>.</li></ul>
 <p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
 </p>
@@ -611,5 +612,5 @@ $ sqlite3 -init vcaElectroEls.sql vcaElectroEls.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Electrical_elements/uk">Libs/Electrical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Electrical_elements/uk">Libs/Electrical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

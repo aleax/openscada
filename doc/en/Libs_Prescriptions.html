@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Prescriptions</h1>
@@ -21,6 +21,7 @@
 <th> Source </th>
 <th> Languages </th>
 <th> Author </th>
+<th> Icon </th>
 <th> Description
 </th></tr>
 
@@ -36,7 +37,8 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:LibPrescriptions.png"><img alt="LibPrescriptions.png" height="64" src="files/LibPrescriptions.png" width="64" /></a>
 </td>
 <td> Library of elements of scenarios of the technological operations — prescriptions.
 <ul><li> <b>Founded:</b> September 2011</li>
@@ -89,13 +91,13 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 <li> <i>arg{N}</i> — user defined values of the arguments from 1 to 5.</li></ul>
 <p>For example, for a four-step prescription we will have:
 </p>
-<pre style="white-space: pre-wrap; margin-left: 20pt;">
-&lt;prg&gt;
-  &lt;com arg1="10" id="Timer" /&gt;
-  &lt;com arg1="10" id="Vacuum" /&gt;
-  &lt;com arg1="20" id="Timer" /&gt;
-  &lt;com arg1="34" id="Enable coils" /&gt;
-&lt;/prg&gt;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt;"><pre><span class="nt">&lt;prg&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"10"</span> <span class="na">id=</span><span class="s">"Timer"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"10"</span> <span class="na">id=</span><span class="s">"Vacuum"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"20"</span> <span class="na">id=</span><span class="s">"Timer"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"34"</span> <span class="na">id=</span><span class="s">"Enable coils"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/prg&gt;</span>
+</pre></div>
 <p>The prescription execution making through the <a href="#manager">prescription manager's</a> parameter, which support two modes of the prescription commands execution:
 </p>
 <ul><li> <b>command-parameter</b> — are placed as parameters of the <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">logical controller</a> and given their context, if the logical controller specified in the prescription manager;</li>
@@ -128,14 +130,14 @@ The commands-macros, which user can choose during the formation of a prescriptio
 <li> <i>arg{1...5}</i> — argument's 1..5 value;</li>
 <li> <i>tmp{1...10}</i> — temporary parameter's (the execution context) 1...10 value;</li></ul></li></ul>
 <dl><dd><dl><dd>An example of the program code for the "Timer" command, which does not depend on the application area:</dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt;">
-JavaLikeCalc.JavaScript
-if(f_start) tmp1 = arg1;
-var curTm = tmp1.toReal();
-if(curTm &lt;= 0) { rez = "1:Waiting is elapsed for "+arg1+"s"; return; }
-curTm -= 1/f_frq;
-tmp1 = max(0, curTm);
-rez = "0:Waiting now for "+curTm+"s";</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt;"><pre><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">JavaScript</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">f_start</span><span class="p">)</span> <span class="nx">tmp1</span> <span class="o">=</span> <span class="nx">arg1</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">curTm</span> <span class="o">=</span> <span class="nx">tmp1</span><span class="p">.</span><span class="nx">toReal</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">curTm</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1:Waiting is elapsed for "</span><span class="o">+</span><span class="nx">arg1</span><span class="o">+</span><span class="s2">"s"</span><span class="p">;</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+<span class="nx">curTm</span> <span class="o">-=</span> <span class="mi">1</span><span class="o">/</span><span class="nx">f_frq</span><span class="p">;</span>
+<span class="nx">tmp1</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">curTm</span><span class="p">);</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="s2">"0:Waiting now for "</span><span class="o">+</span><span class="nx">curTm</span><span class="o">+</span><span class="s2">"s"</span><span class="p">;</span>
+</pre></div>
 <ul><li> <i>arg{1...5}</i> — label of the 1..5 argument, only arguments with the label will be displayed when editing the prescription step; into the label you can set the minimum and maximum borders of the numeric values of the argument into the format "<b>{Label}|{min}|{max}</b>".</li></ul>
 <p>The several command names are reserved for the special purposes:
 </p>
@@ -147,10 +149,9 @@ rez = "0:Waiting now for "+curTm+"s";</pre>
 </p>
 <ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-main", "openscada-LibDB.Main";</li>
 <li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre></div>
 <ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">the one attached here</a>.</li></ul>
 <p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
 </p><p><br />
@@ -716,10 +717,9 @@ work
 </p>
 <ul><li> supplied with a ready and proper package of the Linux distribution like to "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
 <li> directly taken for most actual one from <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">the subversion repository</a> and converted to the DB SQLite file in the way:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
-$ sqlite3 -init vcaBase.sql vcaBase.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre></div>
 <ul><li> downloaded for <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">the one attached here</a>.</li></ul>
 <p>This obtained file next you can place into the project directory of the station and create the database object for the DB module "SQLite", registering the database file in the configuration.
 </p><p><br />
@@ -962,5 +962,5 @@ In the runtime mode, the user can select the desired prescription-program, in <a
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Prescriptions/en">Libs/Prescriptions/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Prescriptions/en">Libs/Prescriptions/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

@@ -540,7 +540,7 @@ void TUser::cntrCmdProc( XMLNode *opt )
 	    modif();
 	}
     }
-    else if(a_path.compare(0,4,"/prm") == 0)
+    else if(a_path.find("/prm") == 0)
 	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,1), name().c_str(), SSEC_ID, RWRWR_);
     else TCntrNode::cntrCmdProc(opt);
 }

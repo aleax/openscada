@@ -58,15 +58,40 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.7
+Version: 2.1.8
 License: GPLv2
-DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
+DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAA
+GXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAABTxJREFUeJzt2XFo3GcZwPHPZdFO
+szQ2VsWxddTW1iVZS41WU6oFS9XqdIwpldoVbVa11CsIysxw9A+ZMnD+E8pEpE4CruJSsjkYs3PV
+1E0xzEm7KWNii61zks6NpZhYL/f6x/NrcrldstySrUp+3+O4e+/3/J57n+d93ud5nztycnJycnJy
+cnJycnJycnJycnIWFIX9+/c/UyqVLvY8LgqNjY0Ui8WEBfksFoupEezEGzO3nMX9GMO70IURPIx/
+1nDjl1DAOE7h59l4E1bgrxjGe/CD7J4CuvE7vBOL8Tj+UEP/q0yjEu7AvzCIdehED/rwNN6GT2Nb
+DQ134kG8gPfhVuGMffgTvopHs/v/gZ9leu7AvXgvfos9uAnH59/ImYgIKGeTu1E44bNowduFUYtw
+yQxajuJ2vIhP4HKcFKvcIpyzRRj4YPb6nIi8y0R0PISVXnMHNEy8K2C1yXBcL3ZKGaM4N4OWAj6a
+yR/Hu/HvbPxCJnMXVgmHviMbE1uvF3/BU3M1p34mHbAS9+CP2IVna0gXptHyBXwbB3Ab/j5Fc3Cf
+iKhP4s34SfZ5Hy4VUfHkK7BgjkxO82lcg+0iPG8XYd+NH+MRsaK1+J7IHbdk4x/ianxY5IG7Mv3H
+8WWR/E6JPHM5viLyxuL5MaoeGjXgN1664sdEYtojwvnWaTQcE5m+ktuE83qEsftEfnhYGHo003kl
+nsfXxVJ8I5N5LanrHHBIMlzxPHvxa/lcnpPngNnymbqk/y+oTlULjv8tB6wVlehJcWD60Ayyj+DP
+s9DZKpLyCfxUlPoKajpgaGhISsm5c+d0d3fP4lvmgd3ixHgD2nCtKJ37quQuEVWnSxy1Z+L9eAyf
+Qwc+hV/jI5MiL3HA5s2brV27VkpJU1OTDRs21G9MvbxJnEIvFb1EDx5AE75YJfsxkYumO5NUcgOu
+EuX3FvxKRMRNFTKVVaChoSH19/en8fHxNDAwkMbGxtLw8PCrn5GvlDwlGZG8oeLzsmS0SvZxyYvS
+xGMmvYOZzOZs3CkZkxyXvCWqwJQIWLVqlfb2dqOjo/r6+hw5csTSpUv19PTMwt1z4Bmx0jeKYzex
+BQomT4eN+JEI5QFxRH85rhau+EU2fiwbX4Xm+GiKAzo7O61evdrp06f19/cbHBx0/vx527Zt09LS
+8sqMmw3j+KUwjOhDvov/iI4RPoDrROLbafpTaSXTTfkyvC7eTnHA7t27QW9vLzh8+LDh4WHLli2z
+adOmWXzjPLBR9AcrRJv8HdGOfz+b9M116Jruh66SiQiacEBXV5f169dLKdm7d68TJ04YGBjQ3Nxs
+yZIlNm7cWLctddMpwnyFiIYPii1xM5aL4/O3RFK7MPMn8Plp9D2rdrJ8LtNVocauXbssWrRIoVDQ
+1tamo6NDR0eHxYujQ9mxY8dcTHt5rsHdYn8eFBn8Aq2i/C1BeyZ7wbB2vHUanU9kr/uz1z2ZnpMm
+2vRGaG1ttW7dOuPj4w4cOGBkZGSKnq1bt1qzZo1isTixPeaVBrHKK0V4bsXp7FrKJv63CvmSaJwa
+RON1TJwNPi4arZ2Z3KOi5n9NlL5m4bjfi+aMKINbtmxJKaV05syZmuWkt7c3lUqlNDg4mJqamua/
+DF4hOVlR2qofte4pV127Jxs/UCU3IBq3suR5ydGqZqhcLisWi8rlsoMHD9ZcoEOHDtm+fbvly5dr
+a2szNDQ003rWz1l8E6+v4549pu7vO8XPaqeq5K4XUXBF9j0PVV1f6D+L53+M5OTk5OTk5OTk5OTk
+5OTk5OTkLCz+C0bKoCod2vh+AAAAAElFTkSuQmCC','Основні елементи','Бібліотека створюється для надання основних елементів користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних та загальних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
 Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу tr() та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.7
+Версія: 2.1.8
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -74,7 +99,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.7
+Версия: 2.1.8
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -85,9 +110,89 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2008-2012), Ksenia Yashina (2007)
 Founded: September 2007
-Version: 1.0.3
+Version: 1.0.4
 License: GPLv2
-DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','wlb_mnEls','','Елементи мнемосхеми','Надає бібліотеку елементів мнемосхем користувацького інтерфейсу промислової автоматизації.
+DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','wlb_mnEls','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','Елементи мнемосхеми','Надає бібліотеку елементів мнемосхем користувацького інтерфейсу промислової автоматизації.
 
 Бібліотека створюється для надання елементів мнемосхем користувацького інтерфейсу та містить графічні елементи, які часто затребувано при формуванні користувацького інтерфейсу автоматизації технологічних процесів. Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc.
 
@@ -95,7 +200,7 @@ DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','wlb_mnEls','','Елементи �
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2008-2012), Ксенія Яшина (2007)
 Засновано: Вересень 2007
-Версія: 1.0.3
+Версія: 1.0.4
 Ліцензія: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','Элементы мнемосхемы','Предоставляет библиотеку элементов мнемосхем пользовательского интерфейса промышленной автоматизации.
 
@@ -105,7 +210,7 @@ DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','Элементы мнемосхе
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2008-2012), Ксения Яшина (2007)
 Основано: Сентябрь 2007
-Версия: 1.0.3
+Версия: 1.0.4
 Лицензия: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements');
 INSERT INTO VCALibs VALUES('doc','Documents','Provides the combined library of the reports, documents and related functions of common and the industrial automation.
@@ -118,9 +223,65 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: January 2008
-Version: 2.1.3
+Version: 2.1.4
 License: GPLv2
-DOC: Libs_Documents|Libs/Documents','wlb_doc','','Документи','Надає комбіновану бібліотеку звітів, документів та пов''язаних функцій загальної та промислової автоматизації.
+DOC: Libs_Documents|Libs/Documents','wlb_doc','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','Документи','Надає комбіновану бібліотеку звітів, документів та пов''язаних функцій загальної та промислової автоматизації.
 
 Містить елементи-кадри документів шаблонного та кінцевого типів, що призначені для розташування у розділі "Документи" (вид відображення) дерева сторінок проекту, побудованого за концепцією об''єктів сигналізації кореневої сторінки "RootPgSo". Однак, вони можуть бути розташовані як окремі сутності або у складі власної концепції керування сторінками, але тут треба враховувати, що кадри часто посилаються та викликають панель документів!
 
@@ -130,7 +291,7 @@ DOC: Libs_Documents|Libs/Documents','wlb_doc','','Документи','Нада�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Січень 2008
-Версія: 2.1.3
+Версія: 2.1.4
 Ліцензія: GPLv2
 DOC: Libs_Documents|Libs/Documents','Документы','Предоставляет комбинированную библиотеку отчётов, документов и связанных функций общей и промышленной автоматизации.
 
@@ -142,7 +303,7 @@ DOC: Libs_Documents|Libs/Documents','Документы','Предоставля
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Январь 2008
-Версия: 2.1.3
+Версия: 2.1.4
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents');
 INSERT INTO VCALibs VALUES('prescr','Prescriptions','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
@@ -155,9 +316,68 @@ Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
 Sponsored by, about the controller templateization: Magomed, SAVTECH
 Founded: April 2012
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2
-DOC: Libs_Prescriptions|Libs/Prescriptions','wlb_prescr','','Рецепти','Бібліотека створюється для надання середовища виконання сценаріїв технологічних процесів — рецептів, та кадрів користувацького інтерфейсу довкола нього, включно з кадром створення/редагування рецептів та двома кадрами контролю виконання та звітності — "Рецепт — виконання" та "Рецепт — виконання, простий". Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc, включно для шаблонів та команд.
+DOC: Libs_Prescriptions|Libs/Prescriptions','wlb_prescr','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','Рецепти','Бібліотека створюється для надання середовища виконання сценаріїв технологічних процесів — рецептів, та кадрів користувацького інтерфейсу довкола нього, включно з кадром створення/редагування рецептів та двома кадрами контролю виконання та звітності — "Рецепт — виконання" та "Рецепт — виконання, простий". Будується бібліотека на основі примітивів віджетів та мови внутрішнього програмування JavaLikeCalc, включно для шаблонів та команд.
 
 Містить елементи-кадри рецептів кінцевого типу та елементи-віджети, що призначені для розташування у розділі мнемосхем (вид відображення) дерева сторінок проекту, побудованого за концепцією об''єктів сигналізації кореневої сторінки "RootPgSo" та для розташування на інших комплексних кадрах. Однак, елементи-кадри можуть бути розташовані як окремі сутності або у складі власної концепції керування сторінками, але тут треба враховувати, що кадри часто посилаються та викликають панель документів!
 
@@ -167,7 +387,7 @@ DOC: Libs_Prescriptions|Libs/Prescriptions','wlb_prescr','','Рецепти','Б
 Спонсоровано: Василь Григор''єв, Лабораторія Вакуумних Технологій
 Спонсоровано, щодо шаблонізації контролеру: Магомед, SAVTECH
 Засновано: Квітень 2012
-Версія: 1.1.0
+Версія: 1.1.1
 Ліцензія: GPLv2
 DOC: Libs_Prescriptions|Libs/Prescriptions','Рецепты','Библиотека создаётся для предоставления среды исполнения сценариев технологических процессов — рецептов, и кадров пользовательского интерфейса около него, включая кадр создания/редактирования рецептов и два кадра контроля исполнения и отчётности — "Рецепт — исполнение" и "Рецепт — исполнение, простой". Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc, включая для шаблонов и команд.
 
@@ -179,7 +399,7 @@ DOC: Libs_Prescriptions|Libs/Prescriptions','Рецепты','Библиотек
 Спонсировано: Василий Григорьев, Лаборатория Вакуумных Технологий
 Спонсировано, на предмет шаблонизации контроллера: Магомед, SAVTECH
 Основано: Апрель 2012
-Версия: 1.1.0
+Версия: 1.1.1
 Лицензия: GPLv2
 DOC: Libs_Prescriptions|Libs/Prescriptions');
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
@@ -15970,117 +16190,11 @@ if(toBuild) {
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0','Шаблон проекту візуалізації, який базовано на групах сигналізації.
+Version: 1.3.1','Шаблон проекту візуалізації, який базовано на групах сигналізації.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.0','Шаблон проекта визуализации основанного на группах сигнализации.
+Версія: 1.3.1','Шаблон проекта визуализации основанного на группах сигнализации.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.0','prj_tmplSO','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
-TkSuQmCC','root','op',432,100,0,1);
+Версия: 1.3.1','prj_tmplSO','','root','op',432,100,0,1);
 INSERT INTO VCAPrjs VALUES('archBrowser','Archives browser','Огляд архівів','Обзор архивов','Project of value archives browsing.
 
 Author: Roman Savochenko <roman@oscada.org>

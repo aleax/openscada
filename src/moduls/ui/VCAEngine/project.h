@@ -61,7 +61,7 @@ class Project : public TCntrNode, public TConfig
 	string	id( ) const	{ return mId; }			//Identifier
 	string	name( ) const;					//Name
 	string	descr( ) const	{ return cfg("DESCR").getS(); }	//Description
-	string	ico( ) const	{ return cfg("ICO").getS(); }	//Icon
+	string	ico( ) const	{ string sval = cfg("ICO").getS(); return sval.size() ? sval : SYS->ico(); }	//Icon
 	string	owner( ) const;					//Library owner
 	string	grp( ) const;					//Library group
 	short	permit( ) const	{ return mPermit; }		//Permission for access to library

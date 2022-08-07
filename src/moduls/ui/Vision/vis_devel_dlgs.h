@@ -71,7 +71,7 @@ class LibProjProp: public QDialog
 
     private slots:
 	//Private slots
-	void selectIco( );
+	void doIco( QAction * );
 	void isModify( QObject *snd = NULL );
 
 	void addMimeData( );
@@ -155,7 +155,7 @@ class VisItProp : public QDialog
 
     private slots:
 	//Private slots
-	void selectIco( );
+	void doIco( QAction * );
 	void isModify( QObject *snd = NULL );
 
 	void addAttr( );

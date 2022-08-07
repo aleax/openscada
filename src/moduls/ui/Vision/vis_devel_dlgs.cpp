@@ -38,6 +38,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QMenuBar>
 
 #include "../QTStarter/lib_qtgen.h"
 #include "vis_widgs.h"
@@ -101,11 +102,9 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
 
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/obj/cfg/ico");
-    obj_ico->setToolTip(_("Item icon. Click to download another."));
     obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
     obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
-    connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
     glay->addWidget(obj_ico, 0, 0, 3, 1);
 
     lab = new QLabel(_("Status:"), tab_w);
@@ -375,9 +374,9 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     XMLNode req("get");
 
     XMLNode info_req("info");
-    info_req.setAttr("path",ed_it);
+    info_req.setAttr("path", ed_it);
 
-    if(owner()->cntrIfCmd(info_req)) {
+    if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 	mod->postMess(mod->nodePath().c_str(), QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
 	return;
     }
@@ -475,14 +474,38 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 		}
 	}
 	// Icon
-	gnd = TCntrNode::ctrId(root,obj_ico->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_ico->objectName().toStdString(), true);
 	ico_modif = gnd && s2i(gnd->attr("acs"))&SEC_WR;
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
 		    ico_t.loadFromData((const uchar*)sval.data(),sval.size()))
+	    {
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
-	    else obj_ico->setIcon(QIcon());
+		obj_ico->setProperty("img", ico_t);
+
+		//  Icon menu
+		QMenu *imgMenu = new QMenu;
+		QAction *it = NULL;
+		if(!ico_t.isNull()) {
+		    it = new QAction(_("Save image"), this);
+		    it->setObjectName("save");
+		    imgMenu->addAction(it);
+		}
+		if(ico_modif) {
+		    it = new QAction(_("Load image"), this);
+		    it->setObjectName("load");
+		    imgMenu->addAction(it);
+		    if(!ico_t.isNull()) {
+			it = new QAction(_("Clear image"),this);
+			it->setObjectName("clear");
+			imgMenu->addAction(it);
+		    }
+		}
+		obj_ico->setMenu(imgMenu);
+		if(imgMenu)
+		    connect(imgMenu, SIGNAL(triggered(QAction*)), this, SLOT(doIco(QAction*)));
+	    } else obj_ico->setIcon(QIcon());
 	}
 	// Permition
 	string wstr;
@@ -739,32 +762,50 @@ void LibProjProp::tabChanged( int itb )
     }
 }
 
-void LibProjProp::selectIco( )
+//?!?! Move to some common code of own image implementation
+void LibProjProp::doIco( QAction *it )
 {
-    QImage ico_t;
+    if(!it) return;
 
-    if(!ico_modif)	return;
+    try {
+	bool update = false;
 
-    QString fileName = owner()->getFileName(_("Downloading the image icon"),"",_("Images (*.png *.jpg)"));
-    if(fileName.isEmpty())	return;
-    if(!ico_t.load(fileName)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Error downloading the icon image '%1'.")).arg(fileName), TVision::Warning, this);
-	return;
-    }
+	if(it->objectName() == "save") {
+	    QString fileName = QFileDialog::getSaveFileName(this,_("Saving the picture"),"img.png",_("Images (*.png *.xpm *.jpg)"));
+	    if(!fileName.isEmpty() && !obj_ico->property("img").value<QImage>().save(fileName))
+		throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'."), fileName.toStdString().c_str());
+	}
+	else if(it->objectName() == "load") {
+	    QString fileName = owner()->getFileName(_("Loading the picture"),"",_("Images (*.png *.jpg)"));
+	    if(fileName.isEmpty())	return;
 
-    obj_ico->setIcon(QPixmap::fromImage(ico_t));
+	    QImage ico_t;
+	    if(!ico_t.load(fileName))
+		throw TError(mod->nodePath().c_str(), _("Error loading the picture '%s'."), fileName.toStdString().c_str());
 
-    QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
-    ico_t.save(&buffer, "PNG");
+	    QByteArray ba;
+	    QBuffer buffer(&ba);
+	    buffer.open(QIODevice::WriteOnly);
+	    ico_t.save(&buffer, "PNG");
 
-    XMLNode req("set");
-    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
-	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
-    if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    XMLNode req("set");
+	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
+		setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
 
-    is_modif = true;
+	    update = true;
+	}
+	else if(it->objectName() == "clear") {
+	    XMLNode req("set");
+	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->setText("");
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
+
+	    update = true;
+	}
+
+	if(update) { showDlg(ed_it, true); is_modif = true; }
+
+    } catch(TError &err) { mod->postMess(err.cat.c_str(), err.mess.c_str(), TVision::Error, this); }
 }
 
 void LibProjProp::isModify( QObject *snd )
@@ -1034,12 +1075,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setSpacing(6);
     obj_ico = new QPushButton(tab_w);
     obj_ico->setObjectName("/wdg/cfg/ico");
-    obj_ico->setToolTip(_("Item icon. Click to download another."));
     obj_ico->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
     obj_ico->setIconSize(QSize(icoSize(5),icoSize(5)));
     obj_ico->setAutoDefault(false);
-    connect(obj_ico, SIGNAL(released()), this, SLOT(selectIco()));
-    glay->addWidget(obj_ico,0,0,4,1);
+    glay->addWidget(obj_ico, 0, 0, 4, 1);
 
     lab = new QLabel(_("Status:"), tab_w);
     glay->addWidget(lab, 0, 1);
@@ -1283,7 +1322,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
     XMLNode info_req("info");
     info_req.setAttr("path", ed_it);
-    if(owner()->cntrIfCmd(info_req)) {
+    if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 	mod->postMess(mod->nodePath().c_str(), QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()), TVision::Error, this);
 	return;
     }
@@ -1348,14 +1387,38 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	}else obj_tmstmp->setText("");*/
 
 	// Icon
-	gnd = TCntrNode::ctrId(root,obj_ico->objectName().toStdString(),true);
+	gnd = TCntrNode::ctrId(root, obj_ico->objectName().toStdString(), true);
 	ico_modif = gnd && s2i(gnd->attr("acs"))&SEC_WR;
 	if(gnd) {
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req) && (sval = TSYS::strDecode(req.text(),TSYS::base64)).size() &&
 		    ico_t.loadFromData((const uchar*)sval.data(),sval.size()))
+	    {
 		obj_ico->setIcon(QPixmap::fromImage(ico_t));
-	    else obj_ico->setIcon(QIcon());
+		obj_ico->setProperty("img", ico_t);
+
+		//  Icon menu
+		QMenu *imgMenu = new QMenu;
+		QAction *it = NULL;
+		if(!ico_t.isNull()) {
+		    it = new QAction(_("Save image"), this);
+		    it->setObjectName("save");
+		    imgMenu->addAction(it);
+		}
+		if(ico_modif) {
+		    it = new QAction(_("Load image"), this);
+		    it->setObjectName("load");
+		    imgMenu->addAction(it);
+		    if(!ico_t.isNull()) {
+			it = new QAction(_("Clear image"),this);
+			it->setObjectName("clear");
+			imgMenu->addAction(it);
+		    }
+		}
+		obj_ico->setMenu(imgMenu);
+		if(imgMenu)
+		    connect(imgMenu, SIGNAL(triggered(QAction*)), this, SLOT(doIco(QAction*)));
+	    } else obj_ico->setIcon(QIcon());
 	}
 	// Id
 	gnd = TCntrNode::ctrId(root,obj_id->objectName().toStdString(),true);
@@ -1454,7 +1517,7 @@ void VisItProp::tabChanged( int itb )
 	    // Get node information
 	    XMLNode info_req("info");
 	    info_req.setAttr("path",ed_it);
-	    if(owner()->cntrIfCmd(info_req)) {
+	    if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 		mod->postMess(mod->nodePath().c_str(),
 			QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
 		return;
@@ -1617,33 +1680,50 @@ void VisItProp::progChanged( )
     }
 }
 
-void VisItProp::selectIco( )
+//?!?! Move to some common code of own image implementation
+void VisItProp::doIco( QAction *it )
 {
-    QImage ico_t;
+    if(!it) return;
 
-    if(!ico_modif)	return;
+    try {
+	bool update = false;
 
-    QString fileName = owner()->getFileName(_("Downloading the image icon"),"",_("Images (*.png *.jpg)"));
+	if(it->objectName() == "save") {
+	    QString fileName = QFileDialog::getSaveFileName(this,_("Saving the picture"),"img.png",_("Images (*.png *.xpm *.jpg)"));
+	    if(!fileName.isEmpty() && !obj_ico->property("img").value<QImage>().save(fileName))
+		throw TError(mod->nodePath().c_str(), _("Error saving to the file '%s'."), fileName.toStdString().c_str());
+	}
+	else if(it->objectName() == "load") {
+	    QString fileName = owner()->getFileName(_("Loading the picture"),"",_("Images (*.png *.jpg)"));
+	    if(fileName.isEmpty())	return;
 
-    if(fileName.isEmpty())	return;
-    if(!ico_t.load(fileName)) {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Error downloading the icon image '%1'.")).arg(fileName), TVision::Warning, this);
-	return;
-    }
+	    QImage ico_t;
+	    if(!ico_t.load(fileName))
+		throw TError(mod->nodePath().c_str(), _("Error loading the picture '%s'."), fileName.toStdString().c_str());
 
-    obj_ico->setIcon(QPixmap::fromImage(ico_t));
+	    QByteArray ba;
+	    QBuffer buffer(&ba);
+	    buffer.open(QIODevice::WriteOnly);
+	    ico_t.save(&buffer, "PNG");
 
-    QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::WriteOnly);
-    ico_t.save(&buffer,"PNG");
+	    XMLNode req("set");
+	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
+		setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
 
-    XMLNode req("set");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->
-	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64,"\n"));
-    if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    update = true;
+	}
+	else if(it->objectName() == "clear") {
+	    XMLNode req("set");
+	    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toStdString(),TSYS::PathEl))->setText("");
+	    if(owner()->cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(), req.text().c_str());
 
-    is_modif = true;
+	    update = true;
+	}
+
+	if(update) { showDlg(ed_it, true); is_modif = true; }
+
+    } catch(TError &err) { mod->postMess(err.cat.c_str(), err.mess.c_str(), TVision::Error, this); }
 }
 
 void VisItProp::isModify( QObject *snd )

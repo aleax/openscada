@@ -133,7 +133,7 @@ class TMess
 	string selDebCats( );
 	bool isUTF8( )		{ return mIsUTF8; }
 
-	void setLang( const string &lang, bool init = false );
+	void setLang( const string &lang );
 	void setLogDirect( int dir );
 	void setMessLevel( int level );
 	void setSelDebCats( const string &vl );

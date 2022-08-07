@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
@@ -285,9 +285,11 @@ Information variables of the program:
 <li> <i>void unload( );</i> — Unload subsystems.</li>
 <li> <i>int start(  );</i> — Start of the system. The function is finished only with the finishing of the system. The return code is returned.</li>
 <li> <i>void stop( int sig = SIGUSR1 );</i> — Stop program by the signal <i>sig</i>, by default it is SIGUSR1 and SIGUSR2 reserved for projects manager.</li>
-<li> <i>string id( );</i> — station ID.</li>
-<li> <i>string name( );</i> — Localized name of the station.</li>
-<li> <i>string user( );</i> — The system user on behalf of which the system is running .</li>
+<li> <i>string id( ) const;</i> — station ID.</li>
+<li> <i>string name( ) const;</i> — Localized name of the station.</li>
+<li> <i>void setName( const string &amp;vl );</i> — Setting the localized name of the station.</li>
+<li> <i>string ico( string *tp = NULL );</i> — Common station icon obtaining with placing the file type to <i>tp</i>.</li>
+<li> <i>string user( ) const;</i> — The system user on behalf of which the system is running.</li>
 <li> <i>string host( );</i> — Host name for the station run.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — A list of registered subsystems in the system.</li>
 <li> <i>bool present( const string &amp;name ) const;</i> — Check the availability of the subsystem.</li>
@@ -309,8 +311,8 @@ Information variables of the program:
 <li> <i>string docDir( );</i> — Directory of the documents of OpenSCADA.</li>
 <li> <i>void setWorkDir( const string &amp;wdir, bool init = false );</i> — Setting the working directory of the station.</li>
 <li> <i>void setModDir( const string &amp;mdir, bool init = false );</i> — Specifying the directories of the modules of OpenSCADA.</li>
-<li> <i>void setIcoDir( const string &amp;idir, bool init = false );</i> — Specifying of the directory of icons of OpenSCADA.</li>
-<li> <i>void setDocDir( const string &amp;idir, bool init = false );</i> — Specifying of the directory of documents of OpenSCADA.</li>
+<li> <i>void setIcoDir( const string &amp;idir );</i> — Specifying of the directory of icons of OpenSCADA.</li>
+<li> <i>void setDocDir( const string &amp;idir );</i> — Specifying of the directory of documents of OpenSCADA.</li>
 <li> <i>string cfgFile( );</i> — Name of configuration file of the system.</li>
 <li> <i>XMLNode &amp;cfgRoot( );</i> — Parsed structure of the configuration file.</li>
 <li> <i>XMLNode *cfgNode( const string &amp;path, bool create = false );</i> — Node of configuration getting by it path <i>path</i>. Elements of the path creation by it miss <i>create</i>.</li>
@@ -511,7 +513,7 @@ Types (levels) of messages (enum — TMess::Type):
 <li> <i>static bool messLevelTest( int8_t condLev, int8_t messLev );</i> — The message level testing for <i>messLev</i> &gt;= <i>condLev</i> counting the message sub-levels — the second digit, where <i>condLev</i> is ±[0...7] and <i>messLev</i> is ±[0...79].</li>
 <li> <i>string selDebCats( );</i> — Selected debug categories (by separated ';' list).</li>
 <li> <i>bool isUTF8( );</i> — Internal codepage is UTF-8.</li>
-<li> <i>void setLang( const string &amp;lang, bool init = false );</i> — Setting of the system language (localization). </li>
+<li> <i>void setLang( const string &amp;lang );</i> — Setting of the system language (localization).</li>
 <li> <i>void setLogDirect( int dir );</i> — Setting receivers to which the system messages are sent. For <i>dir</i> the bit mask is used. Where: </li></ul>
 <dl><dd>1 — to syslog;</dd>
 <dd>2 — to stdout;</dd>
@@ -2445,13 +2447,12 @@ Where:
 <p>As the confirmation of the request's result it is set the result's attribute <i>rez</i> in values: 0-request succeeds, 1-warning (with the possibility of execution), 2-error. In the case of error and warning the messages are written in the text of the container and in the attribute <i>mcat</i> (message category): <i>&lt;cmd path = "/TreePath" user="user" force="1" rez="2" mcat="sub_DAQ/mod_BlockCalc&gt;; Unable to delete the node &lt;/cmd&gt;</i>
 </p><p>Grouping request "CntrReqs" is processed at the API level of the node and does not require separate processing in the user code. In fact, into the tag "CntrReqs" may be placed any other requests with the possibility of hierarchical grouping by including of the internal tags "CntrReqs". The only attribute of this tag is an attribute <i>path</i>, which indicates the path to the node and is the basis for internal requests. 
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;CntrReqs path="/sub_DAQ/cntr_gate"&gt;
-  &lt;get path="/%2fprm%2fcfg%2fNAME"/&gt;
-  &lt;get path="/%2fprm%2fcfg%2fDESCR"/&gt;
-  &lt;list path="/%2fserv%2fattr"/&gt;
-&lt;/CntrReqs&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;CntrReqs</span> <span class="na">path=</span><span class="s">"/sub_DAQ/cntr_gate"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fprm%2fcfg%2fNAME"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fprm%2fcfg%2fDESCR"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/%2fserv%2fattr"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/CntrReqs&gt;</span>
+</pre></div>
 <h3><span class="mw-headline" id="Tag_of_the_information_structure_for_describing_the_groups_of_child_branches_of_the_page"><span class="mw-headline-number">14.2</span> Tag of the information structure for describing the groups of child branches of the page</span></h3>
 <p>Each page can contain groups of child branches. For descriptions of groups of branches there is the tag "branches". Tag contains the description of groups of branches through embedded tags <i>grp</i>. The group tag can be accessed as for the "read" (visibility) and for modification (the execution of commands for adding and removing the elements of the group), hence the element of the triad of access may be:
 </p>
@@ -2461,12 +2462,11 @@ Where:
 <dd><i>6</i> — there is an access to read, and to write.</dd></dl>
 <p>In the high octet it contains the maximum permition.
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;branches id='br'&gt;
-  &lt;grp id='/br/in_' descr='Input transport' acs='52'/&gt;
-  &lt;grp id='/br/out_' descr='Output transport' acs='52'/&gt;
-&lt;/branches&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;branches</span> <span class="na">id=</span><span class="s">'br'</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;grp</span> <span class="na">id=</span><span class="s">'/br/in_'</span> <span class="na">descr=</span><span class="s">'Input transport'</span> <span class="na">acs=</span><span class="s">'52'</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;grp</span> <span class="na">id=</span><span class="s">'/br/out_'</span> <span class="na">descr=</span><span class="s">'Output transport'</span> <span class="na">acs=</span><span class="s">'52'</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/branches&gt;</span>
+</pre></div>
 <p>Actions over the group of elements coincide with the actions over the list of visual elements "list", which is described below.
 </p>
 <h3><span class="mw-headline" id="Tags_of_the_description_of_the_information_structure_of_the_control_interface"><span class="mw-headline-number">14.3</span> Tags of the description of the information structure of the control interface</span></h3>
@@ -2476,16 +2476,15 @@ Where:
 <h4><span class="mw-headline" id="Area_tag_.22area.22"><span class="mw-headline-number">14.3.1</span> Area tag "area"</span></h4>
 <p>Areas are described with "area" tag and are intended to group the elements on different features. Area may include other elements and areas. The root ones form the bookmarks in the presentation of the user interface. To tag, you can access only to "read" or "visibility", hence the element of the triad of access can be set to 00, if access is absent, or 04, if it is present.
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;area id="base" dscr="Base information"&gt;
-  &lt;fld id="host" dscr="Host name" tp="str"/&gt;
-  &lt;fld id="user" dscr="Operated user" tp="str"/&gt;
-  &lt;fld id="sys" dscr="Station system" tp="str"/&gt;
-  &lt;area id="other" dscr="Other options"&gt;
-     &lt;fld id="val" dscr="Value" tp="real"/&gt;
-  &lt;/area&gt;
-&lt;/area&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;area</span> <span class="na">id=</span><span class="s">"base"</span> <span class="na">dscr=</span><span class="s">"Base information"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"host"</span> <span class="na">dscr=</span><span class="s">"Host name"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"user"</span> <span class="na">dscr=</span><span class="s">"Operated user"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"sys"</span> <span class="na">dscr=</span><span class="s">"Station system"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;area</span> <span class="na">id=</span><span class="s">"other"</span> <span class="na">dscr=</span><span class="s">"Other options"</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"val"</span> <span class="na">dscr=</span><span class="s">"Value"</span> <span class="na">tp=</span><span class="s">"real"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/area&gt;</span>
+<span class="nt">&lt;/area&gt;</span>
+</pre></div>
 <h4><span class="mw-headline" id="Data_tags"><span class="mw-headline-number">14.3.2</span> Data tags</span></h4>
 <p>Tags, which describe data, are shown in the table 1.
 </p><p><b>Table 1.</b> Tags, which describe data
@@ -2513,11 +2512,10 @@ Where:
 <td>Images.
 </td></tr></table>
 <h5><span class="mw-headline" id="Tag_.22fld.22"><span class="mw-headline-number">14.3.2.1</span> Tag "fld"</span></h5>
-<pre style="white-space: pre-wrap;">
-&lt;fld id="host" dscr="Host name" tp="str"/&gt;
-&lt;fld id="user" dscr="Operated user" tp="str"/&gt;
-&lt;fld id="sys" dscr="Station system" tp="str"/&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"host"</span> <span class="na">dscr=</span><span class="s">"Host name"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"user"</span> <span class="na">dscr=</span><span class="s">"Operated user"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"sys"</span> <span class="na">dscr=</span><span class="s">"Station system"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+</pre></div>
 <p>The tag can be accessed as to "read" and also to "write", therefore an element of the triad of access may be: 
 </p>
 <dl><dd><i>00</i> — there is no any access;</dd>
@@ -2599,19 +2597,17 @@ Where:
 <p><i>Request:</i> <span id="SnthHgl" title="#SnthHgl">command "SnthHgl"</span>: <i>&lt;SnthHgl path="/fld_teg" user="user"/&gt;</i><br />
 <i>Result:</i> confirmation with the rules of syntax highlight list:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;rule expr="\b(if|else|for|while|in|using|new|var|break|continue|return|Array|Object)\b" color="darkblue" font_weight="1"/&gt;
-&lt;rule expr="(\?|\:)" color="darkblue" font_weight="1"/&gt;
-&lt;rule expr="(\b0[xX][0-9a-fA-F]*\b|\b[+-]?[0-9]*\.?[0-9]+[eE]?[-+]?[0-9]*\b|\btrue\b|\bfalse\b)" color="blue"/&gt;
-&lt;rule expr=""[^"]*"" color="darkgreen"/&gt;
-&lt;rule expr="//[^\n]*" color="gray" font_italic="1"/&gt;
-&lt;blk beg="/\\*" end="\\*/" color="gray" font_italic="1"/&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;rule</span> <span class="na">expr=</span><span class="s">"\b(if|else|for|while|in|using|new|var|break|continue|return|Array|Object)\b"</span> <span class="na">color=</span><span class="s">"darkblue"</span> <span class="na">font_weight=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;rule</span> <span class="na">expr=</span><span class="s">"(\?|\:)"</span> <span class="na">color=</span><span class="s">"darkblue"</span> <span class="na">font_weight=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;rule</span> <span class="na">expr=</span><span class="s">"(\b0[xX][0-9a-fA-F]*\b|\b[+-]?[0-9]*\.?[0-9]+[eE]?[-+]?[0-9]*\b|\btrue\b|\bfalse\b)"</span> <span class="na">color=</span><span class="s">"blue"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;rule</span> <span class="na">expr=</span><span class="s">"&amp;quot;[^&amp;quot;]*&amp;quot;"</span> <span class="na">color=</span><span class="s">"darkgreen"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;rule</span> <span class="na">expr=</span><span class="s">"//[^\n]*"</span> <span class="na">color=</span><span class="s">"gray"</span> <span class="na">font_italic=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;blk</span> <span class="na">beg=</span><span class="s">"/\\*"</span> <span class="na">end=</span><span class="s">"\\*/"</span> <span class="na">color=</span><span class="s">"gray"</span> <span class="na">font_italic=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+</pre></div>
 </td></tr></table>
 <h5><span class="mw-headline" id="Tag_.22list.22"><span class="mw-headline-number">14.3.2.2</span> Tag "list"</span></h5>
-<pre style="white-space: pre-wrap;">
-&lt;list id="mod_auto" dscr="List of shared libs(modules)" tp="str" dest="file"/&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;list</span> <span class="na">id=</span><span class="s">"mod_auto"</span> <span class="na">dscr=</span><span class="s">"List of shared libs(modules)"</span> <span class="na">tp=</span><span class="s">"str"</span> <span class="na">dest=</span><span class="s">"file"</span><span class="nt">/&gt;</span>
+</pre></div>
 <p>The tag can be accessed as to "read" and also to "write"(modification), therefore an element of the triad of access may be: 
 </p>
 <dl><dd><i>00</i> — there is no any access;</dd>
@@ -2684,14 +2680,13 @@ Where:
 </p>
 </td></tr></table>
 <h5><span class="mw-headline" id="Tag_.22table.22"><span class="mw-headline-number">14.3.2.3</span> Tag "table"</span></h5>
-<pre style="white-space: pre-wrap;">
-&lt;table id="a_mess" key="0" col_lst="0;1;2"&gt;
-  &lt;list id="0" dscr="Id" acs="36" tp="str"/&gt;
-  &lt;list id="1" dscr="Name" acs="52" tp="str"/&gt;
-  &lt;list id="2" dscr="Type" acs="52" tp="str"/&gt;
-  &lt;list id="3" dscr="Hide" acs="52" tp="bool"/&gt;
-&lt;/table&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;table</span> <span class="na">id=</span><span class="s">"a_mess"</span> <span class="na">key=</span><span class="s">"0"</span> <span class="na">col_lst=</span><span class="s">"0;1;2"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;list</span> <span class="na">id=</span><span class="s">"0"</span> <span class="na">dscr=</span><span class="s">"Id"</span> <span class="na">acs=</span><span class="s">"36"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;list</span> <span class="na">id=</span><span class="s">"1"</span> <span class="na">dscr=</span><span class="s">"Name"</span> <span class="na">acs=</span><span class="s">"52"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;list</span> <span class="na">id=</span><span class="s">"2"</span> <span class="na">dscr=</span><span class="s">"Type"</span> <span class="na">acs=</span><span class="s">"52"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;list</span> <span class="na">id=</span><span class="s">"3"</span> <span class="na">dscr=</span><span class="s">"Hide"</span> <span class="na">acs=</span><span class="s">"52"</span> <span class="na">tp=</span><span class="s">"bool"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+</pre></div>
 <p>The tag of the table or single column can be accessed as to "read" and also to "write"(modification), therefore an element of the triad of access may be: 
 </p>
 <dl><dd><i>00</i> — there is no any access;</dd>
@@ -2780,9 +2775,8 @@ Where:
 </p>
 </td></tr></table>
 <h5><span class="mw-headline" id="Tag_.22img.22"><span class="mw-headline-number">14.3.2.4</span> Tag "img"</span></h5>
-<pre style="white-space: pre-wrap;">
-&lt;img id="ico" descr="Page icon"/&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;img</span> <span class="na">id=</span><span class="s">"ico"</span> <span class="na">descr=</span><span class="s">"Page icon"</span><span class="nt">/&gt;</span>
+</pre></div>
 <p>The tag can be accessed as to "read" and also to "write"(modification), therefore an element of the triad of access may be: 
 </p>
 <dl><dd><i>00</i> — there is no any access;</dd>
@@ -2797,54 +2791,51 @@ Where:
 <ul><li> <i>&lt;set path="/fld_teg" user="user"&gt;img&lt;/set&gt;</i> — загрузка изображения.</li></ul>
 <dl><dd>The result is the confirmation or error message.</dd></dl>
 <h5><span class="mw-headline" id="Commands_with_the_parameters._Tag_.22comm.22"><span class="mw-headline-number">14.3.2.5</span> Commands with the parameters. Tag "comm"</span></h5>
-<pre style="white-space: pre-wrap;">
-&lt;comm id="add"&gt;
-  &lt;fld id="tm" tp="time"/&gt;
-  &lt;fld id="cat" tp="str"/&gt;
-  &lt;fld id="lvl" tp="dec" min="0" max="7"/&gt;
-  &lt;fld id="mess" tp="str"/&gt;
-&lt;/comm&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;comm</span> <span class="na">id=</span><span class="s">"add"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"tm"</span> <span class="na">tp=</span><span class="s">"time"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"cat"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"lvl"</span> <span class="na">tp=</span><span class="s">"dec"</span> <span class="na">min=</span><span class="s">"0"</span> <span class="na">max=</span><span class="s">"7"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"mess"</span> <span class="na">tp=</span><span class="s">"str"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/comm&gt;</span>
+</pre></div>
 <p>The tag can be accessed as to "read" or visibility + service of the requests, and for modification or execution of the command, hence an element of the triad of access can be set to 00, if access is absent at all; 04, if the command can be seen, and 06, if the command can be initiated.
 </p><p>It is provided for transmission of commands and actions to the node, and also can be used to create links to other pages. Commands may include options. Parameters are described with "fld".
 </p><p>The following request commands are supported:
 </p>
 <ul><li> Command execution:</li></ul>
-<pre style="white-space: pre-wrap;">
-&lt;set path="/fld_teg" user="user"/&gt;
-  &lt;fld id="tm"&gt;1023456244&lt;/fld&gt;
-  &lt;fld id="cat"&gt;*&lt;/fld&gt;
-  &lt;fld id="lvl"&gt;2&lt;/fld&gt;
-  &lt;fld id="mess"&gt;Test mess&lt;/fld&gt;
-&lt;/set&gt;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/fld_teg"</span> <span class="na">user=</span><span class="s">"user"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"tm"</span><span class="nt">&gt;</span>1023456244<span class="nt">&lt;/fld&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"cat"</span><span class="nt">&gt;</span>*<span class="nt">&lt;/fld&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"lvl"</span><span class="nt">&gt;</span>2<span class="nt">&lt;/fld&gt;</span>
+  <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"mess"</span><span class="nt">&gt;</span>Test mess<span class="nt">&lt;/fld&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
 <ul><li> Load the link to another page:</li></ul>
-<pre style="white-space: pre-wrap;">
-&lt;get path="/fld_teg" user="user" tp="lnk"/&gt;"</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/fld_teg"</span> <span class="na">user=</span><span class="s">"user"</span> <span class="na">tp=</span><span class="s">"lnk"</span><span class="nt">/&gt;</span>"
+</pre></div>
 <p>The result is the confirmation or error message.
 </p>
 <h5><span class="mw-headline" id="Branches_.28child_nodes.29"><span class="mw-headline-number">14.3.2.6</span> Branches (child nodes)</span></h5>
-<pre style="white-space: pre-wrap;">
-&lt;list id="k_br" dscr="Kernel branches" tp="br"/&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;list</span> <span class="na">id=</span><span class="s">"k_br"</span> <span class="na">dscr=</span><span class="s">"Kernel branches"</span> <span class="na">tp=</span><span class="s">"br"</span><span class="nt">/&gt;</span>
+</pre></div>
 <p>The branches are described by the usual list "list" with special attributes tp = "br". Methodology of the request and modification of branches coincides with the one of work with the list "list".
 </p>
 <h3><span class="mw-headline" id="Hierarchical_dependences_of_the_information_elements_of_the_control_language"><span class="mw-headline-number">14.4</span> Hierarchical dependences of the information elements of the control language</span></h3>
 <p>Example of the node page of the control language:
 </p>
-<pre style="white-space: pre-wrap;">
-&lt;oscada_cntr&gt;
-  &lt;area id="a_gen" dscr="Generic control"&gt;
-    &lt;fld id="config" dscr="Config file" tp="str" dest="file"/&gt;
-    &lt;fld id="cr_file_perm" dscr="Files" tp="oct" len="3"/&gt;
-    &lt;fld id="cr_dir_perm" dscr="Directories" tp="oct" len="3"/&gt;
-    &lt;comm id="upd_opt" dscr="Update options(from config)"/&gt;
-    &lt;comm id="quit" dscr="Quit"/&gt;
-  &lt;/area&gt;
-  &lt;area id="a_kern" dscr="Kernels"&gt;
-    &lt;list id="k_br" dscr="Kernels" tp="br"/&gt;
-  &lt;/area&gt;
-&lt;/oscada_cntr&gt;
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nt">&lt;oscada_cntr&gt;</span>
+  <span class="nt">&lt;area</span> <span class="na">id=</span><span class="s">"a_gen"</span> <span class="na">dscr=</span><span class="s">"Generic control"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"config"</span> <span class="na">dscr=</span><span class="s">"Config file"</span> <span class="na">tp=</span><span class="s">"str"</span> <span class="na">dest=</span><span class="s">"file"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"cr_file_perm"</span> <span class="na">dscr=</span><span class="s">"Files"</span> <span class="na">tp=</span><span class="s">"oct"</span> <span class="na">len=</span><span class="s">"3"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;fld</span> <span class="na">id=</span><span class="s">"cr_dir_perm"</span> <span class="na">dscr=</span><span class="s">"Directories"</span> <span class="na">tp=</span><span class="s">"oct"</span> <span class="na">len=</span><span class="s">"3"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;comm</span> <span class="na">id=</span><span class="s">"upd_opt"</span> <span class="na">dscr=</span><span class="s">"Update options(from config)"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;comm</span> <span class="na">id=</span><span class="s">"quit"</span> <span class="na">dscr=</span><span class="s">"Quit"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/area&gt;</span>
+  <span class="nt">&lt;area</span> <span class="na">id=</span><span class="s">"a_kern"</span> <span class="na">dscr=</span><span class="s">"Kernels"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;list</span> <span class="na">id=</span><span class="s">"k_br"</span> <span class="na">dscr=</span><span class="s">"Kernels"</span> <span class="na">tp=</span><span class="s">"br"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/area&gt;</span>
+<span class="nt">&lt;/oscada_cntr&gt;</span>
+</pre></div>
 <p><b>Table 6.</b> Hierarchical dependencies of the information elements of the language.
 </p>
 <table class="wikitable">
@@ -4019,32 +4010,31 @@ Error codes (enum — TError::Codes):
 <p>Modules in OpenSCADA are implemented as shared libraries. As it was previously mentioned, one such library can contain many modules of OpenSCADA subsystems, actually acting as a container.
 </p><p>The first step in connecting the shared (SO — shared object) libraries is the connection of the initialization functions. These functions should be defined as usual "C" functions to avoid distortion of function names. Usually this is done as follows:
 </p>
-<pre style="white-space: pre-wrap;">
-//================== CUT =========================
-extern "C"
-{
-#ifdef MOD_INCL
-    //Need for define only at case builtin to OpenSCADA core support by the module
-    TModule::SAt bd_DBF_module( int n_mod )
-#else
-    TModule::SAt module( int n_mod )
-#endif
-    {
-	//Allowed into the shared object the modules descriptors forming
-    }
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//================== CUT =========================</span>
+<span class="k">extern</span> <span class="s">"C"</span>
+<span class="p">{</span>
+<span class="cp">#ifdef MOD_INCL</span>
+    <span class="c1">//Need for define only at case builtin to OpenSCADA core support by the module</span>
+    <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="n">bd_DBF_module</span><span class="p">(</span> <span class="kt">int</span> <span class="n">n_mod</span> <span class="p">)</span>
+<span class="cp">#else</span>
+    <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="n">module</span><span class="p">(</span> <span class="kt">int</span> <span class="n">n_mod</span> <span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="p">{</span>
+	<span class="c1">//Allowed into the shared object the modules descriptors forming</span>
+    <span class="p">}</span>
 
-#ifdef MOD_INCL
-    //Need for define only at case builtin to OpenSCADA core support by the module
-    TModule *bd_Tmpl_attach( const TModule::SAt &amp;AtMod, const string &amp;source )
-#else
-    TModule *attach( const TModule::SAt &amp;AtMod, const string &amp;source )
-#endif
-    {
-	//Selected module connect
-    }
-}
-//================== CUT =========================
-</pre>
+<span class="cp">#ifdef MOD_INCL</span>
+    <span class="c1">//Need for define only at case builtin to OpenSCADA core support by the module</span>
+    <span class="n">TModule</span> <span class="o">*</span><span class="n">bd_Tmpl_attach</span><span class="p">(</span> <span class="k">const</span> <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="o">&amp;</span><span class="n">AtMod</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span><span class="n">source</span> <span class="p">)</span>
+<span class="cp">#else</span>
+    <span class="n">TModule</span> <span class="o">*</span><span class="n">attach</span><span class="p">(</span> <span class="k">const</span> <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="o">&amp;</span><span class="n">AtMod</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span><span class="n">source</span> <span class="p">)</span>
+<span class="cp">#endif</span>
+    <span class="p">{</span>
+	<span class="c1">//Selected module connect</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">//================== CUT =========================</span>
+</pre></div>
 <p><b>Functions for the working with shared library:</b><br />
 <i>TModule::SAt module( int n_mod );</i>
 </p>
@@ -4282,5 +4272,5 @@ extern "C"
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>

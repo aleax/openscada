@@ -7,7 +7,7 @@
 <meta content="MediaWiki 1.26.4" name="generator" />
 <link href="https://www.gnu.org/copyleft/fdl.html" rel="copyright" />
 <link href="../en/files/doc.css" rel="stylesheet" /></head>
-<body><div class="floatright"><a href="index.html"><img alt="OpenSCADA" src="../en/files/index.png" /></a></div><div id="mw_header">
+<body><div class="floatright"><a href="index.html"><img src="../en/files/index.png" /></a></div><div id="mw_header">
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Рецепти</h1>
@@ -21,6 +21,7 @@
 <th> Джерело </th>
 <th> Мови </th>
 <th> Автор </th>
+<th> Іконка </th>
 <th> Опис
 </th></tr>
 
@@ -36,16 +37,17 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> <a class="image" href="http://oscada.org/wiki/File:LibPrescriptions.png"><img alt="LibPrescriptions.png" height="64" src="../en/files/LibPrescriptions.png" width="64" /></a>
 </td>
-<td> Library of elements of scenarios of the technological operations — prescriptions.
-<ul><li> <b>Founded:</b> September 2011</li>
-<li> <b>Sponsored by:</b> Vassily Grigoriev, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">the Laboratory of Vacuum Technologies</a></li>
-<li> <b>Sponsored by, about the controller templateization:</b> Magomed, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li>
-<li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
-<li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">Automated control system for vacuum processing unit</a></li>
-<li> <b><a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
-<dl><dd>- move <a href="#GraphPart">the graphical part</a> items to all work through <a href="#manager">the prescription manager</a>, for the possibility to distribute the parts remotely.</dd></dl>
+<td> Бібліотека елементів сценаріїв технологічних процесів — рецептів.
+<ul><li> <b>Засновано:</b> Вересень 2011</li>
+<li> <b>Спонсоровано:</b> Василь Григор'єв, <a class="external text" href="http://e-beam.ru" rel="nofollow noreferrer noopener" target="_blank">Лабораторія Вакуумних Технологій</a></li>
+<li> <b>Спонсоровано, щодо шаблонізації контролеру:</b> Магомед, <a class="external text" href="https://www.savtech.ru" rel="nofollow noreferrer noopener" target="_blank">SAVTECH</a></li>
+<li> <b>Початково створено, для кадрів:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a></li>
+<li> <b>Використано:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using/Vacuum_processing_unit" title="Special:MyLanguage/Using/Vacuum processing unit">Автоматизована система управління вакуумною технологічною установкою</a></li>
+<li> <b><a href="../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
+<dl><dd>- перевести елементи <a href="#GraphPart">графічної частини</a> на повну роботу через <a href="#manager">менеджер рецептів</a>, для можливості віддаленого рознесення частин.</dd></dl>
 </td></tr></table>
 <p>Бібліотека створюється для надання середовища виконання сценаріїв технологічних процесів — рецептів, та кадрів користувацького інтерфейсу довкола нього, включно з <a href="#prescrEdit">кадром створення/редагування рецептів</a> та двома кадрами контролю виконання та звітності — "<a href="#prescrRun">Рецепт — виконання</a>" та "<a href="#prescrRunSimple">Рецепт — виконання, простий</a>". Будується бібліотека на основі <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">примітивів віджетів</a> та мови внутрішнього програмування <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>, включно для шаблонів та команд.
 </p><p>Назви елементів та їх параметрів доступні на мовах: Англійська, Українська та mRussian. Їх вихідний код написано у мово(людська)-незалежному режимі з викликом функції перекладу <i>tr()</i> та переклад цих повідомлень також доступний Англійською, Українською та mRussian.
@@ -89,13 +91,13 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 <li> <i>arg{N}</i> — визначені користувачем значення аргументів від 1 до 5.</li></ul>
 <p>Наприклад, для рецепту із чотирма кроками матимемо:
 </p>
-<pre style="white-space: pre-wrap; margin-left: 20pt;">
-&lt;prg&gt;
-  &lt;com arg1="10" id="Таймер" /&gt;
-  &lt;com arg1="10" id="Вакуум" /&gt;
-  &lt;com arg1="20" id="Таймер" /&gt;
-  &lt;com arg1="34" id="Ввімкнути котушки" /&gt;
-&lt;/prg&gt;</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt;"><pre><span class="nt">&lt;prg&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"10"</span> <span class="na">id=</span><span class="s">"Таймер"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"10"</span> <span class="na">id=</span><span class="s">"Вакуум"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"20"</span> <span class="na">id=</span><span class="s">"Таймер"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;com</span> <span class="na">arg1=</span><span class="s">"34"</span> <span class="na">id=</span><span class="s">"Ввімкнути котушки"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/prg&gt;</span>
+</pre></div>
 <p>Обчислення рецепту здійснюється через параметр <a href="#manager">менеджеру рецептів</a>, який підтримує два способи виконання команд рецепту:
 </p>
 <ul><li> <b>команда-параметр</b> — розташовані у вигляді параметрів контролеру <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">логічного рівня</a> та з урахуванням їх контексту, якщо у менеджері рецептів вказано логічний контролер;</li>
@@ -128,14 +130,14 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 <li> <i>arg{1...5}</i> — значення аргументу 1...5;</li>
 <li> <i>tmp{1...10}</i> — значення тимчасового параметру (контекст обчислення) 1...10;</li></ul></li></ul>
 <dl><dd><dl><dd>Приклад тексту програми для команди "Таймер", який не залежить від прикладної області:</dd></dl></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 40pt;">
-JavaLikeCalc.JavaScript
-if(f_start) tmp1 = arg1;
-var curTm = tmp1.toReal();
-if(curTm &lt;= 0) { rez = "1:Час вичерпано для "+arg1+"с"; return; }
-curTm -= 1/f_frq;
-tmp1 = max(0, curTm);
-rez = "0:Очікування зараз "+curTm+"с";</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 40pt;"><pre><span class="nx">JavaLikeCalc</span><span class="p">.</span><span class="nx">JavaScript</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">f_start</span><span class="p">)</span> <span class="nx">tmp1</span> <span class="o">=</span> <span class="nx">arg1</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">curTm</span> <span class="o">=</span> <span class="nx">tmp1</span><span class="p">.</span><span class="nx">toReal</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">curTm</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="nx">rez</span> <span class="o">=</span> <span class="s2">"1:Час вичерпано для "</span><span class="o">+</span><span class="nx">arg1</span><span class="o">+</span><span class="s2">"с"</span><span class="p">;</span> <span class="k">return</span><span class="p">;</span> <span class="p">}</span>
+<span class="nx">curTm</span> <span class="o">-=</span> <span class="mi">1</span><span class="o">/</span><span class="nx">f_frq</span><span class="p">;</span>
+<span class="nx">tmp1</span> <span class="o">=</span> <span class="nx">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">curTm</span><span class="p">);</span>
+<span class="nx">rez</span> <span class="o">=</span> <span class="s2">"0:Очікування зараз "</span><span class="o">+</span><span class="nx">curTm</span><span class="o">+</span><span class="s2">"с"</span><span class="p">;</span>
+</pre></div>
 <ul><li> <i>arg{1...5}</i> — мітка аргументу 1...5, лише аргументи із міткою буде відображено при редагуванні кроку рецепту; у мітці можливе визначення мінімальної та максимальної границі числового значення аргументу у вигляді "<b>{назва}|{мін}|{макс}</b>".</li></ul>
 <p>Для спеціальних цілей зарезервовано декілька назв команд:
 </p>
@@ -147,10 +149,9 @@ rez = "0:Очікування зараз "+curTm+"с";</pre>
 </p>
 <ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-main", "openscada-LibDB.Main";</li>
 <li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
-$ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql
+sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
+</pre></div>
 <ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">прикріпленого тут</a>.</li></ul>
 <p>Цей завантажений файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
 </p><p><br />
@@ -716,10 +717,9 @@ work
 </p>
 <ul><li> такий що постачається з готовим та відповідним пакетом дистрибутиву Linux на кшталт "openscada-libdb-vca", "openscada-LibDB.VCA";</li>
 <li> найбільш актуальний та безпосередньо отриманий з <a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql" rel="nofollow noreferrer noopener" target="_blank">репозиторію subversion</a>, перетворений у файл БД SQLite шляхом:</li></ul>
-<pre style="white-space: pre-wrap; margin-left: 15px">
-$ wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
-$ sqlite3 -init vcaBase.sql vcaBase.db .exit
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre>wget http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/vcaBase.sql
+sqlite3 -init vcaBase.sql vcaBase.db .exit
+</pre></div>
 <ul><li> завантаження <a class="external" href="http://oscada.org/wiki/File:VcaBase.db.gz" title="File:VcaBase.db.gz">прикріпленого тут</a>.</li></ul>
 <p>Цей отриманий файл Ви надалі можете розмістити у теці проекту станції та створити об'єкт бази даних модуля БД "SQLite", зареєструвавши файл бази даних у конфігурації.
 </p><p><br />
@@ -962,5 +962,5 @@ $ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Prescriptions/uk">Libs/Prescriptions/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">July 2022</td><td style="text-align: right;" width="40%">OpenSCADA 1+r2834</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Prescriptions/uk">Libs/Prescriptions/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
 </html>
