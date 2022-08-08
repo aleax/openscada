@@ -2,7 +2,7 @@ AC_PREREQ(2.50)
 
 # After any LTS release append there the third stabilisation level/number to the version
 #  Don't change the version string but it uses in whole to replace by a real one into the automatic builder.
-AC_INIT(OpenSCADA, [0.9.5.1], roman@oscada.org)
+AC_INIT(OpenSCADA, [0.9.5.2], roman@oscada.org)
 
 # Increase the major for next Work version.
 # Increase the minor after any significant changes into API of the Work/LTS version
@@ -390,7 +390,7 @@ AC_MSG_RESULT([* Generic features:])
 AC_MSG_RESULT([  - Strings charset encode support (by iconv)                   = $ac_cv_header_iconv_h])
 AC_MSG_RESULT([  - Interfaces internationalisation (I18N) support (by LibIntl) = $ac_cv_header_libintl_h])
 AC_MSG_RESULT([  - LibGD forcing for the core and the modules                  = $enable_LibGD])
-AC_MSG_RESULT([  - Compilation modules of the sunsystems:])
+AC_MSG_RESULT([  - Compilation modules of the subsystems:])
 AC_MSG_RESULT([    "DB":                   $DBSub_mod])
 AC_MSG_RESULT([    "DAQ":                  $DAQSub_mod])
 AC_MSG_RESULT([    "Archive":              $ArchSub_mod])

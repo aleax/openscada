@@ -30,17 +30,17 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
-#define S_NM_SOCK	"SOCK"
+#define S_NM_SOCKET	"SOCKET"
 #define S_NM_TCP	"TCP"
 #define S_NM_UDP	"UDP"
 #define S_NM_UNIX	"UNIX"
 #define S_NM_RAWCAN	"RAWCAN"
 
-#define SOCK_FORCE	-1
-#define SOCK_TCP	0
-#define SOCK_UDP	1
-#define SOCK_UNIX	2
-#define SOCK_RAWCAN	3
+#define S_FORCE		-1
+#define S_TCP		0
+#define S_UDP		1
+#define S_UNIX		2
+#define S_RAWCAN	3
 
 using namespace OSCADA;
 
@@ -75,6 +75,11 @@ class SSockIn
 class TSocketIn: public TTransportIn
 {
     public:
+	//Data
+	// Flags of the SQL requests
+	enum TRModes { M_ForceDiscon = 0, M_NoDiscon, M_Initiative };
+
+	//Methods
 	/* Open input socket <name> for locale <address>
 	 * address : <type:<specific>>
 	 * type:
@@ -90,20 +95,20 @@ class TSocketIn: public TTransportIn
 
 	int lastConn( )			{ return connTm; }
 	unsigned mode( )		{ return mMode; }
+	unsigned inBufLen( )		{ return mInBufLen; }
 	unsigned MSS( )			{ return mMSS; }
 	unsigned maxQueue( )		{ return mMaxQueue; }
 	unsigned maxFork( )		{ return mMaxFork; }
 	unsigned maxForkPerHost( )	{ return mMaxForkPerHost; }
-	unsigned bufLen( )		{ return mBufLen; }
 	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
 	unsigned keepAliveTm( )		{ return mKeepAliveTm; }
 	int taskPrior( )		{ return mTaskPrior; }
 
+	void setInBufLen( unsigned vl )	{ mInBufLen = vl ? vmax(4,vmin(10240,vl)) : 0; modif(); }
 	void setMSS( unsigned vl )	{ mMSS = vl ? vmax(100,vmin(65535,vl)) : 0; modif(); }
 	void setMaxQueue( unsigned vl )	{ mMaxQueue = vmax(1,vmin(100,vl)); modif(); }
 	void setMaxFork( unsigned vl )	{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
 	void setMaxForkPerHost( unsigned vl )	{ mMaxForkPerHost = vmin(1000, vl); modif(); }
-	void setBufLen( unsigned vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
 	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vl; modif(); }
 	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vl; modif(); }
 	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(199,vl)); modif(); }
@@ -148,11 +153,11 @@ class TSocketIn: public TTransportIn
 	string		addon;
 
 	unsigned short	mMode,			//Mode for TCP/UNIX sockets (0 - no hand; 1 - hand connect; 2 - initiative connection)
+			mInBufLen,		//Input buffer length
 			mMSS,			//MSS
 			mMaxQueue,		//Max queue for TCP, UNIX sockets
 			mMaxFork,		//Maximum forking (opened sockets)
 			mMaxForkPerHost,	//Maximum forking (opened sockets), per host
-			mBufLen,		//Input buffer length
 			mKeepAliveReqs,		//KeepAlive requests
 			mKeepAliveTm;		//KeepAlive timeout
 	int		mTaskPrior;		//Requests processing task prioritet
@@ -178,7 +183,7 @@ class TSocketOut: public TTransportOut
 	/* Open output socket <name> for locale <address>
 	 * address : <type:<specific>>
 	 * type:
-	 *   SOCK - direct socket with "SOCK:{fd}"
+	 *   SOCKET - direct socket with "SOCKET:{fd}"
 	 *   TCP  - TCP socket with  "UDP:{host}:{port}"
 	 *   UDP  - UDP socket with  "TCP:{host}:{port}"
 	 *   UNIX - UNIX socket with "UNIX:{path}"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 17:07+0300\n"
+"POT-Creation-Date: 2022-07-27 17:00+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -112,6 +112,10 @@ msgid "Processing time %s[%s]. "
 msgstr "Bearbeitungszeit %s[%s]. "
 
 #, c-format
+msgid "Size input buffer %s, MSS %s. "
+msgstr "Größe Eingabepuffer %s, MSS %s."
+
+#, c-format
 msgid "Error the socket type '%s'!"
 msgstr "Fehler beim Socket-Typ '%s'!"
 
@@ -135,15 +139,15 @@ msgid "Error binding the %s socket: '%s (%d)'!"
 msgstr "Fehler beim Binden des Sockets %s: '%s (%d)'!"
 
 #, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr "Schließen des Sockets %d Fehler '%s (%d)'!"
+
+#, c-format
 msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN Socket ist verbunden mit '%s'!"
 
 msgid "Connected"
 msgstr "Verbunden"
-
-#, c-format
-msgid "Closing the socket '%d' error '%s (%d)'!"
-msgstr "Schließen des Sockets '%d' Fehler '%s (%d)'!"
 
 msgid "Disconnected"
 msgstr "Getrennt"
@@ -156,12 +160,12 @@ msgstr "Reconnect wegen fehlender Eingabeaktivität für '%s'."
 msgid "Write: wrote %s."
 msgstr "Schreiben: schrieb %s."
 
-msgid "Write: the answer is zero byte."
-msgstr "Schreiben: Antwort für Null-Bytes."
-
 #, c-format
-msgid "Write: error '%s (%d)'!"
-msgstr "Schreiben: Fehler '%s (%d)'!"
+msgid "Error writing '%s (%d)'"
+msgstr "Fehler beim Schreiben '%s (%d)'"
+
+msgid "No data wrote"
+msgstr "Keine Daten geschrieben"
 
 #, c-format
 msgid "%d:> Transmitted directly to '%s'\n"
@@ -224,12 +228,8 @@ msgid "Wrote message %s to '%s'."
 msgstr "Schrieb Nachricht %s auf '%s'."
 
 #, c-format
-msgid "Write: error '%s (%d)'."
-msgstr "Schreiben: Fehler '%s (%d)'."
-
-#, c-format
-msgid "Error transmitting: %s"
-msgstr "Fehler beim Senden: %s"
+msgid "Error writing: %s"
+msgstr "Fehler beim Schreiben: %s"
 
 #, c-format
 msgid "Disconnected by '%s'!"
@@ -338,14 +338,14 @@ msgstr ""
 msgid "Priority"
 msgstr "Priorität"
 
-msgid "Maximum segment size (MSS)"
-msgstr "Maximale Segmentgröße (MSS)"
+msgid "Input buffer size, kB"
+msgstr "Größe Eingabepuffer, KB"
 
-msgid "Set 0 for the system MSS."
-msgstr "Stellen Sie 0 für System MSS."
+msgid "Set 0 for the system value."
+msgstr "Stellen Sie 0 als Systemwert ein."
 
-msgid "Input buffer, KB"
-msgstr "Eingabepuffer, KB"
+msgid "Maximum segment size (MSS), B"
+msgstr "Maximale Segmentgröße (MSS), B"
 
 msgid "Queue length"
 msgstr "Reihenlänge "
@@ -446,17 +446,6 @@ msgstr "Transport ist nicht verbunden!"
 #, c-format
 msgid "Error requesting: %s"
 msgstr "Fehler beim Anfordern: %s"
-
-#, c-format
-msgid "Error writing '%s (%d)'"
-msgstr "Fehler beim Schreiben '%s (%d)'"
-
-msgid "No data wrote"
-msgstr "Keine Daten geschrieben"
-
-#, c-format
-msgid "Error writing: %s"
-msgstr "Fehler beim Schreiben: %s"
 
 msgid "> Transmitted to\n"
 msgstr "> Übertragen an\n"

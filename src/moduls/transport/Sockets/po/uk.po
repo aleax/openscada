@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 4.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-11 17:07+0300\n"
+"POT-Creation-Date: 2022-07-27 17:00+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -106,6 +106,10 @@ msgid "Processing time %s[%s]. "
 msgstr "Час обробки %s[%s]. "
 
 #, c-format
+msgid "Size input buffer %s, MSS %s. "
+msgstr "Розмір вхідного буферу %s, MSS %s. "
+
+#, c-format
 msgid "Error the socket type '%s'!"
 msgstr "Помилка типу сокету '%s'!"
 
@@ -129,15 +133,15 @@ msgid "Error binding the %s socket: '%s (%d)'!"
 msgstr "Помилка під'єднання %s сокету: '%s (%d)'!"
 
 #, c-format
+msgid "Closing the socket %d error '%s (%d)'!"
+msgstr "Закриття сокету %d за помилкою '%s (%d)'!"
+
+#, c-format
 msgid "RAWCAN socket binded to '%s'!"
 msgstr "RAWCAN сокет під'єднався до '%s'!"
 
 msgid "Connected"
 msgstr "Приєднано"
-
-#, c-format
-msgid "Closing the socket '%d' error '%s (%d)'!"
-msgstr "Закриття сокету '%d' за помилкою '%s (%d)'!"
 
 msgid "Disconnected"
 msgstr "Від'єднано"
@@ -150,12 +154,12 @@ msgstr "Перепід'єднання через відсутність вхід
 msgid "Write: wrote %s."
 msgstr "Запис: записано %s."
 
-msgid "Write: the answer is zero byte."
-msgstr "Запис: відповідь нуль байт."
-
 #, c-format
-msgid "Write: error '%s (%d)'!"
-msgstr "Запис: помилка '%s (%d)'!"
+msgid "Error writing '%s (%d)'"
+msgstr "Помилка запису '%s (%d)'"
+
+msgid "No data wrote"
+msgstr "Не записано даних"
 
 #, c-format
 msgid "%d:> Transmitted directly to '%s'\n"
@@ -218,12 +222,8 @@ msgid "Wrote message %s to '%s'."
 msgstr "Записано повідомлення %s до '%s'."
 
 #, c-format
-msgid "Write: error '%s (%d)'."
-msgstr "Запис: помилка '%s (%d)'."
-
-#, c-format
-msgid "Error transmitting: %s"
-msgstr "Помилка передавання: %s"
+msgid "Error writing: %s"
+msgstr "Помилка запису: %s"
 
 #, c-format
 msgid "Disconnected by '%s'!"
@@ -329,14 +329,14 @@ msgstr ""
 msgid "Priority"
 msgstr "Пріоритет"
 
-msgid "Maximum segment size (MSS)"
-msgstr "Максимальний розмір сегменту (MSS)"
+msgid "Input buffer size, kB"
+msgstr "Розмір вхідного буферу, кБ"
 
-msgid "Set 0 for the system MSS."
-msgstr "Встановити 0 для системного MSS."
+msgid "Set 0 for the system value."
+msgstr "Встановити 0 для системного значення."
 
-msgid "Input buffer, KB"
-msgstr "Вхідний буфер, кБ"
+msgid "Maximum segment size (MSS), B"
+msgstr "Максимальний розмір сегменту (MSS), Б"
 
 msgid "Queue length"
 msgstr "Довжина черги"
@@ -437,17 +437,6 @@ msgstr "Транспорт не під'єднано!"
 #, c-format
 msgid "Error requesting: %s"
 msgstr "Помилка запиту: %s"
-
-#, c-format
-msgid "Error writing '%s (%d)'"
-msgstr "Помилка запису '%s (%d)'"
-
-msgid "No data wrote"
-msgstr "Не записано даних"
-
-#, c-format
-msgid "Error writing: %s"
-msgstr "Помилка запису: %s"
 
 msgid "> Transmitted to\n"
 msgstr "> Передано\n"

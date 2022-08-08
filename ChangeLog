@@ -1,3 +1,24 @@
+2022-08-08 Roman 0.9.5.2
+- FIX:AGLKS.St: testCalc_prm.test: Fixed for the messages translation of some attributes.
+- FIX:SYS: Building: configure.ac: Fixed for some messages.
+- !!!!:FIX:DAQ.ParamTmpl: Fixed for the IO name edition in the non basic mode of the dynamic translation.
+- FIX:DAQ.System: The UPS source prevented from flooding in the debug mode.
+    Most close(), iconv_close(), dlclose(), pclose() functions appended of checking the result and warning at problems.
+- !!!!:FIX:Archive.FSArch: Prevented for access to "files" in ModMArch::checkArchivator() outside the lock.
+- !!!!:FIX:Transports.Sockets: Fixed in processing the not complete writing for the Input part,
+	when the message cuts on the TCP transmitter buffer size.
+    !!: The input buffer size of the Input part bound to the hardware receiver buffer size control
+	and the internal one just frozen to the standard string buffer len since that is not critical and need no control.
+	The transport status appended of the system size of the input buffer and MSS.
+    Most close(), iconv_close(), dlclose(), pclose() functions appended of checking the result and warning at problems.
+- UI.QTCfg: Improved some in the base fields alignment under single description, that is in RO-labels display.
+    Label of the text fields aligned in the center vertically
+- !!!!:FIX:UI.Vision: All control requests "<info>" appended of checking the child nodes presence to prevent crashes in some cases.
+    !: The project and widget library tree's icons appended of the forcibly setting for clearing also.
+    Prevented for exceptions in the function TBDS::genPrmSet().
+- UI.WebCfgD: Appended "padding-right: 5px;" for all fields.
+
+
 2022-07-24 Roman 0.9.5.1
 - !:FIX:LibsDB.OscadaLibs: tmplib_DevLib.mbBase: Adapted to the builtin syntax highlighting for the attribute "Items set (items)".
 	tmplib_base.ntf: For the server address in the SMTP HELLO request used the EMail sender address instead

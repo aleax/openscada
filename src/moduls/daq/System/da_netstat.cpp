@@ -55,7 +55,7 @@ void NetStat::init( TMdPrm *prm, bool update )
     if(!update) c_subt.fld().setDescr(trS("Interface"));
 
     vector<string> list;
-    dList(list, true);
+    dList(prm, list, true);
     string ifls;
     for(unsigned iL = 0; iL < list.size(); iL++)
 	ifls += list[iL]+";";
@@ -69,7 +69,7 @@ void NetStat::init( TMdPrm *prm, bool update )
 	c_subt.setS(list[0]);
 }
 
-void NetStat::dList( vector<string> &list, bool part )
+void NetStat::dList( TCntrNode *obj, vector<string> &list, bool part )
 {
     long unsigned int rcv, trns;
     char name[11] = "",
@@ -82,7 +82,8 @@ void NetStat::dList( vector<string> &list, bool part )
 	if(sscanf(buf,"%10s %lu %*d %*d %*d %*d %*d %*d %*d %lu",name,&rcv,&trns) != 3) continue;
 	list.push_back(name);
     }
-    if(f) fclose(f);
+    if(f && fclose(f) != 0)
+	mess_warning(obj->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
 }
 
 void NetStat::getVal( TMdPrm *prm )
@@ -106,7 +107,8 @@ void NetStat::getVal( TMdPrm *prm )
 	    devOK = true;
 	    break;
 	}
-	fclose(f);
+	if(fclose(f) != 0)
+	    mess_warning(prm->nodePath().c_str(), _("Closing the file %p error '%s (%d)'!"), f, strerror(errno), errno);
     }
 
     if(devOK) {
@@ -132,7 +134,7 @@ void NetStat::makeActiveDA( TMdContr *aCntr )
     string ap_nm = "Interface_";
 
     vector<string> list;
-    dList(list);
+    dList(aCntr, list);
     for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
 	vector<string> pLs;
 	// Find propper parameter's object

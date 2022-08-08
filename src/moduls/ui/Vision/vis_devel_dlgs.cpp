@@ -377,7 +377,7 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     XMLNode info_req("info");
     info_req.setAttr("path",ed_it);
 
-    if(owner()->cntrIfCmd(info_req)) {
+    if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 	mod->postMess(mod->nodePath().c_str(), QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
 	return;
     }
@@ -1283,7 +1283,7 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
     XMLNode info_req("info");
     info_req.setAttr("path", ed_it);
-    if(owner()->cntrIfCmd(info_req)) {
+    if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 	mod->postMess(mod->nodePath().c_str(), QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()), TVision::Error, this);
 	return;
     }
@@ -1454,7 +1454,7 @@ void VisItProp::tabChanged( int itb )
 	    // Get node information
 	    XMLNode info_req("info");
 	    info_req.setAttr("path",ed_it);
-	    if(owner()->cntrIfCmd(info_req)) {
+	    if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 		mod->postMess(mod->nodePath().c_str(),
 			QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
 		return;
