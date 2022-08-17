@@ -1581,9 +1581,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.custBut = custBut;
 		    var toInit = !this.place.childNodes.length;
 		    formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
-		    if(toInit || this.attrsMdf['font'])		formObj.style.font = this.place.fontCfg;
-		    if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
-		    if(toInit || this.attrsMdf['colorText'])	formObj.style.color = getColor(this.attrs['colorText']);
+		    if(toInit || this.attrsMdf['font'])
+			formObj.style.font = this.place.fontCfg;
+		    if(toInit || this.attrsMdf['color'])
+			formObj.style.backgroundColor = "", formObj.style.backgroundColor = getColor(this.attrs['color']);
+		    if(toInit || this.attrsMdf['colorText'])
+			formObj.style.color = "", formObj.style.color = getColor(this.attrs['colorText']);
 
 		    this.mouseup[this.mouseup.length] = function(e,el) { el.btUp(); }
 		    this.mousedown[this.mousedown.length] = function(e,el) { el.btDown(); };

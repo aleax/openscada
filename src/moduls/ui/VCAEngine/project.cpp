@@ -779,7 +779,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    if(!idmime.empty() && idcol == "dt" && s2i(opt->attr("data"))) {
 		string mimeType, mimeData;
-		if(resourceDataGet("res:"+idmime, mimeType, &mimeData)) opt->setText(mimeData);
+		if(resourceDataGet("res:"+idmime,mimeType,&mimeData)) opt->setText(mimeData);
 	    }
 	    else {
 		XMLNode *n_id = ctrMkNode("list",opt,-1,"/mime/mime/id","");

@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.8.24"
+#define MOD_VER		"7.8.25"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -249,8 +249,6 @@ void Engine::preDisable( int flag )
 void Engine::load_( )
 {
     int64_t d_tm = 0;
-
-    if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
     map<string, bool>	itReg;
 

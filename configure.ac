@@ -157,7 +157,10 @@ AC_SEARCH_LIBS(deflate, [z], [], AC_MSG_ERROR([Z library isn't found. Install or
 # Check for the PCRE library using in the OpenSCADA core
 CXXFLAGS="$CXXFLAGS $($PKG_CONFIG --cflags libpcre)"
 AC_CHECK_HEADERS([pcre.h], [], AC_MSG_ERROR([The PCRE header isn't found. Install or check the PCRE developing package!]))
-AC_SEARCH_LIBS(pcre_compile, [pcre], [], AC_MSG_ERROR([The PCRE library isn't found. Install or check the PCRE package!]))
+AC_SEARCH_LIBS(pcre_compile, [pcre], [
+    AC_SEARCH_LIBS(pcre16_compile, [pcre16], AC_DEFINE(HAVE_PCRE16, 1, [PCRE16 is allowed]))
+    AC_SEARCH_LIBS(pcre32_compile, [pcre32], AC_DEFINE(HAVE_PCRE32, 1, [PCRE32 is allowed]))
+], AC_MSG_ERROR([The PCRE library isn't found. Install or check the PCRE package!]))
 
 # Check for the GD library using into the OpenSCADA core
 if test $enable_LibGD = yes; then

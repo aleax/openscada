@@ -33,15 +33,11 @@ int OSCADA_QT::icoSize( float mult )	{ return (int)(mult * QFontMetrics(qApp->fo
 
 QColor OSCADA_QT::colorAdjToBack( const QColor &clr, const QColor &backClr )
 {
-    //printf("TEST 00: %s on %s\n", clr.name().toStdString().c_str(), backClr.name().toStdString().c_str());
-
     int wV = vmax(60,(256-abs(clr.saturation()-backClr.saturation()))/2);
 
     int wS = abs(clr.hue()-backClr.hue());
     if(wS > 360/2) wS = 360 - wS;
     wS = vmax(0, (180-wS)/2);
-
-    //printf("TEST 01: wV=%d; wS=%d\n", wV, wS);
 
     if(wV > abs(clr.value()-backClr.value()))
 	wV = backClr.value() + ((backClr.value() < 175) ?
@@ -318,8 +314,11 @@ void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
     vector<int> matchedLength(irl->childSize(), 0);
     int minPos = -1, minRule, endIndex, startBlk, sizeBlk;
     QTextCharFormat kForm;
-    //TRegExp expr;
-    QRegExp expr; expr.setPatternSyntax(QRegExp::RegExp2);
+    TRegExp expr("", "", TRegExp::MD_WCHAR);	//Richer and faster in 5 times !!!!
+    bool useQT = (expr.mode() == TRegExp::MD_8);
+    std::wstring textW = text.toStdWString(), patW;
+    QRegExp exprQ;
+    if(useQT) exprQ.setPatternSyntax(QRegExp::RegExp2);
 
     if(lev > 3) return;
 
@@ -338,13 +337,27 @@ void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
 
 	    //Call rule
 	    rl = irl->childGet(iCh);
-	    if(rl->name() == "rule")	expr.setPattern(rl->attr("expr").c_str()/*, s2i(rl->attr("min"))?"U":""*/);
-	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str()/*, s2i(rl->attr("min"))?"U":""*/);
+	    if(rl->name() == "rule") {
+		if(!useQT) {
+		    patW = QString(rl->attr("expr").c_str()).toStdWString();
+		    expr.setPattern(string((const char*)patW.data(),patW.size()*sizeof(wchar_t)), s2i(rl->attr("min"))?"U":"");
+		} else exprQ.setPattern(rl->attr("expr").c_str());
+	    }
+	    else if(rl->name() == "blk") {
+		if(!useQT) {
+		    patW = QString(rl->attr("beg").c_str()).toStdWString();
+		    expr.setPattern(string((const char*)patW.data(),patW.size()*sizeof(wchar_t)), s2i(rl->attr("min"))?"U":"");
+		} else exprQ.setPattern(rl->attr("beg").c_str());
+	    }
 	    else continue;
 
-	    expr.setMinimal(s2i(rl->attr("min")));
-	    rul_pos[iCh] = expr.indexIn(text, iT); matchedLength[iCh] = expr.matchedLength();
-	    //rul_pos[iCh] = expr.search(text.toStdString(), iT, &matchedLength[iCh]);
+	    if(!useQT)
+		rul_pos[iCh] = expr.search(string((const char*)textW.data(),textW.size()*sizeof(wchar_t)), iT, &matchedLength[iCh]);
+	    else {
+		exprQ.setMinimal(s2i(rl->attr("min")));
+		rul_pos[iCh] = exprQ.indexIn(text, iT); matchedLength[iCh] = exprQ.matchedLength();
+	    }
+
 	    if(matchedLength[iCh] <= 0) continue;
 
 	    if(rul_pos[iCh] < 0) rul_pos[iCh] = text.length();
@@ -369,10 +382,16 @@ void SnthHgl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	    if(curBlk) rul_pos[minRule] = curBlk = startBlk = 0;
 	    else startBlk = rul_pos[minRule] + matchedLength[minRule];
 
-	    expr.setPattern(rl->attr("end").c_str()/*, s2i(rl->attr("min"))?"U":""*/);
-	    expr.setMinimal(s2i(rl->attr("min")));
-	    endIndex = expr.indexIn(text, startBlk); matchedLength[minRule] = expr.matchedLength();
-	    //endIndex = expr.search(text.toStdString(), startBlk, &matchedLength[minRule]);
+	    if(!useQT) {
+		patW = QString(rl->attr("end").c_str()).toStdWString();
+		expr.setPattern(string((const char*)patW.data(),patW.size()*sizeof(wchar_t)), s2i(rl->attr("min"))?"U":"");
+		endIndex = expr.search(string((const char*)textW.data(),textW.size()*sizeof(wchar_t)), startBlk, &matchedLength[minRule]);
+	    }
+	    else {
+		exprQ.setPattern(rl->attr("end").c_str());
+		exprQ.setMinimal(s2i(rl->attr("min")));
+		endIndex = exprQ.indexIn(text, startBlk); matchedLength[minRule] = exprQ.matchedLength();
+	    }
 
 	    if(endIndex == -1 || matchedLength[minRule] <= 0) {
 		setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);

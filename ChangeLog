@@ -1,3 +1,18 @@
+2022-08-16 Roman (stable)
+- !!:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the template "BT: RDTech UM24C, UM25C and UM34C (RDTech)".
+- !:LibsDB.vcaBase: wlb_Main.{alarmsAct,alarmsSt}: Expanded in the builtin syntax highlighting of the attribute "Highlight rules (highLght)"
+    for use the PCRE rich features.
+- !!!!:SYS:TRegExp: Appended of the 16 and 32 modes support by the pcre16 and pcre32 libraries respectively
+    and only for the search() function currently.
+- FIX:DAQ.DAQGate: Restored in the redundant hosts live tracing.
+- DAQ.ModBus: Expanded in the syntax highlighting for use the PCRE rich features.
+- UI.QTCfg: The "Favorite" going appended of registering Previous/Next list.
+- !!!!:UI.QTStarter: The common Syntax Highlighter switched to the main work using PCRE in TRegExp,
+    since that is 5 TIMES FASTER and very richer comparing to QRegExp;
+    and QRegExp left to be automatically enabled at missing the PCRE 32/16 libraries.
+- FIX:UI.WebVision: Fixed in the button color dynamic change on Chrome through pre-clearance the style field "backgroundColor".
+
+
 2022-08-07 Roman (stable)
 - !:LibsDB.vcaBase.wlb_{Main,mnEls,doc,prescr},LibsDB.vcaElectroEls.wlb_ElectroEls:
 	Appended for the library representative icon.

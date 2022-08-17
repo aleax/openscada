@@ -1094,8 +1094,14 @@ void ConfApp::favGo( )
 	TBDS::genPrmSet(mod->nodePath()+"favorites", "", user());
 	favUpd(Fav_Reload|Fav_List|Fav_Sel);
     }
-    else try{ pageDisplay(sa->objectName().toStdString()); }
-	catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
+    else try {
+	//Prev and next
+	if(selPath.size()) prev.insert(prev.begin(), selPath);
+	if((int)prev.size() >= queSz)	prev.pop_back();
+	next.clear();
+
+	pageDisplay(sa->objectName().toStdString());
+    } catch(TError &err) { mod->postMess(err.cat, err.mess, TUIMod::Error, this); }
 }
 
 void ConfApp::editToolUpdate( )

@@ -233,15 +233,20 @@ class TArrayObj : public TVarObj
 class TRegExp : public TVarObj
 {
     public:
+	//Data
+	enum Mode { MD_8 = 0, MD_16, MD_32, MD_WCHAR, MD_SAVE };
+
 	//Methods
-	TRegExp( const string &rule = "", const string &flg = "" );
+	TRegExp( const string &rule = "", const string &flg = "", char mode = MD_8 );
 	~TRegExp( );
+
+	char mode( )		{ return md; }
 
 	string objName( )	{ return "RegExp"; }
 	bool isNull( )		{ return !regex; }
 
 	string getPattern( )	{ return pattern; }
-	void setPattern( const string &rule, const string &flg = "" );
+	void setPattern( const string &rule, const string &flg = "", char mode = MD_SAVE );
 
 	TArrayObj *match( const string &vl, bool all = false );
 	bool test( const string &vl );
@@ -275,6 +280,7 @@ class TRegExp : public TVarObj
 
 	void	*regex;
 	int	vSz, *capv;
+	char	md;
 };
 
 //*************************************************

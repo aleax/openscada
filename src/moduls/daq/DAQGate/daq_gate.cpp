@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.21"
+#define MOD_VER		"2.9.22"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -639,7 +639,7 @@ void *TMdContr::Task( void *icntr )
 			    }
 			}
 
-		    if(!req.childSize()) continue;
+		    if(!(req.childSize() || someLive)) continue;	//Polling also the redundant station for live
 
 		    //Same request
 		    try {

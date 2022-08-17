@@ -94,7 +94,7 @@ The template''s names and their parameters are available in languages: English, 
 
 Author: Roman Savochenko <roman@oscada.org>, Arcadiy Kisel (2017)
 Founded: Jul 2016
-Version: 1.4.0
+Version: 1.5.0
 License: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','Бібліотека шаблонів надання доступу до даних пристроїв низькорівневих шин.
 
@@ -104,7 +104,7 @@ DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','Бібліотека шабло
 
 Автор: Роман Савоченко <roman@oscada.org>, Аркадій Кисіль (2017)
 Засновано: Липень 2016
-Версія: 1.4.0
+Версія: 1.5.0
 Ліцензія: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','tmplib_LowDevLib','Низкоуровневые устройства','Библиотека шаблонов предоставления доступа к данным устройств низкоуровневых шин.
 
@@ -114,7 +114,7 @@ DOC: Libs_LowLevelDevices|Libs/LowLevelDevices','tmplib_LowDevLib','Низкоу
 
 Автор: Роман Савоченко <roman@oscada.org>, Аркадий Кысиль (2017)
 Основано: Июль 2016
-Версия: 1.4.0
+Версия: 1.5.0
 Лицензия: GPLv2
 DOC: Libs_LowLevelDevices|Libs/LowLevelDevices');
 CREATE TABLE IF NOT EXISTS 'UserFuncLibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"PROG_TR" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
@@ -11556,6 +11556,107 @@ else	t = (v>>3)*0.25;
 
 if(t_err.toInt() && !f_err.toInt()) t = EVAL;
 f_err = t_err;',1550995458);
+INSERT INTO tmplib_LowDevLib VALUES('RDTech','BT: RDTech UM24C, UM25C and UM34C','RDTech UM24C/UM25C/UM34C BlueTooth interface template. ￼!!!! Tested only on UM24C now.
+
+The RDTech (RuiDeng) UM24C, UM25C and UM34C are low-cost USB pass-through power measurement devices, and support a decent number of collection features, as well as full control via Bluetooth. This template implements most exposed commands and data collection available by the device''s Bluetooth interface.
+
+This template in first time uses the new output transports connection function SYS.Transport.outAt() and the Bluetooth interface for the data acquisition.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.2 HD
+Thanks: for Ryan Finnie at the protocol initial processing in RDUMTOOL (https://github.com/smandon/rdumtool)
+Version: 1.0.0
+License: GPLv2',10,0,'JavaLikeCalc.JavaScript
+if(f_start) { recThr_ = recThr; scrBright_ = scrBright; scrTm_ = scrTm; }
+
+tErr = "";
+
+if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	if(f_stop) { tr.start(false); return; }
+
+	for(resp = tr.messIO(SYS.strFromCharCode(0xF0)); resp.length < 130 && (respTail=tr.messIO("")).length; )
+		resp += respTail;
+
+	if(!resp.length)	tErr = "2:"+tr("No response.");
+	else if(resp.length < 130 || !((tVl=resp.charCodeAt(0,"UTF-16BE")) == 0x0963 || tVl == 0x0d4c) || 
+			!((tVl=resp.charCodeAt(resp.length-2,"UTF-16BE")) == 0xFFF1 || tVl == 0x8068))
+		tErr = "2:"+tr("Not whole or not mine response.");
+	else {
+		// Setting
+		if(scrNext) {
+			if(scrNext == true) { tr.messIO(SYS.strFromCharCode(0xF1), 0, 0); SYS.sleep(0.1); }
+			scrNext = false;
+		}
+		if(scrRot) {
+			if(scrRot == true) { tr.messIO(SYS.strFromCharCode(0xF2), 0, 0); SYS.sleep(0.1); }
+			scrRot = false;
+		}
+		if(grpNext) {
+			if(grpNext == true)	{ tr.messIO(SYS.strFromCharCode(0xF3), 0, 0); SYS.sleep(0.1); }
+			grpNext = false;
+		}
+		if(grpClear) {
+			if(grpClear == true) { tr.messIO(SYS.strFromCharCode(0xF4), 0, 0); SYS.sleep(0.1); }
+			grpClear = false;
+		}
+		if(recThr != recThr_) {
+			if(!recThr.isEVal()) { tr.messIO(SYS.strFromCharCode(0xB0+max(0,min(0.3,recThr))*100), 0, 0); SYS.sleep(0.1); }
+			recThr_ = recThr;
+		}
+		if(scrBright != scrBright_) {
+			if(!scrBright.isEVal()) { tr.messIO(SYS.strFromCharCode(0xD0+max(0,min(5,scrBright))), 0, 0); SYS.sleep(0.1); }
+			scrBright_ = scrBright;
+		}
+		if(scrTm != scrTm_) {
+			if(!scrTm.isEVal()) { tr.messIO(SYS.strFromCharCode(0xE0+max(0,min(9,scrTm))), 0, 0); SYS.sleep(0.1); }
+			scrTm_ = scrTm;
+		}
+
+		// Reading all data
+		io = Special.FLibSYS.IO(resp, "", "b");
+		io.pos = 2;
+		V = io.read("uint16", 1)/100;
+		A = io.read("uint16", 1)/1000;
+		W = io.read("uint32", 1)/1000;
+		T = io.read("uint16", 1);
+		io.read("uint16", 1);	//T, °F
+		dG = io.read("uint16", 1);
+		for(grps = "", iG = 0; iG < 10; iG++)
+			grps += (grps.length?"\n":"") + ((iG==dG)?"> ":"  ") + iG.toString() + ": " +
+						(io.read("uint32",1)/1000) + " Ah, " + (io.read("uint32",1)/1000) + " Wh;";
+		io.read("uint16", 1);	//data_line_positive_volts/100
+		io.read("uint16", 1);	//data_line_negative_volts/100
+		chMode_ = io.read("uint16", 1);
+		if(chMode_ == 1)	chMode = "Quick Charge 2.0";
+		else if(chMode_ == 2)	chMode = "Quick Charge 3.0";
+		else if(chMode_ == 3)	chMode = "Apple 2.4A";
+		else if(chMode_ == 4)	chMode = "Apple 2.1A";
+		else if(chMode_ == 5)	chMode = "Apple 1.0A";
+		else if(chMode_ == 6)	chMode = "Apple 0.5A";
+		else if(chMode_ == 7)	chMode = "DCP 1.5A";
+		else if(chMode_ == 8)	chMode = "Samsung";
+		else chMode = "Unknown / Normal";
+		chMode += " ("+chMode_+")";
+		recAh = io.read("uint32", 1)/1000;
+		recWh = io.read("uint32", 1)/1000;
+		recThr = recThr_ = io.read("uint16", 1)/100;
+		recTm = recTm_ = io.read("uint32", 1);
+		rec = io.read("uint16", 1);
+		scrTm = scrTm_ = io.read("uint16", 1);
+		scrBright = scrBright_ = io.read("uint16", 1);
+		R = io.read("uint32", 1)/10;
+		scr = io.read("uint16", 1);
+	}
+}
+
+if(tErr.length) {
+	f_err = tErr;
+	V = A = W = T = dG = chMode = recAh = recWh = recThr = recTm = rec = scrTm = scrBright = R = scr = EVAL;
+	grps = EVAL;
+}
+else f_err = "0";',1660673386);
 CREATE TABLE IF NOT EXISTS 'tmplib_tests' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_tests VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
 val=val_cod;
@@ -14942,6 +15043,27 @@ INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_cs','CS pin number of the 
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_sclk','SCLK pin number of the GPIO',1,64,'11',2,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_miso','MISO pin number of the GPIO',1,64,'9',3,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','t','T, °С',2,17,'',4,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','transport','Transport',0,64,'Serial.RD:/dev/rfcomm0:9600',0,'Transport','','Serial.RD:/dev/rfcomm0:9600','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','V','Volts',2,16,'',1,'Volts','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','A','Amperes',2,16,'',2,'Ampers<!>','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','this','Object',4,0,'',20,'Object','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','W','Watts',2,16,'',3,'Watts','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','T','Temperature, °С',1,16,'',4,'Temperature, °С','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grps','Groups',0,20,'',11,'Groups','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','chMode','Charging Mode',0,16,'',14,'Charging Mode','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recAh','Record, Ah',2,16,'',7,'Record, Ah','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recWh','Record, Wh',2,16,'',8,'Record, Wh','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recThr','Record threshold, A [0...0.3]',2,32,'',9,'Record threshold, A<!>','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recTm','Record time, seconds',2,16,'',10,'Record time, seconds','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','rec','Recording',3,16,'',6,'Recording','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','R','Resistance, Om',2,16,'',5,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scr','Screen, [0...6]',1,16,'',15,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrTm','Screen timeout, minutes [0...9]',1,32,'',18,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrBright','Screen brightness, [0...5]',1,32,'',19,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrNext','Screen next',3,32,'',16,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrRot','Screen rotate',3,32,'',17,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpNext','Group next',3,32,'',12,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,'',13,'','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');

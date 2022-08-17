@@ -2042,7 +2042,7 @@ msgstr "Вичерпано час запуску задачі '%s'!"
 
 #, c-format
 msgid "Timeout of the task '%s' !!!"
-msgstr "Вичерпано час завданняі '%s' !!!"
+msgstr "Вичерпано час завдання '%s' !!!"
 
 #, c-format
 msgid "Task '%s' is not stopped!"

@@ -793,11 +793,11 @@ bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )	{ return v
 //* TRegExp                                                 *
 //*   Regular expression object                             *
 //***********************************************************
-TRegExp::TRegExp( const string &rule, const string &flg ) :
+TRegExp::TRegExp( const string &rule, const string &flg, char mode ) :
     lastIndex(0), pattern(rule), global(false), ignoreCase(false), multiline(false), ungreedy(false), isSimplePat(false), UTF8(false),
-    regex(NULL), vSz(90), capv(NULL)
+    regex(NULL), vSz(90), capv(NULL), md(MD_8)
 {
-    setPattern(rule, flg);
+    setPattern(rule, flg, mode);
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), 1);
 }
@@ -805,12 +805,20 @@ TRegExp::TRegExp( const string &rule, const string &flg ) :
 TRegExp::~TRegExp( )
 {
     if(capv)	delete [] capv;
-    if(regex)	pcre_free((pcre*)regex);
+    if(regex) {
+	if(md == MD_8)		pcre_free((pcre*)regex);
+#if HAVE_PCRE32
+	else if(md == MD_32)	pcre32_free((pcre32*)regex);
+#endif
+#if HAVE_PCRE16
+	else if(md == MD_16)	pcre16_free((pcre16*)regex);
+#endif
+    }
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter(TVarObj::objName()+":"+objName(), -1);
 }
 
-void TRegExp::setPattern( const string &rule, const string &flg )
+void TRegExp::setPattern( const string &rule, const string &flg, char mode )
 {
     //Global properties init
     global = (flg.find('g') != string::npos);
@@ -828,15 +836,43 @@ void TRegExp::setPattern( const string &rule, const string &flg )
 
     //Check for free
     if(isSimplePat && capv)	{ delete [] capv; capv = NULL; }
-    if(regex)			{ pcre_free((pcre*)regex); regex = NULL; }
+    if(regex) {
+	if(md == MD_8)		pcre_free((pcre*)regex);
+#if HAVE_PCRE32
+	else if(md == MD_32)	pcre32_free((pcre32*)regex);
+#endif
+#if HAVE_PCRE16
+	else if(md == MD_16)	pcre16_free((pcre16*)regex);
+#endif
+	regex = NULL;
+    }
+
+    if(!isSimplePat) {
+	if(mode == MD_SAVE) ;
+#if HAVE_PCRE32
+	else if(mode == MD_32 || (mode == MD_WCHAR && sizeof(wchar_t) == 4))	md = MD_32;
+#endif
+#if HAVE_PCRE16
+	else if(mode == MD_16 || (mode == MD_WCHAR && sizeof(wchar_t) == 2))	md = MD_16;
+#endif
+	else md = MD_8;
+    }
 
     //Alloc for regexp
     if(!isSimplePat && pattern.size()) {
 	const char *terr;
 	int erroff;
-	regex = pcre_compile(pattern.c_str(),
-	    PCRE_DOTALL|(UTF8?PCRE_UTF8:0)|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0)|(ungreedy?PCRE_UNGREEDY:0),
-	    &terr, &erroff, NULL);
+
+	int options = PCRE_DOTALL|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0)|(ungreedy?PCRE_UNGREEDY:0);
+
+	if(md == MD_8) regex = pcre_compile(pattern.c_str(), options|(UTF8?PCRE_UTF8|PCRE_NO_UTF8_CHECK:0), &terr, &erroff, NULL);
+#if HAVE_PCRE32
+	else if(md == MD_32) regex = pcre32_compile((PCRE_SPTR32)(pattern+string(4,0)).data(), options|(UTF8?PCRE_UTF32|PCRE_NO_UTF32_CHECK:0), &terr, &erroff, NULL);
+#endif
+#if HAVE_PCRE16
+	else if(md == MD_16) regex = pcre16_compile((PCRE_SPTR16)(pattern+string(2,0)).data(), options|(UTF8?PCRE_UTF16|PCRE_NO_UTF16_CHECK:0), &terr, &erroff, NULL);
+#endif
+
 	if(!regex) err = terr;
 	else if(!capv) capv = new int[90];
     }
@@ -845,7 +881,7 @@ void TRegExp::setPattern( const string &rule, const string &flg )
 TArrayObj *TRegExp::match( const string &vl, bool all )
 {
     TArrayObj *rez = new TArrayObj();
-    if(!regex) return rez;
+    if(!regex || md != MD_8) return rez;	//?!?! Not implemented still for 16/32 modes
 
     if(all && global)
 	for(int curPos = 0, iN = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0 && capv[1] > capv[0]; curPos = capv[1], iN++)
@@ -865,7 +901,7 @@ TArrayObj *TRegExp::match( const string &vl, bool all )
 string TRegExp::replace( const string &vl, const string &str )
 {
     string rez = vl, repl;
-    if(!regex) return rez;
+    if(!regex || md != MD_8) return rez;	//?!?! Not implemented still for 16/32 modes
     for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0 && capv[1] >= capv[0];
 	curPos = capv[0]+repl.size())
     {
@@ -878,7 +914,7 @@ string TRegExp::replace( const string &vl, const string &str )
 TArrayObj *TRegExp::split( const string &vl, int limit )
 {
     TArrayObj *rez = new TArrayObj();
-    if(!regex) return rez;
+    if(!regex || md != MD_8) return rez;	//?!?! Not implemented still for 16/32 modes
     int curPos = 0, iN = 0;
     for(int se = 0; (se=pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0 && capv[1] > capv[0] && (!limit || iN < limit);
 		curPos = capv[1])
@@ -921,7 +957,7 @@ bool TRegExp::test( const string &vl )
 	return false;
     }
     //Check by regular expression
-    if(!regex) return false;
+    if(!regex || md != MD_8) return false;	//?!?! Not implemented still for 16/32 modes
     int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
     if(global) lastIndex = (n>0) ? capv[1] : 0;
     return (n>0);
@@ -931,7 +967,14 @@ int TRegExp::search( const string &vl, int off, int *length )
 {
     if(!regex) return -1;
 
-    int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), off, 0, capv, vSz);
+    int n = 0;
+    if(md == MD_8) n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), off, PCRE_NO_UTF8_CHECK, capv, vSz);
+#if HAVE_PCRE32
+    else if(md == MD_32) n = pcre32_exec((pcre32*)regex, NULL, (PCRE_SPTR32)vl.data(), vl.size()/4, off, PCRE_NO_UTF32_CHECK, capv, vSz);
+#endif
+#if HAVE_PCRE16
+    else if(md == MD_16) n = pcre16_exec((pcre16*)regex, NULL, (PCRE_SPTR16)vl.data(), vl.size()/2, off, PCRE_NO_UTF16_CHECK, capv, vSz);
+#endif
 
     if(length) *length = (n > 0) ? capv[1]-capv[0] : 0;
     return (n > 0) ? capv[0] : -1;

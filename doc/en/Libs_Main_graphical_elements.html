@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Libs/Main_graphical_elements&amp;oldid=73664&amp;diff=73997" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -705,6 +705,7 @@ In the runtime mode, a table is created to list the active violations, by define
 <span class="c"># &lt;rule expr="^[0-9]*" color="blue"&gt;</span>
 <span class="c">#  &lt;rule expr="[01]$" color="red"/&gt;</span>
 <span class="c"># &lt;/rule&gt;</span>
+<span class="c"># &lt;rule expr="(?&lt;=:).*" font_weight="1"/&gt;</span>
 <span class="c">#&lt;/SnthHgl&gt;</span>
 50:gray
 40:red
@@ -2061,6 +2062,10 @@ In the runtime mode, a table is created from the active violations list, for the
 <span class="c">#  &lt;rule expr="[01]{2}$" color="red"&gt;</span>
 <span class="c">#   &lt;rule expr="[01]$" color="darkorange"/&gt;</span>
 <span class="c">#  &lt;/rule&gt;</span>
+<span class="c"># &lt;/rule&gt;</span>
+<span class="c"># &lt;rule expr="(?&lt;=:).*"&gt;</span>
+<span class="c">#  &lt;rule expr="[^:]*" font_weight="1"/&gt;</span>
+<span class="c">#  &lt;rule expr="(?&lt;=:).*" font_italic="1"/&gt;</span>
 <span class="c"># &lt;/rule&gt;</span>
 <span class="c">#&lt;/SnthHgl&gt;</span>
 501:gray

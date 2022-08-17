@@ -1473,8 +1473,8 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    pg_tp->clear();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
-		    pg_tp->addItem(req.childGet(i_el)->text().c_str(),s2i(req.childGet(i_el)->attr("id")));
+		for(unsigned iEl = 0; iEl < req.childSize(); iEl++)
+		    pg_tp->addItem(req.childGet(iEl)->text().c_str(),s2i(req.childGet(iEl)->attr("id")));
 	    pg_tp->setCurrentIndex(pg_tp->findData(sel_val));
 	}
     }
@@ -1590,14 +1590,14 @@ void VisItProp::tabChanged( int itb )
 	    QStringList	atypes;
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/tp_ls",TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
-		    atypes.push_back((req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str());
+		for(unsigned iEl = 0; iEl < req.childSize(); iEl++)
+		    atypes.push_back((req.childGet(iEl)->text()+"|"+req.childGet(iEl)->attr("id")).c_str());
 	    if(obj_attr_cfg->topLevelItemCount()) obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole,atypes);
 	    atypes.clear();
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/proc/lnk_ls",TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req))
-		for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
-		    atypes.push_back((req.childGet(i_el)->text()+"|"+req.childGet(i_el)->attr("id")).c_str());
+		for(unsigned iEl = 0; iEl < req.childSize(); iEl++)
+		    atypes.push_back((req.childGet(iEl)->text()+"|"+req.childGet(iEl)->attr("id")).c_str());
 	    if(obj_attr_cfg->topLevelItemCount()) obj_attr_cfg->topLevelItem(0)->setData(0,Qt::UserRole+1,atypes);
 
 	    //  Calculate period
@@ -1622,8 +1622,8 @@ void VisItProp::tabChanged( int itb )
 		proc_lang->clear();
 		req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 		if(!owner()->cntrIfCmd(req))
-		    for(unsigned i_el = 0; i_el < req.childSize(); i_el++)
-			proc_lang->addItem(req.childGet(i_el)->text().c_str());
+		    for(unsigned iEl = 0; iEl < req.childSize(); iEl++)
+			proc_lang->addItem(req.childGet(iEl)->text().c_str());
 		int cur_el = proc_lang->findText(sval.c_str());
 		if(cur_el < 0) proc_lang->addItem(sval.c_str());
 		proc_lang->setCurrentIndex(proc_lang->findText(sval.c_str()));

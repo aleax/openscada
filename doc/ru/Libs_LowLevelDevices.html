@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Библиотеки/НизкоУровневыеУстройства</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FLowLevelDevices&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/LowLevelDevices" title="Libs/LowLevelDevices">Libs/LowLevelDevices</a> and the translation is 19% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_LowLevelDevices.html" title="Libs/LowLevelDevices (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--stub">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/Libs_LowLevelDevices.html" title="Бібліотеки/НизькоРівневіПристрої (19% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FLowLevelDevices&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/LowLevelDevices" title="Libs/LowLevelDevices">Libs/LowLevelDevices</a> and the translation is 16% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_LowLevelDevices.html" title="Libs/LowLevelDevices (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--stub">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/Libs_LowLevelDevices.html" title="Бібліотеки/НизькоРівневіПристрої (16% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -27,7 +27,7 @@
 <tr>
 <td> <a href="Libs_LowLevelDevices.html" title="Special:MyLanguage/Libs/LowLevelDevices">Библиотека низкоуровневых сенсоров и чипов</a>
 </td>
-<td> 1.4 </td>
+<td> 1.5 </td>
 <td> GPLv2 </td>
 <td> OscadaLibs.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA/data/LibsDB/OscadaLibs.sql" rel="nofollow noreferrer noopener" target="_blank">SQL</a>, <a class="external" href="http://oscada.org/wiki/File:OscadaLibs.db.gz" title="File:OscadaLibs.db.gz">GZip</a>) &gt; DAQ.tmplb_LowDevLib </td>
 <td> en, uk, ru
@@ -55,20 +55,21 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
-<li class="toclevel-1"><a href="#One_Wire_by_DS9097_.281W_DS9097.29"><span class="tocnumber">1</span> <span class="toctext">One Wire by DS9097 (1W_DS9097)</span></a></li>
-<li class="toclevel-1"><a href="#One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="tocnumber">2</span> <span class="toctext">One Wire by DS9097U (1W_DS9097U)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_PCF8591_.28PCF8591.29"><span class="tocnumber">3</span> <span class="toctext">I2C: PCF8591 (PCF8591)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_PCF8574_.28PCF8574.29"><span class="tocnumber">4</span> <span class="toctext">I2C: PCF8574 (PCF8574)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_ADS101x.2C_ADS111x_.28ADS111x.29"><span class="tocnumber">5</span> <span class="toctext">I2C: ADS101x, ADS111x (ADS111x)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_MCP4725_.28MCP4725.29"><span class="tocnumber">6</span> <span class="toctext">I2C: MCP4725 (MCP4725)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_BMP180_.28BMP180.29"><span class="tocnumber">7</span> <span class="toctext">I2C: BMP180 (BMP180)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_BME280_.28BME280.29"><span class="tocnumber">8</span> <span class="toctext">I2C: BME280 (BME280)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_SHT3x_.28SHT3x.29"><span class="tocnumber">9</span> <span class="toctext">I2C: SHT3x (SHT3x)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_DS1307.2CDS3231_.28DS3231.29"><span class="tocnumber">10</span> <span class="toctext">I2C: DS1307,DS3231 (DS3231)</span></a></li>
-<li class="toclevel-1"><a href="#I2C:_AT24C.7B32.7C64.7D_.28AT24CXX.29"><span class="tocnumber">11</span> <span class="toctext">I2C: AT24C{32|64} (AT24CXX)</span></a></li>
-<li class="toclevel-1"><a href="#GPIO:_DHT11.2C22_.28DHT.29"><span class="tocnumber">12</span> <span class="toctext">GPIO: DHT11,22 (DHT)</span></a></li>
-<li class="toclevel-1"><a href="#GPIO:_MAX6675_.28MAX6675.29"><span class="tocnumber">13</span> <span class="toctext">GPIO: MAX6675 (MAX6675)</span></a></li>
-<li class="toclevel-1"><a href="#GPIO.7CI2C:_1602A.28HD44780.29_.281602A.29"><span class="tocnumber">14</span> <span class="toctext">GPIO|I2C: 1602A(HD44780) (1602A)</span></a></li>
+<li class="toclevel-1"><a href="#BT:_RDTech_UM24C.2C_UM25C_and_UM34C_.28RDTech.29"><span class="tocnumber">1</span> <span class="toctext">BT: RDTech UM24C, UM25C and UM34C (RDTech)</span></a></li>
+<li class="toclevel-1"><a href="#One_Wire_by_DS9097_.281W_DS9097.29"><span class="tocnumber">2</span> <span class="toctext">One Wire by DS9097 (1W_DS9097)</span></a></li>
+<li class="toclevel-1"><a href="#One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="tocnumber">3</span> <span class="toctext">One Wire by DS9097U (1W_DS9097U)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_PCF8591_.28PCF8591.29"><span class="tocnumber">4</span> <span class="toctext">I2C: PCF8591 (PCF8591)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_PCF8574_.28PCF8574.29"><span class="tocnumber">5</span> <span class="toctext">I2C: PCF8574 (PCF8574)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_ADS101x.2C_ADS111x_.28ADS111x.29"><span class="tocnumber">6</span> <span class="toctext">I2C: ADS101x, ADS111x (ADS111x)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_MCP4725_.28MCP4725.29"><span class="tocnumber">7</span> <span class="toctext">I2C: MCP4725 (MCP4725)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_BMP180_.28BMP180.29"><span class="tocnumber">8</span> <span class="toctext">I2C: BMP180 (BMP180)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_BME280_.28BME280.29"><span class="tocnumber">9</span> <span class="toctext">I2C: BME280 (BME280)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_SHT3x_.28SHT3x.29"><span class="tocnumber">10</span> <span class="toctext">I2C: SHT3x (SHT3x)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_DS1307.2CDS3231_.28DS3231.29"><span class="tocnumber">11</span> <span class="toctext">I2C: DS1307,DS3231 (DS3231)</span></a></li>
+<li class="toclevel-1"><a href="#I2C:_AT24C.7B32.7C64.7D_.28AT24CXX.29"><span class="tocnumber">12</span> <span class="toctext">I2C: AT24C{32|64} (AT24CXX)</span></a></li>
+<li class="toclevel-1"><a href="#GPIO:_DHT11.2C22_.28DHT.29"><span class="tocnumber">13</span> <span class="toctext">GPIO: DHT11,22 (DHT)</span></a></li>
+<li class="toclevel-1"><a href="#GPIO:_MAX6675_.28MAX6675.29"><span class="tocnumber">14</span> <span class="toctext">GPIO: MAX6675 (MAX6675)</span></a></li>
+<li class="toclevel-1"><a href="#GPIO.7CI2C:_1602A.28HD44780.29_.281602A.29"><span class="tocnumber">15</span> <span class="toctext">GPIO|I2C: 1602A(HD44780) (1602A)</span></a></li>
 </ul>
 </div>
 
@@ -94,14 +95,300 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="1W_DS9097" title="#1W_DS9097"><h3><span class="mw-headline" id="One_Wire_by_DS9097_.281W_DS9097.29"><span class="mw-headline-number">1</span> One Wire by DS9097 (<a href="Libs_LowLevelDevices.html#1W_DS9097" title="Special:MyLanguage/Libs/LowLevelDevices">1W_DS9097</a>)</span></h3></span> </td>
+<td> <span id="RDTech" title="#RDTech"><h3><span class="mw-headline" id="BT:_RDTech_UM24C.2C_UM25C_and_UM34C_.28RDTech.29"><span class="mw-headline-number">1</span> BT: RDTech UM24C, UM25C and UM34C (<a href="Libs_LowLevelDevices.html#RDTech" title="Special:MyLanguage/Libs/LowLevelDevices">RDTech</a>)</span></h3></span> </td>
+<td> 1.0 </td>
+<td> GPLv2 </td>
+<td> * </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevsRDTech.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="738" src="../en/files/LibsLowLevDevsRDTech.png" width="370" /></a></div>
+<p>RDTech UM24C/UM25C/UM34C BlueTooth interface template. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Tested only on UM24C now.
+</p><p>The RDTech (RuiDeng) UM24C, UM25C and UM34C are low-cost USB pass-through power measurement devices, and support a decent number of collection features, as well as full control via Bluetooth. This template implements most exposed commands and data collection available by the device's Bluetooth interface.
+</p><p>This template in first time uses the new output transports connection function <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">SYS.Transport.outAt()</a> and the Bluetooth interface for the data acquisition.
+</p>
+<ul><li> <b>Total complexity:</b> 0.2 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Thanks:</b> for Ryan Finnie at the protocol initial processing in <a class="external text" href="https://github.com/smandon/rdumtool" rel="nofollow noreferrer noopener" target="_blank">RDUMTOOL</a></li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Serial.RD:/dev/rfcomm0:9600
+</td></tr>
+<tr>
+<td> V </td>
+<td> Volts </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> A </td>
+<td> Amperes </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> W </td>
+<td> Watts </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T </td>
+<td> Temperature, °С </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> R </td>
+<td> Resistance, Om </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> rec </td>
+<td> Recording </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> recAh </td>
+<td> Record, Ah </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> recWh </td>
+<td> Record, Wh </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> recThr </td>
+<td> Record threshold, A [0...0.3] </td>
+<td> Real </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> recTm </td>
+<td> Record time, seconds </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> grps </td>
+<td> Groups </td>
+<td> Text </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> grpNext </td>
+<td> Group next </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> grpClear </td>
+<td> Group clear </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> chMode </td>
+<td> Charging Mode </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> scr </td>
+<td> Screen, [0...6] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> scrNext </td>
+<td> Screen next </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> scrRot </td>
+<td> Screen rotate </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> scrTm </td>
+<td> Screen timeout, minutes [0...9] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> scrBright </td>
+<td> Screen brightness, [0...5] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>1000
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsLowLevDevsCfgRDTech.png" title="Configuration."><img alt="Configuration." height="181" src="../en/files/LibsLowLevDevsCfgRDTech.png" width="368" /></a></div>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<dl><dd>1. Connection the BlueTooth device:</dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre>bluetoothctl
+<span class="c">#[bluetooth]# scan on</span>
+<span class="c">#  Discovery started</span>
+<span class="c">#  [NEW] Device 98:D3:31:F8:52:29 UM24C</span>
+<span class="c">#  [CHG] Device 98:D3:31:F8:52:29 RSSI: -60</span>
+<span class="c">#[bluetooth]# scan off</span>
+<span class="c">#[bluetooth]# pair 98:D3:31:F8:52:29</span>
+<span class="c">#  Attempting to pair with 98:D3:31:F8:52:29</span>
+<span class="c">#  [CHG] Device 98:D3:31:F8:52:29 Connected: yes</span>
+<span class="c">#  Request PIN code</span>
+<span class="c">#  [UM241m[agent] Enter PIN code: 1234</span>
+<span class="c">#  Pairing successful</span>
+<span class="c">#[bluetooth]# trust 98:D3:31:F8:52:29</span>
+<span class="c">#  [CHG] Device 98:D3:31:F8:52:29 Trusted: yes</span>
+<span class="c">#  Changing 98:D3:31:F8:52:29 trust succeeded</span>
+<span class="c">#[bluetooth]# exit</span>
+
+rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29   <span class="c"># 0 here for binding to /dev/rfcomm0</span>
+</pre></div>
+<dl><dd>2. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>3. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select the template for that, one for each the devices. Enable the parameter.</dd>
+<dd>4. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to the address of the automatically created transport with its parameters after ":", according to <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">the function SYS.Transport.outAt() address format</a>, where the device address corresponds to the command <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">rfcomm bind 0</span> in item 1.</li></ul></dd>
+<dd>5. <i>Result</i>: The logical parameter object will perform gather data of and trace to modify of the writable properties.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="1W_DS9097" title="#1W_DS9097"><h3><span class="mw-headline" id="One_Wire_by_DS9097_.281W_DS9097.29"><span class="mw-headline-number">2</span> One Wire by DS9097 (<a href="Libs_LowLevelDevices.html#1W_DS9097" title="Special:MyLanguage/Libs/LowLevelDevices">1W_DS9097</a>)</span></h3></span> </td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en
 </td></tr>
 <tr>
-<td> <span id="1W_DS9097U" title="#1W_DS9097U"><h3><span class="mw-headline" id="One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="mw-headline-number">2</span> One Wire by DS9097U (<a href="Libs_LowLevelDevices.html#1W_DS9097U" title="Special:MyLanguage/Libs/LowLevelDevices">1W_DS9097U</a>)</span></h3></span> </td>
+<td> <span id="1W_DS9097U" title="#1W_DS9097U"><h3><span class="mw-headline" id="One_Wire_by_DS9097U_.281W_DS9097U.29"><span class="mw-headline-number">3</span> One Wire by DS9097U (<a href="Libs_LowLevelDevices.html#1W_DS9097U" title="Special:MyLanguage/Libs/LowLevelDevices">1W_DS9097U</a>)</span></h3></span> </td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -214,7 +501,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <table class="wikitable">
 
 <tr>
-<td> <span id="PCF8591" title="#PCF8591"><h3><span class="mw-headline" id="I2C:_PCF8591_.28PCF8591.29"><span class="mw-headline-number">3</span> I2C: PCF8591 (<a href="Libs_LowLevelDevices.html#PCF8591" title="Special:MyLanguage/Libs/LowLevelDevices">PCF8591</a>)</span></h3></span> </td>
+<td> <span id="PCF8591" title="#PCF8591"><h3><span class="mw-headline" id="I2C:_PCF8591_.28PCF8591.29"><span class="mw-headline-number">4</span> I2C: PCF8591 (<a href="Libs_LowLevelDevices.html#PCF8591" title="Special:MyLanguage/Libs/LowLevelDevices">PCF8591</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -360,7 +647,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <table class="wikitable">
 
 <tr>
-<td> <span id="PCF8574" title="#PCF8574"><h3><span class="mw-headline" id="I2C:_PCF8574_.28PCF8574.29"><span class="mw-headline-number">4</span> I2C: PCF8574 (<a href="Libs_LowLevelDevices.html#PCF8574" title="Special:MyLanguage/Libs/LowLevelDevices">PCF8574</a>)</span></h3></span> </td>
+<td> <span id="PCF8574" title="#PCF8574"><h3><span class="mw-headline" id="I2C:_PCF8574_.28PCF8574.29"><span class="mw-headline-number">5</span> I2C: PCF8574 (<a href="Libs_LowLevelDevices.html#PCF8574" title="Special:MyLanguage/Libs/LowLevelDevices">PCF8574</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -595,7 +882,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <table class="wikitable">
 
 <tr>
-<td> <span id="ADS111x" title="#ADS111x"><h3><span class="mw-headline" id="I2C:_ADS101x.2C_ADS111x_.28ADS111x.29"><span class="mw-headline-number">5</span> I2C: ADS101x, ADS111x (<a href="Libs_LowLevelDevices.html#ADS111x" title="Special:MyLanguage/Libs/LowLevelDevices">ADS111x</a>)</span></h3></span> </td>
+<td> <span id="ADS111x" title="#ADS111x"><h3><span class="mw-headline" id="I2C:_ADS101x.2C_ADS111x_.28ADS111x.29"><span class="mw-headline-number">6</span> I2C: ADS101x, ADS111x (<a href="Libs_LowLevelDevices.html#ADS111x" title="Special:MyLanguage/Libs/LowLevelDevices">ADS111x</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -735,7 +1022,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <table class="wikitable">
 
 <tr>
-<td> <span id="MCP4725" title="#MCP4725"><h3><span class="mw-headline" id="I2C:_MCP4725_.28MCP4725.29"><span class="mw-headline-number">6</span> I2C: MCP4725 (<a href="Libs_LowLevelDevices.html#MCP4725" title="Special:MyLanguage/Libs/LowLevelDevices">MCP4725</a>)</span></h3></span> </td>
+<td> <span id="MCP4725" title="#MCP4725"><h3><span class="mw-headline" id="I2C:_MCP4725_.28MCP4725.29"><span class="mw-headline-number">7</span> I2C: MCP4725 (<a href="Libs_LowLevelDevices.html#MCP4725" title="Special:MyLanguage/Libs/LowLevelDevices">MCP4725</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -845,7 +1132,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <table class="wikitable">
 
 <tr>
-<td> <span id="BMP180" title="#BMP180"><h3><span class="mw-headline" id="I2C:_BMP180_.28BMP180.29"><span class="mw-headline-number">7</span> I2C: BMP180 (<a href="Libs_LowLevelDevices.html#BMP180" title="Special:MyLanguage/Libs/LowLevelDevices">BMP180</a>)</span></h3></span> </td>
+<td> <span id="BMP180" title="#BMP180"><h3><span class="mw-headline" id="I2C:_BMP180_.28BMP180.29"><span class="mw-headline-number">8</span> I2C: BMP180 (<a href="Libs_LowLevelDevices.html#BMP180" title="Special:MyLanguage/Libs/LowLevelDevices">BMP180</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -964,7 +1251,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <table class="wikitable">
 
 <tr>
-<td> <span id="BME280" title="#BME280"><h3><span class="mw-headline" id="I2C:_BME280_.28BME280.29"><span class="mw-headline-number">8</span> I2C: BME280 (<a href="Libs_LowLevelDevices.html#BME280" title="Special:MyLanguage/Libs/LowLevelDevices">BME280</a>)</span></h3></span> </td>
+<td> <span id="BME280" title="#BME280"><h3><span class="mw-headline" id="I2C:_BME280_.28BME280.29"><span class="mw-headline-number">9</span> I2C: BME280 (<a href="Libs_LowLevelDevices.html#BME280" title="Special:MyLanguage/Libs/LowLevelDevices">BME280</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -1092,7 +1379,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <table class="wikitable">
 
 <tr>
-<td> <span id="SHT3x" title="#SHT3x"><h3><span class="mw-headline" id="I2C:_SHT3x_.28SHT3x.29"><span class="mw-headline-number">9</span> I2C: SHT3x (<a href="Libs_LowLevelDevices.html#SHT3x" title="Special:MyLanguage/Libs/LowLevelDevices">SHT3x</a>)</span></h3></span> </td>
+<td> <span id="SHT3x" title="#SHT3x"><h3><span class="mw-headline" id="I2C:_SHT3x_.28SHT3x.29"><span class="mw-headline-number">10</span> I2C: SHT3x (<a href="Libs_LowLevelDevices.html#SHT3x" title="Special:MyLanguage/Libs/LowLevelDevices">SHT3x</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -1201,7 +1488,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <table class="wikitable">
 
 <tr>
-<td> <span id="DS3231" title="#DS3231"><h3><span class="mw-headline" id="I2C:_DS1307.2CDS3231_.28DS3231.29"><span class="mw-headline-number">10</span> I2C: DS1307,DS3231 (<a href="Libs_LowLevelDevices.html#DS3231" title="Special:MyLanguage/Libs/LowLevelDevices">DS3231</a>)</span></h3></span> </td>
+<td> <span id="DS3231" title="#DS3231"><h3><span class="mw-headline" id="I2C:_DS1307.2CDS3231_.28DS3231.29"><span class="mw-headline-number">11</span> I2C: DS1307,DS3231 (<a href="Libs_LowLevelDevices.html#DS3231" title="Special:MyLanguage/Libs/LowLevelDevices">DS3231</a>)</span></h3></span> </td>
 <td> 1.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -1358,7 +1645,7 @@ DS3231;DS1307
 <table class="wikitable">
 
 <tr>
-<td> <span id="AT24CXX" title="#AT24CXX"><h3><span class="mw-headline" id="I2C:_AT24C.7B32.7C64.7D_.28AT24CXX.29"><span class="mw-headline-number">11</span> I2C: AT24C{32|64} (<a href="Libs_LowLevelDevices.html#AT24CXX" title="Special:MyLanguage/Libs/LowLevelDevices">AT24CXX</a>)</span></h3></span> </td>
+<td> <span id="AT24CXX" title="#AT24CXX"><h3><span class="mw-headline" id="I2C:_AT24C.7B32.7C64.7D_.28AT24CXX.29"><span class="mw-headline-number">12</span> I2C: AT24C{32|64} (<a href="Libs_LowLevelDevices.html#AT24CXX" title="Special:MyLanguage/Libs/LowLevelDevices">AT24CXX</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -1381,17 +1668,16 @@ DS3231;DS1307
 <dl><dd>1. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its Identifier like to "i2c", one for each the I2C bus.</dd>
 <dd>2. Set proper address of the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device, only the I2C bus address like "/dev/i2c-{N}". Set the symbol's time into the timeouts field to the minimum value.</dd>
 <dd>3. Place some requesting commands directly into presented or a new internal OpenSCADA procedure like to:</dd></dl>
-<pre style="white-space: pre-wrap; align-left: 30px">
-req = SYS.XMLNode("read"); req.setAttr("ProtIt","AT24CXX").setAttr("addr",87).setAttr("off",1000).setAttr("size",20).setText("My message");
-req = SYS.XMLNode("write"); req.setAttr("ProtIt","AT24CXX").setAttr("addr",87).setAttr("off",1000).setText("Stored data");
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"read"</span><span class="p">);</span> <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"AT24CXX"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"addr"</span><span class="p">,</span><span class="mi">87</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"off"</span><span class="p">,</span><span class="mi">1000</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span><span class="mi">20</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"My message"</span><span class="p">);</span>
+<span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"write"</span><span class="p">);</span> <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"AT24CXX"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"addr"</span><span class="p">,</span><span class="mi">87</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"off"</span><span class="p">,</span><span class="mi">1000</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"Stored data"</span><span class="p">);</span>
+</pre></div>
 <dl><dd>4. <i>Result</i>: Into <i>text()</i> for "read" you will get the read data if no errors occur.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
 
 <tr>
-<td> <span id="DHT" title="#DHT"><h3><span class="mw-headline" id="GPIO:_DHT11.2C22_.28DHT.29"><span class="mw-headline-number">12</span> GPIO: DHT11,22 (<a href="Libs_LowLevelDevices.html#DHT" title="Special:MyLanguage/Libs/LowLevelDevices">DHT</a>)</span></h3></span> </td>
+<td> <span id="DHT" title="#DHT"><h3><span class="mw-headline" id="GPIO:_DHT11.2C22_.28DHT.29"><span class="mw-headline-number">13</span> GPIO: DHT11,22 (<a href="Libs_LowLevelDevices.html#DHT" title="Special:MyLanguage/Libs/LowLevelDevices">DHT</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -1520,7 +1806,7 @@ req = SYS.XMLNode("write"); req.setAttr("ProtIt","AT24CXX").setAttr("addr",87).s
 <table class="wikitable">
 
 <tr>
-<td> <span id="MAX6675" title="#MAX6675"><h3><span class="mw-headline" id="GPIO:_MAX6675_.28MAX6675.29"><span class="mw-headline-number">13</span> GPIO: MAX6675 (<a href="Libs_LowLevelDevices.html#MAX6675" title="Special:MyLanguage/Libs/LowLevelDevices">MAX6675</a>)</span></h3></span> </td>
+<td> <span id="MAX6675" title="#MAX6675"><h3><span class="mw-headline" id="GPIO:_MAX6675_.28MAX6675.29"><span class="mw-headline-number">14</span> GPIO: MAX6675 (<a href="Libs_LowLevelDevices.html#MAX6675" title="Special:MyLanguage/Libs/LowLevelDevices">MAX6675</a>)</span></h3></span> </td>
 <td> 0.1 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -1640,7 +1926,7 @@ req = SYS.XMLNode("write"); req.setAttr("ProtIt","AT24CXX").setAttr("addr",87).s
 <table class="wikitable">
 
 <tr>
-<td> <span id="1602A" title="#1602A"><h3><span class="mw-headline" id="GPIO.7CI2C:_1602A.28HD44780.29_.281602A.29"><span class="mw-headline-number">14</span> GPIO|I2C: 1602A(HD44780) (<a href="Libs_LowLevelDevices.html#1602A" title="Special:MyLanguage/Libs/LowLevelDevices">1602A</a>)</span></h3></span> </td>
+<td> <span id="1602A" title="#1602A"><h3><span class="mw-headline" id="GPIO.7CI2C:_1602A.28HD44780.29_.281602A.29"><span class="mw-headline-number">15</span> GPIO|I2C: 1602A(HD44780) (<a href="Libs_LowLevelDevices.html#1602A" title="Special:MyLanguage/Libs/LowLevelDevices">1602A</a>)</span></h3></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>

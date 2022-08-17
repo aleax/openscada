@@ -1519,10 +1519,18 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(isStd() && a_path == "/prm/cfg/ATTR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
-	opt->childAdd("rule")->setAttr("expr",":[rws~]*:")->setAttr("color","red");
-	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
-	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[iubfds]\\d*)")->setAttr("color","darkorange");
-	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
+	opt->childAdd("rule")->setAttr("expr","^(CI?|RI?_b[0-7]?|RI?_i[248]?|RI?_u[24]?|RI?_[fds]|RI?)")->setAttr("color","darkorange");
+	XMLNode *g0 = opt->childAdd("rule")->setAttr("expr","(?<=:).*");
+	    g0->childAdd("rule")->setAttr("expr","^(0?[xX]?[0-9a-fA-F]*)(\\.[0-7]|,(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*)|)")->setAttr("color","blue");
+	    XMLNode *g1 = g0->childAdd("rule")->setAttr("expr","(?<=:).*");
+		g1->childAdd("rule")->setAttr("expr","[rws~]*(?<!:)")->setAttr("color","red");
+		XMLNode *g2 = g1->childAdd("rule")->setAttr("expr","(?<=:).*");
+		    g2->childAdd("rule")->setAttr("expr","[^:]*")->setAttr("font_weight","1");
+		    g2->childAdd("rule")->setAttr("expr","(?<=:).*")->setAttr("font_italic","1");
+
+	//opt->childAdd("rule")->setAttr("expr",":[rws~]*:")->setAttr("color","red");
+	//opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
+	//opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
     }
     else if(isLogic() && a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
 	cfg("TMPL").setS(opt->text());
