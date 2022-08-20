@@ -11565,7 +11565,7 @@ This template in first time uses the new output transports connection function S
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.2 HD
 Thanks: for Ryan Finnie at the protocol initial processing in RDUMTOOL (https://github.com/smandon/rdumtool)
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) { recThr_ = recThr; scrBright_ = scrBright; scrTm_ = scrTm; }
 
@@ -15043,27 +15043,27 @@ INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_cs','CS pin number of the 
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_sclk','SCLK pin number of the GPIO',1,64,'11',2,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_miso','MISO pin number of the GPIO',1,64,'9',3,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','t','T, °С',2,17,'',4,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','transport','Transport',0,64,'Serial.RD:/dev/rfcomm0:9600',0,'Transport','','Serial.RD:/dev/rfcomm0:9600','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','V','Volts',2,16,'',1,'Volts','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','A','Amperes',2,16,'',2,'Ampers<!>','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','this','Object',4,0,'',20,'Object','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','W','Watts',2,16,'',3,'Watts','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','T','Temperature, °С',1,16,'',4,'Temperature, °С','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grps','Groups',0,20,'',11,'Groups','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','chMode','Charging Mode',0,16,'',14,'Charging Mode','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recAh','Record, Ah',2,16,'',7,'Record, Ah','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recWh','Record, Wh',2,16,'',8,'Record, Wh','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recThr','Record threshold, A [0...0.3]',2,32,'',9,'Record threshold, A<!>','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recTm','Record time, seconds',2,16,'',10,'Record time, seconds','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','rec','Recording',3,16,'',6,'Recording','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','R','Resistance, Om',2,16,'',5,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scr','Screen, [0...6]',1,16,'',15,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrTm','Screen timeout, minutes [0...9]',1,32,'',18,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrBright','Screen brightness, [0...5]',1,32,'',19,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrNext','Screen next',3,32,'',16,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrRot','Screen rotate',3,32,'',17,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpNext','Group next',3,32,'',12,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,'',13,'','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','transport','Transport',0,64,'Serial.RD:/dev/rfcomm0:9600',0,'Транспорт','','Serial.RD:/dev/rfcomm0:9600','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','V','Volts',2,16,'',1,'Вольти','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','A','Amperes',2,16,'',2,'Ампери','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','this','Object',4,0,'',20,'Об''єкт','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','W','Watts',2,16,'',3,'Вати','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','T','Temperature, °С',1,16,'',4,'Температура, °С','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grps','Groups',0,20,'',11,'Групи','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','chMode','Charging Mode',0,16,'',14,'Режим Зарядження','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recAh','Record, Ah',2,16,'',7,'Запис, АГ','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recWh','Record, Wh',2,16,'',8,'Запис, ВтГ','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recThr','Record threshold, A [0...0.3]',2,32,'',9,'Запис поріг, А [0...0.3]','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recTm','Record time, seconds',2,16,'',10,'Запис час, секунди','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','rec','Recording',3,16,'',6,'Запис','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','R','Resistance, Om',2,16,'',5,'Опір, Ом','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scr','Screen, [0...6]',1,16,'',15,'Екран, [0...6]','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrTm','Screen timeout, minutes [0...9]',1,32,'',18,'Час екрану, хвилин [0...9]','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrBright','Screen brightness, [0...5]',1,32,'',19,'Яскравість екрану, [0...5]','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrNext','Screen next',3,32,'',16,'Екран наступний','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrRot','Screen rotate',3,32,'',17,'Екран повернути','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpNext','Group next',3,32,'',12,'Група наступна','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,'',13,'Група очищення','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-31 08:47+0300\n"
+"POT-Creation-Date: 2022-08-20 10:45+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -457,21 +457,6 @@ msgstr ""
 msgid "Mon"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
-msgid "Style"
-msgstr ""
-
-msgid "Font"
-msgstr ""
-
-msgid "Palette"
-msgstr ""
-
-msgid "Style Sheets"
-msgstr ""
-
 msgid "Hold when overloaded to another project."
 msgstr ""
 
@@ -536,6 +521,12 @@ msgid "Widgets style"
 msgstr ""
 
 msgid "Common font"
+msgstr ""
+
+msgid "Palette"
+msgstr ""
+
+msgid "Style Sheets"
 msgstr ""
 
 msgid "<Select a profile to combine>"
@@ -647,10 +638,10 @@ msgstr ""
 msgid "The button for exit the program."
 msgstr ""
 
-msgid "current"
+msgid "CURRENT"
 msgstr ""
 
-msgid "running"
+msgid "RUNNING"
 msgstr ""
 
 #, c-format

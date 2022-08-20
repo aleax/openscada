@@ -57,7 +57,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.13.0"
+#define MOD_VER		"5.13.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1255,10 +1255,10 @@ void StartDialog::updatePrjList( bool force, const string &stage )
 
 	    //  Item placing
 	    string opt;
-	    if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("current");
+	    if(scan_rez->d_name == SYS->prjNm()) opt += string(opt.size()?", ":"") + _("CURRENT");
 	    bool isRun = false;
 	    if(access((wDir+"/"+scan_rez->d_name+"/lock").c_str(),F_OK) == 0) {
-		opt += string(opt.size()?", ":"") + _("running");
+		opt += string(opt.size()?", ":"") + _("RUNNING");
 		isRun = true;
 	    }
 	    //  Get the backups list

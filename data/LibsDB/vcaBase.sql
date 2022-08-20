@@ -797,11 +797,11 @@ INSERT INTO wlb_Main_incl VALUES('grph_panel','Text1','/wlb_originals/wdg_Text',
 INSERT INTO wlb_Main_incl VALUES('grph_panel','Text3','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;',2);
 INSERT INTO wlb_Main_incl VALUES('grph_panel','next1','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
 INSERT INTO wlb_Main_incl VALUES('grph_panel','prev','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','curtime','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
+INSERT INTO wlb_Main_incl VALUES('grph_panel','curtime','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;font;',2);
 INSERT INTO wlb_Main_incl VALUES('grph_panel','arch','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;items;',2);
 INSERT INTO wlb_Main_incl VALUES('grph_panel','size','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;font;',2);
 INSERT INTO wlb_Main_incl VALUES('grph_panel','date','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','prev1','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
+INSERT INTO wlb_Main_incl VALUES('grph_panel','prev1','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomXsc;geomZ;tipTool;tipStatus;elType;font;',2);
 INSERT INTO wlb_Main_incl VALUES('grph_panel','cursor','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;tipTool;bordWidth;font;alignment;text;numbArg;arg0tp;arg0val;',2);
 INSERT INTO wlb_Main_incl VALUES('doc_panel','tmTp','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomXsc;geomZ;tipTool;tipStatus;elType;value;items;font;',2);
 INSERT INTO wlb_Main_incl VALUES('ElCadr','modAuto','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;font;',2);
@@ -1100,6 +1100,7 @@ INSERT INTO wlb_Main_incl VALUES('storeHouse','classSel','/wlb_originals/wdg_For
 INSERT INTO wlb_Main_incl VALUES('storeHouse','btClassEdit','/wlb_originals/wdg_FormEl','owner;perm;en;active;geomX;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
 INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
 INSERT INTO wlb_Main_incl VALUES('RootPgSo','alarms','/wlb_originals/wdg_Protocol','owner;en;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;','');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','curstimeBeg','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -11193,45 +11194,44 @@ UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
 FGPMVxfvPQBYa2u9Ola9ct/L1+UPf2mPKKKIIooooogiiiii/GcFnXNKtRXp3l7PPUhJwkNfYgAA
 AABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1577036562);
 INSERT INTO wlb_Main VALUES('grph_panel','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
-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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+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','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
 curTm = SYS.time();
 tSek = tSek ? tSek : curTm;
 
@@ -11265,6 +11265,7 @@ for(/*ev_rez = "", */off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		tSzPrev = tSize; tSize = max(1, date_value-dateBeg_value);
 		//if(tSize < tSzPrev && curSek < tSek && curSek > (tSek-tSzPrev)) tSek = curSek;
 	}
+	else if(ev_cur == "ws_BtPress:/curstimeBeg")	{ tSize = max(1, tSek-curSek); }
 	else if(ev_cur == "ws_LnAccept:/date")		{ tSek = date_value; if(sclWin == true) sclWin = false; }
 	else if(ev_cur == "ws_BtPress:/curtime")	{ tSek = curSek = curTm; if(sclWin == true) sclWin = false; }
 	else if(ev_cur == "ws_BtPress:/curstime")	{ tSek = curSek; if(sclWin == true) sclWin = false; }
@@ -11315,7 +11316,7 @@ if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curS
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1612769530);
+if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1660980306);
 INSERT INTO wlb_Main VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -18790,7 +18791,7 @@ INSERT INTO wlb_Main_io VALUES('terminator','font','Arial 15',32,'','','Text1','
 INSERT INTO wlb_Main_io VALUES('terminator','text','Control panel',32,'','','Text1','Панель контролю','','Панель контроля','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','Panel of the graphs',32,'','','','Панель групи графіків','','Панель группы графиков','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','110',32,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','365',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','355',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','pgGrp','cntr',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','backColor','grey',96,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','bordWidth','1',32,'','','','','','','','','','');
@@ -18803,7 +18804,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','alignment','10',32,'','','Text3',''
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Change for select other dimension',32,'','','tmTp','Змініть для вибору іншої розмірності','','Изменить для выбора иной размерности','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Used archivators',32,'','','arch','Використані архіватори','','Используемые архиваторы','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','0',32,'','','date','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','40',32,'','','date','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','45',32,'','','date','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','Date',32,'','','date','Дата','','Дата','','','','Датум');
 INSERT INTO wlb_Main_io VALUES('grph_panel','cfg','0.1:366:0.1:::1',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','value','0.01',8,'','','size','','','','','','','');
@@ -18813,15 +18814,15 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Graphic''s window size',3
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Change for setting graphic''s window size.',32,'','','size','Змініть для встановлення розміру вікна графіку','','Изменить для установки размера окна графика','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','10',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','1',32,'','','arch','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','224',32,'','','arch','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','209',32,'','','arch','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','108',32,'','','arch','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','arch','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','12',32,'','','arch','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','name','Current',32,'','','curtime','Поточний','','Текущее','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','2',32,'','','curtime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','90',32,'','','curtime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','53',32,'','','curtime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','curtime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','name','>I',32,'','','curtime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','95',32,'','','curtime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','70',32,'','','curtime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','15',32,'','','curtime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','curtime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','7',32,'','','curtime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Go to the current time',32,'','','curtime','Перейти до поточного часу','','Перейти к текущему времени','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press to go to the current time',32,'','','curtime','Натиснути для переходу до поточного часу','','Нажать для перехода к текущему времени','','','','');
@@ -18833,30 +18834,30 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 1 0 0 0',0,'','','p
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','2',32,'','','zoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 1 0 0 0',0,'','','prev1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','-',32,'','','zoomOut','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 13 1 0 0 0',0,'','','curtime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15 1 0 0 0',0,'','','curtime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 1 0 0 0',0,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','>>',32,'','','next1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','82',32,'','','next1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','62',32,'','','next1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','28',32,'','','next1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','28',32,'','','next1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','57',32,'','','next1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','67',32,'','','next1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','25',32,'','','next1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','6',32,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','More forward',32,'','','next1','Далеко вперед','','Далеко вперёд','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press for going to forward to five graphic''s sizes',32,'','','next1','Натиснути для переходу вперед на п''ять розмірів вікна графіку','','Нажать для перехода вперёд на пять размеров окна графика','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','70',32,'','','tmTp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','60',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','11',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Dimension',32,'','','tmTp','Одиниця виміру','','Единица измерения','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','179',32,'','','tmTp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','40',32,'','','tmTp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','164',32,'','','tmTp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','37',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','Dimension type',32,'','','tmTp','Тип вимірювання','','Тип измерения','','','','');
 INSERT INTO wlb_Main_io VALUES('doc_panel','name','Date',32,'','','date','Дата','','Дата','','','','Датум');
 INSERT INTO wlb_Main_io VALUES('doc_panel','cfg','0.1:366:0.1:::1',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','70',32,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','60',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','Size',32,'','','size','Розмір','','Размер','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','0',32,'','','size','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','179',32,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','164',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','value','All',8,'','','arch','Всі','','Все','','','','Све');
 INSERT INTO wlb_Main_io VALUES('grph_panel','items','All
 FSArch.1s
@@ -19010,10 +19011,10 @@ Scale: %9  --  %10',32,'','','info','Id: %1
 Шкала: %9  --  %10','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','<',32,'','','prev','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','28',32,'','','prev','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','62',32,'','','prev','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','27',32,'','','prev','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','28',32,'','','prev','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','25',32,'','','prev','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','67',32,'','','prev','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','16',32,'','','prev','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','prev','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','4',32,'','','prev','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Backward',32,'','','prev','Назад','','Назад','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press for going to backward to half graphic''s sizes',32,'','','prev','Натиснути для перехода назад на половину розміру вікна графіку','','Нажать для перехода назад на половину размера окна графика','','','','');
@@ -19057,10 +19058,10 @@ d
 7д
 30д','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','>',32,'','','next','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','56',32,'','','next','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','62',32,'','','next','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','27',32,'','','next','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','28',32,'','','next','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','41',32,'','','next','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','67',32,'','','next','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','16',32,'','','next','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','5',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Forward',32,'','','next','Вперед','','Вперёд','','','','Напред');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press for going to forward to half graphic''s sizes',32,'','','next','Натиснути для переходу вперед на половину розміру вікна графіку','','Нажать для перехода вперё на половину размера окна графика','','','','');
@@ -19069,7 +19070,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','next','','','
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','cursor','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','en','1',40,'','','cursor','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','1',32,'','','cursor','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','112',32,'','','cursor','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','97',32,'','','cursor','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','108',32,'','','cursor','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','32',32,'','','cursor','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','12',32,'','','cursor','','','','','','','');
@@ -19081,7 +19082,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','arg0tp','2',0,'','','cursor','','',
 INSERT INTO wlb_Main_io VALUES('grph_panel','arg0val','01.01.1970 03:00:00.0',8,'','','cursor','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','Text1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','1',32,'','','Text1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','20',32,'','','Text1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','25',32,'','','Text1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','108',32,'','','Text1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','Text1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','11',32,'','','Text1','','','','','','','');
@@ -19091,7 +19092,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','alignment','10',32,'','','Text1',''
 INSERT INTO wlb_Main_io VALUES('grph_panel','text','Time',32,'','','Text1','Час','','Время','','','','Време');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','Text3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','1',32,'','','Text3','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','204',32,'','','Text3','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','189',32,'','','Text3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','108',32,'','','Text3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','backColor','',32,'','','st_open','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','bordWidth','0',32,'','','st_open','','','','','','','');
@@ -19476,9 +19477,9 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','view','6',32,'','','date','','','',
 INSERT INTO wlb_Main_io VALUES('grph_panel','cfg','dd.MM.yy hh:mm:ss',32,'','','date','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','<<',32,'','','prev1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','0',32,'','','prev1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','62',32,'','','prev1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','28',32,'','','prev1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','28',32,'','','prev1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','67',32,'','','prev1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','25',32,'','','prev1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','prev1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','3',32,'','','prev1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','More backward',32,'','','prev1','Далеко назад','','Далеко назад','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press for going to backward to five graphic''s sizes',32,'','','prev1','Натиснути для перехода назад на п''ять розмірів вікна графіку','','Нажать для перехода назад на пять размеров окна графика','','','','');
@@ -20051,7 +20052,7 @@ INSERT INTO wlb_Main_io VALUES('grpGraph','min',NULL,34,'Parameter|min','','el1'
 INSERT INTO wlb_Main_io VALUES('grpGraph','varEl',NULL,32,'','','el1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 1 0 0 0',0,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','bordWidth','1',32,'','','cursor','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','285',32,'','','zoomOut','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','275',32,'','','zoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','zoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','zoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','14',32,'','','zoomOut','','','','','','','');
@@ -20062,7 +20063,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','zoomOut','','
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 1 0 0 0',0,'','','zoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','1:1',32,'','','zoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','73',32,'','','zoomDef','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','265',32,'','','zoomDef','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','255',32,'','','zoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','zoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','25',32,'','','zoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','17',32,'','','zoomDef','','','','','','','');
@@ -20073,7 +20074,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','zoomDef','','
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 14 1 0 0 0',0,'','','zoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','zoomOffDown','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','38',32,'','','zoomOffDown','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','285',32,'','','zoomOffDown','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','275',32,'','','zoomOffDown','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','zoomOffDown','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','zoomOffDown','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','16',32,'','','zoomOffDown','','','','','','','');
@@ -20084,7 +20085,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','zoomOffDown',
 INSERT INTO wlb_Main_io VALUES('grph_panel','img','down',0,'','','zoomOffDown','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','+',32,'','','zoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','2',32,'','','zoomIn','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','265',32,'','','zoomIn','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','255',32,'','','zoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','zoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','zoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','13',32,'','','zoomIn','','','','','','','');
@@ -20095,7 +20096,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','zoomIn','',''
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 1 0 0 0',0,'','','zoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','zoomOffUp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','38',32,'','','zoomOffUp','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','265',32,'','','zoomOffUp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','255',32,'','','zoomOffUp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','zoomOffUp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','zoomOffUp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','15',32,'','','zoomOffUp','','','','','','','');
@@ -20107,7 +20108,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','img','up',0,'','','zoomOffUp','',''
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','scaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','en','1',40,'','','scaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','0',32,'','','scaleInfo','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','248',32,'','','scaleInfo','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','238',32,'','','scaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','110',32,'','','scaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','17',32,'','','scaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','17',32,'','','scaleInfo','','','','','','','');
@@ -20119,7 +20120,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','numbArg','2',32,'','','scaleInfo','
 INSERT INTO wlb_Main_io VALUES('grph_panel','arg0val','0',8,'','','scaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','arg1val','0',8,'','','scaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','line3','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','246',32,'','','line3','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','231',32,'','','line3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','108',32,'','','line3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','3',32,'','','line3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','8',32,'','','line3','','','','','','','');
@@ -21603,7 +21604,7 @@ XY','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 14',0,'','','type','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','xScaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','en','1',40,'','','xScaleInfo','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','305',32,'','','xScaleInfo','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','295',32,'','','xScaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','110',32,'','','xScaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','17',32,'','','xScaleInfo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','21',32,'','','xScaleInfo','','','','','','','');
@@ -21616,7 +21617,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','arg1val','0',8,'','','xScaleInfo','
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','xZoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','1:1',32,'','','xZoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','73',32,'','','xZoomDef','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','332',32,'','','xZoomDef','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','322',32,'','','xZoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','xZoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','30',32,'','','xZoomDef','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','23',32,'','','xZoomDef','','','','','','','');
@@ -21629,7 +21630,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','xZoomIn','','
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','+',32,'','','xZoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','en','1',40,'','','xZoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','38',32,'','','xZoomIn','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','322',32,'','','xZoomIn','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','312',32,'','','xZoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','xZoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','xZoomIn','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','20',32,'','','xZoomIn','','','','','','','');
@@ -21641,7 +21642,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 1 0 0 0',0,'','','x
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','xZoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','-',32,'','','xZoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','2',32,'','','xZoomOut','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','322',32,'','','xZoomOut','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','312',32,'','','xZoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','xZoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','xZoomOut','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','19',32,'','','xZoomOut','','','','','','','');
@@ -21656,7 +21657,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','xZoomOffLeft'
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','<',32,'','','xZoomOffLeft','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','en','1',40,'','','xZoomOffLeft','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','2',32,'','','xZoomOffLeft','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','342',32,'','','xZoomOffLeft','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','332',32,'','','xZoomOffLeft','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','xZoomOffLeft','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','xZoomOffLeft','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','21',32,'','','xZoomOffLeft','','','','','','','');
@@ -21669,7 +21670,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','xZoomOffRight
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','>',32,'','','xZoomOffRight','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','en','1',40,'','','xZoomOffRight','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','38',32,'','','xZoomOffRight','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','342',32,'','','xZoomOffRight','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','332',32,'','','xZoomOffRight','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','xZoomOffRight','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','xZoomOffRight','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','22',32,'','','xZoomOffRight','','','','','','','');
@@ -22375,7 +22376,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:UI',32,'','','selWin',
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','selWin','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','',32,'','','selWin','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','73',32,'','','selWin','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','290',32,'','','selWin','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','280',32,'','','selWin','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','35',32,'','','selWin','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','selWin','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','18',32,'','','selWin','','','','','','','');
@@ -22449,15 +22450,15 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.1
+Version: 1.5.2
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Діаграма". Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.1
+Версія: 1.5.2
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Диаграмма". Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.1
+Версия: 1.5.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "Complex objects" of the DAQ-templates.
 
@@ -23738,7 +23739,7 @@ INSERT INTO wlb_Main_io VALUES('doc_panel','cfg','dd.MM.yy hh:mm:ss',32,'','','d
 INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:UI',32,'','','dateBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','dateBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','Date',32,'','','dateBeg','Дата','','Дата','','','','Датум');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','159',32,'','','dateBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','144',32,'','','dateBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','110',32,'','','dateBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','dateBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','9',32,'','','dateBeg','','','','','','','');
@@ -23756,7 +23757,7 @@ INSERT INTO wlb_Main_io VALUES('cntrRegul','prm4width','2',0,'','','trnd','','',
 INSERT INTO wlb_Main_io VALUES('cntrRegul','prm5width','2',0,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:UI',32,'','','Text2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','1',32,'','','Text2','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','145',32,'','','Text2','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','130',32,'','','Text2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','108',32,'','','Text2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','15',32,'','','Text2','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','28',32,'','','Text2','','','','','','','');
@@ -23883,17 +23884,17 @@ INSERT INTO wlb_Main_io VALUES('graphCalc','owner','root:ITW',32,'','','funcCode
 INSERT INTO wlb_Main_io VALUES('graphCalc','perm','436',32,'','','funcCode','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:UI',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','curstime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','name','Cursor',32,'','','curstime','Курсор','','Курсор','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','56',32,'','','curstime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','90',32,'','','curstime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','53',32,'','','curstime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','curstime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','name','|',32,'','','curstime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','82',32,'','','curstime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','70',32,'','','curstime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','13',32,'','','curstime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','8',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Go to the cursor time',32,'','','curstime','Перейти до часу курсору','','Перейти к времени курсора','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press to go to the cursor time',32,'','','curstime','Натиснути для переходу до часу курсору','','Нажать для перехода к времени курсора','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','active','1',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','curstime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 13 1 0 0 0',0,'','','curstime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15 1 0 0 0',0,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('TextLab','dscr','The element is used to display the dynamic text labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
 
 Author: Roman Savochenko <roman@oscada.org>
@@ -24387,6 +24388,21 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','it1lev','4',0,'','','alarms','','',''
 INSERT INTO wlb_Main_io VALUES('RootPgSo','it1color','red',0,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','it2color','yellow',0,'','','alarms','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','tipTool','Select/leave empty color for the typical/styled one.',32,'','','color','Оберіть/залиште порожній колір для типового/стильового.','','Выберите/оставьте пустой цвет для типичного/стилевого.','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:UI',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','name','|',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','97',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','164',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','13',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','30',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Go to the cursor time',32,'','','curstimeBeg','Перейти до часу курсору','','Перейти к времени курсора','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press to go to the cursor time',32,'','','curstimeBeg','Натиснути для переходу до часу курсору','','Нажать для перехода к времени курсора','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','active','1',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15 1 0 0 0',0,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','img','',0,'','','curtime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomXsc','1',32,'','','prev1','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','','');

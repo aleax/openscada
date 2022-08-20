@@ -1160,7 +1160,7 @@ INSERT INTO OPC_UA_Prm_test VALUES('test','','','','','','','',1,'4:"DAQ.System.
 4:"DAQ.System.AutoDA.MemInfo.use"
 4:"DAQ.System.AutoDA.MemInfo.free"
 4:"DAQ.LogicLev.gen.F3.var"|fr|F3
-4:"DAQ.LogicLev.gen.F4.ed"|srw|edF4|F4 dimension"');
+4:"DAQ.LogicLev.gen.F4.ed"|srw|edF4|F4 dimension');
 CREATE TABLE IF NOT EXISTS 'ModBusPrm_testTCP' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ATTR_LS" TEXT DEFAULT '' ,"ru#ATTR_LS" TEXT DEFAULT '' ,"uk#ATTR_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO ModBusPrm_testTCP VALUES('test','','','','','','','',1,'R:0:r:reg0:Register 0
 R:1:r:reg1:Register 1

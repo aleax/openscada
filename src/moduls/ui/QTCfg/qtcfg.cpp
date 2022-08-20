@@ -2121,7 +2121,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Preferred);
 		    sp.setControlType(QSizePolicy::Label);
+#if QT_VERSION >= 0x040700
 		    sp.setWidthForHeight(true);
+#endif
 		    sp.setHorizontalStretch(1);	//!!!! At setting there 0 we enable work at size hint which is very wrapping big texts,
 						//     then we need to reimplement the size hint calculation in that case
 		    val_r->setSizePolicy(sp);

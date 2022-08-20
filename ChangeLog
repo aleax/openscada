@@ -1,3 +1,14 @@
+2022-08-20 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech: Translated to Ukrainian for the attribute name.
+- !:LibsDB.vcaBase: wlb_Main_incl.grph_panel: Appended for the begin time moving to the cursor and reformated for the main time navigation.
+- FIX:ModelsDB.AGLKS.St: Fixed in the F4 dimension name.
+- !:DAQ.OPC_UA: Finished in the writing through custom flags support of the Standard mode
+    and the type obtaining from IO for the Logical mode.
+- DAQ.DAQGate: The parameter objects appended the stations information where the object is presented.
+- FIX:UI.QTCfg: Fixed in building on Qt4.6.
+- UI.QTStarter: Some statuses switched to the upper case.
+
+
 2022-08-16 Roman (stable)
 - !!:LibsDB.OscadaLibs: The library tmplib_LowDevLib appended by the template "BT: RDTech UM24C, UM25C and UM34C (RDTech)".
 - !:LibsDB.vcaBase: wlb_Main.{alarmsAct,alarmsSt}: Expanded in the builtin syntax highlighting of the attribute "Highlight rules (highLght)"

@@ -1,13 +1,13 @@
 # OpenSCADA.UI.QTStarter translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.QTStarter package module.
 #
-# Roman Savochenko <roman@oscada.org>, 2005-2020.
+# Roman Savochenko <roman@oscada.org>, 2005-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-31 08:47+0300\n"
+"POT-Creation-Date: 2022-08-20 10:45+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -41,7 +41,7 @@ msgid "&Cancel"
 msgstr "&Відмовитися"
 
 msgid "&OK"
-msgstr ""
+msgstr "&Гаразд"
 
 msgid "Apply"
 msgstr "Прийняти"
@@ -482,21 +482,6 @@ msgstr "Додатково"
 msgid "Mon"
 msgstr "Пон"
 
-msgid "Name"
-msgstr "Ім'я"
-
-msgid "Style"
-msgstr "Стиль"
-
-msgid "Font"
-msgstr "Шрифт"
-
-msgid "Palette"
-msgstr "Палітра"
-
-msgid "Style Sheets"
-msgstr "Таблиця Стилів"
-
 msgid "Hold when overloaded to another project."
 msgstr "Утримувати при перевантажені до іншого проєкту."
 
@@ -614,6 +599,12 @@ msgstr "Стиль віджетів"
 msgid "Common font"
 msgstr "Загальний шрифт"
 
+msgid "Palette"
+msgstr "Палітра"
+
+msgid "Style Sheets"
+msgstr "Таблиця Стилів"
+
 msgid "<Select a profile to combine>"
 msgstr "<Обрати профіль до поєднання>"
 
@@ -668,8 +659,7 @@ msgstr "Що &це"
 msgid "Question about GUI elements"
 msgstr "Питання про GUI елементи"
 
-msgid ""
-"The button for requesting the information about user interface elements."
+msgid "The button for requesting the information about user interface elements."
 msgstr "Кнопка для запиту інформації про елементи інтерфейсу користувача."
 
 msgid "&Help"
@@ -722,8 +712,7 @@ msgstr "Кнопка для виклику обраного проєкту."
 msgid "Create/update project"
 msgstr "Створити/оновити проєкт"
 
-msgid ""
-"New projects creating or updating of presented ones, like to desktop links"
+msgid "New projects creating or updating of presented ones, like to desktop links"
 msgstr ""
 "Створення нових проєктів або оновлення наявних, на кшталт посилань робочої "
 "стільниці"
@@ -738,11 +727,11 @@ msgstr ""
 msgid "The button for exit the program."
 msgstr "Кнопка для виходу з програми."
 
-msgid "current"
-msgstr "поточний"
+msgid "CURRENT"
+msgstr "ПОТОЧНИЙ"
 
-msgid "running"
-msgstr "виконується"
+msgid "RUNNING"
+msgstr "ВИКОНАННЯ"
 
 #, c-format
 msgid "%d backups"
@@ -820,3 +809,4 @@ msgstr "Ви дійсно бажаєте видалити проєкт \"%1\"?"
 #, c-format
 msgid "Untranslated Qt message: '%s'"
 msgstr "Неперекладене Qt повідомлення: '%s'"
+

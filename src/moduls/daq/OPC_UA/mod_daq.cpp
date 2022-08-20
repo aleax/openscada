@@ -850,10 +850,10 @@ void TMdPrm::loadDATA( bool incl )
 	    // Attribute creating from the hints
 	    if(aFlg.size()) {
 		//  Value type prepare
-		if(aFlg.find("b") != string::npos)	vtp = TFld::Boolean;
-		else if(aFlg.find("i") != string::npos)	vtp = TFld::Integer;
-		else if(aFlg.find("f") != string::npos)	vtp = TFld::Real;
-		else if(aFlg.find("s") != string::npos)	vtp = TFld::String;
+		if(aFlg.find("b") != string::npos)	{ vtp = TFld::Boolean; svtp = i2s(OpcUa_Boolean); }
+		else if(aFlg.find("i") != string::npos)	{ vtp = TFld::Integer; svtp = i2s(OpcUa_Int64); }
+		else if(aFlg.find("f") != string::npos)	{ vtp = TFld::Real; svtp = i2s(OpcUa_Double); }
+		else if(aFlg.find("s") != string::npos)	{ vtp = TFld::String; svtp = i2s(OpcUa_String); }
 		else if(aFlg.find("o") != string::npos)	vtp = TFld::Object;
 
 		//  Flags prepare
@@ -1403,7 +1403,15 @@ bool TMdPrm::TLogCtx::lnkInit( int num, bool toRecnt )
     NodeId lN = NodeId::fromAddr(it->second.addr, true);
     if(!lN.isNull()) {
 	unsigned clntHndl = ((TMdPrm*)obj)->owner().sess.mSubScr[0].monitoredItemAdd(lN);
-	it->second.addrSpec = it->second.addr+"\n0\n"+u2s(clntHndl);
+	int vTp = 0;
+	switch(func()->io(num)->type()) {
+	    case IO::String:	vTp = OpcUa_String; break;
+	    case IO::Integer:	vTp = OpcUa_Int64;  break;
+	    case IO::Real:	vTp = OpcUa_Double; break;
+	    case IO::Boolean:	vTp = OpcUa_Boolean;break;
+	    default: vTp = 0;
+	}
+	it->second.addrSpec = it->second.addr+"\n"+i2s(vTp)+"\n"+u2s(clntHndl);
 	return true;
     }
 

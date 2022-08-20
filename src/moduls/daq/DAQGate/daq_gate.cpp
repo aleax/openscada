@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.22"
+#define MOD_VER		"2.9.23"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -1195,6 +1195,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,"/prm/st/en",_("Enabled"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/st/id",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/stats",_("Stations"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    XMLNode *cfgN = ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"));
 	    if(cfgN && !isEmpty) {
@@ -1227,6 +1228,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/st/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/prm/st/nm" && ctrChkNode(opt))	opt->setText(name());
+    else if(a_path == "/prm/st/stats" && ctrChkNode(opt))	opt->setText(mStats.getS());
     else if(a_path == "/prm/cfg/SHIFR" || a_path == "/prm/cfg/NAME" || a_path == "/prm/cfg/DESCR")
 	TParamContr::cntrCmdProc(opt);
     else if(a_path.compare(0,4,"/prm") == 0) {

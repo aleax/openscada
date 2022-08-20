@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-31 08:47+0300\n"
+"POT-Creation-Date: 2022-08-20 10:45+0300\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -486,21 +486,6 @@ msgstr "Erweitert"
 msgid "Mon"
 msgstr "Mon"
 
-msgid "Name"
-msgstr "Name"
-
-msgid "Style"
-msgstr "Stil"
-
-msgid "Font"
-msgstr "Schriftart"
-
-msgid "Palette"
-msgstr "Palette"
-
-msgid "Style Sheets"
-msgstr "Stilvorlagen"
-
 msgid "Hold when overloaded to another project."
 msgstr "Beim Neuladen in verschiedenen Projekten halten."
 
@@ -622,6 +607,12 @@ msgstr "Widgets Stil"
 msgid "Common font"
 msgstr "Gemeinsame Schriftart"
 
+msgid "Palette"
+msgstr "Palette"
+
+msgid "Style Sheets"
+msgstr "Stilvorlagen"
+
 msgid "<Select a profile to combine>"
 msgstr "<Wählen Sie ein zu kombinierendes Profil>"
 
@@ -676,8 +667,7 @@ msgstr "Was ist &das"
 msgid "Question about GUI elements"
 msgstr "Hilfe über die Elemente der Benutzerschnittstelle"
 
-msgid ""
-"The button for requesting the information about user interface elements."
+msgid "The button for requesting the information about user interface elements."
 msgstr ""
 "Die Schaltfläche zum Anfordern von Informationen zu "
 "Benutzeroberflächenelementen."
@@ -732,8 +722,7 @@ msgstr "Die Schaltfläche zum Aufrufen des ausgewählten Projekts."
 msgid "Create/update project"
 msgstr "Erstellen/aktualisieren Projekt"
 
-msgid ""
-"New projects creating or updating of presented ones, like to desktop links"
+msgid "New projects creating or updating of presented ones, like to desktop links"
 msgstr ""
 "Neue Projekte erstellen oder aktualisieren von vorgestellten, wie Desktop-"
 "Links"
@@ -748,11 +737,11 @@ msgstr ""
 msgid "The button for exit the program."
 msgstr "Die Taste zum Verlassen des Programms."
 
-msgid "current"
-msgstr "aktuell"
+msgid "CURRENT"
+msgstr "AKTUELL"
 
-msgid "running"
-msgstr "laufen"
+msgid "RUNNING"
+msgstr "AM LAUFEN"
 
 #, c-format
 msgid "%d backups"
@@ -792,8 +781,7 @@ msgid "New project or project to update"
 msgstr "Neues Projekt oder Projekt zum Aktualisieren"
 
 msgid "Project name for new one creating or to update present one:"
-msgstr ""
-"Projektname für eine neue Kreation oder um die aktuelle zu aktualisieren:"
+msgstr "Projektname für eine neue Kreation oder um die aktuelle zu aktualisieren:"
 
 msgid "Empty name of the project is unavailable!"
 msgstr "Der leere Name des Projekts ist nicht verfügbar!"
@@ -835,3 +823,4 @@ msgstr "Möchten Sie das Projekt \"%1\" wirklich entfernen?"
 #, c-format
 msgid "Untranslated Qt message: '%s'"
 msgstr "Keine übersetzt Qt Nachricht: '%s'"
+

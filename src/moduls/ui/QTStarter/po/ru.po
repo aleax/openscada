@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-31 08:47+0300\n"
+"POT-Creation-Date: 2022-08-20 10:45+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -482,21 +482,6 @@ msgstr "Дополнительно"
 msgid "Mon"
 msgstr "Пон"
 
-msgid "Name"
-msgstr "Имя"
-
-msgid "Style"
-msgstr "Стиль"
-
-msgid "Font"
-msgstr "Шрифт"
-
-msgid "Palette"
-msgstr "Палитра"
-
-msgid "Style Sheets"
-msgstr "Таблица Стилей"
-
 msgid "Hold when overloaded to another project."
 msgstr "Удерживать при перегрузке в другой проект."
 
@@ -616,6 +601,12 @@ msgstr "Стиль виджетов"
 msgid "Common font"
 msgstr "Общий шрифт"
 
+msgid "Palette"
+msgstr "Палитра"
+
+msgid "Style Sheets"
+msgstr "Таблица Стилей"
+
 msgid "<Select a profile to combine>"
 msgstr "<Выбрать профиль для объединения>"
 
@@ -670,10 +661,8 @@ msgstr "Что &это"
 msgid "Question about GUI elements"
 msgstr "Вопрос про GUI элементы"
 
-msgid ""
-"The button for requesting the information about user interface elements."
-msgstr ""
-"Кнопка для запроса информации про элементы пользовательского интерфейса."
+msgid "The button for requesting the information about user interface elements."
+msgstr "Кнопка для запроса информации про элементы пользовательского интерфейса."
 
 msgid "&Help"
 msgstr "&Помощь"
@@ -725,8 +714,7 @@ msgstr "Кнопка для вызова выбранного проекта."
 msgid "Create/update project"
 msgstr "Создать/обновить проект"
 
-msgid ""
-"New projects creating or updating of presented ones, like to desktop links"
+msgid "New projects creating or updating of presented ones, like to desktop links"
 msgstr ""
 "Создание новых проектов или обновление присутствующих, вроде ссылок рабочего "
 "стола"
@@ -741,11 +729,11 @@ msgstr ""
 msgid "The button for exit the program."
 msgstr "Кнопка для выхода из программы."
 
-msgid "current"
-msgstr "текущий"
+msgid "CURRENT"
+msgstr "ТЕКУЩИЙ"
 
-msgid "running"
-msgstr "исполняется"
+msgid "RUNNING"
+msgstr "ИСПОЛНЕНИЕ"
 
 #, c-format
 msgid "%d backups"
@@ -800,8 +788,7 @@ msgid "Call project"
 msgstr "Вызвать проект"
 
 msgid "Project \"%1\" seems running now! You still want to switch the project?"
-msgstr ""
-"Проект \"%1\" похоже исполняется! Вы всё ещё желаете переключить проект?"
+msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете переключить проект?"
 
 msgid "Project \"%1\" seems running now! You still want to call the project?"
 msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете вызвать проект?"
@@ -824,3 +811,4 @@ msgstr "Вы действительно желаете удалить проек
 #, c-format
 msgid "Untranslated Qt message: '%s'"
 msgstr "Непереведенное Qt сообщение: '%s'"
+
