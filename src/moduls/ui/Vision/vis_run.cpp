@@ -28,6 +28,7 @@
 #include <linux/input.h>
 
 #include <QApplication>
+#include <QWindow>
 #include <QLocale>
 #include <QDesktopWidget>
 #include <QTimer>
@@ -74,7 +75,9 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat,
 		bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)),	//!!!! Seems changed completely in Qt5
+#if QT_VERSION < 0x050000
+    QMainWindow(QDesktopWidget().screen(iScr)),
+#endif
     winClose(false), isResizeManual(false), updTmMax(0), planePer(0),
 #ifndef QT_NO_PRINTER
     prPg(NULL), prDiag(NULL), prDoc(NULL),
@@ -84,6 +87,11 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
     master_pg(NULL), mPeriod(1000), mConId(0), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), expTblCnt(1), x_scale(1), y_scale(1),
     mAlrmSt(0xFFFFFF), alrLevSet(false), ntfSet(0), alrmUpdCnt(0), updPage(false), host(NULL)
 {
+#if QT_VERSION >= 0x050000
+    if(qApp->screens().size() > 1 && iScr < qApp->screens().size() && windowHandle())
+	windowHandle()->setScreen(qApp->screens()[iScr]);	//?!?! Check sometime
+#endif
+
     QImage ico_t;
 
     connect(this, SIGNAL(makeStarterMenu(QWidget*,const QString&)), qApp, SLOT(makeStarterMenu(QWidget*,const QString&)));
@@ -237,7 +245,7 @@ VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string 
 
     //actProjManual->setEnabled(TUIS::docGet(actProjManual->property("doc").toString().toStdString(),NULL,TUIS::GetFilePath).size());
 
-    if(!s2i(SYS->cmdOpt("showWin"))) resize(600, 400);
+    if(!s2i(SYS->cmdOpt("showWin"))) resize(1024, 768);
 
     //Establish connection to the remote station
     //?!?! Disabled by default for the requesting into different threads before resolving the mouse release event in the same widget processing the press event

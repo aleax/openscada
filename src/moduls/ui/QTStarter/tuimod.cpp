@@ -21,6 +21,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 
 #include <QApplication>
 #include <QMenuBar>
@@ -57,7 +58,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.13.1"
+#define MOD_VER		"5.14.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -93,8 +94,10 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false),
-    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()), qtArgC(0), qtArgEnd(0), splashTp(SPLSH_NULL), splash(NULL), splashTm(0)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID),
+    mQtLookMdf(false), QtApp(NULL), hideMode(false), mEndRun(false), mStartCom(false), mCloseToTray(false), mSessCntr(RestartNever),
+    mStartMod(dataRes()), mStyle(dataRes()), mFont(dataRes()), mPalette(dataRes()), mStyleSheets(dataRes()),
+    qtArgC(0), qtArgEnd(0), splashTp(SPLSH_NULL), splash(NULL), splashTm(0)
 {
     mod = this;
 
@@ -167,6 +170,7 @@ void TUIMod::postEnable( int flag )
 #endif
     }
 
+
     if(!SYS->cmdOptPresent("QtInNotMainThread")) {
 	if(SYS->mainThr.freeStat()) SYS->mainThr = this;
 	if(hideMode) return;
@@ -220,6 +224,7 @@ void TUIMod::load_( )
     //Load parameters from config-file
     setStartMod(TBDS::genPrmGet(nodePath()+"StartMod",startMod()));
     setCloseToTray(s2i(TBDS::genPrmGet(nodePath()+"CloseToTray",i2s(closeToTray()))));
+    sessCntr(true);
     setStyle(TBDS::genPrmGet(nodePath()+"Style",style()));
     setFont(TBDS::genPrmGet(nodePath()+"Font",font()));
     setPalette(TBDS::genPrmGet(nodePath()+"Palette",palette()));
@@ -232,10 +237,20 @@ void TUIMod::save_( )
 
     TBDS::genPrmSet(nodePath()+"StartMod", startMod());
     TBDS::genPrmSet(nodePath()+"CloseToTray", i2s(closeToTray()));
+    TBDS::genPrmSet(nodePath()+"SessCntr", i2s(sessCntr()), "root", TBDS::OnlyCfg);
     TBDS::genPrmSet(nodePath()+"Style", style());
     TBDS::genPrmSet(nodePath()+"Font", font());
     TBDS::genPrmSet(nodePath()+"Palette", palette());
     TBDS::genPrmSet(nodePath()+"StyleSheets", styleSheets());
+
+    sess(SYS->prjNm());	// SessCntr acceptation in the session file
+}
+
+int TUIMod::sessCntr( bool reload )
+{
+    if(reload) mSessCntr = s2i(TBDS::genPrmGet(nodePath()+"SessCntr",i2s(mSessCntr)));
+
+    return mSessCntr;
 }
 
 void TUIMod::modStart( )
@@ -360,6 +375,62 @@ void TUIMod::splashSet( SplashFlag flg )
     splashTp = flg;
 }
 
+string TUIMod::sess( const string &proj, int *md )
+{
+    if(!QtApp)	return "";
+
+    string rezPrj, s_buf, s_file = oscd_datadir_full "/gui.sess";
+
+    //Reading the sessions file
+    int hd = open(s_file.c_str(), O_RDONLY);
+    if(hd >= 0) {
+	int cf_sz = lseek(hd, 0, SEEK_END);
+	if(cf_sz > 0) {
+	    lseek(hd, 0, SEEK_SET);
+	    char buf[prmStrBuf_SZ];
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) s_buf.append(buf, len);
+	}
+
+	if(close(hd) != 0)
+	    mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
+    }
+
+    //Parsing XML
+    XMLNode sess(PACKAGE_NAME);
+    try{ sess.load(s_buf); } catch(TError&) { }
+
+    //Searching the project for saving the current session
+    if(proj.size() && (hd=open(s_file.c_str(),O_CREAT|O_TRUNC|O_WRONLY,SYS->permCrtFiles())) >= 0) {
+	XMLNode *prjN = sess.getElementBy("id", proj);
+	if(!prjN) prjN = sess.childAdd("project")->setAttr("id", proj);
+	prjN->setAttr("sess", QtApp->sessionId().toStdString())->setAttr("md", i2s(mod->sessCntr(true)));
+
+	// Removing the previous project record due to switch
+	if(SYS->prjNm().size() && SYS->prjNm() != proj && (prjN=sess.getElementBy("id",SYS->prjNm())))
+	    prjN->parent()->childDel(prjN);
+
+	s_buf = sess.save(XMLNode::XMLHeader|XMLNode::BrAllPast);
+
+	int rez = write(hd, s_buf.data(), s_buf.size());
+	if(rez != (int)s_buf.size())
+	    mod->mess_sys(TMess::Error,_("Error writing the file '%s': %s"), s_file.c_str(), ((rez<0)?strerror(errno):""));
+	else rezPrj = proj;
+
+	if(close(hd) != 0)
+	    mess_warning(mod->nodePath().c_str(), _("Closing the file %d error '%s (%d)'!"), hd, strerror(errno), errno);
+    }
+    //Searching the project at the session ID for restoring
+    else {
+	XMLNode *prjN = sess.getElementBy("sess", QtApp->sessionId().toStdString());
+	if(prjN) {
+	    rezPrj = prjN->attr("id");
+	    if(md) *md = s2i(prjN->attr("md"));
+	}
+    }
+
+    return rezPrj;
+}
+
 string TUIMod::optDescr( )
 {
     return TSYS::strMess(_(
@@ -384,6 +455,7 @@ string TUIMod::optDescr( )
 	"---- Parameters of the module section '%s' of the configuration file ----\n"
 	"StartMod   <moduls>     List of the modules that are started, separated ';'.\n"
 	"CloseToTray <0|1>       Closing all windows or starting without Qt modules to the system tray.\n"
+	"SessCntr   [0...*3]     Sessions control-restart: 0-if running, 1-anyway, 2-immediately, 3-never.\n"
 	"Style      <name>       The GUI style of Qt.\n"
 	"Font       <font>       Common Qt font.\n"
 	"Palette    <colors>     Twenty colors of the palette separated by symbol ',' in three lines for active, disabled and inactive groups.\n"
@@ -454,8 +526,17 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/lsQtMod");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Qt modules for startup"),RWRWR_,"root",SUI_ID,3,
+		"tp","str", "dest","select", "select","/prm/cfg/lsQtMod");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/closeToTray",_("Collapse and startup to the system tray"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/sessCntr",_("Sessions control-restart"),RWRWR_,"root",SUI_ID,5,"tp","dec","dest","select",
+		"sel_id",TSYS::strMess("%d;%d;%d;%d",RestartIfRunning,RestartAnyway,RestartImmediately,RestartNever).c_str(),
+		"sel_list",_("if running;anyway;immediately;never"),
+		"help",_("Applied at the next start for the modes:\n"
+			 "- 'if running' - if it is still running when the session is shut down;\n"
+			 "- 'anyway' - wants to be started at the start of the next session;\n"
+			 "- 'immediately' - wants to be started immediately whenever it is not running;\n"
+			 "- 'never' - does not want to be restarted automatically."));
 	    if(ctrMkNode("area",opt,-1,"/prm/LF",_("Look and feel"))) {
 		ctrMkNode("fld",opt,-1,"/prm/LF/prfl",_("Known profiles"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/LF/prflLs");
 		ctrMkNode("fld",opt,-1,"/prm/LF/stl",_("Widgets style"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/LF/stlLs");
@@ -493,6 +574,10 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/closeToTray") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(closeToTray()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCloseToTray(s2i(opt->text()));
+    }
+    else if(a_path == "/prm/cfg/sessCntr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(sessCntr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessCntr(s2i(opt->text()));
     }
     else if(a_path == "/prm/LF/prfl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(_("<Select a profile to combine>"));
@@ -728,7 +813,10 @@ void StApp::timerEvent( QTimerEvent *event )
 	//Start the call dialog or to system tray
 	if(!op_wnd) {
 	    if(mod->closeToTray() && (SYS->prjNm().size() || SYS->prjCustMode())) createTray();
+	    else if(sessPrjToRestore.size() && SYS->prjSwitch(sessPrjToRestore)) ;
 	    else startDialog();
+
+	    if(sessPrjToRestore.size()) sessPrjToRestore = "";
 	}
 
 #ifdef HAVE_QTSENSORS
@@ -954,7 +1042,21 @@ bool StApp::callQtModule( const string &nm )
 
 void StApp::saveSessState( QSessionManager &manager )
 {
-    manager.setRestartHint(QSessionManager::RestartNever);
+    int smd = -1;
+
+    //Requesting the project name of the current session
+    if(SYS->prjNm().empty())	sessPrjToRestore = mod->sess("", &smd);
+    //Updating the session data
+    else mod->sess(SYS->prjNm());
+
+    //Saving the session for the project SYS->prjNm()
+    if(smd == TUIMod::RestartAnyway || (SYS->prjNm().size() && mod->sessCntr() == TUIMod::RestartAnyway))
+	manager.setRestartHint(QSessionManager::RestartAnyway);
+    else if(smd == TUIMod::RestartImmediately || (SYS->prjNm().size() && mod->sessCntr() == TUIMod::RestartImmediately))
+	manager.setRestartHint(QSessionManager::RestartImmediately);
+    else if(smd == TUIMod::RestartIfRunning || (SYS->prjNm().size() && mod->sessCntr() == TUIMod::RestartIfRunning))
+	manager.setRestartHint(QSessionManager::RestartIfRunning);
+    else manager.setRestartHint(QSessionManager::RestartNever);	//Disable the session control
 }
 
 void StApp::startDialog( )
@@ -1366,6 +1468,7 @@ void StartDialog::projSwitch( const QString& iprj )
 			QMessageBox::Yes|QMessageBox::No,QMessageBox::No) != QMessageBox::Yes)	return;
     if(!SYS->prjSwitch(prjNm.toStdString(),toCreate))
 	QMessageBox::warning(this, SYS->prjNm().size()?_("Switch project"):_("Call project"), QString(_("Project \"%1\" seems wrong or broken!")).arg(prjNm));
+    else mod->sess(prjNm.toStdString());
 }
 
 void StartDialog::prjsLsCtxMenuRequested( const QPoint &pos )

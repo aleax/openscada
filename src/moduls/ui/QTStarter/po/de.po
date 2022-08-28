@@ -3,13 +3,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <roman@oscada.org>, 2014-2020.
+# Roman Savochenko <roman@oscada.org>, 2014-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 10:45+0300\n"
+"POT-Creation-Date: 2022-08-27 21:52+0300\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -502,6 +502,13 @@ msgid "Stopping the module."
 msgstr "Stoppen des Moduls."
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr "Schließen der Datei %d Fehler '%s (%d)'!"
+
+#, c-format
+msgid "Error writing the file '%s': %s"
+msgstr "Fehler beim Schreiben der Datei '%s': %s"
+
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "    --QtInNotMainThread Starts Qt into a different from the main thread.\n"
@@ -535,6 +542,8 @@ msgid ""
 "';'.\n"
 "CloseToTray <0|1>       Closing all windows or starting without Qt modules "
 "to the system tray.\n"
+"SessCntr   [0...*3]     Sessions control-restart: 0-if running, 1-anyway, 2-"
+"immediately, 3-never.\n"
 "Style      <name>       The GUI style of Qt.\n"
 "Font       <font>       Common Qt font.\n"
 "Palette    <colors>     Twenty colors of the palette separated by symbol ',' "
@@ -579,6 +588,8 @@ msgstr ""
 "';'.\n"
 "CloseToTray <0|1>       Schließen Sie alle Fenster oder starten Sie ohne Qt-"
 "Module in die Taskleiste.\n"
+"SessCntr   [0...*3]     Sitzungs Steuerung-Neustart: 0-wenn ausgeführt, 1-"
+"ohnehin, 2-sofort, 3-nie.\n"
 "Style      <Name>       Der GUI-Stil von Qt.\n"
 "Font       <Schriftart> Gemeinsame Qt Schriftart.\n"
 "Palette    <Farben>     Zwanzig Farben der Palette getrennt durch Symbol ',' "
@@ -594,6 +605,26 @@ msgstr "Qt-Module für den Start"
 
 msgid "Collapse and startup to the system tray"
 msgstr "Reduzieren und starten Sie in der Taskleiste"
+
+msgid "Sessions control-restart"
+msgstr "Sitzungs Steuerung-Neustart"
+
+msgid "if running;anyway;immediately;never"
+msgstr "wenn ausgeführt;ohnehin;sofort;nie"
+
+msgid ""
+"Applied at the next start for the modes:\n"
+"- 'if running' - if it is still running when the session is shut down;\n"
+"- 'anyway' - wants to be started at the start of the next session;\n"
+"- 'immediately' - wants to be started immediately whenever it is not "
+"running;\n"
+"- 'never' - does not want to be restarted automatically."
+msgstr ""
+"Angewendet beim nächsten Start für die Modi:\n"
+"- 'wenn ausgeführt' - wenn es noch läuft, wenn die Sitzung beendet wird;\n"
+"- 'ohnehin' - zu Beginn der nächsten Sitzung gestartet werden soll;\n"
+"- 'sofort' - will sofort gestartet werden, wenn es nicht läuft;\n"
+"- 'nie' - will nicht automatisch neu gestartet werden."
 
 msgid "Look and feel"
 msgstr "Aussehen und Gefühl"
@@ -667,7 +698,8 @@ msgstr "Was ist &das"
 msgid "Question about GUI elements"
 msgstr "Hilfe über die Elemente der Benutzerschnittstelle"
 
-msgid "The button for requesting the information about user interface elements."
+msgid ""
+"The button for requesting the information about user interface elements."
 msgstr ""
 "Die Schaltfläche zum Anfordern von Informationen zu "
 "Benutzeroberflächenelementen."
@@ -722,7 +754,8 @@ msgstr "Die Schaltfläche zum Aufrufen des ausgewählten Projekts."
 msgid "Create/update project"
 msgstr "Erstellen/aktualisieren Projekt"
 
-msgid "New projects creating or updating of presented ones, like to desktop links"
+msgid ""
+"New projects creating or updating of presented ones, like to desktop links"
 msgstr ""
 "Neue Projekte erstellen oder aktualisieren von vorgestellten, wie Desktop-"
 "Links"
@@ -781,7 +814,8 @@ msgid "New project or project to update"
 msgstr "Neues Projekt oder Projekt zum Aktualisieren"
 
 msgid "Project name for new one creating or to update present one:"
-msgstr "Projektname für eine neue Kreation oder um die aktuelle zu aktualisieren:"
+msgstr ""
+"Projektname für eine neue Kreation oder um die aktuelle zu aktualisieren:"
 
 msgid "Empty name of the project is unavailable!"
 msgstr "Der leere Name des Projekts ist nicht verfügbar!"
@@ -823,4 +857,3 @@ msgstr "Möchten Sie das Projekt \"%1\" wirklich entfernen?"
 #, c-format
 msgid "Untranslated Qt message: '%s'"
 msgstr "Keine übersetzt Qt Nachricht: '%s'"
-

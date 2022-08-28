@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-translate-header noprint nomobile" dir="ltr" lang="en">This page contains <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Libs/Main_graphical_elements&amp;oldid=73664&amp;diff=73997" rel="nofollow noreferrer noopener" target="_blank">changes</a></span> which are not marked for translation.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -2767,7 +2767,7 @@ The dialogue only provides the user with information about the data source param
 </td></tr></table>
 <p>The element shown in Figure 4.5 is a specialized panel for dynamic control of basic user properties of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Diagram"</a>. So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel.png" width="400" /></a>  <div class="thumbcaption">Fig.4.5. The panel of the graphs in the development and runtime modes (left to right).</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel.png" width="250" /></a>  <div class="thumbcaption">Fig.4.5. The panel of the graphs in the development and runtime modes (left to right).</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The panel does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened in the control panels container of the root page.
 </p><p>The panel Identifier, when placed, should be saved and its line of call, upon receiving focus, in the events processing attribute "evProc" of the primary widget will look "ws_FocusIn::open:/pg_control/pg_grph_panel".
@@ -2776,10 +2776,9 @@ The panel allows the user to:
 </p>
 <ul><li> select the diagram graphics mode: "Graph", "Spectrum of frequencies", "XY";</li>
 <li> select of the diagram formation time;</li>
-<li> perform of navigation through the diagram for the one or five sizes of the graph area;</li>
-<li> set of the diagram generation time to the current time or in the cursor time;</li>
+<li> perform of navigation through the diagram for the half or five sizes of the graph area and setting of the diagram generation time to the current time or in the cursor time;</li>
 <li> get information about the time or frequency in the current cursor's position;</li>
-<li> select of the trend's formation size (depth) or set the begin time;</li>
+<li> select of the trend's formation size (depth) or set the begin time, also to the cursor time;</li>
 <li> select of the archive, used for the trend building, at the access rule "root:ITW";</li>
 <li> control the vertical and horizontal scale of the presentation: zoom in and out the scale, shift the scale up and down, the scale returns to its original value;</li>
 <li> switch of the scale mode by the window drawn by the mouse.</li></ul>

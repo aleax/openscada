@@ -692,7 +692,7 @@
 <li> <i>Name</i> — specifies the transport's name.</li>
 <li> <i>Description</i> — brief description of the transport and its appointment.</li>
 <li> <i>Address</i> — transport address in a specific type of transport (module) format. Description of the format of the address of the transport, as a rule, is available in the tooltip for this field.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:822px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="622" src="files/Sockets_out.png" width="820" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:790px;"><a class="image" href="http://oscada.org/wiki/File:Sockets_out.png"><img class="thumbimage" height="616" src="files/Sockets_out.png" width="788" /></a>  <div class="thumbcaption">Fig. 4.3d. The tab "Transport" of the page of an output transport of the module of the subsystem "Transports".</div></div></div></div>
 <p>Output transport, in addition, provides a tab of forming user requests via this transport (Fig.4.3e). The tab is provided for debugging of communications and communication protocols, and includes:
 </p>
 <ul><li> <i>Time</i> — information about the time spent on the request and the response.</li>
@@ -1718,6 +1718,7 @@ RestoreTime &lt;seconds&gt;   Connection recovery time.
 ---- Parameters of the module section '/sub_UI/mod_QTStarter/' of the configuration file ----
 StartMod   &lt;moduls&gt;     List of the modules that are started, separated ';'.
 CloseToTray &lt;0|1&gt;       Closing all windows or starting without Qt modules to the system tray.
+SessCntr   [0...*3]     Sessions control-restart: 0-if running, 1-anyway, 2-immediately, 3-never.
 Style      &lt;name&gt;       The GUI style of Qt.
 Font       &lt;font&gt;       Common Qt font.
 Palette    &lt;colors&gt;     Twenty colors of the palette separated by symbol ',' in three lines for active, disabled and inactive groups.
@@ -1760,7 +1761,7 @@ ChkPer     &lt;seconds&gt;    Period of the checking for new shared libraries(mo
 <li> opening of own dialog window of the starter (Fig.5a);</li>
 <li> starting-collapsing to the system tray (Fig.5b) — is actually a background run mode, but with the access from the graphical environment.</li></ul></li>
 <li> initiation startup mode (Fig.5c) — selecting a project to switch to the main mode of the project OpenSCADA execution.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:428px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="673" src="files/QTStarter_dialog.png" width="426" /></a>  <div class="thumbcaption">Fig.5a. Dialog window of the starter of the QTStarter module.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:412px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog.png"><img class="thumbimage" height="671" src="files/QTStarter_dialog.png" width="410" /></a>  <div class="thumbcaption">Fig.5a. Dialog window of the starter of the QTStarter module.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:348px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray.png"><img class="thumbimage" height="174" src="files/QTStarter_systray.png" width="346" /></a>  <div class="thumbcaption">Fig.5b. Project "AGLKS", started or collapsed to the system tray.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:298px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_selectProj.png"><img class="thumbimage" height="514" src="files/QTStarter_selectProj.png" width="296" /></a>  <div class="thumbcaption">Fig.5c. Dialog window of the starter of the QTStarter module in the initiation mode — a project selection.</div></div></div></div>
 <p>The simple startup is little useful, inconvenient and involves the use and operation of only one configuration, which is <a href="#Config">configuration file</a> <i>{sysconfdir}/oscada.xml</i> as the primary configuration storage. To enable configuration choices, the <a href="#CfgFilePrm">command line parameter <i>--config</i></a> is provided at startup of the program and changing of the program working directory before launching or by <a href="#CfgFilePrm">parameter "WorkDir" this configuration file</a>, which can be used and used exclusively by OpenSCADA to version 0.9 through the creation of a separate command line script (Shell) for a separate configuration. The OpenSCADA 0.9 version adds the concept of the "OpenSCADA Project", which was originally implemented by a separate command line script <b>openscada_start</b>, and then integrated into the OpenSCADA core and the startup module of the local graphical interface.

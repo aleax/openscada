@@ -11316,7 +11316,7 @@ if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curS
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1660980306);
+if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1661413784);
 INSERT INTO wlb_Main VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -18837,7 +18837,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','name','-',32,'','','zoomOut','','',
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15 1 0 0 0',0,'','','curtime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 18 1 0 0 0',0,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','>>',32,'','','next1','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','57',32,'','','next1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','70',32,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','67',32,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','25',32,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','next1','','','','','','','');
@@ -19058,7 +19058,7 @@ d
 7д
 30д','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','>',32,'','','next','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','41',32,'','','next','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','54',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','67',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','16',32,'','','next','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','next','','','','','','','');
@@ -22450,15 +22450,15 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.2
+Version: 1.5.3
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Діаграма". Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.2
+Версія: 1.5.3
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Диаграмма". Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.2
+Версия: 1.5.3
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "Complex objects" of the DAQ-templates.
 
@@ -23885,7 +23885,7 @@ INSERT INTO wlb_Main_io VALUES('graphCalc','perm','436',32,'','','funcCode','','
 INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:UI',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','|',32,'','','curstime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','82',32,'','','curstime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','41',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','70',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','13',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','curstime','','','','','','','');

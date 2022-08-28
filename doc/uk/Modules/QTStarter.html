@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Пускач Qt GUI</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FQTStarter&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/QTStarter" title="Modules/QTStarter">Modules/QTStarter</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/QTStarter.html" title="Modules/QTStarter (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/QTStarter.html" title="Модули/Пускатель Qt GUI (100% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FQTStarter&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/QTStarter" title="Modules/QTStarter">Modules/QTStarter</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/QTStarter.html" title="Modules/QTStarter (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/QTStarter.html" title="Модули/Пускатель Qt GUI (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/QTStarter.html" title="Special:MyLanguage/Modules/QTStarter">QTStarter</a> </td>
 <td> Qt GUI пускач
 </td>
-<td> 5.13 </td>
+<td> 5.14 </td>
 <td> GPL2 </td>
 <td> ui_QTStarter.so </td>
 <td> en,uk,ru,de </td>
@@ -73,7 +73,7 @@
 <li> вибір наявних OpenSCADA проєктів для їх обрання або перемикання;</li>
 <li> вихід з OpenSCADA;</li>
 <li> меню допомоги з пунктами: "Про", "Про Qt", "Посібник QTStarter" (F1), "Посібник OpenSCADA 0.9" та "Що це" (Shift+F1).</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:429px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_uk.png"><img class="thumbimage" height="672" src="../files/QTStarter_dialog_uk.png" width="427" /></a>  <div class="thumbcaption">Рис.2. Діалогове вікно пускачу цього модуля.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:427px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_dialog_uk.png"><img class="thumbimage" height="670" src="../files/QTStarter_dialog_uk.png" width="425" /></a>  <div class="thumbcaption">Рис.2. Діалогове вікно пускачу цього модуля.</div></div></div></div>
 <p>У разі відсутності діалогового вікна запуску та всіх вікно модулів Qt GUI, програма може бути запущена або згорнута у системний лоток (Рис.3), створений цим модулем.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:340px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_systray_uk.png"><img class="thumbimage" height="174" src="../files/QTStarter_systray_uk.png" width="338" /></a>  <div class="thumbcaption">Рис.3. Проєкт "АГЛКС", запущений або згорнутий до системного лотка.</div></div></div></div> 
@@ -108,7 +108,12 @@
 </p>
 <ul><li> Секція "Опції модуля":
 <ul><li> <i>Модулі Qt для запуску</i>.</li>
-<li> <i>Згортати або запускати у системний лоток</i>.</li></ul></li>
+<li> <i>Згортати або запускати у системний лоток</i>.</li>
+<li> <i>Керування-перезапуск сеансів</i> — застосовується при наступному запуску та працює лише для прямо запущених проєктів без діалогового вікна пускачу (Рис.2) цього модуля. Підтримуються режими:
+<ul><li> "якщо виконується" — якщо він все ще виконується коли сеанс вимикається;</li>
+<li> "завжди" — бажає бути запущеним із запуском наступного сеансу; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> на більшості Linux/X11 стільниць це те саме, що й "якщо виконується";</li>
+<li> "негайно" — бажає бути запущеним негайно коли не виконується; <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> на більшості Linux/X11 стільниць це те саме, що й "якщо виконується";</li>
+<li> "ніколи" — не бажає перезапускатися автоматично.</li></ul></li></ul></li>
 <li> Секція "Вигляд та відчуття", зміни тут не застосовуються одразу та вимагають перевантаження:
 <ul><li> <i>Відомі профілі</i> — комбобокс з переліком профілів у бібліотеці та низка команд над поточним профілем:
 <ul><li> "&lt;Очистити&gt;" — очистити поточний профіль;</li>
@@ -118,7 +123,7 @@
 <li> <i>Загальний шрифт</i> — загальний шрифт Qt, який також визначає розмір іконок.</li>
 <li> <i>Палітра</i> — поле профілю кольорів інтерфейсу у трьох групах за рядками: активна, вимкнена, неактивна. Та з двадцятьма кольорами у групі-рядку, поділені символом ',': WindowText(0), Button(1), Light(2), Midlight(3), Dark(4), Mid(5), Text(6), BrightText(7), ButtonText(8), Base(9), Window(10), Shadow(11), Highlight(12), HighlightedText(13), Link(14), LinkVisited(15), AlternateBase(16), NoRole(17), ToolTipBase(18), ToolTipText(19). Профіль допускає визначення тільки потрібних кольорів, залишаючи невизначені порожніми, та саме це визначає композитність палітри, а саме — заповнення порожнеч іншим профілем бібліотеки.</li>
 <li> <i>Сторінки стилів</i> — поле профілю каскадних таблиць стилів (CSS), композитність якого полягає у доданні CCS правил у кінець поточного профілю.</li></ul></li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:685px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_cfg_uk.png"><img class="thumbimage" height="688" src="../files/QTStarter_cfg_uk.png" width="683" /></a>  <div class="thumbcaption">Рис.4. Сторінка конфігурації модуля.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:QTStarter_cfg_uk.png"><img class="thumbimage" height="715" src="../files/QTStarter_cfg_uk.png" width="773" /></a>  <div class="thumbcaption">Рис.4. Сторінка конфігурації модуля.</div></div></div></div>
 <h2><span class="mw-headline" id="API_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D1.83.D0.B2.D0.B0.D0.BD.D0.BD.D1.8F_.D0.BA.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.87.D0.B0"><span class="mw-headline-number">6</span> API програмування користувача</span></h2>
 <p><b>Об'єкт модуля (SYS.UI.QTStarter)</b>
 </p>

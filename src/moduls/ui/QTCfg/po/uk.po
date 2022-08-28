@@ -728,7 +728,7 @@ msgid "Name:"
 msgstr "Ім'я:"
 
 msgid "Ok"
-msgstr "Добре"
+msgstr "Гаразд"
 
 msgid "Item type:"
 msgstr "Тип елементу:"

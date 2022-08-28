@@ -705,6 +705,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <span class="c"># &lt;rule expr="^[0-9]*" color="blue"&gt;</span>
 <span class="c">#  &lt;rule expr="[01]$" color="red"/&gt;</span>
 <span class="c"># &lt;/rule&gt;</span>
+<span class="c"># &lt;rule expr="(?&lt;=:).*" font_weight="1"/&gt;</span>
 <span class="c">#&lt;/SnthHgl&gt;</span>
 50:gray
 40:red
@@ -2062,6 +2063,10 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <span class="c">#   &lt;rule expr="[01]$" color="darkorange"/&gt;</span>
 <span class="c">#  &lt;/rule&gt;</span>
 <span class="c"># &lt;/rule&gt;</span>
+<span class="c"># &lt;rule expr="(?&lt;=:).*"&gt;</span>
+<span class="c">#  &lt;rule expr="[^:]*" font_weight="1"/&gt;</span>
+<span class="c">#  &lt;rule expr="(?&lt;=:).*" font_italic="1"/&gt;</span>
+<span class="c"># &lt;/rule&gt;</span>
 <span class="c">#&lt;/SnthHgl&gt;</span>
 501:gray
 401:red
@@ -2762,7 +2767,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr></table>
 <p>Елемент, представлений на рисунку 4.5, є спеціалізованою панеллю динамічного керування основними користувацькими властивостями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примітиву "Діаграма"</a>. Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel_uk.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.4.5. Панель графіків у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel_uk.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel_uk.png" width="250" /></a>  <div class="thumbcaption">Рис.4.5. Панель графіків у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
 <p><b><u>Використання — розробка</u></b><br />
 Панель не передбачає спеціальної конфігурації користувачем, вона має лише бути розташована у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме її динамічний виклик та відкриття у контейнері панелей управління кореневої сторінки.
 </p><p>Ідентифікатор панелі, при розміщені, має зберігатися та рядок її виклику, за отриманням фокусу, у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "ws_FocusIn::open:/pg_control/pg_grph_panel".
@@ -2771,10 +2776,9 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p>
 <ul><li> обрати режим відображення графіків діаграми: "Графік", "Спектр частот", "XY";</li>
 <li> обрати час формування діаграми;</li>
-<li> здійснити навігація за діаграмою на один або п'ять розмірів області графіку;</li>
-<li> встановити час генерації діаграми у поточний час та час курсору;</li>
+<li> здійснити навігацію за діаграмою на пів або п'ять розмірів області графіку або встановлення часу генерації діаграми у поточний час та час курсору;</li>
 <li> отримати інформацію про час або частоту у поточному положенні курсору;</li>
-<li> обрати розмір (глибину) формування графіку або встановити час початку;</li>
+<li> обрати розмір (глибину) формування графіку або встановити час початку, також у час курсору;</li>
 <li> обрати архів, що використовується для побудови графіків, з правами доступу "root:ITW";</li>
 <li> керувати вертикальною та горизонтальною шкалою відображення: збільшення та зменшення масштабу, зсуву шкали нагору та додолу, повернення масштабу до початкового значення;</li>
 <li> перемикати режим масштабування шляхом обрамлення вікном, мишею.</li></ul>

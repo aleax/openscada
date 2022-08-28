@@ -1,5 +1,15 @@
+2022-08-28 Roman (stable)
+- !:LibsDB.vcaBase: wlb_Main_incl.grph_panel: The cursor time positioning button moved to the center.
+- Transport.Sockets: The configuration field "Maximum segment size (MSS), B" of the output transport moved to the bottom.
+- FIX:UI.QTCfg: Icon of the dialog button of the "Moving or copying the node" changed to the proper one.
+- !!!!:UI.QTStarter: Appended for the display sessions control, that is the sessions restore.
+- !:UI.Vision: The different screens control switched to use the actual Qt5 method for Qt5 respectively.
+	!: Must be tested on some multiscreen enironment.
+    The initial window size of projects started in the fullscreen mode increased up to 1024x768.
+
+
 2022-08-20 Roman (stable)
-- LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech: Translated to Ukrainian for the attribute name.
+- LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech: Translated to Ukrainian for the attribute names.
 - !:LibsDB.vcaBase: wlb_Main_incl.grph_panel: Appended for the begin time moving to the cursor and reformated for the main time navigation.
 - FIX:ModelsDB.AGLKS.St: Fixed in the F4 dimension name.
 - !:DAQ.OPC_UA: Finished in the writing through custom flags support of the Standard mode

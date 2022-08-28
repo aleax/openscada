@@ -915,7 +915,7 @@ void ConfApp::itPaste( )
 	    }
 
 	//Make request dialog
-	ReqIdNameDlg dlg(this, actItAdd->icon(), "", _("Moving or copying the node"));
+	ReqIdNameDlg dlg(this, actItPaste->icon(), "", _("Moving or copying the node"));
 	dlg.setTargets(brs);
 	dlg.setMess(QString(isCut?_("Moving the node '%1' to '%2'.\n"):_("Copying the node '%1' to '%2'.\n")).arg(copyEl.c_str()).arg(toPath.c_str()));
 	dlg.setId(sEl.substr(bGrp.size()).c_str());

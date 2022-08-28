@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 10:45+0300\n"
+"POT-Creation-Date: 2022-08-27 21:52+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -473,6 +473,14 @@ msgid "Stopping the module."
 msgstr ""
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
+msgid "Error writing the file '%s': %s"
+msgstr ""
+
+#, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "    --QtInNotMainThread Starts Qt into a different from the main thread.\n"
@@ -495,6 +503,7 @@ msgid ""
 "---- Parameters of the module section '%s' of the configuration file ----\n"
 "StartMod   <moduls>     List of the modules that are started, separated ';'.\n"
 "CloseToTray <0|1>       Closing all windows or starting without Qt modules to the system tray.\n"
+"SessCntr   [0...*3]     Sessions control-restart: 0-if running, 1-anyway, 2-immediately, 3-never.\n"
 "Style      <name>       The GUI style of Qt.\n"
 "Font       <font>       Common Qt font.\n"
 "Palette    <colors>     Twenty colors of the palette separated by symbol ',' in three lines for active, disabled and inactive groups.\n"
@@ -509,6 +518,20 @@ msgid "Qt modules for startup"
 msgstr ""
 
 msgid "Collapse and startup to the system tray"
+msgstr ""
+
+msgid "Sessions control-restart"
+msgstr ""
+
+msgid "if running;anyway;immediately;never"
+msgstr ""
+
+msgid ""
+"Applied at the next start for the modes:\n"
+"- 'if running' - if it is still running when the session is shut down;\n"
+"- 'anyway' - wants to be started at the start of the next session;\n"
+"- 'immediately' - wants to be started immediately whenever it is not running;\n"
+"- 'never' - does not want to be restarted automatically."
 msgstr ""
 
 msgid "Look and feel"

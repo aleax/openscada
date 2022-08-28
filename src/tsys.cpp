@@ -707,7 +707,8 @@ void TSYS::cfgFileSave( )
     else {
 	string rezFile = rootN.save(XMLNode::XMLHeader);
 	int rez = write(hd, rezFile.data(), rezFile.size());
-	if(rez != (int)rezFile.size()) mess_sys(TMess::Error,_("Error writing the configuration file '%s': %s"), mConfFile.c_str(), ((rez<0)?strerror(errno):""));
+	if(rez != (int)rezFile.size())
+	    mess_sys(TMess::Error,_("Error writing the configuration file '%s': %s"), mConfFile.c_str(), ((rez<0)?strerror(errno):""));
 	rootModifCnt = 0;
 	rootFlTm = time(NULL);
 	if(close(hd) != 0)

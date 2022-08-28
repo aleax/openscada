@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 10:45+0300\n"
+"POT-Creation-Date: 2022-08-27 21:52+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -498,6 +498,14 @@ msgid "Stopping the module."
 msgstr "Останов модуля."
 
 #, c-format
+msgid "Closing the file %d error '%s (%d)'!"
+msgstr ""
+
+#, c-format
+msgid "Error writing the file '%s': %s"
+msgstr ""
+
+#, fuzzy, c-format
 msgid ""
 "======================= Module <%s:%s> options =======================\n"
 "    --QtInNotMainThread Starts Qt into a different from the main thread.\n"
@@ -531,6 +539,8 @@ msgid ""
 "';'.\n"
 "CloseToTray <0|1>       Closing all windows or starting without Qt modules "
 "to the system tray.\n"
+"SessCntr   [0...*3]     Sessions control-restart: 0-if running, 1-anyway, 2-"
+"immediately, 3-never.\n"
 "Style      <name>       The GUI style of Qt.\n"
 "Font       <font>       Common Qt font.\n"
 "Palette    <colors>     Twenty colors of the palette separated by symbol ',' "
@@ -588,6 +598,21 @@ msgstr "Модули Qt для запуска"
 
 msgid "Collapse and startup to the system tray"
 msgstr "Сворачивать и запускать в системный лоток"
+
+msgid "Sessions control-restart"
+msgstr ""
+
+msgid "if running;anyway;immediately;never"
+msgstr ""
+
+msgid ""
+"Applied at the next start for the modes:\n"
+"- 'if running' - if it is still running when the session is shut down;\n"
+"- 'anyway' - wants to be started at the start of the next session;\n"
+"- 'immediately' - wants to be started immediately whenever it is not "
+"running;\n"
+"- 'never' - does not want to be restarted automatically."
+msgstr ""
 
 msgid "Look and feel"
 msgstr "Вид и ощущение"
@@ -661,8 +686,10 @@ msgstr "Что &это"
 msgid "Question about GUI elements"
 msgstr "Вопрос про GUI элементы"
 
-msgid "The button for requesting the information about user interface elements."
-msgstr "Кнопка для запроса информации про элементы пользовательского интерфейса."
+msgid ""
+"The button for requesting the information about user interface elements."
+msgstr ""
+"Кнопка для запроса информации про элементы пользовательского интерфейса."
 
 msgid "&Help"
 msgstr "&Помощь"
@@ -714,7 +741,8 @@ msgstr "Кнопка для вызова выбранного проекта."
 msgid "Create/update project"
 msgstr "Создать/обновить проект"
 
-msgid "New projects creating or updating of presented ones, like to desktop links"
+msgid ""
+"New projects creating or updating of presented ones, like to desktop links"
 msgstr ""
 "Создание новых проектов или обновление присутствующих, вроде ссылок рабочего "
 "стола"
@@ -788,7 +816,8 @@ msgid "Call project"
 msgstr "Вызвать проект"
 
 msgid "Project \"%1\" seems running now! You still want to switch the project?"
-msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете переключить проект?"
+msgstr ""
+"Проект \"%1\" похоже исполняется! Вы всё ещё желаете переключить проект?"
 
 msgid "Project \"%1\" seems running now! You still want to call the project?"
 msgstr "Проект \"%1\" похоже исполняется! Вы всё ещё желаете вызвать проект?"
@@ -811,4 +840,3 @@ msgstr "Вы действительно желаете удалить проек
 #, c-format
 msgid "Untranslated Qt message: '%s'"
 msgstr "Непереведенное Qt сообщение: '%s'"
-

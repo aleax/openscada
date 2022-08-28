@@ -705,6 +705,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <span class="c"># &lt;rule expr="^[0-9]*" color="blue"&gt;</span>
 <span class="c">#  &lt;rule expr="[01]$" color="red"/&gt;</span>
 <span class="c"># &lt;/rule&gt;</span>
+<span class="c"># &lt;rule expr="(?&lt;=:).*" font_weight="1"/&gt;</span>
 <span class="c">#&lt;/SnthHgl&gt;</span>
 50:gray
 40:red
@@ -2062,6 +2063,10 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <span class="c">#   &lt;rule expr="[01]$" color="darkorange"/&gt;</span>
 <span class="c">#  &lt;/rule&gt;</span>
 <span class="c"># &lt;/rule&gt;</span>
+<span class="c"># &lt;rule expr="(?&lt;=:).*"&gt;</span>
+<span class="c">#  &lt;rule expr="[^:]*" font_weight="1"/&gt;</span>
+<span class="c">#  &lt;rule expr="(?&lt;=:).*" font_italic="1"/&gt;</span>
+<span class="c"># &lt;/rule&gt;</span>
 <span class="c">#&lt;/SnthHgl&gt;</span>
 501:gray
 401:red
@@ -2761,22 +2766,21 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 </td></tr></table>
 <p>Элемент, представленный на рисунке 4.5, является специализированной панелью динамического управления основными пользовательскими свойствами <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примитива "Диаграмма"</a>. Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel_ru.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel_ru.png" width="400" /></a>  <div class="thumbcaption">Рис.4.5. Панель графиков в режиме разработки и исполнения (слева направо).</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel.png"><img class="thumbimage" height="365" src="../en/files/LibMainEls_grph_panel.png" width="250" /></a>  <div class="thumbcaption">Рис.4.5. Панель графиков в режиме разработки и исполнения (слева направо).</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
 Панель не предусматривает специальной конфигурации пользователем, она должна лишь быть размещена в каталоге панелей дерева проекта <a href="#RootPgSo">концепции объектов сигнализации корневой страницы "RootPgSo"</a>, что будет предусматривать её динамический вызов и открытие в контейнере панелей управлений корневой страницы.
 </p><p>Идентификатор панели, при размещении, должен сохраняться и строка её вызова, при получении фокуса, в атрибуте обработки событий "evProc" первичного виджета приобретёт вид "ws_FocusIn::open:/pg_control/pg_grph_panel".
-</p><p><b><u>Использование — исполнение</u></b><br />
-С помощью панели пользователь имеет возможность:
+</p><p><b><u>Using — runtime</u></b><br />
+The panel allows the user to:
 </p>
-<ul><li> выбрать режим отображения графиков диаграммы: "График", "Спектр частот", "XY";</li>
-<li> выбрать время формирования диаграммы;</li>
-<li> осуществить навигацию по диаграмме на один или пять размеров области графика;</li>
-<li> установить время генерации диаграммы в текущее время и время курсора;</li>
-<li> получить информацию о времени или частоте в текущем положении курсора;</li>
-<li> выбрать размер (глубину) формирования графика или установить время начала;</li>
-<li> выбрать архив, используемый для построения графиков, c правами доступа "root:ITW";</li>
-<li> управлять вертикальной и горизонтальной шкалой отображения: увеличение и уменьшения масштаба, смещения шкалы вверх и вниз, возврат масштаба к исходному значению;</li>
-<li> переключать режим масштабирования путём обрамления окном, мышью.</li></ul>
+<ul><li> select the diagram graphics mode: "Graph", "Spectrum of frequencies", "XY";</li>
+<li> select of the diagram formation time;</li>
+<li> perform of navigation through the diagram for the half or five sizes of the graph area and setting of the diagram generation time to the current time or in the cursor time;</li>
+<li> get information about the time or frequency in the current cursor's position;</li>
+<li> select of the trend's formation size (depth) or set the begin time, also to the cursor time;</li>
+<li> select of the archive, used for the trend building, at the access rule "root:ITW";</li>
+<li> control the vertical and horizontal scale of the presentation: zoom in and out the scale, shift the scale up and down, the scale returns to its original value;</li>
+<li> switch of the scale mode by the window drawn by the mouse.</li></ul>
 <p><b><u>Свойства связывания и конфигурации</u></b><br />
 </p>
 <table class="wikitable">
