@@ -28,7 +28,9 @@
 #include <linux/input.h>
 
 #include <QApplication>
-#include <QWindow>
+#if QT_VERSION >= 0x050000
+# include <QWindow>
+#endif
 #include <QLocale>
 #include <QDesktopWidget>
 #include <QTimer>
