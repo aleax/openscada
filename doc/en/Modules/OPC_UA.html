@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/OPC UA</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/OPC_UA.html" title="Модули/OPC UA (99% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -269,7 +269,7 @@ Where:
 <dd><b>3:"BasicDevices2"||var</b> — basic devices node in the name space 3 and the string view with the force attribute ID;</dd>
 <dd><b>4:"61626364"||var|Variable</b> — node in the names space 4 and the byte string view with the force attribute ID and name;</dd>
 <dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}|irw|var|Variable</b> — node in the names space 4 and the GUID view with no requesting the server metadata for RW Integer and the force attribute ID and name.</dd></dl>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:678px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm.png"><img class="thumbimage" height="667" src="../files/OPC-UA_prm.png" width="676" /></a>  <div class="thumbcaption">Fig.6. Configuration tab of the OPC-UA parameter object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:778px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm.png"><img class="thumbimage" height="668" src="../files/OPC-UA_prm.png" width="776" /></a>  <div class="thumbcaption">Fig.6. Configuration tab of the OPC-UA parameter object.</div></div></div></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Nodes in type "Variable" with the value view as a structure are impossible typically to read entirely then you need it's elements insert separately to the reading nodes list.
 </p><p>In accordance with the specified list of nodes there performs acquisition and creation of the parameter's attributes (Fig.7).
 </p>
@@ -504,7 +504,7 @@ Data types (enum — NodeId::Type):
 <li> <i>void setNs( uint16_t ns );</i> — Name space setting to <i>ns</i>.</li>
 <li> <i>void setNumbVal( uint32_t n );</i> — Number value setting to <i>n</i>.</li>
 <li> <i>void setStrVal( const string &amp;str, Type tp = String );</i> — String value setting to <i>str</i> with type <i>tp</i>.</li>
-<li> <i>static NodeId fromAddr( const string &amp;strAddr );</i> — Node's object forming from the address <i>strAddr</i>.</li>
+<li> <i>static NodeId fromAddr( const string &amp;strAddr, bool strictStr = false, int *off = NULL );</i> — Node's object forming from the address <i>strAddr</i>, as a strict string <i>strictStr</i> and with the address parsing end in <i>off</i>.</li>
 <li> <i>string toAddr( ) const;</i> — Node's object address getting.</li></ul>
 <h4><span class="mw-headline" id="Root_object_of_the_OPC-UA_protocol_.28UA.29"><span class="mw-headline-number">4.1.7</span> Root object of the OPC-UA protocol (UA)</span></h4>
 <p><b>Public methods:</b>
@@ -810,15 +810,14 @@ Data types (enum — NodeId::Type):
 <h2><span class="mw-headline" id="Private_keys_and_certificates"><span class="mw-headline-number">5</span> Private keys and certificates</span></h2>
 <p>For the client and server-protocol parts of OPC-UA working you need to create and to place the private key and the certificate into configuration of client or server object. In general, there will be enough to create an ordinal selfsigned certificate and a private key without password, but, for exclude warning messages, you need to add range of service fields to the certificate. That you can do taking <a class="external" href="http://oscada.org/wiki/File:OPC-UA_openssl.cnf" title="File:OPC-UA openssl.cnf">the file of configuration of the certificate creation</a> and executing next procedure:
 </p>
-<pre style="white-space: pre-wrap;">
-# Private key creation:
-$ openssl genrsa -out key_c.pem -des3 -rand /var/log/messages 2048
-# Private key without the password creation:
-$ openssl rsa -in key_c.pem -out key_c1.pem
-# Selfsigned certificate creation:
-$ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.cnf -days 3650
-# Files content placing, for the file key_c1.pem to the field of private key and the file cert_c.pem to the certificate field!
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Private key creation:</span>
+openssl genrsa -out key_c.pem -des3 -rand /var/log/messages 2048
+<span class="c"># Private key without the password creation:</span>
+openssl rsa -in key_c.pem -out key_c1.pem
+<span class="c"># Selfsigned certificate creation:</span>
+openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.cnf -days 3650
+<span class="c"># Files content placing, for the file key_c1.pem to the field of private key and the file cert_c.pem to the certificate field!</span>
+</pre></div>
 <h2><span class="mw-headline" id="Notes"><span class="mw-headline-number">6</span> Notes</span></h2>
 <p>During implementation of the modules of supporting OPC-UA was detected several inconsistencies with the official SDK specification OPC-UA:
 </p>
@@ -975,5 +974,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/en">Modules/OPC_UA/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
 </html>

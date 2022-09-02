@@ -400,7 +400,7 @@ void NodeId::setStrVal( const string &istr, NodeId::Type tp )
     str = istr;
 }
 
-NodeId NodeId::fromAddr( const string &strAddr, bool strictStr )
+NodeId NodeId::fromAddr( const string &strAddr, bool strictStr, int *ioff )
 {
     int off = 0;
     string vl, dt, rez;
@@ -408,10 +408,10 @@ NodeId NodeId::fromAddr( const string &strAddr, bool strictStr )
     bool isObvisNS = false;
     uint16_t ns = strtoul(strParse(strAddr,0,":",&off).c_str(), NULL, 0);
     if(off < (int)strAddr.size()) { vl = strAddr.substr(off); isObvisNS = true; }
-    else { vl = strAddr; ns = 0; }
+    else { vl = strAddr; ns = 0; off = 0; }
 
     //Checking for Guid
-    if(vl.size() == 38 && vl[0] == '{' && vl[vl.size()-1] == '}' &&
+    if(vl.size() >= 38 && vl[0] == '{' && vl[vl.size()-1] == '}' &&
 	vl[9] == '-' && vl[14] == '-' && vl[19] == '-' && vl[24] == '-')
     {
 	bf[2] = 0;
@@ -435,25 +435,35 @@ NodeId NodeId::fromAddr( const string &strAddr, bool strictStr )
 	dt = vl.substr(25,12);
 	for(int iS = 0; iS < (int)dt.size(); iS += 2)
 	{ bf[0] = dt[iS]; bf[1] = dt[iS+1]; rez += (char)strtol(bf,NULL,16); }
+
+	if(ioff) *ioff = off + 38;
+
 	return NodeId(rez, ns, NodeId::Guid);
     }
 
     //Checking for string or opaque
-    if(vl.size() >= 2 && vl[0] == '\"' && vl[vl.size()-1] == '\"') {
+    size_t off1 = 0;
+    if(vl.size() >= 2 && vl[0] == '\"' && ((!ioff && vl[vl.size()-1] == '\"') || (ioff && (off1=vl.find("\"",1)) != string::npos))) {
 	bf[2] = 0;
 	char *endptr = 0;
 	rez = "";
 	for(unsigned iS = 1; !(vl.size()%2) && (!endptr || *endptr == 0) && iS < (vl.size()-1) && isxdigit(vl[iS]) && isxdigit(vl[iS+1]); iS += 2)
 	{ bf[0] = vl[iS]; bf[1] = vl[iS+1]; rez += (char)strtol(bf,&endptr,16); }
 	if(rez.size() == (vl.size()-2)/2)	return NodeId(rez, ns, NodeId::Opaque);
-	return NodeId(vl.substr(1,vl.size()-2), ns);
+
+	if(ioff) *ioff = off + off1 + 1;
+
+	return NodeId(vl.substr(1,ioff?off1-1:vl.size()-2), ns);
     }
 
     //Checking for the number
     bool isStr = false;
-    for(unsigned iS = 0; iS < vl.size() && !isStr; iS++)
-	if(!isdigit(vl[iS])) isStr = true;
-    if(isStr) return (isObvisNS || !strictStr) ? NodeId(vl,ns) : NodeId();
+    for(off1 = 0; off1 < vl.size() && !isStr; off1++)
+	if(!isdigit(vl[off1])) isStr = true;
+
+    if(ioff) *ioff = off + off1;
+    else if(isStr) return (isObvisNS || !strictStr) ? NodeId(vl,ns) : NodeId();
+
     return NodeId((uint32_t)strtoul(vl.c_str(),NULL,0), ns);
 }
 

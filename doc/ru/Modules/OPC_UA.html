@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/OPC UA</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FOPC+UA&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA">Modules/OPC UA</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/OPC_UA.html" title="Modules/OPC UA (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FOPC+UA&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/OPC_UA" title="Modules/OPC UA">Modules/OPC UA</a> and the translation is 99% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/OPC_UA.html" title="Modules/OPC UA (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/OPC_UA.html" title="Модулі/OPC UA (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -269,7 +269,7 @@
 <dd><b>3:"BasicDevices2"||var</b> — узел базовых устройств в области имён 3 и в виде строки с прямым ИД атрибута;</dd>
 <dd><b>4:"61626364"||var|Variable</b> — узел в области имён 4 и в виде строки байт с прямым ИД и названием атрибута;</dd>
 <dd><b>4:{40d95ab0-50d6-46d3-bffd-f55639b853d4}|irw|var|Variable</b> — узел в области имён 4 и в виде GUID с неосуществлением запроса целевых данных на предмет Целого Чтения-Записи и прямым ИД и названием атрибута.</dd></dl>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:688px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_ru.png"><img class="thumbimage" height="669" src="../files/OPC-UA_prm_ru.png" width="686" /></a>  <div class="thumbcaption">Рис.6. Вкладка конфигурации объекта параметра OPC-UA.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:778px;"><a class="image" href="http://oscada.org/wiki/File:OPC-UA_prm_ru.png"><img class="thumbimage" height="668" src="../files/OPC-UA_prm_ru.png" width="776" /></a>  <div class="thumbcaption">Рис.6. Вкладка конфигурации объекта параметра OPC-UA.</div></div></div></div>
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Узлы типа "Переменная" со значением в виде структуры прочитать целиком обычно нельзя поэтому необходимо её элементы вставлять в перечень узлов чтения отдельно.
 </p><p>Согласно указанного списка узлов выполняется опрос и создание атрибутов параметра (рис.7).
 </p>
@@ -488,24 +488,24 @@
 <li> <i>NodeId::String</i> — строка.</li>
 <li> <i>NodeId::Guid</i> — глобальный уникальный идентификатор.</li>
 <li> <i>NodeId::Opaque</i> — opaque.</li></ul>
-<p><b>Публичные методы:</b>
+<p><b>Public methods:</b>
 </p>
-<ul><li> <i>NodeId( uint32_t n, uint16_t ns = 0 );</i> — Численный инициирующий конструктор для числа <i>n</i> в области имён <i>ns</i>.</li>
-<li> <i>NodeId( const string &amp;str, uint16_t ns = 0, Type tp = String );</i> — Строковый инициирующий конструктор для строки <i>str</i> в области имён <i>ns</i> с типом <i>tp</i>.</li>
-<li> <i>NodeId( const NodeId &amp;node );</i> — Копирующий конструктор объекта.</li>
-<li> <i>NodeId( );</i> — Деструктор.</li>
-<li> <i>bool operator==( const NodeId &amp;node );</i> — Сравнение объектов.</li>
-<li> <i>NodeId &amp;operator=( const NodeId &amp;node );</i> — Копирование объекта.</li>
-<li> <i>Type type( ) const;</i> — Тип узла.</li>
-<li> <i>bool isNull( ) const;</i> — Узел нулевой — неинициализированный.</li>
-<li> <i>uint16_t ns( ) const;</i> — Область имён.</li>
-<li> <i>uint32_t numbVal( ) const;</i> — Числовое значение.</li>
-<li> <i>string  strVal( ) const;</i> — Строковое значение.</li>
-<li> <i>void setNs( uint16_t ns );</i> — Установка области имён в <i>ns</i>.</li>
-<li> <i>void setNumbVal( uint32_t n );</i> — Установка числового значения <i>n</i>.</li>
-<li> <i>void setStrVal( const string &amp;str, Type tp = String );</i> — Установка строкового значения <i>str</i> с типом <i>tp</i>.</li>
-<li> <i>static NodeId fromAddr( const string &amp;strAddr );</i> — Формирование объекта узла из адреса <i>strAddr</i>.</li>
-<li> <i>string toAddr( ) const;</i> — Получение адреса объекта узла.</li></ul>
+<ul><li> <i>NodeId( uint32_t n, uint16_t ns = 0 );</i> — Numerical initial constructor for number <i>n</i> in the namespace <i>ns</i>.</li>
+<li> <i>NodeId( const string &amp;str, uint16_t ns = 0, Type tp = String );</i> — String initial constructor for string <i>str</i> into the namespace <i>ns</i> with the type <i>tp</i>.</li>
+<li> <i>NodeId( const NodeId &amp;node );</i> — The object copy constructor.</li>
+<li> <i>NodeId( );</i> — Destructor.</li>
+<li> <i>bool operator==( const NodeId &amp;node );</i> — Objects comparing.</li>
+<li> <i>NodeId &amp;operator=( const NodeId &amp;node );</i> — Copying the object.</li>
+<li> <i>Type type( ) const;</i> — Node type.</li>
+<li> <i>bool isNull( ) const;</i> — Node is zero — uninitialized.</li>
+<li> <i>uint16_t ns( ) const;</i> — Namespace.</li>
+<li> <i>uint32_t numbVal( ) const;</i> — Number value.</li>
+<li> <i>string  strVal( ) const;</i> — String value.</li>
+<li> <i>void setNs( uint16_t ns );</i> — Name space setting to <i>ns</i>.</li>
+<li> <i>void setNumbVal( uint32_t n );</i> — Number value setting to <i>n</i>.</li>
+<li> <i>void setStrVal( const string &amp;str, Type tp = String );</i> — String value setting to <i>str</i> with type <i>tp</i>.</li>
+<li> <i>static NodeId fromAddr( const string &amp;strAddr, bool strictStr = false, int *off = NULL );</i> — Node's object forming from the address <i>strAddr</i>, as a strict string <i>strictStr</i> and with the address parsing end in <i>off</i>.</li>
+<li> <i>string toAddr( ) const;</i> — Node's object address getting.</li></ul>
 <h4><span class="mw-headline" id=".D0.9A.D0.BE.D1.80.D0.BD.D0.B5.D0.B2.D0.BE.D0.B9_.D0.BE.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BF.D1.80.D0.BE.D1.82.D0.BE.D0.BA.D0.BE.D0.BB.D0.B0_OPC-UA_.28UA.29"><span class="mw-headline-number">4.1.7</span> Корневой объект протокола OPC-UA (UA)</span></h4>
 <p><b>Публичные методы:</b>
 </p>
@@ -810,15 +810,14 @@
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B8.D0.B2.D0.B0.D1.82.D0.BD.D1.8B.D0.B5_.D0.BA.D0.BB.D1.8E.D1.87.D0.B8_.D0.B8_.D1.81.D0.B5.D1.80.D1.82.D0.B8.D1.84.D0.B8.D0.BA.D0.B0.D1.82.D1.8B"><span class="mw-headline-number">5</span> Приватные ключи и сертификаты</span></h2>
 <p>Для работы клиентской и серверной-протокольной части OPC-UA необходимо создание и помещение приватного ключа и сертификата в конфигурацию объекта клиента и сервера. В общем случае достаточно создания обычного самоподписанного сертификата и приватного ключа без пароля, однако, для исключения предупредительных сообщений, необходимо добавить ряд служебных полей в сертификат. Это можно выполнить взяв <a class="external" href="http://oscada.org/wiki/File:OPC-UA_openssl.cnf" title="File:OPC-UA openssl.cnf">файл конфигурации создания сертификата</a> и выполнить следующую процедуру:
 </p>
-<pre style="white-space: pre-wrap;">
-# Создание приватного ключа:
-$ openssl genrsa -out key_c.pem -des3 -rand /var/log/messages 2048
-# Создание приватного ключа без пароля:
-$ openssl rsa -in key_c.pem -out key_c1.pem
-# Создание самоподписанного сертификата:
-$ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.cnf -days 3650
-# Поместить содержимое файла key_c1.pem в поле приватного ключа и cert_c.pem в поле сертификата!
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Создание приватного ключа:</span>
+<span class="nv">$ </span>openssl genrsa -out key_c.pem -des3 -rand /var/log/messages 2048
+<span class="c"># Создание приватного ключа без пароля:</span>
+<span class="nv">$ </span>openssl rsa -in key_c.pem -out key_c1.pem
+<span class="c"># Создание самоподписанного сертификата:</span>
+<span class="nv">$ </span>openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl.cnf -days 3650
+<span class="c"># Поместить содержимое файла key_c1.pem в поле приватного ключа и cert_c.pem в поле сертификата!</span>
+</pre></div>
 <h2><span class="mw-headline" id=".D0.97.D0.B0.D0.BC.D0.B5.D1.87.D0.B0.D0.BD.D0.B8.D1.8F"><span class="mw-headline-number">6</span> Замечания</span></h2>
 <p>В процессе реализации модулей поддержки OPC-UA был обнаружен ряд несоответствий официального SDK со спецификацией OPC-UA:
 </p>
@@ -975,5 +974,5 @@ $ openssl req -x509 -new -key key_c.pem -out cert_c.pem -config ./OPC-UA_openssl
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/ru">Modules/OPC_UA/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">August 2022</td><td style="text-align: right;" width="40%"> 1+r2842</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/OPC_UA/ru">Modules/OPC_UA/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
 </html>

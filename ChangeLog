@@ -1,3 +1,10 @@
+2022-09-02 Roman (stable)
+- DAQ.OPC_UA,libOPC_UA: Improved in the items parsing of DAQ-parameters in the Standard mode, than allowing the chars '|' in the address.
+    DAQ.OPC_UA: Improved for the syntax highlight rules of items in the Standard mode of DAQ-parameters.
+- UI.WebVision: Some speeded up on slow channels for 50% idle and requesting the reaction result without a sleep
+    by resetting the planning period to the VCA-model side one.
+
+
 2022-08-28 Roman (stable)
 - FIX:UI.QTStarter: Restored in building into old environments after most close() functions appending of checking the result.
 - UI.Vision: Fixed in building on Qt4.

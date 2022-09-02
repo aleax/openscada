@@ -838,7 +838,7 @@ void TMdPrm::loadDATA( bool incl )
 	    if(aIt.empty() || aIt[0] == '#') continue;
 
 	    int itOff = 0;
-	    aNd = TSYS::strParse(aIt, 0, "|", &itOff);
+	    aNd = NodeId::fromAddr(aIt, false, &itOff).toAddr(); TSYS::strParse(aIt, 0, "|", &itOff);
 	    aFlg = TSYS::strParse(aIt, 0, "|", &itOff);
 	    aId = TSYS::strParse(aIt, 0, "|", &itOff);
 	    aNm = TSYS::strParse(aIt, 0, "|", &itOff);
@@ -1304,10 +1304,21 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(isStd() && a_path == "/prm/cfg/ND_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
-	opt->childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen");
+	XMLNode *g0 = opt->childAdd("rule")->setAttr("expr","^(0?[xX]?[0-9a-fA-F]*:|)(\".*\"|\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}|0?[xX]?[0-9a-fA-F]*)")->
+		setAttr("font_weight","1")->setAttr("color","darkblue");
+	    g0->childAdd("rule")->setAttr("expr","\".*\"")->setAttr("color","darkgreen");
+	    g0->childAdd("rule")->setAttr("expr","\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}")->setAttr("color","darkblue");
+	    g0->childAdd("rule")->setAttr("expr","[0-9a-fA-F]*:")->setAttr("color","darkorange");
+	g0 = opt->childAdd("rule")->setAttr("expr","(?<=\\|).*");
+	    g0->childAdd("rule")->setAttr("expr","[bifsorw]*(?<!\\|)")->setAttr("color","red");
+	    XMLNode *g1 = g0->childAdd("rule")->setAttr("expr","(?<=\\|).*");
+		g1->childAdd("rule")->setAttr("expr","[^|]*")->setAttr("font_weight","1");
+		g1->childAdd("rule")->setAttr("expr","(?<=|).*")->setAttr("font_italic","1");
+
+	/*opt->childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen");
 	opt->childAdd("rule")->setAttr("expr","\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}")->setAttr("color","darkblue");
 	opt->childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*)\\b")->setAttr("color","darkorange");
-	opt->childAdd("rule")->setAttr("expr","\\|[bifsorw]*|")->setAttr("color","red");
+	opt->childAdd("rule")->setAttr("expr","\\|[bifsorw]*|")->setAttr("color","red");*/
 	/*opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");*/
     }
     else if(isStd() && a_path == "/prm/cfg/SEL_NDS") {
