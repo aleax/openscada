@@ -883,7 +883,7 @@ void ConfApp::itPaste( )
 	    }
 
 	//Make request dialog
-	ReqIdNameDlg dlg(this, actItAdd->icon(), "", _("Moving or copying the node"));
+	ReqIdNameDlg dlg(this, actItPaste->icon(), "", _("Moving or copying the node"));
 	dlg.setTargets(brs);
 	dlg.setMess(QString(isCut?_("Moving the node '%1' to '%2'.\n"):_("Copying the node '%1' to '%2'.\n")).arg(copyEl.c_str()).arg(toPath.c_str()));
 	dlg.setId(sEl.substr(bGrp.size()).c_str());
@@ -1986,7 +1986,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Preferred);
 		    sp.setControlType(QSizePolicy::Label);
+#if QT_VERSION >= 0x040700
 		    sp.setWidthForHeight(true);
+#endif
 		    sp.setHorizontalStretch(1);	//!!!! At setting there 0 we enable work at size hint which is very wrapping big texts,
 						//     then we need to reimplement the size hint calculation in that case
 		    val_r->setSizePolicy(sp);

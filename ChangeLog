@@ -1,3 +1,21 @@
+2022-09-03 Roman 0.9.5.3
+- FIX:ModelsDB.AGLKS.St: Fixed in the F4 dimension name.
+- Transport.Sockets: The configuration field "Maximum segment size (MSS), B" of the output transport moved to the bottom.
+- FIX:DAQ.DAQGate: Restored in the redundant hosts live tracing.
+    The parameter objects appended the stations information where the object is presented.
+- !:DAQ.OPC_UA,libOPC_UA: Finished in the writing through custom flags support of the Standard mode
+	and the type obtaining from IO for the Logical mode.
+    Improved in the items parsing of DAQ-parameters in the Standard mode, than allowing the chars '|' in the address.
+- FIX:UI.QTCfg: Fixed in building on Qt4.6.
+    FIX: Icon of the dialog button of the "Moving or copying the node" changed to the proper one.
+- !:UI.Vision: The different screens control switched to use the actual Qt5 method for Qt5 respectively.
+	!: Must be tested on some multiscreen enironment.
+    The initial window size of projects started in the fullscreen mode increased up to 1024x768.
+- FIX:UI.WebVision: Fixed in the button color dynamic change on Chrome through pre-clearance the style field "backgroundColor".
+    Some speeded up on slow channels for 50% idle and requesting the reaction result without a sleep
+	by resetting the planning period to the VCA-model side one.
+
+
 2022-08-08 Roman 0.9.5.2
 - FIX:AGLKS.St: testCalc_prm.test: Fixed for the messages translation of some attributes.
 - FIX:SYS: Building: configure.ac: Fixed for some messages.

@@ -291,6 +291,8 @@ function setWAttrs( wId, attrs, val )
     body += '</set>';
 
     servSet(wId, 'com=attrs', body);
+
+    toFastCycle = true;
 }
 
 /***************************************************
@@ -1581,9 +1583,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.place.custBut = custBut;
 		    var toInit = !this.place.childNodes.length;
 		    formObj = toInit ? this.place.ownerDocument.createElement('button') : this.place.childNodes[0];
-		    if(toInit || this.attrsMdf['font'])		formObj.style.font = this.place.fontCfg;
-		    if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
-		    if(toInit || this.attrsMdf['colorText'])	formObj.style.color = getColor(this.attrs['colorText']);
+		    if(toInit || this.attrsMdf['font'])
+			formObj.style.font = this.place.fontCfg;
+		    if(toInit || this.attrsMdf['color'])
+			formObj.style.backgroundColor = "", formObj.style.backgroundColor = getColor(this.attrs['color']);
+		    if(toInit || this.attrsMdf['colorText'])
+			formObj.style.color = "", formObj.style.color = getColor(this.attrs['colorText']);
 
 		    this.mouseup[this.mouseup.length] = function(e,el) { el.btUp(); }
 		    this.mousedown[this.mousedown.length] = function(e,el) { el.btDown(); };
@@ -2913,9 +2918,10 @@ function makeUI( callBackRez )
     //Elapsed time get and adjust for plane update period depends from the network speed
     var elTm = 1e-3*((new Date()).getTime()-stTmMain.getTime());
     if(!planePer) planePer = 1e-3*modelPer;
-    planePer = Math.min(Math.max(1e-3*modelPer,elTm*10), planePer + (Math.max(1e-3*modelPer,elTm*3)-planePer)/100);
+    planePer = Math.min(Math.max(1e-3*modelPer,(toFastCycle?0:elTm*5)), planePer + (Math.max(1e-3*modelPer,elTm*2)-planePer)/100);
     var sleepTm = Math.max(0, planePer-elTm);
     prcTm = elTm + sleepTm;
+    toFastCycle = false;
 
     // The frontend status request
     if(pgNode && parseInt(pgNode.getAttribute("fStatusOrder")))
@@ -3251,6 +3257,7 @@ var prcCnt = 0;				//Process counter
 var prcTm = 0;				//Process time
 var planePer = 0;			//Planed update period
 var tmCnt = 0;				//Calls counter
+var toFastCycle = false;		//Update immediately without sleep
 var pgList = new Array();		//Opened pages list
 var cachePgLife = 0;			//Life time of the pages into the cache
 var cachePgSz = 0;			//Maximum number of the pages cache

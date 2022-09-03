@@ -3,7 +3,7 @@
 /********************************************************************************
  *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>		*
  *										*
- *   Version: 2.1.28								*
+ *   Version: 2.1.29								*
  *	* NodeId appended for the function operator==() of direct comparing.	*
  *	* The default LifeTimeCounter of the subscriptions set to 2400.		*
  *	* The function XML_N::childClear() appended by a result of returning	*
@@ -510,7 +510,7 @@ class NodeId
     void setNumbVal( uint32_t n );
     void setStrVal( const string &str, Type tp = String );
 
-    static NodeId fromAddr( const string &strAddr, bool strictStr = false );
+    static NodeId fromAddr( const string &strAddr, bool strictStr = false, int *off = NULL );
     string toAddr( ) const;
 
     private:
