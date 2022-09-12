@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.23"
+#define MOD_VER		"2.9.24"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -540,7 +540,6 @@ void *TMdContr::Task( void *icntr )
 			    }
 
 			    //   Same parameters
-			    int pOff = 0;
 			    req.childAdd("set")->setAttr("path", iPrm->first+"/%2fserv%2fattr");
 			    for(map<string,string>::iterator iAttr = iPrm->second.begin(); iAttr != iPrm->second.end(); ++iAttr, ++vlToWr)
 				req.childGet(-1)->childAdd("el")->setAttr("id",iAttr->first)->setText(iAttr->second);
@@ -1051,7 +1050,8 @@ void TMdPrm::sync( )
 	    req.childAdd("get")->setAttr("path","%2fprm%2fcfg%2fNAME");
 	    req.childAdd("get")->setAttr("path","%2fprm%2fcfg%2fDESCR");
 	    req.childAdd("list")->setAttr("path","%2fserv%2fattr");
-	    if((rez=owner().cntrIfCmd(req)) == TError::Tr_Connect) throw TError(req.attr("mcat").c_str(), req.text().c_str());
+	    if((rez=owner().cntrIfCmd(req)) == TError::Tr_Connect || rez == TError::Tr_UnknownHost)
+		throw TError(req.attr("mcat").c_str(), req.text().c_str());
 	    else if(rez || s2i(req.attr("rez")) || s2i(req.childGet(0)->attr("rez"))) {
 		toDisable = true;
 		break; /*continue;*/	//!!!!: No more sense in continue parameters processing which to be disabled
@@ -1089,7 +1089,7 @@ void TMdPrm::sync( )
 
     //!!!! Disable the missed parameters on the remote hosts
     if(toDisable && !isSynced) {
-	mess_warning(nodePath().c_str(), _("The parameter disabling in the reason '%d: %s' ..."), rez, req.save().c_str());
+	//mess_warning(nodePath().c_str(), _("The parameter disabling in the reason '%d: %s' ..."), rez, req.save().c_str());
 	disable();
     }
 }

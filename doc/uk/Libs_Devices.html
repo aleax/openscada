@@ -284,7 +284,10 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 </td></tr>
 <tr>
 <td> items </td>
-<td>i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}" </td>
+<td> Items set
+<p>Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}".
+</p>
+</td>
 <td> Text </td>
 <td> Input </td>
 <td> Full access </td>
@@ -417,11 +420,10 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <dd>2. Create an output transport of the type "<a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a>" and set its ID like to "DCON", one transport suitable for more receivers. </dd>
 <dd>3. Set proper address and timeouts for the <a href="Modules/Serial.html" title="Special:MyLanguage/Modules/Serial">Serial</a> device.</dd>
 <dd>4. Place some requesting commands directly into allowed or a new internal OpenSCADA procedure like to:</dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
-req = SYS.XMLNode("#"); req.setAttr("ProtIt","DCON").setAttr("addr","5");
-SYS.Transport.Serial.out_DCON.messIO(req, "UserProtocol");
-data = req.attr("err").toInt()&nbsp;? ""&nbsp;: req.text();
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"#"</span><span class="p">);</span> <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"DCON"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"addr"</span><span class="p">,</span><span class="s2">"5"</span><span class="p">);</span>
+<span class="nx">SYS</span><span class="p">.</span><span class="nx">Transport</span><span class="p">.</span><span class="nx">Serial</span><span class="p">.</span><span class="nx">out_DCON</span><span class="p">.</span><span class="nx">messIO</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="s2">"UserProtocol"</span><span class="p">);</span>
+<span class="nx">data</span> <span class="o">=</span> <span class="nx">req</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s2">"err"</span><span class="p">).</span><span class="nx">toInt</span><span class="p">()</span> <span class="o">?</span> <span class="s2">""</span> <span class="o">:</span> <span class="nx">req</span><span class="p">.</span><span class="nx">text</span><span class="p">();</span>
+</pre></div>
 <dl><dd>5. RESULT: Into the variable <i>data</i> you will get the request's data part if no errors occur. The data is values of the analog inputs.</dd></dl>
 <p><br />
 </p>

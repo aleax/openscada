@@ -41,10 +41,11 @@ using __gnu_cxx::hash_map;
 //using std::unordered_map;
 #endif*/
 
-//> Security standard permissions
+//Security standard permissions
 #define R_R_R_  0444
 #define R_R___  0440
 #define R_____  0400
+#define _W_W_W  0222
 #define RWRWRW  0666
 #define RWRWR_  0664
 #define RWR_R_  0644

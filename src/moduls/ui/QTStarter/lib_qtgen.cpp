@@ -155,32 +155,32 @@ void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option
 
 QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    QWidget *w_del;
+    QWidget *wDel;
     if(!index.isValid()) return 0;
 
     QVariant value = index.data(Qt::DisplayRole);
     QVariant val_user = index.data(SelectRole);
 
-    if(val_user.isValid()) w_del = new QComboBox(parent);
+    if(val_user.isValid()) wDel = new QComboBox(parent);
     else if(value.type() == QVariant::String && !index.data(OneLineString).toBool()) {
-	w_del = new QTextEdit(parent);
+	wDel = new QTextEdit(parent);
 #if QT_VERSION >= 0x050A00
-	((QTextEdit*)w_del)->setTabStopDistance(40);
+	((QTextEdit*)wDel)->setTabStopDistance(40);
 #else
-	((QTextEdit*)w_del)->setTabStopWidth(40);
+	((QTextEdit*)wDel)->setTabStopWidth(40);
 #endif
-	((QTextEdit*)w_del)->setLineWrapMode(QTextEdit::NoWrap);
-	((QTextEdit*)w_del)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	((QTextEdit*)w_del)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	//((QTextEdit*)w_del)->resize(parent->width(), ((QTextEdit*)w_del)->height());
+	((QTextEdit*)wDel)->setLineWrapMode(QTextEdit::NoWrap);
+	((QTextEdit*)wDel)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	((QTextEdit*)wDel)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	//((QTextEdit*)wDel)->resize(parent->width(), ((QTextEdit*)wDel)->height());
     }
     else {
 	QItemEditorFactory factory;
-	w_del = factory.createEditor(value.type(), parent);
+	wDel = factory.createEditor(value.type(), parent);
     }
-    w_del->installEventFilter(const_cast<TableDelegate*>(this));
+    wDel->installEventFilter(const_cast<TableDelegate*>(this));
 
-    return w_del;
+    return wDel;
 }
 
 void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
@@ -260,7 +260,8 @@ bool TableDelegate::eventFilter( QObject *object, QEvent *event )
 			emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
 			return true;
 		    }
-		    QCoreApplication::postEvent(object, new QKeyEvent(QEvent::KeyPress,static_cast<QKeyEvent *>(event)->key(),Qt::NoModifier,"<REFORWARD>"));
+		    QCoreApplication::postEvent(object,
+				    new QKeyEvent(QEvent::KeyPress,static_cast<QKeyEvent *>(event)->key(),Qt::NoModifier,"<REFORWARD>"));
 		    return true;
 		case Qt::Key_Escape:
 		    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);

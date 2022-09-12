@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.25"
+#define MOD_VER		"5.4.26"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")

@@ -1,3 +1,21 @@
+2022-09-11 Roman (stable)
+- !!:LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech appended for the new attribute "dev" with the Bluetooth device name
+	and for binding to the device at the template start using rfcomm.
+    tmplib_LowDevLib.RDTech completed in the Ukrainian translation.
+    flb_servProc.docOffLine in the attributes "pages" and "pagesCur", tmplib_DevLib.mbBase in the attribute "items",
+	tmplib_LowDevLib.RDTech in the attribute "dev" adapted to help from the second row.
+- LibsDB.vcaBase: wlb_Main.grph_panel: The button of the trend starting from cursor moved to the left.
+    wlb_Main.{alarmsAct,alarmsSt} in the attributes "colms" and "highLght" adapted to help from the second row.
+- !!!!:SYS,DAQ.JavaLikeCalc: Getting help from the second line for the Control Interface appended in:
+    - description of the element fields (TFld) with DAQ-values;
+    - name of function IOs (TFunction) with links and attributes builder of the DAQ Logical Level.
+- SYS,DAQ.JavaLikeCalc,UI.VCAEngine: The Control Interface tables appended of the context help to the field "Name".
+- SYS: Names of the security standard permissions appended of _W_W_W(0222).
+- FIX:DAQ.DAQGate: Prevented of disabling DAQ-parameters at receiving the error TError::Tr_UnknownHost.
+- !!:UI.Vision: The Widget Attributes edition table appended of the multiline edition for the "Name" column
+    and the context help loading for that.
+
+
 2022-09-02 Roman (stable)
 - DAQ.OPC_UA,libOPC_UA: Improved in the items parsing of DAQ-parameters in the Standard mode, than allowing the chars '|' in the address.
     DAQ.OPC_UA: Improved for the syntax highlight rules of items in the Standard mode of DAQ-parameters.

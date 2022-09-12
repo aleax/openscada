@@ -2979,7 +2979,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/io",_("Program"))) {
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move")) {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str",
+		    "help",_("The name's rows after the first one treat as help."));
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",
 			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::TransltText<<8),IO::String|(IO::FullText<<8),IO::String|((IO::FullText|IO::TransltText)<<8),IO::Object).c_str(),
@@ -2996,9 +2997,14 @@ void Func::cntrCmdProc( XMLNode *opt )
 	}
 	if(opt->childSize() && ctrId(opt->childGet(0),"/exec/io",true))
 	    for(int iIO = 0; iIO < ioSize(); iIO++)
-		if(!mIO[iIO]->hide())
-		    ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),trD(io(iIO)->name()),
-						((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
+		if(!mIO[iIO]->hide()) {
+		    string nprm = trD(io(iIO)->name());
+		    int nOff = 0; string nprm1 = TSYS::strLine(nprm, 0, &nOff);
+
+		    XMLNode *nd = ctrMkNode("fld", opt, -1, ("/exec/io/"+io(iIO)->id()).c_str(), nprm1,
+						((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__), "root", grp);
+		    if(nd && nOff < nprm.size()) nd->setAttr("help",nprm.substr(nOff));
+		}
 	return;
     }
 

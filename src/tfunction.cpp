@@ -285,9 +285,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		if(ctrMkNode("area",opt,-1,"/exec/io",_("IO")))
 		    for(int iIO = 0; iIO < ioSize(); iIO++) {
 			if(mIO[iIO]->hide()) continue;
+			string nprm = _(io(iIO)->name());
+			int nOff = 0; string nprm1 = TSYS::strLine(nprm, 0, &nOff);
+
 			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(iIO)->id()).c_str(),
-					_(io(iIO)->name()),((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
+					nprm1,((io(iIO)->flg()&IO::Return)?R_R_R_:RWRW__),"root",grp);
 			if(nd) {
+			    if(nOff < nprm.size()) nd->setAttr("help",nprm.substr(nOff));
 			    switch(io(iIO)->type()) {
 				case IO::String:
 				    nd->setAttr("tp","str");

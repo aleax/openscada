@@ -1215,7 +1215,7 @@ VisItProp::VisItProp( VisDevelop *parent ) :
 						<< _("Configuration") << _("Configuration template"));
     glay->addWidget(obj_attr_cfg, 0, 0, 1, 2);
 
-    buttAttrAdd = new QPushButton(_("Add attribute"),attr_cf_fr); 
+    buttAttrAdd = new QPushButton(_("Add attribute"),attr_cf_fr);
     connect(buttAttrAdd, SIGNAL(clicked()), this, SLOT(addAttr()));
     glay->addWidget(buttAttrAdd, 1, 0);
     buttAttrDel = new QPushButton(_("Delete attribute"),attr_cf_fr);
@@ -1516,7 +1516,7 @@ void VisItProp::tabChanged( int itb )
 
 	    // Get node information
 	    XMLNode info_req("info");
-	    info_req.setAttr("path",ed_it);
+	    info_req.setAttr("path", ed_it);
 	    if(owner()->cntrIfCmd(info_req) || !info_req.childSize()) {
 		mod->postMess(mod->nodePath().c_str(),
 			QString(_("Error getting the node '%1' information.")).arg(ed_it.c_str()),TVision::Error, this);
@@ -1532,7 +1532,9 @@ void VisItProp::tabChanged( int itb )
 		for(unsigned iW = 0; iW < req.childSize(); iW++)
 		    wlst.push_back(req.childGet(iW)->text());
 		    //wlst.push_back(req.childGet(iW)->attr("id"));
+
 	    //  Fill table
+	    gnd = TCntrNode::ctrId(root, obj_attr_cfg->objectName().toStdString(), true);
 	    //  Delete no present root items
 	    for(int iR = 0; iR < obj_attr_cfg->topLevelItemCount(); iR++) {
 		unsigned iW;
@@ -1576,14 +1578,26 @@ void VisItProp::tabChanged( int itb )
 		    if(iR < root_it->childCount()) cur_it = root_it->child(iR);
 		    else cur_it = new QTreeWidgetItem(root_it);
 		    cur_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-		    cur_it->setText(0,req.childGet("id","id")->childGet(iL)->text().c_str());
-		    cur_it->setData(0,Qt::UserRole,cur_it->text(0));
-		    cur_it->setText(1,req.childGet("id","name")->childGet(iL)->text().c_str());
-		    cur_it->setData(2,Qt::DisplayRole,s2i(req.childGet("id","type")->childGet(iL)->text()));
-		    cur_it->setText(3,req.childGet("id","wa")->childGet(iL)->text().c_str());
-		    cur_it->setData(4,Qt::DisplayRole,(bool)s2i(req.childGet("id","proc")->childGet(iL)->text()));
-		    cur_it->setData(5,Qt::DisplayRole,s2i(req.childGet("id","cfg")->childGet(iL)->text()));
-		    cur_it->setText(6,req.childGet("id","cfgtmpl")->childGet(iL)->text().c_str());
+
+		    cur_it->setText(0, req.childGet("id","id")->childGet(iL)->text().c_str());
+		    cur_it->setData(0, Qt::UserRole, cur_it->text(0));
+
+		    cur_it->setText(1, req.childGet("id","name")->childGet(iL)->text().c_str());
+		    XMLNode *nameRow = gnd ? gnd->childGet("id","name") : NULL;
+		    if(nameRow && nameRow->attr("help").size()) {
+			cur_it->setData(1, Qt::ToolTipRole, nameRow->attr("help").c_str());
+			cur_it->setData(1, Qt::WhatsThisRole, nameRow->attr("help").c_str());
+		    }
+
+		    cur_it->setData(2, Qt::DisplayRole, s2i(req.childGet("id","type")->childGet(iL)->text()));
+
+		    cur_it->setText(3, req.childGet("id","wa")->childGet(iL)->text().c_str());
+
+		    cur_it->setData(4, Qt::DisplayRole, (bool)s2i(req.childGet("id","proc")->childGet(iL)->text()));
+
+		    cur_it->setData(5, Qt::DisplayRole, s2i(req.childGet("id","cfg")->childGet(iL)->text()));
+
+		    cur_it->setText(6, req.childGet("id","cfgtmpl")->childGet(iL)->text().c_str());
 		}
 	    }
 	    //  Load types and configurations
@@ -1939,25 +1953,39 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 
 QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    QWidget *w_del = NULL;
+    QWidget *wDel = NULL;
     if(!index.isValid()) return 0;
 
     QVariant value = index.data(Qt::EditRole);
 
     if(index.parent().isValid()) {
-	if(index.column() == 2 || index.column() == 5) w_del = new QComboBox(parent);
+	if(index.column() == 1) {
+	    wDel = new QTextEdit(parent);
+#if QT_VERSION >= 0x050A00
+	    ((QTextEdit*)wDel)->setTabStopDistance(40);
+#else
+	    ((QTextEdit*)wDel)->setTabStopWidth(40);
+#endif
+	    ((QTextEdit*)wDel)->setLineWrapMode(QTextEdit::NoWrap);
+	    ((QTextEdit*)wDel)->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	    ((QTextEdit*)wDel)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	    //((QTextEdit*)wDel)->resize(parent->width(), ((QTextEdit*)wDel)->height());
+	}
+	else if(index.column() == 2 || index.column() == 5) wDel = new QComboBox(parent);
 	else {
 	    QItemEditorFactory factory;
-	    w_del = factory.createEditor(value.type(),parent);
+	    wDel = factory.createEditor(value.type(),parent);
 	}
     }
 
-    return w_del;
+    return wDel;
 }
 
 void VisItProp::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
-    if(index.column() == 2 || index.column() == 5) {
+    if(index.column() == 1)
+	((QTextEdit*)editor)->setPlainText(index.data(Qt::DisplayRole).toString());
+    else if(index.column() == 2 || index.column() == 5) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	QStringList types = index.model()->index(0,0).data(Qt::UserRole+((index.column()==5)?1:0)).toStringList();
 	for(int iL = 0; iL < types.size(); iL++)
@@ -1970,7 +1998,9 @@ void VisItProp::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &
 
 void VisItProp::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
-    if(index.column() == 2 || index.column() == 5) {
+    if(index.column() == 1)
+	model->setData(index, ((QTextEdit*)editor)->toPlainText(), Qt::EditRole);
+    else if(index.column() == 2 || index.column() == 5) {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	model->setData(index,comb->itemData(comb->currentIndex()),Qt::EditRole);
     }
@@ -1979,4 +2009,30 @@ void VisItProp::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *
 	model->setData(index,(bool)comb->currentIndex(),Qt::EditRole);
     }
     else QItemDelegate::setModelData(editor, model, index);
+}
+
+bool VisItProp::ItemDelegate::eventFilter( QObject *object, QEvent *event )
+{
+    if(dynamic_cast<QTextEdit*>(object)) {
+	QTextEdit *ted = dynamic_cast<QTextEdit*>(object);
+	if(event->type() == QEvent::KeyPress)
+	    switch(static_cast<QKeyEvent *>(event)->key()) {
+		case Qt::Key_Enter:
+		case Qt::Key_Return:
+		    if(static_cast<QKeyEvent *>(event)->text() == "<REFORWARD>") return false;
+		    if(!(QApplication::keyboardModifiers()&Qt::ControlModifier)) {
+			emit commitData(ted);
+			emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
+			return true;
+		    }
+		    QCoreApplication::postEvent(object,
+				new QKeyEvent(QEvent::KeyPress,static_cast<QKeyEvent *>(event)->key(),Qt::NoModifier,"<REFORWARD>"));
+		    return true;
+		case Qt::Key_Escape:
+		    emit closeEditor(ted, QAbstractItemDelegate::RevertModelCache);
+		    return true;
+	    }
+    }
+
+    return QItemDelegate::eventFilter(object, event);
 }

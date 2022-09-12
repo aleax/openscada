@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (93% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -683,13 +683,19 @@ In the runtime mode, a table is created to list the active violations, by define
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Columns, by ',' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Columns
+<p>List separated by ',' from the variants: atm, qttm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.
+</p>
+</td>
 <td> String </td>
 <td> Determine in the desired sequence and the fields filling.
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Highlight rules, {lev}[{slev}]{quitt}:{color}:{font}:{fontColor} </td>
+<td> Highlight rules
+<p>Rows in the form "{lev}[{slev}]{quitt}:{color}:{font}:{fontColor}".
+</p>
+</td>
 <td> Text </td>
 <td> Highlight rules, where:
 <ul><li> <i>lev</i> — main level of the message [0...7];</li>
@@ -2038,13 +2044,19 @@ In the runtime mode, a table is created from the active violations list, for the
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Columns, by ',' (atm,qttm,nrmtm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Columns
+<p>List separated by ',' from the variants: atm, qttm, nrmtm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.
+</p>
+</td>
 <td> String </td>
 <td> Determine in the desired sequence and the fields filling.
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Highlight rules, {lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor} </td>
+<td> Highlight rules
+<p>Rows in the form "{lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor}".
+</p>
+</td>
 <td> Text </td>
 <td> Highlight rules, where:
 <ul><li> <i>lev</i> — main level of the message [0...7];</li>
@@ -2767,7 +2779,7 @@ The dialogue only provides the user with information about the data source param
 </td></tr></table>
 <p>The element shown in Figure 4.5 is a specialized panel for dynamic control of basic user properties of <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Diagram"</a>. So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel.png" width="250" /></a>  <div class="thumbcaption">Fig.4.5. The panel of the graphs in the development and runtime modes (left to right).</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel.png" width="400" /></a>  <div class="thumbcaption">Fig.4.5. The panel of the graphs in the development and runtime modes (left to right).</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The panel does not require any special configuration by the user, it should only be located in the panels folder of the project tree of <a href="#RootPgSo">the concept of the signal objects of the root page "RootPgSo"</a>, which will allow it to be dynamically invoked and opened in the control panels container of the root page.
 </p><p>The panel Identifier, when placed, should be saved and its line of call, upon receiving focus, in the events processing attribute "evProc" of the primary widget will look "ws_FocusIn::open:/pg_control/pg_grph_panel".

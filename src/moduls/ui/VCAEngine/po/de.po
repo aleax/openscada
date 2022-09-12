@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:23+0300\n"
+"POT-Creation-Date: 2022-09-11 21:43+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -2056,6 +2056,9 @@ msgstr "Attribute anzeigen"
 
 msgid "Custom"
 msgstr "Benutzerdefiniert"
+
+msgid "The name's rows after the first one treat as help."
+msgstr "Die Namenszeilen nach der ersten behandeln als Hilfe."
 
 msgid "Work area"
 msgstr "Arbeitsbereich"

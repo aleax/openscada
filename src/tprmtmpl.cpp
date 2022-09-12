@@ -262,7 +262,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/io",_("IO"))) {
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","5")) {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str",
+		    "help",_("The name's rows after the first one treat as help."));
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",
 			IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::TransltText<<8),IO::String|(IO::FullText<<8),IO::String|((IO::FullText|IO::TransltText)<<8),
@@ -673,7 +674,8 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		if(is_lnk && TSYS::strLine(func()->io(iIO)->def(),0).size() &&
 		    !s2i(TBDS::genPrmGet(obj->nodePath()+"onlAttr","0",opt->attr("user"))))
 		{
-		    string nprm = TSYS::strSepParse(TSYS::strLine(func()->io(iIO)->def(),0),0,'|');
+		    string nprm = TSYS::strLine(TSYS::strSepParse(TSYS::strLine(func()->io(iIO)->def(),0),0,'|'), 0);
+
 		    // Check already to present parameters
 		    bool f_ok = false;
 		    for(unsigned iL = 0; iL < list.size() && !f_ok; iL++)
@@ -685,6 +687,9 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 		    }
 		}
 		else {
+		    string nprm = func()->io(iIO)->name();
+		    int nOff = 0; string nprm1 = TSYS::strLine(nprm, 0, &nOff);
+
 		    const char *tip = "str";
 		    bool fullTxt = false;
 		    if(!is_lnk)
@@ -697,9 +702,10 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 				break;
 			    case IO::Object:	fullTxt = true;	break;
 			}
-		    XMLNode *wn = ctrMkNode("fld",opt,-1,(pref+"/prm/el_"+i2s(iIO)).c_str(),
-			    func()->io(iIO)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
-		    if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select",pref+"/prm/ls_"+i2s(iIO))->setAttr("help",lnkHelp());
+		    XMLNode *wn = ctrMkNode("fld", opt, -1, (pref+"/prm/el_"+i2s(iIO)).c_str(), nprm1, RWRWR_, "root", SDAQ_ID, 1, "tp",tip);
+		    if(nOff < nprm.size()) wn->setAttr("help",nprm.substr(nOff));
+		    if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select",pref+"/prm/ls_"+i2s(iIO))->
+					 setAttr("help",(wn->attr("help").size()?wn->attr("help")+"\n\n":"")+lnkHelp());
 		    if(wn && fullTxt)wn/*->setAttr("cols","100")*/->setAttr("rows","4");
 		}
 	    }

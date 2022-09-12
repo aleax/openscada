@@ -11316,7 +11316,7 @@ if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curS
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1661413784);
+if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1662874354);
 INSERT INTO wlb_Main VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -13003,7 +13003,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		SYS.Archive.messPut(iM.tm, iM.utm, iM.categ, iM.level, iM.mess.parse(0,messItSep)+messItSep+iM.mess.parse(1,messItSep)+messItSep+iM.mess.parse(2,messItSep)+messItSep+
 										iM.mess.parse(3,messItSep)+messItSep+iM.mess.parse(4,messItSep)+messItSep+set);
 	}
-}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1656941229);
+}','','',-1,'owner;name;dscr;active;geomY;geomW;geomH;contextMenu;evProc;elType;value;items;set;',1662915469);
 INSERT INTO wlb_Main VALUES('alarmsSt','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE60lEQVRYhe2YTW8kRwGGn/qumpn2jJ1db+z1JpsEwgJCCkJw4PeQPwEX
 Llw5w50rd05RDhyQkDgmkdkQstpo7bXX3vXMdFd31wcHx4CEcjASGSLNc6y3q/p9qrtVUov33/9Z
@@ -13455,7 +13455,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 }
 
 time_value = wTm ? wTm : SYS.time();
-//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1656941229);
+//go_cur_active = wTm;','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1662915478);
 INSERT INTO wlb_Main VALUES('ImgLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAN
 EklEQVR4nOWb6W5dyXWFv7XPcCfegRRHiZJIiZRavE31QLtjuQ1ET+GH8O88gB8gT2IgzxD/cAAD
 toLYgdyA3XHakhrd7pZkURTHe0+t/LiUqO5I1MBBRrKAQxI8VXVWrbNr195VdQSY/8fI93//M/Dr
@@ -18844,7 +18844,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','23',32,'','','next1','','',
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','6',32,'','','next1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','More forward',32,'','','next1','Далеко вперед','','Далеко вперёд','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipStatus','Press for going to forward to five graphic''s sizes',32,'','','next1','Натиснути для переходу вперед на п''ять розмірів вікна графіку','','Нажать для перехода вперёд на пять размеров окна графика','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','60',32,'','','tmTp','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','73',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','11',32,'','','tmTp','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','tipTool','Dimension',32,'','','tmTp','Одиниця виміру','','Единица измерения','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','164',32,'','','tmTp','','','','','','','');
@@ -18856,7 +18856,7 @@ INSERT INTO wlb_Main_io VALUES('doc_panel','cfg','0.1:366:0.1:::1',32,'','','siz
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','60',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','name','Size',32,'','','size','Розмір','','Размер','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','0',32,'','','size','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','13',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','164',32,'','','size','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','value','All',8,'','','arch','Всі','','Все','','','','Све');
 INSERT INTO wlb_Main_io VALUES('grph_panel','items','All
@@ -22450,15 +22450,15 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.3
+Version: 1.5.4
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Діаграма". Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.3
+Версія: 1.5.4
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Диаграмма". Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.3
+Версия: 1.5.4
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "Complex objects" of the DAQ-templates.
 
@@ -23360,7 +23360,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.4.1
+Version: 1.4.2
 License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує для динамічного відображення активних порушень у табличному вигляді та із виділенням їх за кольором та текстом. Порушення отримуються із буферу поточних-активних порушень OpenSCADA. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Для детального вивчення актуальних порушень елементом передбачено функцію збільшення висоти угору або униз за отриманням фокусу.
@@ -23386,7 +23386,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.4.1
+Версія: 1.4.2
 Ліцензія: GPLv2','','Элемент на рисунке 1.5 служит для динамического отображения активных нарушений в табличном виде и с выделением их цветом и текстом. Нарушения получаются из буфера текущих-активных нарушений OpenSCADA. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 Для детального изучения актуальных нарушений элементом предусмотрено функцию увеличения высоты вверх или вниз при получении фокуса.
@@ -23412,7 +23412,7 @@ License: GPLv2',32,'','','','Елемент на рисунку 1.5 слугує
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.4.1
+Версия: 1.4.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsSt','dscr','The element-frame serves to display the violations history and to update their dynamically for the current time in a full-format tabular form, to highlight them in color and text and the possibility of multilevel filtering. The violations are obtained from the buffer of current-active violations of OpenSCADA and archive(s), specified in the configuration field <alArch>. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 
@@ -23452,7 +23452,7 @@ As you can see from the list of possible table fields, this item supports confir
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.5.1
+Version: 1.5.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення історії порушень та динамічного їх оновлення на поточний час у повноформатному табличному вигляді, із виділенням їх за кольором та текстом та можливістю багаторівневого фільтрування. Порушення отримуються із буферу поточних-активних порушень OpenSCADA та архіву(ів), визначеного конфігураційним полем <alArch>. Фактично елемент реалізує функції примітиву "Протокол" для порушень та із розширенням можливостей.
 
 Загалом кадр містить елементи:
@@ -23491,7 +23491,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.5.1
+Версія: 1.5.2
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения истории нарушений и динамического их обновление для текущего времени в полноформатном табличном виде, с выделением их цветом и текстом и возможностью многоуровневого фильтрования. Нарушения получаются из буфера текущих-активных сообщений OpenSCADA и архива(ов), определённого конфигурационным полем <alArch>. Фактически элемент реализует функции примитива "Протокол" для нарушений и с расширением возможностей.
 
 В целом кадр содержит элементы:
@@ -23530,7 +23530,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.5.1
+Версия: 1.5.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('userManager','view','7',32,'','','pass','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','backColor','black',96,'backColorVal','','trnd1','','','','','','','');
@@ -23884,7 +23884,7 @@ INSERT INTO wlb_Main_io VALUES('graphCalc','owner','root:ITW',32,'','','funcCode
 INSERT INTO wlb_Main_io VALUES('graphCalc','perm','436',32,'','','funcCode','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:UI',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','curstime','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','name','|',32,'','','curstime','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','name','I',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','41',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','70',32,'','','curstime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','13',32,'','','curstime','','','','','','','');
@@ -24390,8 +24390,8 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','it2color','yellow',0,'','','alarms','
 INSERT INTO wlb_Main_io VALUES('graphSelPrm','tipTool','Select/leave empty color for the typical/styled one.',32,'','','color','Оберіть/залиште порожній колір для типового/стильового.','','Выберите/оставьте пустой цвет для типичного/стилевого.','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','owner','root:UI',32,'','','curstimeBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','perm','438',32,'','','curstimeBeg','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','name','|',32,'','','curstimeBeg','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','97',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','name','I',32,'','','curstimeBeg','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grph_panel','geomX','0',32,'','','curstimeBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomY','164',32,'','','curstimeBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomW','13',32,'','','curstimeBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','20',32,'','','curstimeBeg','','','','','','','');
@@ -28426,37 +28426,49 @@ INSERT INTO wlb_Main_uio VALUES('grpGraph10','sclWinCtx','Scale: by window save 
 ',0,'','','trnd1','Масштаб: контекст вікном','','','Масштаб: контекст окном','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Вибір: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','','Избор: Сачувати избор корисника','');
 INSERT INTO wlb_Main_uio VALUES('grpGraph10','perUserSel','Select: save the selection per user',131072,'0',0,'','','','Вибір: зберігати обрання за користувачем','','','Выбор: сохранять выбор по пользователям','','','','','Избор: Сачувати избор корисника','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','colms','Columns, by '','' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики, за '','' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','colms','Columns
+List separated by '','' from the variants: atm, qttm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.',131077,'atm,lev,prm,dscr,alrm',8,'','','','Стовпчики
+Перелік поділений '','' з варіантів: atm, qttm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.','','','Колонки
+Список поделённый '','' из вариантов: atm, qttm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnFocus','Expand on focus: pixels (0-disabled,>-down,<-up)',131073,'0|',8,'','','','Розширяти при фокусі: пікселів (0-відключено,>-донизу,<-догори)','','','Расширять при фокусе: пикселей (0-отключено,>-вниз,<-вверх)','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','expOnItems','Expand on focus: items (<=0-disabled)',131073,'0|',8,'','','','Розширяти при фокусі: елементів (<=0-відключено)','','','Расширять при фокусе: элементов (<=0-отключено)','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Формат дати та часу (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','Формат даты и времени (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','hHdrVis','Show header: horizontal',131072,'0',8,'','','','Показувати заголовок: горизонтальний','','','Показывать заголовок: горизонтальный','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','highLght','Highlight rules, {lev}[{slev}]{quiet}:{color}:{font}:{fontColor}',131205,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr="^[0-9]*" color="blue"><rule expr="[01]$" color="red"/></rule><rule expr="(?<=:).*" font_weight="1"/></SnthHgl>
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','highLght','Highlight rules
+Rows in the form "{lev}[{slev}]{quitt}:{color}:{font}:{fontColor}".',131205,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr="^[0-9]*" color="blue"><rule expr="[01]$" color="red"/></rule><rule expr="(?<=:).*" font_weight="1"/></SnthHgl>
 50:gray
 40:red
-150:yellow',8,'','','','Правила підсвітлення, {lev}[{slev}]{quiet}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}[{slev}]{quiet}:{color}:{font}:{fontColor}','','','','','','');
+150:yellow',8,'','','','Правила підсвітлення
+Рядки у формі "{lev}[{slev}]{quitt}:{color}:{font}:{fontColor}".','','','Правила подсветки
+Строки в форме "{lev}[{slev}]{quiet}:{color}:{font}:{fontColor}".','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','vHdrVis','Show header: vertical',131072,'0',8,'','','','Показувати заголовок: вертикальний','','','Показывать заголовок: вертикальный','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','hideAttrs','Attributes list of the passport to hide',131077,'',10,'<page>|paspHideAttrs','','','Перелік атрибутів паспорту для приховування','','','Перечень атрибутов паспорта для скрытия','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','name_','For save original name',131077,'',8,'','','','Для збереження оригінальної назви','','','Для сохранения исходного наименования','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','com','Quittance: command',131072,'0',8,'','','','Підтвердження: команда','','','Подтверждение: команда','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','','Підтвердження: стани','ПІДТВ-blue','','Подтверждение: состояния','ПОДТВ-blue','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsAct','digComs','Quittance: commands',131077,'QUITT-blue',8,'','','','Підтвердження: команди','ПІДТВ-blue','','Подтверждение: команды','ПОДТВ-blue','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','digStts','Quittance: statuses',131077,'QUITT-blue',0,'','','','Підтвердження: стани','','','Подтверждение: состояния','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsAct','digComs','Quittance: commands',131077,'QUITT-blue',8,'','','','Підтвердження: команди','','','Подтверждение: команды','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','st_open','Quittance: state',131072,'0',8,'','','','Підтвердження: стан','','','Подтверждение: состояние','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','DESCR','Quittance: description',131077,'',8,'','','','Підтвердження: опис','','','Подтверждение: описание','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','NAME','Quittance: name',131077,'',8,'','','','Підтвердження: ім''я','','','Подтверждение: имя','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsAct','colDscrCustNames','Names list of the user fields, separated by '';''',131333,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','alArch','Alarms archiver, "{ArhMod}.{Arh}"',131077,'FSArch.alarms',8,'','','','Архіватор сигналів, "{ArhMod}.{Arh}"','','','Архиватор сигналов, "{ArhMod}.{Arh}"','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','colDscrCustNames','Names list of the custom fields, separated by '';''',131333,'',8,'','','','Перелік назв користувацьких полів, поділених '';''','','','Перечень наименований пользовательских полей, поделённых '';''','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','colms','Columns, by '','' (atm,qttm,nrmtm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)',131077,'atm,qttm,nrmtm,lev,type,prm,dscr,alrm,cmnt',8,'','','','Стовпчики, за '','' (atm,qttm,nrmtm,lev,type,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','Колонки, по '','' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt)','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','colms','Columns
+List separated by '','' from the variants: atm, qttm, nrmtm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.',131077,'atm,qttm,nrmtm,lev,type,prm,dscr,alrm,cmnt',8,'','','','Стовпчики
+Перелік поділений '','' з варіантів: atm, qttm, nrmtm, lev, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.','','','Колонки
+Список поделённый '','' из вариантов: atm, qttm, nrmtm, lev, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','formDtTm','Data and time format (%Y-%m-%d %H.%M.%S[.%MS,%US])',131077,'%Y-%m-%d %H.%M.%S.%MS',8,'','','','Формат дати та часу (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','Формат даты и времени (%Y-%m-%d %H.%M.%S[.%MS,%US])','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','hHdrVis','Show header: horizontal',131072,'1',8,'','','','Показувати заголовок: горизонтальний','','','Показывать заголовок: горизонтальный','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsSt','highLght','Highlight rules, {lev}[{slev}]{quiet}{act}:{color}:{font}:{fontColor}',131205,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr="^[0-9]*" color="blue"><rule expr="[01]{2}$" color="red"><rule expr="[01]$" color="darkorange"/></rule></rule><rule expr="(?<=:).*"><rule expr="[^:]*" font_weight="1"/><rule expr="(?<=:).*" font_italic="1"/></rule></SnthHgl>
+INSERT INTO wlb_Main_uio VALUES('alarmsSt','highLght','Highlight rules
+Rows in the form "{lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor}".',131205,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr="^[0-9]*" color="blue"><rule expr="[01]{2}$" color="red"><rule expr="[01]$" color="darkorange"/></rule></rule><rule expr="(?<=:).*"><rule expr="[^:]*" font_weight="1"/><rule expr="(?<=:).*" font_italic="1"/></rule></SnthHgl>
 501:gray
 401:red
 1501:yellow
 511:gray:Arial 11 0 1
 411:red:Arial 11 0 1
-1511:yellow:Arial 11 0 1',8,'','','','Правила підсвітлення, {lev}[{slev}]{quiet}{act}:{color}:{font}:{fontColor}','','','Правила подсветки, {lev}[{slev}]{quiet}{act}:{color}:{font}:{fontColor}','','','','','','');
+1511:yellow:Arial 11 0 1',8,'','','','Правила підсвітлення
+Рядки у формі "{lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor}".','','','Правила подсветки
+Строки в форме "{lev}[{slev}]{quiet}{act}:{color}:{font}:{fontColor}".','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','messLim','Messages limit, quantity',131073,'1000|',8,'','','','Обмеження повідомлень, кількість','','','Ограничение сообщений, количество','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','vHdrVis','Show header: vertical',131072,'1',8,'','','','Показувати заголовок: вертикальний','','','Показывать заголовок: вертикальный','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('alarmsSt','DESCR','Quittance: description',131077,'',8,'','','alarms','Підтвердження: опис','','','Подтверждение: описание','','','','','','');

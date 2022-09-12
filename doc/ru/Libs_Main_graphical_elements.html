@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Библиотеки/Основные графические элементы</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 94% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 93% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -635,70 +635,76 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 В режиме использования строится таблица из перечня активных нарушений, для определённых полей, правила сортирования и выделения; содержимое которой периодически и динамически обновляется. При выборе  таблицы, получение фокуса, её высота может расширяться, отобразив больше сообщений, если эта функцию включена и есть соответствие условию из определённого количества нарушений.
 </p><p>Пользователю предоставляется возможность подтвердить нарушение, изменив значение поля времени подтверждения или с помощью панели управления, которая выплывет при выборе элемента и строки нарушения.
 </p><p>Ещё пользователь может оставить комментарий к нарушению, откорректировав соответствующее поле таблицы.
-</p><p><b><u>Свойства связывания и конфигурации</u></b><br />
+</p><p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Идентификатор </th>
-<th> Имя </th>
-<th> Тип </th>
-<th> Описание
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Description
 </th></tr>
 <tr>
 <td> active </td>
-<td> Активный </td>
-<td> Логический </td>
-<td> Выключить если выключено подтверждение, расширение по получению фокуса и редактирование вообще — исключительно отображение.
+<td> Active </td>
+<td> Boolean </td>
+<td> Turn off if there disabled confirmation, focus gaining and editing in general — purely displaying.
 </td></tr>
 <tr>
 <td> hHdrVis </td>
-<td> Показывать заголовок: горизонтальный </td>
-<td>Логический </td>
+<td> Show header: horizontal </td>
+<td> Boolean </td>
 <td>
 </td></tr>
 <tr>
 <td> vHdrVis </td>
-<td> Показывать заголовок: вертикальный </td>
-<td> Логический </td>
+<td> Show header: vertical </td>
+<td> Boolean </td>
 <td>
 </td></tr>
 <tr>
 <td> formDtTm </td>
-<td> Формат даты и времени (%Y-%m-%d&nbsp;%H.%M.%S[.%MS,%US]) </td>
-<td> Строка </td>
-<td> Формат отображения времени нарушения и подтверждения.
+<td> Data and time format (%Y-%m-%d&nbsp;%H.%M.%S[.%MS,%US]) </td>
+<td> String </td>
+<td> Format of displaying the time of violation and confirmation.
 </td></tr>
 <tr>
 <td> expOnItems </td>
-<td> Расширять при фокусе: элементов (&lt;=0-отключено) </td>
-<td> Целый </td>
-<td> Граничное количество сообщений для срабатывания функции расширения элемента, увеличения высоты, при получении фокуса.
+<td> Expand on focus: items (&lt;=0-disabled) </td>
+<td> Integer </td>
+<td> Maximum number of messages to trigger the element expansion, height increasing, at focus gaining.
 </td></tr>
 <tr>
 <td> expOnFocus </td>
-<td> Расширять при фокусе: пикселей (0-отключено,&gt;-вниз,&lt;-вверх) </td>
-<td> Целый </td>
-<td> Установить в нужное значение расширения элемента, увеличения высоты, при получении фокуса.
+<td> Expand on focus: pixels (0-disabled,&gt;-down,&lt;-up) </td>
+<td> Integer </td>
+<td> Set to the desired value of the element extension, height increasing, at focus gaining.
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Колонки, по ',' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
-<td> Строка </td>
-<td> Определить в нужную последовательность и наполнение полей.
+<td> Columns
+<p>List separated by ',' from the variants: atm, qttm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.
+</p>
+</td>
+<td> String </td>
+<td> Determine in the desired sequence and the fields filling.
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Правила подсветки, {lev}[{slev}]{quitt}:{color}:{font}:{fontColor} </td>
-<td> Текст </td>
-<td> Правила подсветки, где:
-<ul><li> <i>lev</i> — основной уровень сообщения [0...7];</li>
-<li> <i>slev</i> — подуровень сообщения [0...9], опционально;</li>
-<li> <i>quitt</i> — признак подтверждения (квитации) сообщения [0|1];</li>
-<li> <i>color</i> — цвет фона строки с сообщением;</li>
-<li> <i>font</i> — шрифт текста строки с сообщением;</li>
-<li> <i>fontColor</i> — цвет текста строки с сообщением.</li></ul>
-<p>Например:
+<td> Highlight rules
+<p>Rows in the form "{lev}[{slev}]{quitt}:{color}:{font}:{fontColor}".
+</p>
+</td>
+<td> Text </td>
+<td> Highlight rules, where:
+<ul><li> <i>lev</i> — main level of the message [0...7];</li>
+<li> <i>slev</i> — sub-level of the message [0...9], optional;</li>
+<li> <i>quitt</i> — sign of the message confirmation (quietation) [0|1];</li>
+<li> <i>color</i> — background color of the message row;</li>
+<li> <i>font</i> — text font of the message row;</li>
+<li> <i>fontColor</i> — text color of the message row.</li></ul>
+<p>Te example:
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c">#&lt;SnthHgl font="monospace"&gt;</span>
 <span class="c"># &lt;rule expr="^#[^\n]*" color="gray" font_italic="1"/&gt;</span>
@@ -1984,77 +1990,83 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p><p>Для генерации отдельного отчёта пользователь может нажать характерную кнопку в правом верхнем углу, если такая функцию включена.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_alarmsStR_ru.png"><img class="thumbimage" height="580" src="files/LibMainEls_alarmsStR_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.3.6b. Кадр "Нарушение — состояние" в режиме исполнения.</div></div></div></div>
-<p><b><u>Свойства связывания и конфигурации</u></b><br />
+<p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
 
 <tr>
-<th> Идентификатор </th>
-<th> Имя </th>
-<th> Тип </th>
-<th> Описание
+<th> Identifier </th>
+<th> Name </th>
+<th> Type </th>
+<th> Description
 </th></tr>
 <tr>
 <td> messCat </td>
-<td> Категория сообщения </td>
-<td> Строка </td>
-<td> Категория обрабатываемых сообщений, типично "al*:*".
+<td> Message category </td>
+<td> String </td>
+<td> Category of the processing messages, typically it is "al*:*".
 </td></tr>
 <tr>
 <td> messLim </td>
-<td> Ограничение сообщений, количество </td>
-<td> Целый </td>
-<td> Максимальное количество сообщений в таблице, типично 1000.
+<td> Messages limit, quantity </td>
+<td> Integer </td>
+<td> Maximum quantity of the messages in the table, typically it is 1000.
 </td></tr>
 <tr>
 <td> alArch </td>
-<td> Архиватор сигналов, "{ArhMod}.{Arh}" </td>
-<td> Строка </td>
-<td> Архиватор из которого брать сообщения, пусто для всех.
+<td> Alarms archiver, "{ArhMod}.{Arh}" </td>
+<td> String </td>
+<td> An archiver from which the violations will be taken, empty for all ones.
 </td></tr>
 <tr>
 <td> alarms.active </td>
-<td> Активный </td>
-<td> Логический </td>
-<td> Выключить если выключено подтверждение, расширение по получению фокуса и редактирование вообще — исключительно отображение.
+<td> Active </td>
+<td> Boolean </td>
+<td> Turn off if there disabled confirmation, focus gaining and editing in general — purely displaying.
 </td></tr>
 <tr>
 <td> hHdrVis </td>
-<td> Показывать заголовок: горизонтальный </td>
-<td>Логический </td>
+<td> Show header: horizontal </td>
+<td> Boolean </td>
 <td>
 </td></tr>
 <tr>
 <td> vHdrVis </td>
-<td> Показывать заголовок: вертикальный </td>
-<td> Логический </td>
+<td> Show header: vertical </td>
+<td> Boolean </td>
 <td>
 </td></tr>
 <tr>
 <td> formDtTm </td>
-<td> Формат даты и времени (%Y-%m-%d&nbsp;%H.%M.%S[.%MS,%US]) </td>
-<td> Строка </td>
-<td> Формат отображения времени нарушения и подтверждения.
+<td> Data and time format (%Y-%m-%d&nbsp;%H.%M.%S[.%MS,%US]) </td>
+<td> String </td>
+<td> Format of displaying the time of violation and confirmation.
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Колонки, по ',' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
-<td> Строка </td>
-<td> Определить в нужную последовательность и наполнение полей.
+<td> Columns
+<p>List separated by ',' from the variants: atm, qttm, nrmtm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.
+</p>
+</td>
+<td> String </td>
+<td> Determine in the desired sequence and the fields filling.
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Правила подсветки, {lev}[{slev}]{quiet}{act}:{color}:{font}:{fontColor} </td>
-<td> Текст </td>
-<td> Правила подсветки, где:
-<ul><li> <i>lev</i> — основной уровень сообщения [0...7];</li>
-<li> <i>slev</i> — подуровень сообщения [0...9], опционально;</li>
-<li> <i>quiet</i> — признак подтверждения сообщения [0|1];</li>
-<li> <i>act</i> — признак активности сообщения [0|1];</li>
-<li> <i>color</i> — цвет фона строки с сообщением;</li>
-<li> <i>font</i> — шрифт текста строки с сообщением;</li>
-<li> <i>fontColor</i> — цвет текста строки с сообщением.</li></ul>
-<p>Например:
+<td> Highlight rules
+<p>Rows in the form "{lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor}".
+</p>
+</td>
+<td> Text </td>
+<td> Highlight rules, where:
+<ul><li> <i>lev</i> — main level of the message [0...7];</li>
+<li> <i>slev</i> — sub-level of the message [0...9], optional;</li>
+<li> <i>quitt</i> — sign of the message confirmation [0|1];</li>
+<li> <i>act</i> — sign of the message activity [0|1];</li>
+<li> <i>color</i> — background color of the message row;</li>
+<li> <i>font</i> — text font of the message row;</li>
+<li> <i>fontColor</i> — text color of the message row.</li></ul>
+<p>Te example:
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c">#&lt;SnthHgl font="monospace"&gt;</span>
 <span class="c"># &lt;rule expr="^#[^\n]*" color="gray" font_italic="1"/&gt;</span>
@@ -2766,7 +2778,7 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 </td></tr></table>
 <p>Элемент, представленный на рисунке 4.5, является специализированной панелью динамического управления основными пользовательскими свойствами <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примитива "Диаграмма"</a>. Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel.png"><img class="thumbimage" height="365" src="../en/files/LibMainEls_grph_panel.png" width="250" /></a>  <div class="thumbcaption">Рис.4.5. Панель графиков в режиме разработки и исполнения (слева направо).</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel.png"><img class="thumbimage" height="365" src="../en/files/LibMainEls_grph_panel.png" width="400" /></a>  <div class="thumbcaption">Рис.4.5. Панель графиков в режиме разработки и исполнения (слева направо).</div></div></div></div>
 <p><b><u>Использование — разработка</u></b><br />
 Панель не предусматривает специальной конфигурации пользователем, она должна лишь быть размещена в каталоге панелей дерева проекта <a href="#RootPgSo">концепции объектов сигнализации корневой страницы "RootPgSo"</a>, что будет предусматривать её динамический вызов и открытие в контейнере панелей управлений корневой страницы.
 </p><p>Идентификатор панели, при размещении, должен сохраняться и строка её вызова, при получении фокуса, в атрибуте обработки событий "evProc" первичного виджета приобретёт вид "ws_FocusIn::open:/pg_control/pg_grph_panel".

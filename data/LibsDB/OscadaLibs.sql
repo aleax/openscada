@@ -299,7 +299,8 @@ INSERT INTO flb_servProc_io VALUES('wacko2media','ndb','MySQL DB id',0,0,'wiki',
 INSERT INTO flb_servProc_io VALUES('wacko2media','wpg','Wiki page',0,0,'HomePageUk/Doc/SQLite',0,1,'','','','');
 INSERT INTO flb_servProc_io VALUES('wacko2media','rez','Result',0,6,'',0,2,'Результат','','Результат','');
 INSERT INTO flb_servProc_io VALUES('docOffLine','resDir','Results directory',0,0,'/home/roman/ext/OpenSCADA/Work/doc/',0,2,'','','','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','pages','Pages list of "{wiki}:{langs}:{dest}"',0,4,'Documents:en,uk,ru:index.html
+INSERT INTO flb_servProc_io VALUES('docOffLine','pages','Pages list
+Rows in the form "{wiki}:{langs}:{dest}".',0,4,'Documents:en,uk,ru:index.html
 Documents/Release_0.9:en,uk,ru:Release_0.9.html
 Works/Technical_Support/Agreement:en,uk,ru:Technical_Support_Agreement.html
 About:en,uk,ru:About.html
@@ -378,7 +379,8 @@ Libs/Mnemo_elements:en,uk,ru:Libs_Mnemo_elements.html
 Libs/Electrical_elements:en,uk,ru:Libs_Electrical_elements.html
 Libs/Documents:en,uk,ru:Libs_Documents.html
 Libs/Prescriptions:en,uk,ru:Libs_Prescriptions.html',0,3,'','','','');
-INSERT INTO flb_servProc_io VALUES('docOffLine','pagesCur','Current pages list of "{wiki}:{langs}:{dest}", for empty here used "pages"',0,5,'',0,4,'','','','');
+INSERT INTO flb_servProc_io VALUES('docOffLine','pagesCur','Current pages list
+Rows in the form "{wiki}:{langs}:{dest}", for empty here used "pages".',0,5,'',0,4,'','','','');
 INSERT INTO flb_servProc_io VALUES('docOffLine','res','Result',0,2,'',0,5,'Результат','','Результат','');
 INSERT INTO flb_servProc_io VALUES('docOffLine','reqTr','Tries of the requests',1,1,'3',0,1,'','','','');
 INSERT INTO flb_servProc_io VALUES('releaseTests','rezF','Result for HTML file',0,5,'',1,2,'','','','');
@@ -4779,7 +4781,7 @@ INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base templ
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.5 HD
 Sponsored by, for whole complexity: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
@@ -4959,7 +4961,7 @@ if(tErr.toInt()) {
 			this[itO.id].set(EVAL, 0, 0, true);
 		}
 }
-f_err = tErr;','','',1601827422);
+f_err = tErr;','','',1662904842);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -8824,7 +8826,7 @@ return obuf;','','',1560098890);
 INSERT INTO flb_servProc VALUES('docOffLine','EXT: Off-line documentation','','','Procedure of forming the offline documentation of OpenSCADA from Wiki by reading and processing the specified Wiki pages on different languages, currently it is: English, Ukrainian, mRussian.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0','','',1,360,0,'trNm = "offLine";
+Version: 1.3.1','','',1,360,0,'trNm = "offLine";
 docHost = "oscada.org:80";
 docHost_ = "http://" + docHost.parse(0,":");
 defLang = "en";
@@ -9028,7 +9030,7 @@ for(var ip in pgsOprc) {
 	//SYS.messInfo("OffLine", "TEST 00: pLang="+pLang);
 }
 
-if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1643902880);
+if(!isError)	pagesCur = "", res = "0: Fetched and processed pages="+pCnt+"; images="+imgCnt+"; links="+lnkCnt+"; languages="+lngCnt;','','',1662906388);
 CREATE TABLE IF NOT EXISTS 'flb_regEl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '1' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO flb_regEl VALUES('pidUnif','PID unified','ПІД уніфікований','ПИД унифицированный','Composite-unified analog and pulse PID. At the heart of the regulator is core a standard analog PID controller from the library FLibComplex1 and the implementation of the PWM for the pulse part.
 
@@ -9900,1763 +9902,6 @@ for(iTr = 0; iTr < trends.length; iTr++) {
 }
 
 return im.save();','','',1581943347);
-CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO tmplib_LowDevLib VALUES('1602A','GPIO|I2C: 1602A(HD44780)','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
-Conditions: Default planing policy but realtime one preferred.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.1',10,0,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//Set link to fast external functions
-if(f_start)	f_err = "0", transport_ = ln1_ = ln2_ = "";
-
-t_err = "0";
-
-//Check for the transport change and the link update
-if(transport != transport_)	{
-	transport_ = transport;
-	if(!(tr=SYS.Transport.Serial.nodeAt("out_"+transport)))
-		function put = transport+".fnc_put";
-}
-
-//Write a byte function declaration
-function byte(tr, vl, md, dl) {
-	if(md == EVAL_BOOL) md = false;
-	if(dl == EVAL_BOOL) dl = 50e-6;
-	if(tr) {
-		//RS(md) | RW(false) | E(false) | BackLight(true) | D4 | D5 | D6 | D7
-		com = (md?0x01:0) | 0x8 | (vl&0xF0);
-		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
-		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
-		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
-		//RS(md) | RW(false) | E(false) | BackLight(true) | D0 | D1 | D2 | D3
-		com = (md?0x01:0) | 0x8 | ((vl<<4)&0xF0);
-		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
-		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
-		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
-	}
-	else if(put) {
-		put(RS, md);
-		put(D4, vl&0x10); put(D5, vl&0x20); put(D6, vl&0x40); put(D7, vl&0x80);
-		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
-		put(D4, vl&0x01); put(D5, vl&0x02); put(D6, vl&0x04); put(D7, vl&0x08);
-		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
-	}
-}
-
-//Main processing
-if(!tr && !put)
-	t_err = "1:"+tr("Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.").replace("%1",transport);
-else if(ln1 != ln1_ || ln2 != ln2_) {
-	ln1_ = ln1; ln2_ = ln2;	
-
-	//Init
-	byte(tr, 0x33); byte(tr, 0x32); byte(tr, 0x28); byte(tr, 0x0C); byte(tr, 0x06); byte(tr, 0x01);
-	//Line 1
-	if(ln1.length) {
-		tmSleep(2e-3);
-		byte(tr, 0x80);
-		for(iC = 0; iC < min(16,ln1.length); iC++)
-			byte(tr, ln1.charCodeAt(iC), true);
-	}
-	//Line 2
-	if(ln2.length) {
-		tmSleep(2e-3);
-		byte(tr, 0xC0);
-		for(iC = 0; iC < min(16,ln2.length); iC++)
-			byte(tr, ln2.charCodeAt(iC), true);
-	}
-}
-
-f_err = t_err;',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097','One Wire by DS9097','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
-Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1',30,0,'JavaLikeCalc.JavaScript
-//Functions
-function reset(tr) {
-	tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
-	rez = tr.messIO(SYS.strFromCharCode(0xF0));
-	tr.addr(tr.addr().parse(0,":")+":115200:8N1"); tr.timings("100:2-0"); tr.start(true);
-	tr.messIO("");
-	return rez.length && rez.charCodeAt(0) != 0xF0;
-}
-
-function io(tr, mess, bits) {
-	if(bits == EVAL) bits = mess.length * 8;
-	req = "";
-	for(iB = 0; iB < ceil(bits/8); iB++) {
-		vB = mess.charCodeAt(iB);
-		bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
-		for(iBi = 0; iBi < bB; iBi++) req += SYS.strFromCharCode((vB&(1<<iBi)) ? 0xFF : 0x00);
-	}
-	//SYS.messInfo("OneWire","bits="+bits+"; req="+SYS.strDecode(req,"Bin"," "));
-	for(resp = tr.messIO(req); resp.length < req.length && (tresp=tr.messIO("")).length; resp += tresp) ;
-	//SYS.messInfo("OneWire","bits="+bits+"; resp="+SYS.strDecode(resp,"Bin"," "));
-	rez = "";
-	for(iR = 0; iR < resp.length; ) {
-		vB = 0;
-		for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
-			if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
-		rez += SYS.strFromCharCode(vB);
-	}		
-	return rez;
-}
-
-function scan(tr, sn, lstDiscr) {
-	if(!reset(tr)) return "";
-	io(tr, SYS.strFromCharCode(0xF0));
-	for(nByte = 0, nBit = 1, tBit = 0, sDir = false, mskByte = 1, lstZero = 0; nByte < 8; ) {
-		tBit = io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0) << 1;
-		tBit = tBit | io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0);
-		//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; tBit="+tBit);
-		if(tBit == 3) break;
-		if(tBit > 0) sDir = !(tBit&0x01);
-		else {
-			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; lstDiscr="+lstDiscr);
-			if(nBit < lstDiscr) sDir = sn[nByte]&mskByte;
-			else sDir = (nBit == lstDiscr);
-			if(!sDir) lstZero = nBit;
-			//if(lstZero < 9) lstDiscr = lstZero;
-			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; sDir="+sDir+"; mskByte="+mskByte);
-		}
-		if(sDir) sn[nByte] = sn[nByte] | mskByte;
-		else sn[nByte] = sn[nByte] & (~mskByte);
-		tr.messIO(SYS.strFromCharCode(sDir?0xFF:0x00));
-		nBit++;
-     mskByte = (mskByte<<1)&0xFF;
-		if(!mskByte) { nByte++; mskByte = 1; }
-	}
-
-	rez = "";
-	if(nByte == 8) {
-		for(iB = 0; iB < nByte; iB++) rez += SYS.strFromCharCode(sn[iB]);
-		if(!Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = lstZero;
-		else { rez = ""; lstDiscr = 0; }
-	}
-
-	return rez;
-}
-
-//Set transport and init
-if(f_start) {
-	tmResc_ = tmResc;
-	devLs = new Object();
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-}
-if(f_stop) {
-	for(var devID in devLs) {
-		if((dO=devLs[devID]).isEVal()) continue;
-		aLs = dO.dP.nodeList("a_");
-		for(iA = 0; iA < aLs.length; iA++)
-			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
-	}
-	devLs = tr = false;
-	return;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else {
-	//Generic information update.
-	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
-		tmResc_ = tmResc;
-		tmSc = SYS.time();
-		// Check for power
-		if(!reset(tr) ||
-		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
-			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
-			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
-		else power = resp.charCodeAt(0);
-		// Scan for allowed devices on the bus.
-		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
-		for(devID = "start", lstDiscr = -1; devID.length && lstDiscr; ) {
-			if(lstDiscr < 0) lstDiscr = 0;
-			if((devID=scan(tr,sn,lstDiscr)).length)	{
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				if((dO=devLs[devID]).isEVal()) {
-					devLs[devID] = dO = new Object();
-					devFamily = devID.charCodeAt(0)&0x7F; devNm = tr("1W device"); dO.isT = false;
-					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
-					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
-					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
-					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
-					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
-					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
-					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
-
-					// Create the device''s parameter object
-					decId = SYS.strDecode(devID,"Bin","");
-					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
-					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
-					// Create the device''s proper attributes
-					dO.dP = dP = this["prm_"+decId];
-					if(dO.isT) {	//Temperature
-						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
-						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
-						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
-					}
-					else if(devFamily == 0x20)		//DS2450
-						for(iN = 0; iN < 4; iN++) {
-							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
-							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
-							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
-							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
-						}
-					else if(devFamily == 0x26) {	//DS2438
-						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
-						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
-						dP.attrAdd("i", tr("Current, A"), "real|ro");
-						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
-						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
-						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
-						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
-						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
-						dP.attrAdd("OFF", tr("Current Offset"), "integer");
-						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
-						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
-						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
-						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
-					}
-					else if(devFamily == 0x29)		//DS2408
-						for(iD = 0; iD < 8; iD++) {
-							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
-							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
-						}
-					else if(devFamily == 0x3A)		//DS2413
-						for(iD = 0; iD < 2; iD++) {
-							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
-							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
-						}
-				}
-				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
-				dO.tmSc = tmSc;
-				dO.try = tryEVAL;
-			}
-		}
-		//Check for removed devices
-		for(devID in devLs) {
-			if((dO=devLs[devID]).isEVal()) continue;
-			if(dO.tmSc != tmSc)	{
-				devLs[devID] = EVAL;
-				aLs = dO.dP.nodeList("a_");
-				for(iA = 0; iA < aLs.length; iA++)
-					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
-			}
-		}
-	}
-	else {
-		//Process devices for reading current value and set modifable
-		for(devID in devLs) {
-			if((dO=devLs[devID]).isEVal()) continue;
-			devFamily = devID.charCodeAt(0)&0x7F;
-			if(dO.isT) {	//Temperature
-				dP = dO.dP;
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				//Check for a modifications
-				isMdf = false;
-				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
-				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
-					//Set scratchpad
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
-					//Copy scratchpad part to the EEPROM
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
-					isMdf = true;
-				}
-
-				//Read current
-				// Call the transmission
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
-				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
-				// Get scratchpad
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				io(tr, SYS.strFromCharCode(0xBE));
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
-					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
-					if(val > 32767) val -= 65536;
-					dP.val.set(val/16, 0, 0, true);
-					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
-						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
-						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
-					}
-					dO.try = 0;
-				}
-				else if((dO.try=dO.try+1) > tryEVAL) {
-					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
-					dO.m = dO.res = EVAL;
-				}
-			}
-			else if(devFamily == 0x20) {	//DS2450
-				dP = dO.dP;
-				//Check for a modifications
-				for(iN = 0; iN < 4; iN++) {
-					if(dO["st1"+iN].isEVal())	continue;
-					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
-					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
-					if(tSt != dO["st1"+iN]) {	//Same write and check the result
-						if(!reset(tr)) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
-						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
-						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
-							dO["st1"+iN] = tSt;
-					}
-					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
-					if(tSt != dO["st2"+iN]) {	//Same write and check the result
-						if(!reset(tr)) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
-						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
-						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
-							dO["st2"+iN] = tSt;
-					}
-				}
-
-				//Read control status data
-				if(dP["res0"].get().isEVal()) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-					for(iN = 0; iN < 4; iN++) {
-						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
-						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
-						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
-						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
-					}
-				} else CRC_OK = true;
-
-				//Read AI value
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
-					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-				}
-				for(iN = 0; iN < 4; iN++)
-					if(CRC_OK) {
-						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
-						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
-						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
-					} else dP["ai"+iN].set(EVAL, 0, 0, true);
-
-				//Start A/D conversion for prepare data for next iteration
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
-				}
-			}
-			else if(devFamily == 0x26) {	//DS2438
-				dP = dO.dP;
-				//Check for a modifications
-				//????
-
-				//Recall memory page 0
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-				if(CRC_OK) {
-					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
-					dP["t"].set(tVl/256, 0, 0, true);
-					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
-					dP["i"].set(tVl, 0, 0, true);
-				}
-				else {
-					dP["t"].set(EVAL, 0, 0, true);
-					dP["i"].set(EVAL, 0, 0, true);
-				}
-				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
-				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
-				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
-				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
-				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
-				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
-
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
-				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
-				if(CRC_OK) {
-					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
-					dP["OFF"].set(tVl, 0, 0, true);
-				} else dP["OFF"].set(EVAL, 0, 0, true);
-
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
-				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
-
-				//Start T ant V conversion for prepare the data for next iteration
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
-				}
-			}
-			else if(devFamily == 0x29) {	//DS2408
-				dP = dO.dP;
-				//Check for a modifications
-				isMdf = false; tVl = 0; do_ = new Array();
-				for(iD = 0; iD < 8; iD++) {
-					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
-					do_[iD] = dP["do"+iD].get();
-					if(do_[iD] != dO["do"+iD])	isMdf = true;
-					if(do_[iD])	tVl = tVl | (1<<iD);
-				}
-				if(isMdf) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
-					// Verify the correct writing, pass by that can be wrong
-					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
-					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
-				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-				for(iD = 0; iD < 8; iD++) {
-					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
-					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
-						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
-						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
-					}
-				}
-			}
-			else if(devFamily == 0x3A) {	//DS2413
-				dP = dO.dP;
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				//Check for a modifications
-				isMdf = false;
-				do0_ = dP.do0.get(), do1_ = dP.do1.get();
-				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
-					tVl = (do1_<<1) | do0_;
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
-					isMdf = true;
-				}
-
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
-					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
-					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
-						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
-						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
-					}
-				}
-				else {
-					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
-					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
-					dO.do0 = dO.do1 = EVAL;
-				}
-			}
-		}
-	}
-}
-
-f_err = t_err;',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097U','One Wire by DS9097U','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
-Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1',30,0,'JavaLikeCalc.JavaScript
-//Functions
-function reset(tr) {
-	req = (isData?SYS.strFromCharCode(0xE3):"") +
-				SYS.strFromCharCode(0xC5);	//CMD_COMM(0x81) | FUNCTSEL_RESET(0x40) | SPEEDSEL_FLEX(0x04)
-	isData = false;
-	resp = tr.messIO(req);
-	return (resp.charCodeAt(0)&0x03) == 0x01;	//RB_PRESENCE
-}
-
-function io(tr, mess, bits) {
-	if(bits == EVAL) {
-		req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
-		isData = true;
-		for(iB = 0; iB < mess.length; iB++) {
-			req += SYS.strFromCharCode(tVl=mess.charCodeAt(iB));
-			if(tVl == 0xE3) req += SYS.strFromCharCode(0xE3);	//duplication to the COMMAND mode
-		}
-		for(resp = tr.messIO(req); resp.length && resp.length < mess.length && (tresp=tr.messIO("")).length; resp += tresp) ;
-		return resp;
-	}
-	else {
-		req = (isData?SYS.strFromCharCode(0xE3):"") + SYS.strFromCharCode(0x3F);	//MODE_COMMAND, CMD_CONFIG(0x01) | PARMSEL_5VPULSE(0x30) | PARMSET_infinite(0x0E)
-		isData = false;
-		for(iB = 0; iB < ceil(bits/8); iB++) {
-			vB = mess.charCodeAt(iB);
-			bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
-			for(iBi = 0; iBi < bB; iBi++)
-				//{BITPOL_ONE(0x10)|BITPOL_ZERO(0x00)}|CMD_COMM(0x81)|FUNCTSEL_BIT(0x00)|SPEEDSEL_FLEX(0x04)|{PRIME5V_TRUE(0x02)|PRIME5V_FALSE(0x00)}
-				req += SYS.strFromCharCode(((vB&(1<<iBi))?0x10:0x00)|0x85/*|((iB==(ceil(bits/8)-1)&&iBi==(bB-1))?0x02:0x00)*/);
-		}
-		for(resp = tr.messIO(req); resp.length && resp.length < (bits+1) && (tresp=tr.messIO("")).length; resp += tresp) ;
-		rez = "";
-		if(resp.length && !(resp.charCodeAt(0)&0x81))
-			for(iR = 1;  iR < resp.length; ) {
-				vB = 0;
-				for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
-					if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
-				rez += SYS.strFromCharCode(vB);
-			}
-	}
-	return rez;
-}
-
-function scan(tr, sn, lstDiscr) {
-	if(!reset(tr)) return "";
-	
-	//Set the bits in the added buffer
-	asn = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	for(i = 0; lstDiscr >= 0 && i < 64; i++)
-		if((i < (lstDiscr-1) && sn[floor(i/8)]&(1<<(i%8))) || i == (lstDiscr-1))
-			asn[(i*2+1)/8] = asn[(i*2+1)/8] | (1<<((i*2+1)%8));
-
-	req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
-	req += SYS.strFromCharCode(0xF0, 0xE3, 0xB5, 0xE1,
-				asn[0], asn[1], asn[2], asn[3], asn[4], asn[5], asn[6], asn[7],
-				asn[8], asn[9], asn[10], asn[11], asn[12], asn[13], asn[14], asn[15],
-				0xE3, 0xA5);
-	isData = false;
-	for(resp = tr.messIO(req); resp.length && resp.length < 17 && (tresp=tr.messIO("")).length; resp += tresp) ;
-
-	tmpLastDesc = -1;
-	for(i = 0; i < 64; i++) {
-		if(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8)))	sn[floor(i/8)] = sn[floor(i/8)] | (1<<(i%8));
-		else sn[floor(i/8)] = sn[floor(i/8)] & (~(1<<(i%8)));
-		// Check LastDiscrepancy
-		if((resp.charCodeAt(floor((i*2)/8)+1)&(1<<((i*2)%8))) && !(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8))))
-			tmpLastDesc = i + 1;
-	}
-
-	rez = "";
-	for(iB = 0; iB < 8; iB++) rez += SYS.strFromCharCode(sn[iB]);
-	if(sn[0] && lstDiscr != 63 && !Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = tmpLastDesc;
-	else { rez = ""; lstDiscr = 0; }
-
-	return rez;
-}
-
-//Set transport and init
-if(f_start) {
-	tmResc_ = 0;
-	devLs = new Object();
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	DS2480 = isData = false;
-}
-if(f_stop) {
-	for(var devID in devLs) {
-		if((dO=devLs[devID]).isEVal()) continue;
-		aLs = dO.dP.nodeList("a_");
-		for(iA = 0; iA < aLs.length; iA++)
-			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
-	}
-	devLs = tr = false;
-	return;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-	DS2480 = false;
-}
-//Try DS2480
-if(tr && !DS2480)	{
-	tr.addr(tr.addr().parse(0,":")+":9600:8N1");	tr.timings("500:20");
-	if(tr.start(true)) {
-		tr.sendbreak(); SYS.sleep(2e-3);
-		tr.messIO(SYS.strFromCharCode(0xC1));	SYS.sleep(4e-3);	//Send timing byte
-		//PDSRC=1.37Vus; W1LT=10us; DSO/WORT=8us;
-		//read the baud rate (to test command block); do 1 bit operation (to test 1-Wire block)
-		req = SYS.strFromCharCode(0x17, 0x45, 0x5B, 0x0F, 0x91);
-		for(resp = tr.messIO(req); resp.length && resp.length < 5 && (tresp=tr.messIO("")).length; resp += tresp) ;
-		if(resp.length == 5 && (resp.charCodeAt(3)&0xF1) == 0x00 && (resp.charCodeAt(3)&0x0E) == 0x00/*9600*/ &&
-				(resp.charCodeAt(4)&0xF0) == 0x90 && (resp.charCodeAt(4)&0x0C) == 0x00/*9600*/)
-			DS2480 = true;
-	}
-	isData = false;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
-else if(!DS2480)	t_err = "2:"+tr("DS2480 is not detected.");
-else {
-	//Generic information update.
-	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
-		tmResc_ = tmResc;
-		tmSc = SYS.time();
-		// Check for power
-		if(!reset(tr) ||
-		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
-			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
-			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
-		else power = resp.charCodeAt(0);
-		// Scan for allowed devices on the bus.
-		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
-		for(devID = "start", lstDiscr = 0; devID.length && lstDiscr >= 0; ) {
-			if((devID=scan(tr,sn,lstDiscr)).length)	{
-				//SYS.messInfo("OneWire","lstDiscr="+lstDiscr+"; devID="+SYS.strDecode(devID,"Bin"," "));
-				if((dO=devLs[devID]).isEVal()) {
-					devLs[devID] = dO = new Object();
-					devFamily = devID.charCodeAt(0)&0x7F; devNm = tr("1W device"); dO.isT = false;
-					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
-					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
-					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
-					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
-					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
-					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
-					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
-
-					// Create the device''s parameter object
-					decId = SYS.strDecode(devID,"Bin","");
-					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
-					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
-					// Create the device''s proper attributes
-					dO.dP = dP = this["prm_"+decId];
-					if(dO.isT) {	//Temperature
-						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
-						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
-						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
-					}
-					else if(devFamily == 0x20)		//DS2450
-						for(iN = 0; iN < 4; iN++) {
-							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
-							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
-							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
-							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
-						}
-					else if(devFamily == 0x26) {	//DS2438
-						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
-						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
-						dP.attrAdd("i", tr("Current, A"), "real|ro");
-						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
-						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
-						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
-						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
-						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
-						dP.attrAdd("OFF", tr("Current Offset"), "integer");
-						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
-						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
-						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
-						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
-					}
-					else if(devFamily == 0x29)		//DS2408
-						for(iD = 0; iD < 8; iD++) {
-							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
-							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
-						}
-					else if(devFamily == 0x3A)		//DS2413
-						for(iD = 0; iD < 2; iD++) {
-							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
-							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
-						}
-				}
-				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
-				dO.tmSc = tmSc;
-				dO.try = tryEVAL;
-			}
-		}
-		//Check for removed devices
-		for(devID in devLs) {
-			if((dO=devLs[devID]).isEVal()) continue;
-			if(dO.tmSc != tmSc)	{
-				devLs[devID] = EVAL;
-				aLs = dO.dP.nodeList("a_");
-				for(iA = 0; iA < aLs.length; iA++)
-					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
-			}
-		}
-	}
-	else {
-		//Process devices for reading current value and set modifable
-		for(devID in devLs) {
-			if((dO=devLs[devID]).isEVal()) continue;
-			devFamily = devID.charCodeAt(0)&0x7F;
-			if(dO.isT) {	//Temperature
-				dP = dO.dP;
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				//Check for a modifications
-				isMdf = false;
-				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
-				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
-					//Set scratchpad
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
-					//Copy scratchpad part to the EEPROM
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
-					isMdf = true;
-				}
-
-				//Read current
-				// Call the transmission
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
-				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
-				// Get scratchpad
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				/*out*/io(tr, SYS.strFromCharCode(0xBE));
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
-					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
-					if(val > 32767) val -= 65536;
-					dP.val.set(val/16, 0, 0, true);
-					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
-						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
-						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
-					}
-					dO.try = 0;
-				}
-				else if((dO.try=dO.try+1) > tryEVAL) {
-					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
-					dO.m = dO.res = EVAL;
-				}
-			}
-			else if(devFamily == 0x20) {	//DS2450
-				dP = dO.dP;
-				//Check for a modifications
-				for(iN = 0; iN < 4; iN++) {
-					if(dO["st1"+iN].isEVal())	continue;
-					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
-					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
-					if(tSt != dO["st1"+iN]) {	//Same write and check the result
-						if(!reset(tr)) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
-						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
-						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
-							dO["st1"+iN] = tSt;
-					}
-					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
-					if(tSt != dO["st2"+iN]) {	//Same write and check the result
-						if(!reset(tr)) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
-						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
-						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
-							dO["st2"+iN] = tSt;
-					}
-				}
-
-				//Read control status data
-				if(dP["res0"].get().isEVal()) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-					for(iN = 0; iN < 4; iN++) {
-						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
-						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
-						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
-						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
-					}
-				} else CRC_OK = true;
-
-				//Read AI value
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
-					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-				}
-				for(iN = 0; iN < 4; iN++)
-					if(CRC_OK) {
-						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
-						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
-						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
-					} else dP["ai"+iN].set(EVAL, 0, 0, true);
-
-				//Start A/D conversion for prepare data for next iteration
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
-				}
-			}
-			else if(devFamily == 0x26) {	//DS2438
-				dP = dO.dP;
-				//Check for a modifications
-				//????
-
-				//Recall memory page 0
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-				if(CRC_OK) {
-					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
-					dP["t"].set(tVl/256, 0, 0, true);
-					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
-					dP["i"].set(tVl, 0, 0, true);
-				}
-				else {
-					dP["t"].set(EVAL, 0, 0, true);
-					dP["i"].set(EVAL, 0, 0, true);
-				}
-				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
-				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
-				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
-				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
-				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
-				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
-
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
-				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
-				if(CRC_OK) {
-					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
-					dP["OFF"].set(tVl, 0, 0, true);
-				} else dP["OFF"].set(EVAL, 0, 0, true);
-
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
-					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
-					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
-				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
-
-				//Start T ant V conversion for prepare the data for next iteration
-				if(CRC_OK) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
-				}
-			}
-			else if(devFamily == 0x29) {	//DS2408
-				dP = dO.dP;
-				//Check for a modifications
-				isMdf = false; tVl = 0; do_ = new Array();
-				for(iD = 0; iD < 8; iD++) {
-					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
-					do_[iD] = dP["do"+iD].get();
-					if(do_[iD] != dO["do"+iD])	isMdf = true;
-					if(do_[iD])	tVl = tVl | (1<<iD);
-				}
-				if(isMdf) {
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
-					// Verify the correct writing, pass by that can be wrong
-					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
-					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
-				}
-
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));//+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
-				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
-				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
-				for(iD = 0; iD < 8; iD++) {
-					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
-					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
-						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
-						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
-					}
-				}
-			}
-			else if(devFamily == 0x3A) {	//DS2413
-				dP = dO.dP;
-				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
-				//Check for a modifications
-				isMdf = false;
-				do0_ = dP.do0.get(), do1_ = dP.do1.get();
-				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
-					tVl = (do1_<<1) | do0_;
-					if(!reset(tr)) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
-					isMdf = true;
-				}
-
-				//Read current state
-				if(!reset(tr)) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
-				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
-				resp = io(tr, SYS.strFromCharCode(0xFF));
-				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
-				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
-					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
-					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
-						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
-						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
-					}
-				}
-				else {
-					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
-					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
-					dO.do0 = dO.do1 = EVAL;
-				}
-			}
-		}
-	}
-}
-
-f_err = t_err;',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('BMP180','I2C: BMP180','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
-//Initial set
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	AC1 = 0;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	resp = Special.FLibSYS.IO("", "", "b");
-	//Calibration data, from register 0xAA and to 0xBF
-	if(!AC1) {
-		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xAA), 0, 22);
-		if(resp.length != 22) t_err = "3:"+tr("Wrong or empty respond to the calibration request.");
-		else {
-			AC1 = resp.read("int16",1);	AC2 = resp.read("int16",1);	AC3 = resp.read("int16",1);
-			AC4 = resp.read("uint16",1); AC5 = resp.read("uint16",1);	AC6 = resp.read("uint16",1);
-			B1 = resp.read("int16",1);	B2 = resp.read("int16",1);
-			MB = resp.read("int16",1);	MC = resp.read("int16",1);	MD = resp.read("int16",1);
-			//SYS.messInfo("BMP180","AC1="+AC1+"; AC2="+AC2+"; AC3="+AC3+"; AC4="+AC4+"; AC5="+AC5+"; AC6="+AC6);
-		}
-	}
-
-	//Read and calculate temperature
-	if(AC1 && !t_err.toInt()) {
-		// Start conversion
-		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x2E), 0, 0);
-		SYS.sleep(4.5e-3);
-		// Read value
-		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 2);
-		if(resp.length != 2) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
-		else {
-			UT = resp.read("int16",1);
-			X1 = (UT-AC6)*AC5/pow(2,15);	X2 = MC*pow(2,11)/(X1+MD);
-			B5 = X1 + X2;
-			t = 0.1*((B5+8)/pow(2,4));
-			//SYS.messInfo("BMP180","UT="+UT+"; X1="+X1+"; X2="+X2+"; B5="+B5+"; t="+t);
-		}
-	}
-	
-	//Read and calculate pressure
-	if(AC1 && !t_err.toInt()) {
-		oss = max(0, min(3,oss));
-		// Start conversion
-		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x34+(oss<<6)), 0, 0);
-		SYS.sleep((1.5+3*pow(2,oss))*1e-3);
-		// Read value
-		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 4);
-		UP = resp.read("int32",1)>>(16-oss);
-		B6 = B5 - 4000;
-		X1 = (B2*(B6*floor(B6/pow(2,12))))/pow(2,11);
-		X2 = AC2*B6/pow(2,11);
-		X3 = X1 + X2;
-		B3 = (((AC1*4+X3)<<oss)+2)/4;
-		X1 = AC3*B6/pow(2,13);
-		X2 = (B1*(B6*B6/pow(2,12)))/pow(2,16);
-		X3 = ((X1+X2)+2)/pow(2,2);
-		B4 = AC4*(X3+32768)/pow(2,15);
-		B7 = (UP-B3)*(50000>>oss);
-		p = (B7 < 0x80000000) ? (B7*2)/B4 : (B7/B4)*2;
-		X1 = (p/pow(2,8))*(p/pow(2,8));
-		X1 = (X1*3038)/pow(2,16);
-		X2 = (-7357*p)/pow(2,16);
-		p = p + (X1+X2+3791)/pow(2,4);
-	}
-}
-
-if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
-f_err = t_err;',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('DHT','GPIO: DHT11,22 (AM23XX)','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
-The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
-Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//Set link to fast external functions
-if(f_start)	f_err = "0", addr_ = "";
-
-t_err = "0";
-
-//Check for the address change and link
-if(addr != addr_)	{
-	addr_ = addr;
-	function mode = addr+".fnc_mode";
-	function get = addr+".fnc_get";
-	function put = addr+".fnc_put";
-}
-
-//Read sensor''s data function declaration
-function read() {
-	vl = 0;						//Meassured value
-	cntHoldMax = 100;		//Maximum wait counter
-
-	//Call the device to a respond
-	mode(pin, 4); put(pin, true); tmSleep(500e-3);	//Set pin to output mode and next to true for 500ms
-	put(pin, false); tmSleep(20e-3);							//Set output to false for 20ms
-	mode(pin, 2);														//Set pin to input mode
-
-	//Read
-	// Wait for pull pin low.
-	for(cntHold = 0; get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-
-	//Meassure the typical pulse length
-	for(cntHold = 0; !get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-	for(cntHold = 0; get(pin); cntHold++)
-		if(cntHold > cntHoldMax) return 0;
-	cntPulse = cntHold;
-
-	//Read meassured value
-	for(iB = 0; iB < 40; iB++) {
-		//stg = iB;
-		for(cntHold = 0; !get(pin); cntHold++)
-			if(cntHold > cntHoldMax) return 0;
-		for(cntHold = 0; get(pin); cntHold++)
-			if(cntHold > cntHoldMax) return 0;
-		vl = vl << 1;
-		if(cntHold > cntPulse/2)	vl = vl | 1;
-	}
-
-	return vl;
-}
-
-//Main processing
-if(!mode)	t_err = "1:"+tr("No link to external functions on ''%1''.").replace("%1",addr);
-else if(!(dev == 0 || dev == 1))	t_err = "2:"+tr("Unknown device %1 [0-DHT11, 1-DHT22].").replace("%1",dev.toString());
-else if(tries < 1 || tries > 5)	t_err = "3:"+tr("Tries number %1 out of range [1...5].").replace("%1",tries.toString());
-else {
-	for(i = 0; i < tries; i++) {
-		if(i) tmSleep(2);	//Retry after two seconds
-		if((vl=read()) && (vl&0xFF) == ((((vl>>8)&0xFF)+((vl>>16)&0xFF)+((vl>>24)&0xFF)+((vl>>32)&0xFF))&0xFF)) {
-			//SYS.messInfo("/DHT","vl="+vl.toString(16));
-			if(dev == 1) {
-				h = 0.1*(((vl>>32)&0xFF)*256+((vl>>24)&0xFF));
-				t = 0.1*(((vl>>16)&0xFF)*256+((vl>>8)&0xFF));
-				break;
-			}
-			h = ((vl>>32)&0xFF) + 20; t = (vl>>16)&0xFF;
-		}
-	}
-	if(i >= tries)	t_err = "10:"+tr("Get data after %1 tries error.").replace("%1",tries.toString());
-}
-
-if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
-f_err = t_err;',1509373346);
-INSERT INTO tmplib_LowDevLib VALUES('DS3231','I2C: DS1307,DS3231','I2C RTC chips DS1307,DS3231 with Temperature sensor and calibration for DS3231. Connects through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	mode_ = -1;
-	tm_ = tm = "";
-	agOff_ = 0;
-	p32k_ = false;
-	pSQW_ = pSQW = false;
-	pSQWf_ = pSQWf = 0;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	//Check for modification
-	if(mode != mode_) {
-		if(mode == 0) {
-			this.attrAdd("pSQWf", "", "integer|sel", "0;1;2;3\n1Hz;1.024kHz;4.096kHz;8.192kHz");
-			this.attrAdd("agOff", "Aging offset, [-128...127]", "integer");
-			this.attrAdd("t", "T, °С", "real|ro");
-			this.attrAdd("p32k", "Enable 32768Hz", "boolean");
-		}
-		else {
-			this.attrAdd("pSQWf", "", "integer|sel", "0;1;2;3\n1Hz;4.096kHz;8.192kHz;32.768kHz");
-			this.attrDel("agOff");
-			this.attrDel("t");
-			this.attrDel("p32k");
-		}
-		mode_ = mode;
-	}
-	if(tm != tm_) {
-		off = 0; sdt = tm.parse(0,"T",off); stm = tm.parse(0,"T",off);
-		off = 0; year = sdt.parse(0,"-",off).toInt(16); month = sdt.parse(0,"-",off).toInt(16); day = sdt.parse(0,"-",off).toInt(16);
-		off = 0; hour = stm.parse(0,":",off).toInt(16); min = stm.parse(0,":",off).toInt(16); sec = stm.parse(0,":",off).toInt(16);
-		tr.messIO(SYS.strFromCharCode(addr,0,sec,min,hour,0,day,month+((year&0xF00)?0x80:0),year&0xFF), 0, 0);
-		tm_ = tm;
-	}
-	if(mode == 0 && !(tVl=this.agOff.get()).isEVal() && tVl != agOff_) {
-		tr.messIO(SYS.strFromCharCode(addr,16,tVl), 0, 0);
-		agOff_ = tVl;
-	}
-	if(mode == 0 && !(tVl=this.p32k.get()).isEVal() && tVl != p32k_) {
-		resp = tr.messIO(SYS.strFromCharCode(addr,15), 0, 1);
-		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
-		else {
-			cntrB = resp.charCodeAt(0);
-			cntrB = tVl ?	cntrB|0x08 : cntrB&(~0x08);
-			tr.messIO(SYS.strFromCharCode(addr,15,cntrB), 0, 0);
-		}
-		p32k_ = tVl;
-	}
-	if(pSQW != pSQW_) {
-		if(mode == 0) {
-			resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
-			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
-			else {
-				cntrB = resp.charCodeAt(0);
-				cntrB = pSQW ? cntrB&(~0x04) : cntrB|0x04;
-				tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
-			}
-		}
-		else {
-			resp = tr.messIO(SYS.strFromCharCode(addr,7), 0, 1);
-			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
-			else {
-				cntrB = resp.charCodeAt(0);
-				cntrB = pSQW ? cntrB|0x10 : cntrB&(~0x10);
-				tr.messIO(SYS.strFromCharCode(addr,7,cntrB), 0, 0);
-			}
-		}
-		pSQW_ = pSQW;
-	}
-	if(pSQWf != pSQWf_) {
-		pSQWf = max(0, min(3,pSQWf));
-		if(mode == 0) {
-			resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
-			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
-			else {
-				cntrB = (resp.charCodeAt(0)&(~0x18)) + (pSQWf<<3);
-				tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
-			}
-		}
-		else {
-			resp = tr.messIO(SYS.strFromCharCode(addr,7), 0, 1);
-			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
-			else {
-				cntrB = (resp.charCodeAt(0)&(~0x3)) + pSQWf;
-				tr.messIO(SYS.strFromCharCode(addr,7,cntrB), 0, 0);
-			}
-		}
-		pSQWf_ = pSQWf;
-	}
-
-	//Get current
-	rSz = (mode == 0) ? 19 : 8;
-	resp = tr.messIO(SYS.strFromCharCode(addr,0), 0, rSz);
-	if(resp.length != rSz) t_err = "3:"+tr("Wrong or empty response.");
-	else {
-		// Get current time
-		tm_ = tm = (20+(resp.charCodeAt(5)>>7)).toString(10,2)+resp.charCodeAt(6).toString(16,2)+"-" +
-				(resp.charCodeAt(5)&0x7F).toString(16,2)+"-" + 
-				resp.charCodeAt(4).toString(16,2)+"T" +
-				(resp.charCodeAt(2)&0x3F).toString(16,2)+":" +
-				resp.charCodeAt(1).toString(16,2)+":" + 
-				resp.charCodeAt(0).toString(16,2);
-
-		if(mode == 0) {
-			// Aging offset
-			if((tVl=resp.charCodeAt(16)) >= 128)	tVl = tVl-256;
-			this.agOff.set(agOff_=tVl, 0, 0, true);
-
-			// Miscellaneous
-			this.p32k.set((p32k_=resp.charCodeAt(15)&0x08), 0, 0, true);
-
-			pSQW = pSQW_ = !(resp.charCodeAt(14)&0x04);
-			pSQWf = pSQWf_ = (resp.charCodeAt(14)>>3)&0x3;
-
-			// Get temperature
-			tVl = (resp.charCodeAt(17)<<2)+(resp.charCodeAt(18)>>6);
-			if(tVl >= 128) tVl = tVl-256;
-			this.t.set(tVl/4, 0, 0, true);
-		}
-		else {
-			pSQW = pSQW_ = resp.charCodeAt(7)&0x10;
-			pSQWf = pSQWf_ = resp.charCodeAt(7)&0x3;
-		}
-	}
-}
-
-if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
-f_err = t_err;',1541249292);
-INSERT INTO tmplib_LowDevLib VALUES('PCF8574','I2C: PCF8574','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
-	do0 = do1 = do2 = do3 = do4 = do5 = do6 = do7 = true;
-	do0_ = do1_ = do2_ = do3_ = do4_ = do5_ = do6_ = do7_ = true;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	if(do0 != do0_ || do1 != do1_ || do2 != do2_ || do3 != do3_ || do4 != do4_ || do5 != do5_ || do6 != do6_ || do7 != do7_) {
-		tr.messIO(SYS.strFromCharCode(addr,(do0?0x01:0)|(do1?0x02:0)|(do2?0x04:0)|(do3?0x08:0)|
-																(do4?0x10:0)|(do5?0x20:0)|(do6?0x40:0)|(do7?0x80:0)), 0, 0);
-		do0_ = do0; do1_ = do1; do2_ = do2; do3_ = do3; do4_ = do4; do5_ = do5; do6_ = do6; do7_ = do7;
-	}
-	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 1);
-	if(rez.length) {
-		vl = rez.charCodeAt(0);
-		di0 = (vl&0x01); di1 = (vl&0x02); di2 = (vl&0x04); di3 = (vl&0x08);
-		di4 = (vl&0x10); di5 = (vl&0x20); di6 = (vl&0x40); di7 = (vl&0x80);
-	}
-	else t_err = "3:"+tr("No read result.");
-}
-
-if(t_err.toInt() && !f_err.toInt())
-	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
-
-f_err = t_err;',1509990639);
-INSERT INTO tmplib_LowDevLib VALUES('PCF8591','I2C: PCF8591','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	for(i = 0; i < 4 && !t_err.toInt(); i++) {
-		//Select next channel and the output
-		tr.messIO(SYS.strFromCharCode(addr,0x40|((i+1)&0x3),255*max(0,min(1,ao/vRef))), 0, 0);
-		SYS.sleep(1e-3);
-		rez = tr.messIO("", 0, 1);
-		if(rez.length)	arguments["ai"+i] = vRef*(rez.charCodeAt(0)/255);
-		else t_err = "3:"+tr("No read result.");
-	}
-}
-
-if(t_err.toInt() && !f_err.toInt())
-	for(i = 0; i < 4; i++)
-		arguments["ai"+i] = EVAL;
-
-f_err = t_err;',1509908745);
-INSERT INTO tmplib_LowDevLib VALUES('BME280','I2C: BME280','I2C Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
-Author: Arcadiy Kisel, Roman Savochenko <roman@oscada.org>
-Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
-//Initial set
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	dig_T1 = 0;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	resp = Special.FLibSYS.IO("", "", "l");
-	//Calibration data, from register 0x88 and count 24 
-	if(!dig_T1) {
-		resp.string = tr.messIO(SYS.strFromCharCode(addr,0x88), 0, 24); //start address 88, count = 24
-		if(resp.length != 24)	t_err = "3:"+tr("Wrong or empty respond to the calibration T1-3 or P1-9 request.");
-		else {
-			dig_T1 = resp.read("uint16", 1);	dig_T2 = resp.read("int16", 1);	dig_T3 = resp.read("int16", 1);
-			dig_P1 = resp.read("uint16", 1);	dig_P2 = resp.read("int16", 1);	dig_P3 = resp.read("int16", 1);
-			dig_P4 = resp.read("int16", 1);	dig_P5 = resp.read("int16", 1);	dig_P6 = resp.read("int16", 1);
-			dig_P7 = resp.read("int16", 1);	dig_P8 = resp.read("int16", 1);	dig_P9 = resp.read("int16", 1);
-		}
-		resp.pos = 0;
-		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xA1), 0, 1); //start address A1, count = 1
-		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty respond to the calibration H1 request.");
-		else dig_H1 = resp.read("uint8",1);
-		resp.pos = 0;
-		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xE1), 0, 7); //start address E1, count = 8
-		if(resp.length != 7) t_err = "3:"+tr("Wrong or empty respond to the calibration H2-H6 request.");
-		else {
-			dig_H2 = resp.read("int16", 1);
-			dig_H3 = resp.read("uint8", 1);
-
-			E4 = resp.read("int8", 1);
-			E5 = resp.read("int8", 1);
-			E6 = resp.read("int8", 1);
-			// dig_H4, dig_H5 is signed. may be bug here, when <0
-			dig_H4 = (E4 << 4) | (E5 & 0x0F);
-			dig_H5 = (E6 << 4) | ((E5 >> 4) & 0x0F);
-			dig_H6 = resp.read("int8", 1);
-		}
-	}
-
-	oss = max(0, min(7,oss));
-
-	//Pressure and Temperature
-	tr.messIO(SYS.strFromCharCode(addr,0xF4,(oss<<5)|(oss<<2)|0x3), 0, 0);
-	
-	//Humidity
-	tr.messIO(SYS.strFromCharCode(addr,0xF2,oss), 0, 0);	
-
-	SYS.sleep((1.25 + (2.3*oss) + 2*(2.3*oss + 0.575))*1e-3); 
-
-	//Read and calculate temperature
-	if(dig_T1 && !t_err.toInt()) {
-		// Read value
-		resp = Special.FLibSYS.IO("", "", "b");
-		resp.pos = 0;
-		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xFA), 0, 4);
-		if(resp.length != 4) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
-		else {
-			adc_T = resp.read("uint32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
-			var1 = (adc_T/16384 - dig_T1/1024)*dig_T2;
-			var2 = ((adc_T/131072 - dig_T1/8192)*(adc_T/131072 - dig_T1/8192))*dig_T3;
-			t_fine = var1 + var2; //for pressure
-			t = (var1 + var2)/5120;
-		}
-	}
-
-	//Read and calculate pressure
-	if(dig_T1 && !t_err.toInt()) {
-		// Read value
-		resp.pos = 0; 
-		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF7), 0, 4);
-		if(resp.length != 4) t_err = "3:"+tr("Wrong or empty respond to the pressure data.");
-		else {
-			adc_P = resp.read("uint32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
-			
-			var1 = t_fine/2 - 64000;
-			var2 = var1*var1*dig_P6/32768;
-			var2 = var2 + var1*dig_P5*2;
-			var2 = var2/4 + dig_P4*65536;
-			var1 = (dig_P3*var1*var1/524288 + dig_P2*var1)/524288;
-			var1 = (1 + var1/32768)*dig_P1;
-			if(var1 == 0)	p = EVAL_REAL; // avoid exception caused by division by zero
-			else {
-				p = 1048576 - adc_P;
-				p = (p - (var2/4096))*6250/var1;
-				var1 = dig_P9*p*p/2147483648;
-				var2 = p*dig_P8/32768;
-				p = p + (var1 + var2 + dig_P7)/16;
-			}
-		}
-	}
-	
-	//Read and calculate humidity
-	if(dig_T1 && !t_err.toInt()) {
-		resp.pos = 0;
-		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xFD), 0, 2);
-		if(resp.length != 2) t_err = "3:"+tr("Wrong or empty respond to the humidity data.");
-		else {
-			adc_H = resp.read("uint16", 1);
-			
-			h = t_fine - 76800;
-			h = (adc_H - (dig_H4*64 + dig_H5/16384*h))*(dig_H2/65536*(1 + dig_H6/67108864*h*(1 + dig_H3/67108864*h)));
-			h = max(0, min(100, h*(1 - dig_H1*h/524288)));
-		}
-	}	
-}
-
-if(t_err.toInt() && !f_err.toInt()) t = p = h = EVAL;
-
-f_err = t_err;',1509989860);
-INSERT INTO tmplib_LowDevLib VALUES('SHT3x','I2C: SHT3x','Digital Temperature and Humidity Sensor for the models: SHT30
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	H = T = EVAL;
-	return;
-}
-if(f_stop)	return;
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	if(H.isEVal()) {
-		if(f_frq < 0.5)		spdCfg = 0x2032;	//0.5mps
-		else if(f_frq < 1)	spdCfg = 0x2130;	//1.0mps
-		else if(f_frq < 2)	spdCfg = 0x2236;	//2.0mps
-		else if(f_frq < 4)	spdCfg = 0x2334;	//4.0mps
-		else spdCfg = 0x2737;						//10.0mps
-		//SYS.messInfo("SMH", "spdCfg="+spdCfg.toString(16)+"; frq="+f_frq+"; tm="+(1/max(0.5,f_frq)));
-		tr.messIO(SYS.strFromCharCode(addr,(spdCfg>>8)&0xFF,spdCfg&0xFF), 0, 0);	//10 mps
-		SYS.sleep(1/max(0.5,f_frq));
-	}
-
-	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 6);
-	if(rez.length == 6) {
-		T = 175*(((rez.charCodeAt(0)<<8)+rez.charCodeAt(1))/65535) - 45;
-		H = 100*(((rez.charCodeAt(3)<<8)+rez.charCodeAt(4))/65535);
-	}
-	else { t_err = "3:"+tr("No data."); H = T = EVAL; }
-}
-
-f_err = t_err;',1542469153);
-INSERT INTO tmplib_LowDevLib VALUES('ADS111x','I2C: ADS101x, ADS111x','I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.1',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	for(i = 0; i < 4 && !t_err.toInt(); i++) {
-		//Selecting the channel and setting for needed options 
-		sw = 0xC000 + (i<<12) + (range<<9) + 0x100 + 0x83;
-		// Writing for the configuration
-		tr.messIO(SYS.strFromCharCode(addr,1,sw>>8,sw&0xFF), 0, 0);
-		// Waiting the conversion
-		for(iTr = 0; iTr < 10 && (rez=tr.messIO(SYS.strFromCharCode(addr,1),0,2)).length && !(rez.charCodeAt(0)&0x80); iTr++)
-			SYS.sleep(1e-3);
-		// Reading for the value
-		rez = tr.messIO(SYS.strFromCharCode(addr,0), 0, 2);
-		if(rez.length) {
-			tVl = (rez.charCodeAt(0)<<8) + rez.charCodeAt(1);
-			if(tVl&0x8000) tVl -= 65536;
-			range_ = (range == 0) ? 6.144 : 4.096/pow(2,range-1);
-			arguments["ai"+i] = range_*tVl/32768;
-		}
-		else t_err = "3:"+tr("No read result.");
-	}
-}
-
-if(t_err.toInt() && !f_err.toInt())
-	for(i = 0; i < 4; i++)
-		arguments["ai"+i] = EVAL;
-
-f_err = t_err;',1549528595);
-INSERT INTO tmplib_LowDevLib VALUES('MCP4725','I2C: MCP4725','I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
-Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0',10,0,'JavaLikeCalc.JavaScript
-//Set transport
-if(f_start) {
-	f_err = "0";
-	transport_ = transport;
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	ao = 0;
-	ao_ = EVAL;
-}
-
-t_err = "0";
-
-//Check for the transport change and connect
-if(!tr || transport != transport_)	{
-	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-	transport_ = transport;
-}
-if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
-else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
-else {
-	//Writing the changes
-	if(!ao_.isEVal() && ao != ao_) {
-		code = max(0,min(1,ao/vRef)) * 4096;
-		tr.messIO(SYS.strFromCharCode(addr,code/256,code%256), 0, 0);
-	}
-
-	//Reading the current value	
-	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 3);
-	if(rez.length)	ao = ao_ = vRef*(rez.charCodeAt(1)*255+rez.charCodeAt(2)>>4)/4096;
-	else t_err = "3:"+tr("No read result.");
-}
-
-if(t_err.toInt() && !f_err.toInt())	ao_ = EVAL;
-
-f_err = t_err;',1549488136);
-INSERT INTO tmplib_LowDevLib VALUES('MAX6675','GPIO: MAX6675','Cold-Junction-Compensated K-Thermocouple-to-Digital Converter (0°C to +1024°C). The module designed for the sensors connect through softSPI by GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
-Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
-Author: Arcadiy Kisel <arcsin@online.ua>
-Version: 0.1.0',10,0,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-//Set link to fast external functions
-if(f_start)	f_err = "0", addr_ = "";
-
-t_err = "0";
-
-//Check for the address change and link
-if(addr != addr_)	{
-	addr_ = addr;
-	function mode = addr+".fnc_mode";
-	function get = addr+".fnc_get";
-	function put = addr+".fnc_put";
-}
-
-if(f_start){
-	mode(pin_cs, 4); put(pin_cs, true); 	//Set pin to output mode and next to true for 500us
-	mode(pin_sclk, 4); put(pin_sclk, false); //Set pin to output mode and next to true for 500ms
-	mode(pin_miso, 1); 
-	tmSleep(1e-3);
-}
-
-//Read sensor''s data function declaration
-function spiread() {
-	d = 0;
-	for(i = 7; i >= 0; i--) {
-		put(pin_sclk, false); tmSleep(1e-3);							//Set output to false for 20ms
-		if(get(pin_miso))	d = d | (1 << i);
-  		put(pin_sclk, true); tmSleep(1e-3);
-	}
-	return d;
-}
-
-//Read
-put(pin_cs, false); tmSleep(1e-3);		
-v = spiread();
-v = v << 8;
-v = v | spiread();
-
-put(pin_cs, true); 		
-if(v&0x4)	t_err = "1:"+tr("uh oh, no thermocouple attached!"); 
-else	t = (v>>3)*0.25;
-
-if(t_err.toInt() && !f_err.toInt()) t = EVAL;
-f_err = t_err;',1550995458);
-INSERT INTO tmplib_LowDevLib VALUES('RDTech','BT: RDTech UM24C, UM25C and UM34C','RDTech UM24C/UM25C/UM34C BlueTooth interface template. ￼!!!! Tested only on UM24C now.
-
-The RDTech (RuiDeng) UM24C, UM25C and UM34C are low-cost USB pass-through power measurement devices, and support a decent number of collection features, as well as full control via Bluetooth. This template implements most exposed commands and data collection available by the device''s Bluetooth interface.
-
-This template in first time uses the new output transports connection function SYS.Transport.outAt() and the Bluetooth interface for the data acquisition.
-
-Author: Roman Savochenko <roman@oscada.org>
-Total complexity: 0.2 HD
-Thanks: for Ryan Finnie at the protocol initial processing in RDUMTOOL (https://github.com/smandon/rdumtool)
-Version: 1.0.1
-License: GPLv2',10,0,'JavaLikeCalc.JavaScript
-if(f_start) { recThr_ = recThr; scrBright_ = scrBright; scrTm_ = scrTm; }
-
-tErr = "";
-
-if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
-	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
-else {
-	if(f_stop) { tr.start(false); return; }
-
-	for(resp = tr.messIO(SYS.strFromCharCode(0xF0)); resp.length < 130 && (respTail=tr.messIO("")).length; )
-		resp += respTail;
-
-	if(!resp.length)	tErr = "2:"+tr("No response.");
-	else if(resp.length < 130 || !((tVl=resp.charCodeAt(0,"UTF-16BE")) == 0x0963 || tVl == 0x0d4c) || 
-			!((tVl=resp.charCodeAt(resp.length-2,"UTF-16BE")) == 0xFFF1 || tVl == 0x8068))
-		tErr = "2:"+tr("Not whole or not mine response.");
-	else {
-		// Setting
-		if(scrNext) {
-			if(scrNext == true) { tr.messIO(SYS.strFromCharCode(0xF1), 0, 0); SYS.sleep(0.1); }
-			scrNext = false;
-		}
-		if(scrRot) {
-			if(scrRot == true) { tr.messIO(SYS.strFromCharCode(0xF2), 0, 0); SYS.sleep(0.1); }
-			scrRot = false;
-		}
-		if(grpNext) {
-			if(grpNext == true)	{ tr.messIO(SYS.strFromCharCode(0xF3), 0, 0); SYS.sleep(0.1); }
-			grpNext = false;
-		}
-		if(grpClear) {
-			if(grpClear == true) { tr.messIO(SYS.strFromCharCode(0xF4), 0, 0); SYS.sleep(0.1); }
-			grpClear = false;
-		}
-		if(recThr != recThr_) {
-			if(!recThr.isEVal()) { tr.messIO(SYS.strFromCharCode(0xB0+max(0,min(0.3,recThr))*100), 0, 0); SYS.sleep(0.1); }
-			recThr_ = recThr;
-		}
-		if(scrBright != scrBright_) {
-			if(!scrBright.isEVal()) { tr.messIO(SYS.strFromCharCode(0xD0+max(0,min(5,scrBright))), 0, 0); SYS.sleep(0.1); }
-			scrBright_ = scrBright;
-		}
-		if(scrTm != scrTm_) {
-			if(!scrTm.isEVal()) { tr.messIO(SYS.strFromCharCode(0xE0+max(0,min(9,scrTm))), 0, 0); SYS.sleep(0.1); }
-			scrTm_ = scrTm;
-		}
-
-		// Reading all data
-		io = Special.FLibSYS.IO(resp, "", "b");
-		io.pos = 2;
-		V = io.read("uint16", 1)/100;
-		A = io.read("uint16", 1)/1000;
-		W = io.read("uint32", 1)/1000;
-		T = io.read("uint16", 1);
-		io.read("uint16", 1);	//T, °F
-		dG = io.read("uint16", 1);
-		for(grps = "", iG = 0; iG < 10; iG++)
-			grps += (grps.length?"\n":"") + ((iG==dG)?"> ":"  ") + iG.toString() + ": " +
-						(io.read("uint32",1)/1000) + " Ah, " + (io.read("uint32",1)/1000) + " Wh;";
-		io.read("uint16", 1);	//data_line_positive_volts/100
-		io.read("uint16", 1);	//data_line_negative_volts/100
-		chMode_ = io.read("uint16", 1);
-		if(chMode_ == 1)	chMode = "Quick Charge 2.0";
-		else if(chMode_ == 2)	chMode = "Quick Charge 3.0";
-		else if(chMode_ == 3)	chMode = "Apple 2.4A";
-		else if(chMode_ == 4)	chMode = "Apple 2.1A";
-		else if(chMode_ == 5)	chMode = "Apple 1.0A";
-		else if(chMode_ == 6)	chMode = "Apple 0.5A";
-		else if(chMode_ == 7)	chMode = "DCP 1.5A";
-		else if(chMode_ == 8)	chMode = "Samsung";
-		else chMode = "Unknown / Normal";
-		chMode += " ("+chMode_+")";
-		recAh = io.read("uint32", 1)/1000;
-		recWh = io.read("uint32", 1)/1000;
-		recThr = recThr_ = io.read("uint16", 1)/100;
-		recTm = recTm_ = io.read("uint32", 1);
-		rec = io.read("uint16", 1);
-		scrTm = scrTm_ = io.read("uint16", 1);
-		scrBright = scrBright_ = io.read("uint16", 1);
-		R = io.read("uint32", 1)/10;
-		scr = io.read("uint16", 1);
-	}
-}
-
-if(tErr.length) {
-	f_err = tErr;
-	V = A = W = T = dG = chMode = recAh = recWh = recThr = recTm = rec = scrTm = scrBright = R = scr = EVAL;
-	grps = EVAL;
-}
-else f_err = "0";',1660673386);
 CREATE TABLE IF NOT EXISTS 'tmplib_tests' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_tests VALUES('ai_simple','Simple AI','Простий AI','Простой AI','Simple analog parameter.','Простий аналоговий параметр.','Простой аналоговый параметр.',10,0,'JavaLikeCalc.JavaScript
 val=val_cod;
@@ -14078,6 +12323,7 @@ INSERT INTO Trs VALUES('Address ''%1'' out of range [0...247].','','','');
 INSERT INTO Trs VALUES('Inconsistent respond''s length.','','','');
 INSERT INTO Trs VALUES('Too short','','','');
 INSERT INTO Trs VALUES('No response','','','');
+INSERT INTO Trs VALUES('Not whole or not mine response.','Неповна або не моя відповідь.','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -14939,9 +13185,14 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','addr','Device address, [0...247]',
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type, [RTU|ASCII|TCP]',0,64,'RTU',2,'Тип ModBus, [RTU|ASCII|TCP]','','Тип ModBus, [RTU|ASCII|TCP]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'Максимальный размер блока ModBus, [10...200]','','Максимальний розмір блоку ModBus, [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
-INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set
+Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
 
-',5,'Набор элементов "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','Набір елементів "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}"','','');
+',5,'Набор элементов
+Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}".','','Набір елементів
+Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}".','#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+
+','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','','');
@@ -15044,26 +13295,29 @@ INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_sclk','SCLK pin number of 
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_miso','MISO pin number of the GPIO',1,64,'9',3,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','t','T, °С',2,17,'',4,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','transport','Transport',0,64,'Serial.RD:/dev/rfcomm0:9600',0,'Транспорт','','Serial.RD:/dev/rfcomm0:9600','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','V','Volts',2,16,'',1,'Вольти','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','A','Amperes',2,16,'',2,'Ампери','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','this','Object',4,0,'',20,'Об''єкт','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','W','Watts',2,16,'',3,'Вати','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','T','Temperature, °С',1,16,'',4,'Температура, °С','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grps','Groups',0,20,'',11,'Групи','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','chMode','Charging Mode',0,16,'',14,'Режим Зарядження','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recAh','Record, Ah',2,16,'',7,'Запис, АГ','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recWh','Record, Wh',2,16,'',8,'Запис, ВтГ','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recThr','Record threshold, A [0...0.3]',2,32,'',9,'Запис поріг, А [0...0.3]','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recTm','Record time, seconds',2,16,'',10,'Запис час, секунди','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','rec','Recording',3,16,'',6,'Запис','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','R','Resistance, Om',2,16,'',5,'Опір, Ом','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scr','Screen, [0...6]',1,16,'',15,'Екран, [0...6]','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrTm','Screen timeout, minutes [0...9]',1,32,'',18,'Час екрану, хвилин [0...9]','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrBright','Screen brightness, [0...5]',1,32,'',19,'Яскравість екрану, [0...5]','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrNext','Screen next',3,32,'',16,'Екран наступний','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrRot','Screen rotate',3,32,'',17,'Екран повернути','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpNext','Group next',3,32,'',12,'Група наступна','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,'',13,'Група очищення','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','V','Volts',2,16,'',2,'Вольти','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','A','Amperes',2,16,'',3,'Ампери','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','this','Object',4,0,'',21,'Об''єкт','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','W','Watts',2,16,'',4,'Вати','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','T','Temperature, °С',1,16,'',5,'Температура, °С','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grps','Groups',0,20,'',12,'Групи','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','chMode','Charging Mode',0,16,'',15,'Режим Зарядження','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recAh','Record, Ah',2,16,'',8,'Запис, АГ','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recWh','Record, Wh',2,16,'',9,'Запис, ВтГ','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recThr','Record threshold, A [0...0.3]',2,32,'',10,'Запис поріг, А [0...0.3]','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','recTm','Record time, seconds',2,16,'',11,'Запис час, секунди','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','rec','Recording',3,16,'',7,'Запис','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','R','Resistance, Om',2,16,'',6,'Опір, Ом','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scr','Screen, [0...6]',1,16,'',16,'Екран, [0...6]','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrTm','Screen timeout, minutes [0...9]',1,32,'',19,'Час екрану, хвилин [0...9]','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrBright','Screen brightness, [0...5]',1,32,'',20,'Яскравість екрану, [0...5]','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrNext','Screen next',3,32,'',17,'Екран наступний','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','scrRot','Screen rotate',3,32,'',18,'Екран повернути','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpNext','Group next',3,32,'',13,'Група наступна','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','grpClear','Group clear',3,32,'',14,'Група очищення','','','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','dev','Device to bind
+Like to "98:D3:31:F8:52:29" for binding by "rfcomm bind {N} 98:D3:31:F8:52:29".',0,64,'',1,'Пристрій для зв''язування
+На кшталт "98:D3:31:F8:52:29" для зв''язування за допомогою "rfcomm bind {N} 98:D3:31:F8:52:29".','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_tests_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val_cod','Value''s source code',1,128,'',0,'Вихідний код значення','','Исходный код значения','','');
 INSERT INTO tmplib_tests_io VALUES('ai_simple','val','Value',2,16,'0',1,'Значення','','Значение','','Вредност');
@@ -15697,4 +13951,1782 @@ INSERT INTO flb_regEl_io VALUES('pidImp','err1','Error step back','Помилк�
 INSERT INTO flb_regEl_io VALUES('pidImp','err2','Error two step back','Помилка два кроки назад',2,1,'0','',1,45,'Ошибка два шага назад','','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','QO','Opened state of the control mechanism','Відкритий стан виконавчого механізму',3,0,'0','',0,31,'Открытое состояние исполнительного механизма','','');
 INSERT INTO flb_regEl_io VALUES('pidUnifD','QZ','Closed state of the control mechanism','Закритий стан виконавчого механізму',3,0,'0','',0,32,'Закрытое состояние исполнительного механизма','','');
+CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '0' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
+INSERT INTO tmplib_LowDevLib VALUES('1602A','GPIO|I2C: 1602A(HD44780)','','LCD Module 1602A, STN, BLUB, 16 Character x 2 Line,  5 x 8 Dots, by the direct (Raspberry PI BCM2835 GPIO) or I2C (PCF8574) wiring.
+Conditions: Default planing policy but realtime one preferred.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.1.1','',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//Set link to fast external functions
+if(f_start)	f_err = "0", transport_ = ln1_ = ln2_ = "";
+
+t_err = "0";
+
+//Check for the transport change and the link update
+if(transport != transport_)	{
+	transport_ = transport;
+	if(!(tr=SYS.Transport.Serial.nodeAt("out_"+transport)))
+		function put = transport+".fnc_put";
+}
+
+//Write a byte function declaration
+function byte(tr, vl, md, dl) {
+	if(md == EVAL_BOOL) md = false;
+	if(dl == EVAL_BOOL) dl = 50e-6;
+	if(tr) {
+		//RS(md) | RW(false) | E(false) | BackLight(true) | D4 | D5 | D6 | D7
+		com = (md?0x01:0) | 0x8 | (vl&0xF0);
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		//RS(md) | RW(false) | E(false) | BackLight(true) | D0 | D1 | D2 | D3
+		com = (md?0x01:0) | 0x8 | ((vl<<4)&0xF0);
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+		tr.messIO(SYS.strFromCharCode(addr,com|0x04), 0, 0);	tmSleep(dl);	//E toggle
+		tr.messIO(SYS.strFromCharCode(addr,com), 0, 0);			tmSleep(dl);
+	}
+	else if(put) {
+		put(RS, md);
+		put(D4, vl&0x10); put(D5, vl&0x20); put(D6, vl&0x40); put(D7, vl&0x80);
+		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+		put(D4, vl&0x01); put(D5, vl&0x02); put(D6, vl&0x04); put(D7, vl&0x08);
+		tmSleep(dl); put(E, true); tmSleep(dl); put(E, false); tmSleep(dl);
+	}
+}
+
+//Main processing
+if(!tr && !put)
+	t_err = "1:"+tr("Error for ''%1'' as an output transport of I2C or a link to external functions of GPIO.").replace("%1",transport);
+else if(ln1 != ln1_ || ln2 != ln2_) {
+	ln1_ = ln1; ln2_ = ln2;	
+
+	//Init
+	byte(tr, 0x33); byte(tr, 0x32); byte(tr, 0x28); byte(tr, 0x0C); byte(tr, 0x06); byte(tr, 0x01);
+	//Line 1
+	if(ln1.length) {
+		tmSleep(2e-3);
+		byte(tr, 0x80);
+		for(iC = 0; iC < min(16,ln1.length); iC++)
+			byte(tr, ln1.charCodeAt(iC), true);
+	}
+	//Line 2
+	if(ln2.length) {
+		tmSleep(2e-3);
+		byte(tr, 0xC0);
+		for(iC = 0; iC < min(16,ln2.length); iC++)
+			byte(tr, ln2.charCodeAt(iC), true);
+	}
+}
+
+f_err = t_err;','',1509990639);
+INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097','One Wire by DS9097','','One Wire sensors bus implementing by 1Wire-adapter DS9097. Supported direct and parasite powering for the temperature sensors.
+Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.2.1','',30,0,'JavaLikeCalc.JavaScript
+//Functions
+function reset(tr) {
+	tr.addr(tr.addr().parse(0,":")+":9600:8N1"); tr.start(true);
+	rez = tr.messIO(SYS.strFromCharCode(0xF0));
+	tr.addr(tr.addr().parse(0,":")+":115200:8N1"); tr.timings("100:2-0"); tr.start(true);
+	tr.messIO("");
+	return rez.length && rez.charCodeAt(0) != 0xF0;
+}
+
+function io(tr, mess, bits) {
+	if(bits == EVAL) bits = mess.length * 8;
+	req = "";
+	for(iB = 0; iB < ceil(bits/8); iB++) {
+		vB = mess.charCodeAt(iB);
+		bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
+		for(iBi = 0; iBi < bB; iBi++) req += SYS.strFromCharCode((vB&(1<<iBi)) ? 0xFF : 0x00);
+	}
+	//SYS.messInfo("OneWire","bits="+bits+"; req="+SYS.strDecode(req,"Bin"," "));
+	for(resp = tr.messIO(req); resp.length < req.length && (tresp=tr.messIO("")).length; resp += tresp) ;
+	//SYS.messInfo("OneWire","bits="+bits+"; resp="+SYS.strDecode(resp,"Bin"," "));
+	rez = "";
+	for(iR = 0; iR < resp.length; ) {
+		vB = 0;
+		for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
+			if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
+		rez += SYS.strFromCharCode(vB);
+	}		
+	return rez;
+}
+
+function scan(tr, sn, lstDiscr) {
+	if(!reset(tr)) return "";
+	io(tr, SYS.strFromCharCode(0xF0));
+	for(nByte = 0, nBit = 1, tBit = 0, sDir = false, mskByte = 1, lstZero = 0; nByte < 8; ) {
+		tBit = io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0) << 1;
+		tBit = tBit | io(tr, SYS.strFromCharCode(0xFF), 1).charCodeAt(0);
+		//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; tBit="+tBit);
+		if(tBit == 3) break;
+		if(tBit > 0) sDir = !(tBit&0x01);
+		else {
+			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; lstDiscr="+lstDiscr);
+			if(nBit < lstDiscr) sDir = sn[nByte]&mskByte;
+			else sDir = (nBit == lstDiscr);
+			if(!sDir) lstZero = nBit;
+			//if(lstZero < 9) lstDiscr = lstZero;
+			//SYS.messInfo("OneWire","nByte="+nByte+"; nBit="+nBit+"; sDir="+sDir+"; mskByte="+mskByte);
+		}
+		if(sDir) sn[nByte] = sn[nByte] | mskByte;
+		else sn[nByte] = sn[nByte] & (~mskByte);
+		tr.messIO(SYS.strFromCharCode(sDir?0xFF:0x00));
+		nBit++;
+     mskByte = (mskByte<<1)&0xFF;
+		if(!mskByte) { nByte++; mskByte = 1; }
+	}
+
+	rez = "";
+	if(nByte == 8) {
+		for(iB = 0; iB < nByte; iB++) rez += SYS.strFromCharCode(sn[iB]);
+		if(!Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = lstZero;
+		else { rez = ""; lstDiscr = 0; }
+	}
+
+	return rez;
+}
+
+//Set transport and init
+if(f_start) {
+	tmResc_ = tmResc;
+	devLs = new Object();
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+}
+if(f_stop) {
+	for(var devID in devLs) {
+		if((dO=devLs[devID]).isEVal()) continue;
+		aLs = dO.dP.nodeList("a_");
+		for(iA = 0; iA < aLs.length; iA++)
+			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+	}
+	devLs = tr = false;
+	return;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	//Generic information update.
+	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
+		tmResc_ = tmResc;
+		tmSc = SYS.time();
+		// Check for power
+		if(!reset(tr) ||
+		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
+			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
+			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
+		else power = resp.charCodeAt(0);
+		// Scan for allowed devices on the bus.
+		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+		for(devID = "start", lstDiscr = -1; devID.length && lstDiscr; ) {
+			if(lstDiscr < 0) lstDiscr = 0;
+			if((devID=scan(tr,sn,lstDiscr)).length)	{
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				if((dO=devLs[devID]).isEVal()) {
+					devLs[devID] = dO = new Object();
+					devFamily = devID.charCodeAt(0)&0x7F; devNm = tr("1W device"); dO.isT = false;
+					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
+					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
+					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
+					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
+					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
+					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
+					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
+
+					// Create the device''s parameter object
+					decId = SYS.strDecode(devID,"Bin","");
+					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
+					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
+					// Create the device''s proper attributes
+					dO.dP = dP = this["prm_"+decId];
+					if(dO.isT) {	//Temperature
+						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
+						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
+					}
+					else if(devFamily == 0x20)		//DS2450
+						for(iN = 0; iN < 4; iN++) {
+							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
+							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
+							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
+							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
+						}
+					else if(devFamily == 0x26) {	//DS2438
+						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
+						dP.attrAdd("i", tr("Current, A"), "real|ro");
+						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
+						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
+						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
+						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
+						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
+						dP.attrAdd("OFF", tr("Current Offset"), "integer");
+						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
+						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
+						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
+						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
+					}
+					else if(devFamily == 0x29)		//DS2408
+						for(iD = 0; iD < 8; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+					else if(devFamily == 0x3A)		//DS2413
+						for(iD = 0; iD < 2; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+				}
+				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
+				dO.tmSc = tmSc;
+				dO.try = tryEVAL;
+			}
+		}
+		//Check for removed devices
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			if(dO.tmSc != tmSc)	{
+				devLs[devID] = EVAL;
+				aLs = dO.dP.nodeList("a_");
+				for(iA = 0; iA < aLs.length; iA++)
+					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+			}
+		}
+	}
+	else {
+		//Process devices for reading current value and set modifable
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			devFamily = devID.charCodeAt(0)&0x7F;
+			if(dO.isT) {	//Temperature
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
+				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
+					//Set scratchpad
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
+					//Copy scratchpad part to the EEPROM
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current
+				// Call the transmission
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
+				// Get scratchpad
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				io(tr, SYS.strFromCharCode(0xBE));
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
+					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
+					if(val > 32767) val -= 65536;
+					dP.val.set(val/16, 0, 0, true);
+					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
+						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
+						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
+					}
+					dO.try = 0;
+				}
+				else if((dO.try=dO.try+1) > tryEVAL) {
+					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
+					dO.m = dO.res = EVAL;
+				}
+			}
+			else if(devFamily == 0x20) {	//DS2450
+				dP = dO.dP;
+				//Check for a modifications
+				for(iN = 0; iN < 4; iN++) {
+					if(dO["st1"+iN].isEVal())	continue;
+					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
+					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
+					if(tSt != dO["st1"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st1"+iN] = tSt;
+					}
+					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
+					if(tSt != dO["st2"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st2"+iN] = tSt;
+					}
+				}
+
+				//Read control status data
+				if(dP["res0"].get().isEVal()) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+					for(iN = 0; iN < 4; iN++) {
+						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
+						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
+						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
+						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
+					}
+				} else CRC_OK = true;
+
+				//Read AI value
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				}
+				for(iN = 0; iN < 4; iN++)
+					if(CRC_OK) {
+						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
+						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
+						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
+					} else dP["ai"+iN].set(EVAL, 0, 0, true);
+
+				//Start A/D conversion for prepare data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+				}
+			}
+			else if(devFamily == 0x26) {	//DS2438
+				dP = dO.dP;
+				//Check for a modifications
+				//????
+
+				//Recall memory page 0
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
+					dP["t"].set(tVl/256, 0, 0, true);
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["i"].set(tVl, 0, 0, true);
+				}
+				else {
+					dP["t"].set(EVAL, 0, 0, true);
+					dP["i"].set(EVAL, 0, 0, true);
+				}
+				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
+				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
+				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
+				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
+				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
+				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["OFF"].set(tVl, 0, 0, true);
+				} else dP["OFF"].set(EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
+
+				//Start T ant V conversion for prepare the data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
+				}
+			}
+			else if(devFamily == 0x29) {	//DS2408
+				dP = dO.dP;
+				//Check for a modifications
+				isMdf = false; tVl = 0; do_ = new Array();
+				for(iD = 0; iD < 8; iD++) {
+					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
+					do_[iD] = dP["do"+iD].get();
+					if(do_[iD] != dO["do"+iD])	isMdf = true;
+					if(do_[iD])	tVl = tVl | (1<<iD);
+				}
+				if(isMdf) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
+					// Verify the correct writing, pass by that can be wrong
+					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
+				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				for(iD = 0; iD < 8; iD++) {
+					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
+					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
+						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
+						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
+					}
+				}
+			}
+			else if(devFamily == 0x3A) {	//DS2413
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				do0_ = dP.do0.get(), do1_ = dP.do1.get();
+				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
+					tVl = (do1_<<1) | do0_;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
+					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
+					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
+						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
+						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
+					}
+				}
+				else {
+					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
+					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
+					dO.do0 = dO.do1 = EVAL;
+				}
+			}
+		}
+	}
+}
+
+f_err = t_err;','',1509990639);
+INSERT INTO tmplib_LowDevLib VALUES('1W_DS9097U','One Wire by DS9097U','','One Wire sensors bus implementing by 1Wire-adapter DS9097U. Supported direct and parasite powering for the temperature sensors.
+Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not tested), DS2413, DS2408, DS2450, DS2438.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.2.1','',30,0,'JavaLikeCalc.JavaScript
+//Functions
+function reset(tr) {
+	req = (isData?SYS.strFromCharCode(0xE3):"") +
+				SYS.strFromCharCode(0xC5);	//CMD_COMM(0x81) | FUNCTSEL_RESET(0x40) | SPEEDSEL_FLEX(0x04)
+	isData = false;
+	resp = tr.messIO(req);
+	return (resp.charCodeAt(0)&0x03) == 0x01;	//RB_PRESENCE
+}
+
+function io(tr, mess, bits) {
+	if(bits == EVAL) {
+		req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
+		isData = true;
+		for(iB = 0; iB < mess.length; iB++) {
+			req += SYS.strFromCharCode(tVl=mess.charCodeAt(iB));
+			if(tVl == 0xE3) req += SYS.strFromCharCode(0xE3);	//duplication to the COMMAND mode
+		}
+		for(resp = tr.messIO(req); resp.length && resp.length < mess.length && (tresp=tr.messIO("")).length; resp += tresp) ;
+		return resp;
+	}
+	else {
+		req = (isData?SYS.strFromCharCode(0xE3):"") + SYS.strFromCharCode(0x3F);	//MODE_COMMAND, CMD_CONFIG(0x01) | PARMSEL_5VPULSE(0x30) | PARMSET_infinite(0x0E)
+		isData = false;
+		for(iB = 0; iB < ceil(bits/8); iB++) {
+			vB = mess.charCodeAt(iB);
+			bB = ((iB+1)*8 > bits) ? bits-floor(bits/8)*8 : 8;
+			for(iBi = 0; iBi < bB; iBi++)
+				//{BITPOL_ONE(0x10)|BITPOL_ZERO(0x00)}|CMD_COMM(0x81)|FUNCTSEL_BIT(0x00)|SPEEDSEL_FLEX(0x04)|{PRIME5V_TRUE(0x02)|PRIME5V_FALSE(0x00)}
+				req += SYS.strFromCharCode(((vB&(1<<iBi))?0x10:0x00)|0x85/*|((iB==(ceil(bits/8)-1)&&iBi==(bB-1))?0x02:0x00)*/);
+		}
+		for(resp = tr.messIO(req); resp.length && resp.length < (bits+1) && (tresp=tr.messIO("")).length; resp += tresp) ;
+		rez = "";
+		if(resp.length && !(resp.charCodeAt(0)&0x81))
+			for(iR = 1;  iR < resp.length; ) {
+				vB = 0;
+				for(ib = 0; ib < 8 && iR < resp.length; iR++, ib++)
+					if(resp.charCodeAt(iR)&1) vB = vB | (1<<ib);
+				rez += SYS.strFromCharCode(vB);
+			}
+	}
+	return rez;
+}
+
+function scan(tr, sn, lstDiscr) {
+	if(!reset(tr)) return "";
+	
+	//Set the bits in the added buffer
+	asn = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	for(i = 0; lstDiscr >= 0 && i < 64; i++)
+		if((i < (lstDiscr-1) && sn[floor(i/8)]&(1<<(i%8))) || i == (lstDiscr-1))
+			asn[(i*2+1)/8] = asn[(i*2+1)/8] | (1<<((i*2+1)%8));
+
+	req = isData ? "" : SYS.strFromCharCode(0xE1);	//MODE_DATA
+	req += SYS.strFromCharCode(0xF0, 0xE3, 0xB5, 0xE1,
+				asn[0], asn[1], asn[2], asn[3], asn[4], asn[5], asn[6], asn[7],
+				asn[8], asn[9], asn[10], asn[11], asn[12], asn[13], asn[14], asn[15],
+				0xE3, 0xA5);
+	isData = false;
+	for(resp = tr.messIO(req); resp.length && resp.length < 17 && (tresp=tr.messIO("")).length; resp += tresp) ;
+
+	tmpLastDesc = -1;
+	for(i = 0; i < 64; i++) {
+		if(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8)))	sn[floor(i/8)] = sn[floor(i/8)] | (1<<(i%8));
+		else sn[floor(i/8)] = sn[floor(i/8)] & (~(1<<(i%8)));
+		// Check LastDiscrepancy
+		if((resp.charCodeAt(floor((i*2)/8)+1)&(1<<((i*2)%8))) && !(resp.charCodeAt(floor((i*2+1)/8)+1)&(1<<((i*2+1)%8))))
+			tmpLastDesc = i + 1;
+	}
+
+	rez = "";
+	for(iB = 0; iB < 8; iB++) rez += SYS.strFromCharCode(sn[iB]);
+	if(sn[0] && lstDiscr != 63 && !Special.FLibSYS.CRC(rez,0x8C,8,0))	lstDiscr = tmpLastDesc;
+	else { rez = ""; lstDiscr = 0; }
+
+	return rez;
+}
+
+//Set transport and init
+if(f_start) {
+	tmResc_ = 0;
+	devLs = new Object();
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	DS2480 = isData = false;
+}
+if(f_stop) {
+	for(var devID in devLs) {
+		if((dO=devLs[devID]).isEVal()) continue;
+		aLs = dO.dP.nodeList("a_");
+		for(iA = 0; iA < aLs.length; iA++)
+			if(!dO.dP[aLs[iA]].isCfg()) dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+	}
+	devLs = tr = false;
+	return;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+	DS2480 = false;
+}
+//Try DS2480
+if(tr && !DS2480)	{
+	tr.addr(tr.addr().parse(0,":")+":9600:8N1");	tr.timings("500:20");
+	if(tr.start(true)) {
+		tr.sendbreak(); SYS.sleep(2e-3);
+		tr.messIO(SYS.strFromCharCode(0xC1));	SYS.sleep(4e-3);	//Send timing byte
+		//PDSRC=1.37Vus; W1LT=10us; DSO/WORT=8us;
+		//read the baud rate (to test command block); do 1 bit operation (to test 1-Wire block)
+		req = SYS.strFromCharCode(0x17, 0x45, 0x5B, 0x0F, 0x91);
+		for(resp = tr.messIO(req); resp.length && resp.length < 5 && (tresp=tr.messIO("")).length; resp += tresp) ;
+		if(resp.length == 5 && (resp.charCodeAt(3)&0xF1) == 0x00 && (resp.charCodeAt(3)&0x0E) == 0x00/*9600*/ &&
+				(resp.charCodeAt(4)&0xF0) == 0x90 && (resp.charCodeAt(4)&0x0C) == 0x00/*9600*/)
+			DS2480 = true;
+	}
+	isData = false;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(!DS2480)	t_err = "2:"+tr("DS2480 is not detected.");
+else {
+	//Generic information update.
+	if(f_start || (tmResc && (tmResc_=tmResc_-1/f_frq) <= 0)) {
+		tmResc_ = tmResc;
+		tmSc = SYS.time();
+		// Check for power
+		if(!reset(tr) ||
+		 	io(tr,(req=SYS.strFromCharCode(0xCC))) != req ||
+			io(tr,(req=SYS.strFromCharCode(0xB4))) != req ||
+			!(resp=io(tr,SYS.strFromCharCode(1),1)).length) power = EVAL;
+		else power = resp.charCodeAt(0);
+		// Scan for allowed devices on the bus.
+		sn = new Array(0, 0, 0, 0, 0, 0, 0, 0);
+		for(devID = "start", lstDiscr = 0; devID.length && lstDiscr >= 0; ) {
+			if((devID=scan(tr,sn,lstDiscr)).length)	{
+				//SYS.messInfo("OneWire","lstDiscr="+lstDiscr+"; devID="+SYS.strDecode(devID,"Bin"," "));
+				if((dO=devLs[devID]).isEVal()) {
+					devLs[devID] = dO = new Object();
+					devFamily = devID.charCodeAt(0)&0x7F; devNm = tr("1W device"); dO.isT = false;
+					if(devFamily == 0x10)			{ devNm = "DS1820/DS18S20/DS1920"; dO.isT = true; }
+					else if(devFamily == 0x20)	devNm = "DS2450";		//4AI
+					else if(devFamily == 0x22)	{ devNm = "DS1822"; dO.isT = true; }
+					else if(devFamily == 0x26)	devNm = "DS2438";		//SmartBat
+					else if(devFamily == 0x28)	{ devNm = "DS18B20"; dO.isT = true; }
+					else if(devFamily == 0x29)	devNm = "DS2408";		//8DIO
+					else if(devFamily == 0x3A)	devNm = "DS2413";		//2DIO
+
+					// Create the device''s parameter object
+					decId = SYS.strDecode(devID,"Bin","");
+					SYS.cntrReq(SYS.XMLNode("add").setAttr("path",this.nodePath()+"/%2fbr%2fprm_").setAttr("id",decId).setText(devNm+": "+decId));
+					SYS.cntrReq(SYS.XMLNode("set").setAttr("path",this.nodePath()+"/prm_"+decId+"/%2fprm%2fst%2fen").setText("1"));
+					// Create the device''s proper attributes
+					dO.dP = dP = this["prm_"+decId];
+					if(dO.isT) {	//Temperature
+						dP.attrAdd("val", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("m", tr("User cell [0...65535]"), "integer");
+						dP.attrAdd("res", tr("Resolution")+" [9...12]", "integer");
+					}
+					else if(devFamily == 0x20)		//DS2450
+						for(iN = 0; iN < 4; iN++) {
+							dP.attrAdd("ai"+iN, tr("AI, V")+iN, "real|ro");
+							dP.attrAdd("res"+iN, tr("Resolution")+iN+" [1...16]", "integer");
+							dP.attrAdd("md"+iN, tr("Mode")+iN, "integer|sel", "0;1;2\n2.55V;5.10V;DO");
+							dP.attrAdd("do"+iN, tr("DO")+iN, "boolean");
+						}
+					else if(devFamily == 0x26) {	//DS2438
+						dP.attrAdd("t", tr("Temperature, °С"), "real|ro");
+						dP.attrAdd("v", tr("Voltage, V"), "real|ro");
+						dP.attrAdd("i", tr("Current, A"), "real|ro");
+						dP.attrAdd("ICA", tr("Current Accumulator"), "integer");
+						dP.attrAdd("thr", tr("Accumulation threshold"), "integer|sel", "0;1;2;3\nNone;±2LSB;±4LSB;±8LSB");
+						dP.attrAdd("ETM", tr("Elapsed time meter"), "integer");
+						dP.attrAdd("TM_DISC", tr("Disconnect time"), "integer");
+						dP.attrAdd("TM_END", tr("End of charge time"), "integer");
+						dP.attrAdd("OFF", tr("Current Offset"), "integer");
+						dP.attrAdd("IAD", tr("Enable Current A/D"), "boolean");
+						dP.attrAdd("CA", tr("Enable Current Accumulator"), "boolean");
+						dP.attrAdd("EE", tr("Enable Current Accumulator Shadow"), "boolean");
+						dP.attrAdd("AD", tr("Voltage A/D (0-VAD,1-VDD)"), "boolean");
+					}
+					else if(devFamily == 0x29)		//DS2408
+						for(iD = 0; iD < 8; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+					else if(devFamily == 0x3A)		//DS2413
+						for(iD = 0; iD < 2; iD++) {
+							dP.attrAdd("di"+iD, tr("DI")+iD, "boolean|ro");
+							dP.attrAdd("do"+iD, tr("DO")+iD, "boolean");
+						}
+				}
+				if(dO.tmSc == tmSc)	break;	//Somthing wrong into the scan but repeat, interruption
+				dO.tmSc = tmSc;
+				dO.try = tryEVAL;
+			}
+		}
+		//Check for removed devices
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			if(dO.tmSc != tmSc)	{
+				devLs[devID] = EVAL;
+				aLs = dO.dP.nodeList("a_");
+				for(iA = 0; iA < aLs.length; iA++)
+					if(!dO.dP[aLs[iA]].isCfg())	dO.dP[aLs[iA]].set(EVAL, 0, 0, true);
+			}
+		}
+	}
+	else {
+		//Process devices for reading current value and set modifable
+		for(devID in devLs) {
+			if((dO=devLs[devID]).isEVal()) continue;
+			devFamily = devID.charCodeAt(0)&0x7F;
+			if(dO.isT) {	//Temperature
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				m_ = dP.m.get(), res_ = max(9,min(12,dP.res.get()));
+				if(!dO.m.isEVal() && !dO.res.isEVal() && (m_ != dO.m || res_ != dO.res)) {
+					//Set scratchpad
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x4E,m_&0xFF,(m_>>8)&0xFF,((res_-9)<<5)|0x1F))) != req) continue;
+					//Copy scratchpad part to the EEPROM
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x48))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current
+				// Call the transmission
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+				if(!power) SYS.sleep(0.094*pow(2,(dO.res.isEVal()?12:dO.res)-9));
+				// Get scratchpad
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				/*out*/io(tr, SYS.strFromCharCode(0xBE));
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(!Special.FLibSYS.CRC(resp,0x8C,8,0)) {
+					val = resp.charCodeAt(1)*256 + resp.charCodeAt(0);
+					if(val > 32767) val -= 65536;
+					dP.val.set(val/16, 0, 0, true);
+					if(dO.m.isEVal() || dO.res.isEVal() || isMdf) {
+						dO.m = resp.charCodeAt(3)*256 + resp.charCodeAt(2); dP.m.set(dO.m, 0, 0, true);
+						dO.res = ((resp.charCodeAt(4)>>5)&0x3)+9; dP.res.set(dO.res, 0, 0, true);
+					}
+					dO.try = 0;
+				}
+				else if((dO.try=dO.try+1) > tryEVAL) {
+					dP.val.set(EVAL, 0, 0, true); dP.m.set(EVAL, 0, 0, true); dP.res.set(EVAL, 0, 0, true);
+					dO.m = dO.res = EVAL;
+				}
+			}
+			else if(devFamily == 0x20) {	//DS2450
+				dP = dO.dP;
+				//Check for a modifications
+				for(iN = 0; iN < 4; iN++) {
+					if(dO["st1"+iN].isEVal())	continue;
+					if((tRes=max(0,min(16,dP["res"+iN].get()))) == 16)	tRes = 0;
+					tSt = (dO["st1"+iN]&(~0xCF)) + tRes + ((dP["md"+iN].get()==2)?0x80:0) + (dP["do"+iN].get()?0x40:0);
+					if(tSt != dO["st1"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st1"+iN] = tSt;
+					}
+					tSt = (dO["st2"+iN]&(~0x01)) + (dP["md"+iN].get()?1:0);
+					if(tSt != dO["st2"+iN]) {	//Same write and check the result
+						if(!reset(tr)) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+						if(io(tr,(req=SYS.strFromCharCode(0x55,8+iN*2+1,0,tSt))) != req) continue;
+						resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF));
+						if(((~((resp.charCodeAt(1)<<8) + resp.charCodeAt(0)))&0xFFFF) == Special.FLibSYS.CRC(req,0xA001,16,0) && resp.charCodeAt(2) == tSt)
+							dO["st2"+iN] = tSt;
+					}
+				}
+
+				//Read control status data
+				if(dP["res0"].get().isEVal()) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x08,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x08,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+					for(iN = 0; iN < 4; iN++) {
+						dP["res"+iN].set(CRC_OK?((tVl=resp.charCodeAt(iN*2)&0xF)?tVl:16):EVAL, 0, 0, true);
+						dP["md"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x80)?2:resp.charCodeAt(iN*2+1)&1):EVAL, 0, 0, true);
+						dP["do"+iN].set(CRC_OK?((resp.charCodeAt(iN*2)&0x40)?true:false):EVAL, 0, 0, true);
+						dO["st1"+iN] = resp.charCodeAt(iN*2); dO["st2"+iN] = resp.charCodeAt(iN*2+1);
+					}
+				} else CRC_OK = true;
+
+				//Read AI value
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xAA,0x00,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," ")/*+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0x3C,0x08,0x00)/*+resp.slice(0,-2),0xA001,16,0).toString(16)*/);
+					CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+					CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xAA,0x00,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				}
+				for(iN = 0; iN < 4; iN++)
+					if(CRC_OK) {
+						tVl = (resp.charCodeAt(iN*2+1)<<8) + resp.charCodeAt(iN*2);
+						vlMax = dP["md"+iN].get() ? 5.1 : 2.55;
+						dP["ai"+iN].set(tVl*vlMax/65536, 0, 0, true);
+					} else dP["ai"+iN].set(EVAL, 0, 0, true);
+
+				//Start A/D conversion for prepare data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x3C,0x0F,0x00))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+				}
+			}
+			else if(devFamily == 0x26) {	//DS2438
+				dP = dO.dP;
+				//Check for a modifications
+				//????
+
+				//Recall memory page 0
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xB8,0))) != req) continue;
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xBE,0))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(2)<<8)+resp.charCodeAt(1)) >= 32767) tVl -= 65536;
+					dP["t"].set(tVl/256, 0, 0, true);
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["i"].set(tVl, 0, 0, true);
+				}
+				else {
+					dP["t"].set(EVAL, 0, 0, true);
+					dP["i"].set(EVAL, 0, 0, true);
+				}
+				dP["v"].set(CRC_OK?((resp.charCodeAt(4)<<8)+resp.charCodeAt(3))/100:EVAL, 0, 0, true);
+				dP["IAD"].set(CRC_OK?(resp.charCodeAt(0)&0x01):EVAL, 0, 0, true);
+				dP["CA"].set(CRC_OK?(resp.charCodeAt(0)&0x02):EVAL, 0, 0, true);
+				dP["EE"].set(CRC_OK?(resp.charCodeAt(0)&0x04):EVAL, 0, 0, true);
+				dP["AD"].set(CRC_OK?(resp.charCodeAt(0)&0x08):EVAL, 0, 0, true);
+				dP["thr"].set(CRC_OK?(resp.charCodeAt(7)>>6):EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,1))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["ETM"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["ICA"].set(CRC_OK?resp.charCodeAt(4):EVAL, 0, 0, true);
+				if(CRC_OK) {
+					if((tVl=(resp.charCodeAt(6)<<8)+resp.charCodeAt(5)) >= 32767) tVl -= 65536;
+					dP["OFF"].set(tVl, 0, 0, true);
+				} else dP["OFF"].set(EVAL, 0, 0, true);
+
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xBE,2))) != req) continue;
+					resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+					CRC_OK = !Special.FLibSYS.CRC(resp, 0x8C, 8, 0);
+					SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+				dP["TM_DISC"].set(CRC_OK?((resp.charCodeAt(3)<<24)+(resp.charCodeAt(2)<<16)+(resp.charCodeAt(1)<<8)+resp.charCodeAt(0)):EVAL, 0, 0, true);
+				dP["TM_END"].set(CRC_OK?((resp.charCodeAt(7)<<24)+(resp.charCodeAt(6)<<16)+(resp.charCodeAt(5)<<8)+resp.charCodeAt(4)):EVAL, 0, 0, true);
+
+				//Start T ant V conversion for prepare the data for next iteration
+				if(CRC_OK) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x44))) != req) continue;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0xB4))) != req) continue;
+				}
+			}
+			else if(devFamily == 0x29) {	//DS2408
+				dP = dO.dP;
+				//Check for a modifications
+				isMdf = false; tVl = 0; do_ = new Array();
+				for(iD = 0; iD < 8; iD++) {
+					if(dO["do"+iD].isEVal())	{ isMdf = false; break; }
+					do_[iD] = dP["do"+iD].get();
+					if(do_[iD] != dO["do"+iD])	isMdf = true;
+					if(do_[iD])	tVl = tVl | (1<<iD);
+				}
+				if(isMdf) {
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,~tVl))) != req) continue;
+					// Verify the correct writing, pass by that can be wrong
+					//resp = io(tr, SYS.strFromCharCode(0xFF,0xFF));
+					//SYS.messInfo("OneWire","Write resp="+SYS.strDecode(resp,"Bin"," "));
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF0,0x88,0x00))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));//+"; CRC="+Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0).toString(16));
+				CRC_OK = (~((resp.charCodeAt(resp.length-1)<<8) + resp.charCodeAt(resp.length-2)))&0xFFFF;
+				CRC_OK = (Special.FLibSYS.CRC(SYS.strFromCharCode(0xF0,0x88,0x00)+resp.slice(0,-2),0xA001,16,0) == CRC_OK);
+				for(iD = 0; iD < 8; iD++) {
+					dP["di"+iD].set(CRC_OK?resp.charCodeAt(0)&(1<<iD):EVAL, 0, 0, true);
+					if(dO["do"+iD].isEVal() || isMdf || !CRC_OK) {
+						dO["do"+iD] = CRC_OK ? ((resp.charCodeAt(1)&(1<<iD))?true:false) : EVAL;
+						dP["do"+iD].set(dO["do"+iD], 0, 0, true);
+					}
+				}
+			}
+			else if(devFamily == 0x3A) {	//DS2413
+				dP = dO.dP;
+				//SYS.messInfo("OneWire","devID="+SYS.strDecode(devID,"Bin"," "));
+				//Check for a modifications
+				isMdf = false;
+				do0_ = dP.do0.get(), do1_ = dP.do1.get();
+				if(!dO.do0.isEVal() && !dO.do1.isEVal() && (do0_ != dO.do0 || do1_ != dO.do1)) {
+					tVl = (do1_<<1) | do0_;
+					if(!reset(tr)) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+					if(io(tr,(req=SYS.strFromCharCode(0x5A,tVl,(~tVl)&0xFF))) != req) continue;
+					isMdf = true;
+				}
+
+				//Read current state
+				if(!reset(tr)) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0x55)+devID)) != req) continue;
+				if(io(tr,(req=SYS.strFromCharCode(0xF5))) != req) continue;
+				resp = io(tr, SYS.strFromCharCode(0xFF));
+				//SYS.messInfo("OneWire","resp="+SYS.strDecode(resp,"Bin"," "));
+				if(((tVl=resp.charCodeAt(0))&0xF) == ((~(tVl>>4))&0xF)) {
+					dP.di0.set(tVl&0x01, 0, 0, true); dP.di1.set(tVl&0x04, 0, 0, true);
+					if(dO.do0.isEVal() || dO.do1.isEVal() || isMdf) {
+						dO.do0 = (tVl&0x02)?true:false; dP.do0.set(dO.do0, 0, 0, true);
+						dO.do1 = (tVl&0x08)?true:false; dP.do1.set(dO.do1, 0, 0, true);
+					}
+				}
+				else {
+					dP.di0.set(EVAL, 0, 0, true); dP.di1.set(EVAL, 0, 0, true);
+					dP.do0.set(EVAL, 0, 0, true); dP.do1.set(EVAL, 0, 0, true);
+					dO.do0 = dO.do1 = EVAL;
+				}
+			}
+		}
+	}
+}
+
+f_err = t_err;','',1509990639);
+INSERT INTO tmplib_LowDevLib VALUES('BMP180','I2C: BMP180','','I2C Pressure and Temperature sensor. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','',10,0,'JavaLikeCalc.JavaScript
+//Initial set
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	AC1 = 0;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	resp = Special.FLibSYS.IO("", "", "b");
+	//Calibration data, from register 0xAA and to 0xBF
+	if(!AC1) {
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xAA), 0, 22);
+		if(resp.length != 22) t_err = "3:"+tr("Wrong or empty respond to the calibration request.");
+		else {
+			AC1 = resp.read("int16",1);	AC2 = resp.read("int16",1);	AC3 = resp.read("int16",1);
+			AC4 = resp.read("uint16",1); AC5 = resp.read("uint16",1);	AC6 = resp.read("uint16",1);
+			B1 = resp.read("int16",1);	B2 = resp.read("int16",1);
+			MB = resp.read("int16",1);	MC = resp.read("int16",1);	MD = resp.read("int16",1);
+			//SYS.messInfo("BMP180","AC1="+AC1+"; AC2="+AC2+"; AC3="+AC3+"; AC4="+AC4+"; AC5="+AC5+"; AC6="+AC6);
+		}
+	}
+
+	//Read and calculate temperature
+	if(AC1 && !t_err.toInt()) {
+		// Start conversion
+		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x2E), 0, 0);
+		SYS.sleep(4.5e-3);
+		// Read value
+		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 2);
+		if(resp.length != 2) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
+		else {
+			UT = resp.read("int16",1);
+			X1 = (UT-AC6)*AC5/pow(2,15);	X2 = MC*pow(2,11)/(X1+MD);
+			B5 = X1 + X2;
+			t = 0.1*((B5+8)/pow(2,4));
+			//SYS.messInfo("BMP180","UT="+UT+"; X1="+X1+"; X2="+X2+"; B5="+B5+"; t="+t);
+		}
+	}
+	
+	//Read and calculate pressure
+	if(AC1 && !t_err.toInt()) {
+		oss = max(0, min(3,oss));
+		// Start conversion
+		tr.messIO(SYS.strFromCharCode(addr,0xF4,0x34+(oss<<6)), 0, 0);
+		SYS.sleep((1.5+3*pow(2,oss))*1e-3);
+		// Read value
+		resp.pos = 0; resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF6), 0, 4);
+		UP = resp.read("int32",1)>>(16-oss);
+		B6 = B5 - 4000;
+		X1 = (B2*(B6*floor(B6/pow(2,12))))/pow(2,11);
+		X2 = AC2*B6/pow(2,11);
+		X3 = X1 + X2;
+		B3 = (((AC1*4+X3)<<oss)+2)/4;
+		X1 = AC3*B6/pow(2,13);
+		X2 = (B1*(B6*B6/pow(2,12)))/pow(2,16);
+		X3 = ((X1+X2)+2)/pow(2,2);
+		B4 = AC4*(X3+32768)/pow(2,15);
+		B7 = (UP-B3)*(50000>>oss);
+		p = (B7 < 0x80000000) ? (B7*2)/B4 : (B7/B4)*2;
+		X1 = (p/pow(2,8))*(p/pow(2,8));
+		X1 = (X1*3038)/pow(2,16);
+		X2 = (-7357*p)/pow(2,16);
+		p = p + (X1+X2+3791)/pow(2,4);
+	}
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
+f_err = t_err;','',1509990639);
+INSERT INTO tmplib_LowDevLib VALUES('DHT','GPIO: DHT11,22 (AM23XX)','','Digital Temperature and Humidity Sensor for models: DHT11, DHT12, AM2302, AM2320, ...
+The module designed for the sensors connect through GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
+Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//Set link to fast external functions
+if(f_start)	f_err = "0", addr_ = "";
+
+t_err = "0";
+
+//Check for the address change and link
+if(addr != addr_)	{
+	addr_ = addr;
+	function mode = addr+".fnc_mode";
+	function get = addr+".fnc_get";
+	function put = addr+".fnc_put";
+}
+
+//Read sensor''s data function declaration
+function read() {
+	vl = 0;						//Meassured value
+	cntHoldMax = 100;		//Maximum wait counter
+
+	//Call the device to a respond
+	mode(pin, 4); put(pin, true); tmSleep(500e-3);	//Set pin to output mode and next to true for 500ms
+	put(pin, false); tmSleep(20e-3);							//Set output to false for 20ms
+	mode(pin, 2);														//Set pin to input mode
+
+	//Read
+	// Wait for pull pin low.
+	for(cntHold = 0; get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+
+	//Meassure the typical pulse length
+	for(cntHold = 0; !get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+	for(cntHold = 0; get(pin); cntHold++)
+		if(cntHold > cntHoldMax) return 0;
+	cntPulse = cntHold;
+
+	//Read meassured value
+	for(iB = 0; iB < 40; iB++) {
+		//stg = iB;
+		for(cntHold = 0; !get(pin); cntHold++)
+			if(cntHold > cntHoldMax) return 0;
+		for(cntHold = 0; get(pin); cntHold++)
+			if(cntHold > cntHoldMax) return 0;
+		vl = vl << 1;
+		if(cntHold > cntPulse/2)	vl = vl | 1;
+	}
+
+	return vl;
+}
+
+//Main processing
+if(!mode)	t_err = "1:"+tr("No link to external functions on ''%1''.").replace("%1",addr);
+else if(!(dev == 0 || dev == 1))	t_err = "2:"+tr("Unknown device %1 [0-DHT11, 1-DHT22].").replace("%1",dev.toString());
+else if(tries < 1 || tries > 5)	t_err = "3:"+tr("Tries number %1 out of range [1...5].").replace("%1",tries.toString());
+else {
+	for(i = 0; i < tries; i++) {
+		if(i) tmSleep(2);	//Retry after two seconds
+		if((vl=read()) && (vl&0xFF) == ((((vl>>8)&0xFF)+((vl>>16)&0xFF)+((vl>>24)&0xFF)+((vl>>32)&0xFF))&0xFF)) {
+			//SYS.messInfo("/DHT","vl="+vl.toString(16));
+			if(dev == 1) {
+				h = 0.1*(((vl>>32)&0xFF)*256+((vl>>24)&0xFF));
+				t = 0.1*(((vl>>16)&0xFF)*256+((vl>>8)&0xFF));
+				break;
+			}
+			h = ((vl>>32)&0xFF) + 20; t = (vl>>16)&0xFF;
+		}
+	}
+	if(i >= tries)	t_err = "10:"+tr("Get data after %1 tries error.").replace("%1",tries.toString());
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = h = EVAL;
+f_err = t_err;','',1509373346);
+INSERT INTO tmplib_LowDevLib VALUES('DS3231','I2C: DS1307,DS3231','','I2C RTC chips DS1307,DS3231 with Temperature sensor and calibration for DS3231. Connects through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.1.0','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	mode_ = -1;
+	tm_ = tm = "";
+	agOff_ = 0;
+	p32k_ = false;
+	pSQW_ = pSQW = false;
+	pSQWf_ = pSQWf = 0;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	//Check for modification
+	if(mode != mode_) {
+		if(mode == 0) {
+			this.attrAdd("pSQWf", "", "integer|sel", "0;1;2;3\n1Hz;1.024kHz;4.096kHz;8.192kHz");
+			this.attrAdd("agOff", "Aging offset, [-128...127]", "integer");
+			this.attrAdd("t", "T, °С", "real|ro");
+			this.attrAdd("p32k", "Enable 32768Hz", "boolean");
+		}
+		else {
+			this.attrAdd("pSQWf", "", "integer|sel", "0;1;2;3\n1Hz;4.096kHz;8.192kHz;32.768kHz");
+			this.attrDel("agOff");
+			this.attrDel("t");
+			this.attrDel("p32k");
+		}
+		mode_ = mode;
+	}
+	if(tm != tm_) {
+		off = 0; sdt = tm.parse(0,"T",off); stm = tm.parse(0,"T",off);
+		off = 0; year = sdt.parse(0,"-",off).toInt(16); month = sdt.parse(0,"-",off).toInt(16); day = sdt.parse(0,"-",off).toInt(16);
+		off = 0; hour = stm.parse(0,":",off).toInt(16); min = stm.parse(0,":",off).toInt(16); sec = stm.parse(0,":",off).toInt(16);
+		tr.messIO(SYS.strFromCharCode(addr,0,sec,min,hour,0,day,month+((year&0xF00)?0x80:0),year&0xFF), 0, 0);
+		tm_ = tm;
+	}
+	if(mode == 0 && !(tVl=this.agOff.get()).isEVal() && tVl != agOff_) {
+		tr.messIO(SYS.strFromCharCode(addr,16,tVl), 0, 0);
+		agOff_ = tVl;
+	}
+	if(mode == 0 && !(tVl=this.p32k.get()).isEVal() && tVl != p32k_) {
+		resp = tr.messIO(SYS.strFromCharCode(addr,15), 0, 1);
+		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+		else {
+			cntrB = resp.charCodeAt(0);
+			cntrB = tVl ?	cntrB|0x08 : cntrB&(~0x08);
+			tr.messIO(SYS.strFromCharCode(addr,15,cntrB), 0, 0);
+		}
+		p32k_ = tVl;
+	}
+	if(pSQW != pSQW_) {
+		if(mode == 0) {
+			resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
+			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+			else {
+				cntrB = resp.charCodeAt(0);
+				cntrB = pSQW ? cntrB&(~0x04) : cntrB|0x04;
+				tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
+			}
+		}
+		else {
+			resp = tr.messIO(SYS.strFromCharCode(addr,7), 0, 1);
+			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+			else {
+				cntrB = resp.charCodeAt(0);
+				cntrB = pSQW ? cntrB|0x10 : cntrB&(~0x10);
+				tr.messIO(SYS.strFromCharCode(addr,7,cntrB), 0, 0);
+			}
+		}
+		pSQW_ = pSQW;
+	}
+	if(pSQWf != pSQWf_) {
+		pSQWf = max(0, min(3,pSQWf));
+		if(mode == 0) {
+			resp = tr.messIO(SYS.strFromCharCode(addr,14), 0, 1);
+			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+			else {
+				cntrB = (resp.charCodeAt(0)&(~0x18)) + (pSQWf<<3);
+				tr.messIO(SYS.strFromCharCode(addr,14,cntrB), 0, 0);
+			}
+		}
+		else {
+			resp = tr.messIO(SYS.strFromCharCode(addr,7), 0, 1);
+			if(resp.length != 1) t_err = "3:"+tr("Wrong or empty response.");
+			else {
+				cntrB = (resp.charCodeAt(0)&(~0x3)) + pSQWf;
+				tr.messIO(SYS.strFromCharCode(addr,7,cntrB), 0, 0);
+			}
+		}
+		pSQWf_ = pSQWf;
+	}
+
+	//Get current
+	rSz = (mode == 0) ? 19 : 8;
+	resp = tr.messIO(SYS.strFromCharCode(addr,0), 0, rSz);
+	if(resp.length != rSz) t_err = "3:"+tr("Wrong or empty response.");
+	else {
+		// Get current time
+		tm_ = tm = (20+(resp.charCodeAt(5)>>7)).toString(10,2)+resp.charCodeAt(6).toString(16,2)+"-" +
+				(resp.charCodeAt(5)&0x7F).toString(16,2)+"-" + 
+				resp.charCodeAt(4).toString(16,2)+"T" +
+				(resp.charCodeAt(2)&0x3F).toString(16,2)+":" +
+				resp.charCodeAt(1).toString(16,2)+":" + 
+				resp.charCodeAt(0).toString(16,2);
+
+		if(mode == 0) {
+			// Aging offset
+			if((tVl=resp.charCodeAt(16)) >= 128)	tVl = tVl-256;
+			this.agOff.set(agOff_=tVl, 0, 0, true);
+
+			// Miscellaneous
+			this.p32k.set((p32k_=resp.charCodeAt(15)&0x08), 0, 0, true);
+
+			pSQW = pSQW_ = !(resp.charCodeAt(14)&0x04);
+			pSQWf = pSQWf_ = (resp.charCodeAt(14)>>3)&0x3;
+
+			// Get temperature
+			tVl = (resp.charCodeAt(17)<<2)+(resp.charCodeAt(18)>>6);
+			if(tVl >= 128) tVl = tVl-256;
+			this.t.set(tVl/4, 0, 0, true);
+		}
+		else {
+			pSQW = pSQW_ = resp.charCodeAt(7)&0x10;
+			pSQWf = pSQWf_ = resp.charCodeAt(7)&0x3;
+		}
+	}
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = p = EVAL;
+f_err = t_err;','',1541249292);
+INSERT INTO tmplib_LowDevLib VALUES('PCF8574','I2C: PCF8574','','I2C 8-bit 8DIO. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
+	do0 = do1 = do2 = do3 = do4 = do5 = do6 = do7 = true;
+	do0_ = do1_ = do2_ = do3_ = do4_ = do5_ = do6_ = do7_ = true;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	if(do0 != do0_ || do1 != do1_ || do2 != do2_ || do3 != do3_ || do4 != do4_ || do5 != do5_ || do6 != do6_ || do7 != do7_) {
+		tr.messIO(SYS.strFromCharCode(addr,(do0?0x01:0)|(do1?0x02:0)|(do2?0x04:0)|(do3?0x08:0)|
+																(do4?0x10:0)|(do5?0x20:0)|(do6?0x40:0)|(do7?0x80:0)), 0, 0);
+		do0_ = do0; do1_ = do1; do2_ = do2; do3_ = do3; do4_ = do4; do5_ = do5; do6_ = do6; do7_ = do7;
+	}
+	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 1);
+	if(rez.length) {
+		vl = rez.charCodeAt(0);
+		di0 = (vl&0x01); di1 = (vl&0x02); di2 = (vl&0x04); di3 = (vl&0x08);
+		di4 = (vl&0x10); di5 = (vl&0x20); di6 = (vl&0x40); di7 = (vl&0x80);
+	}
+	else t_err = "3:"+tr("No read result.");
+}
+
+if(t_err.toInt() && !f_err.toInt())
+	di0 = di1 = di2 = di3 = di4 = di5 = di6 = di7 = EVAL;
+
+f_err = t_err;','',1509990639);
+INSERT INTO tmplib_LowDevLib VALUES('PCF8591','I2C: PCF8591','','I2C 8-bit 4xA/D and D/A converter. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	for(i = 0; i < 4 && !t_err.toInt(); i++) {
+		//Select next channel and the output
+		tr.messIO(SYS.strFromCharCode(addr,0x40|((i+1)&0x3),255*max(0,min(1,ao/vRef))), 0, 0);
+		SYS.sleep(1e-3);
+		rez = tr.messIO("", 0, 1);
+		if(rez.length)	arguments["ai"+i] = vRef*(rez.charCodeAt(0)/255);
+		else t_err = "3:"+tr("No read result.");
+	}
+}
+
+if(t_err.toInt() && !f_err.toInt())
+	for(i = 0; i < 4; i++)
+		arguments["ai"+i] = EVAL;
+
+f_err = t_err;','',1509908745);
+INSERT INTO tmplib_LowDevLib VALUES('BME280','I2C: BME280','','I2C Pressure, Temperature and Humidity sensor. Connect through a Serial output transport into the I2C mode.
+Author: Arcadiy Kisel, Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','',10,0,'JavaLikeCalc.JavaScript
+//Initial set
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	dig_T1 = 0;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	resp = Special.FLibSYS.IO("", "", "l");
+	//Calibration data, from register 0x88 and count 24 
+	if(!dig_T1) {
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0x88), 0, 24); //start address 88, count = 24
+		if(resp.length != 24)	t_err = "3:"+tr("Wrong or empty respond to the calibration T1-3 or P1-9 request.");
+		else {
+			dig_T1 = resp.read("uint16", 1);	dig_T2 = resp.read("int16", 1);	dig_T3 = resp.read("int16", 1);
+			dig_P1 = resp.read("uint16", 1);	dig_P2 = resp.read("int16", 1);	dig_P3 = resp.read("int16", 1);
+			dig_P4 = resp.read("int16", 1);	dig_P5 = resp.read("int16", 1);	dig_P6 = resp.read("int16", 1);
+			dig_P7 = resp.read("int16", 1);	dig_P8 = resp.read("int16", 1);	dig_P9 = resp.read("int16", 1);
+		}
+		resp.pos = 0;
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xA1), 0, 1); //start address A1, count = 1
+		if(resp.length != 1) t_err = "3:"+tr("Wrong or empty respond to the calibration H1 request.");
+		else dig_H1 = resp.read("uint8",1);
+		resp.pos = 0;
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xE1), 0, 7); //start address E1, count = 8
+		if(resp.length != 7) t_err = "3:"+tr("Wrong or empty respond to the calibration H2-H6 request.");
+		else {
+			dig_H2 = resp.read("int16", 1);
+			dig_H3 = resp.read("uint8", 1);
+
+			E4 = resp.read("int8", 1);
+			E5 = resp.read("int8", 1);
+			E6 = resp.read("int8", 1);
+			// dig_H4, dig_H5 is signed. may be bug here, when <0
+			dig_H4 = (E4 << 4) | (E5 & 0x0F);
+			dig_H5 = (E6 << 4) | ((E5 >> 4) & 0x0F);
+			dig_H6 = resp.read("int8", 1);
+		}
+	}
+
+	oss = max(0, min(7,oss));
+
+	//Pressure and Temperature
+	tr.messIO(SYS.strFromCharCode(addr,0xF4,(oss<<5)|(oss<<2)|0x3), 0, 0);
+	
+	//Humidity
+	tr.messIO(SYS.strFromCharCode(addr,0xF2,oss), 0, 0);	
+
+	SYS.sleep((1.25 + (2.3*oss) + 2*(2.3*oss + 0.575))*1e-3); 
+
+	//Read and calculate temperature
+	if(dig_T1 && !t_err.toInt()) {
+		// Read value
+		resp = Special.FLibSYS.IO("", "", "b");
+		resp.pos = 0;
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xFA), 0, 4);
+		if(resp.length != 4) t_err = "3:"+tr("Wrong or empty respond to the temperature data.");
+		else {
+			adc_T = resp.read("uint32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
+			var1 = (adc_T/16384 - dig_T1/1024)*dig_T2;
+			var2 = ((adc_T/131072 - dig_T1/8192)*(adc_T/131072 - dig_T1/8192))*dig_T3;
+			t_fine = var1 + var2; //for pressure
+			t = (var1 + var2)/5120;
+		}
+	}
+
+	//Read and calculate pressure
+	if(dig_T1 && !t_err.toInt()) {
+		// Read value
+		resp.pos = 0; 
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xF7), 0, 4);
+		if(resp.length != 4) t_err = "3:"+tr("Wrong or empty respond to the pressure data.");
+		else {
+			adc_P = resp.read("uint32", 1) >> 12; //8 бит т.к. прочли четвертый "лишний" байт. 4 бит по даташиту
+			
+			var1 = t_fine/2 - 64000;
+			var2 = var1*var1*dig_P6/32768;
+			var2 = var2 + var1*dig_P5*2;
+			var2 = var2/4 + dig_P4*65536;
+			var1 = (dig_P3*var1*var1/524288 + dig_P2*var1)/524288;
+			var1 = (1 + var1/32768)*dig_P1;
+			if(var1 == 0)	p = EVAL_REAL; // avoid exception caused by division by zero
+			else {
+				p = 1048576 - adc_P;
+				p = (p - (var2/4096))*6250/var1;
+				var1 = dig_P9*p*p/2147483648;
+				var2 = p*dig_P8/32768;
+				p = p + (var1 + var2 + dig_P7)/16;
+			}
+		}
+	}
+	
+	//Read and calculate humidity
+	if(dig_T1 && !t_err.toInt()) {
+		resp.pos = 0;
+		resp.string = tr.messIO(SYS.strFromCharCode(addr,0xFD), 0, 2);
+		if(resp.length != 2) t_err = "3:"+tr("Wrong or empty respond to the humidity data.");
+		else {
+			adc_H = resp.read("uint16", 1);
+			
+			h = t_fine - 76800;
+			h = (adc_H - (dig_H4*64 + dig_H5/16384*h))*(dig_H2/65536*(1 + dig_H6/67108864*h*(1 + dig_H3/67108864*h)));
+			h = max(0, min(100, h*(1 - dig_H1*h/524288)));
+		}
+	}	
+}
+
+if(t_err.toInt() && !f_err.toInt()) t = p = h = EVAL;
+
+f_err = t_err;','',1509989860);
+INSERT INTO tmplib_LowDevLib VALUES('SHT3x','I2C: SHT3x','','Digital Temperature and Humidity Sensor for the models: SHT30
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	H = T = EVAL;
+	return;
+}
+if(f_stop)	return;
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	if(H.isEVal()) {
+		if(f_frq < 0.5)		spdCfg = 0x2032;	//0.5mps
+		else if(f_frq < 1)	spdCfg = 0x2130;	//1.0mps
+		else if(f_frq < 2)	spdCfg = 0x2236;	//2.0mps
+		else if(f_frq < 4)	spdCfg = 0x2334;	//4.0mps
+		else spdCfg = 0x2737;						//10.0mps
+		//SYS.messInfo("SMH", "spdCfg="+spdCfg.toString(16)+"; frq="+f_frq+"; tm="+(1/max(0.5,f_frq)));
+		tr.messIO(SYS.strFromCharCode(addr,(spdCfg>>8)&0xFF,spdCfg&0xFF), 0, 0);	//10 mps
+		SYS.sleep(1/max(0.5,f_frq));
+	}
+
+	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 6);
+	if(rez.length == 6) {
+		T = 175*(((rez.charCodeAt(0)<<8)+rez.charCodeAt(1))/65535) - 45;
+		H = 100*(((rez.charCodeAt(3)<<8)+rez.charCodeAt(4))/65535);
+	}
+	else { t_err = "3:"+tr("No data."); H = T = EVAL; }
+}
+
+f_err = t_err;','',1542469153);
+INSERT INTO tmplib_LowDevLib VALUES('ADS111x','I2C: ADS101x, ADS111x','','I2C 12/16-bit 4xA/D converter. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.1','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	for(i = 0; i < 4 && !t_err.toInt(); i++) {
+		//Selecting the channel and setting for needed options 
+		sw = 0xC000 + (i<<12) + (range<<9) + 0x100 + 0x83;
+		// Writing for the configuration
+		tr.messIO(SYS.strFromCharCode(addr,1,sw>>8,sw&0xFF), 0, 0);
+		// Waiting the conversion
+		for(iTr = 0; iTr < 10 && (rez=tr.messIO(SYS.strFromCharCode(addr,1),0,2)).length && !(rez.charCodeAt(0)&0x80); iTr++)
+			SYS.sleep(1e-3);
+		// Reading for the value
+		rez = tr.messIO(SYS.strFromCharCode(addr,0), 0, 2);
+		if(rez.length) {
+			tVl = (rez.charCodeAt(0)<<8) + rez.charCodeAt(1);
+			if(tVl&0x8000) tVl -= 65536;
+			range_ = (range == 0) ? 6.144 : 4.096/pow(2,range-1);
+			arguments["ai"+i] = range_*tVl/32768;
+		}
+		else t_err = "3:"+tr("No read result.");
+	}
+}
+
+if(t_err.toInt() && !f_err.toInt())
+	for(i = 0; i < 4; i++)
+		arguments["ai"+i] = EVAL;
+
+f_err = t_err;','',1549528595);
+INSERT INTO tmplib_LowDevLib VALUES('MCP4725','I2C: MCP4725','','I2C 12-bit D/A converter. Connect through a Serial output transport into the I2C mode.
+Author: Roman Savochenko <roman@oscada.org>
+Version: 1.0.0','',10,0,'JavaLikeCalc.JavaScript
+//Set transport
+if(f_start) {
+	f_err = "0";
+	transport_ = transport;
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	ao = 0;
+	ao_ = EVAL;
+}
+
+t_err = "0";
+
+//Check for the transport change and connect
+if(!tr || transport != transport_)	{
+	tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+	transport_ = transport;
+}
+if(!tr)	t_err = "1:"+tr("Output transport ''%1'' error.").replace("%1", transport);
+else if(addr < 0 || addr > 119)	t_err = "2:"+tr("Device address ''%1'' out of range [0...119].").replace("%1",addr);
+else {
+	//Writing the changes
+	if(!ao_.isEVal() && ao != ao_) {
+		code = max(0,min(1,ao/vRef)) * 4096;
+		tr.messIO(SYS.strFromCharCode(addr,code/256,code%256), 0, 0);
+	}
+
+	//Reading the current value	
+	rez = tr.messIO(SYS.strFromCharCode(addr), 0, 3);
+	if(rez.length)	ao = ao_ = vRef*(rez.charCodeAt(1)*255+rez.charCodeAt(2)>>4)/4096;
+	else t_err = "3:"+tr("No read result.");
+}
+
+if(t_err.toInt() && !f_err.toInt())	ao_ = EVAL;
+
+f_err = t_err;','',1549488136);
+INSERT INTO tmplib_LowDevLib VALUES('MAX6675','GPIO: MAX6675','','Cold-Junction-Compensated K-Thermocouple-to-Digital Converter (0°C to +1024°C). The module designed for the sensors connect through softSPI by GPIO, mostly it''s Raspberry PI BCM2835 GPIO.
+Conditions: Exclusively realtime planing in the priority 199 (FIFO-99).
+Author: Arcadiy Kisel <arcsin@online.ua>
+Version: 0.1.0','',10,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+//Set link to fast external functions
+if(f_start)	f_err = "0", addr_ = "";
+
+t_err = "0";
+
+//Check for the address change and link
+if(addr != addr_)	{
+	addr_ = addr;
+	function mode = addr+".fnc_mode";
+	function get = addr+".fnc_get";
+	function put = addr+".fnc_put";
+}
+
+if(f_start){
+	mode(pin_cs, 4); put(pin_cs, true); 	//Set pin to output mode and next to true for 500us
+	mode(pin_sclk, 4); put(pin_sclk, false); //Set pin to output mode and next to true for 500ms
+	mode(pin_miso, 1); 
+	tmSleep(1e-3);
+}
+
+//Read sensor''s data function declaration
+function spiread() {
+	d = 0;
+	for(i = 7; i >= 0; i--) {
+		put(pin_sclk, false); tmSleep(1e-3);							//Set output to false for 20ms
+		if(get(pin_miso))	d = d | (1 << i);
+  		put(pin_sclk, true); tmSleep(1e-3);
+	}
+	return d;
+}
+
+//Read
+put(pin_cs, false); tmSleep(1e-3);		
+v = spiread();
+v = v << 8;
+v = v | spiread();
+
+put(pin_cs, true); 		
+if(v&0x4)	t_err = "1:"+tr("uh oh, no thermocouple attached!"); 
+else	t = (v>>3)*0.25;
+
+if(t_err.toInt() && !f_err.toInt()) t = EVAL;
+f_err = t_err;','',1550995458);
+INSERT INTO tmplib_LowDevLib VALUES('RDTech','BT: RDTech UM24C, UM25C and UM34C','RDTech UM24C, UM25C та UM34C','RDTech UM24C/UM25C/UM34C BlueTooth interface template. ￼!!!! Tested only on UM24C now.
+
+The RDTech (RuiDeng) UM24C, UM25C and UM34C are low-cost USB pass-through power measurement devices, and support a decent number of collection features, as well as full control via Bluetooth. This template implements most exposed commands and data collection available by the device''s Bluetooth interface.
+
+This template in first time uses the new output transports connection function SYS.Transport.outAt() and the Bluetooth interface for the data acquisition.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 0.3 HD
+Thanks: for Ryan Finnie at the protocol initial processing in RDUMTOOL (https://github.com/smandon/rdumtool)
+Version: 1.1.0
+License: GPLv2','Шаблон BlueTooth інтерфейсу до RDTech UM24C/UM25C/UM34C. !!!! Наразі перевірено лише на UM24C.
+
+UM24C, UM25C та UM34C від RDTech (RuiDeng) є недорогими пристроями вимірювання прохідної потужності на USB, та вони підтримують достатню колекцію властивостей так само як і забезпечують повний контроль через Bluetooth. Цей шаблон реалізує найбільш явні команди та збір даних, які доступні через Bluetooth інтерфейс пристрою.
+
+Цей шаблон вперше використовує нову функцію підключення вихідних транспортів SYS.Transport.outAt() та Bluetooth інтерфейс для збору даних.
+
+Автор: Роман Савоченко <roman@oscada.org>
+Загальна працемісткість: 0.3 ЛД
+Подяки: Райан Фінніє за початкове опрацювання протоколу у RDUMTOOL (https://github.com/smandon/rdumtool)
+Версія: 1.1.0
+Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	recThr_ = recThr; scrBright_ = scrBright; scrTm_ = scrTm;
+
+	isBound = -1;
+	if(dev.match("^[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}$").length &&
+			(tVl=transport.match("/dev/rfcomm(\\d)")).length && SYS.system("rfcomm bind "+tVl[1]+" "+dev,true) == 0)
+		isBound = tVl[1];
+}
+
+tErr = "";
+
+if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else {
+	if(f_stop) {
+		tr.start(false);
+		if(isBound >= 0)	SYS.system("rfcomm release "+isBound, true);
+		return;
+	}
+
+	for(resp = tr.messIO(SYS.strFromCharCode(0xF0)); resp.length < 130 && (respTail=tr.messIO("")).length; )
+		resp += respTail;
+
+	if(!resp.length)	tErr = "2:"+tr("No response.");
+	else if(resp.length < 130 || !((tVl=resp.charCodeAt(0,"UTF-16BE")) == 0x0963 || tVl == 0x0d4c) || 
+			!((tVl=resp.charCodeAt(resp.length-2,"UTF-16BE")) == 0xFFF1 || tVl == 0x8068))
+		tErr = "2:"+tr("Not whole or not mine response.");
+	else {
+		// Setting
+		if(scrNext) {
+			if(scrNext == true) { tr.messIO(SYS.strFromCharCode(0xF1), 0, 0); SYS.sleep(0.1); }
+			scrNext = false;
+		}
+		if(scrRot) {
+			if(scrRot == true) { tr.messIO(SYS.strFromCharCode(0xF2), 0, 0); SYS.sleep(0.1); }
+			scrRot = false;
+		}
+		if(grpNext) {
+			if(grpNext == true)	{ tr.messIO(SYS.strFromCharCode(0xF3), 0, 0); SYS.sleep(0.1); }
+			grpNext = false;
+		}
+		if(grpClear) {
+			if(grpClear == true) { tr.messIO(SYS.strFromCharCode(0xF4), 0, 0); SYS.sleep(0.1); }
+			grpClear = false;
+		}
+		if(recThr != recThr_) {
+			if(!recThr.isEVal()) { tr.messIO(SYS.strFromCharCode(0xB0+max(0,min(0.3,recThr))*100), 0, 0); SYS.sleep(0.1); }
+			recThr_ = recThr;
+		}
+		if(scrBright != scrBright_) {
+			if(!scrBright.isEVal()) { tr.messIO(SYS.strFromCharCode(0xD0+max(0,min(5,scrBright))), 0, 0); SYS.sleep(0.1); }
+			scrBright_ = scrBright;
+		}
+		if(scrTm != scrTm_) {
+			if(!scrTm.isEVal()) { tr.messIO(SYS.strFromCharCode(0xE0+max(0,min(9,scrTm))), 0, 0); SYS.sleep(0.1); }
+			scrTm_ = scrTm;
+		}
+
+		// Reading all data
+		io = Special.FLibSYS.IO(resp, "", "b");
+		io.pos = 2;
+		V = io.read("uint16", 1)/100;
+		A = io.read("uint16", 1)/1000;
+		W = io.read("uint32", 1)/1000;
+		T = io.read("uint16", 1);
+		io.read("uint16", 1);	//T, °F
+		dG = io.read("uint16", 1);
+		for(grps = "", iG = 0; iG < 10; iG++)
+			grps += (grps.length?"\n":"") + ((iG==dG)?"> ":"  ") + iG.toString() + ": " +
+						(io.read("uint32",1)/1000) + " Ah, " + (io.read("uint32",1)/1000) + " Wh;";
+		io.read("uint16", 1);	//data_line_positive_volts/100
+		io.read("uint16", 1);	//data_line_negative_volts/100
+		chMode_ = io.read("uint16", 1);
+		if(chMode_ == 1)	chMode = "Quick Charge 2.0";
+		else if(chMode_ == 2)	chMode = "Quick Charge 3.0";
+		else if(chMode_ == 3)	chMode = "Apple 2.4A";
+		else if(chMode_ == 4)	chMode = "Apple 2.1A";
+		else if(chMode_ == 5)	chMode = "Apple 1.0A";
+		else if(chMode_ == 6)	chMode = "Apple 0.5A";
+		else if(chMode_ == 7)	chMode = "DCP 1.5A";
+		else if(chMode_ == 8)	chMode = "Samsung";
+		else chMode = "Unknown / Normal";
+		chMode += " ("+chMode_+")";
+		recAh = io.read("uint32", 1)/1000;
+		recWh = io.read("uint32", 1)/1000;
+		recThr = recThr_ = io.read("uint16", 1)/100;
+		recTm = recTm_ = io.read("uint32", 1);
+		rec = io.read("uint16", 1);
+		scrTm = scrTm_ = io.read("uint16", 1);
+		scrBright = scrBright_ = io.read("uint16", 1);
+		R = io.read("uint32", 1)/10;
+		scr = io.read("uint16", 1);
+	}
+}
+
+if(tErr.length) {
+	f_err = tErr;
+	V = A = W = T = dG = chMode = recAh = recWh = recThr = recTm = rec = scrTm = scrBright = R = scr = EVAL;
+	grps = EVAL;
+}
+else f_err = "0";','',1662902645);
 COMMIT;

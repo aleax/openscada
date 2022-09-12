@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Основні графічні елементи</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (94% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (93% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -683,13 +683,19 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Стовпчики, за ',' (atm,qttm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Стовпчики
+<p>Перелік поділений ',' з варіантів: atm, qttm, lev, type, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.
+</p>
+</td>
 <td> Рядок </td>
 <td> Визначити у потрібну послідовність та наповнення полів.
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Правила підсвітлення, {lev}[{slev}]{quitt}:{color}:{font}:{fontColor} </td>
+<td> Правила підсвітлення
+<p>Рядки у формі "{lev}[{slev}]{quitt}:{color}:{font}:{fontColor}".
+</p>
+</td>
 <td> Текст </td>
 <td> Правила підсвітлення, де:
 <ul><li> <i>lev</i> — основний рівень повідомлення [0...7];</li>
@@ -2038,13 +2044,19 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr>
 <tr>
 <td> colms </td>
-<td> Стовпчики, за ',' (atm,qttm,nrmtm,lev,cat,mess,prm,dscr,dscrCust{N},alrm,cmnt) </td>
+<td> Стовпчики
+<p>Перелік поділений ',' з варіантів: atm, qttm, nrmtm, lev, cat, mess, prm, dscr, dscrCust{N}, alrm, cmnt.
+</p>
+</td>
 <td> Рядок </td>
 <td> Визначити у потрібну послідовність та наповнення полів.
 </td></tr>
 <tr>
 <td> highLght </td>
-<td> Правила підсвітлення, {lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor} </td>
+<td> Правила підсвітлення
+<p>Рядки у формі "{lev}[{slev}]{quitt}{act}:{color}:{font}:{fontColor}".
+</p>
+</td>
 <td> Текст </td>
 <td> Правила підсвітлення, де:
 <ul><li> <i>lev</i> — основний рівень повідомлення [0...7];</li>
@@ -2767,7 +2779,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </td></tr></table>
 <p>Елемент, представлений на рисунку 4.5, є спеціалізованою панеллю динамічного керування основними користувацькими властивостями <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примітиву "Діаграма"</a>. Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:252px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel_uk.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel_uk.png" width="250" /></a>  <div class="thumbcaption">Рис.4.5. Панель графіків у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:402px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grph_panel_uk.png"><img class="thumbimage" height="365" src="files/LibMainEls_grph_panel_uk.png" width="400" /></a>  <div class="thumbcaption">Рис.4.5. Панель графіків у режимі розробки та виконання (зліва праворуч).</div></div></div></div>
 <p><b><u>Використання — розробка</u></b><br />
 Панель не передбачає спеціальної конфігурації користувачем, вона має лише бути розташована у теці панелей дерева проекту <a href="#RootPgSo">концепції об'єктів сигналізації кореневої сторінки "RootPgSo"</a>, що передбачатиме її динамічний виклик та відкриття у контейнері панелей управління кореневої сторінки.
 </p><p>Ідентифікатор панелі, при розміщені, має зберігатися та рядок її виклику, за отриманням фокусу, у атрибуті обробки подій "evProc" первинного віджету набуде вигляду "ws_FocusIn::open:/pg_control/pg_grph_panel".

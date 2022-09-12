@@ -2665,9 +2665,9 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt, Widget *src )
     string a_path = opt->attr("path");
     if(a_path.compare(0,6,"/attr/") == 0) {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
-	if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
+	if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~_W_W_W):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
 	    opt->setText(attr.at().isTransl()?trD(attr.at().getS()):attr.at().getS());
-	else if(ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR))
+	else if(ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~_W_W_W):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR))
 	{
 	    if(attr.at().id() == "event")	eventAdd(opt->text()+"\n");
 	    else				attr.at().setS(opt->text());

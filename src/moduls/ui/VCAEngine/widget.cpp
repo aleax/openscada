@@ -1491,7 +1491,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    if(!wdgPresent(wattr))	wattr = ".";
 	    if(ctrMkNode("table",opt,-1,"/proc/attr",_("Attributes"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/proc/attr/id",_("Identifier"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("list",opt,-1,"/proc/attr/name",_("Name"),RWRWR_,"root",SUI_ID,2,"tp","str",
+		    "help",_("The name's rows after the first one treat as help."));
 		ctrMkNode("list",opt,-1,"/proc/attr/type",_("Type"),RWRWR_,"root",SUI_ID,4,"tp","dec","idm","1","dest","select","select","/proc/tp_ls");
 		ctrMkNode("list",opt,-1,"/proc/attr/wa",_("Work area"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/proc/attr/proc",_("Processing"),RWRWR_,"root",SUI_ID,1,"tp","bool");

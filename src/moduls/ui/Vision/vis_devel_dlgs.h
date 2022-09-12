@@ -172,13 +172,17 @@ class VisItProp : public QDialog
 	class ItemDelegate: public QItemDelegate
 	{
 	    public:
-		//Public methods
-		ItemDelegate(QObject *parent = 0);
+	    //Public methods
+	    ItemDelegate(QObject *parent = 0);
 
-		void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-		QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-		void setEditorData(QWidget *editor, const QModelIndex &index) const;
-		void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+	    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+	    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+	    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+	    private:
+	    //Private attributes
+	    bool eventFilter( QObject *object, QEvent *event );
 	};
 	//Private attributes
 	QTabWidget	*wdg_tabs;	//Tabs
