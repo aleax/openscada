@@ -2665,7 +2665,8 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end, bool toAccum )
     int64_t a_per = (int64_t)(1e6*archivator().valPeriod());
 
     if(!beg || !end) { beg = ibuf.begin(); end = ibuf.end(); }
-    beg = vmax((beg/a_per)*a_per, ibuf.begin()); end = vmin(end, ibuf.end());
+    beg = vmax((beg/a_per)*a_per, ibuf.begin());
+    end = vmin(end, vmin(ibuf.end(),TSYS::curTime()));	//!!!! Prevents also writing in the future
 
     if(!beg || !end || beg/a_per > end/a_per) return;
 

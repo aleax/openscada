@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 11:10+0300\n"
+"POT-Creation-Date: 2022-09-19 19:45+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -204,10 +204,6 @@ msgstr "Дерево параметров"
 msgid "<<Append current>>"
 msgstr "<<Добавить текущий>>"
 
-#, c-format
-msgid "The parameter disabling in the reason '%d: %s' ..."
-msgstr ""
-
 msgid "Parameter"
 msgstr "Параметр"
 
@@ -227,6 +223,9 @@ msgid "Name"
 msgstr "Имя"
 
 msgid "Stations"
+msgstr ""
+
+msgid "Address in remote source"
 msgstr ""
 
 msgid "Configuration"

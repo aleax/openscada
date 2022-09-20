@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.9.24"
+#define MOD_VER		"2.10.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -195,7 +195,8 @@ void TMdContr::enable_( )	{ sync(); }
 void TMdContr::sync( bool onlyPrmLs )
 {
     string statV, cpEl, daqTp, cntrId, prmId, pIt, cntrPath, prmPath;
-    vector<string> prmLs, prmLs1, gPrmLs;
+    vector<string> prmLs, prmLs1;
+    map<string, vector<string> > gPrmLs;
     XMLNode req("list");
 
     //Stations list update
@@ -211,7 +212,7 @@ void TMdContr::sync( bool onlyPrmLs )
 
     //Remote station scaning. Controllers and parameters scaning
     for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end() && toSync; ++st)
-	for(int cpOff = 0; (cpEl=TSYS::strSepParse(cfg("CNTRPRM").getS(),0,'\n',&cpOff)).size(); )
+	for(int cpOff = 0; (cpEl=TSYS::strParse(cfg("CNTRPRM").getS(),0,"\n",&cpOff)).size(); )
 	    try {
 		// Parse parameters list
 		int pOff = 0;
@@ -297,8 +298,8 @@ void TMdContr::sync( bool onlyPrmLs )
 			} else curP = at(prmId);
 		    }
 
-		    curP.at().setStats(st->first);
-		    gPrmLs.push_back(curP.at().ownerPath(true));
+		    curP.at().setStat(st->first);
+		    gPrmLs[st->first].push_back(curP.at().ownerPath(true));
 		    if(!curP.at().enableStat()) curP.at().enable();
 		    else if(!onlyPrmLs) {
 			if(startStat()) curP.at().sync();
@@ -336,8 +337,8 @@ void TMdContr::sync( bool onlyPrmLs )
 			    curW.at().setPrmAddr(prmPathW_);
 			} else curW = curP.at().at(prmId);
 
-			curW.at().setStats(st->first);
-			gPrmLs.push_back(curW.at().ownerPath(true));
+			curW.at().setStat(st->first);
+			gPrmLs[st->first].push_back(curW.at().ownerPath(true));
 			if(!curW.at().enableStat()) curW.at().enable();
 			else if(!onlyPrmLs) {
 			    if(startStat()) curW.at().sync();
@@ -353,31 +354,103 @@ void TMdContr::sync( bool onlyPrmLs )
 		}
 	    } catch(TError &err) { if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), "%s", err.mess.c_str()); }
 
-    //Removing remotely missed parameters in case all remote stations active status by the actual list
-    if(mAllowToDelPrmAttr && toSync) {
-	bool prmChkToDel = true;
-	for(map<string,StHd>::iterator st = mStatWork.begin(); prmChkToDel && st != mStatWork.end(); ++st)
-	    if(st->second.cntr >= 0) prmChkToDel = false;
-	if(prmChkToDel && enableStat()) {
-	    MtxAlloc res(enRes, true);
-	    for(unsigned iPrm = 0, iGPrm = 0; iPrm < pHd.size(); ) {
-		for(iGPrm = 0; iGPrm < gPrmLs.size() && gPrmLs[iGPrm] != pHd[iPrm].at().ownerPath(true); ) iGPrm++;
-		if(iGPrm >= gPrmLs.size()) {
-		    string pId = pHd[iPrm].at().id();
-		    try {
-			TParamContr *pCntr = dynamic_cast<TParamContr*>(pHd[iPrm].at().nodePrev());
-			if(pCntr) pCntr->del(pId, NodeRemove|TParamContr::NodeRemove_NoArch);
-			else del(pId, NodeRemove|TParamContr::NodeRemove_NoArch);
-			continue;
-		    } catch(TError &err) {
-			mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-			if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),
-			    _("Error deleting parameter '%s' but it is not present on the configuration or remote station."),pId.c_str());
-		    }
-		}
-		iPrm++;
+    //Processing the stations list where the parameters are available and removing for completely missed parameters remotely
+    if(toSync) {
+	//Checking for the parameters list and not only for the enabled-processed since the missing ones are disabled now,
+	//  also removing the empty group parameters
+	vector< vector<string> > prmSt;
+	list(prmLs);
+	prmSt.push_back(prmLs);
+	AutoHD<TMdPrm> curP;
+	bool isEmpty, toRemove;
+	while(true) {
+	    // Already processed in the depth
+	    if(!prmSt.back().size()) {
+		prmSt.pop_back();
+		if(prmSt.size() == 0) break;	//The processing finished
+		curP = (prmSt.size() == 1) ? at(prmSt.back().back()) :
+					     AutoHD<TMdPrm>((TMdPrm*)curP.at().nodePrev()).at().at(prmSt.back().back());
 	    }
+	    // Unwrapping the item tree to the end
+	    else while(true) {
+		curP = (prmSt.size() == 1) ? at(prmSt.back().back()) : curP.at().at(prmSt.back().back());
+		curP.at().list(prmLs);
+		if(!prmLs.size()) break;
+		prmSt.push_back(prmLs);
+	    }
+
+	    // Empty is mostly virtual parameters
+	    isEmpty = (!curP.at().prmAddr().size() || !TSYS::pathLev(curP.at().prmAddr(),1).size());
+
+	    // Checking of the parameter missing on correspond station
+	    for(map<string,StHd>::iterator st = mStatWork.begin(); !isEmpty && st != mStatWork.end(); ++st) {
+		if(st->second.cntr >= 0) continue;	//!!!! No connection with that station now
+		toRemove = true;
+		for(unsigned iGPrm = 0; toRemove && iGPrm < gPrmLs[st->first].size(); ++iGPrm)
+		    toRemove = (gPrmLs[st->first][iGPrm] != curP.at().ownerPath(true));
+		if(toRemove) curP.at().setStat(st->first, true);
+	    }
+
+	    // Checking for the station complete removing
+	    for(int stOff = 0; !isEmpty && (statV=TSYS::strParse(curP.at().stats(),0,";",&stOff)).size(); )
+		if(mStatWork.find(statV) == mStatWork.end())
+		    curP.at().setStat(statV, true);
+
+	    // Removing the parameters with no station
+	    if(isEmpty) curP.at().list(prmLs);
+	    toRemove  = mAllowToDelPrmAttr && ((!isEmpty && curP.at().stats().empty()) || (isEmpty && !prmLs.size()));
+
+	    if(prmSt.size() == 1) curP.free();
+	    else curP = AutoHD<TMdPrm>((TMdPrm*)curP.at().nodePrev());
+
+	    if(toRemove) {
+		try {
+		    if(prmSt.size() == 1) del(prmSt.back().back(), NodeRemove|TParamContr::NodeRemove_NoArch);
+		    else curP.at().del(prmSt.back().back(), NodeRemove|TParamContr::NodeRemove_NoArch);
+		} catch(TError &err) {
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		    if(messLev() == TMess::Debug)
+			mess_debug_(nodePath().c_str(),
+			    _("Error deleting parameter '%s' but it is not present on the configuration or remote station."),
+			    prmSt.back().back().c_str());
+		}
+	    }
+
+	    // Removing from the stack back for the processed items
+	    prmSt.back().pop_back();
 	}
+
+	/*//Only enabled parameters processing
+	MtxAlloc res(enRes, true);
+	for(unsigned iPrm = 0, iGPrm = 0; iPrm < pHd.size(); ) {
+	    // Checking of the parameter missing on correspond station
+	    for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st) {
+		if(st->second.cntr >= 0) continue;	//!!!! No connection with that station now
+		for(iGPrm = 0; iGPrm < gPrmLs[st->first].size() && gPrmLs[st->first][iGPrm] != pHd[iPrm].at().ownerPath(true); ++iGPrm) ;
+		if(iGPrm >= gPrmLs[st->first].size()) pHd[iPrm].at().setStat(st->first, true);
+	    }
+
+	    // Checking for the station complete removing
+	    for(int stOff = 0; (statV=TSYS::strParse(pHd[iPrm].at().stats(),0,";",&stOff)).size(); )
+		if(mStatWork.find(statV) == mStatWork.end())
+		    pHd[iPrm].at().setStat(statV, true);
+
+	    // Removing the parameters with no station
+	    if(mAllowToDelPrmAttr && pHd[iPrm].at().stats().empty()) {
+		string pId = pHd[iPrm].at().id();
+		try {
+		    TParamContr *pCntr = dynamic_cast<TParamContr*>(pHd[iPrm].at().nodePrev());
+		    if(pCntr) pCntr->del(pId, NodeRemove|TParamContr::NodeRemove_NoArch);
+		    else del(pId, NodeRemove|TParamContr::NodeRemove_NoArch);
+		    continue;
+		} catch(TError &err) {
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),
+			_("Error deleting parameter '%s' but it is not present on the configuration or remote station."),pId.c_str());
+		}
+	    }
+	    iPrm++;
+	}*/
     }
 
     syncSt = false;
@@ -426,7 +499,7 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
     TController::cfgChange(co, pc);
 
     if(co.fld().name() == "SCHEDULE")
-	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+	mPer = TSYS::strParse(cron(),1," ").empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     return true;
 }
@@ -578,7 +651,7 @@ void *TMdContr::Task( void *icntr )
 		    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 			TMdPrm &prm = cntr.pHd[iP].at();
 			if(prm.isPrcOK) continue;
-			for(int c_off = 0; (scntr=TSYS::strSepParse(prm.stats(),0,';',&c_off)).size(); ) {
+			for(int cOff = 0; (scntr=TSYS::strParse(prm.stats(),0,";",&cOff)).size(); ) {
 			    if(scntr != st->first) continue;
 			    string aMod	= TSYS::pathLev(prm.prmAddr(), 0);
 			    string aCntr = TSYS::pathLev(prm.prmAddr(), 1);
@@ -780,7 +853,7 @@ void TMdContr::messSet( const string &mess, int lev, const string &type2Code, co
 
     //Sending the message to the remote stations
     string scntr;
-    for(int c_off = 0; (scntr=TSYS::strSepParse(sprm.at().stats(),0,';',&c_off)).size(); )
+    for(int cOff = 0; (scntr=TSYS::strParse(sprm.at().stats(),0,";",&cOff)).size(); )
 	try {
 	    map<string,TMdContr::StHd>::iterator st = mStatWork.find(scntr);
 	    if(st == mStatWork.end())	continue;
@@ -979,14 +1052,21 @@ void TMdPrm::disable( )
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);*/
 }
 
-void TMdPrm::setStats( const string &vl )
+void TMdPrm::setStat( const string &vl, bool toRemove )
 {
-    if(vl.empty()) { mStats = ""; return; }
+    if(vl.empty()) {
+	if(toRemove && mStats.getS().size()) { mStats = ""; modif(); }
+	return;
+    }
 
-    string scntr;
-    for(int off = 0; (scntr=TSYS::strSepParse(mStats,0,';',&off)).size(); )
-	if(scntr == vl) return;
-    mStats.setS(mStats.getS()+vl+";");
+    string scntrs, scntr;
+    for(int off = 0; (scntr=TSYS::strParse(mStats,0,";",&off)).size(); )
+	if(scntr != vl) scntrs += (scntrs.size()?";":"") + scntr;
+    if(!toRemove) scntrs += (scntrs.size()?";":"") + vl;
+
+    if(scntrs != mStats.getS()) modif();
+
+    mStats = scntrs;
 }
 
 void TMdPrm::load_( )
@@ -1043,7 +1123,7 @@ void TMdPrm::sync( )
     //Request and update attributes list
     string scntr;
     XMLNode req("CntrReqs");
-    for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); )
+    for(int cOff = 0; (scntr=TSYS::strParse(stats(),0,";",&cOff)).size(); )
 	try {
 	    vector<string> als;
 	    req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr());
@@ -1112,7 +1192,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 
     string scntr;
 
-    for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); ) {
+    for(int cOff = 0; (scntr=TSYS::strParse(stats(),0,";",&cOff)).size(); ) {
 	map<string,TMdContr::StHd>::iterator st = owner().mStatWork.find(scntr);
 	if(st == owner().mStatWork.end())	continue;
 
@@ -1148,7 +1228,7 @@ bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 	//Direct write
 	else {
 	    string scntr;
-	    for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); )
+	    for(int cOff = 0; (scntr=TSYS::strParse(stats(),0,";",&cOff)).size(); )
 		try {
 		    req.clear()->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/%2fserv%2fattr")->
 			childAdd("el")->setAttr("id",co.fld().name())->setText(co.getS());
@@ -1182,6 +1262,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //Get page info
     if(opt->name() == "info") {
+	//????
 	bool isEmpty = (!prmAddr().size() || !TSYS::pathLev(prmAddr(),1).size());
 
 	TParamContr::cntrCmdProc(opt);
@@ -1196,13 +1277,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/st/id",_("Identifier"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/st/stats",_("Stations"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/st/addr",_("Address in remote source"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    XMLNode *cfgN = ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"));
 	    if(cfgN && !isEmpty) {
 		// Get remote parameter's config section
 		string scntr;
 		XMLNode req("info");
-		for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); )
+		for(int cOff = 0; (scntr=TSYS::strParse(stats(),0,";",&cOff)).size(); )
 		    try {
 			req.clear()->setAttr("path", scntr+"/DAQ/"+prmAddr()+"/%2fprm%2fcfg");
 			if(owner().cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),req.text().c_str());
@@ -1228,13 +1310,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/st/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/prm/st/nm" && ctrChkNode(opt))	opt->setText(name());
-    else if(a_path == "/prm/st/stats" && ctrChkNode(opt))	opt->setText(mStats.getS());
+    else if(a_path == "/prm/st/stats" && ctrChkNode(opt)) opt->setText(mStats.getS());
+    else if(a_path == "/prm/st/addr" && ctrChkNode(opt))  opt->setText(mPrmAddr.getS());
     else if(a_path == "/prm/cfg/SHIFR" || a_path == "/prm/cfg/NAME" || a_path == "/prm/cfg/DESCR")
 	TParamContr::cntrCmdProc(opt);
     else if(a_path.compare(0,4,"/prm") == 0) {
 	//Request to remote host
 	string scntr;
-	for(int c_off = 0; (scntr=TSYS::strSepParse(stats(),0,';',&c_off)).size(); )
+	for(int cOff = 0; (scntr=TSYS::strParse(stats(),0,";",&cOff)).size(); )
 	    try {
 		opt->setAttr("path",scntr+"/DAQ/"+prmAddr()+"/"+TSYS::strEncode(a_path,TSYS::PathEl));
 		if(owner().cntrIfCmd(*opt)) TValue::cntrCmdProc(opt);
@@ -1258,7 +1341,7 @@ void TMdVl::cntrCmdProc( XMLNode *opt )
     if(a_path == "/serv/val" && owner().owner().restDtTm()) {	//Values access
 	// Requesting the remote station
 	string scntr;
-	for(int c_off = 0; (scntr=TSYS::strSepParse(owner().stats(),0,';',&c_off)).size(); )
+	for(int cOff = 0; (scntr=TSYS::strParse(owner().stats(),0,";",&cOff)).size(); )
 	    try {
 		opt->setAttr("path",scntr+"/DAQ/"+owner().prmAddr()+"/a_"+name()+"/"+TSYS::strEncode(a_path,TSYS::PathEl));
 		if(!owner().owner().cntrIfCmd(*opt,true)) break;

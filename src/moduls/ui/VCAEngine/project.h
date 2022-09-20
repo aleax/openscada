@@ -206,7 +206,7 @@ class Page : public Widget, public TConfig
 	void setCalcLang( const string &lng );
 	void setCalcProgTr( bool vl )		{ cfg("PR_TR") = vl; }
 	void setCalcProg( const string &prg );
-	void setCalcPer( int vl )		{ mProcPer = vl; modif(); }
+	void setCalcPer( int vl )		{ mProcPer = vmax(PerVal_UserMin, vl); modif(); }
 	void setParentAddr( const string &nm );
 	void setPrjFlags( int val );
 
@@ -298,6 +298,7 @@ class PageWdg : public Widget, public TConfig
 	string	parentAddr( ) const	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val, bool force = false );
+	void setCalcPer( int vl )		{ mProcPer = vmax(PerVal_UserMin, vl); modif(); }
 	void setParentAddr( const string &isw );
 
 	// Storing
@@ -333,6 +334,10 @@ class PageWdg : public Widget, public TConfig
 	{ if(!a || !(a->flgGlob()&Attr::NotStored) || force) { modif(); Widget::setWModif(a); } }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+    private:
+	//Attributes
+	int64_t	&mProcPer;	//Process period
 };
 
 }

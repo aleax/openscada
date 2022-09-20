@@ -1143,7 +1143,7 @@ string Page::calcProgStors( const string &attr )
     return rez;
 }
 
-int Page::calcPer( ) const	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
+int Page::calcPer( ) const	{ return (mProcPer == PerVal_Parent && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void Page::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg()); }
 
@@ -1800,7 +1800,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 //************************************************
 //* PageWdg: Container stored widget             *
 //************************************************
-PageWdg::PageWdg( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg())
+PageWdg::PageWdg( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg()), mProcPer(cfg("PROC_PER").getId())
 {
     cfg("ID").setS(id());
     mLnk = true;
@@ -1922,7 +1922,7 @@ string PageWdg::calcProgStors( const string &attr )
     return rez;
 }
 
-int PageWdg::calcPer( ) const	{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
+int PageWdg::calcPer( ) const	{ return (mProcPer == PerVal_Parent && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void PageWdg::load_( TConfig *icfg )
 {

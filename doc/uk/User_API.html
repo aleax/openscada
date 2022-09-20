@@ -786,7 +786,8 @@
 <li> <i>string reqUser( )</i> — користувач останнього запиту.</li>
 <li> <i>string reqLang( )</i> — мова останнього запиту.</li>
 <li> <i>int userActTm( )</i> — час останньої дії користувача у секундах від епохи 1.1.1970.</li>
-<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — надсилає UI команду керування сторінками, як то: "open", "next", "prev"; детальніше дивиться у <a href="#Events">секції подій</a>. Ця функція має бути приоритетною для використання у керуванні сторінками перед прямим записом до атрибутів сторінок "pgOpen" та "pgOpenSrc", оскільки це єдиний метод коректної роботи з <a href="#Project">лінкованими сторінками</a>.</li></ul>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — надсилає UI команду керування сторінками, як то: "open", "next", "prev"; детальніше дивиться у <a href="#Events">секції подій</a>. Ця функція має бути приоритетною для використання у керуванні сторінками перед прямим записом до атрибутів сторінок "pgOpen" та "pgOpenSrc", оскільки це єдиний метод коректної роботи з <a href="#Project">лінкованими сторінками</a>.</li>
+<li> <i>int period( bool isReal = false )</i> — отримання періоду опрацювання сеансу, <i>isReal</i> для реального періоду.</li></ul>
 <p><b>Об'єкт "Віджет" (this)</b>
 </p>
 <ul><li> <i>TCntrNodeObj ownerSess( )</i> — об'єкт сеансу даного віджету.</li>
@@ -810,7 +811,8 @@
 </pre></div>
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — ресурс об'єкту за адресою <i>addr</i> (пряме посилання на ресурс або атрибут віджету з цим посиланням) з типом <i>MIME</i>, з таблиці сеансу або джерела. Призначено для редагування ресурсу об'єкта та підставлення його у контексті сеансу, наприклад, зображень SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — встановлює ресурс об'єкту у <i>data</i> з типом <i>MIME</i> за адресою <i>addr</i>.</li>
-<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формує повідомлення програми <i>mess</i> з категорією — шлях до даного віджету.</li></ul>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формує повідомлення програми <i>mess</i> з категорією — шлях до даного віджету.</li>
+<li> <i>int calcPer( int set = EVAL )</i> — отримання, та встановлення за <i>set</i> не EVAL, щодо актуального періоду обчислення-опрацювання.</li></ul>
 <p><b>Об'єкт "Віджет", примітиву "Документ" (this)</b>
 </p>
 <ul><li> <i>string getArhDoc( int nDoc)</i> — текст документу архіву на глибині <i>nDoc</i> (0-{aSize-1}).</li></ul>

@@ -190,6 +190,8 @@ class VisItProp : public QDialog
 			*obj_root,	//Root
 			*obj_path,	//Path
 			*obj_st,	//Status
+			*lab_proc_perG,	//Label of the periodic processing
+			*lab_proc_per,	//Label of the procedure calculate period
 			*lab_proc_text_tr; //Label of the widget's procedure program text translation
 //			*obj_used,	//Used
 //			*obj_tmstmp;	//TimeStamp
@@ -200,6 +202,7 @@ class VisItProp : public QDialog
 
 	LineEdit	*obj_name;	//Name
 	TextEdit	*obj_descr;	//Description
+	LineEdit	*proc_perG;	//Periodic processing
 
 	InspAttr	*obj_attr;	//Attributes inspector
 	InspLnk		*obj_lnk;	//Links inspector

@@ -1,3 +1,46 @@
+2022-09-20 Roman (stable)
+- FIX:LibsDB.vcaTest: wlb_test.FormElTests: fixed in some translation for Ukrainian.
+- !!!!:LibsDB.vcaBase: wlb_Main.RootPgSo: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	- appended in continuing the fast cycles (500 ms) before the container page opening at the start and after navigation,
+	    using the new event "usr_calc";
+	- appended in switching to the fast cycle at alam blink, using the new function calcPer().
+    wlb_Main.ElCadr: the processing period set to 1000.
+    wlb_Main.{anShow,anShow1}: switched to the processing period -1 (parent)
+	and appended in switching to the fast cycle (500 ms) at focus and alam blink.
+    wlb_doc.{docRepDay,docRepMonth,docRepYear}: Switched to the processing period -1 (parent).
+    wlb_doc.{docDin,docAlarmsRep}: Switched to the processing period -2 (disabled).
+- DAQ: The controler objects in the flags "To start" and "To enable" improved in setting "To enable" at "To start"
+    and clearing "To start" at "To enable".
+- DAQ.Value: The service request "get:/serv/attr" of the Control Interface prevented from clearing the "el" subtags
+	at missing the representing attribute, they value is set to EVAL for true mark that as processed in DAQ.DAQGate
+	and don't continue they request in each cycle.
+- !!:DAQ.DAQGate: The controller object sync() function rewrote completely in the "Removing remotely missed parameters" section for:
+	- processing the parameter's representing stations: removing completely for missing stations
+	    and stations where that attribute is miss now;
+	- removing disabled parameters and the logical containers at the flag "Allow the automatic removal of parameters and attributes".
+    The function TMdPrm::setStats() was renamed to TMdPrm::setStat() and was appended for stations removing at the argument "toRemove".
+    The function TSYS::strSepParse() was replaced to TSYS::strParse().
+    Status area of the parameter object appended for the field "Address in remote source".
+- FIX:Archive.Value: Prevented in direct setting values to the archives in very future,
+    what causes FSArch in creation many spare files.
+- Transport.Sockets: Appended for resetting the connection time variable "connTm" at the input transport start.
+- Protocol.SelfSystem: Appended for clearing the attribute "remoteSrcAddr" in the response tree.
+- !!!!:FXI:UI.VCAEngine: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	- fixed in obtaining the period from the owner session widget;
+	- appended of setting the session side period with the User API function calcPer() of the session side widget;
+	- expanded by specifying the special values: PerVal_Sess(0), PerVal_Parent(-1), PerVal_UserMin(PerVal_Dis(-2)), PerVal_SessDef(-3);
+	- "Period of the calculation" renamed to the "Periodic processing" and the renamed field is specified as a generic parameter,
+	    that moved to the main configuration tab and appended for the page widgets of the project and child widget of the library widget;
+	- the session object appended of the User API function period() returning the session periodic processing;
+	- the processing period was clarified in the session widget status;
+	- prevented in entry to the calculation procedure at empty function.
+    !!:FIX: The document primitive generation appended of limiting the repeating blocks size in limUserFile_SZ (10MB).
+    The attribute "alarmSt" change appended of accompaniation by the new event "ws_alarmChange".
+- !!:UI.Vision: Adapted for renaming "Period of the calculation" to the "Periodic processing" and for moving to the main configuration tab.
+    The previous field in the "Processing" tab is set to be hidden at that missing in the VCA model.
+- FIX:UI.WebVision: Appended in the item text encoding for symbols '<','>','&' of the view "Tree" of the primitive type "FormEl".
+
+
 2022-09-11 Roman (stable)
 - !!:LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech appended for the new attribute "dev" with the Bluetooth device name
 	and for binding to the device at the template start using rfcomm.

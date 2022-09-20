@@ -786,7 +786,8 @@ Where:
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
 <li> <i>int userActTm( )</i> — last user action time in seconds from the epoch of 1/1/1970.</li>
-<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li></ul>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li>
+<li> <i>int period( bool isReal = false )</i> — getting the session processing period, <i>isReal</i> for the real one.</li></ul>
 <p><b>Object "Widget" (this)</b>
 </p>
 <ul><li> <i>TCntrNodeObj ownerSess( )</i> — session object for the current widget.</li>
@@ -810,7 +811,8 @@ Where:
 </pre></div>
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — resource object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the <i>MIME</i>, from the session table or the source. It is designed for the resource objects edition and that substitution to this session's context, for example, images SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — sets the resource object to <i>data</i> with <i>MIME</i> by the address <i>addr</i>.</li>
-<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li></ul>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li>
+<li> <i>int calcPer( int set = EVAL )</i> — the actual calculation-processing period getting and setting at <i>set</i> not EVAL.</li></ul>
 <p><b>Object "Widget" of the primitive "Document" (this)</b>
 </p>
 <ul><li> <i>string getArhDoc( int nDoc)</i> — text of the archive document to "nDoc" depth (0-{aSize-1}).</li></ul>

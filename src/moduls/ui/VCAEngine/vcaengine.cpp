@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.8.27"
+#define MOD_VER		"7.9.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -125,7 +125,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     wdg_el.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     wdg_el.fldAdd(new TFld("PROC",trS("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
-    wdg_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    wdg_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5",i2s(Widget::PerVal_Parent).c_str()));
     wdg_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
     wdg_el.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
@@ -133,6 +133,7 @@ void Engine::postEnable( int flag )
     inclwdg_el.fldAdd(new TFld("IDW",trS("Widget identifier"),TFld::String,TCfg::Key,"100"));
     inclwdg_el.fldAdd(new TFld("ID",trS("Identifier"),TFld::String,TCfg::Key,"30"));
     inclwdg_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    inclwdg_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5",i2s(Widget::PerVal_Parent).c_str()));
     inclwdg_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
 
     //Make widget's IO DB structure: {LibWidgetIO,ProjPageIO}(__IDW__, __ID__, __IDC__, IO_VAL, SELF_FLG, CFG_TMPL, CFG_VAL)
@@ -175,7 +176,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd(new TFld("PARENT",trS("Parent widget"),TFld::String,TFld::NoFlag,"200"));
     page_el.fldAdd(new TFld("PR_TR",trS("Completely translate the procedure"),TFld::Boolean,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("PROC",trS("Procedure text and language"),TFld::String,TFld::TransltText,"1000000"));
-    page_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    page_el.fldAdd(new TFld("PROC_PER",trS("Period of the procedure calculating"),TFld::Integer,TFld::NoFlag,"5",i2s(Widget::PerVal_Parent).c_str()));
     page_el.fldAdd(new TFld("FLGS",trS("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
     page_el.fldAdd(new TFld("ATTRS",trS("Changed attributes"),TFld::String,TFld::NoFlag,"10000"));
     page_el.fldAdd(new TFld("TIMESTAMP",trS("Date of modification"),TFld::Integer,TFld::DateTimeDec));

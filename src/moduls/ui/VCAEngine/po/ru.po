@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-11 21:43+0300\n"
+"POT-Creation-Date: 2022-09-19 19:54+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1620,9 +1620,23 @@ msgstr "Ошибка компиляции функции '%s' на языке '%
 msgid "Modification form %d, fix %d. "
 msgstr "Модификация формирование %d, фиксация %d. "
 
-#, c-format
-msgid "Processing at %s. "
+#, fuzzy, c-format
+msgid "Periodic processing %s%s. "
 msgstr "Обработка в %s. "
+
+msgid "DISABLED"
+msgstr ""
+
+msgid ", from the procedure"
+msgstr ""
+
+#, fuzzy, c-format
+msgid "Processing%s. "
+msgstr "Обработка в %s. "
+
+#, fuzzy
+msgid ", no procedure"
+msgstr "Процедура"
 
 msgid "Spent time on the branch "
 msgstr "Затрачено времени на ветвь "
@@ -1956,6 +1970,17 @@ msgstr "Виджет: "
 msgid "Go to the parent"
 msgstr "Перейти к родителю"
 
+#, fuzzy
+msgid "Periodic processing, milliseconds"
+msgstr "Период вычисления, миллисекунд"
+
+msgid ""
+"Use 0 if you want the session period processing,\n"
+"   -1 if you want to use the parent widget/page/project processing period in "
+"the cascade,\n"
+"   -2 for disable the periodic processing in whole."
+msgstr ""
+
 msgid "Clear the widget changes"
 msgstr "Очистка изменений виджета"
 
@@ -2059,16 +2084,6 @@ msgstr "Рабочая область"
 
 msgid "Calculation"
 msgstr "Вычисление"
-
-msgid "Period of the calculating, milliseconds"
-msgstr "Период вычисления, миллисекунд"
-
-msgid ""
-"Use -1 (< 0) if you want to use the parent widget/page/project calculating "
-"period."
-msgstr ""
-"Используйте -1 (< 0) если желаете использования родительской периодичности "
-"вычисления виджета/страницы/проекта."
 
 msgid "Procedure language"
 msgstr "Язык процедуры"
@@ -2239,3 +2254,13 @@ msgstr ""
 "Установка значения атрибута виджета. Установка может осуществляться как "
 "указанием полного адреса атрибута в <addr>, так и: отдельно адрес виджета в "
 "<addr> и идентификатор атрибута в <attr>."
+
+#~ msgid "Period of the calculating, milliseconds"
+#~ msgstr "Период вычисления, миллисекунд"
+
+#~ msgid ""
+#~ "Use -1 (< 0) if you want to use the parent widget/page/project "
+#~ "calculating period."
+#~ msgstr ""
+#~ "Используйте -1 (< 0) если желаете использования родительской "
+#~ "периодичности вычисления виджета/страницы/проекта."

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (95% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a> </td>
 <td> Visual control area engine
 </td>
-<td> 7.8 </td>
+<td> 7.9 </td>
 <td> GPL2 </td>
 <td> ui_VCAEngine.so </td>
 <td> en,uk,ru,de </td>
@@ -436,6 +436,10 @@
 <td colspan="2"> <i>Events of quietance on the side of the visualizer.</i>
 </td></tr>
 <tr>
+<td> ws_alarmChange </td>
+<td> Notifies about the alarm status change, the attribute "alarmSt".
+</td></tr>
+<tr>
 <td> ws_alarmLev </td>
 <td> Quietance of all violations by all notices methods and types.
 </td></tr>
@@ -837,7 +841,7 @@ The first and the typical method of notifications is screen's light notification
 </p><p>To satisfy the opportunities for accessing to archives, in accordance with the item 3, links make check of the attribute type, and in the case of connection to the "Address", the address of the link is put into the value.
 </p><p>In the VCA terms, the dynamic links and configuration of the dynamics are the one process, to describe a configuration of which the tab "Processing" of the widgets is provided. The tab contains a table of configuration of the attributes properties and the calculation procedure text of the widget.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:963px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_proc.png"><img class="thumbimage" height="749" src="../files/VCA_wdg_proc.png" width="961" /></a>  <div class="thumbcaption">Figure. Tab "Processing" of the configuration page of the widget.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:988px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_proc.png"><img class="thumbimage" height="757" src="../files/VCA_wdg_proc.png" width="986" /></a>  <div class="thumbcaption">Figure. Tab "Processing" of the configuration page of the widget.</div></div></div></div>
 <p>In addition to configuration fields of the attributes the column "Processing" in the table provides, for selective using of the attributes in the computational procedure of the widget, and the columns "Configuration", "Configuration template", to describe the links configuration.
 </p><p>If the "Processing" column is true, then the variable <i>{widget ID}_{attribute ID}</i> becomes available in the computational procedure, for example <i>cw_value</i>.
 </p><p>The column "Configuration" allows to specify the link type of the widget attribute:
@@ -865,8 +869,7 @@ The first and the typical method of notifications is screen's light notification
 <ul><li> receiving the data from the input links;</li>
 <li> performing the calculation of the widget procedure;</li>
 <li> transmission the values by the output links.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The widget calculation period in the default value "-1" means the chain using the period value from the widget owner for the first positive value, or the project calculation period.
-</p><p>The figure shows a tab of links for group attributes, by specifying only the parameter. The following figure shows the individual attribute assignment.
+<p>The figure shows a tab of links for group attributes, by specifying only the parameter. The following figure shows the individual attribute assignment.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:656px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_grp.png"><img class="thumbimage" height="458" src="../files/VCA_wdg_lnk_grp.png" width="654" /></a>  <div class="thumbcaption">Figure. Tab "Links" of the configuration page of the widget with the group assignment of the attributes by the specifying only the parameter.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:656px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_attr.png"><img class="thumbimage" height="506" src="../files/VCA_wdg_lnk_attr.png" width="654" /></a>  <div class="thumbcaption">Figure. Tab "Links" of the configuration page of the widget with the individual assignment of the attributes.</div></div></div></div>
@@ -2923,7 +2926,8 @@ Where:
 <li> <i>string reqUser( )</i> — last request user.</li>
 <li> <i>string reqLang( )</i> — last request language.</li>
 <li> <i>int userActTm( )</i> — last user action time in seconds from the epoch of 1/1/1970.</li>
-<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li></ul>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li>
+<li> <i>int period( bool isReal = false )</i> — getting the session processing period, <i>isReal</i> for the real one.</li></ul>
 <p><b>Object "Widget" (this)</b>
 </p>
 <ul><li> <i>TCntrNodeObj ownerSess( )</i> — session object for the current widget.</li>
@@ -2947,7 +2951,8 @@ Where:
 </pre></div>
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — resource object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the <i>MIME</i>, from the session table or the source. It is designed for the resource objects edition and that substitution to this session's context, for example, images SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — sets the resource object to <i>data</i> with <i>MIME</i> by the address <i>addr</i>.</li>
-<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li></ul>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li>
+<li> <i>int calcPer( int set = EVAL )</i> — the actual calculation-processing period getting and setting at <i>set</i> not EVAL.</li></ul>
 <p><b>Object "Widget" of the primitive "Document" (this)</b>
 </p>
 <ul><li> <i>string getArhDoc( int nDoc)</i> — text of the archive document to "nDoc" depth (0-{aSize-1}).</li></ul>
@@ -3319,16 +3324,20 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <li> List of the opened pages.</li></ul>
 <p>Configuration pages of the visual elements, placed in different containers, may be very different, but this difference is the presence or absence of individual tabs. Main tab of the visual elements in fact is the same everywhere, differing in one configuration field and three into the session (Fig.4.8). The pages contains the tabs of the child pages and included widgets. The container widgets contains the tab of the included widgets. All visual elements contain attributes tab (Fig.4.9), except the logical containers of the projects. Elements, at the level of which it is possible to build the user procedure and to determine the links, contain the tab "Processing" (Fig.4.10) and "Links" (Fig.4.11). <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> The attribute name's rows in the "Processing" tab after the first one treat as help.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:754px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_main.png"><img class="thumbimage" height="743" src="../files/VCAeng_vit_main.png" width="752" /></a>  <div class="thumbcaption">Fig.4.8. Main tab of configuration of the visual elements.</div></div></div></div>
-<p>From this page you can set:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:825px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_main.png"><img class="thumbimage" height="766" src="../files/VCAeng_vit_main.png" width="823" /></a>  <div class="thumbcaption">Fig.4.8. Main tab of configuration of the visual elements.</div></div></div></div>
+<p>From this page you can obtain:
 </p>
-<ul><li> States of the element, the same: "Enabled", counter of the use, parent element and jump to it, date and time of the last modification.</li>
-<li> States of the runtime session's mode: "Opened", "Process" and spent time on execution of the subtree and item, into the <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">debug mode</a>.</li>
+<ul><li> State of the element; for information: "Enabled", counter of the use, date of the last modification, state of the calculation procedure; for control: "Enabled", the page type (for pages), parent element and jump to it.</li>
+<li> State of the element in the runtime session's mode; for information: modification, the periodic processing period, "Processing", spent time on execution of the subtree and item, into the <a href="../Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">debug mode</a>, "Opened"; for control: "Opened", "Processing".</li>
 <li> Identifier, type, root, path, name, description and icon of the element.</li>
+<li> Periodic processing in milliseconds — for common control of the periodic processing of any element including ones who have not any calculation procedure, but that value can be used in the cascade for child elements. There reserved the special values:
+<ul><li> <b>0</b> — if you want the session period processing;</li>
+<li> <b>-1</b> — if you want to use the parent widget/page/project processing period in the cascade;</li>
+<li> <b>-2</b> — for disable the periodic processing in whole.</li></ul></li>
 <li> Command — clear the widget changes.</li>
 <li> Command — lower down the widget changes to its parent.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:737px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_attr.png"><img class="thumbimage" height="729" src="../files/VCAeng_vit_attr.png" width="735" /></a>  <div class="thumbcaption">Fig.4.9. Tab of the attributes of the visual elements.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:903px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_proc.png"><img class="thumbimage" height="750" src="../files/VCAeng_vit_proc.png" width="901" /></a>  <div class="thumbcaption">Fig.4.10. Tab of processing of the visual elements.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:930px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_proc.png"><img class="thumbimage" height="766" src="../files/VCAeng_vit_proc.png" width="928" /></a>  <div class="thumbcaption">Fig.4.10. Tab of processing of the visual elements.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1015px;"><a class="image" href="http://oscada.org/wiki/File:VCAeng_vit_lnk.png"><img class="thumbimage" height="522" src="../files/VCAeng_vit_lnk.png" width="1013" /></a>  <div class="thumbcaption">Fig.4.11. Tab of links of the visual elements.</div></div></div></div>
 
 

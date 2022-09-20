@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-07 08:18+0300\n"
+"POT-Creation-Date: 2022-09-19 20:05+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1212,6 +1212,9 @@ msgstr "Root:"
 
 msgid "Path:"
 msgstr "Pfad:"
+
+msgid "Periodic processing, milliseconds:"
+msgstr "Periodische Verarbeitung, Millisekunden:"
 
 msgid "Attributes"
 msgstr "Attribute"

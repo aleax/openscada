@@ -620,7 +620,7 @@ string LWidget::calcProgStors( const string &attr )
     return rez;
 }
 
-int LWidget::calcPer( ) const	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
+int LWidget::calcPer( ) const	{ return (mProcPer == PerVal_Parent && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void LWidget::setCalcLang( const string &ilng )	{ cfg("PROC").setS(ilng.empty() ? "" : ilng+"\n"+calcProg()); }
 
@@ -944,7 +944,7 @@ TVariant LWidget::stlReq( Attr &a, const TVariant &vl, bool wr )
 //************************************************
 //* CWidget: Container stored widget             *
 //************************************************
-CWidget::CWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg())
+CWidget::CWidget( const string &iid, const string &isrcwdg ) : Widget(iid), TConfig(&mod->elInclWdg()), mProcPer(cfg("PROC_PER").getId())
 {
     cfg("ID").setS(id());
     mLnk = true;
@@ -1052,7 +1052,7 @@ string CWidget::calcProgStors( const string &attr )
     return rez;
 }
 
-int CWidget::calcPer( ) const	{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
+int CWidget::calcPer( ) const	{ return (mProcPer == PerVal_Parent && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void CWidget::load_( TConfig *icfg )
 {

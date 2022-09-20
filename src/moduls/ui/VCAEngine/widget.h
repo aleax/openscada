@@ -165,6 +165,13 @@ class Widget : public TCntrNode
 	enum EnDisFlag {
 	    NodeRemove_NoDelMark = TCntrNode::NodeSpecific
 	};
+	enum SpecPerVal {	//Special calculation period value
+	    PerVal_Sess = 0,	//the session periodicity
+	    PerVal_Parent = -1,	//taken from the parent
+	    PerVal_Dis = -2,	//disabled for the periodic calculation
+	    PerVal_UserMin = PerVal_Dis,	//just minimum
+	    PerVal_SessDef = -3	//Session time default for use the common project values
+	};
 
 	//Methods
 	Widget( const string &id, const string &isrcwdg = "" );

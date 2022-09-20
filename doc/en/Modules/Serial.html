@@ -45,7 +45,7 @@
 </td></tr></table>
 <p>The module provides support for transports based on serial interfaces such as RS232, RS485, GSM and similar. Input and output transports is supported. You can add new input and output interfaces through the configuration of the transport subsystem in any OpenSCADA configurator.
 </p><p>The module, in the modem mode, supports a mixed mode of operation, which involves the presence of an input transport, which expects external connections, as well as an output transport on the same device. That is, the input transport will ignore all requests in the presence of the output transport connection, while the output transport will not attempt to establish a connection in the presence of the connection to the input transport or the connection of another output transport, for example, another telephone number.
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In the normal mode of the serial interface, multiple use of one and the same port in input and output transports is not allowed. A global blocking of the serial device is not performed due to the ambiguity of this process at the system level, and multiple use can lead to unpredictable and difficult-to-understand issues. If you need to organize a local serial channel with a couple of linked ports, it is recommended to use the command "<b>$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</b>".
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In the normal mode of the serial interface, multiple use of one and the same port in input and output transports is not allowed. A global blocking of the serial device is not performed due to the ambiguity of this process at the system level, and multiple use can lead to unpredictable and difficult-to-understand issues. If you need to organize a local serial channel with a couple of linked ports, it is recommended to use the command <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666</span>.
 </p>
 <div class="toc" id="toc"><div id="toctitle"><h2>Contents</h2></div>
 <ul>
@@ -172,15 +172,14 @@
 </p><p>To check for latency of the exchange channel, thus optimally adjust the symbol time, you can use the interface of the "Request" tab of the output transport. To do this, you need to specify an exemplary request for the protocol, specify "Wait timeout", send a request, and check its integrity. To get a more representative result, you need to repeat the request several times. If there is an incomplete response, then the time of the symbol must be increased, otherwise you can reduce it.
 </p><p>On embedded serial interfaces RS232/422/485 hardware you can achieve low latency — up to several milliseconds. However, on high-loaded systems with many tasks in the real-time priority, latency may become non-deterministic, due to the execution of the service thread of the Linux kernel events in low priority. To solve this problem, you must set a high priority to these threads, which can be done using a script, placing it, for example, in "/etc/rc.local":
 </p>
-<pre style="white-space: pre-wrap;">
-#!/bin/sh
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c">#!/bin/sh</span>
 
-# Setting the high priority for events kernel threads to rise the serial interfaces reaction
-events=`ps -Ao pid,comm | sed -n '/[ ]*\([^ ]\)[ ]*events\/[0-9]/s//\1/p'`
-for ie in $events; do
-  chrt -pr 21 $ie
-done
-</pre>
+<span class="c"># Setting the high priority for events kernel threads to rise the serial interfaces reaction</span>
+<span class="nv">events</span><span class="o">=</span><span class="sb">`</span>ps -Ao pid,comm <span class="p">|</span> sed -n <span class="s1">'/[ ]*\([^ ]\)[ ]*events\/[0-9]/s//\1/p'</span><span class="sb">`</span>
+<span class="k">for</span> ie in <span class="nv">$events</span><span class="p">;</span> <span class="k">do</span>
+  chrt -pr <span class="m">21</span> <span class="nv">$ie</span>
+<span class="k">done</span>
+</pre></div>
 <p>This script does not make sense for real-time Linux cores, with the PREEMPT_RT patch, since all interrupt and message threads are already running there in real-time priority.
 </p><p>On the external serial interfaces hardware, such as adapters USB-&gt;RS232/422/485, you may meet the problems of high latency associated with the feature of hardware implementation or its driver. To solve this problem you need study the configuration of the equipment or adjust the large waiting time — symbol time!
 </p><p>In the like way you can determine an optimal connection time, that is: set the connection time to the default value for this speed (sets when changing the speed in the address), remove the "Wait timeout", send a request. If the answer is come then we take the measured response time of the device, double and set the value as the connection time. An unreasonable excess of the connection time will lead to high expectations in the absence of the device, as well as to trigger the protective timeouts of the internal procedures!
@@ -189,25 +188,23 @@ done
 <h3><span class="mw-headline" id="Virtual.2Flocal_serial_interfaces"><span class="mw-headline-number">4.1</span> Virtual/local serial interfaces</span></h3>
 <p>Often for local checking, without physical hardware, you may need the ports pair connected each other. For the ports creation and more other operations on serial stream you can use utility <b>socat</b>. For example, to create two linked ports you need call a command which will create and print their addresses:
 </p>
-<pre style="white-space: pre-wrap;">
-$ socat -d -d pty,raw,echo=0,perm=0666 pty,raw,echo=0,perm=0666
-2013/07/02 16:37:29 socat[10402] N PTY is /dev/pts/6
-2013/07/02 16:37:30 socat[10402] N PTY is /dev/pts/7
-2013/07/02 16:37:30 socat[10402] N starting data transfer loop with FDs [3,3] and [5,5]
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre>socat -d -d pty,raw,echo<span class="o">=</span>0,perm<span class="o">=</span><span class="m">0666</span> pty,raw,echo<span class="o">=</span>0,perm<span class="o">=</span>0666
+<span class="c">#2013/07/02 16:37:29 socat[10402] N PTY is /dev/pts/6</span>
+<span class="c">#2013/07/02 16:37:30 socat[10402] N PTY is /dev/pts/7</span>
+<span class="c">#2013/07/02 16:37:30 socat[10402] N starting data transfer loop with FDs [3,3] and [5,5]</span>
+</pre></div>
 <h3><span class="mw-headline" id="Serial_interfaces_transferring_through_Ethernet_network"><span class="mw-headline-number">4.2</span> Serial interfaces transferring through Ethernet network</span></h3>
 <p>In some cases, it is useful to transfer the serial interface port of the remote machine to the local port, for example, to poll the devices connected to the serial interface of the remote machine. Of course, if you install OpenSCADA on the remote machine in the PLC configuration, then you can immediately process the data, pre-buffering/archiving, and so on, but sometimes the hardware can be complicated to launch OpenSCADA, where saves the ability to throw over the serial stream over the network. To solve this problem you can use the same utility <b>socat</b> or <b>remserial</b>, <b>ser2net</b>, which can be built and run on the remote machine. Examples of throwing over the serial port:
 </p>
-<pre style="white-space: pre-wrap;">
-# Creating a socket on port 5555 on the remote computer, for the serial port /dev/ttyS0
-$ socat tcp-l:5555,reuseaddr,fork file:/dev/ttyS0,raw
-# Connecting to the socket of the reflected port of the remote machine and creating a file of the mirrored local interface.
-$ socat -d -d pty,raw,echo=0,perm=0666 tcp:192.168.2.4:5555,mss=1400
-2013/07/04 10:09:09 socat[12947] N PTY is /dev/pts/4
-2013/07/04 10:09:09 socat[12947] N opening connection to AF=2 192.168.2.4:5555
-2013/07/04 10:09:09 socat[12947] N successfully connected from local address AF=2 192.168.2.61:33493
-2013/07/04 10:09:09 socat[12947] N starting data transfer loop with FDs [3,3] and [5,5]
-</pre>
+<div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c"># Creating a socket on port 5555 on the remote computer, for the serial port /dev/ttyS0</span>
+socat tcp-l:5555,reuseaddr,fork file:/dev/ttyS0,raw
+<span class="c"># Connecting to the socket of the reflected port of the remote machine and creating a file of the mirrored local interface.</span>
+socat -d -d pty,raw,echo<span class="o">=</span>0,perm<span class="o">=</span><span class="m">0666</span> tcp:192.168.2.4:5555,mss<span class="o">=</span>1400
+<span class="c">#2013/07/04 10:09:09 socat[12947] N PTY is /dev/pts/4</span>
+<span class="c">#2013/07/04 10:09:09 socat[12947] N opening connection to AF=2 192.168.2.4:5555</span>
+<span class="c">#2013/07/04 10:09:09 socat[12947] N successfully connected from local address AF=2 192.168.2.61:33493</span>
+<span class="c">#2013/07/04 10:09:09 socat[12947] N starting data transfer loop with FDs [3,3] and [5,5]</span>
+</pre></div>
 <p>In the case of "socat", and possibly other utilities, you can omit the EthernetTCP-&gt;Serial driver starting on the client side and connect OpenSCADA directly to the TCP port of the remote device.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> In operation via the EthernetTCP-&gt;Serial driver there is a feature that is associated with the presence of two connection timeouts: one in the driver and one in <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a>. It is important that the value of this timeout in <a href="../Modules/Sockets.html" title="Special:MyLanguage/Modules/Sockets">Transport.Sockets</a> is greater than in the driver, otherwise it is possible to shift and receive delayed replies from previous queries.
 </p><p>More manufacturers of industrial communication hardware produce ready converters from Ethernet to RS-232/422/485, which you can use with OpenSCADA in similar way. Here are comments and a list of the converters for what OpenSCADA working tested:

@@ -75,7 +75,7 @@ class TMdPrm : public TParamContr
 	string stats( )		{ return mStats; }
 	string prmAddr( )	{ return mPrmAddr; }
 
-	void setStats( const string &vl );
+	void setStat( const string &vl, bool toRemove = false );
 	void setPrmAddr( const string &vl )	{ mPrmAddr = vl; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }

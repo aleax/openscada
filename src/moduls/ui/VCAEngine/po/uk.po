@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-11 21:43+0300\n"
+"POT-Creation-Date: 2022-09-19 19:54+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1614,8 +1614,21 @@ msgid "Modification form %d, fix %d. "
 msgstr "Модифікація формування %d, фіксація %d. "
 
 #, c-format
-msgid "Processing at %s. "
-msgstr "Обробка у %s. "
+msgid "Periodic processing %s%s. "
+msgstr "Періодичне опрацювання %s%s. "
+
+msgid "DISABLED"
+msgstr "ВИМКНЕНО"
+
+msgid ", from the procedure"
+msgstr ", із процедури"
+
+#, c-format
+msgid "Processing%s. "
+msgstr "Опрацювання%s. "
+
+msgid ", no procedure"
+msgstr ", немає процедури"
 
 msgid "Spent time on the branch "
 msgstr "Витрачено часу на гілку "
@@ -1638,7 +1651,7 @@ msgid "Focus"
 msgstr "Фокус"
 
 msgid "Processing"
-msgstr "Обробка"
+msgstr "Опрацювання"
 
 msgid "Engine of the visual control area"
 msgstr "Рушій середовища візуалізації та керування"
@@ -1948,6 +1961,19 @@ msgstr "Віджет: "
 msgid "Go to the parent"
 msgstr "Перейти до батька"
 
+msgid "Periodic processing, milliseconds"
+msgstr "Періодичне опрацювання, мілісекунд"
+
+msgid ""
+"Use 0 if you want the session period processing,\n"
+"   -1 if you want to use the parent widget/page/project processing period in "
+"the cascade,\n"
+"   -2 for disable the periodic processing in whole."
+msgstr ""
+"Використайте 0 якщо бажаєте періодичного опрацювання сеансу,\n"
+"   -1 якщо бажаєте використати період опрацювання батьківського віджету/сторінки/проєкту каскадно,\n"
+"   -2 для цілковитого вимкнення періодичного опрацювання."
+
 msgid "Clear the widget changes"
 msgstr "Очищення змін віджету"
 
@@ -2050,16 +2076,6 @@ msgstr "Робоче середовище"
 
 msgid "Calculation"
 msgstr "Обчислення"
-
-msgid "Period of the calculating, milliseconds"
-msgstr "Період обчислення, мілісекунд."
-
-msgid ""
-"Use -1 (< 0) if you want to use the parent widget/page/project calculating "
-"period."
-msgstr ""
-"Використовуйте -1 (< 0) якщо бажаєте використання батьківського періоду "
-"обчислення віджету/сторінки/проєкту."
 
 msgid "Procedure language"
 msgstr "Мова процедури"

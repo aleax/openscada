@@ -657,6 +657,8 @@ TVariant Session::objFuncCall( const string &id, vector<TVariant> &prms, const s
 	uiCmd(prms[0].getS(), prms[1].getS(), swdg.freeStat() ? NULL :  &swdg.at());
 	return true;
     }
+    // int period( bool isReal = false ) - getting the session processing period, <isReal> for the real one
+    if(id == "period")	return period(prms.size()?prms[0].getB():false);
 
     return TCntrNode::objFuncCall(id, prms, user_lang);
 }
@@ -1492,7 +1494,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 
 void SessPage::alarmSet( bool isSet )
 {
-    int aStCur  = attrAt("alarmSt").at().getI( );
+    int aStCur  = attrAt("alarmSt").at().getI();
     string aCur = attrAt("alarm").at().getS( );
     int alev = s2i(TSYS::strSepParse(aCur,0,'|')) & 0xFF;
     int atp  = s2i(TSYS::strSepParse(aCur,3,'|')) & 0xFF;
@@ -1520,9 +1522,11 @@ void SessPage::alarmSet( bool isSet )
 	aqtp |= (iacur>>16) & 0xFF;
     }
 
-    attrAt("alarmSt").at().setI((alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0);
+    int aStCur_ = (alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0;
+    if(aStCur_ != aStCur) { attrAt("alarmSt").at().setI(aStCur_); eventAdd("ws_alarmChange\n"); }
 
-    if(ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
+    SessWdg *sw = ownerSessWdg(true);
+    if(sw) sw->alarmSet();
     if(isSet) ownerSess()->alarmSet(addr(), aCur);
 }
 
@@ -1547,7 +1551,8 @@ void SessPage::alarmQuietance( uint8_t quit_tmpl, bool isSet, bool ret )
     for(unsigned iW = 0; iW < lst.size(); iW++)
 	((AutoHD<SessWdg>)wdgAt(lst[iW])).at().alarmQuietance(quit_tmpl, false, ret);
 
-    if(isSet && ownerSessWdg(true))	ownerSessWdg(true)->alarmSet();
+    SessWdg *sw = NULL;
+    if(isSet && (sw=ownerSessWdg(true))) sw->alarmSet();
 }
 
 bool SessPage::attrPresent( const string &attr ) const
@@ -1641,7 +1646,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 //************************************************
 SessWdg::SessWdg( const string &iid, const string &iparent, Session *isess ) :
     Widget(iid,iparent), TValFunc(iid+"_wdg",NULL), tmCalc(0), tmCalcMax(0),
-    mProc(false), inLnkGet(true), mToEn(false), mCalcClk(isess->calcClk()), mMdfClc(CLK_NO_ALL), mCalcRes(true), mSess(isess)
+    mProc(false), inLnkGet(true), mToEn(false), mCalcClk(isess->calcClk()), mCalcPer(PerVal_SessDef), mMdfClc(CLK_NO_ALL), mCalcRes(true), mSess(isess)
 {
     modifClr();
 
@@ -1725,7 +1730,7 @@ void SessWdg::setEnable( bool val, bool force )
 	mToEn = false;
     }
 
-    SessWdg *sw;
+    SessWdg *sw = NULL;
     if(val && (sw=ownerSessWdg(true)) && sw->process()) {
 	setProcess(true);
 	sw->prcElListUpdate();
@@ -1837,10 +1842,14 @@ string SessWdg::getStatus( )
 {
     string rez = Widget::getStatus();
     rez += TSYS::strMess(_("Modification form %d, fix %d. "), (int)((mMdfClc>>16)&0xFFFF), (int)(mMdfClc&0xFFFF));
+    rez += TSYS::strMess(_("Periodic processing %s%s. "),
+	    (calcPer() == PerVal_Dis)?_("DISABLED"):TSYS::time2str(1e-3*((calcPer()>0)?calcPer():ownerSess()->period())).c_str(),
+	    (mCalcPer != PerVal_SessDef)?_(", from the procedure"):"");
     if(process())
-	rez += TSYS::strMess(_("Processing at %s. "), TSYS::time2str(1e-3*((calcPer()>0)?calcPer():ownerSess()->period())).c_str());
+	rez += TSYS::strMess(_("Processing%s. "), TValFunc::func()?"":_(", no procedure"));
     if(mess_lev() == TMess::Debug)
-	rez += _("Spent time on the branch ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+_("the item ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
+	rez += _("Spent time on the branch ")+tm2s(tmCalcAll())+"["+tm2s(tmCalcMaxAll())+"], "+
+		    _("the item ")+tm2s(tmCalc)+"["+tm2s(tmCalcMax)+"]. ";
 
     return rez;
 }
@@ -1853,8 +1862,8 @@ string SessWdg::calcProgStors( const string &attr ){ return parent().freeStat() 
 
 int SessWdg::calcPer( ) const
 {
-    int vRez = parent().freeStat() ? 0 : parent().at().calcPer();
-    if(vRez < 0 && ownerSessWdg()) vRez = ownerSessWdg()->calcPer();
+    int vRez = (mCalcPer != PerVal_SessDef) ? mCalcPer : (parent().freeStat() ? PerVal_Sess : parent().at().calcPer());
+    if(vRez == PerVal_Parent) { SessWdg *sW = ownerSessWdg(true); if(sW) vRez = sW->calcPer(); }
 
     return vRez;
 }
@@ -1890,7 +1899,7 @@ void SessWdg::wdgAdd( const string &iid, const string &name, const string &ipare
 
     //Limit for the deep
     int depth = 0;
-    for(SessWdg *ownW = this; ownW->ownerSessWdg(); ownW = ownW->ownerSessWdg()) depth++;
+    for(SessWdg *ownW = this, *ownW_ = NULL; (ownW_=ownW->ownerSessWdg()); ownW = ownW_) depth++;
     if(depth > RECURS_DET_HOPS)
 	throw TError(nodePath().c_str(), _("It is a try of creating a widget in depth bigger to %d!"), RECURS_DET_HOPS);
 
@@ -2029,7 +2038,8 @@ void SessWdg::alarmSet( bool isSet )
 
     attrAt("alarmSt").at().setI((alev && atp) ? (aqtp<<16)|(atp<<8)|alev : 0);
 
-    if(ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
+    SessWdg *sw = ownerSessWdg(true);
+    if(sw) sw->alarmSet();
     if(isSet) ownerSess()->alarmSet(addr(), aCur);
 }
 
@@ -2049,7 +2059,8 @@ void SessWdg::alarmQuietance( uint8_t quit_tmpl, bool isSet, bool ret )
     for(unsigned iW = 0; iW < lst.size(); iW++)
 	((AutoHD<SessWdg>)wdgAt(lst[iW])).at().alarmQuietance(quit_tmpl, false, ret);
 
-    if(isSet && ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
+    SessWdg *sw = NULL;
+    if(isSet && (sw=ownerSessWdg(true))) sw->alarmSet();
 }
 
 void SessWdg::prcElListUpdate( )
@@ -2129,13 +2140,10 @@ void SessWdg::calc( bool first, bool last, int pos )
     try {
 	int pgOpenPrc = -1;
 
-	bool isPer = false;
+	bool isPer = TValFunc::func() && calcPer() != PerVal_Dis && !((mCalcClk+pos)%(vmax(calcPer()/ownerSess()->period(),1)));
 
 	//Processing
-	if((isPer=!((mCalcClk+pos)%(vmax(calcPer()/ownerSess()->period(),1))))	//at own period
-		|| first || last	//at start or stop
-		|| eventGet().size())	//early processing for events and what allows to set the own period in big
-	{
+	if(isPer || first || last || eventGet().size()) {	//at own period, at start or stop, as reaction for the events processing
 	    int64_t tCnt = 0;
 	    if(mess_lev() == TMess::Debug) tCnt = TSYS::curTime();
 
@@ -2499,6 +2507,8 @@ TVariant SessWdg::objFuncCall( const string &id, vector<TVariant> &prms, const s
     if(id == "messCrit" && prms.size())	{ mess_crit(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
     if(id == "messAlert" && prms.size()){ mess_alert(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
     if(id == "messEmerg" && prms.size()){ mess_emerg(nodePath().c_str(), "%s", prms[0].getS().c_str()); return 0; }
+    // int calcPer( int set = EVAL ) - the actual calculation-processing period getting and setting at <set> not EVAL.
+    if(id == "calcPer") { if(prms.size() && !prms[0].isEVal()) setCalcPer(prms[0].getI()); return calcPer(); }
 
     //Request to primitive
     TVariant rez = objFuncCall_w(id, prms, user_lang, this);

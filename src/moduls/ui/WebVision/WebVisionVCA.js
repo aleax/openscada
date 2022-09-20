@@ -285,9 +285,9 @@ function setWAttrs( wId, attrs, val )
 {
     var body = '<set>';
     if(typeof(attrs) == 'string')
-	body += '<el id=\''+attrs+'\'>'+((typeof(val)=='string')?val.replace(new RegExp('&','g'),'&amp;').replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):val)+'</el>';
+	body += '<el id=\''+attrs+'\'>'+((typeof(val)=='string')?val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):val)+'</el>';
     else for(var i in attrs)
-	body += '<el id=\''+i+'\'>'+((typeof(attrs[i])=='string')?attrs[i].replace(new RegExp('&','g'),'&amp;').replace(new RegExp('<','g'),'&lt;').replace(new RegExp('>','g'),'&gt;'):attrs[i])+'</el>';
+	body += '<el id=\''+i+'\'>'+((typeof(attrs[i])=='string')?attrs[i].replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):attrs[i])+'</el>';
     body += '</set>';
 
     servSet(wId, 'com=attrs', body);
@@ -3034,7 +3034,9 @@ function getTree( )
 		}
 		if(!cur_it.children.length) {
 		    cur_it.innerHTML = "<img onclick='this.parentNode.formObj.expand(this.parentNode)'/>"+
-				       "<span onclick='this.parentNode.formObj.selIt(this.parentNode.itPath,true)'>"+item+"</span><ul\>";
+				       "<span onclick='this.parentNode.formObj.selIt(this.parentNode.itPath,true)'>"+
+					item.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+
+					"</span><ul\>";
 		    cur_it.formObj = formObj;
 		}
 	    }

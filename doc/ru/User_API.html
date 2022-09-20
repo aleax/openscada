@@ -777,40 +777,42 @@
 </p>
 <ul><li> <i>Array sensors()</i> — получить все доступные сенсоры от Qt mobility, возвращает "false" если не доступно ни одного сенсора.</li></ul>
 <h3><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_UI.VCAEngine"><span class="mw-headline-number">11.2</span> Модуль <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">UI.VCAEngine</a></span></h3>
-<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine_ru.png" title="Объектная модель пользователя модуля VCAEngine."><img alt="Объектная модель пользователя модуля VCAEngine." height="238" src="files/Oscada_UserOM_VCAEngine_ru.png" width="364" /></a></div>
-<p><b>Объект "Сеанс" ( this.ownerSess() )</b>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.png" title="User object model of the module VCAEngine."><img alt="User object model of the module VCAEngine." height="238" src="../en/files/Oscada_UserOM_VCAEngine.png" width="352" /></a></div>
+<p><b>Object "Session" ( this.ownerSess() )</b>
 </p>
-<ul><li> <i>string user( )</i> — текущий пользователь сеанса.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квитирует нарушение <i>wpath</i> с шаблоном <i>quit_tmpl</i>. Если <i>wpath</i> это пустая строка то производится глобальное квитирование. В строке <i>wpath</i>, через символ ';', могут быть перечислены адреса нескольких виджетов. При установке <i>ret</i> осуществляется возврат квитирования.</li>
-<li> <i>int reqTm( )</i> — время последнего запроса в секундах от эпохи 1.1.1970.</li>
-<li> <i>string reqUser( )</i> — пользователь последнего запроса.</li>
-<li> <i>string reqLang( )</i> — язык последнего запроса.</li>
-<li> <i>int userActTm( )</i> — время последнего действия пользователя в секундах от эпохи 1.1.1970.</li>
-<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — отправляет UI команду управления страницами, как: "open", "next", "prev"; детальнее смотрите в <a href="#Events">секции сообщений</a>. Эта функция должна быть приоритетной для использования при контроле страницами перед прямой записью в атрибут страниц "pgOpen" и "pgOpenSrc" поскольку это единственный метод корректной работы с <a href="#Project">линкованными страницами</a>.</li></ul>
-<p><b>Объект "Виджет" (this)</b>
+<ul><li> <i>string user( )</i> — current session user.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — quiets of the violations <i>wpath</i> with the template <i>quit_tmpl</i>. If <i>wpath</i> is empty string then the global quietance makes. Into the string <i>wpath</i>, by symbol ';', can be enumerated addresses of several widgets. When set the <i>ret</i>, the quietance return is performed.</li>
+<li> <i>int reqTm( )</i> — last request time in seconds from the epoch of 1/1/1970.</li>
+<li> <i>string reqUser( )</i> — last request user.</li>
+<li> <i>string reqLang( )</i> — last request language.</li>
+<li> <i>int userActTm( )</i> — last user action time in seconds from the epoch of 1/1/1970.</li>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — sends a UI command of the pages managing, that is: "open", "next", "prev"; for more details see in <a href="#Events">the events section</a>. This function must be in the priority of using to the pages managing before the direct writing to the page attributes "pgOpen" and "pgOpenSrc" due it is single method of the correct work with <a href="#Project">the linked pages</a>.</li>
+<li> <i>int period( bool isReal = false )</i> — getting the session processing period, <i>isReal</i> for the real one.</li></ul>
+<p><b>Object "Widget" (this)</b>
 </p>
-<ul><li> <i>TCntrNodeObj ownerSess( )</i> — объект сеанса данного виджета.</li>
-<li> <i>TCntrNodeObj ownerPage( )</i> — объект родительской страницы данного виджета.</li>
-<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — объект родительского виджета данного виджета. При указании <i>base</i> будут возвращены и объекты страниц.</li>
-<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — добавляет виджет <i>wid</i> с именем <i>wname</i> на основе библиотечного виджета <i>parent</i>.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Добавляет новый виджет на основе виджета текстового примитива</span>
-<span class="nx">nw</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">wdgAdd</span><span class="p">(</span><span class="s2">"nw"</span><span class="p">,</span> <span class="s2">"Новый виджет"</span><span class="p">,</span> <span class="s2">"/wlb_originals/wdg_Text"</span><span class="p">);</span>
+<ul><li> <i>TCntrNodeObj ownerSess( )</i> — session object for the current widget.</li>
+<li> <i>TCntrNodeObj ownerPage( )</i> — parent page object for the current widget.</li>
+<li> <i>TCntrNodeObj ownerWdg( bool base = false )</i> — parent widget object for the current widget. If set <i>base</i> then returns the parent page objects also.</li>
+<li> <i>TCntrNodeObj wdgAdd( string wid, string wname, string parent )</i> — adds the new widget <i>wid</i> with the name <i>wname</i> and based on the library widget <i>parent</i>.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Adds the new widget, based at the text primitive</span>
+<span class="nx">nw</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">wdgAdd</span><span class="p">(</span><span class="s2">"nw"</span><span class="p">,</span> <span class="s2">"New widget"</span><span class="p">,</span> <span class="s2">"/wlb_originals/wdg_Text"</span><span class="p">);</span>
 <span class="nx">nw</span><span class="p">.</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomX"</span><span class="p">,</span> <span class="mi">50</span><span class="p">).</span><span class="nx">attrSet</span><span class="p">(</span><span class="s2">"geomY"</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
 </pre></div>
-<ul><li> <i>bool wdgDel( string wid )</i> — удаляет виджет <i>wid</i>.</li>
-<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — подключается к дочернему или глобальному виджету, посредством пути <i>byPath</i>. В случае глобального подключения можно использовать абсолютный или относительный путь к виджету. Точкой отсчёта абсолютного адреса выступает объект корня модуля "VCAEngine", а значит, первым элементом абсолютного адреса является идентификатор сеанса, который опускается. Относительный адрес берёт отсчёт от текущего виджета. Специальным элементом относительного адреса является элемент вышестоящего узла "..".</li>
-<li> <i>Array attrList()</i> — перечень атрибутов виджета.</li>
-<li> <i>bool attrPresent( string attr )</i> — проверяет атрибут виджета <i>attr</i> на факт присутствия.</li>
-<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — значение атрибута виджета <i>attr</i> или из сеанса <i>fromSess</i>. Для отсутствующих атрибутов возвращается пустая строка.</li>
-<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — устанавливает значение <i>vl</i> в атрибут виджета <i>attr</i> или в сеанс, для <i>toSess</i>. Возвращает текущий объект, для конкатенации функций установки.</li>
-<li> <i>string link( string attr, bool prm = false )</i> — ссылка атрибута виджета <i>attr</i>. При установке <i>prm</i> запрашивает ссылку группы атрибутов (параметр), представленную указанным атрибутом.</li>
-<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — устанавливает ссылку атрибута виджета <i>attr</i>. При установке <i>prm</i> осуществляется установка ссылки группы атрибутов (параметр), представленной указанным атрибутом.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Устанавливает ссылку восьмого тренда параметром</span>
+<ul><li> <i>bool wdgDel( string wid )</i> — deletes the widget <i>wid</i>.</li>
+<li> <i>TCntrNodeObj wdgAt( string wid, bool byPath = false )</i> — attaches to child or global widget, by the path <i>byPath</i>. In the case of global connection, you can use absolute or relative path to the widget. For starting point of the absolute address acts the root object of the module "VCAEngine", which means the first element of the absolute address is session identifier, which is ignored. The relative address takes the countdown from the current widget. Special element of the relative address is an element of parent node "..".</li>
+<li> <i>Array attrList()</i> — list of the widget attributes.</li>
+<li> <i>bool attrPresent( string attr )</i> — checks to presence fact of the attribute <i>attr</i> of the widget.</li>
+<li> <i>ElTp attr( string attr, bool fromSess = false )</i> — value of the attribute <i>attr</i> of the widget or from the session <i>fromSess</i>. For missing attributes will be return empty string.</li>
+<li> <i>TCntrNodeObj attrSet( string attr, ElTp vl, bool toSess = false )</i> — sets the value <i>vl</i> to the attribute <i>attr</i> of the widget or to the session, by <i>toSess</i>. The object is returned for the function concatenation.</li>
+<li> <i>string link( string attr, bool prm = false )</i> — link for the widget attribute <i>attr</i>. At set <i>prm</i> requests the link for the attributes block (parameter), represented by the attribute. </li>
+<li> <i>string linkSet( string attr, string vl, bool prm = false )</i> — sets the link for the widget attribute <i>attr</i>. At set <i>prm</i>, sets the link for the attributes block (parameter), represented by the attribute.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 15px"><pre><span class="c1">//Sets the link to the parameter for the eight trend</span>
 <span class="k">this</span><span class="p">.</span><span class="nx">linkSet</span><span class="p">(</span><span class="s2">"el8.name"</span><span class="p">,</span> <span class="s2">"prm:/LogicLev/experiment/Pi"</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 </pre></div>
-<ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — ресурс объекта по адресу <i>addr</i> (прямая ссылка на ресурс или атрибут виджета с этой ссылкой) с типом <i>MIME</i>, из таблицы сеанса или источника. Предназначено для редактирования ресурса объекта и подстановки его в контексте сеанса, например, изображений SVG.</li>
-<li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — устанавливает ресурс объекта в <i>data</i> с типом <i>MIME</i> по адресу <i>addr</i>.</li>
-<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формирует сообщения программы <i>mess</i> с категорией — путь к данному виджету.</li></ul>
+<ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — resource object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the <i>MIME</i>, from the session table or the source. It is designed for the resource objects edition and that substitution to this session's context, for example, images SVG.</li>
+<li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — sets the resource object to <i>data</i> with <i>MIME</i> by the address <i>addr</i>.</li>
+<li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li>
+<li> <i>int calcPer( int set = EVAL )</i> — the actual calculation-processing period getting and setting at <i>set</i> not EVAL.</li></ul>
 <p><b>Объект "Виджет", примитива "Документ" (this)</b>
 </p>
 <ul><li> <i>string getArhDoc( int nDoc)</i> — текст документа архива на глубине <i>nDoc</i> (0-{aSize-1}).</li></ul>

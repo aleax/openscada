@@ -1632,16 +1632,18 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 
     if(!upTo) upTo = time(NULL)+prmInterf_TM;
 
+    //????
+
     //Process instructions
     if(xcur->childGet("<?dp",0,true)) {
 	if(!s2i(xcur->attr("docAppend")))
-	    for(unsigned i_t = 0; i_t < xcur->childSize(); ) {
-		if(xcur->childGet(i_t)->name().compare(0,4,"<?dp") != 0) xcur->childDel(i_t);
-		else i_t++;
+	    for(unsigned iT = 0; iT < xcur->childSize(); ) {
+		if(xcur->childGet(iT)->name().compare(0,4,"<?dp") != 0) xcur->childDel(iT);
+		else iT++;
 	    }
 	//Call procedures
-	for(int i_t = 0; i_t < (int)xcur->childSize(); i_t++) {
-	    XMLNode *curPrc = xcur->childGet(i_t);
+	for(int iT = 0; iT < (int)xcur->childSize(); iT++) {
+	    XMLNode *curPrc = xcur->childGet(iT);
 	    if(curPrc->name().compare(0,4,"<?dp") != 0) continue;
 	    try {
 		// Compile for new instruction
@@ -1650,13 +1652,15 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		// Call
 		funcV.setS(A_DocCalcPrmRez, "");
 		funcV.calc();
+		if(xcur->attr("docRept").size())
+		    xcur->setAttr("docReptSize", i2s(s2i(xcur->attr("docReptSize"))+funcV.getS(A_DocCalcPrmRez).size()));
 		// Load result to XML tree
 		XMLNode xproc;
 		xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(A_DocCalcPrmRez)+"</i>", true, Mess->charset());
 		// Set result
-		for(unsigned i_tr = 0; i_tr < xproc.childSize(); i_tr++)
-		    *(xcur->childAdd()) = *xproc.childGet(i_tr);
-		if(instrDel)	xcur->childDel(i_t--);
+		for(unsigned iTr = 0; iTr < xproc.childSize(); iTr++)
+		    *(xcur->childAdd()) = *xproc.childGet(iTr);
+		if(instrDel)	xcur->childDel(iT--);
 	    } catch(TError &err) {
 		mess_err(wdg->nodePath().c_str(),_("Error executing instruction '%s': %s"), TSYS::strSepParse(iLang,1,'.').c_str(), err.mess.c_str());
 		mess_err(wdg->nodePath().c_str(),_("Error code: %s"), curPrc->text().c_str());
@@ -1691,7 +1695,8 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    }
 	    progrNode->childAdd("li")->setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),0));
 
-	    while(rTime < wTime && !TSYS::taskEndRun()) {
+	    //????
+	    while(rTime < wTime && !TSYS::taskEndRun() && s2i(reptN->attr("docReptSize")) < limUserFile_SZ) {
 		//Drop current changes and continue
 		if(time(NULL) >= upTo) {
 		    upTo = time(NULL) + prmInterf_TM;
@@ -1718,6 +1723,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		reptN->setAttr("docRptEnd", ((rTimeT-rTime)==perRpt)?"1":"0");
 		rTime = rTimeT;
 	    }
+	    reptN->attrDel("docReptSize");
 	    funcV.setI(A_DocCalcPrmRTime, 0);
 	    funcV.setI(A_DocCalcPrmRTimeU, 0);
 	    funcV.setR(A_DocCalcPrmRPer, 0);
@@ -1783,8 +1789,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    funcV.setS(A_DocCalcPrmMCat, "");
 	    funcV.setS(A_DocCalcPrmMVal, "");
 	    if(docRevers) iC += rCnt;
-	}
-	else nodeProcess(wdg,xcur->childGet(iC),funcV,funcIO,iLang,instrDel,upTo);
+	} else nodeProcess(wdg, xcur->childGet(iC), funcV, funcIO, iLang, instrDel, upTo);
     }
 }
 

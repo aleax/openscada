@@ -195,8 +195,11 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		aNd = opt->childGet(iA);
 		if(aNd->name() == "del") continue;
 		if(!sepReq && aNd->name() != "ael") break;
-		if((aNd->name() != "el" && aNd->name() != "ael") || !vlPresent(aNd->attr("id")))
-		{ opt->childDel(aNd); iA--; continue; }
+		if((aNd->name() != "el" && aNd->name() != "ael") || !vlPresent(aNd->attr("id"))) {
+		    if(aNd->name() == "el") aNd->setText(EVAL_STR);	//!!!! Do not remove the miss attributes entry for true mark on the client
+		    else { opt->childDel(aNd); iA--; }
+		    continue;
+		}
 		vl = vlAt(aNd->attr("id"));
 
 		// Separated element request

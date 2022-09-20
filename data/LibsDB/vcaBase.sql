@@ -10042,7 +10042,7 @@ else if(!prmComText.isEVal() || !prmStText.isEVal()) {
 		st_text_en = st_text_text.length;
 		if(st_text_en && com_text_items.indexOf(st_text_text) != -1) com_text_value = st_text_text;
 	}
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1635753385);
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1663487467);
 INSERT INTO wlb_Main VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
@@ -10474,6 +10474,11 @@ if(f_start || toCompleteUpd) {
 			}
 		}
 	}
+
+	//To wait for some main page open during the page calculation cycle or 10 seconds for disabled periodic calculation
+	toCalcCycles = -max(1, (this.calcPer()==-2)?10:this.calcPer()/this.ownerSess().period());
+	//Fast calculation at the alarm blink
+	if(f_start)	toFastCalc = toFastCalc_ = false;
 }
 
 toChangeCnt = "";
@@ -10535,6 +10540,7 @@ if(pgCont_pgOpenSrc != lastView || toCompleteUpd) {
 //Cvitation button''s
 cvt_light_en = alarmSt&0x100; cvt_alarm_en = alarmSt&0x200; cvt_sound_en = alarmSt&0x400;
 cvt_light_active = alarmSt&0x10000; cvt_alarm_active = alarmSt&0x20000; cvt_sound_active = alarmSt&0x40000;
+toFastCalc = alarmSt&0x10000;
 
 //Per one second''s calls
 if((calcCnt%f_frq) == 0) {
@@ -10553,8 +10559,7 @@ if((calcCnt%f_frq) == 0) {
 			else wColor = labColorWarning;
 			curColor = this["wdg_so"+curSO].attr("colorText");
 			this["wdg_so"+curSO].attrSet("colorText",(aSt&0x10000 && curColor==wColor)?"black":wColor);
-		}
-		else this["wdg_so"+curSO].attrSet("colorText", labColorGood);
+		} else this["wdg_so"+curSO].attrSet("colorText", labColorGood);
 	}
 }
 
@@ -10569,9 +10574,17 @@ for(off = 0, ev_rez = ""; (sval=event.parse(0,"\n",off)).length; )
 		toChangeCnt = "1";
 
 if(toChangeCnt.length) {
-    this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));	//!!!! To open the terminator panel before other
-    if(toChangeCnt.length > 1) this.ownerSess().uiCmd("open", toChangeCnt, this.attr("path"));
+	this.ownerSess().uiCmd("open", "/pg_control/pg_terminator", this.attr("path"));	//!!!! To open the terminator panel before other
+	if(toChangeCnt.length > 1) this.ownerSess().uiCmd("open", toChangeCnt, this.attr("path"));
+	toCalcCycles = 1;
 }
+
+//Updating cycles processing for big processing periods of that page 
+if(abs(toCalcCycles) > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = (sign(toCalcCycles) < 0 && pgCont_pgOpenSrc.length) ? 0 : max(0, abs(toCalcCycles)-1)*sign(toCalcCycles);
+}
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }
 
 //Demo play process
 if(f_start || !play_value) { stepCur = -1; stepTm = 0; play_img = "start"; }
@@ -10592,7 +10605,7 @@ if(play_value) {
 if((tVl=defUser.toInt()) && (tVl2=defUser.parse(1,"-")).length) {
 	if((SYS.time()-this.ownerSess().userActTm()) < tVl*60)	userSetVis = "";
 	else if(this.ownerSess().reqUser() != tVl2.parse(0,":"))	userSetVis = tVl2;
-}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1642271665);
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1663487347);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -10716,6 +10729,8 @@ OBGt7ou7AUCxthdCIWJtemQuKitQTE6O3vL0+ZsO9Q4iTSlJGxNjozPxtLz09YMKoj14xt5gSMyO
 h3+YrABEp8buuE1+d3P/YIumVtZTket3Z8sq7BSAuJm6EQ6X1uOyBgBQkXI3w2EsrorVdlLl8atf
 JOc8Tc46rIipxd+i6Zzyl4tDXY3NXguvZ6OZaoW8mfj20ifRdq/NqC8L2bnZyNrDm/tpX6dJp9N5
 7ty5/zvJf5TT6fwdtJ1wW1UXxCwAAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+if(f_start)	toFastCalc = toFastCalc_ = false;
+
 if(!pDscr.isEVal())
 	tipTool = pDscr + ((!pErr.isEVal()&&pErr.toInt())?"\n"+tr("Error")+": "+pErr:"");
 name_text = pName.isEVal() ? tr("No data") : pName;
@@ -10746,6 +10761,8 @@ if(!pErr.isEVal() && pErrCode != pErr) {
 }
 if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
 
+toFastCalc = false;
+
 //Notification color change
 alarmLev = alarmSt&0xFF;
 if(alarmLev && alarmSt&0x100) {
@@ -10754,26 +10771,27 @@ if(alarmLev && alarmSt&0x100) {
 	else if(alarmLev < 30)	wColor = labColorWarning;
 	else if(alarmLev < 75)	wColor = labColorAlarm;
 	else { wColor = "grey"; blinkPr = false; }
-	if(blinkPr) name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor;
+	if(blinkPr) { name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor; toFastCalc = true; }
 	else { 
 		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; name_color = (redEVAL==true) ? labColorAlarm : wColor; }
 		else name_color = val_color = wColor;
 	}
-}
-else name_color = val_color = labColorGood;
+} else name_color = val_color = labColorGood;
 
 //Blink focused or linked with ElCadr
 if(this.attr("focus") ||
 	(!pName.isEVal() && pName.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == pName))
 {
-  bordColor = (bordColor == "silver") ? "grey" : "silver";
-  bordWidth = 2;
-}
-else { bordColor = "grey"; bordWidth = 1; }
+	bordColor = (bordColor == "silver") ? "grey" : "silver";
+	bordWidth = 2;
+	toFastCalc = true;
+} else bordColor = "grey", bordWidth = 1;
 
 //Check the regulator mode
 if(pModeC == true) mode_text = tr("C");
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;perm;name;dscr;active;geomH;tipTool;contextMenu;evProc;backColor;bordWidth;bordColor;',1629035441);
+else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));
+
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'path;perm;name;dscr;active;geomH;tipTool;contextMenu;evProc;backColor;bordWidth;bordColor;',1663487376);
 INSERT INTO wlb_Main VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
 7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
@@ -10858,6 +10876,8 @@ AMNLTXX1taXx8OLi7+vCjg4gha6+2U5K6Vu/3iL0tc2NptRKiFWVGos1f43E/REMQnljpYpZ/GWO
 6q6DVghEUeBYjhe2BwtXkSQJWRyA39qcmvhKcfAZ58CwkFq7Ojl29fYm+7BFBEEzLKtgkvcSW4wQ
 vHZ5qqi/va1XysRmJn0LqxkLAHg8HpvNtmtWp9NpNpufVE2F4P6fmKIomqZz5eLi4mg0+p+7+ncg
 ABgcHNxLLisre9JrJB9MJtOfuAmh/+/YRy0AAAAASUVORK5CYII=','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+if(f_start)	toFastCalc = toFastCalc_ = false;
+
 var bordWidth_;
 if(bordWidth_.isEVal())	bordWidth_ = bordWidth;
 if(f_stop)	bordWidth = bordWidth_;
@@ -10893,6 +10913,8 @@ if(!pErr.isEVal() && pErrCode != pErr) {
 }
 if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
 
+toFastCalc = false;
+
 //Notification color change
 alarmLev = alarmSt&0xFF;
 if(alarmLev && alarmSt&0x100) {
@@ -10901,22 +10923,23 @@ if(alarmLev && alarmSt&0x100) {
 	else if(alarmLev < 30)	wColor = labColorWarning;
 	else if(alarmLev < 75)	wColor = labColorAlarm;
 	else { wColor = "grey"; blinkPr = false; }
-	if(blinkPr) val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor;
+	if(blinkPr) { val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor; toFastCalc = true; }
 	else { 
 		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 20 0 1 0 1"; }
 		else val_color = wColor;
 	}
-}
-else val_color = labColorGood;
+} else val_color = labColorGood;
 
 //Blink focused or linked with ElCadr
 if(this.attr("focus") ||
 	(!pNAME.isEVal() && pNAME.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == pNAME))
 {
-  bordColor = (bordColor == "silver") ? "grey" : "silver";
-  bordWidth = 2;
-}
-else { bordColor = "grey"; bordWidth = bordWidth_; }','','',500,'perm;name;dscr;active;geomH;tipTool;evProc;backColor;bordWidth;bordColor;',1629035441);
+	bordColor = (bordColor == "silver") ? "grey" : "silver";
+	bordWidth = 2;
+	toFastCalc = true;
+} else bordColor = "grey", bordWidth = bordWidth_;
+
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'perm;name;dscr;active;geomH;tipTool;evProc;backColor;bordWidth;bordColor;',1663487393);
 INSERT INTO wlb_Main VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
 OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6
@@ -15711,7 +15734,7 @@ if(f_start) {
 	}
 	this.doc.attrSet("params", params);
 
-	if(!n) { time = SYS.time(); lastTime = 0; }
+	if(!n) time = SYS.time(), lastTime = 0;
 	return;
 }
 
@@ -15769,7 +15792,7 @@ else if(curMin != lastMin && !(curMin%5)) {
 	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
 	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 	if(curHour < repHour) doc_bTime -= 24*60*60;
-}','','',1000,'name;dscr;evProc;backColor;',1583071529);
+}','','',-1,'name;dscr;evProc;backColor;',1663488391);
 INSERT INTO wlb_doc VALUES('docRepMonth','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	//Init the avialable parameters
@@ -15868,7 +15891,7 @@ else if(curMin != lastMin && !(curMin%5))	{
 	if(curDay == 1 && curHour < repHour)
 		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}','','',1000,'name;dscr;evProc;',1583071529);
+}','','',-1,'name;dscr;evProc;',1663488391);
 INSERT INTO wlb_doc VALUES('docUsersSet','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 fklEQVRYhe2V0UrrQBBAt93ZuEnTNLVUSa0BW5Aq6A/4K/6A/+dX+CaaQsUHfSgiYquGJtlNsnMf
 FooPIpcLda+w5ynsTCZzNplN4/LycjQakd9JkiRwcHBwdHT0ZVgppZQCAESsqopS2mw2vylX1zWl
@@ -15989,7 +16012,7 @@ UqlisXh0dJTP5weDga7ra2trY2Kj0Qhj7Pv+nTt3Jrv9JBRFGQwGoigahmEYRqlUYvLhcDgYDAgh
 mqYZhlEsFidNOp2O53ksqCzL46AAgEajAT9//ry8vPzLeOdv/xe9B/7wnfAX5pd7/vLlCy8IQi6X
 +23sfxM8z//N8+qfwozAtDEjMG3MCEwbMwLTxozAtDEjMG3MCEwbMwLTxozAtDEjMG385wnwjUbD
 dd1pf8ZfotVq/Q94Va1bBeCz3wAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }','','',1000,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1580750144);
+if(f_start){ doc_doc = ""; doc_time = SYS.time(); doc_bTime = doc_time-120; }','','',-2,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1663488391);
 INSERT INTO wlb_doc VALUES('docRep2WorkSh','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 uUlEQVRYhe2UzUvkMBiHkyaZmta2UmIV5iIzo85J0H/c/8CT4kEED1I8dEaLTntoLU7b6Vf64aGw
 yC7LggOGhT6XhB8keZ/kJfDy8nI6nYL/E9u28f7+fhAE0+m0bVsIoe/7Z2dnjuOoqso5p5QahrFe
@@ -16021,7 +16044,7 @@ if(f_start) {
 	doc_time = SYS.time();
 	doc_bTime = doc_time-24*3600;
 	doc_tmpl = doc_tmpl.replace("@@messCat@@", messCat);
-}','','',-1,'name;dscr;backColor;bordWidth;',1635772038);
+}','','',-2,'name;dscr;backColor;bordWidth;',1663488391);
 INSERT INTO wlb_doc VALUES('docMessRep','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 IUlEQVRYhe2VzcriMBhGkzRpYxOpWF0UBPEHBFG8C+/C+/KaXIggggpuxIWKINZGRZtkFh2k8y1m
 BmcgM5Cza/K85TmUNHA0GpVKJUopYyyKok6nwzmP45gxxjn3fR/8iBBiu932ej3wDzCfzzEhBEKI
@@ -16187,7 +16210,7 @@ if(toBuild) {
 			//this.messInfo("pO.trData="+pO.trData);
 		}
 	}
-}','','',1000,'owner;name;dscr;evProc;',1627831876);
+}','','',-1,'owner;name;dscr;evProc;',1663488391);
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
@@ -17770,7 +17793,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.5.3
+Version: 2.6.0
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17798,7 +17821,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.5.3
+Версія: 2.6.0
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -17828,7 +17851,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.5.3
+Версия: 2.6.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');
@@ -21069,7 +21092,7 @@ In the primary function of the pannel — advanced and common control, this item
 If this element using as a control panel is not required, it is firstly in the primary data representing widgets and by their specializing in particular types of data to what a separate panel can be created. Therefore, due to its high universality, due to the support of all known representative structures of DAQ-templates, it is obligatory to use in main frames, as is done in the frame "Contours group".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2',32,'','','','Елемент фактично є універсальною панеллю управління та розширеного контролю різними пристроями за усіма відомими та визначеними представницькими структурами базових даних систем управління за DAQ-шаблонами:
 - аналогові: аналоговий сигнал, ручний ввід аналогового сигналу, ПІД-регулятор (аналоговий та імпульсний);
 - дискретні збірки: клапани, відсікачі, засувки, двигуни, вентилятори та різноманітні перемикачі;
@@ -21082,7 +21105,7 @@ License: GPLv2',32,'','','','Елемент фактично є універса
 Якщо використання цього елементу у якості панелі керування не є обов''язковим, у першу чергу у віджетах первинного представлення та через їх спеціалізацію на окремих типах даних, щодо яких можна створити окрему панель. То завдяки високій універсальності, через підтримку всіх відомих репрезентативних структур DAQ-шаблонів, її обов''язково використовувати у основних кадрах, як це зроблено у кадрі "Група контурів".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.3.0
 Ліцензія: GPLv2','','Элемент фактически является универсальной панелью управления и расширенного контроля различными устройствами по всем известным и определённым представительским структурам базовых данных систем управления по DAQ-шаблонам:
 - аналоговые: аналоговый сигнал, ручной ввод аналогового сигнала, ПИД-регулятор (аналоговый и импульсный);
 - дискретные сборки: клапаны, отсекатели, задвижки, двигатели, вентиляторы и различные переключатели;
@@ -21095,7 +21118,7 @@ License: GPLv2',32,'','','','Елемент фактично є універса
 Если использование этого элемента в качестве панели управления не является обязательным, в первую очередь в виджетах первичного представления и через их специализацию на отдельных типах данных, для которых можно создать отдельную панель. То благодаря высокой универсальности, через поддержку всех известных репрезентативных структур DAQ-шаблонов, её обязательно использовать в основных кадрах, как это сделано в кадре "Группа контуров".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0
+Версия: 1.3.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomZ','5',32,'','','lib','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','numbArg','1',32,'','','labProg','','','','','','','');
@@ -23638,38 +23661,38 @@ Also this element generates alarms on the corresponding parameter settings.
 The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та режиму регулятору, якщо параметр є таким.
 Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру.
 Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.2.0
+Версія: 1.3.0
 Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым.
 Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра.
 Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0
+Версия: 1.3.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','dscr','The element is used to display the current value of the analog parameter and a short prefix of the measured value type.
 Also this element generates alarms on the corresponding parameter settings.
 The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.4.0
 License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та короткого префіксу виміряного значення.
 Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру.
 Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.3.0
+Версія: 1.4.0
 Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и краткого префиксу измеренного значения.
 Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра.
 Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.0
+Версия: 1.4.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('cntrRegul','dscr','Element-frame is used for adjustment of PID-regulator, includes information about the parameter-regulator, fields of the regulator''s settings and the "Diagram" primitive, to monitor the trends of the regulator and browsing history.
 
@@ -28953,7 +28976,7 @@ The main advantage of this document type is the maximal actuality of the data an
 Therefore, documents of this type are allowed to use on every types of the interfaces, include the WEB-interfaces, but some documents based on big archival data require for not slow processing systems!
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2',32,'','','','Кадр є шаблоном документу динамічного типу, він надається як приклад та для побудови власних динамічних документів на його основі. Основною специфікою документу цього типу є синхронна генерація за запитом-відкриттям.
 
 Основною перевагою цього типу документу є максимальна актуальність даних та мови документу, для багатомовних інтерфейсів, тобто можливість генерації на визначену дату та час. Але цей тип документу має суттєвий недолік, який полягає у високому навантажені процесору та тривалому часі синхронної генерації для великих архівних даних.
@@ -28961,7 +28984,7 @@ License: GPLv2',32,'','','','Кадр є шаблоном документу д�
 Відтак, документи такого типу дозволено до використання на всіх типах інтерфейсів, включно з WEB-інтерфейсами, але деякі документи, засновані на великих архівних даних, потребують не повільних обчислювальних систем!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.3.0
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('doc','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','evProc','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel',32,'','','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','ws_FocusIn:/doc:open:/pg_control/pg_doc_panel','','','','');
@@ -29158,11 +29181,11 @@ INSERT INTO wlb_doc_io VALUES('docMessRep','text','Filter:',32,'','','lab_fltr',
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','dscr','The document is provided for generating a report of the violations. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "Violations". As a data source of this document is the message archive.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.6.0
+Version: 1.7.0
 License: GPLv2',32,'','','','Документ слугує для генерації звіту з порушень. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Порушення". У якості джерела даних документу виступає архів повідомлень.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.6.0
+Версія: 1.7.0
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','dscr','The document is provided for generating a day report of the hour-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -29170,14 +29193,14 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 3.1.2
+Version: 3.2.0
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту середніх за годину значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом години формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової години (наприклад, 14:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного дня (наприклад, 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 3.1.2
+Версія: 3.2.0
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','dscr','The document is provided for generating a report of the instantaneous values in view of the trends diagram and the data table. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
@@ -29194,14 +29217,14 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 3.1.2
+Version: 3.2.0
 License: GPLv2',32,'','','','Документ слугує для генерації місячного звіту середніх за добу значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом доби формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової доби (наприклад, 05 09:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного місяця (наприклад, 05 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 3.1.2
+Версія: 3.2.0
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','The document is provided for generating a report of different sort messages together, including: "Violations", "User-operator actions" and "System". The document is the dynamic type, so you can specify the data time and depth. The document so commonly uses and represents the messages structures: "Violations", "User-operator actions" and "System". As a data source of this document is the message archive.
 
@@ -29264,7 +29287,7 @@ Manually entered data is stored or traditionally in an archive of values, with o
 The message archiver of the module FSArch must be set for the next attributes to correct work perform together this document: set "Prevent duplicates", "Consider duplicates and prevent, for equal time, category, level" and set "Time size of the archive files" to 3660 days. The module DBArch must work without such kind specific.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.2
+Version: 1.3.0
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту місячних значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають переважно архіви значень DAQ-параметрів.
 
 Документом вперше запроваджено ручне введення архівних значень великого інтервалу часу вимірювання, яким у цьому випадку є місяць, як недетермінований інтервал. Найбільшу актуальність ця функція становить для лічильників, які з тієї або іншої причини неможливо підключити до системи прямо, із безперервним вимірюванням або періодичним вивантаженням ділянок архіву. Визначення параметру до ручного вводу здійснюється встановленням постійної isMan відповідного параметру, що вмикає елементи форми нагорі документу, за відповідних прав ("root" або у групі "ITW"), та доступ до даних для таблиці та тренду суворо за інтервалом документу — місяць, як і їх введення.
@@ -29278,7 +29301,7 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Архіватор повідомлень модуля FSArch має бути встановлено у наступних атрибутах для здійснення коректної роботи разом із цим документом: встановити "Запобігати дублікатам", "Вважати дублікатами та запобігати, для рівного часу, категорії, рівня" та встановити "Розмір файлів за часом" у 3660 діб. Модуль DBArch має працювати без такого роду специфіки.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.2
+Версія: 1.3.0
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','evProc','',32,'','','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:ITW',32,'','','lab_set','','','','','','','');

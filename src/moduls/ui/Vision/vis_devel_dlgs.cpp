@@ -1173,6 +1173,14 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     connect(obj_descr, SIGNAL(apply()), this, SLOT(isModify()));
     glay->addWidget(obj_descr, 5, 0, 1, 4);
 
+    lab_proc_perG = new QLabel(_("Periodic processing, milliseconds:"), tab_w);
+    lab_proc_perG->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab_proc_perG, 6, 0);
+    proc_perG = new LineEdit(tab_w, LineEdit::Text, false, false);
+    proc_perG->setObjectName("/wdg/cfg/procPer");
+    connect(proc_perG, SIGNAL(apply()), this, SLOT(isModify()));
+    glay->addWidget(proc_perG, 6, 1, 1, 3);
+
     grp->setLayout(glay);
     dlg_lay->addWidget(grp, 1, 0);
 
@@ -1231,9 +1239,10 @@ VisItProp::VisItProp( VisDevelop *parent ) :
     glay->setMargin(9);
     glay->setSpacing(6);
 
-    lab = new QLabel(_("Period of the calculating, milliseconds:"),wdg_proc_fr);
-    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
-    glay->addWidget(lab, 1, 0);
+    //????[v1.0] Remove at moving to the main tab in proc_perG
+    lab_proc_per = new QLabel(_("Period of the calculating, milliseconds:"),wdg_proc_fr);
+    lab_proc_per->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Preferred));
+    glay->addWidget(lab_proc_per, 1, 0);
     proc_per = new LineEdit(wdg_proc_fr, LineEdit::Text, false, false);
     proc_per->setObjectName("/proc/calc/per");
     connect(proc_per, SIGNAL(apply()), this, SLOT(isModify()));
@@ -1458,6 +1467,15 @@ void VisItProp::showDlg( const string &iit, bool reload )
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_descr->objectName().toStdString(),TSYS::PathEl));
 	    if(!owner()->cntrIfCmd(req)) obj_descr->setText(req.text().c_str());
 	}
+	//Periodic processing
+	gnd = TCntrNode::ctrId(root,proc_perG->objectName().toStdString(),true);
+	lab_proc_perG->setVisible(gnd); proc_perG->setVisible(gnd);
+	proc_perG->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
+	if(gnd) {
+	    proc_perG->setToolTip(gnd->attr("help").c_str());
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(proc_perG->objectName().toStdString(),TSYS::PathEl));
+	    if(!owner()->cntrIfCmd(req)) proc_perG->setValue(req.text().c_str());
+	}
 
 	// Special fields
 	//  Page type
@@ -1618,6 +1636,7 @@ void VisItProp::tabChanged( int itb )
 	    if(!proc_per->isEdited()) {
 		proc_per->setValue("");
 		gnd = TCntrNode::ctrId(root,proc_per->objectName().toStdString(),true);
+		lab_proc_per->setVisible(gnd); proc_per->setVisible(gnd);
 		proc_per->setEnabled(gnd && s2i(gnd->attr("acs"))&SEC_WR);
 		if(gnd) {
 		    proc_per->setToolTip(gnd->attr("help").c_str());
@@ -1760,7 +1779,7 @@ void VisItProp::isModify( QObject *snd )
 	req.setText(((QComboBox*)snd)->currentText().toStdString());
 	update = true;
     }
-    else if(oname == obj_name->objectName() || oname == proc_per->objectName() || oname == obj_parent->objectName()) {
+    else if(oname == obj_name->objectName() || oname == proc_perG->objectName() || oname == proc_per->objectName() || oname == obj_parent->objectName()) {
 	req.setText(((LineEdit*)snd)->value().toStdString());
 	update = (oname == obj_parent->objectName());
     }

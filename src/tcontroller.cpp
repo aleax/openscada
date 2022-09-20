@@ -691,6 +691,11 @@ void TController::cntrCmdProc( XMLNode *opt )
 
 bool TController::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.getS() != pc.getS()) modif();
+    if(co.getS() != pc.getS()) {
+	if(co.name() == "ENABLE" && !co.getB())    cfg("START").setB(false);
+	else if(co.name() == "START" && co.getB()) cfg("ENABLE").setB(true);
+
+	modif();
+    }
     return true;
 }
