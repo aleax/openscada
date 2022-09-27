@@ -210,6 +210,8 @@ string TMess::translFld( const string &lng, const string &fld, bool isCfg )	{ re
 
 bool TMess::isMessTranslable( const string &mess )
 {
+    if(mess == EVAL_STR) return false;
+
     for(unsigned iCh = 0; iCh < mess.size(); ++iCh)
 	switch(mess[iCh]) {
 	    case '0' ... '9':					//Digits

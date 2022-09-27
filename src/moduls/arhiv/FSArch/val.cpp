@@ -299,8 +299,10 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
     if(!startStat())	return;
 
     chkANow = true;
-
+    TError err;
     bool isTm = time(NULL) > (mLstCheck+checkTm()*60);
+
+    try {
 
     //Present files of attached archives check.
     //!!!! Moved to the top for early capacity limits check
@@ -387,8 +389,12 @@ void ModVArch::checkArchivator( bool now, bool toLimits )
 	}
     }
 
+    } catch(TError &ierr) { err = ierr; }
+
     chkANow = false;
     if(isTm)	mLstCheck = time(NULL);
+
+    if(err.mess.size()) throw err;
 }
 
 void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm )
@@ -724,23 +730,16 @@ ModVArchEl::~ModVArchEl( )
 {
     //Clear a files list
     ResAlloc res(mRes, true);
-    while(files.size()) {
-	delete files[0];
-	files.pop_front();
-    }
-    res.release();
+    while(files.size()) { delete files[0]; files.pop_front(); }
+    //res.release();
 }
 
 void ModVArchEl::fullErase( )
 {
     //Remove files of the archive
     ResAlloc res(mRes, true);
-    while(files.size()) {
-	files[0]->delFile();
-	delete files[0];
-	files.pop_front();
-    }
-    res.release();
+    while(files.size()) { files[0]->delFile(); delete files[0]; files.pop_front(); }
+    //res.release();
 }
 
 int ModVArchEl::size( )
@@ -946,11 +945,11 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 	    // Insert values to the archive
 	    if(beg <= files[iA]->end() && end >= files[iA]->begin()) {
 		int64_t n_end = (end > files[iA]->end())?files[iA]->end():end;
-		res.request(false);	//release(); !!!! relocking during the use files[iA], then prevent files[iA] loss also
+		//res.request(false);	//release(); !!!! relocking during the use files[iA], then prevent files[iA] loss also
 		if((wrCurOK=files[iA]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
 		wrOK = wrOK && wrCurOK;
 		beg = n_end + v_per;
-		res.request(true);
+		//res.request(true);
 	    }
 	    b_prev = files[iA]->end() + v_per;
 	}
@@ -970,7 +969,7 @@ int64_t ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end, bool to
 	}
 	n_end = (end > n_end) ? n_end : end;
 
-	res.release();
+	//res.release();
 	if((wrCurOK=files[files.size()-1]->setVals(buf,beg,n_end))) realEnd = vmax(realEnd, n_end);
 	wrOK = wrOK && wrCurOK;
 	beg = n_end + v_per;
@@ -1265,9 +1264,9 @@ void VFileArch::attach( const string &iname )
 void VFileArch::check( )
 {
     //Check for pack archive file
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes, true);
     if(!err() && !mPack && owner().archivator().packTm() && (time(NULL) > mAcces + owner().archivator().packTm()*60)) {
-	res.request(true);
+	//res.request(true);
 	if(!mPack) mName = mod->packArch(name());
 	mPack = true;
 
@@ -1306,14 +1305,14 @@ int64_t VFileArch::endData( )
 {
     if(getVal(maxPos()).getS() != EVAL_STR) return end(); //vmin(SYS->curTime(), end());
 
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes, true);
     if(mErr) throw owner().archivator().err_sys(_("Error archive file!"));
+    //res.request(true);
     if(mPack) {
-	res.request(true);
 	try{ if(mPack) mName = mod->unPackArch(mName); } catch(TError&) { mErr = true; throw; }
 	mPack = false;
-	res.request(false);
     }
+    res.request(false);
 
     //Open archive file
     int hd = open(name().c_str(), O_RDONLY);
@@ -1355,8 +1354,8 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     //	vpos_end = vpos_beg+TArchiveS::max_req_vals-buf.realSize();
     if(vpos_beg > vpos_end)	return;
 
+    res.request(true);
     if(mPack) {
-	res.request(true);
 	try{ if(mPack) mName = mod->unPackArch(mName); }
 	catch(TError&) {
 	    try {
@@ -1365,8 +1364,8 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	    } catch(TError&) { mErr = true; throw; }
 	}
 	mPack = false;
-	res.request(false);
     }
+    res.request(false);
 
     //Open archive file
     int hd = open(name().c_str(), O_RDONLY);
@@ -1486,13 +1485,13 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 
 TVariant VFileArch::getVal( int vpos )
 {
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes, true);
     if(mErr) throw owner().archivator().err_sys(_("Error archive file!"));
 
     mAcces = time(NULL);
 
+    //res.request(true);
     if(mPack) {
-	res.request(true);
 	try { if(mPack) mName = mod->unPackArch(mName); }
 	catch(TError&) {
 	    try {
@@ -1501,8 +1500,8 @@ TVariant VFileArch::getVal( int vpos )
 	    } catch(TError&) { mErr = true; throw; }
 	}
 	mPack = false;
-	res.request(false);
     }
+    res.request(false);
 
     //Open archive file
     int hd = open(name().c_str(), O_RDONLY);
@@ -1565,7 +1564,7 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     int vpos_beg, vpos_end;
     string val_b, value, value_first, value_end = eVal;	//Set value
 
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes, true);
     if(mErr) return false;	//throw owner().archivator().err_sys(_("Error archive file!"));
 
     ibeg = vmax(ibeg, begin());
@@ -1574,8 +1573,8 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     mAcces = time(NULL);
 
+    //res.request(true);
     if(mPack) {
-	res.request(true);
 	try { if(mPack) mName = mod->unPackArch(mName); }
 	catch(TError&) {
 	    try {
@@ -1584,8 +1583,8 @@ bool VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	    } catch(TError&) { mErr = true; return false; /*throw;*/ }
 	}
 	mPack = false;
-	res.request(false);
     }
+    res.request(false);
 
     //Init pack index buffer
     vpos_beg = (ibeg-begin())/period();
@@ -1821,6 +1820,7 @@ string VFileArch::getValue( int hd, int voff, int vsz )
 
     if(!fOK) {
 	mod->mess_sys(TMess::Error, _("Error reading the file '%s' for offset %d!"), name().c_str(), voff);
+	ResAlloc res(mRes, true);
 	if(!intoRep) repairFile(hd);
     }
 

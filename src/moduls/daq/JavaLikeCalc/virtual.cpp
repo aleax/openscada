@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.4.26"
+#define MOD_VER		"5.5.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -217,7 +217,10 @@ void TpContr::compileFuncSnthHgl( const string &lang, XMLNode &shgl )
 string TpContr::compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings, int maxCalcTm )
 {
     if(lang != "JavaScript") throw TError(nodePath().c_str(),_("Compilation with the help of the program language %s is not supported."),lang.c_str());
-    if(!lbPresent("sys_compile")) lbReg(new Lib("sys_compile","",""));
+    if(!lbPresent("sys_compile")) {
+	lbReg(new Lib("sys_compile","",""));
+	lbAt("sys_compile").at().setStart(true);
+    }
 
     //Function id generation for "<auto>" or call nodePath() for it
     string funcId = fnc_cfg.id();
@@ -448,7 +451,7 @@ string Contr::getStatus( )
     if(startStat() && !redntUse()) {
 	if(callSt)	val += TSYS::strMess(_("Calculation. "));
 	if(period())	val += TSYS::strMess(_("Calculation with the period: %s. "),tm2s(1e-9*period()).c_str());
-	else val += TSYS::strMess(_("Next calculation by the cron '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	else val += TSYS::strMess(_("Next calculation by the CRON '%s'. "),atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s[%s]."), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(),
 						       tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }

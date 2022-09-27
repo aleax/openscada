@@ -1632,8 +1632,6 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 
     if(!upTo) upTo = time(NULL)+prmInterf_TM;
 
-    //????
-
     //Process instructions
     if(xcur->childGet("<?dp",0,true)) {
 	if(!s2i(xcur->attr("docAppend")))

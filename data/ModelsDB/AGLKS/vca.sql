@@ -1433,7 +1433,6 @@ INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','p2_addr',NU
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','p1_name',NULL,34,'Parameter 1|NAME','prm:/LogicLev/gen/Pi/NAME','e1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','p1_min',NULL,34,'Parameter 1|min','prm:/LogicLev/gen/Pi/min','e1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','p1_max',NULL,34,'Parameter 1|max','prm:/LogicLev/gen/Pi/max','e1','','','','','','');
-INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','p1_clr','#b000b0',96,'Parameter 1','#b000b0','e1','','Параметр 1','','','Параметр 1','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_rg/pg_rg/pg_1','p1_addr',NULL,34,'Parameter 1|var','prm:/LogicLev/gen/Pi/var','e1','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmSp','0',38,'Parameter|sp','prm:/BlockCalc/gen_cntr/PC_PCV3/sp','el7','','','','','','');
 INSERT INTO prj_AGLKS_io VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmShifr','',34,'Parameter|NAME','prm:/BlockCalc/gen_cntr/PC_PCV3/NAME','el7','','','','','','');
@@ -6328,7 +6327,7 @@ CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT D
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO wlb_AGLKS_uio VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE IF NOT EXISTS 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',-1,1,'pgOpen;demoPlayProc;defUser;',1616490460);
+INSERT INTO prj_AGLKS VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo',1,'','','',1000,1,'pgOpen;defUser;demoPlayProc;',1664089342);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so','1','','root',1,'','','',-1,5,'name;dscr;geomX;',1616334878);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/1/ggraph','1','','..',1,'','','',-1,0,'name;dscr;',1582550254);
@@ -6355,7 +6354,7 @@ INSERT INTO prj_AGLKS VALUES('/AGLKS/so','2','','root',1,'','','',-1,5,'name;dsc
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph',1,'','','',-1,2,'geomYsc;pgGrp;',1582550254);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2','mn','','root',1,'','','',-1,5,'name;dscr;',1582873333);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/so/2/mn','CM101','','/wlb_AGLKS/wdg_CM101',1,'','','',-1,0,'name;pgGrp;',1582873333);
-INSERT INTO prj_AGLKS VALUES('/AGLKS','control','','root',1,'','','',-1,5,'name;',1563002297);
+INSERT INTO prj_AGLKS VALUES('/AGLKS','control','','root',1,'','','',1000,5,'name;',1664089342);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/control','ElCadr','','/wlb_Main/wdg_ElCadr',1,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1426000648);
 INSERT INTO prj_AGLKS VALUES('/AGLKS/control','terminator','','/wlb_Main/wdg_terminator',1,'','','',-1,0,'','');
 INSERT INTO prj_AGLKS VALUES('/AGLKS/control','doc_panel','','/wlb_Main/wdg_doc_panel',1,'','','',-1,0,'','');
@@ -6430,11 +6429,11 @@ CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT 
 INSERT INTO VCAPrjs VALUES('AGLKS','AGLKS','АГЛКС','АГЛКС','The project of visualisation AGLKS.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.2.1','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
+Version: 2.2.3','Проект візуалізації Анастасіївської Газо-Ліфтної компресорної станції.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.2.1','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
+Версія: 2.2.3','Проект визуализации Анастасиевской Газо-Лифтной компрессорной станции.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.2.1','prj_AGLKS','','root','op',436,100,0,1);
+Версия: 2.2.3','prj_AGLKS','','root','op',436,250,0,1);
 CREATE TABLE IF NOT EXISTS 'wlb_AGLKS' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '0' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_AGLKS VALUES('CM101','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAI
 pklEQVRYhdVYzXMcxRV//THfM7szsiytLAsZ2bIRjmSoFAaKVLlwRMEh4ZCqHFKcUuSQCpfc+VNy

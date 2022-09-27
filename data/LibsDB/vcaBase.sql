@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.8
+Version: 2.1.18
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAA
 GXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAABTxJREFUeJzt2XFo3GcZwPHPZdFO
@@ -91,7 +91,7 @@ a2szNDQ003rWz1l8E6+v4549pu7vO8XPaqeq5K4XUXBF9j0PVV1f6D+L53+M5OTk5OTk5OTk5OTk
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.8
+Версія: 2.1.18
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -99,7 +99,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.8
+Версия: 2.1.18
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -223,7 +223,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: January 2008
-Version: 2.1.4
+Version: 2.1.14
 License: GPLv2
 DOC: Libs_Documents|Libs/Documents','wlb_doc','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
 GXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAADDBJREFUeJztW0tsHeUV/s61fQ2q
@@ -291,7 +291,7 @@ gGVIUdembhZyx0/HAblJm7RJm1SK/gVOsoBC3kizkAAAAABJRU5ErkJggg==','Документ�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Січень 2008
-Версія: 2.1.4
+Версія: 2.1.14
 Ліцензія: GPLv2
 DOC: Libs_Documents|Libs/Documents','Документы','Предоставляет комбинированную библиотеку отчётов, документов и связанных функций общей и промышленной автоматизации.
 
@@ -303,7 +303,7 @@ DOC: Libs_Documents|Libs/Documents','Документы','Предоставля
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Январь 2008
-Версия: 2.1.4
+Версия: 2.1.14
 Лицензия: GPLv2
 DOC: Libs_Documents|Libs/Documents');
 INSERT INTO VCALibs VALUES('prescr','Prescriptions','The library is created to provide an environment of execution of scenarios of the technological operations — prescriptions, and frames of the user interface about them, including the frame of creation/edition the prescriptions and two frames of the execution control and reporting — "Prescription — run" and "Prescription — run, simple". The library is built on the basis primitives of the widgets and the internal programming language JavaLikeCalc, including templates and commands.
@@ -643,464 +643,6 @@ INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e8','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e8','owner;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','e9','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_e9','owner;','');
 INSERT INTO prj_tmplSO_incl VALUES('/prj_tmplSO/pg_so/pg_view6/pg_view6/pg_1','name','/prj_tmplSO/pg_so/pg_view6/pg_view6/wdg_name','owner;','');
-CREATE TABLE IF NOT EXISTS 'wlb_Main_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_sp','/wlb_originals/wdg_ElFigure','name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','com_open','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_var','/wlb_originals/wdg_ElFigure','name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;p9x;p9y;c1;c2;c3;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','info_name','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text1','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text2','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text3','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text4','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text5','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','com_stop','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_out','/wlb_originals/wdg_ElFigure','name;en;geomX;geomY;geomW;geomH;geomZ;lineClr;fillColor;elLst;p1x;p1y;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','com_close','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','info_var','/wlb_originals/wdg_Text','name;en;active;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;color;wordWrap;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','info_sp','/wlb_originals/wdg_Text','name;en;active;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;color;wordWrap;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','mode','/wlb_originals/wdg_Text','name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;backColor;bordWidth;bordColor;font;wordWrap;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','el1','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','el2','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','el3','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','el4','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','el5','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;addr;color;colorDef;enMode;max;min;varEl;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','el6','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;addr;color;colorDef;enMode;max;min;varEl;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','el7','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','el8','/wlb_Main/wdg_ElViewGraph','name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','ElFigure1','/wlb_originals/wdg_ElFigure','name;geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;',2);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;type;tSek;tSize;sclColor;sclHor;sclVer;sclMarkColor;sclMarkFont;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0val;curSek;curUSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7val;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','so1','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;color;colorText;font;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','next','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','pgCont','/wlb_originals/wdg_Box','perm;geomX;geomY;geomW;geomH;geomZ;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','prev','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','infoW','/wlb_originals/wdg_Box','perm;geomX;geomY;geomW;geomH;geomZ;pgGrp;backColor;bordWidth;bordColor;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','pgCntr','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;backColor;bordWidth;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElViewCadr','trnd','/wlb_originals/wdg_Diagram','geomX;geomY;geomW;backColor;bordWidth;trcPer;tSize;prm0addr;prm0color;prm0val;',2);
-INSERT INTO wlb_Main_incl VALUES('ElViewCadr','text','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;font;color;alignment;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;arg1cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','ElFigure','/wlb_originals/wdg_ElFigure','geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el1','/wlb_Main/wdg_ElCadr','en;geomX;geomY;bordColor;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el2','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el3','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el4','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','name','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el5','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el6','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el7','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','el8','/wlb_Main/wdg_ElCadr','en;geomX;geomY;geomZ;bordColor;prmColor;',2);
-INSERT INTO wlb_Main_incl VALUES('grpCadr','trnd1','/wlb_originals/wdg_Diagram','perm;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSek;tSize;sclHor;sclVer;sclMarkColor;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0width;prm0val;curSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1width;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2width;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3width;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4width;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5width;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6width;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7width;prm7val;',2);
-INSERT INTO wlb_Main_incl VALUES('anShow','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomMargin;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('anShow','val','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomMargin;font;color;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_1','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_2','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_3','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_4','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_5','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_6','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','name','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_1','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_2','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_3','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_4','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_5','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_6','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_1','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_2','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_3','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_4','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_5','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_6','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_1','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_2','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_3','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_4','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_5','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_6','/wlb_Main/wdg_ElViewCadr','en;active;geomX;geomY;geomZ;addr;',2);
-INSERT INTO wlb_Main_incl VALUES('anShow1','name','/wlb_originals/wdg_Text','en;geomX;geomY;geomW;geomH;geomZ;geomMargin;bordWidth;bordColor;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('anShow1','val','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','st_close','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;backColor;bordWidth;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','box_info','/wlb_originals/wdg_Box','name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_pnlTitle','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','Ramka','/wlb_originals/wdg_Box','name;en;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','box_kf','/wlb_originals/wdg_Box','name;geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','trnd','/wlb_originals/wdg_Diagram','name;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSize;sclColor;sclHor;sclVer;sclMarkColor;sclMarkFont;parNum;prm0addr;prm0bordU;prm0color;prm0width;prm0val;curSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1width;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2width;prm2val;prm3addr;prm3bordU;prm3color;prm3width;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4width;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5width;prm5val;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_kfTitle','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','st_open','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;backColor;bordWidth;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','info_ed','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','info_out','/wlb_originals/wdg_Text','name;en;active;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;color;wordWrap;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','pnl_pid','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','tiMin','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','zn','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_ti','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_td','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_kp','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','kp','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_k4','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_k3','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_k2','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_h2','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_h1','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_k1','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','ti','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_tiPer','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','td','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','h2','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','h1','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_zn','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','k1','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','k2','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','k3','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','k4','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','info','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;arg2tp;arg2val;arg3tp;arg3val;arg3cfg;arg4tp;arg4val;arg4cfg;arg5tp;arg5val;arg5cfg;arg6tp;arg6val;arg6cfg;arg7tp;arg7val;arg7cfg;arg8tp;arg8val;arg8cfg;arg9tp;arg9val;arg9cfg;arg10tp;arg10val;arg10cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','trnd','/wlb_originals/wdg_Diagram','geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSize;sclHor;sclVer;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm1addr;prm1bordL;prm1bordU;prm1color;prm2addr;prm2bordL;prm2bordU;prm2color;prm3addr;prm3bordL;prm3bordU;prm3color;prm4addr;prm4bordL;prm4bordU;prm4color;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','title','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomMargin;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p1','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p2','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p3','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p4','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p5','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e1','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e2','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e3','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e4','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e5','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e6','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e7','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e8','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e10','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e11','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e12','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e13','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e14','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e15','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e16','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('ResultGraph','e9','/wlb_Main/wdg_ResultGraphEl','en;geomX;geomY;geomZ;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','cvt_sound','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','cvt_alarm','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','cvt_light','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','h_line','/wlb_originals/wdg_ElFigure','geomX;geomY;geomW;geomH;geomXsc;geomZ;lineWdth;lineStyle;elLst;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','next','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','Text1','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','Text3','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','next1','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','prev','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','curtime','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','size','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;font;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','date','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;tipTool;tipStatus;value;view;cfg;font;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','prev1','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('terminator','Text1','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','tmTp','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;items;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','next','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','Text1','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','Text3','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','next1','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','prev','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','curtime','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','arch','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;items;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','size','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','date','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','prev1','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomXsc;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','cursor','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;tipTool;bordWidth;font;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('doc_panel','tmTp','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomXsc;geomZ;tipTool;tipStatus;elType;value;items;font;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','modAuto','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','moveUp','/wlb_originals/wdg_ElFigure','name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','downm','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','up','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','upm','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','down','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;',2);
-INSERT INTO wlb_Main_incl VALUES('anShow','mode','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;font;color;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrPasp','doc','/wlb_originals/wdg_Document','perm;name;active;geomW;geomH;tmpl;font;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','modCasc','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','modMan','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('ElCadr','moveDwn','/wlb_originals/wdg_ElFigure','name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;orient;elLst;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_rfct','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_tzd','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','rfct','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','tiPer','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_tiMin','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','kd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','ki','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','doc','/wlb_originals/wdg_Document','name;active;geomX;geomY;geomW;geomH;geomZ;tmpl;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_kd','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_ki','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('cntrRegul','tzd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('ElViewGraph','mode','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;font;color;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElViewGraph','trClr','/wlb_originals/wdg_ElFigure','name;geomX;geomY;geomW;geomH;geomZ;lineWdth;lineClr;elLst;',2);
-INSERT INTO wlb_Main_incl VALUES('ElViewGraph','lb_ed','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElViewGraph','lb_sfr','/wlb_originals/wdg_Text','name;geomX;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('ElViewGraph','lb_val','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;font;color;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','prog','/wlb_originals/wdg_Document','name;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;doc;font;time;',0);
-INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','title','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',0);
-INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','btPass','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','btStart','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;img;mode;font;',0);
-INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','btStop','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','lib','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;mode;font;',0);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomOut','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomDef','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomOffDown','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomIn','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomOffUp','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','scaleInfo','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;numbArg;arg0val;arg1val;',2);
-INSERT INTO wlb_Main_incl VALUES('grph_panel','line3','/wlb_originals/wdg_ElFigure','name;geomX;geomY;geomW;geomH;geomZ;elLst;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg1','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg2','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg3','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg4','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg5','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','comAdd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','comArgsBox','/wlb_originals/wdg_Box','name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','comBox','/wlb_originals/wdg_Box','name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','comDel','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','comDwn','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','comIns','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','comUp','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg1','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg2','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg3','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg4','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg5','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArgs','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;color;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labCom','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labProg','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labType','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','lib','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','prog','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','progAdd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','progBox','/wlb_originals/wdg_Box','name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','progDel','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','progExport','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;mode;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','progImport','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;mode;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','progNm','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','save','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','title','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','type','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','wPanel','/wlb_originals/wdg_Box','name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','btStart','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;img;mode;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','btStop','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','labProg','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;numbArg;arg0tp;arg0val;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','lib','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','prog','/wlb_originals/wdg_Document','name;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;doc;font;time;n;vCur;aCur;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','progBox','/wlb_originals/wdg_Box','name;geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','title','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','wPanel','/wlb_originals/wdg_Box','name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','logo','/wlb_originals/wdg_Media','en;geomX;geomY;geomW;geomH;geomZ;backColor;src;fit;',2);
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','play','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;img;mode;font;',2);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','progCopy','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('accept','apply','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('accept','cancel','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('accept','mess','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;bordWidth;font;alignment;text;',0);
-INSERT INTO wlb_Main_incl VALUES('prescrRun','btPass','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','apply','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','cancel','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','color','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;view;cfg;confirm;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','colorBox','/wlb_originals/wdg_Box','geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','dim','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_color','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_dim','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_sc','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','prm','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;elType;value;items;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','val_max','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','val_min','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;',0);
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','name','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;',0);
-INSERT INTO wlb_Main_incl VALUES('grpGraph','arh','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;cfg;',0);
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','descr','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;geomMargin;elType;value;font;','');
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labDescr','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('ElCadr','downMin','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('ElCadr','spToVar','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;img;color;','');
-INSERT INTO wlb_Main_incl VALUES('ElCadr','upMax','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','progRename','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('treeSelect','apply','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;','');
-INSERT INTO wlb_Main_incl VALUES('treeSelect','cancel','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;elType;img;font;','');
-INSERT INTO wlb_Main_incl VALUES('treeSelect','select','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','data','/wlb_originals/wdg_Document','name;en;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;font;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','trends','/wlb_originals/wdg_Diagram','en;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;sclHorPer;tSize;sclHor;sclVer;sclMarkColor;sclMarkFont;parNum;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','view','/wlb_originals/wdg_FormEl','en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;','');
-INSERT INTO wlb_Main_incl VALUES('objProps','labSet','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('objProps','props','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('objProps','set','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('objProps','title','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;geomMargin;tipTool;backColor;bordWidth;bordColor;bordStyle;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','viewLabSet','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','viewSet','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','sel_data','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','sel_trends','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','sel_view','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;','');
-INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','trendsList','/wlb_originals/wdg_FormEl','perm;en;active;geomX;geomY;geomW;geomH;geomZ;elType;set;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','ElFigure1','/wlb_originals/wdg_ElFigure','name;geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','arh','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;cfg;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el1','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el10','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el2','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el3','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el4','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el5','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el6','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el7','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el8','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','el9','/wlb_Main/wdg_ElViewGraph','en;geomX;geomY;geomXsc;geomZ;color;colorDef;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;','');
-INSERT INTO wlb_Main_incl VALUES('grpGraph10','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;backColor;bordColor;trcPer;type;tSek;tSize;sclColor;sclHor;sclVer;sclMarkColor;sclMarkFont;parNum;prm0color;prm0val;curSek;curUSek;curColor;prm1color;prm1val;prm2color;prm2val;prm3color;prm3val;prm4color;prm4val;prm5color;prm5val;prm6color;prm6val;prm7color;prm7val;prm8color;prm8val;prm9color;prm9val;','');
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','comInAdd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labName','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','name','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;confirm;font;','');
-INSERT INTO wlb_Main_incl VALUES('anShow1s','name','/wlb_Main/wdg_anShow1/wdg_name','','');
-INSERT INTO wlb_Main_incl VALUES('anShow1s','val','/wlb_Main/wdg_anShow1/wdg_val','geomW;','');
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_log','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','log','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','type','/wlb_originals/wdg_FormEl','perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','xScaleInfo','/wlb_originals/wdg_Text','name;en;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0val;arg1val;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomDef','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomIn','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomOut','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomOffLeft','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomOffRight','/wlb_originals/wdg_FormEl','perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('ElCadr','com_text','/wlb_originals/wdg_FormEl','en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('ElCadr','st_text','/wlb_originals/wdg_Text','name;en;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;bordWidth;font;color;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','curDay','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','labFri','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','labMon','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','labSat','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','labSun','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','labThr','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','labTue','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','labWed','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','month','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','monthBox','/wlb_originals/wdg_Box','geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w0_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w0_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w0_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w0_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w0_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w0_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w0_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w1_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w1_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w1_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w1_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w1_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w1_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w1_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w2_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w2_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w2_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w2_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w2_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w2_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w2_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w3_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w3_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w3_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w3_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w3_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w3_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w3_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w4_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w4_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w4_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w4_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w4_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w4_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w4_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w5_0','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w5_1','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w5_2','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w5_3','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w5_4','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w5_5','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','w5_6','/wlb_originals/wdg_Text','name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('calendar','year','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','selWin','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;img;mode;font;','');
-INSERT INTO wlb_Main_incl VALUES('graphSelPrm','prmSearch','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;','');
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','pgSel','/wlb_originals/wdg_FormEl','perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;','');
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','backgrnd','/wlb_originals/wdg_FormEl','owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;','');
-INSERT INTO wlb_Main_incl VALUES('prescrEdit','labBackgrnd','/wlb_originals/wdg_Text','owner;name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','alarms','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;contextMenu;elType;value;items;set;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr0','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr1','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr2','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr3','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr4','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol0','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol1','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol2','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol3','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol4','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_cur','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_next','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_next1','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_prev','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_prev1','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_prev_sizeLim','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_report','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','lab_fltr','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;text;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','lab_sort','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','quietMass','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','size','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','sizeLim','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','sort','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsSt','time','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','descr','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','fullName','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','grp','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','labDescr','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','labFullName','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','labGrp','/wlb_originals/wdg_Text','owner;perm;name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','labName','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','labPass','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','labUser','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','lib','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','name','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','pass','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;value;view;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','title','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','userAdd','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','userBox','/wlb_originals/wdg_Box','owner;perm;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','userDel','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','userNm','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;','');
-INSERT INTO wlb_Main_incl VALUES('userManager','wPanel','/wlb_originals/wdg_Box','owner;perm;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;','');
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view1','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view2','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view3','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view4','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view5','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view6','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('doc_panel','dateBeg','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','dateBeg','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','Text2','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('doc_panel','Text2','/wlb_originals/wdg_Text','owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;wordWrap;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('graphCalc','funcCode','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;font;','');
-INSERT INTO wlb_Main_incl VALUES('graphCalc','funcLs','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('graphCalc','lab_funcLs','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('graphCalc','lab_result','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('graphCalc','result','/wlb_originals/wdg_FormEl','owner;geomX;geomY;geomW;geomH;geomZ;elType;value;font;','');
-INSERT INTO wlb_Main_incl VALUES('graphCalc','title','/wlb_originals/wdg_Text','geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','curstime','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsStReport','apply','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;','');
-INSERT INTO wlb_Main_incl VALUES('alarmsStReport','doc','/wlb_originals/wdg_Document','owner;active;geomX;geomY;geomW;geomH;style;doc;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr0','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr1','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr2','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr3','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr4','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol0','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol1','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol2','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol3','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol4','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','go_report','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','itAdd','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','itCopy','/wlb_originals/wdg_FormEl','owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','itDel','/wlb_originals/wdg_FormEl','owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','lab_fltr','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;text;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','dataTbl','/wlb_originals/wdg_FormEl','owner;active;geomX;geomY;geomW;geomH;geomZ;contextMenu;elType;value;items;set;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','classEd','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','classNm','/wlb_originals/wdg_Text','owner;geomX;geomW;geomH;geomZ;font;alignment;text;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','classSel','/wlb_originals/wdg_FormEl','owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','btClassEdit','/wlb_originals/wdg_FormEl','owner;perm;en;active;geomX;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
-INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl','owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;','');
-INSERT INTO wlb_Main_incl VALUES('RootPgSo','alarms','/wlb_originals/wdg_Protocol','owner;en;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;','');
-INSERT INTO wlb_Main_incl VALUES('grph_panel','curstimeBeg','/wlb_originals/wdg_FormEl','owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_Main_mime VALUES('pg_next','image/png;6.00684','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAAZiS0dEACwA
 RADxQFue7AAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9gDBQghJ2VBTzAAAAAddEVYdENv
@@ -9749,8 +9291,10 @@ function setActMess(mess) {
 }
 
 ev_wrk = ev_rez = "";
-if(f_start) cntr = prevCntr = holdCntr = 0;
+if(f_start) cntr = prevCntr = holdCntr = 0, toFastCalc = toFastCalc_ = false;
 cntr++;
+
+toFastCalc = false;
 
 if(!prmColor.isEVal()) { bordColor = prmColor; bordWidth = 2; }
 else { bordColor = "black"; bordWidth = 1; }
@@ -9776,7 +9320,7 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 	info_ed_text = prmDemention.isEVal() ? "" : prmDemention;
 	pVar = prmVar.isEVal() ? prmVarIn : prmVar;
 	if(prmVarIn.isEVal()) info_var_bordWidth = 0;
-	if(info_var_clearCnt <= 0) { info_var_arg0val = pVar; info_var_backColor = ""; } else info_var_clearCnt--; 
+	if(info_var_clearCnt <= 0) { info_var_arg0val = pVar; info_var_backColor = ""; } else { info_var_clearCnt--; toFastCalc = true; }
 	lev_var_p1y = max(0,min(140,140*(1-(pVar-min)/(max-min))));
 	if(prmPrec.isEVal())	info_var_arg0cfg = "10;f;2";
 	else if(prmPrec >= 0)	info_var_arg0cfg = "10;f;"+prmPrec;
@@ -9812,12 +9356,12 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 		spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = (prmCasc != true);
 		lev_out_p1y = 140*(1-prmOut/100);
 		lev_sp_p1y = max(0,min(140,140*(1-(prmSp-min)/(max-min))));
-		if(info_sp_clearCnt <= 0) { info_sp_arg0val = prmSp; info_sp_backColor = ""; } else info_sp_clearCnt--; 
+		if(info_sp_clearCnt <= 0) { info_sp_arg0val = prmSp; info_sp_backColor = ""; } else { info_sp_clearCnt--; toFastCalc = true; }
 		if(prmPrec.isEVal())	info_sp_arg0cfg = "10;f;2";
 		else if(prmPrec >= 0)	info_sp_arg0cfg = "10;f;"+prmPrec;
 		else info_sp_arg0cfg = "10;g;"+abs(prmPrec);
 
-		if(info_out_clearCnt <= 0) { info_out_arg0val = prmOut; info_out_backColor = ""; } else info_out_clearCnt--;
+		if(info_out_clearCnt <= 0) { info_out_arg0val = prmOut; info_out_backColor = ""; } else { info_out_clearCnt--; toFastCalc = true; }
 		appToVl = 0;
 
 		//Event process
@@ -9847,11 +9391,12 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 				info_sp_arg0val = info_var_arg0val;
 				info_sp_backColor = "darkslategray";
 				info_sp_clearCnt = 25;
+				toCalcCycles = 1;
 			}
 			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-			else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
+			else if(ev_wrk == "ws_BtPress:/upm")		appToVl = 10;
 			else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-			else if(ev_wrk == "ws_BtPress:/down")			appToVl = -1;
+			else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
 			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
 			else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
 			else if(ev_wrk == "ws_BtPress:/pnl_pid") {
@@ -9872,13 +9417,14 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
 				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
 				newVl = info_sp_arg0val + sign(appToVl) *										//direction
-														pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
+														pow(abs(appToVl),floor(decMult/2)) *	//half for two buttons level
 														pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-														pow(10,-prmPrec);										//precision base
+														pow(10,-prmPrec);								//precision base
 			}
 			newVl = max(min,min(max,newVl));
 			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin ) newVl = max(prmAMin,min(prmAMax,newVl));
 			info_sp_arg0val = newVl; info_sp_backColor = "darkslategray"; info_sp_clearCnt = 25;
+			toCalcCycles = 1;
 		}
    	else if(appToVl && !prmAuto) {
 			if(prmAnalog==false) {
@@ -9891,6 +9437,7 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 			else {
 				newVl = max(0,min(100,info_out_arg0val+appToVl));
 				info_out_arg0val = newVl; info_out_backColor = "darkslategray"; info_out_clearCnt = 25;
+				toCalcCycles = 1;
 			}
 		}
 
@@ -9917,7 +9464,7 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 				prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
 			}
 			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-			else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
+			else if(ev_wrk == "ws_BtPress:/upm")		appToVl = 10;
 			else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
 			else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
 			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
@@ -9934,13 +9481,14 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
 				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
 				newVl = info_var_arg0val +	sign(appToVl) *										//direction
-															pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
+															pow(abs(appToVl),floor(decMult/2)) *	//half for two buttons level
 															pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-															pow(10,-prmPrec);										//precision base
+															pow(10,-prmPrec);								//precision base
 			}
 			newVl = max(min,min(max,newVl));
 			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin) newVl = max(prmAMin,min(prmAMax,newVl));
 			info_var_arg0val = newVl; info_var_backColor = "darkslategray"; info_var_clearCnt = 25;
+			toCalcCycles = 1;
 		}
 	}
 }
@@ -10042,7 +9590,14 @@ else if(!prmComText.isEVal() || !prmStText.isEVal()) {
 		st_text_en = st_text_text.length;
 		if(st_text_en && com_text_items.indexOf(st_text_text) != -1) com_text_value = st_text_text;
 	}
-}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1663487467);
+}
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1664088345);
 INSERT INTO wlb_Main VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
@@ -10076,30 +9631,33 @@ if(f_start) {
 				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
 		}
 	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
 }
 cnt++;
-if(cnt == 3)	event = "ws_FocusIn:/trnd1";
+if(cnt == cnt_)	event = "ws_FocusIn:/trnd1";
 
 curTm = SYS.time();
-if(!trnd1_tSek) trnd1_tSek = curTm;
+if(!trnd1_tSek)	trnd1_tSek = curTm;
+if(trnd1_curSek > (trnd1_tSek+trnd1_tSize/10) || trnd1_curSek < (trnd1_tSek-trnd1_tSize))
+	trnd1_curSek = trnd1_tSek;
 selSingle = 0;
 selAll = false;
 
 //Events process
-for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length;  ) {
+for(evRez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	if(ev_cur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
 	else if(ev_cur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else if(ev_cur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
-	else if(ev_cur.search("usr_single:/el") == 0)	selSingle = ev_cur.slice(14).toInt();
+	else if(ev_cur == "ws_SliderChange:/arh")		trnd1_tSek = arh_value*trnd1_tSize;
+	else if(ev_cur.search("usr_single:/el") == 0) selSingle = ev_cur.slice(14).toInt();
 	else if(ev_cur.search("usr_all:/el") == 0)	selAll = true;
-	else ev_rez += (ev_cur+"\n");
+	else evRez += (ev_cur+"\n");
 	//SYS.messDebug("Trend","Event: "+ev_cur);
 }
-event = ev_rez;
+event = evRez;
 
 //Trend time control
 if(trnd1_tSek < curTm) trnd1_trcPer = 0;
-else { trnd1_trcPer = 1; trnd1_tSek = 0; }
+else trnd1_trcPer = max(1, (this.calcPer()==-2)?10:this.calcPer()/1000), trnd1_tSek = 0;
 
 //Generic
 name_arg0val = this.attr("name");
@@ -10163,8 +9721,13 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_tipTool = tr("Archive space")+": ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
-}
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1612772549);
+} else arh_active = false, arh_tipTool = "";
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-1,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1664210236);
 INSERT INTO wlb_Main VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAD/klEQVRYhe2Z224bRRiA57gHr8/H2MEpLSCRovYGiXsE4qJ9gEq8RR+A
 23LDg0TiFSJ6Ty8hvSEJJSRqnMb2endnZ2dPPxdxTZq6jllMlkr+rmakmX//z/96ZjSLv/v+Bx9p
@@ -10338,7 +9901,7 @@ for(evRez = "", off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
 	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else evRez += evCur+"\n";
 }
-event = evRez;','','',500,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1636215921);
+event = evRez;','','',-1,'name;dscr;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1664089765);
 INSERT INTO wlb_Main VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADVklEQVRYhe2XS28jRRRGbz366U77ETu2Q6QomwCDDBIsZsFi/gISINbJ
 L4QtC1giQLCZSKMZMa9A7JkYP9vVXd1VdYtF24AEEoFN05LPrj7p072nVepWk4uLC6WU7GSA1F96
@@ -10475,9 +10038,7 @@ if(f_start || toCompleteUpd) {
 		}
 	}
 
-	//To wait for some main page open during the page calculation cycle or 10 seconds for disabled periodic calculation
-	toCalcCycles = -max(1, (this.calcPer()==-2)?10:this.calcPer()/this.ownerSess().period());
-	//Fast calculation at the alarm blink
+	toCalcCycles = -max(1, 10000/this.ownerSess().period());
 	if(f_start)	toFastCalc = toFastCalc_ = false;
 }
 
@@ -10605,7 +10166,7 @@ if(play_value) {
 if((tVl=defUser.toInt()) && (tVl2=defUser.parse(1,"-")).length) {
 	if((SYS.time()-this.ownerSess().userActTm()) < tVl*60)	userSetVis = "";
 	else if(this.ownerSess().reqUser() != tVl2.parse(0,":"))	userSetVis = tVl2;
-}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1663487347);
+}','','',1000,'path;name;dscr;active;geomW;geomH;evProc;backColor;',1664210236);
 INSERT INTO wlb_Main VALUES('ElViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 xUlEQVRoge2W0Y4URRSG///06eqZRQYkqCuBSQDNSEJcHsBrXsInID6P4Y32QhZ3DKLZENZ1iRPR
 XZmNLHZXV53yYokX63IBw1Crqe+yulPn/6r6dBU3Nu5vbk7x32Q0Oqubm9O7d78ej8e5w7w2u7u7
@@ -11209,7 +10770,7 @@ if(szVal < 60)						{ tmTp_value = tr("s"); size_value = szVal; }
 else if(szVal < 60*60)			{ tmTp_value = tr("m"); size_value = szVal/60; }
 else if(szVal < 24*60*60)	{ tmTp_value = tr("h"); size_value = szVal/(60*60); }
 else									{ tmTp_value = tr("d"); size_value = szVal/(24*60*60); }
-dateBeg_value = date_value - szVal;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1577774869);
+dateBeg_value = date_value - szVal;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;',1664089765);
 INSERT INTO wlb_Main VALUES('terminator','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAAx1AAAMdQEteJR1AAAA
 2UlEQVRYhe3QsWrFMAwFUDlVsGWDDa/ZAvn5138K+QEPITVkiSEJ8hvcoUPpUG9Fd5NAh4vU8/mR
 UoKGOOcwpZTSZ4sCAF3jvSiiiCLKb0rOOcbIzH9WEAC2bTPGzPPMzESUc3bOXdfVdd00TcuyWGvv
@@ -11267,6 +10828,8 @@ if(f_start) {
 		for(i_va = 0; i_va < vas.length; i_va++)
 			arch_items += "\n"+mods[i_m].slice(4)+"."+vas[i_va].slice(4);
 	}
+
+	trcPer_ = max(1, trcPer);
 }
 
 //Events process
@@ -11325,8 +10888,8 @@ xScaleInfo_arg0val = 1e4/sclHor; xScaleInfo_arg1val = sclHorOff;
 
 //Trend time control
 date_value = tSek;
-if(tSek < curTm) trcPer = 0; else trcPer = 1, tSek = 0;
-if(tSize < 60)						tmTp_value = tr("s"), size_value = tSize;
+if(tSek < curTm) trcPer = 0; else trcPer = trcPer_, tSek = 0;
+if(tSize < 60)					tmTp_value = tr("s"), size_value = tSize;
 else if(tSize < 60*60)			tmTp_value = tr("m"), size_value = tSize/60;
 else if(tSize < 24*60*60)	tmTp_value = tr("h"), size_value = tSize/(60*60);
 else									tmTp_value = tr("d"), size_value = tSize/(24*60*60);
@@ -11339,7 +10902,7 @@ if(cursor_en && type == 1) cursor_arg0val = tr("Frequency")+":\n"+(1e6/(1e6*curS
 type_value = (type==1)?tr("Spectrum"):((type==2)?tr("XY"):tr("Graph"));
 xScaleInfo_en = xZoomIn_en = xZoomOut_en = xZoomOffRight_en = xZoomOffLeft_en = xZoomDef_en = (type==2);
 selWin_en = (type == 0 && !sclWin.isEVal());
-if(selWin_en)	selWin_value = sclWin;','','',200,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1662874354);
+if(selWin_en)	selWin_value = sclWin;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664210236);
 INSERT INTO wlb_Main VALUES('cntrPasp','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAAYElEQVRoge3PQQ0AIBDAMMC/50MEj4ZkVbDtmVk/OzrgVQNaA1oDWgNa
 A1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgNaA1oDWgPaBXKq
@@ -11381,7 +10944,7 @@ if(SYS.cntrReq(req) == 0 && req.childSize()) {
 		doc_tmpl += "<tr><td>"+SYS.strEncode(aDscr,"HTML")+"</td><td>"+SYS.strEncode(aVl,"HTML")+"</td></tr>\n";
 	}
 }
-doc_tmpl += "</table></body>";','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1577775501);
+doc_tmpl += "</table></body>";','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1664089765);
 INSERT INTO wlb_Main VALUES('ElViewGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAiCAIAAABgN0jYAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAC30lEQVRYhe2XbU/aUBSAT1tAC4XCQFGYBeRF3ERwuKkzcYvzhTXbdGZL
 zH6BP88s+7CYZfNlIU6jMqMx07Hgy1BwceIoUKDtPkDMNMuYEWhI+ny7t+eee57b3OYUmZqaikQi
@@ -11402,7 +10965,13 @@ if(f_start)	{
 	colorDef_ = color_ = "";
 	allowSel = this.ownerWdg(true).attr("allowSelLst").length;
 	perUserSel = this.ownerWdg(true).attr("perUserSel");
+
+	toCalcCycles = -max(1, 10000/this.ownerSess().period());
+	toFastCalc = toFastCalc_ = false;
 }
+
+toFastCalc = false;
+
 if(colorDef_ != colorDef || !color.length)	color = colorDef_ = colorDef;
 user = (perUserSel == true) ? this.ownerSess().user() : "";
 if(f_start || user != user_) { loadFromSess = false; user_ = user; }
@@ -11429,9 +10998,9 @@ if(varEl.isEVal()) lb_val_arg0val = "-";
 else if(!digStts.isEVal() && digStts.length) lb_val_arg0val = (varEl^digRevers) ? digStts.parse(0,";").parse(0,"-") : digStts.parse(1,";").parse(0,"-");
 else lb_val_arg0val = prec.isEVal() ? varEl.toPrecision(6) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : ((log==true)?varEl.toExponential(prec):varEl.toFixed(prec)));
 lb_val_color = lb_sfr_color = lb_ed_color = labColorGood;
-if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color =  "grey";
-else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color =  labColorAlarm;
-else if(!wMax.isEVal() && !wMin.isEVal() && wMax > wMin && (varEl >= wMax || varEl <= wMin)) lb_val_color = lb_sfr_color = lb_ed_color =  labColorWarning;
+if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color = "grey";
+else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color = labColorAlarm;
+else if(!wMax.isEVal() && !wMin.isEVal() && wMax > wMin && (varEl >= wMax || varEl <= wMin)) lb_val_color = lb_sfr_color = lb_ed_color = labColorWarning;
 
 lb_ed_text = ed.isEVal() ? "" : ed;
 
@@ -11439,16 +11008,16 @@ lb_ed_text = ed.isEVal() ? "" : ed;
 if(this.attr("focus") ||
 		(!name.isEVal() && name.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == name))
 {
-  bordColor = (bordColor == "silver") ? "gray" : "silver";
-  bordWidth =  2;
-}
-else { bordWidth =  1; bordColor = "black"; }
+	bordColor = (bordColor == "silver") ? "gray" : "silver";
+	bordWidth =  2;
+	toFastCalc = true;
+} else bordWidth =  1, bordColor = "black";
 
 //Check the regulator mode
 if(!enMode.isEVal() && enMode) { 
-  mode_en = true; 
-  if(!pModeC.isEVal() && pModeC) mode_text = tr("C");
-  else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M")); 
+	mode_en = true; 
+	if(!pModeC.isEVal() && pModeC) mode_text = tr("C");
+	else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M")); 
 }
 else mode_en = false;
 
@@ -11482,7 +11051,14 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+tr(dscr)+"\n";
 	tipStatus = dscr;
-}','','',500,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1636215921);
+}
+
+//Updating cycles processing for big processing periods of that page 
+if(abs(toCalcCycles) > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calcIn\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = (sign(toCalcCycles) < 0 && lb_sfr_color != "grey") ? 0 : max(0, abs(toCalcCycles)-1)*sign(toCalcCycles);
+}
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1664201447);
 INSERT INTO wlb_Main VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -12137,7 +11713,7 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else ev_rez += (ev_cur+"\n");
 }
-event = ev_rez;','','',500,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1577775501);
+event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664089765);
 INSERT INTO wlb_Main VALUES('treeSelect','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
 LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
@@ -12169,7 +11745,7 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
 	else ev_rez += ev_cur + "\n";
 }
-event = ev_rez;','','',500,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1577775501);
+event = ev_rez;','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1664089765);
 INSERT INTO wlb_Main VALUES('TextLab','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAXCAIAAAA0gN7GAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAABHUlEQVRYhWNgGOKAkYGBIScnh5ube6BdQjL4+vXrlClTWBgYGDg4ODg5
 OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
@@ -12470,7 +12046,7 @@ if(f_start || selTab != prevTab) {
 		else if(wId.indexOf(prevTab) != -1) wObj.attrSet("en",false);
 	}
 	prevTab = selTab;
-}','','',1000,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1577775501);
+}','','',-1,'name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1664089765);
 INSERT INTO wlb_Main VALUES('objProps','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAxCAIAAADldTjtAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAABvUlEQVRoge3av0rDUBTH8V9ubpNqrVrS+BcKWtFFpYidXBycHbvqSwhd
 fAHHvoEv4CIOLnHQRQcFETpYEPG/VVNtaaw1iUNRHDrJ1YNwPtMlwzn3O2S72tLy0tnoGdR6AQ4B
@@ -12587,31 +12163,33 @@ if(f_start) {
 				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
 		}
 	cnt = 0;
+	toCalcCycles = cnt_ = max(3, 2000/this.ownerSess().period());
 }
 cnt++;
-if(cnt == 3)	event = "ws_FocusIn:/trnd1";
+if(cnt == cnt_)	event = "ws_FocusIn:/trnd1";
 
 curTm = SYS.time();
-if(!trnd1_tSek) trnd1_tSek = curTm;
+if(!trnd1_tSek)	trnd1_tSek = curTm;
+if(trnd1_curSek > (trnd1_tSek+trnd1_tSize/10) || trnd1_curSek < (trnd1_tSek-trnd1_tSize))
+	trnd1_curSek = trnd1_tSek;
 selSingle = 0;
 selAll = false;
 
 //Events process
-evRez = "";
-for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
-	if(evCur == "key_presComma:/trnd1")		trnd1_tSek -= trnd1_tSize/2;
-	else if(evCur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else if(evCur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
-	else if(evCur.search("usr_single:/el") == 0)	selSingle = evCur.slice(14).toInt();
-	else if(evCur.search("usr_all:/el") == 0)		selAll = true;
-	else evRez += evCur+"\n";
-	//SYS.messDebug("Trend","Event: "+evCur);
+for(evRez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
+	if(ev_cur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
+	else if(ev_cur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
+	else if(ev_cur == "ws_SliderChange:/arh")		trnd1_tSek = arh_value*trnd1_tSize;
+	else if(ev_cur.search("usr_single:/el") == 0) selSingle = ev_cur.slice(14).toInt();
+	else if(ev_cur.search("usr_all:/el") == 0)	selAll = true;
+	else evRez += (ev_cur+"\n");
+	//SYS.messDebug("Trend","Event: "+ev_cur);
 }
 event = evRez;
 
 //Trend time control
 if(trnd1_tSek < curTm) trnd1_trcPer = 0;
-else { trnd1_trcPer = 1; trnd1_tSek = 0; }
+else trnd1_trcPer = max(1, (this.calcPer()==-2)?10:this.calcPer()/1000), trnd1_tSek = 0;
 
 //Generic
 name_arg0val = this.attr("name");
@@ -12675,8 +12253,13 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_tipTool = tr("Archive space")+": ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
-}
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1612768847);
+} else arh_active = false, arh_tipTool = "";
+
+//Updating cycles processing for big processing periods of that page 
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-1,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1664210236);
 INSERT INTO wlb_Main VALUES('anShow1s','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAWCAIAAAD/3A1jAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAG50lEQVRYhdVXWWwb1xW9bxYOOdzERRTFVbtEWRIlWY5dWbHdqI2auC3Q
 nyDoR4EW8H+B+qctYOjDRVC4CBAU7UdRFG4LNAWCRj8tWtiwnTiKHFkRJSaUrJUUtXARZXK4zsJZ
@@ -15642,7 +15225,7 @@ CREATE TABLE IF NOT EXISTS 'prj_archBrowser' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT
 INSERT INTO prj_archBrowser VALUES('/archBrowser','control','','root',1,'
 ','
 ','
-',-1,5,'name;',1592753175);
+',1000,5,'name;',1664089380);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm',0,'','','',-1,0,'',1592753175);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','ElCadr','','/wlb_Main/wdg_ElCadr',0,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1592753175);
 INSERT INTO prj_archBrowser VALUES('/archBrowser/control','grph_panel','','/wlb_Main/wdg_grph_panel',0,'','','',-1,0,'',1592753175);
@@ -15677,7 +15260,7 @@ INSERT INTO prj_tmplSO VALUES('/tmplSO/so','2','','root',1,'
 INSERT INTO prj_tmplSO VALUES('/tmplSO','control','','root',1,'
 ','
 ','
-',-1,5,'name;',1592753399);
+',1000,5,'name;',1664089338);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','ElCadr','','/wlb_Main/wdg_ElCadr',0,'','','',-1,0,'pgGrp;digComs;digStts;max;min;prmAMax;prmAMin;prmAnalog;prmAuto;prmCasc;prmClose;prmCloseSt;prmColor;prmCom;prmComText;prmDemention;prmDescr;prmId;prmImpQdwnTm;prmImpQupTm;prmManIn;prmOpenSt;prmOut;prmPrec;prmShifr;prmSp;prmStText;prmStop;prmVar;prmVarIn;prmWMax;prmWMin;',1592753399);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','doc_panel','','/wlb_Main/wdg_doc_panel',0,'','','',-1,0,'',1592753399);
 INSERT INTO prj_tmplSO VALUES('/tmplSO/control','cntrRegul','','/wlb_Main/wdg_cntrRegul',0,'','','',-1,0,'DESCR;Hdwn;Hup;K1;K2;K3;K4;KImpRfact;Kd;Ki;Kp;NAME;SHIFR;TImpMin;TImpPer;Td;Ti;Tzd;Zi;auto_addr;ed;impQdwn_addr;impQup_addr;max;min;out;out_addr;prec;sp;sp_addr;var;var_addr;',1592753399);
@@ -15820,6 +15403,8 @@ if(f_start) {
 	return;
 }
 
+if(f_stop)	return;
+
 curMin = curHour = curDay = curMonth = curYear = 0;
 
 for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; )
@@ -15891,7 +15476,7 @@ else if(curMin != lastMin && !(curMin%5))	{
 	if(curDay == 1 && curHour < repHour)
 		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}','','',-1,'name;dscr;evProc;',1663488391);
+}','','',-1,'name;dscr;evProc;',1664113795);
 INSERT INTO wlb_doc VALUES('docUsersSet','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 fklEQVRYhe2V0UrrQBBAt93ZuEnTNLVUSa0BW5Aq6A/4K/6A/+dX+CaaQsUHfSgiYquGJtlNsnMf
 FooPIpcLda+w5ynsTCZzNplN4/LycjQakd9JkiRwcHBwdHT0ZVgppZQCAESsqopS2mw2vylX1zWl
@@ -16128,6 +15713,7 @@ if(f_start) {
 		year_items += (year_items.length?"\n":"")+(curYear--);
 
 	toBuild = true;
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 
 	return;
 }
@@ -16210,19 +15796,19 @@ if(toBuild) {
 			//this.messInfo("pO.trData="+pO.trData);
 		}
 	}
-}','','',-1,'owner;name;dscr;evProc;',1663488391);
+}','','',-2,'owner;name;dscr;evProc;',1664170367);
 CREATE TABLE IF NOT EXISTS 'VCAPrjs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"USER" TEXT DEFAULT 'root' ,"GRP" TEXT DEFAULT 'UI' ,"PERMIT" INTEGER DEFAULT '436' ,"PER" INTEGER DEFAULT '100' ,"STYLE" INTEGER DEFAULT '-1' ,"EN_BY_NEED" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO VCAPrjs VALUES('tmplSO','Signal groups (template)','Групи сигналізації (шаблон)','Группы сигнализаций (шаблон)','The projects'' template of visualisation based on signal groups.
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.1','Шаблон проекту візуалізації, який базовано на групах сигналізації.
+Version: 1.3.2','Шаблон проекту візуалізації, який базовано на групах сигналізації.
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.1','Шаблон проекта визуализации основанного на группах сигнализации.
+Версія: 1.3.2','Шаблон проекта визуализации основанного на группах сигнализации.
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.1','prj_tmplSO','','root','op',432,100,0,1);
+Версия: 1.3.2','prj_tmplSO','','root','op',432,250,0,1);
 INSERT INTO VCAPrjs VALUES('archBrowser','Archives browser','Огляд архівів','Обзор архивов','Project of value archives browsing.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0','','','prj_archBrowser','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+Version: 1.4.1','','','prj_archBrowser','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAABKtSURB
 VHic5ZtZbFzXecd/59x7Z+FwuImLSGuxJVkSJWrxIkWb18iOjSRN0hSx46YpkJcWaFEUaZ8KBC3Q
 9rV5aQqkAQK0TdOkblwnRpvYjpvYshxrl0yJEiNqp0RS3MnZ73L6cO6duXNnhqQcI3nIAS5m5q7n
@@ -16308,7 +15894,7 @@ Fw8+1E//oc+hmpq5fPI/GHr3l0zfGMe1XXIeizdmix8M3l48dmUydy5fcu+gZe34QINRQkd3Hh3t
 4rKTD41f+W9zKxwWuk52tibN/q29zU/2dzcdvq/F3NaejktXGJRyRQouxdGF0tDQWOa94fHsqYWC
 cwOdt8HTlxVLe6Xj10VAMEz0/xBagdV9bYldA33Nz9zXFt9weTJ/5tJY5uhUpjSCBhd0DR9K2isd
 v24CgiHRJLT7SxMaGFQas7Br37O0Vzp+UwSUL4VWRBflVvKjkfZKR10CftvG/wPpx5VpdEvbYgAA
-AABJRU5ErkJggg==','root','op',432,100,0,1);
+AABJRU5ErkJggg==','root','op',432,250,0,1);
 CREATE TABLE IF NOT EXISTS 'prj_archBrowser_ses' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','addr','arh:CPULoad_load (+)');
 INSERT INTO prj_archBrowser_ses VALUES('/pg_so/pg_1/pg_ggraph/pg_1/wdg_el1','name','val:CPULoad');
@@ -17607,15 +17193,15 @@ INSERT INTO wlb_Main_io VALUES('grpGraph','name','Graphics group',41,'','','','�
 INSERT INTO wlb_Main_io VALUES('grpGraph','dscr','The element is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "Graphics group element (ElViewGraph)" of each parameter (up to 8) and the widget "Diagram" to monitor the parameters'' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0
+Version: 1.5.0
 License: GPLv2',32,'','','','Елемент слугує для одночасного спостереження трендів та управління параметрами у об''єкті сигналізації, включає у себе як екземпляри віджету "Елемент групи графіків (ElViewGraph)" кожного параметру (до 8), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.0
+Версія: 1.5.0
 Ліцензія: GPLv2','','Элемент служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "Элемент группы графиков (ElViewGraph)" каждого параметра (до 8), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.0
+Версия: 1.5.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomW','900',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomH','600',32,'','','','','','','','','','');
@@ -17793,7 +17379,7 @@ Container of the control panels — container area to include control panels of 
 Under the control panels container placed a button to start the demo mode — mode in which performed periodic switching for representative frames, changing regimes and other operations by a scenario.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.6.0
+Version: 2.6.2
 License: GPLv2',32,'','','','Елемент-кадр слугує базою для створення користувацьких інтерфейсів, пачатково для управління технологічними процесами, заснованими на об''єктах сигналізації (СО).
 
 Коренева сторінка містить чотири області:
@@ -17821,7 +17407,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Під контейнером панелей управління розташовується кнопка запуску демонстраційного режиму — режиму за яким здійснюється періодичне перемикання показних кадрів, зміна режимів та інших операцій згідно сценарію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.6.0
+Версія: 2.6.2
 Ліцензія: GPLv2','','Элемент-кадр служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 
 Корневая страница содержит четыре области:
@@ -17851,7 +17437,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує базою д�
 Корневая страница интерфейса визуализации ТП, построенного на основе объектов сигнализации.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 2.6.0
+Версия: 2.6.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','1024',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','670',40,'','','','','','','','','','');
@@ -19981,15 +19567,15 @@ INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','',32,'','','btPass','',
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','dscr','Element is provided to create graphics groups. Element contains information about a parameter, the regulator mode, if the parameter is such, the units of analog parameter, as well as the color corresponding to the parameter''s trend. The element commonly uses and represents the representative structure of the DAQ-templates "Analog signal" and "Discrete block".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.5
+Version: 1.4.0
 License: GPLv2',42,'Parameter|DESCR','','','Елемент слугує для створення груп графіків. Елемент містить інформацію про параметр, режим регулятору, якщо параметр є таким, одиницю виміру аналогового параметру, а також колір, що відповідає параметру тренда. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "Аналоговий сигнал" та "Дискретний блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.5
+Версія: 1.4.0
 Ліцензія: GPLv2','','Элемент служит для создания групп графиков. Элемент содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов "Аналоговый сигнал" и "Дискретный блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.5
+Версия: 1.4.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','','');
@@ -20775,9 +20361,9 @@ Version: 1.2.0',32,'','','','!!!!: Перенесено до бібліотек�
 По умолчанию архив документов настроен на глубину 10 документов.
 Автор: Роман Савоченко <roman@oscada.org>
 Версия: 1.2.0','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','geomX','913',32,'','','logo','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomX','911',32,'','','logo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomY','3',40,'','','logo','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','107',32,'','','logo','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('RootPgSo','geomW','110',32,'','','logo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomH','55',32,'','','logo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','2',32,'','','logo','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','backColor','',32,'','','logo','','','','','','','');
@@ -21092,7 +20678,7 @@ In the primary function of the pannel — advanced and common control, this item
 If this element using as a control panel is not required, it is firstly in the primary data representing widgets and by their specializing in particular types of data to what a separate panel can be created. Therefore, due to its high universality, due to the support of all known representative structures of DAQ-templates, it is obligatory to use in main frames, as is done in the frame "Contours group".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.4.0
 License: GPLv2',32,'','','','Елемент фактично є універсальною панеллю управління та розширеного контролю різними пристроями за усіма відомими та визначеними представницькими структурами базових даних систем управління за DAQ-шаблонами:
 - аналогові: аналоговий сигнал, ручний ввід аналогового сигналу, ПІД-регулятор (аналоговий та імпульсний);
 - дискретні збірки: клапани, відсікачі, засувки, двигуни, вентилятори та різноманітні перемикачі;
@@ -21105,7 +20691,7 @@ License: GPLv2',32,'','','','Елемент фактично є універса
 Якщо використання цього елементу у якості панелі керування не є обов''язковим, у першу чергу у віджетах первинного представлення та через їх спеціалізацію на окремих типах даних, щодо яких можна створити окрему панель. То завдяки високій універсальності, через підтримку всіх відомих репрезентативних структур DAQ-шаблонів, її обов''язково використовувати у основних кадрах, як це зроблено у кадрі "Група контурів".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.0
+Версія: 1.4.0
 Ліцензія: GPLv2','','Элемент фактически является универсальной панелью управления и расширенного контроля различными устройствами по всем известным и определённым представительским структурам базовых данных систем управления по DAQ-шаблонам:
 - аналоговые: аналоговый сигнал, ручной ввод аналогового сигнала, ПИД-регулятор (аналоговый и импульсный);
 - дискретные сборки: клапаны, отсекатели, задвижки, двигатели, вентиляторы и различные переключатели;
@@ -21118,7 +20704,7 @@ License: GPLv2',32,'','','','Елемент фактично є універса
 Если использование этого элемента в качестве панели управления не является обязательным, в первую очередь в виджетах первичного представления и через их специализацию на отдельных типах данных, для которых можно создать отдельную панель. То благодаря высокой универсальности, через поддержку всех известных репрезентативных структур DAQ-шаблонов, её обязательно использовать в основных кадрах, как это сделано в кадре "Группа контуров".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.0
+Версия: 1.4.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomZ','5',32,'','','lib','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrEdit','numbArg','1',32,'','','labProg','','','','','','','');
@@ -21391,15 +20977,15 @@ INSERT INTO wlb_Main_io VALUES('grpGraph10','name','Graphics group 10',41,'','',
 INSERT INTO wlb_Main_io VALUES('grpGraph10','dscr','The element is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "Graphics group element (ElViewGraph)" of each parameter (up to 10) and the widget "Diagram" to monitor the parameters'' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0
+Version: 1.5.0
 License: GPLv2',32,'','','','Елемент слугує для одночасного спостереження трендів та управління параметрами у об''єкті сигналізації, включає у себе як екземпляри віджету "Елемент групи графіків (ElViewGraph)" кожного параметру (до 10), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.0
+Версія: 1.5.0
 Ліцензія: GPLv2','','Элемент служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "Элемент группы графиков (ElViewGraph)" каждого параметра (до 10), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.0
+Версия: 1.5.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomW','1160',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomH','600',32,'','','','','','','','','','');
@@ -22437,7 +22023,7 @@ In the "Select: parameters accessible to select (allowSelLst)" attribute the dat
 - <varhs> — template of the group selection, if you specify it all available archives in the system will be included into the selection list.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.0
+Version: 1.5.1
 License: GPLv2',32,'','','','Елемент реалізує діалог користувацького вибору джерел даних, часто архівних, для формування графіку у кадрі "Група графіків". Вибір надається з переліку вказаного у атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)", кадру-ініціатору. Для обраного джерела можна вказати ім''я, шкалу, логарифмічність, одиницю вимірювання та колір графіку.
 
 У атрибуті "Вибір: параметри дозволені для обрання (allowSelLst)" мають розташовуватися джерела даних у вигляді:
@@ -22453,7 +22039,7 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 - <varhs> — шаблон групового обрання, при визначені якого до переліку обрання потраплять усе доступні у системі архіви.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.0
+Версія: 1.5.1
 Ліцензія: GPLv2','','Элемент реализует диалог пользовательского выбора источников данных, часто архивных, для формирования графика в кадре "Группа графиков". Выбор предоставляется из перечня указанного в атрибуте "Выбор: параметры доступные для выбора (allowSelLst)", кадра-инициатора. Для выбранного источника можно указать имя, шкалу, логарифмичность, единицу измерения и цвет графика.
 
 В атрибуте "Выбор: параметры доступные для выбора (allowSelLst)" должны помещаться источники данных в виде:
@@ -22468,20 +22054,20 @@ License: GPLv2',32,'','','','Елемент реалізує діалог кор
 - <varhs> — шаблон группового выбора, при указании которого в список выбора попадут все доступные в системе архивы.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.0
+Версия: 1.5.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Diagram". So, the panel allows you to view graphs of the history for the required period of time and the desired resolution, supports: the scale, the selection of archiver for display and the graphs presentation in a spectrum of present frequencies or XY.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.4
+Version: 1.5.6
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Діаграма". Так, панель дозволяє переглянути графіки історії за потрібний проміжок часу та на потрібну роздільну здатність, підтримується: масштабування шкали, вибір архіваторів для відображення, а також надання графіків у вигляді спектру присутніх частот або XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.4
+Версія: 1.5.6
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Диаграмма". Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.4
+Версия: 1.5.6
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('objProps','dscr','The element serves to display the properties of the data source in tabular form and to highlight them in color, as an object, and to allow the values of the recordable properties to be changed. This element also generates violation notifications according to the features of the object. The element generally uses and represents a representative structure "Complex objects" of the DAQ-templates.
 
@@ -22538,7 +22124,7 @@ This dialogue is currently the main one and has replaced the simple passport dia
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: PAC HARTRON
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2',32,'','','','Елемент є інформаційно-контрольним діалогом довкола параметру джерела даних — розширений паспорт параметру. На відміну від простого паспорту, розширений, окрім інформації, надає можливість контролю за атрибутами параметру та відображення історії стандартних атрибутів як у вигляді тренду, так і таблиці даних.
 
 Інформація та контроль за атрибутами параметру залишається основною функцію, яка надається у вкладці "Огляд", де формується таблиця атрибутів як вони є, із стовпчиками "Ім''я" та "Значення". Таблиця активна та за обрання доступних до запису атрибутів, та відповідних прав (root:op), знизу надається поле введення нових значень.
@@ -22563,7 +22149,7 @@ License: GPLv2',32,'','','','Елемент є інформаційно-конт
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано: ПАТ ХАРТРОН
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','','Элемент является информационно-контрольным диалогом около параметра источника данных — расширенный паспорт параметра. В отличии от простого паспорта, расширенный, кроме информации, предоставляет возможность контроля атрибутов параметра и отображения истории стандартных атрибутов как в виде тренда, так и таблицы данных.
 
 Информация и контроль атрибутов параметра остаётся основной функцией, которая предоставляется во вкладке "Обзор", где формируется таблица атрибутов как они есть, со столбцами "Имя" и "Значение". Таблица активная и при выборе доступных для записи атрибутов, и соответствующих прав (root:op), внизу предоставляется поле ввода новых значений.
@@ -22588,7 +22174,7 @@ License: GPLv2',32,'','','','Елемент є інформаційно-конт
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсировано: ПАТ ХАРТРОН
-Версия: 1.2.0
+Версия: 1.2.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','owner','root:UI',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','name','Alarms — active',32,'','','','Порушення — активні','','Нарушения — активные','','','','');
@@ -23713,15 +23299,15 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для нал�
 INSERT INTO wlb_Main_io VALUES('doc_panel','dscr','The element is a specialized panel for dynamic control of basic user properties of the primitive "Document". So, the panel allows you to manage documents and navigate through their histories; supported dynamic and archival documents.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.2
+Version: 1.2.3
 License: GPLv2',32,'','','','Елемент є спеціалізованою панеллю динамічного керування основними користувацькими властивостями примітиву "Документ". Так, панель дозволяє керувати документами та здійснювати навігації за їх історією; підтримуються динамічні та архівні документи.
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.2.2
+Версія: 1.2.3
 Ліцензія: GPLv2','','Элемент является специализированной панелью динамического управления основными пользовательскими свойствами примитива "Документ". Так, панель позволяет управлять документами и осуществлять навигацию по их истории; поддерживаются динамические и архивные документы.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.2
+Версия: 1.2.3
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('terminator','dscr','The panel element serves to fill the panel container space when no active visual control element is selected in the main frame, since closing or clearing frames in the container area is not provided, only the replacement.
 
@@ -23954,17 +23540,17 @@ INSERT INTO wlb_Main_io VALUES('accept','dscr','The element implements a simple 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2',32,'','','','Елемент реалізує простий діалог підтвердження операцій. Діалог містить повідомлення з питанням та дві кнопки "Прийняти" й "Скасувати". Цей діалог, наприклад, використано у кадрі Менеджер користувачів для підтвердження операції видалення.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','','Элемент реализует простейший диалог подтверждения операций. Диалог содержит сообщение с вопросом и две кнопки "Принять" и "Отмена". Данный диалог, например, использован в кадре Менеджер пользователей для подтверждения операции удаления.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.0.0
+Версия: 1.0.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsStReport','owner','root:UI',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsStReport','name','Alarms — report',32,'','','','Порушення — звіт','','Нарушения — отчёт','','','','');
@@ -24045,7 +23631,7 @@ In building the passport the attributes are separately processed for alarm [aMin
 Currently, this dialogue has actually been replaced by the more functional and expanded passport dialogue and is largely disabled in all template and demonstration projects, though no one interferes with its use if only information is required.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2',32,'','','','Елемент є інформаційним діалогом довкола параметру джерела даних — паспорт параметру, відповідно він дозволяє отримати такого роду інформацію як: шифр, ім''я, опис, одиницю виміру, аварійні границі та інше, відповідне до представницької структури параметру — атрибути параметру. Діалог побудовано на основі примітиву "Документ", вміст якого формується динамічно та періодично оновлюється.
 
 У побудові паспорту окремо обробляються атрибути аварійних [aMin...aMax] та попереджувальних шкал [wMin...wMax], які поєднуються у одному записі та взагалі можуть приховуватися за умови їх вимкнення.
@@ -24053,7 +23639,7 @@ License: GPLv2',32,'','','','Елемент є інформаційним діа
 Наразі цей діалог фактично замінено більш функціональним та розширеним діалогом паспорту та його переважно вимкнено у всіх шаблонних та демонстраційних проектах, хоча ніхто не заважає його використанню, якщо потрібно лише інформацію.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','','Элемент является информационным диалогом около параметра источника данных — паспорт параметра, соответственно он позволяет получить такого рода информацию как: шифр, имя, описание, единица измерения, аварийные границы и другое, согласно представительской структуре параметра — атрибуты параметра. Диалог построен на основе примитива "Документ", содержимое которого формируется динамически и периодически обновляется.
 
 При построении паспорта отдельно обрабатываются атрибуты аварийных [aMin...aMax] и предупредительных шкал [wMin...wMax], которые объединяются в одной записи и в целом могут скрываться при условии их отключения.
@@ -24061,23 +23647,23 @@ License: GPLv2',32,'','','','Елемент є інформаційним діа
 На данный момент этот диалог фактически заменён более функциональным и расширенным диалогом паспорта и он в основном отключен во всех шаблонных и демонстрационных проектах, хотя никто не препятствует его использованию, если необходима только информацию.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0
+Версия: 1.0.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('treeSelect','dscr','The element implements a simple dialog for selecting an item in a tree. The dialog contains the tree itself and the two buttons "Accept" and "Cancel". This dialog, for example, was used and originally designed for it in the frame "Prescription — run, simple" for hierarchical selection of an element in a tree.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2',32,'','','','Елемент реалізує простий діалог операції обрання пункту у дереві. Діалог містить саме дерево та дві кнопки "Прийняти" й "Скасувати". Цей діалог, наприклад, використано, та первинно для нього розроблявся, у кадрі "Рецепт:виконання (простий)" для ієрархічного обрання елементу у дереві.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','','Элемент реализует простой диалог операции выбора пункта в дереве. Диалог содержит само дерево и две кнопки "Принять" и "Отменить". Этот диалог, например, использован, и первично для него разрабатывался, в кадре "Рецепт: исполнение (простой)" для иерархического выбора элемента в дереве.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.0.0
+Версия: 1.0.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','tipTool','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','tipTool','',40,'','','','','','','','','','');
@@ -29217,14 +28803,14 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 3.2.0
+Version: 3.2.1
 License: GPLv2',32,'','','','Документ слугує для генерації місячного звіту середніх за добу значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом доби формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової доби (наприклад, 05 09:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного місяця (наприклад, 05 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 3.2.0
+Версія: 3.2.1
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','The document is provided for generating a report of different sort messages together, including: "Violations", "User-operator actions" and "System". The document is the dynamic type, so you can specify the data time and depth. The document so commonly uses and represents the messages structures: "Violations", "User-operator actions" and "System". As a data source of this document is the message archive.
 
@@ -29287,7 +28873,7 @@ Manually entered data is stored or traditionally in an archive of values, with o
 The message archiver of the module FSArch must be set for the next attributes to correct work perform together this document: set "Prevent duplicates", "Consider duplicates and prevent, for equal time, category, level" and set "Time size of the archive files" to 3660 days. The module DBArch must work without such kind specific.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.3.1
 License: GPLv2',32,'','','','Документ слугує для генерації добового звіту місячних значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають переважно архіви значень DAQ-параметрів.
 
 Документом вперше запроваджено ручне введення архівних значень великого інтервалу часу вимірювання, яким у цьому випадку є місяць, як недетермінований інтервал. Найбільшу актуальність ця функція становить для лічильників, які з тієї або іншої причини неможливо підключити до системи прямо, із безперервним вимірюванням або періодичним вивантаженням ділянок архіву. Визначення параметру до ручного вводу здійснюється встановленням постійної isMan відповідного параметру, що вмикає елементи форми нагорі документу, за відповідних прав ("root" або у групі "ITW"), та доступ до даних для таблиці та тренду суворо за інтервалом документу — місяць, як і їх введення.
@@ -29301,7 +28887,7 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Архіватор повідомлень модуля FSArch має бути встановлено у наступних атрибутах для здійснення коректної роботи разом із цим документом: встановити "Запобігати дублікатам", "Вважати дублікатами та запобігати, для рівного часу, категорії, рівня" та встановити "Розмір файлів за часом" у 3660 діб. Модуль DBArch має працювати без такого роду специфіки.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.3.0
+Версія: 1.3.1
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','evProc','',32,'','','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepYear','owner','root:ITW',32,'','','lab_set','','','','','','','');
@@ -29587,4 +29173,462 @@ INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph7','magenta-150','','');
 INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph8','#B6B600-150','','');
 INSERT INTO prj_tmplSO_stls VALUES(1,'labColorGrph9','#69695C-150','','');
 INSERT INTO prj_tmplSO_stls VALUES(1,'labColorWarning','#B4B400','','');
+CREATE TABLE IF NOT EXISTS 'wlb_Main_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
+INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_sp','/wlb_originals/wdg_ElFigure',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','com_open','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_var','/wlb_originals/wdg_ElFigure',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;p1x;p1y;p2x;p2y;p3x;p3y;p4x;p4y;p5x;p5y;p6x;p6y;p7x;p7y;p8x;p8y;p9x;p9y;c1;c2;c3;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','info_name','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text1','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text2','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text3','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text4','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text5','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','com_stop','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','lev_out','/wlb_originals/wdg_ElFigure',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;lineClr;fillColor;elLst;p1x;p1y;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','com_close','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;color;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','info_var','/wlb_originals/wdg_Text',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;color;wordWrap;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','info_sp','/wlb_originals/wdg_Text',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;color;wordWrap;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','greed_text','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','mode','/wlb_originals/wdg_Text',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;backColor;bordWidth;bordColor;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','el1','/wlb_Main/wdg_ElViewGraph',-1,'name;en;active;geomX;geomY;geomW;geomH;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','el2','/wlb_Main/wdg_ElViewGraph',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','el3','/wlb_Main/wdg_ElViewGraph',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','el4','/wlb_Main/wdg_ElViewGraph',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','name','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','el5','/wlb_Main/wdg_ElViewGraph',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;addr;color;colorDef;enMode;max;min;varEl;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','el6','/wlb_Main/wdg_ElViewGraph',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;addr;color;colorDef;enMode;max;min;varEl;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','el7','/wlb_Main/wdg_ElViewGraph',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','el8','/wlb_Main/wdg_ElViewGraph',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;bordWidth;bordColor;addr;color;colorDef;enMode;max;min;varEl;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','ElFigure1','/wlb_originals/wdg_ElFigure',-1,'name;geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','trnd1','/wlb_originals/wdg_Diagram',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;type;tSek;tSize;sclColor;sclHor;sclVer;sclMarkColor;sclMarkFont;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0val;curSek;curUSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7val;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','so1','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;color;colorText;font;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','next','/wlb_originals/wdg_FormEl',-1,'perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','pgCont','/wlb_originals/wdg_Box',-1,'perm;geomX;geomY;geomW;geomH;geomZ;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','prev','/wlb_originals/wdg_FormEl',-1,'perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','infoW','/wlb_originals/wdg_Box',-1,'perm;geomX;geomY;geomW;geomH;geomZ;pgGrp;backColor;bordWidth;bordColor;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','pgCntr','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;backColor;bordWidth;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElViewCadr','trnd','/wlb_originals/wdg_Diagram',-1,'geomX;geomY;geomW;backColor;bordWidth;trcPer;tSize;prm0addr;prm0color;prm0val;');
+INSERT INTO wlb_Main_incl VALUES('ElViewCadr','text','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;font;color;alignment;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;arg1cfg;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','ElFigure','/wlb_originals/wdg_ElFigure',-1,'geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el1','/wlb_Main/wdg_ElCadr',-1,'en;geomX;geomY;bordColor;prmColor;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el2','/wlb_Main/wdg_ElCadr',-1,'en;geomX;geomY;geomZ;bordColor;prmColor;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el3','/wlb_Main/wdg_ElCadr',-1,'en;geomX;geomY;geomZ;bordColor;prmColor;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el4','/wlb_Main/wdg_ElCadr',-1,'en;geomX;geomY;geomZ;bordColor;prmColor;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','name','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el5','/wlb_Main/wdg_ElCadr',-1,'en;geomX;geomY;geomZ;bordColor;prmColor;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el6','/wlb_Main/wdg_ElCadr',-1,'en;geomX;geomY;geomZ;bordColor;prmColor;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el7','/wlb_Main/wdg_ElCadr',-1,'en;geomX;geomY;geomZ;bordColor;prmColor;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','el8','/wlb_Main/wdg_ElCadr',-1,'en;geomX;geomY;geomZ;bordColor;prmColor;');
+INSERT INTO wlb_Main_incl VALUES('grpCadr','trnd1','/wlb_originals/wdg_Diagram',-1,'perm;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSek;tSize;sclHor;sclVer;sclMarkColor;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm0width;prm0val;curSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1width;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2width;prm2val;prm3addr;prm3bordL;prm3bordU;prm3color;prm3width;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4width;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5width;prm5val;prm6addr;prm6bordL;prm6bordU;prm6color;prm6width;prm6val;prm7addr;prm7bordL;prm7bordU;prm7color;prm7width;prm7val;');
+INSERT INTO wlb_Main_incl VALUES('anShow','name','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomMargin;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('anShow','val','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomMargin;font;color;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_1','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_2','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_3','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_4','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_5','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el1_6','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','name','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_1','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_2','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_3','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_4','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_5','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el2_6','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_1','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_2','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_3','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_4','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_5','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el3_6','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_1','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_2','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_3','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_4','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_5','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('ViewCadr','el4_6','/wlb_Main/wdg_ElViewCadr',-1,'en;active;geomX;geomY;geomZ;addr;');
+INSERT INTO wlb_Main_incl VALUES('anShow1','name','/wlb_originals/wdg_Text',-1,'en;geomX;geomY;geomW;geomH;geomZ;geomMargin;bordWidth;bordColor;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('anShow1','val','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','st_close','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;backColor;bordWidth;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','box_info','/wlb_originals/wdg_Box',-1,'name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_pnlTitle','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','Ramka','/wlb_originals/wdg_Box',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','box_kf','/wlb_originals/wdg_Box',-1,'name;geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','trnd','/wlb_originals/wdg_Diagram',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSize;sclColor;sclHor;sclVer;sclMarkColor;sclMarkFont;parNum;prm0addr;prm0bordU;prm0color;prm0width;prm0val;curSek;curColor;prm1addr;prm1bordL;prm1bordU;prm1color;prm1width;prm1val;prm2addr;prm2bordL;prm2bordU;prm2color;prm2width;prm2val;prm3addr;prm3bordU;prm3color;prm3width;prm3val;prm4addr;prm4bordL;prm4bordU;prm4color;prm4width;prm4val;prm5addr;prm5bordL;prm5bordU;prm5color;prm5width;prm5val;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_kfTitle','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','st_open','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;backColor;bordWidth;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','info_ed','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','info_out','/wlb_originals/wdg_Text',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;color;wordWrap;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','pnl_pid','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','tiMin','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','zn','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_ti','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_td','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_kp','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','kp','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_k4','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_k3','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_k2','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_h2','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_h1','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_k1','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','ti','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_tiPer','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','td','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','h2','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','h1','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_zn','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','k1','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','k2','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','k3','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','k4','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','info','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0tp;arg0val;arg1tp;arg1val;arg2tp;arg2val;arg3tp;arg3val;arg3cfg;arg4tp;arg4val;arg4cfg;arg5tp;arg5val;arg5cfg;arg6tp;arg6val;arg6cfg;arg7tp;arg7val;arg7cfg;arg8tp;arg8val;arg8cfg;arg9tp;arg9val;arg9cfg;arg10tp;arg10val;arg10cfg;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','trnd','/wlb_originals/wdg_Diagram',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;tSize;sclHor;sclVer;parNum;prm0addr;prm0bordL;prm0bordU;prm0color;prm1addr;prm1bordL;prm1bordU;prm1color;prm2addr;prm2bordL;prm2bordU;prm2color;prm3addr;prm3bordL;prm3bordU;prm3color;prm4addr;prm4bordL;prm4bordU;prm4color;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','title','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomMargin;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p1','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p2','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p3','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p4','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraphEl','p5','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','name','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e1','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e2','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e3','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e4','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e5','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e6','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e7','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e8','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e10','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e11','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e12','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e13','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e14','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e15','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e16','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('ResultGraph','e9','/wlb_Main/wdg_ResultGraphEl',-1,'en;geomX;geomY;geomZ;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','cvt_sound','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','cvt_alarm','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','cvt_light','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','h_line','/wlb_originals/wdg_ElFigure',-1,'geomX;geomY;geomW;geomH;geomXsc;geomZ;lineWdth;lineStyle;elLst;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','next','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','Text1','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','Text3','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','next1','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','prev','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','curtime','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','size','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','date','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;tipTool;tipStatus;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','prev1','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('terminator','Text1','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','tmTp','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','next','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','Text1','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','Text3','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','next1','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','prev','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','curtime','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','arch','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;items;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','size','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','date','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','prev1','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomXsc;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','cursor','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;tipTool;bordWidth;font;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','tmTp','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomXsc;geomZ;tipTool;tipStatus;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','modAuto','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','moveUp','/wlb_originals/wdg_ElFigure',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;elLst;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','downm','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','up','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','upm','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','down','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;img;');
+INSERT INTO wlb_Main_incl VALUES('anShow','mode','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;font;color;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrPasp','doc','/wlb_originals/wdg_Document',-1,'perm;name;active;geomW;geomH;tmpl;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','modCasc','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','modMan','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','moveDwn','/wlb_originals/wdg_ElFigure',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;fillColor;orient;elLst;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_rfct','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_tzd','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','rfct','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','tiPer','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_tiMin','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','kd','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','ki','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','doc','/wlb_originals/wdg_Document',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tmpl;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_kd','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','txt_ki','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrRegul','tzd','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('ElViewGraph','mode','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;font;color;text;');
+INSERT INTO wlb_Main_incl VALUES('ElViewGraph','trClr','/wlb_originals/wdg_ElFigure',-1,'name;geomX;geomY;geomW;geomH;geomZ;lineWdth;lineClr;elLst;');
+INSERT INTO wlb_Main_incl VALUES('ElViewGraph','lb_ed','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElViewGraph','lb_sfr','/wlb_originals/wdg_Text',-1,'name;geomX;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElViewGraph','lb_val','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;font;color;alignment;text;numbArg;arg0tp;arg0val;arg0cfg;');
+INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','prog','/wlb_originals/wdg_Document',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;doc;font;time;');
+INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','title','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','btPass','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','btStart','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;img;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','btStop','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrRunSimple','lib','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomOut','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomDef','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomOffDown','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomIn','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','zoomOffUp','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','scaleInfo','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;alignment;text;numbArg;arg0val;arg1val;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','line3','/wlb_originals/wdg_ElFigure',-1,'name;geomX;geomY;geomW;geomH;geomZ;elLst;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg1','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg2','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg3','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg4','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','arg5','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','comAdd','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','comArgsBox','/wlb_originals/wdg_Box',-1,'name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','comBox','/wlb_originals/wdg_Box',-1,'name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','comDel','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','comDwn','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','comIns','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','comUp','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg1','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg2','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg3','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg4','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArg5','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labArgs','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labCom','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labProg','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labType','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','lib','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','prog','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','progAdd','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','progBox','/wlb_originals/wdg_Box',-1,'name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','progDel','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','progExport','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','progImport','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','progNm','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','save','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','title','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','type','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','wPanel','/wlb_originals/wdg_Box',-1,'name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','btStart','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;img;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','btStop','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','labProg','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','lib','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','prog','/wlb_originals/wdg_Document',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;doc;font;time;n;vCur;aCur;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','progBox','/wlb_originals/wdg_Box',-1,'name;geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','title','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','wPanel','/wlb_originals/wdg_Box',-1,'name;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','logo','/wlb_originals/wdg_Media',-1,'en;geomX;geomY;geomW;geomH;geomZ;backColor;src;fit;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','play','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;img;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','progCopy','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('accept','apply','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('accept','cancel','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('accept','mess','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;bordWidth;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrRun','btPass','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','apply','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','cancel','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','color','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;view;cfg;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','colorBox','/wlb_originals/wdg_Box',-1,'geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','dim','/wlb_originals/wdg_FormEl',-1,'active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_color','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_dim','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_sc','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','prm','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','val_max','/wlb_originals/wdg_FormEl',-1,'active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','val_min','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_name','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','name','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph','arh','/wlb_originals/wdg_FormEl',-1,'perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;cfg;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','descr','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;geomMargin;elType;value;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labDescr','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','downMin','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','spToVar','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;img;color;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','upMax','/wlb_originals/wdg_FormEl',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','progRename','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('treeSelect','apply','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('treeSelect','cancel','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('treeSelect','select','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','data','/wlb_originals/wdg_Document',-1,'name;en;active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;font;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','trends','/wlb_originals/wdg_Diagram',-1,'en;geomX;geomY;geomW;geomH;geomZ;backColor;trcPer;sclHorPer;tSize;sclHor;sclVer;sclMarkColor;sclMarkFont;parNum;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','view','/wlb_originals/wdg_FormEl',-1,'en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;');
+INSERT INTO wlb_Main_incl VALUES('objProps','labSet','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('objProps','props','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('objProps','set','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('objProps','title','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;geomMargin;tipTool;backColor;bordWidth;bordColor;bordStyle;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','viewLabSet','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','viewSet','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','sel_data','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','sel_trends','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','sel_view','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;');
+INSERT INTO wlb_Main_incl VALUES('cntrPaspExt','trendsList','/wlb_originals/wdg_FormEl',-1,'perm;en;active;geomX;geomY;geomW;geomH;geomZ;elType;set;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','ElFigure1','/wlb_originals/wdg_ElFigure',-1,'name;geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','arh','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;cfg;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el1','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el10','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el2','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el3','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el4','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el5','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el6','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el7','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el8','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','el9','/wlb_Main/wdg_ElViewGraph',-1,'en;geomX;geomY;geomXsc;geomZ;color;colorDef;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','name','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;');
+INSERT INTO wlb_Main_incl VALUES('grpGraph10','trnd1','/wlb_originals/wdg_Diagram',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;backColor;bordColor;trcPer;type;tSek;tSize;sclColor;sclHor;sclVer;sclMarkColor;sclMarkFont;parNum;prm0color;prm0val;curSek;curUSek;curColor;prm1color;prm1val;prm2color;prm2val;prm3color;prm3val;prm4color;prm4val;prm5color;prm5val;prm6color;prm6val;prm7color;prm7val;prm8color;prm8val;prm9color;prm9val;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','comInAdd','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labName','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','name','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('anShow1s','name','/wlb_Main/wdg_anShow1/wdg_name',-1,'');
+INSERT INTO wlb_Main_incl VALUES('anShow1s','val','/wlb_Main/wdg_anShow1/wdg_val',-1,'geomW;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','lab_log','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','log','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','type','/wlb_originals/wdg_FormEl',-1,'perm;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','xScaleInfo','/wlb_originals/wdg_Text',-1,'name;en;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;arg0val;arg1val;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomDef','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomIn','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomOut','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomOffLeft','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','xZoomOffRight','/wlb_originals/wdg_FormEl',-1,'perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','com_text','/wlb_originals/wdg_FormEl',-1,'en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('ElCadr','st_text','/wlb_originals/wdg_Text',-1,'name;en;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;bordWidth;font;color;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','curDay','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('calendar','labFri','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','labMon','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','labSat','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','labSun','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','labThr','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','labTue','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','labWed','/wlb_originals/wdg_Text',-1,'name;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','month','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('calendar','monthBox','/wlb_originals/wdg_Box',-1,'geomX;geomY;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w0_0','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w0_1','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w0_2','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w0_3','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w0_4','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w0_5','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w0_6','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w1_0','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w1_1','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w1_2','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w1_3','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w1_4','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w1_5','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w1_6','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w2_0','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w2_1','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w2_2','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w2_3','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w2_4','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w2_5','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w2_6','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w3_0','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w3_1','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w3_2','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w3_3','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w3_4','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w3_5','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w3_6','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w4_0','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w4_1','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w4_2','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w4_3','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w4_4','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w4_5','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w4_6','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w5_0','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w5_1','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w5_2','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w5_3','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w5_4','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w5_5','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','w5_6','/wlb_originals/wdg_Text',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('calendar','year','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','selWin','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;value;img;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('graphSelPrm','prmSearch','/wlb_originals/wdg_FormEl',-1,'name;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','pgSel','/wlb_originals/wdg_FormEl',-1,'perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','backgrnd','/wlb_originals/wdg_FormEl',-1,'owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;');
+INSERT INTO wlb_Main_incl VALUES('prescrEdit','labBackgrnd','/wlb_originals/wdg_Text',-1,'owner;name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','alarms','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;contextMenu;elType;value;items;set;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr0','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr1','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr2','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr3','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltr4','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol0','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol1','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol2','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol3','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','fltrCol4','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_cur','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_next','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_next1','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_prev','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_prev1','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_prev_sizeLim','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','go_report','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','lab_fltr','/wlb_originals/wdg_Text',-1,'owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;text;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','lab_sort','/wlb_originals/wdg_Text',-1,'owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','quietMass','/wlb_originals/wdg_FormEl',-1,'owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','size','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','sizeLim','/wlb_originals/wdg_Text',-1,'owner;geomX;geomY;geomW;geomH;geomZ;font;color;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','sort','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsSt','time','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','descr','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','fullName','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','grp','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','labDescr','/wlb_originals/wdg_Text',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('userManager','labFullName','/wlb_originals/wdg_Text',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('userManager','labGrp','/wlb_originals/wdg_Text',-1,'owner;perm;name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('userManager','labName','/wlb_originals/wdg_Text',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('userManager','labPass','/wlb_originals/wdg_Text',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('userManager','labUser','/wlb_originals/wdg_Text',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('userManager','lib','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','name','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','pass','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;value;view;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','title','/wlb_originals/wdg_Text',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('userManager','userAdd','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','userBox','/wlb_originals/wdg_Box',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('userManager','userDel','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','userNm','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;confirm;font;');
+INSERT INTO wlb_Main_incl VALUES('userManager','wPanel','/wlb_originals/wdg_Box',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;backColor;bordWidth;bordColor;bordStyle;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view1','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view2','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view3','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view4','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view5','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','go_view6','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','dateBeg','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','dateBeg','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomY;geomW;geomH;geomZ;tipTool;tipStatus;value;view;cfg;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','Text2','/wlb_originals/wdg_Text',-1,'owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('doc_panel','Text2','/wlb_originals/wdg_Text',-1,'owner;en;geomX;geomY;geomW;geomH;geomZ;geomMargin;font;wordWrap;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('graphCalc','funcCode','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;font;');
+INSERT INTO wlb_Main_incl VALUES('graphCalc','funcLs','/wlb_originals/wdg_FormEl',-1,'active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('graphCalc','lab_funcLs','/wlb_originals/wdg_Text',-1,'owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('graphCalc','lab_result','/wlb_originals/wdg_Text',-1,'owner;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('graphCalc','result','/wlb_originals/wdg_FormEl',-1,'owner;geomX;geomY;geomW;geomH;geomZ;elType;value;font;');
+INSERT INTO wlb_Main_incl VALUES('graphCalc','title','/wlb_originals/wdg_Text',-1,'geomX;geomY;geomW;geomH;geomZ;font;alignment;text;numbArg;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','curstime','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsStReport','apply','/wlb_originals/wdg_FormEl',-1,'owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('alarmsStReport','doc','/wlb_originals/wdg_Document',-1,'owner;active;geomX;geomY;geomW;geomH;style;doc;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr0','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr1','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr2','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr3','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltr4','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol0','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol1','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol2','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol3','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','fltrCol4','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','go_report','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','itAdd','/wlb_originals/wdg_FormEl',-1,'owner;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','itCopy','/wlb_originals/wdg_FormEl',-1,'owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','itDel','/wlb_originals/wdg_FormEl',-1,'owner;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','lab_fltr','/wlb_originals/wdg_Text',-1,'owner;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;text;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','dataTbl','/wlb_originals/wdg_FormEl',-1,'owner;active;geomX;geomY;geomW;geomH;geomZ;contextMenu;elType;value;items;set;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','classEd','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;value;view;cfg;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','classNm','/wlb_originals/wdg_Text',-1,'owner;geomX;geomW;geomH;geomZ;font;alignment;text;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','classSel','/wlb_originals/wdg_FormEl',-1,'owner;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;items;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','btClassEdit','/wlb_originals/wdg_FormEl',-1,'owner;perm;en;active;geomX;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;');
+INSERT INTO wlb_Main_incl VALUES('RootPgSo','alarms','/wlb_originals/wdg_Protocol',-1,'owner;en;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;');
+INSERT INTO wlb_Main_incl VALUES('grph_panel','curstimeBeg','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
 COMMIT;

@@ -151,7 +151,7 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Calculation. "));
 	if(period())	rez += TSYS::strMess(_("Calculation with the period %s. "), tm2s(1e-9*period()).c_str());
-	else rez += TSYS::strMess(_("Next calculation by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	else rez += TSYS::strMess(_("Next calculation by the CRON '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time %s[%s]. "),
 	    tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str(), tm2s(SYS->taskUtilizTm(nodePath('.',true),true)).c_str());
     }

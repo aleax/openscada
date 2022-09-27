@@ -135,7 +135,8 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> * </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент на рисунке 1.1 служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым. Также этот элемент генерирует уведомления про нарушения по соответствующим уставкам параметра. Элемент в целом использует и представляет представительскую структуру <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблона "Аналоговый сигнал"</a>.
 </p>
@@ -236,7 +237,8 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> * </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент на рисунке 1.2 служит для отображения текущего значения аналогового параметра и краткого префиксу измеренного значения. Также этот элемент генерирует уведомления про нарушения по соответствующим уставкам параметра. Элемент в целом использует и представляет представительскую структуру <a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">DAQ-шаблона "Аналоговый сигнал"</a>.
 </p><p>Эти два элемента отличаются один от одного только начальным горизонтальным размером, т.е. второй "Отображение аналогового 1, короткий" является коротким вариантом для очень коротких случаев и он прямо наследуется от первого.
@@ -855,7 +857,8 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> * </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> 1000 мс
 </td></tr></table>
 <p>Элемент-кадр, представленный на рисунке 2, служит базой для создания пользовательских интерфейсов, начально для управления технологическими процессами, основанными на объектах сигнализации (СО).
 </p><p>Корневая страница содержит четыре области:
@@ -1009,7 +1012,8 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> * </td>
 <td> en, uk, ru 
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент-кадр, представленный на рисунке 3.1, служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "<a href="#ElViewGraph">Элемент группы графиков</a>" каждого параметра (до 8 или 10), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
 </p>
@@ -1019,6 +1023,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p><p>Типичная глубина трендов в прошлое установлена в 10 минут — для текущего оперативного контроля, что, при необходимости, можно изменить непосредственно отредактировав соответствующее поле виджета диаграммы, например, для шаблонной страницы проекта, чтобы оно распространилось на все конечные страницы.
 </p><p><b><u>Использование — исполнение</u></b><br />
 В режиме исполнения отображаются графики, для которых установлены связи. Управление параметрами с элементов группы графиков детально описано в разделе виджета "<a href="#ElViewGraph">Элемент группы графиков (ElViewGraph)</a>". Дополнительно можно управлять свойствами отображения графиков, для чего автоматически с этой страницей открывается <a href="#grph_panel">панель управления графиком</a>, или необходимо левой клавишей мыши нажать в области графика.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The frame supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpGraphR_ru.png"><img class="thumbimage" height="580" src="files/LibMainEls_grpGraphR_ru.png" width="900" /></a>  <div class="thumbcaption">Рис.3.1b. Кадр "Группа графиков" в режиме исполнения.</div></div></div></div>
 <p><b><u>Свойства связывания и конфигурации</u></b><br />
@@ -1079,7 +1084,8 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> * </td>
 <td> en, uk, ru 
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент-виджет, представленный на рисунке 3.1.1, служит для создания <a href="#grpGraph">групп графиков</a>. Виджет содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Виджет в целом использует и представляет представительскую структуру DAQ-шаблонов "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговый сигнал</a>" и "<a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">Дискретный блок</a>".
 </p>
@@ -1100,6 +1106,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li> "Вычисление" — вызов <a href="#graphCalc">диалога вычисления</a> над видимыми данными выбранного параметра.</li>
 <li> "Выбрать" — вызов <a href="#graphSelPrm">диалога выбора</a> параметра из перечня доступных для выбора, атрибут "Выбор: параметры доступные для выбора" кадра-владельца. Данный пункт доступен только в случае присутствия списка выбора.</li></ul></li></ul>
 <p>Виджет сохраняет выбранный пользователем параметр в таблице сеанса проекта и загружает параметр при следующем запуске, включая цвет тренда, типовое значение которого обычно берется из стиля.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The widget supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent widget/page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:336px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_ElViewGraphR_ru.png"><img class="thumbimage" height="60" src="files/LibMainEls_ElViewGraphR_ru.png" width="334" /></a>  <div class="thumbcaption">Рис.3.1.1b. Виджет "Элемент группы графиков" в режиме исполнения.</div></div></div></div>
 <p><b><u>Свойства связывания и конфигурации</u></b><br />
@@ -1284,7 +1291,8 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> * </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент, представленный на рисунке 3.1.2, реализует диалог пользовательского выбора источников данных, часто архивных, для формирования графика в кадре "<a href="#grpGraph">Группа графиков</a>". Выбор предоставляется из перечня указанного в атрибуте "Выбор: параметры доступные для выбора (allowSelLst)", кадра-инициатора. Для выбранного источника можно указать имя, шкалу, логарифмичность, единицу измерения и цвет графика.
 </p><p>В атрибуте "Выбор: параметры доступные для выбора (allowSelLst)" должны помещаться источники данных в виде:
@@ -2360,12 +2368,13 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 <tr>
 <td> <span id="ElCadr" title="#ElCadr"><h3><span class="mw-headline" id=".D0.AD.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82_.D0.BA.D0.B0.D0.B4.D1.80_.28ElCadr.29"><span class="mw-headline-number">4.2</span> Элемент кадр (<a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElCadr</a>)</span></h3></span>
 </td>
-<td> 1.3 </td>
+<td> 1.4 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru 
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент, представленный на рисунках 4.2, фактически является универсальной панелью управления и расширенного контроля различными устройствами по всем известным и определённым представительским структурам базовых данных систем управления по DAQ-шаблонам:
 </p>
@@ -2389,6 +2398,7 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 </p><p><i>Режим дискретного устройства</i> — в этом режиме осуществляется отображение наименования и поле дискретной сборки параметра. Поле дискретной сборки содержит текущее состояние дискретного устройства, слева, и кнопки возможных команд устройству, справа. Предусмотрено два состояния устройства: "Открыт", "Закрыт" и три команды: "Открыть", "Закрыть", "Стоп". Наименования состояний и команд могут быть установлены при настройке. Смена состояния дискретного устройства определяется нажатием на кнопку соответствующей команды. В режиме прямых дискретных состояний формируется комбобокс из перечня элементов из <i>digComs</i>, текущим состоянием из <i>st_text</i> и отправкой команд в <i>com_text</i>.
 </p><p>Каждое действие на этой панели управления (смена задания ПИД-регулятора, изменение состояния дискретного параметра, ...) регистрируется в журнале (протоколе) вмешательств, посредством генерации соответствующих сообщений согласно <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">структуре сообщений действий оператора</a>.
 </p><p>Для каждого отображаемого или управляемого параметра можно получить <a href="#Passport">паспорт</a>, путём нажатия правой клавиши мыши на поле контура. В паспорте будут представлены все свойства параметра.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The frame supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:602px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_elcadr_ru.png"><img class="thumbimage" height="375" src="files/LibMainEls_elcadr_ru.png" width="600" /></a>  <div class="thumbcaption">Рис.4.2b. Виджет "Элемент кадр" в режиме исполнения.</div></div></div></div>
 <p><b><u>Свойства связывания и конфигурации</u></b><br />
@@ -2668,13 +2678,15 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 <table class="wikitable">
 
 <tr>
-<td> <span id="cntrPaspExt" title="#cntrPaspExt"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.81.D0.BF.D0.BE.D1.80.D1.82.2C_.D1.80.D0.B0.D1.81.D1.88.D0.B8.D1.80.D0.B5.D0.BD.D0.BD.D1.8B.D0.B9_.28cntrPaspExt.29"><span class="mw-headline-number">4.3</span> Паспорт, расширенный (<a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">cntrPaspExt</a>)</span></h3></span> </td>
+<td> <span id="cntrPaspExt" title="#cntrPaspExt"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.81.D0.BF.D0.BE.D1.80.D1.82.2C_.D1.80.D0.B0.D1.81.D1.88.D0.B8.D1.80.D0.B5.D0.BD.D0.BD.D1.8B.D0.B9_.28cntrPaspExt.29"><span class="mw-headline-number">4.3</span> Паспорт, расширенный (<a href="Libs_Main_graphical_elements.html#cntrPaspExt" title="Special:MyLanguage/Libs/Main graphical elements">cntrPaspExt</a>)</span></h3></span>
+</td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент, представленный на рисунке 4.3, является информационно-контрольным диалогом около параметра источника данных — расширенный паспорт параметра. В отличии от <a href="#cntrPasp">простого паспорта</a>, расширенный, кроме информации, предоставляет возможность контроля атрибутов параметра и отображения истории стандартных атрибутов как в виде тренда, так и таблицы данных.
 </p><p><i>Информация и контроль</i> атрибутов параметра остаётся основной функцией, которая предоставляется во вкладке "Обзор", где формируется таблица атрибутов как они есть, со столбцами "Имя" и "Значение". Таблица активная и при выборе доступных для записи атрибутов, и соответствующих прав (root:op), внизу предоставляется поле ввода новых значений.
@@ -2728,13 +2740,15 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 <table class="wikitable">
 
 <tr>
-<td> <span id="cntrPasp" title="#cntrPasp"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.81.D0.BF.D0.BE.D1.80.D1.82_.28cntrPasp.29"><span class="mw-headline-number">4.4</span> Паспорт (<a href="Libs_Main_graphical_elements.html#cntrPasp" title="Special:MyLanguage/Libs/Main graphical elements">cntrPasp</a>)</span></h3></span> </td>
+<td> <span id="cntrPasp" title="#cntrPasp"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.81.D0.BF.D0.BE.D1.80.D1.82_.28cntrPasp.29"><span class="mw-headline-number">4.4</span> Паспорт (<a href="Libs_Main_graphical_elements.html#cntrPasp" title="Special:MyLanguage/Libs/Main graphical elements">cntrPasp</a>)</span></h3></span>
+</td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент, представленный на рисунке 4.4, является информационным диалогом около параметра источника данных — паспорт параметра, соответственно он позволяет получить такого рода информацию как: шифр, имя, описание, единица измерения, аварийные границы и другое, согласно <a href="Libs_Main.html" title="Special:MyLanguage/Libs/Main">представительской структуре параметра</a> — атрибуты параметра. Диалог построен на основе <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примитива "Документ"</a>, содержимое которого формируется динамически и периодически обновляется.
 </p><p>При построении паспорта отдельно обрабатываются атрибуты аварийных [<b>aMin</b>...<b>aMax</b>] и предупредительных шкал [<b>wMin</b>...<b>wMax</b>], которые объединяются в одной записи и в целом могут скрываться при условии их отключения.
@@ -2771,13 +2785,15 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 <table class="wikitable">
 
 <tr>
-<td> <span id="grph_panel" title="#grph_panel"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B3.D1.80.D0.B0.D1.84.D0.B8.D0.BA.D0.BE.D0.B2_.28grph_panel.29"><span class="mw-headline-number">4.5</span> Панель графиков (<a href="Libs_Main_graphical_elements.html#grph_panel" title="Special:MyLanguage/Libs/Main graphical elements">grph_panel</a>)</span></h3></span> </td>
+<td> <span id="grph_panel" title="#grph_panel"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B3.D1.80.D0.B0.D1.84.D0.B8.D0.BA.D0.BE.D0.B2_.28grph_panel.29"><span class="mw-headline-number">4.5</span> Панель графиков (<a href="Libs_Main_graphical_elements.html#grph_panel" title="Special:MyLanguage/Libs/Main graphical elements">grph_panel</a>)</span></h3></span>
+</td>
 <td> 1.5 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент, представленный на рисунке 4.5, является специализированной панелью динамического управления основными пользовательскими свойствами <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примитива "Диаграмма"</a>. Так, панель позволяет просмотреть графики истории за необходимый период времени и в нужном разрешении, поддерживается: масштабирование шкалы, выбор архиваторов для отображения, а также представление графиков в виде спектра присутствующих частот или XY.
 </p>
@@ -2917,13 +2933,15 @@ The panel allows the user to:
 <table class="wikitable">
 
 <tr>
-<td> <span id="doc_panel" title="#doc_panel"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B4.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2_.28doc_panel.29"><span class="mw-headline-number">4.6</span> Панель документов (<a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">doc_panel</a>)</span></h3></span> </td>
+<td> <span id="doc_panel" title="#doc_panel"><h3><span class="mw-headline" id=".D0.9F.D0.B0.D0.BD.D0.B5.D0.BB.D1.8C_.D0.B4.D0.BE.D0.BA.D1.83.D0.BC.D0.B5.D0.BD.D1.82.D0.BE.D0.B2_.28doc_panel.29"><span class="mw-headline-number">4.6</span> Панель документов (<a href="Libs_Main_graphical_elements.html#doc_panel" title="Special:MyLanguage/Libs/Main graphical elements">doc_panel</a>)</span></h3></span>
+</td>
 <td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент, представленный на рисунке 4.6, является специализированной панелью динамического управления основными пользовательскими свойствами <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Document" title="Special:MyLanguage/Sub-projects/VCA">примитива "Документ"</a>. Так, панель позволяет управлять документами и осуществлять навигацию по их истории; поддерживаются динамические и архивные документы.
 </p>
@@ -3019,13 +3037,15 @@ The panel allows the user to:
 <table class="wikitable">
 
 <tr>
-<td> <span id="accept" title="#accept"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.82.D0.B2.D0.B5.D1.80.D0.B6.D0.B4.D0.B5.D0.BD.D0.B8.D0.B5_.28accept.29"><span class="mw-headline-number">4.7</span> Подтверждение (<a href="Libs_Main_graphical_elements.html#accept" title="Special:MyLanguage/Libs/Main graphical elements">accept</a>)</span></h3></span> </td>
+<td> <span id="accept" title="#accept"><h3><span class="mw-headline" id=".D0.9F.D0.BE.D0.B4.D1.82.D0.B2.D0.B5.D1.80.D0.B6.D0.B4.D0.B5.D0.BD.D0.B8.D0.B5_.28accept.29"><span class="mw-headline-number">4.7</span> Подтверждение (<a href="Libs_Main_graphical_elements.html#accept" title="Special:MyLanguage/Libs/Main graphical elements">accept</a>)</span></h3></span>
+</td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент на рисунке 4.7 реализует простейший диалог подтверждения операций. Диалог содержит сообщение с вопросом и две кнопки "Принять" и "Отмена". Данный диалог, например, использован в кадре <a href="#userManager">Менеджер пользователей</a> для подтверждения операции удаления.
 </p>
@@ -3069,13 +3089,15 @@ The panel allows the user to:
 <table class="wikitable">
 
 <tr>
-<td> <span id="treeSelect" title="#treeSelect"><h3><span class="mw-headline" id=".D0.92.D1.8B.D0.B1.D0.BE.D1.80_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B0_.D0.B2_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B5_.28treeSelect.29"><span class="mw-headline-number">4.8</span> Выбор элемента в дереве (<a href="Libs_Main_graphical_elements.html#treeSelect" title="Special:MyLanguage/Libs/Main graphical elements">treeSelect</a>)</span></h3></span> </td>
+<td> <span id="treeSelect" title="#treeSelect"><h3><span class="mw-headline" id=".D0.92.D1.8B.D0.B1.D0.BE.D1.80_.D1.8D.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B0_.D0.B2_.D0.B4.D0.B5.D1.80.D0.B5.D0.B2.D0.B5_.28treeSelect.29"><span class="mw-headline-number">4.8</span> Выбор элемента в дереве (<a href="Libs_Main_graphical_elements.html#treeSelect" title="Special:MyLanguage/Libs/Main graphical elements">treeSelect</a>)</span></h3></span>
+</td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Элемент на рисунке 4.8 реализует простой диалог операции выбора пункта в дереве. Диалог содержит само дерево и две кнопки "Принять" и "Отменить". Этот диалог, например, использован, и первично для него разрабатывался, в кадре "<a href="Libs_Prescriptions.html#prescrRunSimple" title="Special:MyLanguage/Libs/Prescriptions">Рецепт: исполнение (простой)</a>" для иерархического выбора элемента в дереве.
 </p>

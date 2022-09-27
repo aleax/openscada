@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-11 21:42+0300\n"
+"POT-Creation-Date: 2022-09-22 09:31+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -81,8 +81,10 @@ msgid "Operation code %d is not supported."
 msgstr "Operationscode %d wird nicht unterstützt."
 
 #, c-format
-msgid "Number of external functions reached the limit of %d on the function '%s'"
-msgstr "Externe Funktionen Anzahl überschrittene Grenzen bis %d bei Funktion '%s'"
+msgid ""
+"Number of external functions reached the limit of %d on the function '%s'"
+msgstr ""
+"Externe Funktionen Anzahl überschrittene Grenzen bis %d bei Funktion '%s'"
 
 #, c-format
 msgid "More than %d(%d) parameters are specified for the function '%s'"
@@ -114,7 +116,8 @@ msgstr "Ausnahme beim Erstellen von %d Elementen des Arrays."
 
 #, c-format
 msgid "Type %d, which is not supported by the 'Add' operation."
-msgstr "Geben Sie %d ein, das von der Operation 'Hinzufügen' nicht unterstützt wird."
+msgstr ""
+"Geben Sie %d ein, das von der Operation 'Hinzufügen' nicht unterstützt wird."
 
 msgid "You have too deep recursion of the internal function call."
 msgstr "Sie haben eine zu tiefe Rekursion des internen Funktionsaufrufs."
@@ -159,7 +162,8 @@ msgstr "Die Namenszeilen nach der ersten behandeln als Hilfe."
 msgid "Type"
 msgstr "Typ"
 
-msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
+msgid ""
+"Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
 msgstr ""
 "Reellezahl;Ganzzahl;Logisch;Saite;Saite (übersetzen);Text;Text (übersetzen);"
 "Objekt"
@@ -317,9 +321,8 @@ msgstr "Berechnung. "
 msgid "Calculation with the period: %s. "
 msgstr "Berechnung mit einer Periode: %s. "
 
-#, c-format
-msgid "Next calculation by the cron '%s'. "
-msgstr "Berechnung nächsten durch cron '%s'. "
+msgid "Next calculation by the CRON '%s'. "
+msgstr "Berechnung nächsten durch CRON '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]."
@@ -416,4 +419,3 @@ msgstr ""
 "  anm - Name des gebildeten Attributs.\n"
 "  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewählten IO "
 "der Funktion generiert."
-

@@ -274,7 +274,7 @@ TValBuf &ModVArch::accmGetReg( const string &aNm, SGrp **grp, TFld::Type tp, int
 
     switch(tp&TFld::GenMask) {
 	case TFld::Boolean: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
-	case TFld::Integer: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));	break;
+	case TFld::Integer: gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Integer,TFld::NoFlag,"",ll2s(EVAL_INT).c_str()));	break;
 	case TFld::Real:    gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::Real,TFld::NoFlag,"",r2s(EVAL_REAL).c_str()));	break;
 	case TFld::String:  gO.tblEl.fldAdd(new TFld(aNm.c_str(),aNm.c_str(),TFld::String,TFld::NoFlag,"1000",EVAL_STR));		break;
 	default: break;
@@ -492,8 +492,8 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
 	reqEl.fldAdd(new TFld("TM",trS("Time, seconds"),TFld::Integer,TCfg::Key|(archivator().tmAsStr()?TFld::DateTimeDec:0),"20"));
 	//reqEl.fldAdd(new TFld("TMU",trS("Time, microseconds"),TFld::Integer,TCfg::Key,"10"));
 	switch(archive().valType()) {
-	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));	break;
-	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Integer,TFld::NoFlag,"20",ll2s(EVAL_INT).c_str()));break;
+	    case TFld::Boolean: reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Integer,TFld::NoFlag,"1",i2s(EVAL_BOOL).c_str()));break;
+	    case TFld::Integer: reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Integer,TFld::NoFlag,"",ll2s(EVAL_INT).c_str()));break;
 	    case TFld::Real:    reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::Real,TFld::NoFlag,"",r2s(EVAL_REAL).c_str()));	break;
 	    case TFld::String:  reqEl.fldAdd(new TFld("VAL",trS("Value"),TFld::String,TFld::NoFlag,"1000",EVAL_STR));		break;
 	    default: break;

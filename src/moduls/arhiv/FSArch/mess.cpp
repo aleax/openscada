@@ -36,7 +36,7 @@ using namespace FSArch;
 //* FSArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid,idb,cf_el), infoTbl(dataRes()),
+    TMArchivator(iid,idb,cf_el), chkANow(false), infoTbl(dataRes()),
     mUseXml(false), mMaxSize(1024), mNumbFiles(30), mTimeSize(30), mChkTm(60), mPackTm(10),
     mPackInfoFiles(false), mPrevDbl(false), mPrevDblTmCatLev(false), tmProc(0), tmProcMax(0), mLstCheck(0)
 {
@@ -209,7 +209,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 
     int64_t t_cnt = TSYS::curTime();
 
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes, true);	//!!!! WR to prevent of multiple files creation on busy systems
 
     if(!runSt) throw err_sys(_("Archive is not started!"));
     if(!mLstCheck)	return false;
@@ -231,7 +231,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 	    }
 	//If going a new data then create new file
 	if(iF >= 0) {
-	    res.request(true);
+	    //res.request(true);
 	    time_t f_beg = mess[iM].time;
 	    if(iF < (int)files.size() && f_beg > files[iF]->end() && (f_beg-files[iF]->end()) < (mTimeSize*24*60*60/3))
 		f_beg = files[iF]->end()+1;
@@ -256,7 +256,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess, bool force )
 		return false;
 	    }
 	    // Allow parallel read access
-	    res.request(false);
+	    //res.request(false);	//!!!! That is bad to relock in the cycle and for the direct index
 	    wrOK = files[iF]->put(mess[iM]) && wrOK;
 	}
     }
@@ -288,6 +288,13 @@ time_t ModMArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const s
 
 void ModMArch::checkArchivator( bool now )
 {
+    if(chkANow)	return;
+
+    chkANow = true;
+    TError err;
+
+    try {
+
     if(now || time(NULL) > mLstCheck + checkTm()*60) {
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL) throw err_sys(_("The archive directory '%s' is not present."), addr().c_str());
@@ -357,17 +364,17 @@ void ModMArch::checkArchivator( bool now )
 		files.erase(files.begin() + iF);
 	    }
 	    else iF++;
-	res.release();
+	//res.release();
 
 	//Check file count and delete odd files
 	if(mNumbFiles && !mod->noArchLimit) {
 	    int f_cnt = 0;	//Work files number
-	    res.request(false);
+	    //res.request(false);
 	    for(unsigned iF = 0; iF < files.size(); iF++)
 		if(!files[iF]->err()) f_cnt++;
 	    if(f_cnt > mNumbFiles) {
 		// Delete oldest files
-		res.request(true);
+		//res.request(true);
 		for(int iF = files.size()-1; iF >= 0; iF--)
 		    if(f_cnt <= mNumbFiles)	break;
 		    else if(!files[iF]->err()) {
@@ -377,8 +384,8 @@ void ModMArch::checkArchivator( bool now )
 			f_cnt--;
 		    }
 	    }
-	    res.release();
 	}
+	res.release();
 
 	//Check for not presented files into the info table
 	if(infoTbl.size() && !now) {
@@ -399,6 +406,12 @@ void ModMArch::checkArchivator( bool now )
     ResAlloc res(mRes, false);
     for(unsigned iF = 0; iF < files.size(); iF++)
 	files[iF]->check();
+
+    } catch(TError &ierr) { err = ierr; }
+
+    chkANow = false;
+
+    if(err.mess.size()) throw err;
 }
 
 int ModMArch::size( )
@@ -958,15 +971,15 @@ time_t MFileArch::get( time_t bTm, time_t eTm, vector<TMess::SRec> &mess, const 
 
     if(mErr) throw owner().err_sys(_("Messages getting from an error archive file!"));
 
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes, true);
     if(!upTo) upTo = time(NULL) + prmInterf_TM;
 
+    //res.request(true);
     if(mPack) {
-	res.request(true);
 	try { if(mPack) mName = mod->unPackArch(name()); } catch(TError &err) { mErr = true; throw; }
 	mPack = false;
-	res.request(false);
     }
+    res.request(false);
 
     mAcces = time(NULL);
 

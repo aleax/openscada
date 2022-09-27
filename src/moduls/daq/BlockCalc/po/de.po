@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 18:21+0300\n"
+"POT-Creation-Date: 2022-09-22 09:28+0300\n"
 "PO-Revision-Date: 2010-10-09 22:40+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -186,13 +186,14 @@ msgstr "Verbindungswert"
 msgid "Calculation. "
 msgstr "Berechnung. "
 
+#, c-format
 msgid "Calculation with the period %s. "
 msgstr "Berechnung mit einer Periode %s. "
 
-#, c-format
-msgid "Next calculation by the cron '%s'. "
-msgstr "Berechnung nächsten durch cron '%s'. "
+msgid "Next calculation by the CRON '%s'. "
+msgstr "Berechnung nächsten durch CRON '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s]. "
 msgstr "Verbrauchte Zeit %s[%s]. "
 

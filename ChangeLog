@@ -1,7 +1,45 @@
+2022-09-27 Roman (stable)
+- LibsDB.vcaBase,ModelsDB.AGLKS.vca: The VCA projects set to the calculation period 250 ms.
+    prj_{archBrowser,tmplSO}.control: Calculation of the main page and the control group of the VCA projects set to 1000 ms.
+- !!!!:LibsDB.vcaBase: wlb_Main.ElCadr: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	- appended in continuing the immediatly cycles using the new event "usr_calc";
+	- appended in switching to the fast cycle at alam blink, using the new function calcPer();
+	- switched to the processing period -1 (parent).
+    !!!!:wlb_Main.{grpGraph,grpGraph10}: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	    - appended in continuing the immediatly cycles using the new event "usr_calc";
+	    - switched to the processing period -1 (parent);
+	    - tracing period of the Diagram primitive linked also to the Widget period.
+	Appended in limiting the cursor time for the visible area.
+    !:wlb_Main.ElViewGraph: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	- appended in continuing the immediatly cycles in waiting the values appear, using the new event "usr_calc";
+	- appended in switching to the fast cycle at cursor blink, using the new function calcPer();
+	- switched to the processing period -1 (parent).
+    !:wlb_Main.grph_panel: Appended of storing the tracing period of the linked Diagram primitive.
+	Switched to the processing period -1 (parent).
+    wlb_Main.RootPgSo: Rewrote in the waiting the container page opening.
+	Width of the logo expanded to 110 pixels.
+    wlb_Main.{graphSelPrm,doc_panel,accept,treeSelect,cntrPaspExt}: Switched to the processing period -1 (parent).
+    wlb_doc.docRepMonth: Excluded from execution at stopping.
+    wlb_doc.docRepYear: Appended in one immediatly cycle after f_start, using the new event "usr_calc".
+	Disabled for the periodic execution.
+- !!:FIX:SYS: The string EVal value "<EVAL>" appended as not translated one to prevent that translation in VCAEngine for NULL DB values.
+    FIX: Prevented in the maximum measuring value sticking of tasks' time consumption at switching the scheduling method to CRON.
+- DAQ.{BlockCalc,JavaLikeCalc,LogicLev}: The word "cron" renamed to "CRON".
+- !!:DAQ.JavaLikeCalc: Prevented in starting-compiling functions for stopped libraries,
+	due to the libraries can be stopped already at the exiting so the function compiling can lock external objects.
+    !!: The own service library "sys_compile" appended also for that starting just after creation.
+- Archive.DBArch: Length of the integer type fields cleared to use the maximum resolution values, that is "bigint" for MySQL.
+- !!!:FIX:Archive.FSArch: Files accessing locks completely revised for including the packing/unpacking, new files creation,
+	    removing old ones under the WR lock space including also the conditions checking.
+	Also removed for the relocks in cycles and at indexes.
+    FIX: The ModMArch object appended of the sign chkANow of preventing multiple checking in checkArchivator().
+	The sign chkANow for Values also prevented from sticking at an exception.
+
+
 2022-09-20 Roman (stable)
 - FIX:LibsDB.vcaTest: wlb_test.FormElTests: fixed in some translation for Ukrainian.
 - !!!!:LibsDB.vcaBase: wlb_Main.RootPgSo: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
-	- appended in continuing the fast cycles (500 ms) before the container page opening at the start and after navigation,
+	- appended in continuing the immediatly cycles before the container page opening at the start and after navigation,
 	    using the new event "usr_calc";
 	- appended in switching to the fast cycle at alam blink, using the new function calcPer().
     wlb_Main.ElCadr: the processing period set to 1000.

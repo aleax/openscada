@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-11 21:42+0300\n"
+"POT-Creation-Date: 2022-09-22 09:31+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -76,7 +76,8 @@ msgid "Operation code %d is not supported."
 msgstr "Код виконання %d не підтримується."
 
 #, c-format
-msgid "Number of external functions reached the limit of %d on the function '%s'"
+msgid ""
+"Number of external functions reached the limit of %d on the function '%s'"
 msgstr "Кількість зовнішніх функцій досягло ліміту у %d на функції '%s'"
 
 #, c-format
@@ -154,8 +155,10 @@ msgstr "Рядки ім'я після першого опрацьовуютьс�
 msgid "Type"
 msgstr "Тип"
 
-msgid "Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
-msgstr "Реальний;Цілий;Логічний;Рядок;Рядок (переклад);Текст;Текст (переклад);Об'єкт"
+msgid ""
+"Real;Integer;Boolean;String;String (translate);Text;Text (translate);Object"
+msgstr ""
+"Реальний;Цілий;Логічний;Рядок;Рядок (переклад);Текст;Текст (переклад);Об'єкт"
 
 msgid "Mode"
 msgstr "Режим"
@@ -309,9 +312,8 @@ msgstr "Обчислення. "
 msgid "Calculation with the period: %s. "
 msgstr "Обчислення за періодом: %s. "
 
-#, c-format
-msgid "Next calculation by the cron '%s'. "
-msgstr "Наступне обчислення за cron '%s'. "
+msgid "Next calculation by the CRON '%s'. "
+msgstr "Наступне обчислення за CRON '%s'. "
 
 #, c-format
 msgid "Spent time: %s[%s]."
@@ -408,4 +410,3 @@ msgstr ""
 "  anm - ім'я створюваного атрибута.\n"
 "Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з обраного "
 "ВВ функції."
-

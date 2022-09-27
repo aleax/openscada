@@ -138,13 +138,13 @@ void Lib::save_( )
 
 void Lib::setStart( bool val )
 {
+    runSt = val;
+
     vector<string> lst;
     list(lst);
     for(unsigned iF = 0; iF < lst.size(); iF++)
 	try { if(!val || at(lst[iF]).at().toStart()) at(lst[iF]).at().setStart(val); }
 	catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
-
-    runSt = val;
 }
 
 void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc, new Func(id,name)); }

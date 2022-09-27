@@ -867,8 +867,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <ul><li> получение данных входных связей;</li>
 <li> выполнение вычисления процедуры виджета;</li>
 <li> передача значений по выходным связям.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Период вычисления виджета в значении по умолчанию "-1" означает цепное использование значения периода владельца виджета до первого положительного значения, или периода вычисления проекта.
-</p><p>На рисунке представлена вкладка связей с групповым назначением атрибутов, путём указания только параметра. На следующем рисунке представлено индивидуальное назначение атрибутов.
+<p>На рисунке представлена вкладка связей с групповым назначением атрибутов, путём указания только параметра. На следующем рисунке представлено индивидуальное назначение атрибутов.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:753px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_grp_ru.png"><img class="thumbimage" height="531" src="../files/VCA_wdg_lnk_grp_ru.png" width="751" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Связи" страницы конфигурации виджета c групповым назначением атрибутов путём указания только параметра.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:753px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_attr_ru.png"><img class="thumbimage" height="531" src="../files/VCA_wdg_lnk_attr_ru.png" width="751" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Связи" страницы конфигурации виджета c индивидуальным назначением атрибутов.</div></div></div></div>
@@ -3011,7 +3010,11 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — resource object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the <i>MIME</i>, from the session table or the source. It is designed for the resource objects edition and that substitution to this session's context, for example, images SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — sets the resource object to <i>data</i> with <i>MIME</i> by the address <i>addr</i>.</li>
 <li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li>
-<li> <i>int calcPer( int set = EVAL )</i> — the actual calculation-processing period getting and setting at <i>set</i> not EVAL.</li></ul>
+<li> <i>int calcPer( int set = EVAL )</i> — the actual calculation-processing period getting and setting at <i>set</i> not EVAL. There reserved the special values:
+<ul><li> <b>0</b> — if you want the session period processing;</li>
+<li> <b>-1</b> — if you want to use the parent widget/page/project processing period in the cascade;</li>
+<li> <b>-2</b> — for disable the periodic processing in whole;</li>
+<li> <b>-3</b> — no session time period, getting the projecting one.</li></ul></li></ul>
 <p><b>Объект "Виджет", примитива "Документ" (this)</b>
 </p>
 <ul><li> <i>string getArhDoc( int nDoc)</i> — текст документа архива на глубине <i>nDoc</i> (0-{aSize-1}).</li></ul>

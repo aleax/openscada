@@ -2952,7 +2952,11 @@ Where:
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — resource object by the address <i>addr</i> (the direct link to the resource or the widget attribute contained the link) with the <i>MIME</i>, from the session table or the source. It is designed for the resource objects edition and that substitution to this session's context, for example, images SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — sets the resource object to <i>data</i> with <i>MIME</i> by the address <i>addr</i>.</li>
 <li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — formats of the program message <i>mess</i> with the category — the widget path.</li>
-<li> <i>int calcPer( int set = EVAL )</i> — the actual calculation-processing period getting and setting at <i>set</i> not EVAL.</li></ul>
+<li> <i>int calcPer( int set = EVAL )</i> — the actual calculation-processing period getting and setting at <i>set</i> not EVAL. There reserved the special values:
+<ul><li> <b>0</b> — if you want the session period processing;</li>
+<li> <b>-1</b> — if you want to use the parent widget/page/project processing period in the cascade;</li>
+<li> <b>-2</b> — for disable the periodic processing in whole;</li>
+<li> <b>-3</b> — no session time period, getting the projecting one.</li></ul></li></ul>
 <p><b>Object "Widget" of the primitive "Document" (this)</b>
 </p>
 <ul><li> <i>string getArhDoc( int nDoc)</i> — text of the archive document to "nDoc" depth (0-{aSize-1}).</li></ul>

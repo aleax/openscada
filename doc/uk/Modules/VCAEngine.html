@@ -867,8 +867,7 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <ul><li> отримання даних вхідних зв'язків;</li>
 <li> виконання обчислення процедури віджету;</li>
 <li> передача значень за вихідними зв'язками.</li></ul>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Період обчислення віджету у значені по замовченню "-1" означає ланцюгове використання значення періоду власника віджету до першого позитивного значення, або періоду обчислення проєкту.
-</p><p>На рисунку представлено вкладку зв'язків з груповим призначенням атрибутів, шляхом указання тільки параметру. На наступному рисунку представлено індивідуальне призначення атрибутів.
+<p>На рисунку представлено вкладку зв'язків з груповим призначенням атрибутів, шляхом указання тільки параметру. На наступному рисунку представлено індивідуальне призначення атрибутів.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:767px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_grp_uk.png"><img class="thumbimage" height="477" src="../files/VCA_wdg_lnk_grp_uk.png" width="765" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Зв'язки" сторінки конфігурації віджету з груповим призначенням атрибутів шляхом вказання тільки параметру.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:767px;"><a class="image" href="http://oscada.org/wiki/File:VCA_wdg_lnk_attr_uk.png"><img class="thumbimage" height="508" src="../files/VCA_wdg_lnk_attr_uk.png" width="765" /></a>  <div class="thumbcaption">Рисунок. Вкладка "Зв'язки" сторінки конфігурації віджету з індивідуальним призначенням атрибутів.</div></div></div></div>
@@ -3011,7 +3010,11 @@ ws_BtPress:*:open:/pg_control/pg_terminator
 <ul><li> <i>string {resource,mime}( string addr, string MIME = "" )</i> — ресурс об'єкту за адресою <i>addr</i> (пряме посилання на ресурс або атрибут віджету з цим посиланням) з типом <i>MIME</i>, з таблиці сеансу або джерела. Призначено для редагування ресурсу об'єкта та підставлення його у контексті сеансу, наприклад, зображень SVG.</li>
 <li> <i>int {resourceSet,mimeSet}( string addr, string data, string MIME = "" )</i> — встановлює ресурс об'єкту у <i>data</i> з типом <i>MIME</i> за адресою <i>addr</i>.</li>
 <li> <i>int messDebug( string mess ); int messInfo( string mess ); int messNote( string mess ); int messWarning( string mess ); int messErr( string mess ); int messCrit( string mess ); int messAlert( string mess ); int messEmerg( string mess );</i> — формує повідомлення програми <i>mess</i> з категорією — шлях до даного віджету.</li>
-<li> <i>int calcPer( int set = EVAL )</i> — отримання, та встановлення за <i>set</i> не EVAL, щодо актуального періоду обчислення-опрацювання.</li></ul>
+<li> <i>int calcPer( int set = EVAL )</i> — отримання, та встановлення за <i>set</i> не EVAL, щодо актуального періоду обчислення-опрацювання. Зарезервовано наступні спеціальні значення:
+<ul><li> <b>0</b> — якщо бажаєте періодичного опрацювання сеансу;</li>
+<li> <b>-1</b> — якщо бажаєте використати період опрацювання батьківського віджету/сторінки/проєкту каскадно;</li>
+<li> <b>-2</b> — для цілковитого вимкнення періодичного опрацювання.</li>
+<li> <b>-3</b> — відсутній період часу сеансу, отримання проєктного.</li></ul></li></ul>
 <p><b>Об'єкт "Віджет", примітиву "Документ" (this)</b>
 </p>
 <ul><li> <i>string getArhDoc( int nDoc)</i> — текст документу архіву на глибині <i>nDoc</i> (0-{aSize-1}).</li></ul>

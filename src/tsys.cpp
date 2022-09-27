@@ -2590,7 +2590,7 @@ void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
 	    stsk->tm_per = wake_tm;
 	    stsk->tm_pnt = pnt_tm;
 	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
-	    if(stsk->tm_beg) stsk->consMax = vmax(stsk->consMax, stsk->tm_end - stsk->tm_beg);
+	    if(stsk->tm_beg)	stsk->consMax = vmax(stsk->consMax, stsk->tm_end-stsk->tm_beg);
 	}
     }
     else {
@@ -2614,7 +2614,8 @@ void TSYS::taskSleep( int64_t per, const string &icron, int64_t *lag )
 	    stsk->tm_per = 1000ll*curTime();
 	    stsk->tm_pnt = 1000000000ll*cron_tm;
 	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
-	    if(stsk->tm_beg) stsk->consMax = vmax(stsk->consMax, stsk->tm_end - stsk->tm_beg);
+	    if(stsk->tm_beg && (stsk->tm_end-stsk->tm_beg) < 60*60*1000000ll)	//!!!! To prevent for very big values at the scheduling mode switch
+		stsk->consMax = vmax(stsk->consMax, stsk->tm_end-stsk->tm_beg);
 	}
     }
 }
