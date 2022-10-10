@@ -693,7 +693,7 @@ void ConfApp::treeSearch( )
 	else if(QString(TSYS::pathLevEnd(pi->child(iC)->text(2).toStdString(),0).c_str()).contains(wvl,Qt::CaseInsensitive)) break;
     }
     if(iC < pi->childCount()) {
-	pi->treeWidget()->setCurrentItem(pi->child(iC), 0, QItemSelectionModel::Clear|QItemSelectionModel::Select);
+	pi->treeWidget()->setCurrentItem(pi->child(iC));//, 0, QItemSelectionModel::Clear|QItemSelectionModel::Select);
 	pi->treeWidget()->scrollTo(pi->treeWidget()->currentIndex());
     }
     else if(fromCur) { sl->setModified(true); treeSearch(); }
@@ -1602,29 +1602,41 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			thd_it->setData(Qt::WhatsThisRole, colHelp.c_str());
 		    }
 
-		    //   Once list process
-		    QStringList elms, elmi;
-		    if(t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed") {
-			if(t_linf->attr("select").empty()) {
-			    elms = QString(t_linf->attr("sel_list").c_str()).split(";");
-			    elmi = QString(t_linf->attr("sel_id").c_str()).split(";");
-			}
-			else {
-			    XMLNode x_lst("get");
-			    x_lst.setAttr("path",TSYS::strEncode(t_linf->attr("select"),TSYS::PathEl));
-			    if((rez=cntrIfCmd(x_lst)) > 0) mod->postMess(x_lst.attr("mcat"), x_lst.text(), TUIMod::Error, this);
-			    else if(rez == 0)
-				for(unsigned iLs = 0; iLs < x_lst.childSize(); iLs++) {
-				    if(!x_lst.childGet(iLs)->attr("id").empty())
-					elmi += x_lst.childGet(iLs)->attr("id").c_str();
-				    elms += x_lst.childGet(iLs)->text().c_str();
-				}
-			}
-		    }
-
 		    //   Set elements
 		    tblInit = true;
+		    QStringList elmsG, elmiG;
 		    for(unsigned iEl = 0; iEl < t_linf->childSize(); iEl++) {
+			//   The list processing
+			bool isSel = false, isLocSel = false;
+			QStringList elms, elmi;
+			if((isLocSel=(t_linf->childGet(iEl)->attr("dest") == "select" || t_linf->childGet(iEl)->attr("dest") == "sel_ed")) ||
+			    t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed")
+			{
+			    isSel = true;
+			    XMLNode *selO = isLocSel ? t_linf->childGet(iEl) : t_linf;
+
+			    if(isLocSel || elmsG.empty()) {
+				if(selO->attr("select").empty()) {
+				    elms = QString(selO->attr("sel_list").c_str()).split(";");
+				    elmi = QString(selO->attr("sel_id").c_str()).split(";");
+				}
+				else {
+				    XMLNode x_lst("get");
+				    x_lst.setAttr("path",TSYS::strEncode(selO->attr("select"),TSYS::PathEl));
+				    if((rez=cntrIfCmd(x_lst)) > 0) mod->postMess(x_lst.attr("mcat"), x_lst.text(), TUIMod::Error, this);
+				    else if(rez == 0)
+					for(unsigned iLs = 0; iLs < x_lst.childSize(); iLs++) {
+					    if(!x_lst.childGet(iLs)->attr("id").empty())
+						elmi += x_lst.childGet(iLs)->attr("id").c_str();
+					    elms += x_lst.childGet(iLs)->text().c_str();
+					}
+				}
+				if(elmsG.empty()) elmsG = elms, elmiG = elmi;
+			    }
+			    if(!isLocSel) elms = elmsG, elmi = elmiG;
+			}
+
+			//   The item data
 			thd_it = tbl->item(iEl, iLst);
 			if(!thd_it) {
 			    thd_it = new QTableWidgetItem("");
@@ -1639,9 +1651,9 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    }
 			}
 
-			//   Set element
+			//   Setting the element
 			if(t_linf->attr("tp") == "bool")	thd_it->setData(Qt::DisplayRole, (bool)s2i(t_linf->childGet(iEl)->text()));
-			else if(t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed") {
+			else if(isSel) {
 			    int sel_n;
 			    for(sel_n = 0; sel_n < elms.size(); sel_n++)
 				if((elms.size() == elmi.size() && elmi[sel_n] == t_linf->childGet(iEl)->text().c_str()) ||
@@ -2663,6 +2675,8 @@ QTreeWidgetItem *ConfApp::getExpandTreeWIt( const string &path )
 	if(!isOK) return NULL;
     }
 
+    if(curIt && !curIt->isSelected()) curIt->setSelected(true);
+
     return curIt;
 }
 
@@ -3442,7 +3456,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 
 void ConfApp::tableSet( int row, int col )
 {
-    bool noReload = false;
+    bool noReload = false, isLocSel = false;
     string value;
     if(tblInit || row < 0 || col < 0) return;
 
@@ -3454,23 +3468,25 @@ void ConfApp::tableSet( int row, int col )
 
 	QVariant val = tbl->item(row,col)->data(Qt::EditRole);
 	if(n_el->childGet(col)->attr("tp") == "bool") value = val.toBool() ? "1" : "0";
-	else if(n_el->childGet(col)->attr("dest") == "select") {
+	else if((isLocSel=n_el->childGet(col)->childGet(row)->attr("dest") == "select") || n_el->childGet(col)->attr("dest") == "select") {
+	    XMLNode *selO = isLocSel ? n_el->childGet(col)->childGet(row) : n_el->childGet(col);
+
 	    value = val.toString().toStdString();
 	    bool find_ok = false;
-	    if(n_el->childGet(col)->attr("select").empty()) {
-		bool ind_ok = n_el->childGet(col)->attr("sel_id").size();
+	    if(selO->attr("select").empty()) {
+		bool ind_ok = selO->attr("sel_id").size();
 		string s_nm;
-		for(int ls_off = 0, c_el = 0; !(s_nm=TSYS::strSepParse(n_el->childGet(col)->attr("sel_list"),0,';',&ls_off)).empty(); c_el++)
+		for(int ls_off = 0, c_el = 0; !(s_nm=TSYS::strSepParse(selO->attr("sel_list"),0,';',&ls_off)).empty(); c_el++)
 		    if(s_nm == value) {
-			if(ind_ok) value = TSYS::strSepParse(n_el->childGet(col)->attr("sel_id"),c_el,';');
+			if(ind_ok) value = TSYS::strSepParse(selO->attr("sel_id"),c_el,';');
 			find_ok = true;
 		    }
 	    }
 	    else {
-		XMLNode x_lst("get"); x_lst.setAttr("path",selPath+"/"+TSYS::strEncode(n_el->childGet(col)->attr("select"),TSYS::PathEl));
+		XMLNode x_lst("get"); x_lst.setAttr("path",selPath+"/"+TSYS::strEncode(selO->attr("select"),TSYS::PathEl));
 		if(cntrIfCmd(x_lst)) { mod->postMess(x_lst.attr("mcat"),x_lst.text(),TUIMod::Error,this); return; }
 
-		bool ind_ok = s2i(n_el->childGet(col)->attr("idm"));
+		bool ind_ok = s2i(selO->attr("idm"));
 		for(unsigned iEl = 0; iEl < x_lst.childSize(); iEl++) {
 		    if(!iEl) ind_ok = x_lst.childGet(iEl)->attr("id").size();
 		    if(x_lst.childGet(iEl)->text() == value) {

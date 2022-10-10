@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Документація/API користувача</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/User_API.html" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (93% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FUser+API&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/User_API" title="Documents/User API">Documents/User API</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/User_API.html" title="Documents/User API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/User_API.html" title="Документация/API пользователя (90% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li>
 <li> <b>Початково створено:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/ProgrammManual" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a> </li></ul>
@@ -451,7 +451,27 @@
 <li><i>int {mktime|timegm}(int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst);</i> — формує час з епохи 1.1.1970 з окремо вказаних секунд, хвилин, годин, днів, місяців та інше. Значення окремих одиниць часу можуть вказуватися за межами їх звичного діапазону, що дозволяє використовувати цю функцію при переборі та у результаті чого одиниці часу буде виправлено та повернуто у звичайному діапазоні. <i>timegm</i> працює з часом у GMT(UTC). </li>
 <li><i>string {strftime|strftimegm}( int sec, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — перетворює абсолютний час <i>sec</i> у рядок потрібного формату <i>form</i>. Запис формату відповідає POSIX-функції <i>strftime</i>. <i>strftimegm</i> повертає час у GMT(UTC).</li>
 <li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — повертає час у секундах від епохи 1.1.1970, виходячи з строкового запису часу <i>str</i>, відповідно до вказаного шаблону <i>form</i>. Наприклад, шаблону "%Y-%m-%d&nbsp;%H:%M:%S" відповідає час "2006-08-08 11:21:55". Опис формату шаблону можна отримати з документації на POSIX-функцію <i>strptime</i>. <i>strptimegm</i> працює з часом у GMT(UTC).</li>
-<li><i>int cron( string cronreq, int base = 0 );</i> — повертає час, спланований у форматі стандарту Cron, <i>cronreq</i>, починаючи від базового часу <i>base</i> або від поточного, якщо базовий не вказано.</li>
+<li><i>int cron( string cronreq, int base = 0 );</i> — повертає час, спланований у форматі стандарту CRON, <i>cronreq</i>, починаючи від базового часу <i>base</i> або від поточного, якщо базовий не вказано. Форма стандарту CRON це "* * * * *".
+<dl><dt> Де елементи по черзі</dt>
+<dd /></dl>
+<ul><li> хвилини (0-59);</li>
+<li> години (0-23);</li>
+<li> дні (1-31);</li>
+<li> місяці (1-12);</li>
+<li> дні тижня (0[Неділя]-6).</li></ul>
+<dl><dt> Де варіанти елементу</dt>
+<dd /></dl>
+<ul><li> "*" — будь яке значення;</li>
+<li> "1,2,3" — дозволені значення;</li>
+<li> "1-5" — діапазон дозволених значень;</li>
+<li> "*/2" — дільник загального діапазону дозволених значень.</li></ul>
+<dl><dt> Приклади</dt>
+<dd /></dl>
+<ul><li> "* * * * *" — кожна хвилина;</li>
+<li> "10 23 * * *" — лише 23я година та 10а хвилина будь якого дня та місяця;</li>
+<li> "*/2 * * * *" — для хвилин: 0,2,4,...,56,58;</li>
+<li> "* 2-4 * * *" — для будь якої хвилини у годинах від 2 до 4(включно).</li></ul>
+</li>
 <li><i>string strFromCharCode( int char1, int char2, int char3, ... );</i> — створює рядок з кодів символів <i>char1</i>, <i>char2</i> ... <i>charN</i>.</li>
 <li><i>string strFromCharUTF([string type = "UTF-8",] int char1, int char2, int char3, ...);</i> — створює рядок з UTF символів <i>char1</i>, <i>char2</i> ... <i>charN</i>. Наступні типи символу підтримуються: UTF-8, UTF-16, UTF-16LE, UTF-16BE, UTF-32, UTF-32LE, UTF-32BE.</li>
 <li><i>string strCodeConv( string src, string fromCP, string toCP );</i> — перекодовує текст <i>src</i> з кодування <i>fromCP</i> у <i>toCP</i>. Якщо кодування опущено (порожній рядок), то використовується внутрішнє.</li>
@@ -991,5 +1011,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
 </html>

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (98% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -272,7 +272,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.27.D1.94.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.B5.D1.80.D1.83"><span class="mw-headline-number">3.1</span> Об'єкт контролеру</span></h3>
 <p>Для додання джерела даних ModBus створюється та конфігурується об'єкт контролеру OpenSCADA. Приклад вкладки конфігурації объекту контролеру даного типу наведено на рисунку 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:861px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr_uk.png"><img class="thumbimage" height="844" src="../files/ModBus_cntr_uk.png" width="859" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфігурації об'єкту контролеру.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:788px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr_uk.png"><img class="thumbimage" height="909" src="../files/ModBus_cntr_uk.png" width="786" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфігурації об'єкту контролеру.</div></div></div></div>
 <p>За допомогою цієї вкладки можна встановити:
 </p>
 <ul><li> Стан об'єкту контролеру, а саме: Статус, "Ввімкнено", "Виконується" та ім'я БД, яка містить конфігурацію.</li></ul>
@@ -282,7 +282,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Ім'я таблиць зберігання конфігурації параметрів контролеру стандартного та логічного типу.</li>
 <li> Політика планування та пріоритет задачі збору даних.</li>
 <li> ModBus протокол, який використовується для опитування фізичного пристрою (TCP/IP, RTU або ASCII).</li>
-<li> Адреса вихідного транспорту з переліку <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">вихідних транспортів</a> підсистеми "Транспорти" OpenSCADA. Типовий порт ModuBus/TCP це 502. Поле може бути встановлено у порожнє та змінено під час виконання. </li>
+<li> Адреса вихідного транспорту із використанням уніфікованого підключення із навігацією. Типовий порт ModuBus/TCP це 502. Поле може бути встановлено у порожнє та змінено під час виконання. Формат адреси:
+<ul><li> "<b>{TrModule}.[out_]{TrID}[:{TrAddr}]</b>" — типовий вихідний із автоматичним створенням <i>TrID</i> за його відсутності та наданні <i>TrAddr</i>;</li>
+<li> "<b>{TrModule}.in_{TrID}:{RemConId}</b>" — ініціативний вхідний із ідентифікатором підключення у <i>RemConId</i>.</li></ul></li>
 <li> ModBus вузол призначення. У випадку з протоколами RTU та ASCII це індивідуальна адреса фізичного пристрою, а для TCP/IP це ідентифікатор одиниці.</li>
 <li> Об'єднання фрагментів регістрів. Стандартні функції <b>1</b>-<b>4</b> дозволяють запитати одразу декілька суміжних регістрів або бітів. Така стратегія часто дозволяє оптимізувати трафік та час. Однак, потрібні регістри не завжди розташовані суміжно один до одного та така опція дозволяє збирати їх у блоки до 100 регістрів або 1600 бітів.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> До встановлення цього параметру треба підходити з обережністю, оскільки не всі пристрої підтримують доступ до регістрів між фрагментами.</dd></dl>
@@ -382,5 +384,5 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/uk">Modules/ModBus/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/uk">Modules/ModBus/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
 </html>

@@ -4,5 +4,5 @@
 -#!/bin/sh
 +#!/system/bin/sh
  
- if test $# -lt 1; then
-     echo "Projects management script of OpenSCADA mostly designed to call from OpenSCADA but also can be used independently.
+ argHelp()
+ {

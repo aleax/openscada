@@ -469,7 +469,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		    }
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataSet("newMime", "file/unknown;0", "");
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataSet("newRes", "file/unknown;0", "");
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataDel(opt->attr("key_id"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    // Request data
@@ -640,7 +640,11 @@ void LWidget::setEnable( bool val, bool force )
 
     mess_sys(TMess::Debug, val ? _("Enabling the widget.") : _("Disabling the widget."));
 
-    Widget::setEnable(val);
+    try { Widget::setEnable(val); }	//!!!! Setup the previous parent to the actual one if that is broken for next childs renaming
+    catch(TError&) {
+	if(mParentAddrPrev.empty()) mParentAddrPrev = parentAddr();
+	throw;
+    }
 
     //Include widgets link update on the parrent change
     if(val) {

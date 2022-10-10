@@ -997,18 +997,18 @@ string TMess::labSecCRON( )
 {
     return _("Schedule wrotes in seconds periodic form or in the standard CRON form.\n"
 	     "The seconds periodic form is one real number (1.5, 1e-3).\n"
-	     "Cron is the standard form \"* * * * *\".\n"
-	     "  Where items by order:\n"
+	     "CRON is the standard form \"* * * * *\".\n"
+	     "  Where items by the order:\n"
 	     "    - minutes (0-59);\n"
 	     "    - hours (0-23);\n"
 	     "    - days (1-31);\n"
 	     "    - month (1-12);\n"
 	     "    - week day (0[Sunday]-6).\n"
-	     "  Where an item variants:\n"
+	     "  Where the item variants:\n"
 	     "    - \"*\" - any value;\n"
-	     "    - \"1,2,3\" - allowed values list;\n"
-	     "    - \"1-5\" - raw range of allowed values;\n"
-	     "    - \"*/2\" - range divider for allowed values.\n"
+	     "    - \"1,2,3\" - list of the allowed values;\n"
+	     "    - \"1-5\" - raw range of the allowed values;\n"
+	     "    - \"*/2\" - divider to the all allowed values range.\n"
 	     "Examples:\n"
 	     "  \"1e-3\" - call with a period of one millisecond;\n"
 	     "  \"* * * * *\" - each minute;\n"
@@ -1026,6 +1026,13 @@ string TMess::labTaskPrior( )
 	     "  0         - standard userspace priority;\n"
 	     "  1...99    - realtime priority level (round-robin), often allowed only for \"root\";\n"
 	     "  100...199 - realtime priority level (FIFO), often allowed only for \"root\".");
+}
+
+string TMess::labStdOutTrs( )
+{
+    return _("Address format of the output transport using the unified connection:\n"
+	     "  \"{TrModule}.[out_]{TrID}[:{TrAddr}]\" - typical output with automatic creation <TrID> at it missing and providing <TrAddr>;\n"
+	     "  \"{TrModule}.in_{TrID}:{RemConId}\" - initiative input with the connection identifier in <RemConId>.");
 }
 
 string TMess::labMessCat( )

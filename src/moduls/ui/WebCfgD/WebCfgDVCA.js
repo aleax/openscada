@@ -874,26 +874,38 @@ function selectChildRecArea( node, aPath, cBlk )
 			var prcCol = this.srcNode.childNodes[iCol];
 			this.childNodes[0].childNodes[iCol+1].innerText = prcCol.getAttribute('dscr');
 
-			//   Load selected list
-			if((!prcCol.val_ls || !prcCol.length) && (prcCol.getAttribute('dest') == 'select' || prcCol.getAttribute('dest') == 'sel_ed')) {
-			    prcCol.ind_ls = new Array();
-			    prcCol.val_ls = new Array();
-			    if(!prcCol.getAttribute('select')) {
-				if(prcCol.getAttribute('sel_id')) prcCol.ind_ls = prcCol.getAttribute('sel_id').split(';');
-				prcCol.val_ls = prcCol.getAttribute('sel_list').split(';');
-			    }
-			    else {
-				var xLst = servGet((genReqs?'':selPath+'/')+prcCol.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
-				for(var iEl = 0; xLst && iEl < xLst.childNodes.length; iEl++) {
-				    if(xLst.childNodes[iEl].nodeName.toLowerCase() != 'el') continue;
-				    if(xLst.childNodes[iEl].getAttribute('id'))
-					prcCol.ind_ls.push(xLst.childNodes[iEl].getAttribute('id'));
-				    prcCol.val_ls.push(xLst.childNodes[iEl].textContent);
-				}
-			    }
-			}
 			for(var iRow = 0; iRow < prcCol.childNodes.length; iRow++) {
 			    var tblCell = this.childNodes[iRow+1].childNodes[iCol+1];
+
+			    //   The list processingLoad selected list
+			    var ind_ls = new Array(); var val_ls = new Array();
+			    var isSel = false; var isLocSel = false;
+			    if((isLocSel=(prcCol.childNodes[iRow].getAttribute('dest') == 'select' || prcCol.childNodes[iRow].getAttribute('dest') == 'sel_ed')) ||
+				prcCol.getAttribute('dest') == 'select' || prcCol.getAttribute('dest') == 'sel_ed')
+			    {
+				isSel = true;
+				var selO = isLocSel ? prcCol.childNodes[iRow] : prcCol;
+				if(isLocSel || !prcCol.val_ls) {
+				    if(!selO.getAttribute('select')) {
+					if(selO.getAttribute('sel_id')) ind_ls = selO.getAttribute('sel_id').split(';');
+					val_ls = selO.getAttribute('sel_list').split(';');
+				    }
+				    else {
+					var xLst = servGet((genReqs?'':selPath+'/')+selO.getAttribute('select').replace(/%/g,'%25').replace(/\//g,'%2f'),'com=get');
+					for(var iEl = 0; xLst && iEl < xLst.childNodes.length; iEl++) {
+					    if(xLst.childNodes[iEl].nodeName.toLowerCase() != 'el') continue;
+					    if(xLst.childNodes[iEl].getAttribute('id'))
+						ind_ls.push(xLst.childNodes[iEl].getAttribute('id'));
+					    val_ls.push(xLst.childNodes[iEl].textContent);
+					}
+				    }
+				    if(!prcCol.val_ls) prcCol.val_ls = val_ls, prcCol.ind_ls = ind_ls;
+				}
+				if(!isLocSel) val_ls = prcCol.val_ls, ind_ls = prcCol.ind_ls;
+				else selO.val_ls = val_ls, selO.ind_ls = ind_ls;
+			    }
+
+			    //   The item data
 			    if(tblCell.isEnter && tblCell.childNodes.length && saveCh)
 				prcCol.childNodes[iRow].textContent = tblCell.childNodes[0].value;
 			    var cval = prcCol.childNodes[iRow].textContent;
@@ -906,12 +918,11 @@ function selectChildRecArea( node, aPath, cBlk )
 				//tblCell.style.fontWeight = parseInt(cval)?'bold':'normal';
 				tblCell.innerHTML = parseInt(cval) ? "<img src='/"+MOD_ID+"/img_button_ok'/> " : '';
 			    }
-			    else if(prcCol.getAttribute('dest') == 'select') {
+			    else if(isSel) {
 				tblCell.innerText = cval;
-				for(var iEl = 0; iEl < prcCol.val_ls.length; iEl++)
-				    if((prcCol.ind_ls.length && prcCol.ind_ls[iEl] == cval) ||
-					    (!prcCol.ind_ls.length && prcCol.val_ls[iEl] == cval))
-					tblCell.innerText = prcCol.val_ls[iEl];
+				for(var iEl = 0; iEl < val_ls.length; iEl++)
+				    if((ind_ls.length && ind_ls[iEl] == cval) || (!ind_ls.length && val_ls[iEl] == cval))
+					tblCell.innerText = val_ls[iEl];
 			    }
 			    else if(prcCol.getAttribute('tp') == 'time') {
 				var dt = new Date(parseInt(cval)*1000);
@@ -955,8 +966,10 @@ function selectChildRecArea( node, aPath, cBlk )
 		    while(t_s.childNodes[iCli].lastChild) t_s.childNodes[iCli].removeChild(t_s.childNodes[iCli].lastChild);
 		    for(var iRw = 0; iRw < dataReq.childNodes[iCl].childNodes.length; iRw++) {
 			var el = t_s.ownerDocument.createElement(dataReq.childNodes[iCl].childNodes[iRw].nodeName);
-			el.textContent = dataReq.childNodes[iCl].childNodes[iRw].textContent;
-			if((tVl=dataReq.childNodes[iCl].childNodes[iRw].getAttribute('help'))) el.setAttribute('help', tVl);
+			var dO = dataReq.childNodes[iCl].childNodes[iRw];
+			el.textContent = dO.textContent;
+			for(iA = 0; iA < dO.attributes.length; iA++)
+			    el.setAttribute(dO.attributes[iA].name, dO.attributes[iA].value);
 			t_s.childNodes[iCli].appendChild(el);
 		    }
 		}
@@ -1057,10 +1070,10 @@ function selectChildRecArea( node, aPath, cBlk )
 				if((tVl=t_s.childNodes[iCol].childNodes[iRw-1].getAttribute('help'))) cCell.title = tVl;
 				else if(table.childNodes[0].childNodes[iCol+1].title) cCell.title = table.childNodes[0].childNodes[iCol+1].title;
 				var colTp = t_s.childNodes[iCol].getAttribute('tp');
-				var colDst = t_s.childNodes[iCol].getAttribute('dest');
+				var colDst = t_s.childNodes[iCol].childNodes[iRw-1].getAttribute('dest');
+				if(!colDst) colDst = t_s.childNodes[iCol].getAttribute('dest');
 				cCell.style.textAlign = (colTp == "bool" || colTp == "dec" || colTp == "real" || colTp == "time" || colDst == "sel_ed" || colDst == "select") ? "center" : "";
 			    }
-
 			    cCell.onclick = function( ) {
 				var cTbl = this.parentNode.parentNode;
 				if(cTbl.isEnter && !this.isEnter) cTbl.setElements();
@@ -1074,6 +1087,7 @@ function selectChildRecArea( node, aPath, cBlk )
 				this.className = "edit";
 				var prcCol = cTbl.srcNode.childNodes[this.cCol];
 				var cval = prcCol.childNodes[this.cRow].textContent;
+				var isLocSel = false;
 
 				if(prcCol.getAttribute('tp') == 'bool') {
 				    this.innerHTML = "<input type='checkbox'/>";
@@ -1082,7 +1096,8 @@ function selectChildRecArea( node, aPath, cBlk )
 					this.parentNode.parentNode.parentNode.comSet(this.parentNode.cRow,this.parentNode.cCol,this.checked?'1':'0');
 				    }
 				}
-				else if(prcCol.getAttribute('dest') == 'select') {
+				else if((isLocSel=prcCol.childNodes[this.cRow].getAttribute('dest')) || prcCol.getAttribute('dest') == 'select') {
+				    var selO = isLocSel ? prcCol.childNodes[this.cRow] : prcCol;
 				    this.innerHTML = "<select/>";
 				    this.firstChild.onchange = function( ) {
 					if(this.selectedIndex < 0) return;
@@ -1092,11 +1107,11 @@ function selectChildRecArea( node, aPath, cBlk )
 					return false;
 				    }
 				    var valWCfg = ''; var sel_ok = false;
-				    for(var iEl = 0; iEl < prcCol.val_ls.length; iEl++) {
+				    for(var iEl = 0; iEl < selO.val_ls.length; iEl++) {
 					valWCfg += "<option "+
-					    (prcCol.ind_ls.length ? ("vid='"+strEncode(prcCol.ind_ls[iEl])+"' "+((prcCol.ind_ls[iEl]==cval)?"selected='true'":""))
-								  : ((prcCol.val_ls[iEl]==cval)?"selected='true'":""))+">"+strEncode(prcCol.val_ls[iEl])+"</option>";
-					if((prcCol.ind_ls.length && prcCol.ind_ls[iEl] == cval) || (!prcCol.ind_ls.length && prcCol.val_ls[iEl] == cval))
+					    (selO.ind_ls.length ? ("vid='"+strEncode(selO.ind_ls[iEl])+"' "+((selO.ind_ls[iEl]==cval)?"selected='true'":""))
+								  : ((selO.val_ls[iEl]==cval)?"selected='true'":""))+">"+strEncode(selO.val_ls[iEl])+"</option>";
+					if((selO.ind_ls.length && selO.ind_ls[iEl] == cval) || (!selO.ind_ls.length && selO.val_ls[iEl] == cval))
 					    sel_ok = true;
 				    }
 				    if(!sel_ok) valWCfg += "<option selected='true'>"+strEncode(cval)+"</option>";

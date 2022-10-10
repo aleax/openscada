@@ -762,14 +762,14 @@ void Project::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/obj/u_lst" && ctrChkNode(opt)) {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(ls[i_l]);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    opt->childAdd("el")->setText(ls[iL]);
     }
     else if(a_path == "/obj/g_lst" && ctrChkNode(opt)) {
 	vector<string> ls;
 	SYS->security().at().usrGrpList(owner(), ls);
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(ls[i_l]);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
+	    opt->childAdd("el")->setText(ls[iL]);
     }
     else if(a_path == "/mime/mime") {
 	// Request data
@@ -797,7 +797,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		    }
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataSet("newMime", "file/unknown;0", "");
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataSet("newRes", "file/unknown;0", "");
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	resourceDataDel(opt->attr("key_id"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    // Request data
@@ -1012,8 +1012,8 @@ int Page::timeStamp( )
     int curTm = mTimeStamp;
     vector<string> ls;
     pageList(ls);
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	curTm = vmax(curTm, pageAt(ls[i_l]).at().timeStamp());
+    for(unsigned iL = 0; iL < ls.size(); iL++)
+	curTm = vmax(curTm, pageAt(ls[iL]).at().timeStamp());
 
     return curTm;
 }
@@ -1262,7 +1262,10 @@ void Page::loadIO( )
 	    continue;
 	}
 	// Lost inherited widget due to it removing into the parent
-	else if(mod->nodeAt(spar,0,0,0,true).freeStat() && sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0) {
+	else if((mParentAddrPrev.empty() || spar.find(mParentAddrPrev) != 0) &&	//!!!! Do not remove at presence in the previous parent
+		mod->nodeAt(spar,0,0,0,true).freeStat() &&
+		sid.size() < spar.size() && spar.compare(spar.size()-sid.size(),sid.size(),sid) == 0)
+	{
 	    if(wdgPresent(sid)) wdgDel(sid);
 	    TBDS::dataDel(db+"."+tbl, mod->nodePath()+tbl, cEl, TBDS::UseAllKeys);
 	    fldCnt--;
@@ -1355,8 +1358,13 @@ void Page::setEnable( bool val, bool force )
 
 	mParent = ownerProj()->nodeAt(parentAddr());
     }
- 
-    Widget::setEnable(val);
+
+    try { Widget::setEnable(val); }	//!!!! Setup the previous parent to the actual one if that is broken for next childs renaming
+    catch(TError&) {
+	if(mParentAddrPrev.empty()) mParentAddrPrev = parentAddr();
+	throw;
+    }
+
     if(val && !parent().freeStat() && parent().at().rootId() != "Box" && !(prjFlags()&Page::Link)) {
 	Widget::setEnable(false);
 	throw TError(nodePath().c_str(),_("As a page, only a box based widget can be used!"));
@@ -1377,11 +1385,10 @@ void Page::setEnable( bool val, bool force )
     //Include widgets link update on the parrent change
     if(val) {
 	bool lnkUpdt = (mParentAddrPrev.size() && parentAddr() != mParentAddrPrev);
-	vector<string> lst;
-	wdgList(lst, true);
-	for(unsigned iL = 0; iL < lst.size(); iL++)
+	wdgList(ls, true);
+	for(unsigned iL = 0; iL < ls.size(); iL++)
 	    try {
-		AutoHD<Widget> iw = wdgAt(lst[iL]);
+		AutoHD<Widget> iw = wdgAt(ls[iL]);
 		if(lnkUpdt && iw.at().parentAddr().compare(0,mParentAddrPrev.size()+1,mParentAddrPrev+"/") == 0) {
 		    iw.at().setParentAddr(parentAddr()+iw.at().parentAddr().substr(mParentAddrPrev.size()));
 		    iw.at().setEnable(true);

@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Рабочий пользовательский интерфейс (Qt)
 </td>
-<td> 8.4 </td>
+<td> 8.5 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -122,40 +122,42 @@
 <p>Разработка интерфейса СВУ выполняется в одном окне, реализующем многодокументный интерфейс (MDI) (рис.2.a). Данный подход позволяет одновременно открывать несколько кадров различных размеров. Использованы следующие механизмы управления разработкой: панели инструментов, пункты меню и контекстное меню. Большинство действий дублируются разными механизмами, что позволяет быстро найти инструмент удобным способом. Навигационные интерфейсы реализованы присоединяемыми окнами. Конфигурация панелей инструментов и присоединяемых окон сохраняется при выходе и восстанавливается при старте, что позволяет настраивать интерфейс под себя.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1007px;"><a class="image" href="http://oscada.org/wiki/File:Vision_win_ru.png"><img class="thumbimage" height="582" src="../files/Vision_win_ru.png" width="1005" /></a>  <div class="thumbcaption">Рис.2.a. Окно разработки интерфейсов СВУ.</div></div></div></div>
-<p>Доступ к основным компонентам СВУ производится посредством пришвартованных окон, на рисунке 2.a эти окна изображены слева. В этих окнах содержится:
+<p>Access to major components of the VCA is made by attached windows, in the Figure 2.a these windows are shown on the left side. These windows contain:
 </p>
-<ul><li> Дерево библиотек виджетов. С помощью навигатора можно быстро найти нужный виджет или библиотеку и проделать над ними необходимые операции. Реализованы операции: добавления, удаления, копирования, вызова настройки виджетов и библиотек, и вызова визуального редактирования виджетов. Для гибкого управления поддерживается контекстное меню в составе пунктов:
-<ul><li> "Новая библиотека" — создание новой библиотеки.</li>
-<li> "Добавить визуальный элемент" — добавление визуального элемента в библиотеку.</li>
-<li> "Удалить визуальный элемент" — удаление визуального элемента из библиотеки.</li>
-<li> "Очистить визуальный элемент" — очистка визуального элемента с наследованием изменённых свойств или установкой их по умолчанию.</li>
-<li> "Опустить изменения визуального элемента" — опускание изменений визуального элемента к его родителю, которые будут использованы другими наследующими.</li>
-<li> "Свойства визуального элемента" — вызов конфигурации визуального элемента.</li>
-<li> "Редактировать визуальный элемент" — вызов визуального редактирование элемента.</li>
-<li> "Копировать визуальный элемент" — копирование визуального элемента, в момент вставки.</li>
-<li> "Вырезать визуальный элемент" — вырезание-перемещение визуального элемента, в момент вставки.</li>
-<li> "Вставить визуальный элемент" — вставка визуального элемента.</li>
-<li> "Загрузить из БД" — загрузка данных визуального элемента из БД.</li>
-<li> "Сохранить в БД" — сохранение данных визуального элемента в БД.</li>
-<li> "Руководство на ..." — вызов руководства на выбранную библиотеку.</li>
-<li> "Обновить библиотеки" — перечитывание конфигурации и состава библиотек из модели данных.</li></ul></li>
-<li> Дерево страниц проектов. Предусматривает механизм "Перетащи и брось" для формирования пользовательских кадров на основе элементов библиотек. Для гибкого управления поддерживает контекстное меню в составе пунктов:
-<ul><li> "Запустить исполнение проекта" — запуск исполнения выбранного проекта.</li>
-<li> "Новый проект" — создание нового проекта.</li>
-<li> "Добавить визуальный элемент" — добавление визуального элемента в проект-страницу.</li>
-<li> "Удалить визуальный элемент" — удаление визуального элемента из проекта-страницы.</li>
-<li> "Очистить визуальный элемент" — очистка визуального элемента с наследованием изменённых свойств или установкой их по умолчанию.</li>
-<li> "Опустить изменения визуального элемента" — опускание изменений визуального элемента к его родителю, которые будут использованы другими наследующими.</li>
-<li> "Свойства визуального элемента" — конфигурация визуального элемента.</li>
-<li> "Редактировать визуальный элемент" — визуальное редактирование элемента.</li>
-<li> "Копировать визуальный элемент" — копирование визуального элемента, в момент вставки.</li>
-<li> "Вырезать визуальный элемент" — вырезание-перемещение визуального элемента, в момент вставки.</li>
-<li> "Вставить визуальный элемент" — вставка визуального элемента.</li>
-<li> "Загрузить из БД" — загрузка данных визуального элемента из БД.</li>
-<li> "Сохранить в БД" — сохранение данных визуального элемента в БД.</li>
-<li> "Обновить проекты" — перечитывание конфигурации и состава проектов из модели данных.</li></ul></li>
-<li> Панель управления атрибутами виджетов;</li>
-<li> Панель управления внешними связи виджетов.</li></ul>
+<ul><li> Tree of the widgets libraries. Using the navigator you can quickly find the needed widget or library and to do with them necessary operations. The following operations are implemented: add, delete, copy, call for settings of the widgets and libraries, cleaning and call for visual editing of the widget. For flexible control, the context menu is supported with the following items:
+<ul><li> "New library" — creation of the new library.</li>
+<li> "Add visual item" — adding of the visual element to the library-widget.</li>
+<li> "... from the Library" — submenu of adding of the visual element from other libraries to the library-widget.</li>
+<li> "Delete visual item" — deleting of the visual element from the library.</li>
+<li> "Clear visual item changes" — clearing of the visual element with the inheritance of modified properties or setting them by default.</li>
+<li> "Lower down visual item changes" — lowering down of the visual element changes to the parent, that will be used by other inheritances.</li>
+<li> "Properties of the visual item" — call for configuration of the visual element.</li>
+<li> "Edit visual item" — call visual editing of the element.</li>
+<li> "Copy visual item" — copy of the visual element, at the time of paste.</li>
+<li> "Cut visual item" — cut-move of the visual element, at the time of paste.</li>
+<li> "Paste visual item" — paste of the visual element.</li>
+<li> "Load from DB" — uploading data of the visual element from the database.</li>
+<li> "Save to DB" — saving data of the visual element to the database.</li>
+<li> "Manual on ..." — call manual on the selected library.</li>
+<li> "Refresh libraries" — rereading of the configuration and composition of the libraries from the data model.</li></ul></li>
+<li> Tree of the projects pages. Provides the mechanism for "Drag and drop" for creation of the user frames based on the libraries elements. For flexible control, the context menu is supported with the following items:
+<ul><li> "Run project" — starting up of the chosen project execution.</li>
+<li> "New project" — creation of the new project.</li>
+<li> "Add visual item" — adding of the visual element to the project-page.</li>
+<li> "... from the Library" — submenu of adding of the visual element from other libraries to the project-page.</li>
+<li> "Delete visual item" — deleting of the visual element from the project-page.</li>
+<li> "Clear visual item changes" — clearing of the visual element with the inheritance of modified properties or setting them by default.</li>
+<li> "Lower down visual item changes" — lowering down of the visual element changes to the parent, that will be used by other inheritances.</li>
+<li> "Properties of the visual item" — call for configuration of the visual element.</li>
+<li> "Edit visual item" — call visual editing of the element.</li>
+<li> "Copy visual item" — copy of the visual element, at the time of paste.</li>
+<li> "Cut visual item" — cut-move of the visual element, at the time of paste.</li>
+<li> "Paste visual item" — paste of the visual element.</li>
+<li> "Load from DB" — uploading data of the visual element from the database.</li>
+<li> "Save to DB" — saving data of the visual element to the database.</li>
+<li> "Refresh projects" — rereading of the configuration and composition of the projects from the data model.</li></ul></li>
+<li> Control panel of the widget attributes;</li>
+<li> Control panel of the widget links.</li></ul>
 <p>В основном пространстве рабочего окна размещаются окна страниц проектов, кадров библиотек виджетов, пользовательских элементов и элементов примитивов на момент их визуального редактирования.
 </p><p>Наверху рабочего окна содержится меню. В меню размещены все инструменты, необходимые для разработки интерфейсов СВУ. Меню имеет следующую структуру:
 </p>
@@ -974,5 +976,5 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/ru">Modules/Vision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/Vision/ru">Modules/Vision/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
 </html>

@@ -661,7 +661,8 @@ bool TMdContr::setValC( char val, int addr, MtxString &err )
 
 string TMdContr::modBusReq( string &pdu )
 {
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
+    AutoHD<TTransportOut> tr = SYS->transport().at().outAt(addr());
+		//SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
 
     XMLNode req(mPrt);
     req.setAttr("id", id())->
@@ -958,8 +959,13 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "help",_("Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.\n"
 		    "Restart to apply the removed PLC links in run."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,
-	    4,"tp","str","dest","select","select","/cntr/cfg/trLst","help",_("Default port of the ModuBus/TCP is 502."));
+	string outHelp, tVl;
+	if((tVl=TSYS::strParse(addr(),1,".")).size() && tVl.find(STR_IN_PREF) != 0 &&
+		SYS->transport().at().modPresent((tVl=TSYS::strParse(addr(),0,"."))))
+	    outHelp = SYS->transport().at().at(tVl).at().outAddrHelp();
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,RWRWR_,"root",SDAQ_ID,4,
+	    "tp","str", "dest","sel_ed", "select","/cntr/cfg/trLst",
+	    "help",(TMess::labStdOutTrs()+(outHelp.size()?"\n\n"+outHelp+"\n\n"+_("Default port of the ModuBus/TCP is 502!")+"\n":"")).c_str());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/NODE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/MAX_BLKSZ",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,/*startStat()?R_R_R_:*/RWRWR_,"root",SDAQ_ID,4,
@@ -1000,11 +1006,34 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	start();
     }
     else if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setText("");
-	vector<string> sls;
-	SYS->transport().at().outTrList(sls);
-	for(unsigned iS = 0; iS < sls.size(); iS++)
-	    opt->childAdd("el")->setText(sls[iS]);
+	int cLv = 0;
+	string	cPath = "", cEl, pAddr = TSYS::strParse(addr(), 0, ":");
+	vector<string> list;
+	for(int cOff = 0, cLv = 0; (cEl=TSYS::strParse(pAddr,0,".",&cOff)).size(); ++cLv) {
+	    cPath += cLv ? "."+cEl : cEl;
+	    opt->childAdd("el")->setText(cPath);
+	}
+	switch(cLv) {
+	    case 0:
+		SYS->transport().at().modList(list);
+		for(unsigned iS = 0; iS < list.size(); iS++)
+		    opt->childAdd("el")->setText(list[iS]);
+		break;
+	    case 1:
+		if(!SYS->transport().at().modPresent(cEl=TSYS::strParse(pAddr,0,"."))) break;
+		SYS->transport().at().at(cEl).at().outList(list);
+		for(unsigned iS = 0; iS < list.size(); iS++)
+		    opt->childAdd("el")->setText(cPath+"."+list[iS]);
+		SYS->transport().at().at(cEl).at().inList(list);
+		for(unsigned iS = 0; iS < list.size(); iS++)
+		    opt->childAdd("el")->setText(cPath+"."+STR_IN_PREF+list[iS]);
+		break;
+	    case 2:
+		if(TSYS::strParse(pAddr,1,".").find(STR_IN_PREF) == 0)
+		    opt->childAdd("el")->setText(cPath+":RemConId");
+		//else ?!?!
+		break;
+	}
     }
     else TController::cntrCmdProc(opt);
 }
@@ -1519,7 +1548,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(isStd() && a_path == "/prm/cfg/ATTR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
-	opt->childAdd("rule")->setAttr("expr","^(CI?|RI?_b[0-7]?|RI?_i[248]?|RI?_u[24]?|RI?_[fds]|RI?)")->setAttr("color","darkorange");
+	opt->childAdd("rule")->setAttr("expr","^(CI?|RI?_b1[0-5]|RI?_b[0-9]?|RI?_i[248]?|RI?_u[24]?|RI?_[fds]|RI?)")->setAttr("color","darkorange");
 	XMLNode *g0 = opt->childAdd("rule")->setAttr("expr","(?<=:).*");
 	    g0->childAdd("rule")->setAttr("expr","^(0?[xX]?[0-9a-fA-F]*)(\\.[0-7]|,(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*),?(0?[xX]?[0-9a-fA-F]*)|)")->setAttr("color","blue");
 	    XMLNode *g1 = g0->childAdd("rule")->setAttr("expr","(?<=:).*");

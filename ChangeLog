@@ -1,3 +1,46 @@
+2022-10-10 Roman (stable)
+- data/Android/patches/openscada_openscada-proj.patch: Adapted to the last changes.
+- !!!!:LibsDB.vcaBase: wlb_Main.ElViewCadr: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	- appended in switching to the fast cycle at cursor blink, using the new function calcPer();
+	- switched to the processing period -1 (parent);
+	- tracing period of the Diagram primitive linked also to the Widget period.
+    wlb_Main.{grpCadr,ResultGraphEl}: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	- switched to the processing period -1 (parent);
+	- tracing period of the Diagram primitive linked also to the Widget period.
+    wlb_Main.{TextLab,ImgLab},wlb_mnEls.{El_Kran_polozh,El_Kran_Sh,Compressor}:
+	Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	    - appended in switching to the fast cycle at cursor blink, using the new function calcPer();
+	    - switched to the processing period -1 (parent);
+    wlb_Main.{ViewCadr,ResultGraph}: switched to the processing period -1 (parent);
+    Main.ElViewGraph: Calculation set to 2000 ms due to need of that updating at the trend cursor changing.
+- !!:FIX:DB: Coming to the translations clearing is set at the new flag "isTranslatable", splitted from "isTransl",
+	since "isTransl" is the translation environment, then that was not cleared on the base language environments,
+	moreover, that was marked the translation as the base message change.
+    !:FIX: The translation setting prevented in setting double messages to the base messages; what completing not translation "<EVAL>".
+- !!:FIX:SYS: The translation manager prevented in the marked base changing to a human readable form at all, since that used as a key.
+    TMess: appended of the common label labStdOutTrs() for address format of the unified output transport function.
+    The word "cron" renamed to "CRON".
+- !!!:Transport,UI.{QTCfg,WebCfgD}: The field "Transport" of the external hosts control table expanded by the selection specifying per item
+    with support such behaviour in the common editors.
+- !!!!:DAQ.ModBus: The first one what moved to use the unified connection to the output transport.
+    The syntax highlight rules for the register bits expanded for bits [8...15].
+- UI.QTStarter: The table fields editing of the real type switched to use the standard QLineEdit
+    instead the spinned one with two digits after radix.
+- UI.QTCfg: The context searching field of the navigation tree switched to use the pure selecting function setCurrentItem().
+    The function getExpandTreeWIt() also appended of selection not selected end items.
+- !!:FIX:UI.VCAEngine: Fixed in the correct treating of the project pages and the library widgets with initially wrong parent addresses,
+	for don't remove child widgets and change they parent at pointing the correct parent address.
+    !!: The behaviour about the attribute "IO_VAL" field translation changed to alow the translation for linked in and styled ones,
+	    for getting the translation in development;
+	the constant ones left as intranslated due to the configuration value reading-replacing
+	    and the reading expanded on the user attributes loading.
+    Copying resources pointed in attributes of the widgets expanded for the attribute "src" of the primitive "Media".
+    The "newMime" message renamed to "newRes".
+- !!:UI.Vision: The popup menu of project, project pages, widget libraries and library widgets in appending widgets from the libraries
+	removed for limit of the libraries here in 20 items by moving all they to a new separated menu item "... from the Library".
+    The processing-calculation period fields is set to update-reload after a change.
+
+
 2022-09-27 Roman (stable)
 - LibsDB.vcaBase,ModelsDB.AGLKS.vca: The VCA projects set to the calculation period 250 ms.
     prj_{archBrowser,tmplSO}.control: Calculation of the main page and the control group of the VCA projects set to 1000 ms.

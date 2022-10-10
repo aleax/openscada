@@ -1678,9 +1678,10 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		string svalRAW = u_cfg.getS(), toLang = Mess->langCode();
 
 		// Translation
-		bool isTransl = u_cfg.fld().flg()&TFld::TransltText, isDynSet = false;
+		bool isTranslatable = u_cfg.fld().flg()&TFld::TransltText,	//is the translatable field and DB
+		     isDynSet = false;
 		//  ... system prestored
-		bool isSysPreStor = (isTransl && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
+		bool isSysPreStor = (isTranslatable && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
 		if(isSysPreStor) {
 		    tVl = svalRAW;
 		    u_cfg.setS((svalRAW=Mess->I18N(tVl))); sval = getSQLVal(u_cfg);
@@ -1693,15 +1694,16 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    toLang = tVl; tVl = svalRAW;
 		    u_cfg.setS((svalRAW=TSYS::strParse(svalRAW,2,string(1,0)))); sval = getSQLVal(u_cfg);
 		    u_cfg.setS(tVl);
-		    isTransl = (isTransl && toLang != Mess->langCodeBase());
 		}
 		//  ... default
-		else isTransl = (isTransl && trPresent && toLang != Mess->langCodeBase());
+		else isTranslatable = (isTranslatable && trPresent);
+
+		bool isTransl = (isTranslatable && toLang != Mess->langCodeBase());	//is the translation environment
 
 		if(isTransl && langLs.find(toLang+";") == string::npos) langLs += toLang+";";
 
 		//  Clearing all the translation at setting no translable message
-		if(isTransl && (u_cfg.noTransl() || (svalRAW.size() && !Mess->isMessTranslable(svalRAW)))) {
+		if(isTranslatable && (u_cfg.noTransl() || (svalRAW.size() && !Mess->isMessTranslable(svalRAW)))) {
 		    if(u_cfg.noTransl())
 			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
@@ -1730,7 +1732,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 			unsigned mess_TrModifMarkLen = strlen(mess_TrModifMark);
 
 			// The same field
-			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + sval;
+			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + (isTrAsBase?"":sval);
 
 			// Setting for marks and the base message
 			for(unsigned iFld = 0; !u_cfg.noTransl() && iFld < tbl[0].size(); iFld++) {

@@ -1781,7 +1781,7 @@ void VisItProp::isModify( QObject *snd )
     }
     else if(oname == obj_name->objectName() || oname == proc_perG->objectName() || oname == proc_per->objectName() || oname == obj_parent->objectName()) {
 	req.setText(((LineEdit*)snd)->value().toStdString());
-	update = (oname == obj_parent->objectName());
+	update = (oname == obj_parent->objectName() || oname == proc_perG->objectName() || oname == proc_per->objectName());
     }
     else if(oname == obj_descr->objectName() || oname == proc_text->objectName()) {
 	req.setText(((TextEdit*)snd)->text().toStdString());

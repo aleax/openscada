@@ -3707,10 +3707,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    XMLNode *recNd = ns[iN]->childGet(-1);
 		    if(iN == 0) {
 			//   Processing the translation changing mark
-			if(recNd->text().size() > mess_TrModifMarkLen &&
+			//!!!! The marked base cannot be changed at all
+			/*if(recNd->text().size() > mess_TrModifMarkLen &&
 				recNd->text().rfind(mess_TrModifMark) == (recNd->text().size()-mess_TrModifMarkLen))
 			    recNd->setText(string(_("<<<Translation changed>>>\n"))+
-					    recNd->text().substr(0,recNd->text().size()-mess_TrModifMarkLen));
+					    recNd->text().substr(0,recNd->text().size()-mess_TrModifMarkLen));*/
 			continue;
 		    }
 

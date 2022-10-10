@@ -58,7 +58,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>
 Founded: September 2007
-Version: 2.1.18
+Version: 2.1.23
 License: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','wlb_Main','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAA1hAAANsAGkB5ZwAAAA
 GXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAABTxJREFUeJzt2XFo3GcZwPHPZdFO
@@ -91,7 +91,7 @@ a2szNDQ003rWz1l8E6+v4549pu7vO8XPaqeq5K4XUXBF9j0PVV1f6D+L53+M5OTk5OTk5OTk5OTk
 
 Автор: Роман Савоченко <roman@oscada.org>
 Засновано: Вересень 2007
-Версія: 2.1.18
+Версія: 2.1.23
 Ліцензія: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основные элементы','Библиотека создаётся для предоставления основных элементов пользовательского интерфейса и содержит графические элементы, которые часто востребованы при формировании пользовательского интерфейса автоматизации технологических и общих процессом. Строится библиотека на основе примитивов виджетов и языка внутреннего программирования JavaLikeCalc.
 
@@ -99,7 +99,7 @@ DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements','Основны�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Основано: Сентябрь 2007
-Версия: 2.1.18
+Версия: 2.1.23
 Лицензия: GPLv2
 DOC: Libs_Main_graphical_elements|Libs/Main_graphical_elements');
 INSERT INTO VCALibs VALUES('mnEls','Mnemo elements','Provides the mnemonic elements library of the user interface of the industrial automation.
@@ -110,7 +110,7 @@ The element''s names and their parameters are available in languages: English, U
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko (2008-2012), Ksenia Yashina (2007)
 Founded: September 2007
-Version: 1.0.4
+Version: 1.0.7
 License: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','wlb_mnEls','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
 GXRFWHRDb21tZW50AENyZWF0ZWQgd2l0aCBHSU1QV4EOFwAAEYxJREFUeJzVWnlwXHd9//yOd+6p
@@ -200,7 +200,7 @@ MU0pfVmpVFpa7w1eKxkfH39xuVy+nVL6g/8De2BPURoAuyAAAAAASUVORK5CYII=','Елемен�
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко (2008-2012), Ксенія Яшина (2007)
 Засновано: Вересень 2007
-Версія: 1.0.4
+Версія: 1.0.7
 Ліцензія: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','Элементы мнемосхемы','Предоставляет библиотеку элементов мнемосхем пользовательского интерфейса промышленной автоматизации.
 
@@ -210,7 +210,7 @@ DOC: Libs_Mnemo_elements|Libs/Mnemo_elements','Элементы мнемосхе
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко (2008-2012), Ксения Яшина (2007)
 Основано: Сентябрь 2007
-Версия: 1.0.4
+Версия: 1.0.7
 Лицензия: GPLv2
 DOC: Libs_Mnemo_elements|Libs/Mnemo_elements');
 INSERT INTO VCALibs VALUES('doc','Documents','Provides the combined library of the reports, documents and related functions of common and the industrial automation.
@@ -10181,10 +10181,20 @@ HW+x/6mPB1FWJO7Fdtq+86gnc3IT/5t/EtsLa785LenxfziJlzc1B2w+byjsvu/suQGor9X6gcZ5
 xiEBcEhrLfXJDk1XNc6jvTAsmn+ZAqlPUJDE0QUqgEIQrGh/GZUksfB/eIk9EJ4EN3GpS2EW9GO1
 uUFQX625Qv/Qu8+cvCfx14UaAMsVeBpSSBTG36OMJIXU3muri1W30VlrR5eR+NspFkBC3HuZ7+hY
 BBB+CS9H5hHzt1BEVavJ5MZbmCkHOzs7fwOvrhb+aFJiZAAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	toFastCalc = toFastCalc_ = false;
+	trnd_trcPer = max(1, (this.calcPer()==-2)?10:this.calcPer()/1000);
+}
+
+toFastCalc = false;
+
 text_arg0val = name;
 text_arg1val = var;
 trnd_prm0addr = addr;
-bordColor = (focus&&bordColor!="silver")?"silver":"gray";','','',1000,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1578246829);
+if(focus)	bordColor = (bordColor != "silver") ? "silver" : "gray", toFastCalc = true;
+else bordColor = "gray";
+
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1665334246);
 INSERT INTO wlb_Main VALUES('grpCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAJ
 50lEQVRYhdWZya4cyXWG/4iMyDmzKmu4M8kWSGijRW/8GN7rSbQTDG/aNuxX8sZuAY1uGw0JQkuC
 piZui2TdoaacY/YieauLVVcgBAFs86zifPFHVA4RJ87JIp999llVlkpr3/etsW3bhmGgtI7CUEpF
@@ -10246,7 +10256,7 @@ event = ev_rez;
 //Trend time control
 if(trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize)) trnd1_curSek = trnd1_tSek;
 if(trnd1_tSek < curTm)	trnd1_trcPer = 0;
-else trnd1_trcPer = 1, trnd1_tSek = 0;
+else trnd1_trcPer = max(1, (this.calcPer()==-2)?10:this.calcPer()/1000), trnd1_tSek = 0;
 
 //Generic
 name_arg0val = grpName;
@@ -10260,7 +10270,7 @@ for(i = 0; i < 8; i++) {
 						.attrSet("prm"+i+"bordL",el.attr("min")).attrSet("prm"+i+"bordU",el.attr("max"))
 						.attrSet("prm"+i+"color",el.attr("bordColor"));
 	}
-}','','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1624643148);
+}','','',-1,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1665333244);
 INSERT INTO wlb_Main VALUES('anShow','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAZCAIAAAAOir+2AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAF/0lEQVRYhdWW/08bdRjHn8/n7nrXu2tpy1ootmUtDChsK2snk62AsMnG
 5pj1a6LRH4w/+cMS/xT/g4lLNJkxxmjinIvFKduy4QbKgCJQ+pUCLdD1rndt784f6jadQxMDmL1/
@@ -10416,7 +10426,7 @@ if(f_start) {
 			this["wdg_el3_"+j].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]));
 			this["wdg_el4_"+j].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]+rows[2]));
 		}
-}','','',1000,'name;dscr;geomW;geomH;backColor;bordWidth;',1578246314);
+}','','',-1,'name;dscr;geomW;geomH;backColor;bordWidth;',1665333333);
 INSERT INTO wlb_Main VALUES('anShow1','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAOCAIAAAAQWY2VAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAEBElEQVRIicWVW0xbdRzHf+ecf6+nLdAeoEAppQXKxdFsDZciSsZlk7GN
 NTM6iYlv+qSJxvjc6JvxwTezmZCYxcy4h7niggZZNU6B4Zgy6dYy6axlXFrKeuXcjw/sgitoTDv9
@@ -10647,7 +10657,7 @@ if(f_start) {
 			this["wdg_e"+(3+4*(j-1))].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]));
 			this["wdg_e"+(4+4*(j-1))].attrSet("geomY", 30+142*yScale*(rows[0]+rows[1]+rows[2]));
 		}
-}','','',1000,'name;dscr;geomW;geomH;backColor;bordWidth;',1578246829);
+}','','',-1,'name;dscr;geomW;geomH;backColor;bordWidth;',1665334736);
 INSERT INTO wlb_Main VALUES('ResultGraphEl','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAoCAIAAADBrGu+AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xUlEQVRYhdWYWW/bRhRG7ywkJZGUqFCKLC+J5TiIlwe3qQ3kB/RfB30uCkRNFQc2EnlRIsXWZpkU
 KZEccmb64CB2arSNVae0D/jCuRzgfOTgDjGo0Wjs7e0hhAzDgPvG3NwcPTw8fPnypeM4T548GQ6H
@@ -10671,6 +10681,8 @@ r23YZ0PLdTDnACARwkJwQrAQAmMAkAgDSJWxk4XFmFJoNNLWvoRGmlbpd3sP5+o/7Sy3jjkhWAoJ
 0KqtLHQ6naWlH17/7lrWsFTe2HsbK0qo3bGzUcP3dN+v8pNsME0orfTOEqqojNlnZ7np1D4bVnrd
 B6OzSNWKo5HCmMCknbb0VajKmMaYxpjlOl9VXACAvDcGACVJnr+uA4DlugBwtwLMMAchZFnWravM
 AMYYvXr1qtvt3mhau92Ooug7Od2IWq32J7gBUGA1eYbJAAAAAElFTkSuQmCC','/wlb_originals/wdg_Box',0,'JavaLikeCalc.JavaScript
+if(f_start) trnd_trcPer = max(5, (this.calcPer()==-2)?60:this.calcPer()/1000);
+
 en = !p1_addr.isEVal() || !p2_addr.isEVal() || !p3_addr.isEVal() || !p4_addr.isEVal() || !p5_addr.isEVal();
 title_text = title.isEVal() ? "" : title;
 
@@ -10684,7 +10696,7 @@ trnd_prm0addr = p1_addr; trnd_prm0bordL = p1_min; trnd_prm0bordU = p1_max; trnd_
 trnd_prm1addr = p2_addr; trnd_prm1bordL = p2_min; trnd_prm1bordU = p2_max; trnd_prm1color = p2_clr;
 trnd_prm2addr = p3_addr; trnd_prm2bordL = p3_min; trnd_prm2bordU = p3_max; trnd_prm2color = p3_clr;
 trnd_prm3addr = p4_addr; trnd_prm3bordL = p4_min; trnd_prm3bordU = p4_max; trnd_prm3color = p4_clr;
-trnd_prm4addr = p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','','',1000,'name;dscr;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1578246829);
+trnd_prm4addr = p5_addr; trnd_prm4bordL = p5_min; trnd_prm4bordU = p5_max; trnd_prm4color = p5_clr;','','',-1,'name;dscr;en;geomW;geomH;backColor;bordWidth;bordColor;bordStyle;',1665334660);
 INSERT INTO wlb_Main VALUES('doc_panel','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 QElEQVRYhe1WTW/TSheeicdxbMeJHROTJi0hfJQWpapE1RWgLgBVSEBZseEHsOcnsGfJT2CBVNRN
 2JQVGzZQiCpRBGqSpk1Jm9R2Yjt2PLHHdzGv8vZy+3Lfe+/mLnoW1szxOY/nfD0euLKyks1mwe8F
@@ -11058,7 +11070,7 @@ if(abs(toCalcCycles) > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calcIn\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = (sign(toCalcCycles) < 0 && lb_sfr_color != "grey") ? 0 : max(0, abs(toCalcCycles)-1)*sign(toCalcCycles);
 }
-if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1664201447);
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',2000,'path;perm;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1664997819);
 INSERT INTO wlb_Main VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -11758,8 +11770,13 @@ function setActMess(mess) {
 	else SYS.nodeAt(err).nodePrev().messSet("''"+NAME+"''."+mess, 2, "OP", this.ownerSess().user());
 }
 
-if(f_start)	isErr = false, alBlnk = false, cnt = 0, fixText = (text != "---");
+if(f_start) {
+	isErr = false, alBlnk = false, cnt = 0, fixText = (text != "---");
+	toFastCalc = toFastCalc_ = false;
+}
 if(f_stop && !fixText)	{ text = "---"; return; }
+
+toFastCalc = false;
 
 //Prepare/update the context menu
 if(f_start || ((cnt++)%max(1,f_frq*10)) == 0) {
@@ -11813,8 +11830,9 @@ if(!backColor.length)	backColor = "black-1";	//For the activity cursor
 if(this.attr("focus") ||
 	(!NAME.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == NAME))
 {
-  bordColor = (bordColor != "white") ? "white" : "black";
-  bordWidth = 2;
+	bordColor = (bordColor != "white") ? "white" : "black";
+	bordWidth = 2;
+	toFastCalc = true;
 }
 else if(bordWidth) { bordWidth = 1; bordColor = "black"; }
 
@@ -11826,7 +11844,7 @@ if(ntf.length && (ntf.toInt() == stCur) != isErr) {
 if(!isErr && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
 if(alarmSt&0x100) {
 	if(!(alarmSt&0x10000) || alBlnk)	backColor = isErr ? "red" : backColor;
-	else backColor = (backColor=="gray")?"#383838":"gray";
+	else backColor = (backColor=="gray")?"#383838":"gray", toFastCalc = true;
 	alBlnk = !alBlnk;
 }
 
@@ -11856,7 +11874,9 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1650374406);
+event = ev_rez;
+
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1665336554);
 INSERT INTO wlb_Main VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -13128,7 +13148,12 @@ function setActMess(mess) {
 	else SYS.nodeAt(err).nodePrev().messSet("''"+NAME+"''."+mess, 2, "OP", this.ownerSess().user());
 }
 
-if(f_start)	isErr = false, alBlnk = false, cnt = 0;
+if(f_start) {
+	isErr = false, alBlnk = false, cnt = 0;
+	toFastCalc = toFastCalc_ = false;
+}
+
+toFastCalc = false;
 
 //Prepare/update the context menu
 if(f_start || ((cnt++)%max(1,f_frq*10)) == 0) {
@@ -13183,6 +13208,7 @@ if(this.attr("focus") ||
 {
 	bordColor = (bordColor != "white") ? "white" : "black";
 	if(bordWidth) bordWidth = 2;
+	toFastCalc = true;
 }
 else { if(bordWidth) bordWidth = 1; bordColor = "black"; }
 
@@ -13194,7 +13220,7 @@ if(ntf.length && (ntf.toInt() == stCur) != isErr) {
 if(!isErr && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
 if(alarmSt&0x100) {
 	if(!(alarmSt&0x10000) || alBlnk)	backColor = isErr ? "red" : backColor;
-	else backColor = (backColor==EVALclr)?"#383838":EVALclr;
+	else backColor = (backColor==EVALclr) ? "#383838" : EVALclr, toFastCalc = true;
 	alBlnk = !alBlnk;
 }
 
@@ -13224,7 +13250,9 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1635754596);
+event = ev_rez;
+
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'owner;name;dscr;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;src;fit;',1665336554);
 INSERT INTO wlb_Main VALUES('userManager','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 /klEQVRYhe2Zy07bQBiFx+OxnYydC04h0K5ggRJub8ArAEuegrdgy2OwZcGGHS/AgghEKhEJobYh
 JUIE4kkm8Xj+LqwiBC5N0z9EkfhWo7kczxlf5tg2dnZ2UqkUQaLb7abTaSy1vyKlZKlUinOOpXh9
@@ -13991,8 +14019,16 @@ uH3W7Rgzbuw1P/Uf3nULZs7oAscPfPRWS9x53eMxT6x/HPf+7b1Yu24d2trakJubC1Hopy2eMuz/
 oZVJFlY98gj+Jh1urgcFRYWjYjKZ6PRx7Ud05apHcPlyO7xer+scFwFaXIOu65gzew4euP/+QQ01
 3cgonzaV+fqrr+lvf3sUv9q+vVckcHDg1QN0/759NNIVueHe+gwVXvvNa/Ts6TPfWfm+x2Dxf/fV
 GxmkZDnxAAAAAElFTkSuQmCC','/wlb_originals/wdg_ElFigure',0,'JavaLikeCalc.JavaScript
-c1 = (focus && c1=="#d3d3d3") ? "#00ddff" : "#d3d3d3";
-p1y = p2y = 90 - (out.isEVal()?0:55*max(0,min(100,out))/100);','','',1000,'perm;name;dscr;active;geomW;geomH;evProc;lineWdth;lineClr;elLst;p1x;p1y;p2x;p2y;c1;c2;',1579024297);
+if(f_start)	toFastCalc = toFastCalc_ = false;
+
+toFastCalc = false;
+
+if(focus) c1 = (c1 == "#d3d3d3") ? "#00ddff" : "#d3d3d3", toFastCalc = true;
+else c1 = "#d3d3d3";
+
+p1y = p2y = 90 - (out.isEVal()?0:55*max(0,min(100,out))/100);
+
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'perm;name;dscr;active;geomW;geomH;evProc;lineWdth;lineClr;elLst;p1x;p1y;p2x;p2y;c1;c2;',1665336058);
 INSERT INTO wlb_mnEls VALUES('El_round_square','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABPRJREFUeJztml1Mm1UYx58WOrpOirpxwyxVJEBsZSi9ITNhMpJyAROk
 SFYyL/i4cRnZgCVTwYtxN2WJICxxGbAMxQFTaEnGvGBLdN2AyafCYKzAZkpB+rlSSkt4vBHCS9vR
@@ -14428,12 +14464,17 @@ if(f_start) {
 								(digComs.isEVal()?tr("Close"):digComs.parse(1,";").parse(0,"-"))+":close\n";
 		if(!stop.isEVal())	contextMenu += (digComs.isEVal()?"Stop":digComs.parse(2,";").parse(0,"-"))+":stop\n";
 	}
+	toFastCalc = toFastCalc_ = false;
 }
+
+toFastCalc = false;
 
 if(this.attr("focus") ||
 		(!shifr.isEVal() && shifr.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == shifr))
+{
 	c1 = (c1 == c1Sv) ? "#00ddff" : c1Sv;
-else c1 = c1Sv;
+	toFastCalc = true;
+} else c1 = c1Sv;
 
 fillColor = "gray";
 if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false)) {
@@ -14465,7 +14506,9 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1635754955);
+event = ev_rez;
+
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1665336058);
 INSERT INTO wlb_mnEls VALUES('El_Pipe_simple_vert_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAS9JREFUeJztm0FOwlAYBoe+iqRAPAI7DiE38QJ4JvZyB+9VmhALuigG
 0Z1dTIzfJH/en/eSZjL7ThjJasX7ZgNNM8y8gfli2JfL633TwGJxu89mUFXQ93A4QNfdnod22NvL
@@ -14633,11 +14676,18 @@ if(f_start) {
 	if(!com.isEVal() || !close.isEVal())
 		contextMenu =	(digComs.isEVal()?tr("Start"):digComs.parse(0,";").parse(0,"-"))+":open\n"+
 								(digComs.isEVal()?tr("Stop"):digComs.parse(1,";").parse(0,"-"))+":close\n";
+
+	toFastCalc = toFastCalc_ = false;
 }
+
+toFastCalc = false;
+
 if(this.attr("focus") ||
 	(!shifr.isEVal() && shifr.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == shifr))
-		c1 = (c1 == c1Sv) ? "#00ddff" : c1Sv;
-else c1 = c1Sv;
+{
+	c1 = (c1 == c1Sv) ? "#00ddff" : c1Sv;
+	toFastCalc = true;
+} else c1 = c1Sv;
 fillColor = "gray";
 if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false)) {
 	fillColor = "green";
@@ -14663,7 +14713,9 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1635755818);
+event = ev_rez;
+
+if(toFastCalc != toFastCalc_)	{ toFastCalc_ = toFastCalc; this.calcPer(toFastCalc?500:-3); }','','',-1,'name;dscr;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1665336058);
 INSERT INTO wlb_mnEls VALUES('cooler2','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAB9ZJREFUeJztWntQVNcZ/7EPFgSU50oRsqxKQUREalGsVKlJg5CUgmJi
 dWw7jszUcaa2Q20lM21o2ulMZ5qmFnUsPsc4lIiSqIk4IgQStMlGHstL2GV5rMDy2Df7Fr/+kYYU
@@ -17318,7 +17370,7 @@ INSERT INTO wlb_Main_io VALUES('grpGraph','color','cyan',32,'','cyan','el5','','
 INSERT INTO wlb_Main_io VALUES('grpGraph','addr',NULL,34,'Parameter|var','','el6','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','enMode',NULL,32,'','','el6','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','max',NULL,34,'Parameter|max','','el6','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewGraph','path','/wlb_Main/wdg_ElViewGraph',40,'','','','/wlb_Main/wdg_ElViewGraph','','/wlb_Main/wdg_ElViewGraph','','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewGraph','path','/wlb_Main/wdg_ElViewGraph',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','min',NULL,34,'Parameter|min','','el3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','max',NULL,34,'Parameter|max','','el3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','enMode',NULL,32,'','','el3','','','','','','','');
@@ -17480,11 +17532,11 @@ INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomY','2',32,'','','trnd','','',''
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomW','141',32,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','backColor','',32,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','bordWidth','1',32,'','','trnd','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewCadr','trcPer','1',32,'','','trnd','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewCadr','trcPer','1',40,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','tSize','120',32,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','prm0addr','',40,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','prm0color','lightgreen',96,'labColorGood','','trnd','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewCadr','prm0val','0',40,'','','trnd','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewCadr','prm0val',NULL,40,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomX','2',32,'','','text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomY','102',32,'','','text','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','geomW','141',32,'','','text','','','','','','','');
@@ -17493,15 +17545,15 @@ INSERT INTO wlb_Main_io VALUES('grpCadr','name','Contours group',32,'','','','Г
 INSERT INTO wlb_Main_io VALUES('grpCadr','dscr','The element-frame provides for simultaneous monitoring and control of contours of several parameters, up to eight, includes both instances of the widget "Element cadre for each contour, and the primitive "Diagram" to monitor the trends of the contours and viewing history.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.3.0
 License: GPLv2',32,'','','','Елемент-кадр слугує для одночасного спостереження та управління контурами декількох параметрів, до восьми, включає у себе як екземпляри віджету "Елемент кадр" для кожного контуру, так і примітив "Діаграма" для спостереження за трендами контурів та перегляду історії.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.3.0
 Ліцензія: GPLv2','','Элемент-кадр служит для одновременного наблюдения и управления контурами нескольких параметров, до восьми, включает в себя как экземпляры виджета "Элемент кадр" для каждого контура, так и примитив "Диаграмма" для наблюдения за трендами контуров и просмотра истории.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.0
+Версия: 1.3.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','geomW','900',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpCadr','geomH','600',32,'','','','','','','','','','');
@@ -18174,7 +18226,7 @@ INSERT INTO wlb_Main_io VALUES('ResultGraphEl','geomX','61',32,'','','trnd','','
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','geomH','17',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','geomW','223',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','backColor','gray',96,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ResultGraphEl','trcPer','5',32,'','','trnd','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('ResultGraphEl','trcPer','5',40,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','geomY','18',32,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','geomW','162',32,'','','trnd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','geomH','122',32,'','','trnd','','','','','','','');
@@ -19501,11 +19553,7 @@ INSERT INTO wlb_Main_io VALUES('ElViewGraph','active','1',32,'','','','','','','
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','evProc','key_mousePresLeft::open:/pg_control/pg_ElCadr
 usr_pasp:*:open:/pg_control/pg_cntrPasp
 usr_select:*:open:/pg_control/pg_graphSelPrm
-usr_calc:*:open:/pg_control/pg_graphCalc',32,'','','','key_mousePresLeft::open:/pg_control/pg_ElCadr
-usr_pasp:*:open:/pg_control/pg_cntrPasp
-usr_select:*:open:/pg_control/pg_graphSelPrm','','key_mousePresLeft::open:/pg_control/pg_ElCadr
-usr_pasp:*:open:/pg_control/pg_cntrPasp
-usr_select:*:open:/pg_control/pg_graphSelPrm','','','','');
+usr_calc:*:open:/pg_control/pg_graphCalc',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','backColor','black',96,'backColorVal','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','bordWidth','1',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','bordColor','grey',40,'','','','','','','','','','');
@@ -19567,15 +19615,15 @@ INSERT INTO wlb_Main_io VALUES('prescrRunSimple','name','',32,'','','btPass','',
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','dscr','Element is provided to create graphics groups. Element contains information about a parameter, the regulator mode, if the parameter is such, the units of analog parameter, as well as the color corresponding to the parameter''s trend. The element commonly uses and represents the representative structure of the DAQ-templates "Analog signal" and "Discrete block".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.4.0
+Version: 1.4.1
 License: GPLv2',42,'Parameter|DESCR','','','Елемент слугує для створення груп графіків. Елемент містить інформацію про параметр, режим регулятору, якщо параметр є таким, одиницю виміру аналогового параметру, а також колір, що відповідає параметру тренда. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів "Аналоговий сигнал" та "Дискретний блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.4.0
+Версія: 1.4.1
 Ліцензія: GPLv2','','Элемент служит для создания групп графиков. Элемент содержит информацию о параметре, режиме регулятора, если параметр является таковым, единице измерения аналогового параметра, а также цвет, соответствующий параметру тренда. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов "Аналоговый сигнал" и "Дискретный блок".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.4.0
+Версия: 1.4.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ElViewGraph','tipStatus','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomX','71.508',32,'','','btPass','','','','','','','');
@@ -19735,7 +19783,7 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','geomH','3',32,'','','line3','','','
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','8',32,'','','line3','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','elLst','line:(0|1):(110|1)',32,'','','line3','line:(0|1):(108|1)','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraph','geomZ','5',32,'','','e5','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('ElViewCadr','evProc','key_mousePresRight::open:/pg_control/pg_cntrPasp',32,'','','','key_mousePresRight::open:/pg_control/pg_cntrPasp','','key_mousePresRight::open:/pg_control/pg_cntrPasp','','','','');
+INSERT INTO wlb_Main_io VALUES('ElViewCadr','evProc','key_mousePresRight::open:/pg_control/pg_cntrPasp',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('RootPgSo','font','Arial 12 1 0 0 0',0,'','','so1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomZ','8',32,'','','modAuto','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','active','1',40,'','','','','','','','','','');
@@ -23181,15 +23229,15 @@ INSERT INTO wlb_Main_io VALUES('grpGraph10','colorDef','lightyellow',96,'labColo
 INSERT INTO wlb_Main_io VALUES('ElViewCadr','dscr','The element-widget serves as the basis for the group of overview frames and is not usually used independently. The widget displays the text information about parameter in the form of the name and value, and a trend of the parameter for small period of time (2 minutes) to observe the current trend of the parameter with auto-scaling on the value scale.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2',32,'','','','Елемент-віджет слугує основою групи оглядових кадрів та зазвичай не використовується самостійно. Віджет відображає текстову інформацію про параметр у вигляді найменування та значення, а також тренд параметру за невеликий проміжок часу (2 хвилини) для спостереження за поточною тенденцією поведінки параметру з авто-масштабуванням за шкалою значення.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элемент-виджет служит основой группы обзорных кадров и обычно не используется самостоятельно. Виджет отображает текстовую информацию о параметре в виде наименования и значения, а также тренд параметра за небольшой промежуток времени (2 минуты) для наблюдения за текущей тенденцией поведения параметра с авто-масштабированием по шкале значения.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraph','dscr','The element-frame is used to display a group of the current parameter trends (up to 5) in individual frames-widgets with up to 16 units (4x4) for which scaling is supported depending on their configured number. The frames-widgets of the parameter trends are implemented with the satellite widget "Frame of the result graphics".
 
@@ -23198,7 +23246,7 @@ Summary the total number of displayed graphs in one frame reaches 80, and it is 
 The frame doesn''t support any control!
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення групи поточних трендів параметрів (до 5) у окремих кадрах-віджетах кількістю до 16 одиниць (4x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "Кадр зведених графіків".
 
 Разом загальна кількість відображуваних графіків на одному кадрі сягає 80 та він призначений для формування окремого виду відображення, що застосовується поза об''єктів сигналізації — глобально за всім проектом візуалізації.
@@ -23206,7 +23254,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 Кадр не підтримує ніякого керування!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
+Версія: 1.1.1
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения группы текущих трендов параметров (до 5) в отдельных кадрах-виджетах количеством до 16 единиц (4x4), относительно которых поддерживается масштабирование в зависимости от их конфигурируемого количества. Кадры-виджеты трендов параметров реализуются сопутствующим виджетом "Кадр сводных графиков".
 
 Суммарно общее количество отображаемых графиков на одном кадре достигает 80 и он предназначен для формирования отдельного вида отображения, который применяется за объектами сигнализации — глобально по всему проекту визуализации.
@@ -23214,33 +23262,33 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для від�
 Кадр не поддерживает никакого управления!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0
+Версия: 1.1.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ResultGraphEl','dscr','The element-widget serves as the basis for the result graphics and is not usually used independently. The widget displays the name of the group and up to five trends, with their text labels, over a fixed period of time (10 minutes) to observe the current trend of the parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2',32,'','','','Елемент-віджет слугує основою зведених графіків та зазвичай не використовується самостійно. Віджет відображає назву групи та до п''яти трендів, з їх текстовими мітками, за фіксований проміжок часу (10 хвилин) для спостереження за поточною тенденцією поведінки параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элемент-виджет служит основой сводных графиков и обычно не используется самостоятельно. Виджет отображает название группы и до пяти трендов, с их текстовыми метками, за фиксированный промежуток времени (10 минут) для наблюдения за текущей тенденцией поведения параметров.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ViewCadr','dscr','The element-frame is used to display the current parameter trends in individual frames-widgets with up to 24 units (6x4) for which scaling is supported depending on their configured number. The frames-widgets of the parameter trends are implemented with the satellite widget "Frame of the group of overview".
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2',32,'','','','Елемент-кадр слугує для відображення поточних трендів параметрів у окремих кадрах-віджетах кількістю до 24 одиниць (6x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "Кадр оглядової групи".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
+Версія: 1.1.1
 Ліцензія: GPLv2','','Элемент-кадр служит для отображения текущих трендов параметров в отдельных кадрах-виджетах количеством до 24 единиц (6x4), относительно которых поддерживается масштабирование в зависимости от их конфигурируемого количества. Кадры-виджеты трендов параметров реализуются сопутствующим виджетом "Кадр обзорной группы".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0
+Версия: 1.1.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow','dscr','The element is used to display the current value of the analog parameter and the regulator mode, if the parameter is a regulator.
 Also this element generates alarms on the corresponding parameter settings.
@@ -23508,33 +23556,33 @@ INSERT INTO wlb_Main_io VALUES('TextLab','dscr','The element is used to display 
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vassily Grigoriev, the Laboratory of Vacuum Technologies
-Version: 1.1.2
+Version: 1.2.0
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Василь Григор''єв, Лабораторія Вакуумних Технологій
-Версія: 1.1.2
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элемент служит для отображения динамических текстовых меток, которые формируется на основе дискретных сигналов. Также этот элемент генерирует уведомление про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Василий Григорьев, Лаборатория Вакуумных Технологий
-Версия: 1.1.2
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('ImgLab','dscr','The element is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute ntf. The element commonly uses and represents the representative structure of DAQ-templates of the discrete block and the code state.
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vinnica Poultry Farm
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2',32,'','','','Елемент слугує для відображення динамічних міток зображень, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут ntf. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів дискретного блоку та стану за кодом.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Вінницька Птахофабрика
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элемент служит для отображения динамических меток изображений, которые формируются на основе дискретных сигналов. Также этот элемент генерирует уведомления про нарушения по локально определённому условию, атрибут ntf. Элемент в целом использует и представляет представительскую структуру DAQ-шаблонов дискретного блока и состояния по коду.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Винницкая Птицефабрика
-Версия: 1.1.0
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('accept','dscr','The element implements a simple operations'' acception dialog. The dialog contains a message with a question and two buttons "Apply" and "Cancel". The dialogue, for example, is used in the frame Users manager to accept the deleting operation.
 
@@ -24428,13 +24476,13 @@ INSERT INTO wlb_mnEls_uio VALUES('El_box_Alarm','prmSignal','Parameter: signal',
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','com','Parameter: command - "Open"',131072,'0',14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','st_open','Parameter: state - "Opened"',131072,NULL,10,'Parameter|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','st_close','Parameter: state - "Closed"',131072,NULL,10,'Parameter|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','shifr','Parameter: code',131077,NULL,10,'Parameter|NAME','','','Параметр: шифр','','','Параметр: шифр','<EVAL>','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','shifr','Parameter: code',131077,NULL,10,'Parameter|NAME','','','Параметр: шифр','','','Параметр: шифр','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Level','max','Maximum',131076,'100|',10,'Parameter|max','','','Максимум','','','Максимум','','','','','Максимум');
 INSERT INTO wlb_mnEls_uio VALUES('Zadvizhka','com','Parameter: command - "Open"',131072,'0||',14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Kran_3_pos','out','Parameter: position',131076,'0|',10,'Parameter|out','','','Параметр: положення','','','Параметр: положение','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('cooler2','speed','Rotation speed',131073,'<EVAL>|',8,'','','','Швидкість обертання','','','Скорость вращения','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','com','Parameter: command - "Open"',131072,NULL,14,'Parameter|com','','','Параметр: команда - "Відкрити"','','','Параметр: команда - "Открыть"','','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('Compressor','shifr','Parameter: code',131077,'',10,'Parameter|NAME','','','Параметр: шифр','||','','Параметр: шифр','','','','','');
+INSERT INTO wlb_mnEls_uio VALUES('Compressor','shifr','Parameter: code',131077,'',10,'Parameter|NAME','','','Параметр: шифр','','','Параметр: шифр','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','st_close','Parameter: state - "Closed"',131072,'0',10,'Parameter|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor','st_open','Parameter: state - "Opened"',131072,'0',10,'Parameter|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor_1','shifr','Parameter: code',131077,'||',10,'Parameter|NAME','','','Параметр: шифр','','','Параметр: шифр','','','','','');
@@ -24447,8 +24495,8 @@ INSERT INTO wlb_mnEls_uio VALUES('El_Zadvizhka','st_open','Parameter: state - "O
 INSERT INTO wlb_mnEls_uio VALUES('Zadvizhka','shifr','Parameter: code',131077,'||',10,'Parameter|NAME','','','Параметр: шифр','','','Параметр: шифр','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Zadvizhka','st_close','Parameter: state - "Closed"',131072,'0||',10,'Parameter|st_close','','','Параметр: стан - "Закрито"','','','Параметр: состояние - "Закрыто"','','','','','');
 INSERT INTO wlb_mnEls_uio VALUES('Zadvizhka','st_open','Parameter: state - "Opened"',131072,'0||',10,'Parameter|st_open','','','Параметр: стан - "Відкрито"','','','Параметр: состояние - "Открыто"','','','','','');
-INSERT INTO wlb_mnEls_uio VALUES('Compressor','digComs','Commands',131077,'',10,'Parameter|digComs','','','Команди','||','','Команды','','','','','Команде');
-INSERT INTO wlb_mnEls_uio VALUES('Compressor','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','||','','Статусы','','','','','Статуси');
+INSERT INTO wlb_mnEls_uio VALUES('Compressor','digComs','Commands',131077,'',10,'Parameter|digComs','','','Команди','','','Команды','','','','','Команде');
+INSERT INTO wlb_mnEls_uio VALUES('Compressor','digStts','Statuses',131077,'',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','','Статуси');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor_1','digComs','Commands',131077,'||',10,'Parameter|digComs','','','Команди','','','Команды','','','','','Команде');
 INSERT INTO wlb_mnEls_uio VALUES('Compressor_1','digStts','Statuses',131077,'||',10,'Parameter|digStts','','','Статуси','','','Статусы','','','','','Статуси');
 INSERT INTO wlb_mnEls_uio VALUES('El_Kran_Sh','digComs','Commands',131077,'',10,'Parameter|digComs','','','Команди','','','Команды','','','','','Команде');
@@ -26643,15 +26691,15 @@ INSERT INTO wlb_mnEls_io VALUES('El_Armatura','geomXsc','1',32,'','','','','',''
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','dscr','The elements is used to display the discrete apparatus'' status on basis of the discrete signals, for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the discrete block in different visual variants.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2',32,'','','','Елементи використовуються для відображення статусу дискретних апаратів на основі дискретних сигналів, для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону дискретного блоку у різних візуальних варіантах.
 
 Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элементы используются для отображения статуса дискретных аппаратов на основе дискретных сигналов, для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона дискретного блока в различных визуальных вариантах.
 
 Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_Sh','contextMenu','Open:open
 Close:close',40,'','','','Відкрити:open
@@ -27082,15 +27130,15 @@ INSERT INTO wlb_mnEls_io VALUES('El_Alarm','fillImg','led',32,'','','','','','',
 INSERT INTO wlb_mnEls_io VALUES('Compressor','dscr','The elements is used to display the discrete apparatus'' status on basis of the discrete signals, for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the discrete block in different visual variants.
 
 Author: Roman Savochenko <roman@oscada.org>, Maxim Lysenko
-Version: 1.1.0
+Version: 1.2.0
 License: GPLv2',32,'','','','Елементи використовуються для відображення статусу дискретних апаратів на основі дискретних сигналів, для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону дискретного блоку у різних візуальних варіантах.
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лисенко
-Версія: 1.1.0
+Версія: 1.2.0
 Ліцензія: GPLv2','','Элементы используются для отображения статуса дискретных аппаратов на основе дискретных сигналов, для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона дискретного блока в различных визуальных вариантах.
 
 Автор: Роман Савоченко <roman@oscada.org>, Максим Лысенко
-Версия: 1.1.0
+Версия: 1.2.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Alarm','dscr','The element is used to display the discrete status by color. Also this element generates notifications of violations on the locally defined condition, the attribute "ntf". The element commonly uses and represents the representative structure of the DAQ-template of the discrete block.
 
@@ -27121,15 +27169,15 @@ License: GPLv2',32,'','','','Елементи слугують для викор
 INSERT INTO wlb_mnEls_io VALUES('El_Kran_polozh','dscr','The elements is used to display the analog apparatus'' status and intended for use in pipelines. The elements commonly use and represent the representative structure of the DAQ-template of the analog PID-regulators in different visual variants.
 
 Author: Maxim Lysenko, Roman Savochenko <roman@oscada.org>
-Version: 1.0.0
+Version: 1.1.0
 License: GPLv2',32,'','','','Елементи використовуються для відображення статусу аналогових апаратів та призначені для використання в трубопроводах. Елементи загалом використовують та репрезентують структуру DAQ-шаблону аналогових ПІД-регуляторів у різних візуальних варіантах.
 
 Автор: Максим Лисенко, Роман Савоченко <roman@oscada.org>
-Версія: 1.0.0
+Версія: 1.1.0
 Ліцензія: GPLv2','','Элементы используются для отображения статуса аналогових аппаратов и предназначены для использования в трубопроводах. Элементы в целом используют и репрезентуют структуру DAQ-шаблона аналоговых ПИД-регуляторов в различных визуальных вариантах.
 
 Автор: Максим Лысенко, Роман Савоченко <roman@oscada.org>
-Версия: 1.0.0
+Версия: 1.1.0
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_mnEls_io VALUES('El_Krest','dscr','The elements serve to construct pipelines of any complexity, required width and color. By default, they are filled in yellow and the angle of rotation is 0°.
 
@@ -27881,15 +27929,15 @@ INSERT INTO wlb_Main_uio VALUES('cntrRegul','impQdwn_addr','Parameter: address o
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','impQup_addr','Parameter: address of impulse output up',196613,NULL,10,'Parameter|impQup','','','Параметр: адреса імпульсного виходу догори','','','Параметр: адрес выхода импульса вверх','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrRegul','prec','Parameter: precision',131073,'<EVAL>|',10,'Parameter|prec','','','Параметр: точність','','','Параметр: точность','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','addr','Address',196613,NULL,10,'Parameter|var','','','Адреса','','','Адрес','','','','','Адреса','');
-INSERT INTO wlb_Main_uio VALUES('ElViewGraph','digComs','Digital: commands',131333,NULL,1,'','','','Дискретний: команди',NULL,'','Дискретный: команды',NULL,'','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElViewGraph','digStts','Digital: states',131333,NULL,9,'','','','Дискретний: стани',NULL,'','Дискретный: состояния',NULL,'','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElViewGraph','digComs','Digital: commands',131333,NULL,1,'','','','Дискретний: команди','','','Дискретный: команды','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElViewGraph','digStts','Digital: states',131333,NULL,9,'','','','Дискретний: стани','','','Дискретный: состояния','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','pModeA','Regulator mode: auto',131072,NULL,10,'Parameter|auto','','','Режим регулятору: автомат','','','Режим регулятора: автомат','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','pModeC','Regulator mode: cascade',131072,NULL,10,'Parameter|casc','','','Режим регулятору: каскад','','','Режим регулятора: каскад','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','aMax','Border up alarm',131076,'<EVAL>|',10,'Parameter|aMax','','','Границя верхня аварійна','','','Граница верхняя аварийная','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','aMin','Border down alarm',131076,'<EVAL>|',10,'Parameter|aMin','','','Границя нижня аварійна','','','Граница нижняя аварийная','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElViewGraph','color','Graphic color',131077,NULL,8,'','','','Колір графіку',NULL,'','Цвет графика',NULL,'','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElViewGraph','color','Graphic color',131077,NULL,8,'','','','Колір графіку','','','Цвет графика','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','digRevers','Digital: reversion',131072,'0',9,'','','','Дискретний: реверс','','','Дискретный: реверс','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('ElViewGraph','ed','Dimension',131077,NULL,10,'Parameter|ed','','','Одиниця виміру',NULL,'','Единица измерения',NULL,'','','','','');
+INSERT INTO wlb_Main_uio VALUES('ElViewGraph','ed','Dimension',131077,NULL,10,'Parameter|ed','','','Одиниця виміру','','','Единица измерения','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','enMode','Show regulator mode',131072,NULL,8,'','','','Відображати режим регулятору','','','Отображать режим регулятора','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','max','Maximum',131076,'<EVAL>|',10,'Parameter|max','','','Максимум','','','Максимум','','','','','Максимум','');
 INSERT INTO wlb_Main_uio VALUES('ElViewGraph','min','Minimum',131076,'<EVAL>|',10,'Parameter|min','','','Мінімум','','','Минимум','','','','','Минимум','');

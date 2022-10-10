@@ -174,6 +174,7 @@ QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewIte
 	((QTextEdit*)wDel)->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	//((QTextEdit*)wDel)->resize(parent->width(), ((QTextEdit*)wDel)->height());
     }
+    else if(value.type() == QVariant::Double) wDel = new QLineEdit(parent);
     else {
 	QItemEditorFactory factory;
 	wDel = factory.createEditor(value.type(), parent);
@@ -218,7 +219,7 @@ void TableDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, co
 		model->setData(index, ((QLineEdit*)editor)->text().toLongLong(), Qt::EditRole);
 		break;
 	    case QVariant::Double:
-		model->setData(index, ((QLineEdit*)editor)->text().toDouble(), Qt::EditRole);
+		model->setData(index, s2r(((QLineEdit*)editor)->text().toStdString()) /*((QLineEdit*)editor)->text().toDouble()*/, Qt::EditRole);
 		break;
 	    default: model->setData(index, ((QLineEdit*)editor)->text(), Qt::EditRole);	break;
 	}

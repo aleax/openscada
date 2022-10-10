@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Бібліотеки/Основні графічні елементи</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (92% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Libs%2FMain+graphical+elements&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Libs/Main_graphical_elements" title="Libs/Main graphical elements">Libs/Main graphical elements</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/Libs_Main_graphical_elements.html" title="Libs/Main graphical elements (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (90% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -329,12 +329,13 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="TextLab" title="#TextLab"><h3><span class="mw-headline" id=".D0.A2.D0.B5.D0.BA.D1.81.D1.82.D0.BE.D0.B2.D0.B0_.D0.BC.D1.96.D1.82.D0.BA.D0.B0_.28TextLab.29"><span class="mw-headline-number">1.3</span> Текстова мітка (<a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">TextLab</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Елемент на рисунку 1.3 слугує для відображення динамічних текстових міток, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут <b>ntf</b>. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блоку</a> та <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">стану за кодом</a>.
 </p>
@@ -345,6 +346,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p><p><b><u>Використання — виконання</u></b><br />
 У режимі виконання, у основному полі елементу, відображається текстова мітка та на фоні, що відповідає значенням дискретних сигналів параметру та конфігурації станів у атрибуті <b>digStts</b>; де фон, залежно від наявності порушення відповідного до умов атрибуту <b>ntf</b>, встановлюється у колір порушення; та яким зображення незквітованого параметру може блимати. За апаратних помилок та недостовірності даних, фон відображається сірим кольором.
 </p><p>У активному режимі елементу можна отримати <a href="#Passport">паспорт</a>, двічі натиснувши ліву клавішу миші на полі віджету. У паспорті будуть представлені всі властивості параметру. За натиском лівої клавіші миші у області панелей з'явиться <a href="#ElCadr">панель управління</a> параметром, та вибір даного віджету буде відображатися блимаючою рамкою. Команди дублюються у контекстному меню, яке з'являється за натиском правої клавіші миші у області віджету.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Віджет наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для спадкування від батьківського віджету/сторінки/сеансу (значення -1). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
 </p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
 </p>
 <table class="wikitable">
@@ -460,12 +462,13 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="ImgLab" title="#ImgLab"><h3><span class="mw-headline" id=".D0.9C.D1.96.D1.82.D0.BA.D0.B0_.D0.B7.D0.BE.D0.B1.D1.80.D0.B0.D0.B6.D0.B5.D0.BD.D0.BD.D1.8F.D0.BC_.28ImgLab.29"><span class="mw-headline-number">1.4</span> Мітка зображенням (<a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">ImgLab</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Елемент на рисунку 1.4 слугує для відображення динамічних міток зображень, що формується на основі дискретних сигналів. Також цей елемент генерує повідомлення про порушення за локально визначеною умовою, атрибут <b>ntf</b>. Елемент загалом використовує та представляє представницьку структуру DAQ-шаблонів <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">дискретного блоку</a> та <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">стану за кодом</a>.
 </p>
@@ -476,6 +479,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p><p><b><u>Використання — виконання</u></b><br />
 У режимі виконання, у основному полі елементу, відображається зображення мітки на фоні, що відповідає значенням дискретних сигналів параметру та конфігурації станів у атрибуті <b>imgs</b>; де фон, залежно від наявності порушення відповідного до умов атрибуту <b>ntf</b>, встановлюється у колір порушення; та яким зображення незквітованого параметру може блимати. За апаратних помилок та недостовірності даних, фон відображається сірим кольором.
 </p><p>У активному режимі елементу можна отримати <a href="#Passport">паспорт</a>, двічі натиснувши ліву клавішу миші на полі віджету. У паспорті будуть представлені всі властивості параметру. За натиском лівої клавіші миші у області панелей з'явиться <a href="#ElCadr">панель управління</a> параметром, та вибір даного віджету буде відображатися блимаючою рамкою. Команди дублюються у контекстному меню, яке з'являється за натиском правої клавіші миші у області віджету.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Віджет наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для спадкування від батьківського віджету/сторінки/сеансу (значення -1). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
 </p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
 </p>
 <table class="wikitable">
@@ -1085,7 +1089,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> en, uk, ru 
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
-<td> -1 мс (предок)
+<td> 2000 мс
 </td></tr></table>
 <p>Елемент-віджет, представлений на рисунку 3.1.1, слугує для створення <a href="#grpGraph">груп графіків</a>. Віджет містить інформацію про параметр, режим регулятору, якщо параметр є таким, одиницю виміру аналогового параметру, а також колір, що відповідає параметру тренда. Віджет загалом використовує та представляє представницьку структуру DAQ-шаблонів "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговий сигнал</a>" та "<a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">Дискретний блок</a>".
 </p>
@@ -1346,13 +1350,15 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="grpCadr" title="#grpCadr"><h3><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.83.D1.80.D1.96.D0.B2_.28grpCadr.29"><span class="mw-headline-number">3.2</span> Група контурів (<a href="Libs_Main_graphical_elements.html#grpCadr" title="Special:MyLanguage/Libs/Main graphical elements">grpCadr</a>)</span></h3></span> </td>
-<td> 1.2 </td>
+<td> <span id="grpCadr" title="#grpCadr"><h3><span class="mw-headline" id=".D0.93.D1.80.D1.83.D0.BF.D0.B0_.D0.BA.D0.BE.D0.BD.D1.82.D1.83.D1.80.D1.96.D0.B2_.28grpCadr.29"><span class="mw-headline-number">3.2</span> Група контурів (<a href="Libs_Main_graphical_elements.html#grpCadr" title="Special:MyLanguage/Libs/Main graphical elements">grpCadr</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Елемент-кадр, представлений на рисунку 3.2, слугує для одночасного спостереження та управління контурами декількох параметрів, до восьми, включає у себе як екземпляри віджету "<a href="#ElCadr">Елемент кадр</a>" для кожного контуру, так і <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">примітив "Діаграма"</a> для спостереження за трендами контурів та перегляду історії.
 </p>
@@ -1362,6 +1368,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p><p>Типову глибину трендів у минуле встановлено у 10 хвилин — для поточного оперативного контролю, що, за потреби, можна змінити безпосередньо відредагувавши відповідне поле віджету діаграми, наприклад, для шаблонної сторінки проекту, щоб воно розповсюдилося на всі кінцеві сторінки.
 </p><p><b><u>Використання — виконання</u></b><br />
 У режимі виконання відображаються контури та графіки, для яких встановлено зв'язки. Управління параметрами з контурів детально описано у розділі панелі "<a href="#ElCadr">Елемент кадр</a>". На додачу до цього можна керувати властивостями відображення графіків, для чого потрібно лівою клавішею миші натиснути у області графіку та за допомогою <a href="#grph_panel">панелі управління графіком</a>, що з'явиться, здійснити потрібні дії.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Кадр наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для спадкування від батьківської сторінки/сеансу (значення -1). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpCadrR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_grpCadrR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.2b. Кадр "Група контурів" у режимі виконання.</div></div></div></div>
 <p><b><u>Властивості зв'язування та конфігурації</u></b><br />
@@ -1402,7 +1409,8 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> * </td>
 <td> en, uk, ru 
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Елемент-кадр, представлений на рисунку 3.3, слугує для відображення поточних трендів параметрів у окремих кадрах-віджетах кількістю до 24 одиниць (6x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "<a href="#ElViewCadr">Кадр оглядової групи</a>".
 </p>
@@ -1445,13 +1453,15 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="ElViewCadr" title="#ElViewCadr"><h4><span class="mw-headline" id=".D0.9A.D0.B0.D0.B4.D1.80_.D0.B3.D1.80.D1.83.D0.BF.D0.B8_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D1.83_.28ElViewCadr.29"><span class="mw-headline-number">3.3.1</span> Кадр групи огляду (<a href="Libs_Main_graphical_elements.html#ElViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElViewCadr</a>)</span></h4></span> </td>
-<td> 1.1 </td>
+<td> <span id="ElViewCadr" title="#ElViewCadr"><h4><span class="mw-headline" id=".D0.9A.D0.B0.D0.B4.D1.80_.D0.B3.D1.80.D1.83.D0.BF.D0.B8_.D0.BE.D0.B3.D0.BB.D1.8F.D0.B4.D1.83_.28ElViewCadr.29"><span class="mw-headline-number">3.3.1</span> Кадр групи огляду (<a href="Libs_Main_graphical_elements.html#ElViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElViewCadr</a>)</span></h4></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Елемент-віджет, представлений на рисунку 3.3.1, слугує основою <a href="#ViewCadr">групи оглядових кадрів</a> та зазвичай не використовується самостійно. Віджет відображає текстову інформацію про параметр у вигляді найменування та значення, а також тренд параметру за невеликий проміжок часу (2 хвилини) для спостереження за поточною тенденцією поведінки параметру з авто-масштабуванням за шкалою значення. Віджет загалом використовує та представляє представницьку структуру DAQ-шаблону "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговий сигнал</a>".
 </p>
@@ -1461,6 +1471,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p><p><b><u>Використання — виконання</u></b><br />
 У режимі виконання, у основному полі елементу, відображається назва параметру, поточне значення-змінна та тренд параметру; які завжди відображаються кольором стилю: <i>labColorGood</i>.
 </p><p>У активному режимі елементу можна отримати <a href="#Passport">паспорт</a>, натиснувши праву клавішу миші на полі віджету. У паспорті будуть представлені всі властивості параметру. За натиском лівої клавіші миші у області панелей з'явиться <a href="#ElCadr">панель управління</a> параметром, та вибір даного віджету буде відображатися блимаючою рамкою.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Віджет наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для спадкування від батьківського віджету/сторінки/сеансу (значення -1). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
 </p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
 </p>
 <table class="wikitable">
@@ -1508,7 +1519,8 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <td> * </td>
 <td> en, uk, ru 
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Елемент-кадр, представлений на рисунку 3.4, слугує для відображення групи поточних трендів параметрів (до 5) у окремих кадрах-віджетах кількістю до 16 одиниць (4x4), стосовно яких підтримується масштабування залежно від їх конфігурованої кількості. Кадри-віджети трендів параметрів реалізуються супутнім віджетом "<a href="#ResultGraphEl">Кадр зведених графіків</a>".
 </p><p>Разом загальна кількість відображуваних графіків на одному кадрі сягає 80 та він призначений для формування окремого виду відображення, що застосовується поза <a href="#RootPgSo">об'єктів сигналізації</a> — глобально за всім проектом візуалізації.
@@ -1553,13 +1565,15 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <table class="wikitable">
 
 <tr>
-<td> <span id="ResultGraphEl" title="#ResultGraphEl"><h4><span class="mw-headline" id=".D0.9A.D0.B0.D0.B4.D1.80_.D0.B7.D0.B2.D0.B5.D0.B4.D0.B5.D0.BD.D0.B8.D1.85_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28ResultGraphEl.29"><span class="mw-headline-number">3.4.1</span> Кадр зведених графіків (<a href="Libs_Main_graphical_elements.html#ResultGraphEl" title="Special:MyLanguage/Libs/Main graphical elements">ResultGraphEl</a>)</span></h4></span> </td>
-<td> 1.1 </td>
+<td> <span id="ResultGraphEl" title="#ResultGraphEl"><h4><span class="mw-headline" id=".D0.9A.D0.B0.D0.B4.D1.80_.D0.B7.D0.B2.D0.B5.D0.B4.D0.B5.D0.BD.D0.B8.D1.85_.D0.B3.D1.80.D0.B0.D1.84.D1.96.D0.BA.D1.96.D0.B2_.28ResultGraphEl.29"><span class="mw-headline-number">3.4.1</span> Кадр зведених графіків (<a href="Libs_Main_graphical_elements.html#ResultGraphEl" title="Special:MyLanguage/Libs/Main graphical elements">ResultGraphEl</a>)</span></h4></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -1 мс (предок)
 </td></tr></table>
 <p>Елемент-віджет, представлений на рисунку 3.4.1, слугує основою <a href="#ResultGraph">зведених графіків</a> та зазвичай не використовується самостійно. Віджет відображає назву групи та до п'яти трендів, з їх текстовими мітками, за фіксований проміжок часу (10 хвилин) для спостереження за поточною тенденцією поведінки параметрів. Віджет загалом використовує та представляє представницьку структуру DAQ-шаблону "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Аналоговий сигнал</a>".
 </p>
@@ -1568,6 +1582,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 Хоча даний віджет не призначено для самостійного використання, у відриві від <a href="#ResultGrph">зведених графіків</a>, використовувати його таки можна, наприклад, помістивши на мнемосхему та встановивши зв'язок з параметром джерела даних.
 </p><p><b><u>Використання — виконання</u></b><br />
 У режимі виконання, у основному полі елементу, відображається заголовок групи, заголовки та тренди параметрів у визначених конфігурацією або стилем кольорах.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Віджет наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для спадкування від батьківського віджету/сторінки/сеансу (значення -1). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
 </p><p><b><u>Властивості зв'язування та конфігурації</u></b><br />
 </p>
 <table class="wikitable">
@@ -3151,5 +3166,5 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/uk">Libs/Main_graphical_elements/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
 </html>

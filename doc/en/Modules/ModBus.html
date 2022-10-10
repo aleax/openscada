@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (97% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -272,7 +272,7 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <h3><span class="mw-headline" id="Controller_object"><span class="mw-headline-number">3.1</span> Controller object</span></h3>
 <p>To add a data source of ModBus the controller object of OpenSCADA creates and configures. An example of a configuration tab for a controller object of this type is shown in Figure 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:810px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="837" src="../files/ModBus_cntr.png" width="808" /></a>  <div class="thumbcaption">Fig.8. Configuration tab of a controller object.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="909" src="../files/ModBus_cntr.png" width="773" /></a>  <div class="thumbcaption">Fig.8. Configuration tab of a controller object.</div></div></div></div>
 <p>Using this tab you can set:
 </p>
 <ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
@@ -282,7 +282,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <li> Names of tables of storing the configuration of the parameters of the controller object for standard and logical types.</li>
 <li> Policy of scheduling and priority of the data acquisition task.</li>
 <li> ModBus protocol, used for requesting the real device (TCP/IP, RTU or ASCII).</li>
-<li> Address of the output transport from a list of configured <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">output transports</a> in the "Transports" subsystem of OpenSCADA. Default port of the ModuBus/TCP is 502. The field may be set to empty and be changed at the runtime.</li>
+<li> Address of <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">the output transport</a> using the unified connection with navigation. Default port of the ModuBus/TCP is 502. The field may be set to empty and be changed at the runtime. Format of the address is:
+<ul><li> "<b>{TrModule}.[out_]{TrID}[:{TrAddr}]</b>" — typical output with automatic creation <i>TrID</i> at it missing and providing <i>TrAddr</i>;</li>
+<li> "<b>{TrModule}.in_{TrID}:{RemConId}</b>" — initiative input with the connection identifier in <i>RemConId</i>.</li></ul></li>
 <li> ModBus destination node. In the case of protocols RTU and ASCII this is the unique address of the physical device, and when TCP/IP this is the identifier of the unity.</li>
 <li> Merging of the data fragments. Standard functions <b>1</b>-<b>4</b> let to request at once multiple adjacent registers or bits. This strategy often allows to optimize the traffic and time. However, the required registers are not always located adjacent to each other, this option allows you to gather them in blocks of up to 100 registers, or 1600 bits.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../files/At.png" width="22" /></a> Installing of this parameter must be approached with caution, since not all devices support access to the registers between fragments.</dd></dl>
@@ -382,5 +384,5 @@ Where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
 </html>

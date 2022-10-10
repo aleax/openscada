@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (90% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -329,12 +329,13 @@ In the runtime mode, in the main field of the element, there are displayed the s
 <tr>
 <td> <span id="TextLab" title="#TextLab"><h3><span class="mw-headline" id="Text_label_.28TextLab.29"><span class="mw-headline-number">1.3</span> Text label (<a href="Libs_Main_graphical_elements.html#TextLab" title="Special:MyLanguage/Libs/Main graphical elements">TextLab</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr></table>
 <p>The element on Figure 1.3 is used to display the dynamic text labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute <b>ntf</b>. The element commonly uses and represents the representative structure of DAQ-templates of <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">the discrete block</a> and <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">the code state</a>.
 </p>
@@ -345,6 +346,7 @@ This widget can be used by the developer to create mnemonic schemes with display
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, in the main field of the element, there are displayed the text label, what related to values of the discrete signals of the parameter and the attribute <b>digStts</b> configuration; where the background, depending to availability of a violation related to the attribute <b>ntf</b> condition, sets to the violation color; and to what the inquieted parameter may blink. At the hardware errors and non validity the data, the background shows in the gray color.
 </p><p>In the active mode of the element you can obtain <a href="#Passport">the parameter passport</a> clicking twice the left mouse button on the body of the widget. The passport will present all properties of the parameter. Pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="#ElCadr">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking frame. The commands are duplicated in the context menu that appears when the right mouse button is pressed in the widget area.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The widget supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent widget/page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p><p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -460,12 +462,13 @@ In the runtime mode, in the main field of the element, there are displayed the t
 <tr>
 <td> <span id="ImgLab" title="#ImgLab"><h3><span class="mw-headline" id="Image_label_.28ImgLab.29"><span class="mw-headline-number">1.4</span> Image label (<a href="Libs_Main_graphical_elements.html#ImgLab" title="Special:MyLanguage/Libs/Main graphical elements">ImgLab</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr></table>
 <p>The element on Figure 1.4 is used to display the dynamic image labels, which form on basis of the discrete signals. Also this element generates notifications of violations on the locally defined condition, the attribute <b>ntf</b>. The element commonly uses and represents the representative structure of DAQ-templates of <a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">the discrete block</a> and <a href="Libs_Main.html#codeState" title="Special:MyLanguage/Libs/Main">the code state</a>.
 </p>
@@ -476,6 +479,7 @@ This widget can be used by the developer to create mnemonic schemes with display
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, in the main field of the element, there are displayed the image label, what related to values of the discrete signals of the parameter and the attribute <b>imgs</b> configuration; where the background, depending to availability of a violation related to the attribute <b>ntf</b> condition, sets to the violation color; and to what the inquieted parameter may blink. At the hardware errors and non validity the data, the background shows in the gray color.
 </p><p>In the active mode of the element you can obtain <a href="#Passport">the parameter passport</a> clicking twice the left mouse button on the body of the widget. The passport will present all properties of the parameter. Pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="#ElCadr">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking frame. The commands are duplicated in the context menu that appears when the right mouse button is pressed in the widget area.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The widget supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent widget/page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p><p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -1085,7 +1089,7 @@ In the runtime mode, the trends, for which links have been set, are displayed. C
 <td> en, uk, ru 
 </td>
 <td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
-<td> -1 ms (parent)
+<td> 2000 ms
 </td></tr></table>
 <p>The element-widget, shown in Figure 3.1.1, is provided to create <a href="#grpGraph">graphics groups</a>. The widget contains information about parameter, the regulator mode, if the parameter is such, the units of analog parameter, as well as the color corresponding to the parameter's trend. The widget commonly uses and represents the representative structure of the DAQ-templates "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>" and "<a href="Libs_Main.html#digitBlockUnif" title="Special:MyLanguage/Libs/Main">Discrete block</a>".
 </p>
@@ -1346,13 +1350,15 @@ Calling the dialogue is made by the "Calculation" item of the <a href="#ElViewGr
 <table class="wikitable">
 
 <tr>
-<td> <span id="grpCadr" title="#grpCadr"><h3><span class="mw-headline" id="Contours_group_.28grpCadr.29"><span class="mw-headline-number">3.2</span> Contours group (<a href="Libs_Main_graphical_elements.html#grpCadr" title="Special:MyLanguage/Libs/Main graphical elements">grpCadr</a>)</span></h3></span> </td>
-<td> 1.2 </td>
+<td> <span id="grpCadr" title="#grpCadr"><h3><span class="mw-headline" id="Contours_group_.28grpCadr.29"><span class="mw-headline-number">3.2</span> Contours group (<a href="Libs_Main_graphical_elements.html#grpCadr" title="Special:MyLanguage/Libs/Main graphical elements">grpCadr</a>)</span></h3></span>
+</td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr></table>
 <p>The element-frame, shown in Figure 3.2, provides for simultaneous monitoring and control of contours of several parameters, up to eight, includes both instances of the widget "<a href="#ElCadr">Element cadre</a> for each contour, and <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Sub-projects/VCA#Diagram" title="Special:MyLanguage/Sub-projects/VCA">the primitive "Diagram"</a> to monitor the trends of the contours and viewing history.
 </p>
@@ -1362,6 +1368,7 @@ The frame is designed to perform the role of page-template, and should therefore
 </p><p>The default trend depth in the past is set at 10 minutes — for current operational control, which can be changed directly by editing the corresponding field of the diagram widget, for example, for the project template page, to spread to all end pages.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, the contours and trends, for which links have been set, are displayed. Control of the parameters by contours, described in detail in the section of the "<a href="#ElCadr">Element cadre</a>" panel. In addition to this you can control the trends display properties, which requires the left mouse button to click in the trend's area and by means of appeared <a href="#grph_panel">trend's control panel</a> to make the necessary actions.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The frame supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_grpCadrR.png"><img class="thumbimage" height="580" src="files/LibMainEls_grpCadrR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.2b. The "Contours group" frame in the runtime mode.</div></div></div></div>
 <p><b><u>Linking and configuring the attributes</u></b><br />
@@ -1402,7 +1409,8 @@ In the runtime mode, the contours and trends, for which links have been set, are
 <td> * </td>
 <td> en, uk, ru 
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr></table>
 <p>The element-frame shown in Figure 3.3 is used to display the current parameter trends in individual frames-widgets with up to 24 units (6x4) for which scaling is supported depending on their configured number. The frames-widgets of the parameter trends are implemented with the satellite widget "<a href="#ElViewCadr">Frame of the group of overview</a>".
 </p>
@@ -1445,13 +1453,15 @@ In the runtime mode, the frames-widgets, for which links have been set, are disp
 <table class="wikitable">
 
 <tr>
-<td> <span id="ElViewCadr" title="#ElViewCadr"><h4><span class="mw-headline" id="Frame_of_the_group_of_overview_.28ElViewCadr.29"><span class="mw-headline-number">3.3.1</span> Frame of the group of overview (<a href="Libs_Main_graphical_elements.html#ElViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElViewCadr</a>)</span></h4></span> </td>
-<td> 1.1 </td>
+<td> <span id="ElViewCadr" title="#ElViewCadr"><h4><span class="mw-headline" id="Frame_of_the_group_of_overview_.28ElViewCadr.29"><span class="mw-headline-number">3.3.1</span> Frame of the group of overview (<a href="Libs_Main_graphical_elements.html#ElViewCadr" title="Special:MyLanguage/Libs/Main graphical elements">ElViewCadr</a>)</span></h4></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr></table>
 <p>The element-widget, shown in Figure 3.3.1, serves as the basis for <a href="#ViewCadr">the group of overview frames</a> and is not usually used independently. The widget displays the text information about parameter in the form of the name and value, and a trend of the parameter for small period of time (2 minutes) to observe the current trend of the parameter with auto-scaling on the value scale. The widget commonly uses and represents the representative structure of the DAQ-template "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>".
 </p>
@@ -1461,6 +1471,7 @@ Though this widget is not intended for independent use, in isolation from <a hre
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, the main field of the element displays the parameter name, the current value-variable and the trend of the parameter; which are always displayed in the style color: <i>labColorGood</i>.
 </p><p>In the active mode of the element you can obtain <a href="#Passport">the parameter passport</a> clicking the right mouse button on the body of the widget. The passport will present all properties of the parameter. Pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="#ElCadr">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking frame.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The widget supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent widget/page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p><p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -1508,7 +1519,8 @@ In the runtime mode, the main field of the element displays the parameter name, 
 <td> * </td>
 <td> en, uk, ru 
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr></table>
 <p>The element-frame shown in Figure 3.4 is used to display a group of the current parameter trends (up to 5) in individual frames-widgets with up to 16 units (4x4) for which scaling is supported depending on their configured number. The frames-widgets of the parameter trends are implemented with the satellite widget "<a href="#ResultGraphEl">Frame of the result graphics</a>".
 </p><p>Summary the total number of displayed graphs in one frame reaches 80, and it is intended to form a separate type of view that is used outside <a href="#RootPgSo">the signal objects</a> — globally for the entire visualization project.
@@ -1553,13 +1565,15 @@ In the runtime mode, the frames-widgets, for which links have been set, are disp
 <table class="wikitable">
 
 <tr>
-<td> <span id="ResultGraphEl" title="#ResultGraphEl"><h4><span class="mw-headline" id="Frame_of_the_result_graphics_.28ResultGraphEl.29"><span class="mw-headline-number">3.4.1</span> Frame of the result graphics (<a href="Libs_Main_graphical_elements.html#ResultGraphEl" title="Special:MyLanguage/Libs/Main graphical elements">ResultGraphEl</a>)</span></h4></span> </td>
-<td> 1.1 </td>
+<td> <span id="ResultGraphEl" title="#ResultGraphEl"><h4><span class="mw-headline" id="Frame_of_the_result_graphics_.28ResultGraphEl.29"><span class="mw-headline-number">3.4.1</span> Frame of the result graphics (<a href="Libs_Main_graphical_elements.html#ResultGraphEl" title="Special:MyLanguage/Libs/Main graphical elements">ResultGraphEl</a>)</span></h4></span>
+</td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
-<td> en, uk, ru 
+<td> en, uk, ru
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr></table>
 <p>The element-widget, shown in Figure 3.4.1, serves as the basis for <a href="#ResultGraph">the result graphics</a> and is not usually used independently. The widget displays the name of the group and up to five trends, with their text labels, over a fixed period of time (10 minutes) to observe the current trend of the parameters. The widget commonly uses and represents the representative structure of the DAQ-template "<a href="Libs_Main.html#anUnif" title="Special:MyLanguage/Libs/Main">Analog signal</a>".
 </p>
@@ -1568,6 +1582,7 @@ In the runtime mode, the frames-widgets, for which links have been set, are disp
 Though this widget is not intended for independent use, in isolation from <a href="#ResultGrph">the result graphics</a>, it can be still used, for example, placing it to the mnemonic scheme and linking with the data source parameter.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, the main element field displays the group header, headers and trends of the parameters in the configuration-defined or styled colors.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The widget supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent widget/page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p><p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -3151,5 +3166,5 @@ Calling the dialogue is made from the frame-initiator, and closing is made by pr
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Main_graphical_elements/en">Libs/Main_graphical_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
 </html>

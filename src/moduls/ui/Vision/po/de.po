@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 20:05+0300\n"
+"POT-Creation-Date: 2022-10-09 17:01+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1346,6 +1346,9 @@ msgstr "Widgetscontainer"
 #, c-format
 msgid "Time of loading the widgets development tree '%s': %f ms."
 msgstr "Zeitpunkt des Ladens des Widget-Entwicklungsbaums '%s': %f ms."
+
+msgid "... from the Library"
+msgstr "... aus der Bibliothek"
 
 msgid "Refresh libraries"
 msgstr "Bibliotheken aktualisieren"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 16:56+0300\n"
+"POT-Creation-Date: 2022-10-02 17:23+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -100,6 +100,7 @@ msgstr "Відновлення через %.6g c."
 msgid "Acquisition. "
 msgstr "Збір. "
 
+#, c-format
 msgid "Acquisition with the period %s. "
 msgstr "Збір з періодом %s. "
 
@@ -107,6 +108,7 @@ msgstr "Збір з періодом %s. "
 msgid "Next acquisition by the cron '%s'. "
 msgstr "Наступний збір за cron '%s'. "
 
+#, c-format
 msgid "Spent time %s[%s]. "
 msgstr "Витрачено часу %s[%s]. "
 
@@ -158,8 +160,8 @@ msgstr ""
 "переформування блоків збору.\n"
 "Перезапустіть для застосування видалених при виконанні посилань ПЛК."
 
-msgid "Default port of the ModuBus/TCP is 502."
-msgstr "Типовий порт ModuBus/TCP це 502."
+msgid "Default port of the ModuBus/TCP is 502!"
+msgstr "Типовий порт ModuBus/TCP це 502!"
 
 msgid ""
 "Merge non-adjacent fragments of registers for request in a single block.\n"

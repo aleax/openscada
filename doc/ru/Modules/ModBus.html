@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 98% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 97% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.4 </td>
+<td> 3.5 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -272,27 +272,29 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <h3><span class="mw-headline" id=".D0.9E.D0.B1.D1.8A.D0.B5.D0.BA.D1.82_.D0.BA.D0.BE.D0.BD.D1.82.D1.80.D0.BE.D0.BB.D0.BB.D0.B5.D1.80.D0.B0"><span class="mw-headline-number">3.1</span> Объект контроллера</span></h3>
 <p>Для добавления источника данных ModBus создаётся и конфигурируется объект контроллера OpenSCADA. Пример вкладки конфигурации объекта контроллера данного типа изображен на рисунке 8.
 </p>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:857px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr_ru.png"><img class="thumbimage" height="837" src="../files/ModBus_cntr_ru.png" width="855" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфигурации объекта контроллера.</div></div></div></div>
-<p>С помощью этой вкладки можно установить:
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:775px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_cntr.png"><img class="thumbimage" height="909" src="../../en/files/ModBus_cntr.png" width="773" /></a>  <div class="thumbcaption">Рис.8. Вкладка конфигурации объекта контроллера.</div></div></div></div>
+<p>Using this tab you can set:
 </p>
-<ul><li> Состояние объекта контроллера, а именно: Статус, "Включен", "Выполняется" и имя БД, содержащей конфигурацию.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Ручной перезапуск включенного объекта контроллера вызывает принудительное переформирование блоков сбора.</dd></dl>
-<ul><li> Идентификатор, имя и описание контроллера.</li>
-<li> Состояние "Включен" и "Выполняется", в которое переводить объект контроллера при загрузке.</li>
-<li> Имя таблиц хранения конфигурации параметров контроллера стандартного и логического типа.</li>
-<li> Политика планирования и приоритет задачи сбора данных.</li>
-<li> ModBus протокол, используемый для опроса физического устройства (TCP/IP, RTU или ASCII).</li>
-<li> Адрес исходящего транспорта из списка сконфигурированных <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">исходящих транспортов</a> в подсистеме "Транспорты" OpenSCADA. Типовой порт ModuBus/TCP это 502. Поле может быть установлено в пустое и изменено во время исполнения. </li>
-<li> ModBus узел назначения. В случае с протоколами RTU и ASCII это индивидуальный адрес физического устройства, а для TCP/IP это идентификатор единицы.</li>
-<li> Объединение фрагментов регистров. Стандартные функции <b>1</b>-<b>4</b> позволяют запросить сразу несколько смежных регистров или битов. Такая стратегия часто позволяет оптимизировать трафик и время. Однако, нужные регистры не всегда расположены смежно друг к другу и данная опция позволяет собирать их в блоки до 100 регистров или 1600 битов.</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> К установке данного параметра нужно подходить с осторожностью, поскольку не все устройства поддерживают доступ к регистрам между фрагментами.</dd></dl>
-<ul><li> Использовать функции записи нескольких элементов (<b>15</b>, <b>16</b>). Вместо функций одно-элементной записи будут использованы много-элементные.</li>
-<li> Асинхронная запись. Включает асинхронную запись изменений в контроллер, в общем цикле опроса и после самого опроса данных, блокируя чтение записанных значений на один цикл (до очистки буфера записи).</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Этот режим также предотвращает потере записанных данных при потере подключения и записанные данные будут переданы только подключение будет восстановлено. При этом блокируется чтение только что записанных данных, чтобы дать время ПЛК принять изменения.</dd></dl>
-<ul><li> Время ожидания соединения в миллисекундах. Указывает промежуток времени, в течение которого ожидать ответа. В случае указания нулевого значения используется время ожидания по умолчанию в транспорте. Позволяет учитывать индивидуальные свойства контроллера в общей сети.</li>
-<li> Время восстановления соединения в секундах. Указывает промежуток времени, по истечению которого осуществлять повторную попытку запроса к ранее недоступному устройству.</li>
-<li> Попыток запроса для протоколов RTU и ASCII. Указывает на количество попыток повторения запроса в случае получения неполного или повреждённого ответа.</li>
-<li> Максимальный размер блока запроса в байтах, полезен для контроллеров с таким ограничением.</li></ul>
+<ul><li> The state of the controller object, as follows: Status, "Enabled", "Running" and the name of the database containing the configuration.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Manual restart of the enabled controller object causes the force reformation of the acquisition blocks.</dd></dl>
+<ul><li> Identifier, name and description of the controller.</li>
+<li> The state "Enabled" and "Running", in which the controller object must be translated at boot.</li>
+<li> Names of tables of storing the configuration of the parameters of the controller object for standard and logical types.</li>
+<li> Policy of scheduling and priority of the data acquisition task.</li>
+<li> ModBus protocol, used for requesting the real device (TCP/IP, RTU or ASCII).</li>
+<li> Address of <a href="../Program_manual.html#TransportOut" title="Special:MyLanguage/Documents/Program manual">the output transport</a> using the unified connection with navigation. Default port of the ModuBus/TCP is 502. The field may be set to empty and be changed at the runtime. Format of the address is:
+<ul><li> "<b>{TrModule}.[out_]{TrID}[:{TrAddr}]</b>" — typical output with automatic creation <i>TrID</i> at it missing and providing <i>TrAddr</i>;</li>
+<li> "<b>{TrModule}.in_{TrID}:{RemConId}</b>" — initiative input with the connection identifier in <i>RemConId</i>.</li></ul></li>
+<li> ModBus destination node. In the case of protocols RTU and ASCII this is the unique address of the physical device, and when TCP/IP this is the identifier of the unity.</li>
+<li> Merging of the data fragments. Standard functions <b>1</b>-<b>4</b> let to request at once multiple adjacent registers or bits. This strategy often allows to optimize the traffic and time. However, the required registers are not always located adjacent to each other, this option allows you to gather them in blocks of up to 100 registers, or 1600 bits.</li></ul>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Installing of this parameter must be approached with caution, since not all devices support access to the registers between fragments.</dd></dl>
+<ul><li> Using the multi-items writing functions (<b>15</b>, <b>16</b>). Instead one-item writing will be used the multi-items functions.</li>
+<li> Asynchronous write. Enables asynchronously writing of the changes to the controller, in the general acquisition cycle and after the data acquisition itself, blocking of reading the written values on one cycle (before the writing buffer clearing).</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> This mode also prevents for lost the writing data at the connection lost and the wrote data will be transmitted just the connection will be restored. At that, this blocks the reading of the just written data to allow the PLC time to accept changes.</dd></dl>
+<ul><li> Timeout of connection in milliseconds. Specifies the time interval during which the answer is expected. If there is zero waiting time the transport waiting time by default is used. Allows taking into account individual properties of the controller in the common network.</li>
+<li> Timeout of restore in seconds. Specifies the time interval after which the re-attempt of the request to previously inaccessible device is done.</li>
+<li> Request tries for the protocols RTU and ASCII. Indicates the number of attempts by the repetition of the request in case of incomplete or damaged answer.</li>
+<li> Maximum size of the request block in bytes, useful for controllers with such limits.</li></ul>
 <h3><span class="mw-headline" id=".D0.9F.D0.B0.D1.80.D0.B0.D0.BC.D0.B5.D1.82.D1.80.D1.8B"><span class="mw-headline-number">3.2</span> Параметры</span></h3>
 <p>Модуль сбора данных предоставляет два типа параметра: "Стандартный (std)" и "Логический (logic)". Дополнительными конфигурационными полями параметров данного модуля являются:
 </p>
@@ -383,5 +385,5 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
 </html>

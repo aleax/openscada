@@ -191,6 +191,7 @@ class TMess
 	static string labSecCRON( );
 	static string labSecCRONsel( );
 	static string labTaskPrior( );
+	static string labStdOutTrs( );
 	static string labMessCat( );
 
 	int getUTF8( const string &str, int off = 0, int32_t *symb = NULL );

@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Mnemo elements</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Mnemo_elements.html" title="Библиотека/Элементы мнемосхем (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Mnemo_elements.html" title="Бібліотека/Елементи мнемосхем (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Mnemo_elements.html" title="Библиотека/Элементы мнемосхем (96% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Mnemo_elements.html" title="Бібліотека/Елементи мнемосхем (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -532,43 +532,29 @@ In the runtime mode, in the main field of the element, there are displayed a his
 <th> Name (identifier) </th>
 <th> Version </th>
 <th> License </th>
-<th> Author
+<th> Author </th>
+<th> Processing period
 </th></tr>
 <tr>
-<td> Compressor (Compressor) </td>
-<td> 1.1 </td>
+<td> Compressor (Compressor), Compressor 1 (Compressor_1) </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Maxim Lysenko
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Maxim Lysenko </td>
+<td> -1 ms (parent)
 </td></tr>
 <tr>
-<td> Compressor 1 (Compressor_1) </td>
-<td> 1.0 </td>
+<td> Ball crane (El_Kran_Sh), Bolt (El_Zadvizhka), Crane (Zadvizhka) </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>, Maxim Lysenko
-</td></tr>
-<tr>
-<td> Bolt (El_Zadvizhka) </td>
-<td> 1.0 </td>
-<td> GPLv2 </td>
-<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
-</td></tr>
-<tr>
-<td> Crane (Zadvizhka) </td>
-<td> 1.0 </td>
-<td> GPLv2 </td>
-<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
-</td></tr>
-<tr>
-<td> Ball crane (El_Kran_Sh) </td>
-<td> 1.1 </td>
-<td> GPLv2 </td>
-<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr></table>
 <p><b><u>Using — development</u></b><br />
 These widgets can be used by the developer to create mnemonic schemes with displaying and control of the discrete apparatus. To use their you need to add these widgets to a mnemonic scheme, proportionally adjust for the geometry and link to the data source parameter.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, in the main field of the elements, there are represented the apparatus symbolic shape with a dynamic sign of the discrete status, what related to values of the discrete signals of the parameter and the attribute <b>digStts</b> configuration. At the hardware errors and non validity the data, it fills in the gray color.
 </p><p>In the active mode of the element, pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking structure color. The commands are duplicated in the context menu that appears when the right mouse button is pressed in the widget area.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The widget supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent widget/page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p><p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -665,13 +651,15 @@ In the runtime mode, in the main field of the elements, there are represented th
 <th> Name (identifier) </th>
 <th> Version </th>
 <th> License </th>
-<th> Author
+<th> Author </th>
+<th> Processing period
 </th></tr>
 <tr>
 <td> Crane with position (El_Kran_polozh) </td>
-<td> 1.0 </td>
+<td> 1.1 </td>
 <td> GPLv2 </td>
-<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> Maxim Lysenko, <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -1 ms (parent)
 </td></tr>
 <tr>
 <td> Three-positioned crane (Kran_3_pos) </td>
@@ -684,6 +672,7 @@ These widgets can be used by the developer to create mnemonic schemes with displ
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode, in the main field of the elements, there are represented the apparatus symbolic shape with a dynamic sign, what related to values of the analog parameter.
 </p><p>In the active mode of the element, pressing the left mouse button in the widget body will cause to appear in the panels area for <a href="Libs_Main_graphical_elements.html#ElCadr" title="Special:MyLanguage/Libs/Main graphical elements">control panel</a> of the parameter, and the selection of this widget will be displayed with the blinking structure color.
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The widget supports now of working with very big "Periodic processing" value and that value is set now to inherit from parent widget/page/session (the value -1). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p><p><b><u>Linking and configuring the attributes</u></b><br />
 </p>
 <table class="wikitable">
@@ -725,5 +714,5 @@ In the runtime mode, in the main field of the elements, there are represented th
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Mnemo_elements/en">Libs/Mnemo_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">September 2022</td><td style="text-align: right;" width="40%"> 1+r2848</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Mnemo_elements/en">Libs/Mnemo_elements/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
 </html>

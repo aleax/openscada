@@ -553,26 +553,57 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path"), u = opt->attr("user");
-    if(a_path == "/sub/transps" && ctrChkNode(opt)) {
-	vector<string> list, listTrs;
-	modList(list);
-	// Automatic transports at the module
-	for(int iA = 0; iA < (int)list.size(); ++iA)
-	    if(at(list[iA]).at().isNetwork())
-		opt->childAdd("el")->setText(list[iA]);
-	    else list.erase(list.begin()+(iA--));
-	// Output transports directly
-	for(unsigned iA = 0; iA < list.size(); ++iA) {
-	    at(list[iA]).at().outList(listTrs);
-	    for(unsigned iATrs = 0; iATrs < listTrs.size(); ++iATrs)
-		opt->childAdd("el")->setText(list[iA]+"."+STR_OUT_PREF+listTrs[iATrs]);
+    if(a_path.find("/sub/transps") == 0 && ctrChkNode(opt)) {
+	string hostId = TSYS::strParse(a_path, 1, "-");
+	if(hostId.size()) {
+	    bool sysHostAcs = SYS->security().at().access(u, SEC_WR, "root", STR_ID, RWRWR_);
+	    ExtHost host = extHostGet(u, hostId, sysHostAcs);
+	    int cOff = 0, cLv = 0;
+	    string cPath = "", cEl, pAddr = host.transp;
+
+	    vector<string> list;
+	    for(cOff = 0, cLv = 0; (cEl=TSYS::strParse(pAddr,0,".",&cOff)).size(); ++cLv) {
+		cPath += cLv ? "."+cEl : cEl;
+		opt->childAdd("el")->setText(cPath);
+	    }
+	    switch(cLv) {
+		case 0:
+		    SYS->transport().at().modList(list);
+		    for(unsigned iS = 0; iS < list.size(); iS++)
+			opt->childAdd("el")->setText(list[iS]);
+		    break;
+		case 1:
+		    if(!SYS->transport().at().modPresent(cEl=TSYS::strParse(pAddr,0,"."))) break;
+		    SYS->transport().at().at(cEl).at().outList(list);
+		    for(unsigned iS = 0; iS < list.size(); iS++)
+			opt->childAdd("el")->setText(cPath+"."+list[iS]);
+		    SYS->transport().at().at(cEl).at().inList(list);
+		    for(unsigned iS = 0; iS < list.size(); iS++)
+			opt->childAdd("el")->setText(cPath+".in_"+list[iS]);
+		    break;
+	    }
 	}
-	// Input no protocol transports for the remote hosts initiative connections of they control at the connections
-	for(unsigned iA = 0; iA < list.size(); ++iA) {
-	    at(list[iA]).at().inList(listTrs);
-	    for(unsigned iATrs = 0; iATrs < listTrs.size(); ++iATrs)
-		if(at(list[iA]).at().inAt(listTrs[iATrs]).at().protocols().empty())
-		    opt->childAdd("el")->setText(list[iA]+"."+STR_IN_PREF+listTrs[iATrs]);
+	else {
+	    vector<string> list, listTrs;
+	    modList(list);
+	    // Automatic transports at the module
+	    for(int iA = 0; iA < (int)list.size(); ++iA)
+		if(at(list[iA]).at().isNetwork())
+		    opt->childAdd("el")->setText(list[iA]);
+		else list.erase(list.begin()+(iA--));
+	    // Output transports directly
+	    for(unsigned iA = 0; iA < list.size(); ++iA) {
+		at(list[iA]).at().outList(listTrs);
+		for(unsigned iATrs = 0; iATrs < listTrs.size(); ++iATrs)
+		    opt->childAdd("el")->setText(list[iA]+"."+listTrs[iATrs]);
+	    }
+	    // Input no protocol transports for the remote hosts initiative connections of they control at the connections
+	    for(unsigned iA = 0; iA < list.size(); ++iA) {
+		at(list[iA]).at().inList(listTrs);
+		for(unsigned iATrs = 0; iATrs < listTrs.size(); ++iATrs)
+		    if(at(list[iA]).at().inAt(listTrs[iATrs]).at().protocols().empty())
+			opt->childAdd("el")->setText(list[iA]+"."+STR_IN_PREF+listTrs[iATrs]);
+	    }
 	}
     }
     else if(a_path == "/sub/ehost") {
@@ -593,9 +624,9 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 				 ((tVl=opt->attr("upRiseLev")).size()?s2i(tVl):-1), opt->attr("lang"));
 	    for(unsigned iH = 0; iH < list.size(); iH++) {
 		ExtHost &host = list[iH];
-		if(nId)		nId->childAdd("el")->setText(host.id);
-		if(nNm)		nNm->childAdd("el")->setText(trD(host.name));
-		if(nTr)		nTr->childAdd("el")->setText(host.transp);
+		if(nId)	nId->childAdd("el")->setText(host.id);
+		if(nNm)	nNm->childAdd("el")->setText(trD(host.name));
+		if(nTr)	nTr->childAdd("el")->setAttr("dest","select")->setAttr("select","/sub/transps-"+host.id)->setText(host.transp);
 		if(nAddr) {
 		    if(TSYS::strParse(host.transp,1,".").find(STR_IN_PREF) == 0)
 			tVl = _("Initial connection identifier to what bind for control.");
@@ -604,9 +635,9 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		    else tVl = "";
 		    nAddr->childAdd("el")->setAttr("help",tVl)->setText(host.addr);
 		}
-		if(nUser)	nUser->childAdd("el")->setText(host.user);
-		if(nPass)	nPass->childAdd("el")->setText(host.pass.size() ? "*******" : "");
-		if(nMode)	nMode->childAdd("el")->setText(i2s(host.mode));
+		if(nUser) nUser->childAdd("el")->setText(host.user);
+		if(nPass) nPass->childAdd("el")->setText(host.pass.size() ? "*******" : "");
+		if(nMode) nMode->childAdd("el")->setText(i2s(host.mode));
 		if(nUpRiseLev)	nUpRiseLev->childAdd("el")->setText(i2s(host.upRiseLev));
 	    }
 	}
