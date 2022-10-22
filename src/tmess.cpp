@@ -977,8 +977,6 @@ void TMess::save( )
 	TBDS::genPrmSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
 	TBDS::genPrmSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
     }
-
-    SYS->sysModifFlgs = TSYS::MDF_NONE;
 }
 
 string TMess::labStor( bool nogen )

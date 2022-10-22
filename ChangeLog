@@ -1,3 +1,20 @@
+2022-10-22 Roman (stable)
+- !!!!:LibsDB.vcaBase: wlb_Main.storeHouse: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+	- switched to the processing period -2 (disabled);
+	- appended in continuing the immediatly cycles using the new event "usr_calc";
+    Allowed for type changing of the specific field "NAME".
+    Appended for force update at changing fields with the color highlighting.
+- !!!!:FIX:SYS: Fixed in saving for changes of the message configuration fields.
+- !!!:FIX:DB: The translation prevented from propagating the base language column in the SINGLE translation mode for already translated DBs,
+    by appending for different detection the translated DBs in whole and the translated column presence.
+- !!:FIX:UI.WebVision: The view Table of the primitive FormEl improved and fixed for:
+    - setting the CSS property "white-space" to "pre-wrap";
+    - setting the color changes under the selected cells;
+    - preventing the focus loss just after entry to the cell editing;
+    - fixing the boolean value setting at entry to the cell editing;
+    - the table refitting at growing the column string length.
+
+
 2022-10-10 Roman (stable)
 - data/Android/patches/openscada_openscada-proj.patch: Adapted to the last changes.
 - !!!!:LibsDB.vcaBase: wlb_Main.ElViewCadr: Adapted to work in very big processing periods and or disabling the periodic processing in whole:

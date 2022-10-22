@@ -1541,8 +1541,9 @@ void TTable::fieldSQLSet( TConfig &cfg )
 {
     //Generic flags:
     // Mess->translCfg() - is the translatable configuration
-    // trPresent - the table is translating or is going to be translating
-    // isTransl  - the field is translating
+    // hasTr    - the table has translation in whole or is going to be translated
+    // hasTrCol - has the translated column
+    // isTransl - the field is translating
 
     vector< vector<string> > tbl;
 
@@ -1555,13 +1556,13 @@ void TTable::fieldSQLSet( TConfig &cfg )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //Check for translation present
-    bool trPresent = Mess->translCfg();
-    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
-	if(trPresent && !Mess->translCfg()) break;
-	sid = tblStrct[iFld].nm;
-	if(sid.size() > 3 && !trPresent && sid.size() > 3 && sid[2] == '#' /*!Mess->translDyn() && sid.find(Mess->langCode()+"#") == 0*/) trPresent = true;
-    }
+    //Checking for the translation presence
+    bool hasTr = Mess->translCfg(), hasTrCol = false;
+    for(unsigned iFld = 0; iFld < tblStrct.size() && !hasTrCol; iFld++)
+	if((sid=tblStrct[iFld].nm).size() > 3 && sid[2] == '#') {
+	    hasTr = true;
+	    if(sid.find(Mess->langCode()+"#") == 0) hasTrCol = true;
+	}
 
     //Get the available fields list
     // Add key list to queue
@@ -1588,7 +1589,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 
     //Query for presence detect or the current data
     string req, ls, ls2, sval, tVl, langLs;
-    if(trPresent)
+    if(hasTr)
 	req = "SELECT * FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" WHERE " + req_where + ";";
     else if(!isForceUpdt)
 	req = "SELECT 1 FROM \"" + TSYS::strEncode(name(),TSYS::SQL,"\"") + "\" WHERE " + req_where + ";";
@@ -1632,11 +1633,12 @@ void TTable::fieldSQLSet( TConfig &cfg )
 			u_cfg.setS((svalRAW=trD_L(svalBASE_RAW,toLang))); sval = getSQLVal(u_cfg);
 			u_cfg.setS(tVl);
 		    }
-		    isTransl = (isTransl && toLang != Mess->langCodeBase());
 		}
 		//  ... default
-		else isTransl = (isTransl && trPresent && toLang != Mess->langCodeBase());
+		else isTransl = (isTransl && hasTr);
 
+		isTransl = (isTransl && ((!Mess->langCodeBase().size() && hasTrCol) ||
+					 (Mess->langCodeBase().size() && toLang != Mess->langCodeBase())));
 		if(isTransl && langLs.find(toLang+";") == string::npos) langLs += toLang+";";
 
 		// Main values setting
@@ -1672,16 +1674,15 @@ void TTable::fieldSQLSet( TConfig &cfg )
 	    sval = getSQLVal(u_cfg);
 
 	    // No translation
-	    if(!trPresent || u_cfg.fld().type() != TFld::String || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
+	    if(!hasTr || u_cfg.fld().type() != TFld::String || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
 		ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 	    else {
 		string svalRAW = u_cfg.getS(), toLang = Mess->langCode();
 
 		// Translation
-		bool isTranslatable = u_cfg.fld().flg()&TFld::TransltText,	//is the translatable field and DB
-		     isDynSet = false;
+		bool isTransl = u_cfg.fld().flg()&TFld::TransltText, isDynSet = false;
 		//  ... system prestored
-		bool isSysPreStor = (isTranslatable && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
+		bool isSysPreStor = (isTransl && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
 		if(isSysPreStor) {
 		    tVl = svalRAW;
 		    u_cfg.setS((svalRAW=Mess->I18N(tVl))); sval = getSQLVal(u_cfg);
@@ -1696,14 +1697,10 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		    u_cfg.setS(tVl);
 		}
 		//  ... default
-		else isTranslatable = (isTranslatable && trPresent);
-
-		bool isTransl = (isTranslatable && toLang != Mess->langCodeBase());	//is the translation environment
-
-		if(isTransl && langLs.find(toLang+";") == string::npos) langLs += toLang+";";
+		else isTransl = (isTransl && hasTr);
 
 		//  Clearing all the translation at setting no translable message
-		if(isTranslatable && (u_cfg.noTransl() || (svalRAW.size() && !Mess->isMessTranslable(svalRAW)))) {
+		if(isTransl && (u_cfg.noTransl() || (svalRAW.size() && !Mess->isMessTranslable(svalRAW)))) {
 		    if(u_cfg.noTransl())
 			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
@@ -1715,6 +1712,10 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		}
 		//  Setting the translation and the marks
 		else {
+		    isTransl = (isTransl && ((!Mess->langCodeBase().size() && hasTrCol) ||
+					     (Mess->langCodeBase().size() && toLang != Mess->langCodeBase())));
+		    if(isTransl && langLs.find(toLang+";") == string::npos) langLs += toLang+";";
+
 		    sid = (isTransl?(toLang+"#"):"") + cf_el[iEl];
 		    //  Checking whether the field changed
 		    bool isChanged = false, isPresent = false, isEmpty = false, isTrAsBase = false;

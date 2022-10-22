@@ -2229,12 +2229,13 @@ In the runtime mode, a list is formed with available users and, at their selecti
 <tr>
 <td> <span id="storeHouse" title="#storeHouse"><h3><span class="mw-headline" id="Storehouse_.28storeHouse.29"><span class="mw-headline-number">3.8</span> Storehouse (<a href="Libs_Main_graphical_elements.html#storeHouse" title="Special:MyLanguage/Libs/Main graphical elements">storeHouse</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a> </td>
+<td> -2 ms (disabled)
 </td></tr></table>
 <p>The element-frame, shown in Figure 3.8, serves to manage of storehouses on different classes-categories of the storing-managing things. Initially that was developed and tested on the class "Library". The frame means of the direct accessing the DB by SQL and currently supports only MySQL/MariaDB.
 </p><p>During the frame implementing, the view "Table" of <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">the primitive "FormEl"</a> significantly expanded on both visualizers for:
@@ -2297,7 +2298,7 @@ The frame provides currently and in future for next features:
 <p>Data of storehouse of the corresponded class stores in different table with name "sh_{CLASS}" and the structure "<u><b>ID</b></u>, <b>NAME</b>, <b>DSCR</b>, <b>SP_{ID}1</b>, ..., <b>SP_{ID}N</b>", where:
 </p>
 <ul><li> <i>ID</i> [INT] — automatic index of the table;</li>
-<li> <i>NAME</i> [varchar(200)] — name of the item;</li>
+<li> <i>NAME</i> [varchar(200)] — name of the item, allowed for type changing;</li>
 <li> <i>DSCR</i> [text] — description of the item;</li>
 <li> <i>SP_{ID}X</i> — specific field of the class corresponding to <i>ID</i> in the class table.</li></ul>
 <p>For the special means there in the table "classes" reserved and forcibly created fields "*TITLE" for the whole storehouse localised name and "*NAME", "*DSCR" which control the corresponded fixed fields.
@@ -2311,6 +2312,7 @@ In the runtime mode you will see single big table for class (Fig.3.8b) and data 
 </p><p>In the main class data edition mode the users, allowed to edit, can add, copy, remove the rows/records and edit the fields.
 </p><p>In the class edition mode, the users, allowed to edit, can add new and remove present (after removing the last item) classes; and add, remove the specific class fields and edit properties of that fields.
 </p><p>For user access limitation there provided now only a mechanism of including the allowed for the class and data edition users to the group "ITW".
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The frame supports now of working with very big "Periodic processing" value and that value is set now to disabled (the value -2). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseClassR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8b. The "Storehouse" frame in the runtime mode at the class representing.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataR.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8c. The "Storehouse" frame in the runtime mode at the data representing.</div></div></div></div>

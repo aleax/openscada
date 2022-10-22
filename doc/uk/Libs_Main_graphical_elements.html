@@ -2229,12 +2229,13 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <tr>
 <td> <span id="storeHouse" title="#storeHouse"><h3><span class="mw-headline" id=".D0.A1.D0.BA.D0.BB.D0.B0.D0.B4_.28storeHouse.29"><span class="mw-headline-number">3.8</span> Склад (<a href="Libs_Main_graphical_elements.html#storeHouse" title="Special:MyLanguage/Libs/Main graphical elements">storeHouse</a>)</span></h3></span>
 </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk
 </td>
-<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </td>
+<td> -2 мс (вимкнено)
 </td></tr></table>
 <p>Елемент-кадр, представлений на рисунку 3.8, слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 </p><p>Протягом реалізації кадру, вигляд "Таблиця" <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">примітиву "FormEl"</a> значним чином розширено на обох візуалізаторах щодо:
@@ -2297,7 +2298,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <p>Дані складу відповідного класу зберігаються у окремій таблиці із назвою "sh_{CLASS}" та структурою "<u><b>ID</b></u>, <b>NAME</b>, <b>DSCR</b>, <b>SP_{ID}1</b>, ..., <b>SP_{ID}N</b>", де:
 </p>
 <ul><li> <i>ID</i> [INT] — автоматичний індекс таблиці;</li>
-<li> <i>NAME</i> [varchar(200)] — назва елементу;</li>
+<li> <i>NAME</i> [varchar(200)] — назва елементу, дозволено до зміни типу;</li>
 <li> <i>DSCR</i> [text] — опис елементу;</li>
 <li> <i>SP_{ID}X</i> — специфічне поле класу відповідно до <i>ID</i> класу таблиці.</li></ul>
 <p>Зі спеціальним сенсом у таблиці "classes" зарезервовано та примусово створювано поля "*TITLE" для загальної локалізованої назви складу та "*NAME", "*DSCR" із контролем відповідних фіксованих плей.
@@ -2311,6 +2312,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 </p><p>У режимі редагування основних даних класу, користувачі, допущені до редагування, можуть додавати, копіювати, видаляти рядки/записи та редагувати поля.
 </p><p>У режимі редагування класу, користувачі, допущені до редагування, можуть додавати нові та видаляти представлені (після видалення останнього елементу) класи; та додавати, видаляти специфічні поля класу і редагувати властивості цих полів.
 </p><p>Для обмеження доступу користувачів наразі надається лише механізм включення користувачів, дозволених для редагування класу та даних, до групи "ITW".
+</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Кадр наразі підтримує функціювання із дуже великим значенням "Період опрацювання" та це значення наразі встановлено для вимкнення (значення -2). Це можливе завдяки механізму раннього опрацювання подій та можливості контролю періодичності опрацювання із процедури.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseClassR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8b. Кадр "Склад" у режимі виконання на представлені класу.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseDataR_uk.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseDataR_uk.png" width="900" /></a>  <div class="thumbcaption">Рис.3.8c. Кадр "Склад" у режимі виконання на представлені даних.</div></div></div></div>

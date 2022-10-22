@@ -891,9 +891,9 @@ void TSYS::save_( )
 	TBDS::genPrmSet(nodePath()+"RdStList", stLs, "root", TBDS::OnlyCfg);
     }
 
-    sysModifFlgs = MDF_NONE;
-
     Mess->save();	//Messages load
+
+    sysModifFlgs = MDF_NONE;
 }
 
 int TSYS::start( )

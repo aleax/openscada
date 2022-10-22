@@ -29,6 +29,7 @@ var tmClearEdit = 10;			//Clear time of line edit fields, seconds
 var tmFullUpd = 5;			//Full tree updating time,seconds
 var tmAlrmUpd = 0.5;			//Alarms updating time, seconds
 var limTblItmCnt = 300;			//Limit of the table item content
+var tblCurClr = "lightblue";		//Table cursor color
 
 /***************************************************
  * pathLev - Path parsing function.                *
@@ -393,10 +394,11 @@ function getTabIndex( wdgO, origPos )
 /***************************************************
  * setFocus - Command for set focus                *
  ***************************************************/
-function setFocus( wdg, ack, focusElem )
+function setFocus( wdg, ack, focusElem, onlySet )
 {
-    if(focusElem) focusElem.focus();
     if(masterPage.focusWdf == wdg) return;
+    if(onlySet) { masterPage.focusWdf = wdg; return; }
+    if(focusElem) focusElem.focus();
 
     var attrs = new Object();
     if(masterPage.focusWdf) {
@@ -1860,6 +1862,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(attrs) { attrs.event = 'ws_TableChangeSel'; setWAttrs(elTbl.wdgLnk.addr, attrs); }
 			}
 			formObj.ondblclick = function( ) {
+			    setFocus(elTbl.wdgLnk.addr, false, null, true);
+
 			    if(this.nodeName == "TABLE" || !(elTbl=this.offsetParent) || !elTbl.elWr || !this.isEdit) return true;
 			    if(this.isEnter) {
 				this.innerHTML = this.svInnerHTML;
@@ -1871,7 +1875,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				this.svInnerHTML = this.innerHTML;
 
 				if(this.outTp == "b") {
-				    tVl = elTbl.getVal(this.parentNode.rowIndex-1,this.cellIndex-1);
+				    tVl = parseInt(elTbl.getVal(this.parentNode.rowIndex-1,this.cellIndex-1));
 				    this.innerHTML = "<input type='checkbox'/>";
 				    this.firstChild.checked = tVl;
 				    this.firstChild.onclick = function( ) {
@@ -1956,12 +1960,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    if(row || col) {
 				if(!row) {
 				    this.tHead.rows[0].cells[col].svBackgroundColor = this.tHead.rows[0].cells[col].style.backgroundColor;
-				    this.tHead.rows[0].cells[col].style.backgroundColor = "LightBlue";
+				    this.tHead.rows[0].cells[col].style.backgroundColor = tblCurClr;
 				}
 				for(iR = (row?row-1:0); iR <= (row?row-1:this.tBodies[0].rows.length-1); iR++)
 				    for(iC = (col?col:0); iC <= (col?col:this.tBodies[0].rows[iR].cells.length-1); iC++) {
 					this.tBodies[0].rows[iR].cells[iC].svBackgroundColor = this.tBodies[0].rows[iR].cells[iC].style.backgroundColor;
-					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor = "LightBlue";
+					this.tBodies[0].rows[iR].cells[iC].style.backgroundColor = tblCurClr;
 				    }
 			    }
 			    this.svRow = row; this.svCol = col;
@@ -2077,9 +2081,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					// Visibility
 					tit.style.display = (hit.widthSrc.length && !parseInt(hit.widthSrc)) ? "none" : "";
 					// Back color
+					isSelected = (tit.style.backgroundColor == tblCurClr);
 					if((tC && (wVl=tC.getAttribute("color"))) || (wVl=hit.outColor) || (wVl=rClr))
 					    tit.style.backgroundColor = getColor(wVl);
 					else tit.style.backgroundColor = null;
+					if(isSelected) tit.svBackgroundColor = tit.style.backgroundColor;
 					// Text font and color
 					if((tC && (wVl=tC.getAttribute("colorText"))) || (wVl=hit.outColorText) || (wVl=rClrTxt))
 					    tit.style.color = getColor(wVl);
@@ -2103,6 +2109,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    }
 
 			    if(Math.abs(maxRows-startRows) > 3 || (!startRows && formObj.tBodies[0].rows.length) ||
+				    ((formObj.tBodies[0].rows.length-startRows) > 0 && formObj.tBodies[0].rows.length.toString(10).length > startRows.toString(10).length) ||
 				    (formObj.tBodies[0].rows.length && formObj.tBodies[0].rows[0].cells.length > startCols))
 				toReFit = true;
 

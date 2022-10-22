@@ -13538,7 +13538,7 @@ if(wUser != this.ownerSess().reqUser()) {
 	wUser = this.ownerSess().reqUser();
 
 	btClassEdit_value = btEdit_value = false;
-	toUpdate = true;
+	toUpdate = true; toCalcCycles = 1;
 }
 
 //Common events process
@@ -13597,7 +13597,7 @@ if(btClassEdit_value) {
 					else if(itVl == "NAME")	itVl = tr("Name");
 					else if(itVl == "TP")		itVl = tr("Type");
 					else if(itVl == "TBL")		itVl = tr("Table properties");
-					else if(itVl == "FILTER")	itVl = tr("Filter");
+					else if(itVl == "FILTER") itVl = tr("Filter");
 				}
 				else {
 				    if(iC == 1 || iC == 4)	tNm = "t";
@@ -13625,24 +13625,34 @@ if(btClassEdit_value) {
 			}
 			SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`,`TP`) VALUES (''"+class+"'',''NewItem'',''"+tr("New item")+"'',''varchar(100)'');");
 			SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` ADD `SP_NewItem` varchar(100) DEFAULT '''';");
-			toUpdate = true;
+			toUpdate = true; toCalcCycles = 1;
 		}
 		else if(sval == "dlg_Apply:/itDel" && dataTbl_value[0] != "*") {
 		//else if(sval == "ws_BtRelease:/itDel") {
 			SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `classes` WHERE `ID`=''"+dataTbl_value+"'' AND `CLASS`=''"+class+"'';");
 			if(dataTbl.length > 2)	SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` DROP `SP_"+dataTbl_value+"`;");
 			else SYS.BD.nodeAt(db,".").SQLReq("DROP TABLE `sh_"+class+"`;");
-			toUpdate = true;
+			toUpdate = true; toCalcCycles = 1;
 		}
 		else if(sval.indexOf("ws_TableEdit") == 0) {
 			col = sval.parse(0,"_",13).toInt(); row = sval.parse(1,"_",13).toInt();
 			colID = dataTbl[0][col];
-			if(!SYS.BD.nodeAt(db,".").SQLReq("UPDATE `classes` SET `"+colID+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `CLASS`=''"+class+"'' AND `ID`=''"+dataTbl[row+1][0]+"'';").err.length && dataTbl[row+1][0][0] != "*") {
-				if(colID == "ID") SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` CHANGE `SP_"+dataTbl[row+1][0]+"` `SP_"+dataTbl_set+"` "+dataTbl[row+1][2].parse(0,":")+";");	
-				else if(colID == "TP") SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `SP_"+dataTbl[row+1][0]+"` "+dataTbl_set.parse(0,":")+";");	
+			fldID = dataTbl[row+1][0];
+			if(!SYS.BD.nodeAt(db,".").SQLReq("UPDATE `classes` SET `"+colID+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `CLASS`=''"+class+"'' AND `ID`=''"+fldID+"'';").err.length) {
+				if(colID == "ID"  && fldID[0] != "*") {
+					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` CHANGE `SP_"+fldID+"` `SP_"+dataTbl_set+"` "+dataTbl[row+1][2].parse(0,":")+";");
+					toCalcCycles = 1;	//2000/this.ownerSess().period();
+				}
+				else if(colID == "TP" && (fldID[0] != "*" || fldID == "*NAME"))
+					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `"+(fldID[0]=="*"?fldID.slice(1):"SP_"+fldID)+"` "+dataTbl_set.parse(0,":")+";");
 			}
 			toUpdate = true;
 		}
+	}
+
+	if(toCalcCycles > 0.1) {
+		this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+		toCalcCycles = max(0, toCalcCycles-1);
 	}
 
 	return;
@@ -13784,23 +13794,23 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		}
 		if(nmLs.indexOf("`NAME`") < 0)	{ nmLs += (nmLs.length?",":"") + "`NAME`"; vlLs += (vlLs.length?",":"") + "''"+tr("New item")+"''"; }
 		SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `sh_"+class+"` ("+nmLs+") VALUES ("+vlLs+");");
-		toUpdate = true;
+		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval == "dlg_Apply:/itDel") {
 	//else if(sval == "ws_BtRelease:/itDel") {
 		SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
-		toUpdate = true;
+		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval == "ws_BtRelease:/itCopy") {
 		for(colLs = "", iC = 1; iC < dataTbl[0].length; iC++)
 			colLs += (colLs.length?", ":"") + "`"+dataTbl[0][iC]+"`";
 		SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `sh_"+class+"` ("+colLs+") (SELECT "+colLs+" FROM `sh_"+class+"` WHERE `ID` = "+dataTbl_value+");");
-		toUpdate = true;
+		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval.slice(0,12) == "ws_TableEdit") {
 		col = sval.parse(0,"_",13).toInt(); row = sval.parse(1,"_",13).toInt();
 		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `"+dataTbl[0][col]+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[row+1][0]+"'';");
-		//toUpdate = true;	//!!!! To prevent the spare flicking
+		if(colVars[dataTbl[0][col]].fltr.parseLine(1).length)	toUpdate = true, toCalcCycles = 1;
 	}
 	else if(sval.slice(0,22) == "ws_CombChange:/fltrCol") {
 		fN = sval.slice(22).toInt();
@@ -13819,7 +13829,12 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true;
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true;
-}','','',-1,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1650193827);
+}
+
+if(toCalcCycles > 0.1) {
+	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
+	toCalcCycles = max(0, toCalcCycles-1);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1666422606);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -23730,7 +23745,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.1.0
+Version: 1.2.1
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23744,7 +23759,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.1.0
+Версия: 1.2.1
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
