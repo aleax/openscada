@@ -207,7 +207,7 @@ INSERT INTO wlb_test_io VALUES('FormElTests','elType','1',32,'','','text1','',''
 INSERT INTO wlb_test_io VALUES('FormElTests','geomZ','7',32,'','','text1','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','active','1',32,'','','text1','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','geomH','100',32,'','','text1','','','','','','');
-INSERT INTO wlb_test_io VALUES('FormElTests','value','Text editor with words wrapping',0,'','','text1','Текстовий редактор з переносом за словами','','Текстовый редактор с переносом по словам','','','');
+INSERT INTO wlb_test_io VALUES('FormElTests','value','Text editor with words wrapping',0,'','','text1','Текстовий редактор з перенесенням за словами','','Текстовый редактор с переносом по словам','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','elType','7',32,'','','FormEl2','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','value','30',0,'','','FormEl2','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','geomX','412',32,'','','FormEl3','','','','','','');
@@ -331,7 +331,7 @@ INSERT INTO wlb_test_io VALUES('FormElTests','geomH','100',32,'','','text2','','
 INSERT INTO wlb_test_io VALUES('FormElTests','geomZ','8',32,'','','text2','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','active','1',32,'','','text2','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','elType','1',32,'','','text2','','','','','','');
-INSERT INTO wlb_test_io VALUES('FormElTests','value','Text editor without word wrapping',0,'','','text2','Текстовий редактор без переноса слів','','Текстовый редактор без переноса слов','','','');
+INSERT INTO wlb_test_io VALUES('FormElTests','value','Text editor without word wrapping',0,'','','text2','Текстовий редактор без перенесення слів','','Текстовый редактор без переноса слов','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','wordWrap','0',0,'','','text2','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','geomX','74',32,'','','line2','','','','','','');
 INSERT INTO wlb_test_io VALUES('FormElTests','geomY','4',32,'','','line2','','','','','','');

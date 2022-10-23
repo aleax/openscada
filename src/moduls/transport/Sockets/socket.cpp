@@ -61,7 +61,7 @@
 #define MOD_NAME	trS("Sockets")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"4.5.2"
+#define MOD_VER		"4.5.3"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov(2014)")
 #define DESCRIPTION	trS("Provides sockets based transport. Support network and UNIX sockets. Network socket supports TCP, UDP and RAWCAN protocols.")
 #define LICENSE		"GPL2"
@@ -255,7 +255,7 @@ void TSocketIn::start( )
 
     //Status clear
     trIn = trOut = prcTm = prcTmMax = clntDetchCnt = 0;
-    connNumb = clsConnByLim = 0;
+    connNumb = connTm = clsConnByLim = 0;
 
     int aOff = 0;
 

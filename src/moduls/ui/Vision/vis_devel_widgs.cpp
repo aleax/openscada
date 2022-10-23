@@ -1704,15 +1704,14 @@ void WdgTree::ctrTreePopup( )
     //Add actions
     popup.addAction(owner()->actLibNew);
     popup.addAction(owner()->actVisItAdd);
+    QMenu *forLib = popup.addMenu(owner()->actVisItAdd->icon(), _("... from the Library"));
+    for(unsigned iLm = 0; iLm < owner()->lb_menu.size(); iLm++)
+	forLib->addMenu(owner()->lb_menu[iLm]);
     popup.addAction(owner()->actVisItDel);
     popup.addAction(owner()->actVisItClear);
     popup.addAction(owner()->actVisItChDown);
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
-    popup.addSeparator();
-    for(unsigned iLm = 0; iLm < owner()->lb_menu.size(); iLm++)
-	if(owner()->lb_menu.size() <= 20 || owner()->lb_menu[iLm]->property("rootLib").toBool())
-	    popup.addMenu(owner()->lb_menu[iLm]);
     popup.addSeparator();
     popup.addAction(owner()->actVisItCopy);
     popup.addAction(owner()->actVisItCut);
@@ -1965,15 +1964,14 @@ void ProjTree::ctrTreePopup( )
     popup.addSeparator();
     popup.addAction(owner()->actPrjNew);
     popup.addAction(owner()->actVisItAdd);
+    QMenu *forLib = popup.addMenu(owner()->actVisItAdd->icon(), _("... from the Library"));
+    for(unsigned iLm = 0; iLm < owner()->lb_menu.size(); iLm++)
+	forLib->addMenu(owner()->lb_menu[iLm]);
     popup.addAction(owner()->actVisItDel);
     popup.addAction(owner()->actVisItClear);
     popup.addAction(owner()->actVisItChDown);
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
-    popup.addSeparator();
-    for(unsigned iLm = 0; iLm < owner()->lb_menu.size(); iLm++)
-	if(owner()->lb_menu.size() <= 20 || owner()->lb_menu[iLm]->property("rootLib").toBool())
-	    popup.addMenu(owner()->lb_menu[iLm]);
     popup.addSeparator();
     popup.addAction(owner()->actVisItCopy);
     popup.addAction(owner()->actVisItCut);

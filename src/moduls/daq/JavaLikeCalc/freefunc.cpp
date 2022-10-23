@@ -300,6 +300,8 @@ void Func::setStart( bool val )
     if(val == runSt) return;
     //Start calcing
     if(val) {
+	if(!owner().startStat()) return;	//!!!! Don't start functions on disabled libraries since there exiting can be already
+
 	progCompile();
 
 	TFunction::setStart(val);

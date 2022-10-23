@@ -1,3 +1,67 @@
+2022-10-23 Roman 0.9.5.4
+- data/Android/patches/openscada_openscada-proj.patch: Adapted to the last changes.
+- FIX:LibsDB.vcaTest: wlb_test.FormElTests: fixed in some translation for Ukrainian.
+- !!:FIX:SYS: The string EVal value "<EVAL>" appended as not translated one to prevent that translation in VCAEngine for NULL DB values.
+    !!:FIX: The translation manager prevented in the marked base changing to a human readable form at all, since that used as a key.
+    FIX: Prevented in the maximum measuring value sticking of tasks' time consumption at switching the scheduling method to CRON.
+- !!!:FIX:DB: The translation prevented from propagating the base language column in the SINGLE translation mode for already translated DBs,
+	by appending for different detection the translated DBs in whole and the translated column presence.
+    !!:FIX: Coming to the translations clearing is set at the new flag "isTranslatable", splitted from "isTransl",
+	since "isTransl" is the translation environment, then that was not cleared on the base language environments,
+	moreover, that was marked the translation as the base message change.
+    !:FIX: The translation setting prevented in setting double messages to the base messages; what completing not translation "<EVAL>".
+- DAQ: The controler objects in the flags "To start" and "To enable" improved in setting "To enable" at "To start"
+	and clearing "To start" at "To enable".
+    Value: The service request "get:/serv/attr" of the Control Interface prevented from clearing the "el" subtags
+	at missing the representing attribute, they value is set to EVAL for true mark that as processed in DAQ.DAQGate
+	and don't continue they request in each cycle.
+- !!:FIX:DAQ.DAQGate: The controller object sync() function rewrote completely in the "Removing remotely missed parameters" section for:
+	- processing the parameter's representing stations: removing completely for missing stations
+	    and stations where that attribute is miss now;
+	- removing disabled parameters and the logical containers at the flag "Allow the automatic removal of parameters and attributes".
+    FIX: Prevented of disabling DAQ-parameters at receiving the error TError::Tr_UnknownHost.
+    The function TMdPrm::setStats() was renamed to TMdPrm::setStat() and was appended for stations removing at the argument "toRemove".
+    The function TSYS::strSepParse() was replaced to TSYS::strParse().
+    Status area of the parameter object appended for the field "Address in remote source".
+- !!:DAQ.JavaLikeCalc: Prevented in starting-compiling functions for stopped libraries,
+	due to the libraries can be stopped already at the exiting so the function compiling can lock external objects.
+    !!: The own service library "sys_compile" appended also for that starting just after creation.
+- FIX:Archive.Value: Prevented in direct setting values to the archives in very future,
+    what causes FSArch in creation many spare files.
+- Archive.DBArch: Length of the integer type fields cleared to use the maximum resolution values, that is "bigint" for MySQL.
+- !!!:FIX:Archive.FSArch: Files accessing locks completely revised for including the packing/unpacking, new files creation,
+	removing old ones under the WR lock space including also the conditions checking.
+    Also removed for the relocks in cycles and at indexes.
+    FIX: The ModMArch object appended of the sign chkANow of preventing multiple checking in checkArchivator().
+    The sign chkANow for Values also prevented from sticking at an exception.
+- Transport.Sockets: Appended for resetting the connection time variable "connTm" at the input transport start.
+- Protocol.SelfSystem: Appended for clearing the attribute "remoteSrcAddr" in the response tree.
+- !!!:UI.{QTCfg,WebCfgD}: The table expanded by the selection specifying per item.
+- UI.QTStarter: The table fields editing of the real type switched to use the standard QLineEdit
+    instead the spinned one with two digits after radix.
+- UI.QTCfg: The context searching field of the navigation tree switched to use the pure selecting function setCurrentItem().
+    The function getExpandTreeWIt() also appended of selection not selected end items.
+- !!:FIX:UI.VCAEngine: Fixed in the correct treating of the project pages and the library widgets with initially wrong parent addresses,
+	for don't remove child widgets and change they parent at pointing the correct parent address.
+    !!:FIX: The document primitive generation appended of limiting the repeating blocks size in limUserFile_SZ (10MB).
+    !!: The behaviour about the attribute "IO_VAL" field translation changed to alow the translation for linked in and styled ones,
+	for getting the translation in development;
+	the constant ones left as intranslated due to the configuration value reading-replacing
+	and the reading expanded on the user attributes loading.
+    Copying resources pointed in attributes of the widgets expanded for the attribute "src" of the primitive "Media".
+    The "newMime" message renamed to "newRes".
+- !!:UI.Vision: The popup menu of project, project pages, widget libraries and library widgets in appending widgets from the libraries
+	removed for limit of the libraries here in 20 items by moving all they to a new separated menu item "... from the Library".
+    The processing-calculation period fields is set to update-reload after a change.
+- !!:FIX:UI.WebVision: The view Table of the primitive FormEl improved and fixed for:
+	- setting the CSS property "white-space" to "pre-wrap";
+	- setting the color changes under the selected cells;
+	- preventing the focus loss just after entry to the cell editing;
+	- fixing the boolean value setting at entry to the cell editing;
+	- the table refitting at growing the column string length.
+    FIX: Appended in the item text encoding for symbols '<','>','&' of the view "Tree" of the primitive type "FormEl".
+
+
 2022-09-03 Roman 0.9.5.3
 - FIX:ModelsDB.AGLKS.St: Fixed in the F4 dimension name.
 - Transport.Sockets: The configuration field "Maximum segment size (MSS), B" of the output transport moved to the bottom.

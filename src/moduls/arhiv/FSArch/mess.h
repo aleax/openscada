@@ -1,7 +1,7 @@
 
 //OpenSCADA module Archive.FSArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2003-2019 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -146,7 +146,9 @@ class ModMArch: public TMArchivator
 	void checkArchivator( bool now = false );
 
 	//Attributes
-	MtxString	infoTbl;
+	bool	chkANow;
+
+	MtxString infoTbl;
 
     protected:
 	//Methods

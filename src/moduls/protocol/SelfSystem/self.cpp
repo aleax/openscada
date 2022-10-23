@@ -32,7 +32,7 @@
 #define MOD_NAME	trS("Own protocol of OpenSCADA")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"1.9.5"
+#define MOD_VER		"1.9.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides own OpenSCADA protocol based at XML and the control interface of OpenSCADA.")
 #define LICENSE		"GPL2"
@@ -442,6 +442,7 @@ bool TProtIn::mess( const string &request, string &answer )
 
 		req_node.setAttr("remoteSrcAddr", TSYS::strLine(srcAddr(),0));
 		SYS->cntrCmd(&req_node);
+		req_node.attrDel("remoteSrcAddr");
 		if(auth.pHash.size()) {
 		    req_node.setAttr("pHash", auth.pHash);
 		    if(ses_id >= 0) { auth.pHash = ""; mod->sesSet(ses_id, auth); }

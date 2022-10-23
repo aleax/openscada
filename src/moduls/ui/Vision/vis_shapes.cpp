@@ -584,7 +584,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val, const st
 					case 'b': v = (bool)s2i(tC->text());	break;
 					case 'i': v = s2ll(tC->text());		break;
 					case 'r':
-					    if((wVl=tC->attr("prec")).empty() && (wVl=hit->data(Qt::UserRole+8).toString().toStdString()).empty() && (wVl=rPrec).empty())
+					    if((wVl=tC->attr("prec")).empty() && (wVl=hit->data(Qt::UserRole+8).toString().toStdString()).empty() &&
+						    (wVl=rPrec).empty())
 						wVl = "6";
 					    v = s2r(r2s(s2r(tC->text()),s2i(wVl)));
 					    break;
