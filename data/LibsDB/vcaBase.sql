@@ -4136,26 +4136,6 @@ RSEOCSHPfN/vcs7rzVZLrVYqIEkSZFkmPXjwoPTnzc39J8Ph79I0/RwRx6dtPPMCPHHyWZ7nSRCG
 TUVROo7rllVFgdHRkfy3O3ei3d3dz5Ik+X1RFKPnr/ZtAAIAMER8SgiZzZLkvXK5XK9Wq+Xt7W16
 //79v3ie91vO+d48g/pMc1wI8SRJkmjqecZ0Oi0NBoN/jMfjPzDGvvyuefw2AE+cHHHOdwTi36fT
 6Rd5nn8JADH8D0kCgHKr1VKPX5MSvNM7/R/onw7yKqJq8E2/AAAAAElFTkSuQmCC');
-CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
-INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc','perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;',2);
-INSERT INTO wlb_doc_incl VALUES('docUsersSet','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;tmpl;',2);
-INSERT INTO wlb_doc_incl VALUES('doc','doc','/wlb_originals/wdg_Document','active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;n;vCur;',2);
-INSERT INTO wlb_doc_incl VALUES('docRepInstVals','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;tmpl;',2);
-INSERT INTO wlb_doc_incl VALUES('docDin','doc','/wlb_originals/wdg_Document','active;geomX;geomY;geomW;geomH;geomYsc;style;tmpl;doc;bTime;time;',2);
-INSERT INTO wlb_doc_incl VALUES('docRep2WorkSh','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;geomX;geomY;geomW;geomH;tmpl;font;',2);
-INSERT INTO wlb_doc_incl VALUES('docAlarmsRep','doc','/wlb_doc/wdg_docDin/wdg_doc','perm;tmpl;',0);
-INSERT INTO wlb_doc_incl VALUES('docMessRep','doc','/wlb_doc/wdg_docDin/wdg_doc','owner;perm;geomY;geomH;tmpl;font;','');
-INSERT INTO wlb_doc_incl VALUES('docMessRep','fltr','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;value;font;','');
-INSERT INTO wlb_doc_incl VALUES('docMessRep','fltrCol','/wlb_originals/wdg_FormEl','owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_doc_incl VALUES('docMessRep','lab_fltr','/wlb_originals/wdg_Text','owner;name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
-INSERT INTO wlb_doc_incl VALUES('docRepYear','lab_set','/wlb_originals/wdg_Text','owner;perm;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;','');
-INSERT INTO wlb_doc_incl VALUES('docRepYear','name','/wlb_originals/wdg_Text','owner;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;','');
-INSERT INTO wlb_doc_incl VALUES('docRepYear','set_item','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_doc_incl VALUES('docRepYear','set_month','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_doc_incl VALUES('docRepYear','set_val','/wlb_originals/wdg_FormEl','owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;font;','');
-INSERT INTO wlb_doc_incl VALUES('docRepYear','year','/wlb_originals/wdg_FormEl','active;geomX;geomY;geomH;geomZ;elType;value;items;font;','');
-INSERT INTO wlb_doc_incl VALUES('docRepYear','doc','/wlb_doc/wdg_doc/wdg_doc','owner;perm;geomY;geomH;geomZ;tmpl;doc;bTime;time;process;n;','');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -15379,8 +15359,10 @@ if(f_start) {
 		pO.isCntr = this.doc.attr("p"+iP+"cntr");
 		pO.color = colors[iP-1];
 		if(pO.prec.isEVal())	pO.prec = 0;
-		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch()))
+		if(!pO.name.isEVal() && pO.name.length && !pO.var.isEVal() && (aO=SYS.nodeAt(pO.var).arch())) {
 			params.push(pO);
+			pO.type = typeof(SYS.nodeAt(pO.var).get());
+		}
 	}
 	this.doc.attrSet("params", params);
 
@@ -15442,7 +15424,7 @@ else if(curMin != lastMin && !(curMin%5)) {
 	SYS.localtime(doc_time, 0, 0, curHour, curDay, curMonth, curYear);
 	doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-"+curDay+" "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
 	if(curHour < repHour) doc_bTime -= 24*60*60;
-}','','',-1,'name;dscr;evProc;backColor;',1663488391);
+}','','',-1,'name;dscr;evProc;backColor;',1666954984);
 INSERT INTO wlb_doc VALUES('docRepMonth','','/wlb_doc/wdg_doc',0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	//Init the avialable parameters
@@ -28258,44 +28240,74 @@ INSERT INTO wlb_doc_io VALUES('docRepDay','tmpl','<body docProcLang="JavaLikeCal
 
 <div width="100%"><div style="margin-left: auto; margin-right: auto; text-align: center; width: fit-content;">
 	<?dp if(!enGraph) return "";
-		for(iP = 0, srcs = ""; iP < params.length; iP++)
-			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
-				srcs += params[iP].var+":"+params[iP].min+":"+params[iP].max+":"+params[iP].color+":0:2\n";
+		for(iP = 0, srcs = ""; iP < params.length; iP++) {
+			pO = params[iP];
+			if(!pO.min.isEVal() && !pO.max.isEVal()) srcs += pO.var+":"+pO.min+":"+pO.max+":"+pO.color+":0:2\n";
+		}
 		return srcs.length ? DAQ.JavaLikeCalc.lib_doc.diagram(time, time-bTime, srcs, 800, 300, arch) : "";
 	?>
 </div></div>
 <br/>
 
 <TABLE class="data" width="100%" export="1">
-  <TR>
-	<TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH>
+  <THEAD>
+    <TR><TH>Date</TH><TH>Time</TH><TH>Capacity</TH><TH>Aver. pressure diff.</TH><TH>St. pressure</TH><TH>Aver. temp.</TH><TH>Density</TH></TR>
+    <TR><TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH></TR>
 	<?dp
-		rez = "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>";
-		for(iP = 0; iP < params.length; iP++)
-			rez += "<TH style=''color: "+(enGraph?params[iP].color:"black")+";''>"+SYS.strEncode(params[iP].name, "HTML")+"</TH>";
-		return rez; ?>
-  </TR>
-  <TR>
-	<TH>&nbsp;</TH><TH>begin&nbsp;&nbsp;end</TH><TH>m3</TH><TH>kgF/m2</TH><TH>kgF/cm</TH><TH>grad.C</TH><TH>kg/m3</TH>
-	<?dp
-		rez = "<TH>&nbsp;</TH><TH>"+tr("begin")+"&nbsp;&nbsp;"+tr("end")+"</TH>";
+		//Names
+		row = ""; hasGrps = false;
+		for(iP = 0; iP < params.length && !hasGrps; iP++) {
+			pO = params[iP]; pOprv = params[iP-1];
+			if(iP && pO.name.parse(1,":").trim().length && pOprv.name.parse(1,":").trim().length && pO.name.parse(0,":").trim() == pOprv.name.parse(0,":").trim())
+				hasGrps = true;
+			else row += "<TH style=''color: "+((enGraph&&!pO.min.isEVal()&&!pO.max.isEVal())?pO.color:"black")+";''>"+SYS.strEncode(hasGrps?pO.name.parse(1,":").trim():pO.name, "HTML")+"</TH>";
+		}
+		
+		if(!hasGrps) rez = "<TR><TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH>"+row+"</TR>";
+		// Groups processing
+		else {
+			for(grpLst = grpLst_ = row = row2 = "", grpCnt = 0, iP = 0; iP <= params.length; iP++, grpLst = grpLst_) {
+				pO = params[iP]; pOprv = params[iP-1];
+				grpLst_ = (iP < params.length && (tVl=pO.name).parse(1,":").length) ? tVl : "";
+				if(grpLst.parse(1,":").trim().length && grpLst.parse(0,":").trim() == grpLst_.parse(0,":").trim()) {
+					if(!grpCnt) row2 += "<TH style=''color: "+((enGraph&&!pOprv.min.isEVal()&&!pOprv.max.isEVal())?pOprv.color:"black")+";''>"+SYS.strEncode(pOprv.name.parse(1,":").trim(), "HTML")+"</TH>";
+					row2 += "<TH style=''color: "+((enGraph&&!pO.min.isEVal()&&!pO.max.isEVal())?pO.color:"black")+";''>"+SYS.strEncode(pO.name.parse(1,":").trim(), "HTML")+"</TH>";
+					grpCnt++;
+				}
+				else {
+					if(grpCnt) { row += "<TH colspan=''"+(grpCnt+1)+"''>"+SYS.strEncode(grpLst.parse(0,":").trim(), "HTML")+"</TH>"; hasGrps = true; }
+					if(!grpLst_.parse(1,":").trim().length && iP < params.length)
+						row += "<TH rowspan=''2'' style=''color: "+((enGraph&&!pO.min.isEVal()&&!pO.max.isEVal())?pO.color:"black")+";''>"+SYS.strEncode(pO.name, "HTML")+"</TH>";
+					grpCnt = 0;
+				}
+			}
+			rez = "<TR><TH rowspan=''2''>"+tr("Date")+"</TH><TH rowspan=''2''>"+tr("Time")+"</TH>"+row+"</TR><TR>"+row2+"</TR>";
+		}
+
+		//Units
+		rez += "<TR><TH>&nbsp;</TH><TH>"+tr("begin")+"&nbsp;&nbsp;"+tr("end")+"</TH>";
 		for(iP = 0; iP < params.length; iP++) {
 			pO = params[iP];
 			rez += "<TH>"+((enGraph && pO.min < pO.max)?"["+pO.min+"..."+pO.max+"] ":"")+SYS.strEncode(pO.ed, "HTML")+"</TH>";
 		}
+		rez += "</TR>";
 		return rez; ?>
-  </TR>
+  </THEAD>
   <TR docRept="3600">
   <?dp using DAQ.JavaLikeCalc.lib_doc;
 	if((rTime-rPer) > SYS.time())	return "";
 	rez = "<TD style=''text-align: center;''>"+SYS.strftime(rTime,"%d %m")+"</TD>"+
 		"<TD style=''text-align: center;''>"+SYS.strftime(rTime-rPer,"%H:%M")+"&nbsp;&nbsp;"+SYS.strftime(rTime,"%H:%M")+"</TD>";
-	for(iP = 0; iP < params.length; iP++)
-		if(params[iP].isCntr == true) {
-			if(!(V1=getVal(params[iP].var,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
-			if(!(V2=getVal(params[iP].var,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
-			rez += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(params[iP].prec))+"</TD>";
-		} else rez += "<TD style=''text-align: center;''>"+averVal(params[iP].var,rTime-rPer,rTime,params[iP].prec,arch)+"</TD>";
+	for(iP = 0; iP < params.length; iP++) {
+		pO = params[iP];
+		if(pO.type == "string")
+			rez += "<TD style=''text-align: center;''>"+getVal(pO.var,rTime-rPer,0,0,arch,false,rTime*1e6)+"</TD>";
+		else if(pO.isCntr == true) {
+			if(!(V1=getVal(pO.var,rTime-rPer,0,-1,arch,false,rTime*1e6)).isEVal())	V1 = V1.toReal();
+			if(!(V2=getVal(pO.var,rTime,0,-1,arch,false,(rTime-rPer)*1e6)).isEVal())	V2 = V2.toReal();
+			rez += "<TD style=''text-align: center;''>"+((V1.isEVal() || V2.isEVal())?tr("Empty"):abs(V2-V1).toFixed(pO.prec))+"</TD>";
+		} else rez += "<TD style=''text-align: center;''>"+averVal(pO.var,rTime-rPer,rTime,pO.prec,arch)+"</TD>";
+	}
 	return rez; ?>
   </TR>
   <TR style="font-weight: bold;">
@@ -28314,7 +28326,6 @@ INSERT INTO wlb_doc_io VALUES('docRepDay','tmpl','<body docProcLang="JavaLikeCal
 INSERT INTO wlb_doc_io VALUES('docRepDay','bTime','0',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','time','0',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','n','',34,'','wdg:../a_n','doc','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docRepDay','aCur','0',32,'','wdg:../a_aCur','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','name','Month report of the day-averaged values',32,'','','','Місячний звіт середніх за добу значень','','Месячный отчёт среднесуточных значений','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','geomZ','1',32,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','tmpl','<body docProcLang="JavaLikeCalc.JavaScript">
@@ -28910,10 +28921,8 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 Автор: Роман Савоченко <roman@oscada.org>
 Версія: 1.7.0
 Ліцензія: GPLv2','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docRepDay','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','doc','',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','doc','',40,'','','doc','','','','','','','');
-INSERT INTO wlb_doc_io VALUES('docRepDay','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','evProc','ws_FocusIn::open:/pg_control/pg_doc_panel',32,'','','','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','vCur','0',32,'','wdg:../a_vCur','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','aSize','0',32,'','wdg:../a_aSize','doc','','','','','','','');
@@ -29694,4 +29703,24 @@ INSERT INTO wlb_Main_incl VALUES('storeHouse','btClassEdit','/wlb_originals/wdg_
 INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;');
 INSERT INTO wlb_Main_incl VALUES('RootPgSo','alarms','/wlb_originals/wdg_Protocol',-1,'owner;en;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','curstimeBeg','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
+INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'perm;geomZ;tmpl;doc;bTime;time;process;n;');
+INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;');
+INSERT INTO wlb_doc_incl VALUES('docUsersSet','doc','/wlb_doc/wdg_docDin/wdg_doc',-1,'perm;tmpl;');
+INSERT INTO wlb_doc_incl VALUES('doc','doc','/wlb_originals/wdg_Document',-1,'active;geomX;geomY;geomW;geomH;geomZ;style;tmpl;n;vCur;');
+INSERT INTO wlb_doc_incl VALUES('docRepInstVals','doc','/wlb_doc/wdg_docDin/wdg_doc',-1,'perm;tmpl;');
+INSERT INTO wlb_doc_incl VALUES('docDin','doc','/wlb_originals/wdg_Document',-1,'active;geomX;geomY;geomW;geomH;geomYsc;style;tmpl;doc;bTime;time;');
+INSERT INTO wlb_doc_incl VALUES('docRep2WorkSh','doc','/wlb_doc/wdg_docDin/wdg_doc',-1,'perm;geomX;geomY;geomW;geomH;tmpl;font;');
+INSERT INTO wlb_doc_incl VALUES('docAlarmsRep','doc','/wlb_doc/wdg_docDin/wdg_doc',-1,'perm;tmpl;');
+INSERT INTO wlb_doc_incl VALUES('docMessRep','doc','/wlb_doc/wdg_docDin/wdg_doc',-1,'owner;perm;geomY;geomH;tmpl;font;');
+INSERT INTO wlb_doc_incl VALUES('docMessRep','fltr','/wlb_originals/wdg_FormEl',-1,'owner;name;active;geomX;geomY;geomW;geomH;geomZ;value;font;');
+INSERT INTO wlb_doc_incl VALUES('docMessRep','fltrCol','/wlb_originals/wdg_FormEl',-1,'owner;name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_doc_incl VALUES('docMessRep','lab_fltr','/wlb_originals/wdg_Text',-1,'owner;name;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','lab_set','/wlb_originals/wdg_Text',-1,'owner;perm;geomX;geomY;geomW;geomH;geomZ;geomMargin;backColor;bordWidth;font;alignment;text;');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','name','/wlb_originals/wdg_Text',-1,'owner;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','set_item','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','set_month','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','set_val','/wlb_originals/wdg_FormEl',-1,'owner;perm;active;geomX;geomY;geomW;geomH;geomZ;value;view;font;');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','year','/wlb_originals/wdg_FormEl',-1,'active;geomX;geomY;geomH;geomZ;elType;value;items;font;');
+INSERT INTO wlb_doc_incl VALUES('docRepYear','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'owner;perm;geomY;geomH;geomZ;tmpl;doc;bTime;time;process;n;');
 COMMIT;

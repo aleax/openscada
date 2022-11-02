@@ -1262,7 +1262,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //Get page info
     if(opt->name() == "info") {
-	//????
 	bool isEmpty = (!prmAddr().size() || !TSYS::pathLev(prmAddr(),1).size());
 
 	TParamContr::cntrCmdProc(opt);

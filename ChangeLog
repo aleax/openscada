@@ -1,3 +1,17 @@
+2022-11-02 Roman (stable)
+- !!:LibsDB.OscadaLibs: The library DevLib appended by the template "Slot LTD devices (SLOT)".
+- !!:LibsDB.vcaBase: wlb_doc.docRepDay: Some improved and appended for:
+    the columns grouping in the header, string values direct reading, colors disable in the table at EVAL scale.
+- !!!:FIX:DB: Fixed for the DB syntax error at cleaning the translation fields equal to the base.
+    !!:FIX: Prevented in the DBs service termination, as the transactions closing, at some wrong DB presence.
+- !!!!:FIX:SYS: Prevented from propagating the base language column of the translations table "Tr"
+    in the SINGLE translation mode and the base language.
+- DB.SQLite: The "tracing" debug category appended the prefix "db_".
+- !!!:FIX:UI.VCAEngine: The session widgets periodic processing restored at empty functions but for the direct links.
+    FIX: The pages are prevented from the parent widget address clearing at the page type changing from Standard to Template and back.
+    The type field of the pages set to invisible for the owner page is the Template.
+
+
 2022-10-22 Roman (stable)
 - !!!!:LibsDB.vcaBase: wlb_Main.storeHouse: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
 	- switched to the processing period -2 (disabled);

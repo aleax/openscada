@@ -1152,9 +1152,11 @@ void Page::setCalcProg( const string &iprg )	{ cfg("PROC").setS(calcLang()+"\n"+
 void Page::setPrjFlags( int val )
 {
     int dif = mFlgs^val;
-    if(dif&(Page::Template|Page::Link)) {	//!!!! Clear the parent link and disable the page
-						//     at any change the project state Empty|Template|Link
-	//Clear page
+    if(dif&(Page::Template|Page::Link) &&		//!!!! Clear the parent link and disable the page
+	!((mFlgs == 0 && val == Page::Template) ||	//     at any change the project state Empty|Template|Link,
+	    (mFlgs == Page::Template && val == 0)))	//     besides the Standard page change to Template or contrariwise
+    {
+	//Cleaning the page
 	setParentAddr("");
 	if(enable()) {
 	    setEnable(false);
@@ -1572,7 +1574,9 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	Widget::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+addr(),RWRWR_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
-	    ctrMkNode("fld",opt,2,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
+	    if(!ownerPage() || !(ownerPage()->prjFlags()&Page::Template))
+		ctrMkNode("fld",opt,2,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,
+			"tp","str", "idm","1", "dest","select", "select","/wdg/st/pgTpLst");
 	    if((prjFlags()&Page::Empty) || (ownerPage() && (ownerPage()->prjFlags()&Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/wdg/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");

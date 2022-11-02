@@ -2140,7 +2140,7 @@ void SessWdg::calc( bool first, bool last, int pos )
     try {
 	int pgOpenPrc = -1;
 
-	bool isPer = TValFunc::func() && calcPer() != PerVal_Dis && !((mCalcClk+pos)%(vmax(calcPer()/ownerSess()->period(),1)));
+	bool isPer = /*TValFunc::func() &&*/ calcPer() != PerVal_Dis && !((mCalcClk+pos)%(vmax(calcPer()/ownerSess()->period(),1)));
 
 	//Processing
 	if(isPer || first || last || eventGet().size()) {	//at own period, at start or stop, as reaction for the events processing

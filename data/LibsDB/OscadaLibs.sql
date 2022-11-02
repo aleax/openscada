@@ -4962,6 +4962,319 @@ if(tErr.toInt()) {
 		}
 }
 f_err = tErr;','','',1662904842);
+INSERT INTO tmplib_DevLib VALUES('SLOT','Slot LTD devices','','','','','',240,0,'JavaLikeCalc.JavaScript
+//Modem requests
+function modemWr(ln, noNewLn)	{ tr.messIO(ln + ((noNewLn==true)?"":"\x0D\x0A"), 0, 0); }
+
+function modemExpect(vLs, tm) {
+	stTm = SYS.time();
+
+	for(resp = ""; (SYS.time()-stTm) < tm; ) {
+		resp += tr.messIO("");
+		for(off = 0; (tVl=vLs.parseLine(0,off)).length; )
+			if(resp.indexOf(tVl+"\x0D\x0A") >= 0)	return tVl;
+	}
+	return "";	
+}
+
+//Same request to the device
+function req(data) {
+	if(data == EVAL)	data = "";
+	req = SYS.strFromCharCode(0x55, max(0,min(1,pipeN)), addr&0xFF, (addr>>8)&0xFF, data.length+7) + data;
+	//Calc and append the CRC
+	CRC = Special.FLibSYS.CRC(req, 16, 0x8005);
+	req += SYS.strFromCharCode(CRC&0xFF, CRC>>8);
+	SYS.messDebug("/SLOT/"+this.cfg("SHIFR"), tr("Request")+": "+SYS.strDecode(req,"Bin"," "));
+
+	resp = tr.messIO(req);
+	//Waiting the acceptance
+	while(resp.length && (resp.length < 8 || resp.length < resp.charCodeAt(4)) && (tresp=tr.messIO("")).length) resp += tresp;
+	if(resp.length < 8 || resp.charCodeAt(0) != 0x55 || resp.length != resp.charCodeAt(4))
+		return tr("3:No response or the response is inconsistent. ");
+	if(Special.FLibSYS.CRC(resp.slice(0,-2),16,0x8005) != resp.charCodeAt(resp.length-2,"UTF-16LE"))
+		return tr("3:Error the response CRC. ");
+
+	SYS.messDebug("/SLOT/"+this.cfg("SHIFR"), tr("Response")+": "+SYS.strDecode(resp,"Bin"," "));
+
+	data = resp.slice(6,-2);
+	if((tVl=resp.charCodeAt(5))&0x80) {
+		if(tVl == 0x81)	return tr("4:Error at the package receiving. ");
+		else if(tVl == 0x82)	return tr("4:Invalid device address. ");
+		else if(tVl == 0x83)	return tr("4:Invalid function number. ");
+		else if(tVl == 0x84)	return tr("4:Archive empty on pointed interval. ");
+		else if(tVl == 0x85)	return tr("4:Error password. ");
+		else if(tVl == 0x86)	return tr("4:Unknown block number at the request. ");
+		else if(tVl == 0x87)	return tr("4:The compression constant is outranged. ");
+		else if(tVl == 0x88)	return tr("4:The gas density at the writing is outranged. ");
+		else if(tVl == 0x89)	return tr("4:The m.p. of CO2 at the writing is outranged. ");
+		else if(tVl == 0x8A)	return tr("4:The m.p. of N2 at the writing is outranged. ");
+		else	return tr("4:Unknown error %1. ").replace("%1", tVl.toString());
+	}
+	else if((tVl&0x7F) != (req.charCodeAt(5)&0x7F))
+		return tr("4:The function is error or inconsistent to the request one. ");
+
+	return "0";
+}
+
+//Parse float
+function floatGet(ivl) {
+	if((ivl&0xFE) == 0)	return 0;
+	if(!((ivl>>24)&0x80))	return EVAL;
+	sign = (ivl&0x01);
+	rez = pow(2,((ivl>>1)&0x7F)-64) * (ivl>>8) / pow(2,23);
+	return sign ? -rez : rez;
+}
+function floatGet5(ivl) {
+	if((ivl&0xFE) == 0)	return 0;
+	if(!((ivl>>40)&0x80))	return EVAL;
+	sign = (ivl&0x01);
+
+	rez = pow(2,((ivl>>1)&0x7F)-64) * (ivl>>8) / pow(2,39);
+	return sign ? -rez : rez;
+}
+
+//Produce float
+/*function floatSet(vl) {
+	exp = 0;
+	while(vl/pow(2,exp) > 1 && exp < 128)		exp++;
+	while(vl/pow(2,exp) < 0.5 && exp > -127)exp--;
+	mts = (vl/pow(2,exp))*pow(2,24) + 0.5;
+	if(vl >= 0) mts = mts&0x7FFFFF;
+	return ((mts>>16)&0xFF).toString(16,2)+(exp+127).toString(16,2)+(mts&0xFFFF).toString(16,4);
+}*/
+
+//Seting value to the archive
+function archSet(attr, vTm, vl, arh) {
+	SYS.messDebug("/SLOT/"+this.cfg("SHIFR"), "attr="+attr+"; vTm="+SYS.strftime(vTm)+"; arh="+arh+"; vl="+vl);
+	atrO = this[attr];
+	if(!atrO || atrO.isEVal()) return;
+	arguments[attr] = vl;	//Set the current-last value
+	//if(vTm > atrO.time())	atrO.set(vl,vTm,0,true);
+	if(atrO.arch())	atrO.arch().setVal(vTm*1e6, vl, arh);
+}
+
+//Main process
+if(f_start)	{ reset = false; schedTrueTm = SYS.time(); }
+
+if(reset) {
+	reset = false, arhLastD = arhLastD_U = 0, arhLastH = arhLastH_U = 0; schedTrueTm = 1;
+
+	devTime = devTp = devSWVers = devSN = objNm = devModel = devPollPer = devContrHour = devContrDay = devSesonTimeCh = EVAL;
+	apH = apMax = apMin = apConst = EVAL;
+	tMax = tMin = tConst = pulseVl = dpMax = dpMin = EVAL;
+	fMax = fMin = cntrCutOffConst = flowConst = EVAL;
+	pipeD = pipeTExt = pipeBeCoef = pipeCeCoef = pipeRoughCoef = EVAL;
+	diaphD = diaphTExt = diaphBeCoef = diaphCeCoef = diaphEdgeBluntCoef = EVAL;
+
+	correctorTime = dP = P = T = Fstd = Fwork = EVAL;
+}
+if(f_start || f_stop) return;
+
+tErr = "";
+
+if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
+	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
+else if(addr < 0 || addr > 65535)
+	tErr = "2:"+tr("Address ''%1'' out of range [0...65535].").replace("%1",addr.toString());
+else if(!sched.length || SYS.time() >= SYS.cron(sched,schedTrueTm)) {
+	//ModemMode: connect
+	inMdmCon = false;
+	if(modem.length) {
+		mdmTm = modemTm.parse(0,":").toReal();
+		conTm = modemTm.parse(1,":").toReal();
+		mComms = modem + ":ATH";
+		// Init the modem
+		for(iTr = 2; iTr >= 0; iTr--) {
+			tErr = "";
+			for(comPos = 1; !tErr.toInt() && (mComm=mComms.parse(comPos,":")).length; comPos++) {
+				modemWr(mComm);
+				if(!(resp=modemExpect("OK",mdmTm)).length) {
+					// Try to return the modem mode
+					if(comPos == 1) {
+						modemWr("+++", true);
+						if(modemExpect("OK",mdmTm).length)	continue;
+					}
+					tErr = "11:"+tr("No modem response or the response ''%1'' is inconsistent. ").replace("%1",resp);
+				}
+			}
+			if(!tErr.toInt()) break;
+		}
+		// Call the remote number
+		if(!tErr.toInt()) {
+			modemWr("ATD"+modem.parse(0,":"));
+			if((resp=modemExpect("CONNECT\nBUSY\nNO CARRIER\nNO DIALTONE",conTm)) != "CONNECT")
+				tErr = "12:"+tr("Error remote node call ''%1'': ''%2''. ")
+						.replace("%1",modem.parse(0,":"))	.replace("%2",resp.length?resp:"NO RESPONSE");
+		}
+		if(!tErr.toInt())	inMdmCon = true;
+	}
+
+	//Reading the System Parameters
+	if(!tErr.toInt()) {
+		data = SYS.strFromCharCode(1);
+		if(!(tErr=req(data)).toInt()) {
+			devTime_ = data.charCodeAt(0, "UTF-32LE");
+			devTime_U = SYS.strptime("2000-1-1 0:00:00") + (devTime_>>8)*60 + (devTime_&0xFF);
+			devTime = SYS.strftimegm(devTime_U) + " ("+devTime_U+")";
+			if((tVl=data.charCodeAt(4,"UTF-16LE")) == 1)	devTp = "OE-VPT";
+			else if(tVl == 2)	devTp = "OE - VT";
+			else if(tVl == 3)	devTp = "OE-VPTf";
+			else if(tVl == 4)	devTp = "OE-22ЛА";
+			else if(tVl == 11)	devTp = "ОЕ-22ДМ (ОЕ-22ТМ)";
+			else if(tVl == 12)	devTp = "ОЕ-22ДА (OE-22ТА)";
+			else devTp = "Unknown "+tVl;
+			devSWVers = data.slice(6, 8);
+			devSN = data.charCodeAt(8, "UTF-16LE");
+			objNm = data.slice(10, 26);
+			devModel = data.slice(26, 12);
+			devPollPer = data.charCodeAt(42);
+			devContrHour = data.charCodeAt(43);
+			devContrDay = data.charCodeAt(44);
+			devSesonTimeCh = data.charCodeAt(45);
+			apH = floatGet(data.charCodeAt(50,"UTF-32LE"));
+			apMax = floatGet(data.charCodeAt(58,"UTF-32LE"));
+			apMin = floatGet(data.charCodeAt(62,"UTF-32LE"));
+			apConst = floatGet(data.charCodeAt(66,"UTF-32LE"));
+			tMax = floatGet(data.charCodeAt(74,"UTF-32LE"));
+			tMin = floatGet(data.charCodeAt(80,"UTF-32LE"));
+			tConst = floatGet(data.charCodeAt(84,"UTF-32LE"));
+			pulseVl = floatGet(data.charCodeAt(94,"UTF-32LE"));
+			dpMax = floatGet(data.charCodeAt(98,"UTF-32LE"));
+			dpMin = floatGet(data.charCodeAt(102,"UTF-32LE"));
+			fMax = floatGet(data.charCodeAt(106,"UTF-32LE"));
+			fMin = floatGet(data.charCodeAt(110,"UTF-32LE"));
+			cntrCutOffConst = floatGet(data.charCodeAt(114,"UTF-32LE"));
+			flowConst = floatGet(data.charCodeAt(118,"UTF-32LE"));
+			pipeD = floatGet(data.charCodeAt(122,"UTF-32LE"));
+			pipeTExt = floatGet(data.charCodeAt(126,"UTF-32LE"));
+			pipeBeCoef = floatGet(data.charCodeAt(130,"UTF-32LE"));
+			pipeCeCoef = floatGet(data.charCodeAt(134,"UTF-32LE"));
+			pipeRoughCoef = floatGet(data.charCodeAt(138,"UTF-32LE"));
+			diaphD = floatGet(data.charCodeAt(150,"UTF-32LE"));
+			diaphTExt = floatGet(data.charCodeAt(154,"UTF-32LE"));
+			diaphBeCoef = floatGet(data.charCodeAt(158,"UTF-32LE"));
+			diaphCeCoef = floatGet(data.charCodeAt(162,"UTF-32LE"));
+			diaphEdgeBluntCoef = floatGet(data.charCodeAt(166,"UTF-32LE"));
+		}
+	}
+
+	//Reading the Instanceous and Calculated parameters
+	if(!tErr.toInt()) {
+		data = SYS.strFromCharCode(4);
+		if(!(tErr=req(data)).toInt()) {
+			correctorTime_ = data.charCodeAt(0, "UTF-32LE");
+			tVl = SYS.strptime("2000-1-1 0:00:00") + (correctorTime_>>8)*60 + (correctorTime_&0xFF);
+			correctorTime = SYS.strftimegm(tVl) + " ("+tVl+")";
+			dP = floatGet(data.charCodeAt(18,"UTF-32LE"));
+			P = floatGet(data.charCodeAt(22,"UTF-32LE"));
+			T = floatGet(data.charCodeAt(26,"UTF-32LE"));
+			Fstd = floatGet(data.charCodeAt(30,"UTF-32LE"));
+			Fwork = floatGet(data.charCodeAt(34,"UTF-32LE"));
+		}
+	}
+
+	tmCur = SYS.time();
+
+	//Requesting the dayly archive
+	if(arhD.length) {
+		toSave = false;
+
+		for(rBlk = -1; !tErr.toInt() && rBlk != 0 && (SYS.time()-tmCur) < arhTmLim && ((devTime_>>8)-(arhLastD>>8)) > 2*24*60; ) {
+			if(rBlk < 0)	data = SYS.strFromCharCode(5) +
+											SYS.strFromCharUTF("UTF-32LE",(arhLastD>>8)<<8) +
+											SYS.strFromCharUTF("UTF-32LE",(devTime_>>8)<<8);
+			else data = SYS.strFromCharCode(6, 0, rBlk);
+
+			if(!(tErr=req(data)).toInt()) {
+				itN = data.charCodeAt(0);
+				rBlk = data.charCodeAt(1);
+				for(iIt = 0; iIt < itN; iIt++) {
+					arhLastD = data.charCodeAt(2 + iIt*30, "UTF-32LE");
+					arhLastD_U = 24*60*60*floor((SYS.strptime("2000-1-1 0:00:00") + (arhLastD>>8)*60 + (arhLastD&0xFF))/(24*60*60));
+					archSet("Fstd", arhLastD_U, floatGet5((data.charCodeAt(2 + iIt*30 + 8,"UTF-16LE")<<32)+data.charCodeAt(2 + iIt*30 + 4,"UTF-32LE")), arhD);
+					archSet("Fwork", arhLastD_U, floatGet5((data.charCodeAt(2 + iIt*30 + 14,"UTF-16LE")<<32)+data.charCodeAt(2 + iIt*30 + 10,"UTF-32LE")), arhD);
+					archSet("dP", arhLastD_U, floatGet(data.charCodeAt(2 + iIt*30 + 16,"UTF-32LE")), arhD);
+					archSet("P", arhLastD_U, floatGet(data.charCodeAt(2 + iIt*30 + 20,"UTF-32LE")), arhD);
+					archSet("T", arhLastD_U, floatGet(data.charCodeAt(2 + iIt*30 + 24,"UTF-32LE")), arhD);
+					itV4 = data.charCodeAt(2 + iIt*30 + 28,"UTF-16LE");	//Statuses
+					archSet("itSt", arhLastD_U, ((itV4&0x80)?"A":"")+((itV4&0x40)?"В":"")+((itV4&0x3F)?"П":""), arhD);
+					toSave = true;
+				}
+			}
+		}
+		if(toSave)	SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
+	}
+
+	//Requesting the hourly archive
+	if(arhH.length) {
+		toSave = false;
+
+		for(rBlk = -1; !tErr.toInt() && rBlk != 0 && (SYS.time()-tmCur) < arhTmLim && ((devTime_>>8)-(arhLastH>>8)) > /*2*/60; ) {
+			if(rBlk < 0)	data = SYS.strFromCharCode(7) +
+											SYS.strFromCharUTF("UTF-32LE",arhLastH) +
+											SYS.strFromCharUTF("UTF-32LE",devTime_);
+			else data = SYS.strFromCharCode(8, 0, rBlk);
+
+			if(!(tErr=req(data)).toInt()) {
+				itN = data.charCodeAt(0);
+				rBlk = data.charCodeAt(1);
+				for(iIt = 0; iIt < itN; iIt++) {
+					arhLastH = data.charCodeAt(2 + iIt*30, "UTF-32LE");
+					arhLastH_U = 60*60*floor((SYS.strptime("2000-1-1 0:00:00") + (arhLastH>>8)*60 + (arhLastH&0xFF))/(60*60));
+					archSet("Fstd", arhLastH_U, floatGet5((data.charCodeAt(2 + iIt*30 + 8,"UTF-16LE")<<32)+data.charCodeAt(2 + iIt*30 + 4,"UTF-32LE")), arhH);
+					archSet("Fwork", arhLastH_U, floatGet5((data.charCodeAt(2 + iIt*30 + 14,"UTF-16LE")<<32)+data.charCodeAt(2 + iIt*30 + 10,"UTF-32LE")), arhH);
+					archSet("dP", arhLastH_U, floatGet(data.charCodeAt(2 + iIt*30 + 16,"UTF-32LE")), arhH);
+					archSet("P", arhLastH_U, floatGet(data.charCodeAt(2 + iIt*30 + 20,"UTF-32LE")), arhH);
+					archSet("T", arhLastH_U, floatGet(data.charCodeAt(2 + iIt*30 + 24,"UTF-32LE")), arhH);
+					itV4 = data.charCodeAt(2 + iIt*30 + 28,"UTF-16LE");	//Statuses
+					archSet("itSt", arhLastH_U, ((itV4&0x80)?"A":"")+((itV4&0x40)?"В":"")+((itV4&0x3F)?"П":""), arhH);
+					toSave = true;
+				}
+			}
+		}
+		if(toSave)	SYS.cntrReq(SYS.XMLNode("save").setAttr("path",this.nodePath()+"/%2fobj").setAttr("force",1));
+	}
+
+	//Disconnection the modem node
+	if(inMdmCon) {
+		modemWr("+++", true);
+		if(modemExpect("OK",mdmTm).length) { modemWr("ATH"); modemExpect("OK", mdmTm); }
+	}
+}
+
+//Error set
+if(!tErr.length)	tErr = "0";
+if(tErr.toInt()) {
+	if(!tr.isEVal() && tr.start()) tr.start(false);
+	if(f_err != tErr)
+		SYS.messDebug("/SLOT/"+this.cfg("SHIFR"), tr("Error")+": "+tErr);
+}
+else {
+	prcSt = "";
+	schedContinue = false;
+	if(arhD.length) {
+		arhLastD_U = 24*60*60*floor((SYS.strptime("2000-1-1 0:00:00") + (arhLastD>>8)*60 + (arhLastD&0xFF))/(24*60*60));
+		if(arhLastD && ((devTime_>>8)-(arhLastD>>8)) <= 2*24*60)
+			prcSt += tr("Days: ") + tr("Trace for current time=%1").replace("%1",SYS.strftimegm(arhLastD_U,"%Y/%m/%d")) + "; ";
+		else {
+			prcSt += tr("Days: ") + tr("Initial reading in time=%1").replace("%1",SYS.strftimegm(arhLastD_U,"%Y/%m/%d")) + "; ";
+			schedContinue = true;
+		}
+	}
+	if(arhH.length) {
+		arhLastH_U = 60*60*floor((SYS.strptime("2000-1-1 0:00:00") + (arhLastH>>8)*60 + (arhLastH&0xFF))/(60*60));
+		if(arhLastH && ((devTime_>>8)-(arhLastH>>8)) <= 2*60)
+			prcSt += tr("Hours: ") + tr("Trace for current time=%1").replace("%1",SYS.strftimegm(arhLastH_U,"%Y-%m-%d %H")) + "; ";
+		else {
+			prcSt += tr("Hours: ") + tr("Initial reading in time=%1").replace("%1",SYS.strftimegm(arhLastH_U,"%Y-%m-%d %H")) + "; ";
+			schedContinue = true;
+		}
+	}
+
+	if(!schedContinue) schedTrueTm = SYS.time();
+	tErr += (sched.length?"; "+tr("Next scheduled call")+" "+SYS.strftime(SYS.cron(sched,schedTrueTm)):"") + (prcSt.length?"; "+prcSt:"");
+}
+f_err = tErr;','','',1667231182);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -13197,6 +13510,64 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'�
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','this','Object',4,0,'',7,'Объект','','Об''єкт','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Установить ноль','','Встановити нуль','','');
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroAP','Set atmosphere',3,32,'',5,'Установить атмосферу','','Встановити атмосферу','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','transport','Transport',0,64,'Sockets.SLOT:10.39.77.10:4001',0,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','modem','Modem
+In the format "{TelN}[:{Init1}[:{Init2}[...{InitN}]]]',0,64,'',1,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','modemTm','Modem times
+In the format "{tm}:{ConTm}"',0,64,'20:1',2,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','addr','Device address [0...65535]',1,64,'1',3,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','pipeN','Pipe number [0...1]',1,64,'0',4,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','sched','Scheduling at CRON',0,64,'',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhTmLim','Time limit of processing the archiving, seconds',1,64,'40',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhD','OpenSCADA archiver for device archive of days',0,64,'',7,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',8,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','reset','Reset the archives reading',3,32,'',9,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devTime','Device time',0,16,'',10,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devTp','Device type',0,16,'',11,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devSWVers','Device software version',0,16,'',12,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devSN','Device Serial Number',1,16,'',13,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devModel','Device model',0,16,'',14,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devPollPer','Device poll period',1,16,'',15,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devContrDay','Device contract day',1,16,'',16,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devContrHour','Device contract hour',1,16,'',17,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','devSesonTimeCh','Device season time change',1,16,'',18,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','objNm','Object name',0,16,'',19,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','apH','Absolute pressure high limit, MPa',2,16,'',20,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','apMax','Maximum absolute pressure, MPa',2,16,'',21,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','apMin','Minimum absolute pressure, MPa',2,16,'',22,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','apConst','Absolute pressure constant, MPa',2,16,'',23,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','tMax','Maximum temperature, °С',2,16,'',24,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','tMin','Minimum temperature, °С',2,16,'',25,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','tConst','Temperature constant, °С',2,16,'',26,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','pulseVl','Pulse value, m3',2,16,'',27,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','dpMax','Maximum different pressure, kPa',2,16,'',28,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','dpMin','Minimum different pressure, kPa',2,16,'',29,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','fMax','Maximum flow, m3/h',2,16,'',30,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','fMin','Minimum flow, m3/h',2,16,'',31,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','cntrCutOffConst','Constant of the counter cut off, m3/h',2,16,'',32,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','flowConst','Constant of the flow, m3/h',2,16,'',33,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','pipeD','Pipe diameter at 20°С, mm',2,16,'',34,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','pipeTExt','Pipe material extension, 1/°С',2,16,'',35,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','pipeBeCoef','Pipe Be coefficient',2,16,'',36,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','pipeCeCoef','Pipe Ce coefficient',2,16,'',37,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','pipeRoughCoef','Pipe roughness coefficient',2,16,'',38,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','diaphD','Diaphragm diameter at 20°С, mm',2,16,'',39,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','diaphTExt','Diaphragm material extension, 1/°С',2,16,'',40,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','diaphBeCoef','Diaphragm Be coefficient',2,16,'',41,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','diaphCeCoef','Diaphragm Ce coefficient',2,16,'',42,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','diaphEdgeBluntCoef','Diaphragm edge blunting coefficient',2,16,'',43,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','correctorTime','Corrector time',0,16,'',44,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','dP','Pressure difference, kPa [arh]',2,16,'',45,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','P','Pressure, MPa [arh]',2,16,'',46,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','T','Temperature, °С [arh]',2,16,'',47,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fstd','Flow standard cond., m3/h [arh]',2,16,'',48,'','','Volume standard cond., m3 [arh]','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fwork','Flow work cond., m3/h [arh]',2,16,'',49,'','','Volume work cond., m3 [arh]','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','itSt','Item status [arh]',0,16,'',50,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','tr','Output transport',4,1,'',51,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',52,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhLastD','Daily archive last item',1,0,'0',53,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhLastH','Hourly archive last item',1,0,'0',54,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','this','Object of the parameter',4,0,'',55,'','','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_LowDevLib_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '0' ,"FLAGS" INTEGER DEFAULT '0' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '0' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_LowDevLib_io VALUES('1602A','transport','Transport of the I2C, Serial (i2c) or
 GPIO address with function put(), mostly it''s BCM2835 (DAQ.BCM2835.pi.pi)',0,64,'i2c',0,'','','','','');

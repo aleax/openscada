@@ -1693,7 +1693,6 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    }
 	    progrNode->childAdd("li")->setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),0));
 
-	    //????
 	    while(rTime < wTime && !TSYS::taskEndRun() && s2i(reptN->attr("docReptSize")) < limUserFile_SZ) {
 		//Drop current changes and continue
 		if(time(NULL) >= upTo) {

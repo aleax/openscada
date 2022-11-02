@@ -387,11 +387,15 @@ string TMess::translGet( const string &ibase, const string &lang, const string &
 		}
 		// Create new record into the translation table of the data source
 		else if((iA+1) == addrs.rend() /*&& langCodeBase().size()*/) {
-		    if(langCodeBase().size() && langCodeBase() == trLang)
+		    //  Removeing the translation column for the SINGLE translation mode and the base language
+		    if(!langCodeBase().size() || trLang == langCodeBase())
 			req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
-		    TBDS::dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, TBDS::NoException);
-		    //  Early register the new message in the translation index after the real appending
-		    if(translDyn()) Mess->translReg(base, (isCfg?"cfg:/":"db:"+*iA+".")+mess_TrUApiTbl+"#base");
+		    //  Trying the translation record presence in whole and creating when it missing
+		    if(!TBDS::dataGet(*iA+"." mess_TrUApiTbl,"/" mess_TrUApiTbl,req,TBDS::NoException)) {
+			TBDS::dataSet(*iA+"." mess_TrUApiTbl, "/" mess_TrUApiTbl, req, TBDS::NoException);
+			//  Early register the new message in the translation index after the real appending
+			if(translDyn()) Mess->translReg(base, (isCfg?"cfg:/":"db:"+*iA+".")+mess_TrUApiTbl+"#base");
+		    }
 		}
 	    }
 	    translCacheSet(cKey, rez);
