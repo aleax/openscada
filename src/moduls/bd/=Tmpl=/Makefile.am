@@ -1,32 +1,32 @@
 EXTRA_DIST = *.h po/*
 
-#!!! Include module to OpenSCADA core process. It is typical!
+# The module include-builtin to the OpenSCADA core
 if TmplIncl
-#!!! The module result library name
+#  Library name of the module
 noinst_LTLIBRARIES = db_Tmpl.la
 db_Tmpl_la_CXXFLAGS = -DMOD_INCL -fpic
-#!!! Libtool util's flags. It is typical
+#  Libtool flags - typical
 db_Tmpl_la_LIBTOOLFLAGS = --tag=disable-shared
-#!!! The module link flags
+#  Flags of linking the module
 db_Tmpl_la_LDFLAGS = -module
+# The module in an external shared object file - typical
 else
-#!!! The module result library name
+#  Library name of the module
 oscd_modul_LTLIBRARIES = db_Tmpl.la
 db_Tmpl_la_CXXFLAGS =
-#!!! Libtool util's flags. It is typical
+#  Libtool flags - typical
 db_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
-#!!! The module link flags
+#  Flags of linking the module
 db_Tmpl_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
-#!!! The module compiler flags
+# Compiler flags
 db_Tmpl_la_CXXFLAGS += $(tmpl_CFLAGS)
-#!!! The module link flags
+# Linker flags
 db_Tmpl_la_LDFLAGS += $(tmpl_LDLAGS)
-#!!! The module source files list
+# Source files list
 db_Tmpl_la_SOURCES = module.cpp
 
-
-#!!! The module name for translation files
+# The module name for translation files
 I18N_mod = $(oscd_modulpref)Tmpl
 include ../../../../I18N.mk

@@ -133,7 +133,7 @@ class TController : public TCntrNode, public TConfig
 	virtual void start_( )		{ }
 	virtual void stop_( )		{ }
 
-	virtual TParamContr *ParamAttach( const string &name, int type );
+	virtual TParamContr *ParamAttach( const string &id, int type );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 

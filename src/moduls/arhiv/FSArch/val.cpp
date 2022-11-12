@@ -721,7 +721,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* FSArch::ModVArchEl - Value archive element    *
 //*************************************************
-ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) : TVArchEl(iachive,iarchivator), mChecked(false), realEnd(0)
+ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
+    TVArchEl(iachive,iarchivator), mChecked(false), realEnd(0)
 {
 
 }

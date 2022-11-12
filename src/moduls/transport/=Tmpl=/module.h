@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Transport.Tmpl file: module.h
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,17 +18,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! Multi-including this header file prevent. Change for your include file name
+// Preventing of the header file multi-including - change at the header file name changing
 #ifndef MODULE_H
 #define MODULE_H
 
-//!!! System's includings. Add need for your module includings.
-#include <pthread.h>
+// System includings - add need ones
+#include <string>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <ttransports.h>
 
-//!!! Definition of the individual module translation functions. Do not change these!
+// Definition of the individual module translation functions - do not change
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
 #undef trS
@@ -37,108 +36,116 @@
 
 using namespace OSCADA;
 
-//!!! All module's object's include into self (individual) namespace. Change namespace for your module.
-namespace ModTmpl
+// All the module objects in own (individual) namespace - change for your module
+namespace TrTmpl
 {
 
-//!!! Input transport realisation object define. Add methods and attributes for your need.
+// Definition the input transport object of the subsystem "Transports" - add methods and attributes at your need
 //************************************************
-//* ModTmpl::TTrIn				 *
+//* TrTmpl::TTrIn				 *
 //************************************************
 class TTrIn: public TTransportIn
 {
     public:
-	//!!! Constructor for input transport object.
 	TTrIn( string name, const string &idb, TElem *el );
-	//!!! Destructor for input transport object.
 	~TTrIn( );
 
-	//!!! The inherited (virtual) status interface function
 	string getStatus( );
 
-	//!!! The inherited (virtual) start and stop interface functions
+	unsigned keepAliveReqs( )	{ return mKeepAliveReqs; }
+	unsigned keepAliveTm( )		{ return mKeepAliveTm; }
+	int taskPrior( )		{ return mTaskPrior; }
+
+	void setKeepAliveReqs( unsigned vl )	{ mKeepAliveReqs = vl; modif(); }
+	void setKeepAliveTm( unsigned vl )	{ mKeepAliveTm = vl; modif(); }
+	void setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(199,vl)); modif(); }
+
 	void start( );
 	void stop( );
-
-    private:
-	//Methods
-	//!!! Thread's function for process input connections
-	static void *Task( void * );
-
-	//!!! OpenSCADA control interface comands process virtual function.
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
-	//Attributes
-	//!!! Thread's attributes
-	bool	endrun;				// Command for stop task
-
-	//!!! Status interface atributes
-	float	trIn, trOut;			// Traffic in and out counter
-	int	connNumb;			// Connections number
-};
-
-//!!! Output transport realisation object define. Add methods and attributes for your need.
-//************************************************
-//* ModTmpl::TTrOut				 *
-//************************************************
-class TTrOut: public TTransportOut
-{
-    public:
-	//!!! Constructor for output transport object.
-	TTrOut( string name, const string &idb, TElem *el );
-	//!!! Destructor for output transport object.
-	~TTrOut( );
-
-	//!!! The inherited (virtual) status interface function
-	string getStatus( );
-
-	//!!! The inherited (virtual) start and stop interface functions
-	void start( );
-	void stop( );
-
-	//!!! The inherited (virtual) sending and receiving data interface function
-	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
-
-    private:
-	//Methods
-	//!!! OpenSCADA control interface comands process virtual function.
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-
-	//Attributes
-	//!!! Status interface atributes
-	float	trIn, trOut;	// Traffic in and out counter
-};
-
-//!!! Root module's object define. Add methods and attributes for your need.
-//************************************************
-//* ModTmpl::TTr				 *
-//************************************************
-class TTr: public TTypeTransport
-{
-    public:
-	//!!! Constructor for root module's object.
-	TTr( string name );
-	//!!! Destructor for root module's object.
-	~TTr( );
-
-	//!!! Main subsystem API functions for self modules input and output transport objects creation.
-	TTransportIn  *In( const string &name, const string &idb );
-	TTransportOut *Out( const string &name, const string &idb );
 
     protected:
-	//!!! Inherited (virtual) load and save object's node methods. Call from OpenSCADA kernel.
+	//Methods
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
 	void load_( );
 	void save_( );
 
     private:
 	//Methods
-	//!!! Module's comandline options for print help function.
-	string optDescr( );
-	//!!! OpenSCADA control interface comands process virtual function.
-	void cntrCmdProc( XMLNode *opt );		//Control interface command process
+	static void *Task( void * );
+
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	//Attributes
+	bool	endrun;				// Command for stop task
+
+	unsigned short	mKeepAliveReqs,		//KeepAlive requests
+			mKeepAliveTm;		//KeepAlive timeout
+	int		mTaskPrior;		//Requests processing task prioritet
+	//???? Append additional configuration attributes
 };
 
-extern TTr *mod;
-}
+// Definition the output transport object of the subsystem "Transports" - add methods and attributes at your need
+//************************************************
+//* TrTmpl::TTrOut				 *
+//************************************************
+class TTrOut: public TTransportOut
+{
+    public:
+	TTrOut( string name, const string &idb, TElem *el );
+	~TTrOut( );
+
+	string getStatus( );
+
+	string timings( )		{ return mTimings; }
+	unsigned short attempts( )	{ return mAttemts; }
+
+	void setTimings( const string &vl, bool isDef = false );
+	void setAttempts( unsigned short vl );
+
+	void start( int time = 0 );
+	void stop( );
+
+	int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );
+
+    protected:
+	//Methods
+	bool cfgChange( TCfg &co, const TVariant &pc );
+
+	void load_( );
+	void save_( );
+
+    private:
+	//Methods
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
+	//Attributes
+	string		mTimings;
+	unsigned short	mAttemts;
+};
+
+// Definition the root module object of the subsystem "Transports" - add methods and attributes at your need
+//************************************************
+//* TrTmpl::TTr				 *
+//************************************************
+class TTr: public TTypeTransport
+{
+    public:
+	TTr( string name );
+	~TTr( );
+
+	TTransportIn  *In( const string &id, const string &stor );
+	TTransportOut *Out( const string &id, const string &stor );
+
+	string outAddrHelp( );
+
+    private:
+	//Methods
+	void postEnable( int flag );
+};
+
+extern TTr *mod;	//The module root link
+
+} //End the namespace BDTmpl
 
 #endif //MODULE_H

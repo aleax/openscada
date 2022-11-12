@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("DCON client")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.3.13"
+#define MOD_VER		"1.3.14"
 #define AUTHORS		trS("Roman Savochenko, Almaz Karimov")
 #define DESCRIPTION	trS("Provides an implementation of DCON-client protocol. Supports I-7000 DCON protocol.")
 #define LICENSE		"GPL2"
@@ -207,8 +207,6 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 }
-
-
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {

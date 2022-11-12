@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module DAQ.Tmpl file: module.h
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,20 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! Multi-including this header file prevent. Change for your include file name
+// Preventing of the header file multi-including - change at the header file name changing
 #ifndef MODULE_H
 #define MODULE_H
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <string>
 #include <vector>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tcontroller.h>
 #include <ttypedaq.h>
 #include <tparamcontr.h>
 
-//!!! Definition of the individual module translation functions. Do not change these!
+// Definition of the individual module translation functions - do not change
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
 #undef trS
@@ -42,13 +41,13 @@ using std::string;
 using std::vector;
 using namespace OSCADA;
 
-//!!! All the module's objects you should include into self (individual) namespace. Change the namespace for your module.
-namespace ModTmpl
+// All the module objects in own (individual) namespace - change for your module
+namespace DAQTmpl
 {
 
-//!!! DAQ-subsystem parameter object realisation define. Add methods and attributes for your need.
+// Definition the object of the controller parameter of the subsystem "DAQ" - add methods and attributes at your need
 //*************************************************
-//* ModTmpl::TMdPrm                               *
+//* DAQTmpl::TMdPrm                               *
 //*************************************************
 class TMdContr;
 
@@ -56,141 +55,98 @@ class TMdPrm : public TParamContr
 {
     public:
 	//Methods
-	//!!! Constructor for DAQ-subsystem parameter object.
 	TMdPrm( string name, TTypeParam *tp_prm );
-	//!!! Destructor for DAQ-subsystem parameter object.
 	~TMdPrm( );
 
-	//!!! Parameter's structure element link function
 	TElem &elem( )		{ return pEl; }
 
-	//!!! Processing virtual functions for enable and disable parameter
 	void enable( );
 	void disable( );
 
-	//!!! Direct link to parameter's owner controller
 	TMdContr &owner( ) const;
-
-    protected:
-	//Methods
-	//!!! Processing virtual functions for load and save parameter to DB
-	void load_( );
-	void save_( );
 
     private:
 	//Methods
-	//!!! Post-enable processing virtual function
 	void postEnable( int flag );
-	//!!! Processing virtual function for OpenSCADA control interface comands
 	void cntrCmdProc( XMLNode *opt );
-	//!!! Processing virtual function for setup archive's parameters which associated with the parameter on time archive creation
 	void vlArchMake( TVal &val );
 
 	//Attributes
-	//!!! Parameter's structure element
-	TElem	pEl;			//Work atribute elements
+	TElem	pEl;			//Elements of the dynamic attributes
 };
 
-//!!! DAQ-subsystem controller object realisation define. Add methods and attributes for your need.
+// Definition the controller object of the subsystem "DAQ" - add methods and attributes at your need
 //*************************************************
-//* ModTmpl::TMdContr                             *
+//* DAQTmpl::TMdContr                             *
 //*************************************************
 class TMdContr: public TController
 {
     friend class TMdPrm;
     public:
 	//Methods
-	//!!! Constructor for DAQ-subsystem controller object.
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
-	//!!! Destructor for DAQ-subsystem controller object.
 	~TMdContr( );
 
-	//!!! Status processing function for DAQ-controllers
 	string getStatus( );
 
-	//!!! The controller's background task properties
 	int64_t	period( )	{ return mPer; }
-	string	cron( )		{ return mSched; }
+	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return mPrior; }
 
-	//!!! Request for connection to parameter-object of this controller
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
     protected:
 	//Methods
-	//!!! Parameters register function, on time it enable, for fast processing into background task.
 	void prmEn( TMdPrm *prm, bool val );
 
-	//!!! Processing virtual functions for start and stop DAQ-controller
 	void start_( );
 	void stop_( );
 
-	//!!! Processing virtual function for OpenSCADA control interface comands
 	void cntrCmdProc( XMLNode *opt );
 	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
-	//!!! Processing virtual functions for self object-parameter creation.
-	TParamContr *ParamAttach( const string &name, int type );
-	//!!! Background task's function for periodic data acquisition.
+	TParamContr *ParamAttach( const string &id, int type );
 	static void *Task( void *icntr );
 
 	//Attributes
-	//!!! The resource for Enable parameters.
-	Res	enRes;		// Resource allocation for enable parameters
-	//!!! The links to the controller's background task properties into config.
-	TCfg	&mSched,	// Schedule
-		&mPrior;	// Process task priority
+	ResMtx	enRes;		// Resources lock for enabling the parameters
+	int64_t	&mPrior;	// Priority of the processing task
 	int64_t	mPer;
 
-	//!!! Background task's sync properties
-	bool	prcSt,		// Process task active
-		callSt;		// Calc now stat
+	bool	prcSt,		// Activity of the task processing
+		callSt;		// State of the calculation just now
 
-	//!!! Enabled and processing parameter's links list container.
-	vector< AutoHD<TMdPrm> > pHD;
+	vector< AutoHD<TMdPrm> > pHd;
 
-	double	tmGath;		// Gathering time
+	double	tmGath;		// Time of the data gathering
 };
 
-//!!! Root module object define. Add methods and attributes for your need.
+// Definition the root module object of the subsystem "DAQ" - add methods and attributes at your need
 //*************************************************
-//* ModTmpl::TTpContr                             *
+//* DAQTmpl::TTpContr                             *
 //*************************************************
 class TTpContr: public TTypeDAQ
 {
     public:
 	//Methods
-	//!!! Constructor for Root module object.
 	TTpContr( string name );
-	//!!! Destructor for Root module object.
 	~TTpContr( );
 
     protected:
 	//Methods
-	//!!! Post-enable processing virtual function
 	void postEnable( int flag );
 
-	//!!! Processing virtual functions for load and save Root module to DB
-	void load_( );
-	void save_( );
-
-	//!!! The flag for redundantion mechanism support by module detection
 	bool redntAllow( )	{ return true; }
 
     private:
 	//Methods
-	//!!! Processing virtual functions for self object-controller creation.
-	TController *ContrAttach( const string &name, const string &daq_db );
-
-	//!!! Module's comandline options for print help function.
-	string optDescr( );
+	TController *ContrAttach( const string &id, const string &daq_db );
 };
 
-//!!! The module root link
-extern TTpContr *mod;
+extern TTpContr *mod;	//The module root link
 
-} //End namespace ModTmpl
+} //End the namespace DAQTmpl
 
 #endif //MODULE_H

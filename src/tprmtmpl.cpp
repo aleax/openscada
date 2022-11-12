@@ -215,7 +215,8 @@ void TPrmTempl::save_( )
 	cfg.cfg("NAME").setS(io(iIO)->name());
 	cfg.cfg("TYPE").setI(io(iIO)->type());
 	cfg.cfg("FLAGS").setI(io(iIO)->flg());
-	cfg.cfg("VALUE").setNoTransl(!(io(iIO)->type()==IO::String || io(iIO)->flg()&(TPrmTempl::CfgLink|IO::Selectable)));
+	cfg.cfg("VALUE").setNoTransl(!((io(iIO)->type() == IO::String && io(iIO)->flg()&IO::TransltText) ||
+					io(iIO)->flg()&(TPrmTempl::CfgLink|IO::Selectable)));
 	cfg.cfg("VALUE").setS(io(iIO)->def());
 	cfg.cfg("POS").setI(iIO);
 	TBDS::dataSet(w_db+"_io", w_cfgpath+"_io", cfg);

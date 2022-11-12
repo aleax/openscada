@@ -13806,9 +13806,9 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 				this["fltr"+(iF+1)].attrSet("en", false).attrSet("active", false).attrSet("value", "");
 			}
 
-		toUpdate = true;
+		toUpdate = true; toCalcCycles = 1;
 	}
-	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true;
+	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true, toCalcCycles = 1;
 }
 
 if(toCalcCycles > 0.1) {
@@ -15383,13 +15383,14 @@ if(!n) {
 
 	time = min(time, SYS.time());
 	SYS.localtime(time, 0, curMin, curHour, curDay, curMonth, curYear);
-	doc_bTime = SYS.mktime(0, 0, repHour, curDay, curMonth, curYear);
-	doc_time = SYS.mktime(0, 0, repHour, curDay+1, curMonth, curYear);
-	if(curHour < repHour || (curHour == repHour && !curMin)) { doc_bTime -= 24*60*60; doc_time -= 24*60*60; }
-
-	bTime = doc_bTime;
-	time = lastTime = doc_time;
+	doc_bTime_ = SYS.mktime(0, 0, repHour, curDay, curMonth, curYear);
+	doc_time_ = SYS.mktime(0, 0, repHour, curDay+1, curMonth, curYear);
+	if(time < lastTime || curHour < repHour || (curHour == repHour && !curMin)) { doc_bTime_ -= 24*60*60; doc_time_ -= 24*60*60; }
+	bTime = doc_bTime_;
+	time = lastTime = doc_time_;
 	doc_doc = "";
+	if(doc_time == doc_time_) doc_time = 0;
+	else doc_time = doc_time_, doc_bTime = doc_bTime_;
 
 	return;
 }
@@ -23727,7 +23728,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.1
+Version: 1.2.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23741,7 +23742,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.1
+Версия: 1.2.2
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -28619,7 +28620,7 @@ The main advantage of this document type is the lowest load on CPU during the ge
 Therefore, documents of this type are appropriated to use on the stationary AWPs of the operators, even if it is a reproduction from the visualisation server, and are useless in the WEB-interface!
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.0
+Version: 1.2.1
 License: GPLv2',32,'','','','Кадр є шаблоном документу архівного типу, він надається як приклад та для побудови власних архівних документів на його основі. Основною специфікою документу цього типу є періодична генерація на рівні СВУ-сеансу (у фоні) та розміщення фінальних та готових документів у архіві, таблиця БД сеансу СВУ-проекту "prj_{ProjID}_ses".
 
 Основною перевагою цього типу документу є найменше навантаження на процесор протягом генерації, яка може бути багатокроковою протягом основного періоду генерації, та швидкий перегляд, який передбачає просте відкриття готових документів із архіву. Але цей тип документу має суттєвий недолік, який полягає у постійному виконані єдиного сеансу проекту у фоні та відсутність якого призводить до пропуску генерації документів у архів.
@@ -28627,7 +28628,7 @@ License: GPLv2',32,'','','','Кадр є шаблоном документу а�
 Відтак, документи такого типу доцільні до використання на стаціонарних АРМ оператору, навіть якщо це відтворення із серверу візуалізації, та малокорисні у WEB-інтерфейсі!
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.2.0
+Версія: 1.2.1
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docDin','dscr','The frame is a template of documents of the dynamic type and it is provided as an example and for building own dynamic documents on it basis. The main specific of that document type is the synchronous generating at the requesting-opening.
 

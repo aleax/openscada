@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Protocol.Tmpl file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,19 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <string.h>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tsys.h>
 #include <tmess.h>
 #include <tmodule.h>
 #include <tuis.h>
 
-//!!! Self your module's includings. Add need for your module includings.
+// Own includings of the module - add need ones
 #include "module.h"
 
-//!!! Module's meta-information. Change for your module.
 //*************************************************
 //* Module info!                                  *
 #define MOD_ID		"Tmpl"
@@ -44,10 +42,9 @@
 #define LICENSE		"MyLicense"
 //*************************************************
 
-ModTmpl::TProt *ModTmpl::mod;
+PrtTmpl::TProt *PrtTmpl::mod;
 
-//!!! Required section for binding OpenSCADA core to this module. Gives information and create module's root object.
-//!!! Not remove this section!
+// Required section for binding OpenSCADA core to this module, It gives information and creates module root object - do not change
 extern "C"
 {
 #ifdef MOD_INCL
@@ -56,7 +53,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0) return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -66,99 +63,79 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new ModTmpl::TProt( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new PrtTmpl::TProt(source);
 	return NULL;
     }
 }
 
-//!!! Include for default enter to your module namespace.
-using namespace ModTmpl;
+using namespace PrtTmpl;
 
 //*************************************************
 //* TProt                                         *
 //*************************************************
-//!!! Constructor for module's root object. Append into for your need.
 TProt::TProt( string name ) : TProtocol(MOD_ID)
 {
-    //!!! Init shortcut to module root object. Don't change it!
     mod = this;
 
-    //!!! Load module meta-information to root object. Don't change it!
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
-//!!! Destructor for module's root object. Append into for your need.
 TProt::~TProt()
 {
 
 }
 
-//!!! Module's comandline options the print help function. Add your module commandline parameters info.
-string TProt::optDescr( )
-{
-    return TSYS::strMess(_(
-	"======================= Module <%s:%s> options =======================\n"
-	"---- Parameters of the module section '%s' of the configuration file ----\n"
-	"AuthTime <min>          Life time of the authentication, minutes (default 10).\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-}
-
-//!!! Inherited (virtual) load object's node method. Append your module need data loadings
 void TProt::load_( )
 {
-    //!!! Load self module command line parameters' values. Append your addition parameters process.
-    // Load parameters from command line
-
-    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA DB or from main config-file
+    //???? Append loading the configuration parameters
 }
 
 void TProt::save_( )
 {
-    //!!! Save addition your module specific data. For example, make saving addition module's parameters to OpenSCADA DB
+    //???? Append saving the configuration parameters
 }
 
-//!!! Main subsystem API function for self modules input protocol object creation. Change only your class names.
-TProtocolIn *TProt::in_open( const string &name )
+TProtocolIn *TProt::in_open( const string &id )	{ return new TProtIn(id); }
+
+void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
-    return new TProtIn(name);
+    MtxAlloc resN(tro.reqRes(), true);
+
+    //???? Processing for the request preparing, sending and the answer receiving, parsing
 }
 
-//!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standard confifurators of OpenSCADA to individual module's parameters.
-//!!! Modify for self needs
 void TProt::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //???? Change and append for your specific configuration
+
+    //Getting the page info
+    if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
+	//...
 	return;
     }
-
-    //> Process command to page
+    //Processing for commands to the page
     string a_path = opt->attr("path");
+    //...
     TProtocol::cntrCmdProc(opt);
 }
-
 
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-//!!! Constructor for input protocol object. Append into for your need.
 TProtIn::TProtIn( string name ) : TProtocolIn(name)
 {
 
 }
 
-//!!! Destructor for input protocol object. Append into for your need.
-TProtIn::~TProtIn()
+TProtIn::~TProtIn( )
 {
 
 }
 
-//!!! The inherited (virtual) function of process input and preparint output data for called input transport
 bool TProtIn::mess( const string &reqst, string &answer )
 {
-    //!!! Your code
+    //???? Write here processing the input requests
+
+    return false;
 }

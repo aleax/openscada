@@ -753,7 +753,7 @@ void Node::load_( TConfig *icfg )
     else {
 	//cfgViewAll(true);
 	cfg("DT_PROG").setExtVal(true);
-	TBDS::dataGet(fullDB(),owner().nodePath()+tbl(), *this);
+	TBDS::dataGet(fullDB(), owner().nodePath()+tbl(), *this);
 	//cfg("MODE").setI(cfg("MODE").getI());
     }
     if(!progTr()) cfg("DT_PROG").setExtVal(false, true);

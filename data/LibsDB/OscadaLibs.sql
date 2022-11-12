@@ -4962,7 +4962,15 @@ if(tErr.toInt()) {
 		}
 }
 f_err = tErr;','','',1662904842);
-INSERT INTO tmplib_DevLib VALUES('SLOT','Slot LTD devices','','','','','',240,0,'JavaLikeCalc.JavaScript
+INSERT INTO tmplib_DevLib VALUES('SLOT','Slot LTD devices','','','The template implements support for counters and correctors of the "SLOT" LTD production. The devices protocol is flexible and uniform for implementation of reading all available archives also as setting the configuration fields, but currently there was need only for reading the hourly archives, so the template reads the daily and hourly archives and some set of the instantaneous parameters.
+
+The template includes also code for connect the counters through modems using the AT-commands.
+
+Author: Roman Savochenko <roman@oscada.org>
+Total complexity: 3.1 HD
+Sponsored by: Vinnica Poultry Farm
+Version: 0.8.0
+License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Modem requests
 function modemWr(ln, noNewLn)	{ tr.messIO(ln + ((noNewLn==true)?"":"\x0D\x0A"), 0, 0); }
 
@@ -5274,7 +5282,7 @@ else {
 	if(!schedContinue) schedTrueTm = SYS.time();
 	tErr += (sched.length?"; "+tr("Next scheduled call")+" "+SYS.strftime(SYS.cron(sched,schedTrueTm)):"") + (prcSt.length?"; "+prcSt:"");
 }
-f_err = tErr;','','',1667231182);
+f_err = tErr;','','',1668191139);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -12637,6 +12645,28 @@ INSERT INTO Trs VALUES('Inconsistent respond''s length.','','','');
 INSERT INTO Trs VALUES('Too short','','','');
 INSERT INTO Trs VALUES('No response','','','');
 INSERT INTO Trs VALUES('Not whole or not mine response.','Неповна або не моя відповідь.','','');
+INSERT INTO Trs VALUES('3:No response or the response is inconsistent. ','','','');
+INSERT INTO Trs VALUES('3:Error the response CRC. ','','','');
+INSERT INTO Trs VALUES('4:Error at the package receiving. ','','','');
+INSERT INTO Trs VALUES('4:Invalid device address. ','','','');
+INSERT INTO Trs VALUES('4:Invalid function number. ','','','');
+INSERT INTO Trs VALUES('4:Archive empty on pointed interval. ','','','');
+INSERT INTO Trs VALUES('4:Error password. ','','','');
+INSERT INTO Trs VALUES('4:Unknown block number at the request. ','','','');
+INSERT INTO Trs VALUES('4:The compression constant is outranged. ','','','');
+INSERT INTO Trs VALUES('4:The gas density at the writing is outranged. ','','','');
+INSERT INTO Trs VALUES('4:The m.p. of CO2 at the writing is outranged. ','','','');
+INSERT INTO Trs VALUES('4:The m.p. of N2 at the writing is outranged. ','','','');
+INSERT INTO Trs VALUES('4:Unknown error %1. ','','','');
+INSERT INTO Trs VALUES('4:The function is error or inconsistent to the request one. ','','','');
+INSERT INTO Trs VALUES('Address ''%1'' out of range [0...65535].','','','');
+INSERT INTO Trs VALUES('No modem response or the response ''%1'' is inconsistent. ','','','');
+INSERT INTO Trs VALUES('Error remote node call ''%1'': ''%2''. ','','','');
+INSERT INTO Trs VALUES('Days: ','','','');
+INSERT INTO Trs VALUES('Trace for current time=%1','','','');
+INSERT INTO Trs VALUES('Initial reading in time=%1','','','');
+INSERT INTO Trs VALUES('Hours: ','','','');
+INSERT INTO Trs VALUES('Next scheduled call','','','');
 CREATE TABLE IF NOT EXISTS 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO tmplib_base_io VALUES('digAlarm','in','Input',3,144,'Input|in',2,'Вхід','','Вход','','');
 INSERT INTO tmplib_base_io VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','','');
@@ -13512,13 +13542,13 @@ INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroP','Set zero',3,32,'',4,'Уст
 INSERT INTO tmplib_DevLib_io VALUES('MTP4D','zeroAP','Set atmosphere',3,32,'',5,'Установить атмосферу','','Встановити атмосферу','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','transport','Transport',0,64,'Sockets.SLOT:10.39.77.10:4001',0,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','modem','Modem
-In the format "{TelN}[:{Init1}[:{Init2}[...{InitN}]]]',0,64,'',1,'','','','','');
+In the format "{TelN}[:{Init1}[:{Init2}[...{InitN}]]]"',0,64,'',1,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','modemTm','Modem times
-In the format "{tm}:{ConTm}"',0,64,'20:1',2,'','','','','');
+In the format "{tm}:{ConTm}"',0,64,'40:5',2,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','addr','Device address [0...65535]',1,64,'1',3,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','pipeN','Pipe number [0...1]',1,64,'0',4,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','sched','Scheduling at CRON',0,64,'',5,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhTmLim','Time limit of processing the archiving, seconds',1,64,'40',6,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhTmLim','Time limit of processing the archiving, seconds',1,64,'120',6,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhD','OpenSCADA archiver for device archive of days',0,64,'',7,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',8,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','reset','Reset the archives reading',3,32,'',9,'','','','','');
@@ -13560,8 +13590,8 @@ INSERT INTO tmplib_DevLib_io VALUES('SLOT','correctorTime','Corrector time',0,16
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','dP','Pressure difference, kPa [arh]',2,16,'',45,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','P','Pressure, MPa [arh]',2,16,'',46,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','T','Temperature, °С [arh]',2,16,'',47,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fstd','Flow standard cond., m3/h [arh]',2,16,'',48,'','','Volume standard cond., m3 [arh]','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fwork','Flow work cond., m3/h [arh]',2,16,'',49,'','','Volume work cond., m3 [arh]','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fstd','Volume standard cond., m3 [arh]',2,16,'',48,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','Fwork','Volume work cond., m3 [arh]',2,16,'',49,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','itSt','Item status [arh]',0,16,'',50,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','tr','Output transport',4,1,'',51,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','reqCntr','Counter of the requests and the reconnection waiting (negative)',2,0,'0',52,'','','','','');

@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module DAQ.Tmpl file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,22 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
 #include <ttypeparam.h>
 #include <tdaqs.h>
 
-//!!! Self your module's includings. Add need for your module includings.
+// Own includings of the module - add need ones
 #include "module.h"
 
-//!!! Module's meta-information. Change for your module.
 //*************************************************
 //* Module info!                                  *
 #define MOD_ID		"Tmpl"
@@ -47,10 +45,9 @@
 #define LICENSE		"MyLicense"
 //*************************************************
 
-ModTmpl::TTpContr *ModTmpl::mod;	//Pointer for direct access to the module
+DAQTmpl::TTpContr *DAQTmpl::mod;
 
-//!!! Required section for binding OpenSCADA core to this module. It provides information and create module root object.
-//!!! Do not remove this section!
+// Required section for binding OpenSCADA core to this module, It gives information and creates module root object - do not change
 extern "C"
 {
 #ifdef MOD_INCL
@@ -69,100 +66,69 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
-	    return new ModTmpl::TTpContr(source);
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new DAQTmpl::TTpContr(source);
 	return NULL;
     }
 }
 
-//!!! Include for default enter to your module namespace.
-using namespace ModTmpl;
+using namespace DAQTmpl;
 
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-//!!! Constructor for Root module object.
 TTpContr::TTpContr( string name ) : TTypeDAQ(MOD_ID)
 {
-    //!!! Init shortcut to module root object. Don't change it!
     mod = this;
 
-    //!!! Load module meta-information to root object. Don't change it!
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
-//!!! Destructor for Root module object.
 TTpContr::~TTpContr( )
 {
 
 }
 
-//!!! Module's comandline options for print help function.
-string TTpContr::optDescr( )
-{
-    return TSYS::strMess(_(
-	"======================= Module <%s:%s> options =======================\n"
-	"---- Parameters of the module section '%s' of the configuration file ----\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-}
-
-//!!! Processing virtual function for load Root module to DB
-void TTpContr::load_( )
-{
-    //Load parameters from command line
-}
-
-//!!! Processing virtual function for save Root module to DB
-void TTpContr::save_( )
-{
-
-}
-
-//!!! Post-enable processing virtual function
 void TTpContr::postEnable( int flag )
 {
     TTypeDAQ::postEnable(flag);
 
-    //Controler's bd structure
+    //DB structure of the controller object
     fldAdd(new TFld("PRM_BD",trS("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",trS("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",trS("Priority of the acquisition task"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
-    //!!! Append here your's PLC specific configuration field stored into DB
+    //???? Append here the PLC specific configuration fields stored in DB
 
-    //Parameter types and it's bd structure form
-    int tPrm = tpParmAdd("std", "PRM_BD", trS("Standard")/*, true*/);	//!!! Set "true" here for hierarchically parameters
+    //Parameter types and them DB structures
+    int tPrm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
     tpPrmAt(tPrm).fldAdd(new TFld("OID_LS",trS("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
-    //!!! Append here your's source object (parameters) types and it's specific configuration field stored into DB
+    //???? Append here the parameter type specific configuration fields stored in DB
+
+    //???? Append here other parameter types at your need
 }
 
-//!!! Processing virtual functions for self object-controller creation.
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name, daq_db, this);
-}
+TController *TTpContr::ContrAttach( const string &id, const string &daq_db )	{ return new TMdContr(id, daq_db, this); }
 
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-//!!! Constructor for DAQ-subsystem controller object.
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
-    prcSt(false), callSt(false), tmGath(0), mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mPer(1e9)
+TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
+    TController(name_c,daq_db,cfgelem), mPrior(cfg("PRIOR").getId()), mPer(1e9), prcSt(false), callSt(false), tmGath(0)
 {
     cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }
 
-//!!! Destructor for DAQ-subsystem controller object.
 TMdContr::~TMdContr( )
 {
     if(startStat()) stop();
 }
 
-//!!! Status processing function for DAQ-controllers
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
+
+    //???? Append here the status of the controller object for its specific information
     if(startStat() && !redntUse()) {
-	if(!prcSt)	val += TSYS::strMess(_("Task terminated! "));
+	if(!prcSt)	rez += TSYS::strMess(_("Task terminated! "));
 	if(callSt)	rez += TSYS::strMess(_("Acquisition. "));
 	if(period())	rez += TSYS::strMess(_("Acquisition with the period %s. "), tm2s(1e-9*period()).c_str());
 	else rez += TSYS::strMess(_("Next acquisition by the cron '%s'. "), atm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
@@ -171,40 +137,32 @@ string TMdContr::getStatus( )
     return rez;
 }
 
-//!!! Processing virtual functions for self object-parameter creation.
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name, &owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &id, int type ) { return new TMdPrm(id, &owner().tpPrmAt(type)); }
 
-//!!! Processing virtual functions for start DAQ-controller
 void TMdContr::start_( )
 {
-    //Start the gathering data task
-    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
+    //Starting the gathering data task
+    if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
-//!!! Processing virtual functions for stop DAQ-controller
 void TMdContr::stop_( )
 {
-    //Stop the request and calc data task
-    SYS->taskDestroy(nodePath('.',true));
+    //Stopping the gathering data task
+    if(prcSt) SYS->taskDestroy(nodePath('.',true));
 }
 
-//!!! Parameters register function, on time it enable, for fast processing into background task.
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
     unsigned iPrm;
 
-    MtxAlloc res(enRes.mtx(), true);
-    for(iPrm = 0; iPrm < pHD.size(); iPrm++)
-	if(&pHD[iPrm].at() == prm) break;
+    MtxAlloc res(enRes, true);
+    for(iPrm = 0; iPrm < pHd.size(); iPrm++)
+	if(&pHd[iPrm].at() == prm) break;
 
-    if(val && iPrm >= pHD.size())	pHD.push_back(prm);
-    if(!val && iPrm < pHD.size())	pHD.erase(pHD.begin()+iPrm);
+    if(val && iPrm >= pHd.size()) pHd.push_back(prm);
+    if(!val && iPrm < pHd.size()) pHd.erase(pHd.begin()+iPrm);
 }
 
-//!!! Background task's function for periodic data acquisition.
 void *TMdContr::Task( void *icntr )
 {
     TMdContr &cntr = *(TMdContr *)icntr;
@@ -212,22 +170,20 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
 
     while(!TSYS::taskEndRun()) {
-	int64_t t_cnt = TSYS::curTime();
-
-	//Update controller's data
-	//!!! Your code for gather data
-	cntr.enRes.lock();
 	cntr.callSt = true;
-	for(unsigned i_p = 0; i_p < cntr.pHD.size() && !cntr.redntUse(); i_p++)
-	    try {
-		//!!! Process parameter code
-	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
-	cntr.callSt = false;
-	cntr.enRes.unlock();
-	cntr.tmGath = TSYS::curTime() - t_cnt;
+	int64_t tCnt = TSYS::curTime();
 
-	//!!! Wait for next iteration
-	TSYS::taskSleep(cntr.period(), cntr.period()?"":cntr.cron());
+	//Updating the controller data
+	MtxAlloc res(cntr.enRes, true);
+	for(unsigned iP = 0; iP < cntr.pHd.size() && !cntr.redntUse(); iP++)
+	    try {
+		//???? Place here your data acquisition code or call correspond functions of the parameter
+	    } catch(TError &err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	res.unlock();
+	cntr.tmGath = TSYS::curTime() - tCnt;
+	cntr.callSt = false;
+
+	TSYS::taskSleep(cntr.period(), cntr.period() ? "" : cntr.cron());
     }
 
     cntr.prcSt = false;
@@ -235,10 +191,11 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-//!!! Processing virtual function for OpenSCADA control interface comands
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //Get page info
+    //???? Change and append for your specific configuration
+
+    //Getting the page info
     if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
@@ -246,7 +203,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior().c_str());
 	return;
     }
-    //Process command to page
+    //Processing for commands to the page
     TController::cntrCmdProc(opt);
 }
 
@@ -255,7 +212,7 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
     TController::cfgChange(co, pc);
 
     if(co.fld().name() == "SCHEDULE")
-	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
+	mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     return true;
 }
@@ -263,32 +220,21 @@ bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-//!!! Constructor for DAQ-subsystem parameter object.
-TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) :
-    TParamContr(name,tp_prm), pEl("w_attr")
+TMdPrm::TMdPrm( string name, TTypeParam *tp_prm ) : TParamContr(name,tp_prm), pEl("w_attr")
 {
 
 }
 
-//!!! Destructor for DAQ-subsystem parameter object.
-TMdPrm::~TMdPrm( )
-{
-    //!!! Disable and all child nodes early deletion for prevent access to data the object from included nodes on destruction.
-    disable();
-    nodeDelAll();
-}
+TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
 
-//!!! Post-enable processing virtual function
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
     if(!vlElemPresent(&pEl)) vlElemAtt(&pEl);
 }
 
-//!!! Direct link to parameter's owner controller
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+TMdContr &TMdPrm::owner( ) const { return (TMdContr&)TParamContr::owner(); }
 
-//!!! Processing virtual functions for enable parameter
 void TMdPrm::enable( )
 {
     if(enableStat())	return;
@@ -296,9 +242,10 @@ void TMdPrm::enable( )
     TParamContr::enable();
 
     owner().prmEn(this, true);
+
+    //???? Append here for the specific initialisation of the parameter type with filling the dynamic attributes in <pEl>
 }
 
-//!!! Processing virtual functions for disable parameter
 void TMdPrm::disable( )
 {
     if(!enableStat())	return;
@@ -312,50 +259,33 @@ void TMdPrm::disable( )
     elem().fldList(ls);
     for(int i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
+
+    //???? Append here for the specific data releasing of the parameter type
 }
 
-//!!! Processing virtual functions for load parameter from DB
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
-}
-
-//!!! Processing virtual functions for save parameter to DB
-void TMdPrm::save_( )
-{
-    TParamContr::save_();
-}
-
-//!!! Processing virtual function for OpenSCADA control interface comands
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //Service commands process
-    string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
+    //???? Change and append for your specific configuration
 
-    //Get page info
+    //Getting the page info
     if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
-
-    //Process command to page
-    if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
-	if(enableStat()) throw TError(nodePath().c_str(),"Parameter is enabled.");
-//	parseOIDList(opt->text());
-    }
-    else TParamContr::cntrCmdProc(opt);
+    //Processing for commands to the page
+    string a_path = opt->attr("path");
+    TParamContr::cntrCmdProc(opt);
 }
 
-//!!! Processing virtual function for setup archive's parameters which associated with the parameter on time archive creation
 void TMdPrm::vlArchMake( TVal &val )
 {
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
+    //???? Correct for specific of your data
     val.arch().at().setSrcMode(TVArchive::PassiveAttr);
-    val.arch().at().setPeriod((int64_t)(owner().period()*1000000));
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
 }

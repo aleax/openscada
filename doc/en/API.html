@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (2% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../uk/API.html" title="Документи/API (6% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -184,9 +184,9 @@
 <li class="toclevel-2 tocsection-101"><a href="#Access_to_archived_data_of_the_values.27_archive"><span class="tocnumber">18.3</span> <span class="toctext">Access to archived data of the values' archive</span></a></li>
 </ul>
 </li>
-<li class="toclevel-1 tocsection-102"><a href="#API_of_modules_of_the_modular_subsystems"><span class="tocnumber">19</span> <span class="toctext"><span>API of modules of the modular subsystems</span></span></a></li>
+<li class="toclevel-1 tocsection-102"><a href="#API_of_the_module"><span class="tocnumber">19</span> <span class="toctext"><span>API of the module</span></span></a></li>
 <li class="toclevel-1 tocsection-103"><a href="#Debugging_and_Testing_OpenSCADA"><span class="tocnumber">20</span> <span class="toctext">Debugging and Testing OpenSCADA</span></a></li>
-<li class="toclevel-1 tocsection-104"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext">Rules for design and commenting of the sources of OpenSCADA and its modules</span></a></li>
+<li class="toclevel-1 tocsection-104"><a href="#Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="tocnumber">21</span> <span class="toctext"><span>Rules for design and commenting of the sources of OpenSCADA and its modules</span></span></a></li>
 <li class="toclevel-1 tocsection-105"><a href="#Conventional_signs_in_the_text_and_source_code"><span class="tocnumber">22</span> <span class="toctext">Conventional signs in the text and source code</span></a></li>
 <li class="toclevel-1 tocsection-106"><a href="#Links"><span class="tocnumber">23</span> <span class="toctext">Links</span></a></li>
 </ul>
@@ -619,7 +619,7 @@ The data structure which identifies the module (class — TModule::SAt):
 <li> <i>void modFuncList( vector&lt;string&gt; &amp;list );</i> — The list of exported functions <i>list</i> of the module.</li>
 <li> <i>bool modFuncPresent( const string &amp;prot );</i> — Check the availability of the specified function by its prototype <i>prot</i>.</li>
 <li> <i>ExpFunc &amp;modFunc (const string &amp; prot);</i> — Get the information about exported function of the module <i>prot</i>.</li>
-<li> <i>bool modFunc( const string &amp;prot, void (TModule::**offptr)(), bool noex = false );</i> — Getting the relative address <i>offptr</i> of the exported function <i>prot</i>. Returns "true" for successful and the non-exceptional mode <i>noex</i>.</li>
+<li> <i>bool modFunc( const string &amp;prot, void (TModule::**offptr)(), bool noex = false );</i> — Getting the relative address <i>offptr</i> of the exported function <i>prot</i>. Returns TRUE for successful and the non-exceptional mode <i>noex</i>.</li>
 <li> <i>string I18N( const string &amp;mess, const char *mLang = NULL );</i> — Localisation of modular message <i>mess</i> in accordance with the current locale and user language <i>mLang</i> in the MULTILANGUAGE modes.</li>
 <li> <i>virtual string optDescr( );</i> — Localized help on the options of the command line and parameters of the configuration file for the module.</li>
 <li> <i>TSubSYS &amp;owner( ) const;</i> — Subsystem - the owner of the module.</li></ul>
@@ -702,7 +702,7 @@ Flags of the function <i>dbList()</i> (enum – TDBS::DBLsFlg):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>string features( );</i> — Keyword list of features supported by the DB.</li>
+<ul><li> <i>virtual string features( );</i> — Keyword list of features supported by the DB.</li>
 <li> <i>virtual int lsPr( )</i> — The DB priority base [0...9] in the generic storages list.</li>
 <li> <i>bool fullDeleteDB( );</i> — Sign of the complete removal of the database.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of registered (opened) databases.</li>
@@ -873,10 +873,10 @@ Flags of the SQL requests (enum – TTable::SQLFeqFlag):
 <li> <i>int tpParmAdd( const char *id, const char *n_db, const char *name );</i> — Addition/registration of the parameters' types.</li>
 <li> <i>unsigned tpPrmSize( );</i> — Quantity of the parameters' types.</li>
 <li> <i>TTypeParam &amp;tpPrmAt( unsigned id );</i> — Get the object of the parameters' type.</li>
-<li> <i>virtual bool compileFuncLangs( vector&lt;string&gt; *ls = NULL );</i> — Request of the list of languages for which it is realized the possibility of formation of user procedures in this module, and check for it support fact.</li>
-<li> <i>virtual void compileFuncSnthHgl( const string &amp;lang, XMLNode &amp;shgl );</i> — The rules of syntax highlight request for specifying language.</li>
-<li> <i>virtual string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text, const string &amp;usings = "", int maxCalcTm = 0 );</i> — Compiling/setup of the user function on the supported programming language <i>lang</i> and on the source code of procedure <i>prog_text</i>, based on the parameters of procedure <i>fnc_cfg</i>. The result is the address to the prepared function object.</li>
-<li> <i>virtual bool redntAllow( );</i> — The indication of support of redundancy mechanisms by the module. It must be simply overridden and return <b>true</b>.</li></ul>
+<li> <i>virtual bool compileFuncLangs( vector&lt;string&gt; *ls = NULL );</i> — Request of the list of languages for which it is realised the possibility of formation of user procedures in this module, and check for fact of that support.</li>
+<li> <i>virtual void compileFuncSnthHgl( const string &amp;lang, XMLNode &amp;shgl );</i> — Request the rules of the syntax highlight <i>shgl</i> for the specified language <i>lang</i>.</li>
+<li> <i>virtual string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text, const string &amp;usings = "", int maxCalcTm = 0 );</i> — compiling-registering of the user function on the supported programming language <i>lang</i> and on the source code of procedure <i>prog_text</i>, based on the procedure parameters <i>fnc_cfg</i>. Returns address of the compiled function's object, ready for execution.</li>
+<li> <i>virtual bool redntAllow( );</i> — State of support the redundancy mechanisms by the module. Should be overridden and return TRUE if supported, otherwise FALSE.</li></ul>
 <p><b>Protected methods:</b>
 </p>
 <ul><li> <i>virtual TController *ContrAttach( const string &amp;name, const string &amp;daq_db );</i> — Connecting of the controller. It must be obligatory overridden in the descendant of the module.</li></ul>
@@ -908,7 +908,7 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>string name( );</i> — Controller's name.</li>
 <li> <i>string descr( );</i> — Controller's description.</li>
 <li> <i>int64_t timeStamp( );</i> — Timestamp of the object changing as maximum of timestamps of the included parameter objects.</li>
-<li> <i>virtual string getStatus( );</i> — Request function of the controller's status.</li>
+<li> <i>virtual string getStatus( );</i> — Request function of the controller status.</li>
 <li> <i>string DB( bool qTop = false ) const;</i> — Storage name of the controller's instance, <i>qTop</i> for the storage queue top.</li>
 <li> <i>string tbl( ) const;</i> — The name of the table of DB of the controller's instance.</li>
 <li> <i>string fullDB( bool qTop = false ) const;</i> — The full name of the table of storage of the controller's instance, <i>qTop</i> for the storage queue top.</li>
@@ -935,9 +935,9 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>void setRedntMode( Redundant vl );</i> — Setting of the redundancy mode, enabling.</li>
 <li> <i>string redntRun( );</i> — Configuration of the preferred execution.</li>
 <li> <i>void setRedntRun( const string &amp;vl );</i> — Setting the configuration of the preferred execution.</li>
-<li> <i>virtual void redntDataUpdate( );</i> — An operation of the data receiving from the backup station execution. It is called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
-<li> <i>virtual string catsPat( );</i> — regular expression rules separated '|' list for the object's generated messages math by category.</li>
-<li> <i>virtual void messSet( const string &amp;mess, int lev, const string &amp;type2Code = "OP", const string &amp;prm = "", const string &amp;cat = "" );</i> — Formation of the DAQ-sourced messages for the parameter object <i>prm</i> (<b>{PrmId}</b>), or the controller object in whole if the object is not specified, the message <i>mess</i>, level <i>lev</i> and for the type code <i>type2Code</i>. This function generates the messages with the unified DAQ-transparency category <b>{type2Code}{ModId}:{CntrId}[.{prm}][:{cat}]</b>.</li>
+<li> <i>virtual void redntDataUpdate( );</i> — Operation of the data receiving from the backup station, called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
+<li> <i>virtual string catsPat( );</i> — List of the regular expression rules, separated by '|', for matching by category the messages generated by the object.</li>
+<li> <i>virtual void messSet( const string &amp;mess, int lev, const string &amp;type2Code = "OP", const string &amp;prm = "", const string &amp;cat = "" );</i> — Formation of the DAQ-sourced messages for the parameter object <i>prm</i> (<b>{PrmId}</b>), or the controller object in whole if the parameter object is not specified, for the message <i>mess</i>, level <i>lev</i> and for the type code <i>type2Code</i>. This function generates the messages with the unified DAQ-transparency category <b>{type2Code}{ModId}:{CntrId}[.{prm}][:{cat}]</b>.</li>
 <li> <i>void alarmSet( const string &amp;mess, int lev = -TMess::Crit, const string &amp;prm = "", bool force = false );</i> — Formation of alarms (a violation) for the parameter object <i>prm</i> (<b>{PrmId}\n{PrmNm}</b>), or the controller object in whole if the object is not specified, the message <i>mess</i> and level <i>lev</i>. The negative value of the level <i>lev</i> is used to set and positive for removal of the violation. This function generates the violation and message with the category <b>al{ModId}:{CntrId}[.{prm}]</b> and the text <b>{CntrNm} &gt; {PrmNm}: {MessText}</b>. The alarms clearance, as the setting also, works in the toggling mode, so means of passing the clearance messages to the message buffer, and the same clearance, only at the according violations presence, what may be disabled setting <i>force</i>.</li>
 <li> <i>TTypeDAQ &amp;owner( ) const;</i> — The type of the data source (module) - the owner of the controller.</li></ul>
 <p><b>Protected attributes:</b>
@@ -946,11 +946,11 @@ Redundancy modes (enum TController::Redundant):
 <li> <i>bool runSt;</i> — The sign "Running".</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>virtual void enable_(  );</i> — Enabling of the controller. Intercepted by the child.</li>
-<li> <i>virtual void disable_(  );</i> — Disabling of the controller. Intercepted by the child.</li>
-<li> <i>virtual void start_( );</i> — Starting of the controller. Intercepted by the child.</li>
-<li> <i>virtual void stop_( );</i> — Stopping of the controller. Intercepted by the child.</li>
-<li> <i>virtual TParamContr *ParamAttach( const string &amp;name, int type );</i> — Modular method of the creation/opening of the new parameter.</li></ul>
+<ul><li> <i>virtual void enable_(  );</i> — Enabling of the controller object. Usually at this stage the initialisation of the parameters' objects and their interfaces in the form of attributes is made, the attributes can sometimes be requested from the associated remote source.</li>
+<li> <i>virtual void disable_(  );</i> — Disabling the controller object.</li>
+<li> <i>virtual void start_( );</i> — Starting the controller object. Usually at this stage the task of periodic or scheduled polling is created and started.</li>
+<li> <i>virtual void stop_( );</i> — Stopping the controller object.</li>
+<li> <i>virtual TParamContr *ParamAttach( const string &amp;id, int type );</i> — Modular method of the creation/opening of the new parameter.</li></ul>
 <h3><span class="mw-headline" id="Parameters.27_type_object_.28TTypeParam.29"><span class="mw-headline-number">4.4</span> <span id="TTypeParam" title="#TTypeParam">Parameters' type object (TTypeParam)</span></span></h3>
 <table class="wikitable">
 
@@ -1016,12 +1016,12 @@ Flags of the enabling/disabling modes of the node (enum TParamContr::EnDisFlag):
 <li> <i>AutoHD&lt;TParamContr&gt; at( const string &amp;id, const string &amp;who = "th_prm" ) const;</i> — Connection to the controller's parameter <i>id</i>.</li>
 <li> <i>TTypeParam &amp;type( ) const;</i> — Parameter's type.</li>
 <li> <i>virtual TElem *dynElCntr( );</i> — Container of the dynamic elements of the DAQ attributes.</li>
-<li> <i>virtual void enable( );</i> — To enable parameter.</li>
-<li> <i>virtual void disable( );</i> — To disable parameter.</li>
+<li> <i>virtual void enable( );</i> — Enable the parameter object, the formation of the attributes set and filling them with the value of unreliability is made.</li>
+<li> <i>virtual void disable( );</i> — Disable the parameter object.</li>
 <li> <i>TController &amp;owner( ) const;</i> — Controller – the parameter's owner.</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>virtual void setType( const string &amp;tpId );</i> — is called to change the parameter type <i>tpId</i> and can be processed in the object module for self data change.</li></ul>
+<ul><li> <i>virtual void setType( const string &amp;tpId );</i> — called to change the parameter type to <i>tpId</i> and can be processed in the module object to change own data.</li></ul>
 <h3><span class="mw-headline" id="Object_of_the_value_.28TValue.29"><span class="mw-headline-number">4.6</span> <span id="TValue" title="#TValue">Object of the value (TValue)</span></span></h3>
 <table class="wikitable">
 
@@ -1048,10 +1048,10 @@ Flags of the enabling/disabling modes of the node (enum TParamContr::EnDisFlag):
 <li> <i>void vlElemAtt( TElem *ValEl );</i> — Attach of the data structure <i>ValEl</i>.</li>
 <li> <i>void vlElemDet( TElem *ValEl );</i> — Detach of the data structure <i>ValEl</i>.</li>
 <li> <i>TElem &amp;vlElem( const string &amp;name );</i> — Get the data structure by its name <i>name</i>.</li>
-<li> <i>virtual TVal* vlNew( );</i> — Creation of the TVal instance. It can be overridden in the module for the creation of derived objects of the parameters' attributes of the subsystem "Data acquisition".</li>
-<li> <i>virtual void vlGet( TVal &amp;vo );</i> — Predicting function of the value getting. It is used for direct (synchronous) reading.</li>
-<li> <i>virtual void vlSet( TVal &amp;vo, const TVariant &amp;vl, const TVariant &amp;pvl );</i> — Predicting function of the value setting. It is used for direct (synchronous) writing <i>vl</i> with the previous value into  <i>pvl</i>.</li>
-<li> <i>virtual void vlArchMake( TVal &amp;val );</i> — Notifying function of the creation of the archive for the <i>val</i> attribute. It is used to configure the created archive in accordance with the peculiarities of the data source.</li></ul>
+<li> <i>virtual TVal* vlNew( );</i> — Called at the stage of a new attribute creation. It can be overridden to implement the particular behaviour within its own, inherited from the <b>TVal</b>, class during the access of the attribute.</li>
+<li> <i>virtual void vlGet( TVal &amp;vo );</i> — Called for an attribute with the direct reading mode <b>TVal::DirRead</b> (synchronous mode, or reading from an internal buffer of the object) when reading the value in order to directly read the value from the physical source or the object buffer.</li>
+<li> <i>virtual void vlSet( TVal &amp;vo, const TVariant &amp;vl, const TVariant &amp;pvl );</i> — Called for the attribute <i>vo</i> with the direct recording mode <b>TVal::DirWrite</b> (synchronous or writing to an internal buffer of the object) when set to immediate record the value <i>vl</i> to the physical source or buffer object, with the previous value <i>pvl</i>.</li>
+<li> <i>virtual void vlArchMake( TVal &amp;val );</i> — Called at the stage of creation the value archive with the <i>val</i> attribute as the source in the order to initialise the qualitative characteristics of the archive buffer according to the characteristics of the data source and polling.</li></ul>
 <h3><span class="mw-headline" id="Attribute.27s_object_.28TVal.29"><span class="mw-headline-number">4.7</span> <span id="TVal" title="#TVal">Attribute's object (TVal)</span></span></h3>
 <table class="wikitable">
 
@@ -1179,17 +1179,17 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 </p>
 <ul><li> <i>Impl( TCntrNode *iobj, const string &amp;iname = "", bool blked = true );</i> — Constructs for the template implementation with the control node <i>iobj</i> and the name <i>iname</i>.</li>
 <li> <i>int  lnkId( const string &amp;nm );</i> — Returns the link <i>nm</i> (function's IO) identifier/number.</li>
-<li> <i>bool lnkPresent( int num );</i> — Checks the link number <i>num</i> to presence, returns "true" for accessibility the link.</li>
+<li> <i>bool lnkPresent( int num );</i> — Checks the link number <i>num</i> to presence, returns TRUE for accessibility the link.</li>
 <li> <i>void lnkList( vector&lt;int&gt; &amp;ls ) const</i> — Gets for list of the linked attributes ID.</li>
 <li> <i>virtual void lnkAdd( int num, const SLnk &amp;l );</i> — Adds a link with the number <i>num</i> and the "SLnk" structure <i>l</i>.</li>
 <li> <i>string lnkAddr( int num, bool spec = false ) const;</i> — Returns the link address for the number <i>num</i> and the special link address for <i>spec</i>.</li>
 <li> <i>void lnkAddrSet( int num, const string &amp;vl, bool spec = false );</i> — Sets the link address to <i>vl</i> for number <i>num</i> and the special link address for <i>spec</i>.</li>
-<li> <i>virtual bool lnkInit( int num, bool toRecnt = false );</i> — Inits/connects the link for the number <i>num</i>, which means reading "addr" and forming "con" or "addrSpec". Set <i>toRecnt</i> to force the re-linking. Returns "true" at the need for the initialization/activation repeating.</li>
+<li> <i>virtual bool lnkInit( int num, bool toRecnt = false );</i> — Inits/connects the link for the number <i>num</i>, which means reading "addr" and forming "con" or "addrSpec". Set <i>toRecnt</i> to force the re-linking. Returns TRUE at the need for the initialization/activation repeating.</li>
 <li> <i>virtual bool lnkActive( int num );</i> — Checks the link number <i>num</i> initialization/activation state.</li>
 <li> <i>virtual TVariant lnkInput( int num );</i> — Returns a value by the link number <i>num</i>.</li>
-<li> <i>virtual bool lnkOutput( int num, const TVariant &amp;vl );</i> — Sets the value <i>vl</i> by the link number <i>num</i>. Returns "true" at correct setting.</li>
+<li> <i>virtual bool lnkOutput( int num, const TVariant &amp;vl );</i> — Sets the value <i>vl</i> by the link number <i>num</i>. Returns TRUE at correct setting.</li>
 <li> <i>void addLinksAttrs( TElem *attrsCntr = NULL );</i> — Adds links and DAQ parameter's attributes, at <i>attrsCntr</i> presence.</li>
-<li> <i>bool initLnks( bool toRecnt = false );</i> — Inits/connects all the links. Set <i>toRecnt</i> to force the re-linking. Returns "true" at presence at last one not initiated link — needs for the initialization/activation repeating.</li>
+<li> <i>bool initLnks( bool toRecnt = false );</i> — Inits/connects all the links. Set <i>toRecnt</i> to force the re-linking. Returns TRUE at presence at last one not initiated link — needs for the initialization/activation repeating.</li>
 <li> <i>virtual void cleanLnks( bool andFunc = false );</i> — Cleans all the links and the function, for <i>andFunc</i>.</li>
 <li> <i>void inputLinks( );</i> — Gets for values of all the links.</li>
 <li> <i>void outputLinks( );</i> — Sets for values of all the links.</li>
@@ -1396,8 +1396,8 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>TArchiveS &amp;owner( ) const;</i> — Subsystem "Archives" - the owner of the archiver's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>virtual TMArchivator *AMess( const string &amp;iid, const string &amp;idb );</i> — The modular method of creating of the messages' archiver.</li>
-<li> <i>virtual TVArchivator *AVal( const string &amp;iid, const string &amp;idb );</i> — The modular method of creating of the values' archiver.</li></ul>
+<ul><li> <i>virtual TMArchivator *AMess( const string &amp;id, const string &amp;stor );</i> — Called when a new object of the message archiver is opened or created by this module with the identifier <i>id</i> and in the storage <i>stor</i>.</li>
+<li> <i>virtual TVArchivator *AVal( const string &amp;id, const string &amp;stor );</i> — Called when a new object of the value archiver is opened or created by this module with the identifier <i>id</i> and in the storage <i>stor</i>.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_messages.27_archiver_.28TMArchivator.29"><span class="mw-headline-number">5.5</span> <span id="TMArchivator" title="#TMArchivator">The object of the messages' archiver (TMArchivator)</span></span></h3>
 <table class="wikitable">
 
@@ -1437,14 +1437,14 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>void setRedntMode( Redundant vl );</i> — Setting of the redundancy mode, enabling.</li>
 <li> <i>string redntRun( );</i> — Configuration of the preferred execution.</li>
 <li> <i>void setRedntRun( const string &amp;vl );</i> — Setting the configuration of the preferred execution.</li>
-<li> <i>virtual void redntDataUpdate( );</i> — An operation of the data receiving from the backup station execution. It is called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
-<li> <i>virtual void start( );</i> — Start of the archiver.</li>
-<li> <i>virtual void stop( );</i> — Stop of the archiver.</li>
-<li> <i>virtual time_t begin( );</i> — The beginning of the archive of the specified archiver.</li>
-<li> <i>virtual time_t end( );</i> — The end of the archive of the specified archiver.</li>
-<li> <i>virtual bool put( vector&lt;TMess::SRec&gt; &amp;mess, bool force = false );</i> — Place the group of messages in the messages' archive of the specified archivator. Return "true" on successful operation. <i>force</i> for direct writing to the archivator omit the redundancy.</li>
-<li> <i>virtual time_t get( time_t bTm, time_t eTm, vector&lt;TMess::SRec&gt; &amp;mess, const string &amp;category = "", char level = 0, time_t upTo = 0 );</i> — Get the messages from the archive of the specified archiver for the specified filter parameters. Return time of the request stop, useful for continue from the point.</li>
-<li> <i>TTypeArchivator&amp;owner( ) const;</i> — Archiver's type – the owner of the messages' archiver.</li></ul>
+<li> <i>virtual void redntDataUpdate( );</i> — Operation of the data receiving from the backup station, called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
+<li> <i>virtual void start( );</i> — Starting the archiver object, the archiver starts for receiving messages and placing them into the storage.</li>
+<li> <i>virtual void stop( );</i> — Stopping the archiver object.</li>
+<li> <i>virtual time_t begin( );</i> — Begin time of the archiver data accordingly with the current state of the storage.</li>
+<li> <i>virtual time_t end( );</i> — End time of the archiver data accordingly with the current state of the storage.</li>
+<li> <i>virtual bool put( vector&lt;TMess::SRec&gt; &amp;mess, bool force = false );</i> — Placing the message group <i>mess</i> to the archiver. Returns TRUE on the successful operation. Set <i>force</i> for direct writing to the archiver omit the redundancy.</li>
+<li> <i>virtual time_t get( time_t bTm, time_t eTm, vector&lt;TMess::SRec&gt; &amp;mess, const string &amp;category = "", char level = 0, time_t upTo = 0 );</i> — Getting the messages to <i>mess</i> from the archiver for the specified filter parameters. Returns time of the request stop, useful for proceeding from this position as the end time, i.e. iteratively digging into the story. The filter specified by the time range [<i>bTm</i>...<i>eTm</i>], <i>category</i> rules, <i>level</i> and limited up to the time <i>upTo</i>. In the absence of a direct definition of the limiting time <i>upTo</i>, this limitation is set to <i>prmInterf_TM</i> — 7 seconds.</li>
+<li> <i>TTypeArchivator &amp;owner( ) const;</i> — Archiver's type – the owner of the messages' archiver.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
 <ul><li> <i>bool runSt;</i> — The sign "Running".</li>
@@ -1487,8 +1487,8 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>void setSelPrior( int vl );</i> — Set selection priority for mode "All" archivers.</li>
 <li> <i>void setToStart( bool vl );</i> — Setting the sign "To start the archiver".</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting the storage address of the archiver, <i>qTop</i> for the storage queue top.</li>
-<li> <i>virtual void start( );</i> — Start of the archiver.</li>
-<li> <i>virtual void stop( bool full_del = false );</i> — Stop of the archiver with the possibility of it's full deleting <i>full_del</i>.</li>
+<li> <i>virtual void start( );</i> — starting the archiver object, the archiver starts for receiving values and placing them into the storage.</li>
+<li> <i>virtual void stop( bool full_del = false );</i> — stopping the archiver object with the ability to completely remove its data from the storage at <i>full_del</i>.</li>
 <li> <i>void archiveList( vector&lt;string&gt; &amp;ls );</i> — The archive's list, serviced by the archiver.</li>
 <li> <i>bool archivePresent( const string &amp;iid );</i> — Check for the servicing of the specified archive by the specified archiver.</li>
 <li> <i>TTypeArchivator &amp;owner( ) const;</i> — Archiver's type – the owner of the values' archiver.</li></ul>
@@ -1496,8 +1496,8 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 </p>
 <ul><li> <i>TVArchEl *archivePlace( TVArchive &amp;item );</i> — Add the archive <i>item</i> to the processing by the archiver.</li>
 <li> <i>void archiveRemove( const string &amp;id, bool full = false );</i> — Remove the archive <i>id</i> from the processing by the archiver, with the possibility of its full deleting  <i>full</i>.</li>
-<li> <i>virtual TVArchEl *getArchEl( TVArchive &amp;arch );</i> — Getting the object of the archive's element for the specified archive.</li>
-<li> <i>virtual void pushAccumVals( );</i> — Push the accumulated by the archivation task values, for the accumulated archivators.</li></ul>
+<li> <i>virtual TVArchEl *getArchEl( TVArchive &amp;arch );</i> — Getting the element object of the value archive for the specified archive <i>arch</i>.</li>
+<li> <i>virtual void pushAccumVals( );</i> — Pushing the accumulated values by the archivation task, for the accumulative archivers.</li></ul>
 <p><b>Protected attributes:</b>
 </p>
 <ul><li> <i>ResRW archRes;</i> — Resource locker of the archiving process.</li>
@@ -1514,9 +1514,9 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TVArchEl( TVArchive &amp;iarchive, TVArchivator &amp;iarchivator );</i> — Initializing constructor fro the connection the archive <i>iarchive</i> with the archiver <i>iarchivator</i>.</li>
-<li> <i>virtual void fullErase( );</i> — Full deleting of the element.</li>
-<li> <i>virtual int64_t end( );</i> — End time of data (microseconds).</li>
-<li> <i>virtual int64_t begin( );</i> — Start time of data (microseconds).</li>
+<li> <i>virtual void fullErase( );</i> — Called to complete removal of the archive part in the archiver.</li>
+<li> <i>virtual int64_t end( );</i> — End time in microseconds of the available values in the archive of the archiver.</li>
+<li> <i>virtual int64_t begin( );</i> — Begin time in microseconds of the available values in the archive of the archiver.</li>
 <li> <i>int64_t lastGet( );</i> — Time of last transfer of the data from the buffer to the storage.</li>
 <li> <i>TVariant getVal( int64_t *tm, bool up_ord, bool onlyLocal = false );</i> — Request of the value for the time <i>tm</i> and with the sign of moving to the top <i>up_ord</i>, with the specifying of the request of only local archive in <i>onlyLocal</i>.</li>
 <li> <i>void getVals( TValBuf &amp;buf, int64_t beg = 0, int64_t end = 0, bool onlyLocal = false );</i> — Request of the values' frame <i>buf</i> for the time from <i>beg</i> to <i>end</i>, with the specifying of the request of only local archive in <i>onlyLocal</i>.</li>
@@ -1529,9 +1529,9 @@ The data acquisition mode/source (struct — TVArchive::SrcMode):
 <li> <i>string prev_val;</i> — The previous value time. It is used for averaging.</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>virtual TVariant getValProc( int64_t *tm, bool up_ord );</i> — The processing function of the single value from the archive request.</li>
-<li> <i>virtual void getValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — Function of the processing the request of the module to get the data.</li>
-<li> <i>virtual void setValsProc( TValBuf &amp;buf, int64_t beg, int64_t end, bool toAccum );</i> — Function of the processing the request of the module to set the data, through the accumulation <i>toAccum</i>.</li></ul>
+<ul><li> <i>virtual TVariant getValProc( int64_t *tm, bool up_ord );</i> — Requesting of one value from the archive for the time <i>tm</i> and fine-tuning to the upper value in the sampling grid <i>up_ord</i>.</li>
+<li> <i>virtual void getValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — Requesting of a value group to <i>buf</i> from the archive and for the time range [<i>beg</i>...<i>end</i>].</li>
+<li> <i>virtual void setValsProc( TValBuf &amp;buf, int64_t beg, int64_t end, bool toAccum );</i> — Setting of the value group <i>buf</i> to the archive, for the time range [<i>beg</i>...<i>end</i>] and through the accumulation <i>toAccum</i>.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22Transports.22"><span class="mw-headline-number">6</span> <span id="TTransportS" title="#TTransportS">Subsystem "Transports"</span></span></h2>
 <p>"Transports" subsystem is represented by the TTransportS object, which contains modular objects of the transports' types TTypeTransport on the subsystem-level. Each type of transport contains objects TTransportIn of the input and TTransportOut of the output transports. The overall structure of the subsystem is shown in Fig. 6.
 </p>
@@ -1600,7 +1600,7 @@ External hosts mode (enum — ExtHost::Mode):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>virtual bool isNetwork( );</i> — The sign — "The transport module is network one".</li>
+<ul><li> <i>virtual bool isNetwork( );</i> — The sign of network implementation by this module.</li>
 <li> <i>void inList( vector&lt;string&gt; &amp;list ) const;</i> — The list of the input transports.</li>
 <li> <i>bool inPresent( const string &amp;id ) const;</i> — Check for an input transport presence.</li>
 <li> <i>string inAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the input transport. Returns the end created identifier.</li>
@@ -1611,14 +1611,14 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string outAdd( const string &amp;id, const string &amp;db = "*.*" );</i> — Addition of the output transport. Returns the end created identifier.</li>
 <li> <i>void outDel( const string &amp;id, bool complete = false );</i> — Deleting of the output transport. It is possible to completely delete with the database included, by setting the <i>complete</i> sign.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; outAt( const string &amp;id ) const;</i> — Connection to the output transport.</li>
-<li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transport.</li>
+<li> <i>virtual string outAddrHelp( );</i> — Address format help of the output transports.</li>
 <li> <i>int outLifeTime( );</i> — Output transport lifetime, 0 for disable.</li>
 <li> <i>void setOutKeepAliveTm( int vl );</i> — Set the output transport lifetime, 0 for disable.</li>
 <li> <i>TTransportS &amp;owner( ) const;</i> — "Transports" subsystem - the owner of the transport's type.</li></ul>
 <p><b>Protected methods:</b>
 </p>
-<ul><li> <i>virtual TTransportIn *In( const string &amp;name, const string &amp;db );</i> — The modular method of the creating/opening of the new "input" transport.</li>
-<li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;db );</i> — The modular method of the creating/opening of the new "output" transport.</li></ul>
+<ul><li> <i>virtual TTransportIn *In( const string &amp;id, const string &amp;stor );</i> — The modular method of the creating/opening of the new "input" transport.</li>
+<li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;stor );</i> — The modular method of the creating/opening of the new "output" transport.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_input_transports_.28TTransportIn.29"><span class="mw-headline-number">6.3</span> <span id="TTransportIn" title="#TTransportIn">The object of the input transports (TTransportIn)</span></span></h3>
 <table class="wikitable">
 
@@ -1655,7 +1655,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
 <li> <i>virtual void start( );</i> — Start of the transport.</li>
 <li> <i>virtual void stop( );</i> — Stop of the transport.</li>
-<li> <i>virtual int writeTo( const string &amp;sender, const string &amp;data );</i> — Sending <i>data</i> backward to the <i>sender</i>.</li>
+<li> <i>virtual int writeTo( const string &amp;sender, const string &amp;data );</i> — Sending <i>data</i> backward to the <i>sender</i>. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Deprecated mostly and replaced by the polling mode of the <a href="API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">input transport protocol</a>, Initially implemented in transports with support of the initiative sending, not only at a request.</li>
 <li> <i>vector&lt;AutoHD&lt;TTransportOut&gt; &gt; associateTrs( bool checkForCleanDisabled = false );</i> — The associated output transports massive, created by the input transport for typical requests to the connection initiator. Set <i>checkForCleanDisabled</i> for prior checking and clean up disabled ones.</li>
 <li> <i>AutoHD&lt;TTransportOut&gt; associateTr( const string &amp;id );</i> — Getting the associated output transport at that connection ID.</li>
 <li> <i>int logLen( );</i> — length of the IO log.</li>
@@ -1689,7 +1689,7 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string dscr( );</i> — Transport description.</li>
 <li> <i>string addr( ) const;</i> — Transport address.</li>
 <li> <i>virtual string timings( );</i> — Transport timeouts.</li>
-<li> <i>virtual unsigned short attempts( );</i> Connection attempts.</li>
+<li> <i>virtual unsigned short attempts( );</i> — Connection attempts.</li>
 <li> <i>TVariant conPrm( const string &amp;nm );</i> — Getting the connection parameter <i>nm</i> value.</li>
 <li> <i>bool startStat( );</i> — Status "Running".</li>
 <li> <i>time_t startTm( );</i> — Status "Time of starting/connection".</li>
@@ -1706,9 +1706,9 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>void setConPrm( const string &amp;nm, const TVariant &amp;vl );</i> — Setting the connection parameter <i>nm</i> to value <i>vl</i>.</li>
 <li> <i>void clearConPrm( );</i> — Clearing the connection parameters.</li>
 <li> <i>void setDB( const string &amp;vl, bool qTop = false );</i> — Setting of the transport's storage address, <i>qTop</i> for the storage queue top.</li>
-<li> <i>virtual void start( int time = 0 );</i> — Start of the transport with connection time <i>time</i>.</li>
-<li> <i>virtual void stop( );</i> — Stop of the transport.</li>
-<li> <i>virtual int messIO(  const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );</i> — Sending of the data over the transport. The waiting time <i>time</i> of the connection (in milliseconds). The <i>time</i> in negative disables the transport's request/respond mode and allow independent reading/writing to a buffer IO, with the reading timeout <i>time</i> in absolute.</li>
+<li> <i>virtual void start( int time = 0 );</i> — Starting the transport with the connection timeout <i>time</i>. When you start the output transport the actual connection to the remote station is established for the interfaces that works by the connection. At this time the errors can occur if the connection is impossible and the transport should return to the stopped state.</li>
+<li> <i>virtual void stop( );</i> — Stopping the transport.</li>
+<li> <i>virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );</i> — Sending of the data over the transport. The waiting timeout <i>time</i> of the connection in milliseconds. The <i>time</i> in negative disables the transport's request/respond mode and allows for the independently reading/writing to a buffer IO, with the reading timeout <i>time</i> in absolute.</li>
 <li> <i>void messProtIO( XMLNode &amp;io, const string &amp;prot );</i> — Sending of the data in the XML tree <i>in</i> over the transport using the transport protocol <i>prot</i>.</li>
 <li> <i>int logLen( );</i> — length of the IO log.</li>
 <li> <i>void setLogLen( int vl );</i> — set length of the IO log.</li>
@@ -1747,13 +1747,13 @@ External hosts mode (enum — ExtHost::Mode):
 </td></tr></table>
 <p><b>Public methods:</b>
 </p>
-<ul><li> <i>virtual void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — Items list of protocol for individual addressing into transport.</li>
+<ul><li> <i>virtual void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — the list <i>ls</i> of the input protocol sub-elements from the current item  <i>curIt</i>, if the protocol provides them. It is used when selecting an object in the input transport configuration.</li>
 <li> <i>void list( vector&lt;string&gt; &amp;list ) const;</i> — The list of open input sessions.</li>
 <li> <i>bool openStat( const string &amp;name ) const;</i> — Check for the openness of the input session with the specified name.</li>
 <li> <i>void open( const string &amp;name, TTransportIn *tr = NULL, const string &amp;sender = "" );</i> — Opening of the session on behalf of the input transport <i>tr</i>.</li>
 <li> <i>void close( const string &amp;name );</i> — Closing of the input session.</li>
 <li> <i>AutoHD&lt;TProtocolIn&gt; at( const string &amp;name ) const;</i> — Connecting to the open input sessions.</li>
-<li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — Sending the data in the XML tree <i>in</i> over the protocol and transport <i>tro</i>.</li></ul>
+<li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — The data transfer by the objects of the OpenSCADA core in the XML tree <i>io</i> to the remote system via the <i>tro</i> transport and the current output protocol. Presenting the data in the XML tree is non-standardized and specific to the logical structure of the protocol. This data are serialized — converted in a sequence of bytes according to the protocol, and are sent via the specified <i>tro</i> output transport by the <a href="API.html#TTransportOut" title="Special:MyLanguage/Documents/API">messIO() function</a>.</li></ul>
 <h3><span class="mw-headline" id="The_object_of_the_input_protocol.27s_session_.28TProtocolIn.29"><span class="mw-headline-number">7.3</span> <span id="TProtocolIn" title="#TProtocolIn">The object of the input protocol's session (TProtocolIn)</span></span></h3>
 <table class="wikitable">
 
@@ -1771,11 +1771,11 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>string name( );</i> — The name of the input session.</li>
 <li> <i>AutoHD&lt;TTransportIn&gt; &amp;srcTr( )</i> — The transport-source of the opening of the session of the input protocol.</li>
 <li> <i>const string &amp;srcAddr( )</i> — The sender address; second line contains service part of the address for backward messages.</li>
-<li> <i>virtual unsigned waitReqTm( );</i> — A request waiting time on input transport (in milliseconds), after what call to the protocol with the empty message — the polling mode. Setting it to zero will disable the polling mode.</li>
+<li> <i>virtual unsigned waitReqTm( );</i> — The request waiting time on the input transport in milliseconds, call after what to the protocol with the empty message — the polling mode. Setting it to zero disable the polling mode.</li>
 <li> <i>virtual void setSrcTr( TTransportIn *vl )</i> — Setting of the transport-source of the opening of the session of the input protocol.</li>
 <li> <i>virtual void setSrcAddr( const string &amp;vl );</i> — Setting of the sender address.</li>
 <li> <i>int writeTo( const string &amp;data );</i> — Sending the messages <i>data</i> backward to the sender, into srcAddr().</li>
-<li> <i>virtual bool mess( const string &amp;request, string &amp;answer );</i> — Transfer of unstructured data to their processing by the protocol.</li>
+<li> <i>virtual bool mess( const string &amp;request, string &amp;answer );</i> — transfer of the <i>request</i> data sequence to the protocol object for it parsing accordingly to the protocol implementation. The protocol function should process the <i>request</i>, generate the response in <i>answer</i> and return FALSE in the case of the completeness of the request. If the <i>request</i> is not complete, it is necessary to return TRUE for the transport to indicate the "expectation of the completion", the previous parts of the request should be saved in the context of the protocol object.</li>
 <li> <i>TProtocol &amp;owner( ) const;</i> — The protocol, the owner of input sessions.</li></ul>
 <h2><span class="mw-headline" id="Subsystem_.22User_interfaces.22"><span class="mw-headline-number">8</span> Subsystem "User interfaces"</span></h2>
 <p>The subsystem "User Interfaces" is presented by the TUIS object, which contains modular objects of the TUI user interfaces' on the subsystem's level.
@@ -2559,7 +2559,7 @@ Where:
 </td></tr>
 <tr>
 <td>bool</td>
-<td>Boolean sign ("false"|"true"). <br />
+<td>Boolean sign (FALSE|TRUE). <br />
 <p><i>&lt;fld id="log_sysl" dscr="Direct messages to syslog" tp="bool"/&gt;</i>
 </p>
 </td></tr>
@@ -3113,9 +3113,9 @@ Named rights of access to control elements (definition):
 </p>
 <ul><li> <i>ResRW( );</i> — Initialization of the resource.</li>
 <li> <i>static void resRequestW( long tm = 0 );</i> — Request the resource for writing/modification with wait timeout <i>tm</i> (in milliseconds).</li>
-<li> <i>bool resTryW( );</i> — Request try the resource for writing/modification. On success return "true" else "false".</li>
+<li> <i>bool resTryW( );</i> — Request try the resource for writing/modification. On success return TRUE else FALSE.</li>
 <li> <i>static void resRequestR( long tm = 0 );</i> — Request the resource for reading with wait timeout <i>tm</i> (in milliseconds).</li>
-<li> <i>bool resTryR( );</i> — Request try the resource for reading. On success return "true" else "false".</li>
+<li> <i>bool resTryR( );</i> — Request try the resource for reading. On success return TRUE else FALSE.</li>
 <li> <i>static void resRelease( );</i> — Release of the resource.</li></ul>
 <h3><span class="mw-headline" id="Automatic_resource_RW_unlock_object_.28ResAlloc.29"><span class="mw-headline-number">15.2</span> <span id="ResAlloc" title="#ResAlloc">Automatic resource RW unlock object (ResAlloc)</span></span></h3>
 <p><b>Public methods:</b>
@@ -4007,44 +4007,42 @@ Error codes (enum — TError::Codes):
 <td> </td>
 <td>
 </td></tr></table>
-<h2><span class="mw-headline" id="API_of_modules_of_the_modular_subsystems"><span class="mw-headline-number">19</span> <span id="ModAPI" title="#ModAPI">API of modules of the modular subsystems</span></span></h2>
-<p>Modules in OpenSCADA are implemented as shared libraries. As it was previously mentioned, one such library can contain many modules of OpenSCADA subsystems, actually acting as a container.
-</p><p>The first step in connecting the shared (SO — shared object) libraries is the connection of the initialization functions. These functions should be defined as usual "C" functions to avoid distortion of function names. Usually this is done as follows:
+<h2><span class="mw-headline" id="API_of_the_module"><span class="mw-headline-number">19</span> <span id="ModAPI" title="#ModAPI">API of the module</span></span></h2>
+<p>Modules in OpenSCADA are implemented as shared libraries and one such library can contain many modules of the OpenSCADA subsystems, actually acting as a container. Those containers also can be included-builtin in the OpenSCADA Core Library if you build very tightly solutions.
+</p><p>The first step in connecting the shared libraries (SO — Shared Object) is the connection of the initialization functions. These functions should be defined as usual "C" functions to avoid distortion of them names. Usually this is done as follows:
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="c1">//================== CUT =========================</span>
 <span class="k">extern</span> <span class="s">"C"</span>
 <span class="p">{</span>
 <span class="cp">#ifdef MOD_INCL</span>
-    <span class="c1">//Need for define only at case builtin to OpenSCADA core support by the module</span>
-    <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="n">bd_DBF_module</span><span class="p">(</span> <span class="kt">int</span> <span class="n">n_mod</span> <span class="p">)</span>
+    <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="n">bd_Tmpl_module</span><span class="p">(</span> <span class="kt">int</span> <span class="n">n_mod</span> <span class="p">)</span>
 <span class="cp">#else</span>
     <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="n">module</span><span class="p">(</span> <span class="kt">int</span> <span class="n">n_mod</span> <span class="p">)</span>
 <span class="cp">#endif</span>
     <span class="p">{</span>
-	<span class="c1">//Allowed into the shared object the modules descriptors forming</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">n_mod</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">return</span> <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span><span class="p">(</span><span class="n">MOD_ID</span><span class="p">,</span> <span class="n">MOD_TYPE</span><span class="p">,</span> <span class="n">VER_TYPE</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span><span class="p">(</span><span class="s">""</span><span class="p">);</span>
     <span class="p">}</span>
 
+<span class="o">&lt;!--</span><span class="nl">T</span><span class="p">:</span><span class="mi">348</span><span class="o">--&gt;</span>
 <span class="cp">#ifdef MOD_INCL</span>
-    <span class="c1">//Need for define only at case builtin to OpenSCADA core support by the module</span>
     <span class="n">TModule</span> <span class="o">*</span><span class="n">bd_Tmpl_attach</span><span class="p">(</span> <span class="k">const</span> <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="o">&amp;</span><span class="n">AtMod</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span><span class="n">source</span> <span class="p">)</span>
 <span class="cp">#else</span>
     <span class="n">TModule</span> <span class="o">*</span><span class="n">attach</span><span class="p">(</span> <span class="k">const</span> <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span> <span class="o">&amp;</span><span class="n">AtMod</span><span class="p">,</span> <span class="k">const</span> <span class="n">string</span> <span class="o">&amp;</span><span class="n">source</span> <span class="p">)</span>
 <span class="cp">#endif</span>
     <span class="p">{</span>
-	<span class="c1">//Selected module connect</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">AtMod</span> <span class="o">==</span> <span class="n">TModule</span><span class="o">::</span><span class="n">SAt</span><span class="p">(</span><span class="n">MOD_ID</span><span class="p">,</span><span class="n">MOD_TYPE</span><span class="p">,</span><span class="n">VER_TYPE</span><span class="p">))</span> <span class="k">return</span> <span class="k">new</span> <span class="n">BDTmpl</span><span class="o">::</span><span class="n">BDMod</span><span class="p">(</span><span class="n">source</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nb">NULL</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">//================== CUT =========================</span>
 </pre></div>
-<p><b>Functions for the working with shared library:</b><br />
-<i>TModule::SAt module( int n_mod );</i>
+<p>The entry point of any module are the following functions:
 </p>
-<dl><dd>The function is provided to sequentially poll the information about modules which are contained in the SO library. <i>n_mod</i> parameter indicates the serial number of the requested module and must be looked over, starting from zero. In the case of absence of the module with the given identifier the function must return the structure with the module name of zero length, that is the end of the scanning process. </dd></dl>
-<p><i>TModule *attach( const TModule::SAt &amp;AtMod, const string &amp;source );</i>
-</p>
-<dl><dd>Connection to the specified module.</dd></dl>
-<p>Actually all functions and data of the system are summarized in the API-systems described in this document. However, to simplify and accelerate the process of writing the modules the main function, redefined in modules, are listed in Table 22.
-</p><p><b>Table 22.</b> The main functions used when creating the modules
+<ul><li> <i>TModule::SAt module( int n_mod )</i>, <i>TModule::SAt {modTp}_{modNm}_module( int n_mod )</i> — are used to scan the list and information about all modules in the library. The first function is used during the implementation of modules in an external shared library, and the second during their including-embedding in the OpenSCADA core, where <i>modTp</i> corresponds to the type of the module, and <i>modNm</i> is its ID.</li>
+<li> <i>TModule *attach( const TModule::SAt &amp;AtMod, const string &amp;source )</i>, <i>TModule *{modTp}_{modNm}_attach( const TModule::SAt &amp;AtMod, const string &amp;source )</i> — is used to directly connect-open the selected module by creating a root object of the module inherited from <b>TModule</b>. The first function is used during the implementation of modules in an external shared library, and the second during the including-embedding of them into the OpenSCADA core, where <i>modTp</i> and <i>modNm</i> correspond to the previous function.</li></ul>
+<p>Common to all modules is the inheritance of the root object-class of the module from the class of the module subsystem <a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a>, which indicates the presence of a common part of the module interface, which we will consider further. To get a vision of the architecture of the modules in the context of the overall OpenSCADA architecture, it is strongly recommended to have the <a class="external" href="http://oscada.org/wiki/File:API_uml_classdep.png" title="File:API uml classdep.png">overall OpenSCADA class diagram</a> in front of your eyes!
+</p><p>All module interface objects inherit the node class <a href="API.html#TCntrNode" title="Special:MyLanguage/Documents/API">TCntrNode</a>, which provides the <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">control interface</a> mechanism. One task of the mechanism is to provide the object configuration interface in any OpenSCADA configurator.
 </p>
 <table class="wikitable">
 
@@ -4052,185 +4050,213 @@ Error codes (enum — TError::Codes):
 <th> Common API
 </th></tr>
 <tr>
-<td><b>Objects API (TCntrNode):</b>
-<ul><li> <i>virtual void load_( );</i> — Object loading from storage.</li>
-<li> <i>virtual void save_( );</i> — Object saving into storage.</li></ul>
+<td><b><a href="API.html#TCntrNode" title="Special:MyLanguage/Documents/API">TCntrNode</a></b> — OpenSCADA Node:
+<ul><li> <i>virtual void preEnable( int flag );</i>, <i>virtual void postEnable( int flag );</i> — connecting the module to the dynamic tree of objects, called before and after the actual activation of the module, respectively.</li>
+<li> <i>virtual void preDisable( int flag );</i>, <i>virtual void postDisable( int flag );</i> — excluding the module from the dynamic tree of objects before freeing the object, called before and after the actual exclusion of the module, respectively.</li>
+<li> <i>virtual void load_( TConfig *cfg );</i>, <i>virtual void load_( );</i> — loading the module from the "cfg" storage context and in general, called at the stage of loading the module configuration from the storage.</li>
+<li> <i>virtual void save_( );</i> — saving the module, called at the stage of saving the configuration of the module to the storage, usually at the initiative of the user.</li></ul>
 </td></tr>
 <tr>
-<td><b>Common modules API (TModule):</b><br />
-<p><i>Attributes:</i>
+<td><b><a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — OpenSCADA Module:<br />
+<ul><li> <i>virtual void modStart( );</i> — module starting, called at the stage of starting tasks of the module's background functions, if these are provided by the module.</li>
+<li> <i>virtual void modStop( );</i> — stopping the module, called at the stage of stopping the tasks of performing the background functions of the module, if these are provided by the module.</li>
+<li> <i>virtual void modInfo( vector&lt;string&gt; &amp;list );</i> — a request for a list of information properties of the module, which is provided with a standard set of properties "Module", "Name", "Type", "Source", "Version", "Author", "Description", "License", and which can be extended by own-specific properties.</li>
+<li> <i>virtual string modInfo( const string &amp;name );</i> — a request for the information element <i>name</i> at which there performed also the requests processing of own-specific properties of the module.</li>
+<li> <i>void modFuncReg( ExpFunc *func );</i> — registration of the module's exported function, which is part of the mechanism of intermodule interaction that registers the internal function of the module for external call by the name-symbol of the function and its pointer relative to the object of the module. Currently, this mechanism is used by few modules!</li>
+<li> <i>virtual void perSYSCall( unsigned int cnt );</i> — a call from the system-service thread-task with the periodicity 10 seconds and a second counter "cnt", can be used to perform periodic-rare service procedures.</li></ul>
+</td></tr>
+<tr>
+<th> API of the modules of the "Data Bases (DB)" subsystem
+</th></tr>
+<tr>
+<td> Intended for the integration of OpenSCADA with a database or DBMS which is implemented by the module. Provides two common approaches in the modules implementation:
+<ol><li> ANSI SQL Mode — is the simplest way which means of direct using the core functions <a href="API.html#TTable" title="Special:MyLanguage/Documents/API">fieldSQLSeek(), fieldSQLGet(), fieldSQLSet(), fieldSQLDel()</a> in fieldSeek(), fieldGet(), fieldSet(), fieldDel() respectively; all SQL-modules are used now this approach.</li>
+<li> Full Implementation — is the hardest way which means of the complete implementation; modules of such approach using are whether old or specific ones: <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a>, <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>.</li></ol>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TTypeBD" title="Special:MyLanguage/Documents/API">TTypeBD</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — the root module object of the "DB" subsystem:
+<ul><li> <i>virtual string features( );</i> — keyword list of <a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">features supported by the DB</a>.</li>
+<li> <i>virtual int lsPr( );</i> — the DB priority base [0...9] in the generic storages list.</li>
+<li> <i>virtual TBD *openBD( const string &amp;id );</i> — called when a new DB object is opened or created by this module with the identifier <i>id</i>.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TBD" title="Special:MyLanguage/Documents/API">TBD</a></b> — the database object:
+<ul><li> <i>virtual void enable( );</i> — enabling the DB.</li>
+<li> <i>virtual void disable( );</i> — disabling the DB.</li>
+<li> <i>virtual void allowList( vector&lt;string&gt; &amp;list ) const;</i> — requesting the table <i>list</i> in the DB.</li>
+<li> <i>virtual void sqlReq( const string &amp;req, vector&lt; vector&lt;string&gt; &gt; *tbl = NULL, char intoTrans = EVAL_BOOL );</i> — processing the SQL-query <i>req</i> to the DB and receiving the result in the form of the <i>tbl</i> table, if the selection request and the pointer are non-zero. When <i>intoTrans</i> is set to TRUE, a transaction must be open for the request, and closed to FALSE. This function should be implemented for DBMSs that support SQL-queries.</li>
+<li> <i>virtual void transCloseCheck( );</i> — the periodically called function to check the transactions and closing the old or contain many requests ones.</li>
+<li> <i>virtual TTable *openTable( const string &amp;name, bool create );</i> — called when you open or create a new table object.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TTable" title="Special:MyLanguage/Documents/API">TTable</a></b> — the table object in the database:
+<ul><li> <i>void fieldStruct( TConfig &amp;cfg );</i> — getting the current structure of the table in the object <i>cfg</i>.</li>
+<li> <i>bool fieldSeek( int row, TConfig &amp;cfg, const string &amp;cacheKey = "" );</i> — sequential scanning of table entries by incrementing <i>row</i> at the object <i>cfg</i> and returning FALSE after completion, with addressing by active <a href="API.html#TCfg" title="Special:MyLanguage/Documents/API">keyUse()</a> key fields. The cache key <i>cacheKey</i> is specified to prefetch the full response to the cache, extracting the following records from there.</li>
+<li> <i>void fieldGet( TConfig &amp;cfg );</i> — request of the record specified in the "cfg" object with addressing by key fields.</li>
+<li> <i>void fieldSet( TConfig &amp;cfg );</i> — transfer of the record specified in the "cfg" object with addressing by key fields.</li>
+<li> <i>void fieldDel( TConfig &amp;cfg );</i> — deletion of the specified record by the key fields of the "cfg" object.</li></ul>
+<dl><dd> <i><b>Specific for SQL Data Bases</b></i></dd></dl>
+<ul><li> <i>void fieldFix( TConfig &amp;cfg, const string &amp;langLs = "" );</i> — correction of DB table structure to <i>cfg</i> and for translation languages <i>langLs</i>, usually after a failed transfer.</li>
+<li> <i>string getSQLVal( TCfg &amp;cf, uint8_t RqFlg = 0 );</i> — return a SQL-specific wrapped <i>cf</i> value for the <a href="API.html#TCfg" title="Special:MyLanguage/Documents/API">ReqFlg flags</a> of the <i>RqFlg</i> call.</li>
+<li> <i>void setSQLVal( TCfg &amp;cf, const string &amp;vl, bool tr = false );</i> — parsing the SQL value <i>vl</i> to translate <i>tr</i> and with writing to <i>cf</i>.</li></ul>
+</td></tr>
+<tr>
+<th> API of the modules of the "Transports" subsystem
+</th></tr>
+<tr>
+<td> Provides OpenSCADA communications through the interface, often it is the network one which is implemented by the module.
+</td></tr>
+<tr>
+<td><b><a href="API.html#TTypeTransport" title="Special:MyLanguage/Documents/API">TTypeTransport</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — the root module object of the "Transports" subsystem:
+<ul><li> <i>virtual bool isNetwork( );</i> — the sign of network implementation by this module.</li>
+<li> <i>virtual string outAddrHelp( );</i> — address format help of the output transports.</li>
+<li> <i>virtual TTransportIn *In( const string &amp;id, const string &amp;stor );</i> — called when a new input transport object is opened or created by this module with the identifier <i>id</i> and the storage <i>stor</i>.</li>
+<li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;stor );</i> — called when a new output transport object is opened or created by this module with the identifier <i>id</i> and the storage <i>stor</i>.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TTransportIn" title="Special:MyLanguage/Documents/API">TTransportIn</a></b> — the input transport object:
+<ul><li> <i>virtual unsigned keepAliveReqs( );</i> — maximum Keep Alive requests.</li>
+<li> <i>virtual unsigned keepAliveTm( );</i> — keep Alive time.</li>
+<li> <i>virtual string getStatus( );</i> — getting the status of the transport.</li>
+<li> <i>virtual void start( );</i> — starting the transport.</li>
+<li> <i>virtual void stop( );</i> — stopping the transport.</li>
+<li> <i>virtual int writeTo( const string &amp;sender, const string &amp;data );</i> — sending <i>data</i> backward to the <i>sender</i>. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Deprecated mostly and replaced by the polling mode of the <a href="API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">input transport protocol</a>, Initially implemented in transports with support of the initiative sending, not only at a request.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TTransportOut" title="Special:MyLanguage/Documents/API">TTransportOut</a></b> — the output transport object:
+<ul><li> <i>virtual string timings( );</i> — transport timeouts.</li>
+<li> <i>virtual unsigned short attempts( );</i> — connection attempts.</li>
+<li> <i>virtual string getStatus( );</i> — getting the status of the transport.</li>
+<li> <i>virtual void setTimings( const string &amp;vl, bool isDef = false );</i> — setting the transport timeouts, as default one for <i>isDef</i>.</li>
+<li> <i>virtual void setAttempts( unsigned short vl );</i> — setting the connection attempts.</li>
+<li> <i>virtual void start( int time = 0 );</i> — starting the transport with the connection timeout <i>time</i>. When you start the output transport the actual connection to the remote station is established for the interfaces that works by the connection. At this time the errors can occur if the connection is impossible and the transport should return to the stopped state.</li>
+<li> <i>virtual void stop( );</i> — stopping the transport. </li>
+<li> <i>virtual int messIO( const char *oBuf, int oLen, char *iBuf = NULL, int iLen = 0, int time = 0 );</i> — sending of the data over the transport. The waiting timeout <i>time</i> of the connection in milliseconds. The <i>time</i> in negative disables the transport's request/respond mode and allows for the independently reading/writing to a buffer IO, with the reading timeout <i>time</i> in absolute.</li></ul>
+</td></tr>
+<tr>
+<th> API of the modules of the "Transport protocols" subsystem
+</th></tr>
+<tr>
+<td> Provides OpenSCADA with the protocol layer communications, implemented by the module, for the data access from the external systems and for the OpenSCADA data providing for the external systems.
+</td></tr>
+<tr>
+<td><b><a href="API.html#TProtocol" title="Special:MyLanguage/Documents/API">TProtocol</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — the root module object of the "Transport protocols" subsystem:
+<ul><li> <i>virtual void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — the list <i>ls</i> of the input protocol sub-elements from the current item  <i>curIt</i>, if the protocol provides them. It is used when selecting an object in the input transport configuration.</li>
+<li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — the data transfer by the objects of the OpenSCADA core in the XML tree <i>io</i> to the remote system via the <i>tro</i> transport and the current output protocol. Presenting the data in the XML tree is non-standardized and specific to the logical structure of the protocol. This data are serialized — converted in a sequence of bytes according to the protocol, and are sent via the specified <i>tro</i> output transport by the <a href="API.html#TTransportOut" title="Special:MyLanguage/Documents/API">messIO() function</a>.</li>
+<li> <i>virtual TProtocolIn *in_open( const string &amp;id );</i> — called when a new transport protocol object is opened or created by this module with the identifier <i>id</i>.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">TProtocolIn</a></b> — the input object of the transport protocol of the input requests processing from the <a href="API.html#TTransportIn" title="Special:MyLanguage/Documents/API">input transport object TTransportIn</a>. For each session of the input request the object of the associated input protocol is created, which remains alive until completion of the full "request-&gt;answer" session. Address of the transport, which opened the protocol instance, is specified in <a href="API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">srcTr()</a>:
+<ul><li> <i>virtual unsigned waitReqTm( )</i> — the request waiting time on the input transport in milliseconds, call after what to the protocol with the empty message — the polling mode. Setting it to zero disable the polling mode.</li>
+<li> <i>virtual void setSrcTr( TTransportIn *vl )</i> — setting of the transport-source of the opening of the session of the input protocol.</li>
+<li> <i>virtual void setSrcAddr( const string &amp;vl );</i> — setting of the sender address.</li>
+<li> <i>virtual bool mess( const string &amp;request, string &amp;answer );</i> — transfer of the <i>request</i> data sequence to the protocol object for it parsing accordingly to the protocol implementation. The protocol function should process the <i>request</i>, generate the response in <i>answer</i> and return FALSE in the case of the completeness of the request. If the <i>request</i> is not complete, it is necessary to return TRUE for the transport to indicate the "expectation of the completion", the previous parts of the request should be saved in the context of the protocol object.</li></ul>
+</td></tr>
+<tr>
+<th> API of the modules of the "Data AcQuisition" subsystem
+</th></tr>
+<tr>
+<td> Provides the realtime data acquisition from the external systems or it formation in the calculators, implemented by the module. That is the main subsystem since SCADA is about the Data Acquisition primarily. As the main subsystem it provides several approaches in the modules implementation, which mostly about the attributes structure formation and storing:
+<ol><li> Static formation through definition a set of the parameter types inherited from <a href="API.html#TTypeParam" title="Special:MyLanguage/Documents/API">TTypeParam</a>, that is the structures applying is performed as an attributes set with the parameter type change. This method is least flexible and it used by such modules: <a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">GPIO</a>, <a href="Modules/SMH2Gi.html" title="Special:MyLanguage/Modules/SMH2Gi">SMH2Gi</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">AMRDevs</a>.</li>
+<li> Dynamic formation with the structure container <a href="API.html#TElem" title="Special:MyLanguage/Documents/API">TElem</a> managing in the parameter object <a href="API.html#TParamContr" title="Special:MyLanguage/Documents/API">TParamContr</a>. This method is most flexible and used in most modules which mean of the structure be configurable.</li>
+<li> As an extension of the dynamic formation there is the <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">Logical Level parameter type</a>, what can be added to any module, but that used mostly in the universal data sources: <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">LogicLev</a>.</li></ol>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TTypeDAQ" title="Special:MyLanguage/Documents/API">TTypeDAQ</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — the root module object of the "Data AcQuisition" subsystem:
+<ul><li> <i>virtual bool compileFuncLangs( vector&lt;string&gt; *ls = NULL );</i> — request the list <i>ls</i> of languages for which it is realised the possibility of formation of user procedures in this module, and check for fact of that support.</li>
+<li> <i>virtual void compileFuncSnthHgl( const string &amp;lang, XMLNode &amp;shgl );</i> — request the rules of the syntax highlight <i>shgl</i> for the specified language <i>lang</i>.</li>
+<li> <i>virtual string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text, const string &amp;usings = "", int maxCalcTm = 0 );</i> — compiling-registering of the user function on the supported programming language <i>lang</i> and on the source code of procedure <i>prog_text</i>, based on the procedure parameters <i>fnc_cfg</i>. Returns address of the compiled function's object, ready for execution.</li>
+<li> <i>virtual bool redntAllow( );</i> — state of support the redundancy mechanisms by the module. Should be overridden and return TRUE if supported, otherwise FALSE.</li>
+<li> <i>virtual TController *ContrAttach( const string &amp;id, const string &amp;daq_db );</i> — called when a new controller object is opened or created by this module with the identifier <i>id</i>.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TController" title="Special:MyLanguage/Documents/API">TController</a></b> — the data source controller object. In the context of the object is usually run a task of the periodic or scheduled polling of the realtime data of one physical controller or physically separated block of data. In the case of data getting by the packages, they are placed directly into the archive associated with the parameter attribute <a href="API.html#TVAl" title="Special:MyLanguage/Documents/API">TVAl::arch()</a>, and the current value is set by the <a href="API.html#TVAl" title="Special:MyLanguage/Documents/API">TVAl::set() function</a> with the attribute "sys"=TRUE:
+<ul><li> <i>virtual string getStatus( );</i> — request function of the controller status.</li>
+<li> <i>virtual void enable_(  );</i> — enabling of the controller object. Usually at this stage the initialisation of the parameters' objects and their interfaces in the form of attributes is made, the attributes can sometimes be requested from the associated remote source.</li>
+<li> <i>virtual void disable_(  );</i> — disabling the controller object.</li>
+<li> <i>virtual void start_( );</i> — starting the controller object. Usually at this stage the task of periodic or scheduled polling is created and started.</li>
+<li> <i>virtual void stop_( );</i> — stopping the controller object.</li>
+<li> <i>virtual void redntDataUpdate( );</i> — operation of the data receiving from the backup station, called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
+<li> <i>virtual string catsPat( );</i> — list of the regular expression rules, separated by '|', for matching by category the messages generated by the object.</li>
+<li> <i>virtual void messSet( const string &amp;mess, int lev, const string &amp;type2Code = "OP", const string &amp;prm = "", const string &amp;cat = "" );</i> — formation of the DAQ-sourced messages for the parameter object <i>prm</i> (PrmId) or the controller object in whole if the parameter object is not specified, for the message <i>mess</i>, level <i>lev</i> and for the type code <i>type2Code</i>. This function generates the messages with the unified DAQ-transparency category "<b>{type2Code}{ModId}:{CntrId}[.{prm}][:{cat}]</b>".</li>
+<li> <i>virtual TParamContr *ParamAttach( const string &amp;id, int type );</i> — called when a new object of the controller parameter is opened or created by this module with the identifier <i>id</i>.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TParamContr" title="Special:MyLanguage/Documents/API">TParamContr</a>-&gt;<a href="API.html#TValue" title="Special:MyLanguage/Documents/API">TValue</a></b> — the controller parameter object of the data source. Contains attributes with real data in a set defined by physically available data. The values to the attributes come from the polling task of the controller, in the asynchronous mode, or are requested during the access, in the synchronous mode, and through the methods of the inherited type <a href="API.html#TValue" title="Special:MyLanguage/Documents/API">TValue</a>:
+<ul><li> <i>virtual TElem *dynElCntr( );</i> — container of the dynamic elements of the DAQ attributes. Defined mostly by the logical level sources what provide such kind containers.</li>
+<li> <i>virtual void enable( );</i> — enabling the parameter object, the formation of the attributes set and filling them with the value of unreliability is made.</li>
+<li> <i>virtual void disable( );</i> — disabling the parameter object.</li>
+<li> <i>virtual void setType( const string &amp;tpId );</i> — called to change the parameter type to <i>tpId</i> and can be processed in the module object to change own data.</li>
+<li> <i>virtual TVal* vlNew( );</i> — called at the stage of a new attribute creation. Can be overridden to implement special behavior within its object, inherited from <i>TVal</i>, when accessing the attribute.</li>
+<li> <i>virtual void vlGet( TVal &amp;vo );</i> — called for the attribute <i>vo</i> with the direct reading mode <b>TVal::DirRead</b> when reading the value in order to directly-synchronous read from the physical source or the object buffer.</li>
+<li> <i>virtual void vlSet( TVal &amp;vo, const TVariant &amp;vl, const TVariant &amp;pvl );</i> — called for the attribute <i>vo</i> with the direct recording mode <b>TVal::DirWrite</b> when setting the value in order to directly-synchronous set to the physical source or the object buffer, with the previous value <i>pvl</i>.</li>
+<li> <i>virtual void vlArchMake( TVal &amp;val );</i> — called at the stage of creation the values archive with the <i>val</i> attribute as the source in the order to initialise the qualitative characteristics of the archive buffer according to the characteristics of the data source and polling.</li></ul>
+</td></tr>
+<tr>
+<th> API of the modules of the "Archives-History" subsystem
+</th></tr>
+<tr>
+<td> Used for archiving and maintaining the history of messages and realtime values received in the "Data AcQuisition" subsystem, and in the means implemented by the module.
+</td></tr>
+<tr>
+<td><b><a href="API.html#TTypeArchivator" title="Special:MyLanguage/Documents/API">TTypeArchivator</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — the root module object of the "Archives-History" subsystem:
+<ul><li> <i>virtual TMArchivator *AMess( const string &amp;id, const string &amp;stor );</i> — called when a new object of the message archiver is opened or created by this module with the identifier <i>id</i> and in the storage <i>stor</i>.</li>
+<li> <i>virtual TVArchivator *AVal( const string &amp;id, const string &amp;stor );</i> — called when a new object of the value archiver is opened or created by this module with the identifier <i>id</i> and in the storage <i>stor</i>.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TMArchivator" title="Special:MyLanguage/Documents/API">TMArchivator</a></b> — the message archiver object.
+<ul><li> <i>virtual void redntDataUpdate( );</i> — operation of the data receiving from the backup station, called automatically by the service procedure of the redundancy scheme of the subsystem.</li>
+<li> <i>virtual void start( );</i> — starting the archiver object, the archiver starts for receiving messages and placing them into the storage.</li>
+<li> <i>virtual void stop( );</i> — stopping the archiver object.</li>
+<li> <i>virtual time_t begin( );</i> — begin time of the archiver data accordingly with the current state of the storage.</li>
+<li> <i>virtual time_t end( );</i> — end time of the archiver data accordingly with the current state of the storage.</li>
+<li> <i>virtual bool put( vector&lt;TMess::SRec&gt; &amp;mess, bool force = false );</i> — placing the message group <i>mess</i> to the archiver. Returns TRUE on the successful operation. Set <i>force</i> for direct writing to the archiver omit the redundancy.</li>
+<li> <i>virtual time_t get( time_t bTm, time_t eTm, vector&lt;TMess::SRec&gt; &amp;mess, const string &amp;category = "", char level = 0, time_t upTo = 0 );</i> — getting the messages to <i>mess</i> from the archiver for the specified filter parameters. Returns time of the request stop, useful for proceeding from this position as the end time, i.e. iteratively digging into the story. The filter specified by the time range [<i>bTm</i>...<i>eTm</i>], <i>category</i> rules, <i>level</i> and limited up to the time <i>upTo</i>. In the absence of a direct definition of the limiting time <i>upTo</i>, this limitation is set to <i>prmInterf_TM</i> — 7 seconds.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TVArchivator" title="Special:MyLanguage/Documents/API">TVArchivator</a></b> — the value archiver object.
+<ul><li> <i>virtual void start( );</i> — starting the archiver object, the archiver starts for receiving values and placing them into the storage.</li>
+<li> <i>virtual void stop( bool full_del = false );</i> — stopping the archiver object with the ability to completely remove its data from the storage at <i>full_del</i>.</li>
+<li> <i>virtual TVArchEl *getArchEl( TVArchive &amp;arch );</i> — getting the element object of the value archive for the specified archive <i>arch</i>.</li>
+<li> <i>virtual void pushAccumVals( );</i> — pushing the accumulated values by the archivation task, for the accumulative archivers.</li></ul>
+</td></tr>
+<tr>
+<td><b><a href="API.html#TVArchEl" title="Special:MyLanguage/Documents/API">TVArchEl</a></b> — the element object of the value archiver.
+<ul><li> <i>virtual void fullErase( );</i> — called to complete removal of the archive part in the archiver.</li>
+<li> <i>virtual int64_t end( );</i> — end time in microseconds of the available values in the archive of the archiver.</li>
+<li> <i>virtual int64_t begin( );</i> — begin time in microseconds of the available values in the archive of the archiver.</li>
+<li> <i>virtual TVariant getValProc( int64_t *tm, bool up_ord );</i> — requesting of one value from the archive for the time <i>tm</i> and fine-tuning to the upper value in the sampling grid <i>up_ord</i>.</li>
+<li> <i>virtual void getValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — requesting of a value group to <i>buf</i> from the archive and for the time range [<i>beg</i>...<i>end</i>].</li>
+<li> <i>virtual void setValsProc( TValBuf &amp;buf, int64_t beg, int64_t end, bool toAccum );</i> — setting of the value group <i>buf</i> to the archive, for the time range [<i>beg</i>...<i>end</i>] and through the accumulation <i>toAccum</i>.</li></ul>
+</td></tr>
+<tr>
+<th> API of the modules of the "User Interfaces" subsystem
+</th></tr>
+<tr>
+<td> The user interface is formed according to the concept and mechanisms of external known standards and libraries.
+</td></tr>
+<tr>
+<td><b><a href="API.html#TUI" title="Special:MyLanguage/Documents/API">TUI</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — the root module object of the "User Interfaces" subsystem:<br />
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> It contains no specific functions!
 </p>
-<ul><li> <i>string mId;</i> — Module's ID.</li>
-<li> <i>string mName;</i> — Module's name.</li>
-<li> <i>string mDescr;</i> — Module's description.</li>
-<li> <i>string mType;</i> — Module's type.</li>
-<li> <i>string mVers;</i> — Module's version.</li>
-<li> <i>string mAutor;</i> — Module's author.</li>
-<li> <i>string mLicense;</i> — Module's license.</li>
-<li> <i>string mSource;</i> — Module's source/origin.</li></ul>
-<p><i>Methods:</i>
-</p>
-<ul><li> <i>virtual void modStart( );</i> — Module's start.</li>
-<li> <i>virtual void modStop( );</i> — Module's stop.</li>
-<li> <i>virtual void modInfo( vector&lt;string&gt; &amp;list );</i> — The list of available elements of information about the module. There are the following information elements: </li></ul>
-<dl><dd>Module — module's ID;</dd>
-<dd>Name — localized module's name;</dd>
-<dd>Type — module's type;</dd>
-<dd>Source — module's source (container);</dd>
-<dd>Version — module's version;</dd>
-<dd>Author — module's author;</dd>
-<dd>Description — module's description;</dd>
-<dd>License — module's license.</dd></dl>
-<ul><li> <i>virtual string modInfo( const string &amp;name );</i> — Request of the specified information element.</li>
-<li> <i>virtual void perSYSCall( unsigned int cnt );</i> — Сall from system thread, with period 10 seconds and seconds counter <i>cnt</i>.</li>
-<li> <i>void postEnable( int flag );</i> — Connecting the module to the dynamic tree of objects.</li>
-<li> <i>void modFuncReg( ExpFunc *func );</i> — Registration of the exported function.</li></ul>
 </td></tr>
 <tr>
-<th> API of the modules of the "DB" subsystem
+<th> API of the modules of the "Special" subsystem
 </th></tr>
 <tr>
-<td><b>DB type (child from TTypeBD):</b>
-<ul><li> <i>virtual TBD *openBD( const string &amp;id );</i> — Open/create DB.</li></ul>
+<td> Implements the specific functions that are not included in any of the above subsystems. The specific functions are formed accordingly to their own need and with using all features of the OpenSCADA API.
 </td></tr>
 <tr>
-<td><b>DB (child from TBD):</b>
-<ul><li> <i>virtual void enable( );</i> — DB enable.</li>
-<li> <i>virtual void disable( );</i> — DB disable.</li>
-<li> <i>virtual void allowList( vector&lt;string&gt; &amp;list ) const;</i> — Tables' list in the DB.</li>
-<li> <i>virtual void sqlReq( const string &amp;req, vector&lt; vector&lt;string&gt; &gt; *tbl = NULL, char intoTrans = EVAL_BOOL );</i> — Sending the SQL-request <i>req</i> to the DB and receiving the result in tabular form <i>tbl</i>. If set <i>intoTrans</i> to true then will open transaction for the request, else if set to false then transaction will close.</li>
-<li> <i>virtual void transCloseCheck( );</i> — The function call periodic for opened transaction check to close for old transaction or overloaded.</li>
-<li> <i>virtual TTable *openTable( const string &amp;table, bool create );</i> — Open/create the table.</li></ul>
-</td></tr>
-<tr>
-<td><b>Table (child from TTable):</b>
-<ul><li> <i>virtual void fieldStruct( TConfig &amp;cfg );</i> — Getting the table's structure.</li>
-<li> <i>virtual bool fieldSeek( int row, TConfig &amp;cfg );</i> — Sequential scan of the table fields.</li>
-<li> <i>virtual void fieldGet( TConfig &amp;cfg );</i> — Getting the specified field.</li>
-<li> <i>virtual void fieldSet( TConfig &amp;cfg );</i> — Setting the specified field.</li>
-<li> <i>virtual void fieldDel( TConfig &amp;cfg );</i> — Deleting the specified field.</li></ul>
-</td></tr>
-<tr>
-<th> API of the modules of subsystem "Transports"
-</th></tr>
-<tr>
-<td><b>Transport's type (child from TTypeTransport):</b>
-<ul><li> <i>virtual TTransportIn  *In( const string &amp;name, const string &amp;db );</i> — Create/open new "input" transport.</li>
-<li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;db );</i> — Create/open new "output" transport.</li></ul>
-</td></tr>
-<tr>
-<td><b>Input transport (child from TTransportIn):</b>
-<ul><li> <i>virtual string getStatus( );</i> — Interface status.</li>
-<li> <i>virtual void setAddr( const string &amp;addr );</i> — The transport address set. It would be redefined for processing and checking for specific to the module transport's address format.</li>
-<li> <i>virtual void start();</i> — Transport's start.</li>
-<li> <i>virtual void stop();</i> — Transport's stop.</li></ul>
-</td></tr>
-<tr>
-<td><b>Output transport (child from TTransportOut):</b>
-<ul><li> <i>virtual string getStatus( );</i> — Interface status.</li>
-<li> <i>virtual void setAddr( const string &amp;addr );</i> — The transport address set. It would be redefined for processing and checking for specific to the module transport's address format.</li>
-<li> <i>virtual void start( );</i> — Transport's start.</li>
-<li> <i>virtual void stop( );</i> — Transport's stop.</li>
-<li> <i>virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0 );</i> — Sending data via the transport. Timeout <i>time</i> of the connection is indicated in milliseconds. </li></ul>
-</td></tr>
-<tr>
-<th> API of the modules of subsystem "Protocols"
-</th></tr>
-<tr>
-<td><b>Protocol (child from TProtocol):</b>
-<ul><li> <i>virtual void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — The input protocol subelements list, at case the protocol allow. Used for select in object of input transport configuration.</li>
-<li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — Data transfer in the XML tree <i>in</i> to the remote system by means of transport <i>tro</i> and the current output protocol.</li>
-<li> <i>virtual TProtocolIn *in_open( const string &amp;name )</i> — Open/create the input protocol.</li></ul>
-</td></tr>
-<tr>
-<td><b>Input protocol (child from TProtocolIn):</b>
-<ul><li> <i>virtual bool mess( const string &amp;request, string &amp;answer, const string &amp;sender );</i> — Transfer of unstructured message to the protocol.</li></ul>
-</td></tr>
-<tr>
-<th> API  of the modules of "Data acquisition" subsystem
-</th></tr>
-<tr>
-<td><b>Controller's type (child from TTypeDAQ):</b>
-<ul><li> <i>virtual void compileFuncLangs( vector&lt;string&gt; &amp;ls );</i> — The list of user programming languages that are supported by the module.</li>
-<li> <i>virtual void compileFuncSnthHgl( const string &amp;lang, XMLNode &amp;shgl );</i> — Syntax highlight rules <i>shgl</i> request for user programming language <i>lang</i>.</li>
-<li> <i>virtual string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text );</i> — Compilation of the user procedure and creation of the object of function's execution for the specified language of user programming.</li>
-<li> <i>virtual bool redntAllow( );</i> — The sign of support of the redundancy mechanisms by the module. Should by simply redefined and return true.</li>
-<li> <i>virtual TController *ContrAttach( const string &amp;name, const string &amp;daq_db );</i> — Opening/connection of the controller.</li></ul>
-</td></tr>
-<tr>
-<td><b>Controller (child from TController):</b>
-<ul><li> <i>virtual string getStatus( );</i> — Call for specific controller status get.</li>
-<li> <i>virtual void enable_( );</i> — Controller enable.</li>
-<li> <i>virtual void disable_( );</i> — Controller disable.</li>
-<li> <i>virtual void start_( );</i> — Controller's start.</li>
-<li> <i>virtual void stop_( );</i> — Controller's stop.</li>
-<li> <i>virtual void redntDataUpdate( bool firstArchiveSync = false );</i> — An operation of the data receiving from the redundant station execution. It is called automatically by the service task of the redundancy scheme and before starting to synchronize the archives with the parameter <i>firstArchiveSync</i> set.</li>
-<li> <i>virtual TParamContr *ParamAttach( const string &amp;name, int type );</i> — Creation/opening of the new parameter.</li></ul>
-</td></tr>
-<tr>
-<td><b>Controller's parameter (child from TParamContr-&gt;TValue):</b>
-<ul><li> <i>virtual void enable( );</i> — Enable parameter.</li>
-<li> <i>virtual void disable( );</i> — Disable parameter.</li>
-<li> <i>virtual void setType( const string &amp;tpId );</i> — Is called to change the parameter type <i>tpId</i> and can be processed in the object module for self data change.</li>
-<li> <i>virtual TVal* vlNew( );</i> — Call at new attribute creation. Would be redefined for specific behavior into self, inherited from <i>TVal</i>, class at accessing to attribute.</li>
-<li> <i>virtual void vlSet( TVal &amp;val, const TVariant &amp;pvl );</i> — Call for attribute into direct write mode <i>TVal::DirWrite</i> (synchronous mode or writing to internal object's buffer) at a value set, for direct writing to physical controller or object's buffer.</li>
-<li> <i>virtual void vlGet( TVal &amp;val );</i> — Call for attribute into direct read mode <i>TVal::DirRead</i> (synchronous mode or reading from internal object's buffer) at a value get, for direct reading from physical controller or object's buffer.</li>
-<li> <i>virtual void vlArchMake( TVal &amp;val );</i> — Call at a value archive creation with attribute <i>val</i> as the source for quality properties initialization to archive's buffer according with specific of data source and its acquisition.</li></ul>
-</td></tr>
-<tr>
-<th> API of the modules of the "Archives" subsystem
-</th></tr>
-<tr>
-<td><b>Archiver's type (child from TTypeArchivator):</b>
-<ul><li> <i>virtual TMArchivator *AMess(const string &amp;id, const string &amp;db );</i> — Creation of the messages' archive.</li>
-<li> <i>virtual TVArchivator *AVal(const string &amp;id, const string &amp;db );</i> — Creation of the messages' archiver.</li></ul>
-</td></tr>
-<tr>
-<td><b>Messages' archiver (child from TMArchivator):</b>
-<ul><li> <i>virtual void start( );</i> — Archiver's start.</li>
-<li> <i>virtual void stop( );</i> — Archiver's stop.</li>
-<li> <i>virtual time_t begin( );</i> — The beginning of the data in the archive.</li>
-<li> <i>virtual time_t end( );</i> — The end of the data in the archive.</li>
-<li> <i>virtual void put( vector&lt;TMess::SRec&gt; &amp;mess );</i> — Put the message to the archiver.</li>
-<li> <i>virtual void get( time_t b_tm, time_t e_tm, vector&lt;TMess::SRec&gt; &amp;mess, const string &amp;category = "", char level = 0, time_t upTo = 0 );</i> — Get the message from the archiver.</li></ul>
-</td></tr>
-<tr>
-<td><b>Values' archiver (child from TVArchivator):</b>
-<ul><li> <i>virtual void setValPeriod( double per );</i> — Set the periodicity of the archiver's values.</li>
-<li> <i>virtual void setArchPeriod( int per );</i> — Set the archiving periodicity.</li>
-<li> <i>virtual void start( );</i> — Start the archiver.</li>
-<li> <i>virtual void stop( bool full_del = false );</i> — Stop the archiver with the possibility of complete deleting if the <i>full_del</i> flag is set.</li>
-<li> <i>virtual TVArchEl *getArchEl( TVArchive &amp;arch );</i> — Getting the <i>arch</i> archive, which is served by the archiver.</li></ul>
-</td></tr>
-<tr>
-<td><b>An archive element of values (child from TVArchEl):</b>
-<ul><li> <i>virtual void fullErase( );</i> — Complete deleting of the part of archive in the archiver.</li>
-<li> <i>virtual int64_t end( );</i> — End time of the archive in the archiver.</li>
-<li> <i>virtual int64_t begin( );</i> — Start time of the archive in the archiver.</li>
-<li> <i>virtual TVariant getValProc( int64_t *tm, bool up_ord );</i> — Request processing function of the single value from the archive.</li>
-<li> <i>virtual void getValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — Function of the request processing by the module to get data group values <i>buf</i> for set time interval.</li>
-<li> <i>virtual void setValsProc( TValBuf &amp;buf, int64_t beg, int64_t end );</i> — Function of the request processing by the module to set data values <i>buf</i> for set time interval.</li></ul>
-</td></tr>
-<tr>
-<th> API of the modules of subsystem "User interfaces"
-</th></tr>
-<tr>
-<td><b>User interface (child from TUI):</b><br />
-<p>It does not contain specific functions!
-</p>
-</td></tr>
-<tr>
-<th> API модулей подсистемы "Специальные"
-</th></tr>
-<tr>
-<td><b>Specials (child from TSpecial):</b><br />
-<p>It does not contain specific functions!
+<td><b><a href="API.html#TSpecial" title="Special:MyLanguage/Documents/API">TSpecial</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — the root module object of the "User Interfaces" subsystem:<br />
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> It contains no specific functions!
 </p>
 </td></tr></table>
+<p><br />
+</p>
 <h2><span class="mw-headline" id="Debugging_and_Testing_OpenSCADA"><span class="mw-headline-number">20</span> Debugging and Testing OpenSCADA</span></h2>
 <p>To monitor the quality of code and test the performance of various parts of the system the special modules are written that perform testing with the issue of testing protocol. These modules must be executed after the completion of any part of the project.
 </p>
-<h2><span class="mw-headline" id="Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="mw-headline-number">21</span> Rules for design and commenting of the sources of OpenSCADA and its modules</span></h2>
+<h2><span class="mw-headline" id="Rules_for_design_and_commenting_of_the_sources_of_OpenSCADA_and_its_modules"><span class="mw-headline-number">21</span> <span id="CodeDesign" title="#CodeDesign">Rules for design and commenting of the sources of OpenSCADA and its modules</span></span></h2>
 <p>When writing and design of the sources of OpenSCADA and its modules you must to follow the rules:
 </p>
 <ul><li> indent between the levels of enclosure: 4 characters;</li>
@@ -4273,5 +4299,5 @@ Error codes (enum — TError::Codes):
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/API/en">Documents/API/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2022</td><td style="text-align: right;" width="40%"> 1+r2857</td></tr></table></body>
 </html>

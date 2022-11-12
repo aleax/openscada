@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Transport.Tmpl file: module.cpp
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,21 +18,19 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! System's includings. Add need for your module includings.
+// System includings - add need ones
 #include <unistd.h>
-#include <string>
 #include <errno.h>
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// OpenSCADA API includings - add need ones
 #include <tsys.h>
 #include <tmess.h>
 #include <tprotocols.h>
 #include <tmodule.h>
 
-//!!! Self your module's includings. Add need for your module includings.
+// Own includings of the module - add need ones
 #include "module.h"
 
-//!!! Module's meta-information. Change for your module.
 //************************************************
 //* Module info!                                 *
 #define MOD_ID		"Tmpl"
@@ -46,10 +43,9 @@
 #define LICENSE		"MyLicense"
 //************************************************
 
-ModTmpl::TTr *ModTmpl::mod;
+TrTmpl::TTr *TrTmpl::mod;
 
-//!!! Required section for binding OpenSCADA kernel's to this module. Gives information and create module's root object.
-//!!! Not remove this section!
+// Required section for binding OpenSCADA core to this module, It gives information and creates module root object - do not change
 extern "C"
 {
 #ifdef MOD_INCL
@@ -58,7 +54,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if(n_mod == 0) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0) return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -68,147 +64,149 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new ModTmpl::TTr( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new TrTmpl::TTr(source);
 	return NULL;
     }
 }
 
-//!!! Include for default call into your module's namespace.
-using namespace ModTmpl;
+using namespace TrTmpl;
 
 //************************************************
 //* TTr						 *
 //************************************************
-//!!! Constructor for module's root object. Append into for your need.
 TTr::TTr( string name ) : TTypeTransport(MOD_ID)
 {
-    //!!! Init shortcut to module's root object. No change it.
     mod = this;
 
-    //!!! Loading module's meta-information into root object. No change it.
     modInfoMainSet(MOD_NAME, MOD_TYPE, MOD_VER, AUTHORS, DESCRIPTION, LICENSE, name);
 }
 
-//!!! Destructor for module's root object. Append into for your need.
 TTr::~TTr( )
 {
 
 }
 
-//!!! Module's comandline options the print help function. Add your module commandline parameters info.
-string TTr::optDescr( )
+void TTr::postEnable( int flag )
 {
-    return TSYS::strMess(_(
-	"======================= Module <%s:%s> options =======================\n"
-	"---- Parameters of the module section '%s' of the configuration file ----\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-}
+    TModule::postEnable(flag);
 
-//!!! Inherited (virtual) load object's node method. Append your module need data loadings
-void TTr::load_( )
-{
-    TTypeTransport::load_();
-
-    //!!! Load self module command line parameters' values. Append your addition parameters process.
-    // Load parameters from command line
-
-    //!!! Load addition your module specific data. For example, make loading addition module's parameters from OpenSCADA DB or from main config-file
-}
-
-//!!! Main subsystem API functions for self modules input and output transport objects creation. Change only your class names.
-TTransportIn *TTr::In( const string &name, const string &idb )
-{
-    return new TTrIn(name,idb,&owner().inEl());
-}
-
-TTransportOut *TTr::Out( const string &name, const string &idb )
-{
-    return new TTrOut(name,idb,&owner().outEl());
-}
-
-//!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standard configurators of OpenSCADA to individual module's parameters.
-//!!! Modify for self needs
-void TTr::cntrCmdProc( XMLNode *opt )
-{
-    //> Get page info
-    if(opt->name() == "info")
-    {
-	TTypeTransport::cntrCmdProc(opt);
-	return;
+    if(flag&TCntrNode::NodeConnect) {
+	owner().inEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
+	owner().outEl().fldAdd(new TFld("A_PRMS",trS("Addition parameters"),TFld::String,TFld::FullText,"10000"));
     }
+}
 
-    //> Process command to page
-    string a_path = opt->attr("path");
-    TTypeTransport::cntrCmdProc(opt);
+TTransportIn *TTr::In( const string &id, const string &stor )	{ return new TTrIn(id, stor, &owner().inEl()); }
+
+TTransportOut *TTr::Out( const string &id, const string &stor )	{ return new TTrOut(id, stor, &owner().outEl()); }
+
+string TTr::outAddrHelp( )
+{
+    return string(_("Output transport has the address format:\n"
+	//???? Describe here the output transport address
+	));
 }
 
 //************************************************
 //* TTrIn                                        *
 //************************************************
-//!!! Constructor for input transport object. Append into for your need.
-TTrIn::TTrIn( string name, const string &idb, TElem *el ) : TTransportIn(name,idb,el)
+TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
+    TTransportIn(name,idb,el), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0)
+{
+    //???? Set here the default input transport address
+    setAddr("localhost:10005");
+}
+
+TTrIn::~TTrIn( )
 {
 
 }
 
-//!!! Destructor for input transport object. Append into for your need.
-TTrIn::~TTrIn()
-{
-
-}
-
-//!!! The inherited (virtual) status interface function. Append into for your need.
 string TTrIn::getStatus( )
 {
-    string rez = TTransportIn::getStatus( );
+    string rez = TTransportIn::getStatus();
 
-    if( startStat() )
-	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %.4g kb, out %.4g kb."),connNumb,cl_id.size(),trIn,trOut);
+    //???? Append here the status of the input transport for its specific information
+    if(startStat()) {
+	//rez += TSYS::strMess(_("Connections %d, opened %d, last %s, closed by the limit %d. "),
+	//    connNumb, (protocols().empty()?associateTrs().size():clId.size()), atm2s(lastConn()).c_str(), clsConnByLim);
+    }
 
     return rez;
 }
 
-//!!! The inherited (virtual) start and stop interface functions. Append into for your need.
-void TTrIn::start()
+void TTrIn::load_( )
 {
-    if( runSt ) return;
+    try {
+	XMLNode prmNd;
+	string  vl;
+	prmNd.load(cfg("A_PRMS").getS());
+	vl = prmNd.attr("KeepAliveReqs"); if(!vl.empty()) setKeepAliveReqs(s2i(vl));
+	vl = prmNd.attr("KeepAliveTm");	if(!vl.empty()) setKeepAliveTm(s2i(vl));
+	vl = prmNd.attr("TaskPrior");	if(!vl.empty()) setTaskPrior(s2i(vl));
+	//???? Append loading the additional configuration attributes
+    } catch(...) { }
+}
 
-    //> Status clear
-    trIn = trOut = 0;
-    connNumb = 0;
+void TTrIn::save_( )
+{
+    XMLNode prmNd("prms");
+    prmNd.setAttr("KeepAliveReqs", i2s(keepAliveReqs()));
+    prmNd.setAttr("KeepAliveTm", i2s(keepAliveTm()));
+    prmNd.setAttr("TaskPrior", i2s(taskPrior()));
+    //???? Append saving the additional configuration attributes
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
-    //!!! Your code
+    TTransportIn::save_();
+}
 
-    SYS->taskCreate(nodePath('.',true), 0, Task, this);
+void TTrIn::start( )
+{
+    if(runSt) return;
+
+    //???? Init-prepare here the connection properties
+
+    SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this); //main task for processing
+
+    runSt = true;
+
+    TTransportIn::start();
+
+    if(logLen()) pushLogMess(_("Connected"));
 }
 
 void TTrIn::stop()
 {
-    if( !runSt ) return;
-
-    //> Status clear
-    trIn = trOut = 0;
-    connNumb = 0;
+    if(!runSt) return;
 
     SYS->taskDestroy(nodePath('.',true), &endrun);
+    runSt = false;
 
-    //!!! Your code
+    //???? Clean up here the connection properties
+
+    TTransportIn::stop();
+
+    if(logLen()) pushLogMess(_("Disconnected"));
 }
 
-//!!! Thread's function for process input connections. Append into for your need.
+bool TTrIn::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "ADDR" && co.getS() != pc.getS()) {
+	//???? Process here the reconnection at the address change
+    }
+
+    return TTransportIn::cfgChange(co, pc);
+}
+
 void *TTrIn::Task( void *tr_in )
 {
     TTrIn *tr = (TTrIn *)tr_in;
-    AutoHD<TProtocolIn> prot_in;
 
     tr->runSt	= true;
     tr->endrun	= false;
 
-    while( !tr->endrun )
-    {
-	//!!! Your code
+    while(!tr->endrun) {
+	//???? Process here the inbound connections
     }
 
     tr->runSt = false;
@@ -216,48 +214,39 @@ void *TTrIn::Task( void *tr_in )
     return NULL;
 }
 
-//!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standard confifurators of OpenSCADA to individual module's parameters.
-//!!! Modify for self needs
 void TTrIn::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //???? Change and append for your specific configuration
+
+    //Getting the page info
+    if(opt->name() == "info") {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1,"help",
-	    _("Socket's input transport has address format:\n"
-	    "  TCP:[addr]:[port]:[mode] - TCP socket:\n"
-	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
-	    "    port - network port (/etc/services);\n"
-	    "    mode - work mode (0 - break connection; 1 - keep alive).\n"
-	    "  UDP:[addr]:[port] - UDP socket:\n"
-	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
-	    "    port - network port (/etc/services).\n"
-	    "  UNIX:[name]:[mode] - UNIX socket:\n"
-	    "    name - UNIX-socket's file name;\n"
-	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/q_ln",_("Queue length"),RWRW__,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),RWRW__,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),RWRW__,"root",STR_ID,1,"tp","dec");
+	ctrRemoveNode(opt, "/prm/cfg/A_PRMS");
+	ctrMkNode("fld", opt, -1, "/prm/cfg/ADDR", EVAL_STR, startStat()?R_R_R_:RWRWR_, "root", STR_ID, 1, "help",
+	    _("Input transport has the address format:\n"
+		//???? Describe here the input transport address
+	    ));
+	ctrMkNode("fld", opt, -1, "/prm/cfg/taskPrior", _("Priority"), startStat()?R_R_R_:RWRWR_, "root", STR_ID, 2,
+		"tp","dec", "help",TMess::labTaskPrior().c_str());
+	ctrMkNode("fld", opt, -1, "/prm/cfg/keepAliveReqs", _("Keep alive requests"), RWRWR_, "root", STR_ID, 2, "tp","dec",
+		"help",_("Closing the connection after the specified requests.\nZero value to disable - do not close ever."));
+	ctrMkNode("fld", opt, -1, "/prm/cfg/keepAliveTm", _("Keep alive timeout, seconds"), RWRWR_, "root", STR_ID, 2, "tp","dec",
+		"help",_("Closing the connection after no requests at the specified timeout.\nZero value to disable - do not close ever."));
 	return;
     }
-    //> Process command to page
+    //Processing for commands to the page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/q_ln")
-    {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(maxQueue()));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setMaxQueue(atoi(opt->text().c_str()));
+    if(a_path == "/prm/cfg/keepAliveReqs") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveReqs()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveReqs(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/cl_n")
-    {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(maxFork()));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setMaxFork(atoi(opt->text().c_str()));
+    else if(a_path == "/prm/cfg/keepAliveTm") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/bf_ln")
-    {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TSYS::int2str(bufLen()));
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setBufLen(atoi(opt->text().c_str()));
+    else if(a_path == "/prm/cfg/taskPrior") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(s2i(opt->text()));
     }
     else TTransportIn::cntrCmdProc(opt);
 }
@@ -265,85 +254,143 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* TTrOut                                   *
 //************************************************
-//!!! Constructor for output transport object. Append into for your need.
-TTrOut::TTrOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el)
+TTrOut::TTrOut(string name, const string &idb, TElem *el) : TTransportOut(name,idb,el), mAttemts(1)
 {
 
 }
 
-//!!! Destructor for output transport object. Append into for your need.
 TTrOut::~TTrOut()
 {
 
 }
 
-//!!! The inherited (virtual) status interface function. Append into for your need.
 string TTrOut::getStatus( )
 {
-    string rez = TTransportOut::getStatus( );
+    string rez = TTransportOut::getStatus();
 
-    if( startStat() )	rez += TSYS::strMess(_("Traffic in %.4g kb, out %.4g kb."),trIn,trOut);
+    //???? Append here the status of the input transport for its specific information
+    if(startStat()) {
+	//rez += TSYS::strMess(_("To the host '%s'. "), connAddr.c_str());
+    }
 
     return rez;
 }
 
-//!!! The inherited (virtual) start and stop interface functions. Append into for your need.
-void TTrOut::start()
+void TTrOut::setTimings( const string &vl, bool isDef )
 {
-    if( runSt ) return;
+    if((isDef && !mDefTimeouts) || vl == mTimings) return;
+    else if(!isDef) mDefTimeouts = false;
 
-    //> Status clear
-    trIn = trOut = 0;
+    //???? Process here the timeouts structure for parse
 
-    //!!! Your code
+    if(!isDef) modif();
+}
+
+void TTrOut::setAttempts( unsigned short vl )
+{
+    if(vl == mAttemts)	return;
+    mAttemts = vmax(1, vmin(5,vl));
+    modif();
+}
+
+void TTrOut::load_( )
+{
+    try {
+	XMLNode prmNd;
+	string  vl;
+	prmNd.load(cfg("A_PRMS").getS());
+	vl = prmNd.attr("tms"); if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("attempts"); if(!vl.empty()) setAttempts(s2i(vl));
+	//???? Append loading the additional configuration attributes
+    } catch(...) { }
+}
+
+void TTrOut::save_( )
+{
+    XMLNode prmNd("prms");
+    prmNd.setAttr("tms", timings());
+    prmNd.setAttr("attempts", i2s(attempts()));
+    //???? Append saving the additional configuration attributes
+    cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+
+    TTransportOut::save_();
+}
+
+bool TTrOut::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "ADDR" && co.getS() != pc.getS()) {
+	//???? Process here the reconnection at the address change
+    }
+
+    return TTransportOut::cfgChange(co, pc);
+}
+
+void TTrOut::start( int itmCon )
+{
+    MtxAlloc res(reqRes(), true);
+
+    if(runSt) return;
+    if(SYS->stopSignal()) throw TError(nodePath().c_str(), _("We are stopping!"));
+
+    //???? Init-prepare here the connection properties and establish the connection for the connectable transports
 
     runSt = true;
+
+    TTransportOut::start();
+
+    if(logLen()) pushLogMess(_("Connected"));
 }
 
 void TTrOut::stop()
 {
-    if( !runSt ) return;
+    MtxAlloc res(reqRes(), true);
 
-    //> Status clear
-    trIn = trOut = 0;
+    if(!runSt) return;
 
-    //!!! Your code
+    //???? Disconnect for the connectable transports and clean up here the connection properties
 
     runSt = false;
+
+    TTransportOut::stop();
+
+    if(logLen()) pushLogMess(_("Disconnected"));
 }
 
-//!!! The inherited (virtual) sending data and receiving interface function implementation. Append into for your need.
-int TTrOut::messIO( const char *oBuf, int iLen, char *iBuf, int iLen, int time )
+int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
 {
-    if(!runSt) throw TError(nodePath().c_str(),_("Transport is not started!"));
+    int iB = 0;
 
-    //!!! Your code
+    MtxAlloc res(reqRes(), true);
 
-    return 0;	//Recived messages size
+    if(!runSt) throw TError(nodePath().c_str(), _("Transport is not connected!"));
+
+    //???? Perform the messages exchenging just here
+
+    return vmax(0, iB);
 }
 
-//!!! OpenSCADA control interface comands process virtual function.
-//!!! For example, process access from standard confifurators of OpenSCADA to individual module's parameters.
-//!!! Modify for self needs
 void TTrOut::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //???? Change and append for your specific configuration
+
+    //Getting the page info
+    if(opt->name() == "info") {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1,"help",
-	    _("Socket's output transport has address format:\n"
-	    "  TCP:[addr]:[port] - TCP socket:\n"
-	    "    addr - address for remote socket to be opened;\n"
-	    "    port - network port (/etc/services);\n"
-	    "  UDP:[addr]:[port] - UDP socket:\n"
-	    "    addr - address for remote socket to be opened;\n"
-	    "    port - network port (/etc/services).\n"
-	    "  UNIX:[name] - UNIX socket:\n"
-	    "    name - UNIX-socket's file name."));
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1, "help",owner().outAddrHelp().c_str());
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,1, "tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/attempts",_("Attempts"),RWRWR_,"root",STR_ID,1, "tp","dec");
 	return;
     }
-
-    //> Process command to page
-    TTransportOut::cntrCmdProc(opt);
+    //Processing for commands to the page
+    string a_path = opt->attr("path");
+    if(a_path == "/prm/cfg/TMS") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
+    }
+    else if(a_path == "/prm/cfg/attempts") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(attempts()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setAttempts(s2i(opt->text()));
+    }
+    else TTransportOut::cntrCmdProc(opt);
 }

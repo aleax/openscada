@@ -1,5 +1,4 @@
 
-//!!! The module name, the file name and the module's license. Change for your need.
 //OpenSCADA module Archive.Tmpl file: module.h
 /***************************************************************************
  *   Copyright (C) 2022 by MyName MyFamily, <my@email.org>                 *
@@ -19,18 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-//!!! Multi-including this header file prevent. Change for your include file name
-#ifndef MOD_TMPL_H
-#define MOD_TMPL_H
+// Preventing of the header file multi-including - change at the header file name changing
+#ifndef MODULE_H
+#define MODULE_H
 
-//!!! OpenSCADA module's API includings. Add need for your module includings.
+// System includings - add need ones
+#include <string>
+
+// OpenSCADA API includings - add need ones
 #include <tarchives.h>
 
-//!!! Self your module's includings. Add need for your module includings.
+// Own includings of the module - add need ones
 #include "val.h"
 #include "mess.h"
 
-//!!! Definition of the individual module translation functions. Do not change these!
+// Definition of the individual module translation functions - do not change
 #undef _
 #define _(mess) mod->I18N(mess).c_str()
 #undef trS
@@ -38,40 +40,33 @@
 
 using namespace OSCADA;
 
-//!!! All module's object's include into self (individual) namespace. Change namespace for your module.
-namespace ModTmpl
+// All the module objects in own (individual) namespace - change for your module
+namespace ArhTmpl
 {
 
-//!!! Root module's object define. Add methods and attributes for your need.
+// Definition the root module object of the subsystem "Archives-History" - add methods and attributes at your need
 //*************************************************
-//* ModTmpl::ModArch                              *
+//* ArhTmpl::ModArch                              *
 //*************************************************
 class ModArch: public TTypeArchivator
 {
     public:
-	//!!! Constructor for root module's object.
 	ModArch( const string &name );
-	//!!! Destructor for root module's object.
 	~ModArch();
 
-	//AutoHD<ModMArch> messAt( const string &iid )	{ return TTypeArchivator::messAt(iid); }
-	//AutoHD<ModVArch> valAt( const string &iid )	{ return TTypeArchivator::valAt(iid); }
+	AutoHD<ModMArch> messAt( const string &iid )	{ return TTypeArchivator::messAt(iid); }
+	AutoHD<ModVArch> valAt( const string &iid )	{ return TTypeArchivator::valAt(iid); }
 
     protected:
 	//Methods
-	//!!! Inherited (virtual) load and save object's node methods. Call from OpenSCADA kernel.
-	void load_( );
-
-	//!!! Module's post enable call. Add your module objects initialize code.
 	void postEnable( int flag );
 
-	//!!! Main subsystem API functions for self modules message and value archive objects creation.
 	TMArchivator *AMess( const string &id, const string &db );
 	TVArchivator *AVal( const string &id, const string &db );
 };
 
-extern ModArch *mod;
+extern ModArch *mod;	//The module root link
 
-} //End namespace ModTmpl
+} //End the namespace ArhTmpl
 
-#endif //MOD_TMPL_H
+#endif //MODULE_H

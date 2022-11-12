@@ -451,7 +451,7 @@
 <li><i>int {mktime|timegm}(int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst);</i> — формує час з епохи 1.1.1970 з окремо вказаних секунд, хвилин, годин, днів, місяців та інше. Значення окремих одиниць часу можуть вказуватися за межами їх звичного діапазону, що дозволяє використовувати цю функцію при переборі та у результаті чого одиниці часу буде виправлено та повернуто у звичайному діапазоні. <i>timegm</i> працює з часом у GMT(UTC). </li>
 <li><i>string {strftime|strftimegm}( int sec, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — перетворює абсолютний час <i>sec</i> у рядок потрібного формату <i>form</i>. Запис формату відповідає POSIX-функції <i>strftime</i>. <i>strftimegm</i> повертає час у GMT(UTC).</li>
 <li><i>int {strptime|strptimegm}( string str, string form = "%Y-%m-%d&nbsp;%H:%M:%S" );</i> — повертає час у секундах від епохи 1.1.1970, виходячи з строкового запису часу <i>str</i>, відповідно до вказаного шаблону <i>form</i>. Наприклад, шаблону "%Y-%m-%d&nbsp;%H:%M:%S" відповідає час "2006-08-08 11:21:55". Опис формату шаблону можна отримати з документації на POSIX-функцію <i>strptime</i>. <i>strptimegm</i> працює з часом у GMT(UTC).</li>
-<li><i>int cron( string cronreq, int base = 0 );</i> — повертає час, спланований у форматі стандарту CRON, <i>cronreq</i>, починаючи від базового часу <i>base</i> або від поточного, якщо базовий не вказано. Форма стандарту CRON це "* * * * *".
+<li><i><span id="CRON" title="#CRON">int cron( string cronreq, int base = 0 );</span></i> — повертає час, спланований у форматі стандарту CRON, <i>cronreq</i>, починаючи від базового часу <i>base</i> або від поточного, якщо базовий не вказано. Форма стандарту CRON це "* * * * *".
 <dl><dt> Де елементи по черзі</dt>
 <dd /></dl>
 <ul><li> хвилини (0-59);</li>
@@ -1011,5 +1011,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2022</td><td style="text-align: right;" width="40%"> 1+r2857</td></tr></table></body>
 </html>

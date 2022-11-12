@@ -1,3 +1,12 @@
+2022-11-11 Roman (stable)
+- !!:LibsDB.OscadaLibs: tmplib_DevLib.SLOT: Appended by the description and some fixed.
+- !:FIX:LibsDB.vcaBase: wlb_doc.docRepDay: Fixed in the document regeneration at the same time, by setting 0, and in whole.
+    wlb_Main.storeHouse: The filter events appended for call the immediatly cycles.
+- !:FIX:data/ModelsDB/Boiler: Fixed in some description and the processing period of the project set to 250 ms.
+- !!!!:SYS: All templates (the folders =Tmpl=) revised together the document "How to/Create module".
+- !!:FIX:DAQ: The parameter templates fixed in the flag IO::TransltText processing for strings.
+
+
 2022-11-02 Roman (stable)
 - !!:LibsDB.OscadaLibs: The library DevLib appended by the template "Slot LTD devices (SLOT)".
 - !!:LibsDB.vcaBase: wlb_doc.docRepDay: Some improved and appended for:
@@ -13,7 +22,7 @@
 
 
 2022-10-22 Roman (stable)
-- !!!!:LibsDB.vcaBase: wlb_Main.storeHouse: Adapted to work in very big processing periods and or disabling the periodic processing in whole:
+- !!!!:LibsDB.vcaBase: wlb_Main.storeHouse: Adapted to work in very big processing periods and disabling the periodic processing in whole:
 	- switched to the processing period -2 (disabled);
 	- appended in continuing the immediatly cycles using the new event "usr_calc";
     Allowed for type changing of the specific field "NAME".

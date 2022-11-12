@@ -269,9 +269,9 @@ class TTypeTransport: public TModule
 	void load_( );
 	void save_( );
 
-	virtual TTransportIn  *In( const string &name, const string &db )
+	virtual TTransportIn  *In( const string &id, const string &stor )
 	{ throw TError(nodePath().c_str(),_("Input transport is not supported!")); }
-	virtual TTransportOut *Out( const string &name, const string &db )
+	virtual TTransportOut *Out( const string &id, const string &stor )
 	{ throw TError(nodePath().c_str(),_("Output transport is not supported!")); }
 
     private:

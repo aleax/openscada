@@ -1,20 +1,19 @@
 AC_PREREQ([2.50])
 
-AC_INIT([DB.Tmpl],[0.0.1],[my@email.org])
+AC_INIT([Tmpl],[0.0.1],[my@email.org])
 AC_PREFIX_DEFAULT([/usr])
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
-AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
+AM_INIT_AUTOMAKE([1.10 subdir-objects])
 AM_CONFIG_HEADER(confMod.h)
 
 AC_LANG(C++)
 
-# Enable options
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(yes)
 
-# Checks for programs.
+# Checking for the programs
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -33,7 +32,7 @@ PKG_PROG_PKG_CONFIG
 
 AM_SANITY_CHECK
 
-# Checks for header files.
+# Checking for the header files
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
@@ -43,7 +42,7 @@ AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     [AC_MSG_ERROR([Some standard template libs' STL headers not found. Install or check STL-StdC++ developing package!])])
 AC_CHECK_HEADERS([libintl.h],[ ],[AC_MSG_NOTICE(libintl.h header not found. Using is disabled!)])
 
-#Gettext utilites check
+# Checking for the Gettext utilites
 if test $ac_cv_header_libintl_h = yes; then
     AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
     AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
@@ -54,7 +53,7 @@ if test $ac_cv_header_libintl_h = yes; then
     AC_CHECK_LIB([intl],[bindtextdomain],[LIB_CORE="${LIB_CORE}-lintl "])
 fi
 
-# Checks for typedefs, structures, and compiler characteristics.
+# Checking for typedefs, structures, and compiler characteristics
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
@@ -64,19 +63,9 @@ AC_TYPE_SIZE_T
 AC_HEADER_TIME
 AC_STRUCT_TM
 
-# Set up system library
-AC_SUBST(sys_lib)
-sys_lib="/usr/lib"
-if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
-
 AC_SUBST(LIB_CORE)
 
-ix86=no;
-if test $target_cpu = "i386" -o $target_cpu = "i486" -o $target_cpu = "i586" -o $target_cpu = "i686" -o \
-    $target_cpu = "k6" -o $target_cpu = "athlon" -o $target_cpu = "pentium2" -o $target_cpu = "pentium3" -o \
-    $target_cpu = "pentium4"; then ix86=yes; fi
-
-# Checks for library functions.
+# Checking for library functions
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MKTIME
 AC_FUNC_SELECT_ARGTYPES

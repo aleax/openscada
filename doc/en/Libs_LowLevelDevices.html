@@ -390,7 +390,7 @@ rfcomm <span class="nb">bind </span><span class="m">0</span> 98:D3:31:F8:52:29  
 <ul><li> <i>Transport</i> — to the address of the automatically created transport with its parameters after ":", according to <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">the function SYS.Transport.outAt() address format</a>, where the device address corresponds to the command <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">rfcomm bind 0</span> in item 1.</li>
 <li> <i>Device to bind</i> — here you can set the Bluetooth address of the device as "98:D3:31:F8:52:29" to call the <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">rfcomm bind {N} </span> command when starting the template, where <i>N</i> is respectively taken from the address of the previous item.</li></ul>
 <dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The <b>rfcomm</b> command is normally not available to be called by a non-privileged user, and if you want to call it by such a user, you must set a corresponding sign for it as <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">chmod u+s /usr/bin/rfcomm</span> from the super user.</dd></dl></dd>
-<dd>5. <i>Result</i>: The logical parameter object will perform gather data of and trace to modify of the writable properties.</dd></dl>
+<dd>5. RESULT: The logical parameter object will perform gather data of and trace to modify of the writable properties.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -510,7 +510,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>Transport of the One Wire bus, Serial</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>Rescan period, s</i> — periodicity of rescaning for new and removed devices search.</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform at first searching to 1Wire devices on the bus and create included parameters to the each found one. Next the logical parameter object will perform gather data of the found devices and trace to modify of the writable device's properties.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform at first searching to 1Wire devices on the bus and create included parameters to the each found one. Next the logical parameter object will perform gather data of the found devices and trace to modify of the writable device's properties.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -656,7 +656,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119].</li>
 <li> <i>vRef</i> — reference voltage of the AIs and AO.</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the AI attributes and also will take the AO and write to the chip.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the AI attributes and also will take the AO and write to the chip.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -891,7 +891,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119].</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the DI attributes and also will take the DO and write to the chip.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the DI attributes and also will take the DO and write to the chip.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1031,7 +1031,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119].</li>
 <li> <i>range</i> — range of voltage of the AIs.</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the AI attributes.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the AI attributes.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1141,7 +1141,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119].</li>
 <li> <i>vRef</i> — reference voltage of the AO.</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform interaction and take the AO and write to the chip.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and take the AO and write to the chip.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1260,7 +1260,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119].</li>
 <li> <i>oss</i> — oversampling setting of pressure measurement [0...3].</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the Pressure and Temperature attributes.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the Pressure and Temperature attributes.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1388,7 +1388,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119].</li>
 <li> <i>oss</i> — oversampling setting of pressure measurement [0...7].</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the Pressure, Temperature and Humidity attributes.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the Pressure, Temperature and Humidity attributes.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1497,7 +1497,7 @@ Supported 1Wire-devices: DS1820, DS1820/DS18S20/DS1920 (not tested), DS1822 (not
 <dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported;</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119].</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the Temperature and Humidity attributes.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the Temperature and Humidity attributes.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1654,7 +1654,7 @@ DS3231;DS1307
 <dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
 <ul><li> <i>transport</i> — to the address of the transport into step 1. Tracing for the address changing is supported.</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119].</li></ul></dd>
-<dd>6. <i>Result</i>: The logical parameter object will perform interaction and placing of gathered data to the DateTime, Temperature and some one state attributes and also will take the DateTime, some one state attributes and write it to the chip.</dd></dl>
+<dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the DateTime, Temperature and some one state attributes and also will take the DateTime, some one state attributes and write it to the chip.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1686,7 +1686,7 @@ DS3231;DS1307
 <div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 30px"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"read"</span><span class="p">);</span> <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"AT24CXX"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"addr"</span><span class="p">,</span><span class="mi">87</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"off"</span><span class="p">,</span><span class="mi">1000</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"size"</span><span class="p">,</span><span class="mi">20</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"My message"</span><span class="p">);</span>
 <span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"write"</span><span class="p">);</span> <span class="nx">req</span><span class="p">.</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"ProtIt"</span><span class="p">,</span><span class="s2">"AT24CXX"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"addr"</span><span class="p">,</span><span class="mi">87</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"off"</span><span class="p">,</span><span class="mi">1000</span><span class="p">).</span><span class="nx">setText</span><span class="p">(</span><span class="s2">"Stored data"</span><span class="p">);</span>
 </pre></div>
-<dl><dd>4. <i>Result</i>: Into <i>text()</i> for "read" you will get the read data if no errors occur.</dd></dl>
+<dl><dd>4. RESULT: Into <i>text()</i> for "read" you will get the read data if no errors occur.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1815,7 +1815,7 @@ DS3231;DS1307
 <li> <i>pin</i> — GPIO pin number where connected the data pin of the sensor;</li>
 <li> <i>tries</i> — tries of the sensor reading;</li>
 <li> <i>dev</i> — generic device specific selection.</li></ul></dd>
-<dd>5. <i>Result</i>: The logical parameter will perform interaction and placing of the gathered data to the Temperature and Humidity attributes.</dd></dl>
+<dd>5. RESULT: The logical parameter will perform interaction and placing of the gathered data to the Temperature and Humidity attributes.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -1935,7 +1935,7 @@ DS3231;DS1307
 <li> <i>pin_cs</i> — CS pin number where connected the chip selection pin of the sensor; </li>
 <li> <i>pin_sclk</i> — SCLK pin number where connected the serial clock pin of the sensor;</li>
 <li> <i>pin_miso</i> — MISO pin number where connected the master in slave out (data) pin of the sensor.</li></ul></dd>
-<dd>5. <i>Result</i>: The logical parameter will perform interaction and placing of the gathered data to the Temperature attributes.</dd></dl>
+<dd>5. RESULT: The logical parameter will perform interaction and placing of the gathered data to the Temperature attributes.</dd></dl>
 <p><br />
 </p>
 <table class="wikitable">
@@ -2102,12 +2102,12 @@ DS3231;DS1307
 <ul><li> <i>transport</i> — to address of the "BCM 2835" parameter like to "DAQ.GPIO.io.pi" or to address of the transport into step 1; tracing for the address changing is supported;</li>
 <li> <i>addr</i> — the I2C slave device's address [0...119];</li>
 <li> <i>RS, E, D4, D5, D6, D7</i> — numbers of the GPIO pins where connected the proper data ones of the sensor.</li></ul></dd>
-<dd>5. <i>Result</i>: The logical parameter object will perform interaction and setting lines' values to the display.</dd></dl>
+<dd>5. RESULT: The logical parameter object will perform interaction and setting lines' values to the display.</dd></dl>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/en">Libs/LowLevelDevices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/LowLevelDevices/en">Libs/LowLevelDevices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2022</td><td style="text-align: right;" width="40%"> 1+r2857</td></tr></table></body>
 </html>

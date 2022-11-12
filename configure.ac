@@ -20,14 +20,13 @@ AC_LANG(C++)
 # Perform the program name transformation
 #AC_ARG_PROGRAM
 
-# Enable options
 AC_ENABLE_SHARED(yes)
 AC_ENABLE_STATIC(yes)
 AC_LIBTOOL_DLOPEN
 
 # AM_GNU_GETTEXT
 
-# Check for the needed programs.
+# Checking for the programs
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
@@ -47,7 +46,7 @@ fi
 
 AM_SANITY_CHECK
 
-# Check for the header files.
+# Checking for the header files
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
@@ -57,11 +56,11 @@ AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     AC_MSG_ERROR([Some STL headers are not found. Install or check the STL of StdC++ developing package!]))
 AC_CHECK_HEADERS([langinfo.h syscall.h iconv.h libintl.h], [], AC_MSG_NOTICE([Some system headers aren't found. Using disabled!]))
 
-#Check for the gettext utilites
 if test $ac_cv_header_iconv_h = yes; then
     AC_SEARCH_LIBS(libiconv_open, [iconv])
 fi
 
+# Checking for the Gettext utilites
 if test $ac_cv_header_libintl_h = yes; then
     AC_CHECK_PROG(XGETTEXT, xgettext, xgettext, false)
     AC_CHECK_PROG(MSGMERGE, msgmerge, msgmerge, false)
@@ -72,7 +71,7 @@ if test $ac_cv_header_libintl_h = yes; then
     AC_SEARCH_LIBS(libintl_bindtextdomain, [intl])
 fi
 
-# Check for typedefs, structures and the compiler characteristics.
+# Checking for typedefs, structures, and compiler characteristics
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
@@ -92,7 +91,7 @@ fi
 
 AM_CONDITIONAL([ResourcesAllow], [test -d data])
 
-# Check for functions of libraries
+# Checking for library functions
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_MKTIME
 AC_FUNC_SELECT_ARGTYPES

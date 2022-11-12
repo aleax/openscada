@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Devices</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (6% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/Libs_Devices.html" title="Бібліотеки/Пристрої (26% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/Libs_Devices.html" title="Библиотеки/Устройства (6% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/Libs_Devices.html" title="Бібліотеки/Пристрої (25% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -106,6 +106,7 @@ To place a protocol implementation here you need to do and to follow for the sho
 <li class="toclevel-2"><a href="#Mercury_200_.28m200.29"><span class="tocnumber">3.2</span> <span class="toctext">Mercury 200 (m200)</span></a></li>
 <li class="toclevel-2"><a href="#Mercury_230_.28m230.29"><span class="tocnumber">3.3</span> <span class="toctext">Mercury 230 (m230)</span></a></li>
 <li class="toclevel-2"><a href="#Nik2303I_.28Nik2303I.29"><span class="tocnumber">3.4</span> <span class="toctext">Nik2303I (Nik2303I)</span></a></li>
+<li class="toclevel-2"><a href="#Slot_LTD_devices_.28SLOT.29"><span class="tocnumber">3.5</span> <span class="toctext">Slot LTD devices (SLOT)</span></a></li>
 </ul>
 </li>
 </ul>
@@ -5054,11 +5055,599 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 <li> <i>Coefficient of transformation</i> — at accounting through the current transformers set the coefficient, by default it us — 1.</li>
 <li> Set flags for all parameters you need to read.</li></ul></dd>
 <dd>6. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
+<p><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<td> <span id="SLOT" title="#SLOT"><h3><span class="mw-headline" id="Slot_LTD_devices_.28SLOT.29"><span class="mw-headline-number">3.5</span> Slot LTD devices (<a href="Libs_Devices.html#SLOT" title="Special:MyLanguage/Libs/Devices">SLOT</a>)</span></h3></span> </td>
+<td> 0.8 </td>
+<td> GPLv2 </td>
+<td> * =&gt; <a href="Modules/UserProtocol.html" title="Special:MyLanguage/Modules/UserProtocol">UserProtocol</a> </td>
+<td> en 
+</td>
+<td> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a>
+</td></tr></table>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsSLOT.png" title="Result and the operative setup."><img alt="Result and the operative setup." height="675" src="files/LibsDevsSLOT.png" width="428" /></a></div>
+<p>The template implements support for counters and correctors of the "SLOT" LTD production. The devices protocol is flexible and uniform for implementation of reading all available archives also as setting the configuration fields, but currently there was need only for reading the hourly archives, so the template reads the daily and hourly archives and some set of the instantaneous parameters.
+</p><p>The template includes also code for connect the counters through modems using the AT-commands.
+</p>
+<ul><li> <b>Total complexity:</b> 3.1 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span></li>
+<li> <b>Sponsored by:</b> Vinnica Poultry Farm</li></ul>
+<p><b><u>Template IOs</u></b><br />
+</p>
+<table class="wikitable">
+
+<tr>
+<th> Identifier </th>
+<th> Parameter </th>
+<th> Type </th>
+<th> Mode </th>
+<th> Attribute </th>
+<th> Configuration </th>
+<th> Value
+</th></tr>
+<tr>
+<td> transport </td>
+<td> Transport </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> Sockets.SLOT:10.39.77.10:4001
+</td></tr>
+<tr>
+<td> modem </td>
+<td> Modem<br />In the format "{TelN}[:{Init1}[:{Init2}[...{InitN}]]]" </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> modemTm </td>
+<td> Modem times<br />In the format "{tm}:{ConTm}" </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 40:5
+</td></tr>
+<tr>
+<td> addr </td>
+<td> Device address [0...65535] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 1
+</td></tr>
+<tr>
+<td> pipeN </td>
+<td> Pipe number [0...1] </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 0
+</td></tr>
+<tr>
+<td> sched </td>
+<td> Scheduling at CRON </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> arhTmLim </td>
+<td> Time limit of processing the archiving, seconds </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td> 120
+</td></tr>
+<tr>
+<td> arhD </td>
+<td> OpenSCADA archiver for device archive of days </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> arhH </td>
+<td> OpenSCADA archiver for device's archive of hours </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Constant </td>
+<td>
+</td></tr>
+<tr>
+<td> reset </td>
+<td> Reset the archives reading </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Full access </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devTime </td>
+<td> Device time </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devTp </td>
+<td> Device type </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devSWVers </td>
+<td> Device software version </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devSN </td>
+<td> Device Serial Number </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devModel </td>
+<td> Device model </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devPollPer </td>
+<td> Device poll period </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devContrDay </td>
+<td> Device contract day </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devContrHour </td>
+<td> Device contract hour </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> devSesonTimeCh </td>
+<td> Device season time change </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> objNm </td>
+<td> Object name </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> apH </td>
+<td> Absolute pressure high limit, MPa </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> apMax </td>
+<td> Maximum absolute pressure, MPa </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> apMin </td>
+<td> Minimum absolute pressure, MPa </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> apConst </td>
+<td> Absolute pressure constant, MPa </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tMax </td>
+<td> Maximum temperature, °С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tMin </td>
+<td> Minimum temperature, °С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tConst </td>
+<td> Temperature constant, °С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> pulseVl </td>
+<td> Pulse value, m3 </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> dpMax </td>
+<td> Maximum different pressure, kPa </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> dpMin </td>
+<td> Minimum different pressure, kPa </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> fMax </td>
+<td> Maximum flow, m3/h </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> fMin </td>
+<td> Minimum flow, m3/h </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> cntrCutOffConst </td>
+<td> Constant of the counter cut off, m3/h </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> flowConst </td>
+<td> Constant of the flow, m3/h </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> pipeD </td>
+<td> Pipe diameter at 20°С, mm </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> pipeTExt </td>
+<td> Pipe material extension, 1/°С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> pipeBeCoef </td>
+<td> Pipe Be coefficient </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> pipeCeCoef </td>
+<td> Pipe Ce coefficient </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> pipeRoughCoef </td>
+<td> Pipe roughness coefficient </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> diaphD </td>
+<td> Diaphragm diameter at 20°С, mm </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> diaphTExt </td>
+<td> Diaphragm material extension, 1/°С </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> diaphBeCoef </td>
+<td> Diaphragm Be coefficient </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> diaphCeCoef </td>
+<td> Diaphragm Ce coefficient </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> diaphEdgeBluntCoef </td>
+<td> Diaphragm edge blunting coefficient </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> correctorTime </td>
+<td> Corrector time </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> dP </td>
+<td> Pressure difference, kPa [arh] </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> P </td>
+<td> Pressure, MPa [arh] </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> T </td>
+<td> Temperature, °С [arh] </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Fstd </td>
+<td> Volume standard cond., m3 [arh] </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> Fwork </td>
+<td> Volume work cond., m3 [arh] </td>
+<td> Real </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> itSt </td>
+<td> Item status [arh] </td>
+<td> String </td>
+<td> Input </td>
+<td> Read only </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> tr </td>
+<td> Output transport </td>
+<td> Object </td>
+<td> Output </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> reqCntr </td>
+<td> Counter of the requests and the reconnection waiting (negative) </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> arhLastD </td>
+<td> Daily archive last item </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> arhLastH </td>
+<td> Hourly archive last item </td>
+<td> Integer </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> this </td>
+<td> Object of the parameter </td>
+<td> Object </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td>
+</td></tr>
+<tr>
+<td> f_start </td>
+<td> Function start flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_frq </td>
+<td> Frequency of calculation of the function, Hz </td>
+<td> Real </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 1000
+</td></tr>
+<tr>
+<td> f_err </td>
+<td> Function error </td>
+<td> String </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr>
+<tr>
+<td> f_stop </td>
+<td> Function stop flag </td>
+<td> Boolean </td>
+<td> Input </td>
+<td> Not attribute </td>
+<td> Variable </td>
+<td> 0
+</td></tr></table>
+<p><b><u>Configuring and using</u></b><br />
+</p>
+<div class="floatright"><a class="image" href="http://oscada.org/wiki/File:LibsDevsSLOTCfg.png" title="Configuration."><img alt="Configuration." height="391" src="files/LibsDevsSLOTCfg.png" width="503" /></a></div>
+<dl><dd>1. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or use any presented one with the needed scheduling properties.</dd>
+<dd>2. Create <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical parameter object</a> and select this template for it, one for each the devices. Enable the parameter.</dd>
+<dd>3. Into the tab "Template configuration" of the logical parameter object you need to set:
+<ul><li> <i>Transport</i> — to the address of the automatically created transport with its parameters after ":", according to <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">the function SYS.Transport.outAt() address format</a>.</li>
+<li> <i>Modem</i> — here you can set the modem configuration in the format "{TelN}[:{Init1}[:{Init2}[...{InitN}]]]" if your device accessed through a modem.</li>
+<li> <i>Modem times</i> — here you can change the default modem timeouts in the form "{tm}:{ConTm}" if your device accessed through a modem.</li>
+<li> <i>Device address [0...65535]</i> — set here the device address — Serial Number converted from hex to decimal.</li>
+<li> <i>Pipe number [0...1]</i> — change here the default pipe of the device.</li>
+<li> <i>Scheduling at CRON</i> — set here the logical execution at the <a href="User_API.html#CRON" title="Special:MyLanguage/Documents/User API">CRON</a>.</li>
+<li> <i>Time limit of processing the archiving, seconds</i> — change here the default safety timeout.</li>
+<li> <i>OpenSCADA archiver for device archive of days</i> — set here the archive used for storing the daily (86400 seconds) values — enables the day archive reading.</li>
+<li> <i>OpenSCADA archiver for device's archive of hours</i> — set here the archive used for storing the hourly (3600 seconds) values — enables the hour archive reading.</li></ul></dd>
+<dd>4. RESULT: The logical parameter object will perform interaction and placing of gathered data to the parameter attributes.</dd></dl>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/en">Libs/Devices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">October 2022</td><td style="text-align: right;" width="40%"> 1+r2853</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/en">Libs/Devices/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">November 2022</td><td style="text-align: right;" width="40%"> 1+r2857</td></tr></table></body>
 </html>

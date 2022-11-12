@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttypedaq.h
 /***************************************************************************
- *   Copyright (C) 2003-2021 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -80,7 +80,7 @@ class TTypeDAQ : public TModule, public TElem
 	//Protected methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	virtual TController *ContrAttach( const string &name, const string &daq_db );
+	virtual TController *ContrAttach( const string &id, const string &daq_db );
 
     private:
 	//Private attributes
