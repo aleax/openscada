@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 17:01+0300\n"
+"POT-Creation-Date: 2022-11-20 13:59+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -94,20 +94,19 @@ msgstr "Основные окна"
 msgid "Module options"
 msgstr "Опции модуля"
 
-msgid "Station of the VCA engine"
-msgstr "Станция движка СВУ"
+msgid "Exit when closing the last running project"
+msgstr "Выход при закрытии последнего исполняющегося проекта"
 
-msgid "Go to the remote stations list configuration"
-msgstr "Переход к конфигурации перечня удалённых станций"
+msgid "Reset widget styles to common"
+msgstr "Сбрасывать стили виджетов к общему"
 
-msgid "Starting user"
-msgstr "Стартовый пользователь"
-
-msgid "Password of the user"
-msgstr "Пароль пользователя"
-
-msgid "Connection recovery time, seconds"
-msgstr "Время восстановления подключения, секунд"
+msgid ""
+"Required for some widget styles like \"gtk\" in some specific widgets in run "
+"mode, like buttons for the background color and images."
+msgstr ""
+"Необходимо для некоторых стилей виджетов вроде \"gtk\" в работе некоторых "
+"специфических виджетов в режиме исполнения, вроде кнопок для цвета фона и "
+"изображений."
 
 msgid "Lifetime and maximum number of the cached pages"
 msgstr "Время жизни и максимальное количество страниц в кеше"
@@ -128,6 +127,21 @@ msgstr ""
 "Количество определяет ограничение страниц в кеше.\n"
 "Нулевое значение количества исключает закрытие страниц в кеш."
 
+msgid "Go to the remote stations list configuration"
+msgstr "Переход к конфигурации перечня удалённых станций"
+
+msgid "Station of the VCA engine"
+msgstr "Станция движка СВУ"
+
+msgid "Starting user"
+msgstr "Стартовый пользователь"
+
+msgid "Password of the user"
+msgstr "Пароль пользователя"
+
+msgid "Connection recovery time, seconds"
+msgstr "Время восстановления подключения, секунд"
+
 msgid "List of the projects for launch"
 msgstr "Перечень запускаемых проектов"
 
@@ -142,20 +156,6 @@ msgstr ""
 "формате: 'PrjName-1'.\n"
 "Для подключения к фоновому или другому открытому сеансу использовать "
 "\"ses_{SesID}\"."
-
-msgid "Exit when closing the last running project"
-msgstr "Выход при закрытии последнего исполняющегося проекта"
-
-msgid "Reset widget styles to common"
-msgstr "Сбрасывать стили виджетов к общему"
-
-msgid ""
-"Required for some widget styles like \"gtk\" in some specific widgets in run "
-"mode, like buttons for the background color and images."
-msgstr ""
-"Необходимо для некоторых стилей виджетов вроде \"gtk\" в работе некоторых "
-"специфических виджетов в режиме исполнения, вроде кнопок для цвета фона и "
-"изображений."
 
 #, c-format
 msgid "%d: Development by \"%s\" for the station \"%s\"."
@@ -174,6 +174,12 @@ msgstr "Подключен"
 
 msgid "Disconnected"
 msgstr "Отключен"
+
+msgid "<Local>"
+msgstr ""
+
+msgid "<Select>"
+msgstr ""
 
 msgid "Ready"
 msgstr "Готов"
@@ -2240,6 +2246,10 @@ msgstr "Отмена"
 
 msgid "Selecting an user"
 msgstr "Выбор пользователя"
+
+#, fuzzy
+msgid "Station:"
+msgstr "Статус:"
 
 msgid "User:"
 msgstr "Пользователь:"

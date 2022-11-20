@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/Vision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision">Modules/Vision</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Vision.html" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Vision.html" title="Модули/Vision (91% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FVision&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Vision" title="Modules/Vision">Modules/Vision</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Vision.html" title="Modules/Vision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Vision.html" title="Модули/Vision (90% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/Vision.html" title="Special:MyLanguage/Modules/Vision">Vision</a> </td>
 <td> Робочий інтерфейс користувача (Qt)
 </td>
-<td> 8.5 </td>
+<td> 8.6 </td>
 <td> GPL2 </td>
 <td> ui_Vision.so </td>
 <td> en,uk,ru,de </td>
@@ -960,16 +960,18 @@ else if(this.ownerSess().reqUser()&nbsp;!= "user") userSetVis = "user:user";
 <p>Для налаштування власної поведінки у неочевидних ситуаціях, модулем надається можливість налаштування окремих параметрів за посередництвом інтерфейсу управління OpenSCADA (рис.6). Такими параметрами є:
 </p>
 <ul><li> Стан модуля: "Виконується", доступна кількість екранів у бібліотеці Qt та перелік відкритих основних вікон.</li>
-<li> Ім'я віддаленої OpenSCADA станції з рушієм візуалізації СВУ та посилання на сторінку конфігурації переліку зовнішніх OpenSCADA станцій.</li>
-<li> Початковий користувач — вказує, від ім'я якого користувача відкривати вікно модуля без запиту пароля, для локальної станції. Для віддаленої станції вказує на користувача, відмінного від типового, вказаного у конфігурації хосту.</li>
-<li> Пароль користувача (віддалена станція) — пароль користувача, відмінного від типового, вказаного у конфігурації хосту.</li>
-<li> Час відновлення підключення, у секундах — вказує на час повтору відновлення втраченого віддаленого підключення.</li>
+<li> Вихід при закритті останнього виконуваного проєкту — корисно для рішень, що одразу запускаються на інтерфейсі виконання проєкту.</li>
+<li> Скидати стилі віджетів до загального — потрібне для деяких стилів віджетів на кшталт "gtk" у роботі деяких специфічних віджетів у режимі виконання, на кшталт кнопок для кольору фону та зображень.</li>
 <li> Час життя та максимальна кількість сторінок у кеші. Візуалізатор здійснює прискорення роботи користувацького інтерфейсу шляхом розташування раніш відкритих сторінок у кеш, для контролю часу зберігання та максимальної кількості сторінок у якому дані властивості й призначено. Вказання нульового значення взагалі виключить очищення кешу.</li>
+<li> Посилання на сторінку конфігурації переліку зовнішніх OpenSCADA станцій та назва віддаленої OpenSCADA станції з рушієм візуалізації СВУ, де передбачено спеціальні елементи:
+<ul><li> "&lt;Локальне&gt;" — поточна локальна станція;</li>
+<li> "&lt;Select&gt;" — показати діалог із запитом віддаленої станції, корисно для великих переліків контрольованих віддалених станцій.</li></ul></li>
+<li> Початковий користувач — вказує від ім'я якого користувача відкривати вікно модуля без запиту пароля, для локальної станції. Для віддаленої станції вказує на користувача, відмінного від типового, вказаного у конфігурації хосту.</li>
+<li> Пароль користувача (віддалена станція) — пароль користувача, відмінного від типового, вказаного у конфігурації хосту.</li>
+<li> Час відновлення підключення, у секундах (віддалена станція) — вказує на час повтору відновлення втраченого віддаленого підключення.</li>
 <li> Проєкти, через символ роздільника ';', для запуску їх автоматичного виконання із запуском модуля. Для надання можливості вказання відкриття вікна виконання проєкту на потрібному дисплеї, багато-дисплейних систем, передбачено формат запису ім'я проєкту "PrjName-1", де 1 — номер цільового дисплею. Для підключення до фонового або іншого відкритого сеансу використати "<b>ses_{SesID}</b>".</li></ul>
-<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Функція вибору дисплею можлива для невіртуального та не повторення робочого столу, тобто при використанні xinerma або NVidia у відповідному режимі. Технічно, функція Qt screen() має повертати різні віджети дисплею за їх номерами.</dd></dl>
-<ul><li> Вихід при закритті останнього виконуваного проєкту — корисно для рішень, що одразу запускаються на інтерфейсі виконання проєкту.</li>
-<li> Скидати стилі віджетів до загального — потрібне для деяких стилів віджетів на кшталт "gtk" у роботі деяких специфічних віджетів у режимі виконання, на кшталт кнопок для кольору фону та зображень.</li></ul>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1057px;"><a class="image" href="http://oscada.org/wiki/File:Vision_cfg_uk.png"><img class="thumbimage" height="567" src="../files/Vision_cfg_uk.png" width="1055" /></a>  <div class="thumbcaption">Рис.6. Сторінка конфігурації модуля.</div></div></div></div>
+<dl><dd><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../../en/files/At.png" width="22" /></a> Функція вибору дисплею можлива для невіртуального та не повторення робочого столу, тобто при використанні xinerma або NVidia у відповідному режимі. Технічно, функція Qt <i>screen()</i> має повертати різні віджети-об'єкти дисплею за їх номерами.</dd></dl>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:994px;"><a class="image" href="http://oscada.org/wiki/File:Vision_cfg_uk.png"><img class="thumbimage" height="568" src="../files/Vision_cfg_uk.png" width="992" /></a>  <div class="thumbcaption">Рис.6. Сторінка конфігурації модуля.</div></div></div></div>
 
 
 

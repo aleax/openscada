@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 17:01+0300\n"
+"POT-Creation-Date: 2022-11-20 13:59+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -69,19 +69,13 @@ msgstr ""
 msgid "Module options"
 msgstr ""
 
-msgid "Station of the VCA engine"
+msgid "Exit when closing the last running project"
 msgstr ""
 
-msgid "Go to the remote stations list configuration"
+msgid "Reset widget styles to common"
 msgstr ""
 
-msgid "Starting user"
-msgstr ""
-
-msgid "Password of the user"
-msgstr ""
-
-msgid "Connection recovery time, seconds"
+msgid "Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."
 msgstr ""
 
 msgid "Lifetime and maximum number of the cached pages"
@@ -97,6 +91,21 @@ msgid ""
 "Zero value of the number excludes the cache limit."
 msgstr ""
 
+msgid "Go to the remote stations list configuration"
+msgstr ""
+
+msgid "Station of the VCA engine"
+msgstr ""
+
+msgid "Starting user"
+msgstr ""
+
+msgid "Password of the user"
+msgstr ""
+
+msgid "Connection recovery time, seconds"
+msgstr ""
+
 msgid "List of the projects for launch"
 msgstr ""
 
@@ -104,15 +113,6 @@ msgid ""
 "Automatically executed projects, divided by the symbol ';'.\n"
 "To open the project window on the desired display (1), use the project name format: 'PrjName-1'.\n"
 "To connect to the background or another open session use \"ses_{SesID}\"."
-msgstr ""
-
-msgid "Exit when closing the last running project"
-msgstr ""
-
-msgid "Reset widget styles to common"
-msgstr ""
-
-msgid "Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."
 msgstr ""
 
 #, c-format
@@ -127,6 +127,12 @@ msgid "Connected"
 msgstr ""
 
 msgid "Disconnected"
+msgstr ""
+
+msgid "<Local>"
+msgstr ""
+
+msgid "<Select>"
 msgstr ""
 
 msgid "Ready"
@@ -2087,6 +2093,9 @@ msgid "Cancel"
 msgstr ""
 
 msgid "Selecting an user"
+msgstr ""
+
+msgid "Station:"
 msgstr ""
 
 msgid "User:"

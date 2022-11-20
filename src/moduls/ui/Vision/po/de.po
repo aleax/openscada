@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 17:01+0300\n"
+"POT-Creation-Date: 2022-11-20 13:59+0200\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -99,20 +99,18 @@ msgstr "Hauptfenster"
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
-msgid "Station of the VCA engine"
-msgstr "Station der VCA-Engine"
+msgid "Exit when closing the last running project"
+msgstr "Beenden, wenn das zuletzt ausgeführte Projekt geschlossen wird"
 
-msgid "Go to the remote stations list configuration"
-msgstr "Wechseln Sie zur Liste der Remote-Stationslisten"
+msgid "Reset widget styles to common"
+msgstr "Reset-Widget Stile gemeinsam"
 
-msgid "Starting user"
-msgstr "Benutzer starten"
-
-msgid "Password of the user"
-msgstr "Passwort des Benutzers"
-
-msgid "Connection recovery time, seconds"
-msgstr "Verbindungswiederherstellungszeit, Sekunden"
+msgid ""
+"Required for some widget styles like \"gtk\" in some specific widgets in run "
+"mode, like buttons for the background color and images."
+msgstr ""
+"Erforderlich für einige Widget-Stile wie \"gtk\" in bestimmten Widgets im "
+"Ausführungsmodus, z. B. Schaltflächen für die Hintergrundfarbe und Bilder."
 
 msgid "Lifetime and maximum number of the cached pages"
 msgstr "Lebensdauer und maximale Anzahl der zwischengespeicherten Seiten"
@@ -133,6 +131,21 @@ msgstr ""
 "Die Anzahl definiert eine Begrenzung der Seiten im Cache.\n"
 "Ein Nullwert der Zahl schließt das Cache-Limit aus."
 
+msgid "Go to the remote stations list configuration"
+msgstr "Wechseln Sie zur Liste der Remote-Stationslisten"
+
+msgid "Station of the VCA engine"
+msgstr "Station der VCA-Engine"
+
+msgid "Starting user"
+msgstr "Benutzer starten"
+
+msgid "Password of the user"
+msgstr "Passwort des Benutzers"
+
+msgid "Connection recovery time, seconds"
+msgstr "Verbindungswiederherstellungszeit, Sekunden"
+
 msgid "List of the projects for launch"
 msgstr "Liste der Projekte zum Start"
 
@@ -147,19 +160,6 @@ msgstr ""
 "Sie das Projektnamenformat: 'PrjName-1'.\n"
 "Um sich mit dem Hintergrund oder einer anderen offenen Sitzung zu verbinden, "
 "benutzen Sie \"ses_{SesID}\"."
-
-msgid "Exit when closing the last running project"
-msgstr "Beenden, wenn das zuletzt ausgeführte Projekt geschlossen wird"
-
-msgid "Reset widget styles to common"
-msgstr "Reset-Widget Stile gemeinsam"
-
-msgid ""
-"Required for some widget styles like \"gtk\" in some specific widgets in run "
-"mode, like buttons for the background color and images."
-msgstr ""
-"Erforderlich für einige Widget-Stile wie \"gtk\" in bestimmten Widgets im "
-"Ausführungsmodus, z. B. Schaltflächen für die Hintergrundfarbe und Bilder."
 
 #, c-format
 msgid "%d: Development by \"%s\" for the station \"%s\"."
@@ -179,6 +179,12 @@ msgstr "Verbunden"
 
 msgid "Disconnected"
 msgstr "Getrennt"
+
+msgid "<Local>"
+msgstr "<Lokal>"
+
+msgid "<Select>"
+msgstr "<Auswählen>"
 
 msgid "Ready"
 msgstr "Fertig"
@@ -2254,6 +2260,9 @@ msgstr "Abbrechen"
 
 msgid "Selecting an user"
 msgstr "Einen Benutzer auswählen"
+
+msgid "Station:"
+msgstr "Bahnhof:"
 
 msgid "User:"
 msgstr "Benutzer:"

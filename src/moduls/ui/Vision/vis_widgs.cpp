@@ -181,7 +181,7 @@ void InputDlg::showEvent( QShowEvent * event )
 //* User select dialog                            *
 //*************************************************
 DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVCAstat, QWidget *parent, const string &hint, const string &lang ) :
-    QDialog(parent), VCAstat(iVCAstat)
+    QDialog(parent), VCAstat(iVCAstat), stSel(NULL)
 {
     setWindowTitle(_("Selecting an user"));
 
@@ -191,14 +191,25 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 
     QGridLayout *edLay = new QGridLayout;
     edLay->setSpacing(6);
-    edLay->addWidget(new QLabel(_("User:"),this), 0, 0);
+    if(VCAstat == "*") {
+	edLay->addWidget(new QLabel(_("Station:"),this), 0, 0);
+	stSel = new QComboBox(this);
+	stSel->addItem(_("<Local>"), ".");
+	vector<TTransportS::ExtHost> lst;
+	SYS->transport().at().extHostList("*", lst, false, -1, lang);
+	for(unsigned iLs = 0; iLs < lst.size(); iLs++)
+	    stSel->addItem(lst[iLs].name.c_str(), lst[iLs].id.c_str());
+	edLay->addWidget(stSel, 0, 1);
+	connect(stSel, SIGNAL(currentIndexChanged(int)), this, SLOT(stChanged(int)));
+    }
+    edLay->addWidget(new QLabel(_("User:"),this), 1, 0);
     users = new QComboBox(this);
     users->setEditable(true);
-    edLay->addWidget(users, 0, 1);
-    edLay->addWidget(new QLabel(_("Password:"),this), 1, 0);
+    edLay->addWidget(users, 1, 1);
+    edLay->addWidget(new QLabel(_("Password:"),this), 2, 0);
     passwd = new QLineEdit(this);
     passwd->setEchoMode(QLineEdit::Password);
-    edLay->addWidget(passwd, 1, 1);
+    edLay->addWidget(passwd, 2, 1);
     dlg_lay->addItem(edLay);
 
     dlg_lay->addItem(new QSpacerItem(20,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
@@ -208,7 +219,7 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     sep->setFrameShadow(QFrame::Raised);
     dlg_lay->addWidget(sep);
 
-    QDialogButtonBox *butBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, Qt::Horizontal, this);
+    butBox = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel, Qt::Horizontal, this);
     QImage ico_t;
     butBox->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
@@ -222,15 +233,29 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
-    users->setEditText(mod->userStart().c_str());
+    //users->setEditText(mod->userStart().c_str());
+    if(VCAstat == "*") VCAstat = ".";
+    users->setEditText(iuser);
+    passwd->setText(ipass);
 
     mAutoRes = NoAuto;
+
+    fillUsers(hint);
+}
+
+QString DlgUser::user( )	{ return users->currentText(); }
+
+QString DlgUser::password( )	{ return passwd->text(); }
+
+void DlgUser::fillUsers( const string &hint )
+{
     bool chckHintUser = hint.size() && hint != "*";
 
     //Fill users list
-    XMLNode req("get");
-    req.setAttr("path","/Security/%2fusgr%2fusers");
-    if(!mod->cntrIfCmd(req,iuser.toStdString(),ipass.toStdString(),iVCAstat.toStdString(),true)) {
+    users->clear();
+    if(stSel && VCAstat != ".") users->setEditText("");
+    XMLNode req("get"); req.setAttr("path","/Security/%2fusgr%2fusers");
+    if(!mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true)) {
 	size_t	pasSep = hint.find(":");
 	string	h_user = (pasSep == string::npos) ? hint : TSYS::strDecode(hint.substr(0,pasSep),TSYS::Custom),
 		h_pass = (pasSep == string::npos) ? "" : TSYS::strDecode(hint.substr(pasSep+1),TSYS::Custom);
@@ -239,7 +264,7 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 	    if(chckHintUser && h_user == req.childGet(iU)->text()) {
 		users->setEditText(h_user.c_str());
 		if(pasSep == string::npos)
-		    mAutoRes = (VCAstat == "." && dynamic_cast<VisRun*>(parent->window()) && SYS->security().at().usrAt(((VisRun*)parent->window())->user()).at().permitCmpr(user().toStdString()) <= 0)
+		    mAutoRes = (VCAstat == "." && dynamic_cast<VisRun*>(parentWidget()->window()) && SYS->security().at().usrAt(((VisRun*)parentWidget()->window())->user()).at().permitCmpr(user().toStdString()) <= 0)
 				? SelOK : SelErr;
 		else {
 		    passwd->setText(h_pass.c_str());
@@ -250,11 +275,24 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 	    }
 	}
     }
+    if(stSel && VCAstat != ".") users->setEditText("");
 }
 
-QString DlgUser::user( )	{ return users->currentText(); }
+void DlgUser::stChanged( int index )
+{
+    QComboBox *stSel = (QComboBox*)sender();
 
-QString DlgUser::password( )	{ return passwd->text(); }
+    if(index == -1) {
+	VCAstat = "*";
+	users->clear();
+	butBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+	return;
+    }
+    else VCAstat = stSel->itemData(index).toString();
+
+    butBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    fillUsers();
+}
 
 void DlgUser::finish( int result )
 {

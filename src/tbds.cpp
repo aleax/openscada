@@ -1699,10 +1699,9 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		//  ... default
 		else isTransl = (isTransl && hasTr);
 
-		//  Clearing all the translation at setting no translable message
+		//  Clearing all the translation at setting no translatable message
 		if(isTransl && (u_cfg.noTransl() || (svalRAW.size() && !Mess->isMessTranslable(svalRAW)))) {
-		    if(u_cfg.noTransl())
-			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
+		    ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
 			sid = tblStrct[iFld].nm;
 			if(sid.size() <= 3 || sid.compare(3,string::npos,cf_el[iEl]) != 0 || sid.compare(0,3,Mess->langCodeBase()+"#") == 0)

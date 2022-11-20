@@ -15469,20 +15469,20 @@ if(!n) {
 	if(abs(time-lastTime) == 30*24*60*60)	time -= 10*24*60*60;
 
 	time = min(time, SYS.time());
-
 	SYS.localtime(time, 0, curMin, curHour, curDay, curMonth, curYear);
 	if(curDay == 1 && (curHour < repHour || (curHour == repHour && !curMin))) {
-		doc_bTime = SYS.mktime(0, 0, repHour, 1, curMonth ? curMonth-1 : 11, curMonth?curYear:curYear-1);
-		doc_time = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
+		doc_bTime_ = SYS.mktime(0, 0, repHour, 1, curMonth ? curMonth-1 : 11, curMonth?curYear:curYear-1);
+		doc_time_ = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
 	}
 	else	{
-		doc_bTime = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
-		doc_time = SYS.mktime(0, 0, repHour, 1, curMonth+1, curYear);
+		doc_bTime_ = SYS.mktime(0, 0, repHour, 1, curMonth, curYear);
+		doc_time_ = SYS.mktime(0, 0, repHour, 1, curMonth+1, curYear);
 	}
-
-	time = lastTime = doc_time;
+	time = lastTime = doc_time_;
 	bTime = time - 30*24*60*60; // doc_bTime;
 	doc_doc = "";
+	if(doc_time == doc_time_) doc_time = 0;
+	else doc_time = doc_time_, doc_bTime = doc_bTime_;
 
 	return;
 }
@@ -15526,7 +15526,7 @@ else if(curMin != lastMin && !(curMin%5))	{
 	if(curDay == 1 && curHour < repHour)
 		doc_bTime = SYS.strptime(""+((curMonth==0)?(curYear-1):curYear)+"-"+(curMonth?curMonth:12)+"-1 "+repHour+":0:0", "%Y-%m-%d %H:%M:%S");
 	else doc_bTime = SYS.strptime(""+curYear+"-"+(curMonth+1)+"-1 "+repHour+":0:0","%Y-%m-%d %H:%M:%S");
-}','','',-1,'name;dscr;evProc;',1664113795);
+}','','',-1,'name;dscr;evProc;',1668281007);
 INSERT INTO wlb_doc VALUES('docUsersSet','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAC
 fklEQVRYhe2V0UrrQBBAt93ZuEnTNLVUSa0BW5Aq6A/4K/6A/+dX+CaaQsUHfSgiYquGJtlNsnMf
 FooPIpcLda+w5ynsTCZzNplN4/LycjQakd9JkiRwcHBwdHT0ZVgppZQCAESsqopS2mw2vylX1zWl
@@ -17243,15 +17243,15 @@ INSERT INTO wlb_Main_io VALUES('grpGraph','name','Graphics group',41,'','','','�
 INSERT INTO wlb_Main_io VALUES('grpGraph','dscr','The element is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "Graphics group element (ElViewGraph)" of each parameter (up to 8) and the widget "Diagram" to monitor the parameters'' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.0
+Version: 1.5.1
 License: GPLv2',32,'','','','Елемент слугує для одночасного спостереження трендів та управління параметрами у об''єкті сигналізації, включає у себе як екземпляри віджету "Елемент групи графіків (ElViewGraph)" кожного параметру (до 8), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.0
+Версія: 1.5.1
 Ліцензія: GPLv2','','Элемент служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "Элемент группы графиков (ElViewGraph)" каждого параметра (до 8), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.0
+Версия: 1.5.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomW','900',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','geomH','600',32,'','','','','','','','','','');
@@ -19699,7 +19699,8 @@ INSERT INTO wlb_Main_io VALUES('prescrRunSimple','geomZ','0',32,'','','title',''
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','font','Arial 15',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','alignment','8',32,'','','title','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('prescrRunSimple','text','Program/prescription:',32,'','','title','Програма/рецепт:','','Программа/рецепт:','','','','');
-INSERT INTO wlb_Main_io VALUES('grpGraph','evProc','ws_FocusIn:/trnd1:open:/pg_control/pg_grph_panel',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grpGraph','evProc','ws_FocusIn:/trnd1:open:/pg_control/pg_grph_panel
+key_mousePresLeft:/trnd1:open:/pg_control/pg_grph_panel',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','addr',NULL,34,'Parameter|var','','el1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','enMode',NULL,32,'','','el1','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph','max',NULL,34,'Parameter|max','','el1','','','','','','','');
@@ -28878,14 +28879,14 @@ Working in the primary archival mode performed with the 5 minutes period, when d
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored for the dynamization by: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 3.2.1
+Version: 3.2.2
 License: GPLv2',32,'','','','Документ слугує для генерації місячного звіту середніх за добу значень у вигляді діаграми трендів та таблиці даних. Документ початково архівного типу, та з часом він зроблений і динамічним, відтак, залежно від режиму виконання, ви можете або обирати готові документи із архіву або визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Робота у первинному архівному режимі відбувається із періодом 5 хвилин, коли протягом доби формується один запис-рядок. Останній запис-рядок закривається на п''ятій хвилині нової доби (наприклад, 05 09:05) та розпочинається новий запис-рядок. Весь та завершений документ архівується на третій хвилині "Звітного часу (repHour)" наступного місяця (наприклад, 05 09:03).
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсоровано щодо динамізації: Еліор Турабоєв, ТОВ BLUE STAR GROUP
-Версія: 3.2.1
+Версія: 3.2.2
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docMessRep','dscr','The document is provided for generating a report of different sort messages together, including: "Violations", "User-operator actions" and "System". The document is the dynamic type, so you can specify the data time and depth. The document so commonly uses and represents the messages structures: "Violations", "User-operator actions" and "System". As a data source of this document is the message archive.
 

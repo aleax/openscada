@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"8.5.1"
+#define MOD_VER		"8.6.0"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -195,7 +195,7 @@ QIcon TVision::icon( )
 
 QMainWindow *TVision::openWindow( )
 {
-    //Get allowed screens count
+    //Getting the allowed screens count
 #if QT_VERSION >= 0x050000
     mScrnCnt = QApplication::screens().size();
 #elif QT_VERSION >= 0x040600
@@ -215,18 +215,19 @@ QMainWindow *TVision::openWindow( )
 	shapesWdg.push_back(new ShapeFunction);
     }
 
+    string VCAStat = VCAStation();
     string user_open = userStart();
     string user_pass = userPass();
 
-    //Check for start user set OK
+    //Checking for true setting the starting user and asking the remote station
     int err = 0;
     XMLNode req("get"); req.setAttr("path", "/%2fgen%2fid");
-    if(!((VCAStation() == "." && SYS->security().at().usrPresent(userStart())) ||
-	    (VCAStation() != "." && !(err=mod->cntrIfCmd(req,userStart(),userPass(),VCAStation(),true)))))
+    if(VCAStat == "*" || !((VCAStat == "." && SYS->security().at().usrPresent(userStart())) ||
+	    (VCAStat != "." && !(err=mod->cntrIfCmd(req,userStart(),userPass(),VCAStat,true)))))
 										//!!! But for remote same the request has the athentification
 	while(true) {
 	    if(err == TError::Tr_Connect) { postMess(nodePath().c_str(),_("Error connecting to remote station!")); return NULL; }
-	    DlgUser d_usr(userStart().c_str(), userPass().c_str(), VCAStation().c_str());
+	    DlgUser d_usr(userStart().c_str(), userPass().c_str(), VCAStat.c_str());
 	    int rez = d_usr.exec();
 	    if(rez == DlgUser::SelCancel) return NULL;
 	    if(rez == DlgUser::SelErr) {
@@ -235,6 +236,7 @@ QMainWindow *TVision::openWindow( )
 	    }
 	    user_open = d_usr.user().toStdString();
 	    user_pass = d_usr.password().toStdString();
+	    if(VCAStat == "*") VCAStat = d_usr.VCAstat.toStdString();
 	    break;
 	}
     if(!user_open.size()) user_open = req.attr("user");
@@ -252,8 +254,8 @@ QMainWindow *TVision::openWindow( )
 
 	// Check and extract for "ses_" or "proj_" prefixes
 	bool isSess = false;
-	if(sprj.compare(0,4,"ses_") == 0) { isSess = true; sprj.erase(0,4); }
-	else if(sprj.compare(0,4,"prj_") == 0) sprj.erase(0,4);
+	if(sprj.find("ses_") == 0) { isSess = true; sprj.erase(0,4); }
+	else if(sprj.find("prj_") == 0) sprj.erase(0,4);
 
 	//QDesktopWidget().screen(1)
 	// Find for already opened run window
@@ -266,14 +268,14 @@ QMainWindow *TVision::openWindow( )
 	res.unlock();
 	if(openRunOK) continue;
 
-	VisRun *sess = new VisRun((isSess?"/ses_":"/prj_")+sprj, user_open, user_pass, VCAStation(), true, screen);
+	VisRun *sess = new VisRun((isSess?"/ses_":"/prj_")+sprj, user_open, user_pass, VCAStat, true, screen);
 	sess->show();
 	sess->raise();
 	sess->activateWindow();
 	if(!fsess) fsess = sess;
     }
 
-    return fsess ? (QMainWindow*)fsess : (QMainWindow*)new VisDevelop(user_open, user_pass, VCAStation());
+    return fsess ? (QMainWindow*)fsess : (QMainWindow*)new VisDevelop(user_open, user_pass, VCAStat);
 }
 
 void TVision::modStart( )
@@ -337,26 +339,33 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/st/disp_n",_("Number of individual displays"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	ctrMkNode("list",opt,-1,"/prm/st/mnWinds",_("Main windows"),R_R_R_,"root",SUI_ID);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("Station of the VCA engine"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to the remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Starting user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
-	    if(VCAStation() != ".") {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("Password of the user"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/restTm",_("Connection recovery time, seconds"),RWRWR_,"root",SUI_ID,3,"tp","dec","min","1","max","1000");
-	    }
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit when closing the last running project"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/drop_common_wdg_stls",_("Reset widget styles to common"),RWRWR_,"root",SUI_ID,2,"tp","bool",
+		"help",_("Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Lifetime and maximum number of the cached pages"),RWRWR_,"root",SUI_ID,2,"tp","real",
 		"help",_("The time is specified in hours, which defines the inactivity interval for closing pages in the cache.\n"
 			"Zero value of the time excludes the closing of pages in the cache."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgSz","",RWRWR_,"root",SUI_ID,2,"tp","dec",
 		"help",_("The number defines a limit of pages in the cache.\n"
 			"Zero value of the number excludes the cache limit."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("List of the projects for launch"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/prm/cfg/r_lst",
-		"help",_("Automatically executed projects, divided by the symbol ';'.\n"
-			 "To open the project window on the desired display (1), use the project name format: 'PrjName-1'.\n"
-			 "To connect to the background or another open session use \"ses_{SesID}\"."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit when closing the last running project"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/drop_common_wdg_stls",_("Reset widget styles to common"),RWRWR_,"root",SUI_ID,2,"tp","bool",
-		"help",_("Required for some widget styles like \"gtk\" in some specific widgets in run mode, like buttons for the background color and images."));
+
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to the remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("Station of the VCA engine"),RWRWR_,"root",SUI_ID,4,
+		"tp","str", "idm","1", "dest","select", "select","/prm/cfg/vca_lst");
+	    if(VCAStation() != "*") {
+		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Starting user"),RWRWR_,"root",SUI_ID,3,
+		    "tp","str", "dest","select", "select","/prm/cfg/u_lst");
+		if(VCAStation() != ".") {
+		    ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("Password of the user"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		    ctrMkNode("fld",opt,-1,"/prm/cfg/restTm",_("Connection recovery time, seconds"),RWRWR_,"root",SUI_ID,3,
+			"tp","dec", "min","1", "max","1000");
+		}
+		ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("List of the projects for launch"),RWRWR_,"root",SUI_ID,4,
+		    "tp","str", "dest","sel_ed", "select","/prm/cfg/r_lst",
+		    "help",_("Automatically executed projects, divided by the symbol ';'.\n"
+			     "To open the project window on the desired display (1), use the project name format: 'PrjName-1'.\n"
+			     "To connect to the background or another open session use \"ses_{SesID}\"."));
+	    }
 	}
 	return;
     }
@@ -444,15 +453,18 @@ void TVision::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) opt->setText("/Transport");
     else if(a_path == "/prm/cfg/u_lst" && ctrChkNode(opt)) {
-	XMLNode req("get");
-	req.setAttr("path","/Security/%2fusgr%2fusers");
-	opt->childAdd("el")->setText("");
-	if(!mod->cntrIfCmd(req,"","",VCAStation(),true))
-	    for(unsigned iU = 0; iU < req.childSize(); iU++)
-		opt->childAdd("el")->setText(req.childGet(iU)->text());
+	if(VCAStation() != "*") {
+	    XMLNode req("get");
+	    req.setAttr("path","/Security/%2fusgr%2fusers");
+	    opt->childAdd("el")->setText("");
+	    if(!mod->cntrIfCmd(req,"","",VCAStation(),true))
+		for(unsigned iU = 0; iU < req.childSize(); iU++)
+		    opt->childAdd("el")->setText(req.childGet(iU)->text());
+	}
     }
     else if(a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setAttr("id",".")->setText("Local");
+	opt->childAdd("el")->setAttr("id",".")->setText(_("<Local>"));
+	opt->childAdd("el")->setAttr("id","*")->setText(_("<Select>"));
 	vector<TTransportS::ExtHost> lst;
 	SYS->transport().at().extHostList("*", lst, false, -1, opt->attr("lang"));
 	for(unsigned iLs = 0; iLs < lst.size(); iLs++)

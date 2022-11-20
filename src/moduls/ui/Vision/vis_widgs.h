@@ -100,16 +100,22 @@ namespace VISION
 
 	    Results autoRes( )	{ return mAutoRes; }
 
+	    //Attributes
+	    QString	VCAstat;
+
 	protected:
+	    void fillUsers( const string &hint = "" );
+
 	    void showEvent( QShowEvent * event );
 
 	private slots:
+	    void stChanged( int index );
 	    void finish( int result );
 
 	private:
-	    QComboBox	*users;
+	    QDialogButtonBox *butBox;
+	    QComboBox	*stSel, *users;
 	    QLineEdit	*passwd;
-	    QString	VCAstat;
 	    Results	mAutoRes;
     };
 

@@ -1,3 +1,11 @@
+2022-11-20 Roman (stable)
+- !:FIX:LibsDB.vcaBase: wlb_doc.docRepMonth: Fixed in the document regeneration at the same time, by setting 0, and in whole.
+    wlb_Main.grpGraph: Appended for the control panel open at the event key_mousePresLeft also.
+- !!!:FIX:DB: Fixed in writing untranslated strings, by clearing all translation and writing to base.
+- !!!!:UI.Vision: Appended for the possibility of call remote station interfaces by selecting the remote station in a dialog,
+	for what the user selection dialog was expanded.
+
+
 2022-11-11 Roman (stable)
 - !!:LibsDB.OscadaLibs: tmplib_DevLib.SLOT: Appended by the description and some fixed.
 - !:FIX:LibsDB.vcaBase: wlb_doc.docRepDay: Fixed in the document regeneration at the same time, by setting 0, and in whole.
