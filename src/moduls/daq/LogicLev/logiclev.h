@@ -116,9 +116,9 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
 	~TMdContr( );
 
-	string getStatus( );
-	double period( )			{ return mPer; }
-        string cron( )				{ return cfg("SCHEDULE").getS(); }
+	string	getStatus( );
+	double	period( )			{ return mPer; }
+	string	cron( )				{ return cfg("SCHEDULE").getS(); }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

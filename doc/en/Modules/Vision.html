@@ -963,7 +963,7 @@ An example of editing a frame based on this primitive is shown in Figure 2.a, an
 <li> Lifetime and maximum number of the cached pages. The visualiser provides acceleration of the user interface placing previously opened pages into the cache, to control the storage time and maximum number of the pages in which this properties are intended. Indication of the zero value in general excludes cleaning the cache.</li>
 <li> The link to the configuration page of the external OpenSCADA stations and the station of the VCA-engine of the remote OpenSCADA, where reserved the special items:
 <ul><li> "&lt;Local&gt;" — the current local station;</li>
-<li> "&lt;Select&gt;" — show a dialog for ask the remote station, useful for big list of the controlled remote stations.</li></ul></li>
+<li> "&lt;Select&gt;" — use for querying the station together user and password at the module generic call, useful at presence of many control stations and for opening several of them simultaneously.</li></ul></li>
 <li> Starting user — points on behalf of what user to open the module window without requiring the password, for local station. For remote station it is points to an user different from the typical one, pointed into the host configuration.</li>
 <li> User password (remote station) — password of the user different from the typical one, pointed into the host configuration.</li>
 <li> Connection recovery time, in seconds (remote station) — indicates the time that the lost remote connection is restored.</li>

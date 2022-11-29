@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.6.11"
+#define MOD_VER		"2.7.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -379,7 +379,6 @@ void TMdPrm::enable( )
     if(isFullEn) TParamContr::enable();
 
     vector<string> als;
-
     try {
 	if(isPRefl()) {
 	    vector<string> list;
@@ -387,12 +386,14 @@ void TMdPrm::enable( )
 	    if(!prmRefl->freeStat()) {
 		prmRefl->at().vlList(list);
 		for(unsigned iL = 0; iL < list.size(); iL++) {
-		    if(!vlPresent(list[iL]))
-			pEl.fldAdd(new TFld(list[iL].c_str(),prmRefl->at().vlAt(list[iL]).at().fld().descr().c_str(),
-			    prmRefl->at().vlAt(list[iL]).at().fld().type(),
-			    TVal::DirWrite|TVal::DirRead|(prmRefl->at().vlAt(list[iL]).at().fld().flg()&TFld::NoWrite)));
+		    if(!vlPresent(list[iL])) {
+			pEl.fldAdd(new TFld(prmRefl->at().vlAt(list[iL]).at().fld()));
+			AutoHD<TVal> pVal = vlAt(list[iL]);
+			pVal.at().fld().setFlg(pVal.at().fld().flg()|TVal::DirWrite|TVal::DirRead);
+		    }
 		    als.push_back(list[iL]);
 		}
+		if(!AutoHD<TParamContr>(*prmRefl).at().enableStat()) prmRefl->free();
 
 		isProc = true;
 	    }
@@ -537,18 +538,7 @@ void TMdPrm::vlGet( TVal &val )
 
     if(owner().redntUse()) return;
 
-    if(val.name() != "err") {
-	try {
-	    if(isPRefl() && !prmRefl->freeStat()) val.set(prmRefl->at().vlAt(val.name()).at().get(), 0, true);
-	    else if(isStd() && tmpl->func() && (idErr < 0 || tmpl->getS(idErr) != EVAL_STR)) {
-		int id_lnk = tmpl->lnkId(val.name());
-		if(id_lnk >= 0 && !tmpl->lnkActive(id_lnk)) id_lnk = -1;
-		if(id_lnk < 0) val.set(tmpl->get(tmpl->ioId(val.name())), 0, true);
-		else val.set(tmpl->lnkInput(id_lnk), 0, true);
-	    }
-	} catch(TError &err) { }
-    }
-    else {
+    if(val.name() == "err") {
 	if(isStd() && tmpl->func() && idErr >= 0) {
 	    if(tmpl->getS(idErr) != EVAL_STR) val.setS(tmpl->getS(idErr), 0, true);
 	} else val.setS("0", 0, true);
@@ -582,8 +572,8 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(SYS->archive().at().valPeriod()*1000);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
 }
@@ -646,7 +636,19 @@ TVariant TMdPrm::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 
 void TMdPrm::calc( bool first, bool last, double frq )
 {
-    if(isPRefl() && (!first || prmRefl->freeStat())) enable();
+    if(isPRefl()) {
+	if(prmRefl->freeStat()) enable();
+	if(!prmRefl->freeStat()) {
+	    AutoHD<TVal> pVal;
+	    vector<string> ls;
+	    prmRefl->at().vlList(ls);
+	    for(unsigned iEl = 0; iEl < ls.size(); iEl++)
+		try {
+		    if((pVal=vlAt(ls[iEl])).at().isCfg()) continue;
+		    pVal.at().set(prmRefl->at().vlAt(ls[iEl]).at().get(), 0, true);
+		} catch(TError&) { }
+	}
+    }
 
     if(!isStd() || !tmpl->func()) return;
     try {
@@ -671,6 +673,9 @@ void TMdPrm::calc( bool first, bool last, double frq )
 
 	//Put output links
 	tmpl->outputLinks();
+
+	//Put values to the attributes and archives in the passive archiving mode
+	tmpl->archAttrs(this);
 
 	//Put fixed system attributes
 	if(idNm >= 0 && tmpl->ioMdf(idNm))	setName(tmpl->getS(idNm));

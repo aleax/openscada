@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.1.20"
+#define MOD_VER		"2.1.21"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides an access to \"Diamond Systems\" DAQ boards. Includes main support for all generic boards.")
 #define LICENSE		"GPL2"
@@ -716,7 +716,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 	    for(unsigned i_a = 0; prevTrans != curTrans && i_a < aiSz; i_a++) {
 		AutoHD<TVal> ai = vlAt(TSYS::strMess("ai%d",i_a));
 		// Place data to archive
-		if(!ai.at().arch().freeStat() && ai.at().arch().at().srcMode() == TVArchive::PassiveAttr) {
+		if(!ai.at().arch().freeStat() && ai.at().arch().at().srcMode() == TVArchive::DAQAttr) {
 		    AutoHD<TVArchive> arch = ai.at().arch();
 		    int64_t wTm = cTm;
 		    int code;
@@ -990,11 +990,11 @@ void TMdPrm::vlArchMake( TVal &val )
 
     if(val.arch().freeStat()) return;
     if(val.name().compare(0,2,"ai") == 0 && dscs.op_type == OP_TYPE_INT) {
-	val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+	val.arch().at().setSrcMode(TVArchive::DAQAttr);
 	val.arch().at().setPeriod(1000000/dscaioint.conversion_rate);
     }
     else if(asynchRd) {
-	val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+	val.arch().at().setSrcMode(TVArchive::DAQAttr);
 	val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
     }
     else {

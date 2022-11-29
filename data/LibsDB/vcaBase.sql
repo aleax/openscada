@@ -28534,7 +28534,7 @@ INSERT INTO wlb_doc_io VALUES('docRepInstVals','tmpl','<body docProcLang="JavaLi
 <?dp return "<h1>"+tr("Instantaneous values of \"%1\"").replace("%1",title)+"</h1><span>"+SYS.strftime(time)+"</span>";?>
 </center>
 
-<div width="100%"><div style="margin-left: auto; margin-right: auto; width: text-align: center; fit-content;">
+<div width="100%"><div style="margin-left: auto; margin-right: auto; text-align: center; width: fit-content;">
 	<?dp if(!enGraph) return "";
 		for(iP = 0, srcs = ""; iP < params.length; iP++)
 			if(!params[iP].min.isEVal() && !params[iP].max.isEVal())
@@ -28867,11 +28867,11 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 INSERT INTO wlb_doc_io VALUES('docRepInstVals','dscr','The document is provided for generating a report of the instantaneous values in view of the trends diagram and the data table. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 2.1.1
+Version: 2.1.2
 License: GPLv2',32,'','','','Документ слугує для генерації звіту миттєвих значень у вигляді діаграми трендів та таблиці даних. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал". У якості джерела даних документу виступають архіви значень DAQ-параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 2.1.1
+Версія: 2.1.2
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','dscr','The document is provided for generating a month report of the day-averaged values in view of the trends diagram and the data table. The document is initially the archival type but in time it is made dynamic also, so, depending from the execution mode, you can whether select a ready document from the archive or specify the data time and depth. The document commonly uses and represents the representative structure of the DAQ-template "Analog signal". As a data source of this document is the value archives of the DAQ-parameters.
 

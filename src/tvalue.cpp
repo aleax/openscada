@@ -507,7 +507,7 @@ string TVal::setArch( const string &nm )
     //Create new archive
     rez_nm = SYS->archive().at().valAdd(rez_nm);
     SYS->archive().at().valAt(rez_nm).at().setValType(fld().type());
-    SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,DAQPath());
+    SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::DAQAttr,DAQPath());
     SYS->archive().at().valAt(rez_nm).at().setToStart(true);
     SYS->archive().at().valAt(rez_nm).at().start();
     owner().vlArchMake(*this);
@@ -721,7 +721,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys)	owner().vlSet(*this, value, pvl);
 	    //Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::DAQAttr)
 		try{ mArch.at().setS(value,time()); }
 		catch(TError &err) {
 		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
@@ -753,7 +753,7 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::DAQAttr)
 		try{ mArch.at().setI(value,time()); }
 		catch(TError &err) {
 		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
@@ -786,7 +786,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::DAQAttr)
 		try{ mArch.at().setR(value, time()); }
 		catch(TError &err) {
 		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();
@@ -816,7 +816,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::DAQAttr)
 		try{ mArch.at().setB(value,time()); }
 		catch(TError &err) {
 		    if(err.cod == TError::Arch_Val_OldBufVl) mArch.at().clear();

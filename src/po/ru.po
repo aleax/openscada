@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-09 16:50+0300\n"
+"POT-Creation-Date: 2022-11-29 09:55+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -73,7 +73,8 @@ msgstr "Приоритет выбора"
 msgid "Source"
 msgstr "Источник"
 
-msgid "Passive;Passive param. attribute;Active param. attribute"
+#, fuzzy
+msgid "Passive;DAQ Attribute;Active DAQ Attribute (DEPRECATED)"
 msgstr "Пассивный;Пассивный атрибут параметра;Активный атрибут параметра"
 
 msgid "Data combining mode"

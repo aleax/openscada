@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:31+0300\n"
+"POT-Creation-Date: 2022-11-28 23:46+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -32,6 +32,13 @@ msgstr "Неизвестная команда: %s."
 
 msgid "Content is missing."
 msgstr "Содержимое отсутствует."
+
+msgid "The table is wrong or empty"
+msgstr ""
+
+#, fuzzy
+msgid "Error parsing the document"
+msgstr "Ошибка парсинга документа '%s': %s"
 
 msgid "Fill image type is not supported."
 msgstr "Тип изображения заполнения не поддерживается."
@@ -72,6 +79,9 @@ msgstr "кГц"
 
 msgid "Hz"
 msgstr "Гц"
+
+msgid "The document is wrong or empty"
+msgstr ""
 
 #, c-format
 msgid "Error parsing the document '%s': %s"
@@ -185,6 +195,18 @@ msgstr "Уровень нарушения: %1"
 
 msgid "Notificator %1"
 msgstr "Уведомитель %1"
+
+msgid "Field to call of exporting some data."
+msgstr ""
+
+msgid "Document %1"
+msgstr ""
+
+msgid "Table %1"
+msgstr ""
+
+msgid "No data for export!"
+msgstr ""
 
 #, c-format
 msgid ""

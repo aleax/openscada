@@ -1007,48 +1007,47 @@ void VisRun::exportDoc( const string &idoc )
 	    XMLNode *curNode = &docTree;
 	    vector<unsigned> treeStk;
 	    treeStk.push_back(0);
-	    while(!(!curNode->parent() && treeStk.back() >= curNode->childSize())) {
+	    while(curNode->parent() || treeStk.back() < curNode->childSize()) {
 		if(treeStk.back() < curNode->childSize()) {
 		    curNode = curNode->childGet(treeStk.back());
 		    treeStk.push_back(0);
 		    //  Check for marked table and process it
-		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && s2i(curNode->attr("export"))) {
-			map<int,int>	rowSpn;
-			XMLNode *tblN = NULL, *tblRow;
-			string val;
-			for(int iSt = 0; iSt < 4; iSt++) {
-			    switch(iSt) {
-				case 0:	tblN = curNode->childGet("thead", 0, true);	break;
-				case 1:	tblN = curNode->childGet("tbody", 0, true);	break;
-				case 2:	tblN = curNode->childGet("tfoot", 0, true);	break;
-				case 3:	tblN = curNode;					break;
-				default: tblN = NULL;
-			    }
-			    if(!tblN)	continue;
-			    //  Rows process
-			    for(unsigned iN = 0; iN < tblN->childSize(); iN++) {
-				if(strcasecmp(tblN->childGet(iN)->name().c_str(),"tr") != 0)	continue;
-				tblRow = tblN->childGet(iN);
-				for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
-				    if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
-					    strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
-					continue;
-				    while(rowSpn[iCl] > 1) { rez += ";"; rowSpn[iCl]--; iCl++; }
-				    rowSpn[iCl] = s2i(tblRow->childGet(iC)->attr("rowspan",false));
-				    val = tblRow->childGet(iC)->text(true,true);
-				    for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
-				    rez += "\""+sTrm(val)+"\";";
-				    //   Colspan process
-				    int colSpan = s2i(tblRow->childGet(iC)->attr("colspan",false));
-				    for(int iCs = 1; iCs < colSpan; iCs++) rez += ";";
-				    iCl++;
-				}
-				rez += "\x0D\x0A";
-			    }
+		    if(strcasecmp(curNode->name().c_str(),"table") != 0 || !s2i(curNode->attr("export"))) continue;
+		    map<int,int>	rowSpn;
+		    XMLNode *tblN = NULL, *tblRow;
+		    string val;
+		    for(int iSt = 0; iSt < 4; iSt++) {
+			switch(iSt) {
+			    case 0: tblN = curNode->childGet("thead", 0, true);	break;
+			    case 1: tblN = curNode->childGet("tbody", 0, true);	break;
+			    case 2: tblN = curNode->childGet("tfoot", 0, true);	break;
+			    case 3: tblN = curNode;				break;
+			    default: tblN = NULL;
 			}
-			rez += "\x0D\x0A";
+			if(!tblN)	continue;
+			//  Rows process
+			for(unsigned iN = 0; iN < tblN->childSize(); iN++) {
+			    if(strcasecmp(tblN->childGet(iN)->name().c_str(),"tr") != 0)	continue;
+			    tblRow = tblN->childGet(iN);
+			    for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
+				if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
+					strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
+				    continue;
+				while(rowSpn[iCl] > 1) { rez += ";"; rowSpn[iCl]--; iCl++; }
+				rowSpn[iCl] = s2i(tblRow->childGet(iC)->attr("rowspan",false));
+				val = tblRow->childGet(iC)->text(true,true);
+				for(size_t iSz = 0; (iSz=val.find("\"",iSz)) != string::npos; iSz += 2)
+				    val.replace(iSz, 1, 2, '"');
+				rez += "\"" + sTrm(val) + "\";";
+				//   Colspan process
+				int colSpan = s2i(tblRow->childGet(iC)->attr("colspan",false));
+				for(int iCs = 1; iCs < colSpan; iCs++) rez += ";";
+				iCl++;
+			    }
+			    rez += "\x0D\x0A";
+			}
 		    }
-		    else continue;
+		    rez += "\x0D\x0A";
 		}
 		curNode = curNode->parent();
 		treeStk.pop_back();
@@ -1124,7 +1123,7 @@ void VisRun::exportTable( const string &itbl )
 	    QTableWidgetItem *tit;
 	    for(int iC = 0; iC < wdg->columnCount(); iC++)
 		rez += "\""+((tit=wdg->horizontalHeaderItem(iC))?tit->text().toStdString():string(""))+"\";";
-	    rez += "\n";
+	    rez += "\x0D\x0A";
 	    for(int iR = 0; iR < wdg->rowCount(); iR++) {
 		for(int iC = 0; iC < wdg->columnCount(); iC++) {
 		    QVariant vl = (tit=wdg->item(iR,iC)) ? tit->data(Qt::DisplayRole) : QVariant();
@@ -1132,7 +1131,7 @@ void VisRun::exportTable( const string &itbl )
 		    else if(vl.type() == QVariant::String) rez += "\""+TSYS::strEncode(vl.toString().toStdString(),TSYS::SQL,"\"")+"\";";
 		    else rez += vl.toString().toStdString()+";";
 		}
-		rez += "\n";
+		rez += "\x0D\x0A";
 	    }
 	}
 	bool fOK = true;

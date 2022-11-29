@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:31+0300\n"
+"POT-Creation-Date: 2022-11-28 23:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,12 @@ msgid "Unknown command: %s."
 msgstr ""
 
 msgid "Content is missing."
+msgstr ""
+
+msgid "The table is wrong or empty"
+msgstr ""
+
+msgid "Error parsing the document"
 msgstr ""
 
 msgid "Fill image type is not supported."
@@ -69,6 +75,9 @@ msgid "kHz"
 msgstr ""
 
 msgid "Hz"
+msgstr ""
+
+msgid "The document is wrong or empty"
 msgstr ""
 
 #, c-format
@@ -178,6 +187,18 @@ msgid "Alarm level: %1"
 msgstr ""
 
 msgid "Notificator %1"
+msgstr ""
+
+msgid "Field to call of exporting some data."
+msgstr ""
+
+msgid "Document %1"
+msgstr ""
+
+msgid "Table %1"
+msgstr ""
+
+msgid "No data for export!"
 msgstr ""
 
 #, c-format

@@ -37,7 +37,7 @@
 #define MOD_NAME	trS("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.4.9"
+#define MOD_VER		"1.4.10"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
@@ -733,7 +733,7 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
     val.arch().at().setPeriod((int64_t)(owner().period()*1000000));
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);

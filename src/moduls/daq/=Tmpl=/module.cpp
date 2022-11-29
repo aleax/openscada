@@ -284,7 +284,7 @@ void TMdPrm::vlArchMake( TVal &val )
 
     if(val.arch().freeStat()) return;
     //???? Correct for specific of your data
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
     val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);

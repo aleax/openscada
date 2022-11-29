@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/WebVision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (96% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/WebVision.html" title="Модулі/WebVision (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Operation user interface (WEB)
 </td>
-<td> 6.6 </td>
+<td> 6.7 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -48,12 +48,13 @@
 <li> <b>Sponsored by, for the primitive "Media" and Notification on 1.35 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Hadi Ramezani</li>
 <li> <b>Sponsored by, for the Notification on 0.85 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li>
 <li> <b>Sponsored by, for finishing the mirroring of the primitive ElFigure on 0.5 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> SVItoVYR Ltd</li>
+<li> <b>Sponsored by, for the Export on 0.8 <span title="human-days, 1 HD — 10 hours">HD<sup style="color: blue">[!]</sup></span>:</b> Vinnica Poultry Farm</li>
 <li> <b><a href="../To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
 <dl><dd> * revise and unify the keyboard focus forcing on a first active element considering them specifity, to ensure the keyboard shortcuts;</dd>
 <dd> - ElFigure: fix some properties loss (line width at the least) at the actions processing, in the way of the primitive code common refactoring;</dd>
 <dd> + expand the view "Table" of the primitive "FormEl" for user sorting by the selected column;</dd>
 <dd> * expand the status-bar, with the functions:
-<dl><dd> - export and print;</dd>
+<dl><dd> + export;</dd>
 <dd> - call of the project documents;</dd>
 <dd> + alarming-notification by sound and speech.</dd></dl></dd>
 <dd> - ElFigure,Diagram: enable or make the anti aliasing, for the library GD;</dd>
@@ -130,12 +131,13 @@
 <dd>- updating content of the pages and their widgets in accordance with the received modified data.</dd></dl>
 <p>The mechanism of the request for only modified data is based on the absolute counter of the session execution. When you make real changes in the attributes of widgets the remembering of the value of this counter is made, which allows us to identify the modified attributes. This approach allows to increase productivity and reduce the load on the traffic in case of access to the model through the network.
 </p><p>Hierarchically, the module assumes the possibility of placing pages of the project as in the main window of execution (Fig. 3), and by placing inside the container widgets, as well as by opening additional windows over the main one.
-</p><p>On the status line locates:
+</p><p>Located in the status bar:
 </p>
 <ul><li> On the right side:
 <ul><li> the current user, on whose behalf the VCA interface is executed — by a clicking this user can be changed, typing of the new username and password;</li>
 <li> the current interface style, which can be changed selecting need one in the combobox;</li>
-<li> the current alarm status by a lamp with color related to the alarm level and the active notifiers' icons; blinks at the alarm appearing or changing; pressing on the lamp you may quiet the alarm in whole or the desired type of the notification, pressing the correspond notifier icon near.</li></ul></li>
+<li> the current alarm status by a lamp with color related to the alarm level and the active notifiers' icons; blinks at the alarm appearing or changing; pressing on the lamp you may quiet the alarm in whole or the desired type of the notification, pressing the correspond notifier icon near;</li>
+<li> the menu button of call the page data exporting for: Documents (HTML,CSV), Tables (CSV).</li></ul></li>
 <li> In the main field of the status line various messages and assistance messages are displayed.</li></ul>
 <p>The module supports multi-language which one enabled by the <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">dynamic messages translation of OpenSCADA</a>. The gotten language passes by the module <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> and detects in way and by the order:
 </p>
@@ -145,7 +147,7 @@
 <li> Generic language of the OpenSCADA process.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth.png"><img class="thumbimage" height="302" src="../files/HTTP_auth.png" width="617" /></a>  <div class="thumbcaption">Fig.1. Authentication page.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:620px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect.png" width="618" /></a>  <div class="thumbcaption">Fig.2. Connection or creation of a new session of the execution project of the VCA.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="785" src="../files/WebVision_wvis_run.png" width="1037" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1034px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run.png"><img class="thumbimage" height="777" src="../files/WebVision_wvis_run.png" width="1032" /></a>  <div class="thumbcaption">Fig.3. Main execution window.</div></div></div></div>
 <h2><span class="mw-headline" id="Presentation_of_the_basic_elements_.28primitives.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Presentation of the basic elements (primitives)</span></span></h2>
 <p>This version of the module does not implement all the shapes of the primitives laid by the project. In general, the project provides the following primitives:
 </p>

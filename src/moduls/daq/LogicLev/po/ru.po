@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.LogicLev 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-22 09:30+0300\n"
+"POT-Creation-Date: 2022-11-29 09:53+0200\n"
 "PO-Revision-Date: 2007-10-29 09:45+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -64,6 +64,7 @@ msgstr "Вычисление. "
 msgid "Calculation with the period %s. "
 msgstr "Вычисление с периодом %s. "
 
+#, c-format
 msgid "Next calculation by the CRON '%s'. "
 msgstr "Следующее вычисление по CRON '%s'. "
 

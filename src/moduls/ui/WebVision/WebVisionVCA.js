@@ -680,8 +680,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 		if(toCrtStBar) {
 		    stBar = "<table width='100%'><TR><td id='StatusBar' width='100%'/>";
-		    stBar += "<td id='st_alarm' title1='###Alarm level: %1###' style='display: flex;'>"+
-			    "<img id='alarmLev' onclick='alarmQuiet(this.id)' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
+		    stBar += "<td id='st_export' title='###Field to call of exporting some data.###'>"+
+			     "<img onclick='exportElData(event)' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_export' style='cursor: pointer;'/></td>";
+		    stBar += "<td id='st_alarm' title1='###Alarm level: %1###'>"+
+			     "<img id='alarmLev' onclick='alarmQuiet(this.id)' height='"+(masterPage.status.height-2)+"px' src='/"+MOD_ID+"/img_alarmLev'/></td>";
 		    if(modelStyles && parseInt(modelStyles.getAttribute('curStlId')) >= 0 && modelStyles.childNodes.length > 1) {
 			stBar += "<td id='st_style' title='###Field for displaying and changing the used interface style.###'>";
 			stBar += "<select onchange='styleSet(this.selectedOptions[0].getAttribute(\"itId\"))'>";
@@ -3127,6 +3129,43 @@ function alarmQuiet( ev, iNtf, ret ) {
 
     var attrs = new Object();
     attrs.event = "ws_"+ev; setWAttrs(masterPage.addr, attrs);
+}
+
+function exportElData(e) {
+    var optEl = '';
+    docs = document.getElementsByClassName("Primitive Document");
+    for(iD = 0; iD < docs.length; iD++) {
+	optEl += "<option id='"+docs[iD].wdgLnk.addr+"' file='Document "+iD+".html'>"+
+		    "###Document %1### (HTML)".replace("%1",iD.toString())+"</option>";
+	tables = docs[iD].children[0].contentDocument.getElementsByTagName('table');
+	for(iT = 0; iT < tables.length; iT++) {
+	    if(tables[iT].getAttribute("export") != "1") continue;
+	    optEl += "<option id='"+docs[iD].wdgLnk.addr+"' file='Document "+iD+".csv'>"+
+			"###Document %1### (CSV)".replace("%1",iD.toString())+"</option>";
+	    break;
+	}
+    }
+    tables = document.getElementsByClassName("Primitive FormEl Table");
+    for(iT = 0; iT < tables.length; iT++)
+	optEl += "<option id='"+tables[iT].wdgLnk.addr+"' file='Table "+iT+".csv'>"+
+		    "###Table %1### (CSV)".replace("%1",iT.toString())+"</option>";
+
+    if(!optEl.length) alert("###No data for export!###");
+    else {
+	var popUpMenu = getPopup();
+	popUpMenu.childNodes[0].innerHTML = optEl;
+	popUpMenu.childNodes[0].size = Math.max(3,popUpMenu.childNodes[0].childNodes.length);
+	popUpMenu.style.cssText = 'visibility: visible; left: '+(e.clientX+window.pageXOffset-popUpMenu.offsetWidth/2)+'px; '+
+							'top: '+(e.clientY+window.pageYOffset-popUpMenu.offsetHeight)+'px;';
+	popUpMenu.childNodes[0].selectedIndex = -1;
+	popUpMenu.childNodes[0].onclick = function( ) {
+	    this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
+	    if(this.selectedIndex < 0) return false;
+	    sO = this.options[this.selectedIndex];
+	    window.open('/'+MOD_ID+sO.getAttribute('id')+"/"+sO.getAttribute('file')+'?com=obj');
+	    return false;
+	}
+    }
 }
 
 function ntfReg( tp, props, pgCrtor, prior ) {

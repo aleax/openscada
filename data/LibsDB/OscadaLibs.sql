@@ -4969,7 +4969,7 @@ The template includes also code for connect the counters through modems using th
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 3.1 HD
 Sponsored by: Vinnica Poultry Farm
-Version: 0.8.0
+Version: 0.8.1
 License: GPLv2','','',240,0,'JavaLikeCalc.JavaScript
 //Modem requests
 function modemWr(ln, noNewLn)	{ tr.messIO(ln + ((noNewLn==true)?"":"\x0D\x0A"), 0, 0); }
@@ -5084,7 +5084,7 @@ if(!(tr=SYS.Transport.outAt(transport)) || !tr.start(true))
 	tErr = "1:"+tr("Output transport ''%1'' error.").replace("%1",transport);
 else if(addr < 0 || addr > 65535)
 	tErr = "2:"+tr("Address ''%1'' out of range [0...65535].").replace("%1",addr.toString());
-else if(!sched.length || SYS.time() >= SYS.cron(sched,schedTrueTm)) {
+else if(!sched.length || sched.isEVal() || SYS.time() >= SYS.cron(sched,schedTrueTm)) {
 	//ModemMode: connect
 	inMdmCon = false;
 	if(modem.length) {
@@ -5280,9 +5280,9 @@ else {
 	}
 
 	if(!schedContinue) schedTrueTm = SYS.time();
-	tErr += (sched.length?"; "+tr("Next scheduled call")+" "+SYS.strftime(SYS.cron(sched,schedTrueTm)):"") + (prcSt.length?"; "+prcSt:"");
+	tErr += ((sched.length && !sched.isEVal())?"; "+tr("Next scheduled call")+" "+SYS.strftime(SYS.cron(sched,schedTrueTm)):"") + (prcSt.length?"; "+prcSt:"");
 }
-f_err = tErr;','','',1668191139);
+f_err = tErr;','','',1669486667);
 CREATE TABLE IF NOT EXISTS 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO tmplib_PrescrTempl VALUES('timer','Command — Timer','Команда — Таймер','Команда — Таймер','Template of a command of the prescription typical timer. The timer is only designed to hold time between other action steps and for example, so it only has one attribute, "Time" in seconds.
 
@@ -13547,7 +13547,7 @@ INSERT INTO tmplib_DevLib_io VALUES('SLOT','modemTm','Modem times
 In the format "{tm}:{ConTm}"',0,64,'40:5',2,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','addr','Device address [0...65535]',1,64,'1',3,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','pipeN','Pipe number [0...1]',1,64,'0',4,'','','','','');
-INSERT INTO tmplib_DevLib_io VALUES('SLOT','sched','Scheduling at CRON',0,64,'',5,'','','','','');
+INSERT INTO tmplib_DevLib_io VALUES('SLOT','sched','Scheduling at CRON',0,128,'',5,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhTmLim','Time limit of processing the archiving, seconds',1,64,'120',6,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhD','OpenSCADA archiver for device archive of days',0,64,'',7,'','','','','');
 INSERT INTO tmplib_DevLib_io VALUES('SLOT','arhH','OpenSCADA archiver for device''s archive of hours',0,64,'',8,'','','','','');

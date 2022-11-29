@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.10"
+#define MOD_VER		"4.4.12"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1981,8 +1981,6 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 {
     if(!isLogic() || !lCtx->func())	return;
 
-    AutoHD<TVal> pVal;
-    vector<string> ls;
     acqErr.setVal("");	//Clean up before the updating at links processing
 
     try {
@@ -2011,16 +2009,8 @@ void TMdPrm::upValLog( bool first, bool last, double frq )
 	if(lCtx->idNm >= 0 && lCtx->ioMdf(lCtx->idNm)) setName(lCtx->getS(lCtx->idNm));
 	if(lCtx->idDscr >= 0 && lCtx->ioMdf(lCtx->idDscr)) setDescr(lCtx->getS(lCtx->idDscr));
 
-	//Attribute's values update
-	elem().fldList(ls);
-	for(unsigned iEl = 0; iEl < ls.size(); iEl++) {
-	    int id_lnk = lCtx->lnkId(ls[iEl]);
-	    if(id_lnk >= 0 && !lCtx->lnkActive(id_lnk)) id_lnk = -1;
-	    pVal = vlAt(ls[iEl]);
-	    if(pVal.at().fld().flg()&TVal::Dynamic)	continue;
-	    if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[iEl])), 0, true);
-	    else pVal.at().set(lCtx->lnkInput(id_lnk), 0, true);
-	}
+	//Put values to the attributes and archives in the passive archiving mode
+	lCtx->archAttrs(this);
     } catch(TError &err) {
 	mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_warning(nodePath().c_str(),_("Error of the calculation template."));
@@ -2132,7 +2122,7 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    val.arch().at().setSrcMode(TVArchive::DAQAttr);
     val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);

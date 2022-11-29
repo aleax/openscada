@@ -75,7 +75,7 @@ class VCAObj : public TCntrNode
 {
     public:
 	//Methods
-	VCAObj( const string &iid );
+	VCAObj( const string &id );
 	~VCAObj( );
 
 	string objName( );
@@ -435,7 +435,7 @@ class VCADocument : public VCAObj
 
 	string objName( );
 
-	void getReq( SSess &ses )	{ }
+	void getReq( SSess &ses );
 	void postReq( SSess &ses )	{ }
 	void setAttrs( XMLNode &node, const SSess &ses );
 };

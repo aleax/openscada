@@ -1108,7 +1108,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 	}
     }
 
-    if(runSt && vl == PassiveAttr) {
+    if(runSt && vl == DAQAttr) {
 	pattrSrc = srcPAttr(true, src);
 	if(pattrSrc.freeStat()) { if(!noex) throw err_sys(_("Error connecting to source '%s'."),src.c_str()); }
 	else {
@@ -2031,7 +2031,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SARH_ID,RWRWR_);
-		if(srcMode() == PassiveAttr || srcMode() == ActiveAttr)
+		if(srcMode() == DAQAttr || srcMode() == ActiveAttr)
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/Source","",RWRWR_,"root",SARH_ID,2,"dest","sel_ed","select","/cfg/prm_atr_ls");
 		else ctrRemoveNode(opt,"/prm/cfg/Source");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/BSIZE",EVAL_STR,RWRWR_,"root",SARH_ID,1,
@@ -2526,7 +2526,7 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
     TVariant vl = getValProc(tm, up_ord);
 
     if(!onlyLocal && tm && archive().startStat() && vl.isEVal() && SYS->rdActive() &&
-	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::PassiveAttr))
+	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::DAQAttr))
     {
 	int64_t remTm = 0;
 	AutoHD<TVal> paVl = archive().srcPAttr();
@@ -2572,7 +2572,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
     //Check for holes fill
     // Check for the redundancy allowing
     if(!onlyLocal && archive().startStat() && buf.evalCnt() > ecnt && SYS->rdActive() &&
-	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::PassiveAttr))
+	(archive().srcMode() == TVArchive::ActiveAttr || archive().srcMode() == TVArchive::DAQAttr))
     {
 	AutoHD<TVal> paVl = archive().srcPAttr();
 	AutoHD<TParamContr> sPrm(dynamic_cast<TParamContr*>(&paVl.at().owner()));

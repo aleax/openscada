@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 13:59+0200\n"
+"POT-Creation-Date: 2022-11-29 10:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -97,6 +97,15 @@ msgstr ""
 msgid "Station of the VCA engine"
 msgstr ""
 
+#, c-format
+msgid ""
+"Use '%s' for querying the station together user and password at the module generic call.\n"
+"Useful at presence of many control stations and for opening several of them simultaneously."
+msgstr ""
+
+msgid "<Select>"
+msgstr ""
+
 msgid "Starting user"
 msgstr ""
 
@@ -130,9 +139,6 @@ msgid "Disconnected"
 msgstr ""
 
 msgid "<Local>"
-msgstr ""
-
-msgid "<Select>"
 msgstr ""
 
 msgid "Ready"

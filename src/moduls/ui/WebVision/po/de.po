@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 21:31+0300\n"
+"POT-Creation-Date: 2022-11-28 23:46+0200\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -37,6 +37,12 @@ msgstr "Unbekanntes Kommando: %s."
 
 msgid "Content is missing."
 msgstr "Inhalt fehlt."
+
+msgid "The table is wrong or empty"
+msgstr "Die Tabelle ist falsch oder leer"
+
+msgid "Error parsing the document"
+msgstr "Fehler beim Parsen des Dokuments"
 
 msgid "Fill image type is not supported."
 msgstr "Füllen Bildtyp wird nicht unterstützt."
@@ -77,6 +83,9 @@ msgstr "KHz"
 
 msgid "Hz"
 msgstr "Hz"
+
+msgid "The document is wrong or empty"
+msgstr "Das Dokument ist falsch oder leer"
 
 #, c-format
 msgid "Error parsing the document '%s': %s"
@@ -126,22 +135,22 @@ msgid "Mon"
 msgstr "Mon"
 
 msgid "Tue"
-msgstr ""
+msgstr "Tue"
 
 msgid "Wed"
-msgstr ""
+msgstr "Wed"
 
 msgid "Thr"
-msgstr ""
+msgstr "Thr"
 
 msgid "Fri"
-msgstr ""
+msgstr "Fri"
 
 msgid "Sat"
-msgstr ""
+msgstr "Sat"
 
 msgid "Sun"
-msgstr ""
+msgstr "Sun"
 
 msgid "January"
 msgstr "Januar"
@@ -190,6 +199,18 @@ msgstr "Stufe der Störung: %1"
 
 msgid "Notificator %1"
 msgstr "Notifier %1"
+
+msgid "Field to call of exporting some data."
+msgstr "Feld zum Aufrufen des Exportierens einiger Daten."
+
+msgid "Document %1"
+msgstr "Dokument %1"
+
+msgid "Table %1"
+msgstr "Tabelle %1"
+
+msgid "No data for export!"
+msgstr "Keine Daten für den Export!"
 
 #, c-format
 msgid ""

@@ -1193,6 +1193,7 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 <li> <i>virtual void cleanLnks( bool andFunc = false );</i> — Cleans all the links and the function, for <i>andFunc</i>.</li>
 <li> <i>void inputLinks( );</i> — Gets for values of all the links.</li>
 <li> <i>void outputLinks( );</i> — Sets for values of all the links.</li>
+<li> <i>void archAttrs( TValue *vl );</i> — Updating the attribute values in <i>vl</i> from the Logical Level context and with writing them to the archive for the archivating attributes.</li>
 <li> <i>virtual bool cntrCmdProc( XMLNode *opt, const string &amp;pref = "/cfg" );</i> — Calls for control interface of the links with the prefix "pref".</li></ul>
 <p><b>Protected attributes:</b><br />
 </p>
@@ -1277,8 +1278,8 @@ Structure of template links (class — TPrmTempl::Impl::SLnk):
 The data acquisition mode/source (struct — TVArchive::SrcMode):
 </p>
 <ul><li> <i>Passive</i> — passive mode of the data acquisition, the source puts the data into the archive itself;</li>
-<li> <i>PassiveAttr</i> — passive mode of the data acquisition from the parameter's attribute, the parameter's attribute puts the data into the archive itself;</li>
-<li> <i>ActiveAttr</i> — active mode of the data acquisition from the parameter's attribute, the parameter's attribute is periodically polled by the subsystem "Archives";</li></ul>
+<li> <i>DAQAttr</i> — the data acquisition from the DAQ attribute when the DAQ attribute puts the data into the archive itself;</li>
+<li> <i>ActiveAttr</i> [DEPRECATED] — active mode of the data acquisition from the DAQ attribute when the DAQ attribute is periodically polled by the subsystem "Archives";</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>TVArchive( const string &amp;id, const string &amp;db, TElem *cf_el );</i> — Initializing constructor of the archive, where <i>id</i> — archive ID, <i>db</i> — DB for storage and <i>cf_el</i> — DB structure of the values' archives.</li>
@@ -3188,7 +3189,8 @@ Named rights of access to control elements (definition):
 <p><b>Data:</b><br />
 Options for XML-file loading (enum — XMLNode::LoadFlgs):
 </p>
-<ul><li> <i>XMLNode::LD_Full</i> (0x01) — load XML full;</li>
+<ul><li> <i>XMLNode::LD_NO</i> (0x00) — no the loading flag;</li>
+<li> <i>XMLNode::LD_Full</i> (0x01) — load XML full;</li>
 <li> <i>XMLNode::LD_NoTxtSpcRemEnBeg</i> (0x02) — no remove spaces for begin and end tag's text, for not full mode.</li></ul>
 <p>Options of the function of XML-file generation (enum - XMLNode::SaveView):
 </p>

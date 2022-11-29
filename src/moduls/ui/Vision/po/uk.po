@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-20 13:59+0200\n"
+"POT-Creation-Date: 2022-11-29 10:32+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -135,6 +135,19 @@ msgstr "Перейти до конфігурації переліку відда
 msgid "Station of the VCA engine"
 msgstr "Станція рушія СВУ"
 
+#, c-format
+msgid ""
+"Use '%s' for querying the station together user and password at the module "
+"generic call.\n"
+"Useful at presence of many control stations and for opening several of them "
+"simultaneously."
+msgstr ""
+"Користуйтеся '%s' для запиту станції разом із користувачем та паролем при загальному виклику модуля.\n"
+"Корисно за наявності багато станцій керування та відкриття декількох з них одночасно."
+
+msgid "<Select>"
+msgstr "<Вибір>"
+
 msgid "Starting user"
 msgstr "Стартовий користувач"
 
@@ -179,9 +192,6 @@ msgstr "Від'єднаний"
 
 msgid "<Local>"
 msgstr "<Локально>"
-
-msgid "<Select>"
-msgstr "<Вибір>"
 
 msgid "Ready"
 msgstr "Готовий"

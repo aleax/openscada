@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/WebVision</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebVision&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebVision" title="Modules/WebVision">Modules/WebVision</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebVision.html" title="Modules/WebVision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (100% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FWebVision&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/WebVision" title="Modules/WebVision">Modules/WebVision</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/WebVision.html" title="Modules/WebVision (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/WebVision.html" title="Модули/WebVision (96% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/WebVision.html" title="Special:MyLanguage/Modules/WebVision">WebVision</a> </td>
 <td> Робочий користувацький інтерфейс (WEB)
 </td>
-<td> 6.6 </td>
+<td> 6.7 </td>
 <td> GPL2 </td>
 <td> ui_WebVision.so </td>
 <td> en,uk,ru,de </td>
@@ -48,12 +48,13 @@
 <li> <b>Спонсорування, примітиву "Медіа" та Сповіщення на 1.35 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Хайді Рамазані</li>
 <li> <b>Спонсорування, Сповіщення на 0.85 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Вінницька Птахофабрика</li>
 <li> <b>Спонсорування, завершення відображення примітиву ElFigure на 0.5 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> ТОВ "СВІТоВИР"</li>
+<li> <b>Спонсорування, Експорту на 0.8 <span title="людино-днів, 1ЛД — 10 годин">ЛД<sup style="color: blue">[!]</sup></span>:</b> Вінницька Птахофабрика</li>
 <li> <b><a href="../../en/To_do.html" title="Special:MyLanguage/Works/To do">Завдання (To Do)</a>:</b></li></ul>
 <dl><dd> * відревізувати та уніфікувати примушення клавіатурного фокусу на першому активному елементі з урахуванням їх специфіки, для гарантування клавіатурних скорочень;</dd>
 <dd> - ElFigure: виправити втрату деяких властивостей (щонайменш товщину лінії) при опрацюванні дій, у процесі загальної переробки коду примітиву;</dd>
 <dd> + розширити вид "Таблиця" примітиву "FormEl" користувацьким сортуванням за обраним стовпчиком;</dd>
 <dd> * доповнити панель статусу, функціями:
-<dl><dd> - експорт та друк;</dd>
+<dl><dd> + експорт;</dd>
 <dd> - виклик документації проєкту;</dd>
 <dd> + сигналізація-сповіщення звуком та мовою.</dd></dl></dd>
 <dd> - ElFigure,Diagram: ввімкнути або реалізувати згладжування, для бібліотеки GD;</dd>
@@ -136,7 +137,8 @@
 <ul><li> Праворуч:
 <ul><li> поточний користувач, від ім'я якого виконується інтерфейс СВУ — кліком можна змінити цього користувача, ввівши нове ім'я та пароль;</li>
 <li> поточний стиль інтерфейсу, який можна змінити обравши з комбобоксу потрібний;</li>
-<li> поточний статус порушення у лампі кольором, який відповідає рівню порушення, та іконки активних сповіщувачів; блимає при появі та зміні порушення; натиснувши на лампу Ви можете сквітувати (стишити) ці порушення цілком або бажаний тип сповіщення, натиснувши іконку відповідного сповіщувача поряд.</li></ul></li>
+<li> поточний статус порушення у лампі кольором, який відповідає рівню порушення, та іконки активних сповіщувачів; блимає при появі та зміні порушення; натиснувши на лампу Ви можете сквітувати (стишити) ці порушення цілком або бажаний тип сповіщення, натиснувши іконку відповідного сповіщувача поряд;</li>
+<li> кнопка меню із виклику експорту даних сторінки для: Документів (HTML,CSV), Таблиць (CSV).</li></ul></li>
 <li> У головному полі рядка статусу виводяться різні інформаційні повідомлення та повідомлення допомоги.</li></ul>
 <p>Модуль підтримує багатомовність, яка вмикається <a href="../Program_manual.html#ConfigTr" title="Special:MyLanguage/Documents/Program manual">динамічним перекладом повідомлень OpenSCADA</a>. Отримана мова передається модулем <a href="../Modules/HTTP.html" title="Special:MyLanguage/Modules/HTTP">Protocol.HTTP</a> та визначається шляхом та у послідовності:
 </p>
@@ -146,7 +148,7 @@
 <li> Загальна мова процесу OpenSCADA.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:619px;"><a class="image" href="http://oscada.org/wiki/File:HTTP_auth_uk.png"><img class="thumbimage" height="286" src="../files/HTTP_auth_uk.png" width="617" /></a>  <div class="thumbcaption">Рис.1. Сторінка аутентифікації.</div></div></div></div>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:606px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_connect_uk.png"><img class="thumbimage" height="458" src="../files/WebVision_wvis_connect_uk.png" width="604" /></a>  <div class="thumbcaption">Рис.2. Підключення або створення нового сеансу виконання проєкту СВУ.</div></div></div></div>
-<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1039px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="785" src="../files/WebVision_wvis_run_uk.png" width="1037" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1034px;"><a class="image" href="http://oscada.org/wiki/File:WebVision_wvis_run_uk.png"><img class="thumbimage" height="777" src="../files/WebVision_wvis_run_uk.png" width="1032" /></a>  <div class="thumbcaption">Рис.3. Головне вікно режиму виконання.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9F.D1.80.D0.B5.D0.B4.D1.81.D1.82.D0.B0.D0.B2.D0.BB.D0.B5.D0.BD.D0.BD.D1.8F_.D0.B1.D0.B0.D0.B7.D0.BE.D0.B2.D0.B8.D1.85_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D1.96.D0.B2_.28.D0.BF.D1.80.D0.B8.D0.BC.D1.96.D1.82.D0.B8.D0.B2.D1.96.D0.B2.29"><span class="mw-headline-number">3</span> <span id="Primitives" title="#Primitives">Представлення базових елементів (примітивів)</span></span></h2>
 <p>Даною версією модуля реалізовано не всі образи примітивів, закладені проєктом. Загалом, проєктом закладено примітиви:
 </p>

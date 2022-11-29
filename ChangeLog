@@ -1,3 +1,20 @@
+2022-11-29 Roman (stable)
+- !!:LibsDB.OscadaLibs: tmplib_DevLib.SLOT: The IO "sched" switched to the link for binding several counters under single scheduling.
+- FIX:LibsDB.vcaBase: wlb_doc.docRepInstVals: Fixed in centering the diagram.
+- !!!!:Archive,DAQ.{LogicLev,ModBus,OPC_UA}: Finished the unification of archiving at the Logical Level sources
+	when used only the direct-passive archiving:
+    - the object TPrmTempl::Impl appended of the new function archAttrs() of updating-archiving attributes of the LogicalLevel;
+    - the value archive link type "Passive param. attribute (TVArchive::PassiveAttr)" renamed to "DAQ attribute (TVArchive::DAQAttr)";
+    - the value archive link type "Active param. attribute" renamed to "Active DAQ attribute" with that mark as DEPRECATED.
+- SYS: The User API functions strptime() and strptimegm() set in the time default initiating to 0:00:00.
+    The XMLNode loading flags appended of the no flag item LD_NO.
+- !!:FIX:DAQ: Setting the LogicalLevel links prevented from cleaning all the string after the space at the link constants "val:".
+- !!:DAQ.LogicLev: Some improved in work the parameter type "Reflection", that also switched to the passive archiving mode.
+- UI.Vision: The station selection field appended of the short help about the new item "<Select>".
+	Code of the Document exporting to CSV some cleaned.
+- !!!!:UI.WebVision: Appended of the export implementation for the "Document - HTML,CSV" and "Table CSV".
+
+
 2022-11-20 Roman (stable)
 - !:FIX:LibsDB.vcaBase: wlb_doc.docRepMonth: Fixed in the document regeneration at the same time, by setting 0, and in whole.
     wlb_Main.grpGraph: Appended for the control panel open at the event key_mousePresLeft also.

@@ -44,7 +44,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"8.6.0"
+#define MOD_VER		"8.6.2"
 #define AUTHORS		trS("Roman Savochenko, Maxim Lysenko (2006-2012), Kseniya Yashina (2006-2007), Evgen Zaichuk (2005-2006)")
 #define DESCRIPTION	trS("Visual operation user interface, based on the Qt library - front-end to the VCA engine.")
 #define LICENSE		"GPL2"
@@ -348,10 +348,12 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgSz","",RWRWR_,"root",SUI_ID,2,"tp","dec",
 		"help",_("The number defines a limit of pages in the cache.\n"
 			"Zero value of the number excludes the cache limit."));
-
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to the remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("Station of the VCA engine"),RWRWR_,"root",SUI_ID,4,
-		"tp","str", "idm","1", "dest","select", "select","/prm/cfg/vca_lst");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("Station of the VCA engine"),RWRWR_,"root",SUI_ID,5,
+		"tp","str", "idm","1", "dest","select", "select","/prm/cfg/vca_lst",
+		"help",TSYS::strMess(_("Use '%s' for querying the station together user and password at the module generic call.\n"
+				       "Useful at presence of many control stations and for opening several of them simultaneously."),
+				_("<Select>")).c_str());
 	    if(VCAStation() != "*") {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Starting user"),RWRWR_,"root",SUI_ID,3,
 		    "tp","str", "dest","select", "select","/prm/cfg/u_lst");
@@ -463,8 +465,8 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	}
     }
     else if(a_path == "/prm/cfg/vca_lst" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setAttr("id",".")->setText(_("<Local>"));
 	opt->childAdd("el")->setAttr("id","*")->setText(_("<Select>"));
+	opt->childAdd("el")->setAttr("id",".")->setText(_("<Local>"));
 	vector<TTransportS::ExtHost> lst;
 	SYS->transport().at().extHostList("*", lst, false, -1, opt->attr("lang"));
 	for(unsigned iLs = 0; iLs < lst.size(); iLs++)

@@ -118,7 +118,7 @@ class TVision : public TUI
 	QMainWindow *openWindow( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
-	MtxString	mVCAStation,		//VCA station id ('.' - for local station)
+	MtxString	mVCAStation,		//VCA station id ('.' - for local station, '*' - for selection the station)
 			mUserStart,		//No question start user
 			mUserPass;		//No quest user password
 	string		mRunPrjs;		//Run projects list on the module start

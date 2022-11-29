@@ -538,7 +538,7 @@ void *da_LP_8x::fastTask( void *ip )
 		for(unsigned iC = 0; iC < cnls.size(); iC++) {
 		    // Place the readed data to OpenSCADA buffers
 		    AutoHD<TVArchive> arch;
-		    if(!cnls[iC].at().arch().freeStat() && (arch=cnls[iC].at().arch()).at().srcMode() == TVArchive::PassiveAttr)
+		    if(!cnls[iC].at().arch().freeStat() && (arch=cnls[iC].at().arch()).at().srcMode() == TVArchive::DAQAttr)
 			for(int64_t iT = 0; iT < tSz; iT += arch.at().period()) {
 			    //i8014W_CalibrateData(p.modSlot, gainArr[iC], rdData[((rdCnt/cnls.size())*iT/tSz)*cnls.size()+iC], &vAI);
 			    vAI = (10.0/(gainArr[iC]?2*gainArr[iC]:1))*(float)rdData[((rdCnt/cnls.size())*iT/tSz)*cnls.size()+iC]/32670; //Better up to 1.5%

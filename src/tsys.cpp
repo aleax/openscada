@@ -2974,6 +2974,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && !prms.empty()) {
 	struct tm stm;
 	stm.tm_isdst = -1;
+	stm.tm_mon = 0;					//Default month January(1)
+	stm.tm_mday = 1;				//Default day 1
+	stm.tm_hour = stm.tm_min = stm.tm_sec = 0;	//Default time 0:00:00
 	strptime(prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm);
 	return (int64_t)(alt1 ? timegm(&stm) : mktime(&stm));
     }
