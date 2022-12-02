@@ -1,4 +1,9 @@
 2022-12-02 Roman (stable)
+- FIX:Archive: TPrmTempl::Impl::lnkId() added of checking the function availability
+    due to the execution context can be cleared already on busy systems.
+
+
+2022-12-02 Roman (stable)
 - LibsDB.OscadaLibs: tmplib_DevLib.SLOT: The IO "sched" set to the Read Only Attribute also.
 - FIX:Archive: The new function TPrmTempl::Impl::archAttrs() fixed in use the links lock "lnkRes".
 - UI.{Vision,WebVision}: Exporting the Document tables to CSV appended of preventing the empty rows.
