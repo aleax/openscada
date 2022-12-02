@@ -668,6 +668,7 @@ void TPrmTempl::Impl::archAttrs( TValue *vl )
     vector<string> ls;
 
     vl->vlList(ls);
+    MtxAlloc res(lnkRes, true);
     for(unsigned iEl = 0; iEl < ls.size(); iEl++)
 	if(!(pVal=vl->vlAt(ls[iEl])).at().isCfg() && !(pVal.at().fld().flg()&TVal::Dynamic) && (idIO=ioId(ls[iEl])) >= 0)
 	    pVal.at().set(((idLnk=lnkId(ls[iEl])) >= 0 && lnkActive(idLnk)) ? lnkInput(idLnk) : get(idIO), 0, true);

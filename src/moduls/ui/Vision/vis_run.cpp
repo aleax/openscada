@@ -1025,14 +1025,16 @@ void VisRun::exportDoc( const string &idoc )
 			    default: tblN = NULL;
 			}
 			if(!tblN)	continue;
-			//  Rows process
+			//  Rows processing
 			for(unsigned iN = 0; iN < tblN->childSize(); iN++) {
 			    if(strcasecmp(tblN->childGet(iN)->name().c_str(),"tr") != 0)	continue;
 			    tblRow = tblN->childGet(iN);
+			    bool cellAllow = false;
 			    for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
 				if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
 					strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
 				    continue;
+				cellAllow = true;
 				while(rowSpn[iCl] > 1) { rez += ";"; rowSpn[iCl]--; iCl++; }
 				rowSpn[iCl] = s2i(tblRow->childGet(iC)->attr("rowspan",false));
 				val = tblRow->childGet(iC)->text(true,true);
@@ -1044,7 +1046,7 @@ void VisRun::exportDoc( const string &idoc )
 				for(int iCs = 1; iCs < colSpan; iCs++) rez += ";";
 				iCl++;
 			    }
-			    rez += "\x0D\x0A";
+			    if(cellAllow) rez += "\x0D\x0A";
 			}
 		    }
 		    rez += "\x0D\x0A";

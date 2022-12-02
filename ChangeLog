@@ -1,3 +1,9 @@
+2022-12-02 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_DevLib.SLOT: The IO "sched" set to the Read Only Attribute also.
+- FIX:Archive: The new function TPrmTempl::Impl::archAttrs() fixed in use the links lock "lnkRes".
+- UI.{Vision,WebVision}: Exporting the Document tables to CSV appended of preventing the empty rows.
+
+
 2022-11-29 Roman (stable)
 - !!:LibsDB.OscadaLibs: tmplib_DevLib.SLOT: The IO "sched" switched to the link for binding several counters under single scheduling.
 - FIX:LibsDB.vcaBase: wlb_doc.docRepInstVals: Fixed in centering the diagram.

@@ -6942,10 +6942,12 @@ void VCADocument::getReq( SSess &ses )
 			for(unsigned iN = 0; iN < tblN->childSize(); iN++) {
 			    if(strcasecmp(tblN->childGet(iN)->name().c_str(),"tr") != 0) continue;
 			    tblRow = tblN->childGet(iN);
+			    bool cellAllow = false;
 			    for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
 				if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
 					strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
 				    continue;
+				cellAllow = true;
 				while(rowSpn[iCl] > 1) { ses.page += ";"; rowSpn[iCl]--; iCl++; }
 				rowSpn[iCl] = s2i(tblRow->childGet(iC)->attr("rowspan",false));
 				val = tblRow->childGet(iC)->text(true, true);
@@ -6957,7 +6959,7 @@ void VCADocument::getReq( SSess &ses )
 				for(int iCs = 1; iCs < colSpan; iCs++) ses.page += ";";
 				iCl++;
 			    }
-			    ses.page += "\x0D\x0A";
+			    if(cellAllow) ses.page += "\x0D\x0A";
 			}
 		    }
 		    ses.page += "\x0D\x0A";
