@@ -1,3 +1,23 @@
+2022-12-03 Roman 0.9.5.5
+- FIX:LibsDB.vcaBase: wlb_doc.docRepInstVals: Fixed in centering the diagram.
+- !:FIX:data/ModelsDB/Boiler: Fixed in some description and the processing period of the project set to 250 ms.
+- !!!!:FIX:SYS: Prevented from propagating the base language column of the translations table "Tr"
+	in the SINGLE translation mode and the base language.
+    The User API functions strptime() and strptimegm() set in the time default initiating to 0:00:00.
+- !!!:FIX:DB: Fixed for the DB syntax error at cleaning the translation fields equal to the base.
+    !!!:FIX: Fixed in writing untranslated strings, by clearing all translation and writing to base.
+    !!:FIX: Prevented in the DBs service termination, as the transactions closing, at some wrong DB presence.
+- DB.SQLite: The "tracing" debug category appended the prefix "db_".
+- !!:FIX:DAQ: Setting the LogicalLevel links prevented from cleaning all the string after the space at the link constants "val:".
+    !!:FIX: The parameter templates fixed in the flag IO::TransltText processing for strings.
+    FIX: TPrmTempl::Impl::lnkId() added of checking the function availability due to the execution context
+	can be cleared already on busy systems.
+- FIX:UI.VCAEngine: The pages are prevented from the parent widget address clearing at the page type changing
+	from Standard to Template and back.
+    The type field of the pages set to invisible for the owner page is the Template.
+- UI.Vision: Exporting the Document tables to CSV appended of preventing the empty rows.
+
+
 2022-10-23 Roman 0.9.5.4
 - data/Android/patches/openscada_openscada-proj.patch: Adapted to the last changes.
 - FIX:LibsDB.vcaTest: wlb_test.FormElTests: fixed in some translation for Ukrainian.

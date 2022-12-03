@@ -118,11 +118,11 @@ void TBDS::dbList( vector<string> &ls, char flg )
 void TBDS::perSYSCall( unsigned int cnt )
 {
     vector<string> tdbs, dbs, tbls;
-    try {
-	modList(tdbs);
-	for(unsigned iTDB = 0; iTDB < tdbs.size(); iTDB++) {
-	    at(tdbs[iTDB]).at().list(dbs);
-	    for(unsigned iDB = 0; iDB < dbs.size(); iDB++) {
+    modList(tdbs);
+    for(unsigned iTDB = 0; iTDB < tdbs.size(); iTDB++) {
+	at(tdbs[iTDB]).at().list(dbs);
+	for(unsigned iDB = 0; iDB < dbs.size(); iDB++)
+	    try {
 		AutoHD<TBD> db = at(tdbs[iTDB]).at().at(dbs[iDB]);
 		if(db.at().enableStat()) {
 		    //Closing for not used tables
@@ -134,13 +134,13 @@ void TBDS::perSYSCall( unsigned int cnt )
 			    db.at().close(tbls[iTbl]);
 			}
 		    }
-		    //Checking for transaction close
+		    //Checking for the transaction closing
 		    if(db.at().trTm_ClsOnReq() >= prmServTask_PER) db.at().transCloseCheck();
 		}
-		else { if(db.at().toEnable() && !db.at().disabledByUser() && !SYS->stopSignal()) db.at().enable(); }
-	    }
-	}
-    } catch(...){ }
+		else if(db.at().toEnable() && !db.at().disabledByUser() && !SYS->stopSignal())
+		    db.at().enable();
+	    } catch(TError&) { }
+    }
 
     TSubSYS::perSYSCall(cnt);
 }
@@ -1699,10 +1699,9 @@ void TTable::fieldSQLSet( TConfig &cfg )
 		//  ... default
 		else isTransl = (isTransl && hasTr);
 
-		//  Clearing all the translation at setting no translable message
+		//  Clearing all the translation at setting no translatable message
 		if(isTransl && (u_cfg.noTransl() || (svalRAW.size() && !Mess->isMessTranslable(svalRAW)))) {
-		    if(u_cfg.noTransl())
-			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
+		    ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 		    for(unsigned iFld = 0; iFld < tblStrct.size(); iFld++) {
 			sid = tblStrct[iFld].nm;
 			if(sid.size() <= 3 || sid.compare(3,string::npos,cf_el[iEl]) != 0 || sid.compare(0,3,Mess->langCodeBase()+"#") == 0)
@@ -1733,7 +1732,7 @@ void TTable::fieldSQLSet( TConfig &cfg )
 			unsigned mess_TrModifMarkLen = strlen(mess_TrModifMark);
 
 			// The same field
-			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + (isTrAsBase?"":sval);
+			ls += (ls.size()?", \"":"\"") + TSYS::strEncode(sid,TSYS::SQL,"\"") + "\"=" + (isTrAsBase?"''":sval);
 
 			// Setting for marks and the base message
 			for(unsigned iFld = 0; !u_cfg.noTransl() && iFld < tbl[0].size(); iFld++) {

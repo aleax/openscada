@@ -215,7 +215,8 @@ void TPrmTempl::save_( )
 	cfg.cfg("NAME").setS(io(iIO)->name());
 	cfg.cfg("TYPE").setI(io(iIO)->type());
 	cfg.cfg("FLAGS").setI(io(iIO)->flg());
-	cfg.cfg("VALUE").setNoTransl(!(io(iIO)->type()==IO::String || io(iIO)->flg()&(TPrmTempl::CfgLink|IO::Selectable)));
+	cfg.cfg("VALUE").setNoTransl(!((io(iIO)->type() == IO::String && io(iIO)->flg()&IO::TransltText) ||
+					io(iIO)->flg()&(TPrmTempl::CfgLink|IO::Selectable)));
 	cfg.cfg("VALUE").setS(io(iIO)->def());
 	cfg.cfg("POS").setI(iIO);
 	TBDS::dataSet(w_db+"_io", w_cfgpath+"_io", cfg);
@@ -406,6 +407,7 @@ TPrmTempl::Impl::Impl( TCntrNode *iobj, const string &iname, bool blked ) : TVal
 int  TPrmTempl::Impl::lnkId( const string &nm )
 {
     MtxAlloc res(lnkRes, true);
+    if(!func()) return -1;	//!!!! Due to the execution context can be cleared already
     for(int iIO = 0; iIO < func()->ioSize(); iIO++)
 	if(func()->io(iIO)->id() == nm)
 	    return iIO;
@@ -745,7 +747,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	}
     }
     else if((a_path.find("/prm/pl_") == 0 || a_path.find("/prm/ls_") == 0) && ctrChkNode(opt)) {
-	bool is_pl = (a_path.compare(0,8,"/prm/pl_") == 0);
+	bool is_pl = (a_path.find("/prm/pl_") == 0);
 	string m_prm = lnks[s2i(a_path.substr(8))].addr;
 	if(is_pl && !SYS->daq().at().attrAt(m_prm,'.',true).freeStat()) m_prm = m_prm.substr(0,m_prm.rfind("."));
 	SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, '.');
@@ -755,7 +757,8 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	    int iIO = s2i(a_path.substr(8));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
 		opt->setText(lnks[iIO].addr);
-		if(!SYS->daq().at().attrAt(TSYS::strParse(opt->text(),0,"#"),'.',true).freeStat()) opt->setText(opt->text()+" (+)");
+		if(!SYS->daq().at().attrAt(TSYS::strParse(opt->text(),0,"#"),'.',true).freeStat())
+		    opt->setText(opt->text()+" (+)");
 	    }
 	    else if(func()->io(iIO)->flg()&TPrmTempl::CfgConst)
 		opt->setText(getS(iIO));
@@ -763,7 +766,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int iIO = s2i(a_path.substr(8));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
-		string a_vl = TSYS::strParse(opt->text(), 0, " ");
+		string a_vl = opt->text().find("val:") == 0 ? opt->text() : TSYS::strParse(opt->text(), 0, " ");
 		//if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
 		//	TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
 		//	TSYS::strSepParse(a_vl,2,'.') == id())

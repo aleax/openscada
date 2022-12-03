@@ -1011,43 +1011,44 @@ void VisRun::exportDoc( const string &idoc )
 		    curNode = curNode->childGet(treeStk.back());
 		    treeStk.push_back(0);
 		    //  Check for marked table and process it
-		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && s2i(curNode->attr("export"))) {
-			map<int,int>	rowSpn;
-			XMLNode *tblN = NULL, *tblRow;
-			string val;
-			for(int iSt = 0; iSt < 4; iSt++) {
-			    switch(iSt) {
-				case 0:	tblN = curNode->childGet("thead", 0, true);	break;
-				case 1:	tblN = curNode->childGet("tbody", 0, true);	break;
-				case 2:	tblN = curNode->childGet("tfoot", 0, true);	break;
-				case 3:	tblN = curNode;					break;
-				default: tblN = NULL;
+		    if(strcasecmp(curNode->name().c_str(),"table") != 0 || !s2i(curNode->attr("export"))) continue;
+		    map<int,int>	rowSpn;
+		    XMLNode *tblN = NULL, *tblRow;
+		    string val;
+		    for(int iSt = 0; iSt < 4; iSt++) {
+			switch(iSt) {
+			    case 0: tblN = curNode->childGet("thead", 0, true);	break;
+			    case 1: tblN = curNode->childGet("tbody", 0, true);	break;
+			    case 2: tblN = curNode->childGet("tfoot", 0, true);	break;
+			    case 3: tblN = curNode;				break;
+			    default: tblN = NULL;
+			}
+			if(!tblN)	continue;
+			//  Rows processing
+			for(unsigned iN = 0; iN < tblN->childSize(); iN++) {
+			    if(strcasecmp(tblN->childGet(iN)->name().c_str(),"tr") != 0)	continue;
+			    tblRow = tblN->childGet(iN);
+			    bool cellAllow = false;
+			    for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
+				if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
+					strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
+				    continue;
+				cellAllow = true;
+				while(rowSpn[iCl] > 1) { rez += ";"; rowSpn[iCl]--; iCl++; }
+				rowSpn[iCl] = s2i(tblRow->childGet(iC)->attr("rowspan",false));
+				val = tblRow->childGet(iC)->text(true,true);
+				for(size_t iSz = 0; (iSz=val.find("\"",iSz)) != string::npos; iSz += 2)
+				    val.replace(iSz, 1, 2, '"');
+				rez += "\"" + sTrm(val) + "\";";
+				//   Colspan process
+				int colSpan = s2i(tblRow->childGet(iC)->attr("colspan",false));
+				for(int iCs = 1; iCs < colSpan; iCs++) rez += ";";
+				iCl++;
 			    }
-			    if(!tblN)	continue;
-			    //  Rows process
-			    for(unsigned iN = 0; iN < tblN->childSize(); iN++) {
-				if(strcasecmp(tblN->childGet(iN)->name().c_str(),"tr") != 0)	continue;
-				tblRow = tblN->childGet(iN);
-				for(unsigned iC = 0, iCl = 0; iC < tblRow->childSize(); iC++) {
-				    if(!(strcasecmp(tblRow->childGet(iC)->name().c_str(),"th") == 0 ||
-					    strcasecmp(tblRow->childGet(iC)->name().c_str(),"td") == 0))
-					continue;
-				    while(rowSpn[iCl] > 1) { rez += ";"; rowSpn[iCl]--; iCl++; }
-				    rowSpn[iCl] = s2i(tblRow->childGet(iC)->attr("rowspan",false));
-				    val = tblRow->childGet(iC)->text(true,true);
-				    for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
-				    rez += "\""+sTrm(val)+"\";";
-				    //   Colspan process
-				    int colSpan = s2i(tblRow->childGet(iC)->attr("colspan",false));
-				    for(int iCs = 1; iCs < colSpan; iCs++) rez += ";";
-				    iCl++;
-				}
-				rez += "\x0D\x0A";
-			    }
+			    if(cellAllow) rez += "\x0D\x0A";
 			}
 			rez += "\x0D\x0A";
 		    }
-		    else continue;
 		}
 		curNode = curNode->parent();
 		treeStk.pop_back();
