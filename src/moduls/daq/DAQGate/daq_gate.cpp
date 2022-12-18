@@ -817,8 +817,11 @@ void *TMdContr::Task( void *icntr )
 		else if(!someLive && alSt != 1) {
 		    string errM;
 		    for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st)
-			if(st->second.cntr > 0)
-			    errM += (errM.size()?"; ":"") + TSYS::strMess(_("Station '%s' - %s"),st->first.c_str(),st->second.err.getVal().c_str());
+			if(st->second.cntr > 0) {
+			    st->second.dataRes.lock();
+			    errM += (errM.size()?"; ":"") + TSYS::strMess(_("Station '%s' - %s"),st->first.c_str(),st->second.err.c_str());
+			    st->second.dataRes.unlock();
+			}
 		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(errM,"=").c_str()));
 		}
 		alSt = !someLive;
@@ -913,7 +916,7 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool noConnect )
 		st->second.cntr -= 1;
 		return rez;
 	    } catch(TError &err) {
-		st->second.err = err.mess;
+		st->second.dataRes.lock(); st->second.err = err.mess; st->second.dataRes.unlock();
 		if(callSt) st->second.cntr = mRestTm;
 		throw;
 	    }

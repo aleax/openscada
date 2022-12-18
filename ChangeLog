@@ -1,4 +1,8 @@
 2022-12-18 Roman (stable)
+- FIX:DAQ.DAQGate: Fixed in the errors setting for StHd::err at the type MtxString, replacing by the direct data locking and "string".
+
+
+2022-12-18 Roman (stable)
 - !!:FIX:LibsDB.vcaBase: wlb_doc.docUsersSet: Added of the "Message category (messCat)" configuration.
     FIX:wlb_Main.anShow: Fixed in speeding up at alarms.
     wlb_Main.userManager: Disabled in the periodic procesing.
