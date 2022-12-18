@@ -10322,7 +10322,7 @@ if(alarmLev && alarmSt&0x100) {
 	else if(alarmLev < 30)	wColor = labColorWarning;
 	else if(alarmLev < 75)	wColor = labColorAlarm;
 	else { wColor = "grey"; blinkPr = false; }
-	if(blinkPr) { name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor; toFastCalc = true; }
+	if(blinkPr) { name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor; if(alarmSt&0x10000) toFastCalc = true; }
 	else { 
 		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; name_color = (redEVAL==true) ? labColorAlarm : wColor; }
 		else name_color = val_color = wColor;
@@ -10474,7 +10474,7 @@ if(alarmLev && alarmSt&0x100) {
 	else if(alarmLev < 30)	wColor = labColorWarning;
 	else if(alarmLev < 75)	wColor = labColorAlarm;
 	else { wColor = "grey"; blinkPr = false; }
-	if(blinkPr) { val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor; toFastCalc = true; }
+	if(blinkPr) { val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor; if(alarmSt&0x10000) toFastCalc = true; }
 	else { 
 		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 20 0 1 0 1"; }
 		else val_color = wColor;
@@ -13374,7 +13374,7 @@ if(userSel && SYS.mtime() >= userSel) {
 		grp_items += "</tbl>";
 		grp_value = "";
 	}
-}','','',500,'id;owner;perm;name;dscr;geomH;evProc;backColor;',1587891375);
+}','','',-2,'id;owner;perm;name;dscr;geomH;evProc;backColor;',1587891375);
 INSERT INTO wlb_Main VALUES('graphCalc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAgCAIAAAAt/+nTAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD
 X0lEQVRYhe2YzU7jRgCAZ8YziWPPjBNTwoJQoBKicEBqJLgguPMkPEDeaXvgxEOgPAGI21aiIK2d
 LPHP+Hc8nh6yaqtNWJVSyaXKd7DkGXv8fRrJkg0vLy8ppZ7nIYSUUlmWua4rhKjruigK27aVUhjj
@@ -13559,12 +13559,12 @@ if((f_start || toUpdate) /*&& !classFix.length*/) {
 
 //The class edition mode
 if(btClassEdit_value) {
-	SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `classes` (`CLASS` varchar(20) DEFAULT '''', `ID` varchar(20) DEFAULT '''', `NAME` text, `TP` varchar(100) DEFAULT '''', `TBL` varchar(100) DEFAULT '''', `FILTER` text, PRIMARY KEY (`CLASS`,`ID`));");
+	SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `classes` (`CLASS` varchar(20) DEFAULT '''', `ID` varchar(20) DEFAULT '''', `NAME` text, `TP` varchar(100) DEFAULT '''', `TBL` varchar(100) DEFAULT '''', `FILTER` text, PRIMARY KEY (`CLASS`,`ID`));", true);
 
 	//Updation the main table
 	if(f_start || toUpdate) {
 		// Requesting the table structure
-		dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER` FROM `classes` WHERE `CLASS`=''"+class+"'';");
+		dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER` FROM `classes` WHERE `CLASS`=''"+class+"'';", false);
 		dataTbl_items = "<tbl sel=''row'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 		for(iR = 0; iR < dataTbl.length; iR++) {
 			dataTbl_items += iR ? "<r>" : "<h>";
@@ -13598,33 +13598,33 @@ if(btClassEdit_value) {
 		if(sval == "ws_BtRelease:/itAdd") {
 			// Creation the empty data table with the default structure
 			if(dataTbl.length == 1) {
-				SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `sh_"+class+"` (`ID` INT AUTO_INCREMENT, `NAME` varchar(200) DEFAULT '''', `DSCR` text, PRIMARY KEY (`ID`));");
-				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*TITLE'','''');");
-				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*NAME'','''');");
-				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*DSCR'','''');");
+				SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `sh_"+class+"` (`ID` INT AUTO_INCREMENT, `NAME` varchar(200) DEFAULT '''', `DSCR` text, PRIMARY KEY (`ID`));", true);
+				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*TITLE'','''');", true);
+				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*NAME'','''');", true);
+				SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`) VALUES (''"+class+"'',''*DSCR'','''');", true);
 			}
-			SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`,`TP`) VALUES (''"+class+"'',''NewItem'',''"+tr("New item")+"'',''varchar(100)'');");
-			SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` ADD `SP_NewItem` varchar(100) DEFAULT '''';");
+			SYS.BD.nodeAt(db,".").SQLReq("INSERT INTO `classes` (`CLASS`,`ID`,`NAME`,`TP`) VALUES (''"+class+"'',''NewItem'',''"+tr("New item")+"'',''varchar(100)'');", true);
+			SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` ADD `SP_NewItem` varchar(100) DEFAULT '''';", true);
 			toUpdate = true; toCalcCycles = 1;
 		}
 		else if(sval == "dlg_Apply:/itDel" && dataTbl_value[0] != "*") {
 		//else if(sval == "ws_BtRelease:/itDel") {
-			SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `classes` WHERE `ID`=''"+dataTbl_value+"'' AND `CLASS`=''"+class+"'';");
-			if(dataTbl.length > 2)	SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` DROP `SP_"+dataTbl_value+"`;");
-			else SYS.BD.nodeAt(db,".").SQLReq("DROP TABLE `sh_"+class+"`;");
+			SYS.BD.nodeAt(db,".").SQLReq("DELETE FROM `classes` WHERE `ID`=''"+dataTbl_value+"'' AND `CLASS`=''"+class+"'';", true);
+			if(dataTbl.length > 2)	SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` DROP `SP_"+dataTbl_value+"`;", true);
+			else SYS.BD.nodeAt(db,".").SQLReq("DROP TABLE `sh_"+class+"`;", true);
 			toUpdate = true; toCalcCycles = 1;
 		}
 		else if(sval.indexOf("ws_TableEdit") == 0) {
 			col = sval.parse(0,"_",13).toInt(); row = sval.parse(1,"_",13).toInt();
 			colID = dataTbl[0][col];
 			fldID = dataTbl[row+1][0];
-			if(!SYS.BD.nodeAt(db,".").SQLReq("UPDATE `classes` SET `"+colID+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `CLASS`=''"+class+"'' AND `ID`=''"+fldID+"'';").err.length) {
+			if(!SYS.BD.nodeAt(db,".").SQLReq("UPDATE `classes` SET `"+colID+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `CLASS`=''"+class+"'' AND `ID`=''"+fldID+"'';",true).err.length) {
 				if(colID == "ID"  && fldID[0] != "*") {
-					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` CHANGE `SP_"+fldID+"` `SP_"+dataTbl_set+"` "+dataTbl[row+1][2].parse(0,":")+";");
-					toCalcCycles = 1;	//2000/this.ownerSess().period();
+					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` CHANGE `SP_"+fldID+"` `SP_"+dataTbl_set+"` "+dataTbl[row+1][2].parse(0,":")+";",true);
+					toCalcCycles = 1; //2000/this.ownerSess().period();
 				}
 				else if(colID == "TP" && (fldID[0] != "*" || fldID == "*NAME"))
-					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `"+(fldID[0]=="*"?fldID.slice(1):"SP_"+fldID)+"` "+dataTbl_set.parse(0,":")+";");
+					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `"+(fldID[0]=="*"?fldID.slice(1):"SP_"+fldID)+"` "+dataTbl_set.parse(0,":")+";",true);
 			}
 			toUpdate = true;
 		}
@@ -15540,7 +15540,11 @@ Ewghs9nM8zzf98uyfH9/b7Va/X6fMUYIQcQmADDGWq2WEIJSCgBbW1uMsV6vh4hCCMaYXuGcr4dY
 r3S73bIspZT6eF1najqdjlJKCAEAUkpEzPN8HdWZjuOEYcg514eHEKLZbH5O0HUAoCzLsiwJIZ+L
 AMCvH+Lvfky/AitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGitgGphO
 p6vVynQb/8hsNvsDB/ItKMoqpeIAAAAASUVORK5CYII=','/wlb_doc/wdg_docDin',0,'JavaLikeCalc.JavaScript
-if(f_start){ doc_time = SYS.time(); doc_bTime = doc_time-24*3600; }','','',-1,'name;dscr;',1635772940);
+if(f_start) {
+	doc_time = SYS.time();
+	doc_bTime = doc_time-24*3600;
+	doc_tmpl = doc_tmpl.replace("@@messCat@@", messCat);
+}','','',-1,'name;dscr;',1670951600);
 INSERT INTO wlb_doc VALUES('doc','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAG
 d0lEQVRYhe1Y227TSheeGY9jJ3bsOHUTWkJpSlpOUspJQgJxwQUSb8AL8DI8D9wScYVEhHpBaRCI
 klBRUsd2nTSODxN75r8YKX9ouyvYu9rRlvJdRWtmrVnfrNM48NWrV2tra+C/iZ2dHVytVq9fvw4A
@@ -21024,19 +21028,20 @@ INSERT INTO wlb_Main_io VALUES('grpGraph10','name','Graphics group 10',41,'','',
 INSERT INTO wlb_Main_io VALUES('grpGraph10','dscr','The element is provided for simultaneous observation of trends and control the parameters in the signal object, includes both instances of the widget "Graphics group element (ElViewGraph)" of each parameter (up to 10) and the widget "Diagram" to monitor the parameters'' trends and browsing history, and also the scroll bar for fast navigation on allowed history of selected parameters for show.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.5.0
+Version: 1.5.1
 License: GPLv2',32,'','','','Елемент слугує для одночасного спостереження трендів та управління параметрами у об''єкті сигналізації, включає у себе як екземпляри віджету "Елемент групи графіків (ElViewGraph)" кожного параметру (до 10), так і віджет "Діаграма" для спостереження за графіками параметрів та перегляду історії, а також горизонтальну стрічку гортання для швидкої навігації за доступною історією обраних для відображення параметрів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.5.0
+Версія: 1.5.1
 Ліцензія: GPLv2','','Элемент служит для одновременного наблюдения трендов и управления параметрами в объекте сигнализации, включает в себя как экземпляры виджета "Элемент группы графиков (ElViewGraph)" каждого параметра (до 10), так и виджет "Диаграмма" для наблюдения за графиками параметров и просмотра истории, а также горизонтальную полосу прокрутки для быстрой навигации по доступной истории выбранных для отображения параметров.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.5.0
+Версия: 1.5.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomW','1160',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','geomH','600',32,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('grpGraph10','evProc','ws_FocusIn:/trnd1:open:/pg_control/pg_grph_panel',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('grpGraph10','evProc','ws_FocusIn:/trnd1:open:/pg_control/pg_grph_panel
+key_mousePresLeft:/trnd1:open:/pg_control/pg_grph_panel',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','backColor','#5A5A5A',96,'backColorFrame','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','bordWidth','1',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grpGraph10','bordColor','black',32,'','','','','','','','','','');
@@ -22969,7 +22974,7 @@ but sometimes there is a need to provide this capability from the user interface
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Vinnica Poultry Farm
-Version: 1.6.1
+Version: 1.6.2
 License: GPLv2',32,'','','','Елемент-кадр слугує для надання можливості контролю користувачів з інтерфейсу самого користувача.
 Тобто, типово ця функція надається програмісту SCADA на рівні конфігурації підсистеми "Безпека",
 але інколи виникає потреба надання такої можливості з інтерфейсу користувача та із низкою обмежень на контрольованих користувачів та їх групи, що цей кадр здійснює та загалом надає функції:
@@ -22979,7 +22984,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Вінницька Птахофабрика
-Версія: 1.6.1
+Версія: 1.6.2
 Ліцензія: GPLv2','','Элемент-кадр служит для предоставления возможности контроля пользователей из интерфейса самого пользователя.
 Т.е., типично эта функция предоставляется программисту SCADA на уровне конфигурации подсистемы "Безопасность",
 но иногда возникает необходимость предоставления такой возможности из интерфейса пользователя и с рядом ограничений на контролируемых пользователей и их группы, что этот кадр осуществляет и в целом предоставляет функции:
@@ -22989,7 +22994,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для над�
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Винницкая Птицефабрика
-Версия: 1.6.1
+Версия: 1.6.2
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsAct','dscr','The element serves to dynamically display the active violations in a tabular form and to highlight them in color and text. The violations are obtained from the buffer of current-active violations of OpenSCADA. In fact, the element implements the primitive "Protocol" functions for violations and extension opportunities.
 
@@ -23294,19 +23299,19 @@ Also this element generates alarms on the corresponding parameter settings.
 The element commonly uses and represents the representative structure of the "Analog signal" DAQ-template.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.3.0
+Version: 1.3.1
 License: GPLv2',32,'','','','Елемент слугує для відображення поточного значения аналогового параметру та режиму регулятору, якщо параметр є таким.
 Також цей елемент генерує сигналізації (alarms) за відповідними уставкам параметру.
 Елемент загалом використовує та представляє представницьку структуру DAQ-шаблону "Аналоговий сигнал".
 
 Автор: Роман Савоченко <roman@oscada,org>
-Версія: 1.3.0
+Версія: 1.3.1
 Ліцензія: GPLv2','','Элемент служит для отображения текущего значения аналогового параметра и режима регулятора, если параметр является таковым.
 Также этот элемент генерирует сигнализации (alarms) по соответствующим уставкам параметра.
 Элемент в целом использует и представляет представительскую структуру DAQ-шаблона "Аналоговый сигнал".
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.3.0
+Версия: 1.3.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('anShow1','dscr','The element is used to display the current value of the analog parameter and a short prefix of the measured value type.
 Also this element generates alarms on the corresponding parameter settings.
@@ -23729,7 +23734,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.2
+Version: 1.2.3
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23743,7 +23748,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.2
+Версия: 1.2.3
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
@@ -24466,6 +24471,7 @@ INSERT INTO wlb_doc_uio VALUES('docAlarmsRep','sourceCache','Source cache',13107
 INSERT INTO wlb_doc_uio VALUES('docUsersSet','sourceCache','Source cache',131078,'<TVarObj>
 </TVarObj>
 ',0,'','','doc','Кеш джерел','','','Кеш источников','','','','','');
+INSERT INTO wlb_doc_uio VALUES('docUsersSet','messCat','Message category',131077,'2:/(^|.*:)OP*/',8,'','','','Категорія повідомлень','','','Категория сообщений','','','','','Категорије порука');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_mnEls_uio VALUES('Level','var','Value',131076,'<EVAL>|',10,'Parameter|var','','','Значення','','','Значение','','','','','Вредност');
 INSERT INTO wlb_mnEls_uio VALUES('Level','min','Minimum',131076,'0|',10,'Parameter|min','','','Мінімум','','','Минимум','','','','','Минимум');
@@ -28403,7 +28409,7 @@ INSERT INTO wlb_doc_io VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeC
 	<TH>Date</TH><TH>Time</TH><TH>User</TH><TH>Source</TH><TH>Description</TH><TH>Old value</TH><TH>New value</TH>
      <?dp return "<TH>"+tr("Date")+"</TH><TH>"+tr("Time")+"</TH><TH>"+tr("User")+"</TH><TH>"+tr("Source")+"</TH><TH>"+tr("Description")+"</TH><TH>"+tr("Old value")+"</TH><TH>"+tr("New value")+"</TH>"; ?>
   </TR>
-  <TR docAMess="2:/(^|.*:)OP*/" docRevers="1">
+  <TR docAMess="@@messCat@@" docRevers="1">
 	<?dp
 		user = "";
 		if((tVl=mCat.match("^OP:([^:]*):")).length || (tVl=mCat.match("^OP[^:]+:[^:]+:(.*)")).length || (tVl=mCat.match("(.*):OP[^:]+:[^:]+:(.*)")).length)
@@ -28436,7 +28442,7 @@ INSERT INTO wlb_doc_io VALUES('docUsersSet','tmpl','<body docProcLang="JavaLikeC
 	?>
   </TR>
 </TABLE>
-</body>',32,'','','doc','','','','','','','');
+</body>',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','process','0',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','process','0',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docAlarmsRep','style','TABLE.data { border-collapse: collapse; }
@@ -28917,11 +28923,11 @@ License: GPLv2',32,'','','','Документ слугує для генерац
 INSERT INTO wlb_doc_io VALUES('docUsersSet','dscr','The document is provided for generating a report of the user interruptions. The document is the dynamic type, so you can specify the data time and depth. The document commonly uses and represents the messages structure "User-operator actions". As a data source of this document is the message archive.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.7.0
+Version: 1.8.0
 License: GPLv2',32,'','','','Документ слугує для генерації звіту з втручань користувача. Документ динамічного типу, відтак ви можете визначити час та глибину даних. Документ загалом використовує та представляє структуру повідомлень "Дії користувача-оператора". У якості джерела даних документу виступає архів повідомлень.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версія: 1.7.0
+Версія: 1.8.0
 Ліцензія: GPLv2','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','doc','',40,'','','doc','','','','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepMonth','doc','',40,'','','doc','','','','','','','');

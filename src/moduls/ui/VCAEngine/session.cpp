@@ -1863,7 +1863,15 @@ string SessWdg::calcProgStors( const string &attr ){ return parent().freeStat() 
 int SessWdg::calcPer( ) const
 {
     int vRez = (mCalcPer != PerVal_SessDef) ? mCalcPer : (parent().freeStat() ? PerVal_Sess : parent().at().calcPer());
-    if(vRez == PerVal_Parent) { SessWdg *sW = ownerSessWdg(true); if(sW) vRez = sW->calcPer(); }
+    if(vRez == PerVal_Parent) { SessWdg *sW = ownerSessWdg(true); if(sW) vRez = sW->calcPerOrig(); }
+
+    return vRez;
+}
+
+int SessWdg::calcPerOrig( ) const
+{
+    int vRez = parent().freeStat() ? PerVal_Sess : parent().at().calcPer();
+    if(vRez == PerVal_Parent) { SessWdg *sW = ownerSessWdg(true); if(sW) vRez = sW->calcPerOrig(); }
 
     return vRez;
 }

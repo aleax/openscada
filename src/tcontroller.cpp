@@ -512,11 +512,15 @@ void TController::cntrCmdProc( XMLNode *opt )
     //Service commands process
     if(a_path == "/serv/mess") {
 	if(ctrChkNode(opt,"get")) {
+	    if(catsPat().empty()) return;
 	    vector<TMess::SRec> rez;
-	    time_t	tm	= strtoul(opt->attr("tm").c_str(), 0, 10);
+	    time_t tm	= strtoul(opt->attr("tm").c_str(), 0, 10);
 	    //-1 for waranty all curent date get without doubles and losses
-	    if(!tm)	{ tm = redntUse(TController::Any) ? SYS->archive().at().rdTm() : (time_t)(TSYS::curTime()/1000000) - 1; opt->setAttr("tm", i2s(tm)); }
-	    time_t	tm_grnd	= strtoul(opt->attr("tm_grnd").c_str(), 0, 10);
+	    if(!tm) {
+		tm = redntUse(TController::Any) ? SYS->archive().at().rdTm() : (time_t)(TSYS::curTime()/1000000) - 1;
+		opt->setAttr("tm", i2s(tm));
+	    }
+	    time_t tm_grnd = strtoul(opt->attr("tm_grnd").c_str(), 0, 10);
 	    int	lev	= s2i(opt->attr("lev"));
 	    SYS->archive().at().messGet(tm_grnd, tm, rez, "/("+catsPat()+")/", lev, "");
 	    for(unsigned iR = 0; iR < rez.size(); iR++)

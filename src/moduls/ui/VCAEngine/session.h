@@ -263,6 +263,7 @@ class SessWdg : public Widget, public TValFunc
 	string	calcProg( ) const;
 	string	calcProgStors( const string &attr = "" );
 	int	calcPer( ) const;
+	int	calcPerOrig( ) const;
 	bool	process( )	{ return mProc; }		//Process stat
 
 	void setCalcPer( int vl )	{ mCalcPer = vl; }

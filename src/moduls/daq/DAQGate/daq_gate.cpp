@@ -31,7 +31,7 @@
 #define MOD_NAME	trS("Data sources gate")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.10.2"
+#define MOD_VER		"2.11.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Allows to locate data sources of the remote OpenSCADA stations to local ones.")
 #define LICENSE		"GPL2"
@@ -121,7 +121,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     mSched(cfg("SCHEDULE")), mStat(cfg("STATIONS")), mMessLev(cfg("GATH_MESS_LEV")), mRestDtTm(cfg("TM_REST_DT").getRd()),
     mSync(cfg("SYNCPER").getId()), mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     mAsynchWr(cfg("WR_ASYNCH").getBd()), mAllowToDelPrmAttr(cfg("ALLOW_DEL_PA").getBd()), mPlaceCntrToVirtPrm(cfg("CNTR_TO_VPRM").getBd()),
-    prcSt(false), callSt(false), syncSt(false), syncForce(false), endrunReq(false), alSt(-1), mPer(1e9)
+    prcSt(false), callSt(false), syncSt(false), syncForce(false), endrunReq(false), curPat(dataRes()), mPer(1e9)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
@@ -148,7 +148,7 @@ string TMdContr::getStatus( )
 	bool isWork = false;
 	for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st)
 	    if(st->second.cntr > -1)
-		val += TSYS::strMess(_("Error '%s', restoring in %.3g s."), st->first.c_str(), st->second.cntr);
+		val += TSYS::strMess(_("Station '%s' - ERROR, restoring in %.3g s."), st->first.c_str(), st->second.cntr);
 	    else {
 		int inWrBuf = 0;
 		st->second.aWrRes.lock();
@@ -156,7 +156,7 @@ string TMdContr::getStatus( )
 		    inWrBuf += iPrm->second.size();
 		st->second.aWrRes.unlock();
 
-		val += TSYS::strMess(_("Requests to '%s' - %.6g; "), st->first.c_str(), -st->second.cntr);
+		val += TSYS::strMess(_("Station '%s' - requests %.6g; "), st->first.c_str(), -st->second.cntr);
 		val += TSYS::strMess(_("read %g values, %g archive's, %g messages; "), st->second.numR, st->second.numRA, st->second.numRM);
 		val += TSYS::strMess(_("wrote %g values, %g messages, in the buffer %d. "), st->second.numW, st->second.numWM, inWrBuf);
 		isWork = true;
@@ -212,7 +212,7 @@ void TMdContr::sync( bool onlyPrmLs )
 
     //Remote station scaning. Controllers and parameters scaning
     for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end() && toSync; ++st)
-	for(int cpOff = 0; (cpEl=TSYS::strParse(cfg("CNTRPRM").getS(),0,"\n",&cpOff)).size(); )
+	for(int cpOff = 0; (cpEl=TSYS::strLine(cfg("CNTRPRM").getS(),0,&cpOff)).size() || cpOff < cfg("CNTRPRM").getS().size(); )
 	    try {
 		// Parse parameters list
 		int pOff = 0;
@@ -382,7 +382,7 @@ void TMdContr::sync( bool onlyPrmLs )
 	    // Empty is mostly virtual parameters
 	    isEmpty = (!curP.at().prmAddr().size() || !TSYS::pathLev(curP.at().prmAddr(),1).size());
 
-	    // Checking of the parameter missing on correspond station
+	    // Checking of the parameter missing on the correspond station
 	    for(map<string,StHd>::iterator st = mStatWork.begin(); !isEmpty && st != mStatWork.end(); ++st) {
 		if(st->second.cntr >= 0) continue;	//!!!! No connection with that station now
 		toRemove = true;
@@ -460,14 +460,22 @@ void TMdContr::disable_( )
 {
     pHd.clear();
     mStatWork.clear();
-    alSt = -1;
 }
 
 void TMdContr::start_( )
 {
     if(prcSt) return;
 
-    //Clearing station parameters
+    //Controllers initialisation for messaging
+    map<string, bool> cntrLstMA;
+    string cpEl, curPat_, daqTp, cntrId;
+    for(int cpOff = 0; (cpEl=TSYS::strLine(cfg("CNTRPRM").getS(),0,&cpOff)).size() || cpOff < cfg("CNTRPRM").getS().size(); ) {
+	daqTp  = TSYS::strParse(cpEl, 0, ".");
+	cntrId = TSYS::strParse(cpEl, 1, ".");
+	if(daqTp.size() && cntrId.size()) cntrLstMA[daqTp+"/"+cntrId] = true;
+    }
+
+    //Clearing the station parameters and initiation some
     for(map<string,StHd>::iterator st = mStatWork.begin(); st != mStatWork.end(); ++st) {
 	st->second.cntr = -1;
 	st->second.numR = st->second.numRA = st->second.numW = st->second.numRM = st->second.numWM = 0;
@@ -476,7 +484,13 @@ void TMdContr::start_( )
 	st->second.aWrRes.lock();
 	st->second.asynchWrs.clear();
 	st->second.aWrRes.unlock();
+
+	// Updating current pattern of the messages
+	for(map<string,bool>::iterator iC = cntrLstMA.begin(); iC != cntrLstMA.end(); ++iC)
+	    curPat_ += (curPat_.size()?"|^":"^")+st->first+":.*[a-zA-Z]{2}"+
+			TSYS::pathLev(iC->first,0)+":"+TSYS::pathLev(iC->first,1)+"(\\.|$)";
     }
+    curPat = curPat_;
 
     //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -491,7 +505,6 @@ void TMdContr::stop_( )
 
     //Connection alarm clear
     alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("STOP")), TMess::Info);
-    alSt = -1;
 }
 
 bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
@@ -528,7 +541,8 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
     bool firstCall = true;
 
-    string stLs = cntr.mStat;
+    string stLs = cntr.mStat, scntr;
+    int8_t alSt = -1;
 
     for(unsigned int itCnt = 0; !cntr.endrunReq; itCnt++) {
 	if(cntr.redntUse()) {
@@ -644,8 +658,8 @@ void *TMdContr::Task( void *icntr )
 		    }
 
 		    if(stO.cntr > 0) continue;
+
 		    map<string, bool> cntrLstMA;
-		    string scntr;
 
 		    //Put attributes requests
 		    for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
@@ -653,7 +667,7 @@ void *TMdContr::Task( void *icntr )
 			if(prm.isPrcOK) continue;
 			for(int cOff = 0; (scntr=TSYS::strParse(prm.stats(),0,";",&cOff)).size(); ) {
 			    if(scntr != st->first) continue;
-			    string aMod	= TSYS::pathLev(prm.prmAddr(), 0);
+			    string aMod = TSYS::pathLev(prm.prmAddr(), 0);
 			    string aCntr = TSYS::pathLev(prm.prmAddr(), 1);
 			    cntrLstMA[aMod+"/"+aCntr] = true;
 
@@ -797,6 +811,18 @@ void *TMdContr::Task( void *icntr )
 		    }
 		}
 
+		//Connection status
+		if(someLive && alSt != 0)
+		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
+		else if(!someLive && alSt != 1) {
+		    string errM;
+		    for(map<string,StHd>::iterator st = cntr.mStatWork.begin(); st != cntr.mStatWork.end(); ++st)
+			if(st->second.cntr > 0)
+			    errM += (errM.size()?"; ":"") + TSYS::strMess(_("Station '%s' - %s"),st->first.c_str(),st->second.err.getVal().c_str());
+		    cntr.alarmSet(TSYS::strMess(_("Connection to the data source: %s."),TRegExp(":","g").replace(errM,"=").c_str()));
+		}
+		alSt = !someLive;
+
 		//Mark not processed parameters as EVAL
 		for(unsigned iP = 0; iP < cntr.pHd.size(); iP++) {
 		    TMdPrm &prm = cntr.pHd[iP].at();
@@ -830,16 +856,7 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-string TMdContr::catsPat( )
-{
-    string curPat = TController::catsPat();
-
-    string statV, stLs = mStat;
-    for(int stOff = 0; (statV=TSYS::strParse(stLs,0,";",&stOff)).size(); )
-	curPat += "|^"+statV+":";
-
-    return curPat;
-}
+string TMdContr::catsPat( ) { return /*TController::catsPat() + "|" +*/curPat.getVal(); }
 
 void TMdContr::messSet( const string &mess, int lev, const string &type2Code, const string &prm, const string &cat )
 {
@@ -893,22 +910,15 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool noConnect )
 	    try {
 		node.setAttr("conTm", enableStat()?"":"1000");	//Set one second timeout to disabled controller for start procedure speed up.
 		int rez = SYS->transport().at().cntrIfCmd(node, MOD_ID+id());
-		if(alSt != 0) {
-		    alSt = 0;
-		    alarmSet(TSYS::strMess(_("Connection to the data source: %s."),_("OK")), TMess::Info);
-		}
 		st->second.cntr -= 1;
 		return rez;
 	    } catch(TError &err) {
-		if(alSt <= 0) {
-		    alSt = 1;
-		    alarmSet(TSYS::strMess(_("Connection to the data source '%s': %s."),
-						st->first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
-		}
+		st->second.err = err.mess;
 		if(callSt) st->second.cntr = mRestTm;
 		throw;
 	    }
 	}
+
     if(!stPresent) node.setAttr("err", i2s(TError::Tr_UnknownHost)+":"+TSYS::strMess(_("Station missed '%s'."),reqStat.c_str()));
 
     return s2i(node.attr("err"));

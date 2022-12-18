@@ -197,6 +197,7 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 	stSel->addItem(_("<Local>"), ".");
 	vector<TTransportS::ExtHost> lst;
 	SYS->transport().at().extHostList("*", lst, false, -1, lang);
+	sort(lst.begin(), lst.end(), TVision::compareHosts);
 	for(unsigned iLs = 0; iLs < lst.size(); iLs++)
 	    stSel->addItem(lst[iLs].name.c_str(), lst[iLs].id.c_str());
 	edLay->addWidget(stSel, 0, 1);

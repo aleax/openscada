@@ -575,7 +575,7 @@ string LWidget::getStatus( )
     if(calcProg().size()) {
 	rez += _("Calculating procedure - ");
 	if(!parent().freeStat() && parent().at().calcProg().size() && calcProg() != parent().at().calcProg())
-	    rez += _("!!redefined!!");
+	    rez += _("REDEFINED");
 	else if(!parent().freeStat() && parent().at().calcProg().size())
 	    rez += _("inherited");
 	else rez += _("presented");

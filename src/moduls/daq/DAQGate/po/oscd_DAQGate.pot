@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 19:45+0300\n"
+"POT-Creation-Date: 2022-12-18 10:47+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -96,11 +96,11 @@ msgid "Spent time %s[%s]. "
 msgstr ""
 
 #, c-format
-msgid "Error '%s', restoring in %.3g s."
+msgid "Station '%s' - ERROR, restoring in %.3g s."
 msgstr ""
 
 #, c-format
-msgid "Requests to '%s' - %.6g; "
+msgid "Station '%s' - requests %.6g; "
 msgstr ""
 
 #, c-format
@@ -126,14 +126,14 @@ msgstr ""
 msgid "STOP"
 msgstr ""
 
-msgid "10:Data not available."
-msgstr ""
-
 msgid "OK"
 msgstr ""
 
 #, c-format
-msgid "Connection to the data source '%s': %s."
+msgid "Station '%s' - %s"
+msgstr ""
+
+msgid "10:Data not available."
 msgstr ""
 
 #, c-format

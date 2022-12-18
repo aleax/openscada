@@ -786,7 +786,7 @@ bool TPrmTempl::Impl::cntrCmdProc( XMLNode *opt, const string &pref )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) {
 	    int iIO = s2i(a_path.substr(8));
 	    if(func()->io(iIO)->flg()&TPrmTempl::CfgLink) {
-		string a_vl =  opt->text().find("val:") == 0 ? opt->text() : TSYS::strParse(opt->text(), 0, " ");
+		string a_vl = opt->text().find("val:") == 0 ? opt->text() : TSYS::strParse(opt->text(), 0, " ");
 		//if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
 		//	TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
 		//	TSYS::strSepParse(a_vl,2,'.') == id())

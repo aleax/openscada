@@ -103,6 +103,8 @@ class TVision : public TUI
 	// Request to OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob = false );
 
+	static bool compareHosts( const TTransportS::ExtHost &v1, const TTransportS::ExtHost &v2 );
+
 	//Attributes
 	vector<QMainWindow*>	mnWinds;
 
@@ -118,6 +120,7 @@ class TVision : public TUI
 	QMainWindow *openWindow( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
+	//Attributes
 	MtxString	mVCAStation,		//VCA station id ('.' - for local station, '*' - for selection the station)
 			mUserStart,		//No question start user
 			mUserPass;		//No quest user password

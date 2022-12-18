@@ -1,3 +1,22 @@
+2022-12-18 Roman (stable)
+- !!:FIX:LibsDB.vcaBase: wlb_doc.docUsersSet: Added of the "Message category (messCat)" configuration.
+    FIX:wlb_Main.anShow: Fixed in speeding up at alarms.
+    wlb_Main.userManager: Disabled in the periodic procesing.
+    wlb_Main.storeHouse: Switched to use the transaction for reading the changes in the first cycle.
+    wlb_Main.grpGraph10: Appended for the control panel open at the event key_mousePresLeft also.
+- FIX:DAQ: The service request "get:/serv/mess" of obtaining the data source messages of the Controller Object
+    appended of ignoring the processing for empty categories by catsPat().
+- !!!:FIX:DAQ.DAQGate: The message categories in catsPat() of obtaining the data source messages of the Controller Object
+	switched to generate own detailed rules of the regular expression from the specified controllers
+	    - to prevent very redundant messages obtaining.
+    !!:FIX: Improved-fixed in the Controller Alarm status formation for multiple stations,
+	 when ALARM it is at missing connection of all stations.
+    The controller parameter list allowed for empty rows.
+- !:UI.VCAEngine: Obtaining calcPer() switched in the sessions to obtain original-project's value from the parent at "-1".
+    "!!redefined!!" renamed to "REDEFINED".
+- UI.Vision: Added for the hosts sorting in the host selection lists.
+
+
 2022-12-02 Roman (stable)
 - FIX:Archive: TPrmTempl::Impl::lnkId() added of checking the function availability
     due to the execution context can be cleared already on busy systems.

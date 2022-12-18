@@ -159,14 +159,15 @@ class TMdContr: public TController
 	class StHd
 	{
 	    public:
-	    StHd( ) : cntr(0), numR(0), numRA(0), numW(0), numRM(0), numWM(0) { lstMess.clear(); }
+	    StHd( ) : err(dataRes), cntr(0), numR(0), numRA(0), numW(0), numRM(0), numWM(0) { lstMess.clear(); }
 
 	    float cntr;
 	    map<string, map<string,string> > asynchWrs;	//Asynchronous writings list: [prm][attr][vl]
 							//   for the ready requests that is: ["<ReadyReqs>"][req][cmd]
 	    map<string, TMess::SRec>	lstMess;
+	    MtxString err;
 
-	    ResMtx reqM, aWrRes;
+	    ResMtx reqM, aWrRes, dataRes;
 
 	    float numR, numRA, numW, numRM, numWM;
 	};
@@ -204,10 +205,11 @@ class TMdContr: public TController
 		syncSt,				//Sync start
 		syncForce,			//Force sync in the task
 		endrunReq;			//Request to stop of the Process task
-	int8_t	alSt;				//Alarm state
 	map<string, StHd> mStatWork;		//Work stations and it status
 
 	vector< AutoHD<TMdPrm> > pHd;
+
+	MtxString curPat;
 
 	double	mPer;
 };

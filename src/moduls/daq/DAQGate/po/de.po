@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-19 19:45+0300\n"
+"POT-Creation-Date: 2022-12-18 10:47+0200\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -26,7 +26,8 @@ msgstr "OpenSCADA Datenquellen"
 msgid "Roman Savochenko"
 msgstr "Roman Savotscheko"
 
-msgid "Allows to locate data sources of the remote OpenSCADA stations to local ones."
+msgid ""
+"Allows to locate data sources of the remote OpenSCADA stations to local ones."
 msgstr ""
 "Ermöglicht das Lokalisieren von Datenquellen von Remote-OpenSCADA-Stationen "
 "zu lokalen."
@@ -72,7 +73,8 @@ msgid "Allow the automatic removal of parameters and attributes"
 msgstr "Erlaube das automatische Entfernen von Parametern und Attributen"
 
 msgid "Placing different controllers to the separate virtual parameters"
-msgstr "Platzieren verschiedener Controller für die separaten virtuellen Parameter"
+msgstr ""
+"Platzieren verschiedener Controller für die separaten virtuellen Parameter"
 
 msgid "Standard"
 msgstr "Standard"
@@ -105,12 +107,12 @@ msgid "Spent time %s[%s]. "
 msgstr "Verbrauchte Zeit %s[%s]. "
 
 #, c-format
-msgid "Error '%s', restoring in %.3g s."
-msgstr "Fehler '%s', Wiederherstellung in %.3g s."
+msgid "Station '%s' - ERROR, restoring in %.3g s."
+msgstr "Station '%s' - FEHLER, Wiederherstellung in %.3g s."
 
 #, c-format
-msgid "Requests to '%s' - %.6g; "
-msgstr "Anfragen an '%s' - %.6g; "
+msgid "Station '%s' - requests %.6g; "
+msgstr "Station '%s' - Anfragen %.6g; "
 
 #, c-format
 msgid "read %g values, %g archive's, %g messages; "
@@ -122,7 +124,8 @@ msgstr "schrieb %g Werte, %g Nachrichten, in den Puffer %d. "
 
 #, c-format
 msgid "Enabling: station '%s' processing item '%s' for parameters %d."
-msgstr "Aktivieren: Stationen '%s' Verarbeitung Elemente '%s' für Parameter %d."
+msgstr ""
+"Aktivieren: Stationen '%s' Verarbeitung Elemente '%s' für Parameter %d."
 
 #, c-format
 msgid ""
@@ -139,15 +142,15 @@ msgstr "Verbindung zur Datenquelle: %s."
 msgid "STOP"
 msgstr "STOP"
 
-msgid "10:Data not available."
-msgstr "10:Keine Daten verfügbar."
-
 msgid "OK"
 msgstr "OK"
 
 #, c-format
-msgid "Connection to the data source '%s': %s."
-msgstr "Verbindung zur Datenquelle '%s': %s."
+msgid "Station '%s' - %s"
+msgstr "Station '%s' - %s"
+
+msgid "10:Data not available."
+msgstr "10:Keine Daten verfügbar."
 
 #, c-format
 msgid "Station missed '%s'."
@@ -242,3 +245,5 @@ msgstr "Konfiguration des Remote-Parameters"
 msgid "Controller is not started!"
 msgstr "Controller ist nicht gestartet!"
 
+#~ msgid "NO CONNECTION"
+#~ msgstr "KEINE VERBINDUNG"
