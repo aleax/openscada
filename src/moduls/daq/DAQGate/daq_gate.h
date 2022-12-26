@@ -165,7 +165,7 @@ class TMdContr: public TController
 	    map<string, map<string,string> > asynchWrs;	//Asynchronous writings list: [prm][attr][vl]
 							//   for the ready requests that is: ["<ReadyReqs>"][req][cmd]
 	    map<string, TMess::SRec>	lstMess;
-	    string err;
+	    string err;					//!!!! MtxString there causes for deadlocks
 
 	    ResMtx reqM, aWrRes, dataRes;
 

@@ -1,3 +1,11 @@
+2022-12-26 Roman (stable)
+- !!:UI.{WebVision,Vision}: The type "Line Edit" of the primitive FormEl adapted to store the value from the data model
+    at the element editing - for restore the true value at cancel the changes.
+- !!!:UI.WebVision: Appended of the printing implementation for the "Document" and "Main Page".
+    !!!: The type Table of the primitive FormEl added of tearing off the table header at big tables scrolling down.
+    !!: The included pages closing set after several (4) row appearings - to prevent of closing all pages at fast navigation.
+
+
 2022-12-18 Roman (stable)
 - FIX:DAQ.DAQGate: Fixed in the errors setting for StHd::err at the type MtxString, replacing by the direct data locking and "string".
 

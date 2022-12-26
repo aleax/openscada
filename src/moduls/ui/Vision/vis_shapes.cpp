@@ -811,7 +811,8 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 
     switch(shD->elType) {
 	case F_LINE_ED:
-	    if(!((LineEdit*)shD->addrWdg)->isEdited()) ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
+	    //if(!((LineEdit*)shD->addrWdg)->isEdited())
+	    ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
 	    break;
 	case F_TEXT_ED: ((TextEdit*)shD->addrWdg)->setText(val.c_str());	break;
 	case F_CHECK_BOX:

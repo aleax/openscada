@@ -649,41 +649,43 @@ void LineEdit::changed( )
 
 void LineEdit::setValue( const QString &txt )
 {
-    if(edFld) edFld->blockSignals(true);
-    switch(type()) {
-	case Text: case Password:
-	    if(txt == value())	break;
-	    ((QLineEdit*)edFld)->setText(txt);
-	    ((QLineEdit*)edFld)->setCursorPosition(0);
-	    break;
-	case Integer:
-	    ((QSpinBox*)edFld)->setValue(txt.toInt());
-	    break;
-	case Real:
-	    ((QDoubleSpinBox*)edFld)->setValue(txt.toDouble());
-	    break;
-	case Time: {
-	    int secs = txt.toInt();
-	    ((QTimeEdit*)edFld)->setTime(QTime(secs/3600,(secs/60)%60,secs%60)/*.addSecs(txt.toInt())*/);
-	    break;
-	}
-	case Date: case DateTime:
-	    if(((QDateTimeEdit*)edFld)->calendarWidget() && ((QDateTimeEdit*)edFld)->calendarWidget()->isVisible()) break;
-	    ((QDateTimeEdit*)edFld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
-	    break;
-	case Combo:
-	    if(((QComboBox*)edFld)->findText(txt) < 0) ((QComboBox*)edFld)->addItem(txt);
-	    if(txt != value()) {
-		((QComboBox*)edFld)->setEditText(txt);
-		((QComboBox*)edFld)->setCurrentIndex(((QComboBox*)edFld)->findText(txt));
+    if(!isEdited()) {
+	if(edFld) edFld->blockSignals(true);
+	switch(type()) {
+	    case Text: case Password:
+		if(txt == value())	break;
+		((QLineEdit*)edFld)->setText(txt);
+		((QLineEdit*)edFld)->setCursorPosition(0);
+		break;
+	    case Integer:
+		((QSpinBox*)edFld)->setValue(txt.toInt());
+		break;
+	    case Real:
+		((QDoubleSpinBox*)edFld)->setValue(txt.toDouble());
+		break;
+	    case Time: {
+		int secs = txt.toInt();
+		((QTimeEdit*)edFld)->setTime(QTime(secs/3600,(secs/60)%60,secs%60)/*.addSecs(txt.toInt())*/);
+		break;
 	    }
-	    break;
+	    case Date: case DateTime:
+		if(((QDateTimeEdit*)edFld)->calendarWidget() && ((QDateTimeEdit*)edFld)->calendarWidget()->isVisible()) break;
+		((QDateTimeEdit*)edFld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
+		break;
+	    case Combo:
+		if(((QComboBox*)edFld)->findText(txt) < 0) ((QComboBox*)edFld)->addItem(txt);
+		if(txt != value()) {
+		    ((QComboBox*)edFld)->setEditText(txt);
+		    ((QComboBox*)edFld)->setCurrentIndex(((QComboBox*)edFld)->findText(txt));
+		}
+		break;
+	}
+	if(edFld) edFld->blockSignals(false);
     }
-    if(edFld) edFld->blockSignals(false);
 
     m_val = txt;
 
-    if(btFld) viewApplyBt(false);
+    //if(btFld) viewApplyBt(false);
 }
 
 void LineEdit::setCfg( const QString &cfg )
@@ -792,7 +794,9 @@ void LineEdit::applySlot( )
 
 void LineEdit::cancelSlot( )
 {
-    mIsEdited = false;
+    viewApplyBt(false);
+    //mIsEdited = false;
+
     if(mPrev) {
 	setValue(m_val);
 	emit cancel();

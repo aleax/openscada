@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-28 23:46+0200\n"
+"POT-Creation-Date: 2022-12-23 19:45+0200\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -196,8 +196,12 @@ msgstr "Уровень нарушения: %1"
 msgid "Notificator %1"
 msgstr "Уведомитель %1"
 
-msgid "Field to call of exporting some data."
+msgid "Field for printing and exporting data."
 msgstr ""
+
+#, fuzzy
+msgid "Main Page"
+msgstr "Страница"
 
 msgid "Document %1"
 msgstr ""
