@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1674,13 +1674,13 @@ void TTable::fieldSQLSet( TConfig &cfg )
 	    sval = getSQLVal(u_cfg);
 
 	    // No translation
-	    if(!hasTr || u_cfg.fld().type() != TFld::String || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
+	    if(!hasTr || u_cfg.fld().type() != TFld::String || !(u_cfg.fld().flg()&TFld::TransltText) || (cf_el[iEl].size() > 3 && cf_el[iEl][2] == '#'))
 		ls += (ls.size()?", \"":"\"") + TSYS::strEncode(cf_el[iEl],TSYS::SQL,"\"") + "\"=" + sval;
 	    else {
 		string svalRAW = u_cfg.getS(), toLang = Mess->langCode();
 
 		// Translation
-		bool isTransl = u_cfg.fld().flg()&TFld::TransltText, isDynSet = false;
+		bool isTransl = true /*u_cfg.fld().flg()&TFld::TransltText*/, isDynSet = false;
 		//  ... system prestored
 		bool isSysPreStor = (isTransl && TSYS::strParse(svalRAW,0,string(1,0)) != svalRAW && TSYS::strParse(svalRAW,2,string(1,0)).empty());
 		if(isSysPreStor) {

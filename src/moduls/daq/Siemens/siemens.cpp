@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.Siemens file: siemens.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@
 #define MOD_NAME	trS("Siemens DAQ and Beckhoff")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"4.4.12"
+#define MOD_VER		"4.4.13"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides for support of data sources of Siemens PLCs by means of Hilscher CIF cards (using the MPI protocol)\
  and LibnoDave library (or the own implementation) for the rest. Also there is supported the data sources of the firm Beckhoff for the\
@@ -1842,7 +1842,7 @@ void TMdPrm::loadDATA( bool incl )
 		lCtx->addLinksAttrs(&pEl);
 
 		// Load IO at enabling
-		loadIO(true);
+		loadIO();
 
 		// Init links
 		lCtx->chkLnkNeed = lCtx->initLnks(/*true*/);	//!!!! Do not reconnect but that can be done in loadIO() early
@@ -1910,7 +1910,7 @@ void TMdPrm::load_( )
     loadIO();
 }
 
-void TMdPrm::loadIO( bool force )
+void TMdPrm::loadIO( )
 {
     if(!enableStat() || !isLogic() || !lCtx || !lCtx->func()) return;
 

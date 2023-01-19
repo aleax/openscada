@@ -31,7 +31,7 @@
 </p>
 <ul><li> бути правовласником або автором коду цього модуля та розповсюджувати його за вільною ліцензією, віддаючи перевагу GPL;</li>
 <li> приготувати та зберігати код модуля як архів окремої теки модуля будь якої з підсистем OpenSCADA із вимогам до вмісту:
-<ul><li> вихідні тексти модуля на початку кожного файлу мають включати коректну інформацію прав копіювання, бути написаними та відформатованими згідно до якоїсь системи де перевагу треба надавати <a href="../en/API.html#CodeDesign" title="Special:MyLanguage/Documents/API">стилю форматуванню основних модулів OpenSCADA</a>;</li>
+<ul><li> вихідні тексти модуля на початку кожного файлу мають включати коректну інформацію прав копіювання, бути написаними та відформатованими згідно до якоїсь системи де перевагу треба надавати <a href="API.html#CodeDesign" title="Special:MyLanguage/Documents/API">стилю форматуванню основних модулів OpenSCADA</a>;</li>
 <li> файли локалізації модулів також мають бути коректними, актуальними та відповідно відформатованими.</li></ul></li>
 <li> написати коротку інформаційну сторінку модуля для розташування її на <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules" title="Special:MyLanguage/Modules">OpenSCADA Wiki</a> таким-же чином, як і інші модулів поряд;</li>
 <li> для розташування цього модуля написати прямий запит у темі форуму "<a class="external text" href="http://oscada.org/ua/forum/topics/rozrobka_openscada/" rel="nofollow noreferrer noopener" target="_blank">Розробка OpenSCADA</a>", включаючи доказ працездатності від розробника OpenSCADA або коротке демонстраційним відео.</li></ul>
@@ -182,7 +182,7 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <dd>7. Тепер новий модуль можна скласти, після формування складальної системи:
 <dl><dd> <span style="border: solid gray 1px; padding: 1px; font-family: monospace; font-size: 1.2em;">autoreconf -if; ./configure; make</span></dd></dl></dd></dl>
 <h2><span class="mw-headline" id="API_.D0.BC.D0.BE.D0.B4.D1.83.D0.BB.D1.8F"><span class="mw-headline-number">2</span> API модуля</span></h2>
-<p>API OpenSCADA для розробника OpenSCADA та модулів до неї описано у відповідному документі "<a href="../en/API.html" title="Special:MyLanguage/Documents/API">API OpenSCADA</a>", який завжди має бути під рукою при розробці для OpenSCADA. В цьому ж документі наголос здійснено на детальному роз'яснені основних моментів модульного API.
+<p>API OpenSCADA для розробника OpenSCADA та модулів до неї описано у відповідному документі "<a href="API.html" title="Special:MyLanguage/Documents/API">API OpenSCADA</a>", який завжди має бути під рукою при розробці для OpenSCADA. В цьому ж документі наголос здійснено на детальному роз'яснені основних моментів модульного API.
 </p><p>Модулі в OpenSCADA реалізуються як поділювані бібліотеки та одна така бібліотека може містити багато модулів підсистем OpenSCADA, фактично виступаючи як контейнер. Такі контейнери також можуть бути включені-вбудовані до Бібліотеки Ядра OpenSCADA якщо ви будуєте дуже компактні рішення.
 </p><p>Першим кроком підключення поділюваних бібліотек (SO — Поділювані Об'єкти) є підключення функцій ініціалізації. Такі функції мають бути визначені як звичайні "C" функції для запобігання спотворенню їх назв. Зазвичай це здійснюється наступним чином:
 </p>
@@ -216,8 +216,8 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 </p>
 <ul><li> <i>TModule::SAt module( int n_mod )</i>, <i>TModule::SAt {modTp}_{modNm}_module( int n_mod )</i> — використовуються для сканування переліку та інформації з усіх модулів у бібліотеці. Перша функція використовується під час реалізації модулів у зовнішній поділюваній бібліотеці, а друга під час включення-вбудування їх до ядра OpenSCADA, де <i>modTp</i> відповідає типу модуля, а <i>modNm</i> його ІД.</li>
 <li> <i>TModule *attach( const TModule::SAt &amp;AtMod, const string &amp;source )</i>, <i>TModule *{modTp}_{modNm}_attach( const TModule::SAt &amp;AtMod, const string &amp;source )</i> — використовується для безпосереднього підключення-відкриття обраного модуля шляхом створення кореневого об'єкта модуля успадкованого від <b>TModule</b>. Перша функція використовується під час реалізації модулів у зовнішній поділюваній бібліотеці, а друга під час включення-вбудування їх до ядра OpenSCADA, де <i>modTp</i> та <i>modNm</i> відповідають попередній функції.</li></ul>
-<p>Загальним для всіх модулів є наслідування кореневого об'єкта-класу модуля від класу модульної підсистеми <a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a>, що вказує на наявність спільної частини інтерфейсу модуля який розглянемо далі. Для отримання уявлення про архітектуру модулів у контексті загальної архітектури OpenSCADA наполегливо рекомендується мати перед очима <a class="external" href="http://oscada.org/wiki/File:API_uml_classdep.png" title="File:API uml classdep.png">загальну діаграму класів OpenSCADA</a>!
-</p><p>Всі інтерфейсні об'єкти модулів успадковують клас вузла <a href="../en/API.html#TCntrNode" title="Special:MyLanguage/Documents/API">TCntrNode</a>, який надає механізм <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління</a>. Одним із завдань цього механізму є надання інтерфейсу конфігурації об'єкту у будь якому конфігураторі OpenSCADA.
+<p>Загальним для всіх модулів є наслідування кореневого об'єкта-класу модуля від класу модульної підсистеми <a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a>, що вказує на наявність спільної частини інтерфейсу модуля який розглянемо далі. Для отримання уявлення про архітектуру модулів у контексті загальної архітектури OpenSCADA наполегливо рекомендується мати перед очима <a class="external" href="http://oscada.org/wiki/File:API_uml_classdep.png" title="File:API uml classdep.png">загальну діаграму класів OpenSCADA</a>!
+</p><p>Всі інтерфейсні об'єкти модулів успадковують клас вузла <a href="API.html#TCntrNode" title="Special:MyLanguage/Documents/API">TCntrNode</a>, який надає механізм <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління</a>. Одним із завдань цього механізму є надання інтерфейсу конфігурації об'єкту у будь якому конфігураторі OpenSCADA.
 </p>
 <table class="wikitable">
 
@@ -225,14 +225,14 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <th> Загальне API
 </th></tr>
 <tr>
-<td><b><a href="../en/API.html#TCntrNode" title="Special:MyLanguage/Documents/API">TCntrNode</a></b> — Вузол OpenSCADA:
+<td><b><a href="API.html#TCntrNode" title="Special:MyLanguage/Documents/API">TCntrNode</a></b> — Вузол OpenSCADA:
 <ul><li> <i>void preEnable( int flag );</i>, <i>void postEnable( int flag );</i> — підключення модуля до динамічного дерева об'єктів, викликається перед та після фактичного увімкнення модуля відповідно.</li>
 <li> <i>void preDisable( int flag );</i>, <i>void postDisable( int flag );</i> — виключення модуля із динамічного дерева об'єктів перед звільненням об'єкту, викликається перед та після фактичного виключення модуля відповідно.</li>
 <li> <i>void load_( TConfig *cfg );</i>, <i>void load_( );</i> — завантаження модуля із контексту сховища <i>cfg</i> та загалом, викликається на стадії завантаження конфігурації модуля зі сховку.</li>
 <li> <i>void save_( );</i> — збереження модуля, викликається на стадії збереження конфігурації модуля до сховку, зазвичай за ініціативою користувача.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — Модуль OpenSCADA:<br />
+<td><b><a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — Модуль OpenSCADA:<br />
 <ul><li> <i>void modStart( );</i> — запуск модуля, викликається на стадії запуску завдань виконання фонових функцій модуля, якщо такі модулем надаються.</li>
 <li> <i>void modStop( );</i> — зупинка модуля, викликається на стадії зупинки завдань виконання фонових функцій модуля, якщо такі модулем надаються.</li>
 <li> <i>void modInfo( vector&lt;string&gt; &amp;list );</i> — запит переліку інформаційних властивостей модуля, яким надається стандартний набір властивостей "Module", "Name", "Type", "Source", "Version", "Author", "Description", "License", та що може бути розширено власними-специфічними властивостями.</li>
@@ -245,17 +245,17 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 </th></tr>
 <tr>
 <td> Призначено для інтеграції OpenSCADA із БД чи СУБД, яка реалізується модулем. Надає два загальних підходи до реалізації модулів:
-<ol><li> Режим ANSI SQL — є найпростішим шляхом який передбачає безпосереднє використання функцій ядра <a href="../en/API.html#TTable" title="Special:MyLanguage/Documents/API">fieldSQLSeek(), fieldSQLGet(), fieldSQLSet(), fieldSQLDel()</a> у fieldSeek(), fieldGet(), fieldSet(), fieldDel() відповідно; всі SQL-модулі використовують наразі цей підхід.</li>
+<ol><li> Режим ANSI SQL — є найпростішим шляхом який передбачає безпосереднє використання функцій ядра <a href="API.html#TTable" title="Special:MyLanguage/Documents/API">fieldSQLSeek(), fieldSQLGet(), fieldSQLSet(), fieldSQLDel()</a> у fieldSeek(), fieldGet(), fieldSet(), fieldDel() відповідно; всі SQL-модулі використовують наразі цей підхід.</li>
 <li> Повна Реалізація — є найскладнішим шляхом який передбачає повну реалізацію; модулі, що використовують такий підхід є або старими або специфічними: <a href="Modules/DBF.html" title="Special:MyLanguage/Modules/DBF">DBF</a>, <a href="Modules/LDAP.html" title="Special:MyLanguage/Modules/LDAP">LDAP</a>.</li></ol>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TTypeBD" title="Special:MyLanguage/Documents/API">TTypeBD</a>-&gt;<a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "БД":
+<td><b><a href="API.html#TTypeBD" title="Special:MyLanguage/Documents/API">TTypeBD</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "БД":
 <ul><li> <i>string features( );</i> — перелік ключових слів <a href="Program_manual.html#DBFeat" title="Special:MyLanguage/Documents/Program manual">підтримуваних властивостей БД</a>.</li>
 <li> <i>int lsPr( );</i> — базовий приорітет БД [0...9] у загальному переліку сховків.</li>
 <li> <i>TBD *openBD( const string &amp;id );</i> — викликається при відкритті або створені нового об'єкта БД даним модулем з ідентифікатором <i>id</i>.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TBD" title="Special:MyLanguage/Documents/API">TBD</a></b> — об'єкт бази даних:
+<td><b><a href="API.html#TBD" title="Special:MyLanguage/Documents/API">TBD</a></b> — об'єкт бази даних:
 <ul><li> <i>void enable( );</i> — включення БД.</li>
 <li> <i>void disable( );</i> — відключення БД.</li>
 <li> <i>void allowList( vector&lt;string&gt; &amp;list ) const;</i> — запит переліку <i>list</i> таблиць у БД.</li>
@@ -264,15 +264,15 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <li> <i>TTable *openTable( const string &amp;name, bool create );</i> — викликається при відкритті або створені нового об'єкта таблиці.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TTable" title="Special:MyLanguage/Documents/API">TTable</a></b> — об'єкт таблиці у базі даних:
+<td><b><a href="API.html#TTable" title="Special:MyLanguage/Documents/API">TTable</a></b> — об'єкт таблиці у базі даних:
 <ul><li> <i>void fieldStruct( TConfig &amp;cfg );</i> — отримання поточної структури таблиці у об'єкті <i>cfg</i>.</li>
-<li> <i>bool fieldSeek( int row, TConfig &amp;cfg, const string &amp;cacheKey = "" );</i> — послідовне сканування записів таблиці перебором <i>row</i> за об'єктом <i>cfg</i> та повернення FALSE по закінченню, з адресацією за активними <a href="../en/API.html#TCfg" title="Special:MyLanguage/Documents/API">keyUse()</a> ключовими полями. Ключ кешу <i>cacheKey</i> вказується для предзавантаженням повної відповіді до кешу, із витягненням наступних записів звідти.</li>
+<li> <i>bool fieldSeek( int row, TConfig &amp;cfg, const string &amp;cacheKey = "" );</i> — послідовне сканування записів таблиці перебором <i>row</i> за об'єктом <i>cfg</i> та повернення FALSE по закінченню, з адресацією за активними <a href="API.html#TCfg" title="Special:MyLanguage/Documents/API">keyUse()</a> ключовими полями. Ключ кешу <i>cacheKey</i> вказується для предзавантаженням повної відповіді до кешу, із витягненням наступних записів звідти.</li>
 <li> <i>void fieldGet( TConfig &amp;cfg );</i> — запит вказаного у об'єкті <i>cfg</i> запису із адресацією за ключовими полями.</li>
 <li> <i>void fieldSet( TConfig &amp;cfg );</i> — передача вказаного у об'єкті <i>cfg</i> запису з адресацією за ключовими полями.</li>
 <li> <i>void fieldDel( TConfig &amp;cfg );</i> — видалення вказаного запису за ключовими полями об'єкту <i>cfg</i>.</li></ul>
 <dl><dd> <i><b>Специфічне для SQL Баз Даних</b></i></dd></dl>
 <ul><li> <i>void fieldFix( TConfig &amp;cfg, const string &amp;langLs = "" );</i> — виправлення структури таблиці БД до <i>cfg</i> та для мов перекладу <i>langLs</i>, зазвичай після невдалого запису.</li>
-<li> <i>string getSQLVal( TCfg &amp;cf, uint8_t RqFlg = 0 );</i> — повернення специфічно до SQL обгорненого значення <i>cf</i> для <a href="../en/API.html#TCfg" title="Special:MyLanguage/Documents/API">прапорців ReqFlg</a> звернення <i>RqFlg</i>.</li>
+<li> <i>string getSQLVal( TCfg &amp;cf, uint8_t RqFlg = 0 );</i> — повернення специфічно до SQL обгорненого значення <i>cf</i> для <a href="API.html#TCfg" title="Special:MyLanguage/Documents/API">прапорців ReqFlg</a> звернення <i>RqFlg</i>.</li>
 <li> <i>void setSQLVal( TCfg &amp;cf, const string &amp;vl, bool tr = false );</i> — розбір SQL-значення <i>vl</i> для перекладу <i>tr</i> та із записом до <i>cf</i>.</li></ul>
 </td></tr>
 <tr>
@@ -282,23 +282,23 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <td> Забезпечує OpenSCADA комунікаціями через інтерфейс, часто це мережі які реалізуються цим модулем.
 </td></tr>
 <tr>
-<td> <b><a href="../en/API.html#TTypeTransport" title="Special:MyLanguage/Documents/API">TTypeTransport</a>-&gt;<a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Транспорти":
+<td> <b><a href="API.html#TTypeTransport" title="Special:MyLanguage/Documents/API">TTypeTransport</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Транспорти":
 <ul><li> <i>virtual bool isNetwork( );</i> — ознака реалізації мережі цим модулем.</li>
 <li> <i>virtual string outAddrHelp( );</i> — допомога із формату адреси вихідного транспорту.</li>
 <li> <i>virtual TTransportIn *In( const string &amp;id, const string &amp;stor );</i> — викликається модулем за відкриття або створення нового об'єкту вхідного транспорту із ідентифікатором <i>id</i> та сховком <i>stor</i>.</li>
 <li> <i>virtual TTransportOut *Out( const string &amp;name, const string &amp;stor );</i> — викликається модулем за відкриття або створення нового об'єкту вихідного транспорту із ідентифікатором <i>id</i> та сховком <i>stor</i>.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TTransportIn" title="Special:MyLanguage/Documents/API">TTransportIn</a></b> — об'єкт вхідного транспорту:
+<td><b><a href="API.html#TTransportIn" title="Special:MyLanguage/Documents/API">TTransportIn</a></b> — об'єкт вхідного транспорту:
 <ul><li> <i>virtual unsigned keepAliveReqs( );</i> — максимум запитів "Збереження Життя".</li>
 <li> <i>virtual unsigned keepAliveTm( );</i> — час "Збереження Життя".</li>
 <li> <i>virtual string getStatus( );</i> — отримання статусу транспорту.</li>
 <li> <i>virtual void start( );</i> — запуск транспорту.</li>
 <li> <i>virtual void stop( );</i> — зупинка транспорту.</li>
-<li> <i>virtual int writeTo( const string &amp;sender, const string &amp;data );</i> — надсилання даних <i>data</i> назад відправнику <i>sender</i>. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Переважно застаріле та заміщене режимом опитування <a href="../en/API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">вхідного транспортного протоколу</a>, Початково реалізується у транспортах із підтримкою ініціативного відправлення, не лише за запитом.</li></ul>
+<li> <i>virtual int writeTo( const string &amp;sender, const string &amp;data );</i> — надсилання даних <i>data</i> назад відправнику <i>sender</i>. <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Переважно застаріле та заміщене режимом опитування <a href="API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">вхідного транспортного протоколу</a>, Початково реалізується у транспортах із підтримкою ініціативного відправлення, не лише за запитом.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TTransportOut" title="Special:MyLanguage/Documents/API">TTransportOut</a></b> — об'єкт вихідного транспорту:
+<td><b><a href="API.html#TTransportOut" title="Special:MyLanguage/Documents/API">TTransportOut</a></b> — об'єкт вихідного транспорту:
 <ul><li> <i>virtual string timings( );</i> — таймаути транспорту.</li>
 <li> <i>virtual unsigned short attempts( );</i> — спроб підключення.</li>
 <li> <i>virtual string getStatus( );</i> — отримання статусу транспорту.</li>
@@ -315,13 +315,13 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <td> Забезпечує OpenSCADA комунікаціями рівня протоколу, які реалізуються модулем, щодо доступу до даних із зовнішніх систем та надання даних OpenSCADA для зовнішніх систем.
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TProtocol" title="Special:MyLanguage/Documents/API">TProtocol</a>-&gt;<a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Транспортні протоколи":
+<td><b><a href="API.html#TProtocol" title="Special:MyLanguage/Documents/API">TProtocol</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Транспортні протоколи":
 <ul><li> <i>virtual void itemListIn( vector&lt;string&gt; &amp;ls, const string &amp;curIt = "" );</i> — перелік <i>ls</i> під'елементів вхідного протоколу від поточного елементу <i>curIt</i>, якщо протокол їх надає. Використовується при обранні об'єкта у конфігурації вхідного транспорту.</li>
-<li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — передавання даних об'єктами ядра OpenSCADA у дереві XML <i>io</i> до віддаленої системи через транспорт <i>tro</i> та поточний вихідний протокол. Представлення даних у дереві XML не стандартизоване та специфічне до логічної структури протоколу. Ці дані серіалізуються — перетворюються у послідовність байтів відповідно до протоколу, та надсилаються через визначений вихідний транспорт <i>tro</i> <a href="../en/API.html#TTransportOut" title="Special:MyLanguage/Documents/API">функцією messIO()</a>.</li>
+<li> <i>virtual void outMess( XMLNode &amp;io, TTransportOut &amp;tro );</i> — передавання даних об'єктами ядра OpenSCADA у дереві XML <i>io</i> до віддаленої системи через транспорт <i>tro</i> та поточний вихідний протокол. Представлення даних у дереві XML не стандартизоване та специфічне до логічної структури протоколу. Ці дані серіалізуються — перетворюються у послідовність байтів відповідно до протоколу, та надсилаються через визначений вихідний транспорт <i>tro</i> <a href="API.html#TTransportOut" title="Special:MyLanguage/Documents/API">функцією messIO()</a>.</li>
 <li> <i>virtual TProtocolIn *in_open( const string &amp;id );</i> — викликається модулем за відкриття або створення нового об'єкту транспортного протоколу із ідентифікатором <i>id</i>.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">TProtocolIn</a></b> — вхідний об'єкт транспортного протоколу з опрацювання вхідних запитів від <a href="../en/API.html#TTransportIn" title="Special:MyLanguage/Documents/API">вхідного транспортного об'єкту TTransportIn</a>. Для кожного сеансу вхідного запиту створюється асоційований об'єкт вхідного протоколу, який залишається живим до завершення повного сеансу "запит-&gt;відповідь". Адреса транспорту, який відкриває входження протоколу, визначається у <a href="../en/API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">srcTr()</a>:
+<td><b><a href="API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">TProtocolIn</a></b> — вхідний об'єкт транспортного протоколу з опрацювання вхідних запитів від <a href="API.html#TTransportIn" title="Special:MyLanguage/Documents/API">вхідного транспортного об'єкту TTransportIn</a>. Для кожного сеансу вхідного запиту створюється асоційований об'єкт вхідного протоколу, який залишається живим до завершення повного сеансу "запит-&gt;відповідь". Адреса транспорту, який відкриває входження протоколу, визначається у <a href="API.html#TProtocolIn" title="Special:MyLanguage/Documents/API">srcTr()</a>:
 <ul><li> <i>virtual unsigned waitReqTm( )</i> — час очікування запиту на вхідному транспорті у мілісекундах, після якого звертається до протоколу із порожнім повідомленням — режим опитування. Встановлення його у нуль вимикає режим опитування.</li>
 <li> <i>virtual void setSrcTr( TTransportIn *vl )</i> — встановлення транспорту-джерела відкритого сеансу вхідного протоколу.</li>
 <li> <i>virtual void setSrcAddr( const string &amp;vl );</i> — встановлення адреси відправника.</li>
@@ -332,12 +332,12 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 </th></tr>
 <tr>
 <td> Надає збір даних реального часу із зовнішніх систем або їх формування у обчислювачах, які реалізуються модулем. Це основна підсистема, оскільки SCADA це первинно про Збір Даних. Як основна підсистема, вона забезпечує декілька підходів до реалізації модулів, які здебільшого стосуються формування та зберігання структури атрибутів:
-<ol><li> Статичне формування через визначення набору типів параметрів, успадкованих від <a href="../en/API.html#TTypeParam" title="Special:MyLanguage/Documents/API">TTypeParam</a>, тобто застосування структур виконується як набір атрибутів зі зміною типу параметра. Цей метод є найменш гнучким і його використовують такі модулі: <a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">GPIO</a>, <a href="Modules/SMH2Gi.html" title="Special:MyLanguage/Modules/SMH2Gi">SMH2Gi</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">AMRDevs</a>.</li>
-<li> Динамічне формування з керуванням структури контейнеру  <a href="../en/API.html#TElem" title="Special:MyLanguage/Documents/API">TElem</a> в об’єкті параметра <a href="../en/API.html#TParamContr" title="Special:MyLanguage/Documents/API">TParamContr</a>. Цей метод є найбільш гнучким і використовується в більшості модулів, структуру яких можна конфігурувати.</li>
+<ol><li> Статичне формування через визначення набору типів параметрів, успадкованих від <a href="API.html#TTypeParam" title="Special:MyLanguage/Documents/API">TTypeParam</a>, тобто застосування структур виконується як набір атрибутів зі зміною типу параметра. Цей метод є найменш гнучким і його використовують такі модулі: <a href="Modules/GPIO.html" title="Special:MyLanguage/Modules/GPIO">GPIO</a>, <a href="Modules/SMH2Gi.html" title="Special:MyLanguage/Modules/SMH2Gi">SMH2Gi</a>, <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Modules/AMRDevs" title="Special:MyLanguage/Modules/AMRDevs">AMRDevs</a>.</li>
+<li> Динамічне формування з керуванням структури контейнеру  <a href="API.html#TElem" title="Special:MyLanguage/Documents/API">TElem</a> в об’єкті параметра <a href="API.html#TParamContr" title="Special:MyLanguage/Documents/API">TParamContr</a>. Цей метод є найбільш гнучким і використовується в більшості модулів, структуру яких можна конфігурувати.</li>
 <li> Як розширення динамічного формування існує <a href="DAQ.html#LogicLev" title="Special:MyLanguage/Documents/DAQ">тип параметра Логічного Рівня</a>, який можна додати до будь-якого модуля, але він використовується переважно в універсальних джерелах даних: <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a>, <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">Siemens</a>, <a href="Modules/Siemens.html" title="Special:MyLanguage/Modules/Siemens">LogicLev</a>.</li></ol>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TTypeDAQ" title="Special:MyLanguage/Documents/API">TTypeDAQ</a>-&gt;<a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Збір Даних":
+<td><b><a href="API.html#TTypeDAQ" title="Special:MyLanguage/Documents/API">TTypeDAQ</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Збір Даних":
 <ul><li> <i>virtual bool compileFuncLangs( vector&lt;string&gt; *ls = NULL );</i> — запитує перелік мов <i>ls</i> для яких реалізується можливість формування користувацьких процедур у цьому модулі, та перевірка факту підтримки цього.</li>
 <li> <i>virtual void compileFuncSnthHgl( const string &amp;lang, XMLNode &amp;shgl );</i> — запит прав підсвітлення синтаксису <i>shgl</i> щодо визначеної мови <i>lang</i>.</li>
 <li> <i>virtual string compileFunc( const string &amp;lang, TFunction &amp;fnc_cfg, const string &amp;prog_text, const string &amp;usings = "", int maxCalcTm = 0 );</i> — компіляція-реєстрація користувацької функції на підтримуваній мові програмування <i>lang</i> та на вихідному коді процедури <i>prog_text</i>, заснованій на параметрах процедури <i>fnc_cfg</i>. Повертає адресу об'єкту скомпільованої функції, готового до виконання.</li>
@@ -345,7 +345,7 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <li> <i>virtual TController *ContrAttach( const string &amp;id, const string &amp;daq_db );</i> — викликається модулем за відкриття або створення нового об'єкту контролеру із ідентифікатором <i>id</i>.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TController" title="Special:MyLanguage/Documents/API">TController</a></b> — об'єкт контролеру джерела даних. У контексті об'єкту зазвичай виконується завдання періодичного або планового опитування даних реального часу фізичного контролеру або фізично відокремленого блоку даних. У випадку отримання даних пакетами, вони розташовуються безпосередньо у архіві, пов'язаному із атрибутом параметра <a href="../en/API.html#TVAl" title="Special:MyLanguage/Documents/API">TVAl::arch()</a>, та поточне значення встановлюється <a href="../en/API.html#TVAl" title="Special:MyLanguage/Documents/API">функцією TVAl::set()</a> із атрибутом "sys"=TRUE:
+<td><b><a href="API.html#TController" title="Special:MyLanguage/Documents/API">TController</a></b> — об'єкт контролеру джерела даних. У контексті об'єкту зазвичай виконується завдання періодичного або планового опитування даних реального часу фізичного контролеру або фізично відокремленого блоку даних. У випадку отримання даних пакетами, вони розташовуються безпосередньо у архіві, пов'язаному із атрибутом параметра <a href="API.html#TVAl" title="Special:MyLanguage/Documents/API">TVAl::arch()</a>, та поточне значення встановлюється <a href="API.html#TVAl" title="Special:MyLanguage/Documents/API">функцією TVAl::set()</a> із атрибутом "sys"=TRUE:
 <ul><li> <i>virtual string getStatus( );</i> — функція запиту статусу контролеру.</li>
 <li> <i>virtual void enable_(  );</i> — увімкнення об'єкту контролеру. На цій стадії зазвичай відбувається ініціалізація об'єктів параметрів та їх інтерфейсів у формі атрибутів, атрибути інколи можуть запитуватися у пов'язаного віддаленого джерела.</li>
 <li> <i>virtual void disable_(  );</i> — вимкнення об'єкту контролеру.</li>
@@ -357,7 +357,7 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <li> <i>virtual TParamContr *ParamAttach( const string &amp;id, int type );</i> — викликається модулем за відкриття або створення нового об'єкту параметру контролера із ідентифікатором <i>id</i>.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TParamContr" title="Special:MyLanguage/Documents/API">TParamContr</a>-&gt;<a href="../en/API.html#TValue" title="Special:MyLanguage/Documents/API">TValue</a></b> — об'єкт параметру контролера джерела даних. Містить атрибути з реальними даними у наборі визначеному фізично доступними даними. Значення до атрибутів потрапляють із завдання опитування контролера, при асинхронному режимі, або запитуються під час звернення, при синхронному режимі, та за посередництвом методів успадкованого типу <a href="../en/API.html#TValue" title="Special:MyLanguage/Documents/API">TValue</a>:
+<td><b><a href="API.html#TParamContr" title="Special:MyLanguage/Documents/API">TParamContr</a>-&gt;<a href="API.html#TValue" title="Special:MyLanguage/Documents/API">TValue</a></b> — об'єкт параметру контролера джерела даних. Містить атрибути з реальними даними у наборі визначеному фізично доступними даними. Значення до атрибутів потрапляють із завдання опитування контролера, при асинхронному режимі, або запитуються під час звернення, при синхронному режимі, та за посередництвом методів успадкованого типу <a href="API.html#TValue" title="Special:MyLanguage/Documents/API">TValue</a>:
 <ul><li> <i>virtual TElem *dynElCntr( );</i> — контейнер динамічних елементів атрибутів Збору Даних. Переважно визначається джерелами логічного рівня які і надають контейнери такого характеру.</li>
 <li> <i>virtual void enable( );</i> — увімкнення об'єкту параметру, здійснюється формування набору атрибутів та заповнення їх значеннями недостовірності.</li>
 <li> <i>virtual void disable( );</i> — вимкнення об'єкту параметру.</li>
@@ -374,12 +374,12 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <td> Використовується для архівування та ведення історії повідомлень і значень реального часу отриманих у підсистемі "Збір Даних", та у засіб реалізований модулем.
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TTypeArchivator" title="Special:MyLanguage/Documents/API">TTypeArchivator</a>-&gt;<a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Архіви-Історія":
+<td><b><a href="API.html#TTypeArchivator" title="Special:MyLanguage/Documents/API">TTypeArchivator</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Архіви-Історія":
 <ul><li> <i>virtual TMArchivator *AMess( const string &amp;id, const string &amp;stor );</i> — викликається модулем за відкриття або створення нового об'єкту архіватору повідомлень із ідентифікатором <i>id</i> та у сховку <i>stor</i>.</li>
 <li> <i>virtual TVArchivator *AVal( const string &amp;id, const string &amp;stor );</i> — викликається модулем за відкриття або створення нового об'єкту архіватору значень із ідентифікатором <i>id</i> та у сховку <i>stor</i>.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TMArchivator" title="Special:MyLanguage/Documents/API">TMArchivator</a></b> — об'єкт архіватору повідомлень.
+<td><b><a href="API.html#TMArchivator" title="Special:MyLanguage/Documents/API">TMArchivator</a></b> — об'єкт архіватору повідомлень.
 <ul><li> <i>virtual void redntDataUpdate( );</i> — операція отримання даних із резервної станції, автоматично викликається сервісною процедурою схеми резервування підсистеми.</li>
 <li> <i>virtual void start( );</i> — запуск об'єкту архіватору, архіватор запускається для отримання повідомлень та розміщення їх до сховку.</li>
 <li> <i>virtual void stop( );</i> — зупинка об'єкту архіватору.</li>
@@ -389,14 +389,14 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <li> <i>virtual time_t get( time_t bTm, time_t eTm, vector&lt;TMess::SRec&gt; &amp;mess, const string &amp;category = "", char level = 0, time_t upTo = 0 );</i> — отримання повідомлень до <i>mess</i> із архіватору для визначених параметрів фільтрації. Повертає час зупинки запиту, корисно для продовження від цієї позиції як часу закінчення, тобто ітераційно заглиблюючись в історію. Фільтр визначається діапазоном часу [<i>bTm</i>...<i>eTm</i>], правилами категорії <i>category</i>, рівнем <i>level</i> та обмежено до часу <i>upTo</i>. За відсутності прямого визначення обмежувального часу <i>upTo</i>, це обмеження встановлюється у <i>prmInterf_TM</i> — 7 секунд.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TVArchivator" title="Special:MyLanguage/Documents/API">TVArchivator</a></b> — об'єкт архіватору значень.
+<td><b><a href="API.html#TVArchivator" title="Special:MyLanguage/Documents/API">TVArchivator</a></b> — об'єкт архіватору значень.
 <ul><li> <i>virtual void start( );</i> — запуск об'єкту архіватору, архіватор запускається для отримання значень та розміщення їх у сховок.</li>
 <li> <i>virtual void stop( bool full_del = false );</i> — зупинка об'єкту архіватору із можливістю повного видалення його даних зі сховку за <i>full_del</i>.</li>
 <li> <i>virtual TVArchEl *getArchEl( TVArchive &amp;arch );</i> — отримання об'єкту елемента архіву значень для визначеного архіву <i>arch</i>.</li>
 <li> <i>virtual void pushAccumVals( );</i> — виштовхування накопичених завданням архівації значень, для акумулювальних архіваторів.</li></ul>
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TVArchEl" title="Special:MyLanguage/Documents/API">TVArchEl</a></b> — об'єкт елементу архіватору значень.
+<td><b><a href="API.html#TVArchEl" title="Special:MyLanguage/Documents/API">TVArchEl</a></b> — об'єкт елементу архіватору значень.
 <ul><li> <i>virtual void fullErase( );</i> — викликається для цілковитого видалення архівної частини архіватору.</li>
 <li> <i>virtual int64_t end( );</i> — час завершення у мікросекундах щодо наявних значень у архіві архіватору.</li>
 <li> <i>virtual int64_t begin( );</i> — час початку у мікросекундах щодо наявних значень у архіві архіватору.</li>
@@ -411,7 +411,7 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <td> Користувацький інтерфейс формується згідно до концепції та механізмів зовнішніх розповсюджених стандартів та бібліотек.
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TUI" title="Special:MyLanguage/Documents/API">TUI</a>-&gt;<a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Користувацькі Інтерфейси":<br />
+<td><b><a href="API.html#TUI" title="Special:MyLanguage/Documents/API">TUI</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Користувацькі Інтерфейси":<br />
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Не містить специфічних функцій!
 </p>
 </td></tr>
@@ -422,7 +422,7 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 <td> Реалізує специфічні функції, які не увійшли до жодної з вищеперелічених підсистем. Специфічні функції формуються згідно їх власних вимог та із використанням всіх можливостей API OpenSCADA.
 </td></tr>
 <tr>
-<td><b><a href="../en/API.html#TSpecial" title="Special:MyLanguage/Documents/API">TSpecial</a>-&gt;<a href="../en/API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Спеціальне":<br />
+<td><b><a href="API.html#TSpecial" title="Special:MyLanguage/Documents/API">TSpecial</a>-&gt;<a href="API.html#TModule" title="Special:MyLanguage/Documents/API">TModule</a></b> — кореневий об'єкт модуля підсистеми "Спеціальне":<br />
 <p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Не містить специфічних функцій!
 </p>
 </td></tr></table>
@@ -463,12 +463,12 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
     <span class="k">else</span> <span class="n">TBD</span><span class="o">::</span><span class="n">cntrCmdProc</span><span class="p">(</span><span class="n">opt</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
-<p>Перша половина цієї функції обслуговує інформаційні запити "info" з переліком та властивостями полів конфігурації. Друга половина обслуговує решту команд на отримання, встановлення значення та інше. Виклик <b>TBD::cntrCmdProc(opt);</b> використовується для отримання успадкованого інтерфейсу. Детальніше про призначення використаних функцій дивіться у <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсі управління</a>, а також у вихідних текстах існуючих модулів.
+<p>Перша половина цієї функції обслуговує інформаційні запити "info" з переліком та властивостями полів конфігурації. Друга половина обслуговує решту команд на отримання, встановлення значення та інше. Виклик <b>TBD::cntrCmdProc(opt);</b> використовується для отримання успадкованого інтерфейсу. Детальніше про призначення використаних функцій дивіться у <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсі управління</a>, а також у вихідних текстах існуючих модулів.
 </p><p>Об'єкт <b>TCntrNode</b> окрім функції інтерфейсу управління надає уніфіковані механізми контролю за модифікацією конфігурації об'єкта, завантаження, збереження та видалення дублікатів конфігурації у сховищі. Для встановлення прапорця модифікації даних об'єкта можна використовувати функції <b>modif()</b> та <b>modifG()</b>, а специфічні до модуля дії із завантаження та збереження можна розташовувати у віртуальні функції:
 </p>
 <ul><li> <i>void load_( TConfig *cfg );</i>, <i>void load_( );</i> — завантаження об'єкта зі сховища.</li>
 <li> <i>void save_( );</i> — збереження об'єкта у сховищі.</li></ul>
-<p>Дії із конфігурацією типово відбуваються за посередництвом об'єкта <a href="../en/API.html#TConfig" title="Special:MyLanguage/Documents/API">TConfig</a>, яких містить набір визначених властивостей зі структурою та значеннями. Для прямого відображення властивостей об'єкта модуля він успадковується від <b>TConfig</b>, а нові властивості додаються командою:
+<p>Дії із конфігурацією типово відбуваються за посередництвом об'єкта <a href="API.html#TConfig" title="Special:MyLanguage/Documents/API">TConfig</a>, яких містить набір визначених властивостей зі структурою та значеннями. Для прямого відображення властивостей об'єкта модуля він успадковується від <b>TConfig</b>, а нові властивості додаються командою:
 </p>
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="n">fldAdd</span><span class="p">(</span><span class="k">new</span> <span class="n">TFld</span><span class="p">(</span><span class="s">"MOD_PRMS"</span><span class="p">,</span><span class="n">trS</span><span class="p">(</span><span class="s">"Module addition parameters"</span><span class="p">),</span><span class="n">TFld</span><span class="o">::</span><span class="n">String</span><span class="p">,</span><span class="n">TFld</span><span class="o">::</span><span class="n">FullText</span><span class="o">|</span><span class="n">TCfg</span><span class="o">::</span><span class="n">NoVal</span><span class="p">,</span><span class="s">"100000"</span><span class="p">));</span>
 </pre></div>
@@ -480,7 +480,7 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 </pre></div>
 <p>Де:
 </p>
-<ul><li> <i>fullDB()</i> — повна назва сховища у <a href="../en/API.html#DataConcept" title="Special:MyLanguage/Documents/API">загальній формі</a>;</li>
+<ul><li> <i>fullDB()</i> — повна назва сховища у <a href="API.html#DataConcept" title="Special:MyLanguage/Documents/API">загальній формі</a>;</li>
 <li> <i>owner().nodePath()+tbl()</i> — загальний шлях до вузла об'єкта у конфігураційному файлі, представлений таблицею;</li>
 <li> <i>*this</i> — цей об'єкт, успадкований від <b>TConfig</b>.</li></ul>
 <p>Для генерації налагоджувальних повідомлень <a href="Program_manual.html#Config" title="Special:MyLanguage/Documents/Program manual">відповідно до загальної концепції налаштувань</a> необхідно використовувати функцію <b>mess_debug()</b> з умовою виклику залежно від ділянки вихідного тексту програми:
@@ -498,5 +498,5 @@ AX_MOD_Special_EN(NewMod, [disable or enable[=incl] compilation module Special.N
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_module/uk">Documents/How_to/Create_module/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2022</td><td style="text-align: right;" width="40%"> 1+r2862</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/How_to/Create_module/uk">Documents/How_to/Create_module/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
 </html>

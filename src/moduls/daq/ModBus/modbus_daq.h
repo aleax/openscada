@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -45,7 +45,7 @@ using namespace OSCADA;
 #define DAQ_NAME	trS("Client ModBus")
 #define DAQ_TYPE	SDAQ_ID
 #define DAQ_SUBVER	SDAQ_VER
-#define DAQ_MVER	"3.5.3"
+#define DAQ_MVER	"3.6.5"
 #define DAQ_AUTHORS	trS("Roman Savochenko")
 #define DAQ_DESCR	trS("Provides implementation of the client ModBus service. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define DAQ_LICENSE	"GPL2"
@@ -136,7 +136,7 @@ class TMdPrm: public TParamContr
 	};
 
 	//Methods
-	void loadIO( bool force = false );
+	void loadIO( );
 	void saveIO( );
 
 	//Attributes
@@ -165,11 +165,11 @@ class TMdContr: public TController
 
 	void regVal( int reg, const string &dt = "R", bool separate = false );	//Register value for acquisition
 	TVariant getVal( const string &addr, MtxString &err );		//Unified value request from string address
-	int64_t getValR( int addr, MtxString &err, bool in = false );	//Get register value
+	int64_t getValR( int addr, MtxString &err, bool in = false, bool isLE = false ); //Get register value
 	char getValC( int addr, MtxString &err, bool in = false );	//Get coins value
 	bool setVal( const TVariant &val, const string &addr, MtxString &err, bool chkAssync = false );	//Unified value set by string address
-	bool setValR( int val, int addr, MtxString &err );		//Set register value
-	bool setValRs( const map<int,int> &regs, MtxString &err );	//Set multiply registers
+	bool setValR( uint16_t val, int addr, MtxString &err, bool isLE = false );		//Set register value
+	bool setValRs( const map<int,uint16_t> &regs, MtxString &err, bool isLE = false );	//Set multiply registers
 	bool setValC( char val, int addr, MtxString &err );		//Set coins value
 	string modBusReq( string &pdu );
 

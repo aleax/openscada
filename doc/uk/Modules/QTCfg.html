@@ -44,7 +44,7 @@
 <dl><dd>+ доповнити вкладками та вкладкою "Обране" із: процедурами, улюбленим імпортом або інші користувацькі функції швидкого доступу.</dd></dl>
 </td></tr></table>
 <p>Модуль надає конфігуратор OpenSCADA, який засновано на багатоплатформеній бібліотеці <a class="external text" href="http://qt.io" rel="nofollow noreferrer noopener" target="_blank">Qt</a> графічного користувацького інтерфейсу (GUI), початково створеного фірмою <a class="external text" href="http://www.trolltech.com" rel="nofollow noreferrer noopener" target="_blank">TrollTech</a>.
-</p><p>У основі модуля лежить <a href="../../en/API.html" title="Special:MyLanguage/Documents/API">інтерфейс управління OpenSCADA</a>, що означає надання єдиного інтерфейсу конфігурації. Оновлення модуля може знадобитися лише у випадку оновлення специфікації мови інтерфейсу управління. Для запиту контексту сторінки використовується груповий запит інтерфейсу управління, що дозволяє оптимізувати час віддаленого доступу за високо-латентними та повільними каналами зв'язку.
+</p><p>У основі модуля лежить <a href="../API.html" title="Special:MyLanguage/Documents/API">інтерфейс управління OpenSCADA</a>, що означає надання єдиного інтерфейсу конфігурації. Оновлення модуля може знадобитися лише у випадку оновлення специфікації мови інтерфейсу управління. Для запиту контексту сторінки використовується груповий запит інтерфейсу управління, що дозволяє оптимізувати час віддаленого доступу за високо-латентними та повільними каналами зв'язку.
 </p><p>Розглянемо робоче вікно конфігуратору на рисунку 1.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:784px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_workplacestruct_uk.png"><img class="thumbimage" height="720" src="../files/QTCfg_workplacestruct_uk.png" width="782" /></a>  <div class="thumbcaption">Рис.1. Робоче вікно конфігуратору.</div></div></div></div>
@@ -149,7 +149,7 @@
 <h2><span class="mw-headline" id=".D0.91.D0.B0.D0.B7.D0.BE.D0.B2.D1.96_.D0.B5.D0.BB.D0.B5.D0.BC.D0.B5.D0.BD.D1.82.D0.B8"><span class="mw-headline-number">2</span> Базові елементи</span></h2>
 <p>До числа базових елементів входять: інформаційні елементи, поля вводу значень, елементи обрання з переліку, прапорці-ознаки, текстові поля. У випадку відсутності ім'я елементу, базовий елемент приєднується до попереднього базового елементу. Приклад групи базових елементів з приєднанням наведено на рисунку 3.
 </p><p>Для елементів вводу, які не передбачають миттєвих змін та можуть тривалий час редагуватися перед остаточним завершенням, передбачено механізм підтвердження. Цей механізм дозволяє виключити затримки при редагуванні, особливо у випадках конфігурації віддалених станцій, та вносити зміни за підтвердженням. До елементів вводу з підтвердженням відносяться: поля вводу рядків тексту або чисельних значень та текстові поля. Підтвердження здійснюється натиском кнопки, яка з'являється поряд з полем вводу після початку редагування.
-</p><p>Текстові поля підтримують пошук, також як підсвічення синтаксису, правила чого передаються у вигляді регулярних виразів з інтерфейсу управління або можуть бути вбудовані до значення тексту як коментар у <a href="../../en/API.html#SnthHgl" title="Special:MyLanguage/Documents/API">XML-тегу "SnthHgl"</a>.
+</p><p>Текстові поля підтримують пошук, також як підсвічення синтаксису, правила чого передаються у вигляді регулярних виразів з інтерфейсу управління або можуть бути вбудовані до значення тексту як коментар у <a href="../API.html#SnthHgl" title="Special:MyLanguage/Documents/API">XML-тегу "SnthHgl"</a>.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:823px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_genelem_uk.png"><img class="thumbimage" height="657" src="../files/QTCfg_genelem_uk.png" width="821" /></a>  <div class="thumbcaption">Рис.3. Приєднання базових елементів.</div></div></div></div>
 <h2><span class="mw-headline" id=".D0.9A.D0.BE.D0.BC.D0.B0.D0.BD.D0.B4.D0.B8"><span class="mw-headline-number">3</span> Команди</span></h2>
@@ -174,5 +174,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTCfg/uk">Modules/QTCfg/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2022</td><td style="text-align: right;" width="40%"> 1+r2862</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/QTCfg/uk">Modules/QTCfg/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
 </html>

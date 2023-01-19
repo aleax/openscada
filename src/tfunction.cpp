@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tfunction.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -60,7 +60,7 @@ TFunction &TFunction::operator=( const TFunction &func )
     for(int iIO = 0; iIO < func.ioSize(); iIO++) {
 	int dst_io = ioId(func.io(iIO)->id());
 	if(dst_io < 0)
-	    dst_io = ioIns(new IO(func.io(iIO)->id().c_str(),func.io(iIO)->name().c_str(),func.io(iIO)->type(),func.io(iIO)->flg(),
+	    dst_io = ioIns(new IO(func.io(iIO)->id().c_str(),func.io(iIO)->name(),func.io(iIO)->type(),func.io(iIO)->flg(),
 		func.io(iIO)->def().c_str(),func.io(iIO)->hide(),func.io(iIO)->rez().c_str()), iIO);
 	else *io(dst_io) = *func.io(iIO);
 	if(dst_io != iIO && !use()) {

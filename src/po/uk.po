@@ -2200,7 +2200,7 @@ msgid "System user"
 msgstr "Системний користувач"
 
 msgid "System locale charset."
-msgstr "Системне кодування локалі"
+msgstr "Системне кодування локалі."
 
 msgid ""
 "Complete locale information with language, country and charset in the view "
@@ -2213,7 +2213,7 @@ msgid "Host name"
 msgstr "Ім'я хосту"
 
 msgid "CPU"
-msgstr "CPU"
+msgstr "ЦП"
 
 msgid ""
 "Main CPUs set.\n"

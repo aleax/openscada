@@ -230,7 +230,7 @@
 <h4><span class="mw-headline" id=".D0.A1.D0.BF.D0.B5.D1.86.D1.96.D0.B0.D0.BB.D1.8C.D0.BD.D1.96_.D1.81.D0.B8.D0.BC.D0.B2.D0.BE.D0.BB.D0.B8_.D1.81.D1.82.D1.80.D0.BE.D0.BA.D0.BE.D0.B2.D0.B8.D1.85_.D0.B7.D0.BC.D1.96.D0.BD.D0.BD.D0.B8.D1.85"><span class="mw-headline-number">1.4.4</span> Спеціальні символи строкових змінних</span></h4>
 <p>Мовою передбачено підтримку наступних спеціальних символів строкових змінних:
 </p>
-<dl><dd>"\n" — перевід рядка;</dd>
+<dl><dd>"\n" — переведення рядка;</dd>
 <dd>"\t" — символ табуляції;</dd>
 <dd>"\b" — забій;</dd>
 <dd>"\f" — перевід сторінки;</dd>
@@ -416,7 +416,7 @@
 <li><i>int message( string cat, int level, string mess );</i> — формує системне повідомлення <i>mess</i> з категорією <i>cat</i>, рівнем <i>level</i> (-7...7). Негативне значення рівня формує порушення — "Alarm".</li>
 <li><i>int messDebug( string cat, string mess ); int messInfo( string cat, string mess ); int messNote( string cat, string mess ); int messWarning( string cat, string mess ); int messErr( string cat, string mess ); int messCrit( string cat, string mess ); int messAlert( string cat, string mess ); int messEmerg( string cat, string mess );</i> — формує системне повідомлення <i>mess</i> з категорією <i>cat</i> та відповідним до назви рівнем.</li>
 <li><i>XMLNodeObj XMLNode( string name = "" );</i> — створює об'єкт вузла XML з ім'ям <i>name</i>.</li>
-<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — надсилає запит <a href="../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління</a> до програми-системи за посередництвом XML. Зазвичай запит записується у вигляді <b>&lt;get path="/OPath/%2felem"/&gt;</b>. При вказані станції у <i>stat</i> здійснюється запит до вказаної зовнішньої станції. Адресу, атрибут "path", можна дізнатися у конфігураторі OpenSCADA, а саме у рядку статусу, де ця адреса виникає при наведені курсору миші на конфігураційне або інформаційне поле. Деякі приклади розповсюджених запитів, більше прикладів у <a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
+<li><i>string cntrReq( XMLNodeObj req, string stat = "" );</i> — надсилає запит <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">інтерфейсу управління</a> до програми-системи за посередництвом XML. Зазвичай запит записується у вигляді <b>&lt;get path="/OPath/%2felem"/&gt;</b>. При вказані станції у <i>stat</i> здійснюється запит до вказаної зовнішньої станції. Адресу, атрибут "path", можна дізнатися у конфігураторі OpenSCADA, а саме у рядку статусу, де ця адреса виникає при наведені курсору миші на конфігураційне або інформаційне поле. Деякі приклади розповсюджених запитів, більше прикладів у <a href="Libs_Service_procedures.html#releaseTests" title="Special:MyLanguage/Libs/Service procedures">releaseTests()</a>:<ul>
  <li>Читання значення елементу (ім'я користувача "test"):
 <div class="mw-highlight mw-content-ltr" dir="ltr"><pre><span class="nx">req</span> <span class="o">=</span> <span class="nx">SYS</span><span class="p">.</span><span class="nx">XMLNode</span><span class="p">(</span><span class="s2">"get"</span><span class="p">).</span><span class="nx">setAttr</span><span class="p">(</span><span class="s2">"path"</span><span class="p">,</span><span class="s2">"/sub_Security/usr_test/%2fprm%2fDESCR"</span><span class="p">);</span>
 <span class="nx">SYS</span><span class="p">.</span><span class="nx">cntrReq</span><span class="p">(</span><span class="nx">req</span><span class="p">);</span>
@@ -578,7 +578,7 @@
 <span class="nx">SYS</span><span class="p">.</span><span class="nx">DAQ</span><span class="p">.</span><span class="nx">funcCall</span><span class="p">(</span><span class="s2">"JavaLikeCalc.JavaScript"</span><span class="p">,</span><span class="nx">args</span><span class="p">,</span><span class="s2">"y=2*x;"</span><span class="p">);</span>
 <span class="nx">SYS</span><span class="p">.</span><span class="nx">messDebug</span><span class="p">(</span><span class="s2">"TEST Calc"</span><span class="p">,</span><span class="s2">"TEST Calc rezult: "</span><span class="o">+</span><span class="nx">args</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
 </pre></div></li>
-<li><i>string funcSnthHgl(string progLang);</i> — запит правил підсвітлення синтаксису мови програми <i>progLang</i> у <a href="../en/API.html#SnthHgl" title="Special:MyLanguage/Documents/API">XML-тегу <i>SnthHgl</i></a>.</li>
+<li><i>string funcSnthHgl(string progLang);</i> — запит правил підсвітлення синтаксису мови програми <i>progLang</i> у <a href="API.html#SnthHgl" title="Special:MyLanguage/Documents/API">XML-тегу <i>SnthHgl</i></a>.</li>
 </ul>
 <p>Функції об'єкту контролеру (SYS.DAQ["Modul"]["Controller"]):
 </p>
@@ -1011,5 +1011,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2022</td><td style="text-align: right;" width="40%"> 1+r2862</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
 </html>

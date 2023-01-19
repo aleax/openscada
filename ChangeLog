@@ -1,3 +1,20 @@
+2023-01-19 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_DevLib.SLOT: The Device Address IO added of the conversion from SN specified directly in the field.
+- LibsDB.vcaBase: wlb_Main.storeHouse: The filters appended of separated clearance also at the class change.
+- SYS: The definitions SEC_XT, SEC_WR, SEC_RD moved from the file tsecurity.h to tcntrnode.h and used there also.
+    ctrChkNode() cleaned for the argument "warn" due to the response attribute "force" is deprecated.
+    TFunction::operator=() finished in adaption to the IO name translation.
+- FIX:DB: Absence the flag TFld::TransltText means as the translation complete missing for that field.
+- DAQ.{ModBus,LogicLev,OPC_UA,Siemens}: TMdPrm::loadIO() cleaned from the spare argument.
+- !!!!:{DAQ,Protocol}.ModBus: Appended of the option "e" for the register endian switch to LE for generic and BE for strings.
+- !!:DAQ.ModBus: The string extension of the registers appended of the input charset conversion.
+- !:FIX:Protocol.ModBus: Fixed-adapted in the IO name dynamic translation.
+    FIX: Appended for clearing spare Data IO at loading.
+    FIX: The Data Node is set to disabled at loading now.
+    FIX: Prevented from reloading at the Data Node enable.
+- UI.QTCfg: Fields of the commands limited in them attributes by only name, text and "id" at copy.
+
+
 2022-12-26 Roman (stable)
 - !!:UI.{WebVision,Vision}: The type "Line Edit" of the primitive FormEl adapted to store the value from the data model
     at the element editing - for restore the true value at cancel the changes.

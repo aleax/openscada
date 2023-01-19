@@ -202,14 +202,14 @@
 <dl><dd> КАТЕГОРІЯ: у початок категорії отриманого повідомлення додається ідентифікатор об'єкту контролеру модуля <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">DAQ.DAQGate</a>, що здійснив отримання, наприклад — "loop:alModBus:testTCP" або "TopStat(DAQCntr):alModBus:testTCP", де:
 <ul><li> "loop:*" — типовий шаблон-ознака віддаленого нижчого повідомлення на основі ідентифікатору об'єкту контролеру <a href="Modules/DAQGate.html" title="Special:MyLanguage/Modules/DAQGate">модуля DAQ.DAQGate</a>, який може бути безпосередньо використано у фільтрі категорії для визначення суто <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">архіву віддалених повідомлень цього джерела</a>;</li>
 <li> "TopStat(DAQCntr):*" — типовий шаблон-ознака віддаленого вищого повідомлення на основі назви проекту (або ідентифікатору) <i>TopStat</i> та ідентифікатору об'єкту контролеру <i>DAQCntr</i> модуля DAQ.DAQGate, який може бути безпосередньо використано у фільтрі категорії для визначення суто <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">архіву віддалених повідомлень цього джерела</a>.</li></ul></dd></dl>
-<ul><li> Уніфіковані структури із джерелом даних у категорії, генеруються джерелом даних або його процедурами за допомогою функції <i>messSet()</i> <a href="../en/API.html#TController" title="Special:MyLanguage/Documents/API">API OpenSCADA</a> та <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">користувацького API</a>:</li></ul>
+<ul><li> Уніфіковані структури із джерелом даних у категорії, генеруються джерелом даних або його процедурами за допомогою функції <i>messSet()</i> <a href="API.html#TController" title="Special:MyLanguage/Documents/API">API OpenSCADA</a> та <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">користувацького API</a>:</li></ul>
 <dl><dd><dl><dd> КАТЕГОРІЯ: визначає ID-адресу джерела порушення у форматі  "<b>{ID}{ModId}:{CntrId}[.{PrmId}][:{SpecPrms}]</b>", де:
 <ul><li> <i>ID</i> — двосимвольний ідентифікатор структури;</li>
 <li> <i>ModId</i> — ідентифікатор модуля;</li>
 <li> <i>CntrId</i> — ідентифікатор об'єкту контролера;</li>
 <li> <i>PrmId</i> — ідентифікатор параметру;</li>
 <li> <i>SpecPrms</i> — специфічні параметри структури <i>ID</i>.</li></ul></dd></dl>
-<ul><li> <b>Порушення</b>, генеруються джерелом даних або його процедурами за допомогою функції <i>alarmSet()</i> <a href="../en/API.html#TController" title="Special:MyLanguage/Documents/API">API OpenSCADA</a> та <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">користувацького API</a>:</li></ul>
+<ul><li> <b>Порушення</b>, генеруються джерелом даних або його процедурами за допомогою функції <i>alarmSet()</i> <a href="API.html#TController" title="Special:MyLanguage/Documents/API">API OpenSCADA</a> та <a href="User_API.html#SYS.DAQ" title="Special:MyLanguage/Documents/User API">користувацького API</a>:</li></ul>
 <dl><dd> КАТЕГОРІЯ: визначає ID-адресу джерела порушення у форматі "<b>al{ModId}:{CntrId}[.{PrmId}]</b>", наприклад — "alLogicLev:gen.F_PP1", де:
 <ul><li> "al*" — типовий шаблон-ознака повідомлення порушення на основі двох перших символів слова "alarm", який може бути безпосередньо використано у фільтрі категорії для визначення суто <a class="external" href="http://oscada.org/wiki/File:QTCfg_subsys_arch_mod_ma_main_uk.png" title="File:QTCfg subsys arch mod ma main uk.png">архіву порушень</a>.</li></ul></dd>
 <dd> ТЕКСТ: "<b>{CntrNm} &gt; {PrmNm}: {MessText}</b>", наприклад — "Загальностанційка &gt; F_PP1: Витрати газу через діафрагму PP1: НОРМА", де:
@@ -1891,5 +1891,5 @@ service openscada-lts-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/uk">Documents/Program_manual/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2022</td><td style="text-align: right;" width="40%"> 1+r2862</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/uk">Documents/Program_manual/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
 </html>

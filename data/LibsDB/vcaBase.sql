@@ -13504,7 +13504,7 @@ function messByLang(iMess) {
 
 if(f_start) {
 	toUpdate = false;
-	fMax = 5;
+	fMax = 5; fClrTo = -1;
 	btClassEdit_en = dataEditable && classEditable;
 	if(classFix.length)	classNm_text = class = classFix;
 	else classSel_en = true;
@@ -13525,8 +13525,14 @@ if(wUser != this.ownerSess().reqUser()) {
 for(off = 0; (sval=event.parse(0,"\n",off)).length; )
 	if(sval == "ws_BtToggleChange:/btClassEdit")	{ toUpdate = true; itDel_active = itCopy_active = false; }
 	else if(sval == "ws_BtToggleChange:/btEdit")	toUpdate = true;
-	else if(sval == "ws_CombChange:/classSel")	{ class = ((tVl=classSel_value.match("\\((.+)\\)$")).length) ? tVl[1] : classSel_value; toUpdate = true; colVars = new Object(); }
-	else if(sval == "ws_LnAccept:/classEd")		{ class = ((tVl=classEd_value.match("\\((.+)\\)$")).length) ? tVl[1] : classEd_value; toUpdate = true; colVars = new Object(); }
+	else if(sval == "ws_CombChange:/classSel") {
+		class = ((tVl=classSel_value.match("\\((.+)\\)$")).length) ? tVl[1] : classSel_value;
+		toUpdate = true; colVars = new Object(); fClrTo = 0;
+	}
+	else if(sval == "ws_LnAccept:/classEd") {
+		class = ((tVl=classEd_value.match("\\((.+)\\)$")).length) ? tVl[1] : classEd_value;
+		toUpdate = true; colVars = new Object();
+	}
 
 if((f_start || toUpdate) /*&& !classFix.length*/) {
 	clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT DISTINCT CLASS FROM `classes`;");
@@ -13800,21 +13806,27 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 			this["fltrCol"+(fN+1)].attrSet("en", true);
 			this["fltr"+(fN+1)].attrSet("en", true).attrSet("active", false).attrSet("value", "");
 		}
-		else for(iF = fMax-1; !fAct && iF >= fN; iF--)
-			if(iF < (fMax-1)) {
-				this["fltrCol"+(iF+1)].attrSet("en", false).attrSet("value", tr("Disabled"));
-				this["fltr"+(iF+1)].attrSet("en", false).attrSet("active", false).attrSet("value", "");
-			}
+		else if(!fAct) fClrTo = fN+1;
 
 		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true, toCalcCycles = 1;
 }
 
+//Clearing the filter up to fClrTo
+if(fClrTo >= 0) {
+	this.messInfo("Filter clear up to: "+fClrTo);
+	for(iF = fMax-1; iF >= fClrTo; iF--) {
+		if(iF) { 	this["fltrCol"+iF].attrSet("en", false); this["fltr"+iF].attrSet("en", false); }
+		this["fltrCol"+iF].attrSet("value", tr("Disabled")); this["fltr"+iF].attrSet("active", false).attrSet("value", "");
+	}
+	fClrTo = -1; toUpdate = true; toCalcCycles = 1;
+}
+
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1666422606);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1674114750);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -23734,7 +23746,7 @@ The frame provides currently and in future for next features:
   - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.3
+Version: 1.2.4
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23748,7 +23760,7 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.3
+Версия: 1.2.4
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -41,7 +41,11 @@ using __gnu_cxx::hash_map;
 //using std::unordered_map;
 #endif*/
 
-//Security standard permissions
+//Security modes and standard permissions
+#define SEC_XT 0x01
+#define SEC_WR 0x02
+#define SEC_RD 0x04
+
 #define R_R_R_  0444
 #define R_R___  0440
 #define R_____  0400
@@ -110,14 +114,14 @@ class TCntrNode
 	//  Controll Field
 	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );		//get node for it full identifier
 	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
-	    int perm = 0777, const char *user = "root", const char *grp = "root", int n_attr = 0, ... );
+	    int perm = RWRWRW, const char *user = "root", const char *grp = "root", int n_attr = 0, ... );
 	static XMLNode *ctrMkNode2( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
-	    int perm = 0777, const char *user = "root", const char *grp = "root", ... );	//End by zero pointer
+	    int perm = RWRWRW, const char *user = "root", const char *grp = "root", ... );	//End by zero pointer
 	static XMLNode *_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
-	    int perm = 0777, const char *user = "root", const char *grp = "root" );
+	    int perm = RWRWRW, const char *user = "root", const char *grp = "root" );
 	static bool ctrRemoveNode( XMLNode *nd, const char *path );
-	static bool ctrChkNode( XMLNode *nd, const char *cmd = "get", int perm = 0444, const char *user = "root",
-	    const char *grp = "root", char mode = 04, const char *warn = NULL );
+	static bool ctrChkNode( XMLNode *nd, const char *cmd = "get", int perm = R_R_R_, const char *user = "root",
+	    const char *grp = "root", char mode = SEC_RD );
 
     protected:
 	//Methods
@@ -167,7 +171,7 @@ class TCntrNode
 	TCntrNode *nodePrev( bool noex = false ) const;
 	char	 nodeFlg( )		{ return mFlg; }
 	void	 setNodeFlg( char flg );
-	char	 nodeMode( ) const	{ return mFlg&0x3; }
+	char	 nodeMode( ) const	{ return mFlg&ModifFlag::All; }
 	unsigned nodeUse( bool selfOnly = false );
 	unsigned nodePos( )		{ return mOi; }
 

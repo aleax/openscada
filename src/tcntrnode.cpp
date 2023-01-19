@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1037,13 +1037,11 @@ bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
     return true;
 }
 
-bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *user, const char *grp, char mode, const char *warn )
+bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *user, const char *grp, char mode )
 {
     if(nd->name() != cmd) return false;
     if(((char)perm&mode) != mode && SYS->security().at().access(nd->attr("user"),mode,user,grp,perm) != mode)
 	throw TError("ContrItfc", _("Error accessing item '%s'!"), nd->attr("path").c_str());
-    if(warn && !s2i(nd->attr("force")))
-	throw TError(TError::Core_CntrWarning, "ContrItfc", _("Warning element '%s'! %s"), nd->attr("path").c_str(),warn);
     nd->setAttr("rez", i2s(TError::NoError));
 
     return true;

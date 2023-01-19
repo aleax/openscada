@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.ModBus file: modbus_prt.h
 /***************************************************************************
- *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -43,7 +43,7 @@ using namespace OSCADA;
 #define PRT_NAME	trS("Server ModBus")
 #define PRT_TYPE	SPRT_ID
 #define PRT_SUBVER	SPRT_VER
-#define PRT_MVER	"2.9.17"
+#define PRT_MVER	"2.10.4"
 #define PRT_AUTHORS	trS("Roman Savochenko")
 #define PRT_DESCR	trS("Provides implementation of ModBus protocols. ModBus/TCP, ModBus/RTU and ModBus/ASCII protocols are supported.")
 #define PRT_LICENSE	"GPL2"
@@ -144,11 +144,13 @@ class Node : public TFunction, public TConfig
 	//Data
 	class SIO {
 	    public:
-		SIO( ) : id(-1), pos(-1), sTp(0)	{ }
-		SIO( int iid, char isTp = 0, int ipos = 0 ) : id(iid), pos(ipos), sTp(isTp)	{ }
+		SIO( ) : id(-1), pos(-1), sTp(0), endian(false)	{ }
+		SIO( int iid, char isTp = 0, int ipos = 0, bool iend = false ) :
+		    id(iid), pos(ipos), sTp(isTp), endian(iend)	{ }
 
 		int id, pos;
 		char sTp;
+		bool endian;	//endian toggle
 	};
 	class SData : public TPrmTempl::Impl {
 	    public:

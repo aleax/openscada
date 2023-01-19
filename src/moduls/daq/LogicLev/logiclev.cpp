@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.7.1"
+#define MOD_VER		"2.7.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -413,7 +413,7 @@ void TMdPrm::enable( )
 		chkLnkNeed = tmpl->initLnks();
 
 		//Load IO
-		loadIO(true);
+		loadIO();
 
 		//Init system attributes identifiers
 		idFreq	= tmpl->ioId("f_frq");
@@ -476,7 +476,7 @@ void TMdPrm::load_( )
     if(enableStat()) loadIO();
 }
 
-void TMdPrm::loadIO( bool force )
+void TMdPrm::loadIO( )
 {
     if(!isStd() || !tmpl->func()) return;
 

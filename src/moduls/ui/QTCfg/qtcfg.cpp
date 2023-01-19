@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>      *
+ *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2969,7 +2969,10 @@ void ConfApp::buttonClicked( )
 	    XMLNode req("set"); req.setAttr("path", selPath+"/"+button->objectName().toStdString());
 	    //Copy parameters
 	    for(unsigned iCh = 0; iCh < n_el->childSize(); iCh++)
-		*(req.childAdd()) = *(n_el->childGet(iCh));
+		//*(req.childAdd()) = *(n_el->childGet(iCh));
+		req.childAdd(n_el->childGet(iCh)->name())->
+					setAttr("id",n_el->childGet(iCh)->attr("id"))->
+					setText(n_el->childGet(iCh)->text());
 
 	    mess_info(mod->nodePath().c_str(), _("%s| Pressed down '%s'!"),
 		user().c_str(), (selPath+"/"+button->objectName().toStdString()).c_str());

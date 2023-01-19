@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -836,9 +836,8 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
 # endif
     char	outbuf[1000], *obuf;
     size_t ilen, olen, chwrcnt = 0;
-    iconv_t hd;
 
-    hd = iconv_open(toCH.c_str(), fromCH.c_str());
+    iconv_t hd = iconv_open(toCH.c_str(), fromCH.c_str());
     if(hd == (iconv_t)(-1)) {
 	//mess_crit("IConv", _("Error opening 'iconv': %s"), strerror(errno));	//But there can be a recursion for a wrong charset.
 	return mess;

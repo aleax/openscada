@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Модулі/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (92% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.5 </td>
+<td> 3.6 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -50,7 +50,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.9 </td>
+<td> 2.10 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -206,7 +206,7 @@
 <li> <b>C{N}[w]</b>, <b>CI{N}[w]</b>, <b>C:{N}[:w]</b>, <b>CI:{N}[:w]</b> — біт та біт входу.</li></ul></dd>
 <dd>Де:
 <ul><li> <b>{N}</b> — адреса даних ModBus пристрою (десяткова, шістнадцяткова, або вісімкова) [0...65535];</li>
-<li> <b>w~</b> — прапорці: режим запису 'w', інверсія порядку регістрів '~'.</li></ul></dd>
+<li> <b>w~e</b> — прапорці: режим запису 'w', інверсія порядку регістрів '~', перемикання порядку байтів 'e' регістрів (у LE загалом та BE для рядків).</li></ul></dd>
 <dd>Приклади:
 <dl><dd>"R0x300" — доступ до регістру;</dd>
 <dd>"C100w" — доступ до біту, доступний для запису;</dd>
@@ -310,9 +310,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 Де:
 </p>
 <ul><li> <i>dt</i> — тип даних ModBus ("R"—регістр[3,6(16)], "C"—біт[1,5(15)], "RI"—регістр входу[4], "CI"—біт входу[2]);</li></ul>
-<dl><dd>"R" та "RI" можуть бути розширені суфіксами: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Біт5, "b"—Біт у адресі, "s"—Рядок (розмір по умовчанню 10 та до 100 регістрів);</dd></dl>
+<dl><dd>"R" та "RI" можуть бути розширені суфіксами: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Біт5, "b"—Біт у адресі, "s[КОДУВАННЯ]"—Рядок (розмір по умовчанню 10 та до 100 регістрів);</dd></dl>
 <ul><li> <i>numb</i> — адреса ModBus пристрою (десяткова, шістнадцяткова або вісімкова) [0...65535];</li>
-<li> <i>flg</i> — прапорці: режим запису/читання (r-читати, w-писати), суворий режим запиту (без комбінування) 's', інверсія порядку регістрів '~';</li>
+<li> <i>flg</i> — прапорці: режим запису/читання (r-читати, w-писати), суворий режим запиту (без комбінування) 's', інверсія порядку регістрів '~', перемикання порядку байтів 'e' регістрів (у LE загалом та BE для рядків);</li>
 <li> <i>id</i> — ідентифікатор атрибуту що створюється;</li>
 <li> <i>name</i> — ім'я атрибуту що створюється.</li></ul>
 <p>Приклади:
@@ -335,9 +335,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 Де:
 </p>
 <ul><li> <i>dt</i> — тип даних ModBus ("R"—регістр[3,6(16)], "C"—біт[1,5(15)], "RI"—регістр входу[4], "CI"—біт входу[2]);</li></ul>
-<dl><dd>"R" та "RI" можуть бути розширені суфіксами: "i2"—Int16, "i4"—Int32, i8-Int64, u2-UInt16, u4-UInt32, "f"—Float, "d"—Double, "b5"—Біт5, "b"—Біт у адресі, "s"—Рядок (розмір по умовчанню 10 та до 100 регістрів);</dd></dl>
+<dl><dd>"R" та "RI" можуть бути розширені суфіксами: "i2"—Int16, "i4"—Int32, i8-Int64, u2-UInt16, u4-UInt32, "f"—Float, "d"—Double, "b5"—Біт5, "b"—Біт у адресі, "s[КОДУВАННЯ]"—Рядок (розмір по умовчанню 10 та до 100 регістрів);</dd></dl>
 <ul><li> <i>numb</i> — адреса даних ModBus пристрою (десяткова, шістнадцяткова або вісімкова) [0...65535];</li>
-<li> <i>flg</i> — прапорці: режим запису/читання (r-читати, w-писати), інверсія порядку регістрів '~'.</li></ul>
+<li> <i>flg</i> — прапорці: режим запису/читання (r-читати, w-писати), інверсія порядку регістрів '~', перемикання порядку байтів 'e' регістрів (у LE загалом та BE для рядків).</li></ul>
 <p>Приклади:
 </p>
 <dl><dd>"R:0x300:rw" — доступ до регістру;</dd>
@@ -384,5 +384,5 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/uk">Modules/ModBus/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2022</td><td style="text-align: right;" width="40%"> 1+r2862</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/uk">Modules/ModBus/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
 </html>

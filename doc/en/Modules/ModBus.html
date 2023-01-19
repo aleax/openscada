@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (97% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/ModBus.html" title="Модули/ModBus (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.5 </td>
+<td> 3.6 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -50,7 +50,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.9 </td>
+<td> 2.10 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -206,7 +206,7 @@
 <li> <b>C{N}[w]</b>, <b>CI{N}[w]</b>, <b>C:{N}[:w]</b>, <b>CI:{N}[:w]</b> — coil and input coil.</li></ul></dd>
 <dd>Where:
 <ul><li> <b>{N}</b> — ModBus device's data address (decimal, hexadecimal or octal) [0...65535];</li>
-<li> <b>w~</b> — flags: write mode 'w', registers order inversion '~'.</li></ul></dd>
+<li> <b>w~e</b> — flags: write mode 'w', registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings).</li></ul></dd>
 <dd>Examples:
 <dl><dd>"R0x300w" — register access;</dd>
 <dd>"C100w" — coil access, allowed to write;</dd>
@@ -310,9 +310,9 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 Where:
 </p>
 <ul><li> <i>dt</i> — Modbus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI" — input register[4], "CI"—input coil[2]);</li></ul>
-<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s"—String (size by default is 10 and up to 100 registers);</dd></dl>
+<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s[CHARSET]"—String (size by default is 10 and up to 100 registers);</dd></dl>
 <ul><li> <i>numb</i> — ModBus data address of the device (decimal, hexadecimal or octal) [0...65535];</li>
-<li> <i>flg</i> — flags: read/write mode (r-read, w-write), strict requesting mode (not combining) 's', registers order inversion '~';</li>
+<li> <i>flg</i> — flags: read/write mode (r-read, w-write), strict requesting mode (not combining) 's', registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings);</li>
 <li> <i>id</i> — identifier of the created attribute;</li>
 <li> <i>name</i> — name of the created attribute.</li></ul>
 <p>Examples:
@@ -335,9 +335,9 @@ Where:
 Where:
 </p>
 <ul><li> <i>dt</i> — ModBus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI"—input register[4], "CI"—input coil[2]);</li></ul>
-<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s"—String (size by default is 10 and up to 100 registers);</dd></dl>
+<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s[CHARSET]"—String (size by default is 10 and up to 100 registers);</dd></dl>
 <ul><li> <i>numb</i> — ModBus data address of the device (decimal, hexadecimal or octal) [0...65535];</li>
-<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~'.</li></ul>
+<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings).</li></ul>
 <p>Examples:
 </p>
 <dl><dd>"R:0x300:rw" — register access;</dd>
@@ -384,5 +384,5 @@ Where:
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2022</td><td style="text-align: right;" width="40%"> 1+r2862</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/en">Modules/ModBus/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
 </html>

@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -953,7 +953,7 @@ void TMdPrm::loadDATA( bool incl )
 		lCtx->addLinksAttrs(&pEl);
 
 		// Load IO at enabling
-		loadIO(true);
+		loadIO();
 
 		// Init links
 		lCtx->chkLnkNeed = lCtx->initLnks(/*true*/);	//!!!! Do not reconnect but that can be done in loadIO() early
@@ -1025,7 +1025,7 @@ void TMdPrm::load_( )
     loadIO();
 }
 
-void TMdPrm::loadIO( bool force )
+void TMdPrm::loadIO( )
 {
     if(!enableStat() || !isLogic() || !lCtx || !lCtx->func()) return;
 

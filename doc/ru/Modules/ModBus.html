@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/ModBus</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 97% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FModBus&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/ModBus" title="Modules/ModBus">Modules/ModBus</a> and the translation is 92% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/ModBus.html" title="Modules/ModBus (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/ModBus.html" title="Модулі/ModBus (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -30,7 +30,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 3.5 </td>
+<td> 3.6 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -50,7 +50,7 @@
 <td> <a href="../Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">ModBus</a> </td>
 <td> ModBus
 </td>
-<td> 2.9 </td>
+<td> 2.10 </td>
 <td> GPL2 </td>
 <td> daq_ModBus.so </td>
 <td> en,uk,ru,de </td>
@@ -198,28 +198,28 @@
 <li> <b>15</b> — установка группы битов;</li>
 <li> <b>16</b> — установка группы регистров.</li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:811px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prt_node_node_ru.png"><img class="thumbimage" height="657" src="../files/ModBus_prt_node_node_ru.png" width="809" /></a>  <div class="thumbcaption">Рис.2. Вкладка "Узел" страницы конфигурации узла протокола в режиме "Данные".</div></div></div></div>
-<p>Для формирования таблицы отражения данных сети ModBus, а именно регистров и битов, предусматривается вкладка "Данные" (рис.3). Вкладка "Данные" содержит таблицу параметров и программу обработки параметров указанным языком программирования доступным в OpenSCADA, но по шаблону тут доступна только таблица и в режиме "Включено". Таблица содержит параметры со свойствами:
+<p>To form the table of reflection the ModBus network data, that is registers and bits, the tab "Data" is provided (Fig.3). The tab "Data" contains a table of parameters and program of processing the parameters with the specified programming language which is available in OpenSCADA, but in the template there is only the table available and in the "Enabled" mode. The table contains parameters with the properties:
 </p>
-<ul><li> <i>Идентификатор</i> — идентификатор параметра, является ключевым в формировании таблиц регистров и битов ModBus. Регистры и биты ModBus указываются следующим образом:</li></ul>
-<dl><dd><ul><li> <b>R{N}[w~]</b>, <b>RI{N}[w~]</b> — специфичная форма регистра и регистра входа, может быть расширена суффиксами: "i"—Int32, "f"—Float, "d"—Double, "s"—Строка (размер по умолчанию 10 и до 100 регистров);</li>
-<li> <b>R:{N}[:w~]'<i>, </i></b><i>RI:{N}[:w~]</i> — классическая форма регистра и регистра входа, может быть расширена суффиксами: "i4"—Int32, "i8"—Int64, "f"—Float, "d"—Double, "s"—Строка;</li>
-<li> <b>C{N}[w]</b>, <b>CI{N}[w]</b>, <b>C:{N}[:w]</b>, <b>CI:{N}[:w]</b> — бит и бит входа.</li></ul>
-<dl><dd>Где:</dd></dl>
-<ul><li> <b>{N}</b> — адрес данных ModBus устройства (десятичный, шестнадцатеричный, или восьмеричный) [0...65535];</li>
-<li> <b>w~</b> — флаги: режим записи 'w', инверсия порядка регистров '~'.</li></ul></dd>
-<dd>Примеры:
-<dl><dd>"R0x300" — доступ к регистру;</dd>
-<dd>"C100w" — доступ к биту, доступен для записи;</dd>
-<dd>"R_f200", "R_f200~" — получить вещественное из регистров 200 и 201, 201 и 200;</dd>
-<dd>"R_i400,300" — получить int32 из регистров 400 и 300;</dd>
-<dd>"R_s15,20" — получить строку, блок регистров, из регистра 15 и размером 20;</dd>
-<dd>"R_i8:0x10:w" — получить и установить int64 в регистры [0x10-0x13];</dd>
-<dd>"R_d:0x20,0x30" — получить вещественное двойной точности (8 байтов) из регистров [0x20,0x30-0x32].</dd></dl></dd></dl>
-<dl><dt> Все остальные параметры, не попавшие под вышеуказанные правила, являются внутренними, используются для различных промежуточных вычислений, обработки, преобразований и значения их могут быть оперативно проконтролированы и изменены из этой таблицы в режиме исполнения.</dt></dl>
-<ul><li> <i>Имя</i> — имя параметра, используется для именования связи.</li>
-<li> <i>Тип</i> — тип параметра из списка: "Вещественный", "Целый", "Логический" и "Строка". Для регистров и битов ModBus имеет смысл устанавливать "Целый" и "Логический" тип, соответственно. Для регистров, расширенных префиксами "f" и "s", нужно указывать типы "Вещественный" и "Строка", соответственно.</li>
-<li> <i>Связь</i> — признак того, что данный параметр должен связываться с атрибутом параметра подсистемы "Сбор данных". Указанные этим флагом связи устанавливаются во вкладке "Конфигурация шаблона".</li>
-<li> <i>Значение</i> — исходное или текущее значение параметра, если узел включен.</li></ul>
+<ul><li> <i>Identifier</i> — identifier of the parameter. It is the key for formation of the tables of registers and bits of ModBus. Registers and bits of ModBus set as follows:</li></ul>
+<dl><dd><ul><li> <b>R{N}[w~]</b>, <b>RI{N}[w~]</b> — specific register and input register form, can be expanded by the suffixes: "i"—Int32, "f"—Float, "d"—Double, "s"—String (by default the size is 10 and up to 100 registers);</li>
+<li> <b>R:{N}[:w~]</b>, <b>RI:{N}[:w~]</b> — classic register and input register form, can be expanded by the suffixes: "i4"—Int32, "i8"—Int64, "f"—Float, "d"—Double, "s"—String</li>
+<li> <b>C{N}[w]</b>, <b>CI{N}[w]</b>, <b>C:{N}[:w]</b>, <b>CI:{N}[:w]</b> — coil and input coil.</li></ul></dd>
+<dd>Where:
+<ul><li> <b>{N}</b> — ModBus device's data address (decimal, hexadecimal or octal) [0...65535];</li>
+<li> <b>w~e</b> — flags: write mode 'w', registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings).</li></ul></dd>
+<dd>Examples:
+<dl><dd>"R0x300w" — register access;</dd>
+<dd>"C100w" — coil access, allowed to write;</dd>
+<dd>"R_f200", "R_f200~" — get float from registers 200 and 201, 201 and 200;</dd>
+<dd>"R_i400,300" — get int32 from registers 400 and 300;</dd>
+<dd>"R_s15,20" — get string, registers block, from register 15 and size 20.</dd>
+<dd>"R_i8:0x10:w" — get and set int64 into registers [0x10-0x13];</dd>
+<dd>"R_d:0x20,0x30" — get double float point (8 byte) from registers [0x20,0x30-0x32].</dd></dl></dd></dl>
+<dl><dt> All other parameters are internal and used for a variety of intermediate calculations, processing, conversion and their values can be operative controlled and changed from the table into execution mode.</dt></dl>
+<ul><li> <i>Name</i> — name of the parameter, is used for the naming of the connection.</li>
+<li> <i>Type</i> — type of the parameter from the list: "Real", "Integer", "Boolean" and "String". For the registers and bits of ModBus it makes sense to set the "Integer" and "Boolean" type, respectively. For registers, extended by "f" and "s" prefixes, you must specify the "Real" and "String" types respectively.</li>
+<li> <i>Link</i> — a sign that this parameter should be connected with the parameter attribute of the subsystem "Data acquisition". The links indicated by this sign are set in the "Template configuration" tab.</li>
+<li> <i>Value</i> — original or current value of the parameter, if the node is switched on.</li></ul>
 <p>В таблице, по умолчанию, определяется несколько параметров специального назначения:
 </p>
 <ul><li> <i>f_frq</i> — частота вычисления таблицы программой;</li>
@@ -306,15 +306,15 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <p>Главная страница конфигурации параметра стандартного типа представлена на рисунке 9.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:635px;"><a class="image" href="http://oscada.org/wiki/File:ModBus_prm_ru.png"><img class="thumbimage" height="659" src="../files/ModBus_prm_ru.png" width="633" /></a>  <div class="thumbcaption">Рис.9. Вкладка конфигурации параметра стандартного типа.</div></div></div></div>
-<p>Линия атрибута в параметре списка атрибутов записывается как "<b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>".<br />
-Где:
+<p>One attribute line in the parameter of the attributes list can be written as "<b>{dt}:{numb}[:{flg}[:{id}[:{name}]]]</b>".<br />
+Where:
 </p>
-<ul><li> <i>dt</i> — тип данных ModBus ("R"—регистр[3,6(16)], "C"—бит[1,5(15)], "RI"—регистр входа[4], "CI"—бит входа[2]);</li></ul>
-<dl><dd>"R" и "RI" могут быть расширены суффиксами: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Бит5, "b"—Бит в адресе, "s"—Строка (размер по умолчанию 10 и до 100 регистров);</dd></dl>
-<ul><li> <i>numb</i> — адрес ModBus устройства (десятичный, шестнадцатеричный или восьмеричный) [0...65535];</li>
-<li> <i>flg</i> — флаги: режим чтения/записи (r-чтение, w-запись), строгий режим запроса (без комбинирования) 's', инверсия порядка регистров '~';</li>
-<li> <i>id</i> — идентификатор создаваемого атрибута;</li>
-<li> <i>name</i> — имя создаваемого атрибута.</li></ul>
+<ul><li> <i>dt</i> — Modbus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI" — input register[4], "CI"—input coil[2]);</li></ul>
+<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s[CHARSET]"—String (size by default is 10 and up to 100 registers);</dd></dl>
+<ul><li> <i>numb</i> — ModBus data address of the device (decimal, hexadecimal or octal) [0...65535];</li>
+<li> <i>flg</i> — flags: read/write mode (r-read, w-write), strict requesting mode (not combining) 's', registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings);</li>
+<li> <i>id</i> — identifier of the created attribute;</li>
+<li> <i>name</i> — name of the created attribute.</li></ul>
 <p>Примеры:
 </p>
 <dl><dd>"R:0x300:rw:var:Variable" — доступ к регистру;</dd>
@@ -331,14 +331,13 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 <p>Главная страница конфигурации параметра логического типа представлена на рисунке 11.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:713px;"><a class="image" href="http://oscada.org/wiki/File:ModBusLog_prm_ru.png"><img class="thumbimage" height="533" src="../files/ModBusLog_prm_ru.png" width="711" /></a>  <div class="thumbcaption">Рис.11. Вкладка конфигурации параметра логического типа.</div></div></div></div>
-<p>Значение ссылки при конфигурации шаблона (рис.12) записывается в форме
-"<b>{dt}:{numb}[:{flg}]</b>".<br />
-Где:
+<p>Link value, when configuring the template (Fig.12), is written in the form <b>{dt}:{numb}[:{flg}]</b>.<br />
+Where:
 </p>
-<ul><li> <i>dt</i> — тип данных ModBus ("R"—регистр[3,6(16)], "C"—бит[1,5(15)], "RI"—регистр входа[4], "CI"—бит входа[2]);</li></ul>
-<dl><dd>"R" и "RI" могут быть расширены суффиксами: "i2"—Int16, "i4"—Int32, i8-Int64, u2-UInt16, u4-UInt32, "f"—Float, "d"—Double, "b5"—Бит5, "b"—Бит в адресе, "s"—Строка (размер по умолчанию 10 и до 100 регистров);</dd></dl>
-<ul><li> <i>numb</i> — адрес данных ModBus устройства (десятичный, шестнадцатеричный или восьмеричный) [0...65535];</li>
-<li> <i>flg</i> — флаги: режим чтения/записи (r-чтение, w-запись), инверсия порядка регистров '~'.</li></ul>
+<ul><li> <i>dt</i> — ModBus data type ("R"—register[3,6(16)], "C"—coil[1,5(15)], "RI"—input register[4], "CI"—input coil[2]);</li></ul>
+<dl><dd>"R" and "RI" can be expanded by the suffixes: "i2"—Int16, "i4"—Int32, "i8"—Int64, "u2"—UInt16, "u4"—UInt32, "f"—Float, "d"—Double, "b5"—Bit5, "b"—Bit in address, "s[CHARSET]"—String (size by default is 10 and up to 100 registers);</dd></dl>
+<ul><li> <i>numb</i> — ModBus data address of the device (decimal, hexadecimal or octal) [0...65535];</li>
+<li> <i>flg</i> — flags: read/write mode (r-read; w-write), registers order inversion '~', register 'e'ndian toggle (to LE in generic and BE for strings).</li></ul>
 <p>Примеры:
 </p>
 <dl><dd>"R:0x300:rw" — доступ к регистру;</dd>
@@ -385,5 +384,5 @@ arguments["R_s10,5w"] = "9876543210";</pre>
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">December 2022</td><td style="text-align: right;" width="40%"> 1+r2862</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/ModBus/ru">Modules/ModBus/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
 </html>
