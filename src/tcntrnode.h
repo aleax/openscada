@@ -171,7 +171,7 @@ class TCntrNode
 	TCntrNode *nodePrev( bool noex = false ) const;
 	char	 nodeFlg( )		{ return mFlg; }
 	void	 setNodeFlg( char flg );
-	char	 nodeMode( ) const	{ return mFlg&ModifFlag::All; }
+	char	 nodeMode( ) const	{ return mFlg&All; }
 	unsigned nodeUse( bool selfOnly = false );
 	unsigned nodePos( )		{ return mOi; }
 

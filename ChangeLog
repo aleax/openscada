@@ -1,4 +1,8 @@
 2023-01-19 Roman (stable)
+- SYS: Fix the building.
+
+
+2023-01-19 Roman (stable)
 - LibsDB.OscadaLibs: tmplib_DevLib.SLOT: The Device Address IO added of the conversion from SN specified directly in the field.
 - LibsDB.vcaBase: wlb_Main.storeHouse: The filters appended of separated clearance also at the class change.
 - SYS: The definitions SEC_XT, SEC_WR, SEC_RD moved from the file tsecurity.h to tcntrnode.h and used there also.
