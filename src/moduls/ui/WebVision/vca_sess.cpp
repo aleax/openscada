@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebVision file: vca_sess.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>	   *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>	   *
  *		   2007-2012 by Lysenko Maxim, <mlisenko@oscada.org>	   *
  *		   2007-2008 by Yashina Kseniya, <ksu@oscada.org>	   *
  *									   *
@@ -6514,7 +6514,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 {
     if(type == FD_TRND) {
 	int64_t tTimeGrnd = tTime - (int64_t)(1e6*tSize);
-	curTime = vmax(vmin(itm,tTime),tTimeGrnd);
+	curTime = vmax(vmin(itm,tTime), tTimeGrnd);
 
 	holdCur = (curTime==tTime);
 
@@ -6526,12 +6526,15 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	//Update trend's current values
 	for(unsigned iP = 0; iP < trnds.size(); iP++) {
 	    int vpos = trnds[iP].val(curTime);
+	    if(trnds[iP].val().size() && vpos == trnds[iP].val().size())	//!!!! Compensate the one point outward the size
+		vpos = trnds[iP].val().size() - 1;
+
 	    double val = EVAL_REAL;
-	    if(!(!trnds[iP].val().size() || curTime < trnds[iP].valBeg() ||
-		(!tTimeCurent && vpos >= (int)trnds[iP].val().size())))
+	    if(trnds[iP].val().size() && curTime >= trnds[iP].valBeg() &&
+		(tTimeCurent || vpos < (int)trnds[iP].val().size()))
 	    {
 		vpos = vmax(0,vmin((int)trnds[iP].val().size()-1,vpos));
-		if( vpos && trnds[iP].val()[vpos].tm > curTime ) vpos--;
+		if(vpos && trnds[iP].val()[vpos].tm > curTime) vpos--;
 		val = trnds[iP].val()[vpos].val;
 	    }
 	    if(val != trnds[iP].curVal())

@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1878,7 +1878,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    int64_t ibeg = buf.begin(), iend = buf.end();
 	    period = vmax(period, buf.period());
 	    int mode = s2i(opt->attr("mode"));
-	    if(mode < 0 || mode > 2) throw err_sys(_("Data mode '%d' is not supported"), mode);
+	    if(mode < DMSimple || mode > DMBin) throw err_sys(_("Data mode '%d' is not supported"), mode);
 	    switch(buf.valType()) {
 		case TFld::Boolean: {
 		    char tval_pr = EVAL_BOOL, tval_pr1 = EVAL_BOOL;
@@ -1887,13 +1887,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			vpos_cur = (ibeg-buf.begin())/period;
 			if(vpos_cur > vpos_end)
 			    bool1: switch(mode) {
-				case 0: text += ((tval_pr==EVAL_BOOL) ? EVAL_STR : i2s(tval_pr)) + "\n"; break;
-				case 1:
+				case DMSimple: text += ((tval_pr==EVAL_BOOL) ? EVAL_STR : i2s(tval_pr)) + "\n"; break;
+				case DMPack:
 				    if(!vpos_end || tval_pr != tval_pr1)
 					text += i2s(vpos_end) + " " + ((tval_pr==EVAL_BOOL) ? EVAL_STR : i2s(tval_pr)) + "\n";
 				    tval_pr1 = tval_pr;
 				    break;
-				case 2: text += tval_pr; break;
+				case DMBin: text += tval_pr; break;
 			    }
 			tval_pr = tval;
 			vpos_end = vpos_cur;
@@ -1918,8 +1918,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			    }
 			}
 			else int1: switch(mode) {
-			    case 0: text += ((tval_pr==EVAL_INT) ? EVAL_STR : ll2s(tval_pr)) + "\n"; break;
-			    case 1:
+			    case DMSimple: text += ((tval_pr==EVAL_INT) ? EVAL_STR : ll2s(tval_pr)) + "\n"; break;
+			    case DMPack:
 				if(!(vpos_end && (tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
 					100.*(double)abs(tval_pr1-tval_pr)/(double)vmax(abs(tval_pr1),abs(tval_pr)) <= round_perc))))
 				{
@@ -1927,7 +1927,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 				    tval_pr1 = tval_pr;
 				}
 				break;
-			    case 2: text += string((char*)&tval_pr, sizeof(int64_t)); break;
+			    case DMBin: text += string((char*)&tval_pr, sizeof(int64_t)); break;
 			}
 			tval_pr = tval;
 			vpos_end = vpos_cur;
@@ -1954,8 +1954,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			    }
 			}
 			else real1: switch(mode) {
-			    case 0: text += ((tval_pr==EVAL_REAL) ? EVAL_STR : r2s(tval_pr,real_prec)) + "\n";	break;
-			    case 1:
+			    case DMSimple: text += ((tval_pr==EVAL_REAL) ? EVAL_STR : r2s(tval_pr,real_prec)) + "\n";	break;
+			    case DMPack:
 				if(!(vpos_end && (tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
 					100.*fabs(tval_pr1-tval_pr)/vmax(fabs(tval_pr1),fabs(tval_pr)) <= round_perc))))
 				{
@@ -1963,7 +1963,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 				    tval_pr1 = tval_pr;
 				}
 				break;
-			    case 2: text += string((char*)&tval_pr, sizeof(double));	break;
+			    case DMBin: text += string((char*)&tval_pr, sizeof(double));	break;
 			}
 			tval_pr = tval;
 			vpos_end = vpos_cur;
@@ -1980,13 +1980,13 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			vpos_cur = (ibeg-buf.begin())/period;
 			if(vpos_cur > vpos_end)
 			    str1: switch(mode) {
-				case 0: text += TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n"; break;
-				case 1:
+				case DMSimple: text += TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n"; break;
+				case DMPack:
 				    if(!vpos_end || tval_pr != tval_pr1)
 					text += i2s(vpos_end)+" "+TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";
 				    tval_pr1 = tval_pr;
 				    break;
-				case 2: throw err_sys(_("Binary mode is not supported for strings data"));
+				case DMBin: throw err_sys(_("Binary mode is not supported for strings data"));
 			    }
 			tval_pr = tval;
 			vpos_end = vpos_cur;
@@ -2002,7 +2002,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    opt->setAttr("tm", ll2s((buf.end()/period)*period));
 	    opt->setAttr("tm_grnd", ll2s((buf.begin()/period)*period + ((buf.begin()%period)?period:0)));
 	    opt->setAttr("per", ll2s(period));
-	    opt->setText((mode==2) ? TSYS::strEncode(text,TSYS::base64) : text);
+	    opt->setText((mode==DMBin) ? TSYS::strEncode(text,TSYS::base64) : text);
 	    opt->setAttr("vtp", i2s(TValBuf::valType()));
 	}
 	else if(ctrChkNode(opt,"name",RWRWRW,"root","root",SEC_RD)) {	//Archive name request
@@ -2195,10 +2195,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText(ARCH_BUF);
 	vector<string> lsm, lsa;
 	owner().modList(lsm);
-	for(unsigned i_m = 0; i_m < lsm.size(); i_m++) {
-	    owner().at(lsm[i_m]).at().valList(lsa);
+	for(unsigned iM = 0; iM < lsm.size(); iM++) {
+	    owner().at(lsm[iM]).at().valList(lsa);
 	    for(unsigned iA = 0; iA < lsa.size(); iA++)
-		opt->childAdd("el")->setText(lsm[i_m]+"."+lsa[iA]);
+		opt->childAdd("el")->setText(lsm[iM]+"."+lsa[iA]);
 	}
     }
     else if(a_path == "/val/val" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID,SEC_RD)) {

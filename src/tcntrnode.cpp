@@ -1107,13 +1107,13 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		    XMLNode reqIco("get"); reqIco.setAttr("path","/ico")->setAttr("user",opt->attr("user"))->setAttr("lang",opt->attr("lang"));
 		    ch.at().cntrCmdProc(&reqIco);
 		    if(icoCheck) chN->setAttr("icoSize", i2s(reqIco.text().size()));
-		    else chN->childAdd("ico")->setText(reqIco.text());
+		    else if(reqIco.text().size()) chN->childAdd("ico")->setText(reqIco.text());
 		    //   Process groups
 		    XMLNode brReq("info"); brReq.setAttr("path","/br")->setAttr("user",opt->attr("user"))->setAttr("lang",opt->attr("lang"));
 		    ch.at().cntrCmdProc(&brReq);
-		    for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++) {
+		    for(unsigned iBr = 0; brReq.childSize() && iBr < brReq.childGet(0)->childSize(); iBr++) {
 			XMLNode *chB = chN->childAdd();
-			*chB = *brReq.childGet(0)->childGet(i_br);
+			*chB = *brReq.childGet(0)->childGet(iBr);
 			int grpBrId = ch.at().grpId(chB->attr("id"));
 			ch.at().chldList(grpBrId, ls);
 			chB->setAttr("chPresent",ls.size()?"1":"0");
@@ -1136,7 +1136,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/plang/list" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText("");
-	vector<string>  ls, lls;
+	vector<string> ls, lls;
 	SYS->daq().at().modList(ls);
 	for(unsigned iM = 0; iM < ls.size(); iM++) {
 	    if(!SYS->daq().at().at(ls[iM]).at().compileFuncLangs(&lls))	continue;

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: widget.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -637,7 +637,7 @@ void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf, bool allIn
 	    if(p->second->mOi >= pos) p->second->mOi++;
 	mAttrs.insert(std::pair<string,Attr*>(a->id(),a));
 
-	if(a->id().compare(0,3,"vs_") == 0)
+	if(a->id().find("vs_") == 0)
 	    a->setFlgSelf((Attr::SelfAttrFlgs)(a->flgSelf()|Attr::VizerSpec), true);
 
 	//Set modif for new attribute reload allow
@@ -917,12 +917,12 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 		opt->setAttr("lnkPath",parentNoLink().at().addr());
 	    }
 	    else wdgList(lst);
-	    for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
-		if(!isLink()) iwdg = wdgAt(lst[i_f]);
-		else iwdg = parentNoLink().at().wdgAt(lst[i_f]);
+	    for(unsigned iF = 0; iF < lst.size(); iF++) {
+		if(!isLink()) iwdg = wdgAt(lst[iF]);
+		else iwdg = parentNoLink().at().wdgAt(lst[iF]);
 		XMLNode *wn = opt->childAdd("get")->setAttr("path",a_path);
 		iwdg.at().cntrCmdServ(wn);
-		wn->setName("w")->attrDel("path")->attrDel("rez")->setAttr("id",lst[i_f]);
+		wn->setName("w")->attrDel("path")->attrDel("rez")->setAttr("id",lst[iF]);
 	    }
 	}
     }
@@ -1077,11 +1077,11 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    if(!chkUserPerm || SYS->security().at().access(opt->attr("user"),SEC_RD,owner(),grp(),permit())) {
 		vector<string>  lst;
 		wdgList(lst);
-		for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
-		    AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
+		for(unsigned iF = 0; iF < lst.size(); iF++) {
+		    AutoHD<Widget> iwdg = wdgAt(lst[iF]);
 		    if(chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEC_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()))
 			continue;
-		    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trD(iwdg.at().name()));
+		    opt->childAdd("el")->setAttr("id",lst[iF])->setText(trD(iwdg.at().name()));
 		}
 	    }
 	}
@@ -1540,8 +1540,8 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	vector<string> lst;
 	wdgList(lst);
 	opt->childAdd("el")->setText(".");
-	for(unsigned i_f=0; i_f < lst.size(); i_f++)
-	    opt->childAdd("el")->setText(lst[i_f]);
+	for(unsigned iF = 0; iF < lst.size(); iF++)
+	    opt->childAdd("el")->setText(lst[iF]);
     }
     else if(a_path == "/proc/attr") {
 	wattr = opt->attr("wdg");

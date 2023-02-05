@@ -213,7 +213,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 
 <tr>
 <td> <span id="mbBase" title="#mbBase"><h3><span class="mw-headline" id="ModBus_base_.28mbBase.29"><span class="mw-headline-number">1.2</span> ModBus base (<a href="Libs_Devices.html#mbBase" title="Special:MyLanguage/Libs/Devices">mbBase</a>)</span></h3></span> </td>
-<td> 1.1 </td>
+<td> 1.2 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en,uk,ru 
@@ -286,7 +286,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <tr>
 <td> items </td>
 <td> Items set
-<p>Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}".
+<p>Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".
 </p>
 </td>
 <td> Text </td>
@@ -358,7 +358,7 @@ sqlite3 -init OscadaLibs.sql OscadaLibs.db .exit
 <dd>3. Create and start <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">a logical controller object</a> or <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">a ModBus controller object</a> or use any presented one with the needed scheduling properties.</dd>
 <dd>4. Create a logical parameter object and select the template for that, one for the devices on one bus. Enable the parameter.</dd>
 <dd>5. Into the tab "Template configuration" of the logical parameter object you need to set:
-<ul><li> <i>Transport</i> — to address of the transport into step 1. Leave the field empty for <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">the ModBus controller object</a>. Tracing for the address changing is supported.</li>
+<ul><li> <i>Transport</i> — to the address of the automatically created transport with its parameters after ":", accordingly to the <a href="User_API.html#SYSTransport" title="Special:MyLanguage/Documents/User API">function SYS.Transport.outAt() address format</a>. Leave the field empty for <a href="Modules/ModBus.html" title="Special:MyLanguage/Modules/ModBus">the ModBus controller object</a>. Tracing for the address changing is supported.</li>
 <li> <i>Device address</i> (for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the logical controller object</a>) — to logical address of the device on the bus under the transport in step 1. Tracing for the address changing is supported.</li>
 <li> <i>ModBus type</i> (for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the logical controller object</a>) — to the ModBus protocol type/variant from the list: RTU, ASCII, TCP.</li>
 <li> <i>ModBus maximum block size</i> (for <a href="Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">the logical controller object</a>) — to the ModBus protocol package data maximum size in the range [10...200].</li>
@@ -5649,5 +5649,5 @@ The field "addr" of the items can be wrote positive, for  the 8 bit address [0..
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Libs/Devices/uk">Libs/Devices/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

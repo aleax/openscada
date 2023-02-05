@@ -1,7 +1,7 @@
 
 //OpenSCADA module BD.DBGate file: DBGate.cpp
 /***************************************************************************
- *   Copyright (C) 2020-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2020-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,7 +29,7 @@
 #define MOD_NAME	trS("DB gate")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"1.1.5"
+#define MOD_VER		"1.1.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("BD module. Allows to locate databases of the remote OpenSCADA stations to local ones.")
 #define MOD_LICENSE	"GPL2"
@@ -302,7 +302,7 @@ void MTable::fieldStruct( TConfig &cfg )
 
 bool MTable::fieldSeek( int row, TConfig &cfg, const string &cacheKey )
 {
-    //cfg.cfgToDefault();	//reset the not key and viewed fields
+    cfg.cfgToDefault();	//reset the not key and viewed fields, especially for the network traffic
     cfg.setTrcSet(true);
 
     XMLNode req("call");

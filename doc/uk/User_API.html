@@ -801,12 +801,12 @@
 <p><b>Об'єкт "Сеанс" ( this.ownerSess() )</b>
 </p>
 <ul><li> <i>string user( )</i> — поточний користувач сеансу.</li>
-<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — квітує порушення <i>wpath</i> з шаблоном <i>quit_tmpl</i>. Якщо <i>wpath</i> це порожній рядок то здійснюється глобальна квітація. У рядку <i>wpath</i>, через символ ';', може бути перелічено адреси декількох віджетів. При встановлені <i>ret</i> здійснюється повернення квітації.</li>
+<li> <i>int alrmQuietance( int quit_tmpl, string wpath = "", bool ret = false )</i> — стишує порушення <i>wpath</i> з шаблоном <i>quit_tmpl</i>. Якщо <i>wpath</i> це порожній рядок то здійснюється глобальне стишення. У рядку <i>wpath</i>, через символ ';', може бути перелічено адреси декількох віджетів. При встановлені <i>ret</i> здійснюється повернення квітації.</li>
 <li> <i>int reqTm( )</i> — час останнього запиту у секундах від епохи 1.1.1970.</li>
 <li> <i>string reqUser( )</i> — користувач останнього запиту.</li>
 <li> <i>string reqLang( )</i> — мова останнього запиту.</li>
 <li> <i>int userActTm( )</i> — час останньої дії користувача у секундах від епохи 1.1.1970.</li>
-<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — надсилає UI команду керування сторінками, як то: "open", "next", "prev"; детальніше дивиться у <a href="#Events">секції подій</a>. Ця функція має бути приоритетною для використання у керуванні сторінками перед прямим записом до атрибутів сторінок "pgOpen" та "pgOpenSrc", оскільки це єдиний метод коректної роботи з <a href="#Project">лінкованими сторінками</a>.</li>
+<li> <i>bool uiCmd( string cmd, string prm, string src )</i> — надсилає UI команду керування сторінками, як то: "open", "next", "prev"; детальніше дивиться у <a href="#Events">секції подій</a>. Ця функція має бути пріоритетною для використання у керуванні сторінками перед прямим записом до атрибутів сторінок "pgOpen" та "pgOpenSrc", оскільки це єдиний метод коректної поводження з <a href="#Project">лінкованими сторінками</a>.</li>
 <li> <i>int period( bool isReal = false )</i> — отримання періоду опрацювання сеансу, <i>isReal</i> для реального періоду.</li></ul>
 <p><b>Об'єкт "Віджет" (this)</b>
 </p>
@@ -1011,5 +1011,5 @@ vcaBase.db (<a class="external text" href="http://oscada.org/svn/trunk/OpenSCADA
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/User_API/uk">Documents/User_API/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

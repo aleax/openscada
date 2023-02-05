@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/VCAEngine</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (95% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/VCAEngine.html" title="Модули/Движок Среды Визуализации и Управлений (СВУ) (90% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/VCAEngine.html" title="Модулі/Рушій Середовища Візуалізації та Управління (СВУ) (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -90,24 +90,11 @@
 </ul>
 </li>
 <li class="toclevel-2 tocsection-13"><a href="#Database_using_to_store_libraries_of_widgets_and_projects"><span class="tocnumber">3.10</span> <span class="toctext">Database using to store libraries of widgets and projects</span></a></li>
-<li class="toclevel-2 tocsection-14"><a href="#API_of_the_user_programming_and_service_interfaces_of_OpenSCADA"><span class="tocnumber">3.11</span> <span class="toctext"><span>API of the user programming and service interfaces of OpenSCADA</span></span></a>
-<ul>
-<li class="toclevel-3"><a href="#API_of_the_user_programming"><span class="tocnumber">3.11.1</span> <span class="toctext"><span>API of the user programming</span></span></a></li>
-<li class="toclevel-3"><a href="#Service_interfaces_of_OpenSCADA"><span class="tocnumber">3.11.2</span> <span class="toctext">Service interfaces of OpenSCADA</span></a>
-<ul>
-<li class="toclevel-4"><a href="#Access_to_the_attributes_values_of_the_visualization_elements_.28widgets.29"><span class="tocnumber">3.11.2.1</span> <span class="toctext">Access to the attributes values of the visualization elements (widgets)</span></a></li>
-<li class="toclevel-4"><a href="#Group_access_to_the_values_of_the_attributes_of_the_visualization_elements_.28widgets.29"><span class="tocnumber">3.11.2.2</span> <span class="toctext">Group access to the values of the attributes of the visualization elements (widgets)</span></a></li>
-<li class="toclevel-4"><a href="#Access_to_the_session_pages"><span class="tocnumber">3.11.2.3</span> <span class="toctext">Access to the session pages</span></a></li>
-<li class="toclevel-4"><a href="#Control_for_signaling_.28alarming.29"><span class="tocnumber">3.11.2.4</span> <span class="toctext">Control for signaling (alarming)</span></a></li>
-<li class="toclevel-4"><a href="#Manipulation_with_the_sessions_of_the_projects"><span class="tocnumber">3.11.2.5</span> <span class="toctext">Manipulation with the sessions of the projects</span></a></li>
-<li class="toclevel-4"><a href="#Group_request_for_the_tree_of_the_widgets_libraries"><span class="tocnumber">3.11.2.6</span> <span class="toctext">Group request for the tree of the widgets libraries</span></a></li>
+<li class="toclevel-2 tocsection-14"><a href="#API_of_the_user_programming"><span class="tocnumber">3.11</span> <span class="toctext"><span>API of the user programming</span></span></a></li>
+<li class="toclevel-2 tocsection-15"><a href="#Service_commands-functions_of_the_Control_Interface"><span class="tocnumber">3.12</span> <span class="toctext">Service commands-functions of the Control Interface</span></a></li>
 </ul>
 </li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toclevel-1 tocsection-15"><a href="#Configuring_the_module_via_the_control_interface_of_OpenSCADA"><span class="tocnumber">4</span> <span class="toctext">Configuring the module via the control interface of OpenSCADA</span></a></li>
+<li class="toclevel-1 tocsection-16"><a href="#Configuring_the_module_via_the_control_interface_of_OpenSCADA"><span class="tocnumber">4</span> <span class="toctext">Configuring the module via the control interface of OpenSCADA</span></a></li>
 </ul>
 </div>
 
@@ -602,7 +589,7 @@ The mechanism "Processing the events with the help of computational procedure of
 <p><br />
 </p>
 <h3><span class="mw-headline" id="Signaling_.28Alarms.29"><span class="mw-headline-number">3.6</span> <span id="Alarms" title="#Alarms">Signaling (Alarms)</span></span></h3>
-<p>An important element of any visualisation interface is the user notification about the violation — signalling. To simplify the perception, but also in mind the close connectivity of visualisation and notification (as a rule, the notification complements the visualisation) it is decided to integrate the interface of the notification in the visualisation interface. To do this, all the widget provides two additional attributes of the session level: "alarm" and "alarmSt". The attribute "alarm" is used to form the signal by the widget, according to his logic, and the attribute "alarmSt" is used to control the signalling fact of the branch of the session tree.
+<p><span id="Alarms" title="#Alarms">An important element</span> of any visualisation interface is the user notification about the violation — signalling. To simplify the perception, but also in mind the close connectivity of visualisation and notification (as a rule, the notification complements the visualisation) it is decided to integrate the interface of the notification in the visualisation interface. To do this, all the widget provides two additional attributes of the session level: "alarm" and "alarmSt". The attribute "alarm" is used to form the signal by the widget, according to his logic, and the attribute "alarmSt" is used to control the signalling fact of the branch of the session tree.
 </p><p>The "alarm" attribute is a string that has the following format: "<b>{lev}|{categ}|{message}|{type}|{tp_arg}</b>"<br />
 Where:
 </p>
@@ -2913,8 +2900,7 @@ Where:
 <dd><i>IO_VAL</i> — value of the element.</dd></dl></dd></dl>
 <p><br />
 </p>
-<h3><span class="mw-headline" id="API_of_the_user_programming_and_service_interfaces_of_OpenSCADA"><span class="mw-headline-number">3.11</span> <span id="UserAPI" title="#UserAPI">API of the user programming and service interfaces of OpenSCADA</span></span></h3>
-<h4><span class="mw-headline" id="API_of_the_user_programming"><span class="mw-headline-number">3.11.1</span> <span id="UserAPI" title="#UserAPI">API of the user programming</span></span></h4>
+<h3><span class="mw-headline" id="API_of_the_user_programming"><span class="mw-headline-number">3.11</span> <span id="UserAPI" title="#UserAPI">API of the user programming</span></span></h3>
 <p>API of the user programming of the visualization engine are represented directly by the OpenSCADA objects, which form the user interface, that is by the "Session" and "Widgets-pages". For the user, these objects provide a set of control functions:
 </p>
 <div class="floatright"><a class="image" href="http://oscada.org/wiki/File:Oscada_UserOM_VCAEngine.png" title="User object model of the module VCAEngine."><img alt="User object model of the module VCAEngine." height="238" src="../files/Oscada_UserOM_VCAEngine.png" width="352" /></a></div>
@@ -3152,143 +3138,346 @@ Deprecated, but supported, the API is represented by a group of functions direct
 <td> Input </td>
 <td>
 </td></tr></table>
-<h4><span class="mw-headline" id="Service_interfaces_of_OpenSCADA"><span class="mw-headline-number">3.11.2</span> Service interfaces of OpenSCADA</span></h4>
-<p>Service interfaces are the interfaces for access to OpenSCADA through <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">the OpenSCADA control interface</a>. This mechanism is the basis of all mechanisms of exchange within OpenSCADA, implemented through weak links and the standard exchange protocol of OpenSCADA .
+<p><br />
 </p>
-<h5><span class="mw-headline" id="Access_to_the_attributes_values_of_the_visualization_elements_.28widgets.29"><span class="mw-headline-number">3.11.2.1</span> Access to the attributes values of the visualization elements (widgets)</span></h5>
-<p>In order to provide unitized, grouping and relatively fast access to the attributes values of the visual elements, the service function of the visual element "/serv/attr" and get-set commands of values of the attributes are provided:
+<h3><span class="mw-headline" id="Service_commands-functions_of_the_Control_Interface"><span class="mw-headline-number">3.12</span> Service commands-functions of the Control Interface</span></h3>
+<p><b><u>Obtaining the sessions list of the specified VCA project</u></b><br />
+REQ: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" /&gt;</i>
 </p>
-<ul><li> get: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b>;</li>
-<li> set: <b>&lt;set path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b>.</li></ul>
-<p><b>Table.</b> Attributes of the commands for get-set of the attributes of the visual elements.
+<ul><li> <i>project</i> — identifier of the requested project.</li></ul>
+<p>RESP: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="{project}" rez="<b>0</b>"&gt;<b>{sessions}</b>&lt;/list&gt;</i>
 </p>
-<table class="wikitable">
-
-<tr>
-<th> Identifier </th>
-<th> Name </th>
-<th> Value
-</th></tr>
-<tr>
-<td colspan="3"> <i>Requesting command of the visual attributes of the widget: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> tm </td>
-<td> Time-counter of the changes </td>
-<td> Time-counter of the changes set up for the query of the only changed attributes.
-</td></tr>
-<tr>
-<td> &lt;el id="{attr}" p="{a_id}"&gt;{val}&lt;/el&gt; </td>
-<td> Formation of the child elements with the results of the attributes </td>
-<td> In the child element are specified: string identifier <i>attr</i>, index <i>a_id</i> and value <i>val</i> of the attribute.
-</td></tr>
-<tr>
-<td colspan="3"> <i>Setting command of the visual attributes of the widget: <b>&lt;set path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> &lt;el id="{attr}"&gt;{val}&lt;/el&gt; </td>
-<td> Setting of the attributes </td>
-<td> In the child elements are specified: the string identifier <i>attr</i> and value <i>val</i> of the attribute.
-</td></tr>
-<tr>
-<td colspan="3"> <i>Activation-creation command of the specific attribute for the visualizer: <b>&lt;activate path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattr/{attrId}" aNm="{Name}" aTp="{Type} aFlg="{Flags}"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> attrId </td>
-<td> Attribute identifier </td>
-<td>
-</td></tr>
-<tr>
-<td> aNm </td>
-<td> Attribute name </td>
-<td>
-</td></tr>
-<tr>
-<td> aTp </td>
-<td> Attribute type </td>
-<td>
-</td></tr>
-<tr>
-<td> aFlg </td>
-<td> Attribute flags </td>
-<td>
-</td></tr></table>
-<h5><span class="mw-headline" id="Group_access_to_the_values_of_the_attributes_of_the_visualization_elements_.28widgets.29"><span class="mw-headline-number">3.11.2.2</span> Group access to the values of the attributes of the visualization elements (widgets)</span></h5>
-<p>In order to optimize network traffic by eliminating the small queries and use one large, the group query of the attributes' values of the visual elements is made. Grouping of this query involves a request of attributes of the entire branch of the widget, including the included elements. For this request the service command "/serv/attrBr" provides. Request of this service command is equivalent to the service command "/serv/attr" and looks as follows: <b>&lt;get path="/UI/VCAEngine/{wdg_addr}/%2fserv%2fattrBr"/&gt;</b>
+<ul><li> <i>sessions</i> — sessions in the "el" tags.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/list&gt;</span>
+</pre></div>
+<p><b><u>Connection to the specified VCA project or the project session</u></b><br />
+REQ: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" /&gt;</i>
 </p>
-<dl><dd><i>tm</i> — time-counter of the changes. time-counter of the changes set up for the query of the only changed attributes.<br /></dd></dl>
-<p>Result:
+<ul><li> <i>project</i> — identifier of the requested project, empty for connection to the available session;</li>
+<li> <i>session</i> — identifier of the already present session, empty at a new session creation;</li>
+<li> <i>userChange</i> — sign of the user changing [0|1], that is updation the user information.</li></ul>
+<p>RESP: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
 </p>
-<dl><dd><i>&lt;el id="{attr}" p="{a_id}"&gt;{val}&lt;/el&gt;</i> — elements with the results of the attributes. In the element are specified: string identifier <i>attr</i>, index <i>a_id</i> and value <i>val</i> of the attribute.</dd>
-<dd><i>&lt;w id="{wid}" lnkPath="{lnk_path}"&gt;{childs+attrs}&lt;/w&gt;</i> — elements with the child widgets and their attributes. The element specifies: identifier of the child widget <i>wid</i> and the widget path, to which this widget refers if it is a link <i>lnk_path</i>.</dd></dl>
-<h5><span class="mw-headline" id="Access_to_the_session_pages"><span class="mw-headline-number">3.11.2.3</span> Access to the session pages</span></h5>
-<p>In order to unify and optimize the access to the pages, the service function of the session "/serv/pg" and commands are provided:
+<ul><li> <i>conId</i> — the session connection identifier, used in next requests;</li>
+<li> <i>project</i> — the project identifier of the successfully connected session;</li>
+<li> <i>session</i> — identifier of the new created session of the successfully connected project;</li>
+<li> <i>userIsRoot</i> — the user has the root permition [0|1].</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;connect</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">userIsRoot=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+</pre></div>
+<p><b><u>Disconnection the specified VCA project session</u></b><br />
+Sessions with zero connections are closed here also.<br />
+REQ: <i>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess" sess="<b>{session}</b>" conId="<b>{conId}</b>" /&gt;</i>
 </p>
-<ul><li> query of the list of opened pages: <b>&lt;openlist path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b>;</li>
-<li> open the page: <b>&lt;open path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b>;</li>
-<li> close the page: <b>&lt;close path="/UI/VCAEngine/ses_{Session}/%2fserv%2fpg"/&gt;</b>.</li></ul>
-<p>The result of the query is child elements <b>&lt;el&gt;{OpPage}&lt;/el&gt;</b>, which contain the full path of the open page. In addition to the list of open pages, the query returns the value of the current counter for calculating the session, in the attribute <i>tm</i>. If this attribute is set during the query, then for, each open page, it returns the list of changed, since the moment of the specified value of the counter, widgets of the open page.
+<ul><li> <i>session</i> — identifier of the present session;</li>
+<li> <i>conId</i> — the session connection identifier.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;disconnect</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="nt">/&gt;</span>
+</pre></div>
+<p><b><u>Obtaining the widget libraries' tree, optimised for the networks</u></b><br />
+REQ: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="<b>{item}</b>" disIconsW="<b>{disIconsW}</b>" disIconsCW="<b>{disIconsCW}</b>" /&gt;</i>
 </p>
-<h5><span class="mw-headline" id="Control_for_signaling_.28alarming.29"><span class="mw-headline-number">3.11.2.4</span> Control for signaling (alarming)</span></h5>
-<p>To provide a mechanism for global control of the signaling of the session, the service function of the session "/serv/alarm" and commands are provided:
+<ul><li> <i>item</i> — the library item for obtaining, as the path "wlb_<b>{WLib}</b>[/wdg_<b>{Wdg}</b>[/wdg_<b>{ChildWdg}</b>]]", for empty there will be obtained all the tree;</li>
+<li> <i>disIconsW</i> — disable for obtaining the icon data of the widgets [0|1];</li>
+<li> <i>disIconsCW</i> — disable for obtaining the icon data of the child widgets [0|1].</li></ul>
+<p>RESP: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="{item}" disIconsW="{disIconsW}" disIconsCW="{disIconsCW}" rez="<b>0</b>"&gt;<b>{wlibs}</b>&lt;/get&gt;</i>
 </p>
-<ul><li> query of the signals status: <b>&lt;get path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>;</li>
-<li> quietance of the signals: <b>&lt;quietance path="/UI/VCAEngine/ses_{Session}/%2fserv%2falarm"/&gt;</b>.</li></ul>
-<p>Request for the signals status returns generalized state of the signals, as well as the resource of the notification if the "mode" attribute is "resource". The result of the notification resource request is usually a sound file for playback. At the same time, the tracking of the sequence of signaling and the quietance of individual notification resources is provided.
-</p><p>Request for the quietance performs the quietance of the widget, specified in the attribute <i>wdg</i>, in accordance with the template in the attribute <i>tmpl</i>.
+<ul><li> <i>wlibs</i> — the widget libraries in the "wlb" tags: <i>&lt;wlb id="{ID}" doc="{doc}"&gt;{name} <b>{icon}</b> <b>{widgets}</b>&lt;/wlb&gt;</i>
+<ul><li> <i>icon</i> — the "icon" tag with the Base64 encoded data of the icon;</li>
+<li> <i>widgets</i> — the "w" tags with the library widgets description: <i>&lt;w id="{ID}" doc="{doc}" parent="<b>{parent}</b>"&gt;{name} {icon} <b>{widgets}</b>&lt;/w&gt;</i>
+<ul><li> <i>parent</i> — address of the widget parent;</li>
+<li> <i>widgets</i> — the "сw" tags with the child widgets description: <i>&lt;cw id="{ID}" doc="{doc}"&gt;{name} {icon}&lt;/cw&gt;</i></li></ul></li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">disIconsCW=</span><span class="s">"1"</span> <span class="na">disIconsW=</span><span class="s">"1"</span> <span class="na">item=</span><span class="s">"/wlb_AGLKS"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fwlbBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;wlb</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS
+    <span class="nt">&lt;ico&gt;</span>iVBORw0KGgoAA...U5ErkJggg==<span class="nt">&lt;/ico&gt;</span>
+    <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"CM101"</span> <span class="na">parent=</span><span class="s">"/wlb_originals/wdg_Box"</span><span class="nt">&gt;</span>CM101
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"AT101_1"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"AT101_2"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"C101_1"</span><span class="nt">&gt;</span>C101/1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"C101_2"</span><span class="nt">&gt;</span>C101/1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"C101_3"</span><span class="nt">&gt;</span>C101/1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"CM101"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"CM101_1"</span><span class="nt">&gt;</span>CM101_1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"CM101_2"</span><span class="nt">&gt;</span>CM101_2<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure1"</span><span class="nt">&gt;</span>ElFigure1<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure2"</span><span class="nt">&gt;</span>ElFigure2<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure3"</span><span class="nt">&gt;</span>ElFigure3<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure4"</span><span class="nt">&gt;</span>ElFigure4<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure5"</span><span class="nt">&gt;</span>ElFigure5<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure6"</span><span class="nt">&gt;</span>ElFigure6<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"ElFigure7"</span><span class="nt">&gt;</span>ElFigure7<span class="nt">&lt;/cw&gt;</span>
+    <span class="nt">&lt;/w&gt;</span>
+    <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"KCH_MN1"</span> <span class="na">parent=</span><span class="s">"/wlb_originals/wdg_Box"</span><span class="nt">&gt;</span>KCH_MN1
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"BC1"</span><span class="nt">&gt;</span>Ball crane<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"BC2"</span><span class="nt">&gt;</span>Ball crane<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"BC21"</span><span class="nt">&gt;</span>Ball crane<span class="nt">&lt;/cw&gt;</span>
+      <span class="nt">&lt;cw</span> <span class="na">id=</span><span class="s">"BC22"</span><span class="nt">&gt;</span>Ball crane<span class="nt">&lt;/cw&gt;</span>
+    <span class="nt">&lt;/w&gt;</span>
+    <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"comprEn"</span> <span class="na">parent=</span><span class="s">"/wlb_originals/wdg_ElFigure"</span><span class="nt">&gt;</span>Compressor run<span class="nt">&lt;/w&gt;</span>
+  <span class="nt">&lt;/wlb&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Obtaining the project list expanded by some options</u></b><br />
+REQ: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="<b>{chkUserPerm}</b>" getChPgN="<b>{getChPgN}</b>" noName="<b>{noName}</b>" /&gt;</i>
 </p>
-<h5><span class="mw-headline" id="Manipulation_with_the_sessions_of_the_projects"><span class="mw-headline-number">3.11.2.5</span> Manipulation with the sessions of the projects</span></h5>
-<p>To provide a unitize mechanism for manipulation of the sessions, the module of the VCA engine (VCAEngine), for the visualizers of VCA, is provided the service function "/serv/sess" and the commands:
+<ul><li> <i>chkUserPerm</i> — checking for the user permition before listing [0|1];</li>
+<li> <i>getChPgN</i> — requesting for quantity of the child pages in the progects [0|1];</li>
+<li> <i>noName</i> — do not return for names of the pages [0|1].</li></ul>
+<p>RESP: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="{chkUserPerm}" getChPgN="{getChPgN}" noName="{noName}" rez="<b>0</b>"&gt;<b>{projects}</b>&lt;/get&gt;</i>
 </p>
-<ul><li> query of the list of open sessions: <b>&lt;list path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b>;</li>
-<li> connection-creation of the new session: <b>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b>;</li>
-<li> disconnection-deleting of the session: <b>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b>.</li></ul>
-<p><b>Table.</b> Attributes of commands of the mechanism of manipulation with sessions
+<ul><li> <i>projects</i> — projects list in the tags "el", where the name is in the tag text and the identifier in the attribute "id". Expanded by the extra attributes:
+<ul><li> "chPgN" — quantity of the child pages in the progect at setting "getChPgN".</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">getChPgN=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fbr%2fprj_"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"archBrowser"</span><span class="nt">&gt;</span>Archives browser<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"tmplSO"</span><span class="nt">&gt;</span>Signal groups (template)<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Getting for values of specified or all visual attributes of the widget</u></b><br />
+REQ: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
 </p>
-<table class="wikitable">
-
-<tr>
-<th> Identifier </th>
-<th> Name </th>
-<th> Value
-</th></tr>
-<tr>
-<td colspan="3"> <i>Command of requesting of a list of open sessions for the project: <b>&lt;list path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> prj </td>
-<td> Indication of the project </td>
-<td> Specifies the project for which to return the list of opened sessions.
-</td></tr>
-<tr>
-<td> &lt;el&gt;{Session}&lt;/el&gt; </td>
-<td> Control of the sessions' list </td>
-<td> The child elements specify the sessions opened to the requested project.
-</td></tr>
-<tr>
-<td colspan="3"> <i>Command of the connection-opening the session: <b>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> sess </td>
-<td> Installation and control of the session name </td>
-<td> If the attribute is defined, then the connection to the current session is made, otherwise — the creation of a new session. In the case of opening a new session, the name of the new session is placed to the given attribute.
-</td></tr>
-<tr>
-<td> prj </td>
-<td> Setting the name of the project </td>
-<td> It is used to open a new session for the indicated project and when the attribute <i>sess</i> is not specified.
-</td></tr>
-<tr>
-<td colspan="3"> <i>Command of the disconnection-closing of the session: <b>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess"/&gt;</b></i>
-</td></tr>
-<tr>
-<td> sess </td>
-<td> Setting the name of the session </td>
-<td> Specifies the name of the session from which disconnection or closure is performed. Sessions that are not background and which are not connected to any visualizer are automatically closed.
-</td></tr></table>
-<h5><span class="mw-headline" id="Group_request_for_the_tree_of_the_widgets_libraries"><span class="mw-headline-number">3.11.2.6</span> Group request for the tree of the widgets libraries</span></h5>
-<p>In order to optimize the performance of local and, especially, network interaction, the service function "/serv/wlbBr" and the command of the query of the tree of the widgets libraries: <b>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr"/&gt;</b> are provided. The result of the query is a tree with the elements of the widgets libraries — tags <i>wlb</i>. The tags of widgets libraries are included: icon tag <i>ico</i> and the widgets library tags <i>w</i>. The widgets tags, in their turn, contain the icon tag and tags of the child widgets <i>cw</i>.
-</p><p><br />
+<ul><li> <i>wAddr</i> — the widget local address, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
+<li> <i>attributes</i> — the only requested attributes in the tags "el" with only one attribute of the identifier "id"; there can be no the attribute tags for requesting all available ones.</li></ul>
+<p>RESP: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>attributes</i> — processed attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>" act="<b>{active}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
+<li> <i>active</i> — activity state of the attribute, only at the direct requesting;</li>
+<li> <i>value</i> — value of the attribute.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>ElFigure1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_ElFigure1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Setting for group values of the specified widget attributes</u></b><br />
+REQ[<b>root-UI</b>]: <i>&lt;set path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+</p>
+<ul><li> <i>wAddr</i> — the widget local address in the module, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
+<li> <i>attributes</i> — attributes with values in the tags "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>value</i> — setting value of the attribute.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>New name<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>New description<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<p><b><u>Getting for values of the visual attributes of the widget branch, optimised for the networks</u></b><br />
+REQ: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattrBr" /&gt;</i>
+</p>
+<ul><li> <i>wAddr</i> — the widget local address in the module, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1".</li></ul>
+<p>RESP: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>attributes</i> — processed attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
+<li> <i>value</i> — value of the attribute.</li></ul></li>
+<li> <i>widgets</i> — child widgets in the tags "w": <i>&lt;w id="<b>{ID}</b>" lnkPath="<b>{lnkPath}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
+<ul><li> <i>ID</i> — identifier of the widget;</li>
+<li> <i>lnkPath</i> — path to the linked widget for child widgets of the widget libraries.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"AT101_1"</span> <span class="na">lnkPath=</span><span class="s">"/wlb_mnEls/wdg_cooler"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>AT101_1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_AT101_1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_mnEls/wdg_cooler<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;/w&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Checking for read access to the project from the user of the request</u></b><br />
+REQ: <i>&lt;read path="/UI/VCAEngine/prj_<b>{proj}</b>/%2fserv%2faccess" /&gt;</i>
+</p>
+<ul><li> <i>proj</i> — identifier of the project.</li></ul>
+<p>RESP: <i>&lt;read path="/UI/VCAEngine/prj_{proj}/%2fserv%2faccess" rez="<b>0</b>"&gt;<b>{access}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>access</i> — the access presence status [0|1].</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;read</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/prj_AGLKS/%2fserv%2faccess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/read&gt;</span>
+</pre></div>
+<p><b><u>Getting for the opened pages list of the project session</u></b><br />
+REQ[<b>{owner}-{grp}</b>]: <i>&lt;openlist path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" conId="<b>{conId}</b>" tm="<b>{clock}</b>" /&gt;</i>
+</p>
+<ul><li> <i>owner</i>, <i>grp</i> — reading access for the project owner or a user in group and regarding to the project permissions;</li>
+<li> <i>session</i> — identifier of the session;</li>
+<li> <i>conId</i> — the session connection identifier;</li>
+<li> <i>clock</i> — the internal clock (the live cycle) value from the previous processed request, for checking of the changed ones.</li></ul>
+<p>RESP: <i>&lt;openlist path="/UI/VCAEngine/ses_{session}/%2fserv%2fpg" conId="{conId}" tm="<b>{clock}</b>" rez="<b>0</b>"&gt;<b>{pages}</b>&lt;/openlist&gt;</i>
+</p>
+<ul><li> <i>clock</i> — the internal clock (the live cycle) value - 1 at the request time;</li>
+<li> <i>pages</i> — pages in the tags "pg": <i>&lt;pg pgGrp="<b>{pgGrp}</b>" updWdg="<b>{nUpdWdgs}</b>"&gt;<b>{ID}</b>&lt;/pg&gt;</i>
+<ul><li> <i>ID</i> — identifier of the page;</li>
+<li> <i>pgGrp</i> — the pages group for early calculation the page including;</li>
+<li> <i>nUpdWdgs</i> — quantity of the updated widgets after the last request and for not empty "clock".</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;openlist</span> <span class="na">conId=</span><span class="s">"52760577"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2fpg"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1403"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;pg&gt;</span>/ses_AGLKS/pg_so<span class="nt">&lt;/pg&gt;</span>
+  <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"so"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1<span class="nt">&lt;/pg&gt;</span>
+  <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"cntr"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_control/pg_ElCadr<span class="nt">&lt;/pg&gt;</span>
+<span class="nt">&lt;/openlist&gt;</span>
+</pre></div>
+<p><b><u>Opening or closing for the specified page of the project session</u></b><br />
+REQ[<b>{owner}-{grp}</b>]: <i>&lt;[open|close] path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" pg="<b>{page}</b>" /&gt;</i>
+</p>
+<ul><li> <i>owner</i>, <i>grp</i> — writing access for the project owner or a user in group and regarding to the project permissions;</li>
+<li> <i>session</i> — identifier of the session;</li>
+<li> <i>page</i> — address of the page in the session context, like to "/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1".</li></ul>
+<p><b><u>Getting for the alarm status and the notification resource of the project session</u></b><br />
+REQ[<b>{owner}-{grp}</b>]: <i>&lt;get path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" mode="<b>{mode}</b>" tp="<b>{typeNtf}</b>" wdg="<b>{widget}</b>" /&gt;</i>
+</p>
+<ul><li> <i>owner</i>, <i>grp</i> — reading access for the project owner or a user in group and regarding to the project permissions;</li>
+<li> <i>session</i> — identifier of the session;</li>
+<li> <i>mode</i> — the requesting mode, only "resource" for obtaining the notification resources and empty for the status only;</li>
+<li> <i>typeNtf</i> — the notification type of obtaining the notification resource, see the <a href="#Alarms">alarming section</a>;</li>
+<li> <i>widget</i> — address of the widget for forming the notification resource, empty for global.</li></ul>
+<p>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{session}/%2fserv%2falarm" mode="{mode}" tp="{typeNtf}" rez="<b>0</b>" alarmSt="<b>{alarmSt}</b>" tm="<b>{clock}</b>" wdg="<b>{widget}</b>" resTp="<b>{resTp}</b>" mess="<b>{message}</b>" lang="<b>{language}</b>"&gt;<b>{resource}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>alarmSt</i> — the alarm status as that described in the <a href="#Alarms">alarming section</a>;</li>
+<li> <i>clock</i> — the internal clock (the live cycle) value at the notification resource form;</li>
+<li> <i>widget</i> — address of the source widget at the notification resource form;</li>
+<li> <i>message</i> — message of notification from the text;</li>
+<li> <i>language</i> — language of the notification, for the "message" mostly;</li>
+<li> <i>resTp</i> — type of the notification resource;</li>
+<li> <i>resource</i> — resource of the notification encoded by Base64 for the binary data.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">mode=</span><span class="s">"resource"</span> <span class="na">tp=</span><span class="s">"1"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span>
+     <span class="na">alarmSt=</span><span class="s">"460554"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">resTp=</span><span class="s">"audio/ogg;73.3428"</span> <span class="na">lang=</span><span class="s">"en_US.UTF-8"</span><span class="nt">&gt;</span>
+T2dnUwACA...Dg6gwAjo+PAQ==
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Quietance of the alarm notification of the project session</u></b><br />
+REQ[<b>{owner}-{grp}</b>]: <i>&lt;quietance path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" wdg="<b>{widget}</b>" tmpl="<b>{template}</b>" ret="<b>{return}</b>" /&gt;</i>
+</p>
+<ul><li> <i>owner</i>, <i>grp</i> — reading access for the project owner or a user in group and regarding to the project permissions;</li>
+<li> <i>session</i> — identifier of the session;</li>
+<li> <i>widget</i> — address of the widget for quietance the notification, empty for global;</li>
+<li> <i>template</i> — template of the quietance, that is bitset corresponding to the quieting notification types;</li>
+<li> <i>return</i> — sign of the notification return, that is the quietance disabling.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;quietance</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">tmpl=</span><span class="s">"7"</span> <span class="nt">/&gt;</span>
+</pre></div>
+<p><b><u>Getting for values of the modified visual attributes of the session widget</u></b><br />
+Redefines the common service request of the widgets "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" for the session specific.<br />
+REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" tm="<b>{clock}</b>" /&gt;</i>
+</p>
+<ul><li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>clock</i> — the internal clock (the live cycle) value from the previous processed request, for checking of the changed ones; at zero value there force appended the service-virtual attributes: "perm", "name".</li></ul>
+<p>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattr" tm="{clock}" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>attributes</i> — modified from "clock" attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
+<li> <i>value</i> — value of the attribute.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"en"</span> <span class="na">p=</span><span class="s">"5"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"active"</span> <span class="na">p=</span><span class="s">"6"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomX"</span> <span class="na">p=</span><span class="s">"7"</span><span class="nt">&gt;</span>488<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomY"</span> <span class="na">p=</span><span class="s">"8"</span><span class="nt">&gt;</span>250<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomW"</span> <span class="na">p=</span><span class="s">"9"</span><span class="nt">&gt;</span>16<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomH"</span> <span class="na">p=</span><span class="s">"10"</span><span class="nt">&gt;</span>100<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomXsc"</span> <span class="na">p=</span><span class="s">"13"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomYsc"</span> <span class="na">p=</span><span class="s">"14"</span><span class="nt">&gt;</span>0.75<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomZ"</span> <span class="na">p=</span><span class="s">"11"</span><span class="nt">&gt;</span>-9<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Setting for group values of the specified attributes of the session widget</u></b><br />
+Redefines the common service request of the widgets "<i>&lt;set path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" for the session specific like to the "event" attribute processing and detection the user activity-inactivity.<br />
+REQ[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" noUser="<b>{noUser}</b>"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+</p>
+<ul><li> <i>owner</i>, <i>grp</i> — writing access for the project owner or a user in group and regarding to the project permissions;</li>
+<li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>noUser</i> — don't mark that as a user activity;</li>
+<li> <i>attributes</i> — attributes with values in the tags "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>value</i> — setting value of the attribute.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>New name<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>New description<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<p><b><u>Activating the attribute for using as the visual one and creating that at missing</u></b><br />
+REQ: <i>&lt;activate path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr%2f<b>{aID}</b>" aNm="<b>{aName}</b>" aTp="<b>{aType}</b>" aFlg="<b>{aFlags}</b>" aVls="<b>{aValues}</b>" aNms="<b>{aNames}</b>"&gt;<b>{aDef}</b>&lt;/activate&gt;</i>
+</p>
+<ul><li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>aID</i> — identifier of the attribute;</li>
+<li> <i>aName</i> — name of the attribute at it creation;</li>
+<li> <i>aType</i> — type of the attribute at it creation, see to the <a href="../API.html#TFld" title="Special:MyLanguage/Documents/API">object TFld</a>;</li>
+<li> <i>aFlags</i> — flags of the attribute at it creation, see to the <a href="../API.html#TFld" title="Special:MyLanguage/Documents/API">object TFld</a>;</li>
+<li> <i>aDef</i> — default value of the attribute at it creation;</li>
+<li> <i>aValues</i> — the attribute values for the selective types at it creation;</li>
+<li> <i>aNames</i> — names to values of the attribute for the selective types at it creation.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;activate</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/%2fserv%2fattr%2frunWin"</span> <span class="na">aNm=</span><span class="s">"Run window"</span> <span class="na">aTp=</span><span class="s">"1"</span> <span class="na">aFlg=</span><span class="s">"1"</span> <span class="na">aVls=</span><span class="s">"0;1;2"</span> <span class="na">aNms=</span><span class="s">"Original size;Maximize;Full screen"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/activate&gt;</span>
+</pre></div>
+<p><b><u>Getting for values of the visual attributes of the widget branch of the session, optimised for the networks</u></b><br />
+Redefines the common service request of the widgets "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr' /&gt;</i>" for the session specific.<br />
+REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrBr" tm="<b>{clock}</b>" FullTree="<b>{FullTree}</b>" /&gt;</i>
+</p>
+<ul><li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>clock</i> — the internal clock (the live cycle) value from the previous processed request, for checking of the changed ones; at zero value there force appended the service-virtual attributes: "perm", "name";</li>
+<li> <i>fullTree</i> — obtaining the full widgets tree independent from presence the changes, without the attributes.</li></ul>
+<p>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrBr" tm="{clock}" FullTree="{FullTree}" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>attributes</i> — processed attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
+<li> <i>value</i> — value of the attribute.</li></ul></li>
+<li> <i>widgets</i> — child widgets in the tags "w": <i>&lt;w id="<b>{ID}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
+<ul><li> <i>ID</i> — identifier of the widget.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="na">p=</span><span class="s">"-4"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"en"</span> <span class="na">p=</span><span class="s">"5"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"active"</span> <span class="na">p=</span><span class="s">"6"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomX"</span> <span class="na">p=</span><span class="s">"7"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomY"</span> <span class="na">p=</span><span class="s">"8"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomW"</span> <span class="na">p=</span><span class="s">"9"</span><span class="nt">&gt;</span>900<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomH"</span> <span class="na">p=</span><span class="s">"10"</span><span class="nt">&gt;</span>580<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"AT101_1"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"en"</span> <span class="na">p=</span><span class="s">"5"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"active"</span> <span class="na">p=</span><span class="s">"6"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomX"</span> <span class="na">p=</span><span class="s">"7"</span><span class="nt">&gt;</span>338<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomY"</span> <span class="na">p=</span><span class="s">"8"</span><span class="nt">&gt;</span>320<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomW"</span> <span class="na">p=</span><span class="s">"9"</span><span class="nt">&gt;</span>80<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomH"</span> <span class="na">p=</span><span class="s">"10"</span><span class="nt">&gt;</span>100<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;/w&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Getting for value of the session specific attribute of the session widget</u></b><br />
+REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>" /&gt;</i>
+</p>
+<ul><li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>aID</i> — identifier of the session specific attribute.</li></ul>
+<p>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrSess%2f{aID}" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>value</i> — value of the attribute.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>test val<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Setting for value of the session specific attribute of the session widget</u></b><br />
+REQ[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>owner</i>, <i>grp</i> — writing access for the project owner or a user in group and regarding to the project permissions;</li>
+<li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
+<li> <i>aID</i> — identifier of the session specific attribute;</li>
+<li> <i>value</i> — value of the attribute.</li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span><span class="nt">&gt;</span>test val<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<p><br />
 </p>
 <h2><span class="mw-headline" id="Configuring_the_module_via_the_control_interface_of_OpenSCADA"><span class="mw-headline-number">4</span> Configuring the module via the control interface of OpenSCADA</span></h2>
 <p>Through the control interface of OpenSCADA, components that use it, can be configured from any configurator OpenSCADA. This module provides an interface to access all the data object of the VCA. Main tab of the configuration page of the module provides access to widgets libraries and projects (Fig.4.1). The tab "Sessions" provides access to opened sessions of the projects (Fig.4.2).
@@ -3349,5 +3538,5 @@ Deprecated, but supported, the API is represented by a group of functions direct
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/VCAEngine/en">Modules/VCAEngine/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

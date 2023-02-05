@@ -229,7 +229,7 @@ class TCntrNode
 	unsigned grpAdd( const string &id, bool ordered = false );
 	void	grpDel( int8_t id );
 	virtual string chldAdd( int8_t gr, TCntrNode *node, int pos = -1, bool noExp = false );
-	void chldDel( int8_t gr, const string &name, long tm = -1, int flags = NodeNoFlg );
+	void	chldDel( int8_t gr, const string &name, long tm = -1, int flags = NodeNoFlg );
 
 	virtual void preEnable( int flag )	{ }
 	virtual void postEnable( int flag )	{ }

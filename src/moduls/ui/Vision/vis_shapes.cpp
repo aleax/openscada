@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2150,13 +2150,13 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
 	    if((shD->curTime/1000000) == s2i(val)) break;
 	    shD->curTime = s2ll(val)*1000000 + shD->curTime%1000000;
 	    shD->holdCur = (shD->curTime >= (shD->tTime-(shD->pictRect.width()?(int64_t)(3*1e6*shD->tSize)/shD->pictRect.width():0)));	//No more 3 pixels
-	    //shD->holdCur = (shD->curTime >= shD->tTime);
+			//(shD->curTime >= shD->tTime);
 	    up = true;
 	    break;
 	case A_DiagramCurUSek:
 	    if((shD->curTime%1000000) == s2i(val)) break;
 	    shD->curTime = 1000000ll*(shD->curTime/1000000)+s2ll(val);
-	    shD->holdCur = (shD->curTime>=shD->tTime);
+	    shD->holdCur = (shD->curTime >= shD->tTime);
 	    up = true;
 	    break;
 	case A_DiagramCurColor: shD->curColor = getColor(val); up = true;	break;
@@ -2216,7 +2216,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val, const s
     if(!w->allAttrLoad()) {
 	if(reld_tr_dt)	{ loadData(w, reld_tr_dt==2); make_pct = true; }
 	if(make_pct)	{ makePicture(w); up = true; }
-	if(up && uiPrmPos != -1) {
+	if(up /*&& uiPrmPos != A_COM_LOAD*/) {	//!!!! Due to the cursor can be loaded under w->allAttrLoad()
 	    w->update();
 	    setCursor(w, shD->curTime);
 	}
@@ -3821,7 +3821,8 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	int64_t curTime   = vmax(vmin(itm,shD->tTime), tTimeGrnd);
 
 	shD->curTime = curTime;
-	shD->holdCur = (curTime==shD->tTime);
+	shD->holdCur = (curTime >= (shD->tTime-(shD->pictRect.width()?(int64_t)(3*1e6*shD->tSize)/shD->pictRect.width():0)));	//No more 3 pixels
+			//(curTime==shD->tTime);
 
 	XMLNode req("set");
 	req.setAttr("path",w->id()+"/%2fserv%2fattr")->setAttr("noUser", "1")->setAttr("reforwardRedundOff", "1");
@@ -3832,8 +3833,9 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	for(unsigned iP = 0; iP < shD->prms.size(); iP++) {
 	    int vpos = shD->prms[iP].val(curTime);
 	    double val = EVAL_REAL;
-	    if(!(!shD->prms[iP].val().size() || curTime < shD->prms[iP].valBeg( ) ||
-		(!shD->holdCur && vpos >= (int)shD->prms[iP].val().size())))
+
+	    if(shD->prms[iP].val().size() && curTime >= shD->prms[iP].valBeg() &&
+		(shD->holdCur || vpos < (int)shD->prms[iP].val().size()))
 	    {
 		vpos = vmax(0,vmin((int)shD->prms[iP].val().size()-1,vpos));
 		if(vpos && shD->prms[iP].val()[vpos].tm > curTime) vpos--;

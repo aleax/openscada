@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: session.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -727,7 +727,12 @@ void Session::cntrCmdProc( XMLNode *opt )
 		uint16_t tm = s2u(opt->attr("tm"));
 		string res, resTp, mess, lang, wdg = opt->attr("wdg");
 		if(iN != mNotify.end()) res = TSYS::strEncode(iN->second->ntfRes(tm,wdg,resTp,mess,lang), TSYS::base64);
-		opt->setAttr("tm", u2s(tm))->setAttr("wdg", wdg)->setAttr("resTp", resTp)->setAttr("mess", mess)->setAttr("lang", lang)->setText(res);
+		opt->setAttr("tm", u2s(tm))->
+		     setAttr("wdg", wdg)->
+		     setAttr("resTp", resTp)->
+		     setAttr("mess", mess)->
+		     setAttr("lang", lang)->
+		     setText(res);
 	    }
 	}
 	else if(ctrChkNode(opt,"quietance",permit(),owner().c_str(),grp().c_str(),SEC_RD) ||
@@ -2531,13 +2536,14 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     if(a_path == "/serv/attr") {	//Attribute's value operations
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get values
 	    uint16_t tm = s2u(opt->attr("tm"));
-	    if(!tm) {
-		opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->
-		    setText(i2s(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())));
-		if(dynamic_cast<SessPage*>(this))
-		    opt->childAdd("el")->setAttr("id", "name")->setAttr("p", i2s(A_PG_NAME))->setText(name());
-	    }
 	    if(!tm || ownerSess()->clkChkModif(tm,wModif())) {
+		if(!tm) {
+		    opt->childAdd("el")->setAttr("id","perm")->setAttr("p",i2s(A_PERM))->
+			setText(i2s(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())));
+		    if(dynamic_cast<SessPage*>(this))
+			opt->childAdd("el")->setAttr("id", "name")->setAttr("p", i2s(A_PG_NAME))->setText(name());
+		}
+
 		AutoHD<Attr> attr;
 		vector<string> als;
 		attrList(als);
@@ -2612,11 +2618,13 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	}
     }
-    else if(a_path.compare(0,15,"/serv/attrSess/") == 0) {	//Session attribute's value operations
-	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))	opt->setText(sessAttr(TSYS::pathLev(a_path,2)));
-	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	sessAttrSet(TSYS::pathLev(a_path,2), opt->text());
+    else if(a_path.find("/serv/attrSess/") == 0) {	//Session attribute's value operations
+	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))
+	    opt->setText(sessAttr(TSYS::pathLev(a_path,2)));
+	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))
+	    sessAttrSet(TSYS::pathLev(a_path,2), opt->text());
     }
-    else if(a_path.compare(0,11,"/serv/attr/") == 0 && ctrChkNode(opt,"activate")) {
+    else if(a_path.find("/serv/attr/") == 0 && ctrChkNode(opt,"activate")) {
 	string tStr = TSYS::pathLev(a_path, 2);
 	//Visualizer specific attributes creation at the request
 	if(!attrPresent(tStr) && opt->attr("aNm").size()) {

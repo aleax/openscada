@@ -39,7 +39,7 @@
 #define MOD_NAME	trS("Logical level")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"2.7.2"
+#define MOD_VER		"2.7.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the pure logical level of the DAQ parameters.")
 #define LICENSE		"GPL2"
@@ -690,7 +690,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/") {
+    if(a_path.find("/serv/") == 0) {
 	if(a_path == "/serv/tmplAttr") {
 	    if(!isStd() || !tmpl->func()) throw TError(nodePath().c_str(),_("Error or non-template parameter."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
@@ -746,7 +746,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		cfg("PRM").setS(opt->text());
 	    } catch(...) { disable(); throw; }
     }
-    else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
+    else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt))	SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
     else if(isStd() && tmpl->func() && tmpl->TPrmTempl::Impl::cntrCmdProc(opt))	;
     else TParamContr::cntrCmdProc(opt);
 }

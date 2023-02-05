@@ -1018,10 +1018,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	int cLv = 0;
 	string	cPath = "", cEl, pAddr = TSYS::strParse(addr(), 0, ":");
 	vector<string> list;
-	for(int cOff = 0, cLv = 0; (cEl=TSYS::strParse(pAddr,0,".",&cOff)).size(); ++cLv) {
+	for(int cOff = 0; (cEl=TSYS::strParse(pAddr,0,".",&cOff)).size(); ++cLv) {
 	    cPath += cLv ? "."+cEl : cEl;
 	    opt->childAdd("el")->setText(cPath);
 	}
+
 	switch(cLv) {
 	    case 0:
 		SYS->transport().at().modList(list);

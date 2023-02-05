@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Логический уровень</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FLogicLev&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/LogicLev" title="Modules/LogicLev">Modules/LogicLev</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/LogicLev.html" title="Modules/LogicLev (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/LogicLev.html" title="Модулі/Логічний рівень (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FLogicLev&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/LogicLev" title="Modules/LogicLev">Modules/LogicLev</a> and the translation is 88% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/LogicLev.html" title="Modules/LogicLev (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/LogicLev.html" title="Модулі/Логічний рівень (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -31,7 +31,7 @@
 <td> <a href="../Modules/LogicLev.html" title="Special:MyLanguage/Modules/LogicLev">LogicLev</a> </td>
 <td> Логический уровень
 </td>
-<td> 2.6 </td>
+<td> 2.7 </td>
 <td> GPL2 </td>
 <td> daq_LogicLev.so </td>
 <td> en,uk,ru,de </td>
@@ -55,6 +55,7 @@
 </ul>
 </li>
 <li class="toclevel-1 tocsection-5"><a href="#API_.D0.BF.D0.BE.D0.BB.D1.8C.D0.B7.D0.BE.D0.B2.D0.B0.D1.82.D0.B5.D0.BB.D1.8C.D1.81.D0.BA.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B3.D1.80.D0.B0.D0.BC.D0.BC.D0.B8.D1.80.D0.BE.D0.B2.D0.B0.D0.BD.D0.B8.D1.8F"><span class="tocnumber">3</span> <span class="toctext">API пользовательского программирования</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Service_commands-functions_of_the_Control_Interface"><span class="tocnumber">4</span> <span class="toctext">Service commands-functions of the Control Interface</span></a></li>
 </ul>
 </div>
 
@@ -112,11 +113,47 @@
 <li> <i>tp</i> — тип атрибута [boolean | integer | real | string | text | object] + режим выбора [sel | seled] + только для чтения [ro];</li>
 <li> <i>selValsNms</i> — две строки со значениями в первой и их именами во второй, разделённые ";".</li></ul></li>
 <li> <i>bool attrDel( string id )</i> [<span style="color: red">для включенного параметра логического типа</span>] — удаление атрибута <i>id</i>.</li></ul>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Service_commands-functions_of_the_Control_Interface"><span class="mw-headline-number">4</span> Service commands-functions of the Control Interface</span></h2>
+<p>Service functions are an interface for accessing OpenSCADA from external systems through the <a href="../../en/API.html#CntrNode" title="Special:MyLanguage/Documents/API">Control Interface</a>. This mechanism is the basis of all exchange within OpenSCADA, implemented through weak links and <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA's own exchange protocol</a>.
+</p><p><br />
+<b><u>Getting for values of the template IO of the Logical Level parameter of the controller object</u></b><br />
+REQ: <i>&lt;get path="/DAQ/LogicLev/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2ftmplAttr" /&gt;</i>
+</p>
+<ul><li> <i>CNTR</i>, <i>PRM</i> — controller object and parameters.</li></ul>
+<p>RESP: <i>&lt;get path="/DAQ/LogicLev/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2ftmplAttr" rez="<b>0</b>"&gt;<b>{IOs}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>IOs</i> — IOs of the template execution context of the Logical Level parameters in the tags "ta": <i>&lt;ta id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/ta&gt;</i>
+<ul><li> <i>ID</i> — identifier of the IO;</li>
+<li> <i>value</i> — value of the IO.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2ftmplAttr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"in"</span><span class="nt">&gt;</span>44.9998202036118<span class="nt">&lt;/ta&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"inProc"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"var"</span><span class="nt">&gt;</span>44.9999585116556<span class="nt">&lt;/ta&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"ed"</span><span class="nt">&gt;</span>ton/h<span class="nt">&lt;/ta&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"min"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/ta&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"max"</span><span class="nt">&gt;</span>100<span class="nt">&lt;/ta&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"scSqr"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/ta&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Setting for values of the template IO of the Logical Level parameter of the controller object</u></b><br />
+REQ[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/LogicLev/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2ftmplAttr"&gt;<b>{IOs}</b>&lt;/set&gt;</i>
+</p>
+<ul><li> <i>CNTR</i>, <i>PRM</i> — controller object and parameters;</li>
+<li> <i>IOs</i> — IOs of the template execution context of the Logical Level parameters in the tags "ta": <i>&lt;ta id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/ta&gt;</i>
+<ul><li> <i>ID</i> — identifier of the IO;</li>
+<li> <i>value</i> — value of the IO.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2ftmplAttr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"in"</span><span class="nt">&gt;</span>44.9998202036118<span class="nt">&lt;/ta&gt;</span>
+  <span class="nt">&lt;ta</span> <span class="na">id=</span><span class="s">"var"</span><span class="nt">&gt;</span>44.9999585116556<span class="nt">&lt;/ta&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
 
 
 
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/LogicLev/ru">Modules/LogicLev/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/LogicLev/ru">Modules/LogicLev/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

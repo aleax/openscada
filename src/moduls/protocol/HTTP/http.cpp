@@ -1,7 +1,7 @@
 
 //OpenSCADA module Protocol.HTTP file: http.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_NAME	trS("HTTP-realization")
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
-#define MOD_VER		"3.8.2"
+#define MOD_VER		"3.8.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides support for the HTTP protocol for WWW-based user interfaces.")
 #define LICENSE		"GPL2"
@@ -588,7 +588,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/spaceUID",_("Authentication UID generation space"),RWRWR_,"root",SPRT_ID,3,"tp","dec", "min","0", "max","100");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of the authentication, minutes"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/aUsers",_("List of users allowed for authentication, separated by ';'"),RWRWR_,"root",SPRT_ID,1,"tp","str");
-		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,3, "s_com","add,del,ins", "rows","3",
+		if(ctrMkNode("table",opt,-1,"/prm/cfg/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,3, "s_com","add,ins,del", "rows","3",
 		    "help",_("A list of address templates can be used for the address field, for example \"192.168.1.*;192.168.2.*\".")))
 		{
 		    ctrMkNode("list",opt,-1,"/prm/cfg/alog/addrs",_("Address"),RWRWR_,"root",SPRT_ID,1,"tp","str");

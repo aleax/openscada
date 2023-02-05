@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -36,7 +36,7 @@
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
 #define SUB_TYPE	"LIB"
-#define MOD_VER		"5.5.0"
+#define MOD_VER		"5.5.2"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides a calculator and libraries engine on the Java-like language.\
  The user can create and modify functions and their libraries.")
@@ -679,7 +679,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/") {
+    if(a_path.find("/serv/") == 0) {
 	if(a_path == "/serv/fncAttr") {
 	    if(!startStat() || !func()) throw TError(nodePath().c_str(),_("Function is missing or not started."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
@@ -707,7 +707,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	if(enableStat())
 	    ctrMkNode("comm",opt,-1,"/cntr/cfg/toFunc",_("Go to the used function"),R_R_R_,"root",SDAQ_ID,1,"tp","lnk");
 	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calculation"))) {
-	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,1,"s_com",(isDAQTmpl?"":"add,del,ins,move")/*,"rows","15"*/)) {
+	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,1,"s_com",(isDAQTmpl?"":"add,ins,move,del")/*,"rows","15"*/)) {
 		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Identifier"),isDAQTmpl?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),isDAQTmpl?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),isDAQTmpl?R_R_R_:RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",

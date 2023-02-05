@@ -1468,7 +1468,7 @@ msgid "The variable is not a link"
 msgstr "Die Variable ist kein Lnk"
 
 msgid "val:Constant value"
-msgstr "val:Konstante"
+msgstr "val:Konstanter Wert"
 
 msgid "=== Pages ==="
 msgstr "=== Seite ==="

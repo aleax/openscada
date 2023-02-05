@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tarchval.h
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -179,6 +179,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	    ActiveAttr	//????[v1.0] Deprecated - move remaining ActiveAttr sources to DAQAttr like to the Logical Level
 	};
 	enum CombMode { MovAver = 0, LastVal, MinVal, MaxVal };
+	enum ServReqDtMode { DMSimple = 0, DMPack, DMBin };
 
 	//Public methods
 	TVArchive( const string &id, const string &db, TElem *cf_el );

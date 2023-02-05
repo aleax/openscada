@@ -769,19 +769,17 @@
 <li> <i>Описание</i> — краткое описание шаблона и его назначения.</li></ul></li></ul>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:979px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_tmpl_main_ru.png"><img class="thumbimage" height="549" src="files/QTCfg_subsys_daq_tmpl_tmpl_main_ru.png" width="977" /></a>  <div class="thumbcaption">Рис. 4.5e. Главная вкладка конфигурации шаблона параметров подсистемы "Сбор данных".</div></div></div></div>
 <p>Вкладка "ВВ" (Рис.4.5f) содержит конфигурацию атрибутов (Вход-Выход) шаблонов и текст программы шаблона на языке пользовательского программирования OpenSCADA, например, "JavaLikeCalc.JavaScript". Признак "Переводить программу" указывает на сохранение и перевод текста программы для каждого языка (человеческого) отдельно, что усложняет поддержание алгоритма одинаковым для <a href="#Config">многоязычных конфигураций</a>. Этот признак в целом внедрён для совместимости со старыми версиями OpenSCADA, не рекомендуется для установки и на данное время практикуется перевод конкретных текстовых сообщений в тексте программы, через функцию <a href="User_API.html#JavaLikeCalc" title="Special:MyLanguage/Documents/User API">tr()</a>.
-</p><p>In the table of attributes of template user can, through the context menu: add, insert, delete, move up or down the record of attribute, as well as edit the attribute fields:
+</p><p>В таблице атрибутов шаблона пользователь может, посредством контекстного меню: добавить, вставить, удалить, передвинуть вверх или вниз запись атрибута, а также отредактировать поля атрибута:
 </p>
-<ul><li> <i>Identifier</i> — identifier of the attribute.</li>
-<li> <i>Name</i> — name of the attribute.</li></ul>
-<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> The name's rows after the first one treat as help.</dd></dl>
-<ul><li> <i>Type</i> — select the value's type of the attribute from the following: "Real", "Integer", "Boolean", "String", "String (translate)", "Text", "Text (translate)", "Object", "Integer numbers selection", "Real numbers selection", "Strings selection".</li>
-<li> <i>Mode</i> — select the mode from list: "Input", "Output". Typically used to indicate the direction of data transmission through links. I.e., values for the "Input" data link will only be obtained, and for the "Output" will also be transferred, in the case of modification.</li>
-<li> <i>Attribute</i> — mode of the parameter's attribute, implemented based on a template from the list: "No attribute", "Read Only", "Full access". For the attributes of a template, in which this field is set, it will be created an appropriate attribute in the controller's parameter of this subsystem.</li>
-<li> <i>Configuration</i> — configuration mode of an attribute in the configuration tab of a template of the controller's parameter of this subsystem from the list: "Variable", "Constant", "Link". In the "Constant" and "Link" modes in the configuration tab of a template will be added these attributes to set the constant or specify an external link of the parameter.</li>
-<li> <i>Value</i> — attribute's default value or link's template to access by the link:
-<ul><li> Format of the link's template depends on the component that uses it. Common links format is written in the following way "<b>{Parameter}|{attribute}</b>". Field <i>Parameter</i> — specifies the parameter's name as the attribute's container. Attributes with the equal value <i>Parameter</i> will be grouped and will be appointed only by the indication of the attributes' container, and the individual attributes will be associated with the attributes of the container in accordance with the field <i>attribute</i>.</li>
-<li> Constant link value writes in the form "<b>val:{Constant}</b>".</li>
-<li> For selectable types the field may also contains of values list, in the second line, and names list, in the third line, with items separating by the symbol ";".</li></ul></li></ul>
+<ul><li> <i>Идентификатор</i> — идентификатор атрибута.</li>
+<li> <i>Имя</i> — имя атрибута.</li>
+<li> <i>Тип</i> — выбор типа значения атрибута из списка: "Вещественный", "Целый", "Логический", "Строка", "Строка (перевод)", "Текст", "Текст (перевод)", "Объект", "Выбор целых чисел", "Выбор вещественных чисел", "Выбор строк".</li>
+<li> <i>Режим</i> — выбор режима из списка: "Вход", "Выход". Обычно используется для указания направления передачи данных посредством связи. Т.е. для значения "Вход" данные по связи будут только получаться, а для "Выход" также будут передаваться, в случае модификации.</li>
+<li> <i>Атрибут</i> — режим атрибута параметра реализованного на основе шаблона, из списка: "Не атрибут", "Только для чтения", "Полный доступ". Для атрибутов шаблона у которых это поле установлено будет создаваться соответствующий атрибут у параметра контроллера этой подсистемы.</li>
+<li> <i>Конфигурация</i> — режим конфигурации атрибута во вкладке конфигурации шаблона у параметра контроллера этой подсистемы, из списка: "Переменная", "Константа", "Связь". В режимах "Константа" и "Связь" во вкладке конфигурации шаблона будут добавлены эти атрибуты для установки константы или указания внешней связи параметра.</li>
+<li> <i>Значение</i> — значение атрибута по умолчанию или шаблон ссылки для доступа по ссылке:
+<ul><li> Формат шаблона ссылки зависит от компонента который его использует. Общий формат ссылок записывается в виде: <b>{Parameter}|{attribute}</b>. Поле <i>Parameter</i> — указывает имя параметра как контейнера атрибутов. Атрибуты с одинаковым значением <i>Parameter</i> будут группироваться и позволят назначаться указанием только контейнера атрибутов, а отдельные атрибуты будут связаны с атрибутами контейнера в соответствии с полем <i>attribute</i>.</li>
+<li> Для выборных типов это поле также может содержать перечень значений, во второй строке, и перечень наименований, в третьей строке, с разделением элементов символом ";".</li></ul></li></ul>
 <p>С синтаксисом языка программы шаблона можно ознакомиться в документации модуля, предоставляющего интерпретатор выбранного языка. Например, типичным языком пользовательского программирования OpenSCADA является <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc.JavaScript</a>.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:1037px;"><a class="image" href="http://oscada.org/wiki/File:QTCfg_subsys_daq_tmpl_tmpl_io_ru.png"><img class="thumbimage" height="718" src="files/QTCfg_subsys_daq_tmpl_tmpl_io_ru.png" width="1035" /></a>  <div class="thumbcaption">Рис. 4.5f. Вкладка конфигурации атрибутов и программы шаблона подсистемы "Сбор данных".</div></div></div></div>
@@ -1820,7 +1818,7 @@ openscada-proj proc|create|remove|update {ProjName}
   update - update from 0.8.0 LTS;
  Arguments:
   ProjName - project name;
- Environments:
+ Environment variables:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
@@ -1835,9 +1833,10 @@ openscada-proj backupList {ProjName}
  Arguments:
   ProjName   - project name;
   BackupName - the backup archive name.
- Environments:
-  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
-  OSCADA_BackLim      - Backups limit, 10 by default
+ Environment variables:
+  OSCD_TAR_ComprPrg - TAR compression program, by default gzip;
+  OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
+  OSCD_BackLim      - Backups limit, by default 10.
 </pre>
 <p>В целом сценарий командной строки менеджера проектов <b>openscada-proj</b> предусматривает функции и команды над проектами:
 </p>
@@ -1850,8 +1849,7 @@ openscada-proj backupList {ProjName}
 <ul><li> <i>backup</i> — резервное копирование выбранного проекта <i>ProjName</i> в <i>BackupName</i>, или на текущую дату при отсутствии;</li>
 <li> <i>backupRestore</i> — восстановление выбранного проекта <i>ProjName</i> из резервной копии с указанным названием <i>BackupName</i>, или из последнего при отсутствии;</li>
 <li> <i>backupList</i> — перечень резервных копий проекта <i>ProjName</i>.</li></ul>
-<p>Резервное копирование в целом осуществляется в рабочем каталоге OpenSCADA, рядом с каталогами самих проектов для которых создаются файлы запакованных каталогов с названием <b>{ProjName}_{BackupName}.backup</b>, например — "Boiler_2020-06-24_20.09.backup". По умолчанию каталоги проектов сжимаются программой "gzip", которую можно заменить установкой переменной окружения "OSCADA_TAR_ComprPrg". Соответственно резервирование можно осуществлять из вне, например, по указанному расписанию из CRON, кроме того, что осуществлять это вручную из графического интерфейса менеджера проектов (Рис.5a).
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Резервное копирование каталога проекта с большими архивами на рабочих системах может оказаться неэффективным и очень затратным, поэтому сам каталог архивов "ARCHIVES" целесообразно выносить на отдельное большое хранилище и ссылаться на него из каталога проекта, что также целесообразно и из соображений распределения хранилища на базовое-высоконадёжное-резервное и хранилище больших архивных данных (DATA) — истории.
+<p>Backup is generally done in the OpenSCADA working folder along with the folders of the projects themselves, for which packed folder files are created with the name <b>{ProjName}_{BackupName}.backup</b>, for example — "Boiler_2020-06-24_20.09.backup". By default, project folders are compressed with "gzip", which can be changed by setting the environment variable "OSCD_TAR_ComprPrg". The backup files limit is set by default to 10 and you may change that by the environment variable "OSCD_BackLim". You also can append some specific arguments to the TAR archiver by the environment variable "OSCD_TAR_Args", which by default set to "--exclude=lock --exclude=ARCHIVES" for excluding the file "lock" and folder "ARCHIVES" from the backup. The backup can be done from the outside, for example, from the established schedule with CRON, in addition to doing it manually from the graphical interface of the project manager (Fig.5a).
 </p>
 <h3><span class="mw-headline" id=".D0.98.D1.81.D0.BF.D0.BE.D0.BB.D0.BD.D0.B5.D0.BD.D0.B8.D0.B5_.D0.B3.D0.BE.D1.82.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D0.B5.D0.BA.D1.82.D0.B0_OpenSCADA_.D0.B2_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D1.80.D0.B0.D0.BD.D1.81.D1.82.D0.B2.D0.B5_.D1.81.D0.B5.D1.80.D0.B2.D0.B8.D1.81.D0.B0-.D1.84.D0.BE.D0.BD.D0.B5"><span class="mw-headline-number">5.2</span> <span id="Service" title="#Service">Исполнение готового проекта OpenSCADA в пространстве сервиса-фоне</span></span></h3>
 <p>Организация проекта OpenSCADA в отдельном каталоге делает простым запуск готовых проектов в пространстве сервиса — исполнение в фоне, а также дальнейшее обновление и сопровождение этого проекта без прямого удаленного контроля. Фактически, вы можете разрабатывать проект локально, держа его каталог в пользовательском рабочем каталоге (типично "{HOME}/.openscada"), а для запуска в пространстве сервиса только копировать или паковать, передавать на удалённое рабочее устройство и распаковывать в системный рабочий каталог (типично "/usr/share/openscada").
@@ -1876,7 +1874,7 @@ service openscada-server start
 <span class="c"># ... для LTS</span>
 service openscada-lts-server start
 </pre></div>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Отметьте, что локально вы можете не копировать каталог проекта целком, а только установить на него символическую ссылку, но вы получите риск двойного исполнения проекта на общий каталог и данные, что приводит к аварийному завершению одного исполнения или их обоих!
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Отметьте, что локально вы можете не копировать каталог проекта целиком, а только установить на него символическую ссылку, но вы получите риск двойного исполнения проекта на общий каталог и данные, что приводит к аварийному завершению одного исполнения или их обоих!
 </p><p>Отличие исполнения проекта в среде сервиса-фона от пользовательской среды рабочего стола собственно одно, естественно кроме отсутствия локального графического интерфейса, это — отсутствие в фоне определения локали, т.е. язык интерфейса там будет Английский. И что можно просто исправить сменой или добавлением <a href="#CfgFilePrm">конфигурационного параметра</a> <b>&lt;prm id="Lang"&gt;ru_RU.UTF-8&lt;/prm&gt;</b> в секции-теге "station" файла <b>oscada.xml</b> фонового проекта.
 </p><p><br />
 </p>
@@ -1894,5 +1892,5 @@ service openscada-lts-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/ru">Documents/Program_manual/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/ru">Documents/Program_manual/ru</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

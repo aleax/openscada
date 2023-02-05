@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/DAQ</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/DAQ.html" title="Документы/Сбор данных (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/DAQ.html" title="Документи/Збір даних (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/DAQ.html" title="Документы/Сбор данных (97% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/DAQ.html" title="Документи/Збір даних (100% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2010) — the page initial translation</i></font> </li></ul>
 </div>
@@ -197,9 +197,9 @@
 <li> <i>attribute</i> — for the associated linkage of the attributes at the parameter appointment. </li></ul>
 <p><span id="LogicLevLnks" title="#LogicLevLnks">The further linking</span> in general can be carried out by:
 </p>
-<ul><li> general definition-selecting the address-attribute of the subsystem "DAQ"; for example, the link "LogicLev.experiment.Pi.var" performs the access of the parameter attribute to the other parameter attribute; sign "(+)" at the end of the address indicate about successful linking and presence of the target; for object-type attributes, there permissible hierarchical access to a specific property of the object, by specifying its path through the symbol '#', for example: "LogicLev.experiment.Pi.var#pr1.pr2";</li>
+<ul><li> general definition-selecting the address-attribute of the subsystem "DAQ"; for example, the link "LogicLev.experiment.Pi.var" or "prm:/LogicLev/experiment/Pi/var" performs the access of the parameter attribute to the other parameter attribute; sign "(+)" at the end of the address indicate about successful linking and presence of the target; for the object-type attributes there permissible hierarchical access to a specific property of the object, by specifying its path through the symbol '#', for example: "LogicLev.experiment.Pi.var#pr1.pr2" or "prm:/LogicLev/experiment/Pi/var#pr1.pr2"; in the path with the "prm:" prefix you can use items of the relativity "." and "..";</li>
 <li> definition of the specific address of a separate module of the subsystem "DAQ";</li>
-<li> direct setting a constant value in the format "<b>val:{Parameter}</b>";</li>
+<li> direct setting a constant value in the format "<b>val:Constant value</b>";</li>
 <li> empty or erroneous address when the value by the link is set to <b>EVAL</b>.</li></ul>
 <p>As an example of using the template, in Figure 10 is shown an image of the parameter "F3" of the logic level module, where the tab "Template configuration" is presented' for the configuration of the parameter template, including the linkage. In Figure 11 the tab "Attributes" is shown with the list of attributes and their values, created through the template.
 </p>
@@ -273,5 +273,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/DAQ/en">Documents/DAQ/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/DAQ/en">Documents/DAQ/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

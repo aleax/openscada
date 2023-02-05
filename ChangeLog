@@ -1,3 +1,37 @@
+2023-02-05 Roman (stable)
+- !!!:DOC: The "API" document completely revised in the section "Control Interface and dynamic tree of program objects"
+    which unified and the section "Service commands-functions" moved there as a subsection,
+    the subsection "Service commands-functions" completely rewrote and appended, and all those translated in Ukrainian.
+- !:LibsDB.OscadaLibs: DevLib.mbBase: Switched to use TTransportS::outAt() and allowed for empty item names.
+- !!:FIX:data/openscada-proj.in: Expanded by the new environment variable OSCD_TAR_Args of defining extra tar arguments like to --exclude
+	and it was set to the default value "--exclude=lock --exclude=ARCHIVES".
+    FIX: Fixed in description and using the environment variables OSCD_TAR_ComprPrg and OSCD_BackLim.
+    For the environment variables there used the substitution instead the direct condition.
+- SYS: The Control Interface request <chlds path="/{nPath}/%2fobj" /> appended of not creating the empty icon tags "ico".
+- DB: The Control Interface request <call path="/BD/{MOD}/{DB}/%2fserv%2fSQL" /> appended of processing
+    the "intoTrans" attribute as EVAL at missing and clearing the request text in the response.
+- DB.DBGate: Appended for setting the default values before the request MTable::fieldSeek() for decreasing the network trafic.
+- DAQ,DAQ.JavaLikeCalc,Protocol.{ModBus,HTTP}:
+    Commands to the Control Interface tables reordered for moving the deletion "del" to the end.
+- !!!!:DAQ: The Logical Level linking appended of a form of the address representing as the prefixed path "prm:/node/node",
+	so with support of the relative addressing at "." and "..":
+    - the DAQ item linking functions expanded by the base node specifying in the attribute "ndBase":
+	ctrListPrmAttr(), daqAt(), prmAt(), attrAt();
+    - implementation object TPrmTempl::Impl of the Logical Level of the DAQ template expanded for the new linking support.
+- FIX:DAQ: The service request <list path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" />
+    fixed in the attribute name translation.
+- FIX:DAQ.ModBus: Fixed in the transport selection list form.
+- Archive: The value archive object TVArchive appended of declaration the enumeration ServReqDtMode
+    for the Control Interface request <get path="/Archive/va_{ARCH}/%2fserv%2fval" />.
+- FIX:UI.VCAEngine: The visualisator specific attributes fixed in work after the source widgets reloading,
+	by allowing the flag Attr::VizerSpec loading.
+    The Control Interface request <get path="/UI/VCAEngine/%2fserv%2fwlbBr" /> appended of not creating the empty icon tags "ico".
+- FIX:UI.Vision: The view Trend of the primitive Diagram fixed in updating the trend values under cursor
+    at the cursor change during the common loading and fixed in the current cursor hold after it setting by setCursor().
+- FIX:UI.WebVision: The view Trend of the primitive Diagram fixed in setting the EVAL values to the trend cursor values
+    at tracing the current time by the cursor and the tracing period more at 1 second.
+
+
 2023-01-19 Roman (stable)
 - SYS: Fix the building.
 

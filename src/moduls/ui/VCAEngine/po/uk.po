@@ -1458,7 +1458,7 @@ msgid "The variable is not a link"
 msgstr "Змінна не є зв'язком"
 
 msgid "val:Constant value"
-msgstr "val:Стала"
+msgstr "val:Стале значення"
 
 msgid "=== Pages ==="
 msgstr "=== Сторінки ==="

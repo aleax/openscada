@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -330,7 +330,7 @@ class ShapeDiagram : public WdgShape
 		{
 		    public:
 			SHg( int64_t itm, double ival ) : tm(itm), val(ival) { }
-			int64_t tm;
+			int64_t	tm;
 			double	val;
 		};
 		//Methods

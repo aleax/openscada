@@ -777,8 +777,7 @@
 <li> <i>Attribute</i> — mode of the parameter's attribute, implemented based on a template from the list: "No attribute", "Read Only", "Full access". For the attributes of a template, in which this field is set, it will be created an appropriate attribute in the controller's parameter of this subsystem.</li>
 <li> <i>Configuration</i> — configuration mode of an attribute in the configuration tab of a template of the controller's parameter of this subsystem from the list: "Variable", "Constant", "Link". In the "Constant" and "Link" modes in the configuration tab of a template will be added these attributes to set the constant or specify an external link of the parameter.</li>
 <li> <i>Value</i> — attribute's default value or link's template to access by the link:
-<ul><li> Format of the link's template depends on the component that uses it. Common links format is written in the following way "<b>{Parameter}|{attribute}</b>". Field <i>Parameter</i> — specifies the parameter's name as the attribute's container. Attributes with the equal value <i>Parameter</i> will be grouped and will be appointed only by the indication of the attributes' container, and the individual attributes will be associated with the attributes of the container in accordance with the field <i>attribute</i>.</li>
-<li> Constant link value writes in the form "<b>val:{Constant}</b>".</li>
+<ul><li> Format of the link's template depends on the component that uses it. Common links format is written in the following way "<b>{Parameter}|{attribute}</b>". The <i>Parameter</i> field — specifies the parameter's name as the attribute's container. Attributes with the equal value <i>Parameter</i> will be grouped and will be appointed only by the indication of the attributes' container, and the individual attributes will be associated with the attributes of the container in accordance with the field <i>attribute</i>.</li>
 <li> For selectable types the field may also contains of values list, in the second line, and names list, in the third line, with items separating by the symbol ";".</li></ul></li></ul>
 <p>The syntax of the language of the template program can be found in the documentation of the module which provides the interpreter of the selected language. For example, a typical user programming language of OpenSCADA is <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc.JavaScript</a>.
 </p>
@@ -1817,7 +1816,7 @@ openscada-proj proc|create|remove|update {ProjName}
   update - update from 0.8.0 LTS;
  Arguments:
   ProjName - project name;
- Environments:
+ Environment variables:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
@@ -1832,9 +1831,10 @@ openscada-proj backupList {ProjName}
  Arguments:
   ProjName   - project name;
   BackupName - the backup archive name.
- Environments:
-  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
-  OSCADA_BackLim      - Backups limit, 10 by default
+ Environment variables:
+  OSCD_TAR_ComprPrg - TAR compression program, by default gzip;
+  OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
+  OSCD_BackLim      - Backups limit, by default 10.
 </pre>
 <p>In general, the command line script for the project manager <b>openscada-proj</b> includes such project functions and commands:
 </p>
@@ -1847,8 +1847,7 @@ openscada-proj backupList {ProjName}
 <ul><li> <i>backup</i> — backup the selected project <i>ProjName</i> to the name <i>BackupName</i>, or to the current date at missing;</li>
 <li> <i>backupRestore</i> — restore the selected project <i>ProjName</i> from the pointed backup name <i>BackupName</i>, or from the last one at missing;</li>
 <li> <i>backupList</i> — list the project <i>ProjName</i> backups.</li></ul>
-<p>Backup is generally done in the OpenSCADA working folder, along with the folders of the projects themselves, for which packed folder files are created with the name <b>{ProjName}_{BackupName}.backup</b>, for example — "Boiler_2020-06-24_20.09.backup". By default, project folders are compressed with "gzip", which can be changed by setting the environment variable "OSCADA_TAR_ComprPrg". Accordingly, the backup can be done from the outside, for example, according to the established schedule with CRON, in addition to doing it manually from the graphical interface of the project manager (Fig.5a).
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Backup a project folder with large archives on working systems can be inefficient and too expensive, so the archive folder "ARCHIVES" should be taken to a separate large storage and referenced from the project folder, which is also advisable for the distribution of storage to basic - highly reliable - reserved and large archival data storage (DATA) — history.
+<p>Backup is generally done in the OpenSCADA working folder along with the folders of the projects themselves, for which packed folder files are created with the name <b>{ProjName}_{BackupName}.backup</b>, for example — "Boiler_2020-06-24_20.09.backup". By default, project folders are compressed with "gzip", which can be changed by setting the environment variable "OSCD_TAR_ComprPrg". The backup files limit is set by default to 10 and you may change that by the environment variable "OSCD_BackLim". You also can append some specific arguments to the TAR archiver by the environment variable "OSCD_TAR_Args", which by default set to "--exclude=lock --exclude=ARCHIVES" for excluding the file "lock" and folder "ARCHIVES" from the backup. The backup can be done from the outside, for example, from the established schedule with CRON, in addition to doing it manually from the graphical interface of the project manager (Fig.5a).
 </p>
 <h3><span class="mw-headline" id="Execution_the_ready_OpenSCADA_project_in_the_service-background_space"><span class="mw-headline-number">5.2</span> <span id="Service" title="#Service">Execution the ready OpenSCADA project in the service-background space</span></span></h3>
 <p>The OpenSCADA project organisation in a separate folder makes it easy to run ready-made projects in the service space — execution in the background, as well as further update and maintenance of this project without direct remote control. In fact, you can develop a project locally by keeping its folder in the user's work folder (typically "{HOME}/.openscada"), and to run in the service space just copy or package, transfer to a remote work device and unpack into the system work folder (default "/usr/share/openscada").
@@ -1873,7 +1872,7 @@ service openscada-server start
 <span class="c"># ... for LTS</span>
 service openscada-lts-server start
 </pre></div>
-<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note that locally you can not copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
+<p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Note, that locally you may not to copy the entire project folder, but only make a symbolic link to it, but you get the risk of double project execution on a shared folder and data, which leads to the crash of one or both executions!
 </p><p>Difference between the project execution in the service-background environment from the user environment of the desktop is actually one, except for the lack of the local graphical interface of course, it is the absence of a locale in the background, ie the interface language will be English. And what can be fixed simply by changing or adding <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">the configuration parameter</a> <b>&lt;prm id="Lang"&gt;uk_UA.UTF-8&lt;/prm&gt;</b> to the section-tag "station" of the file <b>oscada.xml</b> of the background project.
 </p><p><br />
 </p>
@@ -1891,5 +1890,5 @@ service openscada-lts-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/en">Documents/Program_manual/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

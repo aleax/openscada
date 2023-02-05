@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.10.7"
+#define MOD_VER		"7.10.9"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -555,7 +555,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	//????[v1.0] Remove - temporary placed to clean up the existing DBs, to early fix from using Values and Names for unproper types.
 	else if(IO_VAL.size() >= 2 && IO_VAL.compare(IO_VAL.size()-2,2,"||") == 0) attr.at().setS(IO_VAL.substr(0,IO_VAL.size()-2));
 
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)((selfFlg&(~Attr::VizerSpec))|(attr.at().flgSelf()&Attr::VizerSpec)));
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);	//((selfFlg&(~Attr::VizerSpec))|(attr.at().flgSelf()&Attr::VizerSpec)));
 
 	attr.at().setCfgTempl((selfFlg&Attr::FromStyle)?cEl.cfg("CFG_TMPL").getS(TCfg::ExtValOne):cEl.cfg("CFG_TMPL").getS());
 
@@ -723,9 +723,9 @@ void Engine::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/serv/wlbBr" && ctrChkNode(opt,"get")) {
 	bool disIconsCW	= s2i(opt->attr("disIconsCW"));
 	bool disIconsW	= s2i(opt->attr("disIconsW"));
-	string item = opt->attr("item");
+	string item = opt->attr("item"), tVl;
 	string upd_lb   = TSYS::pathLev(item, 0);
-	if(upd_lb.size() > 4 && upd_lb.substr(0,4) != "wlb_")	return;
+	if(upd_lb.size() && upd_lb.find("wlb_") != 0)	return;
 	if(upd_lb.size() > 4)	upd_lb = upd_lb.substr(4);
 	string upd_wdg  = TSYS::pathLev(item, 1);
 	if(upd_wdg.size() > 4)	upd_wdg = upd_wdg.substr(4);
@@ -740,7 +740,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    AutoHD<WidgetLib> wlb = wlbAt(ls[iWlb]);
 	    XMLNode *wlbN = opt->childAdd("wlb")->setAttr("id",ls[iWlb])->setText(trD(wlb.at().name()));
 	    wlbN->setAttr("doc", TUIS::docKeyGet(wlb.at().descr()));
-	    wlbN->childAdd("ico")->setText(wlb.at().ico());
+	    if((tVl=wlb.at().ico()).size()) wlbN->childAdd("ico")->setText(tVl);
 
 	    //  Widgets
 	    vector<string> wls;
@@ -749,7 +749,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		if(!upd_wdg.empty() && upd_wdg != wls[iW])	continue;
 		AutoHD<LWidget> w = wlb.at().at(wls[iW]);
 		XMLNode *wN = wlbN->childAdd("w")->setAttr("id",wls[iW])->setAttr("parent",w.at().parentAddr())->setText(trD(w.at().name()));
-		wN->childAdd("ico")->setText(disIconsW?"":w.at().ico());
+		if((tVl=disIconsW?"":w.at().ico()).size()) wN->childAdd("ico")->setText(tVl);
 
 		//  Child widgets
 		vector<string> cwls;
@@ -758,8 +758,8 @@ void Engine::cntrCmdProc( XMLNode *opt )
 		    for(unsigned iC = 0; iC < cwls.size(); iC++) {
 			if(!upd_wdgi.empty() && upd_wdgi != cwls[iC])	continue;
 			AutoHD<CWidget> cw = w.at().wdgAt(cwls[iC]);
-			wN->childAdd("cw")->setAttr("id",cwls[iC])->setText(trD(cw.at().name()))->
-			    childAdd("ico")->setText(disIconsCW?"":cw.at().ico());//   (cwls.size()>=100)?"":cw.at().ico());
+			XMLNode *cwN = wN->childAdd("cw")->setAttr("id",cwls[iC])->setText(trD(cw.at().name()));
+			if((tVl=disIconsCW?"":cw.at().ico()).size()) cwN->childAdd("ico")->setText(tVl); //   (cwls.size()>=100)?"":cw.at().ico());
 		    }
 	    }
 	}

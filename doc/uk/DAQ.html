@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Документи/Збір даних</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FDAQ&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/DAQ" title="Documents/DAQ">Documents/DAQ</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/DAQ.html" title="Documents/DAQ (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/DAQ.html" title="Документы/Сбор данных (98% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FDAQ&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/DAQ" title="Documents/DAQ">Documents/DAQ</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/DAQ.html" title="Documents/DAQ (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/DAQ.html" title="Документы/Сбор данных (97% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">Українська</span></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a> </li></ul>
 </div>
@@ -197,9 +197,9 @@
 <li> <i>атрибут</i> — для асоціативного зв'язування атрибутів при призначені параметру. </li></ul>
 <p><span id="LogicLevLnks" title="#LogicLevLnks">Саме подальше зв'язування</span> загалом може здійснюватися:
 </p>
-<ul><li> загальним визначенням-обранням адреси-атрибуту параметру підсистеми "Збір даних"; наприклад, зв'язок "LogicLev.experiment.Pi.var" здійснює доступ атрибуту параметру до іншого атрибуту параметра; Знак "(+)", у кінці адреси, вказує на вдалу лінковку та присутність цільового об'єкту; для атрибутів об'єктного типу допустимий ієрархічний доступ до конкретної властивості об'єкту, шляхом вказання її шляху через символ '#', наприклад: "LogicLev.experiment.Pi.var#pr1.pr2";</li>
+<ul><li> загальним визначенням-обранням адреси-атрибуту параметру підсистеми "Збір даних"; наприклад, зв'язок "LogicLev.experiment.Pi.var" або "prm:/LogicLev/experiment/Pi/var" здійснює доступ атрибуту параметру до іншого атрибуту параметра; знак "(+)" у кінці адреси вказує на вдале зв'язування та присутність цільового об'єкту; для атрибутів об'єктного типу допустимий ієрархічний доступ до конкретної властивості об'єкту шляхом вказання її шляху через символ '#', наприклад: "LogicLev.experiment.Pi.var#pr1.pr2" або "prm:/LogicLev/experiment/Pi/var#pr1.pr2"; у шляху із префіксом "prm:" ви можете використовувати елементи відносності "." та "..";</li>
 <li> визначенням специфічної адреси окремого модуля підсистеми "Збір даних";</li>
-<li> прямим встановленням постійного значення у форматі "<b>val:{Постійна}</b>";</li>
+<li> прямим встановленням постійного значення у форматі "<b>val:Стале значення</b>";</li>
 <li> порожньою або помилковою адресою, коли значення за зв'язком встановлюється у <b>EVAL</b>.</li></ul>
 <p>У якості прикладу використання шаблону, на рисунку 10 наведено зображення параметру "F3" модуля логічного рівня, де представлено вкладку "Конфігурація шаблона" для конфігурації шаблону параметру, включаючи зв'язування. На рисунку 11 представлено вкладку "Атрибути" з переліком атрибутів та їх значень, створених за посередництвом шаблону.
 </p>
@@ -273,5 +273,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/DAQ/uk">Documents/DAQ/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/DAQ/uk">Documents/DAQ/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

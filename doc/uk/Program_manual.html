@@ -777,8 +777,7 @@
 <li> <i>Атрибут</i> — режим атрибуту параметра реалізованого на основі шаблону, з переліку: "Не атрибут", "Тільки для читання", "Повний доступ". Для атрибутів шаблону у яких це поле встановлено буде створюватися відповідний атрибут у параметрі контролеру цієї підсистеми.</li>
 <li> <i>Конфігурація</i> — режим конфігурації атрибуту у вкладці конфігурації шаблону параметра контролеру цієї підсистеми, з переліку: "Змінна", "Константа", "Зв'язок". У режимах "Константа" та "Зв'язок" у вкладці конфігурації шаблону будуть додані ці атрибути для встановлення константи або визначення зовнішнього зв'язку параметру.</li>
 <li> <i>Значення</i> — значення атрибуту по замовченню або шаблон посилання для доступу за посиланням:
-<ul><li> Формат шаблону посилання залежить від компоненту який його використовує. Загальний формат зв'язків записується у вигляді "<b>{Parameter}|{attribute}</b>". Поле <i>Parameter</i> — вказує ім'я параметру, як контейнеру атрибутів. Атрибути з однаковим значенням <i>Parameter</i> будуть групуватися та дозволять призначатися визначенням тільки контейнеру атрибутів, а окремі атрибути будуть пов'язані з атрибутами контейнеру відповідно до поля <i>{attribute}</i>.</li>
-<li> Зв'язок на постійне значення записується у формі "<b>val:{Constant}</b>".</li>
+<ul><li> Формат шаблону посилання залежить від компоненту, який його використовує. Загальний формат зв'язків записується у вигляді "<b>{Parameter}|{attribute}</b>". Поле <i>Parameter</i> — вказує ім'я параметру, як контейнеру атрибутів. Атрибути з однаковим значенням <i>Parameter</i> будуть групуватися та дозволять призначатися визначенням тільки контейнеру атрибутів, а окремі атрибути будуть пов'язані з атрибутами контейнеру відповідно до поля <i>{attribute}</i>.</li>
 <li> Для вибірних типів це поле також може містити перелік значень, у другому рядку, та перелік назв, у третьому рядку, з поділом елементів символом ";".</li></ul></li></ul>
 <p>З синтаксисом мови програми шаблону можна ознайомитися у документації модуля, що надає інтерпретатор обраної мови. Наприклад, типовою мовою користувацького програмування OpenSCADA є <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc.JavaScript</a>.
 </p>
@@ -1817,7 +1816,7 @@ openscada-proj proc|create|remove|update {ProjName}
   update - update from 0.8.0 LTS;
  Arguments:
   ProjName - project name;
- Environments:
+ Environment variables:
   dPrj     - directory of projects OpenSCADA, can be RO;
   dPrjUser - directory of projects OpenSCADA of the user, WR;
   dSysCfg  - directory of system configuration;
@@ -1832,9 +1831,10 @@ openscada-proj backupList {ProjName}
  Arguments:
   ProjName   - project name;
   BackupName - the backup archive name.
- Environments:
-  OSCADA_TAR_ComprPrg - TAR compression program, at missing there used gzip.
-  OSCADA_BackLim      - Backups limit, 10 by default
+ Environment variables:
+  OSCD_TAR_ComprPrg - TAR compression program, by default gzip;
+  OSCD_TAR_Args     - TAR extra arguments, by default \"--exclude=lock --exclude=ARCHIVES\";
+  OSCD_BackLim      - Backups limit, by default 10.
 </pre>
 <p>Загалом сценарій командного рядку менеджеру проєктів <b>openscada-proj</b> передбачає функції та команди довкола проєктів:
 </p>
@@ -1847,8 +1847,7 @@ openscada-proj backupList {ProjName}
 <ul><li> <i>backup</i> — резервне копіювання обраного проєкту <i>ProjName</i> до <i>BackupName</i>, або на поточну дату за відсутності;</li>
 <li> <i>backupRestore</i> — відновлення обраного проєкту <i>ProjName</i> із резервної копії з вказаною назвою <i>BackupName</i>, або із останньої за відсутності;</li>
 <li> <i>backupList</i> — перелік резервних копій проєкту <i>ProjName</i>.</li></ul>
-<p>Резервне копіювання загалом здійснюється у робочій теці OpenSCADA, поряд із теками самих проєктів для яких створюються файли запакованих тек із назвою <b>{ProjName}_{BackupName}.backup</b>, наприклад — "Boiler_2020-06-24_20.09.backup". По замовченню теки проєктів стискаються програмою "gzip", яку можна змінити встановленням змінної оточення "OSCADA_TAR_ComprPrg". Відповідно резервування можна здійснювати із зовні, наприклад, за встановленим розкладом із CRON, окрім того, що здійснювати це вручну із графічного інтерфейсу менеджеру проєктів (Рис.5a).
-</p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="../en/files/At.png" width="22" /></a> Резервне копіювання теки проєкту з великими архівами на робочих системах може виявитися неефективним та надто витратним, тому саму теку архівів "ARCHIVES" доцільно виносити на окремий великий сховок та посилатися на нього із теки проєкту, що також доцільно і з міркувань розподілу сховища на базове-високонадійне-резервоване та сховище великих архівних даних (DATA) — історії.
+<p>Резервне копіювання загалом здійснюється у робочій теці OpenSCADA поряд із теками самих проєктів, для яких створюються файли запакованих тек із назвою <b>{ProjName}_{BackupName}.backup</b>, наприклад — "Boiler_2020-06-24_20.09.backup". По замовченню теки проєктів стискаються програмою "gzip", яку можна змінити встановленням змінної оточення "OSCD_TAR_ComprPrg". Обмеження на резервні файли встановлено у 10 та ви можете його змінити змінною оточення "OSCD_BackLim". Також ви можете додати специфічних аргументів до архіватору TAR змінною оточення "OSCD_TAR_Args", яка по замовченню встановлена у "--exclude=lock --exclude=ARCHIVES" задля виключення файлу "lock" та теки "ARCHIVES" із резервного копіювання. Резервування можна здійснювати із зовні, наприклад, за встановленим розкладом із CRON, окрім того, що здійснювати це вручну із графічного інтерфейсу менеджеру проєктів (Рис.5a).
 </p>
 <h3><span class="mw-headline" id=".D0.92.D0.B8.D0.BA.D0.BE.D0.BD.D0.B0.D0.BD.D0.BD.D1.8F_.D0.B3.D0.BE.D1.82.D0.BE.D0.B2.D0.BE.D0.B3.D0.BE_.D0.BF.D1.80.D0.BE.D1.94.D0.BA.D1.82.D1.83_OpenSCADA_.D1.83_.D0.BF.D1.80.D0.BE.D1.81.D1.82.D0.BE.D1.80.D1.96_.D1.81.D0.B5.D1.80.D0.B2.D1.96.D1.81.D1.83-.D1.84.D0.BE.D0.BD.D1.96"><span class="mw-headline-number">5.2</span> <span id="Service" title="#Service">Виконання готового проєкту OpenSCADA у просторі сервісу-фоні</span></span></h3>
 <p>Організація проєкту OpenSCADA у окремій теці робить простим запуск готових проєктів у просторі сервісу — виконання у фоні, а також подальше оновлення та супровід цього проєкту без прямого віддаленого контролю. Фактично, ви можете розробляти проєкт локально, тримаючи його теку у користувацькій робочій теці (типово "{HOME}/.openscada"), а для запуску у просторі сервісу лише копіювати або пакувати, передавати на віддалений робочий пристрій та розпаковувати у системну робочу теку (типово "/usr/share/openscada").
@@ -1891,5 +1890,5 @@ service openscada-lts-server start
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/uk">Documents/Program_manual/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Documents/Program_manual/uk">Documents/Program_manual/uk</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

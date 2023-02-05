@@ -1,7 +1,7 @@
 
 //OpenSCADA module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -2979,7 +2979,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/func/cfg/MAXCALCTM",_("Maximum calculation time, seconds"),RWRWR_,"root",SDAQ_ID,3,
 	    "tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,-1,"/io",_("Program"))) {
-	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move")) {
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,ins,move,del")) {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Identifier"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str",
 		    "help",_("The name's rows after the first one treat as help."));

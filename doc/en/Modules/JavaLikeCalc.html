@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/JavaLikeCalc</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/JavaLikeCalc.html" title="Модули/Вычислитель похожий на Java (98% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/JavaLikeCalc.html" title="Модулі/Обчислювач подібний до Java (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/JavaLikeCalc.html" title="Модули/Вычислитель похожий на Java (93% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/JavaLikeCalc.html" title="Модулі/Обчислювач подібний до Java (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -102,8 +102,9 @@
 <li class="toclevel-1 tocsection-14"><a href="#Libraries_of_functions_of_the_module"><span class="tocnumber">4</span> <span class="toctext"><span>Libraries of functions of the module</span></span></a></li>
 <li class="toclevel-1 tocsection-15"><a href="#User_functions_of_the_module"><span class="tocnumber">5</span> <span class="toctext">User functions of the module</span></a></li>
 <li class="toclevel-1 tocsection-16"><a href="#User_programming_API"><span class="tocnumber">6</span> <span class="toctext">User programming API</span></a></li>
-<li class="toclevel-1 tocsection-17"><a href="#Productivity"><span class="tocnumber">7</span> <span class="toctext"><span>Productivity</span></span></a></li>
-<li class="toclevel-1 tocsection-18"><a href="#Links"><span class="tocnumber">8</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-17"><a href="#Service_commands-functions_of_the_Control_Interface"><span class="tocnumber">7</span> <span class="toctext">Service commands-functions of the Control Interface</span></a></li>
+<li class="toclevel-1 tocsection-18"><a href="#Productivity"><span class="tocnumber">8</span> <span class="toctext"><span>Productivity</span></span></a></li>
+<li class="toclevel-1 tocsection-19"><a href="#Links"><span class="tocnumber">9</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -402,7 +403,45 @@ For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/Use
 <ul><li> <i>ElTp call(ElTp prm1, ...)</i> — calls the function "func" of the library "Lfunc" with the parameters <i>prm{N}</i>. Returns result of the called function. The prefix "lib_" before the library identifier is required!</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id="Productivity"><span class="mw-headline-number">7</span> <span id="Productivity" title="#Productivity">Productivity</span></span></h2>
+<h2><span class="mw-headline" id="Service_commands-functions_of_the_Control_Interface"><span class="mw-headline-number">7</span> Service commands-functions of the Control Interface</span></h2>
+<p>Service functions are an interface for accessing OpenSCADA from external systems through the <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">Control Interface</a>. This mechanism is the basis of all exchange within OpenSCADA, implemented through weak links and <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA's own exchange protocol</a>.
+</p><p><br />
+<b><u>Getting for values of the function IO of the controller object</u></b><br />
+REQ: <i>&lt;get path="/DAQ/JavaLikeCalc/<b>{CNTR}</b>/%2fserv%2ffncAttr" /&gt;</i>
+</p>
+<ul><li> <i>CNTR</i> — controller object.</li></ul>
+<p>RESP: <i>&lt;get path="/DAQ/JavaLikeCalc/{CNTR}/%2fserv%2ffncAttr" rez="<b>0</b>"&gt;<b>{IOs}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>IOs</i> — IOs of the function execution context in the tags "a": <i>&lt;a id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/a&gt;</i>
+<ul><li> <i>ID</i> — identifier of the IO;</li>
+<li> <i>value</i> — value of the IO.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/DAQ/JavaLikeCalc/testCalc/%2fserv%2ffncAttr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"f_frq"</span><span class="nt">&gt;</span>0.1<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"f_start"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"f_stop"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"this"</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>TCntrNodeObj path="/sub_DAQ/mod_JavaLikeCalc/cntr_testCalc/"/<span class="ni">&amp;gt;</span><span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"offset"</span><span class="nt">&gt;</span>100<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"out"</span><span class="nt">&gt;</span>50<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"test"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"rez"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"inFarg"</span><span class="nt">&gt;</span>3<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Setting for values of the function IO of the controller object</u></b><br />
+REQ[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/JavaLikeCalc/<b>{CNTR}</b>/%2fserv%2ffncAttr"&gt;<b>{IOs}</b>&lt;/set&gt;</i>
+</p>
+<ul><li> <i>CNTR</i> — controller object;</li>
+<li> <i>IOs</i> — IOs of the function execution context in the tags "a": <i>&lt;a id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/a&gt;</i>
+<ul><li> <i>ID</i> — identifier of the IO;</li>
+<li> <i>value</i> — value of the IO.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/JavaLikeCalc/testCalc/%2fserv%2ffncAttr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"out"</span><span class="nt">&gt;</span>50<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"test"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Productivity"><span class="mw-headline-number">8</span> <span id="Productivity" title="#Productivity">Productivity</span></span></h2>
 <p>Source text of the procedures on the language is compiled into a bytecode, which is then computed by the virtual machine. The bytecode is not native machine code and achieving to productivity of the hardware platform into the virtual machine that executing is theoretical unreal, sure if the virtual machine code is not executed directly by the CPU. That is, the productivity of the bytecode execution approximately low by ten to the hardware productivity due to the overhead of the virtual machine commands, the distribution of multithreaded data access, the transparent casting of types and the lack of strict typing, as well as the dynamic nature of the language and the presence of complex types "String" and "Object ".
 </p><p><b>28.01.2006:</b><br />
 <i>Description:</i> Initial estimation of the productivity of the OpenSCADA virtual machine in example of the expression <b>y=x1+x2</b>, where all the variables are global and in the float-point type.
@@ -562,7 +601,7 @@ For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/Use
 <td> By the dynamic accessing function with the end object preparation <b>tO = SYS.DAQ.GPIO.io.pi.fnc_put; for(i = 0; i &lt; 1000; i++) tO.call(18, true);</b> </td>
 <td> 14.3
 </td></tr></table>
-<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">8</span> Links</span></h2>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">9</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_JavaLikeCalc.odg" title="File:Oscada UserOM JavaLikeCalc.odg">Diagram: User object model of the module JavaLikeCalc.</a></li></ul>
 
 
@@ -570,5 +609,5 @@ For access to <a href="../User_API.html" title="Special:MyLanguage/Documents/Use
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/JavaLikeCalc/en">Modules/JavaLikeCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

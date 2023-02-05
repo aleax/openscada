@@ -1057,7 +1057,8 @@ void TBD::cntrCmdProc( XMLNode *opt )
     // SQL-request
     if(a_path == "/serv/SQL" && ctrChkNode(opt,"call",RWRWR_,"root",SDB_ID,SEC_WR)) {
 	vector< vector<string> > tbl;
-	sqlReq(opt->text(), s2i(opt->attr("withRez"))?&tbl:NULL, s2i(opt->attr("intoTrans")));
+	sqlReq(opt->text(), s2i(opt->attr("withRez"))?&tbl:NULL, opt->attr("intoTrans").size()?s2i(opt->attr("intoTrans")):EVAL_BOOL);
+	if(tbl.size()) opt->setText("");
 	for(unsigned iR = 0; iR < tbl.size(); iR++)
 	    for(unsigned iC = 0; iC < tbl[iR].size(); iC++) {
 		while(iR == 0 && iC >= opt->childSize()) opt->childAdd("list");

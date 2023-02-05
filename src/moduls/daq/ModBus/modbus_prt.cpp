@@ -1416,7 +1416,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	}
 	ResAlloc res(nRes, false);
 	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/dt",_("Data"))) {
-	    if((isDirFunc || enableStat()) && ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins,move","rows","15")) {
+	    if((isDirFunc || enableStat()) && ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,2,"s_com","add,ins,move,del","rows","15")) {
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Identifier"),(enableStat()?R_R_R_:RWRWR_),"root",SPRT_ID,2, "tp","str",
 		    "help",_("For the \"Id\" field, a specific ModBus data record form is provided:\n"
 			 "  \"R{N}[w~]\", \"RI{N}[w~]\" - specific register (and input) form, can be expanded by the suffixes:\n"

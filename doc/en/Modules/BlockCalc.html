@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/BlockCalc</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/BlockCalc.html" title="Модули/Блоковый вычислитель (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/BlockCalc.html" title="Модулі/Блоковий обчислювач (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/BlockCalc.html" title="Модули/Блоковый вычислитель (92% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/BlockCalc.html" title="Модулі/Блоковий обчислювач (100% translated)">Українська</a></div></div>
 <div class="noprint" style="float:right; border:1px solid gray; width:300px; background-color:ivory; padding:2px;">
 <table cellspacing="0">
 <tr>
@@ -70,7 +70,8 @@
 <li class="toclevel-1 tocsection-3"><a href="#Parameters_of_the_controller"><span class="tocnumber">3</span> <span class="toctext">Parameters of the controller</span></a></li>
 <li class="toclevel-1 tocsection-4"><a href="#Copying_of_the_block_schemes"><span class="tocnumber">4</span> <span class="toctext">Copying of the block schemes</span></a></li>
 <li class="toclevel-1 tocsection-5"><a href="#User_programming_API"><span class="tocnumber">5</span> <span class="toctext">User programming API</span></a></li>
-<li class="toclevel-1 tocsection-6"><a href="#Links"><span class="tocnumber">6</span> <span class="toctext">Links</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Service_commands-functions_of_the_Control_Interface"><span class="tocnumber">6</span> <span class="toctext">Service commands-functions of the Control Interface</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Links"><span class="tocnumber">7</span> <span class="toctext">Links</span></a></li>
 </ul>
 </div>
 
@@ -151,7 +152,41 @@
 <li> <i>TCntrNodeObj cntr( )</i> — return the object of controller for the parameter nesting independent.</li></ul>
 <p><br />
 </p>
-<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">6</span> Links</span></h2>
+<h2><span class="mw-headline" id="Service_commands-functions_of_the_Control_Interface"><span class="mw-headline-number">6</span> Service commands-functions of the Control Interface</span></h2>
+<p>Service functions are an interface for accessing OpenSCADA from external systems through the <a href="../API.html#CntrNode" title="Special:MyLanguage/Documents/API">Control Interface</a>. This mechanism is the basis of all exchange within OpenSCADA, implemented through weak links and <a href="../Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA's own exchange protocol</a>.
+</p><p><br />
+<b><u>Getting for values of all block attributes of the controller object</u></b><br />
+REQ: <i>&lt;get path="/DAQ/BlockCalc/<b>{CNTR}</b>/blk_<b>{BLK}</b>/%2fserv%2fattr" /&gt;</i>
+</p>
+<ul><li> <i>CNTR</i>, <i>BLK</i> — controller object and block in the block scheme.</li></ul>
+<p>RESP: <i>&lt;get path="/DAQ/BlockCalc/{CNTR}/blk_{BLK}/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+</p>
+<ul><li> <i>attributes</i> — the block attributes in the tags "a": <i>&lt;a id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/a&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>value</i> — value of the attribute.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/DAQ/BlockCalc/CM101/blk_AT101_1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"Fi"</span><span class="nt">&gt;</span>50.3839725707191<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"Pi"</span><span class="nt">&gt;</span>10.2588208891757<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"Ti"</span><span class="nt">&gt;</span>331.149550201738<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"Si"</span><span class="nt">&gt;</span>0.071<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"li"</span><span class="nt">&gt;</span>10<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
+</pre></div>
+<p><b><u>Setting for values of list the block attributes of the controller object</u></b><br />
+REQ[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/BlockCalc/<b>{CNTR}</b>/blk_<b>{BLK}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+</p>
+<ul><li> <i>CNTR</i>, <i>BLK</i> — controller object and block in the block scheme;</li>
+<li> <i>attributes</i> — the block attributes in the tags "a": <i>&lt;a id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/a&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>value</i> — value of the attribute.</li></ul></li></ul>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/BlockCalc/CM101/blk_AT101_1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"Fi"</span><span class="nt">&gt;</span>50.3839725707191<span class="nt">&lt;/a&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">id=</span><span class="s">"Pi"</span><span class="nt">&gt;</span>10.2588208891757<span class="nt">&lt;/a&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
+</pre></div>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Links"><span class="mw-headline-number">7</span> Links</span></h2>
 <ul><li> <a class="external" href="http://oscada.org/wiki/File:Oscada_UserOM_BlockCalc.odg" title="File:Oscada UserOM BlockCalc.odg">Diagram: User object model of the module BlockCalc.</a></li></ul>
 
 
@@ -159,5 +194,5 @@
 
 
 
-</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/BlockCalc/en">Modules/BlockCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">January 2023</td><td style="text-align: right;" width="40%"> 1+r2866</td></tr></table></body>
+</div><table style="border-top: dotted 2px #999999; margin-top: 20pt; color: gray;" width="100%"><tr><td style="text-align: left;" width="40%"><a href="http://oscada.org/wiki/Modules/BlockCalc/en">Modules/BlockCalc/en</a> - <a href="http://oscada.org/en/main/about-the-project/licenses/">GFDL</a></td><td style="text-align: center;">February 2023</td><td style="text-align: right;" width="40%"> 1+r2868</td></tr></table></body>
 </html>

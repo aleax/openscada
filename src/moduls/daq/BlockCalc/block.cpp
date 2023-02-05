@@ -390,17 +390,17 @@ void Block::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/") {
+    if(a_path.find("/serv/") == 0) {
 	if(a_path == "/serv/attr") {
 	    if(!enable() || !func()) throw TError(nodePath().c_str(),_("Block disabled or error."));
 	    if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD) )
-		for(int i_a = 0; i_a < ioSize(); i_a++)
-		    opt->childAdd("a")->setAttr("id",func()->io(i_a)->id())->setText(getS(i_a));
+		for(int iA = 0; iA < ioSize(); iA++)
+		    opt->childAdd("a")->setAttr("id",func()->io(iA)->id())->setText(getS(iA));
 	    if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-		for(unsigned i_a = 0; i_a < opt->childSize(); i_a++) {
+		for(unsigned iA = 0; iA < opt->childSize(); iA++) {
 		    int io_id = -1;
-		    if(opt->childGet(i_a)->name() != "a" || (io_id=ioId(opt->childGet(i_a)->attr("id"))) < 0) continue;
-		    setS(io_id,opt->childGet(i_a)->text());
+		    if(opt->childGet(iA)->name() != "a" || (io_id=ioId(opt->childGet(iA)->attr("id"))) < 0) continue;
+		    setS(io_id, opt->childGet(iA)->text());
 		}
 	}
 	else TCntrNode::cntrCmdProc(opt);
@@ -509,8 +509,8 @@ void Block::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setText(c_path);
 	if(c_lv != 0) c_path += ".";
 	try { SYS->nodeAt(c_path,0,'.').at().nodeList(list); }	catch(...){ }
-	for(unsigned i_a=0; i_a < list.size(); i_a++)
-	    opt->childAdd("el")->setText(c_path+list[i_a]);
+	for(unsigned iA = 0; iA < list.size(); iA++)
+	    opt->childAdd("el")->setText(c_path+list[iA]);
     }
     else if(a_path.compare(0,9,"/blck/cfg") == 0) TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
     else if((a_path == "/lio/show/hide" || a_path == "/lnk/show/hide") && enable()) {
@@ -593,8 +593,8 @@ void Block::cntrCmdProc( XMLNode *opt )
 				break;
 			    default:	break;
 			}
-			for(unsigned i_a=0; i_a < list.size(); i_a++)
-			    opt->childAdd("el")->setText(c_path+list[i_a]);
+			for(unsigned iA = 0; iA < list.size(); iA++)
+			    opt->childAdd("el")->setText(c_path+list[iA]);
 		    }
 	    }
 	}

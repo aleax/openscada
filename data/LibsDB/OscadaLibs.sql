@@ -4781,7 +4781,7 @@ INSERT INTO tmplib_DevLib VALUES('mbBase','ModBus base','','','ModBus base templ
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.5 HD
 Sponsored by, for whole complexity: Elyor Turaboev, BLUE STAR GROUP Ltd
-Version: 1.1.1
+Version: 1.2.1
 License: GPLv2','','',30,0,'JavaLikeCalc.JavaScript
 //Same request to the device
 function req(PDU) {
@@ -4820,6 +4820,7 @@ if(items != items_) {
 		itO.md = sIt.parse(0, ":", off1);
 		itO.id = sIt.parse(0, ":", off1);
 		itO.nm = sIt.slice(off1);
+		if(!itO.nm.length) itO.nm = itO.id;
 		dt[itO.addr.toString(16,5)] = itO;
 		if(itO.tp == "u" || itO.tp == "i" || itO.tp == "u2" || itO.tp == "i2")	{ wTp = "integer"; itO.sz = 2; }
 		else if(itO.tp == "u4" || itO.tp == "i4")	{ wTp = "integer"; itO.sz = 4; }
@@ -4863,7 +4864,9 @@ if(tr.isEVal() || transport != transport_)	{
 			fragMerge = this.cntr().cfg("FRAG_MERGE");
 			if(fragMerge.isEVal())	fragMerge = false;
 		}
-	} else tr = SYS.Transport[transport.parse(0)]["out_"+transport.parse(1)];
+	} else tr = (tr_=SYS.Transport.outAt(transport)) ? tr_ : EVAL;
+		    //SYS.Transport[transport.parse(0)]["out_"+transport.parse(1)];
+
 	maxBlkSz = max(10, min(200,maxBlkSz));
 	transport_ = transport;
 }
@@ -13530,11 +13533,11 @@ INSERT INTO tmplib_DevLib_io VALUES('mbBase','mbType','ModBus type, [RTU|ASCII|T
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','maxBlkSz','ModBus maximum block size, [10...200]',1,64,'200',3,'Максимальный размер блока ModBus, [10...200]','','Максимальний розмір блоку ModBus, [10...200]','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','fragMerge','ModBus blocks merging',3,64,'1',4,'Объединение блоков ModBus','','Поєднання блоків ModBus','','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','items','Items set
-Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+Rows in the form "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".',0,36,'#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
 
 ',5,'Набор элементов
-Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}".','','Набір елементів
-Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}:{nm}".','#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
+Строки в формате "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','','Набір елементів
+Рядки у форматі "[u|i|u2|i2|u4|i4|r|s]:{addr}:{w|r|~}:{id}[:{nm}]".','#<SnthHgl font="monospace"><rule expr="^#[^\n]*" color="gray" font_italic="1"/><rule expr=":[rw~]*:" color="red"/><rule expr=":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)" color="blue"/><rule expr="^(u|i|u2|i2|u4|i4|r|s)" color="darkorange"/><rule expr="\\:" color="blue"/></SnthHgl>
 
 ','');
 INSERT INTO tmplib_DevLib_io VALUES('mbBase','tr','Output transport',4,0,'',6,'Выходной транспорт','','Вихідний транспорт','','');
