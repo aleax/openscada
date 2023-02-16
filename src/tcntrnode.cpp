@@ -1067,12 +1067,12 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    }
 	    else if(opt->childSize()) modifG();
 
-	    if(opt->childSize())	{ res.lock(); SYS->setCfgCtx(opt); }
+	    if(opt->childSize()) { res.lock(); SYS->setCfgCtx(opt); }
 
 	    string errs;
 	    load(NULL, &errs);
 	    if(selDB.size() && !isdigit(selDB[0]))	SYS->setSelDB("");
-	    if(SYS->cfgCtx())	{ SYS->setCfgCtx(NULL); modifG(); }
+	    if(SYS->cfgCtx())	{ SYS->setCfgCtx(NULL); opt->childClear(); modifG(); }
 	    if(errs.size()) throw err_sys(_("Error loading:\n%s"), errs.c_str());
 	}
 	// Save the node

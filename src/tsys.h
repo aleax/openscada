@@ -1,7 +1,7 @@
 
 //OpenSCADA file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -29,6 +29,7 @@
 
 //Other global constants
 #define NSTR_BUF_LEN	50	// Length of string buffers for numbers
+#define CFG_A_LEN	100	// maximum length of the configuration value for placing as an attribute
 #define DAQ_APER_FRQ	1000000	// Frequency of representing the aperiodic invokes, like to f_start, of the periodic processes in Hz
 #define RECURS_DET_HOPS	20	// Hops/depth number of the recursion detection
 

@@ -461,7 +461,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 	    else {
 		if(nd->name() != "tbl" && !(isCfgCtx && !path.size())) nd->setName("tbl");
 
-		// Search present field
+		// Search the field presence
 		for(unsigned iFld = 0, iEl; iFld < nd->childSize(); iFld++) {
 		    XMLNode *el = nd->childGet(iFld);
 		    if(el->name() != "fld") continue;
@@ -530,7 +530,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			}
 
 			// To attribute
-			if(!isPrm && svalBASE.size() < NSTR_BUF_LEN) {
+			if(!isPrm && svalBASE.size() < CFG_A_LEN) {
 			    wel->setAttr(vnm, svalBASE);
 			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 			}
@@ -544,9 +544,9 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, char f
 			}
 		    }
 		    // ... for translated
-		    if(isTransl && !cf.noTransl() && (!isPrm || vnm == "val") && (!Mess->translDyn() || isDynSet || isSysPreStor)) {
+		    if(!isCfgCtx && isTransl && !cf.noTransl() && (!isPrm || vnm == "val") && (!Mess->translDyn() || isDynSet || isSysPreStor)) {
 			vnm = cf_el[iEl]+"_"+toLang;
-			if(!isPrm && sval.size() < NSTR_BUF_LEN) {
+			if(!isPrm && sval.size() < CFG_A_LEN) {
 			    wel->setAttr(vnm, sval);
 			    if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 			}

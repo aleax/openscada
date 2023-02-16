@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-05 12:58+0200\n"
+"POT-Creation-Date: 2023-02-16 10:54+0200\n"
 "PO-Revision-Date: 2020-10-25 10:52+0200\n"
 "Last-Translator: Roman Savochenko <roman@oscada.org>\n"
 "Language-Team:  <uk@li.org>\n"
@@ -185,8 +185,7 @@ msgid "Redundancy"
 msgstr "Резервування"
 
 msgid "Overtime of the reserve history reload at start, days"
-msgstr ""
-"Глибина примусового перевантаження історії резерву при запуску, в добах."
+msgstr "Глибина примусового перевантаження історії резерву при запуску, в добах."
 
 msgid "Message archivers"
 msgstr "Архіватори повідомлень"
@@ -350,8 +349,7 @@ msgid "Requested %d records for time %s."
 msgstr "Запитано %d записів протягом %s."
 
 #, c-format
-msgid ""
-"The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
+msgid "The grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Не підтримується вставка дуже старих повідомлень у режимі прив'язки до сітки "
 "%lld (%lld-%lld)."
@@ -609,8 +607,7 @@ msgstr "Таблиці у БД, але не відкриті на цей час.
 msgid "Load the program from this DB"
 msgstr "Завантажити програму з цієї БД"
 
-msgid ""
-"Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
+msgid "Codepage of data into the DB. For example it is: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr "Кодування даних у БД. Наприклад: UTF-8, KOI8-R, KOI8-U ... ."
 
 msgid ""
@@ -1405,8 +1402,7 @@ msgstr "2:Збір зупинено."
 msgid "Parameter: "
 msgstr "Параметр: "
 
-msgid ""
-"The type changing leads to lose some data of the specific configurations."
+msgid "The type changing leads to lose some data of the specific configurations."
 msgstr "Зміна типу потягне за собою втрату даних специфічних конфігурацій."
 
 msgid "Inclusion"
@@ -1987,8 +1983,7 @@ msgid "Error writing the configuration file '%s': %s"
 msgstr "Помилка запису до конфігураційного файлу '%s': %s"
 
 #, c-format
-msgid ""
-"Impossible to hold the project lock! Seems the project '%s' already running."
+msgid "Impossible to hold the project lock! Seems the project '%s' already running."
 msgstr "Неможливо захопити замок проєкту! Схоже проєкт '%s' вже виконується."
 
 msgid "Loading."
@@ -2570,8 +2565,7 @@ msgid "User;System;User and System"
 msgstr "Корист.;Системн.;Корист. та Системн."
 
 msgid "Initial connection identifier to what bind for control."
-msgstr ""
-"Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
+msgstr "Ідентифікатор ініціативного підключення до якого зв'язуватися для керування."
 
 msgid "New external host"
 msgstr "Новий зовнішній хост"
@@ -2653,11 +2647,14 @@ msgstr "БД транспорту"
 msgid "IO log"
 msgstr "Лог ВВ"
 
-msgid "Log length and block limit"
-msgstr "Довжина логу та обмеження блоку"
+msgid "Log length, block limit, type"
+msgstr "Логу довжина, обмеження блоку, тип"
 
 msgid "Use zero for the log disabling."
 msgstr "Використовуйте нуль для вимкнення логу."
+
+msgid "Binary & Text;Binary;Text"
+msgstr "Бінарне і Текст;Бінарне;Текст"
 
 msgid "Log"
 msgstr "Лог"
@@ -2978,3 +2975,4 @@ msgstr "Встановлено назву проєкту у:"
 
 msgid "already started."
 msgstr "вже запущено."
+

@@ -974,7 +974,7 @@ void ConfApp::itPaste( )
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
 
 		//Load context of the source node to the destination one
-		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj");
+		req.setName("load")->setAttr("path", "/"+statNm+dstNm+"/%2fobj")->attrDel("ctx")->attrDel("rez");
 		if(cntrIfCmd(req))
 		    throw TError(s2i(req.attr("rez")), req.attr("mcat").c_str(), "%s", req.text().c_str());
 	    }
@@ -1282,11 +1282,12 @@ void ConfApp::selectItem( )
     if(sel_ls.size() == 1 && selPath != sel_ls.at(0)->text(2).toStdString()) {
 	selectPage(sel_ls.at(0)->text(2).toStdString(), CH_REFR_TM);
 
-	if((sel_ls=CtrTree->selectedItems()).size()) {	//Updating but it can be changed after "selectPage"
+	//!!!! Due to that performed in pageDisplay() already
+	/*if((sel_ls=CtrTree->selectedItems()).size()) {	//Updating but it can be changed after "selectPage"
 	    int saveVl = CtrTree->horizontalScrollBar() ? CtrTree->horizontalScrollBar()->value() : 0;
 	    CtrTree->scrollToItem(sel_ls.at(0), QAbstractItemView::EnsureVisible);
 	    if(CtrTree->horizontalScrollBar()) CtrTree->horizontalScrollBar()->setValue(saveVl);
-	}
+	}*/
     }
 }
 
@@ -2133,7 +2134,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 		    QSizePolicy sp(QSizePolicy::Preferred, QSizePolicy::Preferred);
 		    sp.setControlType(QSizePolicy::Label);
-#if QT_VERSION >= 0x040700
+#if QT_VERSION >= 0x040800
 		    sp.setWidthForHeight(true);
 #endif
 		    sp.setHorizontalStretch(1);	//!!!! At setting there 0 we enable work at size hint which is very wrapping big texts,
@@ -2289,19 +2290,30 @@ void ConfApp::pageDisplay( const string path )
 
     //Checking for Prev and Next
     actPrev->setEnabled(prev.size());
+    while(prev.size() > NAV_BACK_DEPTH) prev.pop_back();
+    string tVl;
+    for(vector<string>::iterator iv = prev.begin(); iv != prev.end(); ++iv)
+	tVl += (tVl.size()?"\n":"") + *iv;
+    actPrev->setToolTip(tVl.c_str());
+
     actNext->setEnabled(next.size());
+    while(next.size() > NAV_BACK_DEPTH) next.pop_back();
+    tVl = "";
+    for(vector<string>::iterator iv = next.begin(); iv != next.end(); ++iv)
+	tVl += (tVl.size()?"\n":"") + *iv;
+    actNext->setToolTip(tVl.c_str());
 
     //Updating the current page
     if(path != pgInfo.attr("path")) {
 	if(path == selPath) selPath = pgInfo.attr("path");	//!!!! To ensure of proper working of the checking for not applied editable widgets
 
 	// Trace the control tree
-	QTreeWidgetItem *tIt;
+	QTreeWidgetItem *tIt = NULL;
 	if((!CtrTree->currentItem() || CtrTree->currentItem()->text(2).toStdString() != path) && (tIt=getExpandTreeWIt(path))) {
 	    CtrTree->blockSignals(true);
 	    CtrTree->setCurrentItem(tIt);
 	    CtrTree->blockSignals(false);
-	    CtrTree->scrollToItem(tIt);
+	    CtrTree->scrollToItem(tIt, QAbstractItemView::EnsureVisible);
 	}
 
 	// Stop the refreshing
@@ -2607,7 +2619,7 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	    it->setText(1, grpDscr.c_str());
 	    it->setText(2, (path+"/"+br_path).c_str());
 	    // Set icon
-	    XMLNode *chIco = chEl->childGet("ico",0,true);
+	    XMLNode *chIco = chEl->childGet("ico", 0, true);
 	    if(chIco) {
 		string simg = TSYS::strDecode(chIco->text(),TSYS::base64);
 		QImage img;

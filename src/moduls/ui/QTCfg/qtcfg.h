@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2004-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

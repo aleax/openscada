@@ -1,7 +1,7 @@
 
 //OpenSCADA file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2003-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -123,7 +123,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	vector<AutoHD<TTransportOut> >	mAssociateTrO;
 
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt;
+	int		mLogLen, mLogItLim, mLogLstDt, mLogTp;
 	time_t		mLogLstDtTm;
 	deque<string>	mLog;
 };
@@ -221,7 +221,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	ResMtx	mReqRes, mLogRes;
 
 	// IO log
-	int		mLogLen, mLogItLim, mLogLstDt;
+	int		mLogLen, mLogItLim, mLogLstDt, mLogTp;
 	time_t		mLogLstDtTm;
 	deque<string>	mLog;
 };
@@ -312,6 +312,8 @@ class TTransportS : public TSubSYS
 		int8_t	mode;		//Mode; Only dynamic set
 		time_t	mdf;		//Modify time, for detect the reconnection need
 	};
+
+	enum LogType { LTP_BinaryText = 0, LTP_Binary, LTP_Text };
 
 	//Methods
 	TTransportS( );

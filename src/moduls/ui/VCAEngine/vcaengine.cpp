@@ -35,7 +35,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define MOD_SUBTYPE	"VCAEngine"
-#define MOD_VER		"7.10.9"
+#define MOD_VER		"7.11.0"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("The main engine of the visual control area.")
 #define LICENSE		"GPL2"
@@ -620,8 +620,8 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	}
     }
 
-    if(!ldGen) {
-	//Clear no present IO for main io table
+    if(!ldGen && !SYS->cfgCtx()) {
+	//Clearing no present IO for main io table
 	cEl.cfgViewAll(false);
 	for(int fldCnt = 0; TBDS::dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fldCnt++,cEl); ) {
 	    string sid = cEl.cfg("ID").getS();

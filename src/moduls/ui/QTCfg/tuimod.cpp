@@ -37,7 +37,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"Qt"
-#define MOD_VER		"5.12.3"
+#define MOD_VER		"5.12.6"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt-based configurator of OpenSCADA.")
 #define LICENSE		"GPL2"

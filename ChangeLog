@@ -1,3 +1,19 @@
+2023-02-16 Roman (stable)
+- SYS: Writing to the configuration in XML prevented in doubling the translated field for the configuration contexts.
+    NSTR_BUF_LEN(50) splitted to CFG_A_LEN (100) for using in the maximum attribute size of the configuration cell in XML.
+    The service request <load path="/{Node}/%2fobj" /> appended of clearing the configuration context after the loading.
+- !!!:Transports: The IO log of the transports appened of the data modes: "Binary & Text", "Binary", "Text".
+- UI.{QTCfg,WebCfgD}: The remote hosts copy appended of clearing in the "load" command-request
+    for the attributes "ctx" and "rez" after the "save" command-request.
+- FIX:UI.QTCfg: Fixed-restored for building in the Qt4.7 environment.
+    Avoided from doubling the scrollToItem() in the navigation tree due to jumps sometimes.
+    The previous and next navigation buttons added by tooltip with items in the navigation lists.
+- !!!:UI.VCAEngine: The widget libraries adapted to interhost copying.
+- !!:FIX:UI.Vision: Fixed of hanging in the navigation tree at missing icons of the widget libraries,
+	after removing empty "ico" tags in the previous commit.
+    FIX: Fixed-restored for building with old LibC++.
+
+
 2023-02-05 Roman (stable)
 - !!!:DOC: The "API" document completely revised in the section "Control Interface and dynamic tree of program objects"
     which unified and the section "Service commands-functions" moved there as a subsection,

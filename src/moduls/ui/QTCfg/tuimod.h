@@ -31,6 +31,8 @@
 #undef trS
 #define trS(mess) mod->I18N(mess,mess_PreSave)
 
+#define NAV_BACK_DEPTH	10
+
 using namespace OSCADA;
 
 namespace QTCFG

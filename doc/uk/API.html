@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="uk">Документи/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FAPI&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/API" title="Documents/API">Documents/API</a> and the translation is 31% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/API.html" title="Documents/API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">Українська</span></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="uk"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Documents%2FAPI&amp;action=page&amp;filter=&amp;language=uk" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Documents/API" title="Documents/API">Documents/API</a> and the translation is 32% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../en/API.html" title="Documents/API (100% translated)">English</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--low">Українська</span></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Автор:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Роман Савоченко</a></li>
 <li> <b>Початково створено:</b> у <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">старій Wiki</a> </li></ul>
@@ -273,6 +273,7 @@ Information variables of the program:
 <p><b>Templates/definitions:</b>
 </p>
 <ul><li> <i>NSTR_BUF_LEN</i> — Length of string buffers for numbers (50 symbols).</li>
+<li> <i>CFG_A_LEN</i> — Maximum attribute size of the configuration cell in XML (100 symbols).</li>
 <li> <i>DAQ_APER_FRQ</i> — Frequency of representing the aperiodic invokes, like to "f_start", of the periodic processes in Hz (1000000).</li>
 <li> <i>RECURS_DET_HOPS</i> — Hops/depth number of the recursion detection.</li>
 <li> <i>ARCH_BUF</i> — Name of requesting the messages buffer ("&lt;buffer&gt;").</li>
@@ -1568,7 +1569,7 @@ The data acquisition mode/source (enumeration — TVArchive::SrcMode):
 <td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
-External hosts mode (enum — ExtHost::Mode):
+External hosts mode (enum — TTransportS::ExtHost::Mode):
 </p>
 <ul><li> <i>User</i> (0) — User.</li>
 <li> <i>System</i> (1) — System.</li>
@@ -1586,6 +1587,11 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>uint8_t upRiseLev;</i> — External hosts uprising level/depth of this host/station.</li>
 <li> <i>int8_t mode;</i> — Host mode.</li>
 <li> <i>time_t mdf;</i> — Modification time.</li></ul>
+<p>Data types of the IO logs (enum — TTransportS::LogType):
+</p>
+<ul><li> <i>LTP_BinaryText</i> (0) — Binary &amp; Text.</li>
+<li> <i>LTP_Binary</i> (1) — Binary.</li>
+<li> <i>LTP_Text</i> (2) — Text.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
@@ -2940,50 +2946,44 @@ Error values for the different data types (definition):
 <ul><li> <i>lev</i> — рівень резервування станції.</li></ul>
 <p><b><u>Сканування конфігураційного файлу</u></b><br />
 ЗАП[<b>root-root</b>]: <i>&lt;scan path="/%2fgen%2fconfig" /&gt;</i>
-</p><p><b><u>Отримання прапорця модифікації вузла</u></b><br />
-ЗАП: <i>&lt;modify path="/<b>{nPath}</b>/%2fobj" /&gt;</i>
+</p><p><b><u>Запити вузла-об'єкту</u></b><br />
 </p>
-<ul><li> <i>nPath</i> — шлях до потрібного вузла.</li></ul>
-<p>ВІДП: <i>&lt;modify path="/{nPath}/%2fobj" rez="<b>0</b>"&gt;<b>{flag}</b>&lt;/modify&gt;</i>
-</p>
-<ul><li> <i>flag</i> — статус-прапорець модифікації вузла, для деталей дивіться перелічення <a href="#TCntrNode">TCntrNode::ModifFlag</a>.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;modify</span> <span class="na">path=</span><span class="s">"/Security/user/%2fobj"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/modify&gt;</span>
+<dl><dd><b><u>Отримання прапорця модифікації вузла</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;modify path="/<b>{nPath}</b>/%2fobj" /&gt;</i>
+<ul><li> <i>nPath</i> — шлях до потрібного вузла.</li></ul></dd>
+<dd>ВІДП: <i>&lt;modify path="/{nPath}/%2fobj" rez="<b>0</b>"&gt;<b>{flag}</b>&lt;/modify&gt;</i>
+<ul><li> <i>flag</i> — статус-прапорець модифікації вузла, для деталей дивіться перелічення <a href="#TCntrNode">TCntrNode::ModifFlag</a>.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;modify</span> <span class="na">path=</span><span class="s">"/Security/user/%2fobj"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/modify&gt;</span>
 </pre></div>
-<p><b><u>Завантаження вузла</u></b><br />
-ЗАП: <i>&lt;load path="/<b>{nPath}</b>/%2fobj" force="<b>{force}</b>"&gt;<b>{CfgCtx}</b>&lt;/load&gt;</i>
-</p>
+<dl><dd><b><u>Завантаження вузла</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;load path="/<b>{nPath}</b>/%2fobj" force="<b>{force}</b>"&gt;<b>{CfgCtx}</b>&lt;/load&gt;</i>
 <ul><li> <i>nPath</i> — шлях до потрібного вузла;</li>
 <li> <i>force</i> — прапорець примусового завантаження [0|1], вузол може бути не позначеним модифікованим;</li>
-<li> <i>CfgCtx</i> — <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">конфігураційний контекст</a> у тегах "fld" для завантаження із нього, використовується для віддаленого копіювання конфігурації вузла.</li></ul>
-<p><b><u>Збереження вузла</u></b><br />
-ЗАП: <i>&lt;save path="/<b>{nPath}</b>/%2fobj" force="<b>{force}</b>" ctx="<b>{toCfgCtx}</b>" /&gt;</i>
-</p>
+<li> <i>CfgCtx</i> — <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">конфігураційний контекст</a> у тегах "fld" для завантаження із нього, використовується для віддаленого копіювання конфігурації вузла.</li></ul></dd></dl>
+<dl><dd><b><u>Збереження вузла</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;save path="/<b>{nPath}</b>/%2fobj" force="<b>{force}</b>" ctx="<b>{toCfgCtx}</b>" /&gt;</i>
 <ul><li> <i>nPath</i> — шлях до потрібного вузла;</li>
 <li> <i>force</i> — прапорець примусового збереження [0|1], вузол може бути не позначеним модифікованим;</li>
-<li> <i>toCfgCtx</i> — ознака [0|1] збереження конфігурації вузла до <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">конфігураційного контексту</a>, використовується для віддаленого копіювання конфігурації вузла.</li></ul>
-<p>ВІДП: <i>&lt;save path="/{nPath}/%2fobj" force="{force}" ctx="{toCfgCtx}" rez="<b>0</b>"&gt;<b>{CfgCtx}</b>&lt;/save&gt;</i>
-</p>
-<ul><li> <i>CfgCtx</i> — <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">конфігураційний контекст</a> у тегах "fld" після збереження.</li></ul>
-<p><b><u>Локальне копіювання визначеного вузла</u></b><br />
-ЗАП: <i>&lt;copy path="/<b>{nPath}</b>/%2fobj" src="<b>{source}</b>" dst="<b>{destination}</b>" /&gt;</i>
-</p>
+<li> <i>toCfgCtx</i> — ознака [0|1] збереження конфігурації вузла до <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">конфігураційного контексту</a>, використовується для віддаленого копіювання конфігурації вузла.</li></ul></dd>
+<dd>ВІДП: <i>&lt;save path="/{nPath}/%2fobj" force="{force}" ctx="{toCfgCtx}" rez="<b>0</b>"&gt;<b>{CfgCtx}</b>&lt;/save&gt;</i>
+<ul><li> <i>CfgCtx</i> — <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">конфігураційний контекст</a> у тегах "fld" після збереження.</li></ul></dd></dl>
+<dl><dd><b><u>Локальне копіювання визначеного вузла</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;copy path="/<b>{nPath}</b>/%2fobj" src="<b>{source}</b>" dst="<b>{destination}</b>" /&gt;</i>
 <ul><li> <i>nPath</i> — шлях до потрібного вузла, у цій операції може бути будь яким вузлом;</li>
 <li> <i>source</i> — шлях до вузла джерела;</li>
-<li> <i>destination</i> — шлях до вузла призначення.</li></ul>
-<p><b><u>Отримання дочірніх вузлів визначеного вузла, оптимізовано для мереж</u></b><br />
-ЗАП: <i>&lt;chlds path="/<b>{nPath}</b>/%2fobj" grp="<b>{group}</b>" icoCheck="<b>{icoCheck}</b>" /&gt;</i>
-</p>
+<li> <i>destination</i> — шлях до вузла призначення.</li></ul></dd></dl>
+<dl><dd><b><u>Отримання дочірніх вузлів визначеного вузла, оптимізовано для мереж</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;chlds path="/<b>{nPath}</b>/%2fobj" grp="<b>{group}</b>" icoCheck="<b>{icoCheck}</b>" /&gt;</i>
 <ul><li> <i>nPath</i> — шлях до потрібного вузла;</li>
 <li> <i>group</i> — група-префікс дочірніх вузлів;</li>
-<li> <i>icoCheck</i> — ознака [0|1] лише перевірки наявності піктограми встановленням атрибуту "icoSize".</li></ul>
-<p>ВІДП: <i>&lt;chlds path="/{nPath}/%2fobj" grp="{group}" icoCheck="{icoCheck}" rez="<b>0</b>"&gt;<b>{nodes}</b>&lt;/chlds&gt;</i>
-</p>
+<li> <i>icoCheck</i> — ознака [0|1] лише перевірки наявності піктограми встановленням атрибуту "icoSize".</li></ul></dd>
+<dd>ВІДП: <i>&lt;chlds path="/{nPath}/%2fobj" grp="{group}" icoCheck="{icoCheck}" rez="<b>0</b>"&gt;<b>{nodes}</b>&lt;/chlds&gt;</i>
 <ul><li> <i>nodes</i> — вузли у тегах "el", де ім'я у тексті тегу та ідентифікатор у атрибуті "id" для вузлів із ідентифікаторами; теги "el" містять додаткові теги і атрибути:
 <ul><li> <i><b>ico</b></i> — тег із даними іконки при невстановленні "icoCheck";</li>
 <li> <i>icoSize</i> — розмір піктограми вузла за її наявності та встановленні "icoCheck";</li>
 <li> <i><b>grp</b></i> — теги груп дочірніх вузлів із додатковими атрибутами:
-<ul><li> <i>chPresent</i> — ознака наявності дочірніх вузлів для групи.</li></ul></li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;chlds</span> <span class="na">grp=</span><span class="s">"mod_"</span> <span class="na">icoCheck=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Transport/%2fobj"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<ul><li> <i>chPresent</i> — ознака наявності дочірніх вузлів для групи.</li></ul></li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;chlds</span> <span class="na">grp=</span><span class="s">"mod_"</span> <span class="na">icoCheck=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Transport/%2fobj"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">icoSize=</span><span class="s">"10348"</span> <span class="na">id=</span><span class="s">"Sockets"</span><span class="nt">&gt;</span>Сокети
     <span class="nt">&lt;grp</span> <span class="na">acs=</span><span class="s">"54"</span> <span class="na">chPresent=</span><span class="s">"1"</span> <span class="na">dscr=</span><span class="s">"Вхідний транспорт"</span> <span class="na">id=</span><span class="s">"in_"</span> <span class="na">idSz=</span><span class="s">"20"</span> <span class="na">idm=</span><span class="s">"100"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;grp</span> <span class="na">acs=</span><span class="s">"54"</span> <span class="na">chPresent=</span><span class="s">"1"</span> <span class="na">dscr=</span><span class="s">"Вихідний транспорт"</span> <span class="na">id=</span><span class="s">"out_"</span> <span class="na">idSz=</span><span class="s">"20"</span> <span class="na">idm=</span><span class="s">"100"</span> <span class="nt">/&gt;</span>
@@ -2998,17 +2998,17 @@ Error values for the different data types (definition):
   <span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/chlds&gt;</span>
 </pre></div>
-<p><b><u>Отримання переліку БД або таблиць</u></b><br />
-ЗАП: <i>&lt;get path="/<b>{nPath}</b>/%2fdb%2flist[:onlydb]" /&gt;</i>
+<p><b><u>Загальні переліки</u></b><br />
 </p>
+<dl><dd><b><u>Отримання переліку БД або таблиць</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/<b>{nPath}</b>/%2fdb%2flist[:onlydb]" /&gt;</i>
 <dl><dd> <i>&lt;get path="/<b>{nPath}</b>/%2fdb%2ftblList[:onlydb]" /&gt;</i></dd></dl>
 <ul><li> <i>nPath</i> — шлях до потрібного вузла, у цій операції може бути будь яким вузлом;</li>
-<li> "onlydb" — доповнення адреси для вказання на перелічення лише баз даних без групових маркувань.</li></ul>
-<p>ВІДП: <i>&lt;get path="/{nPath}/%2fdb%2flist[:onlydb]" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i>
-</p>
+<li> "onlydb" — доповнення адреси для вказання на перелічення лише баз даних без групових маркувань.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/{nPath}/%2fdb%2flist[:onlydb]" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i>
 <dl><dd> <i>&lt;get path="/{nPath}/%2fdb%2ftblList[:onlydb]" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i></dd></dl>
-<ul><li> <i>list</i> — елементи у тегах "el".</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fdb%2flist:onlydb"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<ul><li> <i>list</i> — елементи у тегах "el".</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fdb%2flist:onlydb"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el&gt;</span>SQLite.vcaTest<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el&gt;</span>SQLite.vcaBase<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el&gt;</span>SQLite.vcaAGLKS<span class="nt">&lt;/el&gt;</span>
@@ -3022,14 +3022,12 @@ Error values for the different data types (definition):
   <span class="nt">&lt;el&gt;</span>DBF.testRelease<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Отримання переліку підтримуваних внутрішніх мов програмування</u></b><br />
-ЗАП: <i>&lt;get path="/<b>{nPath}</b>/%2fplang%2flist" /&gt;</i>
-</p>
-<ul><li> <i>nPath</i> — шлях до потрібного вузла, у цій операції може бути будь яким вузлом.</li></ul>
-<p>ВІДП: <i>&lt;get path="/{nPath}/%2fplang%2flist" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>list</i> — елементи у тегах "el".</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fplang%2flist"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<dl><dd><b><u>Отримання переліку підтримуваних внутрішніх мов програмування</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/<b>{nPath}</b>/%2fplang%2flist" /&gt;</i>
+<ul><li> <i>nPath</i> — шлях до потрібного вузла, у цій операції може бути будь яким вузлом.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/{nPath}/%2fplang%2flist" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i>
+<ul><li> <i>list</i> — елементи у тегах "el".</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fplang%2flist"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;el&gt;</span>JavaLikeCalc.JavaScript<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
@@ -3188,54 +3186,53 @@ Error values for the different data types (definition):
   <span class="nt">&lt;el&gt;</span>prm:BlockCalc.gen.F3.var<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/list&gt;</span>
 </pre></div>
-<p><b><u>Отримання повідомлень пов'язаних із об'єктом контролеру</u></b><br />
-Це повідомлення, згенеровані джерелами даних та запитані <a href="#TArchiveS">TArchiveS::messGet()</a> із відповідними категоріями джерела даних.<br />
-ЗАП: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/%2fserv%2fmess" tm="<b>{TmUNIX}</b>" tm_grnd="<b>{TmGrndUNIX}</b>" lev="<b>{level}</b>" /&gt;</i>
+<p><b><u>Об'єкти контролеру</u></b><br />
 </p>
+<dl><dd><b><u>Отримання повідомлень пов'язаних із об'єктом контролеру</u></b><br /></dd>
+<dd>Це повідомлення, згенеровані джерелами даних та запитані <a href="#TArchiveS">TArchiveS::messGet()</a> із відповідними категоріями джерела даних.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/%2fserv%2fmess" tm="<b>{TmUNIX}</b>" tm_grnd="<b>{TmGrndUNIX}</b>" lev="<b>{level}</b>" /&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i> — модуль Збору Даних та об'єкт контролеру;</li>
 <li> <i>TmUNIX</i>, <i>TmGrndUNIX</i> — мітка часу UNIX від 01.01.1970 для кінця та початку повідомлень; за нульового "tm" використовується або поточний час системи або час останнього резервованого повідомлення для резервованих систем;</li>
-<li> <i>level</i> — мінімальний рівень запитуваних повідомлень, від 0[X] до 7[X].</li></ul>
-<p>ВІДП: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/%2fserv%2fmess" tm="<b>{TmUNIX}</b>" tm_grnd="{TmGrnUNIX}" lev="{level}" rez="<b>0</b>"&gt;<b>{messages}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>level</i> — мінімальний рівень запитуваних повідомлень, від 0[X] до 7[X].</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/%2fserv%2fmess" tm="<b>{TmUNIX}</b>" tm_grnd="{TmGrnUNIX}" lev="{level}" rez="<b>0</b>"&gt;<b>{messages}</b>&lt;/get&gt;</i>
 <ul><li> <i>TmUNIX</i> — встановлюється у час останнього резервованого повідомлення або системний - 1, за нуля у запиті;</li>
 <li> <i>messages</i> — повідомлення у тегах "el": <i>&lt;el time="<b>{time}</b>" utime="<b>{utime}</b>" cat="<b>{cat}</b>" lev="<b>{lev}</b>"&gt;<b>{mess}</b>&lt;/el&gt;</i>
 <ul><li> <i>time</i> — час повідомлення, як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>utime</i> — мікросекундна частина часу повідомлення;</li>
 <li> <i>cat</i> — категорія повідомлення;</li>
 <li> <i>lev</i> — рівень повідомлення;</li>
-<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1674401446"</span> <span class="na">tm_grnd=</span><span class="s">"1674401300"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1674401446"</span> <span class="na">tm_grnd=</span><span class="s">"1674401300"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">cat=</span><span class="s">"alLogicLev:gen.F3"</span> <span class="na">lev=</span><span class="s">"-2"</span> <span class="na">time=</span><span class="s">"1674401357"</span> <span class="na">utime=</span><span class="s">"386070"</span><span class="nt">&gt;</span>
 Загальностанційка <span class="ni">&amp;gt;</span> F3: Витрати газу через трубу на Глінськ: Помилка нижньої поперджув. границі
   <span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Встановлення повідомлення пов'язаного із об'єктом контролеру</u></b><br />
-Генерація-встановлення повідомлення джерела даних <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">трансферного типу</a> із запитом <a href="#TController">TController::messSet()</a>.<br />
-ЗАП: <i>&lt;set path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/%2fserv%2fmess" lev="<b>{level}</b>" type2Code="<b>{type2Code}</b>" prm="<b>{prm}</b>" cat="<b>{cat}</b>"&gt;<b>{mess}</b>&lt;/set&gt;</i>
-</p>
+<dl><dd><b><u>Встановлення повідомлення пов'язаного із об'єктом контролеру</u></b><br /></dd>
+<dd>Генерація-встановлення повідомлення джерела даних <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">трансферного типу</a> із запитом <a href="#TController">TController::messSet()</a>.<br /></dd>
+<dd>ЗАП: <i>&lt;set path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/%2fserv%2fmess" lev="<b>{level}</b>" type2Code="<b>{type2Code}</b>" prm="<b>{prm}</b>" cat="<b>{cat}</b>"&gt;<b>{mess}</b>&lt;/set&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i> — модуль Збору Даних та об'єкт контролеру;</li>
 <li> <i>level</i> — рівень повідомлення;</li>
 <li> <i>type2Code</i> — двосимвольний ІД трансферного повідомлення у категорії;</li>
 <li> <i>prm</i> — ідентифікатор параметру джерела, який може бути доповнений відповідним ІД атрибуту у вигляді "{PrmID}.{AttrId}";</li>
 <li> <i>cat</i> — доповнення до уніфікованої категорії із інформацією про користувача та подібне;</li>
-<li> <i>mess</i> — текст повідомлення із адресою ім'ям перед ним.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/%2fserv%2fmess"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">type2Code=</span><span class="s">"OP"</span> <span class="na">prm=</span><span class="s">"F3"</span> <span class="na">cat=</span><span class="s">"roman"</span><span class="nt">&gt;</span>Значення змінене : 0 : 1<span class="nt">&lt;/set&gt;</span>
+<li> <i>mess</i> — текст повідомлення із адресою ім'ям перед ним.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/%2fserv%2fmess"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">type2Code=</span><span class="s">"OP"</span> <span class="na">prm=</span><span class="s">"F3"</span> <span class="na">cat=</span><span class="s">"roman"</span><span class="nt">&gt;</span>Значення змінене : 0 : 1<span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Отримання переліку атрибутів параметру Збору Даних (<a href="#TValue">#TValue</a>) із детальною інформацією</u></b><br />
-ЗАП: <i>&lt;list path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr" /&gt;</i>
+<p><b><u>Параметри Збору Даних (DAQ)</u></b><br />
 </p>
-<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i> — модуль Збору Даних, об'єкт контролеру та параметри.</li></ul>
-<p>ВІДП: <i>&lt;list path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/list&gt;</i>
-</p>
+<dl><dd><b><u>Отримання переліку атрибутів параметру Збору Даних (<a href="#TValue">#TValue</a>) із детальною інформацією</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;list path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr" /&gt;</i>
+<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i> — модуль Збору Даних, об'єкт контролеру та параметри.</li></ul></dd>
+<dd>ВІДП: <i>&lt;list path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/list&gt;</i>
 <ul><li> <i>attributes</i> — атрибути у тегах "el" із детальною інформацією: <i>&lt;el id="<b>{id}</b>" nm="<b>{name}</b>" tp="<b>{type}</b>" flg="<b>{flags}</b>" vals="<b>{values}</b>" names="<b>{names}</b>" /&gt;</i>
 <ul><li> <i>id</i> — ідентифікатор атрибуту;</li>
 <li> <i>name</i> — назва атрибуту;</li>
 <li> <i>type</i> — тип атрибуту, дивіться типи в об'єкті <a href="#TFld">#TFld</a>;</li>
 <li> <i>flags</i> — прапорці атрибуту, дивіться прапорці в об'єкті <a href="#TVal">#TVal</a>;</li>
 <li> <i>values</i> — значення атрибуту для вибірних типів;</li>
-<li> <i>names</i> — назви значень для вибірних типів.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>names</i> — назви значень для вибірних типів.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">flg=</span><span class="s">"516"</span> <span class="na">id=</span><span class="s">"SHIFR"</span> <span class="na">nm=</span><span class="s">"Ідентифікатор"</span> <span class="na">tp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">flg=</span><span class="s">"16"</span> <span class="na">id=</span><span class="s">"NAME"</span> <span class="na">nm=</span><span class="s">"Ім&amp;#039;я"</span> <span class="na">tp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">flg=</span><span class="s">"24"</span> <span class="na">id=</span><span class="s">"DESCR"</span> <span class="na">nm=</span><span class="s">"Опис"</span> <span class="na">tp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
@@ -3261,10 +3258,9 @@ Error values for the different data types (definition):
   <span class="nt">&lt;el</span> <span class="na">flg=</span><span class="s">"768"</span> <span class="na">id=</span><span class="s">"Tf"</span> <span class="na">nm=</span><span class="s">"Час фільтру, секунд"</span> <span class="na">tp=</span><span class="s">"4"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/list&gt;</span>
 </pre></div>
-<p><b><u>Запит значень атрибутів параметру Збору Даних (<a href="#TValue">#TValue</a>)</u></b><br />
-Дуже загальний запит значень атрибутів із поточними значеннями та архівом-історією.<br />
-ЗАП: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr" sepReq="<b>{sepReq}</b>" hostTm="<b>{hostTm}</b>" prcTm="<b>{prcTm}</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
+<dl><dd><b><u>Запит значень атрибутів параметру Збору Даних (<a href="#TValue">#TValue</a>)</u></b><br /></dd>
+<dd>Дуже загальний запит значень атрибутів із поточними значеннями та архівом-історією.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr" sepReq="<b>{sepReq}</b>" hostTm="<b>{hostTm}</b>" prcTm="<b>{prcTm}</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i> — модуль Збору Даних, об'єкт контролеру та параметри;</li>
 <li> <i>sepReq</i> — ознака запиту атрибутів окремо [0|1];</li>
 <li> <i>hostTm</i> — використовувати час хосту для поточних значень, тож не додавати атрибут "tm", [0|1];</li>
@@ -3273,9 +3269,8 @@ Error values for the different data types (definition):
 <ul><li> "el": <i>&lt;el id="<b>{id}</b>" /&gt;</i>
 <ul><li> <i>id</i> — ідентифікатор атрибуту.</li></ul></li>
 <li> "ael" (для архіву-історії): <i>&lt;ael id="<b>{id}</b>" tm="<b>{time}</b>" /&gt;</i>
-<ul><li> <i>time</i> — час початку запиту архіву-історій у мікросекундах та частина секунд як мітка часу UNIX від 01.01.1970, тобто це час останнього значення від попереднього запиту.</li></ul></li></ul></li></ul>
-<p>ВІДП: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" sepReq="{sepReq}" hostTm="{hostTm}" rez="<b>0</b>" prcTm="<b>{prcTm}</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
+<ul><li> <i>time</i> — час початку запиту архіву-історій у мікросекундах та частина секунд як мітка часу UNIX від 01.01.1970, тобто це час останнього значення від попереднього запиту.</li></ul></li></ul></li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" sepReq="{sepReq}" hostTm="{hostTm}" rez="<b>0</b>" prcTm="<b>{prcTm}</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
 <ul><li> <i>prcTm</i> — системний час хосту, як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>attributes</i> — атрибути у тегах:
 <ul><li> "el": <i>&lt;el id="{id}" tm="<b>{time}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
@@ -3288,8 +3283,8 @@ Error values for the different data types (definition):
 <ul><li> <i>type</i> — тип динамічного атрибуту, дивіться типи в об'єкті <a href="#TFld">#TFld</a>;</li>
 <li> <i>flags</i> — прапорці динамічного атрибуту, дивіться прапорці в об'єкті <a href="#TVal">#TVal</a>;</li>
 <li> <i>values</i> — значення динамічного атрибуту вибіркових типів;</li>
-<li> <i>names</i> — назви значень для вибіркових типів динамічного атрибуту.</li></ul></li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">hostTm=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span> <span class="na">prcTm=</span><span class="s">"1674546677"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>names</i> — назви значень для вибіркових типів динамічного атрибуту.</li></ul></li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">hostTm=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span> <span class="na">prcTm=</span><span class="s">"1674546677"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;ael</span> <span class="na">id=</span><span class="s">"var"</span> <span class="na">per=</span><span class="s">"1000000"</span> <span class="na">tm=</span><span class="s">"1674546650000000"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;v&gt;</span>45.1063015741995<span class="nt">&lt;/v&gt;</span>
     <span class="nt">&lt;v&gt;</span>45.1021080127945<span class="nt">&lt;/v&gt;</span>
@@ -3321,49 +3316,44 @@ Error values for the different data types (definition):
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"Tf"</span><span class="nt">&gt;</span>2<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Встановлення значень багатьох атрибутів параметру Збору Даних (<a href="#TValue">#TValue</a>)</u></b><br />
-ЗАП[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
-</p>
+<dl><dd><b><u>Встановлення значень багатьох атрибутів параметру Збору Даних (<a href="#TValue">#TValue</a>)</u></b><br /></dd>
+<dd>ЗАП[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i> — модуль Збору Даних, об'єкт контролеру та параметри;</li>
 <li> <i>attributes</i> — атрибути в тегах "el": <i>&lt;el id="<b>{id}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
 <ul><li> <i>id</i> — ідентифікатор атрибуту;</li>
-<li> <i>value</i> — встановлюване значення у формі рядка.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+<li> <i>value</i> — встановлюване значення у формі рядка.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"ed"</span><span class="nt">&gt;</span>т/год<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"alDelay"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Запит інформації атрибуту параметру Збору Даних (<a href="#TVal">#TVal</a>)</u></b><br />
-Переспрямування до запиту архіву "<i>&lt;info path='/Archive/va_{ARCH}/%2fserv%2fval' /&gt;</i>" при зв'язувані із архівом, тож щодо додаткових атрибутів та результату дивіться там.<br />
-ЗАП: <i>&lt;info path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" /&gt;</i>
+<p><b><u>Атрибути параметру Збору Даних</u></b><br />
 </p>
-<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — модуль Збору Даних, об'єкт контролеру, параметри та атрибут.</li></ul>
-<p>ВІДП: <i>&lt;info path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" rez="<b>0</b>" end="<b>0</b>" beg="<b>0</b>" per="<b>0</b>" vtp="<b>{valTp}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Запит інформації атрибуту параметру Збору Даних (<a href="#TVal">#TVal</a>)</u></b><br /></dd>
+<dd>Переспрямування до запиту архіву "<i>&lt;info path='/Archive/va_{ARCH}/%2fserv%2fval' /&gt;</i>" при зв'язувані із архівом, тож щодо додаткових атрибутів та результату дивіться там.<br /></dd>
+<dd>ЗАП: <i>&lt;info path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" /&gt;</i>
+<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — модуль Збору Даних, об'єкт контролеру, параметри та атрибут.</li></ul></dd>
+<dd>ВІДП: <i>&lt;info path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" rez="<b>0</b>" end="<b>0</b>" beg="<b>0</b>" per="<b>0</b>" vtp="<b>{valTp}</b>" /&gt;</i>
 <ul><li> "0" — архівні параметри за відсутності архіву встановлюються у 0;</li>
-<li> <i>valTp</i> — тип значення, дивіться до об'єкту <a href="#TFld">#TFld</a>.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;info</span> <span class="na">beg=</span><span class="s">"0"</span> <span class="na">end=</span><span class="s">"0"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_ed/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"0"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
+<li> <i>valTp</i> — тип значення, дивіться до об'єкту <a href="#TFld">#TFld</a>.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;info</span> <span class="na">beg=</span><span class="s">"0"</span> <span class="na">end=</span><span class="s">"0"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_ed/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"0"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Запит значення атрибуту параметру Збору Даних (<a href="#TVal">#TVal</a>)</u></b><br />
-Переспрямування до запиту архіву "<i>&lt;get path='/Archive/va_{ARCH}/%2fserv%2fval' /&gt;</i>" при зв'язувані із архівом, тож щодо додаткових атрибутів та результату дивіться там.<br />
-ЗАП: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" tm="<b>{time}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Запит значення атрибуту параметру Збору Даних (<a href="#TVal">#TVal</a>)</u></b><br /></dd>
+<dd>Переспрямування до запиту архіву "<i>&lt;get path='/Archive/va_{ARCH}/%2fserv%2fval' /&gt;</i>" при зв'язувані із архівом, тож щодо додаткових атрибутів та результату дивіться там.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" tm="<b>{time}</b>" /&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — модуль Збору Даних, об'єкт контролеру, параметри та атрибут;</li>
-<li> <i>time</i> — час запитаного значення у мікросекундах та частина секунд як мітка часу UNIX від 01.01.1970; для нульового значення використовується системний поточний час та ви отримаєте поточне значення за відсутності архіву.</li></ul>
-<p>ВІДП: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" tm="<b>{time}</b>" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>time</i> — час запитаного значення у мікросекундах та частина секунд як мітка часу UNIX від 01.01.1970; для нульового значення використовується системний поточний час та ви отримаєте поточне значення за відсутності архіву.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" tm="<b>{time}</b>" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
 <ul><li> <i>time</i> — встановлюється у час реально запитаного значення;</li>
-<li> <i>value</i> — значення атрибуту.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1675449270029270"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>45.141100502986<span class="nt">&lt;/get&gt;</span>
+<li> <i>value</i> — значення атрибуту.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1675449270029270"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>45.141100502986<span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Запит назви атрибуту для архіву зв'язаного із ним</u></b><br />
-ЗАП: <i>&lt;name path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" /&gt;</i>
-</p>
-<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — модуль Збору Даних, об'єкт контролеру, параметри та атрибут.</li></ul>
-<p>ВІДП: <i>&lt;name path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" rez="<b>0</b>"&gt;<b>{name}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>name</i> — назва архіву.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;name</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>F3.Змінна<span class="nt">&lt;/name&gt;</span>
+<dl><dd><b><u>Запит назви атрибуту для архіву зв'язаного із ним</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;name path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" /&gt;</i>
+<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — модуль Збору Даних, об'єкт контролеру, параметри та атрибут.</li></ul></dd>
+<dd>ВІДП: <i>&lt;name path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" rez="<b>0</b>"&gt;<b>{name}</b>&lt;/get&gt;</i>
+<ul><li> <i>name</i> — назва архіву.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;name</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>F3.Змінна<span class="nt">&lt;/name&gt;</span>
 </pre></div>
 <h5><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_JavaLikeCalc"><span class="mw-headline-number">14.4.3.1</span> Модуль <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a></span></h5>
 <p><b><u>Отримання значень ВВ функції об'єкту контролеру</u></b><br />
@@ -3483,35 +3473,33 @@ Error values for the different data types (definition):
   <span class="nt">&lt;archM</span> <span class="na">id=</span><span class="s">"FSArch.test"</span> <span class="na">run=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/st&gt;</span>
 </pre></div>
-<p><b><u>Отримання інформації архівування повідомлень</u></b><br />
-ЗАП: <i>&lt;info path="/Archive/%2fserv%2fmess" arch="<b>{archiver}</b>" /&gt;</i>
+<p><b><u>Архів повідомлень</u></b><br />
 </p>
-<ul><li> <i>archiver</i> — повний ідентифікатор архіватору повідомлень для запиту цієї інформації або порожньо для архіву повідомлень загалом.</li></ul>
-<p>ВІДП: <i>&lt;info path="/Archive/%2fserv%2fmess" arch="{archiver}" rez="<b>0</b>" end="<b>{end}</b>" beg="<b>{begin}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Отримання інформації архівування повідомлень</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;info path="/Archive/%2fserv%2fmess" arch="<b>{archiver}</b>" /&gt;</i>
+<ul><li> <i>archiver</i> — повний ідентифікатор архіватору повідомлень для запиту цієї інформації або порожньо для архіву повідомлень загалом.</li></ul></dd>
+<dd>ВІДП: <i>&lt;info path="/Archive/%2fserv%2fmess" arch="{archiver}" rez="<b>0</b>" end="<b>{end}</b>" beg="<b>{begin}</b>" /&gt;</i>
 <ul><li> <i>end</i> — час останнього повідомлення в архіві, як мітка часу UNIX від 01.01.1970;</li>
-<li> <i>begin</i> — час першого повідомлення в архіві, як мітка часу UNIX від 01.01.1970.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;info</span> <span class="na">beg=</span><span class="s">"1639859386"</span> <span class="na">end=</span><span class="s">"1674549889"</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+<li> <i>begin</i> — час першого повідомлення в архіві, як мітка часу UNIX від 01.01.1970.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;info</span> <span class="na">beg=</span><span class="s">"1639859386"</span> <span class="na">end=</span><span class="s">"1674549889"</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Запит повідомлень архіву повідомлень</u></b><br />
-Дуже загальний запит повідомлень архіву.<br />
-ЗАП: <i>&lt;get path="/Archive/%2fserv%2fmess" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" cat="<b>{catTmpl}</b>" lev="<b>level</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Запит повідомлень архіву повідомлень</u></b><br /></dd>
+<dd>Дуже загальний запит повідомлень архіву.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/Archive/%2fserv%2fmess" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" cat="<b>{catTmpl}</b>" lev="<b>level</b>" /&gt;</i>
 <ul><li> <i>time</i> — час останнього запитаного повідомлення, як мітка часу UNIX від 01.01.1970; за нульового значення використовується системний поточний час - 1;</li>
 <li> <i>tmGrnd</i> — час першого запитаного повідомлення, як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>archiver</i> — повний ідентифікатор архіватору повідомлень для запиту або порожньо для архіву повідомлень загалом;</li>
 <li> <i>catTmpl</i> — шаблон запитуваних повідомлень;</li>
-<li> <i>level</i> — мінімальний рівень запитуваних повідомлень.</li></ul>
-<p>ВІДП: <i>&lt;get path="/Archive/%2fserv%2fmess" tm="<b>{time}</b>" tm_grnd="{tmGrnd}" arch="{archiver}" cat="{catTmpl}" lev="level" rez="<b>0</b>" &gt;<b>{messages}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>level</i> — мінімальний рівень запитуваних повідомлень.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/Archive/%2fserv%2fmess" tm="<b>{time}</b>" tm_grnd="{tmGrnd}" arch="{archiver}" cat="{catTmpl}" lev="level" rez="<b>0</b>" &gt;<b>{messages}</b>&lt;/get&gt;</i>
 <ul><li> <i>time</i> — тут розташовується час останнього опрацьованого повідомлення (найбільше), як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>messages</i> — запитані повідомлення у тегах "el": <i>&lt;el time="<b>{time}</b>" utime="<b>{utime}</b>" cat="<b>{category}</b>" lev="<b>{level}</b>"&gt;<b>{mess}</b>&lt;/el&gt;</i>
 <ul><li> <i>time</i> — час повідомлення, як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>utime</i> — мікросекундна частина часу повідомлення;</li>
 <li> <i>cat</i> — категорія повідомлення;</li>
 <li> <i>lev</i> — рівень повідомлення;</li>
-<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">cat=</span><span class="s">"/*"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">tm_grnd=</span><span class="s">"1674549800"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">cat=</span><span class="s">"/*"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">tm_grnd=</span><span class="s">"1674549800"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">cat=</span><span class="s">"/sub_UI/mod_QTCfg/"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">time=</span><span class="s">"1674549865"</span> <span class="na">utime=</span><span class="s">"856668"</span><span class="nt">&gt;</span>
 roman| '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test1/%2fexec%2fio%2fin' змінено у: '<span class="ni">&amp;lt;</span>info path="/Archive" /<span class="ni">&amp;gt;</span>'!
   <span class="nt">&lt;/el&gt;</span>
@@ -3526,16 +3514,15 @@ roman| Натиснуто '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Contro
   <span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Встановлення групи повідомлень до архіву повідомлень</u></b><br />
-ЗАП[<b>root-Archive</b>]: <i>&lt;set path="/Archive/%2fserv%2fmess"&gt;<b>{messages}</b>&lt;/set&gt;</i>
-</p>
+<dl><dd><b><u>Встановлення групи повідомлень до архіву повідомлень</u></b><br /></dd>
+<dd>ЗАП[<b>root-Archive</b>]: <i>&lt;set path="/Archive/%2fserv%2fmess"&gt;<b>{messages}</b>&lt;/set&gt;</i>
 <ul><li> <i>messages</i> — повідомлення у тегах "el": <i>&lt;el time="<b>{time}</b>" utime="<b>{utime}</b>" cat="<b>{category}</b>" lev="<b>{level}</b>"&gt;<b>{mess}</b>&lt;/el&gt;</i>
 <ul><li> <i>time</i> — час повідомлення, як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>utime</i> — мікросекундна частина часу повідомлення;</li>
 <li> <i>cat</i> — категорія повідомлення;</li>
 <li> <i>lev</i> — рівень повідомлення;</li>
-<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">cat=</span><span class="s">"/sub_UI/mod_QTCfg/"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">time=</span><span class="s">"1674549865"</span> <span class="na">utime=</span><span class="s">"856668"</span><span class="nt">&gt;</span>
 roman| '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test1/%2fexec%2fio%2fin' змінено у: '<span class="ni">&amp;lt;</span>info path="/Archive" /<span class="ni">&amp;gt;</span>'!
   <span class="nt">&lt;/el&gt;</span>
@@ -3544,24 +3531,24 @@ roman| Натиснуто '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Contro
   <span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Запит повідомлень архіватору повідомлень</u></b><br />
-ЗАП: <i>&lt;get path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}</b>/%2fserv%2fmess" eTm="<b>{endTime}</b>" bTm="<b>{begTime}</b>" cat="<b>{catTmpl}</b>" lev="<b>level</b>" /&gt;</i>
+<p><b><u>Архіватори повідомлень</u></b><br />
 </p>
+<dl><dd><b><u>Запит повідомлень архіватору повідомлень</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}</b>/%2fserv%2fmess" eTm="<b>{endTime}</b>" bTm="<b>{begTime}</b>" cat="<b>{catTmpl}</b>" lev="<b>level</b>" /&gt;</i>
 <ul><li> <i>MOD</i>, <i>ARCHR</i> — модуль архівації повідомлень та ідентифікатор архіватору;</li>
 <li> <i>endTime</i> — час останнього запитаного повідомлення, як мітка часу UNIX від 01.01.1970; за нульового значення використовується системний поточний час;</li>
 <li> <i>begTime</i> — час першого запитаного повідомлення, як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>catTmpl</i> — шаблон запитуваних повідомлень;</li>
-<li> <i>level</i> — мінімальний рівень запитуваних повідомлень.</li></ul>
-<p>ВІДП: <i>&lt;get path="/Archive/{MOD}/{ARCHR}/%2fserv%2fmess" eTm="{endTime}" bTm="{begTime}" cat="{catTmpl}" lev="level" rez="<b>0</b>" tm="<b>{time}</b>" &gt;<b>{messages}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>level</i> — мінімальний рівень запитуваних повідомлень.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/Archive/{MOD}/{ARCHR}/%2fserv%2fmess" eTm="{endTime}" bTm="{begTime}" cat="{catTmpl}" lev="level" rez="<b>0</b>" tm="<b>{time}</b>" &gt;<b>{messages}</b>&lt;/get&gt;</i>
 <ul><li> <i>time</i> — тут розташовується час останнього опрацьованого повідомлення (найбільше), як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>messages</i> — запитані повідомлення у тегах "it": <i>&lt;it tm="<b>{time}</b>" tmu="<b>{utime}</b>" cat="<b>{category}</b>" lev="<b>{level}</b>"&gt;<b>{mess}</b>&lt;/it&gt;</i>
 <ul><li> <i>time</i> — час повідомлення, як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>utime</i> — мікросекундна частина часу повідомлення;</li>
 <li> <i>cat</i> — категорія повідомлення;</li>
 <li> <i>lev</i> — рівень повідомлення;</li>
-<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">bTm=</span><span class="s">"1674549800"</span> <span class="na">cat=</span><span class="s">"/*"</span> <span class="na">eTm=</span><span class="s">"1674549889"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_SYS/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1674549889"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">bTm=</span><span class="s">"1674549800"</span> <span class="na">cat=</span><span class="s">"/*"</span> <span class="na">eTm=</span><span class="s">"1674549889"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_SYS/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1674549889"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;it</span> <span class="na">cat=</span><span class="s">"/sub_UI/mod_QTCfg/"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">tm=</span><span class="s">"1674549865"</span> <span class="na">tmu=</span><span class="s">"856668"</span><span class="nt">&gt;</span>
 roman| '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test1/%2fexec%2fio%2fin' змінено у: '<span class="ni">&amp;lt;</span>info path="/Archive" /<span class="ni">&amp;gt;</span>'!
   <span class="nt">&lt;/it&gt;</span>
@@ -3576,9 +3563,8 @@ roman| Натиснуто '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Contro
   <span class="nt">&lt;/it&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Встановлення групи повідомлень до архіватору повідомлень</u></b><br />
-ЗАП[<b>root-Archive</b>]: <i>&lt;put path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}</b>/%2fserv%2fmess" redundancy="<b>{redundancy}</b>"&gt;<b>{messages}</b>&lt;/put&gt;</i>
-</p>
+<dl><dd><b><u>Встановлення групи повідомлень до архіватору повідомлень</u></b><br /></dd>
+<dd>ЗАП[<b>root-Archive</b>]: <i>&lt;put path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}</b>/%2fserv%2fmess" redundancy="<b>{redundancy}</b>"&gt;<b>{messages}</b>&lt;/put&gt;</i>
 <ul><li> <i>MOD</i>, <i>ARCHR</i> — модуль архівації повідомлень та ідентифікатор архіватору;</li>
 <li> <i>redundancy</i> — ознака надсилання повідомлень до резервних станцій [0|1];</li>
 <li> <i>messages</i> — встановлювані повідомлення у тегах "it": <i>&lt;it tm="<b>{time}</b>" tmu="<b>{utime}</b>" cat="<b>{category}</b>" lev="<b>{level}</b>"&gt;<b>{mess}</b>&lt;/it&gt;</i>
@@ -3586,8 +3572,8 @@ roman| Натиснуто '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Contro
 <li> <i>utime</i> — мікросекундна частина часу повідомлення;</li>
 <li> <i>cat</i> — категорія повідомлення;</li>
 <li> <i>lev</i> — рівень повідомлення;</li>
-<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;put</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_SYS/%2fserv%2fmess"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — текст повідомлення.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;put</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_SYS/%2fserv%2fmess"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;it</span> <span class="na">cat=</span><span class="s">"/sub_UI/mod_QTCfg/"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">tm=</span><span class="s">"1674549865"</span> <span class="na">tmu=</span><span class="s">"856668"</span><span class="nt">&gt;</span>
 roman| '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test1/%2fexec%2fio%2fin' змінено у: '<span class="ni">&amp;lt;</span>info path="/Archive" /<span class="ni">&amp;gt;</span>'!
   <span class="nt">&lt;/it&gt;</span>
@@ -3596,23 +3582,22 @@ roman| Натиснуто '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Contro
   <span class="nt">&lt;/it&gt;</span>
 <span class="nt">&lt;/put&gt;</span>
 </pre></div>
-<p><b><u>Отримання інформації архіву значень</u></b><br />
-ЗАП: <i>&lt;info path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" arch="<b>{archiver}</b>" /&gt;</i>
+<p><b><u>Архіви значень</u></b><br />
 </p>
+<dl><dd><b><u>Отримання інформації архіву значень</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;info path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" arch="<b>{archiver}</b>" /&gt;</i>
 <ul><li> <i>ARCH</i> — ідентифікатор архіву значень;</li>
-<li> <i>archiver</i> — повний ідентифікатор архіватору значень або порожньо для буферу значень.</li></ul>
-<p>ВІДП: <i>&lt;info path="/Archive/va_{ARCH}/%2fserv%2fval" arch="{archiver}" rez="<b>0</b>" end="<b>{end}</b>" beg="<b>{begin}</b>" per="<b>{period}</b>" vtp="<b>{valTp}</b>" /&gt;</i>
-</p>
+<li> <i>archiver</i> — повний ідентифікатор архіватору значень або порожньо для буферу значень.</li></ul></dd>
+<dd>ВІДП: <i>&lt;info path="/Archive/va_{ARCH}/%2fserv%2fval" arch="{archiver}" rez="<b>0</b>" end="<b>{end}</b>" beg="<b>{begin}</b>" per="<b>{period}</b>" vtp="<b>{valTp}</b>" /&gt;</i>
 <ul><li> <i>end</i> — час останнього значення у архіві в мікросекундах та частина секунд як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>begin</i> — час першого значення у архіві в мікросекундах та частина секунд як мітка часу UNIX від 01.01.1970;</li>
 <li> <i>period</i> — періодичність архіватору або буферу значень за відсутності архіватору, у мікросекундах;</li>
-<li> <i>valTp</i> — тип значення, дивіться до об'єкту <a href="#TFld">#TFld</a>.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;info</span> <span class="na">arch=</span><span class="s">"FSArch.1s"</span> <span class="na">beg=</span><span class="s">"1665239503000000"</span> <span class="na">end=</span><span class="s">"1674581638000000"</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"1000000"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"4"</span> <span class="nt">/&gt;</span>
+<li> <i>valTp</i> — тип значення, дивіться до об'єкту <a href="#TFld">#TFld</a>.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;info</span> <span class="na">arch=</span><span class="s">"FSArch.1s"</span> <span class="na">beg=</span><span class="s">"1665239503000000"</span> <span class="na">end=</span><span class="s">"1674581638000000"</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"1000000"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"4"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Запит значень архіву значень</u></b><br />
-Дуже загальний запит значень архівів значень.<br />
-ЗАП: <i>&lt;get path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" local="<b>{localReq}</b>" per="<b>{period}</b>" mode="<b>{mode}</b>" round_perc="<b>{rndPerc}</b>" real_prec="<b>{realPrec}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Запит значень архіву значень</u></b><br /></dd>
+<dd>Дуже загальний запит значень архівів значень.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" local="<b>{localReq}</b>" per="<b>{period}</b>" mode="<b>{mode}</b>" round_perc="<b>{rndPerc}</b>" real_prec="<b>{realPrec}</b>" /&gt;</i>
 <ul><li> <i>ARCH</i> — ідентифікатор архіву значень;</li>
 <li> <i>time</i> — час останнього запитуваного значення в мікросекундах та частина секунд як мітка часу UNIX від 01.01.1970; для нульового значення використовується поточний системний час;</li>
 <li> <i>tmGrnd</i> — час першого запитуваного значення в мікросекундах та частина секунд як мітка часу UNIX від 01.01.1970; для нульового значення здійснюється лише запит поточного;</li>
@@ -3620,30 +3605,29 @@ roman| Натиснуто '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Contro
 <li> <i>localReq</i> — ознака [0|1] локального запиту без запиту резервної станції щодо відсутніх даних;</li>
 <li> <i>period</i> — період у якому запитувати значення, у мікросекундах; використовується максимальний із архівом період;</li>
 <li> <i>mode</i> — режим запиту значень архіву, дивіться перелічення ServReqDtMode об'єкту <a href="#TVArchive">#TVArchive</a>;</li></ul>
-<dl><dd><ul><li> DMSimple(0) — простий запис, один елемент на рядок; значення у випадку строкового типу архіву кодуються щодо виключення символів нового рядка;</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
+<dl><dd><ul><li> DMSimple(0) — простий запис, один елемент на рядок; значення у випадку строкового типу архіву кодуються щодо виключення символів нового рядка;</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40px">
 34.5678
 23.6543
 65.8754
 34.6523</pre>
-<dl><dd><ul><li> DMPack(1) — упакований запис, одне суміжне рівне (округлене) значення на рядок; перед кожним значенням вказується його позиційний номер відокремлений пробілом від значення;</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
+<dl><dd><dl><dd><ul><li> DMPack(1) — упакований запис, одне суміжне рівне (округлене) значення на рядок; перед кожним значенням вказується його позиційний номер відокремлений пробілом від значення;</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40px">
 0 34.5678
 1 23.6543
 4 65.8754
 6 34.6523</pre>
-<dl><dd><ul><li> DMBin(2) — масив неупакованих бінарних значень, закодований Base64; не може бути використано для строкових архівів.</li></ul></dd></dl>
+<dl><dd><dl><dd><ul><li> DMBin(2) — масив неупакованих бінарних значень, закодований Base64; не може бути використано для строкових архівів.</li></ul></dd></dl>
 <ul><li> <i>rndPerc</i> — відсоток округлення реальних значень, тобто які вважаються однаковими;</li>
-<li> <i>realPrec</i> — точність реальних значень при перетворені у рядок, типово 15.</li></ul>
-<p>ВІДП: <i>&lt;get path="/Archive/va_{ARCH}/%2fserv%2fval" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" local="{localReq}" per="<b>{period}</b>" mode="{mode}" round_perc="{rndPerc}" real_prec="{realPrec}" rez="0" vtp="<b>{valType}</b>"&gt;<b>{values}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>realPrec</i> — точність реальних значень при перетворені у рядок, типово 15.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/Archive/va_{ARCH}/%2fserv%2fval" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" local="{localReq}" per="<b>{period}</b>" mode="{mode}" round_perc="{rndPerc}" real_prec="{realPrec}" rez="0" vtp="<b>{valType}</b>"&gt;<b>{values}</b>&lt;/get&gt;</i>
 <ul><li> <i>archiver</i> — встановлюється в обраний архіватор за порожнього значення тут у запиті;</li>
 <li> <i>time</i> — встановлюється у час реально запитаного значення при одиничному запиті або у час останнього-кінцевого значення блоку значень;</li>
 <li> <i>tmGrnd</i> — встановлюється у час першого-базового значення блоку значень;</li>
 <li> <i>period</i> — встановлюється у реальний період даних у блоку значень;</li>
 <li> <i>valType</i> — встановлюється у тип даних у блоку значень;</li>
-<li> <i>values</i> — одне значення для одиничного запиту або блок значень, відформатований відповідно до "mode".</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">arch=</span><span class="s">"FSArch.1s"</span> <span class="na">mode=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"10000000"</span> <span class="na">real_prec=</span><span class="s">"7"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">round_perc=</span><span class="s">"0.1"</span>
+<li> <i>values</i> — одне значення для одиничного запиту або блок значень, відформатований відповідно до "mode".</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">arch=</span><span class="s">"FSArch.1s"</span> <span class="na">mode=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"10000000"</span> <span class="na">real_prec=</span><span class="s">"7"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">round_perc=</span><span class="s">"0.1"</span>
      <span class="na">tm=</span><span class="s">"1674581630000000"</span> <span class="na">tm_grnd=</span><span class="s">"1674581500000000"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"4"</span><span class="nt">&gt;</span>
 0 <span class="ni">&amp;lt;</span>EVAL<span class="ni">&amp;gt;</span>
 7 45.23046
@@ -3651,64 +3635,94 @@ roman| Натиснуто '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Contro
 13 45.08281
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Запит назви архіву залежно від зв'язування із атрибутом Збору Даних</u></b><br />
-ЗАП: <i>&lt;name path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" /&gt;</i><br />
-</p>
-<ul><li> <i>ARCH</i> — ідентифікатор архіву значень.</li></ul>
-<p>ВІДП: <i>&lt;name path="/Archive/va_{ARCH}/%2fserv%2fval" rez="<b>0</b>"&gt;<b>{name}</b>&lt;/name&gt;</i>
-</p>
-<ul><li> <i>name</i> — назва запитуваного архіву.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;name</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>F3.var<span class="nt">&lt;/name&gt;</span>
+<dl><dd><b><u>Запит назви архіву залежно від зв'язування із атрибутом Збору Даних</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;name path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" /&gt;</i><br />
+<ul><li> <i>ARCH</i> — ідентифікатор архіву значень.</li></ul></dd>
+<dd>ВІДП: <i>&lt;name path="/Archive/va_{ARCH}/%2fserv%2fval" rez="<b>0</b>"&gt;<b>{name}</b>&lt;/name&gt;</i>
+<ul><li> <i>name</i> — назва запитуваного архіву.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;name</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>F3.var<span class="nt">&lt;/name&gt;</span>
 </pre></div>
 <h4><span class="mw-headline" id=".D0.9F.D1.96.D0.B4.D1.81.D0.B8.D1.81.D1.82.D0.B5.D0.BC.D0.B0_.22.D0.9A.D0.BE.D1.80.D0.B8.D1.81.D1.82.D1.83.D0.B2.D0.B0.D1.86.D1.8C.D0.BA.D1.96_.D0.86.D0.BD.D1.82.D0.B5.D1.80.D1.84.D0.B5.D0.B9.D1.81.D0.B8_.28UI.29.22"><span class="mw-headline-number">14.4.5</span> Підсистема "Користувацькі Інтерфейси (UI)"</span></h4>
 <h5><span class="mw-headline" id=".D0.9C.D0.BE.D0.B4.D1.83.D0.BB.D1.8C_VCAEngine"><span class="mw-headline-number">14.4.5.1</span> Модуль <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a></span></h5>
-<p><b><u>Отримання переліку сеансів визначеного проєкту СВУ</u></b><br />
-ЗАП: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" /&gt;</i>
+<p>Сервісні функції — це інтерфейс доступу до OpenSCADA із зовнішніх систем посередництвом <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">Інтерфейсу Управління</a>. Цей механізм покладено в основу усього обміну всередині OpenSCADA, реалізованого шляхом слабких зв'язків та <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">власного протоколу обміну OpenSCADA</a>.
+</p><p><b><u>Загальні віджети</u></b><br />
 </p>
-<ul><li> <i>project</i> — ідентифікатор запитаного проєкту.</li></ul>
-<p>ВІДП: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="{project}" rez="<b>0</b>"&gt;<b>{sessions}</b>&lt;/list&gt;</i>
-</p>
-<ul><li> <i>sessions</i> — сеанси у тегах "el".</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;el&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
-<span class="nt">&lt;/list&gt;</span>
+<dl><dd><b><u>Отримання значень визначених або всіх візуальних атрибутів віджету</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
+<li> <i>attributes</i> — лише запитані атрибути у тегах "el" із тільки одним атрибутом ідентифікатору "id"; можлива цілковита відсутність тегів атрибутів для запиту усіх наявних.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+<ul><li> <i>attributes</i> — опрацьовувані атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>" act="<b>{active}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
+<li> <i>active</i> — стан активності атрибуту, лише для прямого запиту;</li>
+<li> <i>value</i> — значення атрибуту.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>ElFigure1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_ElFigure1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Підключення до визначеного проєкту СВУ або сеансу проєкту</u></b><br />
-ЗАП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" /&gt;</i>
-</p>
-<ul><li> <i>project</i> — ідентифікатор запитаного проєкту, порожнє при підключені до наявного сеансу;</li>
-<li> <i>session</i> — ідентифікатор вже наявного сеансу, порожнє для створення нового сеансу;</li>
-<li> <i>userChange</i> — ознака зміни користувача [0|1], тобто для оновлення інформації користувача.</li></ul>
-<p>ВІДП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
-</p>
-<ul><li> <i>conId</i> — ідентифікатор підключення сеансу, використовується у подальших запитах;</li>
-<li> <i>project</i> — ідентифікатор проєкту успішно підключеного сеансу;</li>
-<li> <i>session</i> — ідентифікатор новоствореного сеансу успішно підключеного проєкту;</li>
-<li> <i>userIsRoot</i> — користувач має права суперкористувача [0|1].</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;connect</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">userIsRoot=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+<dl><dd><b><u>Встановлення групи значень визначених атрибутів віджетів</u></b><br /></dd>
+<dd>ЗАП[<b>root-UI</b>]: <i>&lt;set path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету у модулі, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
+<li> <i>attributes</i> — атрибути зі значеннями у тегах "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>value</i> — встановлюване значення атрибуту.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>Нова назва<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>Новий опис<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Відключення від визначеного сеансу проєкту СВУ</u></b><br />
-Сеанси із нульовою кількістю підключень тут також закриваються.<br />
-ЗАП: <i>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess" sess="<b>{session}</b>" conId="<b>{conId}</b>" /&gt;</i>
-</p>
-<ul><li> <i>session</i> — ідентифікатор наявного сеансу;</li>
-<li> <i>conId</i> — ідентифікатор підключення сеансу.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;disconnect</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="nt">/&gt;</span>
+<dl><dd><b><u>Отримання значень візуальних атрибутів гілки віджетів, оптимізовано для мереж</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattrBr" /&gt;</i>
+<ul><li> <i>wAddr</i> — локальна адреса віджету у модулі, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1".</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
+<ul><li> <i>attributes</i> — опрацьовані атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
+<li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
+<li> <i>value</i> — значення атрибуту.</li></ul></li>
+<li> <i>widgets</i> — дочірні віджети у тегах "w": <i>&lt;w id="<b>{ID}</b>" lnkPath="<b>{lnkPath}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
+<ul><li> <i>ID</i> — ідентифікатор віджету;</li>
+<li> <i>lnkPath</i> — шлях до пов'язаного віджету для дочірніх віджетів бібліотек віджетів.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>КМ101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"AT101_1"</span> <span class="na">lnkPath=</span><span class="s">"/wlb_mnEls/wdg_cooler"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>AT101_1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_AT101_1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_mnEls/wdg_cooler<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;/w&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Отримання дерева віджетів бібліотек, оптимізовано для мереж</u></b><br />
-ЗАП: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="<b>{item}</b>" disIconsW="<b>{disIconsW}</b>" disIconsCW="<b>{disIconsCW}</b>" /&gt;</i>
+<p><b><u>Бібліотеки віджетів</u></b><br />
 </p>
+<dl><dd><b><u>Отримання дерева віджетів бібліотек, оптимізовано для мереж</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="<b>{item}</b>" disIconsW="<b>{disIconsW}</b>" disIconsCW="<b>{disIconsCW}</b>" /&gt;</i>
 <ul><li> <i>item</i> — елемент бібліотеки отримання, як шлях "wlb_<b>{WLib}</b>[/wdg_<b>{Wdg}</b>[/wdg_<b>{ChildWdg}</b>]]", для порожнього отримуватиметься все дерево;</li>
 <li> <i>disIconsW</i> — вимкнути отримання даних іконки для віджетів [0|1];</li>
-<li> <i>disIconsCW</i> — вимкнути отримання даних іконки для дочірніх віджетів [0|1].</li></ul>
-<p>ВІДП: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="{item}" disIconsW="{disIconsW}" disIconsCW="{disIconsCW}" rez="<b>0</b>"&gt;<b>{wlibs}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>disIconsCW</i> — вимкнути отримання даних іконки для дочірніх віджетів [0|1].</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="{item}" disIconsW="{disIconsW}" disIconsCW="{disIconsCW}" rez="<b>0</b>"&gt;<b>{wlibs}</b>&lt;/get&gt;</i>
 <ul><li> <i>wlibs</i> — бібліотеки віджетів у тегах "wlb": <i>&lt;wlb id="{ID}" doc="{doc}"&gt;{name} <b>{icon}</b> <b>{widgets}</b>&lt;/wlb&gt;</i>
 <ul><li> <i>icon</i> — тег "icon" із даними цієї іконки кодоване Base64;</li>
 <li> <i>widgets</i> — теги "w" із описом бібліотек віджетів: <i>&lt;w id="{ID}" doc="{doc}" parent="<b>{parent}</b>"&gt;{name} {icon} <b>{widgets}</b>&lt;/w&gt;</i>
 <ul><li> <i>parent</i> — адреса батька віджету;</li>
-<li> <i>widgets</i> — теги "сw" із описом дочірніх віджетів: <i>&lt;cw id="{ID}" doc="{doc}"&gt;{name} {icon}&lt;/cw&gt;</i></li></ul></li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">disIconsCW=</span><span class="s">"1"</span> <span class="na">disIconsW=</span><span class="s">"1"</span> <span class="na">item=</span><span class="s">"/wlb_AGLKS"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fwlbBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>widgets</i> — теги "сw" із описом дочірніх віджетів: <i>&lt;cw id="{ID}" doc="{doc}"&gt;{name} {icon}&lt;/cw&gt;</i></li></ul></li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">disIconsCW=</span><span class="s">"1"</span> <span class="na">disIconsW=</span><span class="s">"1"</span> <span class="na">item=</span><span class="s">"/wlb_AGLKS"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fwlbBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;wlb</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>АГЛКС
     <span class="nt">&lt;ico&gt;</span>iVBORw0KGgoAA...AAAElFTkSuQmCC<span class="nt">&lt;/ico&gt;</span>
     <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"CM101"</span> <span class="na">parent=</span><span class="s">"/wlb_originals/wdg_Box"</span><span class="nt">&gt;</span>КМ101
@@ -3738,169 +3752,122 @@ roman| Натиснуто '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Contro
   <span class="nt">&lt;/wlb&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Отримання переліку проєктів розширене деякими опціями</u></b><br />
-ЗАП: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="<b>{chkUserPerm}</b>" getChPgN="<b>{getChPgN}</b>" noName="<b>{noName}</b>" /&gt;</i>
+<p><b><u>Проєкти СВУ</u></b><br />
 </p>
+<dl><dd><b><u>Отримання переліку проєктів розширене деякими опціями</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="<b>{chkUserPerm}</b>" getChPgN="<b>{getChPgN}</b>" noName="<b>{noName}</b>" /&gt;</i>
 <ul><li> <i>chkUserPerm</i> — перевірка прав користувача перед включенням до переліку [0|1];</li>
 <li> <i>getChPgN</i> — запит кількості дочірніх сторінок у проєктах [0|1];</li>
-<li> <i>noName</i> — не повертати назви сторінок [0|1].</li></ul>
-<p>ВІДП: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="{chkUserPerm}" getChPgN="{getChPgN}" noName="{noName}" rez="<b>0</b>"&gt;<b>{projects}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>noName</i> — не повертати назви сторінок [0|1].</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="{chkUserPerm}" getChPgN="{getChPgN}" noName="{noName}" rez="<b>0</b>"&gt;<b>{projects}</b>&lt;/get&gt;</i>
 <ul><li> <i>projects</i> — перелік проєктів у тегах "el", де назва у тексті тегу та ідентифікатор у атрибуті "id". Розширено додатковими атрибутами:
-<ul><li> "chPgN" — кількість дочірніх сторінок у проєкті за встановлення "getChPgN".</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">getChPgN=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fbr%2fprj_"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<ul><li> "chPgN" — кількість дочірніх сторінок у проєкті за встановлення "getChPgN".</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">getChPgN=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fbr%2fprj_"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>АГЛКС<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"archBrowser"</span><span class="nt">&gt;</span>Огляд архівів<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"tmplSO"</span><span class="nt">&gt;</span>Групи сигналізації (шаблон)<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Отримання значень визначених або всіх візуальних атрибутів віджету</u></b><br />
-ЗАП: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>wAddr</i> — локальна адреса віджету, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
-<li> <i>attributes</i> — лише запитані атрибути у тегах "el" із тільки одним атрибутом ідентифікатору "id"; можлива цілковита відсутність тегів атрибутів для запиту усіх наявних.</li></ul>
-<p>ВІДП: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>attributes</i> — опрацьовувані атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>" act="<b>{active}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
-<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
-<li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
-<li> <i>active</i> — стан активності атрибуту, лише для прямого запиту;</li>
-<li> <i>value</i> — значення атрибуту.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>ElFigure1<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_ElFigure1<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_ElFigure<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/get&gt;</span>
+<dl><dd><b><u>Перевірка доступу на читання проєкту від користувача запиту</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;read path="/UI/VCAEngine/prj_<b>{proj}</b>/%2fserv%2faccess" /&gt;</i>
+<ul><li> <i>proj</i> — ідентифікатор проєкту.</li></ul></dd>
+<dd>ВІДП: <i>&lt;read path="/UI/VCAEngine/prj_{proj}/%2fserv%2faccess" rez="<b>0</b>"&gt;<b>{access}</b>&lt;/get&gt;</i>
+<ul><li> <i>access</i> — статус наявності доступу [0|1].</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;read</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/prj_AGLKS/%2fserv%2faccess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/read&gt;</span>
 </pre></div>
-<p><b><u>Встановлення групи значень визначених атрибутів віджетів</u></b><br />
-ЗАП[<b>root-UI</b>]: <i>&lt;set path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+<p><b><u>Сеанси проєктів</u></b><br />
 </p>
-<ul><li> <i>wAddr</i> — локальна адреса віджету у модулі, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
-<li> <i>attributes</i> — атрибути зі значеннями у тегах "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
-<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
-<li> <i>value</i> — встановлюване значення атрибуту.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>Нова назва<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>Новий опис<span class="nt">&lt;/el&gt;</span>
-<span class="nt">&lt;/set&gt;</span>
+<dl><dd><b><u>Отримання переліку сеансів визначеного проєкту СВУ</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" /&gt;</i>
+<ul><li> <i>project</i> — ідентифікатор запитаного проєкту.</li></ul></dd>
+<dd>ВІДП: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="{project}" rez="<b>0</b>"&gt;<b>{sessions}</b>&lt;/list&gt;</i>
+<ul><li> <i>sessions</i> — сеанси у тегах "el".</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/list&gt;</span>
 </pre></div>
-<p><b><u>Отримання значень візуальних атрибутів гілки віджетів, оптимізовано для мереж</u></b><br />
-ЗАП: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattrBr" /&gt;</i>
-</p>
-<ul><li> <i>wAddr</i> — локальна адреса віджету у модулі, на кшталт "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1".</li></ul>
-<p>ВІДП: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>attributes</i> — опрацьовані атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
-<ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
-<li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
-<li> <i>value</i> — значення атрибуту.</li></ul></li>
-<li> <i>widgets</i> — дочірні віджети у тегах "w": <i>&lt;w id="<b>{ID}</b>" lnkPath="<b>{lnkPath}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
-<ul><li> <i>ID</i> — ідентифікатор віджету;</li>
-<li> <i>lnkPath</i> — шлях до пов'язаного віджету для дочірніх віджетів бібліотек віджетів.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_Box<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>КМ101<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"AT101_1"</span> <span class="na">lnkPath=</span><span class="s">"/wlb_mnEls/wdg_cooler"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>AT101_1<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_AT101_1<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_mnEls/wdg_cooler<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;/w&gt;</span>
-<span class="nt">&lt;/get&gt;</span>
+<dl><dd><b><u>Підключення до визначеного проєкту СВУ або сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" /&gt;</i>
+<ul><li> <i>project</i> — ідентифікатор запитаного проєкту, порожнє при підключені до наявного сеансу;</li>
+<li> <i>session</i> — ідентифікатор вже наявного сеансу, порожнє для створення нового сеансу;</li>
+<li> <i>userChange</i> — ознака зміни користувача [0|1], тобто для оновлення інформації користувача.</li></ul></dd>
+<dd>ВІДП: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
+<ul><li> <i>conId</i> — ідентифікатор підключення сеансу, використовується у подальших запитах;</li>
+<li> <i>project</i> — ідентифікатор проєкту успішно підключеного сеансу;</li>
+<li> <i>session</i> — ідентифікатор новоствореного сеансу успішно підключеного проєкту;</li>
+<li> <i>userIsRoot</i> — користувач має права суперкористувача [0|1].</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;connect</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">userIsRoot=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Перевірка доступу на читання проєкту від користувача запиту</u></b><br />
-ЗАП: <i>&lt;read path="/UI/VCAEngine/prj_<b>{proj}</b>/%2fserv%2faccess" /&gt;</i>
-</p>
-<ul><li> <i>proj</i> — ідентифікатор проєкту.</li></ul>
-<p>ВІДП: <i>&lt;read path="/UI/VCAEngine/prj_{proj}/%2fserv%2faccess" rez="<b>0</b>"&gt;<b>{access}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>access</i> — статус наявності доступу [0|1].</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;read</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/prj_AGLKS/%2fserv%2faccess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/read&gt;</span>
+<dl><dd><b><u>Відключення від визначеного сеансу проєкту СВУ</u></b><br /></dd>
+<dd>Сеанси із нульовою кількістю підключень тут також закриваються.<br /></dd>
+<dd>ЗАП: <i>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess" sess="<b>{session}</b>" conId="<b>{conId}</b>" /&gt;</i>
+<ul><li> <i>session</i> — ідентифікатор наявного сеансу;</li>
+<li> <i>conId</i> — ідентифікатор підключення сеансу.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;disconnect</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Отримання переліку відкритих сторінок сеансу проєкту</u></b><br />
-ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;openlist path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" conId="<b>{conId}</b>" tm="<b>{clock}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Отримання переліку відкритих сторінок сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;openlist path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" conId="<b>{conId}</b>" tm="<b>{clock}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — доступ на читання для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
 <li> <i>session</i> — ідентифікатор сеансу;</li>
 <li> <i>conId</i> — ідентифікатор підключення сеансу;</li>
-<li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) від попереднього опрацьованого запиту, для перевірки змінених.</li></ul>
-<p>ВІДП: <i>&lt;openlist path="/UI/VCAEngine/ses_{session}/%2fserv%2fpg" conId="{conId}" tm="<b>{clock}</b>" rez="<b>0</b>"&gt;<b>{pages}</b>&lt;/openlist&gt;</i>
-</p>
+<li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) від попереднього опрацьованого запиту, для перевірки змінених.</li></ul></dd>
+<dd>ВІДП: <i>&lt;openlist path="/UI/VCAEngine/ses_{session}/%2fserv%2fpg" conId="{conId}" tm="<b>{clock}</b>" rez="<b>0</b>"&gt;<b>{pages}</b>&lt;/openlist&gt;</i>
 <ul><li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) - 1 на час запиту;</li>
 <li> <i>pages</i> — сторінки у тегах "pg": <i>&lt;pg pgGrp="<b>{pgGrp}</b>" updWdg="<b>{nUpdWdgs}</b>"&gt;<b>{ID}</b>&lt;/pg&gt;</i>
 <ul><li> <i>ID</i> — ідентифікатор сторінки;</li>
 <li> <i>pgGrp</i> — група сторінок для раннього обчислення включення сторінок;</li>
-<li> <i>nUpdWdgs</i> — кількість оновлених віджетів після останнього запиту та для непорожнього "clock".</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;openlist</span> <span class="na">conId=</span><span class="s">"52760577"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2fpg"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1403"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>nUpdWdgs</i> — кількість оновлених віджетів після останнього запиту та для непорожнього "clock".</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;openlist</span> <span class="na">conId=</span><span class="s">"52760577"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2fpg"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1403"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;pg&gt;</span>/ses_AGLKS/pg_so<span class="nt">&lt;/pg&gt;</span>
   <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"so"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1<span class="nt">&lt;/pg&gt;</span>
   <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"cntr"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_control/pg_ElCadr<span class="nt">&lt;/pg&gt;</span>
 <span class="nt">&lt;/openlist&gt;</span>
 </pre></div>
-<p><b><u>Відкриття або закриття визначеної сторінки сеансу проєкту</u></b><br />
-ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;[open|close] path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" pg="<b>{page}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Відкриття або закриття визначеної сторінки сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;[open|close] path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" pg="<b>{page}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — доступ на запис для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
 <li> <i>session</i> — ідентифікатор сеансу;</li>
-<li> <i>page</i> — адреса сторінки у контексті сеансу, на кшталт "/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1".</li></ul>
-<p><b><u>Отримання статусу сигналізації та ресурсу сповіщення для сеансу проєкту</u></b><br />
-ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;get path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" mode="<b>{mode}</b>" tp="<b>{typeNtf}</b>" wdg="<b>{widget}</b>" /&gt;</i>
-</p>
+<li> <i>page</i> — адреса сторінки у контексті сеансу, на кшталт "/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1".</li></ul></dd></dl>
+<dl><dd><b><u>Отримання статусу сигналізації та ресурсу сповіщення для сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;get path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" mode="<b>{mode}</b>" tp="<b>{typeNtf}</b>" wdg="<b>{widget}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — доступ на читання для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
 <li> <i>session</i> — ідентифікатор сеансу;</li>
 <li> <i>mode</i> — режим запиту, лише "resource" для отримання ресурсів сповіщення та пусто тільки статус;</li>
 <li> <i>typeNtf</i> — тип сповіщення для отримання ресурсу, дивіться <a href="#Alarms">секцію сигналізації</a>;</li>
-<li> <i>widget</i> — адреса віджету для формування ресурсу сповіщення, порожньо для глобального.</li></ul>
-<p>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{session}/%2fserv%2falarm" mode="{mode}" tp="{typeNtf}" rez="<b>0</b>" alarmSt="<b>{alarmSt}</b>" tm="<b>{clock}</b>" wdg="<b>{widget}</b>" resTp="<b>{resTp}</b>" mess="<b>{message}</b>" lang="<b>{language}</b>"&gt;<b>{resource}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>widget</i> — адреса віджету для формування ресурсу сповіщення, порожньо для глобального.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{session}/%2fserv%2falarm" mode="{mode}" tp="{typeNtf}" rez="<b>0</b>" alarmSt="<b>{alarmSt}</b>" tm="<b>{clock}</b>" wdg="<b>{widget}</b>" resTp="<b>{resTp}</b>" mess="<b>{message}</b>" lang="<b>{language}</b>"&gt;<b>{resource}</b>&lt;/get&gt;</i>
 <ul><li> <i>alarmSt</i> — статус сигналізації як описано у <a href="#Alarms">секції сигналізації</a>;</li>
 <li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) при формуванні ресурсу сповіщення;</li>
 <li> <i>widget</i> — адреса віджету джерела при формуванні ресурсу сповіщення;</li>
 <li> <i>message</i> — повідомлення сповіщення із тексту;</li>
 <li> <i>language</i> — мова сповіщення, переважно для "message";</li>
 <li> <i>resTp</i> — тип ресурсу сповіщення;</li>
-<li> <i>resource</i> — ресурс сповіщення кодований Base64 для бінарних даних.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">mode=</span><span class="s">"resource"</span> <span class="na">tp=</span><span class="s">"1"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span>
+<li> <i>resource</i> — ресурс сповіщення кодований Base64 для бінарних даних.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">mode=</span><span class="s">"resource"</span> <span class="na">tp=</span><span class="s">"1"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span>
      <span class="na">alarmSt=</span><span class="s">"460554"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">resTp=</span><span class="s">"audio/ogg;73.3428"</span> <span class="na">lang=</span><span class="s">"en_US.UTF-8"</span><span class="nt">&gt;</span>
 T2dnUwACA...Dg6gwAjo+PAQ==
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Стишення-квітація сповіщення сигналізації сеансу проєкту</u></b><br />
-ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;quietance path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" wdg="<b>{widget}</b>" tmpl="<b>{template}</b>" ret="<b>{return}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Стишення-квітація сповіщення сигналізації сеансу проєкту</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;quietance path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" wdg="<b>{widget}</b>" tmpl="<b>{template}</b>" ret="<b>{return}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — доступ на читання для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
 <li> <i>session</i> — ідентифікатор сеансу;</li>
 <li> <i>widget</i> — адреса віджету для стишення сповіщення, пусто для глобального;</li>
 <li> <i>template</i> — шаблон сповіщення, тобто бітова збірка відповідно до типів стишуваних сповіщень;</li>
-<li> <i>return</i> — ознака повернення сповіщення, тобто стишення вимикається.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;quietance</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">tmpl=</span><span class="s">"7"</span> <span class="nt">/&gt;</span>
+<li> <i>return</i> — ознака повернення сповіщення, тобто стишення вимикається.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;quietance</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">tmpl=</span><span class="s">"7"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Отримання значень модифікованих візуальних атрибутів віджету сеансу</u></b><br />
-Перевизначає загальний сервісний запит віджетів "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" щодо специфіки сеансу.<br />
-ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" tm="<b>{clock}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Отримання значень модифікованих візуальних атрибутів віджету сеансу</u></b><br /></dd>
+<dd>Перевизначає загальний сервісний запит віджетів "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" щодо специфіки сеансу.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" tm="<b>{clock}</b>" /&gt;</i>
 <ul><li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
-<li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) від попереднього опрацьованого запиту, для перевірки змінених; за нульового значення примусово додаються сервісні-віртуальні атрибути: "perm", "name".</li></ul>
-<p>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattr" tm="{clock}" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) від попереднього опрацьованого запиту, для перевірки змінених; за нульового значення примусово додаються сервісні-віртуальні атрибути: "perm", "name".</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattr" tm="{clock}" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
 <ul><li> <i>attributes</i> — модифіковані від "clock" атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
 <ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
 <li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
-<li> <i>value</i> — значення атрибуту.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>value</i> — значення атрибуту.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"en"</span> <span class="na">p=</span><span class="s">"5"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
@@ -3914,24 +3881,22 @@ T2dnUwACA...Dg6gwAjo+PAQ==
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomZ"</span> <span class="na">p=</span><span class="s">"11"</span><span class="nt">&gt;</span>-9<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Встановлення групи значень визначених атрибутів віджету сеансу</u></b><br />
-Перевизначає загальний сервісний запит віджетів "<i>&lt;set path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>"  щодо специфіки сеансу на кшталт опрацювання атрибуту "event" та виявлення активності-неактивності користувача.<br />
-ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" noUser="<b>{noUser}</b>"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
-</p>
+<dl><dd><b><u>Встановлення групи значень визначених атрибутів віджету сеансу</u></b><br /></dd>
+<dd>Перевизначає загальний сервісний запит віджетів "<i>&lt;set path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>"  щодо специфіки сеансу на кшталт опрацювання атрибуту "event" та виявлення активності-неактивності користувача.<br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" noUser="<b>{noUser}</b>"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — доступ на запис для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
 <li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
 <li> <i>noUser</i> — не маркувати це як активність користувача;</li>
 <li> <i>attributes</i> —  атрибути зі значеннями у тегах "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
 <ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
-<li> <i>value</i> — встановлюване значення атрибуту.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+<li> <i>value</i> — встановлюване значення атрибуту.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>Нова назва<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>Новий опис<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Активація атрибуту для використання у якості візуального та його створення за відсутності</u></b><br />
-ЗАП: <i>&lt;activate path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr%2f<b>{aID}</b>" aNm="<b>{aName}</b>" aTp="<b>{aType}</b>" aFlg="<b>{aFlags}</b>" aVls="<b>{aValues}</b>" aNms="<b>{aNames}</b>"&gt;<b>{aDef}</b>&lt;/activate&gt;</i>
-</p>
+<dl><dd><b><u>Активація атрибуту для використання у якості візуального та його створення за відсутності</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;activate path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr%2f<b>{aID}</b>" aNm="<b>{aName}</b>" aTp="<b>{aType}</b>" aFlg="<b>{aFlags}</b>" aVls="<b>{aValues}</b>" aNms="<b>{aNames}</b>"&gt;<b>{aDef}</b>&lt;/activate&gt;</i>
 <ul><li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
 <li> <i>aID</i> — ідентифікатор атрибуту сеансу;</li>
 <li> <i>aName</i> — ім'я атрибуту при його створені;</li>
@@ -3939,25 +3904,23 @@ T2dnUwACA...Dg6gwAjo+PAQ==
 <li> <i>aFlags</i> — прапорці атрибуту при його створені, дивіться <a href="API.html#TFld" title="Special:MyLanguage/Documents/API">об'єкт TFld</a>;</li>
 <li> <i>aDef</i> — типове значення атрибуту при його створені;</li>
 <li> <i>aValues</i> — значення атрибуту для вибіркових типів при його створені;</li>
-<li> <i>aNames</i> — назви значень атрибуту для вибіркових типів при його створені.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;activate</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/%2fserv%2fattr%2frunWin"</span> <span class="na">aNm=</span><span class="s">"Вікно виконання"</span> <span class="na">aTp=</span><span class="s">"1"</span> <span class="na">aFlg=</span><span class="s">"1"</span> <span class="na">aVls=</span><span class="s">"0;1;2"</span> <span class="na">aNms=</span><span class="s">"Original size;Maximize;Full screen"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/activate&gt;</span>
+<li> <i>aNames</i> — назви значень атрибуту для вибіркових типів при його створені.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;activate</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/%2fserv%2fattr%2frunWin"</span> <span class="na">aNm=</span><span class="s">"Вікно виконання"</span> <span class="na">aTp=</span><span class="s">"1"</span> <span class="na">aFlg=</span><span class="s">"1"</span> <span class="na">aVls=</span><span class="s">"0;1;2"</span> <span class="na">aNms=</span><span class="s">"Original size;Maximize;Full screen"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/activate&gt;</span>
 </pre></div>
-<p><b><u>Отримання значень візуальних атрибутів гілки віджету сеансу, оптимізовано для мереж</u></b><br />
-Перевизначає загальний сервісний запит віджетів "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr' /&gt;</i>"  щодо специфіки сеансу.<br />
-ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrBr" tm="<b>{clock}</b>" FullTree="<b>{FullTree}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Отримання значень візуальних атрибутів гілки віджету сеансу, оптимізовано для мереж</u></b><br /></dd>
+<dd>Перевизначає загальний сервісний запит віджетів "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr' /&gt;</i>"  щодо специфіки сеансу.<br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrBr" tm="<b>{clock}</b>" FullTree="<b>{FullTree}</b>" /&gt;</i>
 <ul><li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
 <li> <i>clock</i> — значення внутрішнього лічильника (цикл життя) від попереднього опрацьованого запиту, для перевірки змінених; за нульового значення примусово додаються сервісні-віртуальні атрибути: "perm", "name".</li>
-<li> <i>fullTree</i> — отримання повного дерева віджетів незалежно від наявності змін, без атрибутів.</li></ul>
-<p>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrBr" tm="{clock}" FullTree="{FullTree}" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>fullTree</i> — отримання повного дерева віджетів незалежно від наявності змін, без атрибутів.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrBr" tm="{clock}" FullTree="{FullTree}" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
 <ul><li> <i>attributes</i> — опрацьовані атрибути у тегах "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
 <ul><li> <i>ID</i> — ідентифікатор атрибуту;</li>
 <li> <i>pos</i> — позиція-індекс атрибуту для стандартних;</li>
 <li> <i>value</i> — значення атрибуту.</li></ul></li>
 <li> <i>widgets</i> — дочірні віджети у тегах "w": <i>&lt;w id="<b>{ID}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
-<ul><li> <i>ID</i> — ідентифікатор віджету.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<ul><li> <i>ID</i> — ідентифікатор віджету.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="na">p=</span><span class="s">"-4"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
@@ -3979,24 +3942,21 @@ T2dnUwACA...Dg6gwAjo+PAQ==
   <span class="nt">&lt;/w&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Отримання значення специфічного до сеансу атрибуту віджету сеансу</u></b><br />
-ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Отримання значення специфічного до сеансу атрибуту віджету сеансу</u></b><br /></dd>
+<dd>ЗАП: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>" /&gt;</i>
 <ul><li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
-<li> <i>aID</i> — ідентифікатор специфічного до сеансу атрибуту.</li></ul>
-<p>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrSess%2f{aID}" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>value</i> — значення атрибуту.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>тестове значення<span class="nt">&lt;/get&gt;</span>
+<li> <i>aID</i> — ідентифікатор специфічного до сеансу атрибуту.</li></ul></dd>
+<dd>ВІДП: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrSess%2f{aID}" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
+<ul><li> <i>value</i> — значення атрибуту.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>тестове значення<span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Встановлення значення специфічного до сеансу атрибуту віджету сеансу</u></b><br />
-ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
-</p>
+<dl><dd><b><u>Встановлення значення специфічного до сеансу атрибуту віджету сеансу</u></b><br /></dd>
+<dd>ЗАП[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — доступ на запис для власника проєкту або користувача у групі та відповідно до прав проєкту;</li>
 <li> <i>wAddr</i> — локальна адреса віджету сеансу, на кшталт "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
 <li> <i>aID</i> — ідентифікатор специфічного до сеансу атрибуту;</li>
-<li> <i>value</i> — значення атрибуту.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span><span class="nt">&gt;</span>тестове значення<span class="nt">&lt;/set&gt;</span>
+<li> <i>value</i> — значення атрибуту.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span><span class="nt">&gt;</span>тестове значення<span class="nt">&lt;/set&gt;</span>
 </pre></div>
 <p><br />
 </p>

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.WebCfgD file: web_cfg.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2008-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -42,7 +42,7 @@
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
 #define SUB_TYPE	"WWW"
-#define MOD_VER		"2.4.0"
+#define MOD_VER		"2.4.1"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the WEB-based configurator of OpenSCADA. The technologies are used: XHTML, CSS and JavaScript.")
 #define LICENSE		"GPL2"
@@ -423,7 +423,7 @@ void TWEB::HTTP_POST( const string &url, string &page, vector<string> &vars, con
 		if(mod->cntrIfCmd(reqExt,ses.user)) req.setAttr("rez", reqExt.attr("rez"))->setText(reqExt.text());
 		else {
 		    //Load context of the source node to the destination one
-		    reqExt.setName("load")->setAttr("path", "/"+req.attr("statNm")+req.attr("dst")+"/%2fobj");
+		    reqExt.setName("load")->setAttr("path", "/"+req.attr("statNm")+req.attr("dst")+"/%2fobj")->attrDel("ctx")->attrDel("rez");
 		    if(mod->cntrIfCmd(reqExt,ses.user)) req.setAttr("rez", reqExt.attr("rez"))->setText(reqExt.text());
 		}
 	    }

@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1483,7 +1483,6 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 	delete treeW->takeTopLevelItem(iTop);
 	iTop--;
     }
-
     //Delete library tool bars and menus
     if(vca_lev != 3) {
 	// Delete toolbars
@@ -1515,7 +1514,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 
     //Add new libraries
     for(iL = 0; iL < req.childSize(); iL++) {
-	XMLNode *wlbN = req.childGet(iL);
+	XMLNode *wlbN = req.childGet(iL), *icoN = NULL;
 	string wlbId = wlbN->attr("id");
 	if(wlbN->name() != "wlb" || (!upd_lb.empty() && upd_lb != wlbId)) continue;
 
@@ -1526,7 +1525,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 
 	// Update libraries data
 	img = QImage();
-	simg = TSYS::strDecode(wlbN->childGet("ico")->text(), TSYS::base64);
+	simg = TSYS::strDecode((icoN=wlbN->childGet("ico",0,true))?icoN->text():"", TSYS::base64);
 	img.loadFromData((const uchar*)simg.data(),simg.size());
 	nit->setIcon(0, QPixmap::fromImage(img));
 	nit->setText(0, wlbN->text().c_str());
@@ -1604,14 +1603,15 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 
 	    //  Update widget's data
 	    img = QImage();
-	    if(wdgN->childGet("ico")->text().size()) {
-		simg = TSYS::strDecode(wdgN->childGet("ico")->text(), TSYS::base64);
+	    if((icoN=wdgN->childGet("ico",0,true)) && icoN->text().size()) {
+		simg = TSYS::strDecode(icoN->text(), TSYS::base64);
 		img.loadFromData((const uchar*)simg.data(),simg.size());
 		nit_w->setIcon(0, QPixmap::fromImage(img));
 	    }
 	    nit_w->setText(0, wdgN->text().c_str());
 	    nit_w->setText(1, _("Widget"));
 	    nit_w->setText(2, wdgId.c_str());
+
 
 	    //  Add widget's actions to toolbar and menu
 	    if(vca_lev != 3) {
@@ -1662,6 +1662,7 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		delete nit_w->takeChild(iTopcwl);
 		iTopcwl--;
 	    }
+
 	    //  Add new widgets
 	    for(iCw = 0; iCw < wdgN->childSize(); iCw++) {
 		XMLNode *cwdgN = wdgN->childGet(iCw);
@@ -1677,8 +1678,8 @@ void WdgTree::updateTree( const string &vca_it, bool initial )
 		nit_cw = (iTopcwl >= nit_w->childCount()) ? new QTreeWidgetItem(nit_w) : nit_w->child(iTopcwl);
 		//   Update widget's data
 		img = QImage();
-		if(cwdgN->childGet("ico")->text().size()) {
-		    simg = TSYS::strDecode(cwdgN->childGet("ico")->text(), TSYS::base64);
+		if((icoN=cwdgN->childGet("ico",0,true)) && icoN->text().size()) {
+		    simg = TSYS::strDecode(icoN->text(), TSYS::base64);
 		    img.loadFromData((const uchar*)simg.data(),simg.size());
 		    nit_cw->setIcon(0, QPixmap::fromImage(img));
 		}

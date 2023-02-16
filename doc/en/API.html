@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Documents/API</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (31% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--stub" href="../ru/API.html" title="Документы/API (2% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--low" href="../uk/API.html" title="Документи/API (32% translated)">Українська</a></div></div>
 <div style="float:right; border:1px solid gray; width:300px; padding:2px; margin-left: 10pt; margin-bottom: 10pt;">
 <ul><li> <b>Author:</b> <a class="external" href="http://oscada.org/wiki/User:RomanSavochenko" title="User:RomanSavochenko">Roman Savochenko</a><br />&nbsp;&nbsp;<font size="-2"><i>Maxim Lysenko (2012) — the page initial translation</i></font></li>
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Doc/API" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a> </li></ul>
@@ -273,6 +273,7 @@ Information variables of the program:
 <p><b>Templates/definitions:</b>
 </p>
 <ul><li> <i>NSTR_BUF_LEN</i> — Length of string buffers for numbers (50 symbols).</li>
+<li> <i>CFG_A_LEN</i> — Maximum attribute size of the configuration cell in XML (100 symbols).</li>
 <li> <i>DAQ_APER_FRQ</i> — Frequency of representing the aperiodic invokes, like to "f_start", of the periodic processes in Hz (1000000).</li>
 <li> <i>RECURS_DET_HOPS</i> — Hops/depth number of the recursion detection.</li>
 <li> <i>ARCH_BUF</i> — Name of requesting the messages buffer ("&lt;buffer&gt;").</li>
@@ -1568,7 +1569,7 @@ The data acquisition mode/source (enumeration — TVArchive::SrcMode):
 <td><i><a href="#TSubSYS">TSubSYS</a></i>
 </td></tr></table>
 <p><b>Data:</b><br />
-External hosts mode (enum — ExtHost::Mode):
+External hosts mode (enum — TTransportS::ExtHost::Mode):
 </p>
 <ul><li> <i>User</i> (0) — User.</li>
 <li> <i>System</i> (1) — System.</li>
@@ -1586,6 +1587,11 @@ External hosts mode (enum — ExtHost::Mode):
 <li> <i>uint8_t upRiseLev;</i> — External hosts uprising level/depth of this host/station.</li>
 <li> <i>int8_t mode;</i> — Host mode.</li>
 <li> <i>time_t mdf;</i> — Modification time.</li></ul>
+<p>Data types of the IO logs (enum — TTransportS::LogType):
+</p>
+<ul><li> <i>LTP_BinaryText</i> (0) — Binary &amp; Text.</li>
+<li> <i>LTP_Binary</i> (1) — Binary.</li>
+<li> <i>LTP_Text</i> (2) — Text.</li></ul>
 <p><b>Public methods:</b>
 </p>
 <ul><li> <i>int subVer( );</i> — Subsystem's version.</li>
@@ -2940,50 +2946,44 @@ RESP: <i>&lt;st path="/%2fserv%2fredundant" rez="<b>0</b>" StLevel="<b>{lev}</b>
 <ul><li> <i>lev</i> — redundancy level of the station.</li></ul>
 <p><b><u>Scanning the configuration file</u></b><br />
 REQ[<b>root-root</b>]: <i>&lt;scan path="/%2fgen%2fconfig" /&gt;</i>
-</p><p><b><u>Getting for flag of the node modification</u></b><br />
-REQ: <i>&lt;modify path="/<b>{nPath}</b>/%2fobj" /&gt;</i>
+</p><p><b><u>Node-object requests</u></b><br />
 </p>
-<ul><li> <i>nPath</i> — path to need node.</li></ul>
-<p>RESP: <i>&lt;modify path="/{nPath}/%2fobj" rez="<b>0</b>"&gt;<b>{flag}</b>&lt;/modify&gt;</i>
-</p>
-<ul><li> <i>flag</i> — the node modification status-flag, see to the enumeration <a href="#TCntrNode">TCntrNode::ModifFlag</a> for the details.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;modify</span> <span class="na">path=</span><span class="s">"/Security/user/%2fobj"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/modify&gt;</span>
+<dl><dd><b><u>Getting for flag of the node modification</u></b><br /></dd>
+<dd>REQ: <i>&lt;modify path="/<b>{nPath}</b>/%2fobj" /&gt;</i>
+<ul><li> <i>nPath</i> — path to need node.</li></ul></dd>
+<dd>RESP: <i>&lt;modify path="/{nPath}/%2fobj" rez="<b>0</b>"&gt;<b>{flag}</b>&lt;/modify&gt;</i>
+<ul><li> <i>flag</i> — the node modification status-flag, see to the enumeration <a href="#TCntrNode">TCntrNode::ModifFlag</a> for the details.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;modify</span> <span class="na">path=</span><span class="s">"/Security/user/%2fobj"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/modify&gt;</span>
 </pre></div>
-<p><b><u>Loading the node</u></b><br />
-REQ: <i>&lt;load path="/<b>{nPath}</b>/%2fobj" force="<b>{force}</b>"&gt;<b>{CfgCtx}</b>&lt;/load&gt;</i>
-</p>
+<dl><dd><b><u>Loading the node</u></b><br /></dd>
+<dd>REQ: <i>&lt;load path="/<b>{nPath}</b>/%2fobj" force="<b>{force}</b>"&gt;<b>{CfgCtx}</b>&lt;/load&gt;</i>
 <ul><li> <i>nPath</i> — path to need node;</li>
 <li> <i>force</i> — the force loading sign [0|1], the node may be not marked as modified;</li>
-<li> <i>CfgCtx</i> — the <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">configuration context</a> in the tags "fld" for loading from that, used for remote copying the node configuration.</li></ul>
-<p><b><u>Saving the node</u></b><br />
-REQ: <i>&lt;save path="/<b>{nPath}</b>/%2fobj" force="<b>{force}</b>" ctx="<b>{toCfgCtx}</b>" /&gt;</i>
-</p>
+<li> <i>CfgCtx</i> — the <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">configuration context</a> in the tags "fld" for loading from that, used for remote copying the node configuration.</li></ul></dd></dl>
+<dl><dd><b><u>Saving the node</u></b><br /></dd>
+<dd>REQ: <i>&lt;save path="/<b>{nPath}</b>/%2fobj" force="<b>{force}</b>" ctx="<b>{toCfgCtx}</b>" /&gt;</i>
 <ul><li> <i>nPath</i> — path to need node;</li>
 <li> <i>force</i> — the force saving sign [0|1], the node may be not marked as modified;</li>
-<li> <i>toCfgCtx</i> — sign [0|1] of saving the node configuration to the <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">configuration context</a>, used for remote copying the node configuration.</li></ul>
-<p>RESP: <i>&lt;save path="/{nPath}/%2fobj" force="{force}" ctx="{toCfgCtx}" rez="<b>0</b>"&gt;<b>{CfgCtx}</b>&lt;/save&gt;</i>
-</p>
-<ul><li> <i>CfgCtx</i> — the <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">configuration context</a> in the tags "fld" after saving.</li></ul>
-<p><b><u>Local copying the specified node</u></b><br />
-REQ: <i>&lt;copy path="/<b>{nPath}</b>/%2fobj" src="<b>{source}</b>" dst="<b>{destination}</b>" /&gt;</i>
-</p>
+<li> <i>toCfgCtx</i> — sign [0|1] of saving the node configuration to the <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">configuration context</a>, used for remote copying the node configuration.</li></ul></dd>
+<dd>RESP: <i>&lt;save path="/{nPath}/%2fobj" force="{force}" ctx="{toCfgCtx}" rez="<b>0</b>"&gt;<b>{CfgCtx}</b>&lt;/save&gt;</i>
+<ul><li> <i>CfgCtx</i> — the <a href="Program_manual.html#CfgFilePrm" title="Special:MyLanguage/Documents/Program manual">configuration context</a> in the tags "fld" after saving.</li></ul></dd></dl>
+<dl><dd><b><u>Local copying the specified node</u></b><br /></dd>
+<dd>REQ: <i>&lt;copy path="/<b>{nPath}</b>/%2fobj" src="<b>{source}</b>" dst="<b>{destination}</b>" /&gt;</i>
 <ul><li> <i>nPath</i> — path to need node, can be any node in this operation;</li>
 <li> <i>source</i> — path to the source node;</li>
-<li> <i>destination</i> — path to the destination node.</li></ul>
-<p><b><u>Obtaining for child nodes of the specified node, optimised for the networks</u></b><br />
-REQ: <i>&lt;chlds path="/<b>{nPath}</b>/%2fobj" grp="<b>{group}</b>" icoCheck="<b>{icoCheck}</b>" /&gt;</i>
-</p>
+<li> <i>destination</i> — path to the destination node.</li></ul></dd></dl>
+<dl><dd><b><u>Obtaining for child nodes of the specified node, optimised for the networks</u></b><br /></dd>
+<dd>REQ: <i>&lt;chlds path="/<b>{nPath}</b>/%2fobj" grp="<b>{group}</b>" icoCheck="<b>{icoCheck}</b>" /&gt;</i>
 <ul><li> <i>nPath</i> — path to need node;</li>
 <li> <i>group</i> — the child nodes group-prefix;</li>
-<li> <i>icoCheck</i> — sign [0|1] of only checking the icon presence by setting the attribute "icoSize".</li></ul>
-<p>RESP: <i>&lt;chlds path="/{nPath}/%2fobj" grp="{group}" icoCheck="{icoCheck}" rez="<b>0</b>"&gt;<b>{nodes}</b>&lt;/chlds&gt;</i>
-</p>
+<li> <i>icoCheck</i> — sign [0|1] of only checking the icon presence by setting the attribute "icoSize".</li></ul></dd>
+<dd>RESP: <i>&lt;chlds path="/{nPath}/%2fobj" grp="{group}" icoCheck="{icoCheck}" rez="<b>0</b>"&gt;<b>{nodes}</b>&lt;/chlds&gt;</i>
 <ul><li> <i>nodes</i> — nodes in the tags "el", where the name is in the tag text and the identifier in the attribute "id" for nodes with identifiers; the "el" tags contains additional tags and attributes:
 <ul><li> <i><b>ico</b></i> — tag with data of the icon at not setting "icoCheck";</li>
 <li> <i>icoSize</i> — size of the node icon at it presence and setting "icoCheck";</li>
 <li> <i><b>grp</b></i> — tags of groups of the child nodes with the extra attributes:
-<ul><li> <i>chPresent</i> — sign of the child nodes presence for the group.</li></ul></li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;chlds</span> <span class="na">grp=</span><span class="s">"mod_"</span> <span class="na">icoCheck=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Transport/%2fobj"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<ul><li> <i>chPresent</i> — sign of the child nodes presence for the group.</li></ul></li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;chlds</span> <span class="na">grp=</span><span class="s">"mod_"</span> <span class="na">icoCheck=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Transport/%2fobj"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">icoSize=</span><span class="s">"10348"</span> <span class="na">id=</span><span class="s">"Sockets"</span><span class="nt">&gt;</span>Sockets
     <span class="nt">&lt;grp</span> <span class="na">acs=</span><span class="s">"54"</span> <span class="na">chPresent=</span><span class="s">"1"</span> <span class="na">dscr=</span><span class="s">"Input transport"</span> <span class="na">id=</span><span class="s">"in_"</span> <span class="na">idSz=</span><span class="s">"20"</span> <span class="na">idm=</span><span class="s">"100"</span> <span class="nt">/&gt;</span>
     <span class="nt">&lt;grp</span> <span class="na">acs=</span><span class="s">"54"</span> <span class="na">chPresent=</span><span class="s">"1"</span> <span class="na">dscr=</span><span class="s">"Output transport"</span> <span class="na">id=</span><span class="s">"out_"</span> <span class="na">idSz=</span><span class="s">"20"</span> <span class="na">idm=</span><span class="s">"100"</span> <span class="nt">/&gt;</span>
@@ -2998,17 +2998,17 @@ REQ: <i>&lt;chlds path="/<b>{nPath}</b>/%2fobj" grp="<b>{group}</b>" icoCheck="<
   <span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/chlds&gt;</span>
 </pre></div>
-<p><b><u>Obtaining the list of the DBs or tables</u></b><br />
-REQ: <i>&lt;get path="/<b>{nPath}</b>/%2fdb%2flist[:onlydb]" /&gt;</i>
+<p><b><u>Generic lists</u></b><br />
 </p>
+<dl><dd><b><u>Obtaining the list of the DBs or tables</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/<b>{nPath}</b>/%2fdb%2flist[:onlydb]" /&gt;</i>
 <dl><dd> <i>&lt;get path="/<b>{nPath}</b>/%2fdb%2ftblList[:onlydb]" /&gt;</i></dd></dl>
 <ul><li> <i>nPath</i> — path to need node, can be any node in this operation;</li>
-<li> "onlydb" — the address addition to point of listing only data bases without the group marks.</li></ul>
-<p>RESP: <i>&lt;get path="/{nPath}/%2fdb%2flist[:onlydb]" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i>
-</p>
+<li> "onlydb" — the address addition to point of listing only data bases without the group marks.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/{nPath}/%2fdb%2flist[:onlydb]" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i>
 <dl><dd> <i>&lt;get path="/{nPath}/%2fdb%2ftblList[:onlydb]" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i></dd></dl>
-<ul><li> <i>list</i> — elements in the tags "el".</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fdb%2flist:onlydb"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<ul><li> <i>list</i> — elements in the tags "el".</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fdb%2flist:onlydb"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el&gt;</span>SQLite.vcaTest<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el&gt;</span>SQLite.vcaBase<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el&gt;</span>SQLite.vcaAGLKS<span class="nt">&lt;/el&gt;</span>
@@ -3022,14 +3022,12 @@ REQ: <i>&lt;get path="/<b>{nPath}</b>/%2fdb%2flist[:onlydb]" /&gt;</i>
   <span class="nt">&lt;el&gt;</span>DBF.testRelease<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Obtaining the list of the supported internal programming languages</u></b><br />
-REQ: <i>&lt;get path="/<b>{nPath}</b>/%2fplang%2flist" /&gt;</i>
-</p>
-<ul><li> <i>nPath</i> — path to need node, can be any node in this operation.</li></ul>
-<p>RESP: <i>&lt;get path="/{nPath}/%2fplang%2flist" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>list</i> — elements in the tags "el".</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fplang%2flist"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<dl><dd><b><u>Obtaining the list of the supported internal programming languages</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/<b>{nPath}</b>/%2fplang%2flist" /&gt;</i>
+<ul><li> <i>nPath</i> — path to need node, can be any node in this operation.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/{nPath}/%2fplang%2flist" rez="<b>0</b>"&gt;<b>{list}</b>&lt;/get&gt;</i>
+<ul><li> <i>list</i> — elements in the tags "el".</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/%2fplang%2flist"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;el&gt;</span>JavaLikeCalc.JavaScript<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
@@ -3188,54 +3186,53 @@ REQ: <i>&lt;list path="/DAQ/%2fserv%2fPrmAttr" base="<b>{base}</b>" toPrm="<b>{f
   <span class="nt">&lt;el&gt;</span>prm:BlockCalc.gen.F3.var<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/list&gt;</span>
 </pre></div>
-<p><b><u>Getting messages related the controller object</u></b><br />
-That are messages generated by the data sources and requested by <a href="#TArchiveS">TArchiveS::messGet()</a> with proper categories of the data source.<br />
-REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/%2fserv%2fmess" tm="<b>{TmUNIX}</b>" tm_grnd="<b>{TmGrndUNIX}</b>" lev="<b>{level}</b>" /&gt;</i>
+<p><b><u>The controller objects</u></b><br />
 </p>
+<dl><dd><b><u>Getting messages related the controller object</u></b><br /></dd>
+<dd>That are messages generated by the data sources and requested by <a href="#TArchiveS">TArchiveS::messGet()</a> with proper categories of the data source.<br /></dd>
+<dd>REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/%2fserv%2fmess" tm="<b>{TmUNIX}</b>" tm_grnd="<b>{TmGrndUNIX}</b>" lev="<b>{level}</b>" /&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i> — the DAQ module and controller object;</li>
 <li> <i>TmUNIX</i>, <i>TmGrndUNIX</i> — the requested messages' end and start UNIX time stamp from 01.01.1970; at zero "tm" there used whether the current system time or the last redundant message time for redundant systems;</li>
-<li> <i>level</i> — minimum level of the requested messages, from 0[X] to 7[X].</li></ul>
-<p>RESP: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/%2fserv%2fmess" tm="<b>{TmUNIX}</b>" tm_grnd="{TmGrnUNIX}" lev="{level}" rez="<b>0</b>"&gt;<b>{messages}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>level</i> — minimum level of the requested messages, from 0[X] to 7[X].</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/%2fserv%2fmess" tm="<b>{TmUNIX}</b>" tm_grnd="{TmGrnUNIX}" lev="{level}" rez="<b>0</b>"&gt;<b>{messages}</b>&lt;/get&gt;</i>
 <ul><li> <i>TmUNIX</i> — is set in time of the end redundant message or system one - 1, at zero in the request;</li>
 <li> <i>messages</i> — messages in the "el" tags: <i>&lt;el time="<b>{time}</b>" utime="<b>{utime}</b>" cat="<b>{cat}</b>" lev="<b>{lev}</b>"&gt;<b>{mess}</b>&lt;/el&gt;</i>
 <ul><li> <i>time</i> — the message time, as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>utime</i> — the microsecond part of the message time;</li>
 <li> <i>cat</i> — the message category;</li>
 <li> <i>lev</i> — the message level;</li>
-<li> <i>mess</i> — the message text.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1674401446"</span> <span class="na">tm_grnd=</span><span class="s">"1674401300"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — the message text.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1674401446"</span> <span class="na">tm_grnd=</span><span class="s">"1674401300"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">cat=</span><span class="s">"alLogicLev:gen.F3"</span> <span class="na">lev=</span><span class="s">"-2"</span> <span class="na">time=</span><span class="s">"1674401357"</span> <span class="na">utime=</span><span class="s">"386070"</span><span class="nt">&gt;</span>
 Genericstation <span class="ni">&amp;gt;</span> F3: Gas flow through the pipe to Glinsk: Lower warning border error
   <span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Setting the message related the controller object</u></b><br />
-Generating-setting the data source message of the <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">transferred type</a> with the request by <a href="#TController">TController::messSet()</a>.<br />
-REQ: <i>&lt;set path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/%2fserv%2fmess" lev="<b>{level}</b>" type2Code="<b>{type2Code}</b>" prm="<b>{prm}</b>" cat="<b>{cat}</b>"&gt;<b>{mess}</b>&lt;/set&gt;</i>
-</p>
+<dl><dd><b><u>Setting the message related the controller object</u></b><br /></dd>
+<dd>Generating-setting the data source message of the <a href="Program_manual.html#ArchMess" title="Special:MyLanguage/Documents/Program manual">transferred type</a> with the request by <a href="#TController">TController::messSet()</a>.<br /></dd>
+<dd>REQ: <i>&lt;set path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/%2fserv%2fmess" lev="<b>{level}</b>" type2Code="<b>{type2Code}</b>" prm="<b>{prm}</b>" cat="<b>{cat}</b>"&gt;<b>{mess}</b>&lt;/set&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i> — the DAQ module and controller object;</li>
 <li> <i>level</i> — the message level;</li>
 <li> <i>type2Code</i> — two symbols ID of the transferred message in the category;</li>
 <li> <i>prm</i> — identifier of the source parameter, which can be appended by the corresponding attribute ID in the view "{PrmID}.{AttrId}";</li>
 <li> <i>cat</i> — addition to the unified category with the user information and so on;</li>
-<li> <i>mess</i> — the message text with the named address before that.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/%2fserv%2fmess"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">type2Code=</span><span class="s">"OP"</span> <span class="na">prm=</span><span class="s">"F3"</span> <span class="na">cat=</span><span class="s">"roman"</span><span class="nt">&gt;</span>Value changed : 0 : 1<span class="nt">&lt;/set&gt;</span>
+<li> <i>mess</i> — the message text with the named address before that.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/%2fserv%2fmess"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">type2Code=</span><span class="s">"OP"</span> <span class="na">prm=</span><span class="s">"F3"</span> <span class="na">cat=</span><span class="s">"roman"</span><span class="nt">&gt;</span>Value changed : 0 : 1<span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Obtaining the attributes list of the DAQ parameter (<a href="#TValue">#TValue</a>) with detailed info</u></b><br />
-REQ: <i>&lt;list path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr" /&gt;</i>
+<p><b><u>The DAQ parameters</u></b><br />
 </p>
-<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i> — the DAQ module, controller object and parameters.</li></ul>
-<p>RESP: <i>&lt;list path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/list&gt;</i>
-</p>
+<dl><dd><b><u>Obtaining the attributes list of the DAQ parameter (<a href="#TValue">#TValue</a>) with detailed info</u></b><br /></dd>
+<dd>REQ: <i>&lt;list path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr" /&gt;</i>
+<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i> — the DAQ module, controller object and parameters.</li></ul></dd>
+<dd>RESP: <i>&lt;list path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/list&gt;</i>
 <ul><li> <i>attributes</i> — attributes in the "el" tags with the detailed information: <i>&lt;el id="<b>{id}</b>" nm="<b>{name}</b>" tp="<b>{type}</b>" flg="<b>{flags}</b>" vals="<b>{values}</b>" names="<b>{names}</b>" /&gt;</i>
 <ul><li> <i>id</i> — identifier of the attribute;</li>
 <li> <i>name</i> — name of the attribute;</li>
 <li> <i>type</i> — type of the attribute, see the types in the object <a href="#TFld">#TFld</a>;</li>
 <li> <i>flags</i> — flags of the attribute, see the flags in the object <a href="#TVal">#TVal</a>;</li>
 <li> <i>values</i> — the attribute values for the selective types;</li>
-<li> <i>names</i> — names to values for the selective types.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>names</i> — names to values for the selective types.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">flg=</span><span class="s">"516"</span> <span class="na">id=</span><span class="s">"SHIFR"</span> <span class="na">nm=</span><span class="s">"Identifier"</span> <span class="na">tp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">flg=</span><span class="s">"16"</span> <span class="na">id=</span><span class="s">"NAME"</span> <span class="na">nm=</span><span class="s">"Name"</span> <span class="na">tp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">flg=</span><span class="s">"24"</span> <span class="na">id=</span><span class="s">"DESCR"</span> <span class="na">nm=</span><span class="s">"Description"</span> <span class="na">tp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
@@ -3261,10 +3258,9 @@ REQ: <i>&lt;list path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>
   <span class="nt">&lt;el</span> <span class="na">flg=</span><span class="s">"768"</span> <span class="na">id=</span><span class="s">"Tf"</span> <span class="na">nm=</span><span class="s">"Filter time, seconds"</span> <span class="na">tp=</span><span class="s">"4"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/list&gt;</span>
 </pre></div>
-<p><b><u>Requesting the attributes' values of the DAQ parameter (<a href="#TValue">#TValue</a>)</u></b><br />
-Very generic request of the attributes' values which the current values and archive-history.<br />
-REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr" sepReq="<b>{sepReq}</b>" hostTm="<b>{hostTm}</b>" prcTm="<b>{prcTm}</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
+<dl><dd><b><u>Requesting the attributes' values of the DAQ parameter (<a href="#TValue">#TValue</a>)</u></b><br /></dd>
+<dd>Very generic request of the attributes' values which the current values and archive-history.<br /></dd>
+<dd>REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr" sepReq="<b>{sepReq}</b>" hostTm="<b>{hostTm}</b>" prcTm="<b>{prcTm}</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i> — the DAQ module, controller object and parameters;</li>
 <li> <i>sepReq</i> — sign of the separated attributes requesting [0|1];</li>
 <li> <i>hostTm</i> — use the host time for the current values, so doesn't add the attribute "tm", [0|1];</li>
@@ -3273,9 +3269,8 @@ REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{
 <ul><li> "el": <i>&lt;el id="<b>{id}</b>" /&gt;</i>
 <ul><li> <i>id</i> — identifier of the attribute.</li></ul></li>
 <li> "ael" (for archive-history): <i>&lt;ael id="<b>{id}</b>" tm="<b>{time}</b>" /&gt;</i>
-<ul><li> <i>time</i> — begin time of the archive-history requesting in microseconds and the seconds part as the UNIX time stamp from 01.01.1970, that is the time of the last value from the previous request.</li></ul></li></ul></li></ul>
-<p>RESP: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" sepReq="{sepReq}" hostTm="{hostTm}" rez="<b>0</b>" prcTm="<b>{prcTm}</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
+<ul><li> <i>time</i> — begin time of the archive-history requesting in microseconds and the seconds part as the UNIX time stamp from 01.01.1970, that is the time of the last value from the previous request.</li></ul></li></ul></li></ul></dd>
+<dd>RESP: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/%2fserv%2fattr" sepReq="{sepReq}" hostTm="{hostTm}" rez="<b>0</b>" prcTm="<b>{prcTm}</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
 <ul><li> <i>prcTm</i> — the system time of the host, as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>attributes</i> — attributes in the tags:
 <ul><li> "el": <i>&lt;el id="{id}" tm="<b>{time}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
@@ -3288,8 +3283,8 @@ REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{
 <ul><li> <i>type</i> — type of the dynamic attribute, see the types in the object <a href="#TFld">#TFld</a>;</li>
 <li> <i>flags</i> — flags of the dynamic attribute, see the flags in the object <a href="#TVal">#TVal</a>;</li>
 <li> <i>values</i> — the dynamic attribute values for the selective types;</li>
-<li> <i>names</i> — names to values for the selective types of the dynamic attribute.</li></ul></li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">hostTm=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span> <span class="na">prcTm=</span><span class="s">"1674546677"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>names</i> — names to values for the selective types of the dynamic attribute.</li></ul></li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">hostTm=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span> <span class="na">prcTm=</span><span class="s">"1674546677"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;ael</span> <span class="na">id=</span><span class="s">"var"</span> <span class="na">per=</span><span class="s">"1000000"</span> <span class="na">tm=</span><span class="s">"1674546650000000"</span><span class="nt">&gt;</span>
     <span class="nt">&lt;v&gt;</span>45.1063015741995<span class="nt">&lt;/v&gt;</span>
     <span class="nt">&lt;v&gt;</span>45.1021080127945<span class="nt">&lt;/v&gt;</span>
@@ -3321,49 +3316,44 @@ REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"Tf"</span><span class="nt">&gt;</span>2<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Setting multiple attributes' values of the DAQ parameter (<a href="#TValue">#TValue</a>)</u></b><br />
-REQ[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
-</p>
+<dl><dd><b><u>Setting multiple attributes' values of the DAQ parameter (<a href="#TValue">#TValue</a>)</u></b><br /></dd>
+<dd>REQ[<b>root-DAQ</b>]: <i>&lt;set path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i> — the DAQ module, controller object and parameters;</li>
 <li> <i>attributes list</i> — attributes in the tags "el": <i>&lt;el id="<b>{id}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
 <ul><li> <i>id</i> — identifier of the attribute;</li>
-<li> <i>value</i> — the setting value in the string form.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+<li> <i>value</i> — the setting value in the string form.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/%2fserv%2fattr"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"ed"</span><span class="nt">&gt;</span>ton/hour<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"alDelay"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Requesting the attribute information of the DAQ parameter (<a href="#TVal">#TVal</a>)</u></b><br />
-Redirection to the archive request "<i>&lt;info path='/Archive/va_{ARCH}/%2fserv%2fval' /&gt;</i>" at linking an archive, so for extra attributes and result see there.<br />
-REQ: <i>&lt;info path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" /&gt;</i>
+<p><b><u>Attributes of the DAQ parameter</u></b><br />
 </p>
-<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — the DAQ module, controller object, parameters and attribute.</li></ul>
-<p>RESP: <i>&lt;info path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" rez="<b>0</b>" end="<b>0</b>" beg="<b>0</b>" per="<b>0</b>" vtp="<b>{valTp}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Requesting the attribute information of the DAQ parameter (<a href="#TVal">#TVal</a>)</u></b><br /></dd>
+<dd>Redirection to the archive request "<i>&lt;info path='/Archive/va_{ARCH}/%2fserv%2fval' /&gt;</i>" at linking an archive, so for extra attributes and result see there.<br /></dd>
+<dd>REQ: <i>&lt;info path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" /&gt;</i>
+<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — the DAQ module, controller object, parameters and attribute.</li></ul></dd>
+<dd>RESP: <i>&lt;info path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" rez="<b>0</b>" end="<b>0</b>" beg="<b>0</b>" per="<b>0</b>" vtp="<b>{valTp}</b>" /&gt;</i>
 <ul><li> "0" — archive parameters at the archive missing is set to 0;</li>
-<li> <i>valTp</i> — value type, see to the object <a href="#TFld">#TFld</a>.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;info</span> <span class="na">beg=</span><span class="s">"0"</span> <span class="na">end=</span><span class="s">"0"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_ed/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"0"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
+<li> <i>valTp</i> — value type, see to the object <a href="#TFld">#TFld</a>.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;info</span> <span class="na">beg=</span><span class="s">"0"</span> <span class="na">end=</span><span class="s">"0"</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_ed/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"0"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"5"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Requesting the attribute value of the DAQ parameter (<a href="#TVal">#TVal</a>)</u></b><br />
-Redirection to the archive request "<i>&lt;get path='/Archive/va_{ARCH}/%2fserv%2fval' /&gt;</i>" at linking an archive, so for extra attributes and result see there.<br />
-REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" tm="<b>{time}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Requesting the attribute value of the DAQ parameter (<a href="#TVal">#TVal</a>)</u></b><br /></dd>
+<dd>Redirection to the archive request "<i>&lt;get path='/Archive/va_{ARCH}/%2fserv%2fval' /&gt;</i>" at linking an archive, so for extra attributes and result see there.<br /></dd>
+<dd>REQ: <i>&lt;get path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" tm="<b>{time}</b>" /&gt;</i>
 <ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — the DAQ module, controller object, parameters and attribute;</li>
-<li> <i>time</i> — time of the requested value in microseconds and the seconds part as the UNIX time stamp from 01.01.1970; for zero value there used the system current time and you'll get the current value at the archive missing.</li></ul>
-<p>RESP: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" tm="<b>{time}</b>" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>time</i> — time of the requested value in microseconds and the seconds part as the UNIX time stamp from 01.01.1970; for zero value there used the system current time and you'll get the current value at the archive missing.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" tm="<b>{time}</b>" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
 <ul><li> <i>time</i> — is set to the requested value real time;</li>
-<li> <i>value</i> — value of the attribute.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1675449270029270"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>45.141100502986<span class="nt">&lt;/get&gt;</span>
+<li> <i>value</i> — value of the attribute.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1675449270029270"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>45.141100502986<span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Requesting for name of the attribute for archive linked to that</u></b><br />
-REQ: <i>&lt;name path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" /&gt;</i>
-</p>
-<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — the DAQ module, controller object, parameters and attribute.</li></ul>
-<p>RESP: <i>&lt;name path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" rez="<b>0</b>"&gt;<b>{name}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>name</i> — name of the archive.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;name</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>F3.Variable<span class="nt">&lt;/name&gt;</span>
+<dl><dd><b><u>Requesting for name of the attribute for archive linked to that</u></b><br /></dd>
+<dd>REQ: <i>&lt;name path="/DAQ/<b>{MOD}</b>/<b>{CNTR}</b>/prm_<b>{PRM}</b>[/prm_<b>{PRM}</b>]/a_<b>{ATTR}</b>/%2fserv%2fval" /&gt;</i>
+<ul><li> <i>MOD</i>, <i>CNTR</i>, <i>PRM</i>, <i>ATTR</i> — the DAQ module, controller object, parameters and attribute.</li></ul></dd>
+<dd>RESP: <i>&lt;name path="/DAQ/{MOD}/{CNTR}/prm_{PRM}[/prm_{PRM}]/a_{ATTR}/%2fserv%2fval" rez="<b>0</b>"&gt;<b>{name}</b>&lt;/get&gt;</i>
+<ul><li> <i>name</i> — name of the archive.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;name</span> <span class="na">path=</span><span class="s">"/DAQ/LogicLev/gen/prm_F3/a_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>F3.Variable<span class="nt">&lt;/name&gt;</span>
 </pre></div>
 <h5><span class="mw-headline" id="The_module_JavaLikeCalc"><span class="mw-headline-number">14.4.3.1</span> The module <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a></span></h5>
 <p><b><u>Getting for values of the function IO of the controller object</u></b><br />
@@ -3483,35 +3473,33 @@ RESP: <i>&lt;st path="/Archive/%2fserv%2fredundant" rez="<b>0</b>" inProc="<b>1<
   <span class="nt">&lt;archM</span> <span class="na">id=</span><span class="s">"FSArch.test"</span> <span class="na">run=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/st&gt;</span>
 </pre></div>
-<p><b><u>Obtaining the information of the message archiving</u></b><br />
-REQ: <i>&lt;info path="/Archive/%2fserv%2fmess" arch="<b>{archiver}</b>" /&gt;</i>
+<p><b><u>The message archive</u></b><br />
 </p>
-<ul><li> <i>archiver</i> — whole identifier of the message archiver of requesting this information or empty for whole message archive.</li></ul>
-<p>RESP: <i>&lt;info path="/Archive/%2fserv%2fmess" arch="{archiver}" rez="<b>0</b>" end="<b>{end}</b>" beg="<b>{begin}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Obtaining the information of the message archiving</u></b><br /></dd>
+<dd>REQ: <i>&lt;info path="/Archive/%2fserv%2fmess" arch="<b>{archiver}</b>" /&gt;</i>
+<ul><li> <i>archiver</i> — whole identifier of the message archiver of requesting this information or empty for whole message archive.</li></ul></dd>
+<dd>RESP: <i>&lt;info path="/Archive/%2fserv%2fmess" arch="{archiver}" rez="<b>0</b>" end="<b>{end}</b>" beg="<b>{begin}</b>" /&gt;</i>
 <ul><li> <i>end</i> — time of the last message in the archive, as the UNIX time stamp from 01.01.1970;</li>
-<li> <i>begin</i> — time of the first message in the archive, as the UNIX time stamp from 01.01.1970.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;info</span> <span class="na">beg=</span><span class="s">"1639859386"</span> <span class="na">end=</span><span class="s">"1674549889"</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
+<li> <i>begin</i> — time of the first message in the archive, as the UNIX time stamp from 01.01.1970.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;info</span> <span class="na">beg=</span><span class="s">"1639859386"</span> <span class="na">end=</span><span class="s">"1674549889"</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Requesting the messages of the message archive</u></b><br />
-Very generic request of the archive messages.<br />
-REQ: <i>&lt;get path="/Archive/%2fserv%2fmess" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" cat="<b>{catTmpl}</b>" lev="<b>level</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Requesting the messages of the message archive</u></b><br /></dd>
+<dd>Very generic request of the archive messages.<br /></dd>
+<dd>REQ: <i>&lt;get path="/Archive/%2fserv%2fmess" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" cat="<b>{catTmpl}</b>" lev="<b>level</b>" /&gt;</i>
 <ul><li> <i>time</i> — time of the last requested message, as the UNIX time stamp from 01.01.1970; at the zero value there used the current system time - 1;</li>
 <li> <i>tmGrnd</i> — time of the first requested message, as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>archiver</i> — whole identifier of the message archiver of requesting or empty for whole message archive;</li>
 <li> <i>catTmpl</i> — template of the requesting messages;</li>
-<li> <i>level</i> — minimum level of the requesting messages.</li></ul>
-<p>RESP: <i>&lt;get path="/Archive/%2fserv%2fmess" tm="<b>{time}</b>" tm_grnd="{tmGrnd}" arch="{archiver}" cat="{catTmpl}" lev="level" rez="<b>0</b>" &gt;<b>{messages}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>level</i> — minimum level of the requesting messages.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/Archive/%2fserv%2fmess" tm="<b>{time}</b>" tm_grnd="{tmGrnd}" arch="{archiver}" cat="{catTmpl}" lev="level" rez="<b>0</b>" &gt;<b>{messages}</b>&lt;/get&gt;</i>
 <ul><li> <i>time</i> — there placed the last processed message time (biggest one), as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>messages</i> — requested messages in the tags "el": <i>&lt;el time="<b>{time}</b>" utime="<b>{utime}</b>" cat="<b>{category}</b>" lev="<b>{level}</b>"&gt;<b>{mess}</b>&lt;/el&gt;</i>
 <ul><li> <i>time</i> — the message time, as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>utime</i> — the microsecond part of the message time;</li>
 <li> <i>cat</i> — the message category;</li>
 <li> <i>lev</i> — the message level;</li>
-<li> <i>mess</i> — the message text.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">cat=</span><span class="s">"/*"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">tm_grnd=</span><span class="s">"1674549800"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — the message text.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">cat=</span><span class="s">"/*"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">tm_grnd=</span><span class="s">"1674549800"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">cat=</span><span class="s">"/sub_UI/mod_QTCfg/"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">time=</span><span class="s">"1674549865"</span> <span class="na">utime=</span><span class="s">"856668"</span><span class="nt">&gt;</span>
 roman| '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test1/%2fexec%2fio%2fin' changed to: '<span class="ni">&amp;lt;</span>info path="/Archive" /<span class="ni">&amp;gt;</span>'!
   <span class="nt">&lt;/el&gt;</span>
@@ -3526,16 +3514,15 @@ roman| Pressed down '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/f
   <span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Setting the group messages to the message archive</u></b><br />
-REQ[<b>root-Archive</b>]: <i>&lt;set path="/Archive/%2fserv%2fmess"&gt;<b>{messages}</b>&lt;/set&gt;</i>
-</p>
+<dl><dd><b><u>Setting the group messages to the message archive</u></b><br /></dd>
+<dd>REQ[<b>root-Archive</b>]: <i>&lt;set path="/Archive/%2fserv%2fmess"&gt;<b>{messages}</b>&lt;/set&gt;</i>
 <ul><li> <i>messages</i> — messages in the tags "el": <i>&lt;el time="<b>{time}</b>" utime="<b>{utime}</b>" cat="<b>{category}</b>" lev="<b>{level}</b>"&gt;<b>{mess}</b>&lt;/el&gt;</i>
 <ul><li> <i>time</i> — the message time, as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>utime</i> — the microsecond part of the message time;</li>
 <li> <i>cat</i> — the message category;</li>
 <li> <i>lev</i> — the message level;</li>
-<li> <i>mess</i> — the message text.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — the message text.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/Archive/%2fserv%2fmess"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">cat=</span><span class="s">"/sub_UI/mod_QTCfg/"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">time=</span><span class="s">"1674549865"</span> <span class="na">utime=</span><span class="s">"856668"</span><span class="nt">&gt;</span>
 roman| '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test1/%2fexec%2fio%2fin' changed to: '<span class="ni">&amp;lt;</span>info path="/Archive" /<span class="ni">&amp;gt;</span>'!
   <span class="nt">&lt;/el&gt;</span>
@@ -3544,24 +3531,24 @@ roman| Pressed down '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/f
   <span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Requesting the messages of the message archiver</u></b><br />
-REQ: <i>&lt;get path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}</b>/%2fserv%2fmess" eTm="<b>{endTime}</b>" bTm="<b>{begTime}</b>" cat="<b>{catTmpl}</b>" lev="<b>level</b>" /&gt;</i>
+<p><b><u>The message archivers</u></b><br />
 </p>
+<dl><dd><b><u>Requesting the messages of the message archiver</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}</b>/%2fserv%2fmess" eTm="<b>{endTime}</b>" bTm="<b>{begTime}</b>" cat="<b>{catTmpl}</b>" lev="<b>level</b>" /&gt;</i>
 <ul><li> <i>MOD</i>, <i>ARCHR</i> — the message archiving module and identifier of the archiver;</li>
 <li> <i>endTime</i> — time of the last requested message, as the UNIX time stamp from 01.01.1970; at the zero value there used the current system time;</li>
 <li> <i>begTime</i> — time of the first requested message, as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>catTmpl</i> — template of the requesting messages;</li>
-<li> <i>level</i> — minimum level of the requesting messages.</li></ul>
-<p>RESP: <i>&lt;get path="/Archive/{MOD}/{ARCHR}/%2fserv%2fmess" eTm="{endTime}" bTm="{begTime}" cat="{catTmpl}" lev="level" rez="<b>0</b>" tm="<b>{time}</b>" &gt;<b>{messages}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>level</i> — minimum level of the requesting messages.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/Archive/{MOD}/{ARCHR}/%2fserv%2fmess" eTm="{endTime}" bTm="{begTime}" cat="{catTmpl}" lev="level" rez="<b>0</b>" tm="<b>{time}</b>" &gt;<b>{messages}</b>&lt;/get&gt;</i>
 <ul><li> <i>time</i> — there placed the last processed message time (biggest one), as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>messages</i> — the requested messages in the tags "it": <i>&lt;it tm="<b>{time}</b>" tmu="<b>{utime}</b>" cat="<b>{category}</b>" lev="<b>{level}</b>"&gt;<b>{mess}</b>&lt;/it&gt;</i>
 <ul><li> <i>time</i> — the message time, as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>utime</i> — the microsecond part of the message time;</li>
 <li> <i>cat</i> — the message category;</li>
 <li> <i>lev</i> — the message level;</li>
-<li> <i>mess</i> — the message text.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">bTm=</span><span class="s">"1674549800"</span> <span class="na">cat=</span><span class="s">"/*"</span> <span class="na">eTm=</span><span class="s">"1674549889"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_SYS/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1674549889"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — the message text.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">bTm=</span><span class="s">"1674549800"</span> <span class="na">cat=</span><span class="s">"/*"</span> <span class="na">eTm=</span><span class="s">"1674549889"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_SYS/%2fserv%2fmess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1674549889"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;it</span> <span class="na">cat=</span><span class="s">"/sub_UI/mod_QTCfg/"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">tm=</span><span class="s">"1674549865"</span> <span class="na">tmu=</span><span class="s">"856668"</span><span class="nt">&gt;</span>
 roman| '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test1/%2fexec%2fio%2fin' changed to: '<span class="ni">&amp;lt;</span>info path="/Archive" /<span class="ni">&amp;gt;</span>'!
   <span class="nt">&lt;/it&gt;</span>
@@ -3576,9 +3563,8 @@ roman| Pressed down '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/f
   <span class="nt">&lt;/it&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Setting the group messages to the message archiver</u></b><br />
-REQ[<b>root-Archive</b>]: <i>&lt;put path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}</b>/%2fserv%2fmess" redundancy="<b>{redundancy}</b>"&gt;<b>{messages}</b>&lt;/put&gt;</i>
-</p>
+<dl><dd><b><u>Setting the group messages to the message archiver</u></b><br /></dd>
+<dd>REQ[<b>root-Archive</b>]: <i>&lt;put path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}</b>/%2fserv%2fmess" redundancy="<b>{redundancy}</b>"&gt;<b>{messages}</b>&lt;/put&gt;</i>
 <ul><li> <i>MOD</i>, <i>ARCHR</i> — the message archiving module and identifier of the archiver;</li>
 <li> <i>redundancy</i> — sign of sending the messages to the redundant stations [0|1];</li>
 <li> <i>messages</i> — the setting messages in the tags "it": <i>&lt;it tm="<b>{time}</b>" tmu="<b>{utime}</b>" cat="<b>{category}</b>" lev="<b>{level}</b>"&gt;<b>{mess}</b>&lt;/it&gt;</i>
@@ -3586,8 +3572,8 @@ REQ[<b>root-Archive</b>]: <i>&lt;put path="/Archive/<b>{MOD}</b>/mess_<b>{ARCHR}
 <li> <i>utime</i> — the microsecond part of the message time;</li>
 <li> <i>cat</i> — the message category;</li>
 <li> <i>lev</i> — the message level;</li>
-<li> <i>mess</i> — the message text.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;put</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_SYS/%2fserv%2fmess"</span><span class="nt">&gt;</span>
+<li> <i>mess</i> — the message text.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;put</span> <span class="na">path=</span><span class="s">"/Archive/FSArch/mess_SYS/%2fserv%2fmess"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;it</span> <span class="na">cat=</span><span class="s">"/sub_UI/mod_QTCfg/"</span> <span class="na">lev=</span><span class="s">"1"</span> <span class="na">tm=</span><span class="s">"1674549865"</span> <span class="na">tmu=</span><span class="s">"856668"</span><span class="nt">&gt;</span>
 roman| '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/fnc_test1/%2fexec%2fio%2fin' changed to: '<span class="ni">&amp;lt;</span>info path="/Archive" /<span class="ni">&amp;gt;</span>'!
   <span class="nt">&lt;/it&gt;</span>
@@ -3596,23 +3582,22 @@ roman| Pressed down '/SimulatorStation/sub_DAQ/mod_JavaLikeCalc/lib_Controller/f
   <span class="nt">&lt;/it&gt;</span>
 <span class="nt">&lt;/put&gt;</span>
 </pre></div>
-<p><b><u>Obtaining the information of the value archive</u></b><br />
-REQ: <i>&lt;info path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" arch="<b>{archiver}</b>" /&gt;</i>
+<p><b><u>The value archives</u></b><br />
 </p>
+<dl><dd><b><u>Obtaining the information of the value archive</u></b><br /></dd>
+<dd>REQ: <i>&lt;info path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" arch="<b>{archiver}</b>" /&gt;</i>
 <ul><li> <i>ARCH</i> — identifier of the value archive;</li>
-<li> <i>archiver</i> — whole identifier of the value archiver or empty for the value buffer.</li></ul>
-<p>RESP: <i>&lt;info path="/Archive/va_{ARCH}/%2fserv%2fval" arch="{archiver}" rez="<b>0</b>" end="<b>{end}</b>" beg="<b>{begin}</b>" per="<b>{period}</b>" vtp="<b>{valTp}</b>" /&gt;</i>
-</p>
+<li> <i>archiver</i> — whole identifier of the value archiver or empty for the value buffer.</li></ul></dd>
+<dd>RESP: <i>&lt;info path="/Archive/va_{ARCH}/%2fserv%2fval" arch="{archiver}" rez="<b>0</b>" end="<b>{end}</b>" beg="<b>{begin}</b>" per="<b>{period}</b>" vtp="<b>{valTp}</b>" /&gt;</i>
 <ul><li> <i>end</i> — time of the last value in the archive in microseconds and the seconds part as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>begin</i> — time of the first value in the archive in microseconds and the seconds part as the UNIX time stamp from 01.01.1970;</li>
 <li> <i>period</i> — the archiver periodicity or the value buffer at the archiver missing, in microseconds;</li>
-<li> <i>valTp</i> — value type, see to the object <a href="#TFld">#TFld</a>.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;info</span> <span class="na">arch=</span><span class="s">"FSArch.1s"</span> <span class="na">beg=</span><span class="s">"1665239503000000"</span> <span class="na">end=</span><span class="s">"1674581638000000"</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"1000000"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"4"</span> <span class="nt">/&gt;</span>
+<li> <i>valTp</i> — value type, see to the object <a href="#TFld">#TFld</a>.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;info</span> <span class="na">arch=</span><span class="s">"FSArch.1s"</span> <span class="na">beg=</span><span class="s">"1665239503000000"</span> <span class="na">end=</span><span class="s">"1674581638000000"</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"1000000"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"4"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Requesting the values of the value archive</u></b><br />
-Very generic request of values of the value archives.<br />
-REQ: <i>&lt;get path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" local="<b>{localReq}</b>" per="<b>{period}</b>" mode="<b>{mode}</b>" round_perc="<b>{rndPerc}</b>" real_prec="<b>{realPrec}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Requesting the values of the value archive</u></b><br /></dd>
+<dd>Very generic request of values of the value archives.<br /></dd>
+<dd>REQ: <i>&lt;get path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" local="<b>{localReq}</b>" per="<b>{period}</b>" mode="<b>{mode}</b>" round_perc="<b>{rndPerc}</b>" real_prec="<b>{realPrec}</b>" /&gt;</i>
 <ul><li> <i>ARCH</i> — identifier of the value archive;</li>
 <li> <i>time</i> — time of the last requesting value in microseconds and the seconds part as the UNIX time stamp from 01.01.1970; for zero value there used the system current time;</li>
 <li> <i>tmGrnd</i> — time of the first requesting value in microseconds and the seconds part as the UNIX time stamp from 01.01.1970; for zero value there performed only current value request;</li>
@@ -3620,30 +3605,29 @@ REQ: <i>&lt;get path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" tm="<b>{time}</b>
 <li> <i>localReq</i> — sign [0|1] of the local requesting without requesting the redundant station for the missing data;</li>
 <li> <i>period</i> — period in which the values request, in microseconds; there used the maximum period from the archive period;</li>
 <li> <i>mode</i> — mode of the archive values representing, see to the enumeration ServReqDtMode of the <a href="#TVArchive">#TVArchive</a> object;</li></ul>
-<dl><dd><ul><li> DMSimple(0) — simple record, one item per line; in the case of the string archive type the values are encoded to exclude the newlines characters;</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
+<dl><dd><ul><li> DMSimple(0) — simple record, one item per line; in the case of the string archive type the values are encoded to exclude the newlines characters;</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40px">
 34.5678
 23.6543
 65.8754
 34.6523</pre>
-<dl><dd><ul><li> DMPack(1) — packed record, one adjacent equal (rounded) value per line; before each value there is indicated its position number separated by the space from the value;</li></ul></dd></dl>
-<pre style="white-space: pre-wrap; margin-left: 30px">
+<dl><dd><dl><dd><ul><li> DMPack(1) — packed record, one adjacent equal (rounded) value per line; before each value there is indicated its position number separated by the space from the value;</li></ul></dd></dl></dd></dl>
+<pre style="white-space: pre-wrap; margin-left: 40px">
 0 34.5678
 1 23.6543
 4 65.8754
 6 34.6523</pre>
-<dl><dd><ul><li> DMBin(2) — array of unpacked binary values, encoded by Base64; cannot to be used for string archives.</li></ul></dd></dl>
+<dl><dd><dl><dd><ul><li> DMBin(2) — array of unpacked binary values, encoded by Base64; cannot to be used for string archives.</li></ul></dd></dl>
 <ul><li> <i>rndPerc</i> — percent of the real values rounding, that is meant as equal ones;</li>
-<li> <i>realPrec</i> — precision of the real values at conversion in string, 15 by default.</li></ul>
-<p>RESP: <i>&lt;get path="/Archive/va_{ARCH}/%2fserv%2fval" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" local="{localReq}" per="<b>{period}</b>" mode="{mode}" round_perc="{rndPerc}" real_prec="{realPrec}" rez="0" vtp="<b>{valType}</b>"&gt;<b>{values}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>realPrec</i> — precision of the real values at conversion in string, 15 by default.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/Archive/va_{ARCH}/%2fserv%2fval" tm="<b>{time}</b>" tm_grnd="<b>{tmGrnd}</b>" arch="<b>{archiver}</b>" local="{localReq}" per="<b>{period}</b>" mode="{mode}" round_perc="{rndPerc}" real_prec="{realPrec}" rez="0" vtp="<b>{valType}</b>"&gt;<b>{values}</b>&lt;/get&gt;</i>
 <ul><li> <i>archiver</i> — is set to the selected archiver at empty here in the request;</li>
 <li> <i>time</i> — is set to the requested value real time at the single value requesting or to time of the last-end value at the value block;</li>
 <li> <i>tmGrnd</i> — is set to the first-ground value of the value block;</li>
 <li> <i>period</i> — is set to the real data period in the value block;</li>
 <li> <i>valType</i> — is set to the data type in the value block;</li>
-<li> <i>values</i> — one value for the single value requesting or the value block formatted corresponding to the "mode".</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">arch=</span><span class="s">"FSArch.1s"</span> <span class="na">mode=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"10000000"</span> <span class="na">real_prec=</span><span class="s">"7"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">round_perc=</span><span class="s">"0.1"</span>
+<li> <i>values</i> — one value for the single value requesting or the value block formatted corresponding to the "mode".</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">arch=</span><span class="s">"FSArch.1s"</span> <span class="na">mode=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">per=</span><span class="s">"10000000"</span> <span class="na">real_prec=</span><span class="s">"7"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">round_perc=</span><span class="s">"0.1"</span>
      <span class="na">tm=</span><span class="s">"1674581630000000"</span> <span class="na">tm_grnd=</span><span class="s">"1674581500000000"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">vtp=</span><span class="s">"4"</span><span class="nt">&gt;</span>
 0 <span class="ni">&amp;lt;</span>EVAL<span class="ni">&amp;gt;</span>
 7 45.23046
@@ -3651,64 +3635,94 @@ REQ: <i>&lt;get path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" tm="<b>{time}</b>
 13 45.08281
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Requesting the name of the archive depending on presence the DAQ attribute link</u></b><br />
-REQ: <i>&lt;name path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" /&gt;</i><br />
-</p>
-<ul><li> <i>ARCH</i> — the value archive identifier.</li></ul>
-<p>RESP: <i>&lt;name path="/Archive/va_{ARCH}/%2fserv%2fval" rez="<b>0</b>"&gt;<b>{name}</b>&lt;/name&gt;</i>
-</p>
-<ul><li> <i>name</i> — name of the requested archive.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;name</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>F3.var<span class="nt">&lt;/name&gt;</span>
+<dl><dd><b><u>Requesting the name of the archive depending on presence the DAQ attribute link</u></b><br /></dd>
+<dd>REQ: <i>&lt;name path="/Archive/va_<b>{ARCH}</b>/%2fserv%2fval" /&gt;</i><br />
+<ul><li> <i>ARCH</i> — the value archive identifier.</li></ul></dd>
+<dd>RESP: <i>&lt;name path="/Archive/va_{ARCH}/%2fserv%2fval" rez="<b>0</b>"&gt;<b>{name}</b>&lt;/name&gt;</i>
+<ul><li> <i>name</i> — name of the requested archive.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;name</span> <span class="na">path=</span><span class="s">"/Archive/va_F3_var/%2fserv%2fval"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>F3.var<span class="nt">&lt;/name&gt;</span>
 </pre></div>
 <h4><span class="mw-headline" id="The_subsystem_.22User_Interfaces_.28UI.29.22"><span class="mw-headline-number">14.4.5</span> The subsystem "User Interfaces (UI)"</span></h4>
 <h5><span class="mw-headline" id="The_module_VCAEngine"><span class="mw-headline-number">14.4.5.1</span> The module <a href="Modules/VCAEngine.html" title="Special:MyLanguage/Modules/VCAEngine">VCAEngine</a></span></h5>
-<p><b><u>Obtaining the sessions list of the specified VCA project</u></b><br />
-REQ: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" /&gt;</i>
+<p>Service functions are an interface for accessing OpenSCADA from external systems through the <a href="API.html#CntrNode" title="Special:MyLanguage/Documents/API">Control Interface</a>. This mechanism is the basis of all exchange within OpenSCADA, implemented through weak links and <a href="Modules/SelfSystem.html" title="Special:MyLanguage/Modules/SelfSystem">OpenSCADA's own exchange protocol</a>.
+</p><p><b><u>The common widgets</u></b><br />
 </p>
-<ul><li> <i>project</i> — identifier of the requested project.</li></ul>
-<p>RESP: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="{project}" rez="<b>0</b>"&gt;<b>{sessions}</b>&lt;/list&gt;</i>
-</p>
-<ul><li> <i>sessions</i> — sessions in the "el" tags.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;el&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
-<span class="nt">&lt;/list&gt;</span>
+<dl><dd><b><u>Getting for values of specified or all visual attributes of the widget</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+<ul><li> <i>wAddr</i> — the widget local address, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
+<li> <i>attributes</i> — the only requested attributes in the tags "el" with only one attribute of the identifier "id"; there can be no the attribute tags for requesting all available ones.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
+<ul><li> <i>attributes</i> — processed attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>" act="<b>{active}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
+<li> <i>active</i> — activity state of the attribute, only at the direct requesting;</li>
+<li> <i>value</i> — value of the attribute.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>ElFigure1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_ElFigure1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Connection to the specified VCA project or the project session</u></b><br />
-REQ: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" /&gt;</i>
-</p>
-<ul><li> <i>project</i> — identifier of the requested project, empty for connection to the available session;</li>
-<li> <i>session</i> — identifier of the already present session, empty at a new session creation;</li>
-<li> <i>userChange</i> — sign of the user changing [0|1], that is updation the user information.</li></ul>
-<p>RESP: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
-</p>
-<ul><li> <i>conId</i> — the session connection identifier, used in next requests;</li>
-<li> <i>project</i> — the project identifier of the successfully connected session;</li>
-<li> <i>session</i> — identifier of the new created session of the successfully connected project;</li>
-<li> <i>userIsRoot</i> — the user has the root permition [0|1].</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;connect</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">userIsRoot=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
+<dl><dd><b><u>Setting for group values of the specified widget attributes</u></b><br /></dd>
+<dd>REQ[<b>root-UI</b>]: <i>&lt;set path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+<ul><li> <i>wAddr</i> — the widget local address in the module, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
+<li> <i>attributes</i> — attributes with values in the tags "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>value</i> — setting value of the attribute.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>New name<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>New description<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Disconnection the specified VCA project session</u></b><br />
-Sessions with zero connections are closed here also.<br />
-REQ: <i>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess" sess="<b>{session}</b>" conId="<b>{conId}</b>" /&gt;</i>
-</p>
-<ul><li> <i>session</i> — identifier of the present session;</li>
-<li> <i>conId</i> — the session connection identifier.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;disconnect</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="nt">/&gt;</span>
+<dl><dd><b><u>Getting for values of the visual attributes of the widget branch, optimised for the networks</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattrBr" /&gt;</i>
+<ul><li> <i>wAddr</i> — the widget local address in the module, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1".</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
+<ul><li> <i>attributes</i> — processed attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
+<ul><li> <i>ID</i> — identifier of the attribute;</li>
+<li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
+<li> <i>value</i> — value of the attribute.</li></ul></li>
+<li> <i>widgets</i> — child widgets in the tags "w": <i>&lt;w id="<b>{ID}</b>" lnkPath="<b>{lnkPath}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
+<ul><li> <i>ID</i> — identifier of the widget;</li>
+<li> <i>lnkPath</i> — path to the linked widget for child widgets of the widget libraries.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"AT101_1"</span> <span class="na">lnkPath=</span><span class="s">"/wlb_mnEls/wdg_cooler"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>AT101_1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_AT101_1<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_mnEls/wdg_cooler<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
+    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/el&gt;</span>
+  <span class="nt">&lt;/w&gt;</span>
+<span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Obtaining the widget libraries' tree, optimised for the networks</u></b><br />
-REQ: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="<b>{item}</b>" disIconsW="<b>{disIconsW}</b>" disIconsCW="<b>{disIconsCW}</b>" /&gt;</i>
+<p><b><u>The widget libraries</u></b><br />
 </p>
+<dl><dd><b><u>Obtaining the widget libraries' tree, optimised for the networks</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="<b>{item}</b>" disIconsW="<b>{disIconsW}</b>" disIconsCW="<b>{disIconsCW}</b>" /&gt;</i>
 <ul><li> <i>item</i> — the library item for obtaining, as the path "wlb_<b>{WLib}</b>[/wdg_<b>{Wdg}</b>[/wdg_<b>{ChildWdg}</b>]]", for empty there will be obtained all the tree;</li>
 <li> <i>disIconsW</i> — disable for obtaining the icon data of the widgets [0|1];</li>
-<li> <i>disIconsCW</i> — disable for obtaining the icon data of the child widgets [0|1].</li></ul>
-<p>RESP: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="{item}" disIconsW="{disIconsW}" disIconsCW="{disIconsCW}" rez="<b>0</b>"&gt;<b>{wlibs}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>disIconsCW</i> — disable for obtaining the icon data of the child widgets [0|1].</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="{item}" disIconsW="{disIconsW}" disIconsCW="{disIconsCW}" rez="<b>0</b>"&gt;<b>{wlibs}</b>&lt;/get&gt;</i>
 <ul><li> <i>wlibs</i> — the widget libraries in the "wlb" tags: <i>&lt;wlb id="{ID}" doc="{doc}"&gt;{name} <b>{icon}</b> <b>{widgets}</b>&lt;/wlb&gt;</i>
 <ul><li> <i>icon</i> — the "icon" tag with the Base64 encoded data of the icon;</li>
 <li> <i>widgets</i> — the "w" tags with the library widgets description: <i>&lt;w id="{ID}" doc="{doc}" parent="<b>{parent}</b>"&gt;{name} {icon} <b>{widgets}</b>&lt;/w&gt;</i>
 <ul><li> <i>parent</i> — address of the widget parent;</li>
-<li> <i>widgets</i> — the "сw" tags with the child widgets description: <i>&lt;cw id="{ID}" doc="{doc}"&gt;{name} {icon}&lt;/cw&gt;</i></li></ul></li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">disIconsCW=</span><span class="s">"1"</span> <span class="na">disIconsW=</span><span class="s">"1"</span> <span class="na">item=</span><span class="s">"/wlb_AGLKS"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fwlbBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>widgets</i> — the "сw" tags with the child widgets description: <i>&lt;cw id="{ID}" doc="{doc}"&gt;{name} {icon}&lt;/cw&gt;</i></li></ul></li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">disIconsCW=</span><span class="s">"1"</span> <span class="na">disIconsW=</span><span class="s">"1"</span> <span class="na">item=</span><span class="s">"/wlb_AGLKS"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fwlbBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;wlb</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS
     <span class="nt">&lt;ico&gt;</span>iVBORw0KGgoAA...U5ErkJggg==<span class="nt">&lt;/ico&gt;</span>
     <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"CM101"</span> <span class="na">parent=</span><span class="s">"/wlb_originals/wdg_Box"</span><span class="nt">&gt;</span>CM101
@@ -3738,169 +3752,122 @@ REQ: <i>&lt;get path="/UI/VCAEngine/%2fserv%2fwlbBr" item="<b>{item}</b>" disIco
   <span class="nt">&lt;/wlb&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Obtaining the project list expanded by some options</u></b><br />
-REQ: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="<b>{chkUserPerm}</b>" getChPgN="<b>{getChPgN}</b>" noName="<b>{noName}</b>" /&gt;</i>
+<p><b><u>The VCA projects</u></b><br />
 </p>
+<dl><dd><b><u>Obtaining the project list expanded by some options</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="<b>{chkUserPerm}</b>" getChPgN="<b>{getChPgN}</b>" noName="<b>{noName}</b>" /&gt;</i>
 <ul><li> <i>chkUserPerm</i> — checking for the user permition before listing [0|1];</li>
 <li> <i>getChPgN</i> — requesting for quantity of the child pages in the progects [0|1];</li>
-<li> <i>noName</i> — do not return for names of the pages [0|1].</li></ul>
-<p>RESP: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="{chkUserPerm}" getChPgN="{getChPgN}" noName="{noName}" rez="<b>0</b>"&gt;<b>{projects}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>noName</i> — do not return for names of the pages [0|1].</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/[%2fbr%2fprj_|%2fprm%2fcfg%2fprj]" chkUserPerm="{chkUserPerm}" getChPgN="{getChPgN}" noName="{noName}" rez="<b>0</b>"&gt;<b>{projects}</b>&lt;/get&gt;</i>
 <ul><li> <i>projects</i> — projects list in the tags "el", where the name is in the tag text and the identifier in the attribute "id". Expanded by the extra attributes:
-<ul><li> "chPgN" — quantity of the child pages in the progect at setting "getChPgN".</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">getChPgN=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fbr%2fprj_"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<ul><li> "chPgN" — quantity of the child pages in the progect at setting "getChPgN".</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">getChPgN=</span><span class="s">"1"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fbr%2fprj_"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"AGLKS"</span><span class="nt">&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"archBrowser"</span><span class="nt">&gt;</span>Archives browser<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">chPgN=</span><span class="s">"2"</span> <span class="na">id=</span><span class="s">"tmplSO"</span><span class="nt">&gt;</span>Signal groups (template)<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Getting for values of specified or all visual attributes of the widget</u></b><br />
-REQ: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>wAddr</i> — the widget local address, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
-<li> <i>attributes</i> — the only requested attributes in the tags "el" with only one attribute of the identifier "id"; there can be no the attribute tags for requesting all available ones.</li></ul>
-<p>RESP: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattr" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>attributes</i> — processed attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>" act="<b>{active}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
-<ul><li> <i>ID</i> — identifier of the attribute;</li>
-<li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
-<li> <i>active</i> — activity state of the attribute, only at the direct requesting;</li>
-<li> <i>value</i> — value of the attribute.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>ElFigure1<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_ElFigure1<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_ElFigure<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/get&gt;</span>
+<dl><dd><b><u>Checking for read access to the project from the user of the request</u></b><br /></dd>
+<dd>REQ: <i>&lt;read path="/UI/VCAEngine/prj_<b>{proj}</b>/%2fserv%2faccess" /&gt;</i>
+<ul><li> <i>proj</i> — identifier of the project.</li></ul></dd>
+<dd>RESP: <i>&lt;read path="/UI/VCAEngine/prj_{proj}/%2fserv%2faccess" rez="<b>0</b>"&gt;<b>{access}</b>&lt;/get&gt;</i>
+<ul><li> <i>access</i> — the access presence status [0|1].</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;read</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/prj_AGLKS/%2fserv%2faccess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/read&gt;</span>
 </pre></div>
-<p><b><u>Setting for group values of the specified widget attributes</u></b><br />
-REQ[<b>root-UI</b>]: <i>&lt;set path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattr"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
+<p><b><u>The project sessions</u></b><br />
 </p>
-<ul><li> <i>wAddr</i> — the widget local address in the module, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1";</li>
-<li> <i>attributes</i> — attributes with values in the tags "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
-<ul><li> <i>ID</i> — identifier of the attribute;</li>
-<li> <i>value</i> — setting value of the attribute.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>New name<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>New description<span class="nt">&lt;/el&gt;</span>
-<span class="nt">&lt;/set&gt;</span>
+<dl><dd><b><u>Obtaining the sessions list of the specified VCA project</u></b><br /></dd>
+<dd>REQ: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" /&gt;</i>
+<ul><li> <i>project</i> — identifier of the requested project.</li></ul></dd>
+<dd>RESP: <i>&lt;list path="/UI/VCAEngine/%2fserv%2fsess" prj="{project}" rez="<b>0</b>"&gt;<b>{sessions}</b>&lt;/list&gt;</i>
+<ul><li> <i>sessions</i> — sessions in the "el" tags.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;list</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;el&gt;</span>AGLKS<span class="nt">&lt;/el&gt;</span>
+<span class="nt">&lt;/list&gt;</span>
 </pre></div>
-<p><b><u>Getting for values of the visual attributes of the widget branch, optimised for the networks</u></b><br />
-REQ: <i>&lt;get path="/UI/VCAEngine/<b>{wAddr}</b>/%2fserv%2fattrBr" /&gt;</i>
-</p>
-<ul><li> <i>wAddr</i> — the widget local address in the module, like to "/wlb_AGLKS/wdg_CM101/wdg_ElFigure1".</li></ul>
-<p>RESP: <i>&lt;get path="/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>attributes</i> — processed attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
-<ul><li> <i>ID</i> — identifier of the attribute;</li>
-<li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
-<li> <i>value</i> — value of the attribute.</li></ul></li>
-<li> <i>widgets</i> — child widgets in the tags "w": <i>&lt;w id="<b>{ID}</b>" lnkPath="<b>{lnkPath}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
-<ul><li> <i>ID</i> — identifier of the widget;</li>
-<li> <i>lnkPath</i> — path to the linked widget for child widgets of the widget libraries.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/wlb_AGLKS/wdg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_originals/wdg_Box<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;w</span> <span class="na">id=</span><span class="s">"AT101_1"</span> <span class="na">lnkPath=</span><span class="s">"/wlb_mnEls/wdg_cooler"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"id"</span><span class="nt">&gt;</span>AT101_1<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"path"</span><span class="nt">&gt;</span>/wlb_AGLKS/wdg_CM101/wdg_AT101_1<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"parent"</span><span class="nt">&gt;</span>/wlb_mnEls/wdg_cooler<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"owner"</span><span class="nt">&gt;</span>root:UI<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span><span class="nt">&gt;</span>948<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
-    <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>АТ101 1<span class="nt">&lt;/el&gt;</span>
-  <span class="nt">&lt;/w&gt;</span>
-<span class="nt">&lt;/get&gt;</span>
+<dl><dd><b><u>Connection to the specified VCA project or the project session</u></b><br /></dd>
+<dd>REQ: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="<b>{userChange}</b>" /&gt;</i>
+<ul><li> <i>project</i> — identifier of the requested project, empty for connection to the available session;</li>
+<li> <i>session</i> — identifier of the already present session, empty at a new session creation;</li>
+<li> <i>userChange</i> — sign of the user changing [0|1], that is updation the user information.</li></ul></dd>
+<dd>RESP: <i>&lt;connect path="/UI/VCAEngine/%2fserv%2fsess" prj="<b>{project}</b>" sess="<b>{session}</b>" userChange="{userChange}" rez="<b>0</b>" conId="<b>{conId}</b>" userIsRoot="<b>{userIsRoot}</b>" /&gt;</i>
+<ul><li> <i>conId</i> — the session connection identifier, used in next requests;</li>
+<li> <i>project</i> — the project identifier of the successfully connected session;</li>
+<li> <i>session</i> — identifier of the new created session of the successfully connected project;</li>
+<li> <i>userIsRoot</i> — the user has the root permition [0|1].</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;connect</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">prj=</span><span class="s">"AGLKS"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">user=</span><span class="s">"roman"</span> <span class="na">userIsRoot=</span><span class="s">"1"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Checking for read access to the project from the user of the request</u></b><br />
-REQ: <i>&lt;read path="/UI/VCAEngine/prj_<b>{proj}</b>/%2fserv%2faccess" /&gt;</i>
-</p>
-<ul><li> <i>proj</i> — identifier of the project.</li></ul>
-<p>RESP: <i>&lt;read path="/UI/VCAEngine/prj_{proj}/%2fserv%2faccess" rez="<b>0</b>"&gt;<b>{access}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>access</i> — the access presence status [0|1].</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;read</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/prj_AGLKS/%2fserv%2faccess"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/read&gt;</span>
+<dl><dd><b><u>Disconnection the specified VCA project session</u></b><br /></dd>
+<dd>Sessions with zero connections are closed here also.<br /></dd>
+<dd>REQ: <i>&lt;disconnect path="/UI/VCAEngine/%2fserv%2fsess" sess="<b>{session}</b>" conId="<b>{conId}</b>" /&gt;</i>
+<ul><li> <i>session</i> — identifier of the present session;</li>
+<li> <i>conId</i> — the session connection identifier.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;disconnect</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/%2fserv%2fsess"</span> <span class="na">sess=</span><span class="s">"AGLKS"</span> <span class="na">conId=</span><span class="s">"50860885"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Getting for the opened pages list of the project session</u></b><br />
-REQ[<b>{owner}-{grp}</b>]: <i>&lt;openlist path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" conId="<b>{conId}</b>" tm="<b>{clock}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Getting for the opened pages list of the project session</u></b><br /></dd>
+<dd>REQ[<b>{owner}-{grp}</b>]: <i>&lt;openlist path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" conId="<b>{conId}</b>" tm="<b>{clock}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — reading access for the project owner or a user in group and regarding to the project permissions;</li>
 <li> <i>session</i> — identifier of the session;</li>
 <li> <i>conId</i> — the session connection identifier;</li>
-<li> <i>clock</i> — the internal clock (the live cycle) value from the previous processed request, for checking of the changed ones.</li></ul>
-<p>RESP: <i>&lt;openlist path="/UI/VCAEngine/ses_{session}/%2fserv%2fpg" conId="{conId}" tm="<b>{clock}</b>" rez="<b>0</b>"&gt;<b>{pages}</b>&lt;/openlist&gt;</i>
-</p>
+<li> <i>clock</i> — the internal clock (the live cycle) value from the previous processed request, for checking of the changed ones.</li></ul></dd>
+<dd>RESP: <i>&lt;openlist path="/UI/VCAEngine/ses_{session}/%2fserv%2fpg" conId="{conId}" tm="<b>{clock}</b>" rez="<b>0</b>"&gt;<b>{pages}</b>&lt;/openlist&gt;</i>
 <ul><li> <i>clock</i> — the internal clock (the live cycle) value - 1 at the request time;</li>
 <li> <i>pages</i> — pages in the tags "pg": <i>&lt;pg pgGrp="<b>{pgGrp}</b>" updWdg="<b>{nUpdWdgs}</b>"&gt;<b>{ID}</b>&lt;/pg&gt;</i>
 <ul><li> <i>ID</i> — identifier of the page;</li>
 <li> <i>pgGrp</i> — the pages group for early calculation the page including;</li>
-<li> <i>nUpdWdgs</i> — quantity of the updated widgets after the last request and for not empty "clock".</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;openlist</span> <span class="na">conId=</span><span class="s">"52760577"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2fpg"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1403"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>nUpdWdgs</i> — quantity of the updated widgets after the last request and for not empty "clock".</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;openlist</span> <span class="na">conId=</span><span class="s">"52760577"</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2fpg"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"1403"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;pg&gt;</span>/ses_AGLKS/pg_so<span class="nt">&lt;/pg&gt;</span>
   <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"so"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1<span class="nt">&lt;/pg&gt;</span>
   <span class="nt">&lt;pg</span> <span class="na">pgGrp=</span><span class="s">"cntr"</span><span class="nt">&gt;</span>/ses_AGLKS/pg_control/pg_ElCadr<span class="nt">&lt;/pg&gt;</span>
 <span class="nt">&lt;/openlist&gt;</span>
 </pre></div>
-<p><b><u>Opening or closing for the specified page of the project session</u></b><br />
-REQ[<b>{owner}-{grp}</b>]: <i>&lt;[open|close] path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" pg="<b>{page}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Opening or closing for the specified page of the project session</u></b><br /></dd>
+<dd>REQ[<b>{owner}-{grp}</b>]: <i>&lt;[open|close] path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2fpg" pg="<b>{page}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — writing access for the project owner or a user in group and regarding to the project permissions;</li>
 <li> <i>session</i> — identifier of the session;</li>
-<li> <i>page</i> — address of the page in the session context, like to "/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1".</li></ul>
-<p><b><u>Getting for the alarm status and the notification resource of the project session</u></b><br />
-REQ[<b>{owner}-{grp}</b>]: <i>&lt;get path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" mode="<b>{mode}</b>" tp="<b>{typeNtf}</b>" wdg="<b>{widget}</b>" /&gt;</i>
-</p>
+<li> <i>page</i> — address of the page in the session context, like to "/ses_AGLKS/pg_so/pg_1/pg_mn/pg_1".</li></ul></dd></dl>
+<dl><dd><b><u>Getting for the alarm status and the notification resource of the project session</u></b><br /></dd>
+<dd>REQ[<b>{owner}-{grp}</b>]: <i>&lt;get path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" mode="<b>{mode}</b>" tp="<b>{typeNtf}</b>" wdg="<b>{widget}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — reading access for the project owner or a user in group and regarding to the project permissions;</li>
 <li> <i>session</i> — identifier of the session;</li>
 <li> <i>mode</i> — the requesting mode, only "resource" for obtaining the notification resources and empty for the status only;</li>
 <li> <i>typeNtf</i> — the notification type of obtaining the notification resource, see the <a href="#Alarms">alarming section</a>;</li>
-<li> <i>widget</i> — address of the widget for forming the notification resource, empty for global.</li></ul>
-<p>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{session}/%2fserv%2falarm" mode="{mode}" tp="{typeNtf}" rez="<b>0</b>" alarmSt="<b>{alarmSt}</b>" tm="<b>{clock}</b>" wdg="<b>{widget}</b>" resTp="<b>{resTp}</b>" mess="<b>{message}</b>" lang="<b>{language}</b>"&gt;<b>{resource}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>widget</i> — address of the widget for forming the notification resource, empty for global.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{session}/%2fserv%2falarm" mode="{mode}" tp="{typeNtf}" rez="<b>0</b>" alarmSt="<b>{alarmSt}</b>" tm="<b>{clock}</b>" wdg="<b>{widget}</b>" resTp="<b>{resTp}</b>" mess="<b>{message}</b>" lang="<b>{language}</b>"&gt;<b>{resource}</b>&lt;/get&gt;</i>
 <ul><li> <i>alarmSt</i> — the alarm status as that described in the <a href="#Alarms">alarming section</a>;</li>
 <li> <i>clock</i> — the internal clock (the live cycle) value at the notification resource form;</li>
 <li> <i>widget</i> — address of the source widget at the notification resource form;</li>
 <li> <i>message</i> — message of notification from the text;</li>
 <li> <i>language</i> — language of the notification, for the "message" mostly;</li>
 <li> <i>resTp</i> — type of the notification resource;</li>
-<li> <i>resource</i> — resource of the notification encoded by Base64 for the binary data.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">mode=</span><span class="s">"resource"</span> <span class="na">tp=</span><span class="s">"1"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span>
+<li> <i>resource</i> — resource of the notification encoded by Base64 for the binary data.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">mode=</span><span class="s">"resource"</span> <span class="na">tp=</span><span class="s">"1"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span>
      <span class="na">alarmSt=</span><span class="s">"460554"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">resTp=</span><span class="s">"audio/ogg;73.3428"</span> <span class="na">lang=</span><span class="s">"en_US.UTF-8"</span><span class="nt">&gt;</span>
 T2dnUwACA...Dg6gwAjo+PAQ==
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Quietance of the alarm notification of the project session</u></b><br />
-REQ[<b>{owner}-{grp}</b>]: <i>&lt;quietance path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" wdg="<b>{widget}</b>" tmpl="<b>{template}</b>" ret="<b>{return}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Quietance of the alarm notification of the project session</u></b><br /></dd>
+<dd>REQ[<b>{owner}-{grp}</b>]: <i>&lt;quietance path="/UI/VCAEngine/ses_<b>{session}</b>/%2fserv%2falarm" wdg="<b>{widget}</b>" tmpl="<b>{template}</b>" ret="<b>{return}</b>" /&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — reading access for the project owner or a user in group and regarding to the project permissions;</li>
 <li> <i>session</i> — identifier of the session;</li>
 <li> <i>widget</i> — address of the widget for quietance the notification, empty for global;</li>
 <li> <i>template</i> — template of the quietance, that is bitset corresponding to the quieting notification types;</li>
-<li> <i>return</i> — sign of the notification return, that is the quietance disabling.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;quietance</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">tmpl=</span><span class="s">"7"</span> <span class="nt">/&gt;</span>
+<li> <i>return</i> — sign of the notification return, that is the quietance disabling.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;quietance</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/%2fserv%2falarm"</span> <span class="na">tmpl=</span><span class="s">"7"</span> <span class="nt">/&gt;</span>
 </pre></div>
-<p><b><u>Getting for values of the modified visual attributes of the session widget</u></b><br />
-Redefines the common service request of the widgets "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" for the session specific.<br />
-REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" tm="<b>{clock}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Getting for values of the modified visual attributes of the session widget</u></b><br /></dd>
+<dd>Redefines the common service request of the widgets "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" for the session specific.<br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" tm="<b>{clock}</b>" /&gt;</i>
 <ul><li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
-<li> <i>clock</i> — the internal clock (the live cycle) value from the previous processed request, for checking of the changed ones; at zero value there force appended the service-virtual attributes: "perm", "name".</li></ul>
-<p>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattr" tm="{clock}" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>clock</i> — the internal clock (the live cycle) value from the previous processed request, for checking of the changed ones; at zero value there force appended the service-virtual attributes: "perm", "name".</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattr" tm="{clock}" rez="<b>0</b>"&gt;<b>{attributes}</b>&lt;/get&gt;</i>
 <ul><li> <i>attributes</i> — modified from "clock" attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
 <ul><li> <i>ID</i> — identifier of the attribute;</li>
 <li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
-<li> <i>value</i> — value of the attribute.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<li> <i>value</i> — value of the attribute.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>ElFigure<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"en"</span> <span class="na">p=</span><span class="s">"5"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/el&gt;</span>
@@ -3914,24 +3881,22 @@ REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" tm="<b>{c
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"geomZ"</span> <span class="na">p=</span><span class="s">"11"</span><span class="nt">&gt;</span>-9<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Setting for group values of the specified attributes of the session widget</u></b><br />
-Redefines the common service request of the widgets "<i>&lt;set path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" for the session specific like to the "event" attribute processing and detection the user activity-inactivity.<br />
-REQ[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" noUser="<b>{noUser}</b>"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
-</p>
+<dl><dd><b><u>Setting for group values of the specified attributes of the session widget</u></b><br /></dd>
+<dd>Redefines the common service request of the widgets "<i>&lt;set path='/UI/VCAEngine/{wAddr}/%2fserv%2fattr' /&gt;</i>" for the session specific like to the "event" attribute processing and detection the user activity-inactivity.<br /></dd>
+<dd>REQ[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr" noUser="<b>{noUser}</b>"&gt;<b>{attributes}</b>&lt;/set&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — writing access for the project owner or a user in group and regarding to the project permissions;</li>
 <li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
 <li> <i>noUser</i> — don't mark that as a user activity;</li>
 <li> <i>attributes</i> — attributes with values in the tags "el": <i>&lt;el id="<b>{ID}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
 <ul><li> <i>ID</i> — identifier of the attribute;</li>
-<li> <i>value</i> — setting value of the attribute.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
+<li> <i>value</i> — setting value of the attribute.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1/%2fserv%2fattr"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>New name<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"dscr"</span><span class="nt">&gt;</span>New description<span class="nt">&lt;/el&gt;</span>
 <span class="nt">&lt;/set&gt;</span>
 </pre></div>
-<p><b><u>Activating the attribute for using as the visual one and creating that at missing</u></b><br />
-REQ: <i>&lt;activate path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr%2f<b>{aID}</b>" aNm="<b>{aName}</b>" aTp="<b>{aType}</b>" aFlg="<b>{aFlags}</b>" aVls="<b>{aValues}</b>" aNms="<b>{aNames}</b>"&gt;<b>{aDef}</b>&lt;/activate&gt;</i>
-</p>
+<dl><dd><b><u>Activating the attribute for using as the visual one and creating that at missing</u></b><br /></dd>
+<dd>REQ: <i>&lt;activate path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr%2f<b>{aID}</b>" aNm="<b>{aName}</b>" aTp="<b>{aType}</b>" aFlg="<b>{aFlags}</b>" aVls="<b>{aValues}</b>" aNms="<b>{aNames}</b>"&gt;<b>{aDef}</b>&lt;/activate&gt;</i>
 <ul><li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
 <li> <i>aID</i> — identifier of the attribute;</li>
 <li> <i>aName</i> — name of the attribute at it creation;</li>
@@ -3939,25 +3904,23 @@ REQ: <i>&lt;activate path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattr%2f<b>
 <li> <i>aFlags</i> — flags of the attribute at it creation, see to the <a href="API.html#TFld" title="Special:MyLanguage/Documents/API">object TFld</a>;</li>
 <li> <i>aDef</i> — default value of the attribute at it creation;</li>
 <li> <i>aValues</i> — the attribute values for the selective types at it creation;</li>
-<li> <i>aNames</i> — names to values of the attribute for the selective types at it creation.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;activate</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/%2fserv%2fattr%2frunWin"</span> <span class="na">aNm=</span><span class="s">"Run window"</span> <span class="na">aTp=</span><span class="s">"1"</span> <span class="na">aFlg=</span><span class="s">"1"</span> <span class="na">aVls=</span><span class="s">"0;1;2"</span> <span class="na">aNms=</span><span class="s">"Original size;Maximize;Full screen"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/activate&gt;</span>
+<li> <i>aNames</i> — names to values of the attribute for the selective types at it creation.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;activate</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/%2fserv%2fattr%2frunWin"</span> <span class="na">aNm=</span><span class="s">"Run window"</span> <span class="na">aTp=</span><span class="s">"1"</span> <span class="na">aFlg=</span><span class="s">"1"</span> <span class="na">aVls=</span><span class="s">"0;1;2"</span> <span class="na">aNms=</span><span class="s">"Original size;Maximize;Full screen"</span><span class="nt">&gt;</span>0<span class="nt">&lt;/activate&gt;</span>
 </pre></div>
-<p><b><u>Getting for values of the visual attributes of the widget branch of the session, optimised for the networks</u></b><br />
-Redefines the common service request of the widgets "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr' /&gt;</i>" for the session specific.<br />
-REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrBr" tm="<b>{clock}</b>" FullTree="<b>{FullTree}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Getting for values of the visual attributes of the widget branch of the session, optimised for the networks</u></b><br /></dd>
+<dd>Redefines the common service request of the widgets "<i>&lt;get path='/UI/VCAEngine/{wAddr}/%2fserv%2fattrBr' /&gt;</i>" for the session specific.<br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrBr" tm="<b>{clock}</b>" FullTree="<b>{FullTree}</b>" /&gt;</i>
 <ul><li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
 <li> <i>clock</i> — the internal clock (the live cycle) value from the previous processed request, for checking of the changed ones; at zero value there force appended the service-virtual attributes: "perm", "name";</li>
-<li> <i>fullTree</i> — obtaining the full widgets tree independent from presence the changes, without the attributes.</li></ul>
-<p>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrBr" tm="{clock}" FullTree="{FullTree}" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
-</p>
+<li> <i>fullTree</i> — obtaining the full widgets tree independent from presence the changes, without the attributes.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrBr" tm="{clock}" FullTree="{FullTree}" rez="<b>0</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/get&gt;</i>
 <ul><li> <i>attributes</i> — processed attributes in the tags "el": <i>&lt;el id="<b>{ID}</b>" p="<b>{pos}</b>"&gt;<b>{value}</b>&lt;/el&gt;</i>
 <ul><li> <i>ID</i> — identifier of the attribute;</li>
 <li> <i>pos</i> — position-index of the attribute for the standard ones;</li>
 <li> <i>value</i> — value of the attribute.</li></ul></li>
 <li> <i>widgets</i> — child widgets in the tags "w": <i>&lt;w id="<b>{ID}</b>"&gt;<b>{attributes}</b> <b>{widgets}</b>&lt;/w&gt;</i>
-<ul><li> <i>ID</i> — identifier of the widget.</li></ul></li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
+<ul><li> <i>ID</i> — identifier of the widget.</li></ul></li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrBr"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">tm=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"name"</span> <span class="na">p=</span><span class="s">"-4"</span><span class="nt">&gt;</span>CM101<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"perm"</span> <span class="na">p=</span><span class="s">"-3"</span><span class="nt">&gt;</span>6<span class="nt">&lt;/el&gt;</span>
   <span class="nt">&lt;el</span> <span class="na">id=</span><span class="s">"root"</span> <span class="na">p=</span><span class="s">"1"</span><span class="nt">&gt;</span>Box<span class="nt">&lt;/el&gt;</span>
@@ -3979,24 +3942,21 @@ REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrBr" tm="<b>
   <span class="nt">&lt;/w&gt;</span>
 <span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Getting for value of the session specific attribute of the session widget</u></b><br />
-REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>" /&gt;</i>
-</p>
+<dl><dd><b><u>Getting for value of the session specific attribute of the session widget</u></b><br /></dd>
+<dd>REQ: <i>&lt;get path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>" /&gt;</i>
 <ul><li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
-<li> <i>aID</i> — identifier of the session specific attribute.</li></ul>
-<p>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrSess%2f{aID}" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
-</p>
-<ul><li> <i>value</i> — value of the attribute.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>test val<span class="nt">&lt;/get&gt;</span>
+<li> <i>aID</i> — identifier of the session specific attribute.</li></ul></dd>
+<dd>RESP: <i>&lt;get path="/UI/VCAEngine/ses_{wAddr}/%2fserv%2fattrSess%2f{aID}" rez="<b>0</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
+<ul><li> <i>value</i> — value of the attribute.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;get</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span> <span class="na">rez=</span><span class="s">"0"</span> <span class="na">user=</span><span class="s">"roman"</span><span class="nt">&gt;</span>test val<span class="nt">&lt;/get&gt;</span>
 </pre></div>
-<p><b><u>Setting for value of the session specific attribute of the session widget</u></b><br />
-REQ[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
-</p>
+<dl><dd><b><u>Setting for value of the session specific attribute of the session widget</u></b><br /></dd>
+<dd>REQ[<b>{owner}-{grp}</b>]: <i>&lt;set path="/UI/VCAEngine/ses_<b>{wAddr}</b>/%2fserv%2fattrSess%2f<b>{aID}</b>"&gt;<b>{value}</b>&lt;/get&gt;</i>
 <ul><li> <i>owner</i>, <i>grp</i> — writing access for the project owner or a user in group and regarding to the project permissions;</li>
 <li> <i>wAddr</i> — the session widget local address, like to "/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/wdg_ElFigure1";</li>
 <li> <i>aID</i> — identifier of the session specific attribute;</li>
-<li> <i>value</i> — value of the attribute.</li></ul>
-<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 10pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span><span class="nt">&gt;</span>test val<span class="nt">&lt;/set&gt;</span>
+<li> <i>value</i> — value of the attribute.</li></ul></dd></dl>
+<div class="mw-highlight mw-content-ltr" dir="ltr" style="margin-left: 20pt"><pre><span class="nt">&lt;set</span> <span class="na">path=</span><span class="s">"/UI/VCAEngine/ses_AGLKS/pg_so/pg_2/pg_mn/pg_CM101/%2fserv%2fattrSess%2ftestA"</span><span class="nt">&gt;</span>test val<span class="nt">&lt;/set&gt;</span>
 </pre></div>
 <p><br />
 </p>

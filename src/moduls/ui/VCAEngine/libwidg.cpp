@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.VCAEngine file: libwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2006-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -153,12 +153,16 @@ void WidgetLib::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(DB())) throw TError();
 
-    mess_debug(nodePath().c_str(),_("Loading widgets library."));
+    mess_debug(nodePath().c_str(), _("Loading widgets library."));
 
     if(icfg) *(TConfig*)this = *icfg;
     else TBDS::dataGet(DB()+"."+mod->wlbTable(), mod->nodePath()+"LIB", *this);
 
+    if(SYS->cfgCtx() && !enable()) setEnable(true);
+
     passAutoEn = true;
+
+    try {
 
     //Create new widgets
     map<string, bool>	itReg;
@@ -167,7 +171,10 @@ void WidgetLib::load_( TConfig *icfg )
     //cEl.cfgViewAll(false);
     for(int fldCnt = 0; TBDS::dataSeek(fullDB(),mod->nodePath()+tbl(),fldCnt++,cEl,TBDS::UseCache); ) {
 	string fId = cEl.cfg("ID").getS();
-	if(!present(fId)) { add(fId, "", ""); at(fId).at().setEnableByNeed(); }
+	if(!present(fId)) {
+	    add(fId, "", "");
+	    if(!SYS->cfgCtx()) at(fId).at().setEnableByNeed();
+	}
 	at(fId).at().load(&cEl);
 	itReg[fId] = true;
     }
@@ -180,6 +187,8 @@ void WidgetLib::load_( TConfig *icfg )
 	    if(itReg.find(itLs[iIt]) == itReg.end())
 		del(itLs[iIt]);
     }
+
+    } catch(TError&) { }
 
     passAutoEn = false;
 }
@@ -670,10 +679,10 @@ void LWidget::load_( TConfig *icfg )
 
     if(!SYS->chkSelDB(ownerLib().DB())) throw TError();
 
-    //Load generic widget's data
-    string db  = ownerLib().DB();
-    string tbl = ownerLib().tbl();
+    string  db  = ownerLib().DB(),
+	    tbl = (SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").size()) ? SYS->cfgCtx()->attr("srcTbl") : ownerLib().tbl();
 
+    //Load generic widget's data
     if(icfg) *(TConfig*)this = *icfg;
     else {
 	cfg("PROC").setExtVal(true);
@@ -681,10 +690,13 @@ void LWidget::load_( TConfig *icfg )
     }
     if(!calcProgTr()) cfg("PROC").setExtVal(false, true);
 
+    if(SYS->cfgCtx() && !enable()) setEnable(true);
+
     //Inherit modify attributes
     vector<string> als;
     attrList(als);
     string tAttrs = cfg("ATTRS").getS();
+
     for(unsigned iA = 0; iA < als.size(); iA++) {
 	if(!attrPresent(als[iA])) continue;
 	AutoHD<Attr> attr = attrAt(als[iA]);
@@ -705,8 +717,11 @@ void LWidget::loadIO( )
 {
     if(!enable()) return;
 
+    string  db  = ownerLib().DB(),
+	    tbl = (SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").size()) ? SYS->cfgCtx()->attr("srcTbl") : ownerLib().tbl();
+
     //Load widget's work attributes
-    mod->attrsLoad(*this, ownerLib().DB()+"."+ownerLib().tbl(), id(), "", cfg("ATTRS").getS());
+    mod->attrsLoad(*this, db+"."+tbl, id(), "", cfg("ATTRS").getS());
 
     //Force Active, not inherited and not modified attributes, mostly for init the primitives ones.
     /*vector<string> aLs;
@@ -727,10 +742,8 @@ void LWidget::loadIO( )
     if(!isContainer()) return;
     map<string, bool>   itReg;
     TConfig cEl(&mod->elInclWdg());
-    string db  = ownerLib().DB();
-    string tbl = ownerLib().tbl()+"_incl";
     cEl.cfg("IDW").setS(id(),true);
-    for(int fldCnt = 0; TBDS::dataSeek(db+"."+tbl,mod->nodePath()+tbl,fldCnt++,cEl,TBDS::UseCache); ) {
+    for(int fldCnt = 0; TBDS::dataSeek(db+"."+tbl+"_incl",mod->nodePath()+tbl+"_incl",fldCnt++,cEl,TBDS::UseCache); ) {
 	string sid  = cEl.cfg("ID").getS();
 	if(cEl.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);
@@ -763,11 +776,12 @@ void LWidget::save_( )
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl();
 
-    //Save generic attributes
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, id(), "", true));
-
-    //Save generic widget's data
     mTimeStamp = SYS->sysTm();
+
+    //Saving the generic data and attributes
+    if(SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").empty())
+	SYS->cfgCtx()->setAttr("srcTbl", tbl);
+    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, id(), "", true));
     TBDS::dataSet(db+"."+tbl, mod->nodePath()+tbl, *this);
 
     //Save widget's attributes
@@ -1062,12 +1076,19 @@ void CWidget::load_( TConfig *icfg )
 {
     if(!SYS->chkSelDB(ownerLWdg().ownerLib().DB())) throw TError();
 
-    //Load generic widget's data
-    string db  = ownerLWdg().ownerLib().DB();
-    string tbl = ownerLWdg().ownerLib().tbl()+"_incl";
+    string  db  = ownerLWdg().ownerLib().DB(),
+	    tbl = (SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").size()) ? SYS->cfgCtx()->attr("srcTbl") : ownerLWdg().ownerLib().tbl(),
+	    srcW = (SYS->cfgCtx() && SYS->cfgCtx()->attr("srcW").size()) ? SYS->cfgCtx()->attr("srcW") : ownerLWdg().id();
 
+    //Load generic widget's data
     if(icfg) *(TConfig*)this = *icfg;
-    else TBDS::dataGet(db+"."+tbl, mod->nodePath()+tbl, *this);
+    else {
+	if(SYS->cfgCtx()) cfg("IDW").setS(srcW);
+	TBDS::dataGet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
+	if(SYS->cfgCtx()) cfg("IDW").setS(ownerLWdg().id());
+    }
+
+    if(SYS->cfgCtx() && !enable()) setEnable(true);
 
     //Inherit modify attributes
     vector<string> als;
@@ -1083,7 +1104,7 @@ void CWidget::load_( TConfig *icfg )
     }
 
     //Load generic attributes
-    mod->attrsLoad(*this, db+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id(), tAttrs, true);
+    mod->attrsLoad(*this, db+"."+tbl, srcW, id(), tAttrs, true);
 
     //Load all other attributes
     loadIO();
@@ -1093,8 +1114,12 @@ void CWidget::loadIO( )
 {
     if(!enable()) return;
 
+    string  db  = ownerLWdg().ownerLib().DB(),
+	    tbl = (SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").size()) ? SYS->cfgCtx()->attr("srcTbl") : ownerLWdg().ownerLib().tbl(),
+	    srcW = (SYS->cfgCtx() && SYS->cfgCtx()->attr("srcW").size()) ? SYS->cfgCtx()->attr("srcW") : ownerLWdg().id();
+
     //Load widget's work attributes
-    mod->attrsLoad(*this, ownerLWdg().ownerLib().DB()+"."+ownerLWdg().ownerLib().tbl(), ownerLWdg().id(), id(), cfg("ATTRS").getS());
+    mod->attrsLoad(*this, db+"."+tbl, srcW, id(), cfg("ATTRS").getS());
 }
 
 void CWidget::save_( )
@@ -1103,7 +1128,9 @@ void CWidget::save_( )
     string tbl = ownerLWdg().ownerLib().tbl();
 
     //Save generic attributes
-    cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, ownerLWdg().id(), id(), true));
+    if(SYS->cfgCtx() && SYS->cfgCtx()->attr("srcTbl").empty() && SYS->cfgCtx()->attr("srcW").empty())
+	SYS->cfgCtx()->setAttr("srcW", ownerLWdg().id());
+    cfg("ATTRS").setS(mod->attrsSave(*this,db+"."+tbl,ownerLWdg().id(),id(),true));
 
     //Save generic widget's data
     TBDS::dataSet(db+"."+tbl+"_incl", mod->nodePath()+tbl+"_incl", *this);
