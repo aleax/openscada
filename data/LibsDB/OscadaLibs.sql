@@ -13699,7 +13699,7 @@ INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_cs','CS pin number of the 
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_sclk','SCLK pin number of the GPIO',1,64,'11',2,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','pin_miso','MISO pin number of the GPIO',1,64,'9',3,'','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('MAX6675','t','T, °С',2,17,'',4,'','','','','');
-INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','transport','Transport',0,64,'Serial.RD:/dev/rfcomm0:9600',0,'Транспорт','','Serial.RD:/dev/rfcomm0:9600','','');
+INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','transport','Transport',0,64,'Serial.RD:/dev/rfcomm0:9600||1000:40-20',0,'Транспорт','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','V','Volts',2,16,'',2,'Вольти','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','A','Amperes',2,16,'',3,'Ампери','','','','');
 INSERT INTO tmplib_LowDevLib_io VALUES('RDTech','this','Object',4,0,'',21,'Об''єкт','','','','');
@@ -16021,7 +16021,7 @@ This template in first time uses the new output transports connection function S
 Author: Roman Savochenko <roman@oscada.org>
 Total complexity: 0.3 HD
 Thanks: for Ryan Finnie at the protocol initial processing in RDUMTOOL (https://github.com/smandon/rdumtool)
-Version: 1.1.0
+Version: 1.1.1
 License: GPLv2','Шаблон BlueTooth інтерфейсу до RDTech UM24C/UM25C/UM34C. !!!! Наразі перевірено лише на UM24C.
 
 UM24C, UM25C та UM34C від RDTech (RuiDeng) є недорогими пристроями вимірювання прохідної потужності на USB, та вони підтримують достатню колекцію властивостей так само як і забезпечують повний контроль через Bluetooth. Цей шаблон реалізує найбільш явні команди та збір даних, які доступні через Bluetooth інтерфейс пристрою.
@@ -16031,7 +16031,7 @@ UM24C, UM25C та UM34C від RDTech (RuiDeng) є недорогими прис
 Автор: Роман Савоченко <roman@oscada.org>
 Загальна працемісткість: 0.3 ЛД
 Подяки: Райан Фінніє за початкове опрацювання протоколу у RDUMTOOL (https://github.com/smandon/rdumtool)
-Версія: 1.1.0
+Версія: 1.1.1
 Ліцензія: GPLv2',10,0,'JavaLikeCalc.JavaScript
 if(f_start) {
 	recThr_ = recThr; scrBright_ = scrBright; scrTm_ = scrTm;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -1945,8 +1945,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    var cellObj = this.parentNode;
 					    this.parentNode.offsetParent.setVal(this.value, this.parentNode.parentNode.rowIndex-1, this.parentNode.cellIndex-1);
 					    //  Order the refitting at not fixed columns
-					    if(cellObj.innerHTML.length < 50 && cellObj.innerHTML.length != cellObj.svInnerHTML.length &&
-						    !cellObj.offsetParent.tHead.rows[0].cells[cellObj.cellIndex].widthSrc.length) {
+					    if((cellObj.innerHTML.length < 50 || cellObj.svInnerHTML.length < 50) &&
+						    cellObj.innerHTML.length != cellObj.svInnerHTML.length &&
+						    !cellObj.offsetParent.tHead.rows[0].cells[cellObj.cellIndex].widthSrc.length)
+					    {
 						var isGrow = (cellObj.innerHTML.length > cellObj.svInnerHTML.length);
 						var tRows = cellObj.offsetParent.tBodies[0].rows;
 						for(var iR = 0; iR < tRows.length; iR++)

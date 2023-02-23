@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -59,7 +59,7 @@
 #define MOD_NAME	trS("Qt GUI starter")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define MOD_VER		"5.14.2"
+#define MOD_VER		"5.14.3"
 #define AUTHORS		trS("Roman Savochenko")
 #define DESCRIPTION	trS("Provides the Qt GUI starter. Qt-starter is the only and compulsory component for all GUI modules based on the Qt library.")
 #define LICENSE		"GPL2"
@@ -1074,7 +1074,7 @@ void StApp::startDialog( )
 //*************************************************
 //* StartDialog                                   *
 //*************************************************
-StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmr(NULL)
+StartDialog::StartDialog( ) : logo(NULL), prjsLs(NULL), prjsBt(NULL), updTmr(NULL), logoImgSz(0)
 {
     if(SYS->prjCustMode()) setWindowTitle(_("Qt-starter of OpenSCADA"));
     else if(SYS->prjNm().size()) setWindowTitle(QString(_("Project: %1")).arg(SYS->prjNm().c_str()));
@@ -1140,13 +1140,14 @@ StartDialog::StartDialog( ) : prjsLs(NULL), prjsBt(NULL), updTmr(NULL)
 
     QPixmap pxImg(":/images/logo.png");
     if(!pxImg.isNull()) {
-	QLabel *logo = new QLabel(this);
+	logo = new QLabel(this);
 	logo->setPixmap(pxImg);
 	logo->setAutoFillBackground(true);
 	QPalette plt = logo->palette();
 	plt.setBrush(QPalette::Window, pxImg.copy(pxImg.width()-1, 0, 1, pxImg.height()));
 	logo->setPalette(plt);
 	wnd_lay->addWidget(logo);
+	logoImgSz = pxImg.height();
     }
 
     //Append the title and the list of Qt modules of OpenSCADA
@@ -1287,6 +1288,11 @@ bool StartDialog::eventFilter( QObject *object, QEvent *event )
     if(object == prjsLs && updTmr) updTmr->start(1e3*prmWait_TM);	//Delay the updating at some activity in the project list
 
     return false;
+}
+
+void StartDialog::resizeEvent( QResizeEvent *event )
+{
+    if(logo) logo->setVisible(height()/3 > logoImgSz);
 }
 
 void StartDialog::updatePrjList( bool force, const string &stage )

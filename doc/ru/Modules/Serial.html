@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="ru">Модули/Serial</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial">Modules/Serial</a> and the translation is 100% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Serial.html" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Serial.html" title="Модулі/Serial (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="ru"><div class="mw-pt-translate-header noprint" dir="ltr" lang="en">This page is a <span class="plainlinks"><a class="external text" href="http://oscada.org/wiki/index.php?title=Special:Translate&amp;group=page-Modules%2FSerial&amp;action=page&amp;filter=&amp;language=ru" rel="nofollow noreferrer noopener" target="_blank">translated version</a></span> of the page <a class="external" href="http://oscada.org/wiki/Modules/Serial" title="Modules/Serial">Modules/Serial</a> and the translation is 97% complete.</div><hr /><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><a class="mw-pt-languages-ui mw-pt-progress mw-pt-progress--complete" href="../../en/Modules/Serial.html" title="Modules/Serial (100% translated)">English</a>&nbsp;• ‎<span class="mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">mRussian</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Serial.html" title="Модулі/Serial (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -111,31 +111,32 @@
 </p><p>Главная вкладка страницы конфигурации выходного последовательного интерфейса изображёна на рисунке 3.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:680px;"><a class="image" href="http://oscada.org/wiki/File:Serial_out_ru.png"><img class="thumbimage" height="578" src="../files/Serial_out_ru.png" width="678" /></a>  <div class="thumbcaption">Рис.3. Главная вкладка страницы конфигурации выходного последовательного интерфейса.</div></div></div></div>
-<p>С помощью этого диалога можно установить:
+<p>Using this dialog you can set:
 </p>
-<ul><li> Состояние транспорта, а именно: статус, "Подключение" и имя БД, содержащей конфигурацию.</li>
-<li> Идентификатор, имя и описание транспорта.</li>
-<li> Адрес интерфейса в формате строки: "<b>{dev}:{spd}:{format}[:{opts}[:{modTel}]]</b>", где:
-<ul><li> <i>dev</i> — адрес последовательного устройства (/dev/ttyS0);</li>
-<li> <i>spd</i> — скорость последовательного устройства из ряда: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 или 921600;</li>
-<li> <i>format</i> — формат асинхронных данных "<b>{размер}{чётность}{стоп}</b>" (8N1, 7E1, 5O2, ...);</li>
-<li> <i>opts</i> — различные параметры, в основном для управления потоком, разделённые символом ',':
-<ul><li> "[-]h" — аппаратное (CRTSCTS);</li>
-<li> "[-]s" — программное (IXON|IXOFF);</li>
-<li> "rts" — использование RTS сигнала для передачи(false) и проверки на эхо, для сырого RS-485;</li>
-<li> "rts1" — использование RTS сигнала для передачи(true) и проверки на эхо, для сырого RS-485;</li>
-<li> "rtsne" — использование RTS сигнала для передачи(false) без проверки на эхо, для сырого RS-485;</li>
-<li> "rts1ne" — использование RTS сигнала для передачи(true) без проверки на эхо, для сырого RS-485;</li>
-<li> "[-]RS485" — использовать RS-485 режим, посредством TIOCSRS485.</li></ul></li>
-<li> <i>modTel</i> — телефон модема, присутствие этого поля переключает транспорт на работу в режиме модема.</li></ul></li>
-<li> Временные интервалы интерфейса в формате строки: "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", где:
-<ul><li> <i>conn</i> — максимальное время ожидания ответа подключения, в миллисекундах — т.е. ответа от удалённого устройства;</li>
-<li> <i>symbol</i> — максимальное время одного символа, используется для обнаружения окончания фрейма и таймаута следующего запроса, в миллисекундах;</li>
-<li> <i>NextReqMult</i> — множитель времени следующего запроса к времени символа <i>symbol</i>, 4 по умолчанию;</li>
-<li> <i>KeepAliveTm</i> — таймаут жизни для перезапуска транспорта, в секундах; используйте значение &lt; 0 для останова транспорта после отсутствия ответа на любой запрос;</li>
-<li> <i>rtsDelay1</i> — задержка между включением передатчика сигналом RTS и началом передачи, в миллисекундах;</li>
-<li> <i>rtsDelay2</i> — задержка между окончанием передачи и отключением передатчика сигналом RTS, в миллисекундах.</li></ul></li>
-<li> Не отключать при обработке. Иногда закрытие открытого устройства может быть разрушительным, например, на ПЛК LP от ICP-DAS, и вы можете предотвратить это данной опцией.</li></ul>
+<ul><li> The state of transport, that is: status, "Connect" and name of the database, containing the configuration.</li>
+<li> Identifier, name and description of the transport.</li>
+<li> Address of the transport in the format "<b>{dev}:{spd}:{format}[:{opts}[:{modTel}]]</b>", where:
+<ul><li> <i>dev</i> — address of the serial device (/dev/ttyS0);</li>
+<li> <i>spd</i> — speed of the serial devices from a number: 300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000 or 921600;</li>
+<li> <i>format</i> — asynchronous data format "<b>{size}{parity}{stop}</b>" (8N1, 7E1, 5O2, ...);</li>
+<li> <i>opts</i> — different options, mostly for flow control, separated by ',':
+<ul><li> "[-]h" — hardware (CRTSCTS);</li>
+<li> "[-]s" — software (IXON|IXOFF);</li>
+<li> "rts" — using of the RTS signal for transferring(false) and checking for echo, for raw RS-485;</li>
+<li> "rts1" — using of the RTS signal for transferring(true) and checking for echo, for raw RS-485;</li>
+<li> "rtsne" — using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;</li>
+<li> "rts1ne" — using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;</li>
+<li> "[-]RS485" — using RS-485 mode, through TIOCSRS485.</li></ul></li>
+<li> <i>modTel</i> — modem phone, presence of this field switches transport to work in the modem mode.</li></ul></li>
+<li> Time intervals of the interface in format of the string "<b>{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]</b>", where:
+<ul><li> <i>conn</i> — maximum time of waiting the connecting response, in milliseconds;</li>
+<li> <i>symbol</i> — maximum time of one symbol, used for the frame end detection, in milliseconds;</li>
+<li> <i>NextReqMult</i> — next request's multiplicator to the <i>symbol</i> time, 4 by default;</li>
+<li> <i>KeepAliveTm</i> — keep alive timeout to restart the transport, in seconds; use the value &lt; 0 for stopping the transport after missing response at each request;</li>
+<li> <i>rtsDelay1</i> — delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;</li>
+<li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li></ul>
+<dl><dd> Can be prioritatile specified into the address field as the second global argument, as such "<b>/dev/rfcomm0:9600||1000:40-20</b>".</dd></dl>
+<ul><li> Do not disconnect at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>
 <p>Транспорт поддерживает возможность работы в режиме модема. Данный режим включается наличием пятого параметра адреса и подразумевает осуществление звонка по телефону, указанному этим параметром, в момент запуска транспорта. После установки связи с удалённым модемом все запросы передачи направляются станции за удалённым модемом. Отключение сеанса связи, с остановкой транспорта, осуществляется по таймауту активности.
 </p><p>Для настройки модема выходного транспорта предусмотрена специальная вкладка "Модем" (рис.4).
 </p>

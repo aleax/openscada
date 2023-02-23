@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2005-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -49,6 +49,7 @@ class QSplashScreen;
 class QListWidget;
 class QPushButton;
 class QMenu;
+class QLabel;
 
 using namespace OSCADA;
 
@@ -87,13 +88,17 @@ protected:
     //Methods
     void showEvent( QShowEvent* );
     void closeEvent( QCloseEvent* );
+    void resizeEvent( QResizeEvent* );
 
 private:
     //Attributes
+    QLabel	*logo;
     QListWidget	*prjsLs;
     QPushButton	*prjsBt;
 
     QTimer	*updTmr;
+
+    unsigned	logoImgSz;
 
     //Methods
     bool eventFilter( QObject *object, QEvent *event );

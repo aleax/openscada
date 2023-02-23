@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Libs/Main graphical elements</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (90% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../ru/Libs_Main_graphical_elements.html" title="Библиотеки/Основные графические элементы (88% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../uk/Libs_Main_graphical_elements.html" title="Бібліотеки/Основні графічні елементи (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -46,9 +46,9 @@
 <li> <b>Initially created:</b> in <a class="external text" href="http://wiki.oscada.org/HomePageEn/Using/GraphicElementsLibraries/MainElements" rel="nofollow noreferrer noopener" target="_blank">the old Wiki</a></li>
 <li> <b>Used by:</b> <a class="external" href="http://oscada.org/wiki/Special:MyLanguage/Using" title="Special:MyLanguage/Using">most projects on OpenSCADA</a></li>
 <li> <b><a href="To_do.html" title="Special:MyLanguage/Works/To do">To Do</a>:</b></li></ul>
-<dl><dd> - <a href="#storeHouse">Storehouse</a>: expand for the detailed viewer and editor of the specific fields, starting those fields in whole;</dd>
-<dd> - <a href="#storeHouse">Storehouse</a>: expand for generation report documents to the selected items, ready to print and convenient in complete observing;</dd>
-<dd> - <a href="#storeHouse">Storehouse</a>: expand for generation report documents to the main table with accounting the filter settings and natural show the specific fields.</dd></dl>
+<dl><dd> + <a href="#storeHouse">Storehouse</a>: generation of the report document of the selected item, which is ready to print and convenient in complete observing;</dd>
+<dd> + <a href="#storeHouse">Storehouse</a>: generation of the report document of the main table with accounting the filter settings and natural show the specific fields;</dd>
+<dd> - <a href="#storeHouse">Storehouse</a>: detailed control panel of the selected item with the specific fields.</dd></dl>
 </td></tr></table>
 <p>The library is created to provide main elements of the user interface and it contains graphic elements, often need when forming the user interface of the automation of technological and common processes. The library is built on the basis <a href="Modules/VCAEngine.html#WidgetPrimitives" title="Special:MyLanguage/Modules/VCAEngine">primitives of the widgets</a> and the internal programming language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc</a>.
 </p><p>The element's names and their parameters are available in languages: English, Ukrainian and mRussian. Their source code wrote in the human-language independent mode with calls for the translations by the function <i>tr()</i> and the message's translation also allowed for English, Ukrainian and mRussian.
@@ -99,7 +99,7 @@ sqlite3 -init vcaBase.sql vcaBase.db .exit
 <li class="toclevel-2"><a href="#Regulator.27s_control_panel_.28cntrRegul.29"><span class="tocnumber">3.5</span> <span class="toctext">Regulator's control panel (cntrRegul)</span></a></li>
 <li class="toclevel-2"><a href="#Alarms_.E2.80.94_state_.28alarmsSt.29"><span class="tocnumber">3.6</span> <span class="toctext">Alarms — state (alarmsSt)</span></a>
 <ul>
-<li class="toclevel-3"><a href="#Alarms_.E2.80.94_report_.28alarmsStReport.29"><span class="tocnumber">3.6.1</span> <span class="toctext">Alarms — report (alarmsStReport)</span></a></li>
+<li class="toclevel-3"><a href="#Report_.28alarmsStReport.29"><span class="tocnumber">3.6.1</span> <span class="toctext">Report (alarmsStReport)</span></a></li>
 </ul>
 </li>
 <li class="toclevel-2"><a href="#Users_manager_.28userManager.29"><span class="tocnumber">3.7</span> <span class="toctext">Users manager (userManager)</span></a></li>
@@ -2131,7 +2131,7 @@ In the runtime mode, a table is created from the active violations list, for the
 <table class="wikitable">
 
 <tr>
-<td> <span id="alarmsStReport" title="#alarmsStReport"><h4><span class="mw-headline" id="Alarms_.E2.80.94_report_.28alarmsStReport.29"><span class="mw-headline-number">3.6.1</span> Alarms — report (<a href="Libs_Main_graphical_elements.html#alarmsStReport" title="Special:MyLanguage/Libs/Main graphical elements">alarmsStReport</a>)</span></h4></span> </td>
+<td> <span id="alarmsStReport" title="#alarmsStReport"><h4><span class="mw-headline" id="Report_.28alarmsStReport.29"><span class="mw-headline-number">3.6.1</span> Report (<a href="Libs_Main_graphical_elements.html#alarmsStReport" title="Special:MyLanguage/Libs/Main graphical elements">alarmsStReport</a>)</span></h4></span> </td>
 <td> 1.0 </td>
 <td> GPLv2 </td>
 <td> * </td>
@@ -2230,7 +2230,7 @@ In the runtime mode, a list is formed with available users and, at their selecti
 <tr>
 <td> <span id="storeHouse" title="#storeHouse"><h3><span class="mw-headline" id="Storehouse_.28storeHouse.29"><span class="mw-headline-number">3.8</span> Storehouse (<a href="Libs_Main_graphical_elements.html#storeHouse" title="Special:MyLanguage/Libs/Main graphical elements">storeHouse</a>)</span></h3></span>
 </td>
-<td> 1.2 </td>
+<td> 1.3 </td>
 <td> GPLv2 </td>
 <td> * </td>
 <td> en, uk
@@ -2275,10 +2275,10 @@ The frame provides currently and in future for next features:
 <ul><li> observing main data of the selected or fixed storehouse classes in a big table with possibility of sorting and filtering by up to five columns;</li>
 <li> editing of content of the table cells in the edition mode;</li>
 <li> adding, copying and removing of records-rows of the table in the edition mode;</li>
-<li> [PLANNED] detailed viewer and editor of the specific fields;</li>
-<li> [PLANNED] generation of report documents of the selected items, which is ready to print and convenient in complete observing;</li>
-<li> [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.</li></ul></li></ul>
-<p>The storehouse classes store in the table "classes" with the fixed table structure "<u><b>CLASS</b></u>, <u><b>ID</b></u>, <b>NAME</b>, <b>TP</b> , <b>TBL</b>, <b>FILTER</b>", where:
+<li> generation of the report document of the selected item, which is ready to print and convenient in complete observing;</li>
+<li> generation of the report document of the main table with accounting the filter settings and natural show the specific fields;</li>
+<li> [PLANNED] detailed control panel of the selected item with the specific fields.</li></ul></li></ul>
+<p>The storehouse classes store in the table "classes" with the fixed table structure "<u><b>CLASS</b></u>, <u><b>ID</b></u>, <b>NAME</b>, <b>TP</b> , <b>TBL</b>, <b>FILTER</b>, <b>PROC</b>", where:
 </p>
 <ul><li> <i>CLASS</i> [varchar(20)] — class ID;</li>
 <li> <i>ID</i> [varchar(20)] — specific field ID of the class;</li>
@@ -2296,6 +2296,8 @@ The frame provides currently and in future for next features:
 <li> <i>FLGS</i> — flags list in values [0|1], currently that is only "Highlight [Cell|Row]";</li>
 <li> <i>color</i> — the background color;</li>
 <li> <i>font</i> — the text font.</li></ul></dd></dl>
+<ul><li> <i>PROC</i> [text] — a procedure of calculation the cell value on the internal language <a href="Modules/JavaLikeCalc.html" title="Special:MyLanguage/Modules/JavaLikeCalc">JavaLikeCalc.JavaScript</a> of OpenSCADA, the column is become the logical one; cells of the logical columns aren't accessible for the manual edition; all cells of the record-row are accessed in the procedure as them IDs, including the calculated one which you have to assign in some value; you can use that feature also as a temporary one, that is install a procedure for calculation and next clean up that;</li></ul>
+<dl><dd> <a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> Setting here a procedure will clean up (set to NULL) all the column cells!</dd></dl>
 <p>Data of storehouse of the corresponded class stores in different table with name "sh_{CLASS}" and the structure "<u><b>ID</b></u>, <b>NAME</b>, <b>DSCR</b>, <b>SP_{ID}1</b>, ..., <b>SP_{ID}N</b>", where:
 </p>
 <ul><li> <i>ID</i> [INT] — automatic index of the table;</li>
@@ -2307,12 +2309,14 @@ The frame provides currently and in future for next features:
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseD.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseD.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8a. The "Storehouse" frame in the development mode.</div></div></div></div>
 <p><b><u>Using — development</u></b><br />
 The widget is designed to perform the role of a page, and should therefore be placed directly in the project's tree. Additionally, into the panels folder of the project, you need to place <a href="#accept">the accepting dialog frame</a> and some attribute configuration is required, below, where no links are provided.
+</p><p>To enable the reporting, you have to place <a href="#alarmsStReport">the frame of alarms reporting</a> in the logical container of panels of the project tree.
 </p><p><b><u>Using — runtime</u></b><br />
 In the runtime mode you will see single big table for class (Fig.3.8b) and data (Fig.3.8c) edition and representing.
 </p><p>In the main class data representing mode the users can observe the table, filter and sort the representing data at the specified fields.
 </p><p>In the main class data edition mode the users, allowed to edit, can add, copy, remove the rows/records and edit the fields.
 </p><p>In the class edition mode, the users, allowed to edit, can add new and remove present (after removing the last item) classes; and add, remove the specific class fields and edit properties of that fields.
 </p><p>For user access limitation there provided now only a mechanism of including the allowed for the class and data edition users to the group "ITW".
+</p><p>To generate a separate report, the user can click a characteristic button in the top right corner.
 </p><p><a class="image" href="http://oscada.org/wiki/File:At.png"><img alt="At.png" height="22" src="files/At.png" width="22" /></a> The frame supports now of working with very big "Periodic processing" value and that value is set now to disabled (the value -2). That is possible by a mechanism of the events early processing and the possibility of control the processing periodicity from the procedure.
 </p>
 <div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:902px;"><a class="image" href="http://oscada.org/wiki/File:LibMainEls_storeHouseClassR.png"><img class="thumbimage" height="580" src="files/LibMainEls_storeHouseClassR.png" width="900" /></a>  <div class="thumbcaption">Fig.3.8b. The "Storehouse" frame in the runtime mode at the class representing.</div></div></div></div>

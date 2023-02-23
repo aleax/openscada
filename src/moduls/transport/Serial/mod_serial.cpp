@@ -1,7 +1,7 @@
 
 //OpenSCADA module Transport.Serial file: mod_serial.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2009-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -55,7 +55,7 @@
 #define MOD_NAME	trS("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"2.6.6"
+#define MOD_VER		"2.6.7"
 #define AUTHORS		trS("Roman Savochenko, Maxim Kochetkov (2016)")
 #define DESCRIPTION	trS("Provides transport based on the serial interfaces.\
  It is used for data exchanging via the serial interfaces of the type RS232, RS485, GSM and similar.")
@@ -132,7 +132,7 @@ TTransportOut *TTr::Out( const string &name, const string &idb ){ return new TTr
 
 string TTr::outAddrHelp( )
 {
-    return _("The serial transport has the address format \"{dev}:{speed}:{format}[:{opts}[:{modTel}]]\", where:\n"
+    return string(_("The serial transport has the address format \"{dev}:{speed}:{format}[:{opts}[:{modTel}]]\", where:\n"
 	"    dev - serial device address (/dev/ttyS0);\n"
 	"    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	"                          230400, 460800, 500000, 576000 or 921600);\n"
@@ -145,7 +145,21 @@ string TTr::outAddrHelp( )
 	"      'rtsne' - using of the RTS signal for transferring(false) and without checking for echo, for raw RS-485;\n"
 	"      'rts1ne' - using of the RTS signal for transferring(true) and without checking for echo, for raw RS-485;\n"
 	"      '[-]RS485' - using RS-485 mode, through TIOCSRS485.\n"
-	"    modTel - modem telephone, the field presence do switch transport to work with modem mode.");
+	"    modTel - modem telephone, the field presence do switch transport to work with modem mode.")) +
+	"\n\n|| " + outTimingsHelp();
+}
+
+string TTr::outTimingsHelp( )
+{
+    return _("Connection timings in the format \"{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]\", where:\n"
+	"    conn - maximum time of waiting the connecting response, in milliseconds;\n"
+	"    symbol - maximum time of one symbol, used for the frame end detection, in milliseconds;\n"
+	"    NextReqMult - next request's multiplicator to the <symbol> time, 4 by default;\n"
+	"    KeepAliveTm - keep alive timeout to reconnect the transport, in seconds;\n"
+	"                  use the value < 0 for disconnecting the transport after missing response at each request;\n"
+	"    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
+	"    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.\n"
+	"Can be prioritatile specified into the address field as the second global argument, as such \"/dev/rfcomm0:9600||1000:40-20\".");
 }
 
 bool TTr::devLock( const string &dn, bool check )
@@ -743,9 +757,9 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	int off = 0;
 	TSYS::ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
 	string suf = (off < (int)addr().size()) ? addr().substr(off) : "";
-	for(unsigned i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
-	    if(opt->childGet(i_t)->text().size())
-		opt->childGet(i_t)->setText(opt->childGet(i_t)->text()+":"+suf);
+	for(unsigned iT = 0; suf.size() && iT < opt->childSize(); iT++)
+	    if(opt->childGet(iT)->text().size())
+		opt->childGet(iT)->setText(opt->childGet(iT)->text()+":"+suf);
     }
     else if(a_path == "/prm/cfg/TMS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
@@ -902,7 +916,7 @@ void TTrOut::setTimings( const string &vl, bool isDef )
     string charTm = TSYS::strParse(vl, 1, ":");
     float wCharTm = vmax(0.01, vmin(1e4,s2r(charTm)));
     string reqRetrMult = TSYS::strParse(charTm, 1, "-");
-    mTimings = reqRetrMult.size() ? TSYS::strMess("%d:%g-%g", wReqTm, wCharTm, vmax(0,vmin(10,s2r(reqRetrMult)))) :
+    mTimings = reqRetrMult.size() ? TSYS::strMess("%d:%g-%g", wReqTm, wCharTm, vmax(0,vmin(100,s2r(reqRetrMult)))) :
 				    TSYS::strMess("%d:%g", wReqTm, wCharTm);
 
     float wKeepAliveTm = vmax(0, vmin(1e3,s2r(TSYS::strParse(vl,2,":"))));
@@ -926,9 +940,14 @@ void TTrOut::start( int tmCon )
     trIn = trOut = respTm = respTmMax = respSymbTmMax = 0;
     bool isLock = false;
 
+    // Reading the global arguments
+    string addr_ = TSYS::strParse(addr(), 0, "||");
+    string tVl;
+    if((tVl=TSYS::strParse(addr(),1,"||")).size()) setTimings(tVl);
+
     try {
 	//Open and setup device
-	mDevPort = TSYS::strParse(addr(), 0, ":");
+	mDevPort = TSYS::strParse(addr_, 0, ":");
 	// Lock device for all serial transports
 	if(!(isLock=mod->devLock(mDevPort))) throw TError(nodePath().c_str(),_("The device '%s' is using now."),mDevPort.c_str());
 
@@ -971,7 +990,7 @@ void TTrOut::start( int tmCon )
 	    tio.c_cc[VMIN] = 0;		//< blocking read until 0 character arrives
 
 	    // Set speed
-	    string speed = sTrm(TSYS::strParse(addr(),1,":"));
+	    string speed = sTrm(TSYS::strParse(addr_, 1, ":"));
 	    if(!speed.empty()) {
 		speed_t tspd = B9600;
 		switch(s2i(speed)) {
@@ -997,7 +1016,7 @@ void TTrOut::start( int tmCon )
 	    }
 
 	    // Set asynchronous data format
-	    string format = sTrm(TSYS::strParse(addr(),2,":"));
+	    string format = sTrm(TSYS::strParse(addr_,2,":"));
 	    if(!format.empty()) {
 		if(format.size() != 3) throw TError(nodePath().c_str(),_("Error the asynchronous data format '%s'."),format.c_str());
 
@@ -1029,7 +1048,7 @@ void TTrOut::start( int tmCon )
 	    }
 
 	    // Set options
-	    string opts = sTrm(TSYS::strParse(addr(),3,":")), opt;
+	    string opts = sTrm(TSYS::strParse(addr_,3,":")), opt;
 	    for(int off = 0; (opt=TSYS::strParse(opts,0,",",&off)).size(); ) {
 		if(strcasecmp(opt.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
 		else if(strcasecmp(opt.c_str(),"-h") == 0)	tio.c_cflag &= ~CRTSCTS;
@@ -1062,7 +1081,7 @@ void TTrOut::start( int tmCon )
 		throw TError(nodePath().c_str(), _("Error the serial port '%s' %s: %s."), mDevPort.c_str(), "tcsetattr", strerror(errno));
 
 	    //Modem connection establish
-	    string telNumb = sTrm(TSYS::strParse(addr(),4,":"));
+	    string telNumb = sTrm(TSYS::strParse(addr_,4,":"));
 	    if(!telNumb.empty()) {
 		// Resource to transfer function alloc
 		runSt = true;
@@ -1190,7 +1209,7 @@ int TTrOut::messIO( const char *oBuf, int oLen, char *iBuf, int iLen, int time )
     string tVl = TSYS::strParse(timings(), 0, ":", &off);
     float wCharTm = s2r(TSYS::strParse(tVl,0,"-"));	//Milliseconds
     tVl = TSYS::strParse(tVl, 1, "-");
-    float reqRetrMult = tVl.size() ? vmax(0,vmin(10,s2r(tVl))) : 4;
+    float reqRetrMult = tVl.size() ? s2r(tVl) : 4;
 
     float wKeepAliveTm = s2r(TSYS::strParse(timings(),0,":",&off));
 
@@ -1418,15 +1437,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,3,
 	    "dest","sel_ed", "select","/prm/cfg/devLS", "help",owner().outAddrHelp().c_str());
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in the format \"{conn}:{symbol}[-{NextReqMult}][:{KeepAliveTm}[:{rtsDelay1}:{rtsDelay2}]]\", where:\n"
-	    "    conn - maximum time of waiting the connecting response, in milliseconds;\n"
-	    "    symbol - maximum time of one symbol, used for the frame end detection, in milliseconds;\n"
-	    "    NextReqMult - next request's multiplicator to the <symbol> time, 4 by default;\n"
-	    "    KeepAliveTm - keep alive timeout to reconnect the transport, in seconds;\n"
-	    "                  use the value < 0 for disconnecting the transport after missing response at each request;\n"
-	    "    rtsDelay1 - delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;\n"
-	    "    rtsDelay2 - delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",((TTr&)owner()).outTimingsHelp().c_str());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/notStopOnProceed",_("Do not disconnect at processing"),RWRWR_,"root",STR_ID,2,"tp","bool", "help",
 	    _("Sometime opened device closing can be breakage, on ICP-DAS LP PLC for example, then you are alowed to prevent it by this option."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID)) {
@@ -1455,9 +1466,9 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	int off = 0;
 	TSYS::ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
 	string suf = (off < (int)addr().size()) ? addr().substr(off) : "";
-	for(unsigned i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
-	    if(opt->childGet(i_t)->text().size())
-		opt->childGet(i_t)->setText(opt->childGet(i_t)->text()+":"+suf);
+	for(unsigned iT = 0; suf.size() && iT < opt->childSize(); iT++)
+	    if(opt->childGet(iT)->text().size())
+		opt->childGet(iT)->setText(opt->childGet(iT)->text()+":"+suf);
     }
     else if(a_path == "/prm/cfg/TMS") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());

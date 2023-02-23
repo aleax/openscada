@@ -11,7 +11,7 @@
 			<div class="mw-indicators">
 </div>
 			<h1 id="firstHeading" lang="en">Modules/Serial</h1>
-		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Serial.html" title="Модули/Serial (100% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Serial.html" title="Модулі/Serial (100% translated)">Українська</a></div></div>
+		</div><div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en"><div class="mw-pt-languages" dir="ltr" lang="en"><div class="mw-pt-languages-list autonym"><span class="mw-pt-languages-ui mw-pt-languages-selected mw-pt-progress mw-pt-progress--complete">English</span>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../ru/Modules/Serial.html" title="Модули/Serial (97% translated)">mRussian</a>&nbsp;• ‎<a class="mw-pt-progress mw-pt-progress--complete" href="../../uk/Modules/Serial.html" title="Модулі/Serial (100% translated)">Українська</a></div></div>
 <table class="wikitable">
 
 <tr>
@@ -134,8 +134,9 @@
 <li> <i>NextReqMult</i> — next request's multiplicator to the <i>symbol</i> time, 4 by default;</li>
 <li> <i>KeepAliveTm</i> — keep alive timeout to restart the transport, in seconds; use the value &lt; 0 for stopping the transport after missing response at each request;</li>
 <li> <i>rtsDelay1</i> — delay between the transmitter activation with RTS signal and start up of the transmission, in milliseconds;</li>
-<li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li>
-<li> Do not disconnect at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>
+<li> <i>rtsDelay2</i> — delay between the transmitting and disconnecting the transmitter with RTS signal, in milliseconds.</li></ul></li></ul>
+<dl><dd> Can be prioritatile specified into the address field as the second global argument, as such "<b>/dev/rfcomm0:9600||1000:40-20</b>".</dd></dl>
+<ul><li> Do not disconnect at processing. Sometimes the closing of an open device can be destructive, for example, on an ICP-DAS LP PLC, and you can prevent it with this option.</li></ul>
 <p>The transport supports the ability to work in the modem mode. This mode is enabled by the fifth parameter presence of the address and it involves making a call on the phone specified by this parameter at the start time of the transport. After establishing a connection to the remote modem, all transmission requests are sent to the remote modem station. Disconnection of a communication session, with the transport stopping, is carried out according to the activity timeout.
 </p><p>To configure the modem of the output transport the special tab "Modem" is provided (Fig. 4).
 </p>

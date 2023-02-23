@@ -1,7 +1,7 @@
 
 //OpenSCADA module UI.Vision file: vis_devel_dlgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2022 by Roman Savochenko, <roman@oscada.org>       *
+ *   Copyright (C) 2007-2023 by Roman Savochenko, <roman@oscada.org>       *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -923,7 +923,7 @@ void LibProjProp::loadMimeData( )
 {
     if(!mimeDataTable->selectedItems().empty()) {
 	InputDlg dlg(this, windowIcon(),
-	    QString(_("Are you sure of loading a mime to selected item '%1'?")).arg(mimeDataTable->selectedItems()[0]->text()),
+	    QString(_("Are you sure of loading data to selected item '%1'?")).arg(mimeDataTable->selectedItems()[0]->text()),
 		    _("Loading the data"), false, false);
 	if(dlg.exec() != QDialog::Accepted) return;
     }

@@ -1,3 +1,16 @@
+2023-02-23 Roman (stable)
+- LibsDB.OscadaLibs: tmplib_LowDevLib.RDTech: The default device address was appended by the timeouts part "||1000:40-20".
+- !!!!:LibsDB.vcaBase: The frame Main.storeHouse was significantly expanded by:
+	- implementation the procedures support for the logical columns;
+	- implementation the report of all visible table and a selected record.
+    The resources of the widget library wlb_Main was updated for the image "edit.png" and appended by the image docIt.png.
+    wlb_Main.alarmsStReport: renamed to "Report" for the common using by Main.storeHouse.
+- Transport.Serial: The output transport expanded for the possibility of setting the timeouts field in the address one.
+- UI.QTStarter: Added by a possibility of the logo dynamic hiding at low height.
+- FIX:UI.Vision: Fixed for some original messages.
+- FIX:UI.WebVision: Fixed in processing the view Table of the primitive FormEl for conditions of the column fitting.
+
+
 2023-02-16 Roman (stable)
 - SYS: Writing to the configuration in XML prevented in doubling the translated field for the configuration contexts.
     NSTR_BUF_LEN(50) splitted to CFG_A_LEN (100) for using in the maximum attribute size of the configuration cell in XML.

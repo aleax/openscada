@@ -4019,123 +4019,134 @@ ABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgB
 AAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAA
 gP3Xlh8AAAAAAABwh9Oy41nffygHABgBAAAAgP3Xlh8AAAAAAABwh9Oq4qk+O+hyAICqAQAAAQD4
 1fbCDAAAAIANAADg6gwAjo+PAQ==');
-INSERT INTO wlb_Main_mime VALUES('edit','image/png;8.78516','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');
+INSERT INTO wlb_Main_mime VALUES('edit','image/png;2.49316','iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBI
+WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5wIWCS8JrDZh/wAAABl0RVh0Q29tbWVudABDcmVhdGVk
+IHdpdGggR0lNUFeBDhcAAAbISURBVFjD7ZdNb9zWFYYPOUPOkBx+zbc0kiaWFAdwXCOGg9ZwAcEw
+WqDeGAnQdYFu+4e6DroL2h/gotlWRVPHcQp0bFmWJXmk0dgz/BySl/denttFpQZ1ZUeOPU4L+AW4
+u4uH7z3nPecCvNM7/bCSXuGsXKlUSv1+X7YsCyRJAs/zYHd3F4ui4AAg5gFYPitcrVbrmqb5oeM4
+rmmaqizLkiRJeRAEk9lstp3n+RgA8h8EcH19XZFl+eN2u/2bixcvdkzTLAOARAihuq5P9/b27ozH
+4z+laboJAMmbBCyd5RAhpMQ57zebzZ9fv369f/PmTePatWv6lStXzNXV1a5hGB9GUfR+EAQ7nPMR
+ABRvA1ABABUAkDGGlFKSZZnJGFtZWFjQV1dXwTQtaLfb0Ol0yr7vW8PhMCCEbCFiPFdAWZYVRVE+
+RsTLkiSlABAh4oxSOvY8rxoEQW9pacloNOpQLiugKGUghFQePXrkBkHgM8YeAgCbG2C32zU0TftV
+rVb7dbVaNRlj24gYI6KXpuneeDyWfN8/5ziOXq+7siTJwjRNoJSah4eHahiGdxHRexOdfSpgp9PR
+er3ezy5fvvxTy7L6URQRxthRURQzIUTAGBt7nuf4vt+V5ZJlGIak67pAxNJw+EQfjUZblNJtAOBz
+AWy1WtXFxcXrN27c+NGlS5cs3/dXGWP1NE0JIj5FxEmWZf5oNOr5vv9Bv78iNxtNlCUJfD8QOzs7
+9+I4/uZNXPOpMTMej7HT6SS1Wo1dvXpVdl13aXNz85e3b99ee/z48WeEkL+qqlqzbdtYX18vWq2W
+DCBAURQwazVZURQFAOS51WCe52qlUrm8vLz80YULF9T19XXR7/dVznnz6Oiok6ap3e0u/GJjY+PH
+t27dqiwu9hALhIwQ2N3ble/du3cQx/FACBG+bh2+KGYkRGypqvrR2tqas7y8LGzbhm63qzLGekmS
+XLl69Sfvf/LJp9r62hoCCKCcAqU5zOJZeW9/vxHHMRRF8QQRo9eBfBFggYhpnuf9Uqm02u/3K5Zl
+Cdd1YWVlpXz+/Hl9Y2NDXl09hyABMMaAUQaccahWq0Ipl60ois4lSVLinO8gYvJ9IV8Y1IhIi6Io
+ZrNZv1wu9zqdjmTbtrBtW6ysrBSO4wiAY7jjL6cUEBGq1aoky7IZhuHSbDbLEXH4fcP7ZZOEF0Vx
+RAiZeJ73PmPMtm1bBgBJURQQ4gSO/hvuBFQIAYZhQLlctqIwfI8xJjPOR4hIXnUMvnQWIyIlhAyD
+IPD29/elg4MDeWtrS50lMzaZTIswCEqqokiICJwxoPRbNwEATNMEVVVdXhQfEELalFKKiE9fZes5
+y7LAKaWHSZLcn06ng+3tbX8wGBx+ffdr/+HDh4ZtW0bNNAERgVEKjDKgNAfOCyiVZLBtGxqNhi6E
+6EVx3Mzz/KkQYnTWEC+d8UcI5/xZlmU7URTdm0wmm8Ph8JvhwVCK4njFsizdMAwQiEAZBUopFJwB
+CAGqqoJt26Jer1eFEAtxFLUyQo6EEJOzBHnpFcpBIGKBiAnnPDoGHvq+b85ms55lmnqtVgPEAihl
+UBTflposSaDrOriOoxacL4Rh2KCMTRHxO50svUaGIgCElNJpGIZ2lmWLzWZTV9UKICIUiP+5IUkS
+VDUNTMtS8jzvJnFcJ3m+I4TwXtY4pdecRCiEmBJCDj3fN0iWLRuGUdU07dTHjizLoBsGOI5TxaJY
+CaPI5pyPhRATIQSfByAAQCGE8PI8HwVh2MyyrO06jqbrOsiyfCqkoevCdhwlS9PlNMvqnPMh5/zZ
+aU6+CcATSD/P8yAMQwcAeq7rVnRdB1mSTndS04SmaVVCyFKappoQYosx5j8/cd4UIAAAF0KMCSGH
+YRi2GWNt13UrumG8ELJWq4GqqtXpZNLI8/x+pVLZJoQU8wKE446c5HnuR1HUQMR2o9GoVDXtvyAF
+AKRpKj8ZDsXO48e70+n0j3Ec7x0339wAT5yc0jyPojjulEqlBdd1FU3TQDqGFP9a6aTBYCDf/eqr
+0cHh4edZln0hhJjNqwafF0UhDgkhz3zf73LO681WS61WKiBJEmRZJj148KD0583N/SfD4e/SNP0c
+EcenbTzzAjxx8lme50kQhk1FUTqO65ZVRYHR0ZH8tzt3ot3d3c+SJPl9URSj56/2bQACADBEfEoI
+mc2S5L1yuVyvVqvl7e1tev/+/b94nvdbzvnePIP6THNcCPEkSZJo6nnGdDotDQaDf4zH4z8wxr78
+rnn8NgBPnBxxzncE4t+n0+kXeZ5/CQAx/A9JAoByq9VSj1+TErzTO/0f6J8O8iqiavBNvwAAAABJ
+RU5ErkJggg==');
+INSERT INTO wlb_Main_mime VALUES('docIt','image/png;7.00098','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
+TkSuQmCC');
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','El_text_alarm','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;alignment;text;',2);
 INSERT INTO wlb_mnEls_incl VALUES('El_box_Alarm','box_alarm','/wlb_mnEls/wdg_El_Alarm','name;geomX;geomY;geomW;geomH;geomXsc;geomYsc;geomZ;fillColor;elLst;',2);
@@ -13486,7 +13497,7 @@ for(off = 0, ev_rez = ""; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	if(ev_cur == "ws_BtPress:/apply")	this.attrSet("pgOpen",false);
 	else ev_rez += ev_cur + "\n";
 }
-event = ev_rez;','','',500,'owner;name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1568902608);
+event = ev_rez;','','',500,'owner;name;dscr;geomW;geomH;pgGrp;backColor;bordWidth;',1677086092);
 INSERT INTO wlb_Main VALUES('storeHouse','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAnCAIAAAAw+tlrAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAB
 gUlEQVRYhe3Sy1LCMBiG4T9NUnviJAiF6rhz7cIb8Ia4Me7GJaMLB8SBUg6ltYU0iVtn3MiI/C7y
 7JN870zIcDh0HAf+xmw2A4DBYHDCO68fHvsNT0khgY6fXxhjrF6vM8YAgNgOsx2tNbft7ye1UqrY
@@ -13503,7 +13514,7 @@ function messByLang(iMess) {
 }
 
 if(f_start) {
-	toUpdate = false;
+	toUpdate = toReport = false;
 	fMax = 5; fClrTo = -1;
 	btClassEdit_en = dataEditable && classEditable;
 	if(classFix.length)	classNm_text = class = classFix;
@@ -13527,7 +13538,7 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; )
 	else if(sval == "ws_BtToggleChange:/btEdit")	toUpdate = true;
 	else if(sval == "ws_CombChange:/classSel") {
 		class = ((tVl=classSel_value.match("\\((.+)\\)$")).length) ? tVl[1] : classSel_value;
-		toUpdate = true; colVars = new Object(); fClrTo = 0;
+		toUpdate = true; colVars = new Object(); fClrTo = 0; dataTbl_value = "";
 	}
 	else if(sval == "ws_LnAccept:/classEd") {
 		class = ((tVl=classEd_value.match("\\((.+)\\)$")).length) ? tVl[1] : classEd_value;
@@ -13561,16 +13572,18 @@ if((f_start || toUpdate) /*&& !classFix.length*/) {
 	itCopy_en = !btClassEdit_value;
 	classEd_en = !classFix.length && btClassEdit_value;
 	classSel_en = !classFix.length && !btClassEdit_value;
+
+	go_report_en = go_reportIt_en = !btClassEdit_value;
 }
 
 //The class edition mode
 if(btClassEdit_value) {
-	SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `classes` (`CLASS` varchar(20) DEFAULT '''', `ID` varchar(20) DEFAULT '''', `NAME` text, `TP` varchar(100) DEFAULT '''', `TBL` varchar(100) DEFAULT '''', `FILTER` text, PRIMARY KEY (`CLASS`,`ID`));", true);
+	SYS.BD.nodeAt(db,".").SQLReq("CREATE TABLE IF NOT EXISTS `classes` (`CLASS` varchar(20) DEFAULT '''', `ID` varchar(20) DEFAULT '''', `NAME` text, `TP` varchar(100) DEFAULT '''', `TBL` varchar(100) DEFAULT '''', `FILTER` text, `PROC` text, PRIMARY KEY (`CLASS`,`ID`));", true);
 
 	//Updation the main table
 	if(f_start || toUpdate) {
 		// Requesting the table structure
-		dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER` FROM `classes` WHERE `CLASS`=''"+class+"'';", false);
+		dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER`,`PROC` FROM `classes` WHERE `CLASS`=''"+class+"'';", false);
 		dataTbl_items = "<tbl sel=''row'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 		for(iR = 0; iR < dataTbl.length; iR++) {
 			dataTbl_items += iR ? "<r>" : "<h>";
@@ -13584,9 +13597,10 @@ if(btClassEdit_value) {
 					else if(itVl == "TP")		itVl = tr("Type");
 					else if(itVl == "TBL")		itVl = tr("Table properties");
 					else if(itVl == "FILTER") itVl = tr("Filter");
+					else if(itVl == "PROC")	{ itVl = tr("Procedure"); opt += " width=''400px''"; }
 				}
 				else {
-				    if(iC == 1 || iC == 4)	tNm = "t";
+				    if(iC == 1 || iC == 4 || iC == 5)	tNm = "t";
 				    if(itVl == "<NULL>")	itVl = "";
 				}
 				dataTbl_items += "<"+tNm+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+tNm+">";
@@ -13626,11 +13640,13 @@ if(btClassEdit_value) {
 			fldID = dataTbl[row+1][0];
 			if(!SYS.BD.nodeAt(db,".").SQLReq("UPDATE `classes` SET `"+colID+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `CLASS`=''"+class+"'' AND `ID`=''"+fldID+"'';",true).err.length) {
 				if(colID == "ID"  && fldID[0] != "*") {
-					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` CHANGE `SP_"+fldID+"` `SP_"+dataTbl_set+"` "+dataTbl[row+1][2].parse(0,":")+";",true);
+					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` CHANGE `SP_"+fldID+"` `SP_"+dataTbl_set+"` "+dataTbl[row+1][2].parse(0,":")+";", true);
 					toCalcCycles = 1; //2000/this.ownerSess().period();
 				}
 				else if(colID == "TP" && (fldID[0] != "*" || fldID == "*NAME"))
-					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `"+(fldID[0]=="*"?fldID.slice(1):"SP_"+fldID)+"` "+dataTbl_set.parse(0,":")+";",true);
+					SYS.BD.nodeAt(db,".").SQLReq("ALTER TABLE `sh_"+class+"` MODIFY `"+(fldID[0]=="*"?fldID.slice(1):"SP_"+fldID)+"` "+dataTbl_set.parse(0,":")+";", true);
+				else if(colID == "PROC" && dataTbl_set.length)
+					SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `SP_"+fldID+"`=NULL;", true);
 			}
 			toUpdate = true;
 		}
@@ -13651,14 +13667,17 @@ if(f_start || toUpdate) {
 		this["fltrCol"+iF].attrSet("items", tr("Disabled")+"\n"+tr("Name")+" (NAME)\n"+tr("Description")+" (DSCR)");
 
 	// Requesting the table structure
-	clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER` FROM `classes` WHERE `CLASS`=''"+class+"'';");
+	clsLs = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,`NAME`,`TP`,`TBL`,`FILTER`,`PROC` FROM `classes` WHERE `CLASS`=''"+class+"'';");
 	clsLsO = new Object();	 clsLsSort = new Array();
+	hasProc = false;		//The scheme has procedures of the logical columns
 	for(iR = 1; iR < clsLs.length; iR++) {
 		clsLsO[clsLs[iR][0]] = tO = new Object();
 		tO.name = ((tO.name=clsLs[iR][1]) == "<NULL>" || !tO.name.length) ? clsLs[iR][0] : messByLang(tO.name);
 		tO.tp = clsLs[iR][2];
 		tO.tbl = clsLs[iR][3];
 		if((tO.fltr=clsLs[iR][4]) == "<NULL>")	tO.fltr = "";
+		if((tO.prc=clsLs[iR][5]) == "<NULL>")	tO.prc = "";
+		if(tO.prc.length) hasProc = true;
 		if(clsLs[iR][0] == "*NAME") {
 			tO.name = (tO.name==clsLs[iR][0]) ? tr("Name") : tO.name;
 			tO.tp = tO.tp.length ? tO.tp : "varchar(200)";
@@ -13682,6 +13701,9 @@ if(f_start || toUpdate) {
 		clsLsReq += (clsLsReq.length?",":"") + "`"+(((tVl=clsLs[clsLsSort[iL].parse(1,":").toInt()][0])[0]=="*")?tVl.slice(1):"SP_"+tVl)+"`";
 
 	//Updation the main table
+	procLng = "JavaLikeCalc.JavaScript";
+	procArgs = new Object();
+
 	// Where prepairing for the filter
 	for(wherePart = "", iF = 0; iF < fMax; iF++) {
 		if(!(tVl=this["fltr"+iF].attr("value")).length)	continue;
@@ -13696,34 +13718,62 @@ if(f_start || toUpdate) {
 	dataTbl = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` "+(wherePart.length?"WHERE"+wherePart:"")+"ORDER BY ''ID'';");
 	dataTbl_items = "<tbl sel=''row'' sortEn=''"+(btEdit_value?0:1)+"'' colsWdthFit=''0'' hHdrVis=''1'' vHdrVis=''1''>\n";
 	colTps = new Object();
+	if(toReport)	tRep = "<body>\n"
+							"<h1>"+classNm_text+"</h1>\n"
+							"<table class=''data'' width=''100%'' export=''1''>\n";
+
 	for(iR = 0; iR < dataTbl.length; iR++) {
 		cntR = optR = "";
-		for(iC = 0; iC < dataTbl[iR].length; iC++) {
-			itVl = dataTbl[iR][iC];
-			opt = "";
-			if(iR == 0) {
+		if(toReport) tRep += "<tr>";
+		//   ... the header
+		if(iR == 0)
+			for(iC = 0; iC < dataTbl[iR].length; iC++) {
+				itVl = dataTbl[iR][iC];
+				opt = "";
 				if(itVl == "ID")	opt += " width=''0px''";
-				else {
-					opt += btEdit_value ? " edit=''1''" : "";
-					if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal())) {
-						if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl].isEVal()) {
-							colVars[itVl] = new Object();
-							colVars[itVl].ls = new Object();
-							colVars[itVl].fltr = tVl.fltr;
-						}
-						itVl = tVl.name;
-						if(tVl.tp.search("bool","i") >= 0)		colTps[iC] = "b";
-						else if(tVl.tp.search("int","i") >= 0)	colTps[iC] = "i";
-						else if(tVl.tp.search("(float|double)","i") >= 0) colTps[iC] = "r";
-						else if(tVl.tp.search("text","i") >= 0)	colTps[iC] = "t";
-						if((tVl2=tVl.tbl.parse(0,":")).length)	opt += " align=''"+tVl2+"''";
-						if((tVl2=tVl.tbl.parse(1,":")).length)	opt += " width=''"+tVl2+"''";
-						//this.messInfo("iC="+iC+"; tp="+tVl.tp+" = "+colTps[iC]+"; tVl.fltr="+tVl.fltr);
+				else if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal()))
+				{
+					if((tVl.fltr == "index" || tVl.fltr.indexOf("list") == 0) && colVars[itVl].isEVal()) {
+						colVars[itVl] = new Object();
+						colVars[itVl].ls = new Object();
+						colVars[itVl].fltr = tVl.fltr;
 					}
+					opt += (btEdit_value && !tVl.prc.length) ? " edit=''1''" : "";
+					itVl = tVl.name;
+					if(tVl.tp.search("bool","i") >= 0)		colTps[iC] = "b";
+					else if(tVl.tp.search("int","i") >= 0)	colTps[iC] = "i";
+					else if(tVl.tp.search("(float|double)","i") >= 0) colTps[iC] = "r";
+					else if(tVl.tp.search("text","i") >= 0)	colTps[iC] = "t";
+					if((tVl2=tVl.tbl.parse(0,":")).length)	opt += " align=''"+tVl2+"''";
+					if((tVl2=tVl.tbl.parse(1,":")).length)	opt += " width=''"+tVl2+"''";
+					//this.messInfo("iC="+iC+"; tp="+tVl.tp+" = "+colTps[iC]+"; tVl.fltr="+tVl.fltr);
 				}
 				cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
+				if(toReport) tRep += "<th>"+SYS.strEncode(itVl,"HTML")+"</th>";
 			}
-			else {
+		//  ... the data
+		else {
+			//  ... prepairing the logical cells
+			if(hasProc) {
+				updReq = "";
+				for(iC = 0; iC < dataTbl[iR].length; iC++)
+					if((itID=dataTbl[0][iC]).indexOf("SP_") == 0)
+						procArgs[itID.slice(3)] = ((itVl=dataTbl[iR][iC]) != "<NULL>") ? itVl : "";
+				for(iC = 0; iC < dataTbl[iR].length; iC++) {
+					if((itID=dataTbl[0][iC]).indexOf("SP_") != 0 || (tClO=clsLsO[(itID=itID.slice(3))]).isEVal() || !tClO.prc.length || dataTbl[iR][iC] != "<NULL>") continue;
+					if(tClO.prcId.isEVal()) tClO.prcId = this.nodePath("_")+"_"+itID;
+					SYS.DAQ.funcCall(procLng, procArgs, tClO.prc, tClO.prcId);
+					dataTbl[iR][iC] = procArgs[itID];
+					updReq += (updReq.length?", ":"") + "`SP_"+itID+"`=''"+SYS.strEncode(procArgs[itID],"SQL")+"''";
+				}
+				if(updReq.length)
+					SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[iR][0]+"'';", true);
+			}
+
+			//  ... representing
+			for(iC = 0; iC < dataTbl[iR].length; iC++) {
+				itVl = dataTbl[iR][iC];
+				opt = "";
 				if(itVl == "<NULL>")	itVl = "";
 				if(!(tVl2=colVars[dataTbl[0][iC]]).isEVal())	{
 					tLs = new Array();
@@ -13740,11 +13790,14 @@ if(f_start || toUpdate) {
 				}
 				if(!colTps[iC].isEVal())	cntR += "<"+colTps[iC]+opt+">"+SYS.strEncode(itVl,"HTML")+"</"+colTps[iC]+">";
 				else cntR += "<s"+opt+">"+SYS.strEncode(itVl,"HTML")+"</s>";
+				if(toReport) tRep += "<td style=''white-space: pre-wrap;"+((colTps[iC]=="t")?"text-align: left;":"")+"''>"+SYS.strEncode(itVl,"HTML")+"</td>";
 			}
 		}
 		dataTbl_items += (iR?"<r":"<h")+optR+">" + cntR + (iR?"</r>\n":"</h>\n");
+		if(toReport) tRep += "</tr>\n";
 	}
-	dataTbl_items += "</tbl>";
+	dataTbl_items += "</tbl>\n";
+	if(toReport) { tRep += "</table>\n</body>\n"; go_report_report = tRep; tRep = ""; }
 
 	//Filter''s selection list update
 	for(iF = 0; iF < fMax; iF++) {
@@ -13764,12 +13817,12 @@ if(f_start || toUpdate) {
 		iFo.attrSet("cfg", fCfg);
 	}
 
-	toUpdate = false;
+	toUpdate = toReport = false;
 }
 
 //Representing events process
 for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
-	itDel_active = itCopy_active = dataTbl_value.length;
+	itDel_active = itCopy_active = go_reportIt_active = dataTbl_value.length;
 	if(sval == "ws_BtRelease:/itAdd") {
 		nmLs = vlLs = "";
 		//Prepairing the filter values
@@ -13795,8 +13848,13 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else if(sval.slice(0,12) == "ws_TableEdit") {
 		col = sval.parse(0,"_",13).toInt(); row = sval.parse(1,"_",13).toInt();
-		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `"+dataTbl[0][col]+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[row+1][0]+"'';");
-		if(colVars[dataTbl[0][col]].fltr.parseLine(1).length)	toUpdate = true, toCalcCycles = 1;
+		//SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET `"+dataTbl[0][col]+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"'' WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[row+1][0]+"'';");
+		updReq = "`"+dataTbl[0][col]+"`=''"+SYS.strEncode(dataTbl_set,"SQL")+"''";
+		for(var itID in clsLsO)
+			if(itID[0] != "*" && clsLsO[itID].prc.length)
+				updReq += ", `SP_"+itID+"`=NULL";
+		SYS.BD.nodeAt(db,".").SQLReq("UPDATE `sh_"+class+"` SET "+updReq+" WHERE `"+dataTbl[0][0]+"`=''"+dataTbl[row+1][0]+"'';");
+		if(colVars[dataTbl[0][col]].fltr.parseLine(1).length || hasProc)	toUpdate = true, toCalcCycles = 1;
 	}
 	else if(sval.slice(0,22) == "ws_CombChange:/fltrCol") {
 		fN = sval.slice(22).toInt();
@@ -13811,13 +13869,32 @@ for(off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 		toUpdate = true; toCalcCycles = 1;
 	}
 	else if(sval.slice(0,17) == "ws_LnAccept:/fltr")	toUpdate = true, toCalcCycles = 1;
+	else if(sval == "ws_BtRelease:/go_reportIt") {
+		go_reportIt_report = "<body>\n"
+			"<h1>"+tr("%1 item:").replace("%1",classNm_text)+"</h1>\n";
+		dataTblOneReq = SYS.BD.nodeAt(db,".").SQLReq("SELECT `ID`,"+clsLsReq+" FROM `sh_"+class+"` WHERE `ID`=''"+dataTbl_value+"'';");
+		for(iR = 1; iR < dataTblOneReq.length; iR++) {
+			if(dataTblOneReq[iR][0] != dataTbl_value) continue;
+			for(iC = 0; iC < dataTblOneReq[iR].length; iC++) {
+				itVl = dataTblOneReq[0][iC];
+				if((itVl.indexOf("SP_") == 0 && !(tVl=clsLsO[itVl.slice(3)]).isEVal()) || ((itVl == "NAME" || itVl == "DSCR") && !(tVl=clsLsO["*"+itVl]).isEVal()))
+					itVl = tVl.name;
+				go_reportIt_report += "<span style=''font: bold 15px/25px Arial, sans-serif''>"+SYS.strEncode(itVl,"HTML")+":</span>";
+				if(colTps[iC] == "t")	go_reportIt_report += "<br/>";
+				go_reportIt_report += "<span style=''margin-left: 3pt; white-space: pre-wrap;''>"+SYS.strEncode(dataTblOneReq[iR][iC],"HTML")+"</span><br/>";
+			}
+			break;
+		}
+		delete dataTblOneReq;
+		go_reportIt_report += "</body>";
+	}
+	else if(sval == "ws_BtRelease:/go_report")	toUpdate = toReport = true, toCalcCycles = 1;
 }
 
 //Clearing the filter up to fClrTo
 if(fClrTo >= 0) {
-	this.messInfo("Filter clear up to: "+fClrTo);
 	for(iF = fMax-1; iF >= fClrTo; iF--) {
-		if(iF) { 	this["fltrCol"+iF].attrSet("en", false); this["fltr"+iF].attrSet("en", false); }
+		if(iF) { this["fltrCol"+iF].attrSet("en", false); this["fltr"+iF].attrSet("en", false); }
 		this["fltrCol"+iF].attrSet("value", tr("Disabled")); this["fltr"+iF].attrSet("active", false).attrSet("value", "");
 	}
 	fClrTo = -1; toUpdate = true; toCalcCycles = 1;
@@ -13826,7 +13903,7 @@ if(fClrTo >= 0) {
 if(toCalcCycles > 0.1) {
 	this.attrSet("event", this.attr("event")+"usr_calc\n");	//!!!! Just to calc in the next session cycle for update
 	toCalcCycles = max(0, toCalcCycles-1);
-}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1674114750);
+}','','',-2,'owner;name;dscr;geomX;geomY;geomW;geomH;geomZ;evProc;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1677093435);
 CREATE TABLE IF NOT EXISTS 'wlb_mnEls' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PR_TR" INTEGER DEFAULT '1' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO wlb_mnEls VALUES('El_round_square1','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABaBJREFUeJztm11MU1cAx/+tZVB0027ysctqN2SYKDoEP8aD05XE6hQB
@@ -17223,6 +17300,8 @@ INSERT INTO Trs VALUES('Type','Тип','Тип','');
 INSERT INTO Trs VALUES('New item','Новий елемент','Новый элемент','');
 INSERT INTO Trs VALUES('Table properties','Властивості таблиці','Свойства таблицы','');
 INSERT INTO Trs VALUES('Filter','Фільтр','Фильтр','');
+INSERT INTO Trs VALUES('Procedure','Процедура','','');
+INSERT INTO Trs VALUES('%1 item:','%1 елемент:','','');
 CREATE TABLE IF NOT EXISTS 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_Main_io VALUES('ElCadr','name','Element cadre',32,'','','','Елемент кадр','','Элемент кадр','','','','');
 INSERT INTO wlb_Main_io VALUES('ElCadr','geomW','110',32,'','','','','','','','','','');
@@ -23617,7 +23696,7 @@ License: GPLv2',32,'','','','Елемент реалізує простий ді
 Версия: 1.0.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsStReport','owner','root:UI',32,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('alarmsStReport','name','Alarms — report',32,'','','','Порушення — звіт','','Нарушения — отчёт','','','','');
+INSERT INTO wlb_Main_io VALUES('alarmsStReport','name','Report',32,'','','','Звіт','','Отчёт','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomW','800',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsStReport','geomH','600',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('alarmsStReport','pgGrp','fl',32,'','','','','','','','','','');
@@ -23654,21 +23733,21 @@ The main purpose and function of this frame is to provide an opportunity to prin
 
 Author: Roman Savochenko <roman@oscada.org>
 Sponsored by: Ustijancev Michael
-Version: 1.0.0
+Version: 1.0.1
 License: GPLv2',32,'','','','Елемент-кадр реалізує діалог відображення звітного документу, побудованого із переліку отриманих порушень кадру повноформатного представлення історії порушень.
 
 Основним призначенням та функцією цього кадру є надання можливості роздрукувати таблицю історії порушень та експортувати з неї дані.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсорування: Устьянцев Михайло
-Версія: 1.0.0
+Версія: 1.0.1
 Ліцензія: GPLv2','','Элемент-кадр реализует диалог отображения отчётного документа, построенного из перечня полученных нарушений кадром полноформатного представления истории нарушений.
 
 Основным назначением и функцией этого кадра является предоставление возможности распечатать таблицу истории нарушений и экспортировать из неё данные.
 
 Автор: Роман Савоченко <roman@oscada.org>
 Спонсирование: Устьянцев Михаил
-Версия: 1.0.0
+Версия: 1.0.1
 Лицензия: GPLv2','','','','');
 INSERT INTO wlb_Main_io VALUES('calendar','dscr','The element is used to display the month of the calendar by week, which allows you to select the year, month and day, as well as switch to the current day.
 
@@ -23741,12 +23820,12 @@ The frame provides currently and in future for next features:
   - observing main data of the selected or fixed storehouse classes in a big table with possibility of sorting and filtering by up to five columns;
   - editing of content of the table cells in the edition mode;
   - adding, copying and removing of records-rows of the table in the edition mode;
-  - [PLANNED] detailed viewer and editor of the specific fields;
-  - [PLANNED] generation of report documents of the selected items, which is ready to print and convenient in complete observing;
-  - [PLANNED] generation of report documents of the main table with accounting the filter settings and natural show the specific fields.
+  - generation of the report document of the selected item, which is ready to print and convenient in complete observing;
+  - generation of the report document of the main table with accounting the filter settings and natural show the specific fields;
+  - [PLANNED] detailed control panel of the selected item with the specific fields.
 
 Author: Roman Savochenko <roman@oscada.org>
-Version: 1.2.4
+Version: 1.3.0
 License: GPLv2',32,'','','','Елемент-кадр слугує для контролю складу зі зберігання-керування речами різних класів-категорій. Початково його розроблено та перевірено на класі "Бібліотека". Кадр передбачає прямий доступ до БД за SQL та наразі підтримує лише MySQL/MariaDB.
 
 Кадр надає наразі, та надасть у майбутньому, наступні властивості:
@@ -23755,19 +23834,21 @@ License: GPLv2',32,'','','','Елемент-кадр слугує для кон�
   - споглядання основних даних обраного або фіксованого класу складу у великій таблиці із можливістю сортування та фільтрування до п''ятьма стовпчиками;
   - редагування вмісту клітинок таблиці у режимі редагування;
   - додання, копіювання та видалення записів-рядків таблиці у режимі редагування;
-  - [ЗАПЛАНОВАНО] деталізований переглядач та редактор специфічних полів;
-  - [ЗАПЛАНОВАНО] генерація звітної документації до обраних елементів, готової для друку та зручної для повного огляду;
-  - [ЗАПЛАНОВАНО] генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів.
+  - генерація звітної документації до обраного елементу, готової до друку та зручної для повного огляду;
+  - генерація звітної документації до основної таблиці з урахуванням налаштувань фільтру та природним відображенням специфічних полів;
+  - [ЗАПЛАНОВАНО] деталізована панель керування обраним елементом зі специфічними полями.
 
 Автор: Роман Савоченко <roman@oscada.org>
-Версия: 1.2.4
+Версія: 1.3.0
 Лицензия: GPLv2','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','6',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','62',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','900',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','580',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','22',32,'','','','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','evProc','ws_BtPress:/itDel:open:/pg_control/pg_accept',32,'','','','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','evProc','ws_BtPress:/itDel:open:/pg_control/pg_accept
+ws_BtPress:/go_report:open:/pg_control/pg_alarmsStReport
+ws_BtPress:/go_reportIt:open:/pg_control/pg_alarmsStReport',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','pgOpenSrc','',40,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','pgGrp','so',32,'','','','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','backColor','grey',96,'','','','','','','','','','');
@@ -23892,13 +23973,13 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','value','Disabled',8,'','','fltrCol4
 INSERT INTO wlb_Main_io VALUES('storeHouse','items','Disabled',8,'','','fltrCol4','Вимкнено','','Выключено','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 12',0,'','','fltrCol4','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','830',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','2',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','67',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','37',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','875',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','1',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','22',32,'','','go_report','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','6',32,'','','go_report','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Prepare and call the report for the session',32,'','','go_report','Приготувати та викликати звіт сеансу','','Приготовить и вызвать отчёт сеанса','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Prepare and call a report of all visible',32,'','','go_report','Приготувати та викликати звіт усього видимого','','Приготовить и вызвать отчёт всего видимого','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','go_report','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','img','doc',0,'','','go_report','','','','','','','');
@@ -23914,7 +23995,7 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','itAdd','','',
 INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','itAdd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',0,'','','itAdd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','itCopy','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','name','Copy',32,'','','itCopy','Копіювання','','Копирование','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','name','Copy',32,'','','itCopy','Копіювати','','Копировать','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','210.606',32,'','','itCopy','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','555.532',32,'','','itCopy','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','129.165',32,'','','itCopy','','','','','','','');
@@ -23975,9 +24056,9 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',40,'','','itCopy','','','',
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','1',32,'','','itDel','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','classEd','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','180',32,'','','classEd','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','200',32,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','0',32,'','','classEd','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','540',32,'','','classEd','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','500',32,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','24',32,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','classEd','','','','','','','');
@@ -23986,8 +24067,8 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','view','1',32,'','','classEd','','',
 INSERT INTO wlb_Main_io VALUES('storeHouse','cfg','',40,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 15',32,'','','classEd','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','classNm','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','180',32,'','','classNm','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','540',32,'','','classNm','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','200',32,'','','classNm','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','500',32,'','','classNm','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','classNm','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','2',32,'','','classNm','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','font','Arial 18',32,'','','classNm','','','','','','','');
@@ -23995,9 +24076,9 @@ INSERT INTO wlb_Main_io VALUES('storeHouse','alignment','10',32,'','','classNm',
 INSERT INTO wlb_Main_io VALUES('storeHouse','text','Library',40,'','','classNm','Бібліотека','','Библиотека','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:UI',32,'','','classSel','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','classSel','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','180',32,'','','classSel','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','200',32,'','','classSel','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','0',32,'','','classSel','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','540',32,'','','classSel','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','500',32,'','','classSel','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','classSel','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','23',32,'','','classSel','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','active','1',32,'','','classSel','','','','','','','');
@@ -24009,7 +24090,7 @@ INSERT INTO wlb_Main_io VALUES('RootPgSo','geomZ','14',32,'','','play','','','',
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomZ','2',32,'','','date','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','owner','root:ITW',32,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','btClassEdit','','','','','','','');
-INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','722',32,'','','btClassEdit','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','702',32,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','20',32,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','20',32,'','','btClassEdit','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','20',32,'','','btClassEdit','','','','','','','');
@@ -24076,6 +24157,16 @@ INSERT INTO wlb_Main_io VALUES('grph_panel','elType','3',32,'','','curstimeBeg',
 INSERT INTO wlb_Main_io VALUES('grph_panel','font','Arial 15 1 0 0 0',0,'','','curstimeBeg','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','img','',0,'','','curtime','','','','','','','');
 INSERT INTO wlb_Main_io VALUES('grph_panel','geomXsc','1',32,'','','prev1','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','en','0',40,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomX','850',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomY','1',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomW','22',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomH','22',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','geomZ','21',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','tipTool','Prepare and call a report for the selected record',32,'','','go_reportIt','Приготувати та викликати звіт обраного запису','','Приготовить и вызвать отчёт выбранной записи','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','active','0',40,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','elType','3',32,'','','go_reportIt','','','','','','','');
+INSERT INTO wlb_Main_io VALUES('storeHouse','img','docIt',0,'','','go_reportIt','','','','','','','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_uio' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#NAME" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastDay','Last day',131073,'-1|',8,'','','','Останній день','','','Последний день','','','','','');
 INSERT INTO wlb_doc_uio VALUES('docRepDay','lastHour','Last hour',131073,'-1|',8,'','','','Остання година','','','Последний час','','','','','');
@@ -28199,7 +28290,7 @@ INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph7','Graph color: 7',1
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph8','Graph color: 8',147461,'yellow',64,'','','','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph9','Graph color: 9',147461,'lightyellow',64,'','','','','','','','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('cntrPaspExt','labColorGrph10','Graph color: 10',147461,'darkcyan',64,'','','','','','','','','','','','','');
-INSERT INTO wlb_Main_uio VALUES('alarmsStReport','doc','Document',131205,'',2,'<page>|report','','','Документ','Документ','','Документ','Документ','','','','','');
+INSERT INTO wlb_Main_uio VALUES('alarmsStReport','doc','Document',131205,'',2,'<page>|report','','','Документ','','','Документ','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('calendar','selTime','Selected time',131073,'0|',8,'','','','Обраний час','','','Выбранное время','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('anShow','pDscr','Parameter: description',131333,'',10,'Parameter|DESCR','','','Параметр: опис','','','Параметр: описание','','','','','Параметар: опис','');
 INSERT INTO wlb_Main_uio VALUES('anShow1','pDscr','Parameter: description',131333,'',10,'Parameter|DESCR','','','Параметр: опис','','','Параметр: описание','','','','','Параметар: опис','');
@@ -28248,6 +28339,7 @@ INSERT INTO wlb_Main_uio VALUES('ElCadr','prmErr','Parameter: error',196613,'',1
 INSERT INTO wlb_Main_uio VALUES('TextLab','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('ImgLab','err','Parameter: error',196613,'',10,'Parameter|err','','','Параметр: помилка','','','Параметр: ошибка','','','','','','');
 INSERT INTO wlb_Main_uio VALUES('TextLab','transTr','Transitive transl.',131072,'0',9,'','','','Транзитивний перекл.','','','Транзитивный перев.','','','','','','');
+INSERT INTO wlb_Main_uio VALUES('storeHouse','report','Report',131205,'',8,'','','go_reportIt','Звіт','','','Отчёт','','','','','Извештај','');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"sr#IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO wlb_doc_io VALUES('docRepDay','name','Day report of the hour-averaged values',32,'','','','Добовий звіт середніх за годину значень','','Суточный отчёт среднечасовых значений','','','','');
 INSERT INTO wlb_doc_io VALUES('docRepDay','geomZ','1',32,'','','doc','','','','','','','');
@@ -29723,6 +29815,7 @@ INSERT INTO wlb_Main_incl VALUES('storeHouse','btClassEdit','/wlb_originals/wdg_
 INSERT INTO wlb_Main_incl VALUES('storeHouse','btEdit','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;contextMenu;elType;value;img;mode;font;');
 INSERT INTO wlb_Main_incl VALUES('RootPgSo','alarms','/wlb_originals/wdg_Protocol',-1,'owner;en;geomX;geomY;geomW;geomH;geomZ;headVis;tSize;trcPer;lev;viewOrd;col;itProp;it0lev;it0color;it1lev;it1color;it2color;');
 INSERT INTO wlb_Main_incl VALUES('grph_panel','curstimeBeg','/wlb_originals/wdg_FormEl',-1,'owner;perm;name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;tipStatus;elType;font;');
+INSERT INTO wlb_Main_incl VALUES('storeHouse','go_reportIt','/wlb_originals/wdg_FormEl',-1,'en;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;img;');
 CREATE TABLE IF NOT EXISTS 'wlb_doc_incl' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
 INSERT INTO wlb_doc_incl VALUES('docRepDay','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'perm;geomZ;tmpl;doc;bTime;time;process;n;');
 INSERT INTO wlb_doc_incl VALUES('docRepMonth','doc','/wlb_doc/wdg_doc/wdg_doc',-1,'perm;geomZ;tmpl;doc;bTime;time;process;n;vCur;aCur;aSize;');
